@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2024
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Worker", "NHSOnline.Backend.Worker\NHSOnline.Backend.Worker.csproj", "{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{20199673-6C63-4C72-AFA9-501FD562F01A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20199673-6C63-4C72-AFA9-501FD562F01A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20199673-6C63-4C72-AFA9-501FD562F01A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20199673-6C63-4C72-AFA9-501FD562F01A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20199673-6C63-4C72-AFA9-501FD562F01A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {977BD944-985E-4AE2-8D9D-9D61E71ED054}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  nhsonline.backend.worker:
+    image: nhsonline.backend.worker
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.Worker/Dockerfile
