@@ -7,15 +7,15 @@ RUN apt-get update && \
 FROM microsoft/aspnetcore-build:2.0 AS build
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y openjdk-8-jre && \
     rm -rf /var/lib/apt/lists/*
 
 FROM build as built
 WORKDIR /src
 COPY *.sln ./
-COPY NHSOnline.Backend.Worker/NHSOnline.Backend.Worker.csproj NHSOnline.Backend.Worker/
 COPY . .
+COPY NHSOnline.Backend.Worker/NHSOnline.Backend.Worker.csproj NHSOnline.Backend.Worker/
 WORKDIR /src/NHSOnline.Backend.Worker
+RUN dotnet restore
 RUN dotnet build -c Release -o /app
 
 FROM built AS publish

@@ -5,19 +5,14 @@ services:
     build:
       context: .
       dockerfile: NHSOnline.Backend.Worker/Dockerfile
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - STUBS_ENDPOINT_URL=http://localhost:32768
-    ports:
-      - "8800:5123"
-  nhsonline.redis.sds:
-    image: nhsonline.redis.sds
-    ports:
-      - "6379:6379"
-  nhsonline.stubs.emis.im1:
-    image: nhsonline.stubs.emis.im1
+  nhsonline.stubs.consoleapp:
+    image: nhsonline.stubs.consoleapp
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8800:5123"
     tty: true
+  nhsonline.redis.sds:
+    image: nhsonline.redis.sds
+    ports:
+      - "6379:6379"

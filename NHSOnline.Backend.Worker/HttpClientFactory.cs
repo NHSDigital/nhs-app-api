@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace NHSOnline.Backend.Worker.Factories
+namespace NHSOnline.Backend.Worker
 {
     public class HttpClientFactory : IHttpClientFactory
     {

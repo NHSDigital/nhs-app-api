@@ -52,21 +52,5 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Tests.Values
         {
             _stubMockServer.Reset();
         }
-
-        [TestMethod]
-        public async Task When_EmisValuesReturnsCorrectResponse_Then_BackendWorkedResponseIsCorrect()
-        {
-            ValuesEndpointDelegate.RespondsWithCorrectValues(_stubMockServer);
-
-            var response = await _client.GetAsync("/values");
-            var results = response.Content.ReadAsStringAsync().Result;
-            var valuesList = JsonConvert.DeserializeObject<IEnumerable<Value>>(results);
-            var firstValueExists = valuesList.Any(v => v.Name.Equals("Stubbed Value 1"));
-            var secondValueExists = valuesList.Any(v => v.Name.Equals("Stubbed Value 2"));
-
-            Assert.IsTrue(response.StatusCode == HttpStatusCode.OK, "Backend Worked did not respond with correct response.");
-            Assert.IsTrue(firstValueExists);
-            Assert.IsTrue(secondValueExists);
-        }
     }
 }
