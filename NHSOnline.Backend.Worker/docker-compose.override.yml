@@ -6,3 +6,5 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
+  nhsonline.stubs.emis.im1:
+    image: nhsonline.stubs.emis.im1
