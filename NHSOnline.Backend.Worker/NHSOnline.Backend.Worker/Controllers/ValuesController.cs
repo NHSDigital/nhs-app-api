@@ -1,44 +1,27 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace NHSOnline.Backend.Worker.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        // GET api/values
+        private const string StubUrl = "http://nhsonline.stubs.emis.im1/api/values";
+        private static readonly HttpClient HttpClient = new HttpClient();
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
-        }
+            var stubResponse = await HttpClient.GetStringAsync(StubUrl);
+            var stubValues = JsonConvert.DeserializeObject<IEnumerable<string>>(stubResponse);
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return stubValues
+                .Prepend("Backend Value 1")
+                .Append("Backend Value 2");
         }
     }
 }
