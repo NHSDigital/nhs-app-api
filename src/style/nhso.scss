@@ -1,0 +1,239 @@
+/** IMPORTS */
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+//@import url('https://assets.nhs.uk/fonts/nhsuk-fonts-1.1.0.css');
+@import url('https://beta.nhs.uk/static/beta/css/expo2017/fonts/frutiger-light.css');
+
+/** COLOURS */
+$white: #ffffff;
+$background: #e8edee;
+$nhs_blue: #005EB8;
+$dark_blue: #003087;
+$light_green: #006747;
+$dark_green: #004D34;
+$light_grey: #979797;
+$dark_grey: #4A4A4A;
+$black: #231F20;
+$warning: #FCED66;
+$error: #DA291C;
+$home_gradient: radial-gradient(#0072DF 0%, #0053A3 100%);
+
+/** FONTS */
+$frutiger: "Frutiger W01", Arial, sans-serif;
+$default: 'Roboto', sans-serif;
+
+/** TEXT STYLES */
+@mixin h1 {
+	font-family: $frutiger;
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 29px;
+	color: $white;
+}
+@mixin h2 {
+	font-family: $frutiger;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 24px;
+	color: $white;
+}
+@mixin screen_title {
+	font-family: $frutiger;
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 24px;
+	color: $white;
+}
+@mixin h4 {
+	font-family: $frutiger;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 23px;
+	color: $dark_grey;
+}
+@mixin h5 {
+	font-family: $frutiger;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 23px;
+	color: $light_grey;
+}
+@mixin button {
+	font-family: $frutiger;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 23px;
+	color: $white;
+}
+@mixin default_label {
+	font-family: $default;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin default_text {
+	font-family: $default;
+	font-weight: normal;
+	font-size: 16px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin default_text_white {
+	font-family: $default;
+	font-size: 16px;
+	line-height: 22px;
+	color: $white;
+}
+@mixin small_label {
+	font-family: $default;
+	font-weight: 700;
+	font-size: 13px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin small_text {
+	font-family: $default;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin message {
+	font-family: $default;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin menu {
+	font-family: $default;
+	font-weight: normal;
+	font-size: 9px;
+	text-transform: uppercase;
+	line-height: 10px;
+	color: $dark_grey;
+}
+@mixin menu_active {
+	font-family: $default;
+	font-weight: normal;
+	font-size: 9px;
+	text-transform: uppercase;
+	line-height: 10px;
+	color: $nhs_blue;
+}
+
+/** HTML */
+body {
+	padding: 0px;
+	margin: 0px;
+	background: $background;
+	@include default_text;
+}
+* {
+	padding: 0;
+	margin: 0;
+}
+
+/** BUTTONS */
+button {
+	@include button;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px;
+	background-color: $nhs_blue;
+	border: none;
+	border-radius: 4px;
+	//box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color];
+	box-shadow: 0px 4px 0px 0px $dark_blue;
+	margin-top: 16px;
+	outline: none;
+}
+
+header {
+	background: $nhs_blue;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	height: 100px;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+	
+	h1 {
+		@include screen_title;
+		text-align: center;
+	}
+	.nhs_logo {
+		margin: 16px;
+		height: 22px;
+		float: left;
+	}
+	.account {
+		margin: 16px;
+		float: right;
+		height: 22px;
+	}
+	hr {
+		margin: 54px 16px 9px 16px;
+		height: 1px;
+		border: none;
+		background-color: white;
+		opacity: 0.4;
+	}
+}
+nav {
+	background-color: $white;
+	position: fixed;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	height: 70px;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+	
+	ul {
+		width: 100%;
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		padding-left: 6px;
+		padding-right: 6px;
+		
+		
+		li {
+			flex-grow: 1;
+			text-align: center;
+			vertical-align: bottom;
+			list-style: none;
+			margin-top: 4px;
+			align-self: stretch;
+			justify-content: space-around;
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+			
+			svg {
+				display: block;
+				align-self: center;
+				flex-grow: 1;
+				/*width: 100%;*/
+			}
+			label {
+				@include menu;
+				display: block;
+				box-sizing: border-box;
+				align-self: flex-end;
+				text-align: center;
+				width: 100%;
+				margin-top: 2px;
+			}
+		}
+	}
+	
+	
+}
+main {
+	padding: 116px 16px 90px 16px;
+}
+
+
+
