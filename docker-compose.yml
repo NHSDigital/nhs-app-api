@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  nhsonline.web:
+    image: nhsonline.web
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/src/app/
