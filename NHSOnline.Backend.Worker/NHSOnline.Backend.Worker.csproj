@@ -6,16 +6,45 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
+  
+  <PropertyGroup>
+    <SwaggerCodegenCli>..\tools\swagger-codegen-cli-2.3.1.jar</SwaggerCodegenCli>
+    <SwaggerContract>..\contracts\index.yaml</SwaggerContract>
+    <SwaggerTemplate>SwaggerCodegenTemplate</SwaggerTemplate>
+    <SwaggerOutput>SwaggerGenerated</SwaggerOutput>
+    <SwaggerNamespace>$(RootNamespace)</SwaggerNamespace>
+
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SwaggerTemplate)\**;$(SwaggerOutput)\**</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(SwaggerOutput)/src/$(SwaggerNamespace)/**/*$(DefaultLanguageSourceExtension)">
+      <Link>GeneratedSource\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+  </ItemGroup>
+
+  <Target Name="SwaggerCodegen" BeforeTargets="BeforeBuild">
+    <RemoveDir Directories="$(SwaggerOutput)" />
+    
+    <Exec Command="java -jar $(SwaggerCodegenCli) generate -i $(SwaggerContract) -l aspnetcore -t $(SwaggerTemplate) -o $(SwaggerOutput) -DpackageName=$(SwaggerNamespace) -Dapis -Dmodels" CustomWarningRegularExpression="WARN" CustomErrorRegularExpression="ERROR|Exception in thread" />
+
+    <ItemGroup>
+      <Compile Include="$(SwaggerOutput)/src/$(SwaggerNamespace)/**/*$(DefaultLanguageSourceExtension)" Exclude="$(GeneratedSource)**">
+        <Link>GeneratedSource\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      </Compile>
+    </ItemGroup>
+  </Target>
 
 </Project>

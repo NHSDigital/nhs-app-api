@@ -1,0 +1,37 @@
+swagger: '3.0'
+
+info:
+  version: 0.0.1
+  title: NHS Online
+  description: This is an API for NHS Online.
+
+tags:
+  - name: values
+    description: View some values
+
+schemes:
+  - https
+
+paths:
+  /values:
+    get:
+      tags:
+        - values
+      summary: Get a collection of values
+      description: Values will be received from the IM1 stub.
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Value"
+
+definitions:
+  Value:
+    type: object
+    properties:
+      name:
+        type: string
+      somethingElse:
+        type: integer
