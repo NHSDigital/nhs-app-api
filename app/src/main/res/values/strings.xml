@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NHS Online</string>
+    <string name="symptoms">Symptoms</string>
+    <string name="appointment">Appointment</string>
+    <string name="prescription">Prescriptions</string>
+    <string name="my_record">My Records</string>
+    <string name="more">more</string>
+    <string name="baseURL">http://10.0.3.2:8082/#</string>
+</resources>

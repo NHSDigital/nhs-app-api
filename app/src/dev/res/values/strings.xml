@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS Online Dev</string>
+    <string name="testtext">Development</string>
+    <string name="baseURL">http://10.0.3.2:8082/#</string>
+</resources>
