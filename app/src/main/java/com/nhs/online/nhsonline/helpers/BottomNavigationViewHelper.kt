@@ -1,8 +1,5 @@
 package com.nhsonline.nhsdigital.nhsonline.helpers
 
-/**
- * Created by karma.tsering on 02/02/2018.
- */
 import android.annotation.SuppressLint
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
