@@ -8,10 +8,10 @@ COPY package.json /tmp/
 WORKDIR /tmp
 RUN npm config set registry http://registry.npmjs.org/ && npm install
 
-COPY . /usr/src/app/
+COPY . /app
 
-WORKDIR /usr/src/app
-RUN cp -r /tmp/node_modules /usr/src/app/
+WORKDIR /app
+RUN cp -r /tmp/node_modules /app
 
 EXPOSE 8080
 
