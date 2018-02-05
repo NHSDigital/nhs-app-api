@@ -79,13 +79,7 @@ module.exports = {
         test: /\.scss$/,
         use: [
           'css-loader',
-          'sass-loader',
-          {
-            loader: 'sass-resources-loader',
-            options: {
-              resources: path.resolve(__dirname, '../src/style/_variables.scss')
-            },
-          },
+          'sass-loader'
         ],
       }
     ]

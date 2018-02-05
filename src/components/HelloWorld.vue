@@ -21,16 +21,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@import "~../style/_variables.scss";
+@import "../style/nhso.scss";
 $primary-color:#333;
+
 .testClass{
   background-color: $primary-color;
 }
 
-.bodyDiv{
-  @include body;
-}
 h1, h2 {
+  @include screen_title;
   font-weight: normal;
 }
 ul {
