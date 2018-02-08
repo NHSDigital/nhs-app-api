@@ -1,50 +1,52 @@
 package com.nhs.online.nhsonline
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import com.nhsonline.nhsdigital.nhsonline.helpers.BottomNavigationViewHelper
+import android.support.v7.app.AppCompatDelegate
+import com.nhs.online.nhsonline.bmenu.CustomMenu
+import com.nhs.online.nhsonline.bmenu.CustomMenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var bottomNavHelper: BottomNavigationViewHelper
+    private var currentUrl = "https://111.nhs.uk"
+    private val mOnMenuItemSelectListener = object : CustomMenu.OnCustomMenuItemSelectedListener {
+        override fun onItemSelected(item: CustomMenuItem) {
+            when (item.id) {
+                R.id.symptoms -> {
+                    if (currentUrl == "https://111.nhs.uk") return
+                    currentUrl = "https://111.nhs.uk"
+                    loadPage(currentUrl)
+                }
+                R.id.appointments -> {
 
+                }
+                R.id.prescriptions -> {
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.symptom -> {
-                loadPage("https://111.nhs.uk")
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.appointment -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.prescription -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.my_record -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.more -> {
-                return@OnNavigationItemSelectedListener true
+                }
+                R.id.myRecord -> {
+
+                }
+                R.id.more -> {
+
+                }
             }
         }
-        false
+
     }
 
 
-    private fun loadPage(url:String){
+    private fun loadPage(url: String) {
         webview.loadUrl(url)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         setContentView(R.layout.activity_main)
-        bottomNavHelper = BottomNavigationViewHelper
-        bottomNavHelper.disableShiftMode(navigation)
+        customMenu.setOnMenuItemSelectListener(mOnMenuItemSelectListener)
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        loadPage(currentUrl)
     }
 
 }

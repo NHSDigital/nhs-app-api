@@ -11,9 +11,8 @@
         android:id="@+id/webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        android:layout_marginBottom="@dimen/_45sdp"
+        app:layout_constraintBottom_toTopOf="@+id/customMenu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,18 +20,53 @@
         app:layout_constraintVertical_bias="0.071" />
 
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
-        android:background="?android:attr/windowBackground"
-        android:animateLayoutChanges="false"
-        android:splitMotionEvents="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/navigation" />
+    <com.nhs.online.nhsonline.bmenu.CustomMenu
+        android:id="@+id/customMenu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@drawable/menu_top_shadow"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.nhs.online.nhsonline.bmenu.CustomMenuItem
+            android:id="@+id/symptoms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:activeIcon="@mipmap/icon_menu_symptoms_active"
+            app:inactiveIcon="@mipmap/icon_menu_symptoms"
+            app:menuTitle="@string/symptoms" />
+
+        <com.nhs.online.nhsonline.bmenu.CustomMenuItem
+            android:id="@+id/appointments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:activeIcon="@mipmap/icon_menu_appointments_active"
+            app:inactiveIcon="@mipmap/icon_menu_appointments"
+            app:menuTitle="@string/appointment" />
+
+        <com.nhs.online.nhsonline.bmenu.CustomMenuItem
+            android:id="@+id/prescriptions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:activeIcon="@mipmap/icon_menu_prescriptions_active"
+            app:inactiveIcon="@mipmap/icon_menu_prescriptions"
+            app:menuTitle="@string/prescription" />
+
+        <com.nhs.online.nhsonline.bmenu.CustomMenuItem
+            android:id="@+id/myRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:activeIcon="@mipmap/icon_menu_record_active"
+            app:inactiveIcon="@mipmap/icon_menu_record"
+            app:menuTitle="@string/my_record" />
+
+        <com.nhs.online.nhsonline.bmenu.CustomMenuItem
+            android:id="@+id/more"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:activeIcon="@mipmap/icon_menu_more_active"
+            app:inactiveIcon="@mipmap/icon_menu_more"
+            app:menuTitle="@string/more" />
+
+    </com.nhs.online.nhsonline.bmenu.CustomMenu>
 
 </android.support.constraint.ConstraintLayout>

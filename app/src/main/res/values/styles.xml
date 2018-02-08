@@ -8,4 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="menu_default_text" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/defaultMenuTextColor</item>
+    </style>
 </resources>
