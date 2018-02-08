@@ -29,7 +29,7 @@
 
         <com.nhs.online.nhsonline.bmenu.CustomMenuItem
             android:id="@+id/symptoms"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:activeIcon="@mipmap/icon_menu_symptoms_active"
             app:inactiveIcon="@mipmap/icon_menu_symptoms"
@@ -37,7 +37,7 @@
 
         <com.nhs.online.nhsonline.bmenu.CustomMenuItem
             android:id="@+id/appointments"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:activeIcon="@mipmap/icon_menu_appointments_active"
             app:inactiveIcon="@mipmap/icon_menu_appointments"
@@ -45,7 +45,7 @@
 
         <com.nhs.online.nhsonline.bmenu.CustomMenuItem
             android:id="@+id/prescriptions"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:activeIcon="@mipmap/icon_menu_prescriptions_active"
             app:inactiveIcon="@mipmap/icon_menu_prescriptions"
@@ -53,7 +53,7 @@
 
         <com.nhs.online.nhsonline.bmenu.CustomMenuItem
             android:id="@+id/myRecord"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:activeIcon="@mipmap/icon_menu_record_active"
             app:inactiveIcon="@mipmap/icon_menu_record"
@@ -61,7 +61,7 @@
 
         <com.nhs.online.nhsonline.bmenu.CustomMenuItem
             android:id="@+id/more"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:activeIcon="@mipmap/icon_menu_more_active"
             app:inactiveIcon="@mipmap/icon_menu_more"

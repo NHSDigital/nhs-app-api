@@ -46,8 +46,8 @@ class CustomMenuItem @JvmOverloads constructor(
     }
 
     private fun setDefaultViewValues() {
-        defaultIconHeight = convertDPToPixel(20)
-        defaultIconWidth = convertDPToPixel(20)
+        defaultIconHeight = convertDPToPixel(18)
+        defaultIconWidth = convertDPToPixel(18)
         defaultTextSize = convertSPToPixel(7)
     }
 
