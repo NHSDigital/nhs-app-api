@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -14,34 +14,45 @@
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RG1-19-v0v"/>
+                        <viewControllerLayoutGuide type="bottom" id="Plg-9S-Owc"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DsO-M7-xl2">
-                                <rect key="frame" x="0.0" y="24" width="375" height="594"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DsO-M7-xl2">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
                             </wkWebView>
-                            <tabBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="va0-HI-HiS">
+                            <tabBar contentMode="bottom" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="va0-HI-HiS">
                                 <rect key="frame" x="0.0" y="618" width="375" height="49"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
-                                    <tabBarItem tag="4" title="Symptoms" id="g4U-nj-aFu"/>
-                                    <tabBarItem tag="3" title="Appointment" id="ALP-hf-SBr"/>
-                                    <tabBarItem tag="2" title="Prescriptions" id="egF-fO-zDJ"/>
-                                    <tabBarItem tag="1" title="My Record" id="iKy-SG-p0H"/>
-                                    <tabBarItem systemItem="more" id="Nhs-Wn-GjK"/>
+                                    <tabBarItem tag="4" title="Symptoms" image="icon_menu_symptoms_ios" selectedImage="icon_menu_symptoms_active_ios" id="g4U-nj-aFu"/>
+                                    <tabBarItem tag="3" title="Appointment" image="icon_menu_appointments_ios" selectedImage="icon_menu_appointments_active_ios" id="ALP-hf-SBr"/>
+                                    <tabBarItem tag="2" title="Prescriptions" image="icon_menu_prescriptions_ios" selectedImage="icon_menu_prescriptions_active_ios" id="egF-fO-zDJ"/>
+                                    <tabBarItem tag="1" title="My Record" image="icon_menu_record_ios" selectedImage="icon_menu_record_active_ios" id="iKy-SG-p0H"/>
+                                    <tabBarItem title="More" image="icon_menu_more_ios" selectedImage="icon_menu_more_active_ios" id="Nhs-Wn-GjK"/>
                                 </items>
                             </tabBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <constraints>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="bottom" secondItem="Plg-9S-Owc" secondAttribute="top" id="1P0-EI-zfN"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="bottom" secondItem="Plg-9S-Owc" secondAttribute="top" id="83I-bf-aIG"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="Sh1-hA-VGN"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="bottom" secondItem="va0-HI-HiS" secondAttribute="bottom" id="bQv-dq-3HU"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="trailing" secondItem="va0-HI-HiS" secondAttribute="trailing" id="bgU-AZ-CR4"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="leading" secondItem="va0-HI-HiS" secondAttribute="leading" id="fdu-R4-KVL"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="hQf-le-Xat"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="mWd-c7-ys3"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="tabBar" destination="va0-HI-HiS" id="S7r-kw-T2l"/>
@@ -53,4 +64,16 @@
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="icon_menu_appointments_active_ios" width="36" height="36"/>
+        <image name="icon_menu_appointments_ios" width="36" height="36"/>
+        <image name="icon_menu_more_active_ios" width="25" height="6"/>
+        <image name="icon_menu_more_ios" width="25" height="6"/>
+        <image name="icon_menu_prescriptions_active_ios" width="39" height="35"/>
+        <image name="icon_menu_prescriptions_ios" width="39" height="35"/>
+        <image name="icon_menu_record_active_ios" width="33" height="36"/>
+        <image name="icon_menu_record_ios" width="33" height="36"/>
+        <image name="icon_menu_symptoms_active_ios" width="31" height="36"/>
+        <image name="icon_menu_symptoms_ios" width="30" height="36"/>
+    </resources>
 </document>
