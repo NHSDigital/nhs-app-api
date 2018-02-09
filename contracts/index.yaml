@@ -1,4 +1,4 @@
-swagger: '3.0'
+swagger: '2.0'
 
 info:
   version: 0.0.1
@@ -33,5 +33,3 @@ definitions:
     properties:
       name:
         type: string
-      somethingElse:
-        type: integer

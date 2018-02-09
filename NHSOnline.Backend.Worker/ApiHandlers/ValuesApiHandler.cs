@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using NHSOnline.Backend.Worker.Models;
 
 namespace NHSOnline.Backend.Worker.ApiHandlers
 {
@@ -16,11 +17,12 @@ namespace NHSOnline.Backend.Worker.ApiHandlers
         public async Task<IActionResult> ValuesGet()
         {
             var stubResponse = await HttpClient.GetStringAsync(StubUrl);
-            var stubValues = JsonConvert.DeserializeObject<IEnumerable<string>>(stubResponse);
+            var stubValues = JsonConvert.DeserializeObject<IEnumerable<string>>(stubResponse)
+                .Select(name => new Value {Name = name});
 
             var values = stubValues
-                .Prepend("Backend Value 1 (Generated)")
-                .Append("Backend Value 2 (Generated)");
+                .Prepend(new Value {Name = "Backend Value 1"})
+                .Append(new Value {Name = "Backend Value 2"});
 
             return new OkObjectResult(values);
         }
