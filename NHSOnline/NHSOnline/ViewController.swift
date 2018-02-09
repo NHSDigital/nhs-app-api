@@ -15,12 +15,10 @@ class ViewController: UIViewController, UITabBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.itemSpacing = 20.0
-        tabBar.delegate = self
+        initializeTabBar()
         loadWebView()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -42,10 +40,15 @@ class ViewController: UIViewController, UITabBarDelegate {
         }
     }
     
+    private func initializeTabBar() {
+        tabBar.delegate = self
+        tabBar.itemSpacing = 20.0
+    }
+    
     private func loadWebView() {
         let webViewEndpointUrl = Bundle.main.infoDictionary!["WebViewEndpointUrl"] as! String
         let urlRequest = URLRequest(url: URL(string: webViewEndpointUrl)!)
-        self.webView.frame = self.view.bounds
+        webView.frame = view.bounds
 
         webView.load(urlRequest)
     }

@@ -97,7 +97,6 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
-				F0F04AC1202CAA320015C95F /* UIExtensions */,
 				C20578022028B94800CDBDC5 /* AppDelegate.swift */,
 				C20578042028B94800CDBDC5 /* ViewController.swift */,
 				C20578062028B94800CDBDC5 /* Main.storyboard */,
@@ -124,13 +123,6 @@
 				C20578242028B94800CDBDC5 /* Info.plist */,
 			);
 			path = NHSOnlineUITests;
-			sourceTree = "<group>";
-		};
-		F0F04AC1202CAA320015C95F /* UIExtensions */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UIExtensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
