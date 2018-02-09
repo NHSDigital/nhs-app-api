@@ -12,14 +12,14 @@ import android.widget.LinearLayout
  * Created by karma.tsering on 06/02/2018.
  */
 
-class CustomMenu @JvmOverloads constructor(
+class MenuBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
     private val menuItemClickedListener: OnMenuItemClickedListener
     private var onMenuItemSelectListener: OnCustomMenuItemSelectedListener? = null
-    private lateinit var items: Array<CustomMenuItem?>
+    private lateinit var items: Array<MenuBarItem?>
     private var selectedPos = -1
 
     init {
@@ -27,16 +27,16 @@ class CustomMenu @JvmOverloads constructor(
         gravity = Gravity.CENTER
         weightSum = 50f
         this.menuItemClickedListener = object : OnMenuItemClickedListener {
-            override fun onMenuItemClicked(customMenuItem: CustomMenuItem, position: Int) {
+            override fun onMenuItemClicked(menuBarItem: MenuBarItem, position: Int) {
                 if (selectedPos != position) {
                     if (selectedPos != -1)
                         items[selectedPos]?.deselectItem()
 
-                    customMenuItem.selectItem()
+                    menuBarItem.selectItem()
                     selectedPos = position
                 }
                 if (onMenuItemSelectListener != null)
-                    onMenuItemSelectListener!!.onItemSelected(customMenuItem)
+                    onMenuItemSelectListener!!.onItemSelected(menuBarItem)
             }
         }
     }
@@ -60,7 +60,7 @@ class CustomMenu @JvmOverloads constructor(
     private fun storeMenuItems() {
         items = arrayOfNulls(childCount)
         for (i in 0 until childCount) {
-            val item = getChildAt(i) as CustomMenuItem
+            val item = getChildAt(i) as MenuBarItem
             item.setMenuItemClickedListener(this.menuItemClickedListener)
             item.setItemPosition(i)
             (item.layoutParams as LinearLayout.LayoutParams).weight = 10f
@@ -87,11 +87,11 @@ class CustomMenu @JvmOverloads constructor(
     }
 
     interface OnCustomMenuItemSelectedListener {
-        fun onItemSelected(item: CustomMenuItem)
+        fun onItemSelected(barItem: MenuBarItem)
     }
 
     interface OnMenuItemClickedListener {
-        fun onMenuItemClicked(customMenuItem: CustomMenuItem, position: Int)
+        fun onMenuItemClicked(menuBarItem: MenuBarItem, position: Int)
     }
 
     internal class SavedState : View.BaseSavedState {

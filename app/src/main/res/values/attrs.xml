@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="CustomMenuItem">
+    <declare-styleable name="MenuBarItem">
         <attr name="activeTabColor" format="color"/>
         <attr name="activeIcon" format="reference"/>
         <attr name="inactiveIcon" format="reference"/>

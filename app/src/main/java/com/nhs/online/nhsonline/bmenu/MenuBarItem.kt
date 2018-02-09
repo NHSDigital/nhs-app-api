@@ -16,25 +16,28 @@ import android.widget.TextView
 import com.nhs.online.nhsonline.R
 
 
-class CustomMenuItem @JvmOverloads constructor(
+class MenuBarItem @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), View.OnClickListener {
     @DrawableRes
-    private var iconId: Int = 0
+    private var inactiveIconResId: Int = 0
     @DrawableRes
-    private var activeIconId: Int = 0
+    private var activeIconResId: Int = 0
     private var isActive: Boolean = false
     private lateinit var title: String
     private lateinit var viewTitle: TextView
     private lateinit var viewImage: ImageView
 
-    private var defaultIconWidth: Int = 0
-    private var defaultIconHeight: Int = 0
-    private var defaultTextSize: Int = 0
+    private val iconWidth: Int
+        get() = resources.getDimension(R.dimen.menuBarItemIconWidth).toInt()
+    private val iconHeight: Int
+        get() = resources.getDimension(R.dimen.menuBarItemIconHeight).toInt()
+    private val textSize: Float
+        get() = resources.getDimension(R.dimen.menuBarItemFontSize)
 
-    private var menuItemClickedListener: CustomMenu.OnMenuItemClickedListener? = null
+    private var menuItemClickedListener: MenuBar.OnMenuItemClickedListener? = null
     private var itemPosition: Int = 0
 
     init {
@@ -42,20 +45,19 @@ class CustomMenuItem @JvmOverloads constructor(
         isClickable = true
         setOnClickListener(this)
         fetchDataFromXML(context, attrs)
-        setDefaultViewValues()
-    }
-
-    private fun setDefaultViewValues() {
-        defaultIconHeight = convertDPToPixel(18)
-        defaultIconWidth = convertDPToPixel(18)
-        defaultTextSize = convertSPToPixel(7)
     }
 
     private fun fetchDataFromXML(context: Context, attrs: AttributeSet?) {
-        val array = context.obtainStyledAttributes(attrs, R.styleable.CustomMenuItem)
-        iconId = array.getResourceId(R.styleable.CustomMenuItem_inactiveIcon, iconId)
-        activeIconId = array.getResourceId(R.styleable.CustomMenuItem_activeIcon, activeIconId)
-        title = array.getString(R.styleable.CustomMenuItem_menuTitle)!!.toUpperCase()
+        val array = context.obtainStyledAttributes(attrs, R.styleable.MenuBarItem)
+        inactiveIconResId = array.getResourceId(
+            R.styleable.MenuBarItem_inactiveIcon,
+            inactiveIconResId
+        )
+        activeIconResId = array.getResourceId(
+            R.styleable.MenuBarItem_activeIcon,
+            activeIconResId
+        )
+        title = array.getString(R.styleable.MenuBarItem_menuTitle)!!.toUpperCase()
         array.recycle()
     }
 
@@ -72,9 +74,9 @@ class CustomMenuItem @JvmOverloads constructor(
 
     private fun initiateMenuIcon() {
         viewImage = ImageView(context)
-        val params = LinearLayout.LayoutParams(defaultIconWidth, defaultIconHeight)
+        val params = LinearLayout.LayoutParams(iconWidth, iconHeight)
         params.gravity = Gravity.CENTER
-        params.bottomMargin = convertDPToPixel(2)
+        params.bottomMargin = resources.getDimension(R.dimen.menuBarItemIconBottomMargin).toInt()
         viewImage.layoutParams = params
         viewImage.setImageResource(getImageResourceId())
         addView(viewImage)
@@ -88,12 +90,13 @@ class CustomMenuItem @JvmOverloads constructor(
         )
         params.gravity = Gravity.CENTER
         viewTitle.layoutParams = params
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             viewTitle.setTextAppearance(R.style.menu_default_text)
         } else {
             viewTitle.setTextAppearance(context, R.style.menu_default_text)
         }
-        viewTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, defaultTextSize.toFloat())
+        viewTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         viewTitle.text = title
         addView(viewTitle)
 
@@ -116,24 +119,14 @@ class CustomMenuItem @JvmOverloads constructor(
     }
 
     private fun getImageResourceId(): Int {
-        return if (!isActive) iconId else if (activeIconId == 0) iconId else activeIconId
-    }
-
-    private fun convertDPToPixel(dp: Int): Int {
-        val sdp = resources.getDimension(R.dimen._1sdp)
-        return (dp * sdp).toInt()
-    }
-
-    private fun convertSPToPixel(sp: Int): Int {
-        val ssp = resources.getDimension(R.dimen._1ssp)
-        return (sp * ssp).toInt()
+        return if (!isActive) inactiveIconResId else if (activeIconResId == 0) inactiveIconResId else activeIconResId
     }
 
     fun setItemPosition(itemPosition: Int) {
         this.itemPosition = itemPosition
     }
 
-    fun setMenuItemClickedListener(menuItemClickedListener: CustomMenu.OnMenuItemClickedListener) {
+    fun setMenuItemClickedListener(menuItemClickedListener: MenuBar.OnMenuItemClickedListener) {
         this.menuItemClickedListener = menuItemClickedListener
     }
 
