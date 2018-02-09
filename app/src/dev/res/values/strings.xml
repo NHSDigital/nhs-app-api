@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">NHS Online Dev</string>
     <string name="testtext">Development</string>
-    <string name="baseURL">http://10.0.3.2:8082/#</string>
+    <string name="baseURL">http://10.0.3.2:8080/#</string>
 </resources>

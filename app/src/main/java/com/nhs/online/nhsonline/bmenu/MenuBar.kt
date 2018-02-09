@@ -8,10 +8,6 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 
-/**
- * Created by karma.tsering on 06/02/2018.
- */
-
 class MenuBar @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -25,7 +21,6 @@ class MenuBar @JvmOverloads constructor(
     init {
         orientation = LinearLayout.HORIZONTAL
         gravity = Gravity.CENTER
-        weightSum = 50f
         this.menuItemClickedListener = object : OnMenuItemClickedListener {
             override fun onMenuItemClicked(menuBarItem: MenuBarItem, position: Int) {
                 if (selectedPos != position) {
@@ -36,7 +31,7 @@ class MenuBar @JvmOverloads constructor(
                     selectedPos = position
                 }
                 if (onMenuItemSelectListener != null)
-                    onMenuItemSelectListener!!.onItemSelected(menuBarItem)
+                    onMenuItemSelectListener?.onItemSelected(menuBarItem)
             }
         }
     }
@@ -54,6 +49,8 @@ class MenuBar @JvmOverloads constructor(
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        weightSum = childCount.toFloat()
+
         storeMenuItems()
     }
 
@@ -63,7 +60,7 @@ class MenuBar @JvmOverloads constructor(
             val item = getChildAt(i) as MenuBarItem
             item.setMenuItemClickedListener(this.menuItemClickedListener)
             item.setItemPosition(i)
-            (item.layoutParams as LinearLayout.LayoutParams).weight = 10f
+            (item.layoutParams as LinearLayout.LayoutParams).weight = 1f
             items[i] = item
 
         }
