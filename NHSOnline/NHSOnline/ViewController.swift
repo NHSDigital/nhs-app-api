@@ -2,7 +2,6 @@
 //  ViewController.swift
 //  NHSOnline
 //
-//  Created by Karma Tsering on 05/02/2018.
 //  Copyright © 2018 NHS Digital. All rights reserved.
 //
 
