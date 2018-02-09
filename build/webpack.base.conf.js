@@ -3,6 +3,8 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const webpack = require('webpack')
+const SwaggerCodegenPlugin = require('./swagger-codegen/swagger-codegen-plugin')
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir)
@@ -38,6 +40,15 @@ module.exports = {
       '@': resolve('src'),
     }
   },
+  plugins: [
+    new SwaggerCodegenPlugin({
+      contractPath: resolve('contracts/index.yaml'),
+      outputPath: resolve('src/services/nhsonlineapi.js')
+    }),
+    new webpack.DefinePlugin({
+      'process.env.API_HOST': JSON.stringify(process.env.API_HOST)
+    }),
+  ],
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),
