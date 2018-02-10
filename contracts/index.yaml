@@ -19,6 +19,7 @@ paths:
         - values
       summary: Get a collection of values
       description: Values will be received from the IM1 stub.
+      operationId: getValues
       responses:
         200:
           description: Successful operation

@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.Worker.ApiHandlers
         private const string StubUrl = "http://nhsonline.stubs.emis.im1/api/values";
         private static readonly HttpClient HttpClient = new HttpClient();
 
-        public async Task<IActionResult> ValuesGet()
+        public async Task<IActionResult> GetValues()
         {
             var stubResponse = await HttpClient.GetStringAsync(StubUrl);
             var stubValues = JsonConvert.DeserializeObject<IEnumerable<string>>(stubResponse)

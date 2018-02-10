@@ -10,9 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="1.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -26,26 +24,31 @@
     <SwaggerTemplate>SwaggerCodegenTemplate</SwaggerTemplate>
     <SwaggerOutput>SwaggerGenerated</SwaggerOutput>
     <SwaggerNamespace>$(RootNamespace)</SwaggerNamespace>
-
+    
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SwaggerTemplate)\**;$(SwaggerOutput)\**</DefaultItemExcludes>
   </PropertyGroup>
 
+
   <ItemGroup>
-    <Compile Include="$(SwaggerOutput)/src/$(SwaggerNamespace)/**/*$(DefaultLanguageSourceExtension)">
+    <None Include="$(SwaggerOutput)/src/$(SwaggerNamespace)/**/*$(DefaultLanguageSourceExtension)">
       <Link>GeneratedSource\%(RecursiveDir)%(Filename)%(Extension)</Link>
-    </Compile>
+    </None>
   </ItemGroup>
 
-  <Target Name="SwaggerCodegen" BeforeTargets="BeforeBuild">
-    <RemoveDir Directories="$(SwaggerOutput)" />
-    
+
+  <Target Name="SwaggerCodegen" BeforeTargets="CoreCompile" Inputs="$(SwaggerContract)" Outputs="$(SwaggerOutput)/**">
+    <MakeDir Directories="$(SwaggerOutput)" />
+
     <Exec Command="java -jar $(SwaggerCodegenCli) generate -i $(SwaggerContract) -l aspnetcore -t $(SwaggerTemplate) -o $(SwaggerOutput) -DpackageName=$(SwaggerNamespace) -Dapis -Dmodels" CustomWarningRegularExpression="WARN" CustomErrorRegularExpression="ERROR|Exception in thread" />
 
     <ItemGroup>
-      <Compile Include="$(SwaggerOutput)/src/$(SwaggerNamespace)/**/*$(DefaultLanguageSourceExtension)" Exclude="$(GeneratedSource)**">
-        <Link>GeneratedSource\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      </Compile>
+      <Compile Include="$(SwaggerOutput)/src/$(SwaggerNamespace)/**/*$(DefaultLanguageSourceExtension)" />
     </ItemGroup>
+  </Target>
+
+
+  <Target Name="CleanSwaggerCodegen" AfterTargets="Clean">
+    <RemoveDir Directories="$(SwaggerOutput)" />
   </Target>
 
 </Project>
