@@ -1,10 +1,3 @@
-//
-//  ViewController.swift
-//  NHSOnline
-//
-//  Copyright © 2018 NHS Digital. All rights reserved.
-//
-
 import UIKit
 import WebKit
 
@@ -16,12 +9,10 @@ class ViewController: UIViewController, UITabBarDelegate {
         super.viewDidLoad()
         initializeTabBar()
         loadWebView()
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     public func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
