@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/_45sdp"
-        app:layout_constraintBottom_toTopOf="@+id/customMenu"
+        app:layout_constraintBottom_toTopOf="@+id/menuBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,14 +20,14 @@
         app:layout_constraintVertical_bias="0.071" />
 
 
-    <com.nhs.online.nhsonline.bmenu.MenuBar
-        android:id="@+id/customMenu"
+    <com.nhs.online.nhsonline.navigation.MenuBar
+        android:id="@+id/menuBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_45sdp"
         android:background="@drawable/menu_top_shadow"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.nhs.online.nhsonline.bmenu.MenuBarItem
+        <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/symptoms"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             app:inactiveIcon="@mipmap/icon_menu_symptoms"
             app:menuTitle="@string/symptoms" />
 
-        <com.nhs.online.nhsonline.bmenu.MenuBarItem
+        <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/appointments"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             app:inactiveIcon="@mipmap/icon_menu_appointments"
             app:menuTitle="@string/appointment" />
 
-        <com.nhs.online.nhsonline.bmenu.MenuBarItem
+        <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/prescriptions"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             app:inactiveIcon="@mipmap/icon_menu_prescriptions"
             app:menuTitle="@string/prescription" />
 
-        <com.nhs.online.nhsonline.bmenu.MenuBarItem
+        <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/myRecord"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
             app:inactiveIcon="@mipmap/icon_menu_record"
             app:menuTitle="@string/my_record" />
 
-        <com.nhs.online.nhsonline.bmenu.MenuBarItem
+        <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/more"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -67,6 +67,6 @@
             app:inactiveIcon="@mipmap/icon_menu_more"
             app:menuTitle="@string/more" />
 
-    </com.nhs.online.nhsonline.bmenu.MenuBar>
+    </com.nhs.online.nhsonline.navigation.MenuBar>
 
 </android.support.constraint.ConstraintLayout>

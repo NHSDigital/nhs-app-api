@@ -6,20 +6,18 @@ import android.support.v7.app.AppCompatDelegate
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-
-    private fun loadPage(url: String) {
-        webview.loadUrl(url)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         setContentView(R.layout.activity_main)
-        resources.getString(R.string.baseURL)
+
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
         loadPage(resources.getString(R.string.baseURL))
     }
 
+    private fun loadPage(url: String) {
+        webview.loadUrl(url)
+    }
 }

@@ -5,5 +5,5 @@
     <string name="prescription">Prescriptions</string>
     <string name="my_record">My Records</string>
     <string name="more">more</string>
-    <string name="baseURL">http://10.0.3.2:8082/#</string>
+    <string name="baseURL">http://10.0.2.2:8080</string>
 </resources>
