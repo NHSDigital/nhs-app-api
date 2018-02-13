@@ -1,0 +1,12 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+
+    <dimen name="menuBarItemIconHeight">@dimen/_18sdp</dimen>
+    <dimen name="menuBarItemIconWidth">@dimen/_18sdp</dimen>
+    <dimen name="menuBarItemIconBottomMargin">@dimen/_2sdp</dimen>
+    <dimen name="menuBarItemFontSize">@dimen/_7ssp</dimen>
+
+</resources>

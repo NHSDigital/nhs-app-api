@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Theme colors-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!--MenuBar and MenuBarItem colors-->
+    <color name="defaultMenuTextColor">#4A4A4A</color>
+    <color name="activeMenuTextColor">#005EB8</color>
+    <color name="menuBarTopBorder">#BCC0C4</color>
+</resources>
