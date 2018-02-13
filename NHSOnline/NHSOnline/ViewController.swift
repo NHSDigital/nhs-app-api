@@ -15,8 +15,8 @@ class ViewController: UIViewController {
     }
     
     private func loadDefaultWebPage() {
-        let webViewEndpointUrl = Bundle.main.infoDictionary!["BaseUrl"] as! String
-        let urlRequest = URLRequest(url: URL(string: webViewEndpointUrl)!)
+        let baseUrl = Bundle.main.infoDictionary!["BaseUrl"] as! String
+        let urlRequest = URLRequest(url: URL(string: baseUrl)!)
         webView.load(urlRequest)
     }
 }
