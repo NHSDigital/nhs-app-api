@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DsO-M7-xl2">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <tabBar contentMode="bottom" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="va0-HI-HiS">
+                                <rect key="frame" x="0.0" y="618" width="375" height="49"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <items>
+                                    <tabBarItem title="Symptoms" image="SymptomsIcon" selectedImage="SymptomsActiveIcon" id="g4U-nj-aFu"/>
+                                    <tabBarItem tag="1" title="Appointments" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="ALP-hf-SBr"/>
+                                    <tabBarItem tag="2" title="Prescriptions" image="PrescriptionsIcon" selectedImage="PrescriptionsActiveIcon" id="egF-fO-zDJ"/>
+                                    <tabBarItem tag="3" title="My Record" image="RecordIcon" selectedImage="RecordActiveIcon" id="iKy-SG-p0H"/>
+                                    <tabBarItem tag="4" title="More" image="MoreIcon" selectedImage="MoreActiveIcon" id="Nhs-Wn-GjK"/>
+                                </items>
+                            </tabBar>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="trailing" secondItem="DsO-M7-xl2" secondAttribute="trailing" id="8h7-lp-NGr"/>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="bottom" secondItem="4RY-uH-2KI" secondAttribute="bottom" id="MHY-5W-CwR"/>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="OTK-4a-PVJ"/>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="top" secondItem="DsO-M7-xl2" secondAttribute="bottom" id="bHx-jY-0qz"/>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="top" secondItem="DsO-M7-xl2" secondAttribute="bottom" id="bfg-zZ-Pn0"/>
+                            <constraint firstAttribute="trailing" secondItem="va0-HI-HiS" secondAttribute="trailing" id="eAG-X6-tz8"/>
+                            <constraint firstItem="DsO-M7-xl2" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="gXf-WC-SqF"/>
+                            <constraint firstItem="va0-HI-HiS" firstAttribute="leading" secondItem="DsO-M7-xl2" secondAttribute="leading" id="gx9-qA-o5j"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4RY-uH-2KI"/>
+                    </view>
+                    <connections>
+                        <outlet property="tabBar" destination="va0-HI-HiS" id="S7r-kw-T2l"/>
+                        <outlet property="webView" destination="DsO-M7-xl2" id="g6M-Hf-dal"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="AppointmentActiveIcon" width="36" height="36"/>
+        <image name="AppointmentIcon" width="36" height="36"/>
+        <image name="MoreActiveIcon" width="25" height="6"/>
+        <image name="MoreIcon" width="25" height="6"/>
+        <image name="PrescriptionsActiveIcon" width="39" height="35"/>
+        <image name="PrescriptionsIcon" width="39" height="35"/>
+        <image name="RecordActiveIcon" width="33" height="36"/>
+        <image name="RecordIcon" width="33" height="36"/>
+        <image name="SymptomsActiveIcon" width="31" height="36"/>
+        <image name="SymptomsIcon" width="30" height="36"/>
+    </resources>
+    <color key="tintColor" red="0.0047798985619999998" green="0.18509393930000001" blue="0.52652108669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+</document>
