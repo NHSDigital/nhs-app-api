@@ -1,8 +1,8 @@
 <template>
   <div class="bodyDiv">
-    <h1>{{ msg }}</h1>
-    <button v-on:click="getValues">Get Values</button>
-    <ul>
+    <h1>{{ title }}</h1>
+    <button id="get-values-button" v-on:click="getValues">Get Values</button>
+    <ul id="values-list">
       <li v-for="value in values" :key="value.name">
         {{ value.name }}
       </li>
@@ -20,16 +20,15 @@ export default {
   ],
   data() {
     return {
-      msg: 'NHS Online',
+      title: 'NHS Online',
       values: [],
     };
   },
   methods: {
     getValues() {
-      this.nhsOnlineApi.getValues()
-        .then((values) => {
-          this.values = values;
-        });
+      return this.nhsOnlineApi.getValues().then((values) => {
+        this.values = values;
+      });
     },
   },
 };
