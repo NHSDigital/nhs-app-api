@@ -2,4 +2,8 @@
 <resources>
     <string name="baseURL">http://10.0.2.2:8080</string>
     <string name="nhs111">https://111.nhs.uk</string>
+
+    <string-array name="serviceUrls">
+        <item>@string/nhs111</item>
+    </string-array>
 </resources>
