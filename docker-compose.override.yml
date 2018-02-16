@@ -1,6 +1,24 @@
 version: '3'
 
+volumes:
+  node_modules:
 services:
   nhsonline.web:
     ports:
-      - "8080"
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      - API_HOST=http://localhost:8800
+  nhsonline.backend.proxy:
+    image: nhsonline.backend.proxy
+    ports:
+      - "8800:80"
+  nhsonline.backend.worker:
+    image: nhsonline.backend.worker
+  nhsonline.stubs.emis.im1:
+    image: nhsonline.stubs.emis.im1
+
+# Note that the node_modules volume is mapped as above in order to prevent the hosts node_modules being used in the container.
+# # See https://stackoverflow.com/a/38601156 for more information

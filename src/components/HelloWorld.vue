@@ -1,26 +1,45 @@
 <template>
   <div class="bodyDiv">
-    <h1>{{ msg }}</h1>
+    <h1>{{ title }}</h1>
+    <button id="get-values-button" v-on:click="getValues">Get Values</button>
+    <ul id="values-list">
+      <li v-for="value in values" :key="value.name">
+        {{ value.name }}
+      </li>
+    </ul>
   </div>
 </template>
 
+
 <script>
+
 export default {
   name: 'HelloWorld',
+  inject: [
+    'nhsOnlineApi',
+  ],
   data() {
     return {
-      msg: 'NHS Online',
+      title: 'NHS Online',
+      values: [],
     };
+  },
+  methods: {
+    getValues() {
+      return this.nhsOnlineApi.getValues().then((values) => {
+        this.values = values;
+      });
+    },
   },
 };
 </script>
 
+
 <style lang="scss" scoped>
-@import "../style/nhso.scss";
+  @import "../style/nhso.scss";
 
-h1 {
-  @include h1;
-  background-color: $nhs_blue;
-}
-
+  h1 {
+    @include h1;
+    background-color: $nhs_blue;
+  }
 </style>
