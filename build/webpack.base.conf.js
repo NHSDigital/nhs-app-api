@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const utils = require('./utils');
 const config = require('../config');
 const vueLoaderConfig = require('./vue-loader.conf');
-const SwaggerCodegenPlugin = require('./swagger-codegen/swagger-codegen-plugin');
 
 function resolve(dir) {
   return path.join(__dirname, '..', dir);
@@ -21,6 +20,7 @@ const createLintingRule = () => ({
     emitWarning: !config.dev.showEslintErrorsInOverlay,
   },
 });
+
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
@@ -42,10 +42,6 @@ module.exports = {
     },
   },
   plugins: [
-    new SwaggerCodegenPlugin({
-      contractPath: resolve('contracts/index.yaml'),
-      outputPath: resolve('src/services/nhsonlineapi.js'),
-    }),
     new webpack.DefinePlugin({
       'process.env.API_HOST': JSON.stringify(process.env.API_HOST),
     }),
