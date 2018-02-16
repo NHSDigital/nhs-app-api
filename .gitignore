@@ -3,6 +3,9 @@
 *.swp
 *.swo
 
+#jar in libs folder 
+lib/*.jar
+
 #built application files
 *.apk
 *.ap_
@@ -33,13 +36,14 @@ Thumbs.db
 # Android Studio
 *.iml
 .idea
+#exclude coding style settings 
+!.idea/codeStyleSettings.xml 
 #.idea/workspace.xml
 .gradle/
 build/
 .navigation
 captures/
 output.json
-
 #NDK
 obj/
 .externalNativeBuild

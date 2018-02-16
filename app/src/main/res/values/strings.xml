@@ -6,4 +6,5 @@
     <string name="my_record">My Records</string>
     <string name="more">more</string>
     <string name="baseURL">http://10.0.2.2:8080</string>
+    <string name="nhs111">https://111.nhs.uk</string>
 </resources>
