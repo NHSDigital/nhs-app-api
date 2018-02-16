@@ -7,4 +7,6 @@
     <string name="more">More</string>
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
+
+    <string name="retryButtonText">Reload page</string>
 </resources>

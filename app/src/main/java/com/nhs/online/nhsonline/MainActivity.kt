@@ -8,8 +8,6 @@ import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import kotlinx.android.synthetic.main.activity_main.*
 
-
-
 class MainActivity : IInteractor, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,6 +16,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         configureWebView()
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
+        retryButton.setOnClickListener { onSymptomMenuSelected() }
         loadWelcomePage()
     }
 

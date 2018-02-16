@@ -39,6 +39,14 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="@dimen/errorTextSize" />
+
+            <Button
+                android:id="@+id/retryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:text="@string/retryButtonText"
+                android:textAllCaps="false" />
         </LinearLayout>
 
     </FrameLayout>
