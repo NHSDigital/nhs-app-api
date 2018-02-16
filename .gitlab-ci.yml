@@ -1,0 +1,43 @@
+image: docker:latest
+
+before_script:
+  - apk add --update nodejs
+
+stages:
+  - build
+  - package
+
+cache:
+  key: "${CI_COMMIT_SHA}"
+
+build_branch:
+  stage: build
+  script:
+    - npm install
+    - npm run unit
+
+
+.job_template: &push_docker
+  stage: package
+  script:
+    - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
+    - docker build . -t "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${DOCKER_TAG}"
+    - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${DOCKER_TAG}"
+
+package_docker_branches:
+  variables:
+    DOCKER_TAG: ${CI_COMMIT_REF_SLUG}
+  only:
+    - branches
+  except:
+    - master
+    - develop
+  <<: *push_docker
+
+package_docker_develop:
+  variables:
+    DOCKER_TAG: latest
+  only:
+    - develop
+  <<: *push_docker
+
