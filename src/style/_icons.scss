@@ -1,0 +1,76 @@
+svg {
+	.menu_stroke {
+		fill:none;
+		stroke:#606060;
+		stroke-linecap:round;
+		stroke-linejoin:round;
+		stroke-width:4px;
+		transition: all ease 0.5s;
+	}
+	.symptoms_middle {
+		fill:#606060;
+	}
+	.icon-account {
+		fill:none;
+		stroke:#fff;
+		stroke-linecap:round;
+		stroke-linejoin:round;
+		stroke-width:4px;
+	}
+}
+.active {
+	svg {
+		.menu_stroke {
+			stroke: $nhs_blue;
+		}
+	}
+}
+#btn_more.active {
+	svg {
+		.menu_stroke {
+			fill: $nhs_blue;
+		}
+	}
+}
+#btn_symptoms.active {
+	svg {
+		.active {
+			fill: $nhs_blue;
+		}
+		.symptoms_middle {
+			fill: $nhs_blue;
+		}
+	}
+}
+#btn_appointments.active {
+	svg {
+		.active {
+			fill: $nhs_blue;
+		}
+	}
+}
+#btn_prescriptions.active {
+	svg {
+		.active {
+			fill: $nhs_blue;
+		}
+	}
+}
+#btn_record.active {
+	svg {
+		.active {
+			fill: $nhs_blue;
+		}
+		.white {
+			stroke: $white;
+		}
+	}
+}
+#btn_more.active {
+	svg {
+		.active {
+			fill: $nhs_blue;
+		}
+		
+	}
+}

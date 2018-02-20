@@ -1,0 +1,113 @@
+//* TEXT STYLES */
+@mixin h1 {
+	display: block;
+	font-family: $frutiger-roman;
+	font-weight: 700;
+	font-size: 24px;
+	line-height: 29px;
+	color: $white;
+}
+@mixin h2 {
+	display: block;
+	font-family: $frutiger-roman;
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 24px;
+	color: $white;
+}
+@mixin screen_title {
+	display: block;
+	font-family: $frutiger-light;
+	font-weight: normal;
+	font-size: 20px;
+	line-height: 24px;
+	color: $white;
+}
+@mixin h4 {
+	display: block;
+	font-family: $frutiger-bold;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 23px;
+	color: $dark_grey;
+}
+@mixin h5 {
+	font-family: $frutiger-bold;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 23px;
+	color: $light_grey;
+}
+@mixin button {
+	display: block;
+	font-family: $frutiger-roman;
+	font-weight: 700;
+	font-size: 18px;
+	line-height: 23px;
+	color: $white;
+}
+@mixin default_label {
+	display: block;
+	font-family: $default;
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin default_text {
+	display: block;
+	font-family: $default;
+	font-weight: normal;
+	font-size: 16px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin default_text_white {
+	display: block;
+	font-family: $default;
+	font-size: 16px;
+	line-height: 22px;
+	color: $white;
+}
+@mixin small_label {
+	display: block;
+	font-family: $default;
+	font-weight: 700;
+	font-size: 13px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin small_text {
+	display: block;
+	font-family: $default;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin message {
+	display: block;
+	font-family: $default;
+	font-weight: normal;
+	font-size: 18px;
+	line-height: 22px;
+	color: $dark_grey;
+}
+@mixin menu {
+	display: block;
+	font-family: $default;
+	font-weight: normal;
+	font-size: 9px;
+	text-transform: uppercase;
+	line-height: 10px;
+	color: $dark_grey;
+}
+@mixin menu_active {
+	display: block;
+	font-family: $default;
+	font-weight: normal;
+	font-size: 9px;
+	text-transform: uppercase;
+	line-height: 10px;
+	color: $nhs_blue;
+}
