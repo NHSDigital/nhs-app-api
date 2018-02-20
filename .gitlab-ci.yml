@@ -14,7 +14,7 @@ build_branch:
   stage: build
   script:
     - npm install
-    - npm run unit
+    - npm run test-unit
 
 
 .job_template: &push_docker
