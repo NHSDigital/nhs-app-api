@@ -1,7 +1,8 @@
 <template>
   <div class="bodyDiv">
     <h1>{{ title }}</h1>
-    <button id="get-values-button" v-on:click="getValues">Get Values</button>
+    <p v-html="$t('message.hello')"></p>
+    <button id="get-values-button" v-on:click="getValues">{{ $t('message.getValue') }}</button>
     <ul id="values-list">
       <li v-for="value in values" :key="value.name">
         {{ value.name }}
@@ -9,7 +10,6 @@
     </ul>
   </div>
 </template>
-
 
 <script>
 
