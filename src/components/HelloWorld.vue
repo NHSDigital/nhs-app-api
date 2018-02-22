@@ -1,7 +1,6 @@
 <template>
   <div class="bodyDiv">
     <h1>{{ title }}</h1>
-    <p v-html="$t('message.hello')"></p>
     <button id="get-values-button" v-on:click="getValues">{{ $t('message.getValue') }}</button>
     <ul id="values-list">
       <li v-for="value in values" :key="value.name">
