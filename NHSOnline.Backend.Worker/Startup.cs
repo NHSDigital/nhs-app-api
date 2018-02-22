@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.ApiHandlers;
 using NHSOnline.Backend.Worker.Controllers;
+using NHSOnline.Backend.Worker.Factories;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -19,8 +20,7 @@ namespace NHSOnline.Backend.Worker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IValuesApiHandler, ValuesApiHandler>();
-
+            services.AddSingleton<IValuesApiHandler>(new ValuesApiHandler(new Config(Configuration), new HttpClientFactory()));
             services.AddMvc();
         }
 
