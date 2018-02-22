@@ -5,7 +5,7 @@
 ## Get code
 Clone from the GitLab repo: https://git.nhschoices.net/nhsonline/nhsonline-web
 ```bash
-git clone ssh://git@git.nhschoices.net:8222/nhsonline/nhsonline-web.git
+git clone https://git.nhschoices.net/nhsonline/nhsonline-web
 ```
 
 ## Installation
