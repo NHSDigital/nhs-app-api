@@ -21,8 +21,8 @@ const i18n = new VueI18n({
 /* eslint-disable no-new */
 new Vue({
   i18n,
-  el: '#app',
   router,
+  el: '#app',
   components: { App },
   template: '<App/>',
 });
