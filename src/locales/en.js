@@ -12,5 +12,5 @@ export default {
   },
   common: {
     or: 'OR',
-  }
+  },
 };
