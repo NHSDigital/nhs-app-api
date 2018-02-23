@@ -3,7 +3,7 @@ export default {
     welcome: 'Welcome!',
   },
   loginOrRegister: {
-    login: 'Sing in with your NHS account',
+    login: 'Sign in with your NHS account',
     createAccount: 'Create an NHS account',
   },
   symptom: {
