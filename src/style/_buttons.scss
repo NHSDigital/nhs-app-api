@@ -1,0 +1,34 @@
+/** BUTTONS */
+button.button {
+	@include button;
+	box-sizing: border-box;
+	width: 100%;
+	padding: 10px;
+	background-color: $nhs_blue;
+	border: none;
+	border-radius: 4px;
+	//box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color];
+	box-shadow: 0px 4px 0px 0px $dark_blue;
+	margin-bottom: 20px;
+	outline: none;
+	transition: all ease 0.5s;
+	
+	&.green {
+		background-color: $light_green;
+		box-shadow: 0px 4px 0px 0px $dark_green;
+	}
+	&.grey {
+		background-color: $light_grey;
+		box-shadow: 0px 4px 0px 0px $dark_grey;
+	}
+	&.white {
+		background-color: $white;
+		box-shadow: 0px 4px 0px 0px $light_grey;
+		color: $dark_grey;
+	}
+	
+	&:active {
+		-webkit-filter: brightness(120%);
+		filter: brightness(120%);
+	}
+}

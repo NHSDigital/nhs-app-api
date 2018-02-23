@@ -1,7 +1,3 @@
-/* eslint-disable func-names */
-// The Given, When, Then functions require the use of `this`.  In turn this required an actual
-// function as opposed to an anonymous function.  Names, however, are rather pointless in this
-// case.
 import { Given, Then } from 'cucumber';
 import HomePage from '../page-objects/HomePage';
 
@@ -12,4 +8,12 @@ Given('I am on the home page', function () {
 
 Then('I should see the NHS Online banner', function () {
   return this.homePage.expect.banner.to.be.visible;
+});
+
+Then('I should a see mechanism for initiating login', function () {
+  return this.homePage.expect.loginButton.to.be.visible;
+});
+
+Then('I should a see mechanism for initiating the creation of a new account', function () {
+  return this.homePage.expect.createAccountButton.to.be.visible;
 });

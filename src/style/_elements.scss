@@ -1,0 +1,76 @@
+.panel {
+	width: 100%;
+	box-sizing: border-box;
+	padding: 16px;
+	margin-bottom: 16px;
+	background-color: $white;
+	-webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	-moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+	display: table;
+	transition: all ease 0.5s;
+	
+	.panel-icon,
+	.panel-content,
+	.panel-selection {
+		transition: all ease 0.5s;
+	}
+	
+	.panel-icon {
+		display: table-cell;
+		vertical-align: top;
+		width: 40px;
+	}
+	.panel-content {
+		display: table-cell;
+		vertical-align: top;
+	}
+	.panel-selection {
+		display: table-cell;
+		vertical-align: top;
+		width: 24px;
+		display: none; // FIRST STATE
+		
+		.checkbox {
+			border: 1px #979797 solid;
+			width: 24px;
+			height: 24px;
+			border-radius: 5px;
+			
+			&:active {
+				border-color: $black;
+			}
+			
+			.checked {
+				margin-left: 4px;
+				margin-top: 6px;
+				display: none;
+			}
+		}
+	}
+}
+.panel,
+.form {
+	h6 {
+		@include small_label;
+		padding-top: 16px;
+	}
+	h5 {
+		@include default_label;
+	}
+	p {
+		@include default_text;
+	}
+	label {
+		@include default_label;
+		padding-top: 16px;
+	}
+	hr {
+		height: 1px;
+		border: none;
+		background-color: $dark_grey;
+		opacity: 0.2;
+		margin-bottom: 16px;
+		margin-top: 16px;
+	}
+}

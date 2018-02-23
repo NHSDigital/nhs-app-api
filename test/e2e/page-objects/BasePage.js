@@ -19,7 +19,8 @@ class BasePage {
       get(target, name) {
         const selector = self.selectors[name];
         if (selector) {
-          return self.browser.expect.element(selector);
+          const { value, using = 'css selector' } = selector;
+          return self.browser.expect.element(value, using);
         }
 
         throw new Error(`Cannot find selector: ${name}`);
