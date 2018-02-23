@@ -1,8 +1,8 @@
 <template>
   <div class="symptom_banner">
-    <h2>How are you feeling right now?</h2>
+    <h2>{{ $t('symptom.howAreYouFeeling') }}</h2>
     <button class="button white" id="btn_home_symptoms">
-      Symptom checker
+      {{ $t('symptom.checker') }}
     </button>
   </div>
 </template>

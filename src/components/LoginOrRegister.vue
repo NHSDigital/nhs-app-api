@@ -1,13 +1,13 @@
 <template>
   <main class="login-or-register">
     <button data-id="login-button" class="button green">
-      Login with your NHS account
+      {{ $t('loginOrRegister.login') }}
     </button>
 
-    <hr class="hr-text" data-content="OR">
+    <hr class="hr-text" v-bind:data-content="$t('common.or')">
 
     <button data-id="create-account-button" class="create-account-button button">
-      Create an NHS account
+       {{ $t('loginOrRegister.createAccount') }}
     </button>
   </main>
 </template>
