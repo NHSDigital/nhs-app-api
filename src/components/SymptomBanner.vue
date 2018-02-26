@@ -1,11 +1,21 @@
 <template>
   <div class="symptom_banner">
     <h2>{{ $t('symptom.howAreYouFeeling') }}</h2>
-    <button class="button white" id="btn_home_symptoms">
+    <a :href="symptomCheckerUrl" class="button white" id="btn_home_symptoms">
       {{ $t('symptom.checker') }}
-    </button>
+    </a>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      symptomCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
+    };
+  },
+};
+</script>
 
 <style lang="scss"  scoped>
   @import '../style/colours';
@@ -18,7 +28,7 @@
     width: 100%;
     vertical-align: bottom;
 
-    button.button {
+    button.button, a.button {
       margin-bottom: 5px;
     }
   }

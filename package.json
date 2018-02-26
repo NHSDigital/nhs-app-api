@@ -8,7 +8,7 @@
     "docker-down": "docker-compose -f docker-compose.dev.yml down",
     "dev": "npm run docker-up && npm run swagger && npm run dev-server",
     "prod": "npm run swagger && npm run prod-server",
-    "dev-server": "cross-env API_HOST=http://localhost:8800 ORGAN_DONATION_URL=https://www.organdonation.nhs.uk/ webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev-server": "cross-env API_HOST=http://localhost:8800 ORGAN_DONATION_URL=https://www.organdonation.nhs.uk/ SYMPTOM_CHECKER_URL=https://111.nhs.uk webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "prod-server": "webpack-dev-server --inline --progress --config build/webpack.prod.conf.js",
     "start": "npm run dev",
     "test": "npm run test-browser",

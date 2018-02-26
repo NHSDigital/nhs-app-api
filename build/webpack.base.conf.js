@@ -45,6 +45,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.API_HOST': JSON.stringify(process.env.API_HOST),
       'process.env.ORGAN_DONATION_URL': JSON.stringify(process.env.ORGAN_DONATION_URL),
+      'process.env.SYMPTOM_CHECKER_URL': JSON.stringify(process.env.SYMPTOM_CHECKER_URL),
     }),
   ],
   module: {
