@@ -35,7 +35,7 @@
         </svg>
       </div>
 
-      <h1>Welcome!</h1>
+      <h1>{{ $t('home.welcome') }}</h1>
 
       <SymptomBanner/>
     </header>

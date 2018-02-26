@@ -16,7 +16,6 @@ build_branch:
   script:
     - apk add --update nodejs
     - npm install
-    - npm run test-unit
 
 
 sonarqube_analyse:
