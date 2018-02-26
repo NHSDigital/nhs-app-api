@@ -1,5 +1,11 @@
 /** BUTTONS */
-button.button {
+a.button {
+	text-decoration: none;
+	text-align: center;
+}
+
+button.button,
+a.button {
 	@include button;
 	box-sizing: border-box;
 	width: 100%;

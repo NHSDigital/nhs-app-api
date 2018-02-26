@@ -12,7 +12,7 @@ class HomePage extends BasePage {
 
     this.selectors.loginButton = textContains({
       element: 'button',
-      value: 'Login with your NHS account',
+      value: 'Sign in with your NHS account',
     });
   }
 }

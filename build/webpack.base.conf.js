@@ -44,6 +44,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.API_HOST': JSON.stringify(process.env.API_HOST),
+      'process.env.ORGAN_DONATION_URL': JSON.stringify(process.env.ORGAN_DONATION_URL),
     }),
   ],
   module: {

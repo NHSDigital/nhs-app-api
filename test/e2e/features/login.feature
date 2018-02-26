@@ -7,4 +7,3 @@ Feature: Login
     Given I am not logged in
     When I am on the home page
     Then I should a see mechanism for initiating login
-

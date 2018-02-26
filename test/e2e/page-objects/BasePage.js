@@ -1,4 +1,8 @@
-import { resolve as resolveUrl } from 'url';
+const { assign } = require('lodash/fp');
+const { default: urlExpectations } = require('../support/expectations/url-expectations');
+
+const MODE_CSS = 'css selector';
+const MODE_XPATH = 'xpath';
 
 class BasePage {
   constructor({ path, world }) {
@@ -17,19 +21,53 @@ class BasePage {
     // `page.expect.header` will attempt to resolve using `browser.expect.element('h1').
     self.expect = new Proxy(self.browser.expect, {
       get(target, name) {
-        const selector = self.selectors[name];
-        if (selector) {
-          const { value, using = 'css selector' } = selector;
-          return self.browser.expect.element(value, using);
+        if (name === 'url') {
+          return urlExpectations(self);
         }
 
-        throw new Error(`Cannot find selector: ${name}`);
+        const { value, using } = self.getSelector(name);
+        return self.browser.expect.element(value, using);
       },
     });
+
+    self.invoke = new Proxy(self.browser, {
+      get(target, name) {
+        const { value, using } = self.getSelector(name);
+        self.changeMode(using);
+        return self.browser.click(value);
+      }
+    })
+  }
+
+  changeMode(mode) {
+    switch(mode) {
+      case MODE_XPATH:
+        return this.browser.useXpath();
+      default:
+        return this.browser.useCss();
+    }
+  }
+
+  getSelector(name) {
+    const selector = this.selectors[name];
+    if (selector) {
+      const result = assign({ using: MODE_CSS }, selector);
+      return result;
+    }
+
+    throw new Error(`Cannot find selector: ${name}`);
   }
 
   goto() {
-    return this.browser.url(resolveUrl(this.baseUrl, this.path));
+    const baseUrl = this.baseUrl.replace(/\/$/, '');
+    const path = this.path.replace(/^\//, '');
+    return this.browser.url(`${baseUrl}/${path}`);
+    // return this.browser.url('data:,')
+  }
+
+  invoke(selectorName) {
+    const selector = this.getSelector(selectorName);
+    return this.browser.click(selector);
   }
 }
 
