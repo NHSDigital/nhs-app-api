@@ -12,12 +12,13 @@
     "prod-server": "webpack-dev-server --inline --progress --config build/webpack.prod.conf.js",
     "start": "npm run dev",
     "test": "npm run test-browser",
-    "test-browser": "nightwatch --config test/e2e/nightwatch.conf.js --env chrome",
+    "test-browser": "node ./test/e2e/runner",
     "lint": "eslint --ext .js,.vue .",
     "build": "node build/build.js",
     "swagger": "node build/swagger.js --contract_path contracts/index.yaml --output_path src/services/nhsonlineapi.js"
   },
   "dependencies": {
+    "browserstack-automate": "^1.0.2",
     "postcss": "^6.0.16",
     "q": "^1.5.1",
     "vue": "^2.5.2",
