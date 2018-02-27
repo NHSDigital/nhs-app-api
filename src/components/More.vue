@@ -1,7 +1,8 @@
 <template>
   <div>
     <a class="button" :href="organDonationUrl" id="btn_organdonation">
-      Organ donation register
+      {{ $t('more.organDonationButtonText') }}
+
     </a>
   </div>
 </template>

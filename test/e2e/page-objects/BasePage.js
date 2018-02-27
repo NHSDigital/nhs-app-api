@@ -35,12 +35,12 @@ class BasePage {
         const { value, using } = self.getSelector(name);
         self.changeMode(using);
         return self.browser.click(value);
-      }
-    })
+      },
+    });
   }
 
   changeMode(mode) {
-    switch(mode) {
+    switch (mode) {
       case MODE_XPATH:
         return this.browser.useXpath();
       default:

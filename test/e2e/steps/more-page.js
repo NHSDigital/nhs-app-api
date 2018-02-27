@@ -6,10 +6,10 @@ Given('I am on the more page', function () {
   return this.morePage.goto();
 });
 
-When('I invoke organ donation', function() {
+When('I invoke organ donation', function () {
   return this.morePage.invoke.organDonationButton;
 });
 
-Then('I should be on the organ donation register', function() {
+Then('I should be on the organ donation register', function () {
   return this.morePage.expect.url.toEqual('https://www.organdonation.nhs.uk/');
 });

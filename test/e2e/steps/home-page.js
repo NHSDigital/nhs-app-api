@@ -1,4 +1,4 @@
-import { Given, Then } from 'cucumber';
+import { Given, When, Then } from 'cucumber';
 import HomePage from '../page-objects/HomePage';
 
 Given('I am on the home page', function () {
@@ -16,4 +16,8 @@ Then('I should a see mechanism for initiating login', function () {
 
 Then('I should a see mechanism for initiating the creation of a new account', function () {
   return this.homePage.expect.createAccountButton.to.be.visible;
+});
+
+When('I invoke symptom checker', function () {
+  return this.homePage.invoke.symptomCheckerButton;
 });

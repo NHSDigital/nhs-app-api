@@ -10,6 +10,9 @@ export default {
     howAreYouFeeling: 'How are you feeling right now?',
     checker: 'Symptom checker',
   },
+  more: {
+    organDonationButtonText: 'Organ donation register',
+  },
   common: {
     or: 'OR',
   },

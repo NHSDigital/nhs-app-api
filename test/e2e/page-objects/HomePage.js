@@ -14,6 +14,8 @@ class HomePage extends BasePage {
       element: 'button',
       value: 'Sign in with your NHS account',
     });
+
+    this.selectors.symptomCheckerButton = css('#btn_home_symptoms');
   }
 }
 
