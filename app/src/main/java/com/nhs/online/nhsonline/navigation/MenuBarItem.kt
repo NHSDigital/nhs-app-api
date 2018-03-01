@@ -32,7 +32,7 @@ class MenuBarItem @JvmOverloads constructor(
     private val iconHeight: Int
         get() = resources.getDimension(R.dimen.menuBarItemIconHeight).toInt()
 
-    var menuItemClickedListener: ((menuBarItem: MenuBarItem, position: Int) -> Unit)? = null
+    var menuItemClickedListener: ((position: Int) -> Unit)? = null
     private var itemPosition: Int = 0
 
     init {
@@ -42,7 +42,7 @@ class MenuBarItem @JvmOverloads constructor(
         readResourcesFromLayout(context, attrs)
     }
 
-    private fun readResourcesFromLayout(context: Context, attrs: AttributeSet?)  {
+    private fun readResourcesFromLayout(context: Context, attrs: AttributeSet?) {
         val array = context.obtainStyledAttributes(attrs, R.styleable.MenuBarItem)
 
         inactiveIconResId = getRequiredResourceId(array, R.styleable.MenuBarItem_inactiveIcon)
@@ -87,8 +87,8 @@ class MenuBarItem @JvmOverloads constructor(
 
     private fun initialiseMenuTitle() {
         val params = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
         )
         params.gravity = Gravity.CENTER
 
@@ -101,7 +101,7 @@ class MenuBarItem @JvmOverloads constructor(
     }
 
     fun selectItem() {
-        if (isActive){
+        if (isActive) {
             return
         }
 
@@ -111,7 +111,7 @@ class MenuBarItem @JvmOverloads constructor(
     }
 
     fun deselectItem() {
-        if (!isActive){
+        if (!isActive) {
             return
         }
 
@@ -125,6 +125,6 @@ class MenuBarItem @JvmOverloads constructor(
     }
 
     override fun onClick(view: View) {
-        menuItemClickedListener?.invoke(this, itemPosition)
+        menuItemClickedListener?.invoke(itemPosition)
     }
 }

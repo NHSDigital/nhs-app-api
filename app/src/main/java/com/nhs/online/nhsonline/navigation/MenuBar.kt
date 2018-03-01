@@ -7,13 +7,15 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
+import com.nhs.online.nhsonline.support.Optional
 
 class MenuBar @JvmOverloads constructor(
-        context: Context,
-        attributes: AttributeSet? = null,
-        defaultStyleResourceId: Int = 0
+    context: Context,
+    attributes: AttributeSet? = null,
+    defaultStyleResourceId: Int = 0
 ) : LinearLayout(context, attributes, defaultStyleResourceId) {
-    private var selectedPos = 0
+    private var selectedPosition = Optional.empty<Int>()
+    var menuItemSelectedListener: ((menuBarItem: MenuBarItem) -> Unit)? = null
 
     init {
         orientation = LinearLayout.HORIZONTAL
@@ -23,14 +25,15 @@ class MenuBar @JvmOverloads constructor(
     override fun onFinishInflate() {
         super.onFinishInflate()
         weightSum = childCount.toFloat()
-
         initialiseMenuItems()
     }
 
     private fun initialiseMenuItems() {
         for (i in 0 until childCount) {
             val menuBarItem = getMenuBarItemAt(i)
-            menuBarItem.menuItemClickedListener = {menuBarItem, position -> onMenuItemClicked(menuBarItem, position) }
+            menuBarItem.menuItemClickedListener = { position ->
+                onMenuItemClicked(position)
+            }
             menuBarItem.setItemPosition(i)
             (menuBarItem.layoutParams as LinearLayout.LayoutParams).weight = 1f
         }
@@ -40,15 +43,26 @@ class MenuBar @JvmOverloads constructor(
         return getChildAt(index) as MenuBarItem
     }
 
-    private fun onMenuItemClicked(menuBarItem: MenuBarItem, position: Int) {
-        val previousSelectedPosition = selectedPos
-        if (previousSelectedPosition != position) {
-            if (previousSelectedPosition != null)
-                getMenuBarItemAt(previousSelectedPosition).deselectItem()
-
-            menuBarItem.selectItem()
-            selectedPos = position
+    private fun onMenuItemClicked(position: Int) {
+        selectedPosition.ifPresent { selectedPosition ->
+            if (selectedPosition != position) {
+                getMenuBarItemAt(selectedPosition).deselectItem()
+                selectMenuItem(position)
+            }
         }
+
+        selectedPosition.ifEmpty {
+            selectMenuItem(position)
+        }
+    }
+
+    private fun selectMenuItem(position: Int) {
+        val menuBarItem = getMenuBarItemAt(position)
+
+        menuBarItem.selectItem()
+        selectedPosition = Optional.of(position)
+
+        menuItemSelectedListener?.invoke(menuBarItem)
     }
 
     override fun onRestoreInstanceState(state: Parcelable) {
@@ -57,31 +71,39 @@ class MenuBar @JvmOverloads constructor(
             return
         }
 
-        selectedPos = state.selectedPosition
-        getMenuBarItemAt(selectedPos).selectItem()
+        state.selectedPosition.ifPresent { position -> selectMenuItem(position) }
 
         super.onRestoreInstanceState(state.superState)
     }
 
     override fun onSaveInstanceState(): Parcelable? {
         val superState = super.onSaveInstanceState()
-        return SavedState(superState, selectedPos)
+        return SavedState(superState, selectedPosition)
     }
 
     internal class SavedState : View.BaseSavedState {
-        val selectedPosition: Int
+        companion object {
+            private const val UNSELECTED_POSITION = -1
+        }
 
-        constructor(superState: Parcelable, selectedPosition: Int) : super(superState) {
+        val selectedPosition: Optional<Int>
+
+        constructor(superState: Parcelable, selectedPosition: Optional<Int>) : super(superState) {
             this.selectedPosition = selectedPosition
         }
 
         constructor(source: Parcel) : super(source) {
-            selectedPosition = source.readInt()
+            val position = source.readInt()
+            selectedPosition = if (position == UNSELECTED_POSITION) {
+                Optional.empty()
+            } else {
+                Optional.of(position)
+            }
         }
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
             super.writeToParcel(parcel, flags)
-            parcel.writeInt(selectedPosition)
+            parcel.writeInt(selectedPosition.orElse(UNSELECTED_POSITION))
         }
     }
 }
