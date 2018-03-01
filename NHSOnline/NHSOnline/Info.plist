@@ -4,6 +4,8 @@
 <dict>
 	<key>BaseUrl</key>
 	<string>http://localhost:8080</string>
+	<key>nhs111Url</key>
+	<string>https://111.nhs.uk</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
