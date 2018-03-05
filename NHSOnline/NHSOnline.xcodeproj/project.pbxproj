@@ -14,6 +14,7 @@
 		C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */; };
 		C20578182028B94800CDBDC5 /* NHSOnlineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578172028B94800CDBDC5 /* NHSOnlineTests.swift */; };
 		C20578232028B94800CDBDC5 /* NHSOnlineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578222028B94800CDBDC5 /* NHSOnlineUITests.swift */; };
+		F0B4B8B8204D68DC004E4120 /* Locales.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0B4B8BA204D68DC004E4120 /* Locales.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,8 @@
 		C205781E2028B94800CDBDC5 /* NHSOnlineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NHSOnlineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C20578222028B94800CDBDC5 /* NHSOnlineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NHSOnlineUITests.swift; sourceTree = "<group>"; };
 		C20578242028B94800CDBDC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0B4B8B2204D50E9004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		F0B4B8B9204D68DC004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Locales.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +106,7 @@
 				C20578092028B94800CDBDC5 /* Assets.xcassets */,
 				C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */,
 				C205780E2028B94800CDBDC5 /* Info.plist */,
+				F0B4B8BA204D68DC004E4120 /* Locales.strings */,
 			);
 			path = NHSOnline;
 			sourceTree = "<group>";
@@ -234,6 +238,7 @@
 			files = (
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
+				F0B4B8B8204D68DC004E4120 /* Locales.strings in Resources */,
 				C20578082028B94800CDBDC5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,6 +305,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C20578072028B94800CDBDC5 /* Base */,
+				F0B4B8B2204D50E9004E4120 /* en */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -312,6 +318,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		F0B4B8BA204D68DC004E4120 /* Locales.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F0B4B8B9204D68DC004E4120 /* en */,
+			);
+			name = Locales.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -319,6 +333,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -376,6 +391,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

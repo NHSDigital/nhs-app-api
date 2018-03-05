@@ -1,0 +1,15 @@
+
+/* Class = "UITabBarItem"; title = "Appointments"; ObjectID = "ALP-hf-SBr"; */
+"ALP-hf-SBr.title" = "Appointments";
+
+/* Class = "UITabBarItem"; title = "More"; ObjectID = "Nhs-Wn-GjK"; */
+"Nhs-Wn-GjK.title" = "More";
+
+/* Class = "UITabBarItem"; title = "Prescriptions"; ObjectID = "egF-fO-zDJ"; */
+"egF-fO-zDJ.title" = "Prescriptions";
+
+/* Class = "UITabBarItem"; title = "Symptoms"; ObjectID = "g4U-nj-aFu"; */
+"g4U-nj-aFu.title" = "Symptoms";
+
+/* Class = "UITabBarItem"; title = "My Record"; ObjectID = "iKy-SG-p0H"; */
+"iKy-SG-p0H.title" = "My Record";
