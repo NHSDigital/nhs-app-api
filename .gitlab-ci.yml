@@ -3,7 +3,6 @@ image: docker:latest
 stages:
   - build
   - analyse
-  - package
 
 variables:
   PROJECT_VERSION: "0.1"
@@ -13,10 +12,16 @@ cache:
 
 build_branch:
   stage: build
+  only:
+    - branches
+  except:
+    - master
   script:
-    - apk add --update nodejs
-    - npm install
-
+    - docker build . -t "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}"
+    - docker tag "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}" "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:latest"
+    - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
+    - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_REF_SLUG}"
+    - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:latest"
 
 sonarqube_analyse:
   stage: analyse
@@ -27,28 +32,3 @@ sonarqube_analyse:
     - curl -OL https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778.zip
     - mkdir sonar_scanner_unzip && unzip -d sonar_scanner_unzip sonar-scanner-cli-3.0.3.778.zip && mv sonar_scanner_unzip/* sonar_scanner && rm -rf sonar_scanner_unzip sonar-scanner-cli-3.0.3.778.zip
     - ./sonar_scanner/bin/sonar-scanner -Dsonar.projectKey=${CI_PROJECT_NAME} -Dsonar.sources=. -X -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectName=${CI_PROJECT_NAME} -Dsonar.projectVersion=${PROJECT_VERSION} -Dsonar.branch=${CI_COMMIT_REF_SLUG} -Dsonar.host.url=${SONAR_URL} -Dsonar.exclusions=node_modules/**  -Dsonar.analysis.mode=preview -Dsonar.issuesReport.console.enable=true
-
-
-.job_template: &push_docker
-  stage: package
-  script:
-    - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
-    - docker build . -t "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${DOCKER_TAG}"
-    - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${DOCKER_TAG}"
-
-package_docker_branches:
-  variables:
-    DOCKER_TAG: ${CI_COMMIT_REF_SLUG}
-  only:
-    - branches
-  except:
-    - master
-    - develop
-  <<: *push_docker
-
-package_docker_develop:
-  variables:
-    DOCKER_TAG: latest
-  only:
-    - develop
-  <<: *push_docker

@@ -1,7 +1,20 @@
-version: '3'
-
+version: "3.2"
 services:
   nhsonline.web:
-    image: nhsonline.web
     build:
       context: .
+      dockerfile: Dockerfile-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/opt/app
+    environment:
+      - ENV API_HOST=http://localhost:8800
+  # nhsonline.backend.proxy:
+  #   image: nhsonline.backend.proxy
+  #   ports:
+  #     - "8800:80"
+  # nhsonline.backend.worker:
+  #   image: nhsonline.backend.worker
+  # nhsonline.stubs.emis.im1:
+  #   image: nhsonline.stubs.emis.im1
