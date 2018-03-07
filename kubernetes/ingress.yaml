@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  name: nhsonline-web
+spec:
+  rules:
+    - host: nhsonline-web.local
+      http:
+        paths:
+          - backend:
+              serviceName: nhsonline-web
+              servicePort: 80
+            path: /

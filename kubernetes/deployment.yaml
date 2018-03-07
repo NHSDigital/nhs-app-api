@@ -1,0 +1,18 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nhsonline-web
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nhsonline-web
+    spec:
+      containers:
+      - name: nhsonline-web
+        image: nhsonline.azurecr.io/nhsonline-web:feature-docker-rework
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+       - name: azure-registry
