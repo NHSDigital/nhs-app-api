@@ -28,19 +28,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    flavorDimensions "default"
-    productFlavors {
-        dev {
-            applicationIdSuffix ".dev"
-            versionNameSuffix "-dev"
-        }
-
-        prod {
-            applicationIdSuffix ".prod"
-            versionNameSuffix "-prod"
-        }
-    }
-
     testOptions {
         unitTests {
             includeAndroidResources = true
