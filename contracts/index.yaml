@@ -2,35 +2,60 @@ swagger: '2.0'
 
 info:
   version: 0.0.1
-  title: NHS Online
-  description: This is an API for NHS Online.
-
-tags:
-  - name: values
-    description: View some values
+  title: NHS Online Backend Worker
+  description: This is the API for NHS Online Backend Worker.
 
 schemes:
   - https
 
 paths:
-  /values:
+  /v1/patient/im1Connection:
     get:
       tags:
-        - values
-      summary: Get a collection of values
-      description: Values will be received from the IM1 stub.
-      operationId: getValues
+        - im1-connection
+      summary: Gets an IM1 connection token.
+      description: This call returns an IM1 connection token and an array of NHS Numbers, given a connection token and supplier enumeration.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: NHSO-Connection-Token
+          type: string
+          required: true
+          description: IM1 Connection token
+        - in: header
+          name: NHSO-ODS-Code
+          type: string
+          required: true
+          description: ODS Code
       responses:
         200:
-          description: Successful operation
+          description: Successful operation. Connection returned.
           schema:
-            type: array
-            items:
-              $ref: "#/definitions/Value"
+            $ref: "#/definitions/PatientIm1ConnectionResponse"
+        400:
+          description: Bad request. All headers must be provided.
+        404:
+          description: Not found. No patient could be found matching the supplied headers.
 
 definitions:
-  Value:
+  PatientIm1ConnectionResponse:
     type: object
     properties:
-      name:
+      ConnectionToken:
         type: string
+        description: IM1 Connection Token.
+      NhsNumbers:
+        type: array
+        description: Array of the Patient's NHS numbers.
+        items: 
+          $ref: '#/definitions/PatientNhsNumber'
+
+  PatientNhsNumber:
+    type: object
+    properties:
+        NhsNumber: 
+         type: string
+         description: Patient's NHS number.
