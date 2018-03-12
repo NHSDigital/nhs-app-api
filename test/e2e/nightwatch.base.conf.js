@@ -3,6 +3,7 @@ require('nightwatch-cucumber')({
   cucumberArgs: [
     '--require', './test/e2e',
     '--format', 'json:test/e2e/reports/cucumber_report.json',
+    '--tags', 'not @wip',
     './test/e2e/features'],
 });
 
