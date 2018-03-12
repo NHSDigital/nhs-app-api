@@ -15,6 +15,7 @@ class MenuBar @JvmOverloads constructor(
     defaultStyleResourceId: Int = 0
 ) : LinearLayout(context, attributes, defaultStyleResourceId) {
     private var selectedPosition = Optional.empty<Int>()
+
     var menuItemSelectedListener: ((menuBarItem: MenuBarItem) -> Unit)? = null
 
     init {
@@ -26,6 +27,16 @@ class MenuBar @JvmOverloads constructor(
         super.onFinishInflate()
         weightSum = childCount.toFloat()
         initialiseMenuItems()
+    }
+
+    fun switchActiveMenuItemTo(menuBarItemId: Int) {
+        for (i in 0 until childCount) {
+            val menuBarItem = getMenuBarItemAt(i)
+            if (menuBarItem.id == menuBarItemId) {
+                onMenuItemClicked(i, false)
+                break
+            }
+        }
     }
 
     private fun initialiseMenuItems() {
@@ -43,11 +54,11 @@ class MenuBar @JvmOverloads constructor(
         return getChildAt(index) as MenuBarItem
     }
 
-    private fun onMenuItemClicked(position: Int) {
+    private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
         selectedPosition.ifPresent { selectedPosition ->
             if (selectedPosition != position) {
                 getMenuBarItemAt(selectedPosition).deselectItem()
-                selectMenuItem(position)
+                selectMenuItem(position, shouldInvokeListener)
             }
         }
 
@@ -56,14 +67,16 @@ class MenuBar @JvmOverloads constructor(
         }
     }
 
-    private fun selectMenuItem(position: Int) {
+    private fun selectMenuItem(position: Int, shouldInvokeListener: Boolean = true) {
         val menuBarItem = getMenuBarItemAt(position)
 
         menuBarItem.selectItem()
         selectedPosition = Optional.of(position)
 
-        menuItemSelectedListener?.invoke(menuBarItem)
+        if (shouldInvokeListener)
+            menuItemSelectedListener?.invoke(getMenuBarItemAt(position))
     }
+
 
     override fun onRestoreInstanceState(state: Parcelable) {
         if (state !is SavedState) {
