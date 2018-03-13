@@ -9,12 +9,22 @@ services:
     volumes:
       - .:/opt/app
     environment:
-      - ENV API_HOST=http://localhost:8800
-  # nhsonline.backend.proxy:
-  #   image: nhsonline.backend.proxy
-  #   ports:
-  #     - "8800:80"
-  # nhsonline.backend.worker:
-  #   image: nhsonline.backend.worker
-  # nhsonline.stubs.emis.im1:
-  #   image: nhsonline.stubs.emis.im1
+      - ENV API_HOST=http://nhsonline.backend.worker:8800
+  nhsonline.backend.worker:
+    image: nhsonline.backend.worker
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8800:5123"
+  nhsonline.redis.sds:
+    image: nhsonline.redis.sds
+    ports:
+      - "6379:6379"
+  nhsonline.stubs.emis.im1:
+    image: nhsonline.stubs.emis.im1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8801:5123"
+    tty: true
+

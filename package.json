@@ -4,7 +4,7 @@
   "description": "NHS Online Web",
   "private": true,
   "scripts": {
-    "server": "cross-env webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "server": "cross-env webpack-dev-server --inline --disable-host-check --progress --config build/webpack.dev.conf.js",
     "start": "npm run swagger && npm run server",
     "test": "npm run test-browser",
     "test-browser": "node ./test/e2e/runner",
