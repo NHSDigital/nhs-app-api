@@ -1,8 +1,13 @@
-version: '3'
-
+version: "3.2"
 services:
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     build:
       context: .
       dockerfile: NHSOnline.Backend.Worker/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8800:5123"
+  # nhsonline.stubs.emis.im1:
+  #   image: nhsonline.stubs.emis.im1
