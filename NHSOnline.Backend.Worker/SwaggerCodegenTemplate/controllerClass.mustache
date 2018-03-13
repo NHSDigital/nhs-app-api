@@ -25,7 +25,7 @@
         [SwaggerResponse(statusCode: {{code}}, type: typeof({{&dataType}}), description: "{{message}}")]{{/dataType}}{{^dataType}}{{/dataType}}{{/responses}}
         public virtual Task<IActionResult> {{operationId}}({{#allParams}}{{>pathParam}}{{>queryParam}}{{>bodyParam}}{{>formParam}}{{>headerParam}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
         {
-            return this.handler.{{operationId}}({{paramName}});
+            return this.handler.{{operationId}}({{#allParams}}{{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}});
         }
         {{/operation}}
     }
