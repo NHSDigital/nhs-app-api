@@ -1,0 +1,31 @@
+image: docker:latest
+
+stages:
+  - build
+  - analyse
+
+variables:
+  PROJECT_VERSION: "0.2"
+
+build_branch:
+  stage: build
+  only:
+    - branches
+  except:
+    - master
+  script:
+    - docker build . -t "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}" -f NHSOnline.Backend.Proxy/Dockerfile
+    - docker tag "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}" "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:latest"
+    - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
+    - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}"
+    - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:latest"
+
+sonarqube_analyse:
+  stage: analyse
+  image: java:8-jre-alpine
+  script:
+    - apk update && apk add --no-cache curl git python3
+    - pip3 install --upgrade pip pylint setuptools
+    - curl -OL https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778.zip
+    - mkdir sonar_scanner_unzip && unzip -d sonar_scanner_unzip sonar-scanner-cli-3.0.3.778.zip && mv sonar_scanner_unzip/* sonar_scanner && rm -rf sonar_scanner_unzip sonar-scanner-cli-3.0.3.778.zip
+    - ./sonar_scanner/bin/sonar-scanner -Dsonar.projectKey=${CI_PROJECT_NAME} -Dsonar.sources=. -X -Dsonar.login=${SONAR_TOKEN} -Dsonar.projectName=${CI_PROJECT_NAME} -Dsonar.projectVersion=${PROJECT_VERSION} -Dsonar.branch=${CI_COMMIT_SHA} -Dsonar.host.url=${SONAR_URL} -Dsonar.exclusions=node_modules/**  -Dsonar.analysis.mode=preview -Dsonar.issuesReport.console.enable=true
