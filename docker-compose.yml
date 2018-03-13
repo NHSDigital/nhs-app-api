@@ -9,5 +9,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8800:5123"
-  # nhsonline.stubs.emis.im1:
-  #   image: nhsonline.stubs.emis.im1
+  nhsonline.redis.sds:
+    image: nhsonline.redis.sds
+    ports:
+      - "6379:6379"
+  nhsonline.stubs.emis.im1:
+    image: nhsonline.stubs.emis.im1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8800:5123"
+    tty: true
