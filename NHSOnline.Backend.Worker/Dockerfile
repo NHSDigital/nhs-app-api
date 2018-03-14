@@ -14,7 +14,6 @@ FROM build as built
 WORKDIR /src
 COPY *.sln ./
 COPY NHSOnline.Backend.Worker/NHSOnline.Backend.Worker.csproj NHSOnline.Backend.Worker/
-RUN dotnet restore
 COPY . .
 WORKDIR /src/NHSOnline.Backend.Worker
 RUN dotnet build -c Release -o /app
