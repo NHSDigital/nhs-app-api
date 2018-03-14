@@ -8,5 +8,5 @@ spec:
   selector:
     app: nhsonline-backendworker
   ports:
-  - port: 5123
+  - port: 80
     targetPort: 5123

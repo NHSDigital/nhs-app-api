@@ -10,9 +10,14 @@ spec:
         app: nhsonline-backendworker
     spec:
       containers:
-      - name: nhsonline-sbackendworker
+      - name: nhsonline-backendworker
         image: nhsonline.azurecr.io/nhsonline-backendworker:latest
         ports:
         - containerPort: 5123
+        env:
+        - name: STUBS_ENDPOINT_URL
+          value: "http://nhsonline-stubs:5123"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
       imagePullSecrets:
        - name: azure-registry

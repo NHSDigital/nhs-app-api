@@ -7,6 +7,7 @@ services:
       dockerfile: NHSOnline.Backend.Worker/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - STUBS_ENDPOINT_URL=http://localhost:32768
     ports:
       - "8800:5123"
   nhsonline.redis.sds:
