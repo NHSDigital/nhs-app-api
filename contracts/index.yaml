@@ -1,7 +1,7 @@
 swagger: '2.0'
 
 info:
-  version: 0.0.1
+  version: 0.0.2
   title: NHS Online Backend Worker
   description: This is the API for NHS Online Backend Worker.
 
@@ -40,7 +40,59 @@ paths:
         404:
           description: Not found. No patient could be found matching the supplied headers.
 
+    post:
+      tags:
+        - im1-connection
+      summary: Creates an IM1 connection for specified Citizen ID registration data.
+      description: Given a set of attributes to identify a patient, creates and returns an IM1 connection object.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: im1Connection
+          required: true
+          description: Patient account details for the connection to be created.
+          schema:
+            $ref: "#/definitions/PatientIm1ConnectionRequest"
+      responses:
+        201:
+          description: Successful operation. Connection created and returned.
+          schema:
+            $ref: "#/definitions/PatientIm1ConnectionResponse"
+        400:
+          description: Bad request. Supplied connection details are incomplete or invalid.
+        404:
+          description: Not found. No patient was found matching the supplied connection details.
+        409:
+          description: Conflict. Account has already been associated with the application.
+
 definitions:
+  PatientIm1ConnectionRequest:
+    type: object
+    required:
+     - AccountId
+     - DateOfBirth
+     - LinkageKey
+     - OdsCode
+     - Surname
+    properties:
+      AccountId:
+        type: string
+        description: Patient's GP IM1 Account ID.
+      DateOfBirth:
+        type: string
+        format: date
+        description: Patient's Date of Birth.
+      LinkageKey:
+        type: string
+        description: Patient's GP IM1 Linkage Key.
+      OdsCode:
+        type: string
+        description: GP's ODS Code.
+      Surname:
+        type: string
+        description: Patient's Surname.
+
   PatientIm1ConnectionResponse:
     type: object
     properties:
@@ -50,12 +102,12 @@ definitions:
       NhsNumbers:
         type: array
         description: Array of the Patient's NHS numbers.
-        items: 
+        items:
           $ref: '#/definitions/PatientNhsNumber'
 
   PatientNhsNumber:
     type: object
     properties:
-        NhsNumber: 
+        NhsNumber:
          type: string
          description: Patient's NHS number.
