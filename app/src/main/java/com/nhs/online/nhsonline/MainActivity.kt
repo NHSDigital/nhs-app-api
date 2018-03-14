@@ -7,13 +7,10 @@ import android.view.View
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.logging.Logger
+
+
 
 class MainActivity : IInteractor, AppCompatActivity() {
-    companion object {
-        val logger = Logger.getLogger(MainActivity::class.java.simpleName)!!
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
