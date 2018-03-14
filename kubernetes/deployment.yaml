@@ -1,0 +1,18 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nhsonline-backendworker
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nhsonline-backendworker
+    spec:
+      containers:
+      - name: nhsonline-sbackendworker
+        image: nhsonline.azurecr.io/nhsonline-backendworker:latest
+        ports:
+        - containerPort: 5123
+      imagePullSecrets:
+       - name: azure-registry
