@@ -14,7 +14,7 @@ build_branch:
   except:
     - master
   script:
-    - docker build . -t "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}" -f NHSOnline.Backend.Proxy/Dockerfile
+    - docker build . -t "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}" -f NHSOnline.Backend.Worker/Dockerfile
     - docker tag "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}" "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:latest"
     - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY}
     - docker push "${DOCKER_REGISTRY}/${CI_PROJECT_NAME}:${CI_COMMIT_SHA}"
