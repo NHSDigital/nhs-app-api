@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.Worker.Models.Patient
 {
     public class PatientIm1ConnectionResponse
     {
+        public string ConnectionToken { get; set; }
         public IEnumerable<PatientNhsNumber> NhsNumbers { get; set; }
     }
 }

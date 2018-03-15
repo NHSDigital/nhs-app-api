@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.IntegrationTests.Delegates.Patient;
 using NHSOnline.Backend.Worker.Models.Patient;
-using WireMock.Server;
-using WireMock.Settings;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Tests.Patient
 {
@@ -55,7 +52,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Tests.Patient
         [TestMethod]
         public async Task When_PatientIm1ConnectionReturnsCorrectResponse_Then_BackendWorkedResponseIsCorrect()
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, "patient/im1connection");
+            var request = new HttpRequestMessage(HttpMethod.Get, "patient/im1connection");
             request.Headers.Add(HeaderConnectionToken, new[] { "LUKE_SKYWALKER" });
             request.Headers.Add(HeaderOdsCode, new[] { "Rebels" });
 

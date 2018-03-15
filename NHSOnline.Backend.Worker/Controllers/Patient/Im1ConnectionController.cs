@@ -18,8 +18,8 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
             _systemProviderFactory = systemProviderFactory;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(
+        [HttpGet]
+        public async Task<IActionResult> Get(
             [FromHeader(Name = Headers.ConnectionToken)] string connectionToken,
             [FromHeader(Name = Headers.OdsCode)] string odsCode
         )
@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
 
             return Json(new PatientIm1ConnectionResponse
             {
+                ConnectionToken = connectionToken,
                 NhsNumbers = nhsNumbers
             });
         }

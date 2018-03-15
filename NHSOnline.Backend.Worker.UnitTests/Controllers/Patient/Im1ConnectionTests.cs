@@ -28,39 +28,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         }
 
         [TestMethod]
-        public async Task NhsNumber_ReturnsABadRequestResult_WhenTheConnectionTokenIsNull()
+        public async Task Get_ReturnsABadRequestResult_WhenTheConnectionTokenIsNull()
         {
-            var result = await _im1ConnectionController.Post(null, DefaultOdsCode);
+            var result = await _im1ConnectionController.Get(null, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod]
-        public async Task NhsNumber_ReturnsABadRequestResult_WhenTheConnectionTokenIsEmpty()
+        public async Task Get_ReturnsABadRequestResult_WhenTheConnectionTokenIsEmpty()
         {
-            var result = await _im1ConnectionController.Post(string.Empty, DefaultOdsCode);
+            var result = await _im1ConnectionController.Get(string.Empty, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod]
-        public async Task NhsNumber_ReturnsABadRequestResult_WhenTheOdsCodeIsNull()
+        public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsNull()
         {
-            var result = await _im1ConnectionController.Post(DefaultConnectionToken, null);
+            var result = await _im1ConnectionController.Get(DefaultConnectionToken, null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod]
-        public async Task NhsNumber_ReturnsABadRequestResult_WhenTheOdsCodeIsEmpty()
+        public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsEmpty()
         {
-            var result = await _im1ConnectionController.Post(DefaultConnectionToken, string.Empty);
+            var result = await _im1ConnectionController.Get(DefaultConnectionToken, string.Empty);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod]
-        public async Task NhsNumber_ReturnsTheNhsNumberAssociatedWithTheSuppliedToken_WhenValidlyRequested()
+        public async Task Get_ReturnsTheNhsNumberAssociatedWithTheSuppliedToken_WhenValidlyRequested()
         {
             const string odsCode = DefaultOdsCode;
             const SupplierEnum supplier = DefaultSupplier;
@@ -72,16 +72,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
                 new PatientNhsNumber { NhsNumber =  "456DEF" }
             };
 
+            var expectedResponse = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = expectedNhsNumbers
+            };
+
             var nhsNumberProvider = MockNhsNumberProvider(patientIdentifier, expectedNhsNumbers);
             var systemProviderMock = MockSystemProvider(nhsNumberProvider);
             var systemProviderFactoryMock = MockSystemProviderFactory(supplier, systemProviderMock);
             nhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(DefaultConnectionToken, odsCode)).ReturnsAsync(expectedNhsNumbers);
             _im1ConnectionController = CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
 
-            var result = (PatientIm1ConnectionResponse) ((JsonResult) await _im1ConnectionController.Post(DefaultConnectionToken, odsCode)).Value;
+            var result = (PatientIm1ConnectionResponse) ((JsonResult) await _im1ConnectionController.Get(DefaultConnectionToken, odsCode)).Value;
 
-            var expectedJson = JsonConvert.SerializeObject(expectedNhsNumbers);
-            var resultJson = JsonConvert.SerializeObject(result.NhsNumbers);
+            var expectedJson = JsonConvert.SerializeObject(expectedResponse);
+            var resultJson = JsonConvert.SerializeObject(result);
             Assert.AreEqual(expectedJson, resultJson);
         }
 
