@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/opt/app
     environment:
-      - ENV API_HOST=http://nhsonline.backend.worker:8800
+      - API_HOST=http://nhsonline.backend.worker:8800
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:
