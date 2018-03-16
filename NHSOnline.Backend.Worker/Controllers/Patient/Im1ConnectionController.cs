@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Worker.Models.Patient;
 using NHSOnline.Backend.Worker.Ods;
@@ -14,8 +15,8 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
 
         public Im1ConnectionController(IOdsCodeLookup odsCodeLookup, ISystemProviderFactory systemProviderFactory)
         {
-            _odsCodeLookup = odsCodeLookup;
-            _systemProviderFactory = systemProviderFactory;
+            _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
+            _systemProviderFactory = systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
         }
 
         [HttpGet]
@@ -34,7 +35,7 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
             var nhsNumberProvider = systemProvider.GetNhsNumberProvider();
             var nhsNumbers = await nhsNumberProvider.GetNhsNumbersAsync(connectionToken, odsCode);
 
-            return Json(new PatientIm1ConnectionResponse
+            return Ok(new PatientIm1ConnectionResponse
             {
                 ConnectionToken = connectionToken,
                 NhsNumbers = nhsNumbers

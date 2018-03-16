@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Controllers.Patient;
 using NHSOnline.Backend.Worker.Models.Patient;
 using NHSOnline.Backend.Worker.Ods;
@@ -25,6 +26,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         public void TestInitialize()
         {
             _im1ConnectionController = CreateIm1ConnectionController();
+        }
+
+        [TestMethod]
+        public void Constructor_NullOdsCodeLookup_Throws()
+        {
+            var systemProviderFactory = MockSystemProviderFactory();
+
+            Action act = () => new Im1ConnectionController(null, systemProviderFactory.Object);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCodeLookup");
+        }
+
+        [TestMethod]
+        public void Constructor_NullSystemProviderFactory_Throws()
+        {
+            var odsCodeLookup = MockOdsCodeLookup();
+
+            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("systemProviderFactory");
         }
 
         [TestMethod]
@@ -84,11 +105,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             nhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(DefaultConnectionToken, odsCode)).ReturnsAsync(expectedNhsNumbers);
             _im1ConnectionController = CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
 
-            var result = (PatientIm1ConnectionResponse) ((JsonResult) await _im1ConnectionController.Get(DefaultConnectionToken, odsCode)).Value;
+            var result = await _im1ConnectionController.Get(DefaultConnectionToken, odsCode);
 
-            var expectedJson = JsonConvert.SerializeObject(expectedResponse);
-            var resultJson = JsonConvert.SerializeObject(result);
-            Assert.AreEqual(expectedJson, resultJson);
+            result.Should().BeAssignableTo<OkObjectResult>();
+            // ReSharper disable once PossibleNullReferenceException
+            var responseObject = (result as OkObjectResult).Value;
+            responseObject.Should().BeAssignableTo<PatientIm1ConnectionResponse>();
+            responseObject.Should().BeEquivalentTo(expectedResponse);
         }
 
         private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null, Mock<ISystemProviderFactory> systemProviderFactoryMock = null)
