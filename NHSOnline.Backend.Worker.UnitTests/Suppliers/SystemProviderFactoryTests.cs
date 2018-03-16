@@ -33,7 +33,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers
         [TestMethod]
         public void CreateSystemProvider_ThrowsAnUnknownSystemException_WhenTheSupplierNameIsUnknown()
         {
-            Assert.ThrowsException<UnknownSupplierException>(() => _systemProviderFactory.CreateSystemProvider((SupplierEnum)(-1)));
+            Assert.ThrowsException<UnknownSupplierException>(() =>
+                _systemProviderFactory.CreateSystemProvider((SupplierEnum) (-1)));
         }
     }
 }

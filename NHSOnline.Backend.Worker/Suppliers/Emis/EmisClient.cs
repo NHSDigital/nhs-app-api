@@ -34,7 +34,8 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
             return JsonConvert.DeserializeObject<CreateEndUserSessionResponseModel>(stringResponse);
         }
 
-        public async Task<CreateSessionResponseModel> SessionsAsync(string endUserSessionId, string connectionToken, string odsCode)
+        public async Task<CreateSessionResponseModel> SessionsAsync(string endUserSessionId, string connectionToken,
+            string odsCode)
         {
             var sessionRequest = new CreateSessionRequestModel
             {
@@ -43,7 +44,7 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
             };
 
             var request = new HttpRequestMessage(HttpMethod.Post, SessionsPath);
-            request.Headers.Add(HeaderEndUserSessionId, new [] { endUserSessionId });
+            request.Headers.Add(HeaderEndUserSessionId, new[] {endUserSessionId});
             request.Content = new StringContent(JsonConvert.SerializeObject(sessionRequest));
             var response = _httpClient.SendAsync(request);
 
@@ -52,12 +53,13 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
             return JsonConvert.DeserializeObject<CreateSessionResponseModel>(stringResponse);
         }
 
-        public async Task<DemographicsResponse> DemographicsAsync(string userPatientLinkToken, string responseSessionId, string endUserSessionId)
+        public async Task<DemographicsResponse> DemographicsAsync(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, DemographicsPath);
-            request.Headers.Add(HeaderEndUserSessionId, new[] { endUserSessionId });
-            request.Headers.Add(HeaderSessionId, new[] { responseSessionId });
-            request.Headers.Add(HeaderUserPatientLinkToken, new[] { userPatientLinkToken });
+            request.Headers.Add(HeaderEndUserSessionId, new[] {endUserSessionId});
+            request.Headers.Add(HeaderSessionId, new[] {responseSessionId});
+            request.Headers.Add(HeaderUserPatientLinkToken, new[] {userPatientLinkToken});
 
             var response = _httpClient.SendAsync(request);
 

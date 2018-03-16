@@ -100,7 +100,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
         [DataTestMethod]
         [DataRow("EmIs", SupplierEnum.Emis)]
         [DataRow("tPp", SupplierEnum.Tpp)]
-        public void LookupSupplier_RedisCacheReturnsValidSupplierButWithUnusualCasing_ReturnsEnum(string redisString, SupplierEnum supplier)
+        public void LookupSupplier_RedisCacheReturnsValidSupplierButWithUnusualCasing_ReturnsEnum(string redisString,
+            SupplierEnum supplier)
         {
             const string odsCode = "ABC123";
             RedisValue redisValue = redisString;

@@ -16,12 +16,14 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
         public Im1ConnectionController(IOdsCodeLookup odsCodeLookup, ISystemProviderFactory systemProviderFactory)
         {
             _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
-            _systemProviderFactory = systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
+            _systemProviderFactory =
+                systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(
-            [FromHeader(Name = Headers.ConnectionToken)] string connectionToken,
+            [FromHeader(Name = Headers.ConnectionToken)]
+            string connectionToken,
             [FromHeader(Name = Headers.OdsCode)] string odsCode
         )
         {

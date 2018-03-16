@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker
             BuildWebHost(args).Run();
         }
 
-        public static IConfigurationRoot BuildConfiguration() =>  new ConfigurationBuilder()
+        public static IConfigurationRoot BuildConfiguration() => new ConfigurationBuilder()
             .AddEnvironmentVariables()
             .Build();
 

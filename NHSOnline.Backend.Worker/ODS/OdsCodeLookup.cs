@@ -5,13 +5,14 @@ using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.Ods
 {
-    public class OdsCodeLookup: IOdsCodeLookup
+    public class OdsCodeLookup : IOdsCodeLookup
     {
         private readonly IConnectionMultiplexer _connectionMultiplexer;
 
         public OdsCodeLookup(IConnectionMultiplexer connectionMultiplexer)
         {
-            _connectionMultiplexer = connectionMultiplexer ?? throw new ArgumentNullException(nameof(connectionMultiplexer));
+            _connectionMultiplexer =
+                connectionMultiplexer ?? throw new ArgumentNullException(nameof(connectionMultiplexer));
         }
 
         public async Task<SupplierEnum> LookupSupplier(string odsCode)

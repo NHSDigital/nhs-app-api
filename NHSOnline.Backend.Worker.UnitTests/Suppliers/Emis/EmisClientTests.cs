@@ -65,9 +65,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             var expectedResponse = new CreateSessionResponseModel
             {
                 SessionId = "foo",
-                UserPatientLinks = new []
+                UserPatientLinks = new[]
                 {
-                    new UserPatientLinkModel { UserPatientLinkToken = "link1" },
+                    new UserPatientLinkModel {UserPatientLinkToken = "link1"},
                 }
             };
 
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             var endUserSessionId = "end user session id";
             var expectedResponse = new DemographicsResponse
             {
-                PatientIdentifiers = new[] { new PatientIdentifier { IdentifierValue = nhsNumber }}
+                PatientIdentifiers = new[] {new PatientIdentifier {IdentifierValue = nhsNumber}}
             };
 
             var additionalHeaders = new List<KeyValuePair<string, string>>

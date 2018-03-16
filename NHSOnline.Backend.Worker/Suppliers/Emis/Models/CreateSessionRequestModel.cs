@@ -1,5 +1,4 @@
-﻿
-namespace NHSOnline.Backend.Worker.Suppliers.Emis.Models
+﻿namespace NHSOnline.Backend.Worker.Suppliers.Emis.Models
 {
     public class CreateSessionRequestModel
     {

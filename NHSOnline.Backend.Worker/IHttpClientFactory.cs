@@ -1,5 +1,4 @@
-﻿
-using System.Net.Http;
+﻿using System.Net.Http;
 
 namespace NHSOnline.Backend.Worker
 {

@@ -87,10 +87,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             const SupplierEnum supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
-            var expectedNhsNumbers = new []
+            var expectedNhsNumbers = new[]
             {
-                new PatientNhsNumber { NhsNumber = "123ABC" },
-                new PatientNhsNumber { NhsNumber =  "456DEF" }
+                new PatientNhsNumber {NhsNumber = "123ABC"},
+                new PatientNhsNumber {NhsNumber = "456DEF"}
             };
 
             var expectedResponse = new PatientIm1ConnectionResponse
@@ -102,8 +102,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             var nhsNumberProvider = MockNhsNumberProvider(patientIdentifier, expectedNhsNumbers);
             var systemProviderMock = MockSystemProvider(nhsNumberProvider);
             var systemProviderFactoryMock = MockSystemProviderFactory(supplier, systemProviderMock);
-            nhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(DefaultConnectionToken, odsCode)).ReturnsAsync(expectedNhsNumbers);
-            _im1ConnectionController = CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
+            nhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(DefaultConnectionToken, odsCode))
+                .ReturnsAsync(expectedNhsNumbers);
+            _im1ConnectionController =
+                CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
 
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, odsCode);
 
@@ -114,7 +116,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             responseObject.Should().BeEquivalentTo(expectedResponse);
         }
 
-        private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null, Mock<ISystemProviderFactory> systemProviderFactoryMock = null)
+        private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null,
+            Mock<ISystemProviderFactory> systemProviderFactoryMock = null)
         {
             odsCodeLookupMock = odsCodeLookupMock ?? MockOdsCodeLookup();
             systemProviderFactoryMock = systemProviderFactoryMock ?? MockSystemProviderFactory();
@@ -122,7 +125,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             return new Im1ConnectionController(odsCodeLookupMock.Object, systemProviderFactoryMock.Object);
         }
 
-        private Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode, SupplierEnum supplier = DefaultSupplier)
+        private Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode,
+            SupplierEnum supplier = DefaultSupplier)
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(supplier));
@@ -130,7 +134,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             return mockOdsCodeLookup;
         }
 
-        private Mock<ISystemProviderFactory> MockSystemProviderFactory(SupplierEnum supplier = DefaultSupplier, Mock<ISystemProvider> systemProviderMock = null)
+        private Mock<ISystemProviderFactory> MockSystemProviderFactory(SupplierEnum supplier = DefaultSupplier,
+            Mock<ISystemProvider> systemProviderMock = null)
         {
             systemProviderMock = systemProviderMock ?? MockSystemProvider();
             var mockSystemProviderFactory = new Mock<ISystemProviderFactory>();
@@ -148,11 +153,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             return mockSystemProvider;
         }
 
-        private Mock<INhsNumberProvider> MockNhsNumberProvider(string patientIdentifier = DefaultPatientIdentifier, IEnumerable<PatientNhsNumber> expectedNhsNumbers = null)
+        private Mock<INhsNumberProvider> MockNhsNumberProvider(string patientIdentifier = DefaultPatientIdentifier,
+            IEnumerable<PatientNhsNumber> expectedNhsNumbers = null)
         {
             expectedNhsNumbers = expectedNhsNumbers ?? new List<PatientNhsNumber>();
             var mockNhsNumberProvider = new Mock<INhsNumberProvider>();
-            mockNhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(patientIdentifier, "")).ReturnsAsync(expectedNhsNumbers);
+            mockNhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(patientIdentifier, ""))
+                .ReturnsAsync(expectedNhsNumbers);
 
             return mockNhsNumberProvider;
         }

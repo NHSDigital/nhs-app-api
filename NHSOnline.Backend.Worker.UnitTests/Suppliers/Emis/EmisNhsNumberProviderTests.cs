@@ -23,9 +23,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
         {
             const string expectedNhsNumber = "AB123";
 
-            var expectedNhsNumbers = new [] { expectedNhsNumber };
-            var userPatientLinkModels = new [] { CreateUserPatientLinkModel() };
-            var patientIdentifiers = new [] { CreatePatientIdentifier(expectedNhsNumber) };
+            var expectedNhsNumbers = new[] {expectedNhsNumber};
+            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
+            var patientIdentifiers = new[] {CreatePatientIdentifier(expectedNhsNumber)};
             var emisClientMock = new Mock<IEmisClient>();
 
             SetupEmisClientMock(
@@ -43,15 +43,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task GetNhsNumbersAsync_ReturnsAnNhsNumberUsingTheSelfUserPatientLinkToken_WhenTheMultipleUserPatientLinkTokensAreReturnedFromEmis()
+        public async Task
+            GetNhsNumbersAsync_ReturnsAnNhsNumberUsingTheSelfUserPatientLinkToken_WhenTheMultipleUserPatientLinkTokensAreReturnedFromEmis()
         {
             const string expectedNhsNumber = "345";
             var emisClientMock = new Mock<IEmisClient>();
-            var userPatientLinkModels = new[] {
+            var userPatientLinkModels = new[]
+            {
                 CreateUserPatientLinkModel("proxy", AssociationType.Proxy),
                 CreateUserPatientLinkModel("self", AssociationType.Self),
             };
-            var patientIdentifiers = new[] { CreatePatientIdentifier(expectedNhsNumber) };
+            var patientIdentifiers = new[] {CreatePatientIdentifier(expectedNhsNumber)};
 
             SetupEmisClientMock(
                 emisClientMock,
@@ -68,11 +70,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task GetNhsNumbersAsync_ReturnsThePatientNhsNumbersOfTypeNhsNumber_WhenTheMultipleNhsNumbersAreReturnedFromEmis()
+        public async Task
+            GetNhsNumbersAsync_ReturnsThePatientNhsNumbersOfTypeNhsNumber_WhenTheMultipleNhsNumbersAreReturnedFromEmis()
         {
-            var expectedNhsNumbers = new [] { "1234", "345" };
+            var expectedNhsNumbers = new[] {"1234", "345"};
             var emisClientMock = new Mock<IEmisClient>();
-            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
 
             var patientIdentifiers = new[]
             {
@@ -100,10 +103,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
         {
             var emisClientMock = new Mock<IEmisClient>();
             var nhsNumberProvider = new EmisNhsNumberProvider(emisClientMock.Object);
-            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
             var patientIdentifiers = new PatientIdentifier[0];
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
+            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
+                patientIdentifiers: patientIdentifiers);
 
             var result = await nhsNumberProvider.GetNhsNumbersAsync(DefaultConnectionToken, DefaultOdsCode);
 
@@ -116,10 +120,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
         {
             var emisClientMock = new Mock<IEmisClient>();
             var nhsNumberProvider = new EmisNhsNumberProvider(emisClientMock.Object);
-            var userPatientLinkModels = new[] { CreateUserPatientLinkModel() };
+            var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
             var patientIdentifiers = (PatientIdentifier[]) null;
 
-            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
+            SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
+                patientIdentifiers: patientIdentifiers);
 
             var result = await nhsNumberProvider.GetNhsNumbersAsync(DefaultConnectionToken, DefaultOdsCode);
 
@@ -168,6 +173,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
                 IdentifierValue = identifierValue
             };
         }
+
         private static UserPatientLinkModel CreateUserPatientLinkModel(
             string userPatientLinkToken = DefaultUserPatientLinkToken,
             AssociationType associationType = AssociationType.Self
@@ -191,7 +197,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             IEnumerable<PatientIdentifier> patientIdentifiers = null
         )
         {
-            userPatientLinkToken = userPatientLinkToken ?? userPatientLinkModels?.FirstOrDefault()?.UserPatientLinkToken;
+            userPatientLinkToken =
+                userPatientLinkToken ?? userPatientLinkModels?.FirstOrDefault()?.UserPatientLinkToken;
 
             var endUserSessionResponse = new CreateEndUserSessionResponseModel
             {
@@ -218,7 +225,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
                 .ReturnsAsync(sessionResponse);
 
             emisClientMock
-                .Setup(x => x.DemographicsAsync(userPatientLinkToken, sessionResponse.SessionId,endUserSessionResponse.EndUserSessionId))
+                .Setup(x => x.DemographicsAsync(userPatientLinkToken, sessionResponse.SessionId,
+                    endUserSessionResponse.EndUserSessionId))
                 .ReturnsAsync(demographicsResponse);
 
             emisClientMock

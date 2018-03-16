@@ -30,7 +30,8 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
                 return new PatientNhsNumber[0];
             }
 
-            var demographicsResponse = await _emisClient.DemographicsAsync(userPatientLinkToken, sessionsResponse.SessionId, endUserSessionId);
+            var demographicsResponse =
+                await _emisClient.DemographicsAsync(userPatientLinkToken, sessionsResponse.SessionId, endUserSessionId);
             var patientIdentifiers = demographicsResponse?.PatientIdentifiers;
 
             if (patientIdentifiers == null)
@@ -40,7 +41,7 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
 
             return patientIdentifiers
                 .Where(x => x.IdentifierType == IdentifierType.NhsNumber)
-                .Select(x => new PatientNhsNumber { NhsNumber = x.IdentifierValue });
+                .Select(x => new PatientNhsNumber {NhsNumber = x.IdentifierValue});
         }
     }
 }
