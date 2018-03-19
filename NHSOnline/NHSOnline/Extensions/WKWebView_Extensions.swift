@@ -2,8 +2,9 @@ import WebKit
 
 extension WKWebView {
     
-    func loadPage(stringUrl: String) {
-        let urlRequest = URLRequest(url: URL(string: stringUrl)!)
+    func loadPage(url: String) {
+        let urlRequest = URLRequest(url: URL(string: url)!)
+        
         self.load(urlRequest)
     }
 }
