@@ -2,8 +2,8 @@ swagger: '2.0'
 
 info:
   version: 0.0.2
-  title: NHS Online Backend Worker
-  description: This is the API for NHS Online Backend Worker.
+  title: NHS Online API
+  description: This is the API for NHS Online.
 
 schemes:
   - https
@@ -14,7 +14,7 @@ paths:
       tags:
         - im1-connection
       summary: Gets an IM1 connection token.
-      description: This call returns an IM1 connection token and an array of NHS Numbers, given a connection token and supplier enumeration.
+      description: This call returns an IM1 connection token and an array of NHS Numbers, given an IM1 Connection Token and ODS Code.
       consumes:
         - application/json
       produces:
@@ -32,13 +32,19 @@ paths:
           description: ODS Code
       responses:
         200:
-          description: Successful operation. Connection returned.
+          description: Successful operation. IM1 Connection Token and NHS Numbers returned.
           schema:
             $ref: "#/definitions/PatientIm1ConnectionResponse"
         400:
           description: Bad request. All headers must be provided.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
         404:
           description: Not found. No patient could be found matching the supplied headers.
+        500:
+          description: An unexpected error occured processing the request.
+        502:
+          description: The GP system is currently unavailable.
 
     post:
       tags:
@@ -56,33 +62,35 @@ paths:
             $ref: "#/definitions/PatientIm1ConnectionRequest"
       responses:
         201:
-          description: Successful operation. Connection created and returned.
+          description: Successful operation. IM1 Connection Token created and returned with NHS Numbers.
           schema:
             $ref: "#/definitions/PatientIm1ConnectionResponse"
         400:
           description: Bad request. Supplied connection details are incomplete or invalid.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
         404:
           description: Not found. No patient was found matching the supplied connection details.
         409:
-          description: Conflict. Account has already been associated with the application.
+          description: Conflict. Account has already been associated with the application in the GP system.
+        500:
+          description: An unexpected error occured processing the request.
+        502:
+          description: The GP system is currently unavailable.
 
 definitions:
   PatientIm1ConnectionRequest:
     type: object
     required:
      - AccountId
-     - DateOfBirth
      - LinkageKey
      - OdsCode
      - Surname
+     - DateOfBirth
     properties:
       AccountId:
         type: string
         description: Patient's GP IM1 Account ID.
-      DateOfBirth:
-        type: string
-        format: date
-        description: Patient's Date of Birth.
       LinkageKey:
         type: string
         description: Patient's GP IM1 Linkage Key.
@@ -92,6 +100,10 @@ definitions:
       Surname:
         type: string
         description: Patient's Surname.
+      DateOfBirth:
+        type: string
+        format: date
+        description: Patient's Date of Birth.
 
   PatientIm1ConnectionResponse:
     type: object
