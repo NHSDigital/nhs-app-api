@@ -15,8 +15,8 @@ spec:
         ports:
         - containerPort: 5123
         env:
-        - name: STUBS_ENDPOINT_URL
-          value: "http://nhsonline-stubs:5123"
+        - name: REDIS_ODSLOOKUP_CONFIG
+          value: "nhsonline.redis.sds:6379"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
       imagePullSecrets:
