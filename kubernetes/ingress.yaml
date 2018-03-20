@@ -6,7 +6,7 @@ metadata:
   name: nhsonline-web
 spec:
   rules:
-    - host: nhsonline-web.local
+    - host: www.develop.bitraft.io
       http:
         paths:
           - backend:
