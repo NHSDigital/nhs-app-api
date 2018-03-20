@@ -2,9 +2,15 @@ version: "3.2"
 services:
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
+    environment:
+      - REDIS_ODSLOOKUP_CONFIG=nhsonline.redis.sds:6379
     build:
       context: .
       dockerfile: NHSOnline.Backend.Worker/Dockerfile
+    depends_on:
+      - nhsonline.redis.sds
+    ports:
+      - "8080:5123"
   nhsonline.stubs.consoleapp:
     image: nhsonline.stubs.consoleapp
     environment:
@@ -12,7 +18,21 @@ services:
     ports:
       - "8800:5123"
     tty: true
+  nhsonline.redis-data.sds:
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds
   nhsonline.redis.sds:
-    image: nhsonline.redis.sds
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - "6379:6379"
+    volumes:
+      - 'redis_data:/bitnami/redis'
+volumes:
+  redis_data:
+    driver: local

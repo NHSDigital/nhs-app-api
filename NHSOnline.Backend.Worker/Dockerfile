@@ -1,8 +1,11 @@
 FROM microsoft/aspnetcore:2.0 AS runtime
 RUN apt-get update && \
     apt-get upgrade -y && \
+    apt-get install -y netcat && \
     rm -rf /var/lib/apt/lists/* && \
-    adduser --disabled-password aspnetcore
+    useradd -m aspnetcore && \
+    curl -L -o /usr/local/bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for && \
+    chmod +rx /usr/local/bin/wait-for
 
 FROM microsoft/aspnetcore-build:2.0 AS build
 RUN apt-get update && \
@@ -24,9 +27,11 @@ RUN dotnet publish -c Release -o /app
 FROM runtime AS final
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS="http://*:5123"
+ENV REDIS_ODSLOOKUP_CONFIG 127.0.0.1:6379
+ENV WAIT_FOR_TIMEOUT 60
 WORKDIR /app
 EXPOSE 5123
 COPY --from=publish /app .
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD dotnet NHSOnline.Backend.Worker.dll
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- dotnet NHSOnline.Backend.Worker.dll
