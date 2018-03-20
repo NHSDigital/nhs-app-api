@@ -9,22 +9,37 @@ services:
     volumes:
       - .:/opt/app
     environment:
-      - API_HOST=http://nhsonline.backend.worker:8800
+      - API_HOST=http://nhsonline.backend.worker:5123
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
+    environment:
+      - REDIS_ODSLOOKUP_CONFIG=nhsonline.redis.sds:6379
+    depends_on:
+      - nhsonline.redis.sds
+    ports:
+      - "8081:5123"
+  nhsonline.stubs.consoleapp:
+    image: nhsonline.stubs.consoleapp
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8800:5123"
+    tty: true
+  nhsonline.redis-data.sds:
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds
   nhsonline.redis.sds:
-    image: nhsonline.redis.sds
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     ports:
       - "6379:6379"
-  nhsonline.stubs.emis.im1:
-    image: nhsonline.stubs.emis.im1
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "8801:5123"
-    tty: true
-
+    volumes:
+      - 'redis_data:/bitnami/redis'
+volumes:
+  redis_data:
+    driver: local
