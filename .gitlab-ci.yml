@@ -6,6 +6,7 @@ stages:
   - analyse
 
 variables:
+  PROJECT_VERSION: "0.2"
   KUBECTL_VERSION: "1.9.0"
 
 cache:
