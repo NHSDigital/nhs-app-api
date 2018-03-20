@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
 
         private async Task<Option<IIm1ConnectionService>> GetIm1ConnectionService(string odsCode)
         {
-            var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
+            var supplier = await _odsCodeLookup.LookupSupplierAsync(odsCode);
             if (!supplier.HasValue)
             {
                 return Option.None<IIm1ConnectionService>();

@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
             string userLinkToken,
             string sessionId,
             string endUserSessionId,
-            string nhsNumber,
+            IEnumerable<string> nhsNumbers,
             string applicationId = null,
             string version = null
         )
@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
 
             return new Mapping(
                 new Request().ConfigureDemographicsRequest(userLinkToken, sessionId, endUserSessionId, applicationId, version),
-                new Response().ConfigureDemographicsResponse(statusCode, nhsNumber)
+                new Response().ConfigureDemographicsResponse(statusCode, nhsNumbers)
             );
         }
 
@@ -51,19 +51,23 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
                 .ConfigureVersionHeader(version);
         }
 
-        public static Response ConfigureDemographicsResponse(this Response response, int statusCode, string nhsNumber)
+        public static Response ConfigureDemographicsResponse(this Response response, int statusCode, IEnumerable<string> nhsNumbers)
         {
+            nhsNumbers = nhsNumbers ?? new string[0];
+
             var demographicsResponse = new DemographicsResponse
             {
-                PatientIdentifiers = new List<PatientIdentifier>
-                {
-                    new PatientIdentifier
-                    {
-                        IdentifierType = IdentifierType.NhsNumber,
-                        IdentifierValue = nhsNumber
-                    }
-                }
+                PatientIdentifiers = new List<PatientIdentifier>()
             };
+
+            foreach (var nhsNumber in nhsNumbers)
+            {
+                demographicsResponse.PatientIdentifiers.Add(new PatientIdentifier
+                {
+                    IdentifierType = IdentifierType.NhsNumber,
+                    IdentifierValue = nhsNumber
+                });
+            }
 
             return response.ConfigureBody(JsonConvert.SerializeObject(demographicsResponse));
         }

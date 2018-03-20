@@ -15,8 +15,9 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
         public async Task BeforeScenario()
         {
             await MockingClient.ResetMappings();
-            ScenarioContext.Current.WorkerClient(WorkerClient);
-            ScenarioContext.Current.MockingClient(MockingClient);
+            ScenarioContext.Current
+                .SetWorkerClient(WorkerClient)
+                .SetMockingClient(MockingClient);
         }
     }
 }

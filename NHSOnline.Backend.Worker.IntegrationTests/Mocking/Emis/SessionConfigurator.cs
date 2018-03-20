@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis.Models;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models;
@@ -114,6 +115,29 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
             return response
                 .ConfigureStatusCode(statusCode)
                 .ConfigureBody($"{{\"EndUserSessionId\":\"{ endUserSessionId }\"}}");
+        }
+
+        public static Response ConfigureEndUserSessionErrorResponse(this Response response, int statusCode, string message)
+        {
+            return response
+                .ConfigureStatusCode(statusCode)
+                .ConfigureBody(message);
+        }
+
+        public static Mapping CreateEndUserSessionMappingWithTimout(TimeSpan timeout)
+        {
+            return new Mapping(
+                new Request().ConfigureEndUserSessionRequest(),
+                new Response().ConfigureTimeoutResponse(timeout)
+            );
+        }
+
+        public static Mapping CreateEndUserSessionMappingWithError(int statusCode, string message)
+        {
+            return new Mapping(
+                new Request().ConfigureEndUserSessionRequest(),
+                new Response().ConfigureEndUserSessionErrorResponse(statusCode, message)
+            );
         }
     }
 }

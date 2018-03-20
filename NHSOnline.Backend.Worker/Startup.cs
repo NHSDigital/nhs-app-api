@@ -34,14 +34,13 @@ namespace NHSOnline.Backend.Worker
                 .AddJsonOptions(
                     options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()
                     );
-                
+
             services.AddSingleton<ISystemProviderFactory, SystemProviderFactory>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<EmisSystemProvider>();
-
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));

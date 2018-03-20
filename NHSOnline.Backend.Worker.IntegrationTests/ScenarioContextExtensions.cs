@@ -6,28 +6,89 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
 {
     public static class ScenarioContextExtensions
     {
+        private const string KeyConnectionToken = "ConnectionToken";
+        private const string KeyHttpException = "HttpException";
         private const string KeyMockingClient = "MockingClient";
+        private const string KeyNhsNumber = "NhsNumber";
+        private const string KeyNhsNumbers = "NhsNumbers";
+        private const string KeyOdsCode = "OdsCode";
         private const string KeyWorkerClient = "WorkerClient";
 
-        public static MockingClient MockingClient(this ScenarioContext context, MockingClient mockingClient = null)
+        public static string GetConnectionToken(this ScenarioContext context)
         {
-            const string key = KeyMockingClient;
-            AddIfRequired(key, mockingClient, context);
-            return context.ContainsKey(key) ? context.Get<MockingClient>(key) : null;
+            return context.ContainsKey(KeyConnectionToken) ? context.Get<string>(KeyConnectionToken) : null;
         }
 
-        public static WorkerClient WorkerClient(this ScenarioContext context, WorkerClient workerClient = null)
+        public static ScenarioContext SetConnectionToken(this ScenarioContext context, string connectionToken)
         {
-            const string key = KeyWorkerClient;
-            AddIfRequired(key, workerClient, context);
-            return context.ContainsKey(key) ? context.Get<WorkerClient>(key) : null;
+            context.Set(connectionToken, KeyConnectionToken);
+            return context;
         }
 
-        private static void AddIfRequired(string key, object item, ScenarioContext context) {
-            if (item != null && !context.ContainsKey(key))
-            {
-                context.Add(key, item);
-            }
+        public static NhsoHttpException GetHttpException(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeyHttpException) ? context.Get<NhsoHttpException>(KeyHttpException) : null;
+        }
+
+        public static ScenarioContext SetHttpException(this ScenarioContext context, NhsoHttpException httpException)
+        {
+            context.Set(httpException, KeyHttpException);
+            return context;
+        }
+
+        public static string GetNhsNumber(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeyNhsNumber) ? context.Get<string>(KeyNhsNumber) : null;
+        }
+
+        public static ScenarioContext SetNhsNumber(this ScenarioContext context, string nhsNumber)
+        {
+            context.Set(nhsNumber, KeyNhsNumber);
+            return context;
+        }
+
+        public static string[] GetNhsNumbers(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeyNhsNumbers) ? context.Get<string[]>(KeyNhsNumbers) : null;
+        }
+
+        public static ScenarioContext SetNhsNumbers(this ScenarioContext context, string[] nhsNumbers)
+        {
+            context.Set(nhsNumbers, KeyNhsNumbers);
+            return context;
+        }
+
+        public static MockingClient GetMockingClient(this ScenarioContext context)
+        {
+            return context.Get<MockingClient>(KeyMockingClient);
+        }
+
+        public static ScenarioContext SetMockingClient(this ScenarioContext context, MockingClient client)
+        {
+            context.Set(client, KeyMockingClient);
+            return context;
+        }
+
+        public static string GetOdsCode(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeyOdsCode) ? context.Get<string>(KeyOdsCode) : null;
+        }
+
+        public static ScenarioContext SetOdsCode(this ScenarioContext context, string odsCode)
+        {
+            context.Set(odsCode, KeyOdsCode);
+            return context;
+        }
+
+        public static WorkerClient GetWorkerClient(this ScenarioContext context)
+        {
+            return context.Get<WorkerClient>(KeyWorkerClient);
+        }
+
+        public static ScenarioContext SetWorkerClient(this ScenarioContext context, WorkerClient client)
+        {
+            context.Set(client, KeyWorkerClient);
+            return context;
         }
     }
 }

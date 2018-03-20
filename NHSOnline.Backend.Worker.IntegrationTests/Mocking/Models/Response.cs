@@ -21,6 +21,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models
         public int StatusCode { get; set; }
         public string BodyDestination { get; set; }
         public string Body { get; set; }
+        public int? Delay { get; set; }
         public BodyEncoding BodyEncoding { get; set; }
         public bool UseTransformer { get; set; }
         public IDictionary<string, string> Headers { get; set; }

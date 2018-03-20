@@ -32,13 +32,6 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
         {
             var response = await _client.SendAsync(request);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
-                // when values are not as expected.  This makes it easier to debug.
-                throw new Exception($"Request to {request.RequestUri} failed with status code: {response.StatusCode}");
-            }
-
             return response;
         }
     }

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Linq;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
@@ -50,18 +50,11 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
 
         public static Request ConfigureBody(this Request request, IDictionary<string, string> matchProperties)
         {
-            // TODO: Fix
-            request.Body = new Body { Matchers = new List<Matcher>() };
-            foreach (var key in matchProperties.Keys)
+            var matchers = matchProperties.Keys.Select(x => $"$..[?(@.{x}=='{matchProperties[x]}')]").ToList();
+            request.Body = new Body
             {
-                request.Body.Matchers.Add(new RegexMatcher
-                {
-                    Patterns = new List<string>
-                    {
-                        $"\"{ Regex.Escape(key) }\"\\s*:\\s*\"{ Regex.Escape(matchProperties[key]) }\"",
-                    }
-                });
-            }
+                Matcher = new JsonPathMatcher { Patterns = matchers }
+            };
 
             return request;
         }

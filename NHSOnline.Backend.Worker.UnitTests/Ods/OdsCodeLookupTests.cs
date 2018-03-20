@@ -28,8 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
         {
             var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
-
-            var result = await sut.LookupSupplier(odsCode);
+            var result = await sut.LookupSupplierAsync(odsCode);
 
             result.HasValue.Should().BeFalse();
         }
@@ -52,8 +51,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            var result = await sut.LookupSupplier(odsCode);
-
+            var result = await sut.LookupSupplierAsync(odsCode);
             result.HasValue.Should().BeFalse();
         }
 
@@ -75,8 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            var result = await sut.LookupSupplier(odsCode);
-
+            var result = await sut.LookupSupplierAsync(odsCode);
             result.HasValue.Should().BeFalse();
         }
 
@@ -99,8 +96,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
                 .Returns(connectionMultiplexer.Object);
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
-
-            var actual = await sut.LookupSupplier(odsCode);
+            var actual = await sut.LookupSupplierAsync(odsCode);
 
             actual.HasValue.Should().BeTrue();
             actual.ValueOrFailure().Should().Be(supplier);
@@ -127,8 +123,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            var actual = await sut.LookupSupplier(odsCode);
-
+            var actual = await sut.LookupSupplierAsync(odsCode);
             actual.HasValue.Should().BeTrue();
             actual.ValueOrFailure().Should().Be(supplier);
         }

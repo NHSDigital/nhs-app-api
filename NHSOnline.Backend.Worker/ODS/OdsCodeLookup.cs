@@ -6,11 +6,6 @@ using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.Ods
 {
-    public interface IOdsCodeLookup
-    {
-        Task<Option<SupplierEnum>> LookupSupplier(string odsCode);
-    }
-
     public class OdsCodeLookup : IOdsCodeLookup
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
@@ -21,7 +16,7 @@ namespace NHSOnline.Backend.Worker.Ods
                 connectionMultiplexerFactory ?? throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
         }
 
-        public async Task<Option<SupplierEnum>> LookupSupplier(string odsCode)
+        public async Task<Option<SupplierEnum>> LookupSupplierAsync(string odsCode)
         {
             if (string.IsNullOrWhiteSpace(odsCode))
             {
