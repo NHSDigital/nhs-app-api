@@ -16,7 +16,7 @@ spec:
         - containerPort: 5123
         env:
         - name: REDIS_ODSLOOKUP_CONFIG
-          value: "nhsonline.redis.sds:6379"
+          value: "redis:6379"
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
       imagePullSecrets:
