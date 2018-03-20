@@ -69,7 +69,9 @@
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/progressbar_color"
+            android:indeterminateTintMode="src_in"/>
     </LinearLayout>
 
 
@@ -78,7 +80,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_45sdp"
         android:background="@drawable/menu_top_shadow"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/symptoms"

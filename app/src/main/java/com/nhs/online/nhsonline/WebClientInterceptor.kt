@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline
 
 import android.graphics.Bitmap
 import android.os.Handler
+import android.os.Message
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -12,7 +13,7 @@ private const val DELAY_PROGRESS_SHOW_TIME = 500L
 private const val REQUEST_TIMEOUT = 10 * 1000L
 
 class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: Array<String>) :
-        WebViewClient() {
+    WebViewClient() {
     private val serviceUrls = serviceUrls
 
     companion object {
@@ -53,6 +54,7 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
         }
         super.onPageFinished(view, url)
     }
+
 
     @Suppress("OverridingDeprecatedMember")
     override fun onReceivedError(
