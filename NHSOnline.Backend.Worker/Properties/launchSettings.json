@@ -16,7 +16,8 @@
         "EMIS_APPLICATION_ID": "D66BA979-60D2-49AA-BE82-AEC06356E41F",
         "EMIS_VERSION": "2.1.0.0",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "EMIS_BASE_URL": "http://127.0.0.1:8800/emis/"
+        "EMIS_BASE_URL": "http://127.0.0.1:8800/emis/",
+        "REDIS_ODSLOOKUP_CONFIG": "localhost:6379"
       }
     },
     "NHSOnline.Backend.Worker": {
@@ -24,8 +25,8 @@
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
-        "REDIS_ODSLOOKUP_CONFIG": "127.0.0.1:6379",
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "REDIS_ODSLOOKUP_CONFIG": "127.0.0.1:6379"
       },
       "applicationUrl": "http://localhost:55641/"
     }

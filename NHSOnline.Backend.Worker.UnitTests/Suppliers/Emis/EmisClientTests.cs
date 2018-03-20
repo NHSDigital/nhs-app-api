@@ -110,11 +110,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             {
                 new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
                 new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
-                new KeyValuePair<string, string>(EmisClient.HeaderUserPatientLinkToken, userPatientLinkToken)
             };
 
             _mockHttpHandler
-                .WhenEmis(HttpMethod.Get, "demographics")
+                .WhenEmis(HttpMethod.Get, $"demographics?{ EmisClient.QueryParameterUserPatientLinkToken }={ userPatientLinkToken }")
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 

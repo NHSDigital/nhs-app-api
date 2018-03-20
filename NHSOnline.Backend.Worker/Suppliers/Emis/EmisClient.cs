@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Suppliers.Emis.Models;
@@ -10,7 +11,7 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
         public const string HeaderApplicationId = "X-API-ApplicationId";
         public const string HeaderEndUserSessionId = "X-API-EndUserSessionId";
         public const string HeaderSessionId = "X-API-SessionId";
-        public const string HeaderUserPatientLinkToken = "userPatientLinkToken";
+        public const string QueryParameterUserPatientLinkToken = "userPatientLinkToken";
         public const string HeaderVersion = "X-API-Version";
 
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
@@ -56,10 +57,9 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
         public async Task<DemographicsResponse> DemographicsAsync(string userPatientLinkToken, string responseSessionId,
             string endUserSessionId)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, DemographicsPath);
-            request.Headers.Add(HeaderEndUserSessionId, new[] {endUserSessionId});
-            request.Headers.Add(HeaderSessionId, new[] {responseSessionId});
-            request.Headers.Add(HeaderUserPatientLinkToken, new[] {userPatientLinkToken});
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{ DemographicsPath }?userPatientLinkToken={ userPatientLinkToken }");
+            request.Headers.Add(HeaderEndUserSessionId, new[] { endUserSessionId });
+            request.Headers.Add(HeaderSessionId, new[] { responseSessionId });
 
             var response = _httpClient.SendAsync(request);
 

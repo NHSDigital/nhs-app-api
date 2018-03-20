@@ -11,6 +11,11 @@ services:
       - nhsonline.redis.sds
     ports:
       - "8080:5123"
+    environment:
+      - REDIS_ODSLOOKUP_CONFIG=nhsonline.redis.sds:6379
+      - EMIS_BASE_URL=http://nhsonline.stubs.consoleapp:5123/emis/
+      - EMIS_APPLICATION_ID=D66BA979-60D2-49AA-BE82-AEC06356E41F
+      - EMIS_VERSION=2.1.0.0
   nhsonline.stubs.consoleapp:
     image: nhsonline.stubs.consoleapp
     environment:

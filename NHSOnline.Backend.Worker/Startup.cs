@@ -1,4 +1,7 @@
+using System;
+using System.Linq;
 using System.Net.Http;
+using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,6 +34,12 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<EmisSystemProvider>();
             services.AddSingleton<IConnectionMultiplexer>(x =>
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"]));
+
+            var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));
+            if (module != null)
+            {
+                services.Remove(module);
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
