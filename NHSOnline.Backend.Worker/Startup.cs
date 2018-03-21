@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Suppliers;
 using NHSOnline.Backend.Worker.Suppliers.Emis;
@@ -25,15 +27,28 @@ namespace NHSOnline.Backend.Worker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services
+                .AddMvc(
+                    options => { options.Filters.Add(typeof(ModelStateValidationFilter)); }
+                    )
+                .AddJsonOptions(
+                    options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                    );
+                
             services.AddSingleton<ISystemProviderFactory, SystemProviderFactory>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<EmisSystemProvider>();
-            services.AddSingleton<IConnectionMultiplexer>(x =>
-                ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"]));
+
+            services.AddSingleton(x => new NamedConnectionMultiplexer(
+                ConnectionMultiplexerName.OdsCodeLookup,
+                ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
+            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
+
+            services.AddSingleton(x => new NamedHttpClient(HttpClientName.EmisApiClient, new HttpClient()));
+            services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
 
             var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));
             if (module != null)

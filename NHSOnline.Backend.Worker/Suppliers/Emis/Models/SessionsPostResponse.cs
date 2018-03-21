@@ -2,9 +2,9 @@
 
 namespace NHSOnline.Backend.Worker.Suppliers.Emis.Models
 {
-    public class CreateSessionResponseModel
+    public class SessionsPostResponse
     {
         public string SessionId { get; set; }
-        public IEnumerable<UserPatientLinkModel> UserPatientLinks { get; set; }
+        public IEnumerable<UserPatientLink> UserPatientLinks { get; set; }
     }
 }

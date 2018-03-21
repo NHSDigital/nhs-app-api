@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NHSOnline.Backend.Worker {
+namespace NHSOnline.Backend.Worker.Suppliers.Emis {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace NHSOnline.Backend.Worker {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ExceptionMessages {
+    public class EmisApiErrorMessages {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ExceptionMessages() {
+        internal EmisApiErrorMessages() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NHSOnline.Backend.Worker.ExceptionMessages", typeof(ExceptionMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("NHSOnline.Backend.Worker.Suppliers.Emis.EmisApiErrorMessages", typeof(EmisApiErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,38 +61,11 @@ namespace NHSOnline.Backend.Worker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ConnectionMultiplexer &apos;{0}&apos; could not be found..
+        ///   Looks up a localized string similar to Registered online user is already linked.
         /// </summary>
-        internal static string ConnectionMultiplexerFactoryUnknownMultiplexerName {
+        public static string MeApplicationsPost_AlreadyLinked {
             get {
-                return ResourceManager.GetString("ConnectionMultiplexerFactoryUnknownMultiplexerName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to HttpClient &apos;{0}&apos; could not be found..
-        /// </summary>
-        internal static string HttpClientFactoryUnknownClientName {
-            get {
-                return ResourceManager.GetString("HttpClientFactoryUnknownClientName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ODS Code &apos;{0}&apos; could not be found..
-        /// </summary>
-        internal static string OdsCodeLookupUnknownOdsCode {
-            get {
-                return ResourceManager.GetString("OdsCodeLookupUnknownOdsCode", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ODS Code &apos;{0}&apos; is associated with unexpected supplier &apos;{1}&apos;..
-        /// </summary>
-        internal static string OdsCodeLookupUnknownSupplierCode {
-            get {
-                return ResourceManager.GetString("OdsCodeLookupUnknownSupplierCode", resourceCulture);
+                return ResourceManager.GetString("MeApplicationsPost_AlreadyLinked", resourceCulture);
             }
         }
     }

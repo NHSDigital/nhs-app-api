@@ -1,8 +1,10 @@
 ﻿namespace NHSOnline.Backend.Worker.Suppliers.Emis.Models
 {
-    public class CreateSessionRequestModel
+    public class MeApplicationsPostResponse
     {
+        public int StatusCode { get; set; }
+        
+
         public string AccessIdentityGuid { get; set; }
-        public string NationalPracticeCode { get; set; }
     }
 }

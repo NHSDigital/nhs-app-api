@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -13,19 +13,27 @@ using NHSOnline.Backend.Worker.Suppliers;
 namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
 {
     [TestClass]
-    public class Im1ConnectionTests
+    public class Im1ConnectionControllerTests
     {
         private const string DefaultOdsCode = "AB1234";
         private const SupplierEnum DefaultSupplier = SupplierEnum.Emis;
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = DefaultPatientIdentifier;
 
-        private Im1ConnectionController _im1ConnectionController;
+        private Im1ConnectionController sut;
+
+        private static IFixture _fixture;
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext testContext)
+        {
+            _fixture = new AutoFixture.Fixture();
+        }
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _im1ConnectionController = CreateIm1ConnectionController();
+            sut = CreateIm1ConnectionController();
         }
 
         [TestMethod]
@@ -51,7 +59,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         [TestMethod]
         public async Task Get_ReturnsABadRequestResult_WhenTheConnectionTokenIsNull()
         {
-            var result = await _im1ConnectionController.Get(null, DefaultOdsCode);
+            var result = await sut.Get(null, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
@@ -59,7 +67,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         [TestMethod]
         public async Task Get_ReturnsABadRequestResult_WhenTheConnectionTokenIsEmpty()
         {
-            var result = await _im1ConnectionController.Get(string.Empty, DefaultOdsCode);
+            var result = await sut.Get(string.Empty, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
@@ -67,7 +75,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         [TestMethod]
         public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsNull()
         {
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, null);
+            var result = await sut.Get(DefaultConnectionToken, null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
@@ -75,13 +83,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         [TestMethod]
         public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsEmpty()
         {
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, string.Empty);
+            var result = await sut.Get(DefaultConnectionToken, string.Empty);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
         [TestMethod]
-        public async Task Get_ReturnsTheNhsNumberAssociatedWithTheSuppliedToken_WhenValidlyRequested()
+        public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
             const string odsCode = DefaultOdsCode;
             const SupplierEnum supplier = DefaultSupplier;
@@ -99,21 +107,49 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
                 NhsNumbers = expectedNhsNumbers
             };
 
-            var nhsNumberProvider = MockNhsNumberProvider(patientIdentifier, expectedNhsNumbers);
-            var systemProviderMock = MockSystemProvider(nhsNumberProvider);
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode, new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+            var systemProviderMock = MockSystemProvider(im1ConnectionService);
             var systemProviderFactoryMock = MockSystemProviderFactory(supplier, systemProviderMock);
-            nhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(DefaultConnectionToken, odsCode))
-                .ReturnsAsync(expectedNhsNumbers);
-            _im1ConnectionController =
+            im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
+                .ReturnsAsync(new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+            sut =
                 CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
 
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, odsCode);
+            var result = await sut.Get(DefaultConnectionToken, odsCode);
 
             result.Should().BeAssignableTo<OkObjectResult>();
             // ReSharper disable once PossibleNullReferenceException
             var responseObject = (result as OkObjectResult).Value;
             responseObject.Should().BeAssignableTo<PatientIm1ConnectionResponse>();
             responseObject.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [TestMethod]
+        public async Task Get_UnknownOdsCode_ReturnsNotFound()
+        {
+            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode)).Throws<OdsCodeLookupException>();
+
+            sut = CreateIm1ConnectionController(mockOdsCodeLookup);
+
+            var result = await sut.Get(DefaultConnectionToken, DefaultOdsCode);
+
+            result.Should().BeAssignableTo<NotFoundResult>();
+        }
+
+        [TestMethod]
+        public async Task Post_UnknownOdsCode_ReturnsNotFound()
+        {
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(request.OdsCode)).Throws<OdsCodeLookupException>();
+
+            sut = CreateIm1ConnectionController(mockOdsCodeLookup);
+
+            var result = await sut.Post(request);
+
+            result.Should().BeAssignableTo<NotFoundResult>();
         }
 
         private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null,
@@ -144,24 +180,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             return mockSystemProviderFactory;
         }
 
-        private Mock<ISystemProvider> MockSystemProvider(Mock<INhsNumberProvider> nhsNumberProvider = null)
+        private Mock<ISystemProvider> MockSystemProvider(Mock<IIm1ConnectionService> nhsNumberProvider = null)
         {
-            nhsNumberProvider = nhsNumberProvider ?? MockNhsNumberProvider();
+            nhsNumberProvider = nhsNumberProvider ?? MockIm1ConnectionService();
             var mockSystemProvider = new Mock<ISystemProvider>();
-            mockSystemProvider.Setup(x => x.GetNhsNumberProvider()).Returns(nhsNumberProvider.Object);
+            mockSystemProvider.Setup(x => x.GetIm1ConnectionService()).Returns(nhsNumberProvider.Object);
 
             return mockSystemProvider;
         }
 
-        private Mock<INhsNumberProvider> MockNhsNumberProvider(string patientIdentifier = DefaultPatientIdentifier,
-            IEnumerable<PatientNhsNumber> expectedNhsNumbers = null)
+        private Mock<IIm1ConnectionService> MockIm1ConnectionService(string patientIdentifier = DefaultPatientIdentifier, string odsCode = DefaultOdsCode,
+            Im1ConnectionVerifyResult expectedResponse = null)
         {
-            expectedNhsNumbers = expectedNhsNumbers ?? new List<PatientNhsNumber>();
-            var mockNhsNumberProvider = new Mock<INhsNumberProvider>();
-            mockNhsNumberProvider.Setup(x => x.GetNhsNumbersAsync(patientIdentifier, ""))
-                .ReturnsAsync(expectedNhsNumbers);
+            var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
+            mockIm1ConnectionService.Setup(x => x.Verify(patientIdentifier, odsCode))
+                .ReturnsAsync(expectedResponse);
 
-            return mockNhsNumberProvider;
+            return mockIm1ConnectionService;
         }
     }
 }

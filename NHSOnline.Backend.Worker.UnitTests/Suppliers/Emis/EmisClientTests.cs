@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -16,13 +20,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
     public class EmisClientTests
     {
         public const string DefaultEmisVersion = "2.1.0.0";
-        public const string DefaultEmisApplicationId = "D66BA979-60D2-49AA-BE82-AEC06356E41F";
+        public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
 
         public static readonly Uri BaseUri = new Uri("http://185.13.72.81/PFS/");
-        private IEmisClient _emisClient;
+
+        private IEmisClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<IEmisConfig> _configMock;
         private HttpClient _httpClient;
+        private Mock<IHttpClientFactory> _httpClientFactory;
+        private static IFixture _fixture;
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+        }
 
         [TestInitialize]
         public void TestInitialize()
@@ -34,48 +47,38 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             _configMock.SetupGet(x => x.Version).Returns(DefaultEmisVersion);
             _configMock.SetupGet(x => x.ApplicationId).Returns(DefaultEmisApplicationId);
             _httpClient = new HttpClient(_mockHttpHandler);
-            _emisClient = new EmisClient(_httpClient, _configMock.Object);
+
+            _httpClientFactory = _fixture.Freeze<Mock<IHttpClientFactory>>();
+            _httpClientFactory.Setup(x => x.GetClient(HttpClientName.EmisApiClient)).Returns(_httpClient);
+
+            _fixture.Inject(_configMock);
+
+            _sut = _fixture.Create<EmisClient>();
         }
 
         [TestMethod]
-        public async Task EndUserSessionAsync_ReturnsAnEndUserSessionId_WhenValidlyRequested()
+        public async Task SessionsEndUserSessionPost_ReturnsAnEndUserSessionId_WhenValidlyRequested()
         {
-            const string expected = "DW3EUerDy8VEZi2gvJ5esg";
-            var endUserSessionResponse = new CreateEndUserSessionResponseModel
-            {
-                EndUserSessionId = expected
-            };
+            var expectedEndUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
 
             _mockHttpHandler
                 .WhenEmis(HttpMethod.Post, "sessions/endusersession")
                 .WithEmisHeaders()
-                .Respond("application/json", JsonConvert.SerializeObject(endUserSessionResponse));
+                .Respond("application/json", JsonConvert.SerializeObject(expectedEndUserSessionResponse));
 
-            var response = await _emisClient.EndUserSessionAsync();
+            var response = await _sut.SessionsEndUserSessionPost();
 
-            Assert.AreEqual(expected, response.EndUserSessionId);
+            response.Body.Should().BeEquivalentTo(expectedEndUserSessionResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
-        public async Task SessionsAsync_ReturnsASessionResponse_WhenValidlyRequested()
+        public async Task SessionsPost_ReturnsASessionResponse_WhenValidlyRequested()
         {
-            const string endUserSessionId = "end user session id";
-            const string connectionToken = "connection token";
-            const string odsCode = "ods code";
-            var expectedResponse = new CreateSessionResponseModel
-            {
-                SessionId = "foo",
-                UserPatientLinks = new[]
-                {
-                    new UserPatientLinkModel {UserPatientLinkToken = "link1"},
-                }
-            };
-
-            var expectedContent = new CreateSessionRequestModel
-            {
-                AccessIdentityGuid = connectionToken,
-                NationalPracticeCode = odsCode
-            };
+            var endUserSessionId = _fixture.Create<string>();
+            var expectedResponse = _fixture.Create<SessionsPostResponse>();
+            var requestBody = _fixture.Create<SessionsPostRequest>();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
@@ -85,26 +88,75 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             _mockHttpHandler
                 .WhenEmis(HttpMethod.Post, "sessions")
                 .WithEmisHeaders(additionalHeaders)
-                .WithContent(JsonConvert.SerializeObject(expectedContent))
+                .WithContent(JsonConvert.SerializeObject(requestBody))
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _emisClient.SessionsAsync(endUserSessionId, connectionToken, odsCode);
-            var expectedJson = JsonConvert.SerializeObject(expectedResponse);
-            var actualJson = JsonConvert.SerializeObject(response);
-            Assert.AreEqual(expectedJson, actualJson);
+            var response = await _sut.SessionsPost(endUserSessionId, requestBody);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
-        public async Task DemographicsAsync_ReturnsADemographicsResponse_WhenValidlyRequested()
+        public async Task MeApplicationsPost_ReturnsAnApplicationsPostResponse_WhenValidlyRequested()
         {
-            const string nhsNumber = "AB1234";
-            var userPatientLinkToken = "user link token";
-            var sessionId = "session id";
-            var endUserSessionId = "end user session id";
-            var expectedResponse = new DemographicsResponse
+            var endUserSessionId = _fixture.Create<string>();
+            var expectedResponse = _fixture.Create<MeApplicationsPostResponse>();
+            var requestBody = _fixture.Create<MeApplicationsPostRequest>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                PatientIdentifiers = new[] {new PatientIdentifier {IdentifierValue = nhsNumber}}
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
             };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "me/applications")
+                .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.MeApplicationsPost(endUserSessionId, requestBody);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
+        }
+
+        [TestMethod]
+        public async Task
+            MeApplicationsPost_ReturnsAnApplicationsPostResponseWithErrorDetails_WhenUserAlreadyRegistered()
+        {
+            var endUserSessionId = _fixture.Create<string>();
+            var expectedResponse = _fixture.Create<ErrorResponse>();
+            var requestBody = _fixture.Create<MeApplicationsPostRequest>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "me/applications")
+                .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .Respond(HttpStatusCode.InternalServerError, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.MeApplicationsPost(endUserSessionId, requestBody);
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(500);
+            response.Body.Should().Be(null);
+        }
+
+        [TestMethod]
+        public async Task DemographicsGet_ReturnsADemographicsResponse_WhenValidlyRequested()
+        {
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var expectedResponse = _fixture.Create<DemographicsGetResponse>();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
@@ -113,15 +165,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Suppliers.Emis
             };
 
             _mockHttpHandler
-                .WhenEmis(HttpMethod.Get, $"demographics?{ EmisClient.QueryParameterUserPatientLinkToken }={ userPatientLinkToken }")
+                .WhenEmis(HttpMethod.Get, "demographics?userPatientLinkToken=" + userPatientLinkToken)
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _emisClient.DemographicsAsync(userPatientLinkToken, sessionId, endUserSessionId);
+            var response = await _sut.DemographicsGet(userPatientLinkToken, sessionId, endUserSessionId);
 
-            var expectedJson = JsonConvert.SerializeObject(expectedResponse);
-            var actualJson = JsonConvert.SerializeObject(response);
-            Assert.AreEqual(expectedJson, actualJson);
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
         }
     }
 }

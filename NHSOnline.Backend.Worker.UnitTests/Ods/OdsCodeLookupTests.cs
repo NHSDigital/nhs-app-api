@@ -13,11 +13,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
     public class OdsCodeLookupTests
     {
         [TestMethod]
-        public void Constructor_NullConnectionMultiplexer_Throws()
+        public void Constructor_NullConnectionMultiplexerFactory_Throws()
         {
             Action act = () => new OdsCodeLookup(null);
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("connectionMultiplexer");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("connectionMultiplexerFactory");
         }
 
         [DataTestMethod]
@@ -26,8 +26,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
         [DataRow("  ")]
         public void LookupSupplier_NullOrEmptyOdsCode_Throws(string odsCode)
         {
-            var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
-            var sut = new OdsCodeLookup(connectionMultiplexer.Object);
+            var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
             Func<Task> act = async () => await sut.LookupSupplier(odsCode);
 
@@ -46,7 +46,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
             var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
             connectionMultiplexer.Setup(x => x.GetDatabase(-1, null)).Returns(database.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexer.Object);
+            var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
+            connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
+                .Returns(connectionMultiplexer.Object);
+
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
             Func<Task> act = async () => await sut.LookupSupplier(odsCode);
 
@@ -67,7 +71,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
             var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
             connectionMultiplexer.Setup(x => x.GetDatabase(-1, null)).Returns(database.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexer.Object);
+            var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
+            connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
+                .Returns(connectionMultiplexer.Object);
+
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
             Func<Task> act = async () => await sut.LookupSupplier(odsCode);
 
@@ -90,7 +98,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
             var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
             connectionMultiplexer.Setup(x => x.GetDatabase(-1, null)).Returns(database.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexer.Object);
+            var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
+            connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
+                .Returns(connectionMultiplexer.Object);
+
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
             var actual = sut.LookupSupplier(odsCode).Result;
 
@@ -112,7 +124,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
             var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
             connectionMultiplexer.Setup(x => x.GetDatabase(-1, null)).Returns(database.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexer.Object);
+            var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
+            connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
+                .Returns(connectionMultiplexer.Object);
+
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
             var actual = sut.LookupSupplier(odsCode).Result;
 

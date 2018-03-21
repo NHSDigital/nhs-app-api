@@ -2,6 +2,6 @@
 {
     public interface ISystemProvider
     {
-        INhsNumberProvider GetNhsNumberProvider();
+        IIm1ConnectionService GetIm1ConnectionService();
     }
 }

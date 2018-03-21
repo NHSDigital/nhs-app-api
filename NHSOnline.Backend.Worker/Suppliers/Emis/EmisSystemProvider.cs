@@ -9,9 +9,9 @@
             _emisClient = emisClient;
         }
 
-        public INhsNumberProvider GetNhsNumberProvider()
+        public IIm1ConnectionService GetIm1ConnectionService()
         {
-            return new EmisNhsNumberProvider(_emisClient);
+            return new EmisIm1ConnectionService(_emisClient);
         }
     }
 }

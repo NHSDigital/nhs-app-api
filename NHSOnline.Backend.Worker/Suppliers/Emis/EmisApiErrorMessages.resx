@@ -117,16 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConnectionMultiplexerFactoryUnknownMultiplexerName" xml:space="preserve">
-    <value>ConnectionMultiplexer '{0}' could not be found.</value>
-  </data>
-  <data name="HttpClientFactoryUnknownClientName" xml:space="preserve">
-    <value>HttpClient '{0}' could not be found.</value>
-  </data>
-  <data name="OdsCodeLookupUnknownOdsCode" xml:space="preserve">
-    <value>ODS Code '{0}' could not be found.</value>
-  </data>
-  <data name="OdsCodeLookupUnknownSupplierCode" xml:space="preserve">
-    <value>ODS Code '{0}' is associated with unexpected supplier '{1}'.</value>
+  <data name="MeApplicationsPost_AlreadyLinked" xml:space="preserve">
+    <value>Registered online user is already linked</value>
   </data>
 </root>

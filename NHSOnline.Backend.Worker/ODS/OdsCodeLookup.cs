@@ -7,12 +7,12 @@ namespace NHSOnline.Backend.Worker.Ods
 {
     public class OdsCodeLookup : IOdsCodeLookup
     {
-        private readonly IConnectionMultiplexer _connectionMultiplexer;
+        private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
 
-        public OdsCodeLookup(IConnectionMultiplexer connectionMultiplexer)
+        public OdsCodeLookup(IConnectionMultiplexerFactory connectionMultiplexerFactory)
         {
-            _connectionMultiplexer =
-                connectionMultiplexer ?? throw new ArgumentNullException(nameof(connectionMultiplexer));
+            _connectionMultiplexerFactory =
+                connectionMultiplexerFactory ?? throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
         }
 
         public async Task<SupplierEnum> LookupSupplier(string odsCode)
@@ -35,7 +35,8 @@ namespace NHSOnline.Backend.Worker.Ods
 
         private async Task<RedisValue> GetSupplierNameFromRedis(string odsCode)
         {
-            var database = _connectionMultiplexer.GetDatabase();
+            var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
+            var database = multiplexer.GetDatabase();
             var redisValue = await database.StringGetAsync(odsCode);
 
             if (redisValue == default(RedisValue))

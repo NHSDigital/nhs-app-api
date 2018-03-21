@@ -3,6 +3,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace NHSOnline.Backend.Worker.Suppliers.Emis
 {
+    public interface IEmisConfig
+    {
+        Uri BaseUrl { get; set; }
+        string ApplicationId { get; set; }
+        string Version { get; set; }
+    }
+
     public class EmisConfig : IEmisConfig
     {
         public Uri BaseUrl { get; set; }
