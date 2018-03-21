@@ -36,17 +36,7 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
 
                 var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
                 if (!sessionsResponse.HasSuccessStatusCode) { return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();}
-
-                var userPatientLinkToken = sessionsResponse
-                    ?.Body
-                    ?.UserPatientLinks
-                    ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
-                    ?.UserPatientLinkToken;
-
-                if (userPatientLinkToken == null)
-                {
-                    return new Im1ConnectionVerifyResult.NotFound();
-                }
+                if (!TryExtractUserPatientLinkToken(sessionsResponse.Body, out var userPatientLinkToken)) { return new Im1ConnectionVerifyResult.NotFound(); }
 
                 var demographicsResponse =
                     await _emisClient.DemographicsGet(userPatientLinkToken, sessionsResponse.Body.SessionId, endUserSessionId);
@@ -110,17 +100,7 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
                 var sessionsResponse =
                     await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
                 if (!sessionsResponse.HasSuccessStatusCode) { return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();}
-
-                var userPatientLinkToken = sessionsResponse
-                    ?.Body
-                    ?.UserPatientLinks
-                    ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
-                    ?.UserPatientLinkToken;
-
-                if (userPatientLinkToken == null)
-                {
-                    return new Im1ConnectionRegisterResult.NotFound();
-                }
+                if (!TryExtractUserPatientLinkToken(sessionsResponse.Body, out var userPatientLinkToken)) { return new Im1ConnectionRegisterResult.NotFound(); }
 
                 var demographicsResponse =
                     await _emisClient.DemographicsGet(userPatientLinkToken, sessionsResponse.Body.SessionId, endUserSessionId);
@@ -154,6 +134,16 @@ namespace NHSOnline.Backend.Worker.Suppliers.Emis
             return patientIdentifiers
                 .Where(x => x.IdentifierType == IdentifierType.NhsNumber)
                 .Select(x => new PatientNhsNumber { NhsNumber = x.IdentifierValue });
+        }
+
+        private static bool TryExtractUserPatientLinkToken(SessionsPostResponse sessionsResponse, out string userPatientLinkToken)
+        {
+            userPatientLinkToken = sessionsResponse
+                ?.UserPatientLinks
+                ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
+                ?.UserPatientLinkToken;
+
+            return !string.IsNullOrEmpty(userPatientLinkToken);
         }
     }
 }
