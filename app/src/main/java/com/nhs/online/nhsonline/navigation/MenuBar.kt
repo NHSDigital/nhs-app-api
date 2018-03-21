@@ -95,9 +95,6 @@ class MenuBar @JvmOverloads constructor(
     }
 
     internal class SavedState : View.BaseSavedState {
-        companion object {
-            private const val UNSELECTED_POSITION = -1
-        }
 
         val selectedPosition: Optional<Int>
 
@@ -117,6 +114,17 @@ class MenuBar @JvmOverloads constructor(
         override fun writeToParcel(parcel: Parcel, flags: Int) {
             super.writeToParcel(parcel, flags)
             parcel.writeInt(selectedPosition.orElse(UNSELECTED_POSITION))
+        }
+
+        companion object CREATOR : Parcelable.Creator<SavedState> {
+            private const val UNSELECTED_POSITION = -1
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
         }
     }
 }
