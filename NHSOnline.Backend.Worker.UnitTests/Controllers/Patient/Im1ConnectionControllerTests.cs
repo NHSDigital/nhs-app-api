@@ -9,6 +9,7 @@ using NHSOnline.Backend.Worker.Controllers.Patient;
 using NHSOnline.Backend.Worker.Models.Patient;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Suppliers;
+using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
 {
@@ -139,7 +140,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
         public async Task Get_UnknownOdsCode_ReturnsNotFound()
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode)).Throws<OdsCodeLookupException>();
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
+                .Returns(Task.FromResult(Option.None<SupplierEnum>()));
 
             sut = CreateIm1ConnectionController(mockOdsCodeLookup);
 
@@ -154,7 +156,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(request.OdsCode)).Throws<OdsCodeLookupException>();
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
+                .Returns(Task.FromResult(Option.None<SupplierEnum>()));
 
             sut = CreateIm1ConnectionController(mockOdsCodeLookup);
 
@@ -176,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             SupplierEnum supplier = DefaultSupplier)
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(supplier));
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(supplier)));
 
             return mockOdsCodeLookup;
         }

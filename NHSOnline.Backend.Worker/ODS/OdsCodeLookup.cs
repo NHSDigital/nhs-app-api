@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Suppliers;
+using NHSOnline.Backend.Worker.Support;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.Ods
 {
+    public interface IOdsCodeLookup
+    {
+        Task<Option<SupplierEnum>> LookupSupplier(string odsCode);
+    }
+
     public class OdsCodeLookup : IOdsCodeLookup
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
@@ -15,22 +21,21 @@ namespace NHSOnline.Backend.Worker.Ods
                 connectionMultiplexerFactory ?? throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
         }
 
-        public async Task<SupplierEnum> LookupSupplier(string odsCode)
+        public async Task<Option<SupplierEnum>> LookupSupplier(string odsCode)
         {
             if (string.IsNullOrWhiteSpace(odsCode))
             {
-                throw new ArgumentNullException(nameof(odsCode));
+                return Option.None<SupplierEnum>();
             }
 
             var supplierName = await GetSupplierNameFromRedis(odsCode);
 
             if (!Enum.TryParse(supplierName, true, out SupplierEnum supplierEnum))
             {
-                var errmsg = string.Format(ExceptionMessages.OdsCodeLookupUnknownSupplierCode, odsCode, supplierName);
-                throw new OdsCodeLookupException(errmsg, odsCode);
+                return Option.None<SupplierEnum>();
             }
 
-            return supplierEnum;
+            return Option.Some(supplierEnum);
         }
 
         private async Task<RedisValue> GetSupplierNameFromRedis(string odsCode)
@@ -38,13 +43,6 @@ namespace NHSOnline.Backend.Worker.Ods
             var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
             var database = multiplexer.GetDatabase();
             var redisValue = await database.StringGetAsync(odsCode);
-
-            if (redisValue == default(RedisValue))
-            {
-                var errmsg = string.Format(ExceptionMessages.OdsCodeLookupUnknownOdsCode, odsCode);
-                throw new OdsCodeLookupException(errmsg, odsCode);
-            }
-
             return redisValue;
         }
     }

@@ -24,18 +24,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
         [DataRow(null)]
         [DataRow("")]
         [DataRow("  ")]
-        public void LookupSupplier_NullOrEmptyOdsCode_Throws(string odsCode)
+        public async Task LookupSupplier_NullOrEmptyOdsCode_ReturnsOptionNone(string odsCode)
         {
             var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            Func<Task> act = async () => await sut.LookupSupplier(odsCode);
+            var result = await sut.LookupSupplier(odsCode);
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCode");
+            result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
-        public void LookupSupplier_RedisCacheReturnsNull_Throws()
+        public async Task LookupSupplier_RedisCacheReturnsNull_ReturnsOptionNone()
         {
             const string odsCode = "ABC123";
             RedisValue redisValue = default(RedisValue);
@@ -52,15 +52,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            Func<Task> act = async () => await sut.LookupSupplier(odsCode);
+            var result = await sut.LookupSupplier(odsCode);
 
-            act.Should().Throw<OdsCodeLookupException>()
-                .WithMessage($"ODS Code '{odsCode}' could not be found.")
-                .And.OdsCode.Should().Be(odsCode);
+            result.HasValue.Should().BeFalse();
         }
 
         [TestMethod]
-        public void LookupSupplier_RedisCacheReturnsUnknownSupplier_Throws()
+        public async Task LookupSupplier_RedisCacheReturnsUnknownSupplier_Throws()
         {
             const string odsCode = "ABC123";
             RedisValue redisValue = "UnknownSupplier";
@@ -77,17 +75,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            Func<Task> act = async () => await sut.LookupSupplier(odsCode);
+            var result = await sut.LookupSupplier(odsCode);
 
-            act.Should().Throw<OdsCodeLookupException>()
-                .WithMessage($"ODS Code '{odsCode}' is associated with unexpected supplier '{redisValue}'.")
-                .And.OdsCode.Should().Be(odsCode);
+            result.HasValue.Should().BeFalse();
         }
 
         [DataTestMethod]
         [DataRow(SupplierEnum.Emis)]
         [DataRow(SupplierEnum.Tpp)]
-        public void LookupSupplier_RedisCacheReturnsValidSupplier_ReturnsEnum(SupplierEnum supplier)
+        public async Task LookupSupplier_RedisCacheReturnsValidSupplier_ReturnsValue(SupplierEnum supplier)
         {
             const string odsCode = "ABC123";
             RedisValue redisValue = supplier.ToString();
@@ -104,15 +100,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            var actual = sut.LookupSupplier(odsCode).Result;
+            var actual = await sut.LookupSupplier(odsCode);
 
-            actual.Should().Be(supplier);
+            actual.HasValue.Should().BeTrue();
+            actual.ValueOrFailure().Should().Be(supplier);
         }
 
         [DataTestMethod]
         [DataRow("EmIs", SupplierEnum.Emis)]
         [DataRow("tPp", SupplierEnum.Tpp)]
-        public void LookupSupplier_RedisCacheReturnsValidSupplierButWithUnusualCasing_ReturnsEnum(string redisString,
+        public async Task LookupSupplier_RedisCacheReturnsValidSupplierButWithUnusualCasing_ReturnsEnum(string redisString,
             SupplierEnum supplier)
         {
             const string odsCode = "ABC123";
@@ -130,9 +127,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ods
 
             var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
 
-            var actual = sut.LookupSupplier(odsCode).Result;
+            var actual = await sut.LookupSupplier(odsCode);
 
-            actual.Should().Be(supplier);
+            actual.HasValue.Should().BeTrue();
+            actual.ValueOrFailure().Should().Be(supplier);
         }
     }
 }

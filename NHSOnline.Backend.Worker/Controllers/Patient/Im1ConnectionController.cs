@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Worker.Models.Patient;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Suppliers;
+using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.Controllers.Patient
 {
@@ -40,24 +41,14 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
                 return BadRequest();
             }
 
-            ISystemProvider systemProvider;
+            var im1ConnectionService = await GetIm1ConnectionService(odsCode);
 
-            try
-            {
-                var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
-                systemProvider = _systemProviderFactory.CreateSystemProvider(supplier);
-            }
-            catch (OdsCodeLookupException)
-            {
-                return NotFound();
-            }
-            catch (UnknownSupplierException)
+            if (!im1ConnectionService.HasValue)
             {
                 return NotFound();
             }
 
-            var im1ConnectionService = systemProvider.GetIm1ConnectionService();
-            var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
+            var verifyResult = await im1ConnectionService.ValueOrFailure().Verify(connectionToken, odsCode);
 
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
         }
@@ -65,26 +56,38 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
+            var im1ConnectionService = await GetIm1ConnectionService(model.OdsCode);
+
+            if (!im1ConnectionService.HasValue)
+            {
+                return NotFound();
+            }
+            
+            var registerResult = await im1ConnectionService.ValueOrFailure().Register(model);
+
+            return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
+        }
+
+        private async Task<Option<IIm1ConnectionService>> GetIm1ConnectionService(string odsCode)
+        {
+            var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
+            if (!supplier.HasValue)
+            {
+                return Option.None<IIm1ConnectionService>();
+            }
+
             ISystemProvider systemProvider;
 
             try
             {
-                var supplier = await _odsCodeLookup.LookupSupplier(model.OdsCode);
-                systemProvider = _systemProviderFactory.CreateSystemProvider(supplier);
-            }
-            catch (OdsCodeLookupException)
-            {
-                return NotFound();
+                systemProvider = _systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure());
             }
             catch (UnknownSupplierException)
             {
-                return NotFound();
+                return Option.None<IIm1ConnectionService>();
             }
 
-            var im1ConnectionService = systemProvider.GetIm1ConnectionService();
-            var registerResult = await im1ConnectionService.Register(model);
-
-            return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
+            return Option.Some(systemProvider.GetIm1ConnectionService());
         }
 
         private class Im1ConnectionVerifyResultVisitor : Im1ConnectionVerifyResult.IIm1ConnectionVerifyResultVisitor<IActionResult>
