@@ -88,6 +88,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Controllers.Patient
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
+        [DataTestMethod]
+        [DataRow("AB123")]
+        [DataRow("AB12345")]
+        [DataRow("!£$123HJ")]
+        public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsInAnInvalidFormat(string badOdsCode)
+        {
+            var result = await sut.Get(DefaultConnectionToken, badOdsCode);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
         [TestMethod]
         public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {

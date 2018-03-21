@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -30,6 +31,11 @@ namespace NHSOnline.Backend.Worker.Controllers.Patient
         )
         {
             if (string.IsNullOrEmpty(connectionToken) || string.IsNullOrEmpty(odsCode))
+            {
+                return BadRequest();
+            }
+
+            if (!Regex.IsMatch(odsCode, OdsCodeFormats.GpPracticeEnglandWales))
             {
                 return BadRequest();
             }

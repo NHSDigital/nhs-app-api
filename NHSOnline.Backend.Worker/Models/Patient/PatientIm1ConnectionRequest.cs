@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using NHSOnline.Backend.Worker.Ods;
 
 namespace NHSOnline.Backend.Worker.Models.Patient
 {
@@ -15,7 +16,7 @@ namespace NHSOnline.Backend.Worker.Models.Patient
         public string LinkageKey { get; set; }
 
         [Required]
-        [RegularExpression(@"^[A-Z0-9]{1,8}$")]
+        [RegularExpression(OdsCodeFormats.GpPracticeEnglandWales)]
         public string OdsCode { get; set; }
 
         [Required]
