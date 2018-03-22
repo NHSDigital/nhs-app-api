@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NHSOnline.Backend.Worker.Support
+﻿namespace NHSOnline.Backend.Worker.Support
 {
     public static class Option
     {
@@ -17,25 +15,6 @@ namespace NHSOnline.Backend.Worker.Support
         {
             Value = value;
             HasValue = hasValue;
-        }
-
-        public T ValueOr(T alternative)
-        {
-            return HasValue ? Value : alternative;
-        }
-
-        public T ValueOr(Func<T> alternativeFactory)
-        {
-            if (alternativeFactory == null)
-            {
-                throw new ArgumentNullException(nameof(alternativeFactory));
-            }
-            return HasValue ? Value : alternativeFactory();
-        }
-
-        public T ValueOrDefault()
-        {
-            return HasValue ? Value : default(T);
         }
 
         public T ValueOrFailure()

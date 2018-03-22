@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
@@ -27,7 +28,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Suppliers\Emis\EmisApiErrorMessages.Designer.cs">
+    <Compile Update="Bridges\Emis\EmisApiErrorMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EmisApiErrorMessages.resx</DependentUpon>
@@ -39,7 +40,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Suppliers\Emis\EmisApiErrorMessages.resx">
+    <EmbeddedResource Update="Bridges\Emis\EmisApiErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EmisApiErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>

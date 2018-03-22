@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
-using NHSOnline.Backend.Worker.Suppliers;
-using NHSOnline.Backend.Worker.Suppliers.Emis;
+using NHSOnline.Backend.Worker.Router;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker

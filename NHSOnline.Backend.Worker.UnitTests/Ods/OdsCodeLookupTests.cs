@@ -4,7 +4,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Ods;
-using NHSOnline.Backend.Worker.Suppliers;
+using NHSOnline.Backend.Worker.Router;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Ods
