@@ -11,10 +11,11 @@
 export default {
   data() {
     return {
-      symptomCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
+      symptomCheckerUrl: this.$config.SYMPTOM_CHECKER_URL,
     };
   },
 };
+
 </script>
 
 <style lang="scss"  scoped>

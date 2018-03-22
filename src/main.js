@@ -2,9 +2,12 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import axios from 'axios';
 import App from './App';
 import router from './router';
 import en from './locales/en';
+// import NHSOnlineApi from './services/nhsonlineapi';
+
 
 Vue.config.productionTip = false;
 Vue.use(VueI18n);
@@ -18,11 +21,19 @@ const i18n = new VueI18n({
   messages,
 });
 
-/* eslint-disable no-new */
-new Vue({
-  i18n,
-  router,
-  el: '#app',
-  components: { App },
-  template: '<App/>',
-});
+axios.get('/config')
+  .then((response) => {
+    // JSON responses are automatically parsed.
+    Vue.prototype.$config = response.data;
+    /* eslint-disable no-new */
+    new Vue({
+      i18n,
+      router,
+      el: '#app',
+      components: { App },
+      template: '<App/>',
+      // provide: {
+      //  nhsOnlineApi: new NHSOnlineApi(response.data.API_HOST),
+      // },
+    });
+  });

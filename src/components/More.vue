@@ -11,7 +11,7 @@
 export default {
   data() {
     return {
-      organDonationUrl: process.env.ORGAN_DONATION_URL,
+      organDonationUrl: this.$config.ORGAN_DONATION_URL,
     };
   },
 };
