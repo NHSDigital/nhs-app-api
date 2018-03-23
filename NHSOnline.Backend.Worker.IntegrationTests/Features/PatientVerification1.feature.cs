@@ -87,20 +87,18 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with valid credentials returns a valid response with singl" +
             "e NHS Number")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         public virtual void VerifyingPatientDataWithValidCredentialsReturnsAValidResponseWithSingleNHSNumber()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with valid credentials returns a valid response with singl" +
-                    "e NHS Number", new string[] {
-                        "wip"});
+                    "e NHS Number", ((string[])(null)));
+#line 6
+ this.ScenarioSetup(scenarioInfo);
 #line 7
-this.ScenarioSetup(scenarioInfo);
+    testRunner.Given("I have valid credentials for a patient with one NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 8
-   testRunner.Given("I have valid credentials for a patient with one NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 9
-   testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 10
-   testRunner.Then("I receive the expected NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("I receive the expected NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -109,20 +107,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with valid credentials returns a valid response with multi" +
             "ple NHS Numbers")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         public virtual void VerifyingPatientDataWithValidCredentialsReturnsAValidResponseWithMultipleNHSNumbers()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with valid credentials returns a valid response with multi" +
-                    "ple NHS Numbers", new string[] {
-                        "wip"});
+                    "ple NHS Numbers", ((string[])(null)));
+#line 11
+ this.ScenarioSetup(scenarioInfo);
+#line 12
+  testRunner.Given("I have valid credentials for a patient with multiple NHS Numbers", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 13
-this.ScenarioSetup(scenarioInfo);
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 14
- testRunner.Given("I have valid credentials for a patient with multiple NHS Numbers", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 15
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 16
- testRunner.Then("I receive the expected NHS Numbers", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("I receive the expected NHS Numbers", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -131,22 +127,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verify patient data with valid credentials does not return NHS Number if does not" +
             " exists")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("bug")]
         public virtual void VerifyPatientDataWithValidCredentialsDoesNotReturnNHSNumberIfDoesNotExists()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verify patient data with valid credentials does not return NHS Number if does not" +
-                    " exists", new string[] {
-                        "wip",
-                        "bug"});
-#line 20
-this.ScenarioSetup(scenarioInfo);
-#line 21
- testRunner.Given("I have valid credentials for a patient with no NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 22
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 23
- testRunner.Then("I receive no NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                    " exists", ((string[])(null)));
+#line 16
+ this.ScenarioSetup(scenarioInfo);
+#line 17
+  testRunner.Given("I have valid credentials for a patient with no NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 18
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 19
+  testRunner.Then("I receive no NHS Number", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -155,22 +147,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with an IM1 Connection Token that does not exist returns a" +
             " \"Bad Gateway\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("bug")]
         public virtual void VerifyingPatientDataWithAnIM1ConnectionTokenThatDoesNotExistReturnsABadGatewayError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with an IM1 Connection Token that does not exist returns a" +
-                    " \"Bad Gateway\" error", new string[] {
-                        "wip",
-                        "bug"});
-#line 27
-this.ScenarioSetup(scenarioInfo);
-#line 28
- testRunner.Given("I have an IM1 Connection Token that does not exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 29
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 30
- testRunner.Then("I receive a \"Bad Gateway\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                    " \"Bad Gateway\" error", ((string[])(null)));
+#line 21
+ this.ScenarioSetup(scenarioInfo);
+#line 22
+  testRunner.Given("I have an IM1 Connection Token that does not exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 23
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 24
+  testRunner.Then("I receive a \"Bad Gateway\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -179,22 +167,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with an IM1 Connection Token not in the expected format re" +
             "turns a \"Bad Request\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("bug")]
         public virtual void VerifyingPatientDataWithAnIM1ConnectionTokenNotInTheExpectedFormatReturnsABadRequestError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with an IM1 Connection Token not in the expected format re" +
-                    "turns a \"Bad Request\" error", new string[] {
-                        "wip",
-                        "bug"});
-#line 34
-this.ScenarioSetup(scenarioInfo);
-#line 35
- testRunner.Given("I have an IM1 Connection Token that is in an invalid format", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 36
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 37
- testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                    "turns a \"Bad Request\" error", ((string[])(null)));
+#line 26
+ this.ScenarioSetup(scenarioInfo);
+#line 27
+  testRunner.Given("I have an IM1 Connection Token that is in an invalid format", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 28
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 29
+  testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -203,20 +187,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with a missing IM1 Connection Token returns a \"Bad Request" +
             "\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         public virtual void VerifyingPatientDataWithAMissingIM1ConnectionTokenReturnsABadRequestError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with a missing IM1 Connection Token returns a \"Bad Request" +
-                    "\" error", new string[] {
-                        "wip"});
-#line 40
-this.ScenarioSetup(scenarioInfo);
-#line 41
- testRunner.Given("I have no IM1 Connection Token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 42
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 43
- testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                    "\" error", ((string[])(null)));
+#line 31
+ this.ScenarioSetup(scenarioInfo);
+#line 32
+  testRunner.Given("I have no IM1 Connection Token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 33
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 34
+  testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -225,20 +207,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with an ODS Code that does not exist returns a \"Not Found\"" +
             " error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         public virtual void VerifyingPatientDataWithAnODSCodeThatDoesNotExistReturnsANotFoundError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with an ODS Code that does not exist returns a \"Not Found\"" +
-                    " error", new string[] {
-                        "wip"});
-#line 46
-this.ScenarioSetup(scenarioInfo);
-#line 47
- testRunner.Given("I have an ODS Code that does not exists", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 48
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 49
- testRunner.Then("I receive a \"Not Found\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                    " error", ((string[])(null)));
+#line 36
+ this.ScenarioSetup(scenarioInfo);
+#line 37
+  testRunner.Given("I have an ODS Code that does not exists", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 38
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 39
+  testRunner.Then("I receive a \"Not Found\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -247,20 +227,18 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with an ODS Code not in the expected format returns a \"Bad" +
             " Request\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         public virtual void VerifyingPatientDataWithAnODSCodeNotInTheExpectedFormatReturnsABadRequestError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with an ODS Code not in the expected format returns a \"Bad" +
-                    " Request\" error", new string[] {
-                        "wip"});
-#line 52
-this.ScenarioSetup(scenarioInfo);
-#line 53
- testRunner.Given("I have an ODS Code not in expected format", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 54
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 55
- testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+                    " Request\" error", ((string[])(null)));
+#line 41
+ this.ScenarioSetup(scenarioInfo);
+#line 42
+  testRunner.Given("I have an ODS Code not in expected format", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 43
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 44
+  testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -268,43 +246,37 @@ this.ScenarioSetup(scenarioInfo);
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with a missing ODS Code returns a \"Bad Request\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         public virtual void VerifyingPatientDataWithAMissingODSCodeReturnsABadRequestError()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with a missing ODS Code returns a \"Bad Request\" error", new string[] {
-                        "wip"});
-#line 58
-this.ScenarioSetup(scenarioInfo);
-#line 59
- testRunner.Given("I have no ODS Code", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 60
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 61
- testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with a missing ODS Code returns a \"Bad Request\" error", ((string[])(null)));
+#line 46
+ this.ScenarioSetup(scenarioInfo);
+#line 47
+  testRunner.Given("I have no ODS Code", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 48
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 49
+  testRunner.Then("I receive a \"Bad Request\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data when EMIS is unavailable returns an \"Internal Server Error" +
-            "\" error")]
+        [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data when EMIS is unavailable returns \"Gateway Timeout\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
-        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("bug")]
-        public virtual void VerifyingPatientDataWhenEMISIsUnavailableReturnsAnInternalServerErrorError()
+        [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("long-running")]
+        public virtual void VerifyingPatientDataWhenEMISIsUnavailableReturnsGatewayTimeoutError()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data when EMIS is unavailable returns an \"Internal Server Error" +
-                    "\" error", new string[] {
-                        "wip",
-                        "bug"});
-#line 65
-this.ScenarioSetup(scenarioInfo);
-#line 66
- testRunner.Given("EMIS is unavailable", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 67
- testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 68
- testRunner.Then("I receive an \"Internal Server Error\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data when EMIS is unavailable returns \"Gateway Timeout\" error", new string[] {
+                        "long-running"});
+#line 52
+ this.ScenarioSetup(scenarioInfo);
+#line 53
+  testRunner.Given("EMIS is unavailable", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 54
+  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 55
+  testRunner.Then("I receive an \"Gateway Timeout\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

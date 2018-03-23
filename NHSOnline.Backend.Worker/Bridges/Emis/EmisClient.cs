@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -107,7 +108,6 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.SendAsync(request);
-
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             var stringResponse = await responseMessage.Content.ReadAsStringAsync();

@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         {
             { "bad gateway", HttpStatusCode.BadGateway },
             { "bad request", HttpStatusCode.BadRequest },
+            { "gateway timeout", HttpStatusCode.GatewayTimeout },
             { "not found", HttpStatusCode.NotFound },
             { "internal server error", HttpStatusCode.InternalServerError }
         };

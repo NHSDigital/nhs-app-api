@@ -20,8 +20,6 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         [Given(@"EMIS is unavailable")]
         public async Task GivenEmisIsUnavailable()
         {
-            throw new Exception(
-                "Until the controller terminates the request to a non-responding EMIS, this is ignored as it causes all other tests to fail.");
             _context
                 .SetConnectionToken(PatientVerificationSteps.DefaultConnectionToken)
                 .SetOdsCode(PatientVerificationSteps.DefaultOdsCode);

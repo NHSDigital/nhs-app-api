@@ -17,6 +17,8 @@ namespace NHSOnline.Backend.Worker
 {
     public class Startup
     {
+        public const int DefaultHttpTimeoutSeconds = 10;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -46,7 +48,13 @@ namespace NHSOnline.Backend.Worker
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
 
-            services.AddSingleton(x => new NamedHttpClient(HttpClientName.EmisApiClient, new HttpClient()));
+            int.TryParse(Configuration["HTTP_TIMEOUT_SECONDS"], out var timeout);
+            timeout = timeout == default(int) ? DefaultHttpTimeoutSeconds : timeout;
+
+            services.AddSingleton(x => new NamedHttpClient(HttpClientName.EmisApiClient, new HttpClient
+            {
+                Timeout = TimeSpan.FromSeconds(timeout)
+            }));
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
 
             var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));

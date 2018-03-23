@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         private const string DefaultLinkToken = "link_token";
         private const string DefaultEndUserSessionId = "bar";
         private const AssociationType DefaultAssociationType = AssociationType.Self;
-        private readonly TimeSpan TestLimit = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan TestLimit = TimeSpan.FromSeconds(15);
 
         private readonly ScenarioContext _context;
         public PatientVerificationSteps(ScenarioContext context)
