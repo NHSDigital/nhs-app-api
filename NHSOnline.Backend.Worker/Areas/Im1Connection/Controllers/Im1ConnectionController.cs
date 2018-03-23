@@ -40,14 +40,23 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
                 return BadRequest();
             }
 
-            var im1ConnectionService = await GetIm1ConnectionService(odsCode);
-
-            if (!im1ConnectionService.HasValue)
+            var systemProviderOption = await GetSystemProvider(odsCode);
+            if (!systemProviderOption.HasValue)
             {
+                // If no system provider is returned it is because the supplier could not be determined from the ODS
+                // code.  This, in turn, is because the ODS code is not found so a "Not Found" response is returned.
                 return NotFound();
             }
 
-            var verifyResult = await im1ConnectionService.ValueOrFailure().VerifyAsync(connectionToken, odsCode);
+            var systemProvider = systemProviderOption.Value;
+            var tokenValidationService = systemProvider.GetTokenValidationService();
+            if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
+            {
+                return BadRequest();
+            }
+
+            var im1ConnectionService = systemProvider.GetIm1ConnectionService();
+            var verifyResult = await im1ConnectionService.VerifyAsync(connectionToken, odsCode);
 
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
         }
@@ -55,38 +64,28 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
-            var im1ConnectionService = await GetIm1ConnectionService(model.OdsCode);
-
-            if (!im1ConnectionService.HasValue)
+            var systemProviderOption = await GetSystemProvider(model.OdsCode);
+            if (!systemProviderOption.HasValue)
             {
                 return NotFound();
             }
 
-            var registerResult = await im1ConnectionService.ValueOrFailure().RegisterAsync(model);
+            var systemProvider = systemProviderOption.Value;
+            var im1ConnectionService = systemProvider.GetIm1ConnectionService();
+            var registerResult = await im1ConnectionService.RegisterAsync(model);
 
             return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
         }
 
-        private async Task<Option<IIm1ConnectionService>> GetIm1ConnectionService(string odsCode)
+        private async Task<Option<ISystemProvider>> GetSystemProvider(string odsCode)
         {
             var supplier = await _odsCodeLookup.LookupSupplierAsync(odsCode);
             if (!supplier.HasValue)
             {
-                return Option.None<IIm1ConnectionService>();
+                return Option.None<ISystemProvider>();
             }
 
-            ISystemProvider systemProvider;
-
-            try
-            {
-                systemProvider = _systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure());
-            }
-            catch (UnknownSupplierException)
-            {
-                return Option.None<IIm1ConnectionService>();
-            }
-
-            return Option.Some(systemProvider.GetIm1ConnectionService());
+            return Option.Some(_systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure()));
         }
     }
 }

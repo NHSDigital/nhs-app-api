@@ -16,5 +16,10 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         {
             return new EmisIm1ConnectionService(_emisClient);
         }
+
+        public ITokenValidationService GetTokenValidationService()
+        {
+            return new EmisTokenValidationService();
+        }
     }
 }

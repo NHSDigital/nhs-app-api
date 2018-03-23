@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
@@ -20,8 +21,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
         private const string DefaultOdsCode = "AB1234";
         private const SupplierEnum DefaultSupplier = SupplierEnum.Emis;
         private const string DefaultPatientIdentifier = "XX00000A";
-        private const string DefaultConnectionToken = DefaultPatientIdentifier;
+        private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
+        private readonly ITokenValidationService _defaultTokenValidationService = new EmisTokenValidationService();
         private Im1ConnectionController _im1ConnectionController;
 
         private static IFixture _fixture;
@@ -152,6 +154,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
         }
 
         [TestMethod]
+        public async Task Get_UnknownOdsCodeFormat_ReturnsBadRequest()
+        {
+            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
+            mockOdsCodeLookup.Setup(x => x.LookupSupplierAsync(DefaultOdsCode))
+                .Returns(Task.FromResult(Option.Some(SupplierEnum.Emis)));
+
+            _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
+
+            var result = await _im1ConnectionController.Get(DefaultConnectionToken, "foo");
+
+            result.Should().BeAssignableTo<BadRequestResult>();
+        }
+
+        [TestMethod]
         public async Task Post_UnknownOdsCode_ReturnsNotFound()
         {
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
@@ -184,7 +200,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             return mockOdsCodeLookup;
         }
 
-        private Mock<ISystemProviderFactory> MockSystemProviderFactory(SupplierEnum supplier = DefaultSupplier,
+        private Mock<ISystemProviderFactory> MockSystemProviderFactory(
+            SupplierEnum supplier = DefaultSupplier,
             Mock<ISystemProvider> systemProviderMock = null)
         {
             systemProviderMock = systemProviderMock ?? MockSystemProvider();
@@ -194,11 +211,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             return mockSystemProviderFactory;
         }
 
-        private Mock<ISystemProvider> MockSystemProvider(Mock<IIm1ConnectionService> nhsNumberProvider = null)
+        private Mock<ISystemProvider> MockSystemProvider(
+            Mock<IIm1ConnectionService> nhsNumberProvider = null,
+            ITokenValidationService tokenValidationService = null
+        )
         {
             nhsNumberProvider = nhsNumberProvider ?? MockIm1ConnectionService();
+            tokenValidationService = tokenValidationService ?? _defaultTokenValidationService;
+
             var mockSystemProvider = new Mock<ISystemProvider>();
             mockSystemProvider.Setup(x => x.GetIm1ConnectionService()).Returns(nhsNumberProvider.Object);
+            mockSystemProvider.Setup(x => x.GetTokenValidationService()).Returns(tokenValidationService);
 
             return mockSystemProvider;
         }
