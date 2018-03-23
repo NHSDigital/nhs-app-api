@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode, new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             var systemProviderMock = MockSystemProvider(im1ConnectionService);
             var systemProviderFactoryMock = MockSystemProviderFactory(supplier, systemProviderMock);
-            im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
+            im1ConnectionService.Setup(x => x.VerifyAsync(DefaultConnectionToken, odsCode))
                 .ReturnsAsync(new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             _im1ConnectionController =
                 CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
@@ -207,7 +207,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             Im1ConnectionVerifyResult expectedResponse = null)
         {
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
-            mockIm1ConnectionService.Setup(x => x.Verify(patientIdentifier, odsCode))
+            mockIm1ConnectionService.Setup(x => x.VerifyAsync(patientIdentifier, odsCode))
                 .ReturnsAsync(expectedResponse);
 
             return mockIm1ConnectionService;

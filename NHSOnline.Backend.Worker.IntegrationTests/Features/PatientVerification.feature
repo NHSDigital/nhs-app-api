@@ -24,10 +24,10 @@ Scenario: Verify patient data with valid credentials does not return NHS Number 
 
 @wip
 @bug
-Scenario: Verifying patient data with an IM1 Connection Token that does not exist returns a "Not Found" error
+Scenario: Verifying patient data with an IM1 Connection Token that does not exist returns a "Bad Gateway" error
 	Given I have an IM1 Connection Token that does not exist
 	When I verify patient data
-	Then I receive a "Not Found" error
+	Then I receive a "Bad Gateway" error
 
 @wip
 @bug

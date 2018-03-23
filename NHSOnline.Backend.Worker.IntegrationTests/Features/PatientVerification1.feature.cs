@@ -153,14 +153,14 @@ this.ScenarioSetup(scenarioInfo);
         
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute()]
         [Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute("Verifying patient data with an IM1 Connection Token that does not exist returns a" +
-            " \"Not Found\" error")]
+            " \"Bad Gateway\" error")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestPropertyAttribute("FeatureTitle", "Patient Verification")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("wip")]
         [Microsoft.VisualStudio.TestTools.UnitTesting.TestCategoryAttribute("bug")]
-        public virtual void VerifyingPatientDataWithAnIM1ConnectionTokenThatDoesNotExistReturnsANotFoundError()
+        public virtual void VerifyingPatientDataWithAnIM1ConnectionTokenThatDoesNotExistReturnsABadGatewayError()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Verifying patient data with an IM1 Connection Token that does not exist returns a" +
-                    " \"Not Found\" error", new string[] {
+                    " \"Bad Gateway\" error", new string[] {
                         "wip",
                         "bug"});
 #line 27
@@ -170,7 +170,7 @@ this.ScenarioSetup(scenarioInfo);
 #line 29
  testRunner.When("I verify patient data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 30
- testRunner.Then("I receive a \"Not Found\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("I receive a \"Bad Gateway\" error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
                 .GetMockingClient()
                 .PostMappingAsync(
                     SessionConfigurator.CreateSessionsMapping(
-                        400,
+                        500,
                         nonExistingConnectionToken,
                         DefaultOdsCode,
                         DefaultSessionId,
@@ -159,7 +159,6 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
             {
                 var result = await _context
                     .GetWorkerClient()
-                    .Patient
                     .GetIm1Connection(connectionToken, odsCode)
                     .WithTimeout(TestLimit);
 

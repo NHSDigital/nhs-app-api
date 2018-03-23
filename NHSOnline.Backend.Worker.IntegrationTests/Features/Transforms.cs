@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
     {
         private readonly Dictionary<string, HttpStatusCode> errorMapping = new Dictionary<string, HttpStatusCode>()
         {
+            { "bad gateway", HttpStatusCode.BadGateway },
             { "bad request", HttpStatusCode.BadRequest },
             { "not found", HttpStatusCode.NotFound },
             { "internal server error", HttpStatusCode.InternalServerError }

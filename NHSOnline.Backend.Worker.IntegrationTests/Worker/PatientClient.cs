@@ -16,23 +16,6 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
             _jsonSerializerSettings = jsonSerializerSettings;
         }
 
-        public async Task<Im1ConnectionResponse> GetIm1Connection(string connectionToken, string odsCode)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, WorkerPaths.PatientIm1Connection);
-            request.Headers.Add(WorkerHeaders.ConnectionToken, connectionToken);
-            request.Headers.Add(WorkerHeaders.OdsCode, odsCode);
-            var response = await _client.SendAsync(request);
-            var json = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode)
-            {
-                // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
-                // when values are not as expected.  This makes it easier to debug.
-                throw new NhsoHttpException(response.StatusCode, json);
-            }
-
-            var result = JsonConvert.DeserializeObject<Im1ConnectionResponse>(json, _jsonSerializerSettings);
-            return result;
-        }
     }
 }

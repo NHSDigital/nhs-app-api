@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
                 return NotFound();
             }
 
-            var verifyResult = await im1ConnectionService.ValueOrFailure().Verify(connectionToken, odsCode);
+            var verifyResult = await im1ConnectionService.ValueOrFailure().VerifyAsync(connectionToken, odsCode);
 
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
         }
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
                 return NotFound();
             }
 
-            var registerResult = await im1ConnectionService.ValueOrFailure().Register(model);
+            var registerResult = await im1ConnectionService.ValueOrFailure().RegisterAsync(model);
 
             return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
         }
