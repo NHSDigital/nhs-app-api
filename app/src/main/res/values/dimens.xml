@@ -7,6 +7,7 @@
     <dimen name="menuBarItemIconBottomMargin">@dimen/_2sdp</dimen>
     <dimen name="menuBarItemFontSize">@dimen/_7ssp</dimen>
 
-    <dimen name="errorTextSize">@dimen/_12ssp</dimen>
+    <dimen name="errorTextSize">@dimen/_16ssp</dimen>
+    <dimen name="tryAgainLaterTextSize">@dimen/_14ssp</dimen>
 
 </resources>
