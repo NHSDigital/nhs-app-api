@@ -6,10 +6,11 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var webViewContainer: UIView!
     
     var webViewController: WebViewController?
-    var nativeViewController: NativeViewController?
+    var nativeViewController: NHS111OnlineUnavailabilityViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().BaseUrl
+    let nhs111Url = config().Nhs111Url
     let webViewSegue = "webViewSegue"
     let nativeViewSegue = "nativeViewSegue"
     
