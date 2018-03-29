@@ -3,11 +3,9 @@ services:
   nhsonline.web:
     build:
       context: .
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile
     ports:
-      - "8080:8080"
-    volumes:
-      - .:/opt/app
+      - "8080:4000"
     environment:
       - API_HOST=http://nhsonline.backend.worker:5123
   nhsonline.backend.worker:

@@ -1,6 +1,7 @@
 FROM alpine:3.7 AS base
 
 ENV HOST 0.0.0.0
+ENV PORT 4000
 ENV API_HOST http://localhost:8800
 ENV ORGAN_DONATION_URL https://www.organdonation.nhs.uk/
 ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
@@ -31,11 +32,18 @@ FROM dependencies AS test
 COPY . .
 #RUN npm test
 
+# Build
+FROM dependencies as build
+COPY . .
+RUN npm run build
+
 # Final image
 FROM base AS release
-COPY --from=dependencies /opt/app/prod_node_modules ./node_modules
-COPY . .
+COPY --from=build /opt/app/prod_node_modules ./node_modules
+COPY --from=build /opt/app/dist ./dist
+COPY --from=build /opt/app/config ./config
+COPY --from=build /opt/app/server.js .
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs
-EXPOSE 8080
-CMD npm run start
+EXPOSE 4000
+CMD npm run serve
