@@ -8,9 +8,3 @@ Feature: Display navigation menu on mobile web
 
   @wip
   Scenario: The navigation menu is hidden in a native app
-
-  @wip
-  Scenario: The NHS 111 page opens on a new tab when click on the symptoms menu button
-
-  @wip
-  Scenario: The symptoms navigation menu button remains unselected when opening a new tab on the symptoms menu click
