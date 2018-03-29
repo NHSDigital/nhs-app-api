@@ -13,10 +13,7 @@ module.exports = {
     proxyTable: {
       '/config': {
         target: 'http://localhost:4000',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/config': '',
-        },
+        changeOrigin: true
       },
     },
 
