@@ -1,0 +1,32 @@
+<template>
+  <svg xmlns="http://www.w3.org/2000/svg" width="33" height="29" viewBox="0 0 122.43 109.69">
+    <defs>
+    </defs>
+    <title>Prescriptions</title>
+    <path class="menu_stroke" d="M102,90.5l-13.61,13A15.23,15.23,0,0,1,66.89,
+        103h0a15.24,15.24,0,0,1,.49-21.46l13.6-13" />
+    <path class="menu_stroke active" d="M81.08,68.46l21,22,13.7-13.09a15.23,15.23,
+        0,0,0,.49-21.46h0a15.22,15.22,0,0,0-21.46-.49Z" />
+    <rect class="menu_stroke active" x="16.75" y="2" width="56.99" height="26.59" rx="7" ry="7" />
+    <path class="menu_stroke" d="M26.69,28.59v7.56l-18,10.49C5,49.42,2,50.58,2,
+        54.24v38a6.67,6.67,0,0,0,6.65,6.65H63.56" />
+    <path class="menu_stroke" d="M87.48,62V54.24c0-3.66-3.6-5.48-6.65-7.6L62.31,
+        36.15V28.59" />
+    <polygon class="menu_stroke active" points="51.58 72.58 51.58 83.13 36.91
+        83.13 36.91 72.58 26.37 72.58 26.37 57.92 36.91 57.92 36.91 47.38 51.58
+        47.38 51.58 57.92 62.12 57.92 62.12 72.58 51.58 72.58" />
+  </svg>
+</template>
+
+<style lang="scss" scoped>
+  @import "../../style/icons";
+  @import "../../style/colours";
+  .active {
+    svg {
+      .active {
+        fill: $nhs_blue;
+      }
+    }
+  }
+
+</style>

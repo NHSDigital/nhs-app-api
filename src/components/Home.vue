@@ -1,46 +1,53 @@
 <template>
-  <div>
-    <HomeHeader/>
-    <LoginOrRegister />
+  <div id="mainDiv">
+    <home-header/>
+    <login-or-register/>
+    <navigation-menu v-if="showMenu" />
   </div>
 </template>
-
 <script>
 import HomeHeader from '@/components/HomeHeader';
 import LoginOrRegister from '@/components/LoginOrRegister';
+import NavigationMenu from '@/components/NavigationMenu';
 
 export default {
   components: {
     HomeHeader,
     LoginOrRegister,
+    NavigationMenu,
+  },
+
+  data() {
+    return {
+      showMenu: true,
+    };
+  },
+
+  created() {
+    if (this.$route.query.source === 'mobile') {
+      this.showMenu = false;
+    }
+  },
+
+  mounted() {
+    if (this.showMenu) {
+      this.$el.classList.add('navigationVisible');
+    }
   },
 };
 </script>
 
 <style lang="scss">
-  @import '../style/fonts';
+  @import '../style/html';
   @import '../style/textstyles';
-  @import '../style/colours';
 
-  body {
+  #mainDiv {
     padding: 0;
-    margin: 0;
-    background: $background;
     @include default_text;
   }
 
-  h1 {
-    @include h1;
+  .navigationVisible {
+    margin-bottom: 70px;
   }
 
-  h2 {
-    @include h2;
-  }
-</style>
-
-<style lang="scss" scoped>
-  * {
-    padding: 0;
-    margin: 0;
-  }
 </style>

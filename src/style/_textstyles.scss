@@ -1,4 +1,6 @@
 //* TEXT STYLES */
+@import './fonts';
+@import './colours';
 @mixin h1 {
 	display: block;
 	font-family: $frutiger-roman;

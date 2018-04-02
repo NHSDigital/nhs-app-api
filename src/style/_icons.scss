@@ -1,3 +1,4 @@
+@import './colours';
 svg {
 	.menu_stroke {
 		fill:none;
@@ -18,59 +19,11 @@ svg {
 		stroke-width:4px;
 	}
 }
-.active {
-	svg {
-		.menu_stroke {
-			stroke: $nhs_blue;
-		}
-	}
-}
-#btn_more.active {
-	svg {
-		.menu_stroke {
-			fill: $nhs_blue;
-		}
-	}
-}
-#btn_symptoms.active {
-	svg {
-		.active {
-			fill: $nhs_blue;
-		}
-		.symptoms_middle {
-			fill: $nhs_blue;
-		}
-	}
-}
-#btn_appointments.active {
-	svg {
-		.active {
-			fill: $nhs_blue;
-		}
-	}
-}
-#btn_prescriptions.active {
-	svg {
-		.active {
-			fill: $nhs_blue;
-		}
-	}
-}
-#btn_record.active {
-	svg {
-		.active {
-			fill: $nhs_blue;
-		}
-		.white {
-			stroke: $white;
-		}
-	}
-}
-#btn_more.active {
-	svg {
-		.active {
-			fill: $nhs_blue;
-		}
-		
-	}
-}
+// .active {
+// 	svg {
+// 		.menu_stroke {
+// 			stroke: $nhs_blue;
+// 		}
+// 	}
+// }
+

@@ -29,6 +29,11 @@ export default {
     width: 100%;
     vertical-align: bottom;
 
+    h2{
+      @include h2;
+      margin-bottom:16px;
+    }
+
     button.button, a.button {
       margin-bottom: 5px;
     }

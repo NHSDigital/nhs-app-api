@@ -17,12 +17,7 @@
   @import '../style/textstyles';
   @import '../style/fonts';
   @import '../style/buttons';
-  @import '../style/icons';
   main {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
     height: 200px;
     padding: 24px;
     box-sizing: border-box;
