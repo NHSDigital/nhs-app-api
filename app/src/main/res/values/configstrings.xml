@@ -6,4 +6,8 @@
     <string-array name="serviceUrls">
         <item>@string/nhs111</item>
     </string-array>
+
+    <string-array name="nativeAppHosts">
+        <item>@string/nhs111</item>
+    </string-array>
 </resources>
