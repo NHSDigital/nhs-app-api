@@ -2,9 +2,9 @@ package com.nhs.online.nhsonline
 
 import android.graphics.Bitmap
 import android.os.Handler
-import android.os.Message
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import java.net.URL
 import java.util.logging.Logger
@@ -12,24 +12,30 @@ import java.util.logging.Logger
 private const val DELAY_PROGRESS_SHOW_TIME = 500L
 private const val REQUEST_TIMEOUT = 10 * 1000L
 
-class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: Array<String>) :
+class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: Array<String>, activities: List<ActivityInterface>) :
     WebViewClient() {
     private val serviceUrls = serviceUrls
+    private val activities = activities
 
     companion object {
         val logger = Logger.getLogger(WebClientInterceptor::class.java.simpleName)!!
     }
 
-
     private val handler = Handler()
     private var shouldShowErrorPage = false
 
     @Suppress("OverridingDeprecatedMember")
-    override fun shouldOverrideUrlLoading(view: WebView?, request: String?): Boolean {
-        val requestUrl = request ?: ""
-        if (shouldInterceptUrl(requestUrl)) {
+    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+        activities.forEach{activity ->
+            if (activity.canStart(view.context, url)) {
+                activity.start(view.context, url);
+            }
+        }
+
+        if (shouldInterceptUrl(url)) {
             uiInteractor.selectSymptomsMenuActive()
         }
+
         return false
     }
 

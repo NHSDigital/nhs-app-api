@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.webkit.GeolocationPermissions
 import android.webkit.WebChromeClient
+import com.nhs.online.nhsonline.activity.ActivityInterface
+import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,7 +38,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.webChromeClient = chromeClient
 
         webview.webViewClient =
-                WebClientInterceptor(this, resources.getStringArray(R.array.serviceUrls))
+                WebClientInterceptor(this, resources.getStringArray(R.array.serviceUrls), createAvtivities())
+    }
+
+    private fun createAvtivities(): List<ActivityInterface>
+    {
+        val openBrowserActivity = OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
+        return listOf(openBrowserActivity)
     }
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
