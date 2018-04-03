@@ -14,7 +14,7 @@
         <!--HomeViewController-->
         <scene sceneID="fSg-JL-25l">
             <objects>
-                <viewController title="HomeViewController" id="fl5-i3-NEv" customClass="HomeViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="HomeViewController" title="HomeViewController" id="fl5-i3-NEv" customClass="HomeViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DCw-4H-MWg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
