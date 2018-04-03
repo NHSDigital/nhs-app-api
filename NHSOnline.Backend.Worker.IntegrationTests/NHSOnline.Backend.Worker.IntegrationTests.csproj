@@ -67,14 +67,34 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\CommonSteps.cs" />
-    <Compile Include="Features\PatientVerification1.feature.cs">
+    <Compile Include="Features\Emis\EmisDefaults.cs" />
+    <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistration.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PatientRegistration.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationValidation.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PatientRegistrationValidation.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationSteps.cs" />
+    <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationValidationSteps.cs" />
+    <Compile Include="Features\Shared\CommonSteps.cs" />
+    <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerification1.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PatientVerification.feature</DependentUpon>
     </Compile>
+    <Compile Include="Mocking\Emis\MeConfigurator.cs" />
+    <Compile Include="Mocking\Emis\Models\CreateSessionRequestModel.cs" />
+    <Compile Include="Mocking\Emis\Models\EndUserSessionResponse.cs" />
+    <Compile Include="Mocking\Emis\Models\LinkApplicationResponse.cs" />
+    <Compile Include="Mocking\Emis\Models\LinkageDetails.cs" />
+    <Compile Include="Mocking\Emis\Models\LinkApplicationRequest.cs" />
+    <Compile Include="Mocking\Nhso\Models\Patient\Im1ConnectionRequest.cs" />
     <Compile Include="TaskExtensions.cs" />
-    <Compile Include="Features\Transforms.cs" />
+    <Compile Include="Features\Shared\Transforms.cs" />
     <Compile Include="Mocking\Configuration.cs" />
     <Compile Include="Mocking\Emis\EmisRequestConfigurator.cs" />
     <Compile Include="Mocking\Emis\DemographicsConfigurator.cs" />
@@ -89,7 +109,7 @@
     <Compile Include="Mocking\Emis\Models\Sex.cs" />
     <Compile Include="Mocking\Emis\Models\UserPatientLink.cs" />
     <Compile Include="Mocking\Emis\SessionConfigurator.cs" />
-    <Compile Include="Features\PatientVerificationSteps.cs" />
+    <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerificationSteps.cs" />
     <Compile Include="GlobalHooks.cs" />
     <Compile Include="Mocking\MockingClient.cs" />
     <Compile Include="Mocking\Models\Body.cs" />
@@ -112,14 +132,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioContextExtensions.cs" />
     <Compile Include="Worker\NhsoHttpException.cs" />
-    <Compile Include="Worker\PatientClient.cs" />
     <Compile Include="Worker\WorkerClient.cs" />
     <Compile Include="Worker\WorkerHeaders.cs" />
     <Compile Include="Worker\WorkerPaths.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Features\PatientVerification.feature">
+    <None Include="Features\Emis\Im1Connection\Registration\PatientRegistration.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PatientRegistration.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\Emis\Im1Connection\Registration\PatientRegistrationValidation.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PatientRegistrationValidation.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\Emis\Im1Connection\Verification\PatientVerification.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PatientVerification1.feature.cs</LastGenOutput>
     </None>

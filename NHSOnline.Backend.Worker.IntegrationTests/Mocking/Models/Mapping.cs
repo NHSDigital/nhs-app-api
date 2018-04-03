@@ -1,21 +1,20 @@
-﻿using System;
-
-namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models
+﻿namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models
 {
     public class Mapping
     {
-        public Mapping()
-        {
-            Guid = Guid.NewGuid();
-        }
-
-        public Mapping(Request request, Response response): this()
+        public Mapping(Request request, Response response)
         {
             Request = request;
             Response = response;
         }
 
-        public Guid Guid { get; set; }
+        public Mapping(Request request, Response response, int priority)
+        {
+            Request = request;
+            Response = response;
+            Priority = priority;
+        }
+
         public int Priority { get; set; }
         public Request Request { get; set; }
         public Response Response { get; set; }

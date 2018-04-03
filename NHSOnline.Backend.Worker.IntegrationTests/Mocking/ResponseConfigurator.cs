@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
     {
         public static Response ConfigureStatusCode(this Response response, int statusCode)
         {
-            response.StatusCode = statusCode;
+            response.Status = statusCode;
             return response;
         }
 
@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
         public static Response ConfigureTimeoutResponse(this Response response, TimeSpan timeout)
         {
             response.Body = $"Returned after timeout of { timeout.TotalMilliseconds } milliseconds";
-            response.Delay = (int)timeout.TotalMilliseconds;
+            response.FixedDelayMilliseconds = (int)timeout.TotalMilliseconds;
             return response;
         }
     }

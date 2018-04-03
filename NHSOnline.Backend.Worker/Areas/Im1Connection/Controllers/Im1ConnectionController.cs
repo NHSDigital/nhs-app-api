@@ -13,7 +13,7 @@ using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
 {
-    [Route("/patient/im1connection")]
+    [Route("patient/im1connection")]
     public class Im1ConnectionController : Controller
     {
         private readonly IOdsCodeLookup _odsCodeLookup;

@@ -7,7 +7,7 @@
 	   Given I have valid credentials for a patient with one NHS Number
 	   When I verify patient data
 	   Then I receive the expected NHS Number
-   
+
 	Scenario: Verifying patient data with valid credentials returns a valid response with multiple NHS Numbers
 		Given I have valid credentials for a patient with multiple NHS Numbers
 		When I verify patient data
@@ -48,10 +48,11 @@
 		When I verify patient data
 		Then I receive a "Bad Request" error
 
-	@long-running
-	Scenario: Verifying patient data when EMIS is unavailable returns "Gateway Timeout" error
+    @bug
+    @wip
+	Scenario: Verifying patient data when EMIS is unavailable returns "Service Unavailable" error
 		Given EMIS is unavailable
 		When I verify patient data
-		Then I receive an "Gateway Timeout" error
+		Then I receive an "Service Unavailable" error
 
 

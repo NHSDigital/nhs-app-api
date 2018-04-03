@@ -4,6 +4,7 @@ using System.Net.Http;
 using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
@@ -15,7 +16,7 @@ using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker
 {
-    public class Startup
+    public class  Startup
     {
         public const int DefaultHttpTimeoutSeconds = 10;
 
@@ -71,6 +72,8 @@ namespace NHSOnline.Backend.Worker
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UsePathBase(new PathString("/v1"));
 
             app.UseMvc();
         }

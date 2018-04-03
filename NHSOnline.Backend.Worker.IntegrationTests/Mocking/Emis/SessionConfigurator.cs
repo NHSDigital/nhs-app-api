@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.IntegrationTests.Features.Emis;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis.Models;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Shared;
@@ -62,11 +63,12 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
         {
             applicationId = applicationId ?? Configuration.EmisApplicationId;
             version = version ?? Configuration.EmisVersion;
+            connectionToken = connectionToken ?? EmisDefaults.ConnectionToken;
 
-            var bodyProperties = new Dictionary<string, string>
+            var bodyProperties = new CreateSessionRequestModel
             {
-                { BodyAccessIdentityGuid, connectionToken },
-                { BodyNationalPracticeCode, odsCode }
+                AccessIdentityGuid = connectionToken,
+                NationalPracticeCode = odsCode
             };
 
             return request
@@ -75,7 +77,8 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
                 .ConfigureEndUserSessionId(endUserSessionId)
                 .ConfigureApplicationHeader(applicationId)
                 .ConfigureVersionHeader(version)
-                .ConfigureBody(bodyProperties);
+                //.ConfigureHeader("Content-Type", "application/json")
+                .ConfigureBody(JsonConvert.SerializeObject(bodyProperties));
         }
 
         public static Response ConfigureSessionsResponse(this Response response, int statusCode, string sessionId, string linkToken, AssociationType associationType)
@@ -112,9 +115,11 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
 
         public static Response ConfigureEndUserSessionResponse(this Response response, int statusCode, string endUserSessionId)
         {
+            var body = new EndUserSessionResponse{ EndUserSessionId = endUserSessionId };
+
             return response
                 .ConfigureStatusCode(statusCode)
-                .ConfigureBody($"{{\"EndUserSessionId\":\"{ endUserSessionId }\"}}");
+                .ConfigureBody(JsonConvert.SerializeObject(body));
         }
 
         public static Response ConfigureEndUserSessionErrorResponse(this Response response, int statusCode, string message)

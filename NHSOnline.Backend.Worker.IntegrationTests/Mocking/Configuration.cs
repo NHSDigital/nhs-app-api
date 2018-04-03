@@ -1,12 +1,11 @@
 ﻿using System;
+using NHSOnline.Backend.Worker.IntegrationTests.Features.Emis;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
 {
     public class Configuration
     {
         public const string DefaultBackendBaseUrl = "http://127.0.0.1:8080/";
-        public const string DefaultEmisApplicationId = "D66BA979-60D2-49AA-BE82-AEC06356E41F";
-        public const string DefaultEmisVersion = "2.1.0.0";
         public const string DefaultAdminBaseUrl = "http://127.0.0.1:8800/__admin/";
         public const string EnvironmentBackendBaseUrl = "BACKEND_BASE_URL";
         public const string EnvironmentEmisApplicationId = "EMIS_APPLICATION_ID";
@@ -16,9 +15,9 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
         static Configuration()
         {
             BackendBaseUrl = FromEnvironmentOrDefault(EnvironmentBackendBaseUrl, DefaultBackendBaseUrl);
-            EmisApplicationId = FromEnvironmentOrDefault(EnvironmentEmisApplicationId, DefaultEmisApplicationId);
+            EmisApplicationId = FromEnvironmentOrDefault(EnvironmentEmisApplicationId, EmisDefaults.ApplicationId);
             EmisBaseUrl = FromEnvironmentOrDefault(EnvironmentAdminBaseUrl, DefaultAdminBaseUrl);
-            EmisVersion = FromEnvironmentOrDefault(EnvironmentEmisVersion, DefaultEmisVersion);
+            EmisVersion = FromEnvironmentOrDefault(EnvironmentEmisVersion, EmisDefaults.Version);
         }
 
         public static string EmisBaseUrl { get; }

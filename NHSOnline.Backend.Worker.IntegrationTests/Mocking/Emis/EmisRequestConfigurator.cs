@@ -14,24 +14,28 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
         {
             applicationId = applicationId ?? Configuration.EmisApplicationId;
             request.ConfigureHeader(HeaderApplicationId, applicationId);
+
             return request;
         }
 
         public static Request ConfigureEndUserSessionId(this Request request, string endUserSessionId)
         {
             request.ConfigureHeader(HeaderEndUserSessionId, endUserSessionId);
+
             return request;
         }
 
         public static Request ConfigureSessionId(this Request request, string sessionId)
         {
             request.ConfigureHeader(HeaderSessionId, sessionId);
+
             return request;
         }
 
         public static Request ConfigureUserLinkToken(this Request request, string userLinkToken)
         {
-            request.ConfigureQueryParameter(QueryUserPatientLinkToken, userLinkToken);
+            request.ConfigureQueryParameter(QueryUserPatientLinkToken, "equalTo", userLinkToken);
+
             return request;
         }
 
@@ -39,6 +43,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis
         {
             version = version ?? Configuration.EmisVersion;
             request.ConfigureHeader(HeaderVersion, version);
+
             return request;
         }
     }

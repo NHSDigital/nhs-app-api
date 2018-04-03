@@ -1,11 +1,12 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.Verification;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis;
 using TechTalk.SpecFlow;
 
-namespace NHSOnline.Backend.Worker.IntegrationTests.Features
+namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Shared
 {
     [Binding]
     public class CommonSteps
@@ -23,18 +24,18 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
             _context
                 .SetConnectionToken(PatientVerificationSteps.DefaultConnectionToken)
                 .SetOdsCode(PatientVerificationSteps.DefaultOdsCode);
-            _context.Add("TimeoutDelay", TimeSpan.FromMinutes(5));
+
             await _context
                 .GetMockingClient()
-                .PostMappingAsync(SessionConfigurator.CreateEndUserSessionMappingWithTimout(TimeSpan.FromMinutes(5)));
+                .PostMappingAsync(SessionConfigurator.CreateEndUserSessionMappingWithError((int)HttpStatusCode.ServiceUnavailable, "service unavailable"));
         }
 
         [Then(@"I receive (?:a|an) ""(.*)"" error")]
         public void ThenIReceiveAnMessage(HttpStatusCode expectedStatusCode)
         {
             var exception = _context.GetHttpException();
-            Assert.IsNotNull(exception, "An exception was expected but was not returned within the expected time limit.");
-            Assert.AreEqual(expectedStatusCode, exception.StatusCode);
+            exception.Should().NotBeNull("An exception was expected but was not returned within the expected time limit.");
+            exception.StatusCode.Should().Be(expectedStatusCode);
         }
     }
 }

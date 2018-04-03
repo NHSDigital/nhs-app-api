@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -30,23 +31,36 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
             var request = new HttpRequestMessage(HttpMethod.Get, WorkerPaths.PatientIm1Connection);
             request.Headers.Add(WorkerHeaders.ConnectionToken, connectionToken);
             request.Headers.Add(WorkerHeaders.OdsCode, odsCode);
-            var response = await _client.SendAsync(request);
+            var response = await SendAsync(request);
+            var json = await response.Content.ReadAsStringAsync();
+            var res = JsonConvert.DeserializeObject<Im1ConnectionResponse>(json, _jsonSerializerSettings);
+            return res;
+        }
+
+        public async Task<Im1ConnectionResponse> PostIm1Connection(Im1ConnectionRequest requestBody)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, WorkerPaths.PatientIm1Connection)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json")
+
+            };
+
+            var response = await SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
 
-            if (!response.IsSuccessStatusCode)
-            {
-                // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
-                // when values are not as expected.  This makes it easier to debug.
-                throw new NhsoHttpException(response.StatusCode, json);
-            }
-
-            var result = JsonConvert.DeserializeObject<Im1ConnectionResponse>(json, _jsonSerializerSettings);
-            return result;
+            return JsonConvert.DeserializeObject<Im1ConnectionResponse>(json, _jsonSerializerSettings);
         }
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
             var response = await _client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
+                // when values are not as expected.  This makes it easier to debug.
+                throw new NhsoHttpException(request, response);
+            }
 
             return response;
         }

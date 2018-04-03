@@ -4,10 +4,12 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models
 {
     public class Request
     {
-        public string Path { get; set; }
-        public IList<string> Methods { get; set; }
-        public IList<Header> Headers { get; set; }
-        public IList<Param> Params { get; set; }
-        public Body Body { get; set; }
+
+        public string UrlPath { get; set; }
+        public string UrlPathPattern { get; set; }
+        public string Method { get; set; }
+        public readonly Dictionary<string, Dictionary<string, string>> Headers = new Dictionary<string, Dictionary<string, string>>();
+        public readonly Dictionary<string, Dictionary<string, string>> QueryParameters = new Dictionary<string, Dictionary<string, string>>();
+        public readonly IList<Dictionary<string, string>> BodyPatterns = new List<Dictionary<string, string>>();
     }
 }

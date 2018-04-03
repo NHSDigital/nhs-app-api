@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Models
         [ClassInitialize]
         public static void ClassInitialize(TestContext testContext)
         {
-            _fixture = new AutoFixture.Fixture();
+            _fixture = new Fixture();
         }
 
         [TestInitialize]

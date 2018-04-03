@@ -2,6 +2,6 @@
 {
     public class WorkerPaths
     {
-        public const string PatientIm1Connection = "patient/im1connection";
+        public const string PatientIm1Connection = "v1/patient/im1connection";
     }
 }

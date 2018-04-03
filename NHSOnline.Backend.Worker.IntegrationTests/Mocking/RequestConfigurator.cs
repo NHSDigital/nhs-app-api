@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
@@ -8,55 +7,50 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
     {
         public static Request ConfigurePath(this Request request, string path)
         {
-            request.Path = path;
+            request.UrlPath = path;
             return request;
         }
 
         public static Request ConfigureMethod(this Request request, string method)
         {
-            request.Methods = new List<string> { method };
+            request.Method = method;
             return request;
         }
 
-        public static Request ConfigureQueryParameter(this Request request, string name, string value)
+        public static Request ConfigureQueryParameter(this Request request, string name, string condition, string value)
         {
-            return request.ConfigureQueryParameter(name, new List<string> { value });
+            return ConfigureQueryParameter(request, name, new Dictionary<string, string>{{ condition, value }});
         }
 
-        public static Request ConfigureQueryParameter(this Request request, string name, IList<string> values)
+        public static Request ConfigureQueryParameter(this Request request, string name, Dictionary<string, string> options)
         {
-            request.Params = request.Params ?? new List<Param>();
-            request.Params.Add(new Param { Name = name, Values = values });
+            request.QueryParameters.Add(name, options);
             return request;
         }
 
-        public static Request ConfigureHeader(this Request request, string name, string value)
+        public static Request ConfigureHeader(this Request request, string header, Dictionary<string, string> options)
         {
-            request.Headers = request.Headers ?? new List<Header>();
-            request.Headers.Add(new Header
-            {
-                Name = name,
-                Matchers = new List<Matcher>
-                {
-                    new WildcardMatcher
-                    {
-                        Pattern = value
-                    }
-                }
-            });
+            request.Headers.Add(header, options);
 
             return request;
         }
 
-        public static Request ConfigureBody(this Request request, IDictionary<string, string> matchProperties)
+        public static Request ConfigureHeader(this Request request, string header, string value)
         {
-            var matchers = matchProperties.Keys.Select(x => $"$..[?(@.{x}=='{matchProperties[x]}')]").ToList();
-            request.Body = new Body
-            {
-                Matcher = new JsonPathMatcher { Patterns = matchers }
-            };
+            return ConfigureHeader(request, header, new Dictionary<string, string>{{ "equalTo", value } } );
+        }
+
+        public static Request ConfigureBody(this Request request, string condition, string body)
+        {
+            request.BodyPatterns.Add(new Dictionary<string, string> { { condition, body } });
 
             return request;
         }
+
+        public static Request ConfigureBody(this Request request, string jsonBody)
+        {
+            return ConfigureBody(request, "equalToJson", jsonBody);
+        }
+
     }
 }

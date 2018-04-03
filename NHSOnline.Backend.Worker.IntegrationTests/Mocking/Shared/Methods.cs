@@ -2,9 +2,9 @@
 {
     public class Methods
     {
-        public const string Delete = "delete";
-        public const string Get = "get";
-        public const string Post = "post";
-        public const string Put = "put";
+        public const string Delete = "DELETE";
+        public const string Get = "GET";
+        public const string Post = "POST";
+        public const string Put = "PUT";
     }
 }

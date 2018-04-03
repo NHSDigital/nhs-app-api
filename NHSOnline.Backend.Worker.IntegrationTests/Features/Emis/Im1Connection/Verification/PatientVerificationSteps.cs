@@ -3,19 +3,17 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis.Models;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Nhso.Models.Patient;
 using NHSOnline.Backend.Worker.IntegrationTests.Worker;
 using TechTalk.SpecFlow;
 
-namespace NHSOnline.Backend.Worker.IntegrationTests.Features
+namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.Verification
 {
     [Binding]
     internal class PatientVerificationSteps
     {
-        private const string MockingClientContextKey = "MOckingClient";
         public const string DefaultOdsCode = "E87649";
         public const string DefaultConnectionToken = "bce74b97-4296-414a-a4f5-0f1bf5732ba6";
         public const string GetIm1ConnectionResult = "GetIm1ConnectionResult";
@@ -23,7 +21,6 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         private const string DefaultLinkToken = "link_token";
         private const string DefaultEndUserSessionId = "bar";
         private const AssociationType DefaultAssociationType = AssociationType.Self;
-        private readonly TimeSpan TestLimit = TimeSpan.FromSeconds(15);
 
         private readonly ScenarioContext _context;
         public PatientVerificationSteps(ScenarioContext context)
@@ -32,7 +29,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have an IM1 Connection Token that does not exist")]
-        public async Task GivenIHaveAnIMConnectionTokenThatDoesNotExist()
+        public async Task GivenIHaveAnImConnectionTokenThatDoesNotExist()
         {
             const string nonExistingConnectionToken = "0d135b66-a8b0-46b2-b437-cfe75edc773d";
 
@@ -58,7 +55,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have an IM1 Connection Token that is in an invalid format")]
-        public void GivenIHaveAnIM1ConnectionTokenThatIsInAnInvalidFormat()
+        public void GivenIHaveAnIm1ConnectionTokenThatIsInAnInvalidFormat()
         {
             _context
                 .SetConnectionToken("token")
@@ -74,7 +71,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have an ODS Code not in expected format")]
-        public void GivenIHaveAnODSCodeNotInExpectedFormat()
+        public void GivenIHaveAnOdsCodeNotInExpectedFormat()
         {
             _context
                 .SetConnectionToken(DefaultConnectionToken)
@@ -82,7 +79,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have an ODS Code that does not exists")]
-        public void GivenIHaveAnODSCodeThatDoesNotExists()
+        public void GivenIHaveAnOdsCodeThatDoesNotExists()
         {
             _context
                 .SetConnectionToken(DefaultConnectionToken)
@@ -90,7 +87,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have no ODS Code")]
-        public void GivenIHaveNoODSCode()
+        public void GivenIHaveNoOdsCode()
         {
             _context
                 .SetConnectionToken(DefaultConnectionToken)
@@ -121,7 +118,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have valid credentials for a patient with multiple NHS Numbers")]
-        public async Task GivenIHaveValidCredentialsForAPatientWithMultipleNHSNumbers()
+        public async Task GivenIHaveValidCredentialsForAPatientWithMultipleNhsNumbers()
         {
             const string connectionToken = DefaultConnectionToken;
             const string odsCode = DefaultOdsCode;
@@ -136,7 +133,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         }
 
         [Given(@"I have valid credentials for a patient with no NHS Number")]
-        public async Task GivenIHaveValidCredentialsForAPatientWithNoNHSNumber()
+        public async Task GivenIHaveValidCredentialsForAPatientWithNoNhsNumber()
         {
             const string connectionToken = DefaultConnectionToken;
             const string odsCode = DefaultOdsCode;
@@ -159,13 +156,15 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
             {
                 var result = await _context
                     .GetWorkerClient()
-                    .GetIm1Connection(connectionToken, odsCode)
-                    .WithTimeout(TestLimit);
+                    .GetIm1Connection(connectionToken, odsCode);
 
                 _context.Add(GetIm1ConnectionResult, result);
             }
             catch (NhsoHttpException httpException)
             {
+
+                Console.WriteLine(httpException);
+
                 _context.SetHttpException(httpException);
             }
         }
@@ -177,9 +176,9 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
             var nhsNumber = _context.GetNhsNumber();
             var connectionToken = _context.GetConnectionToken();
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(nhsNumber, result.NhsNumbers.First().NhsNumber);
-            Assert.AreEqual(connectionToken, result.ConnectionToken);
+            result.Should().NotBeNull();
+            result.NhsNumbers.First().NhsNumber.Should().Be(nhsNumber);
+            result.ConnectionToken.Should().Be(connectionToken);
         }
 
         [Then(@"I receive the expected NHS Numbers")]
@@ -189,9 +188,9 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
             var nhsNumbers = _context.GetNhsNumbers();
             var connectionToken = _context.GetConnectionToken();
 
-            Assert.IsNotNull(result);
-            CollectionAssert.AreEqual(nhsNumbers, result.NhsNumbers.Select(x => x.NhsNumber).ToArray());
-            Assert.AreEqual(connectionToken, result.ConnectionToken);
+            result.Should().NotBeNull();
+            result.NhsNumbers.Select(x => x.NhsNumber).Should().BeEquivalentTo(nhsNumbers);
+            result.ConnectionToken.Should().Be(connectionToken);
         }
 
         [Then(@"I receive no NHS Number")]
@@ -199,8 +198,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features
         {
             var result = _context.Get<Im1ConnectionResponse>(GetIm1ConnectionResult);
 
-            var actualNhsNumbers = result?.NhsNumbers;
-            actualNhsNumbers.Should().BeEmpty();
+            result.NhsNumbers.Should().BeEmpty();
         }
 
         private async Task MockEmisDelay(TimeSpan delay)

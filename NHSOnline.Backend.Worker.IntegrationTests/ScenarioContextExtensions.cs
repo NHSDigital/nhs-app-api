@@ -1,4 +1,5 @@
 ﻿using NHSOnline.Backend.Worker.IntegrationTests.Mocking;
+using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Nhso.Models.Patient;
 using NHSOnline.Backend.Worker.IntegrationTests.Worker;
 using TechTalk.SpecFlow;
 
@@ -13,6 +14,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
         private const string KeyNhsNumbers = "NhsNumbers";
         private const string KeyOdsCode = "OdsCode";
         private const string KeyWorkerClient = "WorkerClient";
+        private const string KeyIm1ConnectionRequest = "Im1ConnectionRequest";
 
         public static string GetConnectionToken(this ScenarioContext context)
         {
@@ -88,6 +90,17 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
         public static ScenarioContext SetWorkerClient(this ScenarioContext context, WorkerClient client)
         {
             context.Set(client, KeyWorkerClient);
+            return context;
+        }
+
+        public static Im1ConnectionRequest GetIm1ConnectionRequest(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeyIm1ConnectionRequest) ? context.Get<Im1ConnectionRequest>(KeyIm1ConnectionRequest) : null;
+        }
+
+        public static ScenarioContext SetIm1ConnectionRequest(this ScenarioContext context, Im1ConnectionRequest im1ConnectionRequest)
+        {
+            context.Set(im1ConnectionRequest, KeyIm1ConnectionRequest);
             return context;
         }
     }

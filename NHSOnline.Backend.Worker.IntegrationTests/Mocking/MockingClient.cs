@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Models;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
@@ -12,7 +13,8 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Mocking
     {
         private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
-            NullValueHandling = NullValueHandling.Ignore
+            NullValueHandling = NullValueHandling.Ignore,
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
         private readonly HttpClient _client;
