@@ -38,10 +38,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.webChromeClient = chromeClient
 
         webview.webViewClient =
-                WebClientInterceptor(this, resources.getStringArray(R.array.serviceUrls), createAvtivities())
+                WebClientInterceptor(this, resources.getStringArray(R.array.serviceUrls), createActivities())
     }
 
-    private fun createAvtivities(): List<ActivityInterface>
+    private fun createActivities(): List<ActivityInterface>
     {
         val openBrowserActivity = OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
         return listOf(openBrowserActivity)

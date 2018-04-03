@@ -28,7 +28,7 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         activities.forEach{activity ->
             if (activity.canStart(view.context, url)) {
-                activity.start(view.context, url);
+                activity.start(view.context, url)
             }
         }
 
