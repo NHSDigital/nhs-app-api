@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline
+package com.nhs.online.nhsonline.webclients
 
 import android.graphics.Bitmap
 import android.os.Handler
@@ -6,16 +6,17 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.interfaces.IInteractor
-import java.net.URL
+import com.nhs.online.nhsonline.services.KnownServices
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME = 500L
 private const val REQUEST_TIMEOUT = 10 * 1000L
 
-class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: Array<String>, activities: List<ActivityInterface>) :
-    WebViewClient() {
-    private val serviceUrls = serviceUrls
-    private val activities = activities
+class WebClientInterceptor(
+    private val uiInteractor: IInteractor,
+    private val knownServices: KnownServices,
+    private val activities: List<ActivityInterface>
+) : WebViewClient() {
 
     companion object {
         val logger = Logger.getLogger(WebClientInterceptor::class.java.simpleName)!!
@@ -26,13 +27,28 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        activities.forEach{activity ->
+        activities.forEach { activity ->
             if (activity.canStart(view.context, url)) {
                 activity.start(view.context, url)
+                return true
             }
         }
 
-        if (shouldInterceptUrl(url)) {
+        val matchingKnownService = knownServices.findMatchingKnownService(url)
+        if (matchingKnownService != null) {
+            if (knownServices.isTheService(matchingKnownService,
+                    KnownServices.ServiceName.NHS111)) {
+                uiInteractor.selectSymptomsMenuActive()
+            }
+
+            if (matchingKnownService.hasMissingQueryString(url)) {
+                val urlWithMissingQueryStrings = matchingKnownService.addMissingQueryStrings(url)
+                view.loadUrl(urlWithMissingQueryStrings)
+                return true
+            }
+        }
+
+        if (shouldHandleUnavailability(url)) {
             uiInteractor.selectSymptomsMenuActive()
         }
 
@@ -41,7 +57,7 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         cancelTrackingWebRequestResponse()
-        if (shouldInterceptUrl(url)) {
+        if (shouldHandleUnavailability(url)) {
             trackWebRequestResponse(view)
         }
 
@@ -50,7 +66,7 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {
-        if (shouldInterceptUrl(url)) {
+        if (shouldHandleUnavailability(url)) {
             cancelTrackingWebRequestResponse()
             uiInteractor.dismissProgressDialog()
         }
@@ -69,7 +85,7 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
         description: String?,
         failingUrl: String?
     ) {
-        if (shouldInterceptUrl(failingUrl)) {
+        if (shouldHandleUnavailability(failingUrl)) {
             shouldShowErrorPage = true
             cancelTrackingWebRequestResponse()
             uiInteractor.showUnavailabilityError()
@@ -77,16 +93,15 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
         }
     }
 
-    private fun shouldInterceptUrl(url2: String?): Boolean {
-        if (url2.isNullOrEmpty())
-            return false
-
-        val currentUrl = URL(url2)
-        serviceUrls.forEach { url ->
-            if (URL(url).host == currentUrl.host) {
-                return true
+    private fun shouldHandleUnavailability(urlString: String?): Boolean {
+        if (urlString != null) {
+            val matchingKnownService =
+                knownServices.findMatchingKnownService(urlString)
+            if (matchingKnownService != null) {
+                return matchingKnownService.shouldHandleUnavailability
             }
         }
+
         return false
     }
 
@@ -101,7 +116,8 @@ class WebClientInterceptor(private val uiInteractor: IInteractor, serviceUrls: A
             logger.info("NHS 111 unavailable")
         }
 
-        handler.postDelayed(showDialogFn, DELAY_PROGRESS_SHOW_TIME)
+        handler.postDelayed(showDialogFn,
+            DELAY_PROGRESS_SHOW_TIME)
         handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT)
 
     }
