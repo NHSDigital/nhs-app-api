@@ -16,12 +16,12 @@ services:
       - nhsonline.redis.sds
     ports:
       - "8081:5123"
-  nhsonline.stubs.consoleapp:
-    image: nhsonline.stubs.consoleapp
+  nhsonline.stubs:
+    image: rodolpheche/wiremock
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "8800:5123"
+      - "8800:8080"
     tty: true
   nhsonline.redis-data.sds:
     image: nhsonline.azurecr.io/nhsonline-redis-data:latest

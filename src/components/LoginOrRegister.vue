@@ -1,8 +1,6 @@
 <template>
   <main class="login-or-register">
-    <button data-id="login-button" class="button green">
-      {{ $t('loginOrRegister.login') }}
-    </button>
+    <LoginButton />
 
     <hr class="hr-text" v-bind:data-content="$t('common.or')">
 
@@ -11,7 +9,15 @@
     </button>
   </main>
 </template>
+<script>
+import LoginButton from '@/components/LoginButton';
 
+export default {
+  components: {
+    LoginButton,
+  },
+};
+</script>
 <style lang="scss"  scoped>
   @import '../style/colours';
   @import '../style/textstyles';

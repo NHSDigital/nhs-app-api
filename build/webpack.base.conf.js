@@ -1,6 +1,5 @@
 const friendlyFormatter = require('eslint-friendly-formatter');
 const path = require('path');
-const webpack = require('webpack');
 
 const utils = require('./utils');
 const config = require('../config');
