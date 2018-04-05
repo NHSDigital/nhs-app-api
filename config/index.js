@@ -19,6 +19,10 @@ module.exports = {
         target: 'http://localhost:4000',
         changeOrigin: true,
       },
+      '/apple-app-site-association': {
+        target: 'http://localhost:4000',
+        changeOrigin: true
+      },
     },
 
     // Various Dev Server settings
