@@ -58,6 +58,7 @@
         android:layout_marginBottom="@dimen/_45sdp"
         android:background="@drawable/progress_spinner_background"
         android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/menuBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
