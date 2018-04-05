@@ -69,6 +69,7 @@ export default {
     onMoreMenuClicked(event) {
       const moreMenuItem = event.currentTarget;
       this.handleMenuSelection(moreMenuItem);
+      this.$router.push('more');
     },
 
     handleMenuSelection(menuItem) {
