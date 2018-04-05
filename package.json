@@ -4,6 +4,7 @@
   "description": "NHS Online Web",
   "private": true,
   "scripts": {
+    "start": "node server.js",
     "serve": "node server.js",
     "dev": "npm run swagger && concurrently --kill-others \"npm run serve\" \"webpack-dev-server --inline --disable-host-check --progress --config build/webpack.dev.conf.js\" ",
     "build": "npm run swagger && node build/build.js",
