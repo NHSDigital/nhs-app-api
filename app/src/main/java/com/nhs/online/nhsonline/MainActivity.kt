@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -27,7 +28,23 @@ class MainActivity : IInteractor, AppCompatActivity() {
         configureWebView()
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         retryButton.setOnClickListener { onSymptomMenuSelected() }
-        loadWelcomePage()
+
+        val urlPath = intent?.data?.path
+        val authRedirectPath = resources.getString(R.string.authRedirectPath)
+
+        if (urlPath == authRedirectPath) {
+            loadPage(intent.data.toString());
+
+        } else {
+            loadWelcomePage()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        val data = intent?.data
+        webview.loadUrl(data.toString())
     }
 
     private fun configureWebView() {
