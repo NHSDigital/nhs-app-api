@@ -9,8 +9,9 @@ class NHSOnlineTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
+        let knownServices = KnownServices(config: config())
         viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomeViewController") as? HomeViewController
-        webViewDelegate = WebViewDelegate(controller: viewController!)
+        webViewDelegate = WebViewDelegate(controller: viewController!, knownServices: knownServices)
     }
     
     override func tearDown() {

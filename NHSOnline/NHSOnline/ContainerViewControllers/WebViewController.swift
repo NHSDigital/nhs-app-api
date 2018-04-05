@@ -15,4 +15,8 @@ class WebViewController: UIViewController {
         webViewDelegate?.stopErrorsHandling()
         webView.loadPage(url: url)
     }
+    
+    func dismissSafariViewController() {
+        webViewDelegate?.safariViewController?.dismiss(animated: true, completion: nil)
+    }
 }

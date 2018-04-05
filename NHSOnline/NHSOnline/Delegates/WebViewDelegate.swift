@@ -1,16 +1,18 @@
 import UIKit
+import SafariServices
 import WebKit
 import os.log
 
 class WebViewDelegate: NSObject, WKNavigationDelegate {
     let knownServices: KnownServices
     let viewController: HomeViewController
-    let safari: Safari
-    let webViewHosts =  [URL(string: config().BaseUrl)?.host,
+    let webViewHosts =  [URL(string: config().HomeUrl)?.host,
                          URL(string: config().Nhs111Url)?.host,
                          URL(string: config().OrganDonationUrl)?.host]
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let responseWaitingTime = config().ResponseWaitingTime
+    
+    var safariViewController: SFSafariViewController?
     var shouldHandleErrors = false
     var timer: Timer!
     var startDate: Date!
@@ -18,7 +20,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
     init(controller: HomeViewController, knownServices: KnownServices) {
         self.viewController = controller
         self.knownServices = knownServices
-        self.safari = Safari()
         self.activityIndicator.center = viewController.view.center
         self.viewController.view.addSubview(activityIndicator)
     }
@@ -43,7 +44,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
             
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
-                safari.open(url: url)
+                openInSafari(url: url)
                 return;
             }
         }
@@ -78,6 +79,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
         }
         
         return true;
+    }
+    
+    func openInSafari(url: URL) {
+        self.safariViewController = SFSafariViewController(url: url)
+        self.viewController.present(safariViewController!, animated: true, completion: nil)
+
     }
     
     @objc func pageIsNotResponding() {

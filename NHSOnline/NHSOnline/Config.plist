@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>BaseUrl</key>
-	<string>http://localhost:3000/</string>
+	<key>HomeUrl</key>
+    <string>http://localhost:3000/</string>
 	<key>Nhs111Url</key>
-	<string>https://111-int2.staging.111.service.nhs.uk/</string>
+	<string>http://111-int2.staging.111.service.nhs.uk/</string>
 	<key>OrganDonationUrl</key>
 	<string>https://www.organdonation.nhs.uk/</string>
 	<key>NhsOnlineRequiredQueryString</key>

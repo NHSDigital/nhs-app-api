@@ -14,7 +14,7 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlString: config.BaseUrl, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.HomeUrl, urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlString: config.Nhs111Url, shouldHandleUnavailability: true))
         serviceList.append(KnownService(urlString: config.OrganDonationUrl))
     }
@@ -29,7 +29,7 @@ class KnownServices {
     func isTheService(knownService:KnownService, name:ServiceName)-> Bool {
         switch name {
         case .NHS_ONLINE:
-            return knownService.url.host == URLComponents(string: config.BaseUrl)?.host
+            return knownService.url.host == URLComponents(string: config.HomeUrl)?.host
         case .NHS111:
             return knownService.url.host == URLComponents(string: config.Nhs111Url)?.host
         case .ORGAN_DONATION:
