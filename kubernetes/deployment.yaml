@@ -13,6 +13,6 @@ spec:
       - name: nhsonline-web
         image: nhsonline.azurecr.io/nhsonline-web:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 4000
       imagePullSecrets:
        - name: azure-registry

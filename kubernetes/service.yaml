@@ -9,4 +9,4 @@ spec:
     app: nhsonline-web
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 4000
