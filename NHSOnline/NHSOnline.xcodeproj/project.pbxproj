@@ -11,10 +11,10 @@
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
 		C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C20578092028B94800CDBDC5 /* Assets.xcassets */; };
 		C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */; };
-		C20578182028B94800CDBDC5 /* NHSOnlineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578172028B94800CDBDC5 /* NHSOnlineTests.swift */; };
-		C20578232028B94800CDBDC5 /* NHSOnlineUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578222028B94800CDBDC5 /* NHSOnlineUITests.swift */; };
-		C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */; };
 		C20578182028B94800CDBDC5 /* SafariTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578172028B94800CDBDC5 /* SafariTests.swift */; };
+		C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */; };
+		C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D555207669C500F3B1E5 /* KnownServices.swift */; };
+		C276D5582077842300F3B1E5 /* KnownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D5572077842300F3B1E5 /* KnownService.swift */; };
 		F0099A8C205557C700530DE3 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0099A8B205557C700530DE3 /* Config.plist */; };
 		F0099A8E2055585800530DE3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0099A8D2055585800530DE3 /* Config.swift */; };
 		F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026199A2050AFE100EDDFE0 /* WebViewController.swift */; };
@@ -55,9 +55,9 @@
 		C20578172028B94800CDBDC5 /* SafariTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariTests.swift; sourceTree = "<group>"; };
 		C20578192028B94800CDBDC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C205781E2028B94800CDBDC5 /* NHSOnlineUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NHSOnlineUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C20578222028B94800CDBDC5 /* NHSOnlineUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NHSOnlineUITests.swift; sourceTree = "<group>"; };
-		C20578242028B94800CDBDC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer_Extensions.swift; sourceTree = "<group>"; };
+		C276D555207669C500F3B1E5 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
+		C276D5572077842300F3B1E5 /* KnownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
 		F0099A8B205557C700530DE3 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		F0099A8D2055585800530DE3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		F026199A2050AFE100EDDFE0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +118,7 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				C276D5542076557400F3B1E5 /* Services */,
 				F06913B720738B3800508886 /* Safari */,
 				F0D2E5D2205007200067DEC4 /* Delegates */,
 				F0B7D86D204EA0F40078D56E /* Extensions */,
@@ -142,6 +143,15 @@
 				C20578192028B94800CDBDC5 /* Info.plist */,
 			);
 			path = NHSOnlineTests;
+			sourceTree = "<group>";
+		};
+		C276D5542076557400F3B1E5 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C276D555207669C500F3B1E5 /* KnownServices.swift */,
+				C276D5572077842300F3B1E5 /* KnownService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		F06913B720738B3800508886 /* Safari */ = {
@@ -325,6 +335,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0F2A8B3205138C700394B2F /* NHS111OnlineUnavailabilityViewController.swift in Sources */,
+				C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
@@ -334,6 +345,7 @@
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
+				C276D5582077842300F3B1E5 /* KnownService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

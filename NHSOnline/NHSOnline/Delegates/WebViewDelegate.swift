@@ -3,7 +3,7 @@ import WebKit
 import os.log
 
 class WebViewDelegate: NSObject, WKNavigationDelegate {
-    
+    let knownServices: KnownServices
     let viewController: HomeViewController
     let safari: Safari
     let webViewHosts =  [URL(string: config().BaseUrl)?.host,
@@ -15,11 +15,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
     var timer: Timer!
     var startDate: Date!
     
-    init(controller: HomeViewController) {
-        viewController = controller
-        safari = Safari()
-        activityIndicator.center = viewController.view.center
-        viewController.view.addSubview(activityIndicator)
+    init(controller: HomeViewController, knownServices: KnownServices) {
+        self.viewController = controller
+        self.knownServices = knownServices
+        self.safari = Safari()
+        self.activityIndicator.center = viewController.view.center
+        self.viewController.view.addSubview(activityIndicator)
     }
     
     func stopErrorsHandling() {
@@ -27,10 +28,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView,
-                          decidePolicyFor navigationAction: WKNavigationAction,
-                          decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         
         if let url = navigationAction.request.url {
+            if let matchingKnownService = knownServices.findMatchingKnownServiceFor(url: url) {
+                if(matchingKnownService.hasMissingQueryString(urlString: url.absoluteString)) {
+                    let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
+                    decisionHandler(.cancel)
+                    webView.loadPage(url: urlString)
+                    return
+                }
+            }
+            
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
                 safari.open(url: url)

@@ -16,8 +16,8 @@ class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        webViewDelegate = WebViewDelegate(controller: self)
+        let knownServices = KnownServices(config: config())
+        webViewDelegate = WebViewDelegate(controller: self, knownServices:knownServices)
         tabBarDelegate = TabBarDelegate(controller: self)
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         tabBar.delegate = tabBarDelegate
