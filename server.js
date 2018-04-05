@@ -13,6 +13,11 @@ app.get('/config', (request, response) => {
   response.send(config);
 });
 
+app.get('/.well-known/assetlinks.json', (request, response) => {
+  response.type('application/json');
+  response.sendFile(path.resolve(`${__dirname}/app_links`, 'assetlinks.json'));
+});
+
 app.get('*', (request, response) => {
   console.log('request received');
   response.sendFile(path.resolve(`${__dirname}/dist`, 'index.html'));

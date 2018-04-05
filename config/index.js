@@ -15,6 +15,10 @@ module.exports = {
         target: 'http://localhost:4000',
         changeOrigin: true
       },
+      '/.well-known/assetlinks.json': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      },
     },
 
     // Various Dev Server settings
