@@ -28,6 +28,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         case .MyRecord:
             break
         case .More:
+            let moreUrl = NSURL(fileURLWithPath: config().BaseUrl).appendingPathComponent(config().MoreUrlPath)?.absoluteString
+            viewController.webViewController?.loadUrl(url: moreUrl!)
             break
         }
     }
