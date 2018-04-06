@@ -10,6 +10,8 @@
 	<string>https://www.organdonation.nhs.uk/</string>
 	<key>NhsOnlineRequiredQueryString</key>
 	<string>?source=mobile</string>
+	<key>MoreUrlPath</key>
+	<string>/more</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
 </dict>
