@@ -13,7 +13,7 @@ module.exports = {
     proxyTable: {
       '/config': {
         target: 'http://localhost:4000',
-        changeOrigin: true
+        changeOrigin: true,
       },
       '/.well-known/assetlinks.json': {
         target: 'http://localhost:4000',

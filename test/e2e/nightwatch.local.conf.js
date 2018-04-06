@@ -2,11 +2,13 @@ const minimist = require('minimist');
 const { assign } = require('lodash/fp');
 const { path: seleniumPath } = require('selenium-server');
 const { path: chromePath } = require('chromedriver');
+
 const baseConfig = require('./nightwatch.base.conf');
+
 const commandLineOptions = minimist(process.argv.slice(2));
 
 const config = assign(baseConfig, {
-    selenium: {
+  selenium: {
     start_process: true,
     server_path: seleniumPath,
     host: '127.0.0.1',
@@ -36,13 +38,13 @@ const config = assign(baseConfig, {
         acceptSslCerts: true,
       },
     },
-  }
+  },
 });
 
 if (commandLineOptions.headless) {
-    config.test_settings.chrome.desiredCapabilities.chromeOptions = {
-        args: ['--headless'],
-    };
+  config.test_settings.chrome.desiredCapabilities.chromeOptions = {
+    args: ['--headless'],
+  };
 }
 
 module.exports = config;

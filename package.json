@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "serve": "node server.js",
-    "dev": "npm run swagger && concurrently --kill-others \"npm run serve\" \"CID_AUTH_ENDPOINT=https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/auth webpack-dev-server --inline --disable-host-check --progress --config build/webpack.dev.conf.js\" ",
+    "dev": "npm run swagger && npm run lint && concurrently --kill-others \"npm run serve\" \"CID_AUTH_ENDPOINT=https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/auth webpack-dev-server --inline --disable-host-check --progress --config build/webpack.dev.conf.js\" ",
     "build": "npm run swagger && node build/build.js",
     "test": "npm run test-e2e",
     "test-e2e": " node test/e2e/runner.js",

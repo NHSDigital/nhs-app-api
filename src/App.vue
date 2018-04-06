@@ -15,7 +15,7 @@ export default {
   name: 'App',
   components: {
     NavigationMenu,
-    HeaderMenu
+    HeaderMenu,
   },
 
   data() {
@@ -26,9 +26,9 @@ export default {
   },
 
   computed: {
-    showMenu: function(){
+    showMenu() {
       return !this.isNativeApp && this.isLoggedIn;
-    }
+    },
   },
 
   created() {
@@ -36,7 +36,7 @@ export default {
       this.isNativeApp = true;
     }
 
-    if (this.$route.query.loggedIn){
+    if (this.$route.query.loggedIn) {
       this.isLoggedIn = true;
     }
   },

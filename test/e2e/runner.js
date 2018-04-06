@@ -1,11 +1,12 @@
 const DEFAULT_PROFILE_NAME = 'chrome';
-const CONFIG_PATH_BROWSERSTACK = './nightwatch.browserstack.conf'
-const CONFIG_PATH_LOCAL = './nightwatch.local.conf'
+const CONFIG_PATH_BROWSERSTACK = './nightwatch.browserstack.conf';
+const CONFIG_PATH_LOCAL = './nightwatch.local.conf';
 
 const browserstack = require('browserstack-local');
 const minimist = require('minimist');
 const nightwatch = require('nightwatch');
 const path = require('path');
+
 const browserStackConfig = require(CONFIG_PATH_BROWSERSTACK);
 
 class Runner {
@@ -56,11 +57,11 @@ class Runner {
             console.log('Running nightwatch');
 
             nightwatch.cli((argv) => {
-                nightwatch
-                  .CliRunner(argv)
-                  .setup(null, () => this.stopBrowserstack())
-                  .runTests(() => this.stopBrowserstack());
-                resolve();
+              nightwatch
+                .CliRunner(argv)
+                .setup(null, () => this.stopBrowserstack())
+                .runTests(() => this.stopBrowserstack());
+              resolve();
             });
           } catch (ex) {
             reject(ex);

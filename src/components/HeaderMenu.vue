@@ -15,11 +15,12 @@ import AccountIcon from '@/components/icons/AccountIcon';
 import HomeIcon from '@/components/icons/HomeIcon';
 
 export default {
-    components: {
-        AccountIcon,
-        HomeIcon
-    }
-}
+  components: {
+    AccountIcon,
+    HomeIcon,
+  },
+};
+
 </script>
 
 <style lang="scss" scoped>
