@@ -3,11 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>BaseUrl</key>
-	<string>http://localhost:8080/</string>
+	<string>http://localhost:3000/</string>
 	<key>Nhs111Url</key>
-	<string>https://111.nhs.uk/</string>
+	<string>https://111-int2.staging.111.service.nhs.uk/</string>
 	<key>OrganDonationUrl</key>
 	<string>https://www.organdonation.nhs.uk/</string>
+	<key>NhsOnlineRequiredQueryString</key>
+	<string>?source=mobile</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
 </dict>
