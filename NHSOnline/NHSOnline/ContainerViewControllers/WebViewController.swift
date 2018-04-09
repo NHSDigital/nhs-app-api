@@ -8,7 +8,9 @@ class WebViewController: UIViewController {
 
     func setWebViewDelegate(delegate: WebViewDelegate) {
         webView.navigationDelegate = delegate
+        webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
+        webView.configuration.userContentController.add(delegate, name: "loggedIn")
     }
 
     func loadUrl(url: String) {
@@ -20,3 +22,4 @@ class WebViewController: UIViewController {
         webViewDelegate?.safariViewController?.dismiss(animated: true, completion: nil)
     }
 }
+

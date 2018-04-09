@@ -3,7 +3,7 @@ import SafariServices
 import WebKit
 import os.log
 
-class WebViewDelegate: NSObject, WKNavigationDelegate {
+class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     let knownServices: KnownServices
     let viewController: HomeViewController
     let webViewHosts =  [URL(string: config().HomeUrl)?.host,
@@ -16,6 +16,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
     var shouldHandleErrors = false
     var timer: Timer!
     var startDate: Date!
+    
+    private let script = """
+                    window.nativeApp = {};
+                    window.nativeApp.loggedIn = function () {
+                        window.webkit.messageHandlers.loggedIn.postMessage(null);
+                    };
+                """
     
     init(controller: HomeViewController, knownServices: KnownServices) {
         self.viewController = controller
@@ -59,6 +66,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
+        if knownServices.shouldAllowNativeInteraction(host: webView.url?.host){
+            webView.evaluateJavaScript(script, completionHandler: nil)
+        }
         self.showWebViewContainer()
     }
     
@@ -85,6 +95,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate {
         self.safariViewController = SFSafariViewController(url: url)
         self.viewController.present(safariViewController!, animated: true, completion: nil)
 
+    }
+    
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) {
+            if message.name == "loggedIn" {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
+            }
+        }
     }
     
     @objc func pageIsNotResponding() {

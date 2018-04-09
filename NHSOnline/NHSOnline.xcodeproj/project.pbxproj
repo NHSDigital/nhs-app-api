@@ -14,6 +14,8 @@
 		C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */; };
 		C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D555207669C500F3B1E5 /* KnownServices.swift */; };
 		C276D5582077842300F3B1E5 /* KnownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D5572077842300F3B1E5 /* KnownService.swift */; };
+		C276D562207B573900F3B1E5 /* HeaderBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = C276D561207B573900F3B1E5 /* HeaderBar.xib */; };
+		C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D563207B638400F3B1E5 /* HeaderBar.swift */; };
 		F0099A8C205557C700530DE3 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0099A8B205557C700530DE3 /* Config.plist */; };
 		F0099A8E2055585800530DE3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0099A8D2055585800530DE3 /* Config.swift */; };
 		F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */; };
@@ -35,13 +37,6 @@
 			remoteGlobalIDString = C20577FE2028B94800CDBDC5;
 			remoteInfo = NHSOnline;
 		};
-		F01745B5207BA21E00877E4D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C20577F72028B94800CDBDC5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C20577FE2028B94800CDBDC5;
-			remoteInfo = NHSOnline;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +51,8 @@
 		C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer_Extensions.swift; sourceTree = "<group>"; };
 		C276D555207669C500F3B1E5 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
 		C276D5572077842300F3B1E5 /* KnownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
+		C276D561207B573900F3B1E5 /* HeaderBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeaderBar.xib; sourceTree = "<group>"; };
+		C276D563207B638400F3B1E5 /* HeaderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBar.swift; sourceTree = "<group>"; };
 		F0099A8B205557C700530DE3 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		F0099A8D2055585800530DE3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,13 +77,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C20578102028B94800CDBDC5 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F01745AD207BA21E00877E4D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -118,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				F08E80FF2077DBA700017BFB /* NHSOnline.entitlements */,
+				C276D560207B571A00F3B1E5 /* CustomViews */,
 				C276D5542076557400F3B1E5 /* Services */,
 				F0D2E5D2205007200067DEC4 /* Delegates */,
 				F0B7D86D204EA0F40078D56E /* Extensions */,
@@ -152,6 +143,15 @@
 				C276D5572077842300F3B1E5 /* KnownService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		C276D560207B571A00F3B1E5 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				C276D561207B573900F3B1E5 /* HeaderBar.xib */,
+				C276D563207B638400F3B1E5 /* HeaderBar.swift */,
+			);
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		F0B7D860204E8B8A0078D56E /* ContainerViewControllers */ = {
@@ -247,11 +247,6 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = C20577FE2028B94800CDBDC5;
 					};
-					F01745AF207BA21E00877E4D = {
-						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
-						TestTargetID = C20577FE2028B94800CDBDC5;
-					};
 				};
 			};
 			buildConfigurationList = C20577FA2028B94800CDBDC5 /* Build configuration list for PBXProject "NHSOnline" */;
@@ -280,6 +275,7 @@
 			files = (
 				F0099A8C205557C700530DE3 /* Config.plist in Resources */,
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
+				C276D562207B573900F3B1E5 /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Locales.strings in Resources */,
 				C20578082028B94800CDBDC5 /* Main.storyboard in Resources */,
@@ -287,13 +283,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C20578112028B94800CDBDC5 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F01745AE207BA21E00877E4D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -316,6 +305,7 @@
 				F0099A8E2055585800530DE3 /* Config.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
+				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
 				C276D5582077842300F3B1E5 /* KnownService.swift in Sources */,
 			);
@@ -330,13 +320,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F01745AC207BA21E00877E4D /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -344,11 +327,6 @@
 			isa = PBXTargetDependency;
 			target = C20577FE2028B94800CDBDC5 /* NHSOnline */;
 			targetProxy = C20578142028B94800CDBDC5 /* PBXContainerItemProxy */;
-		};
-		F01745B6207BA21E00877E4D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C20577FE2028B94800CDBDC5 /* NHSOnline */;
-			targetProxy = F01745B5207BA21E00877E4D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -495,6 +473,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -502,6 +481,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -512,6 +492,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
@@ -519,6 +500,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
