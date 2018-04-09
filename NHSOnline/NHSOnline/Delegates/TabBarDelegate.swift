@@ -20,7 +20,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         
         switch selectedItem {
         case .Symptoms:
-            viewController.webViewController?.loadUrl(url: config().Nhs111Url)
+            selectPage(pageUrl: config().Nhs111Url)
         case .Appointments:
             break
         case .Prescription:
@@ -28,9 +28,14 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         case .MyRecord:
             break
         case .More:
-            let moreUrl = NSURL(fileURLWithPath: config().BaseUrl).appendingPathComponent(config().MoreUrlPath)?.absoluteString
+            let moreUrl = NSURL(fileURLWithPath: config().HomeUrl).appendingPathComponent(config().MoreUrlPath)?.absoluteString
             viewController.webViewController?.loadUrl(url: moreUrl!)
             break
         }
+    }
+    
+    private func selectPage(pageUrl: String) {
+        viewController.pageUrl = pageUrl
+        viewController.webViewController?.loadUrl(url: pageUrl)
     }
 }
