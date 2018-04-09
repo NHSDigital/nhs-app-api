@@ -7,17 +7,72 @@
     android:layout_height="match_parent"
     tools:context="com.nhs.online.nhsonline.MainActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_92sdp"
+        android:elevation="4dp"
+        android:background="#005EB8"
+        android:visibility="gone"
+        android:gravity="bottom">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginRight="@dimen/_16sdp"
+            android:layout_marginLeft="@dimen/_16sdp">
+
+            <RelativeLayout
+                android:id="@+id/top_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp">
+            <ImageView
+                android:id="@+id/nhsOnlineLogoIcon"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_alignParentStart="true"
+                android:src="@mipmap/icon_nhs_online_logo" />
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_alignParentEnd="true"
+                android:src="@mipmap/icon_header_account" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_1sdp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#64FFFFFF" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_below="@id/top_header"
+                android:id="@+id/bottom_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:textSize="@dimen/_18sdp"
+                    android:textColor="#FFFFFF"
+                    android:text="Home" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
     <FrameLayout
         android:id="@+id/viewSwitcher"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_45sdp"
-        app:layout_constraintBottom_toTopOf="@+id/menuBar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.071">
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintVertical_bias="1.0">
 
         <WebView
             android:id="@+id/webview"
@@ -55,16 +110,9 @@
         android:id="@+id/progressBarLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/_45sdp"
         android:background="@drawable/progress_spinner_background"
         android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/menuBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.071">
+        >
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -72,17 +120,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminateTint="@color/progressbar_color"
-            android:indeterminateTintMode="src_in"/>
+            android:indeterminateTintMode="src_in" />
     </LinearLayout>
-
 
     <com.nhs.online.nhsonline.navigation.MenuBar
         android:id="@+id/menuBar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_45sdp"
         android:background="@drawable/menu_top_shadow"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.nhs.online.nhsonline.navigation.MenuBarItem
             android:id="@+id/symptoms"
