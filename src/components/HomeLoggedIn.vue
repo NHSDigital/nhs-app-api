@@ -2,8 +2,8 @@
   <div id="mainDiv">
     <main class="content">
       <div class="info">
-        <h5>Welcome, James Doyle</h5>
-        <p>Get medical advice, book GP appointments and order repeat prescriptions any time.</p>
+        <h5>{{ $t('homeLoggedIn.welcome') }}, James Doyle</h5>
+        <p>{{ $t('homeLoggedIn.description') }}</p>
       </div>
       <div class="panel">
         <div class="panel-icon">
@@ -13,11 +13,11 @@
           <h5>James Doyle</h5>
           <hr>
           <div style="display: inline-block; float: left;">
-            <label>Date of birth</label>
+            <label>{{ $t('homeLoggedIn.dateOfBirth') }}</label>
             <p>20th January 1982</p>
           </div>
           <div style="display: inline-block; float: left; margin-left: 28px;">
-            <label>NHS number</label>
+            <label>{{ $t('homeLoggedIn.nhsNumber') }}</label>
             <p>1234567890</p>
           </div>
         </div>

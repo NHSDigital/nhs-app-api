@@ -1,19 +1,64 @@
 export default {
-  home: {
+  common: {
+    or: 'OR',
+  },
+  homeHeader: {
     welcome: 'Welcome!',
   },
-  loginOrRegister: {
-    login: 'Sign in with your NHS account',
-    createAccount: 'Create an NHS account',
+  homeLoggedIn: {
+    welcome: 'Welcome',
+    description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
+    dateOfBirth: 'Date of birth',
+    nhsNumber: 'NHS number',
   },
-  symptom: {
-    howAreYouFeeling: 'How are you feeling right now?',
-    checker: 'Symptom checker',
+  loginButton: {
+    login: 'Sign in with your NHS account',
+  },
+  loginOrRegister: {
+    createAccount: 'Create an NHS account',
   },
   more: {
     organDonationButtonText: 'Organ donation register',
   },
-  common: {
-    or: 'OR',
+  navigationMenu: {
+    appointmentsLabel: 'Appointments',
+    moreLabel: 'More',
+    myRecordLabel: 'My record',
+    prescriptionsLabel: 'Prescriptions',
+    symptomsLabel: 'Symptoms',
+  },
+  symptomBanner: {
+    howAreYouFeeling: 'How are you feeling right now?',
+    checker: 'Check your symptoms',
+  },
+  icons: {
+    accountIcon: {
+      title: 'My Account',
+    },
+    appointmentsIcon: {
+      title: 'Appointments',
+    },
+    homeIcon: {
+      title: 'NHS Online',
+      desc: 'Click here to go back to the home screen.',
+    },
+    moreIcon: {
+      title: 'More',
+    },
+    myRecordIcon: {
+      title: 'My Record',
+    },
+    nhsLogoIcon: {
+      title: 'NHS app',
+    },
+    patientDetailsIcon: {
+      title: 'Patient Details',
+    },
+    prescriptionsIcon: {
+      title: 'Prescriptions',
+    },
+    symptomsIcon: {
+      title: 'Symptoms Checker',
+    },
   },
 };

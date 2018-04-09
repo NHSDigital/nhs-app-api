@@ -1,6 +1,6 @@
 <template>
   <button data-id="login-button" class="button green" v-on:click="loginClicked()">
-    {{ $t('loginOrRegister.login') }}
+    {{ $t('loginButton.login') }}
   </button>
 </template>
 

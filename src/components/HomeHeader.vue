@@ -6,7 +6,7 @@
         <nhs-logo/>
       </div>
 
-      <h1>{{ $t('home.welcome') }}</h1>
+      <h1>{{ $t('homeHeader.welcome') }}</h1>
 
       <symptom-banner/>
     </header>

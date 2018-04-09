@@ -1,7 +1,7 @@
 <template>
   <svg viewBox="0 0 79 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="nhs_logo">
-    <title>NHS Online</title>
-    <desc>Click here to go back to the home screen.</desc>
+    <title>{{ $t('icons.homeIcon.title') }}</title>
+    <desc>{{ $t('icons.homeIcon.desc') }}</desc>
     <defs></defs>
     <g id="nhs_logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <!--eslint-disable-next-line -->

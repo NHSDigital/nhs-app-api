@@ -2,7 +2,7 @@
   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 114 112">
     <defs>
     </defs>
-    <title>Appointments</title>
+    <title>{{ $t('icons.appointmentsIcon.title') }}</title>
     <rect class="menu_stroke active" x="15.5" y="46" width="19" height="19" />
     <rect class="menu_stroke active" x="47.5" y="46" width="19" height="19" />
     <rect class="menu_stroke active" x="79.5" y="46" width="19" height="19" />

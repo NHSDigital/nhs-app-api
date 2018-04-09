@@ -1,8 +1,8 @@
 <template>
   <div class="symptom_banner">
-    <h2>{{ $t('symptom.howAreYouFeeling') }}</h2>
+    <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
     <a :href="symptomCheckerUrl" class="button white" id="btn_home_symptoms">
-      {{ $t('symptom.checker') }}
+      {{ $t('symptomBanner.checker') }}
     </a>
   </div>
 </template>

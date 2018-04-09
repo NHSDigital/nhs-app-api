@@ -1,6 +1,6 @@
 <template>
   <svg height="55px" viewBox="0 0 112 46" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>NHS app</title>
+    <title>{{ $t('icons.nhsLogoIcon.title') }}</title>
     <desc></desc>
     <defs></defs>
     <g id="nhso_logo" fill="#FFFFFF" fill-rule="nonzero">
