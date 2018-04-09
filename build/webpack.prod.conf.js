@@ -13,10 +13,6 @@ const utils = require('./utils');
 const config = require('../config');
 const baseWebpackConfig = require('./webpack.base.conf');
 
-const env = process.env.NODE_ENV === 'testing'
-  ? require('../config/test.env')
-  : require('../config/prod.env');
-
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -32,10 +28,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: utils.assetsPath('js/[id].[chunkhash].js'),
   },
   plugins: [
-    // http://vuejs.github.io/vue-loader/en/workflow/production.html
-    new webpack.DefinePlugin({
-      'process.env': env,
-    }),
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {

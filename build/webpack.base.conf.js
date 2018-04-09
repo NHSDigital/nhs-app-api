@@ -40,8 +40,6 @@ module.exports = {
       '@': resolve('src'),
     },
   },
-  plugins: [
-  ],
   module: {
     rules: [
       ...(config.dev.useEslint ? [createLintingRule()] : []),

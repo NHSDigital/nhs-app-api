@@ -5,7 +5,6 @@ const path = require('path');
 const portfinder = require('portfinder');
 const merge = require('webpack-merge');
 const {
-  DefinePlugin,
   HotModuleReplacementPlugin,
   NamedModulesPlugin,
   NoEmitOnErrorsPlugin,
@@ -13,7 +12,6 @@ const {
 
 const baseWebpackConfig = require('./webpack.base.conf');
 const config = require('../config');
-const devEnvironment = require('../config/dev.env');
 const utils = require('./utils');
 
 const HOST = process.env.HOST;
@@ -51,9 +49,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     },
   },
   plugins: [
-    new DefinePlugin({
-      'process.env': devEnvironment,
-    }),
     new HotModuleReplacementPlugin(),
     new NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new NoEmitOnErrorsPlugin(),

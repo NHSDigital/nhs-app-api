@@ -5,19 +5,18 @@
 </template>
 
 <script>
-import { createVerifier, performLogin } from '@/services/authorization-service';
+import AuthorizationService from '@/services/authorization-service';
 
-const calculateRedirectUri = () => `${window.location.origin}/auth-return`;
-
-const loginClicked = () => {
+function loginClicked() {
   // TODO: Storage of verifier
   // The verifier needs to be stored in a cookie or local storage which is why it is generated
   // here instead of in the authorization service.  The storage of the verifier is outside the
   // scope of this ticket.
-  const verifier = createVerifier();
-  const redirectUri = process.env.CID_REDIRECT_URI || calculateRedirectUri();
-  performLogin(redirectUri, verifier);
-};
+
+  const authorizationService = new AuthorizationService(this.$config);
+  const verifier = authorizationService.createVerifier();
+  authorizationService.performLogin(verifier);
+}
 
 export default {
   methods: {
