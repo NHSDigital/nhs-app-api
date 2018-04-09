@@ -36,3 +36,27 @@ export default class AuthorizationService {
     return authorizationHandler.performAuthorizationRequest(this.configuration, request);
   }
 }
+
+export function handleAuthReturn() {
+  sessionStorage.isLoggedIn = true;
+  if (typeof window.nativeApp !== 'undefined') {
+    window.nativeApp.loggedIn();
+  }
+}
+
+export function isLoggedIn() {
+  return !!sessionStorage.isLoggedIn;
+}
+
+export function requireAuth(to, from, next) {
+  if (!isLoggedIn()) {
+    next({
+      path: '/',
+      query: {
+        redirect: to.fullPath,
+      },
+    });
+  } else {
+    next();
+  }
+}

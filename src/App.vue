@@ -10,6 +10,7 @@
 
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
+import { isLoggedIn } from '@/services/authorization-service';
 
 export default {
   name: 'App',
@@ -27,17 +28,13 @@ export default {
 
   computed: {
     showMenu() {
-      return !this.isNativeApp && this.isLoggedIn;
+      return !this.isNativeApp && isLoggedIn();
     },
   },
 
   created() {
     if (this.$route.query.source === 'mobile') {
       this.isNativeApp = true;
-    }
-
-    if (this.$route.query.loggedIn) {
-      this.isLoggedIn = true;
     }
   },
 };

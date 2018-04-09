@@ -5,6 +5,7 @@
   </div>
 </template>
 <script>
+
 import HomeHeader from '@/components/HomeHeader';
 import LoginOrRegister from '@/components/LoginOrRegister';
 

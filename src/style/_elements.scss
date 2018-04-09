@@ -1,6 +1,58 @@
 @import './colours';
 @import './fonts';
 @import './textstyles';
+main.content {
+	padding: 16px 16px 5px 16px;
+	box-sizing: border-box;
+	width: 100%;
+	
+	&.slim {
+		padding: 66px 16px 75px 16px;
+	}
+	&.nopadding {
+		padding: 100px 0px 50px 0px;
+	}
+	&.slim.nopadding  {
+		padding: 50px 0px 50px 0px;
+	}
+	
+	.info p {
+		@include default_text;
+		font-size: 12pt;
+		display: block;
+		margin-bottom: 16px;
+	}
+	.info h5 {
+		@include h5;
+		color: $nhs_blue !important;
+		font-size: 16pt;
+		color: $dark_grey;
+		margin-bottom: 16px;
+	}
+	.info h4 {
+		@include h5;
+		font-size: 16pt;
+		color: $dark_grey;
+		margin-bottom: 16px;
+	}
+	.info a {
+		@include default_text;
+		font-size: 14pt;
+		display: block;
+		text-decoration: underline;
+		font-weight: bold;
+		margin-bottom: 8px;
+	}
+	.info ul {
+		li {
+			margin-left: 24px;
+			margin-bottom: 16px;
+		}
+	}
+}
+footer {
+	display: none;
+}
 .panel {
 	width: 100%;
 	box-sizing: border-box;
@@ -33,27 +85,63 @@
 		vertical-align: top;
 		width: 24px;
 		display: none; // FIRST STATE
-		
-		.checkbox {
-			border: 1px #979797 solid;
-			width: 24px;
-			height: 24px;
-			border-radius: 5px;
-			
-			&:active {
-				border-color: $black;
-			}
-			
-			.checked {
-				margin-left: 4px;
-				margin-top: 6px;
-				display: none;
-			}
+	}
+	
+	.requested {
+		label {
+			color: #F5A623 !important;
+		}
+		p {
+			color: #F5A623 !important;
+		}
+	}
+	.issued {
+		label {
+			color: #427606 !important;
+		}
+		p {
+			color: #427606 !important;
+		}
+	}
+	.rejected {
+		label {
+			color: #990000 !important;
+		}
+		p {
+			color: #990000 !important;
 		}
 	}
 }
+.panel-title {
+	h5 {
+		@include h5;
+		margin-bottom: 8px;
+		margin-top: 24px;
+	}
+	p {
+		@include default_text;
+		margin-bottom: 16px;
+	}
+}
+
 .panel,
 .form {
+	.checkbox {
+		border: 1px #979797 solid;
+		width: 24px;
+		height: 24px;
+		border-radius: 5px;
+
+		&:active {
+			border-color: $black;
+		}
+
+		.checked {
+			margin-left: 4px;
+			margin-top: 6px;
+			display: none;
+		}
+	}
 	h6 {
 		@include small_label;
 		padding-top: 16px;
@@ -61,8 +149,18 @@
 	h5 {
 		@include default_label;
 	}
+	h4 {
+		@include default_label;
+		padding-top: 8px;
+		color: #999;
+		font-size: 20px;
+	}
 	p {
 		@include default_text;
+		
+		b {
+			display: inline-block;
+		}
 	}
 	label {
 		@include default_label;
