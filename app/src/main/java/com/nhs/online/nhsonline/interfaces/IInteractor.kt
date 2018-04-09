@@ -9,7 +9,9 @@ interface IInteractor {
 
     fun selectSymptomsMenuActive()
 
-    fun showUnavailabilityError()
+    fun selectMoreMenuActive()
+
+    fun showUnavailabilityError(unavailabilityErrorMessage: String?)
 
     fun showWebviewScreen()
 }

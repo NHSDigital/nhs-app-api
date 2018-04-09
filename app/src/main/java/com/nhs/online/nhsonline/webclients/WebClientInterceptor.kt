@@ -7,6 +7,7 @@ import android.webkit.WebViewClient
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.KnownServices
+import java.net.URL
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME = 500L
@@ -39,6 +40,11 @@ class WebClientInterceptor(
             if (knownServices.isTheService(matchingKnownService,
                     KnownServices.ServiceName.NHS111)) {
                 uiInteractor.selectSymptomsMenuActive()
+            }
+
+            if (knownServices.isTheService(matchingKnownService,
+                            KnownServices.ServiceName.ORGAN_DONATION)) {
+                uiInteractor.selectMoreMenuActive()
             }
 
             if (matchingKnownService.hasMissingQueryString(url)) {
@@ -88,8 +94,10 @@ class WebClientInterceptor(
         if (shouldHandleUnavailability(failingUrl)) {
             shouldShowErrorPage = true
             cancelTrackingWebRequestResponse()
-            uiInteractor.showUnavailabilityError()
-            logger.info("NHS 111 unavailable")
+
+            val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
+            uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
+            logger.info(unavailabilityErrorMessage)
         }
     }
 
@@ -112,8 +120,11 @@ class WebClientInterceptor(
             shouldShowErrorPage = true
             view?.stopLoading()
             uiInteractor.dismissProgressDialog()
-            uiInteractor.showUnavailabilityError()
-            logger.info("NHS 111 unavailable")
+
+            val failingUrl: String? = (URL(view?.url)).host
+            val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
+            uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
+            logger.info(unavailabilityErrorMessage)
         }
 
         handler.postDelayed(showDialogFn,
@@ -127,4 +138,8 @@ class WebClientInterceptor(
         handler.removeCallbacksAndMessages(null)
     }
 
+    private fun getUnavailabilityErrorMessageForService(failingUrl: String?) : String? {
+        val service = knownServices.findMatchingKnownService(failingUrl.toString())
+        return service?.unavailabilityErrorMessage
+    }
 }
