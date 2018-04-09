@@ -5,16 +5,20 @@
     <string name="basePort">3000</string>
     <string name="authRedirectPath">/auth-return</string>
     <string name="baseURL">http://10.0.2.2:3000</string>
+    <string name="morePath">more</string>
     <string name="nhs111">https://111.nhs.uk</string>
+    <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
 
     <string name="nhsOnlineRequiredQueries">\?source=mobile</string>
 
     <string-array name="serviceUrls">
         <item>@string/nhs111</item>
+        <item>@string/organDonation</item>
     </string-array>
 
     <string-array name="nativeAppHosts">
         <item>@string/nhs111</item>
+        <item>@string/organDonation</item>
         <item>@string/baseURL</item>
     </string-array>
 

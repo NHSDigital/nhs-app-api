@@ -18,12 +18,19 @@ class KnownServices(private val context: Context) {
     private fun buildKnownServices() {
         serviceList.add(Service(context.resources.getString(
             R.string.baseURL),
-
-            queryString = context.getString(R.string.nhsOnlineRequiredQueries)))
+            true,
+            queryString = context.getString(R.string.nhsOnlineRequiredQueries),
+            unavailabilityErrorMessage = context.resources.getString(R.string.connection_error)))
+        serviceList.add(Service(context.resources.getString(
+            R.string.organDonation),
+            true,
+            null,
+             unavailabilityErrorMessage = context.resources.getString(R.string.organ_donation_connection_error)))
         serviceList.add(Service(context.resources.getString(
             R.string.nhs111),
-            true))
-
+            true,
+            null,
+            unavailabilityErrorMessage = context.resources.getString(R.string.nhs111_connection_error)))
     }
 
     fun findMatchingKnownService(urlString: String): Service? {
@@ -50,6 +57,7 @@ class KnownServices(private val context: Context) {
     fun isTheService(service: Service, name: ServiceName): Boolean {
         return when (name) {
             ServiceName.NHS111 -> service.url.host == getHostOfUrl(context.resources.getString(R.string.nhs111))
+            ServiceName.ORGAN_DONATION -> service.url.host == getHostOfUrl(context.resources.getString(R.string.organDonation))
             ServiceName.NHS_ONLINE-> service.url.host == getHostOfUrl(context.resources.getString(R.string.baseURL))
             else -> false
         }
@@ -64,7 +72,8 @@ class KnownServices(private val context: Context) {
     class Service(
         urlString: String,
         val shouldHandleUnavailability: Boolean = false,
-        queryString: String? = null
+        queryString: String? = null,
+        val unavailabilityErrorMessage: String? = null
     ) {
         private val serviceQueryMap: MutableMap<String, String> = mutableMapOf()
         val url: URL = URL(urlString)

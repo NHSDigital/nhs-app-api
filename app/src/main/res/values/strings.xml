@@ -7,6 +7,8 @@
     <string name="more">More</string>
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
+    <string name="organ_donation_connection_error">Organ donation unavailable</string>
+    <string name="connection_error">Service unavailable</string>
 
     <string name="retryButtonText">Reload page</string>
 </resources>

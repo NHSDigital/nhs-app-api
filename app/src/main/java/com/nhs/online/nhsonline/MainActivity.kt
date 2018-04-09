@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
@@ -67,11 +68,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
         when (menuBarItem.id) {
             R.id.symptoms -> onSymptomMenuSelected()
+            R.id.more -> onMoreMenuSelected()
             else -> loadWelcomePage()
         }
     }
 
     private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
+
+    private fun onMoreMenuSelected() = loadMorePage()
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
@@ -79,6 +83,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val urlWithMissingQueryStrings =
             knownServices.findKnownServiceAddMissingQueryFor(url)
         webview.loadUrl(urlWithMissingQueryStrings)
+    }
+
+    private fun loadMorePage() {
+        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
+                .buildUpon()
+                .appendEncodedPath(resources.getString(R.string.morePath))
+                .build()
+        val moreURL = builtUri.toString()
+        loadPage(moreURL)
     }
 
     override fun showProgressDialog() {
@@ -95,12 +108,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
         menuBar.switchActiveMenuItemTo(R.id.symptoms)
     }
 
-    override fun showUnavailabilityError() {
+    override fun selectMoreMenuActive() {
+        menuBar.switchActiveMenuItemTo(R.id.more)
+    }
+
+    override fun showUnavailabilityError(unavailabilityErrorMessage: String?) {
         showErrorScreen()
 
-        val errorMessage = resources.getString(R.string.nhs111_connection_error)
-        errorTextView.text = errorMessage
-
+        errorTextView.text = unavailabilityErrorMessage
     }
 
     private fun showErrorScreen() {
