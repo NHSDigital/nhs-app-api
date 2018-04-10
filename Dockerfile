@@ -43,6 +43,7 @@ COPY --from=build /opt/app/prod_node_modules ./node_modules
 COPY --from=build /opt/app/dist ./dist
 COPY --from=build /opt/app/config ./config
 COPY --from=build /opt/app/server.js .
+COPY --from=build /opt/app/app_links ./app_links
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs
 EXPOSE 4000
