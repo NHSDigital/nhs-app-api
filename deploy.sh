@@ -6,7 +6,7 @@ then
 	exit 1
 fi
 
-git-crypt unlock ~/.ci-key.gpg
+git-crypt unlock ~/.cicd.key
 mkdir -p ~/.kube
 echo $KUBECTL_CONFIG | base64 -d | zcat > ~/.kube/config
 sed -i "s/latest/$(git rev-parse HEAD)/" kubernetes/deployment.yaml
