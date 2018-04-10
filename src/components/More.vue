@@ -1,8 +1,10 @@
 <template>
-  <div>
+  <div id="mainDiv">
+    <main class="content">
     <a class="button" :href="organDonationUrl" id="btn_organdonation">
       {{ $t('more.organDonationButtonText') }}
     </a>
+    </main>
   </div>
 </template>
 
@@ -17,19 +19,10 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../style/fonts';
+  @import '../style/html';
   @import '../style/textstyles';
+  @import '../style/elements';
+  @import '../style/fonts';
   @import '../style/colours';
   @import '../style/buttons';
-</style>
-
-<style lang="scss" scoped>
-  * {
-    padding: 0;
-    margin: 0;
-  }
-
-  div {
-    margin: 15px 5px;
-  }
 </style>
