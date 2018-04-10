@@ -17,6 +17,7 @@ class KnownService {
             let queryKeyValues = queryStringRemovedQuestionMark?.components(separatedBy: "&")
             queryKeyValues?.forEach { queryParameter in
                 let keyValuePair = queryParameter.components(separatedBy: "=")
+                
                 if keyValuePair.count == 2 {
                     self.urlQueryItems.append(URLQueryItem(name: keyValuePair[0], value: keyValuePair[1]))
                 }
@@ -24,8 +25,8 @@ class KnownService {
         }
     }
     
-    func hasMissingQueryString(urlString: String)-> Bool {
-        if(self.urlQueryItems.isEmpty){
+    func hasMissingQueryString(urlString: String) -> Bool {
+        if(self.urlQueryItems.isEmpty) {
             return false
         }
         
@@ -42,19 +43,21 @@ class KnownService {
                 return true
             }
         }
-        return false
         
+        return false
     }
     
     func addingMissingQueryParameters(urlString:String) -> String {
         if(self.urlQueryItems.isEmpty) {
             return urlString
         }
+        
         guard var urlComponents = URLComponents(string: urlString) else {
             return urlString
         }
         
         var queryItems = urlComponents.queryItems ?? [URLQueryItem]()
+        
         urlQueryItems.forEach { urlQueryItem in
             if(!queryItems.contains(urlQueryItem)) {
                 queryItems.append(urlQueryItem)
@@ -62,6 +65,7 @@ class KnownService {
         }
         
         urlComponents.queryItems = queryItems
+        
         return urlComponents.string ?? urlString
     }
 }
