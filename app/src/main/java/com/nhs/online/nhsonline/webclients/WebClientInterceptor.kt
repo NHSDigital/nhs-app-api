@@ -54,10 +54,6 @@ class WebClientInterceptor(
             }
         }
 
-        if (shouldHandleUnavailability(url)) {
-            uiInteractor.selectSymptomsMenuActive()
-        }
-
         return false
     }
 
