@@ -8,8 +8,6 @@ export default {
   homeLoggedIn: {
     welcome: 'Welcome',
     description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
-    dateOfBirth: 'Date of birth',
-    nhsNumber: 'NHS number',
   },
   loginButton: {
     login: 'Sign in with your NHS account',
