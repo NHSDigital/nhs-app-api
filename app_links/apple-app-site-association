@@ -1,11 +1,11 @@
 {
-    "applinks": {
-        "apps": [],
-        "details": [
-        {
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
         "appID": "5Y58TN94AP.com.nhs.online",
         "paths": ["*"]
-        }
-        ]
-    }
+      }
+    ]
+  }
 }

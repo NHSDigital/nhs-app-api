@@ -4,6 +4,8 @@
 
 const path = require('path');
 
+const proxyTarget = 'http://localhost:4000';
+
 module.exports = {
   dev: {
 
@@ -12,16 +14,16 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/config': {
-        target: 'http://localhost:4000',
+        target: proxyTarget,
         changeOrigin: true,
       },
       '/.well-known/assetlinks.json': {
-        target: 'http://localhost:4000',
+        target: proxyTarget,
         changeOrigin: true,
       },
       '/apple-app-site-association': {
-        target: 'http://localhost:4000',
-        changeOrigin: true
+        target: proxyTarget,
+        changeOrigin: true,
       },
     },
 
