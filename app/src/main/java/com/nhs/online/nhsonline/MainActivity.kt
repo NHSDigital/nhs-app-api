@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
+import android.view.View.*
+import android.support.v7.widget.Toolbar
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -24,11 +26,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         configureWebView()
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         retryButton.setOnClickListener { onSymptomMenuSelected() }
+
+        nhsOnlineLogoIcon.setOnClickListener{ onNhsOnlineLogoIconSelected() }
 
         val urlPath = intent?.data?.path
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
@@ -57,6 +62,26 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         knownServices = KnownServices(this)
         webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities())
+
+        webview.addJavascriptInterface( WebAppInterface(this), "nativeApp")
+    }
+
+    fun showMenuBar()
+    {
+        runOnUiThread({
+            run {
+                menuBar.visibility = VISIBLE
+            }
+        })
+    }
+
+    fun showHeader()
+    {
+        runOnUiThread({
+            run {
+                findViewById<Toolbar>(R.id.header).visibility = VISIBLE
+            }
+        })
     }
 
     private fun createActivities(): List<ActivityInterface> {
@@ -76,6 +101,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
 
     private fun onMoreMenuSelected() = loadMorePage()
+
+    private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
