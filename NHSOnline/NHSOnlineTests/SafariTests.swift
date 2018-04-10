@@ -18,14 +18,14 @@ class NHSOnlineTests: XCTestCase {
         super.tearDown()
     }
     
-    func When_HostIsKnown_Then_PageShouldBeOpenedInWebView() {
-        let webViewUrl = URL(string: "https://111.nhs.uk/Home/Find");
+    func test_When_HostIsKnown_Then_PageShouldBeOpenedInWebView() {
+        let webViewUrl = URL(string: "https://111-int2.staging.111.service.nhs.uk/");
         let displayedInWebView = webViewDelegate?.shouldOpenInSafari(url: webViewUrl!)
         
         XCTAssertFalse(displayedInWebView!)
     }
     
-    func When_HostIsUnknown_Then_PageShouldBeOpenedInSafari() {
+    func test_When_HostIsUnknown_Then_PageShouldBeOpenedInSafari() {
         let webViewUrl = URL(string: "https://outside.url.com");
         let displayedInWebView = webViewDelegate?.shouldOpenInSafari(url: webViewUrl!)
         
