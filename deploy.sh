@@ -6,6 +6,7 @@ then
 	exit 1
 fi
 
+cd /repo
 git-crypt unlock ~/.cicd.key
 mkdir -p ~/.kube
 echo $KUBECTL_CONFIG | base64 -d | zcat > ~/.kube/config
