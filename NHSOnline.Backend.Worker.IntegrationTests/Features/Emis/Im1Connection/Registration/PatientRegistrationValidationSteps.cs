@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis.Models;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Nhso.Models.Patient;
+using NHSOnline.Backend.Worker.IntegrationTests.Worker.Models.Patient;
+using NHSOnline.Backend.Worker.Mocking.Emis;
+using NHSOnline.Backend.Worker.Mocking.Models;
 using TechTalk.SpecFlow;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.Registration
@@ -14,27 +13,14 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
         private readonly Dictionary<string, string> _headers;
         private readonly ScenarioContext _context;
 
-        private const string XApiApplicationId = "D66BA979-60D2-49AA-BE82-AEC06356E41F";
-        private const string XApiVersion = "2.1.0.0";
-        private const string XApiEndUserSessionId = "SE333ION989ID";
-
         public PatientRegistrationValidationSteps(ScenarioContext context)
         {
             _context = context;
-
-            _headers = new Dictionary<string, string>
-            {
-                { "X-API-ApplicationId", XApiApplicationId },
-                { "X-API-Version", XApiVersion },
-                { "X-API-EndUserSessionId", XApiEndUserSessionId }
-            };
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with an ODS Code not in the expected format")]
-        public async Task GivenIHaveAnEmisUsersIm1CredentialsWithAnOdsCodeNotInTheExpectedFormat()
+        public void GivenIHaveAnEmisUsersIm1CredentialsWithAnOdsCodeNotInTheExpectedFormat()
         {
-            await MockSuccessfulIm1Connection();
-
             _context.SetIm1ConnectionRequest(new Im1ConnectionRequest
                 {
                     AccountId = "MASTER_YODA",
@@ -44,56 +30,47 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
                     DateOfBirth = "1919-12-24T14:03:15.892"
                 }
             );
-
-            var emisRequestBody = new LinkApplicationRequest
-            {
-                Surname = "Yoda",
-                DateOfBirth = "1919-12-24T14:03:15.892Z",
-                LinkageDetails = new LinkageDetails
-                {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "MASTER000YODA",
-                    NationalPracticeCode = "xxx-wrong-format-xxx"
-                }
-            };
-
-            await CreateApplicationsMapping(400, emisRequestBody);
+            _context.SetHttpExceptionExpected(true);
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with a Surname not in the expected format")]
         public async Task GivenIHaveAnEmisUsersIm1CredentialsWithASurnameNotInTheExpectedFormat()
         {
-            await MockSuccessfulIm1Connection();
+            const string odsCode = "A82010";
+            const string surname = "xxx-wrong-format-xxx";
+            const string dateOfBirth = "1919-12-24T14:03:15.892Z";
+            const string accountId = "MASTER_YODA";
+            const string linkageKey = "MASTER000YODA";
+            const string endUserSessionId = "zVfHuYArbENW4aoAUeQPyS";
 
             _context.SetIm1ConnectionRequest(new Im1ConnectionRequest
                 {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "MASTER000YODA",
-                    OdsCode = "A82010",
-                    Surname = "xxx-wrong-format-xxx",
-                    DateOfBirth = "1919-12-24T14:03:15.892Z"
+                    AccountId = accountId,
+                    LinkageKey = linkageKey,
+                    OdsCode = odsCode,
+                    Surname = surname,
+                    DateOfBirth = dateOfBirth
                 }
             );
 
-            var emisRequestBody = new LinkApplicationRequest
-            {
-                Surname = "xxx-wrong-format-xxx",
-                DateOfBirth = "1919-12-24T14:03:15.892Z",
-                LinkageDetails = new LinkageDetails
-                {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "MASTER000YODA",
-                    NationalPracticeCode = "A82010"
-                }
-            };
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
 
-            await CreateApplicationsMapping(400, emisRequestBody);
+            await PostMapping(MeConfigurator
+                .ForRequest(endUserSessionId, surname, dateOfBirth, accountId, linkageKey, odsCode)
+                .RespondWithBadRequest("The Surname value cannot exceed 100 characters."));
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with an Account ID not in the expected format")]
         public async Task GivenIHaveAnEmisUsersIm1CredentialsWithAnAccountIdNotInTheExpectedFormat()
         {
-            await MockSuccessfulIm1Connection();
+            const string odsCode = "A82010";
+            const string surname = "Yoda";
+            const string dateOfBirth = "1919-12-24T14:03:15.892Z";
+            const string accountId = "xxx-wrong-format-xxx";
+            const string linkageKey = "MASTER000YODA";
+            const string endUserSessionId = "zVfHuYArbENW4aoAUeQPyS";
 
             _context.SetIm1ConnectionRequest(
                 new Im1ConnectionRequest
@@ -106,79 +83,64 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
                 }
             );
 
-            var emisRequestBody = new LinkApplicationRequest
-            {
-                Surname = "Yoda",
-                DateOfBirth = "1919-12-24T14:03:15.892Z",
-                LinkageDetails = new LinkageDetails
-                {
-                    AccountId = "xxx-wrong-format-xxx",
-                    LinkageKey = "MASTER000YODA",
-                    NationalPracticeCode = "A82010"
-                }
-            };
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
 
-            await CreateApplicationsMapping(400, emisRequestBody);
+            await PostMapping(MeConfigurator
+                .ForRequest(endUserSessionId, surname, dateOfBirth, accountId, linkageKey, odsCode)
+                .RespondWithBadRequest("AccountId length outside of valid range. Must be between 10 - 15 (inclusive) characters."));
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with a Date Of Birth not in the expected format")]
-        public async Task GivenIHaveAnEmisUsersIm1CredentialsWithADateOfBirthNotInTheExpectedFormat()
+        public void GivenIHaveAnEmisUsersIm1CredentialsWithADateOfBirthNotInTheExpectedFormat()
         {
-            await MockSuccessfulIm1Connection();
+            const string odsCode = "A82010";
+            const string surname = "Yoda";
+            const string dateOfBirth = "xxx-wrong-format-xxx";
+            const string accountId = "MASTER_YODA";
+            const string linkageKey = "MASTER000YODA";
 
             _context.SetIm1ConnectionRequest(new Im1ConnectionRequest
                 {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "MASTER000YODA",
-                    OdsCode = "A82010",
-                    Surname = "Yoda",
-                    DateOfBirth = "xxx-wrong-format-xxx"
+                    AccountId = accountId,
+                    LinkageKey = linkageKey,
+                    OdsCode = odsCode,
+                    Surname = surname,
+                    DateOfBirth = dateOfBirth
                 }
             );
-
-            var emisRequestBody = new LinkApplicationRequest
-            {
-                Surname = "Yoda",
-                DateOfBirth = "xxx-wrong-format-xxx",
-                LinkageDetails = new LinkageDetails
-                {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "MASTER000YODA",
-                    NationalPracticeCode = "A82010"
-                }
-            };
-
-            await CreateApplicationsMapping(400, emisRequestBody);
+            _context.SetHttpExceptionExpected(true);
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with a Linkage Key not in the expected format")]
         public async Task GivenIHaveAnEmisUsersIm1CredentialsWithALinkageKeyNotInTheExpectedFormat()
         {
-            await MockSuccessfulIm1Connection();
+            const string odsCode = "A82010";
+            const string surname = "Yoda";
+            const string dateOfBirth = "1919-12-24T14:03:15.892Z";
+            const string accountId = "MASTER_YODA";
+            const string linkageKey = "xxx-wrong-format-xxx";
+            const string endUserSessionId = "zVfHuYArbENW4aoAUeQPyS";
 
             _context.SetIm1ConnectionRequest(new Im1ConnectionRequest
                 {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "xxx-wrong-format-xxx",
-                    OdsCode = "A82010",
-                    Surname = "Yoda",
-                    DateOfBirth = "1919-12-24T14:03:15.892Z"
+                    AccountId = accountId,
+                    LinkageKey = linkageKey,
+                    OdsCode = odsCode,
+                    Surname = surname,
+                    DateOfBirth = dateOfBirth
                 }
             );
+            _context.SetHttpExceptionExpected(true);
 
-            var emisRequestBody = new LinkApplicationRequest
-            {
-                Surname = "Yoda",
-                DateOfBirth = "1919-12-24T14:03:15.892Z",
-                LinkageDetails = new LinkageDetails
-                {
-                    AccountId = "MASTER_YODA",
-                    LinkageKey = "xxx-wrong-format-xxx",
-                    NationalPracticeCode = "A82010"
-                }
-            };
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
 
-            await CreateApplicationsMapping(400, emisRequestBody);
+            await PostMapping(MeConfigurator
+                .ForRequest(endUserSessionId, surname, dateOfBirth, accountId, linkageKey, odsCode)
+                .RespondWithBadRequest("LinkageKey length outside of valid range. Must be between 6 - 15 (inclusive) characters."));
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with missing ODS Code")]
@@ -192,6 +154,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
                     DateOfBirth = "1919-12-24T14:03:15.892Z"
                 }
             );
+            _context.SetHttpExceptionExpected(true);
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with missing Surname")]
@@ -205,6 +168,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
                     DateOfBirth = "1919-12-24T14:03:15.892Z"
                 }
             );
+            _context.SetHttpExceptionExpected(true);
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with missing Account ID")]
@@ -218,6 +182,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
                     DateOfBirth = "1919-12-24T14:03:15.892Z"
                 }
             );
+            _context.SetHttpExceptionExpected(true);
         }
 
         [Given(@"I have an EMIS user's IM1 credentials with missing Linkage Key")]
@@ -231,35 +196,13 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
                     DateOfBirth = "1919-12-24T14:03:15.892Z"
                 }
             );
+            _context.SetHttpExceptionExpected(true);
         }
 
-        private async Task MockSuccessfulIm1Connection()
+        private async Task PostMapping(Mapping mapping)
         {
-            const int statusCodeCreated = (int)HttpStatusCode.Created;
-            const int statusCodeOk = (int)HttpStatusCode.OK;
-
-            await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateEndUserSessionMapping(statusCodeCreated, XApiEndUserSessionId, XApiApplicationId, XApiVersion));
-            await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateSessionsMapping(statusCodeCreated, null, "A82010", "session_id", "link_token", AssociationType.Self, XApiEndUserSessionId, XApiApplicationId, XApiVersion));
-            await _context.GetMockingClient().PostMappingAsync(DemographicsConfigurator.CreateDemographicsMapping(statusCodeOk, "link_token", "session_id", XApiEndUserSessionId, new string[0], XApiApplicationId, XApiVersion));
-        }
-
-        private async Task CreateApplicationsMapping(int statusCode, LinkApplicationRequest requestBody)
-        {
-            var responseBody = new LinkApplicationResponse
-            {
-                AccessIdentityGuid = "IYYTYODA876786tT"
-            };
-
-            await _context
-                .GetMockingClient()
-                .PostMappingAsync(
-                    MeConfigurator.CreateApplicationsMapping(
-                        statusCode,
-                        _headers,
-                        requestBody,
-                        responseBody
-                    )
-                );
+            await _context.GetMockingClient()
+                .PostMappingAsync(mapping);
         }
     }
 }

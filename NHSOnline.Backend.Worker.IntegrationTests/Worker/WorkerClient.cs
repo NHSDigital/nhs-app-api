@@ -4,8 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Nhso.Models.Patient;
+using NHSOnline.Backend.Worker.IntegrationTests.Worker.Models.Patient;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
 {
@@ -51,7 +50,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
             return JsonConvert.DeserializeObject<Im1ConnectionResponse>(json, _jsonSerializerSettings);
         }
 
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
             var response = await _client.SendAsync(request);
 

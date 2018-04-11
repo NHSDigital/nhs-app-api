@@ -1,6 +1,6 @@
-﻿using NHSOnline.Backend.Worker.IntegrationTests.Mocking;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Nhso.Models.Patient;
-using NHSOnline.Backend.Worker.IntegrationTests.Worker;
+﻿using NHSOnline.Backend.Worker.IntegrationTests.Worker;
+using NHSOnline.Backend.Worker.IntegrationTests.Worker.Models.Patient;
+using NHSOnline.Backend.Worker.Mocking;
 using TechTalk.SpecFlow;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests
@@ -8,6 +8,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
     public static class ScenarioContextExtensions
     {
         private const string KeyConnectionToken = "ConnectionToken";
+        private const string KeyHttpExceptionExpected = "HttpExceptionExpected";
         private const string KeyHttpException = "HttpException";
         private const string KeyMockingClient = "MockingClient";
         private const string KeyNhsNumber = "NhsNumber";
@@ -25,6 +26,17 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
         {
             context.Set(connectionToken, KeyConnectionToken);
             return context;
+        }
+
+        public static ScenarioContext SetHttpExceptionExpected(this ScenarioContext context, bool httpExceptionExpected)
+        {
+            context.Set(httpExceptionExpected, KeyHttpExceptionExpected);
+            return ScenarioContext.Current;
+        }
+
+        public static bool GetHttpExceptionExpected(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeyHttpExceptionExpected) && context.Get<bool>(KeyHttpExceptionExpected);
         }
 
         public static NhsoHttpException GetHttpException(this ScenarioContext context)

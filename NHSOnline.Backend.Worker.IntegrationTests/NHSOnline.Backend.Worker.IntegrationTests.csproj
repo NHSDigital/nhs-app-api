@@ -51,8 +51,8 @@
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.2.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -80,57 +80,22 @@
     </Compile>
     <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationSteps.cs" />
     <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationValidationSteps.cs" />
+    <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerificationSteps.cs" />
     <Compile Include="Features\Shared\CommonSteps.cs" />
     <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerification1.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PatientVerification.feature</DependentUpon>
     </Compile>
-    <Compile Include="Mocking\Emis\MeConfigurator.cs" />
-    <Compile Include="Mocking\Emis\Models\CreateSessionRequestModel.cs" />
-    <Compile Include="Mocking\Emis\Models\EndUserSessionResponse.cs" />
-    <Compile Include="Mocking\Emis\Models\LinkApplicationResponse.cs" />
-    <Compile Include="Mocking\Emis\Models\LinkageDetails.cs" />
-    <Compile Include="Mocking\Emis\Models\LinkApplicationRequest.cs" />
-    <Compile Include="Mocking\Nhso\Models\Patient\Im1ConnectionRequest.cs" />
-    <Compile Include="TaskExtensions.cs" />
     <Compile Include="Features\Shared\Transforms.cs" />
-    <Compile Include="Mocking\Configuration.cs" />
-    <Compile Include="Mocking\Emis\EmisRequestConfigurator.cs" />
-    <Compile Include="Mocking\Emis\DemographicsConfigurator.cs" />
-    <Compile Include="Mocking\Emis\Models\Address.cs" />
-    <Compile Include="Mocking\Emis\Models\ApplicationLinkLevel.cs" />
-    <Compile Include="Mocking\Emis\Models\AssociationType.cs" />
-    <Compile Include="Mocking\Emis\Models\ContactDetails.cs" />
-    <Compile Include="Mocking\Emis\Models\DemographicsResponse.cs" />
-    <Compile Include="Mocking\Emis\Models\IdentifierType.cs" />
-    <Compile Include="Mocking\Emis\Models\PatientIdentifier.cs" />
-    <Compile Include="Mocking\Emis\Models\SessionsResponse.cs" />
-    <Compile Include="Mocking\Emis\Models\Sex.cs" />
-    <Compile Include="Mocking\Emis\Models\UserPatientLink.cs" />
-    <Compile Include="Mocking\Emis\SessionConfigurator.cs" />
-    <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerificationSteps.cs" />
+    <Compile Include="TaskExtensions.cs" />
     <Compile Include="GlobalHooks.cs" />
-    <Compile Include="Mocking\MockingClient.cs" />
-    <Compile Include="Mocking\Models\Body.cs" />
-    <Compile Include="Mocking\Models\BodyEncoding.cs" />
-    <Compile Include="Mocking\Models\Header.cs" />
-    <Compile Include="Mocking\Models\Mapping.cs" />
-    <Compile Include="Mocking\Models\Matcher.cs" />
-    <Compile Include="Mocking\Models\JsonPathMatcher.cs" />
-    <Compile Include="Mocking\Models\RegexMatcher.cs" />
-    <Compile Include="Mocking\Models\WildcardMatcher.cs" />
-    <Compile Include="Mocking\Models\Param.cs" />
-    <Compile Include="Mocking\Models\Path.cs" />
-    <Compile Include="Mocking\Models\Request.cs" />
-    <Compile Include="Mocking\Models\Response.cs" />
-    <Compile Include="Mocking\Nhso\Models\Patient\Im1ConnectionResponse.cs" />
-    <Compile Include="Mocking\Nhso\Models\Patient\PatientNhsNumber.cs" />
-    <Compile Include="Mocking\Shared\Methods.cs" />
-    <Compile Include="Mocking\ResponseConfigurator.cs" />
-    <Compile Include="Mocking\RequestConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScenarioContextExtensions.cs" />
+    <Compile Include="Worker\Configuration.cs" />
+    <Compile Include="Worker\Models\Patient\Im1ConnectionRequest.cs" />
+    <Compile Include="Worker\Models\Patient\Im1ConnectionResponse.cs" />
+    <Compile Include="Worker\Models\Patient\PatientNhsNumber.cs" />
     <Compile Include="Worker\NhsoHttpException.cs" />
     <Compile Include="Worker\WorkerClient.cs" />
     <Compile Include="Worker\WorkerHeaders.cs" />
@@ -154,7 +119,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\NHSOnline.Backend.Worker.Mocking\NHSOnline.Backend.Worker.Mocking.csproj">
+      <Project>{025b4f82-7023-4216-83d1-3027d5802194}</Project>
+      <Name>NHSOnline.Backend.Worker.Mocking</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

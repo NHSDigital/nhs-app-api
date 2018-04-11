@@ -3,10 +3,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis.Models;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Nhso.Models.Patient;
 using NHSOnline.Backend.Worker.IntegrationTests.Worker;
+using NHSOnline.Backend.Worker.IntegrationTests.Worker.Models.Patient;
+using NHSOnline.Backend.Worker.Mocking.Emis;
+using NHSOnline.Backend.Worker.Mocking.Emis.Models;
+using NHSOnline.Backend.Worker.Mocking.Models;
 using TechTalk.SpecFlow;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.Verification
@@ -17,9 +18,6 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
         public const string DefaultOdsCode = "E87649";
         public const string DefaultConnectionToken = "bce74b97-4296-414a-a4f5-0f1bf5732ba6";
         public const string GetIm1ConnectionResult = "GetIm1ConnectionResult";
-        private const string DefaultSessionId = "session_id";
-        private const string DefaultLinkToken = "link_token";
-        private const string DefaultEndUserSessionId = "bar";
         private const AssociationType DefaultAssociationType = AssociationType.Self;
 
         private readonly ScenarioContext _context;
@@ -32,26 +30,20 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
         public async Task GivenIHaveAnImConnectionTokenThatDoesNotExist()
         {
             const string nonExistingConnectionToken = "0d135b66-a8b0-46b2-b437-cfe75edc773d";
+            const string odsCode = DefaultOdsCode;
+            const string endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D";
 
-            // Setup the mock server to return using the default connection token not the missing one
-            await MockSuccessfulIm1Connection((string) null, DefaultConnectionToken, DefaultOdsCode);
-            await _context
-                .GetMockingClient()
-                .PostMappingAsync(
-                    SessionConfigurator.CreateSessionsMapping(
-                        500,
-                        nonExistingConnectionToken,
-                        DefaultOdsCode,
-                        DefaultSessionId,
-                        DefaultLinkToken,
-                        DefaultAssociationType,
-                        DefaultEndUserSessionId
-                    )
-                );
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
+
+            await PostMapping(SessionConfigurator
+                .ForRequest(nonExistingConnectionToken, odsCode, endUserSessionId)
+                .RespondWithUserNotRegistered());
 
             _context
                 .SetConnectionToken(nonExistingConnectionToken)
-                .SetOdsCode(DefaultOdsCode);
+                .SetOdsCode(odsCode);
         }
 
         [Given(@"I have an IM1 Connection Token that is in an invalid format")]
@@ -100,16 +92,24 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
             const string connectionToken = DefaultConnectionToken;
             const string nhsNumber = "NHS_number";
             const string odsCode = DefaultOdsCode;
+            const string title = "Mr";
+            const string firstName = "Eduardo";
+            const string surname = "Crouch";
+            const string endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D";
+            const string sessionId = "h3pYG9By2tVTqcvPvpw3DL";
+            const string userPatientLinkToken = "5d4p6ZExhi97mmerMrtD5p";
 
-            if (_context.TryGetValue("TimeoutDelay", out TimeSpan delay))
-            {
-                await MockEmisDelay(delay);
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
 
-            }
-            else
-            {
-                await MockSuccessfulIm1Connection(nhsNumber, connectionToken, odsCode);
-            }
+            await PostMapping(SessionConfigurator
+                .ForRequest(connectionToken, odsCode, endUserSessionId)
+                .RespondWithSuccess(sessionId, title, firstName, surname, userPatientLinkToken, odsCode, AssociationType.Self));
+
+            await PostMapping(DemographicsConfigurator
+                .ForRequest(endUserSessionId, sessionId, userPatientLinkToken)
+                .RespondWithSuccess(title, firstName, surname, new[] { PatientIdentifier.NHSNumber(nhsNumber), }));
 
             _context
                 .SetNhsNumber(nhsNumber)
@@ -120,11 +120,27 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
         [Given(@"I have valid credentials for a patient with multiple NHS Numbers")]
         public async Task GivenIHaveValidCredentialsForAPatientWithMultipleNhsNumbers()
         {
-            const string connectionToken = DefaultConnectionToken;
+            const string connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4";
             const string odsCode = DefaultOdsCode;
+            const string title = "Miss";
+            const string firstName = "Alexia";
+            const string surname = "Scott";
+            const string endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7";
+            const string sessionId = "xkWiivK1WBAkxIN9CDrGyy";
+            const string userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl";
             var nhsNumbers = new[] { "NHS_number1", "NHS_number2" };
 
-            await MockSuccessfulIm1Connection(nhsNumbers, connectionToken, odsCode);
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
+
+            await PostMapping(SessionConfigurator
+                .ForRequest(connectionToken, odsCode, endUserSessionId)
+                .RespondWithSuccess(sessionId, title, firstName, surname, userPatientLinkToken, odsCode, AssociationType.Self));
+
+            await PostMapping(DemographicsConfigurator
+                .ForRequest(endUserSessionId, sessionId, userPatientLinkToken)
+                .RespondWithSuccess(title, firstName, surname, nhsNumbers.Select(PatientIdentifier.NHSNumber)));
 
             _context
                 .SetNhsNumbers(nhsNumbers)
@@ -135,11 +151,26 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
         [Given(@"I have valid credentials for a patient with no NHS Number")]
         public async Task GivenIHaveValidCredentialsForAPatientWithNoNhsNumber()
         {
-            const string connectionToken = DefaultConnectionToken;
+            const string connectionToken = "e69ddbd4-2d89-43b7-a252-06dba3558f9f";
             const string odsCode = DefaultOdsCode;
-            const string nhsNumber = null;
+            const string title = "Mr";
+            const string firstName = "Rajan";
+            const string surname = "Liu";
+            const string endUserSessionId = "igOhJWsZ6GOBjaZU5PdR37";
+            const string sessionId = "ALtNiTSBVk7VwCe1s4L1mz";
+            const string userPatientLinkToken = "vOXLnnw7QLQoghDyqTd1Sa";
 
-            await MockSuccessfulIm1Connection(nhsNumber, connectionToken, odsCode);
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithSuccess(endUserSessionId));
+
+            await PostMapping(SessionConfigurator
+                .ForRequest(connectionToken, odsCode, endUserSessionId)
+                .RespondWithSuccess(sessionId, title, firstName, surname, userPatientLinkToken, odsCode, AssociationType.Self));
+
+            await PostMapping(DemographicsConfigurator
+                .ForRequest(endUserSessionId, sessionId, userPatientLinkToken)
+                .RespondWithSuccess(title, firstName, surname, Enumerable.Empty<PatientIdentifier>()));
 
             _context
                 .SetConnectionToken(connectionToken)
@@ -201,28 +232,34 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.
             result.NhsNumbers.Should().BeEmpty();
         }
 
-        private async Task MockEmisDelay(TimeSpan delay)
-        {
-            await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateEndUserSessionMappingWithTimout(delay));
-        }
+        //private async Task MockEmisDelay(TimeSpan delay)
+        //{
+        //    await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateEndUserSessionMappingWithTimout(delay));
+        //}
 
-        private async Task MockSuccessfulIm1Connection(string nhsNumber, string connectionToken, string odsCode)
-        {
-            var nhsNumbers = nhsNumber == null ? new string[0] : new[] { nhsNumber };
-            await MockSuccessfulIm1Connection(nhsNumbers, connectionToken, odsCode);
-        }
+        //private async Task MockSuccessfulIm1Connection(string nhsNumber, string connectionToken, string odsCode)
+        //{
+        //    var nhsNumbers = nhsNumber == null ? new string[0] : new[] { nhsNumber };
+        //    await MockSuccessfulIm1Connection(nhsNumbers, connectionToken, odsCode);
+        //}
 
-        private async Task MockSuccessfulIm1Connection(string[] nhsNumbers, string connectionToken, string odsCode)
-        {
-            const int statusCodeCreated = (int)HttpStatusCode.Created;
-            const int statusCodeOk = (int)HttpStatusCode.OK;
-            const string endUserSessionId = DefaultEndUserSessionId;
-            const string linkToken = DefaultLinkToken;
-            const string sessionId = DefaultSessionId;
+        //private async Task MockSuccessfulIm1Connection(string[] nhsNumbers, string connectionToken, string odsCode)
+        //{
+        //    const int statusCodeCreated = (int)HttpStatusCode.Created;
+        //    const int statusCodeOk = (int)HttpStatusCode.OK;
+        //    const string endUserSessionId = DefaultEndUserSessionId;
+        //    const string linkToken = DefaultLinkToken;
+        //    const string sessionId = DefaultSessionId;
 
-            await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateEndUserSessionMapping(statusCodeCreated, endUserSessionId));
-            await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateSessionsMapping(statusCodeCreated, connectionToken, odsCode, sessionId, linkToken, DefaultAssociationType, endUserSessionId));
-            await _context.GetMockingClient().PostMappingAsync(DemographicsConfigurator.CreateDemographicsMapping(statusCodeOk, linkToken, sessionId, endUserSessionId, nhsNumbers));
+        //    await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateEndUserSessionMapping(statusCodeCreated, endUserSessionId));
+        //    await _context.GetMockingClient().PostMappingAsync(SessionConfigurator.CreateSessionsMapping(statusCodeCreated, connectionToken, odsCode, sessionId, linkToken, DefaultAssociationType, endUserSessionId));
+        //    await _context.GetMockingClient().PostMappingAsync(DemographicsConfigurator.CreateDemographicsMapping(statusCodeOk, linkToken, sessionId, endUserSessionId, nhsNumbers));
+        //}
+
+        private async Task PostMapping(Mapping mapping)
+        {
+            await _context.GetMockingClient()
+                .PostMappingAsync(mapping);
         }
     }
 }

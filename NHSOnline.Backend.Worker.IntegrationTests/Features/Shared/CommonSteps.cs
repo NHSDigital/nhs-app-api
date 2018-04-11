@@ -1,9 +1,8 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.IntegrationTests.Features.Emis.Im1Connection.Verification;
-using NHSOnline.Backend.Worker.IntegrationTests.Mocking.Emis;
+using NHSOnline.Backend.Worker.Mocking.Emis;
+using NHSOnline.Backend.Worker.Mocking.Models;
 using TechTalk.SpecFlow;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Shared
@@ -21,13 +20,16 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Shared
         [Given(@"EMIS is unavailable")]
         public async Task GivenEmisIsUnavailable()
         {
-            _context
-                .SetConnectionToken(PatientVerificationSteps.DefaultConnectionToken)
-                .SetOdsCode(PatientVerificationSteps.DefaultOdsCode);
+            const string connectionToken = "f6ca8e0c-dd67-4863-ba9e-3d34bfe930d0";
+            const string odsCode = "A29928";
 
-            await _context
-                .GetMockingClient()
-                .PostMappingAsync(SessionConfigurator.CreateEndUserSessionMappingWithError((int)HttpStatusCode.ServiceUnavailable, "service unavailable"));
+            _context
+                .SetConnectionToken(connectionToken)
+                .SetOdsCode(odsCode);
+
+            await PostMapping(EndUserSessionConfigurator
+                .ForRequest()
+                .RespondWithServiceUnavailable());
         }
 
         [Then(@"I receive (?:a|an) ""(.*)"" error")]
@@ -36,6 +38,12 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Features.Shared
             var exception = _context.GetHttpException();
             exception.Should().NotBeNull("An exception was expected but was not returned within the expected time limit.");
             exception.StatusCode.Should().Be(expectedStatusCode);
+        }
+
+        private async Task PostMapping(Mapping mapping)
+        {
+            await _context.GetMockingClient()
+                .PostMappingAsync(mapping);
         }
     }
 }

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NHSOnline.Backend.Worker.Stubs": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "WIREMOCK_AUTHORITY": "localhost:8800"
+      }
+    }
+  }
+}
