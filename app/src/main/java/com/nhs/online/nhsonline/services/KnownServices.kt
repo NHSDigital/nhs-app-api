@@ -9,7 +9,7 @@ import java.net.URL
 class KnownServices(private val context: Context) {
     private val serviceList = arrayListOf<Service>()
 
-    enum class ServiceName { NHS111, NHS_ONLINE, ORGAN_DONATION }
+    enum class ServiceName { NHS111, NHS_ONLINE, ORGAN_DONATION, UNKNOWN }
 
     init {
         buildKnownServices()
@@ -19,7 +19,7 @@ class KnownServices(private val context: Context) {
         serviceList.add(Service(context.resources.getString(
             R.string.baseURL),
             true,
-            queryString = context.getString(R.string.nhsOnlineRequiredQueries),
+            queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
             unavailabilityErrorMessage = context.resources.getString(R.string.connection_error)))
         serviceList.add(Service(context.resources.getString(
             R.string.organDonation),
@@ -34,7 +34,7 @@ class KnownServices(private val context: Context) {
     }
 
     fun findMatchingKnownService(urlString: String): Service? {
-        val url = URL(urlString)
+        val url = try{ URL(urlString.toLowerCase())} catch (e: java.net.MalformedURLException){return null}
         serviceList.forEach { knownService ->
             if (knownService.url.host == url.host) {
                 return knownService
@@ -54,12 +54,12 @@ class KnownServices(private val context: Context) {
         }
     }
 
-    fun isTheService(service: Service, name: ServiceName): Boolean {
-        return when (name) {
-            ServiceName.NHS111 -> service.url.host == getHostOfUrl(context.resources.getString(R.string.nhs111))
-            ServiceName.ORGAN_DONATION -> service.url.host == getHostOfUrl(context.resources.getString(R.string.organDonation))
-            ServiceName.NHS_ONLINE-> service.url.host == getHostOfUrl(context.resources.getString(R.string.baseURL))
-            else -> false
+    fun isTheService(service: Service?): ServiceName {
+        return when (service?.url?.host) {
+            getHostOfUrl(context.resources.getString(R.string.nhs111)) -> ServiceName.NHS111
+            getHostOfUrl(context.resources.getString(R.string.organDonation)) -> ServiceName.ORGAN_DONATION
+            getHostOfUrl(context.resources.getString(R.string.baseURL)) -> ServiceName.NHS_ONLINE
+            else -> ServiceName.UNKNOWN
         }
     }
 
@@ -86,33 +86,42 @@ class KnownServices(private val context: Context) {
             if (serviceQueryMap.isEmpty()) {
                 return url
             }
-
             val uri = Uri.parse(url)
-            val uriBuilder = uri.buildUpon()
-            serviceQueryMap.keys.forEach {
-                if (uri.getQueryParameter(it) == null) {
-                    uriBuilder.appendQueryParameter(it, serviceQueryMap[it])
+            if(matchesThisServiceHost(uri)) {
+                val uriBuilder = uri.buildUpon()
+                serviceQueryMap.keys.forEach {
+                    if (uri.getQueryParameter(it) == null) {
+                        uriBuilder.appendQueryParameter(it, serviceQueryMap[it])
+                    }
                 }
+                return uriBuilder.build().toString()
             }
 
-            return uriBuilder.build().toString()
+            return url
         }
 
         fun hasMissingQueryString(urlString: String): Boolean {
             if (urlString.isEmpty()) {
                 return false
             }
-            val uri = Uri.parse(urlString)
-            serviceQueryMap.keys.forEach {
-                if (uri.getQueryParameter(it) == null) {
-                    return true
+            val uri = Uri.parse(urlString.toLowerCase())
+            if(matchesThisServiceHost(uri)) {
+                serviceQueryMap.keys.forEach {
+                    if (uri.getQueryParameter(it) == null) {
+                        return true
+                    }
                 }
             }
             return false
         }
 
+        private fun matchesThisServiceHost(uri: Uri) : Boolean
+        {
+            return url.host.equals(uri.host,ignoreCase = true)
+        }
+
         private fun retrieveQueryStringKeyValuesInMap(queryString: String?) {
-            val queryStringWithoutQuestionMark = queryString?.replace("?", "")
+            val queryStringWithoutQuestionMark = queryString?.toLowerCase()?.replace("?", "")
             val queryStringKeyValues = queryStringWithoutQuestionMark?.split("&")
             queryStringKeyValues?.forEach {
                 val queryStringKeyValue = it.split("=")
