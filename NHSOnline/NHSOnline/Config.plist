@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>HomeUrl</key>
-    <string>http://localhost:3000/</string>
+	<string>https://www.develop.bitraft.io/</string>
 	<key>Nhs111Url</key>
 	<string>http://111-int2.staging.111.service.nhs.uk/</string>
 	<key>OrganDonationUrl</key>

@@ -3,11 +3,13 @@ import Foundation
 class KnownService {
     let url:URLComponents
     let shouldHandleUnavailability:Bool
+    let shouldAllowNativeInteraction:Bool
     private var urlQueryItems = Array<URLQueryItem>()
     
-    init(urlString:String, shouldHandleUnavailability:Bool = false, urlQueryString:String? = nil) {
+    init(urlString:String, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
         self.url = URLComponents(string: urlString)!
         self.shouldHandleUnavailability = shouldHandleUnavailability
+        self.shouldAllowNativeInteraction = shouldAllowNativeInteraction
         self.retrieveQueryKeyValueFrom(queryString: urlQueryString)
     }
     
