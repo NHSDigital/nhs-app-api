@@ -2,8 +2,8 @@ swagger: '2.0'
 
 info:
   version: 0.0.2
-  title: NHS Online API
-  description: This is the API for NHS Online.
+  title: NHS Online API - Citizen ID.
+  description: This is the API for NHS Online endpoints that are intended for consumption by Citizen ID.
 
 schemes:
   - https
@@ -42,7 +42,7 @@ paths:
         404:
           description: Not found. No patient could be found matching the supplied headers.
         500:
-          description: An unexpected error occured processing the request.
+          description: An unexpected error occurred processing the request.
         502:
           description: The GP system is currently unavailable.
 
@@ -74,7 +74,7 @@ paths:
         409:
           description: Conflict. Account has already been associated with the application in the GP system.
         500:
-          description: An unexpected error occured processing the request.
+          description: An unexpected error occurred processing the request.
         502:
           description: The GP system is currently unavailable.
 

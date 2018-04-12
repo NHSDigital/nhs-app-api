@@ -1,0 +1,13 @@
+swagger: '2.0'
+
+info:
+  version: 0.0.3
+  title: NHS Online API
+  description: This is the API for NHS online.
+
+schemes:
+  - https
+
+paths:
+  /v1/session:
+    $ref: 'nhsonline.usersession.yaml#/session'

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Worker", "NHSOnline.Backend.Worker\NHSOnline.Backend.Worker.csproj", "{12C2445B-9D16-4B95-B6B8-4CE591B8B06B}"
 EndProject
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Worker.Un
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{24778223-5844-4C8C-97D5-DD64B27839E8}"
 	ProjectSection(SolutionItems) = preProject
-		contracts\index.yaml = contracts\index.yaml
+		contracts\citizenid.yaml = contracts\citizenid.yaml
+		contracts\nhsonline.usersession.yaml = contracts\nhsonline.usersession.yaml
+		contracts\nhsonline.yaml = contracts\nhsonline.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Worker.IntegrationTests", "NHSOnline.Backend.Worker.IntegrationTests\NHSOnline.Backend.Worker.IntegrationTests.csproj", "{5865A6BA-83D5-4CB0-9A5F-D168B7C40106}"

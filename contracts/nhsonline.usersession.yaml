@@ -1,0 +1,53 @@
+swagger: "2.0"
+  
+info:
+  version: 0.0.3
+  title: NHS Online Sub-API - User Sessions.
+  description: NHS Online Sub-API - endpoints pertaining to User Sessions.
+
+paths:
+  /v1/session:
+    post:
+      tags:
+        - session
+      summary: Creates a user session for an authenticated user.
+      description: Given an OAuth authorisation code and PKCE code verifier, creates and returns a user session.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: userSession
+          required: true
+          description: OAuth details for the session to be created.
+          schema:
+            $ref: '#/definitions/UserSessionRequest'
+      responses:
+        201:
+          description: Successful operation. User session created and returned.
+          schema:
+            $ref: "#/definitions/UserSessionResponse"
+        400:
+          description: Bad request. Supplied OAuth details are incomplete or invalid.
+        500:
+          description: An unexpected error occurred during the processing of the request.
+        502:
+          description: The GP system is currently unavailable.
+definitions:
+  UserSessionRequest:
+    type: object
+    required: 
+     - AuthCode
+     - CodeVerifier
+    properties:
+      AuthCode:
+        type: string
+        description: OAuth authorization code.
+      CodeVerifier:
+        type: string
+        description: PKCE code verifier.
+  UserSessionResponse:
+    type: object
+    properties:
+      SessionGuid: 
+        type: string
+        description: User session GUID.
