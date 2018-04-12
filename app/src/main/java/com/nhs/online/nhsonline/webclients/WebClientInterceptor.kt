@@ -36,17 +36,11 @@ class WebClientInterceptor(
         }
 
         val matchingKnownService = knownServices.findMatchingKnownService(url)
+        when(knownServices.isTheService(matchingKnownService)) {
+            KnownServices.ServiceName.NHS111 -> uiInteractor.selectSymptomsMenuActive()
+            KnownServices.ServiceName.ORGAN_DONATION -> uiInteractor.selectMoreMenuActive()
+        }
         if (matchingKnownService != null) {
-            if (knownServices.isTheService(matchingKnownService,
-                    KnownServices.ServiceName.NHS111)) {
-                uiInteractor.selectSymptomsMenuActive()
-            }
-
-            if (knownServices.isTheService(matchingKnownService,
-                            KnownServices.ServiceName.ORGAN_DONATION)) {
-                uiInteractor.selectMoreMenuActive()
-            }
-
             if (matchingKnownService.hasMissingQueryString(url)) {
                 val urlWithMissingQueryStrings = matchingKnownService.addMissingQueryStrings(url)
                 view.loadUrl(urlWithMissingQueryStrings)
