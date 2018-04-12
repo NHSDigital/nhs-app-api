@@ -12,6 +12,8 @@
 	<string>?source=mobile</string>
 	<key>MoreUrlPath</key>
 	<string>/more</string>
+	<key>AppointmentsUrlPath</key>
+	<string>/appointments</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
 </dict>
