@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import More from '@/components/More';
+import Appointments from '@/components/Appointments';
 import AuthReturn from '@/components/AuthReturn';
 import { requireAuth, isLoggedIn } from '@/services/authorization-service';
 import HomeLoggedOut from '@/components/HomeLoggedOut';
@@ -24,6 +25,11 @@ export default new Router({
           HomeLoggedIn,
         },
       },
+    }, {
+      path: '/appointments',
+      name: 'appointments',
+      component: Appointments,
+      beforeEnter: requireAuth,
     }, {
       path: '/more',
       name: 'more',

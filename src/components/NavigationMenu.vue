@@ -54,6 +54,7 @@ export default {
     onAppointmentsMenuClicked(event) {
       const appointmentsMenu = event.currentTarget;
       this.handleMenuSelection(appointmentsMenu);
+      this.$router.push('appointments');
     },
 
     onPrescriptionsMenuClicked(event) {
