@@ -120,10 +120,4 @@ class KnownServicesServiceTest {
 
         Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=mobile",result)
     }
-
-    @Test
-    fun isTheService_returnsFalse_forNotAValidService()
-    {
-
-    }
 }

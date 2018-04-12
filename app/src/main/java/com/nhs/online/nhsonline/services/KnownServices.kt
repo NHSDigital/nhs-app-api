@@ -115,8 +115,7 @@ class KnownServices(private val context: Context) {
             return false
         }
 
-        private fun matchesThisServiceHost(uri: Uri) : Boolean
-        {
+        private fun matchesThisServiceHost(uri: Uri) : Boolean {
             return url.host.equals(uri.host,ignoreCase = true)
         }
 

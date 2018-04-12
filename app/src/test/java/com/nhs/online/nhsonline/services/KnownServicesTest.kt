@@ -15,8 +15,7 @@ import java.net.URL
 @RunWith(RobolectricTestRunner::class)
 class KnownServicesTest {
 
-    fun mockContext():Context
-    {
+    fun mockContext():Context {
         var mockresource: Resources = mock() {on {getString(R.string.baseURL)} doReturn "http://10.0.2.2:3000"
             on {getString(R.string.nhs111)} doReturn "https://111.nhs.uk"
             on {getString(R.string.organDonation)} doReturn "https://www.organdonation.nhs.uk/"
@@ -31,8 +30,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findMatchingKnownService_returnsNull_forNotAUrl()
-    {
+    fun findMatchingKnownService_returnsNull_forNotAUrl() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -42,8 +40,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findMatchingKnownService_returnsService_forValidServiceUrl()
-    {
+    fun findMatchingKnownService_returnsService_forValidServiceUrl() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -53,8 +50,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findMatchingKnownService_returnsService_forValidServiceUrlDifferentCasing()
-    {
+    fun findMatchingKnownService_returnsService_forValidServiceUrlDifferentCasing() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -64,8 +60,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findMatchingKnownService_returnsService_forValidServiceUrlWithQueryString()
-    {
+    fun findMatchingKnownService_returnsService_forValidServiceUrlWithQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -75,8 +70,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceNoQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceNoQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -86,8 +80,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceNoQueryStringDifferentCasing()
-    {
+    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceNoQueryStringDifferentCasing() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -97,8 +90,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceWithQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceWithQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -108,8 +100,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceNoQueryStringWithInputQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceNoQueryStringWithInputQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -119,8 +110,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceWithQueryStringWithInputQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceWithQueryStringWithInputQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -130,8 +120,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceWithQueryStringWithAdditionalInputQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsValidUrl_forValidServiceWithQueryStringWithAdditionalInputQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -141,8 +130,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsOriginalUrl_forInvalidServiceWithInputQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsOriginalUrl_forInvalidServiceWithInputQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -152,8 +140,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun findKnownServiceAddMissingQuery_returnsOriginalUrl_forInvalidServiceNoQueryString()
-    {
+    fun findKnownServiceAddMissingQuery_returnsOriginalUrl_forInvalidServiceNoQueryString() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -163,8 +150,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun isTheService_returnsUnknown_forNullService()
-    {
+    fun isTheService_returnsUnknown_forNullService() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
@@ -174,8 +160,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun isTheService_returnsServiceName_forKnownService()
-    {
+    fun isTheService_returnsServiceName_forKnownService() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
         val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
@@ -186,8 +171,7 @@ class KnownServicesTest {
     }
 
     @Test
-    fun isTheService_returnsUnknown_forUnKnownService()
-    {
+    fun isTheService_returnsUnknown_forUnKnownService() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
         val testService = KnownServices.Service("http://www.google.com")
