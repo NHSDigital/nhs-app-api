@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv">
     <main class="content">
-    <a class="button" :href="organDonationUrl" id="btn_organdonation">
+    <a class="button" :href="organDonationUrl" target="_blank" id="btn_organdonation">
       {{ $t('more.organDonationButtonText') }}
     </a>
     </main>
