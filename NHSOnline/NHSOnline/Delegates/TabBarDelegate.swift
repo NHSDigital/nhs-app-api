@@ -21,15 +21,18 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         switch selectedItem {
         case .Symptoms:
             selectPage(pageUrl: config().Nhs111Url)
+            break
         case .Appointments:
+            let appointmentsUrl = appendPathToBaseUrl(urlPathToAppend: config().AppointmentsUrlPath)
+            selectPage(pageUrl: appointmentsUrl)
             break
         case .Prescription:
             break
         case .MyRecord:
             break
         case .More:
-            let moreUrl = NSURL(fileURLWithPath: config().HomeUrl).appendingPathComponent(config().MoreUrlPath)?.absoluteString
-            viewController.webViewController?.loadUrl(url: moreUrl!)
+            let moreUrl = appendPathToBaseUrl(urlPathToAppend: config().MoreUrlPath)
+            selectPage(pageUrl: moreUrl)
             break
         }
     }
@@ -37,5 +40,10 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     private func selectPage(pageUrl: String) {
         viewController.pageUrl = pageUrl
         viewController.webViewController?.loadUrl(url: pageUrl)
+    }
+    
+    private func appendPathToBaseUrl(urlPathToAppend: String) -> String {
+        let url = NSURL(fileURLWithPath: config().HomeUrl).appendingPathComponent(urlPathToAppend)?.absoluteString
+        return url!;
     }
 }
