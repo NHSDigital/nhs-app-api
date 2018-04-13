@@ -10,4 +10,4 @@ schemes:
 
 paths:
   /v1/session:
-    $ref: 'nhsonline.usersession.yaml#/session'
+    $ref: './paths/nhsonline.usersession.yaml#/session'
