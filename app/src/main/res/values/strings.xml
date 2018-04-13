@@ -10,5 +10,7 @@
     <string name="organ_donation_connection_error">Organ donation unavailable</string>
     <string name="connection_error">Service unavailable</string>
 
-    <string name="retryButtonText">Reload page</string>
+    <string name="retryButtonText">Try again</string>
+    <string name="errorIconDesc">warning icon</string>
+    <string name="tryLaterText">Please try again later.</string>
 </resources>

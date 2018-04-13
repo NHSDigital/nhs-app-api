@@ -78,27 +78,47 @@
             android:id="@+id/webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="0dp" />
+            android:layout_margin="0dp"
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/errorViewLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:background="@color/background"
             android:orientation="vertical"
+            android:padding="@dimen/_12sdp"
             android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:background="@color/error"
+                android:contentDescription="@string/errorIconDesc"
+                android:src="@mipmap/ic_error" />
 
             <TextView
                 android:id="@+id/errorTextView"
+                style="@style/default_warning_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:minHeight="@dimen/_40sdp" />
+
+            <TextView
+                android:id="@+id/tryAgainTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:text="@string/tryLaterText"
                 android:textSize="@dimen/errorTextSize" />
 
             <Button
                 android:id="@+id/retryButton"
-                android:layout_width="wrap_content"
+                style="@style/blue_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="@dimen/_25sdp"
                 android:text="@string/retryButtonText"
                 android:textAllCaps="false" />
