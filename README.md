@@ -37,24 +37,6 @@ Stop:
 # run unit tests
 npm run test-unit
 
-# run e2e (browser) tests including taking down and bringing up the docker containers.
-npm run test-e2e
-
-# e2e in headless mode
-npm run test-e2e -- --headless
-
-# e2e with a different base URL
-npm run tests-e2e -- --base_url http://alternative.base.url/
-
-# run browser tests but do not attempt to bring up or take down docker (assume it to be available).
-npm run test-browser
-
-# browser in headless mode
-npm run test-browser -- --headless
-
-# browser with a different base URL
-npm run test-browser -- --base_url http://alternative.base.url/
-
 # run all tests
 npm test
 ```

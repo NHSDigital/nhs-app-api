@@ -1,4 +1,3 @@
 /dist/
 /node_modules/
 /test/unit/coverage/
-/test/e2e/runner.js
