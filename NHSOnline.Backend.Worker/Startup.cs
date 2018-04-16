@@ -32,11 +32,15 @@ namespace NHSOnline.Backend.Worker
         {
             services
                 .AddMvc(
-                    options => { options.Filters.Add(typeof(ModelStateValidationFilter)); }
-                    )
+                    options =>
+                    {
+                        options.Filters.Add(typeof(ModelStateValidationFilter));
+                        options.Filters.Add(typeof(AccessControlAllowOriginFilter));
+                    }
+                )
                 .AddJsonOptions(
                     options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()
-                    );
+                );
 
             services.AddSingleton<ISystemProviderFactory, SystemProviderFactory>();
             services.AddSingleton<IEmisClient, EmisClient>();
