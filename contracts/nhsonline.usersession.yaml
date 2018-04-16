@@ -23,13 +23,13 @@ paths:
             $ref: '#/definitions/UserSessionRequest'
       responses:
         201:
-          description: Successful operation. User session created and returned.
+          description: Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-ID`. This cookie should be included in subsequent requests.
           schema:
             $ref: "#/definitions/UserSessionResponse"
         400:
           description: Bad request. Supplied OAuth details are incomplete or invalid
-		    403:
-		      description: Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully autheticate with the GP system.
+        403:
+          description: Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system.
         500:
           description: An unexpected error occurred during the processing of the request.
         502:
@@ -50,6 +50,9 @@ definitions:
   UserSessionResponse:
     type: object
     properties:
-      SessionGuid: 
+      GivenName: 
         type: string
-        description: User session GUID.
+        description: User's given name
+      FamilyName: 
+        type: string
+        description: User's family name.

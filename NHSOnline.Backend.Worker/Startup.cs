@@ -9,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
+using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.Session;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker
@@ -46,6 +48,8 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddSingleton<ISessionCacheService, SessionCacheService>();
+            services.AddSingleton<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<EmisSystemProvider>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(

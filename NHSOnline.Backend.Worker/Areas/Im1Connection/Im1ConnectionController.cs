@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Support;
 
-namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
+namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 {
     [Route("patient/im1connection")]
     public class Im1ConnectionController : Controller
@@ -59,7 +56,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
             }
 
             var im1ConnectionService = systemProvider.GetIm1ConnectionService();
-            var verifyResult = await im1ConnectionService.VerifyAsync(connectionToken, odsCode);
+            var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
 
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
         }
@@ -75,14 +72,14 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers
 
             var systemProvider = systemProviderOption.Value;
             var im1ConnectionService = systemProvider.GetIm1ConnectionService();
-            var registerResult = await im1ConnectionService.RegisterAsync(model);
+            var registerResult = await im1ConnectionService.Register(model);
 
             return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
         }
 
         private async Task<Option<ISystemProvider>> GetSystemProvider(string odsCode)
         {
-            var supplier = await _odsCodeLookup.LookupSupplierAsync(odsCode);
+            var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
             if (!supplier.HasValue)
             {
                 return Option.None<ISystemProvider>();

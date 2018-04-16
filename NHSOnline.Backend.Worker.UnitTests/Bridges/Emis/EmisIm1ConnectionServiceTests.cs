@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
 
@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
 
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
 
@@ -152,7 +152,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
                 patientIdentifiers: patientIdentifiers);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
 
             var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
                 patientIdentifiers: patientIdentifiers);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
             var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
 
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.NotFound>();
         }
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.NotFound>();
         }
@@ -216,7 +216,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
 
-            var result = await systemUnderTest.VerifyAsync(DefaultConnectionToken, DefaultOdsCode);
+            var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
         }
@@ -232,7 +232,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             // Act
-            var result = await _systemUnderTest.RegisterAsync(request);
+            var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
@@ -251,7 +251,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.Conflict)));
 
             // Act
-            var result = await _systemUnderTest.RegisterAsync(request);
+            var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
@@ -274,7 +274,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
                         .InternalServerError) {ErrorResponse = errorResponse}));
 
             // Act
-            var result = await _systemUnderTest.RegisterAsync(request);
+            var result = await _systemUnderTest.Register(request);
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();

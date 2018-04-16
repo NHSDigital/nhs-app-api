@@ -5,7 +5,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Im1Connection.Controllers;
+using NHSOnline.Backend.Worker.Areas.Im1Connection;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Ods;
@@ -13,7 +13,7 @@ using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Support;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
+namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 {
     [TestClass]
     public class Im1ConnectionControllerTests
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode, new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             var systemProviderMock = MockSystemProvider(im1ConnectionService);
             var systemProviderFactoryMock = MockSystemProviderFactory(supplier, systemProviderMock);
-            im1ConnectionService.Setup(x => x.VerifyAsync(DefaultConnectionToken, odsCode))
+            im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
                 .ReturnsAsync(new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             _im1ConnectionController =
                 CreateIm1ConnectionController(systemProviderFactoryMock: systemProviderFactoryMock);
@@ -143,7 +143,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
         public async Task Get_UnknownOdsCode_ReturnsNotFound()
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplierAsync(DefaultOdsCode))
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
                 .Returns(Task.FromResult(Option.None<SupplierEnum>()));
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
@@ -157,7 +157,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
         public async Task Get_UnknownOdsCodeFormat_ReturnsBadRequest()
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplierAsync(DefaultOdsCode))
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
                 .Returns(Task.FromResult(Option.Some(SupplierEnum.Emis)));
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplierAsync(DefaultOdsCode))
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(request.OdsCode))
                 .Returns(Task.FromResult(Option.None<SupplierEnum>()));
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
@@ -196,7 +196,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             SupplierEnum supplier = DefaultSupplier)
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplierAsync(odsCode)).Returns(Task.FromResult(Option.Some(supplier)));
+            mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(supplier)));
             return mockOdsCodeLookup;
         }
 
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Controllers
             Im1ConnectionVerifyResult expectedResponse = null)
         {
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();
-            mockIm1ConnectionService.Setup(x => x.VerifyAsync(patientIdentifier, odsCode))
+            mockIm1ConnectionService.Setup(x => x.Verify(patientIdentifier, odsCode))
                 .ReturnsAsync(expectedResponse);
 
             return mockIm1ConnectionService;

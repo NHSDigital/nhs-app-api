@@ -1,6 +1,6 @@
 ﻿namespace NHSOnline.Backend.Worker.Router.Im1Connection
 {
-    public interface IIm1ConnectionVerifyResultVisitor<T>
+    public interface IIm1ConnectionVerifyResultVisitor<out T>
     {
         T Visit(Im1ConnectionVerifyResult.SuccessfullyVerified result);
         T Visit(Im1ConnectionVerifyResult.InsufficientPermissions result);

@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             _emisClient = emisClient;
         }
 
-        public async Task<Im1ConnectionVerifyResult> VerifyAsync(string connectionToken, string odsCode)
+        public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             }
         }
 
-        public async Task<Im1ConnectionRegisterResult> RegisterAsync(PatientIm1ConnectionRequest request)
+        public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
         {
             try
             {

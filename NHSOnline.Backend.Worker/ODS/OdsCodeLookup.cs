@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Support;
 using StackExchange.Redis;
 
@@ -16,7 +15,7 @@ namespace NHSOnline.Backend.Worker.Ods
                 connectionMultiplexerFactory ?? throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
         }
 
-        public async Task<Option<SupplierEnum>> LookupSupplierAsync(string odsCode)
+        public async Task<Option<SupplierEnum>> LookupSupplier(string odsCode)
         {
             if (string.IsNullOrWhiteSpace(odsCode))
             {
