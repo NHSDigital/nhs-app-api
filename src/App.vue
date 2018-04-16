@@ -10,7 +10,6 @@
 
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
-import { isLoggedIn } from '@/services/authorization-service';
 
 export default {
   name: 'App',
@@ -28,7 +27,7 @@ export default {
 
   computed: {
     showMenu() {
-      return !this.isNativeApp && isLoggedIn();
+      return !this.isNativeApp && this.$store.state.auth.loggedIn;
     },
   },
 
