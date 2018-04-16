@@ -94,6 +94,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         when (menuBarItem.id) {
             R.id.symptoms -> onSymptomMenuSelected()
             R.id.more -> onMoreMenuSelected()
+            R.id.appointments -> onAppointmentsMenuSelected()
             else -> loadWelcomePage()
         }
     }
@@ -101,6 +102,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
 
     private fun onMoreMenuSelected() = loadMorePage()
+
+    private fun onAppointmentsMenuSelected() = loadAppointmentsPage()
 
     private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
 
@@ -119,6 +122,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 .build()
         val moreURL = builtUri.toString()
         loadPage(moreURL)
+    }
+
+    private fun loadAppointmentsPage() {
+        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
+                .buildUpon()
+                .appendEncodedPath(resources.getString(R.string.appointmentsPath))
+                .build()
+        val appointmentsURL = builtUri.toString()
+        loadPage(appointmentsURL)
     }
 
     override fun showProgressDialog() {
