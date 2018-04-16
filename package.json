@@ -10,7 +10,7 @@
     "build": "npm run swagger && node build/build.js",
     "test": "npm run test-e2e",
     "test-e2e": " node test/e2e/runner.js",
-    "test-unit": "jest --config test/unit/jest.conf.js --coverage",
+    "test-unit": "npm run lint && jest --config test/unit/jest.conf.js --coverage",
     "test-unit-watch": "jest --config test/unit/jest.conf.js --watchAll",
     "lint": "eslint --ext .js,.vue src server.js config test/unit test/e2e",
     "swagger": "node build/swagger.js --contract_path contracts/index.yaml --output_path src/services/nhsonlineapi.js"
