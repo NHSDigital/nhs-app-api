@@ -30,7 +30,10 @@ export default class AuthorizationService {
       undefined,
       undefined,
       undefined,
-      { code_challenge: challenge },
+      {
+        code_challenge: challenge,
+        code_challenge_method: 'S256',
+      },
     );
 
     return authorizationHandler.performAuthorizationRequest(this.configuration, request);
