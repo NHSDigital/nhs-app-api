@@ -55,6 +55,9 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
+            services.AddSingleton(x => new NamedConnectionMultiplexer(
+                ConnectionMultiplexerName.Session,
+                ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
 
             int.TryParse(Configuration["HTTP_TIMEOUT_SECONDS"], out var timeout);
