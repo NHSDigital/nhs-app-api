@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import {
   AUTH_RESPONSE,
+  LOGOUT,
 } from './mutation-types';
 
 export const handleAuthResponse = ({ commit }) => {
@@ -16,6 +17,23 @@ export const handleAuthResponse = ({ commit }) => {
   });
 };
 
+export const unauthorised = ({ commit }) => {
+  commit(LOGOUT, true);
+  Vue.router.push({
+    name: 'home.logout',
+    params: { unauthorised: true },
+  });
+};
+
+export const logout = ({ commit }) => {
+  commit(LOGOUT, true);
+  Vue.router.push({
+    name: 'home.logout',
+  });
+};
+
 export default {
   handleAuthResponse,
+  unauthorised,
+  logout,
 };

@@ -4,6 +4,7 @@ import createLogger from 'vuex/dist/logger';
 
 // Add our Modules here
 import auth from './modules/auth';
+import http from './modules/http';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
 
   modules: {
     auth,
+    http,
   },
 
 
