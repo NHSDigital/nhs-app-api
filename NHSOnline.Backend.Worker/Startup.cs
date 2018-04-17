@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Worker
                     }
                 )
                 .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()
+                    options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
                 );
 
             services.AddSingleton<ISystemProviderFactory, SystemProviderFactory>();

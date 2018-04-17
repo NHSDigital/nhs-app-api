@@ -41,18 +41,18 @@ definitions:
      - AuthCode
      - CodeVerifier
     properties:
-      AuthCode:
+      authCode:
         type: string
         description: OAuth authorization code.
-      CodeVerifier:
+      codeVerifier:
         type: string
         description: PKCE code verifier.
   UserSessionResponse:
     type: object
     properties:
-      GivenName: 
+      givenName: 
         type: string
         description: User's given name
-      FamilyName: 
+      familyName: 
         type: string
         description: User's family name.

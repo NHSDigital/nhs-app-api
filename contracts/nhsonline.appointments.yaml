@@ -1,0 +1,118 @@
+swagger: "2.0"
+  
+info:
+  version: 0.0.3
+  title: NHS Online Sub-API - Appointments
+  description: NHS Online Sub-API - endpoints pertaining to appointments requires NHSO-Session-ID cookie in header from session end point
+
+paths:
+  /appointmentslots:
+    get:
+      tags:
+        - appointmentslots
+      summary: Gets a list of available appointments for the logged on user.
+      description: For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-ID cookie in header from session end point
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fromDate
+          type: string
+          format: date-time
+          required: true
+          description: Appointment search from date.
+        - in: query
+          name: toDate
+          type: string
+          format: date-time
+          required: true
+          description: Appointment search to date.
+      responses:
+        200:
+          description: Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots.
+          schema:
+            $ref: "#/definitions/AppointmentSlotsResponse"
+        400:
+          description: Bad request. All headers must be provided.
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occured processing the request.
+        502:
+          description: The GP system is currently unavailable.    
+definitions:
+  AppointmentSlotsResponse:
+    type: object
+    properties:
+      clinicians:
+        type: array
+        description: Array of attending Clinicians.
+        items:
+         $ref: '#/definitions/Clinician'    
+      appointmentSessions:
+        type: array
+        description: Array of Appointment Sessions.
+        items:
+          $ref: '#/definitions/AppointmentSession'
+      locations:
+        type: array
+        description: Array of Locations.
+        items:
+          $ref: '#/definitions/Location'
+      slots:
+        type: array
+        description: Available Appointment Slots.
+        items:
+          $ref: '#/definitions/Slot'
+  AppointmentSession:
+    type: object
+    properties:
+        id:
+         type: string
+         description: Appointment Session Identifier.
+        displayName:
+         type: string
+         description: Appointment Session Name.
+  Clinician:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Clinician Identifier.
+      displayName:
+        type: string
+        description: Clinician Name.
+  Location:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Location Identifier.
+      displayName:
+        type: string
+        description: Location Name.
+  Slot:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Slot Identifier.
+      startTime:
+        type: string
+        format: date-time
+        description: Appointment Slot Start Date Time.
+      endTime:
+        type: string
+        format: date-time
+        description: Appointment Slot End Date Time.
+      locationId: 
+        type: string
+        description: Location Identifier
+      appointmentSessionId:
+        type: string
+        description: GP system appointment session Identifier.
+      clinicianIds:
+        type: array
+        description: Array of Clinicians, accounts for joint sessions.
+        items:
+          type: string

@@ -82,25 +82,25 @@ definitions:
   PatientIm1ConnectionRequest:
     type: object
     required:
-     - AccountId
-     - LinkageKey
-     - OdsCode
-     - Surname
-     - DateOfBirth
+     - accountId
+     - linkageKey
+     - odsCode
+     - surname
+     - dateOfBirth
     properties:
-      AccountId:
+      accountId:
         type: string
         description: Patient's GP IM1 Account ID.
-      LinkageKey:
+      linkageKey:
         type: string
         description: Patient's GP IM1 Linkage Key.
-      OdsCode:
+      odsCode:
         type: string
         description: GP's ODS Code.
-      Surname:
+      surname:
         type: string
         description: Patient's Surname.
-      DateOfBirth:
+      dateOfBirth:
         type: string
         format: date
         description: Patient's Date of Birth.
@@ -108,10 +108,10 @@ definitions:
   PatientIm1ConnectionResponse:
     type: object
     properties:
-      ConnectionToken:
+      connectionToken:
         type: string
         description: IM1 Connection Token.
-      NhsNumbers:
+      nhsNumbers:
         type: array
         description: Array of the Patient's NHS numbers.
         items:
@@ -120,6 +120,6 @@ definitions:
   PatientNhsNumber:
     type: object
     properties:
-        NhsNumber:
+        nhsNumber:
          type: string
          description: Patient's NHS number.
