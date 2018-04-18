@@ -9,4 +9,9 @@ class WebAppInterface(private val context: MainActivity) {
         context.showMenuBar()
         context.showHeader()
     }
+
+    @JavascriptInterface
+    fun updateHeaderText(text:String) {
+        context.setHeaderText(text)
+    }
 }

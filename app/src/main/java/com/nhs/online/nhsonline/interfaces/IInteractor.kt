@@ -14,4 +14,6 @@ interface IInteractor {
     fun showUnavailabilityError(unavailabilityErrorMessage: String?)
 
     fun showWebviewScreen()
+
+    fun setHeaderText(text: String)
 }

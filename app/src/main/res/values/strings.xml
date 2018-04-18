@@ -5,6 +5,8 @@
     <string name="prescription">Prescriptions</string>
     <string name="my_record">My Records</string>
     <string name="more">More</string>
+    <string name="organ_donation_register_header">Organ donation register</string>
+    <string name="nhs_111_header">Check your symptoms</string>
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
     <string name="organ_donation_connection_error">Organ donation unavailable</string>
@@ -14,3 +16,4 @@
     <string name="errorIconDesc">warning icon</string>
     <string name="tryLaterText">Please try again later.</string>
 </resources>
+

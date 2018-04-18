@@ -10,6 +10,7 @@ import android.view.View
 import android.view.View.*
 import android.support.v7.widget.Toolbar
 import android.webkit.WebView
+import android.widget.TextView
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -40,7 +41,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
 
         if (urlPath == authRedirectPath) {
-            loadPage(intent.data.toString());
+            loadPage(intent.data.toString())
 
         } else {
             loadWelcomePage()
@@ -51,7 +52,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onNewIntent(intent)
 
         val data = intent?.data
-        webview.loadUrl(data.toString())
+        loadPage(data.toString())
     }
 
     private fun configureWebView() {
@@ -113,6 +114,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
             knownServices.findKnownServiceAddMissingQueryFor(url)
+
         webview.loadUrl(urlWithMissingQueryStrings)
     }
 
@@ -132,6 +134,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 .build()
         val appointmentsURL = builtUri.toString()
         loadPage(appointmentsURL)
+    }
+
+    override fun setHeaderText(text: String) {
+        runOnUiThread({
+            run {
+                findViewById<TextView>(R.id.header_text_view).text = text
+            }
+        })
     }
 
     override fun showProgressDialog() {

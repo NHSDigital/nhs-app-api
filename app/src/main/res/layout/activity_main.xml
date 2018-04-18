@@ -10,7 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_92sdp"
+        android:layout_height="@dimen/_96sdp"
         android:elevation="4dp"
         android:background="#005EB8"
         android:visibility="gone"
@@ -51,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp">
                 <TextView
+                    android:id="@+id/header_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"

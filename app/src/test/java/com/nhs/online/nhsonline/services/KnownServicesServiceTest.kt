@@ -120,4 +120,20 @@ class KnownServicesServiceTest {
 
         Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=mobile",result)
     }
+
+    @Test
+    fun hasNativeHeader_returnsTrue_forServiveWithNativeHeader(){
+        val testService = KnownServices.Service("http://testUrl", nativeHeader = "Header 1")
+
+        val result = testService.hasNativeHeader()
+        Assert.assertTrue(result)
+    }
+
+    @Test
+    fun hasNativeHeader_returnsFalse_forServiveWithoutNativeHeader(){
+        val testService = KnownServices.Service("http://testUrl")
+
+        val result = testService.hasNativeHeader()
+        Assert.assertFalse(result)
+    }
 }
