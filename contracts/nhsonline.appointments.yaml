@@ -1,7 +1,7 @@
 swagger: "2.0"
-  
+
 info:
-  version: 0.0.3
+  version: 0.0.4
   title: NHS Online Sub-API - Appointments
   description: NHS Online Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-ID cookie (obtained from Session end point).
 
@@ -41,7 +41,7 @@ paths:
         502:
           description: The GP system is currently unavailable.
         504:
-          description: The GP system did not respond in a timely fashion.  
+          description: The GP system did not respond in a timely fashion.
 definitions:
   AppointmentSlotsResponse:
     type: object
@@ -50,7 +50,7 @@ definitions:
         type: array
         description: Array of attending Clinicians.
         items:
-         $ref: '#/definitions/Clinician'    
+         $ref: '#/definitions/Clinician'
       appointmentSessions:
         type: array
         description: Array of Appointment Sessions.
@@ -107,7 +107,7 @@ definitions:
         type: string
         format: date-time
         description: Appointment Slot End Date Time.
-      locationId: 
+      locationId:
         type: string
         description: Location Identifier
       appointmentSessionId:

@@ -1,7 +1,7 @@
 swagger: "2.0"
-  
+
 info:
-  version: 0.0.3
+  version: 0.0.4
   title: NHS Online Sub-API - User Sessions.
   description: NHS Online Sub-API - endpoints pertaining to User Sessions.
 
@@ -35,11 +35,11 @@ paths:
         502:
           description: The GP system is currently unavailable.
         504:
-          description: The GP system did not respond in a timely fashion.  
+          description: The GP system did not respond in a timely fashion.
 definitions:
   UserSessionRequest:
     type: object
-    required: 
+    required:
      - authCode
      - codeVerifier
     properties:
@@ -52,9 +52,9 @@ definitions:
   UserSessionResponse:
     type: object
     properties:
-      givenName: 
+      givenName:
         type: string
         description: User's given name
-      familyName: 
+      familyName:
         type: string
         description: User's family name.

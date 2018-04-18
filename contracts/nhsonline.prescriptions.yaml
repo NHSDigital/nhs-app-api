@@ -1,0 +1,172 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.4
+  title: NHS Online Sub-API - Prescriptions
+  description: NHS Online Sub-API - endpoints pertaining to repeat prescriptions require NHSO-Session-ID cookie in header from session end point.
+
+paths:
+  /courses:
+    get:
+      tags:
+        - courses
+      summary: Gets a list of prescriptions courses for the given patient.
+      description: Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-ID cookie in header from session end point.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses.
+          schema:
+            $ref: "#/definitions/CourseListResponse"
+        401:
+          description: User session missing or expired.
+        500:
+          description: An unexpected error occured processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+  /prescriptions:
+    post:
+      tags:
+        - prescriptions
+      summary: Creates a repeat prescription request for the logged in user
+      description: For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-ID cookie in header from session end point.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: PrescriptionRequest
+          required: true
+          description: Repeat prescription request details to be created.
+          schema:
+            $ref: "#/definitions/PrescriptionRequest"
+      responses:
+        201:
+          description: Successful operation. Repeat Prescription Created.
+          schema:
+            $ref: "#/definitions/PrescriptionRequestResponse"
+        400:
+          description: Bad request. Supplied connection details or request data is incomplete or invalid.
+        401:
+          description: User session missing or expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
+        409:
+          description: Conflict. A repeat prescription for the given course already exists preventing a new one to be created.
+        500:
+          description: An unexpected error occured processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+    get:
+      tags:
+        - prescriptions
+      summary: Gets a list of requested repeat prescriptions for the logged on user.
+      description: For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-ID cookie in header from session end point.
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fromDate
+          type: string
+          format: date-time
+          required: false
+          description: Repeat Prescription from date. Will default to 6 months ago if no value is supplied
+      responses:
+        200:
+          description: Returns list of requested repeat prescriptions and associated meta data. Returns empty collection of repeat prescriptions if GP system does not return a list of prescriptions.
+          schema:
+            $ref: "#/definitions/PrescriptionListResponse"
+        400:
+          description: Bad request. All headers must be provided.
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occured processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+
+definitions:
+  PrescriptionListResponse:
+    type: object
+    properties:
+      prescriptions:
+        type: array
+        description: Array of repeat prescriptions.
+        items:
+          $ref: '#/definitions/PrescriptionItem'
+      courses:
+        type: array
+        description: Array of prescription courses.
+        items:
+          $ref: '#/definitions/Course'
+  CourseListResponse:
+    type: object
+    properties:
+      courses:
+        type: array
+        description: An array of prescription courses
+        items:
+          $ref: '#/definitions/Course'
+  PrescriptionRequestResponse:
+    type: object
+    properties:
+      prescriptionCreated:
+        type: boolean
+        description: Success flag for creating repeat prescription
+  PrescriptionRequest:
+    type: object
+    required:
+      - courseIds
+    properties:
+      courseIds:
+        type: array
+        description: Array of course identifiers to create the prescription for.
+      specialRequest:
+        type: string
+        description: Optional free text that a user may supply in order to add a special request for the given prescription
+  PrescriptionItem:
+    type: object
+    properties:
+      courses:
+        type: array
+        description: Array of prescription courses.
+        items:
+          $ref: '#/definitions/CourseEntry'
+      orderDate:
+        type: string
+        format: date-time
+        description: The date on which the repeat prescription was ordered.
+  CourseEntry:
+    type: object
+    properties:
+      courseId:
+        type: string
+        description: Course identifier.
+      status:
+        type: string
+        enum:
+          - approved
+          - ordered
+          - rejected
+          - cancelled
+  Course:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Course identifier.
+      name:
+        type: string
+        description: Course name.
+      dosage:
+        type: string
+        description: The required dosage for the course.
+      quantity:
+        type: string
+        description: The quantity of the drug for the course.
