@@ -45,7 +45,8 @@ paths:
           description: An unexpected error occurred processing the request.
         502:
           description: The GP system is currently unavailable.
-
+        504:
+          description: The GP system did not respond in a timely fashion.
     post:
       tags:
         - im1-connection
@@ -77,7 +78,8 @@ paths:
           description: An unexpected error occurred processing the request.
         502:
           description: The GP system is currently unavailable.
-
+        504:
+          description: The GP system did not respond in a timely fashion.
 definitions:
   PatientIm1ConnectionRequest:
     type: object

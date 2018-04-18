@@ -39,7 +39,9 @@ paths:
         500:
           description: An unexpected error occured processing the request.
         502:
-          description: The GP system is currently unavailable.    
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.  
 definitions:
   AppointmentSlotsResponse:
     type: object
