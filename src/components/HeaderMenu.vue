@@ -5,7 +5,7 @@
         </router-link>
         <account-icon/>
         <hr>
-        <h1>Home</h1>
+        <h1>{{ $store.state.header.headerText }}</h1>
     </header>
 </template>
 

@@ -10,6 +10,7 @@ export default [
     name: 'home.index',
     meta: {
       auth: true,
+      headerKey: 'pageHeaderTitles.home',
     },
     component: HomeLoggedIn,
   },
@@ -26,6 +27,7 @@ export default [
     component: Appointments,
     meta: {
       auth: true,
+      headerKey: 'pageHeaderTitles.appointments',
     },
   }, {
     path: '/more',
@@ -33,6 +35,7 @@ export default [
     component: More,
     meta: {
       auth: true,
+      headerKey: 'pageHeaderTitles.more',
     },
   }, {
     path: '/auth-return',

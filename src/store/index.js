@@ -7,6 +7,7 @@ import VuexPersist from 'vuex-persist';
 import auth from './modules/auth';
 import http from './modules/http';
 import appointmentSlots from './modules/appointment-slots';
+import header from './modules/header';
 
 Vue.use(Vuex);
 
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     appointmentSlots,
     auth,
     http,
+    header,
   },
   /**
    * If strict mode should be enables

@@ -20,6 +20,13 @@ export default {
   loginOrRegister: {
     createAccount: 'Create an NHS account',
   },
+  pageHeaderTitles: {
+    home: 'Home',
+    prescriptions: 'Prescriptions',
+    appointments: 'Appointments',
+    myRecord: 'My record',
+    more: 'More',
+  },
   more: {
     organDonationButtonText: 'Organ donation register',
   },
