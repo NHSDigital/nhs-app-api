@@ -2,8 +2,8 @@
   <div id="mainDiv">
     <main class="content">
       <div class="info">
-        <h5>{{ $t('home.loggedIn.welcome') }}</h5>
-        <p>{{ $t('home.loggedIn.description') }}</p>
+        <h5>{{ $t('homeLoggedIn.welcome') }}</h5>
+        <p>{{ $t('homeLoggedIn.description') }}</p>
       </div>
     </main>
   </div>
@@ -15,9 +15,6 @@ import PatientDetailsIcon from '@/components/icons/PatientDetailsIcon';
 export default {
   components: {
     PatientDetailsIcon,
-  },
-  mounted() {
-    this.$store.dispatch('header/setTitle', this.$t('home.loggedIn.header.title'));
   },
 };
 </script>

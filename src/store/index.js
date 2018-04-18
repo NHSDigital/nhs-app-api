@@ -5,7 +5,6 @@ import VuexPersist from 'vuex-persist';
 
 // Add our Modules here
 import auth from './modules/auth';
-import header from './modules/header';
 import http from './modules/http';
 import appointmentSlots from './modules/appointment-slots';
 
@@ -25,7 +24,6 @@ export default new Vuex.Store({
   modules: {
     appointmentSlots,
     auth,
-    header,
     http,
   },
   /**

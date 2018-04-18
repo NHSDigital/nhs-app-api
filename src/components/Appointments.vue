@@ -28,7 +28,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('appointmentSlots/load', this.$config);
-    this.$store.dispatch('header/setTitle', this.$t('appointments.header.title'));
   },
 };
 </script>
