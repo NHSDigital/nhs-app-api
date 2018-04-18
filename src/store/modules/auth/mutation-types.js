@@ -1,8 +1,10 @@
 export const AUTH_RESPONSE = 'AUTH_RESPONSE';
 export const LOGOUT = 'LOGOUT';
 export const AUTH_UNAUTHORISED = 'AUTH_UNAUTHORISED';
+export const UPDATE_CONFIG = 'UPDATE_VERIFIER';
 
 export default {
   AUTH_RESPONSE,
   LOGOUT,
+  UPDATE_CONFIG,
 };

@@ -19,6 +19,7 @@ import $q from 'q';
  */
 class {{&className}} {
   constructor(options){
+    this.store = options.store;
     let domain = (typeof options === 'object') ? options.domain : options;
     this.domain = domain ? domain : '{{&domain}}';
     if(this.domain.length === 0) {
@@ -80,15 +81,22 @@ class {{&className}} {
       body = undefined;
     }
 
+
+    this.store.dispatch('http/isLoading');
     fetch(urlWithParams, {
       method,
       headers,
+      mode: 'cors',
+      credentials: 'same-origin',
       body: JSON.stringify(body)
     }).then((response) => {
       return response.json();
     }).then((body) => {
+      this.store.dispatch('http/loadingCompleted');
       deferred.resolve(body);
     }).catch((error) => {
+      // possibly need to handle the reason for the error here.
+      this.store.dispatch('http/loadingCompleted');
       deferred.reject(error);
     });
   }

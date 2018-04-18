@@ -73,6 +73,9 @@ export default {
     prescriptionsIcon: {
       title: 'Prescriptions',
     },
+    sessionExpired: {
+      title: 'Session Expired. Please Login again.',
+    },
     symptomsIcon: {
       title: 'Symptoms Checker',
     },

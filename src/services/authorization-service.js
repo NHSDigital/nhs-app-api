@@ -7,7 +7,7 @@ const sha256 = value => crypto.createHash('sha256').update(value).digest();
 const createChallenge = verifier => base64URLEncode(sha256(verifier));
 const authorizationHandler = new RedirectRequestHandler();
 
-export default class AuthorizationService {
+class AuthorizationService {
   constructor(environmentConfig) {
     this.cidClientId = environmentConfig.CID_CLIENT_ID;
     this.redirectUri = environmentConfig.CID_REDIRECT_URI;
@@ -15,14 +15,11 @@ export default class AuthorizationService {
       new AuthorizationServiceConfiguration(environmentConfig.CID_AUTH_ENDPOINT, null, null);
   }
 
-  // This rule is disabled because we need `createVerifier` to be at class level to expose it
-  // to the code that imports the `AuthorizationService`.
-  // eslint-disable-next-line class-methods-use-this
-  createVerifier() {
+  static createVerifier() {
     return base64URLEncode(crypto.randomBytes(32));
   }
 
-  performLogin(verifier) {
+  login(verifier) {
     const challenge = createChallenge(verifier);
     const request = new AuthorizationRequest(
       this.cidClientId,
@@ -40,3 +37,4 @@ export default class AuthorizationService {
   }
 }
 
+export default AuthorizationService;

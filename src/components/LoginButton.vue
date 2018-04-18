@@ -5,17 +5,9 @@
 </template>
 
 <script>
-import AuthorizationService from '@/services/authorization-service';
 
 function loginClicked() {
-  // TODO: Storage of verifier
-  // The verifier needs to be stored in a cookie or local storage which is why it is generated
-  // here instead of in the authorization service.  The storage of the verifier is outside the
-  // scope of this ticket.
-
-  const authorizationService = new AuthorizationService(this.$config);
-  const verifier = authorizationService.createVerifier();
-  authorizationService.performLogin(verifier);
+  this.$store.dispatch('auth/login', this.$config);
 }
 
 export default {

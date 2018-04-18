@@ -2,17 +2,18 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 
 import Vue from 'vue';
-import './plugins/axios';
+import Axios from 'axios';
+import './plugins/api';
 import './plugins/vuex';
 import { i18n } from './plugins/vue-i18n';
 import { router } from './plugins/vue-router';
 import './plugins/vuex-router-sync';
 import App from './App';
 import store from './store';
-// import NHSOnlineApi from './services/nhsonlineapi';
+
 Vue.config.productionTip = false;
 
-Vue.$http.get('/config')
+Axios.get('/config')
   .then((response) => {
     // JSON responses are automatically parsed.
     Vue.prototype.$config = response.data;
