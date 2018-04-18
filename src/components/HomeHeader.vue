@@ -16,7 +16,6 @@ import SymptomBanner from '@/components/SymptomBanner';
 import NhsLogo from '@/components/icons/NhsLogo';
 
 export default {
-
   components: {
     SymptomBanner,
     NhsLogo,

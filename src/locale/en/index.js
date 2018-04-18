@@ -1,13 +1,23 @@
 export default {
+  appointments: {
+    header: {
+      title: 'Book an appointment',
+    },
+  },
   common: {
     or: 'OR',
   },
+  home: {
+    loggedIn: {
+      header: {
+        title: 'Home',
+      },
+      welcome: 'Welcome',
+      description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
+    },
+  },
   homeHeader: {
     welcome: 'Welcome!',
-  },
-  homeLoggedIn: {
-    welcome: 'Welcome',
-    description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
   },
   loginButton: {
     login: 'Sign in with your NHS account',
@@ -36,9 +46,15 @@ export default {
     appointmentsIcon: {
       title: 'Appointments',
     },
+    clinicianIcon: {
+      title: 'Clinician',
+    },
     homeIcon: {
       title: 'NHS Online',
       desc: 'Click here to go back to the home screen.',
+    },
+    locationIcon: {
+      title: 'Location',
     },
     moreIcon: {
       title: 'More',

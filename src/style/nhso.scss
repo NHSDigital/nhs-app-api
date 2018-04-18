@@ -9,7 +9,7 @@ $nhs_blue: #005EB8;
 $dark_blue: #003087;
 $light_green: #006747;
 $dark_green: #004D34;
-$light_grey: #979797;
+$mid_grey: #979797;
 $dark_grey: #4A4A4A;
 $black: #231F20;
 $warning: #FCED66;
@@ -54,7 +54,7 @@ $default: 'Roboto', sans-serif;
 	font-weight: 700;
 	font-size: 18px;
 	line-height: 23px;
-	color: $light_grey;
+	color: $mid_grey;
 }
 @mixin button {
 	font-family: $frutiger;
@@ -156,7 +156,7 @@ header {
 	right: 0px;
 	height: 100px;
 	box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
-	
+
 	h1 {
 		@include screen_title;
 		text-align: center;
@@ -187,7 +187,7 @@ nav {
 	right: 0px;
 	height: 70px;
 	box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
-	
+
 	ul {
 		width: 100%;
 		box-sizing: border-box;
@@ -196,8 +196,8 @@ nav {
 		flex-wrap: wrap;
 		padding-left: 6px;
 		padding-right: 6px;
-		
-		
+
+
 		li {
 			flex-grow: 1;
 			text-align: center;
@@ -209,7 +209,7 @@ nav {
 			display: flex;
 			flex-direction: column;
 			text-align: center;
-			
+
 			svg {
 				display: block;
 				align-self: center;
@@ -227,8 +227,8 @@ nav {
 			}
 		}
 	}
-	
-	
+
+
 }
 main {
 	padding: 116px 16px 90px 16px;

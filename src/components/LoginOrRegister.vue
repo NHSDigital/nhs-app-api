@@ -34,14 +34,14 @@ export default {
       position: relative;
       outline: 0;
       border: 0;
-      color: $light_grey;
+      color: $mid_grey;
       text-align: center;
       height: 1.5em;
       margin-bottom: 16px;
 
       &:before {
         content: '';
-        background: $light_grey;
+        background: $mid_grey;
         position: absolute;
         left: 0;
         top: 50%;

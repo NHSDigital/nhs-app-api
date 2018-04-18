@@ -1,5 +1,5 @@
 <template>
-  <div v-show="showSpinner">
+  <div v-show="isVisible">
     <img id="loading-spinner" src="/static/images/spinner.gif" alt="loading" />
   </div>
 </template>
@@ -17,18 +17,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      showSpinner: false,
-    };
-  },
-  mounted() {
-    this.$root.$on('show-loading-spinner', () => {
-      this.showSpinner = true;
-    });
-    this.$root.$on('hide-loading-spinner', () => {
-      this.showSpinner = false;
-    });
+  computed: {
+    isVisible() {
+      return this.$store.state.http.isLoading;
+    },
   },
 };
 </script>

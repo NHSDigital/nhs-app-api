@@ -1,46 +1,44 @@
 <template>
   <div id="mainDiv">
-    <spinner></spinner>
+    <spinner />
     <main class="content">
-      // TODO: Remove in next task: exists to prove current task.
-      Data: {{ JSON.stringify(this.appointmentSlots) }}
+      <ul>
+        <li :key="slot.id" v-for="slot in slots">
+          <appointment-slot :appointmentSlot="slot"/>
+        </li>
+      </ul>
     </main>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import AppointmentSlot from '@/components/AppointmentSlot';
 import Spinner from '@/components/Spinner';
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
+    AppointmentSlot,
     Spinner,
   },
-  data() {
-    axios
-      .get(`${this.$config.API_HOST}/patient/appointmentslots`)
-      .then((data) => {
-        this.appointmentSlots = data;
-        this.spinnerOff();
-      });
-
-    return {
-      appointmentSlots: [],
-    };
+  computed: {
+    ...mapGetters({
+      slots: 'appointmentSlots/slots',
+    }),
   },
   mounted() {
-    this.spinnerOn();
-  },
-  methods: {
-    spinnerOn() {
-      this.$root.$emit('show-loading-spinner');
-    },
-    spinnerOff() {
-      this.$root.$emit('hide-loading-spinner');
-    },
+    this.$store.dispatch('appointmentSlots/load', this.$config);
+    this.$store.dispatch('header/setTitle', this.$t('appointments.header.title'));
   },
 };
 </script>
+
+<style scoped="true">
+  li {
+    list-style: none;
+    margin-bottom: 18px;
+  }
+</style>
 
 <style lang="scss">
   @import '../style/html';
@@ -49,4 +47,8 @@ export default {
   @import '../style/fonts';
   @import '../style/colours';
   @import '../style/buttons';
+
+  .content {
+    margin-right: 18px;
+  }
 </style>

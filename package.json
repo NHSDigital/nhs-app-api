@@ -62,6 +62,7 @@
     "karma": "^2.0.0",
     "lodash": "^4.17.5",
     "minimist": "^1.2.0",
+    "moment": "^2.22.1",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.7.2",
     "npm": "^5.7.1",
