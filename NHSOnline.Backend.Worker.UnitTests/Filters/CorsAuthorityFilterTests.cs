@@ -34,6 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Filters
         public void
             OnActionExecuting_DoesNotSetTheAccessControlAllowOriginHeader_WhenThereIsNoCorsAuthorityEnvironmentVariable()
         {
+            System.Environment.SetEnvironmentVariable("CORS_AUTHORITY", null);
             var httpContext = MockHttpContext();
             var actionContext = CreateActionContext(httpContext.Object);
             var context = CreateActionExecutingContext(actionContext);
