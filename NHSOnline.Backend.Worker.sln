@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Worker.In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Worker.Stubs", "NHSOnline.Backend.Worker.Stubs\NHSOnline.Backend.Worker.Stubs.csproj", "{9421696A-6A21-4810-BCA6-E6F88607C55C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Worker.Mocking", "NHSOnline.Backend.Worker.Mocking\NHSOnline.Backend.Worker.Mocking.csproj", "{7304F547-9B71-4EF1-9D38-7722903CE154}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{9421696A-6A21-4810-BCA6-E6F88607C55C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9421696A-6A21-4810-BCA6-E6F88607C55C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9421696A-6A21-4810-BCA6-E6F88607C55C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7304F547-9B71-4EF1-9D38-7722903CE154}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7304F547-9B71-4EF1-9D38-7722903CE154}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7304F547-9B71-4EF1-9D38-7722903CE154}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7304F547-9B71-4EF1-9D38-7722903CE154}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
