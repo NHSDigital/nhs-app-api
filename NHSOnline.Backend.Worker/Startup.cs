@@ -32,12 +32,12 @@ namespace NHSOnline.Backend.Worker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services
                 .AddMvc(
                     options =>
                     {
                         options.Filters.Add(typeof(ModelStateValidationFilter));
-                        options.Filters.Add(typeof(AccessControlAllowOriginFilter));
                     }
                 )
                 .AddJsonOptions(
@@ -85,7 +85,14 @@ namespace NHSOnline.Backend.Worker
             }
 
             app.UsePathBase(new PathString("/v1"));
-
+            
+            
+            var corsAuthority = Configuration["CORS_AUTHORITY"];
+            if (corsAuthority != null)
+            {
+                app.UseCors(builder => builder.WithOrigins(corsAuthority).AllowAnyMethod().AllowAnyHeader());   
+            }
+            
             app.UseMvc();
         }
     }
