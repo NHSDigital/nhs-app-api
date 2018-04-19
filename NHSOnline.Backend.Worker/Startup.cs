@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.CitizenId;
+using NHSOnline.Backend.Worker.DataProtection;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
@@ -44,11 +45,13 @@ namespace NHSOnline.Backend.Worker
                     options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
                 );
 
+            services.AddDataProtection();
             services.AddSingleton<ISystemProviderFactory, SystemProviderFactory>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
+            services.AddSingleton<ICipherService, CipherService>();
             services.AddSingleton<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<EmisSystemProvider>();
@@ -70,6 +73,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
 
             var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));
+
             if (module != null)
             {
                 services.Remove(module);

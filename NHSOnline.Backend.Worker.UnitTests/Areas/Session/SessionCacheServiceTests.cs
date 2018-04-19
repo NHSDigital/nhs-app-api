@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using FluentAssertions;
+using NHSOnline.Backend.Worker.DataProtection;
 using NHSOnline.Backend.Worker.Session;
 using StackExchange.Redis;
 
@@ -26,6 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         [TestMethod]
         public async Task CreateUserSession_ReturnsSessionGuidString()
         {
+            // Arrange
             var sessionKey = "1234-5678";
             var supplier = SupplierEnum.Emis;
 
@@ -39,7 +41,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             RedisValue redisValue = JsonConvert.SerializeObject(userSession);
 
             var database = new Mock<IDatabase>();
-            database.Setup(x => x.SetAddAsync(redisKey, redisValue, CommandFlags.None)).Returns(Task.FromResult(true));
+            database.Setup(x => x.StringSetAsync(redisKey, redisValue, TimeSpan.FromMinutes(20),When.Always ,CommandFlags.None)).Returns(Task.FromResult(true));
 
             var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
             connectionMultiplexer.Setup(x => x.GetDatabase(-1, null)).Returns(database.Object);
@@ -50,8 +52,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             var sut = _fixture.Create<SessionCacheService>();
 
+            // Act
             var result = await sut.CreateUserSession(userSession);
 
+            // Assert
             result.Should().NotBeNullOrEmpty();
         }
 
@@ -63,12 +67,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
 
             string redisSessionKey = null;
+            string redisValue = null;
+
+            var cipherService = new Mock<ICipherService>();
+            cipherService.Setup(x => x.Encrypt(It.IsAny<string>())).Returns("encrypted_string");
+
             var database = new Mock<IDatabase>();
             database
                 .Setup(x =>
                     x.StringSetAsync(
                         It.IsAny<RedisKey>(),
-                        userSessionJson,
+                        cipherService.Object.Encrypt(userSessionJson),
                         TimeSpan.FromMinutes(20),
                         When.Always,
                         CommandFlags.None))
@@ -76,6 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Callback<RedisKey, RedisValue, TimeSpan?, When, CommandFlags>((key, value, expiry, when, flags) =>
                 {
                     redisSessionKey = key;  // Store the guid key that was used as Redis session key
+                    redisValue = value;
                 })
                 .Verifiable();
 
@@ -86,8 +96,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.Session))
                 .Returns(connectionMultiplexer.Object);
 
-            var systemUnderTest = new SessionCacheService(connectionMultiplexerFactory.Object);
-            //var systemUnderTest = _fixture.Create<SessionCacheService>();
+
+            var systemUnderTest = new SessionCacheService(connectionMultiplexerFactory.Object, cipherService.Object);
 
             // Act
             var result = await systemUnderTest.CreateUserSession(userSession);
@@ -95,6 +105,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Assert
             database.Verify();
             result.Should().Be(redisSessionKey);
+            redisValue.Should().NotBeNullOrEmpty();
+            redisValue.Should().NotBeSameAs(userSessionJson);
         }
     }
 }
