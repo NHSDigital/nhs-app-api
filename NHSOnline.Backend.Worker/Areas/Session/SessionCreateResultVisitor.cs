@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.Router.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
@@ -10,8 +11,12 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             return new SessionCreateResultVisitorOutput
             {
-                ShouldReturn = false,
-                UserSessionResponse = result.UserInfo,
+                SessionWasCreated = true,
+                UserSessionResponse = new UserSessionResponse
+                {
+                    FamilyName = result.FamilyName,
+                    GivenName = result.GivenName
+                },
                 SupplierSessionId = result.SessionId
             };
         }
@@ -20,7 +25,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             return new SessionCreateResultVisitorOutput
             {
-                ShouldReturn = true,
+                SessionWasCreated = false,
                 StatusCode = StatusCodes.Status403Forbidden
             };
         }
@@ -29,7 +34,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             return new SessionCreateResultVisitorOutput
             {
-                ShouldReturn = true,
+                SessionWasCreated = false,
                 StatusCode = StatusCodes.Status502BadGateway
             };
         }

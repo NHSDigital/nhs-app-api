@@ -1,6 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Areas.Session.Models;
-
-namespace NHSOnline.Backend.Worker.Router.Session
+﻿namespace NHSOnline.Backend.Worker.Router.Session
 {
     public abstract class SessionCreateResult
     {
@@ -12,12 +10,14 @@ namespace NHSOnline.Backend.Worker.Router.Session
 
         public class SuccessfullyCreated : SessionCreateResult
         {
-            public UserSessionResponse UserInfo { get; }
+            public string GivenName { get; }
+            public string FamilyName { get; }
             public string SessionId { get; set; }
 
-            public SuccessfullyCreated(string sessionId, UserSessionResponse userInfo)
+            public SuccessfullyCreated(string sessionId, string givenName, string familyName)
             {
-                UserInfo = userInfo;
+                GivenName = givenName;
+                FamilyName = familyName;
                 SessionId = sessionId;
             }
 

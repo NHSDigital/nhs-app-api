@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -117,7 +116,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             }
             else
             {
-                response.ErrorResponse = JsonConvert.DeserializeObject<ErrorResponse>(stringResponse);
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    response.ErrorResponseBadRequest =
+                        JsonConvert.DeserializeObject<BadRequestErrorResponse>(stringResponse);
+                }
+                else
+                {
+                    response.ErrorResponse = JsonConvert.DeserializeObject<ErrorResponse>(stringResponse);
+                }
             }
 
             return response;
@@ -132,6 +139,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
             public HttpStatusCode StatusCode { get; set; }
             public ErrorResponse ErrorResponse { get; set; }
+            public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
             public bool HasSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
 
             public bool HasExceptionWithMessage(string message)
