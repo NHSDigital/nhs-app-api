@@ -6,7 +6,7 @@ import {
   UPDATE_CONFIG,
 } from './mutation-types';
 
-export const handleAuthResponse = ({ commit, state }, { code, API_HOST }) => {
+export const handleAuthResponse = ({ commit, state }, { code }) => {
   /**
    * This needs to fire a proxy method
    * as more work needs to be done before logging in
