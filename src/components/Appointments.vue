@@ -2,19 +2,25 @@
   <div id="mainDiv">
     <spinner />
     <main class="content">
-      <ul>
+      <div data-purpose="no-slots-error" v-show="showNoAppointment">
+        <p class="summary">There are no appointments available at the moment</p>
+        <p class="info">If you need an appointment, please contact your GP.</p>
+      </div>
+      <ul data-purpose="slots" v-show="showAppointments">
         <li :key="slot.id" v-for="slot in slots">
-          <appointment-slot :appointmentSlot="slot"/>
+          <appointment-slot :slotId="slot.id"/>
         </li>
       </ul>
     </main>
+
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import AppointmentSlot from '@/components/AppointmentSlot';
 import Spinner from '@/components/Spinner';
-import { mapGetters } from 'vuex';
+
 
 export default {
   components: {
@@ -22,6 +28,14 @@ export default {
     Spinner,
   },
   computed: {
+    showNoAppointment() {
+      return this.$store.state.appointmentSlots.hasLoaded
+        && this.$store.state.appointmentSlots.slots.length === 0;
+    },
+    showAppointments() {
+      return this.$store.state.appointmentSlots.hasLoaded
+        && this.$store.state.appointmentSlots.slots.length > 0;
+    },
     ...mapGetters({
       slots: 'appointmentSlots/slots',
     }),
@@ -37,6 +51,15 @@ export default {
     list-style: none;
     margin-bottom: 18px;
   }
+
+  .content {
+    margin-right: 18px;
+  }
+
+  [data-purpose="no-slots-error"] .summary {
+    font-weight: bold;
+    margin-bottom: 18px;
+  }
 </style>
 
 <style lang="scss">
@@ -47,7 +70,4 @@ export default {
   @import '../style/colours';
   @import '../style/buttons';
 
-  .content {
-    margin-right: 18px;
-  }
 </style>

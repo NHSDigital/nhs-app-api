@@ -13,6 +13,9 @@ export const slots = state => state.slots.map((slot) => {
   return result;
 });
 
+export const isSelected = state => id => id === state.selectedSlotId;
+
 export default {
+  isSelected,
   slots,
 };

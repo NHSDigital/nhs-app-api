@@ -3,4 +3,7 @@ export default {
   clinicians: [],
   locations: [],
   slots: [],
+  hasLoaded: false,
+  hasErrored: false,
+  selectedSlotId: undefined,
 };

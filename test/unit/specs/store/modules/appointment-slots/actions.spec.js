@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import { load } from '@/store/modules/appointment-slots/actions';
-import { SLOTS_LOADED } from '@/store/modules/appointment-slots/mutation-types';
+import { load, select } from '@/store/modules/appointment-slots/actions';
+import { SLOT_SELECTED, SLOTS_LOADED } from '@/store/modules/appointment-slots/mutation-types';
 
 const API_HOST = 'http://unit.test';
 const EXPECTED_URL = `${API_HOST}/patient/appointmentslots`;
@@ -40,5 +40,16 @@ describe('load', () => {
 
     return load({ commit }, { API_HOST })
       .then(() => expect(commit).toBeCalledWith(SLOTS_LOADED, expected.data));
+  });
+});
+
+describe('select', () => {
+  it('will commit the received slot ID using the SLOT_SELECTED mutation type', () => {
+    const slotId = '1234';
+    const commit = jest.fn();
+
+    select({ commit }, slotId);
+
+    expect(commit).toBeCalledWith(SLOT_SELECTED, slotId);
   });
 });
