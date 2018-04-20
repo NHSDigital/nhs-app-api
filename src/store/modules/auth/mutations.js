@@ -8,7 +8,7 @@ export default {
   [AUTH_RESPONSE](state, user) {
     state.loggedIn = true;
     state.authorised = true;
-    state.user = Object.assign({}, state.user, user.data);
+    state.user = Object.assign({}, state.user, user);
     if (typeof window.nativeApp !== 'undefined') {
       window.nativeApp.loggedIn();
     }

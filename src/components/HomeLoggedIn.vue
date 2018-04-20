@@ -2,7 +2,7 @@
   <div id="mainDiv">
     <main class="content">
       <div class="info">
-        <h5>{{ $t('homeLoggedIn.welcome') }}</h5>
+        <h5>{{greetingMessage}}</h5>
         <p>{{ $t('homeLoggedIn.description') }}</p>
       </div>
     </main>
@@ -15,6 +15,14 @@ import PatientDetailsIcon from '@/components/icons/PatientDetailsIcon';
 export default {
   components: {
     PatientDetailsIcon,
+  },
+  computed: {
+    greetingMessage() {
+      const message = this.$t('homeLoggedIn.welcome');
+      const givenName = this.$store.state.auth.user.givenName;
+      const familyName = this.$store.state.auth.user.familyName;
+      return `${message}, ${givenName} ${familyName}`;
+    },
   },
 };
 </script>
