@@ -1,6 +1,6 @@
 module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'production',
-  API_HOST: process.env.API_HOST || 'http://localhost:8080',
+  API_HOST: process.env.API_HOST || 'http://localhost:8082',
   ORGAN_DONATION_URL: process.env.ORGAN_DONATION_URL || 'https://www.organdonation.nhs.uk',
   PORT: process.env.PORT || 4000,
   SYMPTOM_CHECKER_URL:

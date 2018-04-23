@@ -7,17 +7,24 @@ services:
     ports:
       - "8080:4000"
     environment:
-      - API_HOST=http://nhsonline.backend.worker:5123
+      - API_HOST=http://localhost:8082
+      - CID_REDIRECT_URI=http://localhost:8080/auth-return
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:
       - REDIS_ODSLOOKUP_CONFIG=nhsonline.redis.sds:6379
+      - REDIS_SESSION_CONFIG=nhsonline.redis.session:6379
+      - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
+      - EMIS_APPLICATION_ID=D66BA979-60D2-49AA-BE82-AEC06356E41F
+      - EMIS_VERSION=2.1.0.0
+      - CORS_AUTHORITY=*
     depends_on:
       - nhsonline.redis.sds
     ports:
-      - "8081:5123"
+      - "8082:5123"
   nhsonline.stubs:
     image: rodolpheche/wiremock
+    command: --local-response-templating
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
