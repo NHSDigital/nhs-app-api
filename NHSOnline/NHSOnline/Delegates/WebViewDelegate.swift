@@ -16,11 +16,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     var shouldHandleErrors = false
     var timer: Timer!
     var startDate: Date!
-    
+
     private let script = """
                     window.nativeApp = {};
                     window.nativeApp.loggedIn = function () {
                         window.webkit.messageHandlers.loggedIn.postMessage(null);
+                    };
+                    window.nativeApp.updateHeaderText = function (header) {
+                        window.webkit.messageHandlers.updateHeaderText.postMessage(header);
                     };
                 """
     
@@ -38,24 +41,25 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        
         if let url = navigationAction.request.url {
-            if let matchingKnownService = knownServices.findMatchingKnownServiceFor(url: url) {
-                if(matchingKnownService.hasMissingQueryString(urlString: url.absoluteString)) {
-                    let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
+            if url.absoluteString != "about:blank" {
+                if let matchingKnownService = knownServices.findMatchingKnownServiceFor(url: url) {
+                    if(matchingKnownService.hasMissingQueryString(urlString: url.absoluteString)) {
+                        let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
+                        decisionHandler(.cancel)
+                        callUpdateHeaderText(headerText: matchingKnownService.serviceTitle)
+                        webView.loadPage(url: urlString)
+                        return
+                    }
+                }
+              
+                if shouldOpenInSafari(url: url) {
                     decisionHandler(.cancel)
-                    webView.loadPage(url: urlString)
-                    return
+                    openInSafari(url: url)
+                    return;
                 }
             }
-            
-            if shouldOpenInSafari(url: url) {
-                decisionHandler(.cancel)
-                openInSafari(url: url)
-                return;
-            }
         }
-        
         decisionHandler(.allow)
     }
     
@@ -94,7 +98,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     func openInSafari(url: URL) {
         self.safariViewController = SFSafariViewController(url: url)
         self.viewController.present(safariViewController!, animated: true, completion: nil)
-
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -102,9 +105,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
             if message.name == "loggedIn" {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
             }
+            if (message.name == "updateHeaderText"){
+                callUpdateHeaderText(headerText: message.body)
+            }
         }
     }
-    
+    func callUpdateHeaderText(headerText: Any) {
+        viewController.updateHeaderText(headerText: String(describing: headerText))
+    }
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)

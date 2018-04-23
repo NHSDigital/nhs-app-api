@@ -4,12 +4,14 @@ class KnownService {
     let url:URLComponents
     let shouldHandleUnavailability:Bool
     let shouldAllowNativeInteraction:Bool
+    let serviceTitle: String
     private var urlQueryItems = Array<URLQueryItem>()
     
-    init(urlString:String, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
+    init(urlString:String, serviceTitle: String = "", shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
         self.url = URLComponents(string: urlString)!
         self.shouldHandleUnavailability = shouldHandleUnavailability
         self.shouldAllowNativeInteraction = shouldAllowNativeInteraction
+        self.serviceTitle = serviceTitle
         self.retrieveQueryKeyValueFrom(queryString: urlQueryString)
     }
     

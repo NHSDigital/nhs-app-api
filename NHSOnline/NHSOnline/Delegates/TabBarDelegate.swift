@@ -6,7 +6,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     enum Menu: Int {
         case Symptoms = 0
         case Appointments = 1
-        case Prescription = 2
+        case Prescriptions = 2
         case MyRecord = 3
         case More = 4
     }
@@ -17,7 +17,6 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
         let selectedItem = Menu(rawValue: didSelect.tag)!
-        
         switch selectedItem {
         case .Symptoms:
             selectPage(pageUrl: config().Nhs111Url)
@@ -26,7 +25,7 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             let appointmentsUrl = appendPathToBaseUrl(urlPathToAppend: config().AppointmentsUrlPath)
             selectPage(pageUrl: appointmentsUrl)
             break
-        case .Prescription:
+        case .Prescriptions:
             break
         case .MyRecord:
             break
