@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.View.*
 import android.support.v7.widget.Toolbar
+import android.webkit.WebView
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
@@ -31,7 +32,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         configureWebView()
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
-        retryButton.setOnClickListener { onSymptomMenuSelected() }
+        retryButton.setOnClickListener { webview.reload() }
 
         nhsOnlineLogoIcon.setOnClickListener{ onNhsOnlineLogoIconSelected() }
 
