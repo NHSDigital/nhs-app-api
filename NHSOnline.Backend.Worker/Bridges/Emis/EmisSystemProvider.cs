@@ -13,6 +13,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             _emisClient = emisClient;
         }
 
+        public SupplierEnum Supplier => SupplierEnum.Emis;
+
         public IIm1ConnectionService GetIm1ConnectionService()
         {
             return new EmisIm1ConnectionService(_emisClient);
@@ -20,8 +22,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public ISessionService GetSessionService()
         {
-            // TODO - NHSO-456
-            throw new System.NotImplementedException();
+            return new EmisSessionService(_emisClient);
         }
 
         public ITokenValidationService GetTokenValidationService()

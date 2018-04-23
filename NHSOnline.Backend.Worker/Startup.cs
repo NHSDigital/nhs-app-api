@@ -53,6 +53,8 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICipherService, CipherService>();
             services.AddSingleton<ICitizenIdService, CitizenIdService>();
+            services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
+            services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
             services.AddSingleton<HttpClient>();
             services.AddSingleton<EmisSystemProvider>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
@@ -70,6 +72,7 @@ namespace NHSOnline.Backend.Worker
             {
                 Timeout = TimeSpan.FromSeconds(timeout)
             }));
+            services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
 
             var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));

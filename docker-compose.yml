@@ -11,12 +11,17 @@ services:
     ports:
       - "8080:5123"
     environment:
-      - REDIS_SESSION_CONFIG=nhsonline.redis.session:6379
-      - REDIS_ODSLOOKUP_CONFIG=nhsonline.redis.sds:6379
-      - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
-      - EMIS_APPLICATION_ID=D66BA979-60D2-49AA-BE82-AEC06356E41F
-      - EMIS_VERSION=2.1.0.0
+      - CITIZEN_ID_BASE_URL=https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/
+      - CITIZEN_ID_CLIENT_ID=nhs-online-poc
+      - CITIZEN_ID_CLIENT_SECRET=872b46c9-0afe-4037-8958-e7bbc209a379
       - CORS_AUTHORITY=*
+      - EMIS_APPLICATION_ID=D66BA979-60D2-49AA-BE82-AEC06356E41F
+      - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
+      - EMIS_VERSION=2.1.0.0
+      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
+      - REDIS_ODSLOOKUP_CONFIG=nhsonline.redis.sds:6379
+      - REDIS_SESSION_CONFIG=nhsonline.redis.session:6379
+      - SESSION_EXPIRY_MINUTES=20
   nhsonline.stub-data:
     image: nhsonline.backend.stub-data
     build:

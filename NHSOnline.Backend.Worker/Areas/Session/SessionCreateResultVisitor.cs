@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.Router.Session;
 

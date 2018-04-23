@@ -62,4 +62,7 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {977BD944-985E-4AE2-8D9D-9D61E71ED054}
 	EndGlobalSection
+	GlobalSection(NDepend) = preSolution
+		Project = ".\NHSOnline.Backend.Worker.ndproj"
+	EndGlobalSection
 EndGlobal

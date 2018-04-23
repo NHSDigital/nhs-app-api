@@ -112,8 +112,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             var expectedNhsNumbers = new[]
             {
-                new PatientNhsNumber {NhsNumber = "123ABC"},
-                new PatientNhsNumber {NhsNumber = "456DEF"}
+                new PatientNhsNumber { NhsNumber = "123ABC" },
+                new PatientNhsNumber { NhsNumber = "456DEF" }
             };
 
             var expectedResponse = new PatientIm1ConnectionResponse
@@ -122,7 +122,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
                 NhsNumbers = expectedNhsNumbers
             };
 
-            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode, new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
+                new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             var systemProviderMock = MockSystemProvider(im1ConnectionService);
             var systemProviderFactoryMock = MockSystemProviderFactory(supplier, systemProviderMock);
             im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
@@ -132,11 +133,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, odsCode);
 
-            result.Should().BeAssignableTo<OkObjectResult>();
-            // ReSharper disable once PossibleNullReferenceException
-            var responseObject = (result as OkObjectResult).Value;
-            responseObject.Should().BeAssignableTo<PatientIm1ConnectionResponse>();
-            responseObject.Should().BeEquivalentTo(expectedResponse);
+            var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
         [TestMethod]
@@ -226,7 +225,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             return mockSystemProvider;
         }
 
-        private Mock<IIm1ConnectionService> MockIm1ConnectionService(string patientIdentifier = DefaultPatientIdentifier, string odsCode = DefaultOdsCode,
+        private Mock<IIm1ConnectionService> MockIm1ConnectionService(
+            string patientIdentifier = DefaultPatientIdentifier, string odsCode = DefaultOdsCode,
             Im1ConnectionVerifyResult expectedResponse = null)
         {
             var mockIm1ConnectionService = new Mock<IIm1ConnectionService>();

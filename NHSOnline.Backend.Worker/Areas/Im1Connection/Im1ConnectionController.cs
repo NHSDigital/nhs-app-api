@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return NotFound();
             }
 
-            var systemProvider = systemProviderOption.Value;
+            var systemProvider = systemProviderOption.ValueOrFailure();
             var tokenValidationService = systemProvider.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
             {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return NotFound();
             }
 
-            var systemProvider = systemProviderOption.Value;
+            var systemProvider = systemProviderOption.ValueOrFailure();
             var im1ConnectionService = systemProvider.GetIm1ConnectionService();
             var registerResult = await im1ConnectionService.Register(model);
 

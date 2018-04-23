@@ -5,6 +5,8 @@ namespace NHSOnline.Backend.Worker.Router
 {
     public interface ISystemProvider
     {
+        SupplierEnum Supplier { get; }
+
         IIm1ConnectionService GetIm1ConnectionService();
         ISessionService GetSessionService();
         ITokenValidationService GetTokenValidationService();

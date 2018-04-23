@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             response.Body.Should().BeEquivalentTo(expectedEndUserSessionResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().Be(null);
+            response.ErrorResponse.Should().BeNull();
         }
 
         [TestMethod]
@@ -140,7 +140,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
                 .WhenEmis(HttpMethod.Post, "me/applications")
                 .WithEmisHeaders(additionalHeaders)
                 .WithContent(JsonConvert.SerializeObject(requestBody))
-                .Respond(HttpStatusCode.InternalServerError, "application/json", JsonConvert.SerializeObject(expectedResponse));
+                .Respond(HttpStatusCode.InternalServerError, "application/json",
+                    JsonConvert.SerializeObject(expectedResponse));
 
             var response = await _sut.MeApplicationsPost(endUserSessionId, requestBody);
 

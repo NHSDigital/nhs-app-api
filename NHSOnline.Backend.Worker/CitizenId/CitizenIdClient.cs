@@ -1,0 +1,112 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.CitizenId.Models;
+
+namespace NHSOnline.Backend.Worker.CitizenId
+{
+    public interface ICitizenIdClient
+    {
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier);
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string bearerToken);
+    }
+
+    public class CitizenIdClient : ICitizenIdClient
+    {
+        private const string TokenPath = "token";
+        private const string UserInfoPath = "userinfo";
+
+        private readonly HttpClient _httpClient;
+        private readonly string _redirectUri;
+        private readonly string _clientId;
+        private readonly string _basicAuthCredentials;
+
+        public CitizenIdClient(IHttpClientFactory httpClientFactory, ICitizenIdConfig config)
+        {
+            _httpClient = httpClientFactory.GetClient(HttpClientName.CitizenIdApiClient);
+            _httpClient.BaseAddress = config.CitizenIdApiBaseUrl;
+
+            _redirectUri = new Uri(config.NhsWebAppBaseUrl, "auth-return").ToString();
+            _clientId = config.ClientId;
+            _basicAuthCredentials = Convert.ToBase64String(
+                System.Text.Encoding.ASCII.GetBytes($"{config.ClientId}:{config.ClientSecret}"));
+        }
+
+        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier)
+        {
+            var dict = new Dictionary<string, string>
+            {
+                { "grant_type", "authorization_code" },
+                { "code", authCode },
+                { "redirect_uri", _redirectUri },
+                { "code_verifier", codeVerifier },
+                { "client_id", _clientId },
+                { "code_challenge_method", "S256" }
+            };
+
+            var request = new HttpRequestMessage(HttpMethod.Post, TokenPath)
+            {
+                Content = new FormUrlEncodedContent(dict)
+            };
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _basicAuthCredentials);
+
+            var response = await SendRequestAndParseResponse<Token>(request);
+            return response;
+        }
+
+        public async Task<CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string bearerToken)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, UserInfoPath);
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+            var response = await SendRequestAndParseResponse<UserInfo>(request);
+            return response;
+        }
+
+        private async Task<CitizenIdApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
+            HttpRequestMessage request)
+        {
+            var responseMessage = await _httpClient.SendAsync(request);
+            var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);
+
+            var stringResponse = await responseMessage.Content.ReadAsStringAsync();
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                response.Body = JsonConvert.DeserializeObject<TResponse>(stringResponse);
+            }
+            else
+            {
+                response.ErrorResponse = JsonConvert.DeserializeObject<ErrorResponse>(stringResponse);
+            }
+
+            return response;
+        }
+
+        public class CitizenIdApiResponse
+        {
+            public CitizenIdApiResponse(HttpStatusCode statusCode)
+            {
+                StatusCode = statusCode;
+            }
+
+            public HttpStatusCode StatusCode { get; set; }
+            public ErrorResponse ErrorResponse { get; set; }
+            public bool HasSuccessStatusCode => (int) StatusCode >= 200 && (int) StatusCode <= 299;
+        }
+
+        public class CitizenIdApiObjectResponse<TBody> : CitizenIdApiResponse
+        {
+            public CitizenIdApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
+            {
+            }
+
+            public TBody Body { get; set; }
+        }
+    }
+}

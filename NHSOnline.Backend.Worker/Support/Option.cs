@@ -9,7 +9,7 @@
     public struct Option<T>
     {
         public bool HasValue { get; }
-        internal T Value { get; }
+        private T Value { get; }
 
         internal Option(T value, bool hasValue)
         {

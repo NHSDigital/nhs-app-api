@@ -2,6 +2,9 @@
 
 SwaggerGenerated
 
+# NDepend Outputs
+NDependOut/
+
 # End NHSOnline Specific
 
 
