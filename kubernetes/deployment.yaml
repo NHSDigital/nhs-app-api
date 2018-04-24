@@ -19,6 +19,8 @@ spec:
           value: "Production"
         - name: REDIS_ODSLOOKUP_CONFIG
           value: "redis:6379"
+        - name: REDIS_SESSION_CONFIG
+          value: "redis2:6379"
         - name: EMIS_BASE_URL
           value: "http://nhsonline-stubs:5123/emis/"
         - name: EMIS_APPLICATION_ID
