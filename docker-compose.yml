@@ -9,7 +9,7 @@ services:
       - nhsonline.redis.sds
       - nhsonline.redis.session
     ports:
-      - "8080:5123"
+      - "8082:5123"
     environment:
       - CITIZEN_ID_BASE_URL=https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/
       - CITIZEN_ID_CLIENT_ID=nhs-online-poc
