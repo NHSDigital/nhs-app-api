@@ -26,7 +26,8 @@ RUN dotnet publish -c Release -o /app
 
 FROM runtime AS final
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS="http://*:5123" 
+ENV ASPNETCORE_URLS="http://*:5123"
+ENV CORS_AUTHORITY="http://develop.bitraft.io"
 ENV WAIT_FOR_TIMEOUT 60
 WORKDIR /app
 EXPOSE 5123
