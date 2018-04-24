@@ -10,9 +10,9 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlString: config.HomeUrl, serviceTitle: "Home", shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlString: config.Nhs111Url, serviceTitle: "NHS 111", shouldHandleUnavailability: true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlString: config.OrganDonationUrl, serviceTitle: "Organ Donation", shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.HomeUrl, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.Nhs111Url, serviceTitle: config.TitleNHS111, shouldHandleUnavailability: true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.OrganDonationUrl, serviceTitle: config.TitleOrganDonation, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func findMatchingKnownServiceFor(url:URL) -> KnownService? {
