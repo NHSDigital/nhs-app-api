@@ -39,6 +39,12 @@ class HomeViewController : UIViewController {
         }
     }
     
+    func updateHeaderText(headerText: String?) {
+        if ((headerText) != nil) {
+            self.headerBar.headerTitle.text = headerText
+        }
+    }
+    
     func setVisibilityOfHeaderAndMenuBars(visible:Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             if(visible) {
