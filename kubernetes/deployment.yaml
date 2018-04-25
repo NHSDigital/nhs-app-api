@@ -29,3 +29,22 @@ spec:
           value: "2.1.0.0"
       imagePullSecrets:
        - name: azure-registry
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nhsonline-stubs
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nhsonline-stubs
+    spec:
+      containers:
+      - name: nhsonline-stubs
+        image: nhsonline.azurecr.io/nhsonline-stubs:latest
+        ports:
+        - containerPort: 5123
+      imagePullSecrets:
+       - name: azure-registry
