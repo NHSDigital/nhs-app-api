@@ -46,5 +46,27 @@ spec:
         image: nhsonline.azurecr.io/nhsonline-stubs:latest
         ports:
         - containerPort: 5123
+        env:
+        - name: WIREMOCK_AUTHORITY
+          value: "nhsonline-wiremock:8080"
+        - name: WAIT_FOR_TIMEOUT
+          value: "60"
       imagePullSecrets:
        - name: azure-registry
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nhsonline-wiremock
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nhsonline-wiremock
+    spec:
+      containers:
+      - name: nhsonline-wiremock
+        image: rodolpheche/wiremock
+        ports:
+        - containerPort: 8080
