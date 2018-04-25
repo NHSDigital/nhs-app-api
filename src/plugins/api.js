@@ -4,7 +4,7 @@ import store from '@/store';
 import NHSOnlineApi from '../services/nhsonlineapi';
 
 
-Axios.defaults.baseUrl = process.env.API_HOST || 'http://localhost:8080';
+Axios.defaults.baseUrl = process.env.API_HOST || 'http://localhost:8082';
 Axios.defaults.headers.common.Accept = 'application/json';
 
 

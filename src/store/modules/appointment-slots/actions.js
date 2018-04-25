@@ -4,11 +4,32 @@ import {
   SLOTS_LOADED,
 } from './mutation-types';
 
-export const load = ({ commit }, { API_HOST }) =>
+function getFromDate() {
+  return new Date();
+}
+
+function getToDate() {
+  const rangeInDays = 14;
+
+  const date = getFromDate();
+  date.setDate(date.getDate() + rangeInDays);
+  date.setUTCHours(0, 0, 0, 0);
+
+  return date;
+}
+
+function getAppointmentsSlotsParameters() {
+  return {
+    fromDate: getFromDate().toISOString(),
+    toDate: getToDate().toISOString(),
+  };
+}
+
+export const load = ({ commit }) =>
   Vue
     .$http
-    .get(`${API_HOST}/patient/appointmentslots`)
-    .then(({ data } = {}) => {
+    .getV1PatientAppointmentslots(getAppointmentsSlotsParameters())
+    .then((data) => {
       commit(SLOTS_LOADED, data);
     });
 

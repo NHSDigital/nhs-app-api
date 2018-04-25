@@ -3,7 +3,6 @@ import { load, select } from '@/store/modules/appointment-slots/actions';
 import { SLOT_SELECTED, SLOTS_LOADED } from '@/store/modules/appointment-slots/mutation-types';
 
 const API_HOST = 'http://unit.test';
-const EXPECTED_URL = `${API_HOST}/patient/appointmentslots`;
 
 let original$http;
 
@@ -15,15 +14,16 @@ afterEach(() => {
   Vue.$http = original$http;
 });
 
+
 describe('load', () => {
   it('will request the appointment slots from the backend', () => {
     Vue.$http = {
-      get: jest.fn().mockResolvedValue(),
+      getV1PatientAppointmentslots: jest.fn().mockResolvedValue(),
     };
 
     return load({ commit: jest.fn() }, { API_HOST })
       .then(() => {
-        expect(Vue.$http.get).toBeCalledWith(EXPECTED_URL);
+        expect(Vue.$http.getV1PatientAppointmentslots).toBeCalled();
       });
   });
 
@@ -33,13 +33,13 @@ describe('load', () => {
     };
 
     Vue.$http = {
-      get: () => Promise.resolve(expected),
+      getV1PatientAppointmentslots: () => Promise.resolve(expected),
     };
 
     const commit = jest.fn();
 
     return load({ commit }, { API_HOST })
-      .then(() => expect(commit).toBeCalledWith(SLOTS_LOADED, expected.data));
+      .then(() => expect(commit).toBeCalledWith(SLOTS_LOADED, expected));
   });
 });
 
