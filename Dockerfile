@@ -1,4 +1,4 @@
-FROM alpine:3.7 AS base
+FROM nhsonline.azurecr.io/nhsonline-web-base:latest AS base
 
 ENV HOST 0.0.0.0
 ENV PORT 4000
@@ -6,17 +6,6 @@ ENV API_HOST http://localhost:8800
 ENV ORGAN_DONATION_URL https://www.organdonation.nhs.uk/
 ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
 
-RUN apk upgrade --no-cache && \
-    apk add --no-cache \
-      nodejs \
-      nodejs-npm \
-      tini \
-    && \
-    adduser -D nodejs && \
-    npm install webpack webpack-dev-server -g
-
-WORKDIR /opt/app
-ENTRYPOINT ["/sbin/tini", "--"]
 COPY package.json .
 COPY package-lock.json .
 
