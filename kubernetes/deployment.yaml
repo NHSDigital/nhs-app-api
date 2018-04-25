@@ -22,35 +22,11 @@ spec:
         - name: REDIS_SESSION_CONFIG
           value: "redis2:6379"
         - name: EMIS_BASE_URL
-          value: "http://nhsonline-stubs:5123/emis/"
+          value: "http://nhsonline-wiremock:8080/emis/"
         - name: EMIS_APPLICATION_ID
           value: "D66BA979-60D2-49AA-BE82-AEC06356E41F"
         - name: EMIS_VERSION
           value: "2.1.0.0"
-      imagePullSecrets:
-       - name: azure-registry
----
-apiVersion: apps/v1beta1
-kind: Deployment
-metadata:
-  name: nhsonline-stubs
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: nhsonline-stubs
-    spec:
-      containers:
-      - name: nhsonline-stubs
-        image: nhsonline.azurecr.io/nhsonline-stubs:latest
-        ports:
-        - containerPort: 5123
-        env:
-        - name: WIREMOCK_AUTHORITY
-          value: "nhsonline-wiremock:8080"
-        - name: WAIT_FOR_TIMEOUT
-          value: "60"
       imagePullSecrets:
        - name: azure-registry
 ---
