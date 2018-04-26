@@ -2,6 +2,7 @@ package com.nhs.online.nhsonline.services
 
 import android.content.Context
 import android.net.Uri
+import android.provider.Settings.System.getString
 import com.nhs.online.nhsonline.R
 import java.net.URL
 
@@ -16,21 +17,26 @@ class KnownServices(private val context: Context) {
     }
 
     private fun buildKnownServices() {
+
         serviceList.add(Service(context.resources.getString(
             R.string.baseURL),
             true,
             queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
             unavailabilityErrorMessage = context.resources.getString(R.string.connection_error)))
+
         serviceList.add(Service(context.resources.getString(
             R.string.organDonation),
             true,
             null,
-             unavailabilityErrorMessage = context.resources.getString(R.string.organ_donation_connection_error)))
+             unavailabilityErrorMessage = context.resources.getString(R.string.organ_donation_connection_error),
+             nativeHeader = context.resources.getString(R.string.organ_donation_register_header)))
+
         serviceList.add(Service(context.resources.getString(
             R.string.nhs111),
             true,
             null,
-            unavailabilityErrorMessage = context.resources.getString(R.string.nhs111_connection_error)))
+            unavailabilityErrorMessage = context.resources.getString(R.string.nhs111_connection_error),
+            nativeHeader = context.resources.getString(R.string.nhs_111_header)))
     }
 
     fun findMatchingKnownService(urlString: String): Service? {
@@ -73,7 +79,8 @@ class KnownServices(private val context: Context) {
         urlString: String,
         val shouldHandleUnavailability: Boolean = false,
         queryString: String? = null,
-        val unavailabilityErrorMessage: String? = null
+        val unavailabilityErrorMessage: String? = null,
+        var nativeHeader: String? = null
     ) {
         private val serviceQueryMap: MutableMap<String, String> = mutableMapOf()
         val url: URL = URL(urlString)
@@ -113,6 +120,10 @@ class KnownServices(private val context: Context) {
                 }
             }
             return false
+        }
+
+        fun hasNativeHeader() : Boolean {
+            return !nativeHeader.isNullOrEmpty()
         }
 
         private fun matchesThisServiceHost(uri: Uri) : Boolean {

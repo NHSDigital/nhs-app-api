@@ -26,6 +26,20 @@ class WebClientInterceptor(
     private val handler = Handler()
     private var shouldShowErrorPage = false
 
+    override fun onLoadResource(view: WebView?, url: String?) {
+        if (!url.isNullOrEmpty()) {
+            val matchingKnownService = knownServices.findMatchingKnownService(url!!)
+
+            when(matchingKnownService?.hasNativeHeader()) {
+                true -> {
+                    uiInteractor.setHeaderText(matchingKnownService.nativeHeader!!)
+                }
+            }
+        }
+
+        super.onLoadResource(view, url)
+    }
+
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         activities.forEach { activity ->
@@ -36,10 +50,12 @@ class WebClientInterceptor(
         }
 
         val matchingKnownService = knownServices.findMatchingKnownService(url)
+
         when(knownServices.isTheService(matchingKnownService)) {
             KnownServices.ServiceName.NHS111 -> uiInteractor.selectSymptomsMenuActive()
             KnownServices.ServiceName.ORGAN_DONATION -> uiInteractor.selectMoreMenuActive()
         }
+
         if (matchingKnownService != null) {
             if (matchingKnownService.hasMissingQueryString(url)) {
                 val urlWithMissingQueryStrings = matchingKnownService.addMissingQueryStrings(url)
