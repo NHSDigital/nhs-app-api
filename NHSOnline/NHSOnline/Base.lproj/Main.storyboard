@@ -19,29 +19,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lXZ-bo-CEV" customClass="HeaderBar" customModule="NHSOnline" customModuleProvider="target">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lXZ-bo-CEV" customClass="HeaderBar" customModule="NHSOnline" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="20" width="375" height="94"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="94" id="3SX-vM-Asc"/>
                                 </constraints>
                             </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cru-Eq-4ir" userLabel="WebViewContainer">
-                                <rect key="frame" x="0.0" y="114" width="375" height="504"/>
-                                <connections>
-                                    <segue destination="gYs-SY-5nG" kind="embed" identifier="webViewSegue" id="KK9-CC-6sc"/>
-                                </connections>
-                            </containerView>
-                            <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sFg-cm-uUY" userLabel="NativeViewContainer">
-                                <rect key="frame" x="0.0" y="114" width="375" height="504"/>
-                                <connections>
-                                    <segue destination="i9L-px-mbd" kind="embed" identifier="nativeViewSegue" id="naU-IK-iVV"/>
-                                </connections>
-                            </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0OU-1V-r5y" userLabel="NavMenu">
                                 <rect key="frame" x="0.0" y="618" width="375" height="49"/>
                                 <subviews>
-                                    <tabBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-IT-U0z">
+                                    <tabBar hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-IT-U0z">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <items>
@@ -58,25 +46,41 @@
                                     <constraint firstAttribute="height" constant="49" id="lne-R1-6xH"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="top" secondItem="0OU-1V-r5y" secondAttribute="top" id="pE2-6d-SNE"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="leading" secondItem="0OU-1V-r5y" secondAttribute="leading" id="pp9-V8-8hO"/>
-                                    <constraint firstAttribute="trailing" secondItem="ZaB-IT-U0z" secondAttribute="trailing" id="wrT-J1-CxW"/>
+                                    <constraint firstItem="ZaB-IT-U0z" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wrT-J1-CxW"/>
                                 </constraints>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cru-Eq-4ir" userLabel="WebViewContainer">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <connections>
+                                    <segue destination="gYs-SY-5nG" kind="embed" identifier="webViewSegue" id="KK9-CC-6sc"/>
+                                </connections>
+                            </containerView>
+                            <containerView opaque="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sFg-cm-uUY" userLabel="NativeViewContainer">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <connections>
+                                    <segue destination="i9L-px-mbd" kind="embed" identifier="nativeViewSegue" id="naU-IK-iVV"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="0OU-1V-r5y" firstAttribute="top" secondItem="cru-Eq-4ir" secondAttribute="bottom" id="CRu-RB-K16"/>
-                            <constraint firstItem="sFg-cm-uUY" firstAttribute="top" secondItem="lXZ-bo-CEV" secondAttribute="bottom" id="DEQ-BH-PJB"/>
+                            <constraint firstItem="cru-Eq-4ir" firstAttribute="bottom" secondItem="0OU-1V-r5y" secondAttribute="top" priority="850" id="CRu-RB-K16"/>
+                            <constraint firstItem="sFg-cm-uUY" firstAttribute="top" secondItem="lXZ-bo-CEV" secondAttribute="bottom" priority="850" id="DEQ-BH-PJB"/>
                             <constraint firstItem="0OU-1V-r5y" firstAttribute="leading" secondItem="sYc-Id-utI" secondAttribute="leading" id="DqC-Vo-tyG"/>
                             <constraint firstItem="lXZ-bo-CEV" firstAttribute="top" secondItem="sYc-Id-utI" secondAttribute="top" id="JsB-Mh-Zym"/>
-                            <constraint firstItem="cru-Eq-4ir" firstAttribute="top" secondItem="lXZ-bo-CEV" secondAttribute="bottom" id="LRQ-pX-8d6"/>
+                            <constraint firstItem="cru-Eq-4ir" firstAttribute="top" secondItem="lXZ-bo-CEV" secondAttribute="bottom" priority="850" id="LRQ-pX-8d6"/>
+                            <constraint firstItem="cru-Eq-4ir" firstAttribute="bottom" secondItem="sYc-Id-utI" secondAttribute="bottom" priority="875" id="NXJ-oO-geV"/>
+                            <constraint firstItem="sFg-cm-uUY" firstAttribute="bottom" secondItem="sYc-Id-utI" secondAttribute="bottom" priority="875" id="T0c-5E-uy0"/>
                             <constraint firstItem="lXZ-bo-CEV" firstAttribute="leading" secondItem="sYc-Id-utI" secondAttribute="leading" id="UIP-pb-vgQ"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="trailing" secondItem="sYc-Id-utI" secondAttribute="trailing" id="UlJ-Ez-V0N"/>
                             <constraint firstItem="sFg-cm-uUY" firstAttribute="trailing" secondItem="sYc-Id-utI" secondAttribute="trailing" id="aOK-f0-KIQ"/>
                             <constraint firstItem="0OU-1V-r5y" firstAttribute="bottom" secondItem="sYc-Id-utI" secondAttribute="bottom" id="alT-GL-rw1"/>
-                            <constraint firstItem="0OU-1V-r5y" firstAttribute="top" secondItem="sFg-cm-uUY" secondAttribute="bottom" id="geL-BL-dWf"/>
+                            <constraint firstItem="sFg-cm-uUY" firstAttribute="bottom" secondItem="0OU-1V-r5y" secondAttribute="top" priority="850" id="geL-BL-dWf"/>
+                            <constraint firstItem="sFg-cm-uUY" firstAttribute="top" secondItem="sYc-Id-utI" secondAttribute="top" priority="875" id="jtD-1R-Wui"/>
                             <constraint firstItem="cru-Eq-4ir" firstAttribute="leading" secondItem="sYc-Id-utI" secondAttribute="leading" id="lMe-Oj-L3n"/>
                             <constraint firstItem="0OU-1V-r5y" firstAttribute="trailing" secondItem="sYc-Id-utI" secondAttribute="trailing" id="lsV-rj-VoI"/>
                             <constraint firstItem="sFg-cm-uUY" firstAttribute="leading" secondItem="sYc-Id-utI" secondAttribute="leading" id="nle-7e-Ip1"/>
+                            <constraint firstItem="cru-Eq-4ir" firstAttribute="top" secondItem="sYc-Id-utI" secondAttribute="top" priority="875" id="vcq-ak-JSw"/>
                             <constraint firstItem="lXZ-bo-CEV" firstAttribute="trailing" secondItem="sYc-Id-utI" secondAttribute="trailing" id="zdZ-XY-SoQ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="sYc-Id-utI"/>
@@ -85,11 +89,13 @@
                         <outlet property="NativeViewContainer" destination="sFg-cm-uUY" id="0cI-cc-ScC"/>
                         <outlet property="WebViewContainer" destination="cru-Eq-4ir" id="W0V-78-3mB"/>
                         <outlet property="headerBar" destination="lXZ-bo-CEV" id="oMF-tD-acd"/>
-                        <outlet property="headerHeightConstraint" destination="3SX-vM-Asc" id="eQ4-V2-Qgg"/>
                         <outlet property="nativeViewContainer" destination="sFg-cm-uUY" id="3hk-0q-Ctw"/>
+                        <outlet property="nativeViewHeaderTopConstraint" destination="DEQ-BH-PJB" id="E50-TW-6aY"/>
+                        <outlet property="nativeViewNavMenuBottomConstraint" destination="geL-BL-dWf" id="gke-6P-EC7"/>
                         <outlet property="tabBar" destination="ZaB-IT-U0z" id="uui-jS-F4U"/>
-                        <outlet property="tabBarHeightConstraint" destination="lne-R1-6xH" id="zkA-JR-xN4"/>
                         <outlet property="webViewContainer" destination="cru-Eq-4ir" id="mxE-Ru-4nZ"/>
+                        <outlet property="webviewHeaderTopConstraint" destination="LRQ-pX-8d6" id="t0q-WK-WfT"/>
+                        <outlet property="webviewNavMenuBottomConstraint" destination="CRu-RB-K16" id="1KK-yO-vl1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tET-Ty-ZzB" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -101,11 +107,11 @@
             <objects>
                 <viewController title="Web View Controller" id="gYs-SY-5nG" customClass="WebViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sqL-hQ-eXV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gVA-xH-vzV">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="504"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -135,11 +141,11 @@
             <objects>
                 <viewController title="Native View Controller" id="i9L-px-mbd" customClass="PageUnavailabilityViewController" customModule="NHSOnline" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J0Q-Cj-kkS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="504"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7J3-ga-aZb">
-                                <rect key="frame" x="0.0" y="20" width="375" height="484"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="627"/>
                                 <color key="backgroundColor" red="0.85882352941176465" green="0.8784313725490196" blue="0.88235294117647056" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hoh-DY-uYf">

@@ -1,16 +1,18 @@
 import UIKit
 
 class HomeViewController : UIViewController {
-    private var defaultHeaderBarHeight:CGFloat = 94
-    private var defaultTabBarHeight:CGFloat = 49
+    private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
+    private let hideConstraintPriority = UILayoutPriority.init(rawValue: 850)
     
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var tabBar: UITabBar!
     @IBOutlet weak var nativeViewContainer: UIView!
     @IBOutlet weak var webViewContainer: UIView!
     
-    @IBOutlet weak var headerHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var tabBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var webviewHeaderTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var nativeViewHeaderTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var webviewNavMenuBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var nativeViewNavMenuBottomConstraint: NSLayoutConstraint!
     
     var webViewController: WebViewController?
     var nativeViewController: PageUnavailabilityViewController?
@@ -30,7 +32,6 @@ class HomeViewController : UIViewController {
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         tabBar.delegate = tabBarDelegate
         webViewController?.webView.loadPage(url: pageUrl)
-        setVisibilityOfHeaderAndMenuBars(visible: false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -47,17 +48,19 @@ class HomeViewController : UIViewController {
     
     func setVisibilityOfHeaderAndMenuBars(visible:Bool) {
         UIView.animate(withDuration: 0.3, animations: {
+            let constraintPriority:UILayoutPriority
             if(visible) {
-                self.headerHeightConstraint.constant = self.defaultHeaderBarHeight
-                self.tabBarHeightConstraint.constant = self.defaultTabBarHeight
+                constraintPriority = self.showConstraintPriority
             } else {
-                self.headerHeightConstraint.constant = 0
-                self.tabBarHeightConstraint.constant = 0
+                constraintPriority = self.hideConstraintPriority
             }
+            self.webviewHeaderTopConstraint.priority = constraintPriority
+            self.nativeViewHeaderTopConstraint.priority = constraintPriority
+            
+            self.webviewNavMenuBottomConstraint.priority = constraintPriority
+            self.nativeViewNavMenuBottomConstraint.priority = constraintPriority
             self.headerBar.isHidden = !visible
             self.tabBar.isHidden = !visible
-            self.tabBar.layoutIfNeeded()
-            self.headerBar.layoutIfNeeded()
         })
     }
 }

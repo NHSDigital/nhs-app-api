@@ -47,4 +47,21 @@ class WebViewUrlTests: XCTestCase {
         
         XCTAssertNil(knownService)
     }
+    
+    func test_When_KnownServiceHeaderTitleIsRequested_ThenCorrectTitleForPathIsReturned() {
+        let knownServices = KnownServices(config: config())
+        let serviceUrlTitleDictionary = [
+            config().HomeUrl : nil,
+            config().Nhs111Url:config().TitleNHS111,
+            config().OrganDonationUrl: config().TitleOrganDonation
+        ]
+        for (urlString, title) in serviceUrlTitleDictionary {
+            let url = URL(string:urlString)
+            guard let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: url?.host) else {
+                assertionFailure("known service not found for \(urlString)")
+                return
+            }
+            XCTAssertEqual(knownService.getTitleFor(urlPath: url?.path), title, "expected title \(title ?? "nil") for url \(urlString) not found")
+        }
+    }
 }

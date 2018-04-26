@@ -47,7 +47,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                     if(matchingKnownService.hasMissingQueryString(urlString: url.absoluteString)) {
                         let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
                         decisionHandler(.cancel)
-                        callUpdateHeaderText(headerText: matchingKnownService.serviceTitle)
+                        if let headerTitle = matchingKnownService.getTitleFor(urlPath: url.path){
+                            callUpdateHeaderText(headerText: headerTitle)
+                        }
                         webView.loadPage(url: urlString)
                         return
                     }

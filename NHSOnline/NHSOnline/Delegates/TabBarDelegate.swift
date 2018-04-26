@@ -42,7 +42,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     }
     
     private func appendPathToBaseUrl(urlPathToAppend: String) -> String {
-        let url = NSURL(fileURLWithPath: config().HomeUrl).appendingPathComponent(urlPathToAppend)?.absoluteString
-        return url!;
+        let baseUrl = URL(string: config().HomeUrl)
+        let url = URL(string: urlPathToAppend, relativeTo: baseUrl)?.absoluteString
+        return url!
     }
 }
