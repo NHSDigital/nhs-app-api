@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.CitizenId.Models;
 
 namespace NHSOnline.Backend.Worker.CitizenId
@@ -75,19 +74,18 @@ namespace NHSOnline.Backend.Worker.CitizenId
             var responseMessage = await _httpClient.SendAsync(request);
             var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
-            var stringResponse = await responseMessage.Content.ReadAsStringAsync();
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                response.Body = JsonConvert.DeserializeObject<TResponse>(stringResponse);
-            }
-            else
-            {
-                response.ErrorResponse = JsonConvert.DeserializeObject<ErrorResponse>(stringResponse);
-            }
+            var stringResponse = responseMessage.Content != null
+                ? await responseMessage.Content.ReadAsStringAsync()
+                : null;
+            
+            if (string.IsNullOrEmpty(stringResponse)) return response;
+            
+            response.Body = stringResponse.ParseBody<TResponse>(responseMessage);
+            response.ErrorResponse = stringResponse.ParseError<ErrorResponse>(responseMessage);
 
             return response;
         }
-
+        
         public class CitizenIdApiResponse
         {
             public CitizenIdApiResponse(HttpStatusCode statusCode)

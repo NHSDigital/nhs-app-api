@@ -109,27 +109,19 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             var responseMessage = await _httpClient.SendAsync(request);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
-            var stringResponse = await responseMessage.Content.ReadAsStringAsync();
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                response.Body = JsonConvert.DeserializeObject<TResponse>(stringResponse);
-            }
-            else
-            {
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    response.ErrorResponseBadRequest =
-                        JsonConvert.DeserializeObject<BadRequestErrorResponse>(stringResponse);
-                }
-                else
-                {
-                    response.ErrorResponse = JsonConvert.DeserializeObject<ErrorResponse>(stringResponse);
-                }
-            }
+            var stringResponse = responseMessage.Content != null
+                ? await responseMessage.Content.ReadAsStringAsync()
+                : null;
+
+            if (string.IsNullOrEmpty(stringResponse)) return response;
+            
+            response.Body = stringResponse.ParseBody<TResponse>(responseMessage);
+            response.ErrorResponseBadRequest = stringResponse.ParseBadRequest<BadRequestErrorResponse>(responseMessage);
+            response.ErrorResponse = stringResponse.ParseError<ErrorResponse>(responseMessage, HttpStatusCode.BadRequest);
 
             return response;
         }
-
+        
         public class EmisApiResponse
         {
             public EmisApiResponse(HttpStatusCode statusCode)

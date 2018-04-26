@@ -176,5 +176,81 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             response.StatusCode.Should().Be(200);
             response.ErrorResponse.Should().Be(null);
         }
+
+        [TestMethod]
+        public async Task EndpointCalled_ReturnsErrorResponseCodeWithNullBody_ResponseHasEmptyErrorProperties()
+        {
+            var endUserSessionId = _fixture.Create<string>();
+            var requestBody = _fixture.Create<SessionsPostRequest>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "sessions")
+                .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .Respond(HttpStatusCode.Forbidden);
+
+            var response = await _sut.SessionsPost(endUserSessionId, requestBody);
+
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.ErrorResponseBadRequest.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [TestMethod]
+        public async Task EndpointCalled_ReturnsErrorResponseCodeWithEmptyBody_ResponseHasEmptyErrorProperties()
+        {
+            var endUserSessionId = _fixture.Create<string>();
+            var requestBody = _fixture.Create<SessionsPostRequest>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "sessions")
+                .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .Respond(HttpStatusCode.Forbidden, "application/json", string.Empty);
+
+            var response = await _sut.SessionsPost(endUserSessionId, requestBody);
+
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.ErrorResponseBadRequest.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [TestMethod]
+        public async Task EndpointCalled_ReturnsBadRequest_ResponseHasPopulatedErrorResponseBadRequestProperty()
+        {
+            var endUserSessionId = _fixture.Create<string>();
+            var requestBody = _fixture.Create<SessionsPostRequest>();
+            var expectedResponse = _fixture.Create<BadRequestErrorResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId)
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "sessions")
+                .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .Respond(HttpStatusCode.BadRequest, "application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.SessionsPost(endUserSessionId, requestBody);
+
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.ErrorResponseBadRequest.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
     }
 }

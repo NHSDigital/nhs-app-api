@@ -176,5 +176,45 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
+
+        [TestMethod]
+        public async Task EndpointCalled_ReturnsErrorResponseCodeWithNullBody_ResponseHasEmptyErrorProperties()
+        {
+            // Arrange
+            var bearerToken = _fixture.Create<string>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, "userinfo").ToString())
+                .WithHeaders("Authorization", $"Bearer {bearerToken}")
+                .Respond(HttpStatusCode.Forbidden);
+
+            // Act
+            var response = await _systemUnderTest.GetUserInfo(bearerToken);
+
+            // Assert
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        [TestMethod]
+        public async Task EndpointCalled_ReturnsErrorResponseCodeWithEmptyBody_ResponseHasEmptyErrorProperties()
+        {
+            // Arrange
+            var bearerToken = _fixture.Create<string>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, "userinfo").ToString())
+                .WithHeaders("Authorization", $"Bearer {bearerToken}")
+                .Respond(HttpStatusCode.Forbidden, "application/json", string.Empty);
+
+            // Act
+            var response = await _systemUnderTest.GetUserInfo(bearerToken);
+
+            // Assert
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
     }
 }
