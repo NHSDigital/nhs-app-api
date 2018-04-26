@@ -8,6 +8,13 @@ export default {
       info: 'If you need an appointment, please contact your GP.',
     },
   },
+  prescriptions: {
+    noPrescriptionsAvailable: {
+      title: 'Looks like you have no repeat prescriptions ordered here.',
+      contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
+      orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
+    },
+  },
   common: {
     or: 'OR',
   },
@@ -26,7 +33,7 @@ export default {
   },
   pageHeaderTitles: {
     home: 'Home',
-    prescriptions: 'Prescriptions',
+    prescriptions: 'My repeat prescriptions',
     appointments: 'Appointments',
     myRecord: 'My record',
     more: 'More',

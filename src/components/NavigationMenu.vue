@@ -60,6 +60,7 @@ export default {
     onPrescriptionsMenuClicked(event) {
       const prescriptionsMenu = event.currentTarget;
       this.handleMenuSelection(prescriptionsMenu);
+      this.$router.push('prescriptions');
     },
 
     onMyRecordMenuClicked(event) {

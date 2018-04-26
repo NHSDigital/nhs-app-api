@@ -1,5 +1,6 @@
 import More from '@/components/More';
 import Appointments from '@/components/Appointments';
+import Prescriptions from '@/components/Prescriptions';
 import AuthReturn from '@/components/AuthReturn';
 import HomeLoggedOut from '@/components/HomeLoggedOut';
 import HomeLoggedIn from '@/components/HomeLoggedIn';
@@ -36,6 +37,14 @@ export default [
     meta: {
       auth: true,
       headerKey: 'pageHeaderTitles.more',
+    },
+  }, {
+    path: '/prescriptions',
+    name: 'prescriptions',
+    component: Prescriptions,
+    meta: {
+      auth: true,
+      headerKey: 'pageHeaderTitles.prescriptions',
     },
   }, {
     path: '/auth-return',
