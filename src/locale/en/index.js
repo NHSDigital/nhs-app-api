@@ -3,6 +3,10 @@ export default {
     header: {
       title: 'Book an appointment',
     },
+    noSlotErrorMessage: {
+      summary: 'There are no appointments available at the moment',
+      info: 'If you need an appointment, please contact your GP.',
+    },
   },
   common: {
     or: 'OR',

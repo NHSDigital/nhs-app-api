@@ -2,11 +2,11 @@
   <div id="mainDiv">
     <spinner />
     <main class="content">
-      <div data-purpose="no-slots-error" v-show="showNoAppointment">
-        <p class="summary">There are no appointments available at the moment</p>
-        <p class="info">If you need an appointment, please contact your GP.</p>
+      <div data-purpose="no-slots-error" v-if="showNoAppointment">
+        <p class="summary">{{$t('appointments.noSlotErrorMessage.summary')}}</p>
+        <p class="info">{{$t('appointments.noSlotErrorMessage.info')}}</p>
       </div>
-      <ul data-purpose="slots" v-show="showAppointments">
+      <ul data-purpose="slots" v-if="showAppointments">
         <li :key="slot.id" v-for="slot in slots">
           <appointment-slot :slotId="slot.id"/>
         </li>
