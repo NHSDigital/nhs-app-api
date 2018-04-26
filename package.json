@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "serve": "node server.js",
-    "dev": "npm run swagger && npm run lint && concurrently --kill-others \"npm run serve\" \"webpack-dev-server --inline --disable-host-check --progress --config build/webpack.dev.conf.js\" ",
+    "dev": "npm run swagger && npm run lint && concurrently --kill-others \"npm run serve -- --port=4000 \" \"webpack-dev-server --inline --disable-host-check --progress --config build/webpack.dev.conf.js\" ",
     "build": "npm run swagger && node build/build.js",
     "test": "npm run test-unit",
     "test-unit": "npm run lint && jest --config test/unit/jest.conf.js --coverage",
@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "express": "^4.16.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "minimist": "^1.2.0"
+
   },
   "devDependencies": {
     "@openid/appauth": "^0.3.1",
@@ -61,7 +63,6 @@
     "js-yaml": "^3.10.0",
     "karma": "^2.0.0",
     "lodash": "^4.17.5",
-    "minimist": "^1.2.0",
     "moment": "^2.22.1",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.7.2",

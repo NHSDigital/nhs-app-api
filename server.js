@@ -1,10 +1,11 @@
 /* eslint no-console: off */
-
+const minimist = require('minimist');
 const express = require('express');
 const path = require('path');
 const config = require('./config/env');
 
 const app = express();
+const args = minimist(process.argv.slice(2));
 
 app.use(express.static(path.resolve(`${__dirname}/dist`)));
 
@@ -27,5 +28,6 @@ app.get('*', (request, response) => {
   response.sendFile(path.resolve(`${__dirname}/dist`, 'index.html'));
 });
 
-console.log(`Starting Service on Port ${config.PORT}`);
-app.listen(config.PORT);
+const port = args.port || config.PORT;
+console.log(`Starting Service on Port ${port}`);
+app.listen(port);
