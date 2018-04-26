@@ -4,7 +4,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments.Controllers
 {
-    [Route("patient/appointmentslots")]
+    [Route("patient/appointment-slots")]
     public class AppointmentsSlotsController : Controller
     {
         [HttpGet]

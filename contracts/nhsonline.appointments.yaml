@@ -3,15 +3,15 @@ swagger: "2.0"
 info:
   version: 0.0.3
   title: NHS Online Sub-API - Appointments
-  description: NHS Online Sub-API - endpoints pertaining to appointments requires NHSO-Session-ID cookie in header from session end point
+  description: NHS Online Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-ID cookie (obtained from Session end point).
 
 paths:
-  /appointmentslots:
+  /appointment-slots:
     get:
       tags:
-        - appointmentslots
+        - appointment-slots
       summary: Gets a list of available appointments for the logged on user.
-      description: For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-ID cookie in header from session end point
+      description: For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-ID cookie (obtained from Session end point).
       produces:
         - application/json
       parameters:
@@ -19,21 +19,21 @@ paths:
           name: fromDate
           type: string
           format: date-time
-          required: true
-          description: Appointment search from date.
+          required: false
+          description: Appointment search from date. If not supplied and no toDate supplied, defaults to current datetime. If not supplied but toDate supplied, defaults to start of the day two weeks before toDate.
         - in: query
           name: toDate
           type: string
           format: date-time
-          required: true
-          description: Appointment search to date.
+          required: false
+          description: Appointment search to date. If not supplied and no fromDate supplied, defaults to end of the day two weeks after current datetime. If not supplied but fromDate supplied, defaults to end of the day two weeks after fromDate.
       responses:
         200:
           description: Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots.
           schema:
             $ref: "#/definitions/AppointmentSlotsResponse"
         400:
-          description: Bad request. All headers must be provided.
+          description: Bad request. A querystring parameter is not in the expected format.
         401:
           description: User session has expired.
         500:

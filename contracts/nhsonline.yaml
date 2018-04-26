@@ -9,8 +9,8 @@ schemes:
   - https
 
 paths:
-  /v1/patient/appointmentslots:
-    $ref: './nhsonline.appointments.yaml#/paths/~1appointmentslots'
+  /v1/patient/appointment-slots:
+    $ref: './nhsonline.appointments.yaml#/paths/~1appointment-slots'
   /v1/session:
     $ref: './nhsonline.usersession.yaml#/paths/~1session'
   
