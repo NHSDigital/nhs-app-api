@@ -11,7 +11,7 @@
   Scenario: Requesting available appointment slots with correct data returns lists of available slots, locations, clinicians, and appointment sessions
 
   @wip
-  Scenario: Each available slot contains an id, start date and time, end date and time, location identifire, appointment session identifire, clinician identifire
+  Scenario: Each available slot contains an id, start date and time, end date and time, location identifier, appointment session identifier, clinician identifier
 
   @wip
   Scenario: Each available location contains an id and display name
@@ -44,10 +44,13 @@
   Scenario: Requesting available appointment slots when online appointment booking is offered by practice, and patient, but there will never never be any slots available returns empty set of slots
 
   @wip
-  Scenario: Requesting available appointment slots with a missing NHSO-Session-Id retuns "Bad request" error
+  Scenario: Requesting available appointment slots by patient whose session expired returns "Unauthorized" error
 
   @wip
-  Scenario: Requesting available appointment slots with a NHSO-Session-Id not in the expected format retuns "Bad request" error
+  Scenario: Requesting available appointment slots with a missing NHSO-Session-Id cookie returns "Unauthorized" error
+
+  @wip
+  Scenario: Requesting available appointment slots with a NHSO-Session-Id cookie not in the expected format returns "Unauthorized" error
 
   @wip
   Scenario: Requesting available appointment slots with a missing fromDate parameter returns "Bad Request" error
@@ -65,7 +68,7 @@
   Scenario: Requesting available appointment slots when the GP practice has disabled this functionality returns empty list of slots
 
   @wip
-  Scenario: Requesting available appointment slots by patient whos session expired returns "Not authorized" error
+  Scenario: Requesting available appointment slots when GP system is unavailable returns "Bad gateway" error
 
   @wip
-  Scenario: Requesting available appointment slots when GP system is unavailable returns "bad gateway" error
+  Scenario: Requesting available appointment slots the GP system times out and returns "Gateway Timeout" error
