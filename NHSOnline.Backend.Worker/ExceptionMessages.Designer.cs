@@ -61,6 +61,15 @@ namespace NHSOnline.Backend.Worker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configuration value &apos;{0}&apos; not found.
+        /// </summary>
+        internal static string ConfigurationValueNotFound {
+            get {
+                return ResourceManager.GetString("ConfigurationValueNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ConnectionMultiplexer &apos;{0}&apos; could not be found..
         /// </summary>
         internal static string ConnectionMultiplexerFactoryUnknownMultiplexerName {

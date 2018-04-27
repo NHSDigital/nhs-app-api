@@ -23,10 +23,12 @@ namespace NHSOnline.Backend.Worker
     public class  Startup
     {
         public const int DefaultHttpTimeoutSeconds = 10;
+        private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -34,6 +36,10 @@ namespace NHSOnline.Backend.Worker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var configurationSettings = Configuration.GetSection("ConfigurationSettings").Get<ConfigurationSettings>();
+            EnsureConfigurationSettingsPopulated(configurationSettings);
+            services.Configure<ConfigurationSettings>(Configuration.GetSection("ConfigurationSettings"));
+            
             services.AddCors();
             services
                 .AddMvc(
@@ -74,7 +80,10 @@ namespace NHSOnline.Backend.Worker
             }));
             services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
-
+            
+            // Add functionality to inject IOptions<T>
+            services.AddOptions();
+            
             var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));
 
             if (module != null)
@@ -91,6 +100,7 @@ namespace NHSOnline.Backend.Worker
             if (env.IsDevelopment())
             {
                 loggerFactory.AddDebug();
+                loggerFactory.AddConsole();
                 app.UseDeveloperExceptionPage();
             }
 
@@ -103,6 +113,14 @@ namespace NHSOnline.Backend.Worker
             }
             
             app.UseMvc();
+        }
+
+        public void EnsureConfigurationSettingsPopulated(ConfigurationSettings config)
+        {
+            if (config.PrescriptionsDefaultLastNumberMonthsToDisplay == null)
+            {
+                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.PrescriptionsDefaultLastNumberMonthsToDisplay)));
+            }
         }
     }
 }
