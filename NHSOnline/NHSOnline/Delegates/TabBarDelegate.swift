@@ -26,6 +26,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             selectPage(pageUrl: appointmentsUrl)
             break
         case .Prescriptions:
+            let prescriptionsUrl = appendPathToBaseUrl(urlPathToAppend: config().PrescriptionsUrlPath)
+            selectPage(pageUrl: prescriptionsUrl)
             break
         case .MyRecord:
             break

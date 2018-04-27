@@ -12,6 +12,8 @@
 	<string>/more</string>
 	<key>AppointmentsUrlPath</key>
 	<string>/appointments</string>
+	<key>PrescriptionsUrlPath</key>
+	<string>/prescriptions</string>
 	<key>TitleNHS111</key>
 	<string>111 Online</string>
 	<key>TitleOrganDonation</key>
