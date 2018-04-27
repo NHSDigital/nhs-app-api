@@ -10,5 +10,6 @@ namespace NHSOnline.Backend.Worker.Router
         IIm1ConnectionService GetIm1ConnectionService();
         ISessionService GetSessionService();
         ITokenValidationService GetTokenValidationService();
+        IPrescriptionService GetPrescriptionService();
     }
 }

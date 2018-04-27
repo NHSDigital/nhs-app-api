@@ -1,4 +1,6 @@
-﻿using NHSOnline.Backend.Worker.Router;
+﻿using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
+using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Session;
 
@@ -7,10 +9,14 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
     public class EmisSystemProvider : ISystemProvider
     {
         private readonly IEmisClient _emisClient;
+        private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public EmisSystemProvider(IEmisClient emisClient)
+        public EmisSystemProvider(ILoggerFactory loggerFactory, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _emisClient = emisClient;
+            _emisPrescriptionMapper = emisPrescriptionMapper;
+            _loggerFactory = loggerFactory;
         }
 
         public SupplierEnum Supplier => SupplierEnum.Emis;
@@ -18,6 +24,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public IIm1ConnectionService GetIm1ConnectionService()
         {
             return new EmisIm1ConnectionService(_emisClient);
+        }
+
+        public IPrescriptionService GetPrescriptionService()
+        {
+            return new EmisPrescriptionService(_loggerFactory, _emisClient, _emisPrescriptionMapper);
         }
 
         public ISessionService GetSessionService()

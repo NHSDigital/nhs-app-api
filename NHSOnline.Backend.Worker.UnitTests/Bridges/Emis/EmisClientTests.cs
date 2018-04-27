@@ -11,6 +11,7 @@ using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
+using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Helpers;
 using RichardSzalay.MockHttp;
 
@@ -251,6 +252,35 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             response.ErrorResponse.Should().BeNull();
             response.ErrorResponseBadRequest.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [TestMethod]
+        public async Task PrescriptionsGet_ReturnsAPrescriptionsResponse_WhenValidlyRequested()
+        {
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+            var fromDateTime = _fixture.Create<DateTimeOffset>();
+            var toDateTime = _fixture.Create<DateTimeOffset>();
+
+            var expectedResponse = _fixture.Create<PrescriptionRequestsGetResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken + "&filterFromDate=" + fromDateTime.ToString("O") + "&filterToDate=" + toDateTime.ToString("O"))
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.PrescriptionsGet(userPatientLinkToken, sessionId, endUserSessionId, fromDateTime, toDateTime);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
         }
     }
 }
