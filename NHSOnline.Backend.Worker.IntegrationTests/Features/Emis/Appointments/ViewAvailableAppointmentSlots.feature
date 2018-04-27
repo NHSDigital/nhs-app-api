@@ -53,13 +53,25 @@
   Scenario: Requesting available appointment slots with a NHSO-Session-Id cookie not in the expected format returns "Unauthorized" error
 
   @wip
-  Scenario: Requesting available appointment slots with a missing fromDate parameter returns "Bad Request" error
+  Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 2 weeks from now
+
+  @wip
+  Scenario: Requesting available appointment slots with fromDate and toDate parameters returns set of appointment slots within specified date range
+
+  @wip
+  Scenario: Requesting available appointment slots with only fromDate parameter returns set of appointment slots for 2 weeks from specified start date
+
+  @wip
+  Scenario: Requesting available appointment slots with only toDate parameter returns set of appointment slots for 2 weeks from start day 2 weeks before end date
+
+  @wip
+  Scenario: Requesting available appointment slots with fromDate parameter that is after toDate parameter returns "Bad request"
+
+  @wip
+  Scenario: Requesting available appointment slots with fromDate and toDate parameter in the past returns empty set of appointment slots
 
   @wip
   Scenario: Requesting available appointment slots with a fromDate parameter not in the expected format returns "Bad Request" error
-
-  @wip
-  Scenario: Requesting available appointment slots with a missing toDate parameter returns "Bad Request" error
 
   @wip
   Scenario: Requesting available appointment slots with a toDate parameter not in the expected format returns "Bad Request" error

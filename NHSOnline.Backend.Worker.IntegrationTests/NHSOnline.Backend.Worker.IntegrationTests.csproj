@@ -67,6 +67,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Features\Emis\Appointments\ViewAvailableAppointmentSlots.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewAvailableAppointmentSlots.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\Emis\EmisDefaults.cs" />
     <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistration.feature.cs">
       <AutoGen>True</AutoGen>
@@ -81,6 +86,11 @@
     <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationSteps.cs" />
     <Compile Include="Features\Emis\Im1Connection\Registration\PatientRegistrationValidationSteps.cs" />
     <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerificationSteps.cs" />
+    <Compile Include="Features\Emis\Session\CreateSession.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CreateSession.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\Shared\CommonSteps.cs" />
     <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerification1.feature.cs">
       <AutoGen>True</AutoGen>
@@ -103,6 +113,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Features\Emis\Appointments\ViewAvailableAppointmentSlots.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewAvailableAppointmentSlots.feature.cs</LastGenOutput>
+    </None>
     <None Include="Features\Emis\Im1Connection\Registration\PatientRegistration.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PatientRegistration.feature.cs</LastGenOutput>
@@ -114,6 +128,10 @@
     <None Include="Features\Emis\Im1Connection\Verification\PatientVerification.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PatientVerification1.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Features\Emis\Session\CreateSession.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>CreateSession.feature.cs</LastGenOutput>
     </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
