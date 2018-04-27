@@ -52,5 +52,9 @@ namespace NHSOnline.Backend.Worker.Mocking
             return ConfigureBody(request, "equalToJson", jsonBody);
         }
 
+        public static Request ConfigureAuthorizationHeader(this Request request, string header, string value)
+        {
+            return ConfigureHeader(request, header, new Dictionary<string, string> { { "contains", value } });
+        }
     }
 }

@@ -72,5 +72,39 @@ namespace NHSOnline.Backend.Worker.Mocking.Emis
 
             return new Mapping(_request, response);
         }
+
+        public Mapping RespondWithServerError()
+        {
+            var response = new Response()
+                .ConfigureStatusCode(HttpStatusCode.InternalServerError);
+
+            return new Mapping(_request, response);
+        }
+
+        public Mapping RespondWithForbidden()
+        {
+            return RespondWithForbiddenException(-1030,
+                "Exception occurred during API processing.");
+        }
+
+        private Mapping RespondWithForbiddenException(int internalResponseCode, string message)
+        {
+
+            var responseBody = new ExceptionResponse(internalResponseCode, message);
+
+            var response = new Response()
+                .ConfigureStatusCode(HttpStatusCode.Forbidden)
+                .ConfigureBodyObject(responseBody);
+
+            return new Mapping(_request, response);
+        }
+
+        public Mapping RespondWithBadGateway()
+        {
+            var response = new Response()
+                .ConfigureStatusCode(HttpStatusCode.BadGateway);
+
+            return new Mapping(_request, response);
+        }
     }
 }

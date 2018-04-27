@@ -14,6 +14,7 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
         private const string KeyNhsNumber = "NhsNumber";
         private const string KeyNhsNumbers = "NhsNumbers";
         private const string KeyOdsCode = "OdsCode";
+        private const string KeySessionDetails = "SessionDetails";
         private const string KeyWorkerClient = "WorkerClient";
         private const string KeyIm1ConnectionRequest = "Im1ConnectionRequest";
 
@@ -115,6 +116,24 @@ namespace NHSOnline.Backend.Worker.IntegrationTests
             context.Set(im1ConnectionRequest, KeyIm1ConnectionRequest);
             return context;
         }
+
+        public static ScenarioContext SetSessionDetails(this ScenarioContext context, string givenName, string familyName)
+        {
+            var sessionDetails = new UserSessionResponse
+            {
+                GivenName = givenName,
+                FamilyName = familyName
+            };
+
+            context.Set(sessionDetails, KeySessionDetails);
+            return context;
+        }
+
+        public static UserSessionResponse GetSessionDetails(this ScenarioContext context)
+        {
+            return context.ContainsKey(KeySessionDetails) ? context.Get<UserSessionResponse>(KeySessionDetails) : null;
+        }
+
     }
 }
 

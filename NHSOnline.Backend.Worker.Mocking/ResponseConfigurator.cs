@@ -23,5 +23,17 @@ namespace NHSOnline.Backend.Worker.Mocking
             response.Body = body;
             return response;
         }
+
+        public static Response ConfigureDelay(this Response response, int secondsDelay)
+        {
+            response.FixedDelayMilliseconds = SecondsToMilliseconds(secondsDelay);
+            return response;
+        }
+
+        private static int SecondsToMilliseconds(int seconds)
+        {
+            return seconds * 1000;
+        }
+
     }
 }

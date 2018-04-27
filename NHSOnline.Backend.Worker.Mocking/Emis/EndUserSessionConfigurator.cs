@@ -46,11 +46,28 @@ namespace NHSOnline.Backend.Worker.Mocking.Emis
 
         public Mapping RespondWithServiceUnavailable()
         {
-            const string responseBody = "Service Unavailable";
+            _response
+                .ConfigureStatusCode(HttpStatusCode.ServiceUnavailable);
+
+            return new Mapping(_request, _response);
+        }
+
+        public Mapping RespondWithBadGatewayError()
+        {
+            _response
+                .ConfigureStatusCode(HttpStatusCode.BadGateway);
+
+            return new Mapping(_request, _response);
+        }
+
+        public Mapping RespondWithDelayedSuccess(string endUserSessionId, int delaySeconds)
+        {
+            var responseBody = new EndUserSessionResponse(endUserSessionId);
 
             _response
-                .ConfigureStatusCode(HttpStatusCode.ServiceUnavailable)
-                .ConfigureBody(responseBody);
+                .ConfigureStatusCode(HttpStatusCode.OK)
+                .ConfigureDelay(delaySeconds)
+                .ConfigureBodyObject(responseBody);
 
             return new Mapping(_request, _response);
         }

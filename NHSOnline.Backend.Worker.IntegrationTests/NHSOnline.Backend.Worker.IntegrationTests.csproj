@@ -91,6 +91,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CreateSession.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\Emis\Session\CreateSessionSteps.cs" />
     <Compile Include="Features\Shared\CommonSteps.cs" />
     <Compile Include="Features\Emis\Im1Connection\Verification\PatientVerification1.feature.cs">
       <AutoGen>True</AutoGen>
@@ -106,6 +107,9 @@
     <Compile Include="Worker\Models\Patient\Im1ConnectionRequest.cs" />
     <Compile Include="Worker\Models\Patient\Im1ConnectionResponse.cs" />
     <Compile Include="Worker\Models\Patient\PatientNhsNumber.cs" />
+    <Compile Include="Worker\Models\User\SessionResponseTestObject.cs" />
+    <Compile Include="Worker\Models\User\UserSessionRequest.cs" />
+    <Compile Include="Worker\Models\User\UserSessionResponse.cs" />
     <Compile Include="Worker\NhsoHttpException.cs" />
     <Compile Include="Worker\WorkerClient.cs" />
     <Compile Include="Worker\WorkerHeaders.cs" />

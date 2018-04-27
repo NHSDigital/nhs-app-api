@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.IntegrationTests.Worker.Models.Patient;
+using NHSOnline.Backend.Worker.IntegrationTests.Worker.Models.User;
 
 namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
 {
     public class WorkerClient
     {
-        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
@@ -49,6 +53,31 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
 
             return JsonConvert.DeserializeObject<Im1ConnectionResponse>(json, _jsonSerializerSettings);
         }
+
+        public async Task<SessionResponseTestObject> PostSession(UserSessionRequest requestBody)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, WorkerPaths.PatientSessionConnection)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json")
+            };
+
+            var response = await SendAsync(request);
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var sessionResponseTestObject = new SessionResponseTestObject
+            {
+                UserSessionResponse = JsonConvert.DeserializeObject<UserSessionResponse>(json, WorkerClient._jsonSerializerSettings)
+            };
+
+            if (response.Headers.TryGetValues("Set-Cookie", out var values))
+            {
+                sessionResponseTestObject.Cookie = values.First();
+            }
+
+            return sessionResponseTestObject;
+        }
+
 
         private async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {

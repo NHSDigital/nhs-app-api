@@ -106,7 +106,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
             public HttpStatusCode StatusCode { get; set; }
             public ErrorResponse ErrorResponse { get; set; }
-            public bool HasSuccessStatusCode => (int) StatusCode >= 200 && (int) StatusCode <= 299;
+            public bool HasSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
         }
 
         public class CitizenIdApiObjectResponse<TBody> : CitizenIdApiResponse
