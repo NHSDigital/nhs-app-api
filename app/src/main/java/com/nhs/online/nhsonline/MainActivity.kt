@@ -97,6 +97,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
             R.id.symptoms -> onSymptomMenuSelected()
             R.id.more -> onMoreMenuSelected()
             R.id.appointments -> onAppointmentsMenuSelected()
+            R.id.prescriptions -> onPrescriptionsMenuSelected()
             else -> loadWelcomePage()
         }
     }
@@ -106,6 +107,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun onMoreMenuSelected() = loadMorePage()
 
     private fun onAppointmentsMenuSelected() = loadAppointmentsPage()
+
+    private fun onPrescriptionsMenuSelected() = loadPrescriptionsPage()
 
     private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
 
@@ -134,6 +137,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 .build()
         val appointmentsURL = builtUri.toString()
         loadPage(appointmentsURL)
+    }
+
+    private fun loadPrescriptionsPage() {
+        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
+                .buildUpon()
+                .appendEncodedPath(resources.getString(R.string.prescriptionsPath))
+                .build()
+        val prescriptionsURL = builtUri.toString()
+        loadPage(prescriptionsURL)
     }
 
     override fun setHeaderText(text: String) {
