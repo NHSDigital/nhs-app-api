@@ -7,6 +7,12 @@ export default {
       summary: 'There are no appointments available at the moment',
       info: 'If you need an appointment, please contact your GP.',
     },
+    noConnection: {
+      dialogHeader: 'Connection error.',
+      dialogText: 'Please check your internet connection and try again.',
+      retryText: 'Try again',
+      info: 'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
+    },
   },
   prescriptions: {
     noPrescriptionsAvailable: {

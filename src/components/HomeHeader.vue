@@ -25,8 +25,7 @@ export default {
 
 <style lang="scss"  scoped>
 @import '../style/textstyles';
-@import '../style/buttons';
-@import '../style/icons';
+@import '../style/colours';
 header.home-header {
   background: $home_gradient;
   height: 65vh;

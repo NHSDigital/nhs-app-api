@@ -1,5 +1,7 @@
 <template>
-  <div id="mainDiv">
+<div>
+  <appointments-no-connection v-if="noConnection" @retry="onRetryButtonClicked"/>
+  <div id="mainDiv" v-else>
     <spinner />
     <main class="content">
       <div data-purpose="no-slots-error" v-if="showNoAppointment">
@@ -14,18 +16,26 @@
     </main>
 
   </div>
+  </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import AppointmentSlot from '@/components/AppointmentSlot';
+import AppointmentsNoConnection from '@/components/appointments/AppointmentsNoConnection';
+import AppointmentSlot from '@/components/appointments/AppointmentSlot';
 import Spinner from '@/components/Spinner';
 
 
 export default {
   components: {
+    AppointmentsNoConnection,
     AppointmentSlot,
     Spinner,
+  },
+  data() {
+    return {
+      noConnection: true,
+    };
   },
   computed: {
     showNoAppointment() {
@@ -40,8 +50,14 @@ export default {
       slots: 'appointmentSlots/slots',
     }),
   },
+  methods: {
+    onRetryButtonClicked() {
+      this.noConnection = !navigator.onLine;
+    },
+  },
   mounted() {
     this.$store.dispatch('appointmentSlots/load', this.$config);
+    this.noConnection = !navigator.onLine;
   },
 };
 </script>
@@ -63,11 +79,7 @@ export default {
 </style>
 
 <style lang="scss">
-  @import '../style/html';
-  @import '../style/textstyles';
-  @import '../style/elements';
-  @import '../style/fonts';
-  @import '../style/colours';
-  @import '../style/buttons';
+  @import '../../style/html';
+  @import '../../style/elements';
 
 </style>
