@@ -3,12 +3,14 @@ import os.log
 
 class PageUnavailabilityViewController: UIViewController {
     @IBOutlet weak var errorLabelWrapper: UIView!
+    @IBOutlet weak var errorLabel: UILabel!
     
+    var failedUrl: String? = nil
+
     @IBAction func reloadPageTrigger(_ sender: Any) {
         let parentVC = self.parent as? HomeViewController
         let webViewController = parentVC?.childViewControllers.first as? WebViewController
-
-        webViewController?.webView.loadPage(url: (parentVC?.pageUrl)!)
+        webViewController?.reloadWebView()
     }
     
     override func viewDidAppear(_ animated: Bool) {

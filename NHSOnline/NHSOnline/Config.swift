@@ -7,6 +7,7 @@ struct Config: Decodable {
         case TitleNHS111, TitleOrganDonation
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime
+        case ErrorMessageGeneric, ErrorMessageOrganDonation, ErrorMessageNhs111
     }
     
     let HomeUrl: String
@@ -22,6 +23,10 @@ struct Config: Decodable {
 
     let NhsOnlineRequiredQueryString:String
     let ResponseWaitingTime: Double
+    
+    let ErrorMessageGeneric: String
+    let ErrorMessageOrganDonation: String
+    let ErrorMessageNhs111: String
 }
 
 func config() -> Config {

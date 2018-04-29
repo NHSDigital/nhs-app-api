@@ -224,6 +224,7 @@
                         <viewLayoutGuide key="safeArea" id="Nch-Qq-RUf"/>
                     </view>
                     <connections>
+                        <outlet property="errorLabel" destination="obl-Ud-xKL" id="HXa-13-woL"/>
                         <outlet property="errorLabelWrapper" destination="hoh-DY-uYf" id="G4Y-3j-aEi"/>
                     </connections>
                 </viewController>
