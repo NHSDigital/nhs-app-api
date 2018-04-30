@@ -18,12 +18,12 @@ afterEach(() => {
 describe('load', () => {
   it('will request the appointment slots from the backend', () => {
     Vue.$http = {
-      getV1PatientAppointmentslots: jest.fn().mockResolvedValue(),
+      getV1PatientAppointmentSlots: jest.fn().mockResolvedValue(),
     };
 
     return load({ commit: jest.fn() }, { API_HOST })
       .then(() => {
-        expect(Vue.$http.getV1PatientAppointmentslots).toBeCalled();
+        expect(Vue.$http.getV1PatientAppointmentSlots).toBeCalled();
       });
   });
 
@@ -33,7 +33,7 @@ describe('load', () => {
     };
 
     Vue.$http = {
-      getV1PatientAppointmentslots: () => Promise.resolve(expected),
+      getV1PatientAppointmentSlots: () => Promise.resolve(expected),
     };
 
     const commit = jest.fn();

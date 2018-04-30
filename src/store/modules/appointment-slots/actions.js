@@ -28,7 +28,7 @@ function getAppointmentsSlotsParameters() {
 export const load = ({ commit }) =>
   Vue
     .$http
-    .getV1PatientAppointmentslots(getAppointmentsSlotsParameters())
+    .getV1PatientAppointmentSlots(getAppointmentsSlotsParameters())
     .then((data) => {
       commit(SLOTS_LOADED, data);
     });
