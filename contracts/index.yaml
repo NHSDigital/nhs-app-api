@@ -1,7 +1,7 @@
 ---
   swagger: "2.0"
   info: 
-    version: "0.0.3"
+    version: "0.0.4"
     title: "NHS Online API"
     description: "This is the API for NHS online."
   schemes: 
@@ -104,6 +104,158 @@
             description: "Bad request. A querystring parameter is not in the expected format."
           401: 
             description: "User session has expired."
+          500: 
+            description: "An unexpected error occured processing the request."
+          502: 
+            description: "The GP system is currently unavailable."
+          504: 
+            description: "The GP system did not respond in a timely fashion."
+    /v1/patient/prescriptions: 
+      post: 
+        tags: 
+          - "prescriptions"
+        summary: "Creates a repeat prescription request for the logged in user"
+        description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-ID cookie in header from session end point."
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "PrescriptionRequest"
+            required: true
+            description: "Repeat prescription request details to be created."
+            schema: 
+              type: "object"
+              required: 
+                - "courseIds"
+              properties: 
+                courseIds: 
+                  type: "array"
+                  description: "Array of course identifiers to create the prescription for."
+                  items: 
+                    type: "string"
+                specialRequest: 
+                  type: "string"
+                  description: "Optional free text that a user may supply in order to add a special request for the given prescription"
+        responses: 
+          201: 
+            description: "Successful operation. Repeat Prescription Created."
+            schema: 
+              type: "object"
+              properties: 
+                prescriptionCreated: 
+                  type: "boolean"
+                  description: "Success flag for creating repeat prescription"
+          400: 
+            description: "Bad request. Supplied connection details or request data is incomplete or invalid."
+          401: 
+            description: "User session missing or expired."
+          403: 
+            description: "The patient does not have the necessary permissions within the GP system."
+          409: 
+            description: "Conflict. A repeat prescription for the given course already exists preventing a new one to be created."
+          500: 
+            description: "An unexpected error occured processing the request."
+          502: 
+            description: "The GP system is currently unavailable."
+          504: 
+            description: "The GP system did not respond in a timely fashion."
+      get: 
+        tags: 
+          - "prescriptions"
+        summary: "Gets a list of requested repeat prescriptions for the logged on user."
+        description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-ID cookie in header from session end point."
+        produces: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "query"
+            name: "fromDate"
+            type: "string"
+            format: "date-time"
+            required: false
+            description: "Repeat Prescription from date. Will default to 6 months ago if no value is supplied"
+        responses: 
+          200: 
+            description: "Returns list of requested repeat prescriptions and associated meta data. Returns empty collection of repeat prescriptions if GP system does not return a list of prescriptions."
+            schema: 
+              type: "object"
+              properties: 
+                prescriptions: 
+                  type: "array"
+                  description: "Array of repeat prescriptions."
+                  items: 
+                    type: "object"
+                    properties: 
+                      courses: 
+                        type: "array"
+                        description: "Array of prescription courses."
+                        items: 
+                          type: "object"
+                          properties: 
+                            courseId: 
+                              type: "string"
+                              description: "Course identifier."
+                            status: 
+                              type: "string"
+                              enum: 
+                                - "approved"
+                                - "ordered"
+                                - "rejected"
+                                - "cancelled"
+                      orderDate: 
+                        type: "string"
+                        format: "date-time"
+                        description: "The date on which the repeat prescription was ordered."
+                courses: 
+                  type: "array"
+                  description: "Array of prescription courses."
+                  items: 
+                    $ref: "#/paths/~1v1~1patient~1courses/get/responses/200/schema/properties/courses/items"
+          400: 
+            description: "Bad request. All headers must be provided."
+          401: 
+            description: "User session has expired."
+          500: 
+            description: "An unexpected error occured processing the request."
+          502: 
+            description: "The GP system is currently unavailable."
+          504: 
+            description: "The GP system did not respond in a timely fashion."
+    /v1/patient/courses: 
+      get: 
+        tags: 
+          - "courses"
+        summary: "Gets a list of prescriptions courses for the given patient."
+        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-ID cookie in header from session end point."
+        produces: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses."
+            schema: 
+              type: "object"
+              properties: 
+                courses: 
+                  type: "array"
+                  description: "An array of prescription courses"
+                  items: 
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Course identifier."
+                      name: 
+                        type: "string"
+                        description: "Course name."
+                      dosage: 
+                        type: "string"
+                        description: "The required dosage for the course."
+                      quantity: 
+                        type: "string"
+                        description: "The quantity of the drug for the course."
+          401: 
+            description: "User session missing or expired."
           500: 
             description: "An unexpected error occured processing the request."
           502: 
