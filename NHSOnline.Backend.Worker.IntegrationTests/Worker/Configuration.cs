@@ -6,8 +6,8 @@ namespace NHSOnline.Backend.Worker.IntegrationTests.Worker
 {
     internal static class Configuration
     {
-        private const string DefaultBackendBaseUrl = "http://192.168.99.100:8080/";
-        private const string DefaultWiremockBaseUrl = "http://192.168.99.100:8800/__admin/";
+        private const string DefaultBackendBaseUrl = "http://192.168.99.100:8082/";
+        private const string DefaultWiremockBaseUrl = "http://192.168.99.100:8080/__admin/";
         private const string DefaultApplicationId = "D66BA979-60D2-49AA-BE82-AEC06356E41F";
         private const string DefaultVersion = "2.1.0.0";
         private const string EnvironmentBackendBaseUrl = "BACKEND_BASE_URL";

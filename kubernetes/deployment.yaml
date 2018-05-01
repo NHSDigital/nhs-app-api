@@ -13,7 +13,7 @@ spec:
       - name: nhsonline-backendworker
         image: nhsonline.azurecr.io/nhsonline-backendworker:latest
         ports:
-        - containerPort: 5123
+        - containerPort: 8082
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
@@ -46,3 +46,10 @@ spec:
         image: rodolpheche/wiremock
         ports:
         - containerPort: 8080
+        env:
+        - name: WIREMOCK_AUTHORITY
+          value: "nhsonline-wiremock:8080"
+        - name: WAIT_FOR_TIMEOUT
+          value: "60"
+      imagePullSecrets:
+       - name: azure-registry

@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.Stubs
                 {
                     throw new ArgumentNullException(
                         WiremockAuthorityEnvironmentVariable,
-                        "The WIREMOCK_AUTHORITY environment variable must be set to the host and port where wiremock is running (eg. localhost:8800)"
+                        "The WIREMOCK_AUTHORITY environment variable must be set to the host and port where wiremock is running (eg. localhost:8080)"
                     );
                 }
 

@@ -1,18 +1,5 @@
 version: "3.2"
 services:
-  nhsonline.backend.worker:
-    image: nhsonline.backend.worker
-    build:
-      context: .
-      dockerfile: NHSOnline.Backend.Worker/Dockerfile
-    depends_on:
-      - nhsonline.redis.sds
-      - nhsonline.redis.session
-    ports:
-      - "8082:8082"
-    environment:
-      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
-      - CORS_AUTHORITY=*
   nhsonline.stub-data:
     image: nhsonline.backend.stub-data
     build:
@@ -24,6 +11,7 @@ services:
       - nhsonline.stubs
   nhsonline.stubs:
     image: rodolpheche/wiremock
+    command: --local-response-templating
     ports:
       - "8080:8080"
   nhsonline.redis-data.sds:

@@ -3,7 +3,7 @@
     "NHSOnline.Backend.Worker.Stubs": {
       "commandName": "Project",
       "environmentVariables": {
-        "WIREMOCK_AUTHORITY": "localhost:8800"
+        "WIREMOCK_AUTHORITY": "localhost:8080"
       }
     }
   }

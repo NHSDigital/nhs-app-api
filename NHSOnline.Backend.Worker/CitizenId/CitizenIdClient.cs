@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.CitizenId.Models;
 
 namespace NHSOnline.Backend.Worker.CitizenId
@@ -16,6 +17,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
     public class CitizenIdClient : ICitizenIdClient
     {
+        private readonly ILogger<CitizenIdClient> _logger;
         private const string TokenPath = "token";
         private const string UserInfoPath = "userinfo";
 
@@ -24,8 +26,12 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private readonly string _clientId;
         private readonly string _basicAuthCredentials;
 
-        public CitizenIdClient(IHttpClientFactory httpClientFactory, ICitizenIdConfig config)
+        public CitizenIdClient(
+            IHttpClientFactory httpClientFactory, 
+            ICitizenIdConfig config, 
+            ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger<CitizenIdClient>();
             _httpClient = httpClientFactory.GetClient(HttpClientName.CitizenIdApiClient);
             _httpClient.BaseAddress = config.CitizenIdApiBaseUrl;
 
@@ -37,6 +43,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
         public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier)
         {
+            _logger.LogDebug("Starting ExchangeAuthToken");
             var dict = new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
@@ -71,6 +78,10 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private async Task<CitizenIdApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
+            var message = "Sending request to:" +
+                          $"   RequestUri: {request.RequestUri}";
+            
+            _logger.LogDebug(message);
             var responseMessage = await _httpClient.SendAsync(request);
             var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);
 

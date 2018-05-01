@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
@@ -21,28 +22,34 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<SessionController> _logger;
 
         public SessionController(
             ICitizenIdService citizenIdService,
             ISystemProviderFactory systemProviderFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ILoggerFactory loggerFactory)
         {
             _citizenIdService = citizenIdService;
             _systemProviderFactory = systemProviderFactory;
             _sessionCacheService = sessionCacheService;
             _odsCodeLookup = odsCodeLookup;
             _configuration = configuration;
+            _logger = loggerFactory.CreateLogger<SessionController>();
         }
 
         [HttpPost, TimeoutExceptionFilter]
         public async Task<IActionResult> Post([FromBody] UserSessionRequest model)
         {
+            _logger.LogDebug("Starting POST /session");
             // Call Citizen ID to get the IM1 connection token and ODS code.
             var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier);
             if (!cidUserProfileOption.HasValue)
             {
+                _logger
+                    .LogError("No CID profile was found for received authcode and code verifier");
                 return BadRequest();
             }
 
@@ -72,6 +79,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var sessionCreatedResultVisited = sessionCreateResult.Accept(new SessionCreateResultVisitor());
             if (!sessionCreatedResultVisited.SessionWasCreated)
             {
+                _logger
+                    .LogError($"Creating the session failed with status code: {sessionCreatedResultVisited.StatusCode}");
                 return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
             }
 
@@ -103,6 +112,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
             if (!supplier.HasValue)
             {
+                _logger.LogError($"Cannot find system provider for ODS code: {odsCode}");
                 return Option.None<ISystemProvider>();
             }
 

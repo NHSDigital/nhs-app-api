@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.CitizenId;
@@ -64,7 +65,6 @@ namespace NHSOnline.Backend.Worker
                 ConnectionMultiplexerName.Session,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
-
             int.TryParse(Configuration["HTTP_TIMEOUT_SECONDS"], out var timeout);
             timeout = timeout == default(int) ? DefaultHttpTimeoutSeconds : timeout;
 
@@ -84,16 +84,18 @@ namespace NHSOnline.Backend.Worker
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole();
+            
             if (env.IsDevelopment())
             {
+                loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
             }
 
             app.UsePathBase(new PathString("/v1"));
-            
-            
+
             var corsAuthority = Configuration["CORS_AUTHORITY"];
             if (corsAuthority != null)
             {

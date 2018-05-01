@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.CitizenId
@@ -11,17 +14,32 @@ namespace NHSOnline.Backend.Worker.CitizenId
     public class CitizenIdService : ICitizenIdService
     {
         private readonly ICitizenIdClient _citizenIdClient;
+        private readonly ILogger<CitizenIdService>  _logger;
 
-        public CitizenIdService(ICitizenIdClient citizenIdClient)
+        public CitizenIdService(ICitizenIdClient citizenIdClient, ILoggerFactory loggerFactory)
         {
             _citizenIdClient = citizenIdClient;
+            _logger = loggerFactory.CreateLogger<CitizenIdService>();
         }
 
         public async Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier)
         {
+            _logger.LogDebug("Starting GetUserProfile");
             // Sanity-check input parameters - no point invoking CID endpoint if they are clearly invalid
             if (string.IsNullOrWhiteSpace(authCode) || string.IsNullOrWhiteSpace(codeVerifier))
             {
+                var missing = new List<string>();
+                if (string.IsNullOrEmpty(authCode))
+                {
+                    missing.Add("authCode");
+                }
+                
+                if (string.IsNullOrEmpty(codeVerifier))
+                {
+                    missing.Add("codeVerifier");
+                }   
+                
+                _logger.LogWarning($"Missing input parameters: {missing.Join(", ")}");
                 return Option.None<UserProfile>();
             }
 
@@ -29,6 +47,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier);
             if (!tokenResponse.HasSuccessStatusCode)
             {
+                _logger.LogError("Failed to exchange auth token");
                 return Option.None<UserProfile>();
             }
 
