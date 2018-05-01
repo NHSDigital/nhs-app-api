@@ -127,6 +127,8 @@ definitions:
       courseIds:
         type: array
         description: Array of course identifiers to create the prescription for.
+        items:
+          type: string
       specialRequest:
         type: string
         description: Optional free text that a user may supply in order to add a special request for the given prescription
