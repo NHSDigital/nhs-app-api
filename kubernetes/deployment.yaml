@@ -13,7 +13,7 @@ spec:
       - name: nhsonline-web
         image: nhsonline.azurecr.io/nhsonline-web:latest
         ports:
-        - containerPort: 3000
+        - containerPort: 4000
         env:
         - name: CID_REDIRECT_URI
           value: "https://www.develop.bitraft.io/auth-return"
