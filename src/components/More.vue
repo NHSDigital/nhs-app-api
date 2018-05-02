@@ -20,6 +20,9 @@ export default {
 
 <style lang="scss">
   @import '../style/html';
+  @import '../style/textstyles';
   @import '../style/elements';
+  @import '../style/fonts';
+  @import '../style/colours';
   @import '../style/buttons';
 </style>

@@ -24,11 +24,13 @@ import { mapGetters } from 'vuex';
 import moment from 'moment';
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
+import Spinner from '@/components/Spinner';
 
 export default {
   components: {
     ClinicianIcon,
     LocationIcon,
+    Spinner,
   },
   computed: {
     appointmentSlot() {
@@ -60,7 +62,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import '../../style/colours';
+  @import '../style/html';
+  @import '../style/textstyles';
+  @import '../style/elements';
+  @import '../style/fonts';
+  @import '../style/colours';
+  @import '../style/buttons';
 
   h2 {
     margin-bottom: 8px;

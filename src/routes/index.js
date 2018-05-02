@@ -1,6 +1,6 @@
 import More from '@/components/More';
+import Appointments from '@/components/Appointments';
 import Prescriptions from '@/components/Prescriptions';
-import Appointments from '@/components/appointments/Appointments';
 import AuthReturn from '@/components/AuthReturn';
 import HomeLoggedOut from '@/components/HomeLoggedOut';
 import HomeLoggedIn from '@/components/HomeLoggedIn';
