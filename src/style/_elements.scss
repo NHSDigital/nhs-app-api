@@ -1,11 +1,12 @@
 @import './colours';
 @import './fonts';
 @import './textstyles';
+
 main.content {
 	padding: 16px 16px 5px 16px;
 	box-sizing: border-box;
 	width: 100%;
-	
+
 	&.slim {
 		padding: 66px 16px 75px 16px;
 	}
@@ -15,7 +16,7 @@ main.content {
 	&.slim.nopadding  {
 		padding: 50px 0px 50px 0px;
 	}
-	
+
 	.info p {
 		@include default_text;
 		font-size: 12pt;
@@ -64,13 +65,13 @@ footer {
 	box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
 	display: table;
 	transition: all ease 0.5s;
-	
+
 	.panel-icon,
 	.panel-content,
 	.panel-selection {
 		transition: all ease 0.5s;
 	}
-	
+
 	.panel-icon {
 		display: table-cell;
 		vertical-align: top;
@@ -86,7 +87,7 @@ footer {
 		width: 24px;
 		display: none; // FIRST STATE
 	}
-	
+
 	.requested {
 		label {
 			color: #F5A623 !important;
@@ -157,7 +158,7 @@ footer {
 	}
 	p {
 		@include default_text;
-		
+
 		b {
 			display: inline-block;
 		}

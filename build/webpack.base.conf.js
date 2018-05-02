@@ -80,7 +80,11 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          'css-loader',
+          'vue-style-loader',
+          {
+            loader: 'css-loader',
+            options: { modules: true },
+          },
           'sass-loader',
         ],
       },

@@ -3,18 +3,17 @@
   <appointments-no-connection v-if="noConnection" @retry="onRetryButtonClicked"/>
   <div id="mainDiv" v-else>
     <spinner />
-    <main class="content">
+    <main :class="$style.main">
       <div data-purpose="no-slots-error" v-if="showNoAppointment">
-        <p class="summary">{{$t('appointments.noSlotErrorMessage.summary')}}</p>
-        <p class="info">{{$t('appointments.noSlotErrorMessage.info')}}</p>
+        <p :class="$style.summary">{{$t('appointments.noSlotErrorMessage.summary')}}</p>
+        <p :class="$style.info">{{$t('appointments.noSlotErrorMessage.info')}}</p>
       </div>
       <ul data-purpose="slots" v-if="showAppointments">
-        <li :key="slot.id" v-for="slot in slots">
+        <li :key="slot.id" v-for="slot in slots" :class="$style.slot">
           <appointment-slot :slotId="slot.id"/>
         </li>
       </ul>
     </main>
-
   </div>
   </div>
 </template>
@@ -62,24 +61,30 @@ export default {
 };
 </script>
 
-<style scoped="true">
-  li {
-    list-style: none;
-    margin-bottom: 18px;
-  }
-
-  .content {
-    margin-right: 18px;
-  }
-
-  [data-purpose="no-slots-error"] .summary {
-    font-weight: bold;
-    margin-bottom: 18px;
-  }
-</style>
-
-<style lang="scss">
+<style module lang="scss">
   @import '../../style/html';
-  @import '../../style/elements';
+  @import '../../style/fonts';
+  @import '../../style/spacings';
 
+  .main {
+   @include space(padding, all, $three);
+  }
+  .summary {
+    font-weight: bold;
+    @include space(margin, bottom, $three);
+  }
+  .info {
+      @include default_text;
+      font-size: 12pt;
+      @include space(margin, bottom, $three);
+  }
+  .slot {
+    list-style: none;
+    @include space(margin, bottom, $three);
+  }
+  .summary {
+    font-weight: bold;
+    @include space(margin, bottom, $three);
+  }
 </style>
+

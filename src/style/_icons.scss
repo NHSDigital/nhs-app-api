@@ -1,4 +1,13 @@
 @import './colours';
+
+@mixin menu_stoke {
+  fill:none;
+  stroke:#606060;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  stroke-width:4px;
+  transition: all ease 0.5s;
+}
 svg {
   .menu_stroke {
     fill: none;

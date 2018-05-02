@@ -1,5 +1,5 @@
 <template>
-  <svg viewBox="0 0 79 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="nhs_logo">
+  <svg viewBox="0 0 79 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" :class="$style.nhs_logo">
     <title>{{ $t('icons.homeIcon.title') }}</title>
     <desc>{{ $t('icons.homeIcon.desc') }}</desc>
     <defs></defs>
@@ -16,7 +16,12 @@
   </svg>
 </template>
 
-<style lang="scss" scoped="">
-  @import "../../style/icons";
-  @import "../../style/colours";
+<style module lang="scss">
+  @import "../../style/spacings";
+
+  .nhs_logo {
+    @include space(margin, all, $two);
+    height: 22px;
+    float: left;
+  }
 </style>
