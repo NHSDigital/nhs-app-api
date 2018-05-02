@@ -18,8 +18,6 @@ class HeaderBar: UIView {
         headerBarView.bounds = self.bounds
         headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         addSubview(headerBarView)
-        
-        headerTitle.layer.addTopBorder(color: UIColor.white, thickness: 0.5)
     }
     
     func addBottomShadow() {
