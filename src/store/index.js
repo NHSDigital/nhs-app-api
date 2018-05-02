@@ -15,7 +15,7 @@ const debug = process.env.NODE_ENV !== 'production';
 
 const vuexLocalStorage = new VuexPersist({
   key: 'vuex', // The key to store the state on in the storage provider.
-  storage: window.localStorage, // or window.sessionStorage
+  storage: window.sessionStorage, // or window.sessionStorage
 });
 export default new Vuex.Store({
   /**
