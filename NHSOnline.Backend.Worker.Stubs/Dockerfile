@@ -23,7 +23,7 @@ RUN dotnet publish -c Release -o /app
 
 
 FROM runtime as final
-ENV WIREMOCK_AUTHORITY=nhsonline-wiremock:8080
+ENV WIREMOCK_AUTHORITY=nhsonline.stubs:8080
 ENV WAIT_FOR_TIMEOUT=60
 WORKDIR /app
 COPY --from=built /app .
