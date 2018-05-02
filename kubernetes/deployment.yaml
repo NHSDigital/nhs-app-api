@@ -13,7 +13,7 @@ spec:
       - name: nhsonline-backendworker
         image: nhsonline.azurecr.io/nhsonline-backendworker:latest
         ports:
-        - containerPort: 5123
+        - containerPort: 8082
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
