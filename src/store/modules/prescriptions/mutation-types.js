@@ -1,0 +1,5 @@
+export const PRESCRIPTIONS_LOADED = 'PRESCRIPTIONS_LOADED';
+
+export default {
+  PRESCRIPTIONS_LOADED,
+};

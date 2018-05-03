@@ -25,6 +25,9 @@ export default {
   components: {
     Spinner,
   },
+  mounted() {
+    this.$store.dispatch('prescriptions/load', this.$config);
+  },
 };
 </script>
 

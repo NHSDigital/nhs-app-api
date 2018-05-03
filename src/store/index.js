@@ -7,6 +7,7 @@ import createLogger from 'vuex/dist/logger';
 import auth from './modules/auth';
 import http from './modules/http';
 import appointmentSlots from './modules/appointment-slots';
+import prescriptions from './modules/prescriptions';
 import header from './modules/header';
 
 Vue.use(Vuex);
@@ -24,6 +25,7 @@ export default new Vuex.Store({
 
   modules: {
     appointmentSlots,
+    prescriptions,
     auth,
     http,
     header,
