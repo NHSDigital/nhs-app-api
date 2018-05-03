@@ -11,4 +11,5 @@ git-crypt unlock ~/.cicd.key
 mkdir -p ~/.kube
 echo $KUBECTL_CONFIG | base64 -d | zcat > ~/.kube/config
 sed -i "s/latest/$(git rev-parse HEAD)/" kubernetes/deployment.yaml
+sed -i "s/latest/$(git rev-parse HEAD)/" kubernetes/pod.yaml
 kubectl apply -f kubernetes/
