@@ -19,11 +19,8 @@ export default {
 </script>
 
 <style lang="scss"  scoped>
-  @import '../style/colours';
   @import '../style/textstyles';
-  @import '../style/fonts';
   @import '../style/buttons';
-  @import '../style/icons';
   .symptom_banner {
     text-align: center;
     width: 100%;
