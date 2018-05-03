@@ -22,5 +22,11 @@
 	<string>?source=mobile</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
+	<key>ErrorMessageGeneric</key>
+	<string>Service unavailable</string>
+	<key>ErrorMessageOrganDonation</key>
+	<string>Organ donation unavailable</string>
+	<key>ErrorMessageNhs111</key>
+	<string>NHS 111 unavailable</string>
 </dict>
 </plist>

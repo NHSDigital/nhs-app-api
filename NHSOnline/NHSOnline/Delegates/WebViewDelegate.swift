@@ -12,6 +12,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let responseWaitingTime = config().ResponseWaitingTime
     
+    var failedUrl: URL? = nil
+    var nativeViewController: PageUnavailabilityViewController?
     var safariViewController: SFSafariViewController?
     var shouldHandleErrors = false
     var timer: Timer!
@@ -80,8 +82,21 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
         if(shouldHandleErrors) {
+            var errorMessage: String? = nil
+            if withError._domain == "NSURLErrorDomain" {
+                if let info = withError._userInfo as? [String: Any] {
+                    if let url = info["NSErrorFailingURLKey"] as? URL {
+                        failedUrl = url
+                        errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: url)
+                        self.showNativeViewContainer(errorMessage: errorMessage!)
+                    }
+                }
+            } else {
+                errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: webView.url!)
+                failedUrl = webView.url
+                self.showNativeViewContainer(errorMessage: errorMessage!)
+            }
             os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
-            self.showNativeViewContainer()
         }
     }
     
@@ -119,7 +134,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
             self.viewController.webViewController?.webView.stopLoading()
-            self.showNativeViewContainer()
+            let errorMessage = knownServices.getGenericErrorMessage()
+            
+            self.showNativeViewContainer(errorMessage: errorMessage)
         }
     }
     
@@ -130,10 +147,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         self.viewController.nativeViewContainer.alpha = 0
     }
     
-    private func showNativeViewContainer() {
+    private func showNativeViewContainer(errorMessage: String) {
         self.timer.invalidate()
         self.activityIndicator.stopAnimating()
         self.viewController.webViewContainer.alpha = 0
         self.viewController.nativeViewContainer.alpha = 1
+        self.viewController.nativeViewController?.errorLabel.text = errorMessage
     }
 }

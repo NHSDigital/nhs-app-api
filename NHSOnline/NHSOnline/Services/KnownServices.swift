@@ -10,13 +10,21 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlString: config.HomeUrl, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlString: config.Nhs111Url, serviceTitle: config.TitleNHS111, shouldHandleUnavailability: true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlString: config.OrganDonationUrl, serviceTitle: config.TitleOrganDonation, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.HomeUrl, serviceErrorMessage: config.ErrorMessageGeneric, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.Nhs111Url, serviceTitle: config.TitleNHS111, serviceErrorMessage: config.ErrorMessageNhs111, shouldHandleUnavailability: true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlString: config.OrganDonationUrl, serviceTitle: config.TitleOrganDonation, serviceErrorMessage: config.ErrorMessageOrganDonation, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func findMatchingKnownServiceFor(url:URL) -> KnownService? {
         return findMatchingKnownServiceForHostname(hostname: url.host)
+    }
+    
+    func getUnavailabilityErrorMessageForService(url:URL) -> String? {
+        return ((findMatchingKnownServiceForHostname(hostname: url.host))?.serviceErrorMessage)!
+    }
+    
+    func getGenericErrorMessage() -> String {
+        return config.ErrorMessageGeneric
     }
     
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {

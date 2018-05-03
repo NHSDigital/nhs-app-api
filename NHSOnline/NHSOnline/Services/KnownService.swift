@@ -5,13 +5,15 @@ import Foundation
     let shouldHandleUnavailability:Bool
     let shouldAllowNativeInteraction:Bool
     let serviceTitle: String?
+    let serviceErrorMessage: String?
     private var urlQueryItems = Array<URLQueryItem>()
     
-    init(urlString:String, serviceTitle: String? = nil, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
+    init(urlString:String, serviceTitle: String? = nil, serviceErrorMessage: String? = nil, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
         self.url = URLComponents(string: urlString)!
         self.shouldHandleUnavailability = shouldHandleUnavailability
         self.shouldAllowNativeInteraction = shouldAllowNativeInteraction
         self.serviceTitle = serviceTitle
+        self.serviceErrorMessage = serviceErrorMessage
         self.retrieveQueryKeyValueFrom(queryString: urlQueryString)
     }
     

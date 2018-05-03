@@ -19,6 +19,11 @@ class WebViewController: UIViewController {
         webView.loadPage(url: url)
     }
     
+    func reloadWebView()
+    {
+        webView.load(URLRequest(url: webViewDelegate!.failedUrl!))
+    }
+    
     func dismissSafariViewController() {
         webViewDelegate?.safariViewController?.dismiss(animated: true, completion: nil)
     }

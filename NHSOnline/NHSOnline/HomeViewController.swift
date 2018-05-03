@@ -37,6 +37,8 @@ class HomeViewController : UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == webViewSegue {
             webViewController = segue.destination as? WebViewController
+        } else if segue.identifier == nativeViewSegue {
+            nativeViewController = (segue.destination as! PageUnavailabilityViewController)
         }
     }
     
