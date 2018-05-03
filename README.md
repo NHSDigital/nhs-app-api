@@ -15,7 +15,15 @@ git clone https://git.nhschoices.net/nhsonline/nhsonline-web
 
 ```
 docker-compose up --build
+# if on windows execute docker-port-forward.sh from the nhsonline-dev-utils repository
 # open browser to http://localhost:3000
+```
+
+## Running with HTTPS
+```
+# in windows be sure to run this from the Docker Toolbox terminal
+./create-certificate.sh    # follow the instructions to install the generated certificate
+./run-with-https.sh
 ```
 
 If for any reason you need to shell into container, use:
