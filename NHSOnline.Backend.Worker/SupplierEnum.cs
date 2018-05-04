@@ -2,7 +2,8 @@
 {
     public enum SupplierEnum
     {
-        Emis,
-        Tpp
+        Unknown = 0,
+        Emis = 1,
+        Tpp = 2
     }
 }

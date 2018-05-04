@@ -3,9 +3,8 @@
 namespace NHSOnline.Backend.Worker.Session
 {
     [Serializable]
-    public class UserSession
+    public abstract class UserSession
     {
-        public SupplierEnum Supplier { get; set; }
-        public string SupplierSessionId { get; set; }
+        public abstract SupplierEnum Supplier { get; }
     }
 }

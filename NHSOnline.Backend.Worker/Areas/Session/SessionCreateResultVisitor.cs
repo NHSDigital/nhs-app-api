@@ -15,9 +15,9 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 UserSessionResponse = new UserSessionResponse
                 {
                     FamilyName = result.FamilyName,
-                    GivenName = result.GivenName
+                    GivenName = result.GivenName,
+                    UserSession = result.UserSession
                 },
-                SupplierSessionId = result.SessionId
             };
         }
 

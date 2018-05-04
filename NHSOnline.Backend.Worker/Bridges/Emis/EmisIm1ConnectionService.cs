@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
+using NHSOnline.Backend.Worker.Bridges.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
@@ -41,7 +40,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
-                if (!TryExtractUserPatientLinkToken(sessionsResponse.Body, out var userPatientLinkToken))
+                var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
+                if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
                     return new Im1ConnectionVerifyResult.NotFound();
                 }
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = ExtractNhsNumbers(demographicsResponse.Body);
+                var nhsNumbers = demographicsResponse.Body.ExtractNhsNumbers();
 
                 var response = new PatientIm1ConnectionResponse
                 {
@@ -121,7 +121,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
-                if (!TryExtractUserPatientLinkToken(sessionsResponse.Body, out var userPatientLinkToken))
+                var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
+                if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
                     return new Im1ConnectionRegisterResult.NotFound();
                 }
@@ -134,7 +135,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
-                var nhsNumbers = ExtractNhsNumbers(demographicsResponse.Body);
+                var nhsNumbers = demographicsResponse.Body.ExtractNhsNumbers();
 
                 var response = new PatientIm1ConnectionResponse
                 {
@@ -148,31 +149,6 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             {
                 return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
             }
-        }
-
-        private static IEnumerable<PatientNhsNumber> ExtractNhsNumbers(DemographicsGetResponse demographicsResponse)
-        {
-            var patientIdentifiers = demographicsResponse?.PatientIdentifiers;
-
-            if (patientIdentifiers == null)
-            {
-                return Enumerable.Empty<PatientNhsNumber>();
-            }
-
-            return patientIdentifiers
-                .Where(x => x.IdentifierType == IdentifierType.NhsNumber)
-                .Select(x => new PatientNhsNumber { NhsNumber = x.IdentifierValue });
-        }
-
-        private static bool TryExtractUserPatientLinkToken(SessionsPostResponse sessionsResponse,
-            out string userPatientLinkToken)
-        {
-            userPatientLinkToken = sessionsResponse
-                ?.UserPatientLinks
-                ?.FirstOrDefault(x => x.AssociationType == AssociationType.Self)
-                ?.UserPatientLinkToken;
-
-            return !string.IsNullOrEmpty(userPatientLinkToken);
         }
     }
 }

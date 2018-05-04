@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
+using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
@@ -29,22 +31,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private static Mock<IOdsCodeLookup> _mockOdsCodeLookup;
         private static Mock<ISessionCacheService> _mockSessionCacheService;
         private static Mock<ISessionService> _mockSessionService;
-        private static Mock<IConfiguration> _mockConfiguration;
         private static Mock<ITokenValidationService> _mockTokenValidationService;
         private static Mock<ISystemProviderFactory> _mockSystemProviderFactory;
+        private Mock<IAuthenticationService> _authenticationServiceMock;
 
-        private static int _sessionExpiryMinutes;
         private static UserSessionRequest _userSessionRequest;
         private static UserProfile _userProfile;
-        private static string _supplierSessionId;
         private static string _apiSessionId;
         private string _givenName;
         private string _familyName;
         private SessionCreateResult _sessionCreateResult;
-        private CookieOptions _cookieOptions;
-        private Mock<IResponseCookies> _mockResponseCookies;
-        private string _cookieKey;
-        private string _cookieValue;
 
         [TestInitialize]
         public void TestInitialize()
@@ -56,14 +52,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
 
-            _supplierSessionId = _fixture.Create<string>();
             _givenName = _fixture.Create<string>();
             _familyName = _fixture.Create<string>();
 
             _apiSessionId = _fixture.Create<string>();
 
             _sessionCreateResult =
-                new SessionCreateResult.SuccessfullyCreated(_supplierSessionId, _givenName, _familyName);
+                new SessionCreateResult.SuccessfullyCreated(_givenName, _familyName, new EmisUserSession());
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockCitizenIdService
@@ -104,25 +99,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Setup(x => x.CreateUserSession(It.IsAny<UserSession>()))
                 .Returns(Task.FromResult(_apiSessionId));
 
-            _mockConfiguration = _fixture.Freeze<Mock<IConfiguration>>();
-            _sessionExpiryMinutes = _fixture.Create<int>();
-            _mockConfiguration.SetupGet(r => r["SESSION_EXPIRY_MINUTES"]).Returns(_sessionExpiryMinutes.ToString);
-
-            _mockResponseCookies = _fixture.Freeze<Mock<IResponseCookies>>();
-            _mockResponseCookies.Setup(x => x.Append(Cookies.SessionId, _apiSessionId, It.IsAny<CookieOptions>()))
-                .Callback<string, string, CookieOptions>((key, value, options) =>
-                {
-                    _cookieKey = key;
-                    _cookieValue = value;
-                    _cookieOptions = options;
-                })
-                .Verifiable();
-
+            _authenticationServiceMock = new Mock<IAuthenticationService>();
+            _authenticationServiceMock
+                .Setup(x => x.SignInAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<ClaimsPrincipal>(),
+                    It.IsAny<AuthenticationProperties>()))
+                .Returns(Task.FromResult((object)null));
+            var serviceProviderMock = new Mock<IServiceProvider>();
             var httpContextMock = new Mock<HttpContext>();
             var responseMock = new Mock<HttpResponse>();
 
+            serviceProviderMock
+                .Setup(x => x.GetService(typeof(IAuthenticationService)))
+                .Returns(_authenticationServiceMock.Object);
+
             httpContextMock.SetupGet(h => h.Response).Returns(responseMock.Object);
-            responseMock.SetupGet(r => r.Cookies).Returns(_mockResponseCookies.Object);
+            httpContextMock.SetupGet(h => h.RequestServices).Returns(serviceProviderMock.Object);
 
             _systemUnderTest = _fixture.Create<SessionController>();
 
@@ -241,72 +232,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 FamilyName = _familyName,
                 GivenName = _givenName
             };
-            actualUserSessionResponse.Should().BeEquivalentTo(expectedUserSessionResponse);
-        }
 
-        [TestMethod]
-        public async Task Post_HappyPath_ReturnsSessionIdInCookieWithExpectedKey()
-        {
-            // Arrange
-
-            // Act
-            await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockResponseCookies.Verify();
-            _cookieKey.Should().Be(Cookies.SessionId);
-        }
-
-        [TestMethod]
-        public async Task Post_HappyPath_ReturnsSessionIdInCookieWithApiSessionIdInValue()
-        {
-            // Arrange
-
-            // Act
-            await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockResponseCookies.Verify();
-            _cookieValue.Should().Be(_apiSessionId);
-        }
-
-        [TestMethod]
-        public async Task Post_HappyPath_ReturnsSessionIdInCookieWithExpectedExpiry()
-        {
-            // Arrange
-
-            // Act
-            await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockResponseCookies.Verify();
-            _cookieOptions.Expires.Should().BeCloseTo(DateTimeOffset.Now.AddMinutes(_sessionExpiryMinutes));
-        }
-
-        [TestMethod]
-        public async Task Post_HappyPath_ReturnsSessionIdInCookieWithSecureSet()
-        {
-            // Arrange
-
-            // Act
-            await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockResponseCookies.Verify();
-            _cookieOptions.Secure.Should().BeTrue();
-        }
-
-        [TestMethod]
-        public async Task Post_HappyPath_ReturnsSessionIdInCookieWithHttpOnlySet()
-        {
-            // Arrange
-
-            // Act
-            await _systemUnderTest.Post(_userSessionRequest);
-
-            // Assert
-            _mockResponseCookies.Verify();
-            _cookieOptions.HttpOnly.Should().BeTrue();
+            actualUserSessionResponse.FamilyName.Should().Be(expectedUserSessionResponse.FamilyName);
+            actualUserSessionResponse.GivenName.Should().Be(expectedUserSessionResponse.GivenName);
+            actualUserSessionResponse.UserSession.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -324,8 +253,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionCacheService.VerifyAll();
             _mockOdsCodeLookup.VerifyAll();
             _mockSessionService.VerifyAll();
-            _mockConfiguration.VerifyAll();
-            _mockResponseCookies.VerifyAll();
+            _authenticationServiceMock.VerifyAll();
         }
     }
 }

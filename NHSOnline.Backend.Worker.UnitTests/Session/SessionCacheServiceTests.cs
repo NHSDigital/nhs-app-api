@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.DataProtection;
+using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Session;
 using StackExchange.Redis;
 
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Session
         public async Task CreateUserSession_UserSessionIsStoredInRedis()
         {
             // Arrange
-            var userSession = _fixture.Create<UserSession>();
+            var userSession = _fixture.Create<EmisUserSession>();
             RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
             
             var sessionExpiryMinutes = _fixture.Create<int>();

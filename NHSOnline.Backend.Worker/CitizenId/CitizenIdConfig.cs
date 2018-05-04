@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {
@@ -20,7 +21,8 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
         public CitizenIdConfig(IConfiguration configuration)
         {
-            CitizenIdApiBaseUrl = new Uri(configuration["CITIZEN_ID_BASE_URL"]);
+            var citizenIdBaseUrl = configuration["CITIZEN_ID_BASE_URL"];
+            CitizenIdApiBaseUrl = new Uri(citizenIdBaseUrl);
             NhsWebAppBaseUrl = new Uri(configuration["NHS_WEB_APP_BASE_URL"]);
             ClientId = configuration["CITIZEN_ID_CLIENT_ID"];
             ClientSecret = configuration["CITIZEN_ID_CLIENT_SECRET"];

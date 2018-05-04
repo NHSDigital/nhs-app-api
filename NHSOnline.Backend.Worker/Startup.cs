@@ -2,16 +2,18 @@ using System;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.ApplicationInsights.DependencyCollector;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.DataProtection;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
@@ -20,9 +22,10 @@ using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker
 {
-    public class  Startup
+    public class Startup
     {
-        public const int DefaultHttpTimeoutSeconds = 10;
+        private const int DefaultHttpTimeoutSeconds = 10;
+        private const int DefaultSessionExpiryMinutes = 20;
         private readonly ILogger<Startup> _logger;
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
@@ -40,16 +43,39 @@ namespace NHSOnline.Backend.Worker
             EnsureConfigurationSettingsPopulated(configurationSettings);
             services.Configure<ConfigurationSettings>(Configuration.GetSection("ConfigurationSettings"));
             
+            services
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.Name = Constants.Cookies.SessionId;
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    options.EventsType = typeof(CustomCookieAuthenticationEvents);
+
+                    int.TryParse(Configuration["SESSION_EXPIRY_MINUTES"], out var sessionExpiryMinutes);
+                    sessionExpiryMinutes = sessionExpiryMinutes == default(int)
+                        ? DefaultSessionExpiryMinutes
+                        : sessionExpiryMinutes;
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(sessionExpiryMinutes);
+                    options.SlidingExpiration = true;
+                });
+
+            services.AddScoped<CustomCookieAuthenticationEvents>();
+
             services.AddCors();
             services
                 .AddMvc(
                     options =>
                     {
                         options.Filters.Add(typeof(ModelStateValidationFilter));
+                        options.Filters.Add(new AuthorizeFilter(
+                            new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
+                        );
                     }
                 )
                 .AddJsonOptions(
-                    options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    options => options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver()
                 );
 
             services.AddDataProtection();
@@ -96,7 +122,8 @@ namespace NHSOnline.Backend.Worker
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
-            
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 loggerFactory.AddDebug();
@@ -109,7 +136,12 @@ namespace NHSOnline.Backend.Worker
             var corsAuthority = Configuration["CORS_AUTHORITY"];
             if (corsAuthority != null)
             {
-                app.UseCors(builder => builder.WithOrigins(corsAuthority).AllowAnyMethod().AllowAnyHeader());   
+                app.UseCors(builder => builder
+                    .WithOrigins(corsAuthority)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                );   
             }
             
             app.UseMvc();

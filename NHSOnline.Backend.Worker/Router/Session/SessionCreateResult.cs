@@ -1,4 +1,7 @@
-﻿namespace NHSOnline.Backend.Worker.Router.Session
+﻿using System;
+using NHSOnline.Backend.Worker.Session;
+
+namespace NHSOnline.Backend.Worker.Router.Session
 {
     public abstract class SessionCreateResult
     {
@@ -10,15 +13,20 @@
 
         public class SuccessfullyCreated : SessionCreateResult
         {
+            public UserSession UserSession { get; }
             public string GivenName { get; }
             public string FamilyName { get; }
-            public string SessionId { get; set; }
+           
+            
 
-            public SuccessfullyCreated(string sessionId, string givenName, string familyName)
+            public SuccessfullyCreated(
+                string givenName, 
+                string familyName, 
+                UserSession userSession)
             {
                 GivenName = givenName;
                 FamilyName = familyName;
-                SessionId = sessionId;
+                UserSession = userSession;
             }
 
             public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)

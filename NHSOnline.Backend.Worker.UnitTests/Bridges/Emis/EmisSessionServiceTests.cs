@@ -211,9 +211,61 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>();
 
             var expectedResult = new SessionCreateResult.SuccessfullyCreated(
-                _sessionsResponse.SessionId, _sessionsResponse.FirstName, _sessionsResponse.Surname);
+                _sessionsResponse.FirstName, 
+                _sessionsResponse.Surname,
+                new EmisUserSession()
+            );
 
             (result as SessionCreateResult.SuccessfullyCreated).Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public async Task Create_HappyPath_ReturnsAUserSessionInTheResult()
+        {
+            // Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+            
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<SessionCreateResult.SuccessfullyCreated>()
+                .Subject
+                .UserSession
+                .Should()
+                .NotBeNull();
+        }
+
+        [TestMethod] 
+        public async Task Create_HappyPath_ReturnsAUserSessionWithTheEmisSupplier()
+        {
+            // Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+            
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<SessionCreateResult.SuccessfullyCreated>()
+                .Subject
+                .UserSession
+                .Supplier
+                .Should()
+                .Be(SupplierEnum.Emis);
+        }
+        
+        [TestMethod]
+        public async Task Create_HappyPath_ReturnsAEmisUserSession()
+        {
+            // Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+            
+            // Assert
+            result
+                .Should()
+                .BeAssignableTo<SessionCreateResult.SuccessfullyCreated>()
+                .Subject
+                .UserSession
+                .Should()
+                .BeAssignableTo<EmisUserSession>();
         }
     }
 }

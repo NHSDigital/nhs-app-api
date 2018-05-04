@@ -7,6 +7,5 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         public bool SessionWasCreated { get; set; }
         public int StatusCode { get; set; }
         public UserSessionResponse UserSessionResponse { get; set; }
-        public string SupplierSessionId { get; set; }
     }
 }

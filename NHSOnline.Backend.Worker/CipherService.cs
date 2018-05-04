@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 
-namespace NHSOnline.Backend.Worker.DataProtection
+namespace NHSOnline.Backend.Worker
 {
+    public interface ICipherService
+    {
+        string Encrypt(string input);
+        string Decrypt(string cipherText);
+    }
+
     public class CipherService : ICipherService
     {
         private readonly IDataProtectionProvider _dataProtectionProvider;

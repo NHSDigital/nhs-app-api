@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
@@ -23,11 +24,11 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
         }
 
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Get(
-            [FromHeader(Name = Headers.ConnectionToken)]
+            [FromHeader(Name = Constants.Headers.ConnectionToken)]
             string connectionToken,
-            [FromHeader(Name = Headers.OdsCode)] string odsCode
+            [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode
         )
         {
             if (string.IsNullOrEmpty(connectionToken) || string.IsNullOrEmpty(odsCode))
@@ -61,7 +62,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
         }
 
-        [HttpPost, TimeoutExceptionFilter]
+        [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
             var systemProviderOption = await GetSystemProvider(model.OdsCode);

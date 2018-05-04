@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
-using NHSOnline.Backend.Worker.DataProtection;
 
 namespace NHSOnline.Backend.Worker.UnitTests.DataProtection
 {
