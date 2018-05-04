@@ -7,6 +7,7 @@
 /*jshint esversion: 6 */
 /*global fetch, btoa */
 import $q from 'q';
+import axios from 'axios'
 
 /**
  * {{&description}}
@@ -83,14 +84,16 @@ class {{&className}} {
 
 
     this.store.dispatch('http/isLoading');
-    fetch(urlWithParams, {
+
+    axios({
+      url: urlWithParams,
       method,
       headers,
-      mode: 'cors',
-      credentials: 'same-origin',
-      body: JSON.stringify(body)
+      withCredentials: true,
+      crossDomain: true,
+      data: JSON.stringify(body)
     }).then((response) => {
-      return response.json();
+      return response.data
     }).then((body) => {
       this.store.dispatch('http/loadingCompleted');
       deferred.resolve(body);
