@@ -5,7 +5,9 @@
 	<key>HomeUrl</key>
 	<string>https://www.develop.bitraft.io/</string>
 	<key>Nhs111Url</key>
-	<string>http://111-int2.staging.111.service.nhs.uk/</string>
+	<string>https://111.nhs.uk/</string>
+	<key>Nhs111LocationUrl</key>
+	<string>https://111.service.nhs.uk/</string>
 	<key>OrganDonationUrl</key>
 	<string>https://www.organdonation.nhs.uk/</string>
 	<key>MoreUrlPath</key>

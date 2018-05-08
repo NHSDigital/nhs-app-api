@@ -6,9 +6,6 @@ import os.log
 class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     let knownServices: KnownServices
     let viewController: HomeViewController
-    let webViewHosts =  [URL(string: config().HomeUrl)?.host,
-                         URL(string: config().Nhs111Url)?.host,
-                         URL(string: config().OrganDonationUrl)?.host]
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let responseWaitingTime = config().ResponseWaitingTime
     
@@ -45,13 +42,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let url = navigationAction.request.url {
             if url.absoluteString != "about:blank" {
-                if let matchingKnownService = knownServices.findMatchingKnownServiceFor(url: url) {
+                if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
                     if(matchingKnownService.hasMissingQueryString(urlString: url.absoluteString)) {
                         let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
                         decisionHandler(.cancel)
-                        if let headerTitle = matchingKnownService.getTitleFor(urlPath: url.path){
-                            callUpdateHeaderText(headerText: headerTitle)
-                        }
                         webView.loadPage(url: urlString)
                         return
                     }
@@ -63,10 +57,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                     return;
                 }
             }
+            
         }
+        self.callUpdateHeaderTextForURL(url: navigationAction.request.url!)
         decisionHandler(.allow)
     }
-    
+        
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
@@ -102,8 +98,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     
     func shouldOpenInSafari(url: URL) -> Bool {
         let currentHost = url.host
-        
-        for host in webViewHosts {
+        let knownHosts = self.knownServices.getAllKnownHosts()
+        for host in knownHosts {
             if (host == currentHost) {
                 return false;
             }
@@ -123,12 +119,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
             }
             if (message.name == "updateHeaderText"){
-                callUpdateHeaderText(headerText: message.body)
+                callUpdateHeaderText(headerText: String(describing: message.body))
             }
         }
     }
-    func callUpdateHeaderText(headerText: Any) {
-        viewController.updateHeaderText(headerText: String(describing: headerText))
+    func callUpdateHeaderTextForURL(url: URL) {
+        let knownService = self.knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
+        self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
+    }
+    func callUpdateHeaderText(headerText: String?) {
+            viewController.updateHeaderText(headerText: headerText)
     }
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {

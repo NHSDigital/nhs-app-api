@@ -1,15 +1,15 @@
 import Foundation
 
  class KnownService {
-    let url:URLComponents
+    var urls = [URLComponents]()
     let shouldHandleUnavailability:Bool
     let shouldAllowNativeInteraction:Bool
     let serviceTitle: String?
     let serviceErrorMessage: String?
     private var urlQueryItems = Array<URLQueryItem>()
     
-    init(urlString:String, serviceTitle: String? = nil, serviceErrorMessage: String? = nil, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
-        self.url = URLComponents(string: urlString)!
+    init(urlStrings:[String], serviceTitle: String? = "", serviceErrorMessage: String? = nil, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, urlQueryString:String? = nil) {
+        self.urls = urlStrings.map { URLComponents(string: $0)! }
         self.shouldHandleUnavailability = shouldHandleUnavailability
         self.shouldAllowNativeInteraction = shouldAllowNativeInteraction
         self.serviceTitle = serviceTitle
@@ -17,7 +17,7 @@ import Foundation
         self.retrieveQueryKeyValueFrom(queryString: urlQueryString)
     }
     
-    func getTitleFor(urlPath:String?)-> String? {
+    func getTitleFor(urlHost:String?)-> String? {
         return serviceTitle
     }
     

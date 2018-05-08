@@ -22,7 +22,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceIsMissingQueryString_Then_ItsCorrectlyAdded() {
         let urlString = config().HomeUrl
         let webViewUrl = URL(string: urlString);
-        let knownService = knownServices?.findMatchingKnownServiceFor(url: webViewUrl!)
+        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
         
         let correctUrl = knownService?.addingMissingQueryParameters(urlString: (webViewUrl?.absoluteString)!)
         
@@ -32,7 +32,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceContainsQueryString_Then_ItsNotAdded() {
         let urlString = config().HomeUrl + config().NhsOnlineRequiredQueryString
         let webViewUrl = URL(string: urlString)
-        let knownService = knownServices?.findMatchingKnownServiceFor(url: webViewUrl!)
+        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
         
         let correctUrl = knownService?.addingMissingQueryParameters(urlString: (webViewUrl?.absoluteString)!)
         
@@ -52,7 +52,7 @@ class WebViewUrlTests: XCTestCase {
         let urlString = "http://notknown.service.url/"
         let webViewUrl = URL(string: urlString)
         
-        let knownService = knownServices?.findMatchingKnownServiceFor(url: webViewUrl!)
+        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
         
         XCTAssertNil(knownService)
     }
@@ -60,7 +60,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceHeaderTitleIsRequested_ThenCorrectTitleForPathIsReturned() {
         let knownServices = KnownServices(config: config())
         let serviceUrlTitleDictionary = [
-            config().HomeUrl : nil,
+            config().HomeUrl : "",
             config().Nhs111Url:config().TitleNHS111,
             config().OrganDonationUrl: config().TitleOrganDonation
         ]
@@ -70,7 +70,7 @@ class WebViewUrlTests: XCTestCase {
                 assertionFailure("known service not found for \(urlString)")
                 return
             }
-            XCTAssertEqual(knownService.getTitleFor(urlPath: url?.path), title, "expected title \(title ?? "nil") for url \(urlString) not found")
+            XCTAssertEqual(knownService.getTitleFor(urlHost: url?.host), title, "expected title \(title ) for url \(urlString) not found")
         }
     }
 }

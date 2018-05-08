@@ -2,7 +2,7 @@ import Foundation
 
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
-        case HomeUrl, Nhs111Url, OrganDonationUrl
+        case HomeUrl, Nhs111Url, Nhs111LocationUrl, OrganDonationUrl
         case AppointmentsUrlPath, MoreUrlPath, PrescriptionsUrlPath
         case TitleNHS111, TitleOrganDonation
         case NhsOnlineRequiredQueryString
@@ -12,6 +12,7 @@ struct Config: Decodable {
     
     let HomeUrl: String
     let Nhs111Url: String
+    let Nhs111LocationUrl: String
     let OrganDonationUrl: String
     
     let MoreUrlPath: String
