@@ -18,6 +18,7 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.Router.Validators;
 using NHSOnline.Backend.Worker.Session;
 using StackExchange.Redis;
 
@@ -84,6 +85,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
+            services.AddTransient<IPrescriptionRequestValidationService, PrescriptionRequestValidationService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICipherService, CipherService>();
