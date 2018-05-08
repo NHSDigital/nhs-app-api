@@ -39,4 +39,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Prescriptions\" />
+  </ItemGroup>
+
 </Project>

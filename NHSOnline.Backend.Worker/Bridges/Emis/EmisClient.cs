@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
+using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
@@ -20,6 +21,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
         private const string SessionsPath = "sessions";
         private const string DemographicsPath = "demographics?userPatientLinkToken={0}";
+        private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
 
         private readonly HttpClient _httpClient;
 
@@ -55,6 +57,25 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId, MeApplicationsPostRequest model)
         {
             var response = await Post<MeApplicationsPostRequest, MeApplicationsPostResponse>(model, MeApplicationsPath, endUserSessionId);
+            return response;
+        }
+
+        public async Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime)
+        {
+            var path = string.Format(PrescriptionsPath, userPatientLinkToken);
+
+            if (fromDateTime.HasValue)
+            {
+                path += $"&filterFromDate={fromDateTime:O}";
+            }
+
+            if (toDateTime.HasValue)
+            {
+                path += $"&filterToDate={toDateTime:O}";
+            }
+
+            var response = await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
             return response;
         }
 
