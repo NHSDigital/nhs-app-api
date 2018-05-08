@@ -21,7 +21,7 @@ export default {
         result.location = location;
       }
 
-      const appointmentSession = findById(slot.locationId, state.locations);
+      const appointmentSession = findById(slot.appointmentSessionId, state.appointmentSessions);
       if (appointmentSession) {
         result.appointmentSession = appointmentSession;
       }
