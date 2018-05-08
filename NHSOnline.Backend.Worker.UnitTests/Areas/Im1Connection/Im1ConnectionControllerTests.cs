@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection;
@@ -45,7 +46,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var systemProviderFactory = MockSystemProviderFactory();
 
-            Action act = () => new Im1ConnectionController(null, systemProviderFactory.Object);
+            Action act = () => new Im1ConnectionController(null, systemProviderFactory.Object, new LoggerFactory());
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCodeLookup");
         }
@@ -55,7 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var odsCodeLookup = MockOdsCodeLookup();
 
-            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null);
+            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, new LoggerFactory());
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("systemProviderFactory");
         }
@@ -188,7 +189,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             odsCodeLookupMock = odsCodeLookupMock ?? MockOdsCodeLookup();
             systemProviderFactoryMock = systemProviderFactoryMock ?? MockSystemProviderFactory();
 
-            return new Im1ConnectionController(odsCodeLookupMock.Object, systemProviderFactoryMock.Object);
+            return new Im1ConnectionController(odsCodeLookupMock.Object, systemProviderFactoryMock.Object, new LoggerFactory());
         }
 
         private Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode,

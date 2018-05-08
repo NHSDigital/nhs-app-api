@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
@@ -16,12 +17,17 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
     {
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly ILogger<Im1ConnectionController> _logger;
 
-        public Im1ConnectionController(IOdsCodeLookup odsCodeLookup, ISystemProviderFactory systemProviderFactory)
+        public Im1ConnectionController(
+            IOdsCodeLookup odsCodeLookup, 
+            ISystemProviderFactory systemProviderFactory,
+            ILoggerFactory loggerFactory)
         {
             _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
             _systemProviderFactory =
                 systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
+            _logger = loggerFactory.CreateLogger<Im1ConnectionController>();
         }
 
         [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
@@ -31,12 +37,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode
         )
         {
-            if (string.IsNullOrEmpty(connectionToken) || string.IsNullOrEmpty(odsCode))
-            {
-                return BadRequest();
-            }
-
-            if (!Regex.IsMatch(odsCode, OdsCodeFormats.GpPracticeEnglandWales))
+            if (ArgumentsAreInvalid(connectionToken, odsCode))
             {
                 return BadRequest();
             }
@@ -44,6 +45,9 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             var systemProviderOption = await GetSystemProvider(odsCode);
             if (!systemProviderOption.HasValue)
             {
+                _logger.LogDebug(
+                    $"No system provider was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
+
                 // If no system provider is returned it is because the supplier could not be determined from the ODS
                 // code.  This, in turn, is because the ODS code is not found so a "Not Found" response is returned.
                 return NotFound();
@@ -53,6 +57,8 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             var tokenValidationService = systemProvider.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
             {
+                _logger.LogError(
+                    $"ConnectionToken {connectionToken} provided in header {Constants.Headers.ConnectionToken} is not a Guid.");
                 return BadRequest();
             }
 
@@ -68,6 +74,8 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             var systemProviderOption = await GetSystemProvider(model.OdsCode);
             if (!systemProviderOption.HasValue)
             {
+                _logger.LogDebug(
+                    $"No system provider was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
                 return NotFound();
             }
 
@@ -87,6 +95,34 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             }
 
             return Option.Some(_systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure()));
+        }
+        
+        private bool ArgumentsAreInvalid(string connectionToken, string odsCode)
+        {
+            var retval = false;
+
+            if (string.IsNullOrEmpty(connectionToken))
+            {
+                _logger.LogError($"The header {Constants.Headers.ConnectionToken}, has not been supplied in the request"); 
+                retval = true;
+            }
+
+            if (string.IsNullOrEmpty(odsCode))
+            {
+                _logger.LogError($"The header {Constants.Headers.OdsCode}, has not been supplied in the request.");
+                retval = true;
+            }
+            else
+            {
+                if (!Regex.IsMatch(odsCode, OdsCodeFormats.GpPracticeEnglandWales))
+                {
+                    _logger.LogError($"The OdsCode {odsCode} provided in header {Constants.Headers.OdsCode} " +
+                                     $"does not match format {OdsCodeFormats.GpPracticeEnglandWales}.");
+                    retval = true;
+                }
+            }
+
+            return retval;
         }
     }
 }
