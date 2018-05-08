@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode
         )
         {
-            if (ArgumentsAreInvalid(connectionToken, odsCode))
+            if (!ArgumentsAreValid(connectionToken, odsCode))
             {
                 return BadRequest();
             }
@@ -97,20 +97,20 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             return Option.Some(_systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure()));
         }
         
-        private bool ArgumentsAreInvalid(string connectionToken, string odsCode)
+        private bool ArgumentsAreValid(string connectionToken, string odsCode)
         {
-            var retval = false;
+            var argumentsAreValid = true;
 
             if (string.IsNullOrEmpty(connectionToken))
             {
                 _logger.LogError($"The header {Constants.Headers.ConnectionToken}, has not been supplied in the request"); 
-                retval = true;
+                argumentsAreValid = false;
             }
 
             if (string.IsNullOrEmpty(odsCode))
             {
                 _logger.LogError($"The header {Constants.Headers.OdsCode}, has not been supplied in the request.");
-                retval = true;
+                argumentsAreValid = false;
             }
             else
             {
@@ -118,11 +118,11 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 {
                     _logger.LogError($"The OdsCode {odsCode} provided in header {Constants.Headers.OdsCode} " +
                                      $"does not match format {OdsCodeFormats.GpPracticeEnglandWales}.");
-                    retval = true;
+                    argumentsAreValid = false;
                 }
             }
 
-            return retval;
+            return argumentsAreValid;
         }
     }
 }
