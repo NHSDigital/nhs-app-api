@@ -19,7 +19,7 @@ class NHSOnlineTests: XCTestCase {
     }
     
     func test_When_HostIsKnown_Then_PageShouldBeOpenedInWebView() {
-        let webViewUrl = URL(string: "https://111-int2.staging.111.service.nhs.uk/");
+        let webViewUrl = URL(string: config().Nhs111Url);
         let displayedInWebView = webViewDelegate?.shouldOpenInSafari(url: webViewUrl!)
         
         XCTAssertFalse(displayedInWebView!)
