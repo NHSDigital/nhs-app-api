@@ -1,19 +1,16 @@
 package com.nhs.online.nhsonline.services
 
-import android.content.Context
-import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import com.nhs.online.nhsonline.services.KnownServices
 
 @RunWith(RobolectricTestRunner::class)
-class KnownServicesServiceTest {
+class KnownServiceServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsTrue_forMissingQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000")
 
@@ -22,7 +19,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsTrue_forMissingOneOfMany(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile&param2=param2Value")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile&param2=param2Value")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?param2=param2Value")
         Assert.assertTrue(result)
@@ -33,7 +30,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=mobile")
 
@@ -42,7 +39,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryStringDifferentCase(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?SOURCE=MOBILE")
 
@@ -51,7 +48,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryStringNoValue(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=")
 
@@ -60,7 +57,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasMissingQueryString_returnsFalse_forEmptyUrl(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.hasMissingQueryString("")
 
@@ -69,7 +66,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forMissingQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000")
 
@@ -78,7 +75,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forIncludedQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?source=mobile")
 
@@ -87,7 +84,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forNonMatchingHost(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.addMissingQueryStrings("http://www.google.com")
 
@@ -96,7 +93,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forNoQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"))
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000")
 
@@ -105,7 +102,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forNoQueryStringWithInputQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"))
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?param1=param1Value")
 
@@ -114,7 +111,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forQueryStringWithAdditionalInputQueryString(){
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
+        val testService = KnownService(arrayOf("http://10.0.2.2:3000"),queryString = "?source=mobile")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?param1=param1Value")
 
@@ -123,7 +120,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasNativeHeader_returnsTrue_forServiveWithNativeHeader(){
-        val testService = KnownServices.Service("http://testUrl", nativeHeader = "Header 1")
+        val testService = KnownService(arrayOf("http://testUrl"), nativeHeader = "Header 1")
 
         val result = testService.hasNativeHeader()
         Assert.assertTrue(result)
@@ -131,7 +128,7 @@ class KnownServicesServiceTest {
 
     @Test
     fun hasNativeHeader_returnsFalse_forServiveWithoutNativeHeader(){
-        val testService = KnownServices.Service("http://testUrl")
+        val testService = KnownService(arrayOf("http://testUrl"))
 
         val result = testService.hasNativeHeader()
         Assert.assertFalse(result)

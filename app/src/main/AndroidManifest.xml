@@ -31,9 +31,7 @@
 
                 <data
                     android:scheme="@string/baseScheme"
-                    android:host="@string/baseHost"
-                    android:pathPrefix="@string/authRedirectPath"
-                    android:port="@string/basePort"/>
+                    android:host="@string/baseHost" />
             </intent-filter>
         </activity>
     </application>
