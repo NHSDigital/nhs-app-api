@@ -28,12 +28,14 @@ namespace NHSOnline.Backend.Worker
     {
         private const int DefaultHttpTimeoutSeconds = 10;
         private const int DefaultSessionExpiryMinutes = 20;
+        private readonly IHostingEnvironment _env;
         private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger, IHostingEnvironment env)
         {
             Configuration = configuration;
             _logger = logger;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -44,14 +46,16 @@ namespace NHSOnline.Backend.Worker
             var configurationSettings = Configuration.GetSection("ConfigurationSettings").Get<ConfigurationSettings>();
             EnsureConfigurationSettingsPopulated(configurationSettings);
             services.Configure<ConfigurationSettings>(Configuration.GetSection("ConfigurationSettings"));
-            
+
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.Cookie.Name = Constants.Cookies.SessionId;
                     options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                    options.Cookie.SecurePolicy = _env.IsDevelopment()
+                        ? CookieSecurePolicy.SameAsRequest
+                        : CookieSecurePolicy.Always;
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
 
                     int.TryParse(Configuration["SESSION_EXPIRY_MINUTES"], out var sessionExpiryMinutes);
@@ -110,10 +114,10 @@ namespace NHSOnline.Backend.Worker
             }));
             services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
-            
+
             // Add functionality to inject IOptions<T>
             services.AddOptions();
-            
+
             var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));
 
             if (module != null)
@@ -145,9 +149,9 @@ namespace NHSOnline.Backend.Worker
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
-                );   
+                );
             }
-            
+
             app.UseMvc();
         }
 
