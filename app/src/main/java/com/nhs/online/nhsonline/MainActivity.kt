@@ -63,7 +63,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.webChromeClient = chromeClient
 
         knownServices = KnownServices(this)
-        webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities())
+        webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities(), this)
 
         webview.addJavascriptInterface( WebAppInterface(this), "nativeApp")
     }

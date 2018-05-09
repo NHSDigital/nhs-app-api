@@ -18,6 +18,7 @@ class KnownServicesTest {
     fun mockContext():Context {
         var mockresource: Resources = mock() {on {getString(R.string.baseURL)} doReturn "http://10.0.2.2:3000"
             on {getString(R.string.nhs111)} doReturn "https://111.nhs.uk"
+            on {getString(R.string.nhs111Location)} doReturn "https://111.service.nhs.uk/"
             on {getString(R.string.organDonation)} doReturn "https://www.organdonation.nhs.uk/"
             on {getString(R.string.nhs111_connection_error)} doReturn "NHS 111 unavailable"
             on {getString(R.string.organ_donation_connection_error)} doReturn "Organ donation unavailable"
@@ -46,7 +47,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findMatchingKnownService("https://111.nhs.uk")
 
-        Assert.assertEquals(URL("https://111.nhs.uk"),result?.url)
+        Assert.assertEquals(URL("https://111.nhs.uk"), result?.urlList?.get(0))
     }
 
     @Test
@@ -56,7 +57,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findMatchingKnownService("https://111.NHS.UK")
 
-        Assert.assertEquals(URL("https://111.nhs.uk"),result?.url)
+        Assert.assertEquals(URL("https://111.nhs.uk"),result?.urlList?.get(0))
     }
 
     @Test
@@ -66,7 +67,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=mobile")
 
-        Assert.assertEquals(URL("http://10.0.2.2:3000"),result?.url)
+        Assert.assertEquals(URL("http://10.0.2.2:3000"),result?.urlList?.get(0))
     }
 
     @Test
@@ -148,36 +149,5 @@ class KnownServicesTest {
 
         Assert.assertEquals("https://www.google.co.uk",result)
     }
-
-    @Test
-    fun isTheService_returnsUnknown_forNullService() {
-        var context: Context = mockContext()
-        val testKnownServices = KnownServices(context)
-
-        val result = testKnownServices.isTheService(null)
-
-        Assert.assertEquals(KnownServices.ServiceName.UNKNOWN,result)
-    }
-
-    @Test
-    fun isTheService_returnsServiceName_forKnownService() {
-        var context: Context = mockContext()
-        val testKnownServices = KnownServices(context)
-        val testService = KnownServices.Service("http://10.0.2.2:3000",queryString = "?source=mobile")
-
-        val result = testKnownServices.isTheService(testService)
-
-        Assert.assertEquals(KnownServices.ServiceName.NHS_ONLINE,result)
-    }
-
-    @Test
-    fun isTheService_returnsUnknown_forUnKnownService() {
-        var context: Context = mockContext()
-        val testKnownServices = KnownServices(context)
-        val testService = KnownServices.Service("http://www.google.com")
-
-        val result = testKnownServices.isTheService(testService)
-
-        Assert.assertEquals(KnownServices.ServiceName.UNKNOWN,result)
-    }
+    
 }

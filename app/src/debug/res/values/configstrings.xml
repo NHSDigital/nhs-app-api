@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NHS Online Dev</string>
-    <string name="baseURL">http://10.0.2.2:3000</string>
+    <string name="baseURL">https://www.develop.bitraft.io/</string>
 </resources>

@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.os.Handler
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.content.Context
+import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.KnownServices
@@ -16,7 +18,8 @@ private const val REQUEST_TIMEOUT = 10 * 1000L
 class WebClientInterceptor(
     private val uiInteractor: IInteractor,
     private val knownServices: KnownServices,
-    private val activities: List<ActivityInterface>
+    private val activities: List<ActivityInterface>,
+    private val context: Context
 ) : WebViewClient() {
 
     companion object {
@@ -51,12 +54,11 @@ class WebClientInterceptor(
 
         val matchingKnownService = knownServices.findMatchingKnownService(url)
 
-        when(knownServices.isTheService(matchingKnownService)) {
-            KnownServices.ServiceName.NHS111 -> uiInteractor.selectSymptomsMenuActive()
-            KnownServices.ServiceName.ORGAN_DONATION -> uiInteractor.selectMoreMenuActive()
-        }
-
         if (matchingKnownService != null) {
+            when(matchingKnownService.nativeHeader) {
+                context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectSymptomsMenuActive()
+                context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectMoreMenuActive()
+            }
             if (matchingKnownService.hasMissingQueryString(url)) {
                 val urlWithMissingQueryStrings = matchingKnownService.addMissingQueryStrings(url)
                 view.loadUrl(urlWithMissingQueryStrings)
