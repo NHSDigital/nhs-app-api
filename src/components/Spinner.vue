@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 #loading-spinner {
   position: absolute;
   left: 0;
