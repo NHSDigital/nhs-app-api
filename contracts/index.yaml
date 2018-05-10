@@ -12,7 +12,7 @@
         tags: 
           - "appointment-slots"
         summary: "Gets a list of available appointments for the logged on user."
-        description: "For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-ID cookie (obtained from Session end point)."
+        description: "For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         produces: 
           - "application/json"
         parameters: 
@@ -105,7 +105,53 @@
           401: 
             description: "User session has expired."
           500: 
-            description: "An unexpected error occured processing the request."
+            description: "An unexpected error occurred processing the request."
+          502: 
+            description: "The GP system is currently unavailable."
+          504: 
+            description: "The GP system did not respond in a timely fashion."
+    /v1/patient/appointments: 
+      post: 
+        tags: 
+          - "appointments"
+        summary: "Creates a GP Appointment for the logged on user."
+        description: "Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "AppointmentBookRequest"
+            required: true
+            description: "Details of the appointment slot to be booked, along with reasons for the booking being made."
+            schema: 
+              type: "object"
+              required: 
+                - "slotId"
+                - "bookingReason"
+              properties: 
+                slotId: 
+                  type: "string"
+                  description: "Identifier of appointment slot to be booked."
+                  minLength: 1
+                bookingReason: 
+                  type: "string"
+                  description: "Reason for booking appointment. e.g. symptoms being experienced by the patient."
+                  minLength: 1
+                  maxLength: 150
+        responses: 
+          201: 
+            description: "Appointment successfully created."
+          400: 
+            description: "Bad request. Supplied request is incomplete or invalid."
+          401: 
+            description: "User session has expired."
+          403: 
+            description: "The patient does not have the necessary permissions within the GP system."
+          409: 
+            description: "Conflict. The chosen appointment slot is not available for booking."
+          500: 
+            description: "An unexpected error occurred processing the request."
           502: 
             description: "The GP system is currently unavailable."
           504: 
@@ -115,7 +161,7 @@
         tags: 
           - "prescriptions"
         summary: "Creates a repeat prescription request for the logged in user"
-        description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-ID cookie in header from session end point."
+        description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-Id cookie in header from session endpoint."
         consumes: 
           - "application/json"
         parameters: 
@@ -140,12 +186,6 @@
         responses: 
           201: 
             description: "Successful operation. Repeat Prescription Created."
-            schema: 
-              type: "object"
-              properties: 
-                prescriptionCreated: 
-                  type: "boolean"
-                  description: "Success flag for creating repeat prescription"
           400: 
             description: "Bad request. Supplied connection details or request data is incomplete or invalid."
           401: 
@@ -155,7 +195,7 @@
           409: 
             description: "Conflict. A repeat prescription for the given course already exists preventing a new one to be created."
           500: 
-            description: "An unexpected error occured processing the request."
+            description: "An unexpected error occurred processing the request."
           502: 
             description: "The GP system is currently unavailable."
           504: 
@@ -164,7 +204,7 @@
         tags: 
           - "prescriptions"
         summary: "Gets a list of requested repeat prescriptions for the logged on user."
-        description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-ID cookie in header from session end point."
+        description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
         produces: 
           - "application/json"
         parameters: 
@@ -217,7 +257,7 @@
           401: 
             description: "User session has expired."
           500: 
-            description: "An unexpected error occured processing the request."
+            description: "An unexpected error occurred processing the request."
           502: 
             description: "The GP system is currently unavailable."
           504: 
@@ -227,7 +267,7 @@
         tags: 
           - "courses"
         summary: "Gets a list of prescriptions courses for the given patient."
-        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-ID cookie in header from session end point."
+        description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
         produces: 
           - "application/json"
         responses: 
@@ -257,7 +297,7 @@
           401: 
             description: "User session missing or expired."
           500: 
-            description: "An unexpected error occured processing the request."
+            description: "An unexpected error occurred processing the request."
           502: 
             description: "The GP system is currently unavailable."
           504: 
@@ -290,7 +330,7 @@
                   description: "PKCE code verifier."
         responses: 
           201: 
-            description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-ID`. This cookie should be included in subsequent requests."
+            description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests."
             schema: 
               type: "object"
               properties: 
