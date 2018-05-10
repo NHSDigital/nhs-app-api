@@ -283,5 +283,32 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             response.StatusCode.Should().Be(200);
             response.ErrorResponse.Should().Be(null);
         }
+
+        [TestMethod]
+        public async Task CoursesGet_ReturnsACoursesResponse_WhenValidlyRequested()
+        {
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var expectedResponse = _fixture.Create<CoursesGetResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "courses?userPatientLinkToken=" + userPatientLinkToken)
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.CoursesGet(userPatientLinkToken, sessionId, endUserSessionId);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
+        }
     }
 }

@@ -30,5 +30,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         // AppointmentSlotsMetadata
         Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
             EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters);
+
+        // Courses
+        Task<EmisClient.EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken, string responseSessionId, string endUserSessionId);
     }
 }

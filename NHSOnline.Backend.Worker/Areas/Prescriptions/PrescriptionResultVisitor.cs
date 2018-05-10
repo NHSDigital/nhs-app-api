@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
         public IActionResult Visit(GetPrescriptionsResult.Unsuccessful result)
         {
-            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
     }
 }

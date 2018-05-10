@@ -33,6 +33,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             throw new System.NotImplementedException();
         }
 
+        public ICourseService GetCourseService()
+        {
+            return new EmisCourseService(_loggerFactory, _emisClient, _emisPrescriptionMapper);
+        }
+
         public IIm1ConnectionService GetIm1ConnectionService()
         {
             return new EmisIm1ConnectionService(_emisClient);

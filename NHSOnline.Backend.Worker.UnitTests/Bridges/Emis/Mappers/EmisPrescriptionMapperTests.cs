@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -29,15 +28,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
         }
 
         [TestMethod]
-        public void Map_WhenPassingNull_ThrowsNullReferenceException()
+        public void MapPrescriptionRequestsGetResponseToPrescriptionListResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapper.Map(null);
+            Action act = () => _mapper.Map((PrescriptionRequestsGetResponse)null);
             
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("prescriptionGetResponse");
         }
 
         [TestMethod]
-        public void Map_WithEmptyValues_ReturnsResultWithEmptyValues()
+        public void MapPrescriptionRequestsGetResponseToPrescriptionListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange
             var item = new PrescriptionRequestsGetResponse();
@@ -52,7 +51,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
         }
 
         [TestMethod]
-        public void Map_WithValues_ReturnsResultValues()
+        public void MapPrescriptionRequestsGetResponseToPrescriptionListResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
             var item = new PrescriptionRequestsGetResponse
@@ -127,5 +126,76 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
 
             result.Should().BeEquivalentTo(expectedResult);
         }
+
+        [TestMethod]
+        public void MapCoursesGetResponseToCourseListResponse_WhenPassingNull_ThrowsNullReferenceException()
+        {
+            Action act = () => _mapper.Map((CoursesGetResponse)null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("coursesGetResponse");
+        }
+
+        [TestMethod]
+        public void MapCoursesGetResponseToCourseListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
+        {
+            // Arrange
+            var item = new CoursesGetResponse();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Courses.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void MapCoursesGetResponseToCourseListResponse_WithValues_ReturnsResultValues()
+        {
+            // Arrange
+            var item = new CoursesGetResponse()
+            {
+                Courses = new List<MedicationCourse>
+                {
+                    new MedicationCourse
+                    {
+                        CanBeRequested = true,
+                        Constituents = new List<string>
+                        {
+                            _fixture.Create<string>()
+                        },
+                        Dosage = _fixture.Create<string>(),
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        QuantityRepresentation = _fixture.Create<string>(),
+                        Name = _fixture.Create<string>(),
+                        PrescriptionType = PrescriptionType.Automatic,
+                    }
+                }
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Courses.Should().HaveCount(item.Courses.Count());
+
+            var expectedResult = new CourseListResponse
+            {
+                Courses = new List<Course>
+                {
+                    new Course
+                    {
+                        Dosage = item.Courses.ElementAt(0).Dosage,
+                        Id = item.Courses.ElementAt(0).MedicationCourseGuid,
+                        Name = item.Courses.ElementAt(0).Name,
+                        Quantity = item.Courses.ElementAt(0).QuantityRepresentation,
+                    }
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
     }
 }

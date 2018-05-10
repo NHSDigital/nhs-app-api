@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private const string AppointmentSlotsMetaPath = "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
         private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
+        private const string CoursesPath = "courses?userPatientLinkToken={0}";
 
         private readonly HttpClient _httpClient;
 
@@ -102,7 +103,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             var response = await Get<AppointmentsSlotsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
             return response;
         }
-        
+
         public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
             EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters getQueryParameters)
         {
@@ -110,13 +111,20 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             var fromDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionStartDate));
             var toDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionEndDate));
 
-            var path = string.Format(AppointmentSlotsMetaPath, 
+            var path = string.Format(AppointmentSlotsMetaPath,
                 getQueryParameters.UserPatientLinkToken,
-                fromDateTime, 
+                fromDateTime,
                 toDateTime);
 
             var response = await Get<AppointmentSlotsMetadataGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            return response;
+        }
 
+        public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken, string responseSessionId, string endUserSessionId)
+        {
+            var path = string.Format(CoursesPath, userPatientLinkToken);
+
+            var response = await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
             return response;
         }
 

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -64,14 +62,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             {
                 HttpContext = httpContextMock.Object
             };
-        }
-
-        [TestMethod]
-        public void Constructor_NullSystemProviderFactory_Throws()
-        {
-            Action act = () => new PrescriptionsController(_options, new LoggerFactory(), null, _prescriptionRequestValidationService.Object);
-
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("systemProviderFactory");
         }
 
         [TestMethod]

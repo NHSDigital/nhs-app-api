@@ -26,8 +26,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Controllers
         {
             _settings = settings.Value;
             _logger = loggerFactory.CreateLogger<PrescriptionsController>();
-            _systemProviderFactory =
-                systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
+            _systemProviderFactory = systemProviderFactory;
             _prescriptionRequestValidationService = prescriptionRequestValidationService;
         }
         
