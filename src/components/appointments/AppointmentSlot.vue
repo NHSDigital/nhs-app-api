@@ -1,22 +1,24 @@
 <template>
-  <div v-bind:class="getClass()" v-on:click="select">
-    <h2 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h2>
-    <h3 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h3>
-    <hr/>
-    <h3 :class="$style.session">{{ appointmentSession | truncate(24)}}</h3>
-    <hr/>
-    <div>
-      <location-icon/>
-      &nbsp;{{ location | truncate(24) }}
+  <appointment-slot>
+    <div v-bind:class="getClass()" v-on:click="select">
+      <h2 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h2>
+      <h3 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h3>
+      <hr/>
+      <h3 :class="$style.session">{{ appointmentSession | truncate(24)}}</h3>
+      <hr/>
+      <div>
+        <location-icon/>
+        &nbsp;{{ location | truncate(24) }}
+      </div>
+      <ul :key="clinician.id"
+          v-for="clinician in appointmentSlot.clinicians" :class="$style.clinicians">
+        <li title="getType();">
+          <clinician-icon/>
+          &nbsp;{{ clinician.displayName | truncate(24) }}
+        </li>
+      </ul>
     </div>
-    <ul :key="clinician.id"
-        v-for="clinician in appointmentSlot.clinicians" :class="$style.clinicians">
-      <li title="getType();">
-        <clinician-icon/>
-        &nbsp;{{ clinician.displayName | truncate(24) }}
-      </li>
-    </ul>
-  </div>
+  </appointment-slot>
 </template>
 
 <script>
