@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Worker.Session
                 return Option.None<UserSession>();
             }
 
-            database.KeyExpire(sessionId, TimeSpan.FromMinutes(_sessionExpiryMinutes));
+            await database.KeyExpireAsync(sessionId, TimeSpan.FromMinutes(_sessionExpiryMinutes));
 
             var userSession = JsonConvert
                 .DeserializeObject<UserSession>(_cipherService.Decrypt(redisValue.Value), _serializerSettings);

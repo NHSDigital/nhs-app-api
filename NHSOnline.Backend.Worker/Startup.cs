@@ -29,12 +29,10 @@ namespace NHSOnline.Backend.Worker
         private const int DefaultHttpTimeoutSeconds = 10;
         private const int DefaultSessionExpiryMinutes = 20;
         private readonly IHostingEnvironment _env;
-        private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration, ILogger<Startup> logger, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            _logger = logger;
             _env = env;
         }
 
@@ -129,13 +127,12 @@ namespace NHSOnline.Backend.Worker
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole();
             app.UseAuthentication();
 
             if (env.IsDevelopment())
             {
-                loggerFactory.AddDebug();
                 loggerFactory.AddConsole();
+                loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
             }
 
