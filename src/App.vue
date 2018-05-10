@@ -20,20 +20,19 @@ export default {
 
   data() {
     return {
-      isNativeApp: false,
       isLoggedIn: false,
     };
   },
 
   computed: {
     showMenu() {
-      return !this.isNativeApp && this.$store.state.auth.loggedIn;
+      return !this.$store.state.device.isNativeApp && this.$store.state.auth.loggedIn;
     },
   },
 
   created() {
     if (this.$route.query.source === 'mobile') {
-      this.isNativeApp = true;
+      this.$store.dispatch('device/updateIsNativeApp', true);
     }
   },
 };

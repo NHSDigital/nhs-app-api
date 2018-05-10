@@ -1,5 +1,6 @@
 import More from '@/components/More';
 import Prescriptions from '@/components/Prescriptions';
+import RepeatPrescriptionCourses from '@/components/RepeatPrescriptionCourses';
 import Appointments from '@/components/appointments/Appointments';
 import AuthReturn from '@/components/AuthReturn';
 import HomeLoggedOut from '@/components/HomeLoggedOut';
@@ -45,6 +46,14 @@ export default [
     meta: {
       auth: true,
       headerKey: 'pageHeaderTitles.prescriptions',
+    },
+  }, {
+    path: '/repeat-prescription-courses',
+    name: 'repeatPrescriptionCourses',
+    component: RepeatPrescriptionCourses,
+    meta: {
+      auth: true,
+      headerKey: 'pageHeaderTitles.repeatPrescriptionCourses',
     },
   }, {
     path: '/auth-return',

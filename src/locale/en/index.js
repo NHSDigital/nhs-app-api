@@ -15,10 +15,16 @@ export default {
     },
   },
   prescriptions: {
+    orderRepeatPrescriptionButton: 'Order a repeat prescription',
     noPrescriptionsAvailable: {
       title: 'Looks like you have no repeat prescriptions ordered here.',
       contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
       orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
+    },
+    backToYourPrescriptionsButton: 'Back to your prescriptions',
+    noRepeatPrescriptionsYouCanOrder: {
+      title: 'Looks like you have no repeat prescriptions you can order.',
+      contactGp: 'If you think you should have a repeat prescriptions you can order, please contact your GP.',
     },
   },
   common: {
@@ -40,6 +46,7 @@ export default {
   pageHeaderTitles: {
     home: 'Home',
     prescriptions: 'My repeat prescriptions',
+    repeatPrescriptionCourses: 'Order a repeat prescription',
     appointments: 'Appointments',
     myRecord: 'My record',
     more: 'More',

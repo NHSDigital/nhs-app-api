@@ -13,6 +13,11 @@
           {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
         </p>
       </div>
+      <div v-bind:class="getButtonContainerClass()">
+        <router-link to="repeat-prescription-courses" tag="button" class="button">
+          {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
+        </router-link>
+      </div>
     </main>
   </div>
 </template>
@@ -28,10 +33,16 @@ export default {
   mounted() {
     this.$store.dispatch('prescriptions/load', this.$config);
   },
+  methods: {
+    getButtonContainerClass() {
+      return this.$store.state.device.isNativeApp ? 'button-container-native' : 'button-container';
+    },
+  },
 };
 </script>
 
 <style lang="scss">
   @import '../style/html';
   @import '../style/elements';
+  @import '../style/buttons';
 </style>

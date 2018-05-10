@@ -8,7 +8,9 @@ import auth from './modules/auth';
 import http from './modules/http';
 import appointmentSlots from './modules/appointment-slots';
 import prescriptions from './modules/prescriptions';
+import repeatPrescriptionCourses from './modules/repeat-prescription-courses';
 import header from './modules/header';
+import device from './modules/device';
 
 Vue.use(Vuex);
 
@@ -26,9 +28,11 @@ export default new Vuex.Store({
   modules: {
     appointmentSlots,
     prescriptions,
+    repeatPrescriptionCourses,
     auth,
     http,
     header,
+    device,
   },
   /**
    * If strict mode should be enables
