@@ -40,6 +40,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        self.stopErrorsHandling()
         if let url = navigationAction.request.url {
             if url.absoluteString != "about:blank" {
                 if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
