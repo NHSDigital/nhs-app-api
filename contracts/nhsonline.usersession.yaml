@@ -23,7 +23,7 @@ paths:
             $ref: '#/definitions/UserSessionRequest'
       responses:
         201:
-          description: Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-ID`. This cookie should be included in subsequent requests.
+          description: Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests.
           schema:
             $ref: "#/definitions/UserSessionResponse"
         400:

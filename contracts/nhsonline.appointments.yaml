@@ -3,7 +3,7 @@ swagger: "2.0"
 info:
   version: 0.0.4
   title: NHS Online Sub-API - Appointments
-  description: NHS Online Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-ID cookie (obtained from Session end point).
+  description: NHS Online Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
 
 paths:
   /appointment-slots:
@@ -11,7 +11,7 @@ paths:
       tags:
         - appointment-slots
       summary: Gets a list of available appointments for the logged on user.
-      description: For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-ID cookie (obtained from Session end point).
+      description: For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
       produces:
         - application/json
       parameters:
@@ -37,12 +37,59 @@ paths:
         401:
           description: User session has expired.
         500:
-          description: An unexpected error occured processing the request.
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+  /appointments:
+    post:
+      tags:
+        - appointments
+      summary: Creates a GP Appointment for the logged on user.
+      description: Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: AppointmentBookRequest
+          required: true
+          description: Details of the appointment slot to be booked, along with reasons for the booking being made.
+          schema:
+            $ref: "#/definitions/AppointmentBookRequest"
+      responses:
+        201:
+          description: Appointment successfully created.
+        400:
+          description: Bad request. Supplied request is incomplete or invalid.
+        401:
+          description: User session has expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
+        409:
+          description: Conflict. The chosen appointment slot is not available for booking.
+        500:
+          description: An unexpected error occurred processing the request.
         502:
           description: The GP system is currently unavailable.
         504:
           description: The GP system did not respond in a timely fashion.
 definitions:
+  AppointmentBookRequest:
+    type: object
+    required:
+      - slotId
+      - bookingReason
+    properties:
+      slotId:
+        type: string
+        description: Identifier of appointment slot to be booked.
+        minLength: 1
+      bookingReason:
+        type: string
+        description: Reason for booking appointment. e.g. symptoms being experienced by the patient.
+        minLength: 1
+        maxLength: 150
   AppointmentSlotsResponse:
     type: object
     properties:

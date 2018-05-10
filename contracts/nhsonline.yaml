@@ -11,6 +11,8 @@ schemes:
 paths:
   /v1/patient/appointment-slots:
     $ref: './nhsonline.appointments.yaml#/paths/~1appointment-slots'
+  /v1/patient/appointments:
+    $ref: './nhsonline.appointments.yaml#/paths/~1appointments'
   /v1/patient/prescriptions:
     $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
   /v1/patient/courses:
