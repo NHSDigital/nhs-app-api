@@ -249,7 +249,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Assert
             _mockCitizenIdService.VerifyAll();
             _mockSystemProvider.VerifyAll();
-            _mockSystemProvider.VerifyAll();
+            _mockSystemProviderFactory.VerifyAll();
             _mockSessionCacheService.VerifyAll();
             _mockOdsCodeLookup.VerifyAll();
             _mockSessionService.VerifyAll();

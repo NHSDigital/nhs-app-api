@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _userSession = _fixture.Create<UserSession>();
             var httpContextItems = new Dictionary<object, object>
             {
-                { Constants.HttpcontextItems.UserSession, _userSession }
+                { Constants.HttpContextItems.UserSession, _userSession }
             };
 
             var httpContextMock = new Mock<HttpContext>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Session;
 
@@ -20,6 +21,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         }
 
         public SupplierEnum Supplier => SupplierEnum.Emis;
+
+        public IAppointmentsService GetAppointmentsService()
+        {
+            throw new System.NotImplementedException();
+        }
 
         public IIm1ConnectionService GetIm1ConnectionService()
         {

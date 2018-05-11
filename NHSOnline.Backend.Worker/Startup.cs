@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker
                 .AddMvc(
                     options =>
                     {
-                        options.Filters.Add(typeof(ModelStateValidationFilter));
+                        options.Filters.Add(typeof(ModelStateValidationFilterAttribute));
                         options.Filters.Add(new AuthorizeFilter(
                             new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
                         );

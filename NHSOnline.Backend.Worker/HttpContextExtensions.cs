@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker
     {
         public static UserSession GetUserSession(this HttpContext httpContext)
         {
-            return (UserSession)httpContext.Items[Constants.HttpcontextItems.UserSession];
+            return (UserSession)httpContext.Items[Constants.HttpContextItems.UserSession];
         }
     }
 }

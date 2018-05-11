@@ -19,7 +19,7 @@
             public const string OdsCode = NhsoPrefix + "ODS-Code";
         }
 
-        public class HttpcontextItems
+        public class HttpContextItems
         {
             public const string UserSession = "UserSession";
         }

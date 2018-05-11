@@ -86,8 +86,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Models
 
         [DataTestMethod]
         [DataRow("ABCDEFGHJKH")]  // more than 8 characters
-        //[DataRow("")]
-        //[DataRow(" ")]
         public void PatientIm1ConnectionValidation_OdsCode_InvalidFormats(string odsCode)
         {
             // Arrange

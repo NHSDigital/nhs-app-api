@@ -39,7 +39,4 @@
       <LastGenOutput>EmisApiErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\Im1Connection\Services" />
-  </ItemGroup>
 </Project>

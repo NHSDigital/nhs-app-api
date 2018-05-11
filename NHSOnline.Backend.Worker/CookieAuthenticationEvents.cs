@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker
 
             _logger.LogWarning($"User session found: {userSession.ValueOrFailure()}");
             
-            context.HttpContext.Items.Add(Constants.HttpcontextItems.UserSession, userSession.ValueOrFailure());
+            context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrFailure());
             _logger.LogDebug("Finish: Validate Principal");
         }
 
