@@ -21,10 +21,10 @@ export default {
       contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
       orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
     },
-    backToYourPrescriptionsButton: 'Back to your prescriptions',
+    backToYourPrescriptionsButton: 'Back to my prescriptions',
     noRepeatPrescriptionsYouCanOrder: {
-      title: 'Looks like you have no repeat prescriptions you can order.',
-      contactGp: 'If you think you should have a repeat prescriptions you can order, please contact your GP.',
+      title: 'You don\'t have any medications available to order right now.',
+      contactGp: 'If you have medications available on repeat prescription that aren\'t showing here, contact your GP surgery for more information.',
     },
   },
   common: {
