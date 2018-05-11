@@ -4,6 +4,7 @@ import UIKit
 class HeaderBar: UIView {
     @IBOutlet var headerBarView: UIView!
     @IBOutlet weak var headerTitle: UILabel!
+    @IBOutlet weak var NHSHomeLogo: UIImageView!
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -16,7 +17,7 @@ class HeaderBar: UIView {
     func setupHeaderBar() {
         Bundle.main.loadNibNamed("HeaderBar", owner: self, options: nil)
         headerBarView.bounds = self.bounds
-        headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]    
         addSubview(headerBarView)
     }
     
