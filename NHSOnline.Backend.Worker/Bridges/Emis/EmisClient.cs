@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
@@ -67,12 +68,12 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
             if (fromDateTime.HasValue)
             {
-                path += $"&filterFromDate={fromDateTime:O}";
+                path += $"&filterFromDate={EncodeDateTimeOffsetToIso(fromDateTime.Value)}";
             }
 
             if (toDateTime.HasValue)
             {
-                path += $"&filterToDate={toDateTime:O}";
+                path += $"&filterToDate={EncodeDateTimeOffsetToIso(toDateTime.Value)}";
             }
 
             var response = await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
@@ -169,6 +170,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             }
 
             public TBody Body { get; set; }
+        }
+
+        private static string EncodeDateTimeOffsetToIso(DateTimeOffset dateTimeOffset)
+        {
+            return HttpUtility.UrlEncode(dateTimeOffset.ToString("O"));
         }
     }
 }

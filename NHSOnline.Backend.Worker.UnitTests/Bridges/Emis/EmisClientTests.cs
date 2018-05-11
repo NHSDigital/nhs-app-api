@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -272,7 +273,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             };
 
             _mockHttpHandler
-                .WhenEmis(HttpMethod.Get, "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken + "&filterFromDate=" + fromDateTime.ToString("O") + "&filterToDate=" + toDateTime.ToString("O"))
+                .WhenEmis(HttpMethod.Get, "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken + "&filterFromDate=" + HttpUtility.UrlEncode(fromDateTime.ToString("O")) + "&filterToDate=" + HttpUtility.UrlEncode(toDateTime.ToString("O")))
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
