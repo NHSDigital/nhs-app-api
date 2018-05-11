@@ -41,17 +41,6 @@ a.button {
 	}
 }
 
-@mixin float-buttons {
-    position: fixed;
-    left: 0;
-    right: 0;
-    background-color: $white;
-    box-sizing: border-box;
-    padding: 16px;
-    border-top: 1px $background solid;
-    height: 80px;
-}
-
 .button-container {
 	@include float-buttons;
 	bottom: 68px;

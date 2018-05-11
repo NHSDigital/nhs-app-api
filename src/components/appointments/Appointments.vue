@@ -3,7 +3,7 @@
   <appointments-no-connection v-if="noConnection" @retry="onRetryButtonClicked"/>
   <div id="mainDiv" v-else>
     <spinner />
-    <main :class="$style.main">
+    <main v-bind:class="bottomStyle()">
       <div data-purpose="no-slots-error" v-if="showNoAppointment">
         <p :class="$style.summary">{{$t('appointments.noSlotErrorMessage.summary')}}</p>
         <p :class="$style.info">{{$t('appointments.noSlotErrorMessage.info')}}</p>
@@ -13,6 +13,9 @@
           <appointment-slot :slotId="slot.id"/>
         </li>
       </ul>
+      <floating-button-bottom :clickable="hasASlotSelected">
+        {{$t('appointments.bookAppointmentButtonText')}}
+      </floating-button-bottom>
     </main>
   </div>
   </div>
@@ -23,6 +26,7 @@ import { mapGetters } from 'vuex';
 import AppointmentsNoConnection from '@/components/appointments/AppointmentsNoConnection';
 import AppointmentSlot from '@/components/appointments/AppointmentSlot';
 import Spinner from '@/components/Spinner';
+import FloatingButtonBottom from '@/components/FloatingButtonBottom';
 
 
 export default {
@@ -30,6 +34,7 @@ export default {
     AppointmentsNoConnection,
     AppointmentSlot,
     Spinner,
+    FloatingButtonBottom,
   },
   data() {
     return {
@@ -45,11 +50,23 @@ export default {
       return this.$store.state.appointmentSlots.hasLoaded
         && this.$store.state.appointmentSlots.slots.length > 0;
     },
+    hasASlotSelected() {
+      return typeof this.currentSlot !== 'undefined';
+    },
     ...mapGetters({
       slots: 'appointmentSlots/slots',
+      findById: 'appointmentSlots/findById',
+      currentSlot: 'appointmentSlots/currentSlot',
     }),
   },
   methods: {
+    bottomStyle() {
+      if (this.$store.state.appointmentSlots.hasLoaded
+        && this.$store.state.appointmentSlots.slots.length !== 0) {
+        return this.$style.mainShowingSlots;
+      }
+      return this.$style.main;
+    },
     onRetryButtonClicked() {
       this.noConnection = !navigator.onLine;
     },
@@ -68,6 +85,10 @@ export default {
 
   .main {
    @include space(padding, all, $three);
+  }
+  .mainShowingSlots {
+   @include space(padding, all, $three);
+   padding-bottom: 78px;
   }
   .summary {
     font-weight: bold;

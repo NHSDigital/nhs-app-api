@@ -13,6 +13,7 @@ export default {
       retryText: 'Try again',
       info: 'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
+    bookAppointmentButtonText: 'Book this appointment',
   },
   prescriptions: {
     orderRepeatPrescriptionButton: 'Order a repeat prescription',

@@ -13,11 +13,9 @@
           {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
         </p>
       </div>
-      <div v-bind:class="getButtonContainerClass()">
-        <router-link to="repeat-prescription-courses" tag="button" class="button">
-          {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
-        </router-link>
-      </div>
+      <floating-button-bottom @on-click="onFloatingButtonClicked">
+        {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
+      </floating-button-bottom>
     </main>
   </div>
 </template>
@@ -25,10 +23,12 @@
 <script>
 
 import Spinner from '@/components/Spinner';
+import FloatingButtonBottom from '@/components/FloatingButtonBottom';
 
 export default {
   components: {
     Spinner,
+    FloatingButtonBottom,
   },
   mounted() {
     this.$store.dispatch('prescriptions/load', this.$config);
@@ -37,6 +37,9 @@ export default {
     getButtonContainerClass() {
       return this.$store.state.device.isNativeApp ? 'button-container-native' : 'button-container';
     },
+    onFloatingButtonClicked() {
+      this.$router.push('repeat-prescription-courses');
+    },
   },
 };
 </script>
@@ -44,5 +47,4 @@ export default {
 <style lang="scss">
   @import '../style/html';
   @import '../style/elements';
-  @import '../style/buttons';
 </style>

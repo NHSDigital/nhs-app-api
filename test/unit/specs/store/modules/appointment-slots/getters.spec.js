@@ -1,4 +1,4 @@
-import { slots } from '@/store/modules/appointment-slots/getters';
+import { slots, currentSlot } from '@/store/modules/appointment-slots/getters';
 
 describe('getters', () => {
   describe('slots', () => {
@@ -151,5 +151,43 @@ describe('getters', () => {
     const result = slots(state);
 
     expect(result[0].clinicians).toEqual([]);
+  });
+
+  it('will return undefined when selectedSlotId is undefined', () => {
+    const state = {
+      slots: [
+        { id: 'x' },
+        { id: 'y' },
+        { id: 'z' },
+      ],
+      selectedSlotId: 'undefined',
+    };
+    const result = currentSlot(state);
+    expect(typeof result).toEqual('undefined');
+  });
+
+  it('will return undefined when selectedSlotId is not found in slots', () => {
+    const state = {
+      slots: [
+        { id: 'x' },
+        { id: 'y' },
+        { id: 'z' },
+      ],
+      selectedSlotId: 'a',
+    };
+    const result = currentSlot(state);
+    expect(typeof result).toEqual('undefined');
+  });
+  it('will return matching appointment slot when the slot with selectedSlotId exist in slots', () => {
+    const state = {
+      slots: [
+        { id: 'x' },
+        { id: 'y' },
+        { id: 'z' },
+      ],
+      selectedSlotId: 'y',
+    };
+    const result = currentSlot(state);
+    expect(result.currentSlot).toEqual(result[1]);
   });
 });
