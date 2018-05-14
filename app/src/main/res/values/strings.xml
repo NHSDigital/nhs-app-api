@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NHS Online</string>
     <string name="symptoms">Symptoms</string>
-    <string name="appointment">Appointment</string>
+    <string name="appointment">Appointments</string>
     <string name="prescription">Prescriptions</string>
     <string name="my_record">My Records</string>
     <string name="more">More</string>
