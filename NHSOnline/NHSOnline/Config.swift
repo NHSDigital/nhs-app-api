@@ -3,7 +3,7 @@ import Foundation
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
         case HomeUrl, Nhs111Url, Nhs111LocationUrl, OrganDonationUrl
-        case AppointmentsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath
+        case AppointmentsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath, SessionUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime
     }
@@ -17,6 +17,7 @@ struct Config: Decodable {
     let AppointmentsUrlPath: String
     let PrescriptionsUrlPath: String
     let MyAccountUrlPath: String
+    let SessionUrlPath: String
 
     let NhsOnlineRequiredQueryString:String
     let ResponseWaitingTime: Double

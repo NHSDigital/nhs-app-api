@@ -23,6 +23,8 @@
 		F057336920A72F040059032D /* HeaderBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = F057336B20A72F040059032D /* HeaderBar.xib */; };
 		F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065B3D7205FCFFE004EF388 /* HomeViewController.swift */; };
 		F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */; };
+		F07607F320B44C0300069F7F /* NativeEvents.js in Resources */ = {isa = PBXBuildFile; fileRef = F07607F220B44C0300069F7F /* NativeEvents.js */; };
+		F07607F620B465E400069F7F /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07607F520B465E400069F7F /* FileReader.swift */; };
 		F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0B4B8BA204D68DC004E4120 /* Localizable.strings */; };
 		F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */; };
 		F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D2E5D520501EAA0067DEC4 /* WebViewDelegate.swift */; };
@@ -60,6 +62,8 @@
 		F057336A20A72F040059032D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HeaderBar.xib; sourceTree = "<group>"; };
 		F065B3D7205FCFFE004EF388 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarDelegate.swift; sourceTree = "<group>"; };
+		F07607F220B44C0300069F7F /* NativeEvents.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = NativeEvents.js; sourceTree = "<group>"; };
+		F07607F520B465E400069F7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		F08E80FF2077DBA700017BFB /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
 		F0B4B8B2204D50E9004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		F0B4B8B9204D68DC004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -107,6 +111,8 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				F07607F420B4655B00069F7F /* Utils */,
+				F07607F120B44B6900069F7F /* JavaScript */,
 				F08E80FF2077DBA700017BFB /* NHSOnline.entitlements */,
 				C276D560207B571A00F3B1E5 /* CustomViews */,
 				C276D5542076557400F3B1E5 /* Services */,
@@ -152,6 +158,23 @@
 				C276D563207B638400F3B1E5 /* HeaderBar.swift */,
 			);
 			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		F07607F120B44B6900069F7F /* JavaScript */ = {
+			isa = PBXGroup;
+			children = (
+				F07607F220B44C0300069F7F /* NativeEvents.js */,
+			);
+			path = JavaScript;
+			sourceTree = "<group>";
+		};
+		F07607F420B4655B00069F7F /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F07607F520B465E400069F7F /* FileReader.swift */,
+			);
+			name = Utils;
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		F0B7D860204E8B8A0078D56E /* ContainerViewControllers */ = {
@@ -235,7 +258,7 @@
 				TargetAttributes = {
 					C20577FE2028B94800CDBDC5 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -278,6 +301,7 @@
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
 				C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */,
 				F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */,
+				F07607F320B44C0300069F7F /* NativeEvents.js in Resources */,
 				C20578082028B94800CDBDC5 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -299,6 +323,7 @@
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
 				C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
+				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
@@ -482,14 +507,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "b59a08ee-b920-406e-83be-4f5c3b68a98f";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Develop";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -501,14 +527,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "b59a08ee-b920-406e-83be-4f5c3b68a98f";
+				PROVISIONING_PROFILE_SPECIFIER = "NHS App Develop";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

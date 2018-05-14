@@ -15,16 +15,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     var shouldHandleErrors = false
     var timer: Timer!
     var startDate: Date!
-
-    private let script = """
-                    window.nativeApp = {};
-                    window.nativeApp.loggedIn = function () {
-                        window.webkit.messageHandlers.loggedIn.postMessage(null);
-                    };
-                    window.nativeApp.updateHeaderText = function (header) {
-                        window.webkit.messageHandlers.updateHeaderText.postMessage(header);
-                    };
-                """
+    var javascript: String!
     
     init(controller: HomeViewController, knownServices: KnownServices) {
         self.viewController = controller
@@ -71,8 +62,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
-        if knownServices.shouldAllowNativeInteraction(host: webView.url?.host){
-            webView.evaluateJavaScript(script, completionHandler: nil)
+        if knownServices.shouldAllowNativeInteraction(host: webView.url?.host) {
+            let fileReader = FileReader();
+            let nativeEventsJSLocation = Bundle.main.path(forResource: "NativeEvents", ofType: "js")!
+            javascript = fileReader.readContentFromLocation(fileLocation: nativeEventsJSLocation)
+            webView.evaluateJavaScript(javascript!, completionHandler: nil)
         }
         
         self.showWebViewContainer()
@@ -103,13 +97,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     func shouldOpenInSafari(url: URL) -> Bool {
         let currentHost = url.host
         let knownHosts = self.knownServices.getAllKnownHosts()
+        
         for host in knownHosts {
             if (host == currentHost) {
-                return false;
+                return false
             }
         }
         
-        return true;
+        return true
     }
     
     func openInSafari(url: URL) {
@@ -119,11 +114,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) {
-            if message.name == "loggedIn" {
+            if (message.name == "onLogin") {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
             }
             
-            if (message.name == "updateHeaderText"){
+            if (message.name == "onLogout") {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: false)
+            }
+            
+            if (message.name == "updateHeaderText") {
                 callUpdateHeaderText(headerText: String(describing: message.body))
             }
         }
@@ -135,7 +134,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     }
     
     func callUpdateHeaderText(headerText: String?) {
-            viewController.updateHeaderText(headerText: headerText)
+        viewController.updateHeaderText(headerText: headerText)
     }
     
     @objc func pageIsNotResponding() {
@@ -146,6 +145,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
             self.showNativeViewContainer(errorMessage: errorMessage)
         }
     }
+    
     private func showWebViewContainer() {
         self.timer.invalidate()
         self.activityIndicator.stopAnimating()
