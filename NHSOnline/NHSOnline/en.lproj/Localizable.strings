@@ -1,0 +1,9 @@
+/*Header titles*/
+"MyAccountTitle" = "My Account";
+"OrganDonationTitle" = "Organ donation register";
+"NHS111Title" = "111 Online";
+
+/*Error messages*/
+"ServiceUnavailableErrorMessage" = "Service unavailable";
+"OrganDonationUnavailableErrorMessage" = "Organ donation unavailable";
+"Nhs111UnavailableErrorMessage" = "NHS 111 unavailable";

@@ -13,14 +13,8 @@ class WebViewController: UIViewController {
         webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
         webView.configuration.userContentController.add(delegate, name: "loggedIn")
     }
-
-    func loadUrl(url: String) {
-        webViewDelegate?.stopErrorsHandling()
-        webView.loadPage(url: url)
-    }
     
-    func reloadWebView()
-    {
+    func reloadWebView() {
         webView.load(URLRequest(url: webViewDelegate!.failedUrl!))
     }
     

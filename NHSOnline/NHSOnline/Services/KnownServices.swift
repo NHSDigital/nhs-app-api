@@ -2,6 +2,11 @@ import Foundation
 
 class KnownServices {
     private let config:Config
+    private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
+    private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
+    private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
+    private let nhs111UnavailableErrorMessage = NSLocalizedString("Nhs111UnavailableErrorMessage", comment: "")
+    private let organDonationUnavailableErrorMessage = NSLocalizedString("OrganDonationUnavailableErrorMessage", comment: "")
     private var serviceList = Array<KnownService>()
     
     init(config:Config) {
@@ -10,9 +15,9 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: config.ErrorMessageGeneric, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: config.TitleNHS111, serviceErrorMessage: config.ErrorMessageNhs111, shouldHandleUnavailability: true))
-        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: config.TitleOrganDonation, serviceErrorMessage: config.ErrorMessageOrganDonation, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: serviceUnavailableErrorMessage, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, serviceErrorMessage: nhs111UnavailableErrorMessage, shouldHandleUnavailability: true))
+        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, serviceErrorMessage: organDonationUnavailableErrorMessage, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func getAllKnownHosts() -> [String?] {
@@ -24,8 +29,8 @@ class KnownServices {
         return ((findMatchingKnownServiceForHostname(hostname: url.host))?.serviceErrorMessage)!
     }
     
-    func getGenericErrorMessage() -> String {
-        return config.ErrorMessageGeneric
+    func getServiceUnavailableErrorMessage() -> String {
+        return serviceUnavailableErrorMessage
     }
     
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {

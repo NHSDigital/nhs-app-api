@@ -22,17 +22,17 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             selectPage(pageUrl: config().Nhs111Url)
             break
         case .Appointments:
-            let appointmentsUrl = appendPathToBaseUrl(urlPathToAppend: config().AppointmentsUrlPath)
+            let appointmentsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
             selectPage(pageUrl: appointmentsUrl)
             break
         case .Prescriptions:
-            let prescriptionsUrl = appendPathToBaseUrl(urlPathToAppend: config().PrescriptionsUrlPath)
+            let prescriptionsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
             selectPage(pageUrl: prescriptionsUrl)
             break
         case .MyRecord:
             break
         case .More:
-            let moreUrl = appendPathToBaseUrl(urlPathToAppend: config().MoreUrlPath)
+            let moreUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
             selectPage(pageUrl: moreUrl)
             break
         }
@@ -40,12 +40,6 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     
     private func selectPage(pageUrl: String) {
         viewController.pageUrl = pageUrl
-        viewController.webViewController?.loadUrl(url: pageUrl)
-    }
-    
-    private func appendPathToBaseUrl(urlPathToAppend: String) -> String {
-        let baseUrl = URL(string: config().HomeUrl)
-        let url = URL(string: urlPathToAppend, relativeTo: baseUrl)?.absoluteString
-        return url!
+        viewController.webViewController?.webView.loadPage(url: pageUrl)
     }
 }
