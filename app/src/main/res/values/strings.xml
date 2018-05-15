@@ -15,5 +15,6 @@
     <string name="retryButtonText">Try again</string>
     <string name="errorIconDesc">warning icon</string>
     <string name="tryLaterText">Please try again later.</string>
+    <string name="nhsAppHome">NHS App Home</string>
 </resources>
 
