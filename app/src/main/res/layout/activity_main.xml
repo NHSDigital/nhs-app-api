@@ -27,18 +27,20 @@
                 android:id="@+id/top_header"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_50sdp">
-            <ImageView
-                android:id="@+id/nhsOnlineLogoIcon"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_alignParentStart="true"
-                android:src="@mipmap/icon_nhs_online_logo" />
 
-            <ImageView
-                android:layout_width="@dimen/_15sdp"
-                android:layout_height="@dimen/_50sdp"
-                android:layout_alignParentEnd="true"
-                android:src="@mipmap/icon_header_account" />
+                <ImageView
+                    android:id="@+id/nhsOnlineLogoIcon"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_alignParentStart="true"
+                    android:contentDescription="@string/nhsAppHome"
+                    android:src="@mipmap/icon_nhs_online_logo" />
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_50sdp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@mipmap/icon_header_account" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_1sdp"
