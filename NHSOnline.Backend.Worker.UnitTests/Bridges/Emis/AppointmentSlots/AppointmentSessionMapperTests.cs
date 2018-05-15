@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 {
     [TestClass]
     public class AppointmentSessionMapperTests

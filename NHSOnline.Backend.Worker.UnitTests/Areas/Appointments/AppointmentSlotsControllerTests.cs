@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
     [TestClass]
     public class AppointmentsSlotsControllerTests
     {
-        private AppointmentsSlotsController _systemUnderTest;
+        private AppointmentSlotsController _systemUnderTest;
         private static IFixture _fixture;
         private Mock<ISystemProviderFactory> _systemProviderFactory;
         private UserSession _userSession;
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
 
-            _systemUnderTest = _fixture.Create<AppointmentsSlotsController>();
+            _systemUnderTest = _fixture.Create<AppointmentSlotsController>();
 
             _systemUnderTest.ControllerContext = new ControllerContext
             {
@@ -67,10 +67,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _systemProviderFactory.Setup(x => x.CreateSystemProvider(_userSession.Supplier))
                 .Returns(systemProvider.Object);
 
-            systemProvider.Setup(x => x.GetAppointmentService(_userSession))
+            systemProvider.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            appointmentSlotsService.Setup(x => x.Get(fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
+            appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
 
             // Act
             var queryParams = new PatientAppointmentSlotsQueryParameters
@@ -82,8 +82,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             // Assert
             _systemProviderFactory.Verify(x => x.CreateSystemProvider(_userSession.Supplier));
-            systemProvider.Verify(x => x.GetAppointmentService(_userSession));
-            appointmentSlotsService.Verify(x => x.Get(fromDate, toDate));
+            systemProvider.Verify(x => x.GetAppointmentSlotsService());
+            appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value;
@@ -121,10 +121,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _systemProviderFactory.Setup(x => x.CreateSystemProvider(_userSession.Supplier))
                 .Returns(systemProvider.Object);
 
-            systemProvider.Setup(x => x.GetAppointmentService(_userSession))
+            systemProvider.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            appointmentSlotsService.Setup(x => x.Get(fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
+            appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
 
             // Act
             var queryParams = new PatientAppointmentSlotsQueryParameters
@@ -136,8 +136,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             // Assert
             _systemProviderFactory.Verify(x => x.CreateSystemProvider(_userSession.Supplier));
-            systemProvider.Verify(x => x.GetAppointmentService(_userSession));
-            appointmentSlotsService.Verify(x => x.Get(fromDate, toDate));
+            systemProvider.Verify(x => x.GetAppointmentSlotsService());
+            appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(BadRequestResult));
         }
         
@@ -155,10 +155,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _systemProviderFactory.Setup(x => x.CreateSystemProvider(_userSession.Supplier))
                 .Returns(systemProvider.Object);
 
-            systemProvider.Setup(x => x.GetAppointmentService(_userSession))
+            systemProvider.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            appointmentSlotsService.Setup(x => x.Get(fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
+            appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
 
             // Act
             var queryParams = new PatientAppointmentSlotsQueryParameters
@@ -170,8 +170,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             // Assert
             _systemProviderFactory.Verify(x => x.CreateSystemProvider(_userSession.Supplier));
-            systemProvider.Verify(x => x.GetAppointmentService(_userSession));
-            appointmentSlotsService.Verify(x => x.Get(fromDate, toDate));
+            systemProvider.Verify(x => x.GetAppointmentSlotsService());
+            appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 
             var statusCodeResult = (StatusCodeResult) result;

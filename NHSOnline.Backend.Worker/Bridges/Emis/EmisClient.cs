@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Date;
@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
+        private const string AppointmentsPath = "appointments";
 
         private readonly HttpClient _httpClient;
 
@@ -126,6 +127,12 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
             var response = await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
             return response;
+        }
+        
+        public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentPost(EmisHeaderParameters headerParameters,
+            BookAppointmentSlotPostRequest postRequest)
+        {
+            return await Post<BookAppointmentSlotPostRequest, BookAppointmentSlotPostResponse>(postRequest, AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Get<TResponse>(string path,

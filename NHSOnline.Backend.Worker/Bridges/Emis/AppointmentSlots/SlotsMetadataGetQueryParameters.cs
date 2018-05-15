@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots
 {
     public class SlotsMetadataGetQueryParameters
     {

@@ -3,7 +3,7 @@ using System.Linq;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using Location = NHSOnline.Backend.Worker.Areas.Appointments.Models.Location;
 
-namespace NHSOnline.Backend.Worker.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots
 {
     public class AppointmentLocationMapper
     {

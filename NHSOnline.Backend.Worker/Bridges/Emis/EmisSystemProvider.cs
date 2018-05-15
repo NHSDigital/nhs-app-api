@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public IAppointmentsService GetAppointmentsService()
         {
-            throw new System.NotImplementedException();
+            return new EmisAppointmentsService(_emisClient, _loggerFactory);
         }
 
         public ICourseService GetCourseService()
@@ -58,9 +58,9 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             return new EmisTokenValidationService();
         }
 
-        public IAppointmentSlotsService GetAppointmentService(UserSession userSession)
+        public IAppointmentSlotsService GetAppointmentSlotsService()
         {
-            return new EmisAppointmentSlotsService(userSession, _emisClient, _loggerFactory,_dateTimeOffsetProvider);
+            return new EmisAppointmentSlotsService(_emisClient, _loggerFactory,_dateTimeOffsetProvider);
         }
     }
 }

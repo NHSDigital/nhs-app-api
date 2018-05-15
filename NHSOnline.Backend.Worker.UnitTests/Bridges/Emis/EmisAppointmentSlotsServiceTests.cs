@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router.Appointments;
@@ -52,9 +52,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var userSession = _fixture.Create<EmisUserSession>();
             var loggerFactory = _fixture.Create<ILoggerFactory>();
 
-            var sut = new EmisAppointmentSlotsService(userSession, _mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
+            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
             // Act
-            var result = await sut.Get(_dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
 
             // Assert
             _mockEmisClient.Verify();
@@ -80,10 +80,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var userSession = _fixture.Create<EmisUserSession>();
             var loggerFactory = _fixture.Create<ILoggerFactory>();
 
-            var sut = new EmisAppointmentSlotsService(userSession, _mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
+            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
             // Act
 
-            var result = await sut.Get(_dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
 
             // Assert
             _mockEmisClient.Verify();
@@ -114,11 +114,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             var userSession = _fixture.Create<EmisUserSession>();
             var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(userSession, _mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
+            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
             
             // Act
             
-            var result = await sut.Get(_dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
 
             // Assert
             _mockEmisClient.Verify();
@@ -149,11 +149,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             var userSession = _fixture.Create<EmisUserSession>();
             var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(userSession, _mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
+            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
             
             // Act
             
-            var result = await sut.Get(_dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
 
             // Assert
             _mockEmisClient.Verify();
@@ -206,11 +206,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             
             var userSession = _fixture.Create<EmisUserSession>();
             var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(userSession, _mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
+            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
             
             // Act
             
-            var result = await sut.Get(_dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
 
             // Assert
             _mockEmisClient.Verify();
@@ -244,11 +244,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             
             var userSession = _fixture.Create<EmisUserSession>();
             var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(userSession, _mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
+            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _dateTimeOffsetProvider);
             
             // Act
             
-            var result = await sut.Get(_dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
 
             // Assert
             _mockEmisClient.Verify();

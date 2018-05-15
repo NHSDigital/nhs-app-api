@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router.Appointments;
@@ -13,23 +13,22 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisAppointmentSlotsService: IAppointmentSlotsService
     {
-        private readonly EmisUserSession _userSession;
         private readonly IEmisClient _emisClient;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<EmisAppointmentSlotsService> _logger;
         
-        public EmisAppointmentSlotsService(UserSession userSession, IEmisClient emisClient,
+        public EmisAppointmentSlotsService(IEmisClient emisClient,
             ILoggerFactory loggerFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
-            _userSession = (EmisUserSession) userSession;
             _emisClient = emisClient;
             _logger = loggerFactory.CreateLogger<EmisAppointmentSlotsService>();
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
         
-        public async Task<AppointmentSlotsResult> Get(DateTimeOffset fromDate, DateTimeOffset toDate)
+        public async Task<AppointmentSlotsResult> Get(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
         {
+            var emisSserSession = (EmisUserSession) userSession;
             AppointmentSlotsMetadataGetResponse metaBody;
             AppointmentsSlotsGetResponse slotBody;
             
@@ -39,19 +38,19 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 {
                     SessionStartDate = fromDate,
                     SessionEndDate = toDate,
-                    UserPatientLinkToken = _userSession.UserPatientLinkToken
+                    UserPatientLinkToken = emisSserSession.UserPatientLinkToken
                 };
 
                 var slotsParams = new SlotsGetQueryParameters()
                 {
                     FromDateTime = fromDate,
                     ToDateTime = toDate,
-                    UserPatientLinkToken = _userSession.UserPatientLinkToken
+                    UserPatientLinkToken = emisSserSession.UserPatientLinkToken
                 };
                 var headerParams = new EmisHeaderParameters()
                 {
-                    EndUserSessionId = _userSession.EndUserSessionId,
-                    SessionId = _userSession.SessionId
+                    EndUserSessionId = emisSserSession.EndUserSessionId,
+                    SessionId = emisSserSession.SessionId
                 };
 
                 var metaTask = _emisClient.AppointmentsSlotsMetadataGet(headerParams, metaParams);
@@ -115,7 +114,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         {
             var response = new AppointmentSlotsResponse
             {
-                Slots = new AppointmentSlotMapper(_dateTimeOffsetProvider).Map(slotsResponse, slotsMetadataResponse),
+                Slots = new AppointmentSlotsMapper(_dateTimeOffsetProvider).Map(slotsResponse, slotsMetadataResponse),
                 Locations = new AppointmentLocationMapper().Map(slotsMetadataResponse),
                 Clinicians = new AppointmentClinicianMapper().Map(slotsMetadataResponse),
                 AppointmentSessions = new AppointmentSessionMapper().Map(slotsMetadataResponse),

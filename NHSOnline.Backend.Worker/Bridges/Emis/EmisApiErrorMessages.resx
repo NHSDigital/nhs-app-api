@@ -120,4 +120,10 @@
   <data name="MeApplicationsPost_AlreadyLinked" xml:space="preserve">
     <value>Registered online user is already linked</value>
   </data>
+  <data name="AppointmentsPost_NotFound" xml:space="preserve">
+    <value>Appointment not found</value>
+  </data>
+  <data name="AppointmentsPost_InThePast" xml:space="preserve">
+    <value>Appointment cannot be booked in the past</value>
+  </data>
 </root>

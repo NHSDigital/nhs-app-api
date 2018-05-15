@@ -2,13 +2,13 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Date;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 {
     [TestClass]
-    public class AppointmentSlotDateRangeTests
+    public class AppointmentSlotsDateRangeTests
     {
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(expectedFromDate));
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset(todayDate)).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(todayDate));
             
-            var dateRange = new AppointmentSlotDateRange(mockDateTimeOffsetProvider.Object, null, null);
+            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, null, null);
 
             dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromUtc.Date);
             dateRange.FromDate.Should().HaveHour(expectedFromUtc.Hour);
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             //mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(DateTime.Now));
             //mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset(fromDateAtMidnight)).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(fromDateAtMidnight));
             
-            var dateRange = new AppointmentSlotDateRange(mockDateTimeOffsetProvider.Object, expectedFromDate, null);
+            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, expectedFromDate, null);
 
             dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromUtc.Date);
             dateRange.FromDate.Should().HaveHour(expectedFromUtc.Hour);
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(expectedFromDate));
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset(toDateAtMidnight)).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(toDateAtMidnight));
             
-            var dateRange = new AppointmentSlotDateRange(mockDateTimeOffsetProvider.Object, null, expectedToDate);
+            var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, null, expectedToDate);
 
             dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromDateOut.Date);
             dateRange.FromDate.Should().HaveHour(expectedFromDateOut.Hour);

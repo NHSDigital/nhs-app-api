@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 
@@ -33,5 +33,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         // Courses
         Task<EmisClient.EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken, string responseSessionId, string endUserSessionId);
+
+        Task<EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentPost(EmisHeaderParameters headerParameters,
+            BookAppointmentSlotPostRequest postRequest);
     }
 }

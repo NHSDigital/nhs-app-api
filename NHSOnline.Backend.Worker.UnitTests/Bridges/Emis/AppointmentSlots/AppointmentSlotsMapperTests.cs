@@ -2,14 +2,14 @@
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Date;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 {
     [TestClass]
-    public class AppointmentSlotMapperTests
+    public class AppointmentSlotsMapperTests
     {       
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             var slotsResponse = new AppointmentsSlotsGetResponse();
 
             //when
-            var mapper = new AppointmentSlotMapper(_dateTimeOffsetProvider);
+            var mapper = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             };
 
             //when
-            var mapper = new AppointmentSlotMapper(_dateTimeOffsetProvider);
+            var mapper = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             };
             
             //when
-            var mapper = new AppointmentSlotMapper(_dateTimeOffsetProvider);
+            var mapper = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
@@ -128,7 +128,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             };
             
             //when
-            var mapper = new AppointmentSlotMapper(_dateTimeOffsetProvider);
+            var mapper = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             };
             
             //when
-            var mapper = new AppointmentSlotMapper(_dateTimeOffsetProvider);
+            var mapper = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
@@ -227,7 +227,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Appointments
             };
             
             //when
-            var mapper = new AppointmentSlotMapper(_dateTimeOffsetProvider);
+            var mapper = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then

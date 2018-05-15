@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Date;
 
-namespace NHSOnline.Backend.Worker.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots
 {
-    public class AppointmentSlotMapper
+    public class AppointmentSlotsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
-        public AppointmentSlotMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }

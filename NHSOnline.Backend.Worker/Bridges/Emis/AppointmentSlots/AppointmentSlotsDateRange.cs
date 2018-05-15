@@ -1,16 +1,16 @@
 ﻿using System;
 using NHSOnline.Backend.Worker.Date;
 
-namespace NHSOnline.Backend.Worker.Bridges.Emis.Appointments
+namespace NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots
 {
-    public class AppointmentSlotDateRange
+    public class AppointmentSlotsDateRange
     {
         private const int DayRange = 15;
 
         public DateTimeOffset FromDate { get; }
         public DateTimeOffset ToDate { get; }
         
-        public AppointmentSlotDateRange(IDateTimeOffsetProvider dateTimeOffsetProvider, DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        public AppointmentSlotsDateRange(IDateTimeOffsetProvider dateTimeOffsetProvider, DateTimeOffset? fromDate, DateTimeOffset? toDate)
         {
             if (fromDate == null && toDate == null)
             {

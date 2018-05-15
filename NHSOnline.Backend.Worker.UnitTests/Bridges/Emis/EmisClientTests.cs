@@ -310,5 +310,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             response.StatusCode.Should().Be(200);
             response.ErrorResponse.Should().Be(null);
         }
+        
+        [TestMethod]
+        public async Task ApplicationsPost_ReturnsTrue_WhenValidlyRequested()
+        {
+            var expectedResponse = new BookAppointmentSlotPostResponse
+            {
+                BookingCreated = true
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "appointments")
+                .WithEmisHeaders()
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.AppointmentPost(new EmisHeaderParameters(), new BookAppointmentSlotPostRequest());
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+        }
     }
 }

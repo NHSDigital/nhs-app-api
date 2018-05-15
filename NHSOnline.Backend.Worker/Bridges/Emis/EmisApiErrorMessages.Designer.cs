@@ -61,6 +61,24 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Appointment cannot be booked in the past.
+        /// </summary>
+        public static string AppointmentsPost_InThePast {
+            get {
+                return ResourceManager.GetString("AppointmentsPost_InThePast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appointment not found.
+        /// </summary>
+        public static string AppointmentsPost_NotFound {
+            get {
+                return ResourceManager.GetString("AppointmentsPost_NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registered online user is already linked.
         /// </summary>
         public static string MeApplicationsPost_AlreadyLinked {

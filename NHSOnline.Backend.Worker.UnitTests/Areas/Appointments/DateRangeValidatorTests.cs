@@ -8,7 +8,7 @@ using NHSOnline.Backend.Worker.Router;
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
     [TestClass]
-    public class DataRangeValidatorTests
+    public class DateRangeValidatorTests
     {
         private IDateRangeValidator _dateRangeValidator;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
