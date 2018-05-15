@@ -6,13 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.Date;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisClient : IEmisClient
     {
+        private readonly TimeZoneConverter _localTimeZoneConverter;
         public const string HeaderApplicationId = "X-API-ApplicationId";
         public const string HeaderEndUserSessionId = "X-API-EndUserSessionId";
         public const string HeaderSessionId = "X-API-SessionId";
@@ -22,12 +25,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
         private const string SessionsPath = "sessions";
         private const string DemographicsPath = "demographics?userPatientLinkToken={0}";
+        private const string AppointmentSlotsMetaPath = "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
+        private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
 
         private readonly HttpClient _httpClient;
 
-        public EmisClient(IHttpClientFactory httpClientFactory, IEmisConfig config)
+        public EmisClient(IHttpClientFactory httpClientFactory, IEmisConfig config,TimeZoneConverter localTimeZoneConverter)
         {
+            _localTimeZoneConverter = localTimeZoneConverter;
             _httpClient = httpClientFactory.GetClient(HttpClientName.EmisApiClient);
             _httpClient.DefaultRequestHeaders.Add(HeaderApplicationId, config.ApplicationId);
             _httpClient.DefaultRequestHeaders.Add(HeaderVersion, config.Version);
@@ -77,6 +83,40 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             }
 
             var response = await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
+            return response;
+        }
+
+        public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
+            EmisHeaderParameters headerParameters, SlotsGetQueryParameters getQueryParameters)
+        {
+            var dateStringFormatter = new DateStringFormatter();
+
+            var fromDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.FromDateTime));
+            var toDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.ToDateTime));
+
+            var path = string.Format(AppointmentSlotsPath,
+                getQueryParameters.UserPatientLinkToken,
+                fromDateTime,
+                toDateTime);
+
+            var response = await Get<AppointmentsSlotsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            return response;
+        }
+        
+        public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
+            EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters getQueryParameters)
+        {
+            var dateStringFormatter = new DateStringFormatter();
+            var fromDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionStartDate));
+            var toDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionEndDate));
+
+            var path = string.Format(AppointmentSlotsMetaPath, 
+                getQueryParameters.UserPatientLinkToken,
+                fromDateTime, 
+                toDateTime);
+
+            var response = await Get<AppointmentSlotsMetadataGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+
             return response;
         }
 

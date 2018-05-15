@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         
         public class CitizenIdApiResponse
         {
-            public CitizenIdApiResponse(HttpStatusCode statusCode)
+            protected CitizenIdApiResponse(HttpStatusCode statusCode)
             {
                 StatusCode = statusCode;
             }

@@ -15,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.CitizenId;
+using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
@@ -112,7 +113,10 @@ namespace NHSOnline.Backend.Worker
             }));
             services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
-
+            services.AddSingleton<TimeZoneInfoProvider>();
+            services.AddSingleton<TimeZoneConverter>();
+            services.AddSingleton<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
+            
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 

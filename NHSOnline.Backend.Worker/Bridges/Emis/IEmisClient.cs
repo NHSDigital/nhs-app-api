@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 
@@ -21,5 +22,13 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         // Prescriptions
         Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
             string userPatientLinkToken, string responseSessionId, string endUserSessionId, DateTimeOffset? fromDateTime, DateTimeOffset? toDate);
+        
+        // AppointmentSlots
+        Task<EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
+            EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);
+        
+        // AppointmentSlotsMetadata
+        Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
+            EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters);
     }
 }

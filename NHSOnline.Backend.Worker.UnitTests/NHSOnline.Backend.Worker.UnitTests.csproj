@@ -1,11 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.1.0" />
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.1.0" />
@@ -16,11 +13,9 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.2.0" />
     <PackageReference Include="RichardSzalay.MockHttp" Version="3.3.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\NHSOnline.Backend.Worker\NHSOnline.Backend.Worker.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Mvc.Abstractions">
       <HintPath>..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.mvc.abstractions\2.0.2\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll</HintPath>
@@ -38,9 +33,7 @@
       <HintPath>..\..\..\Users\a.broughton-janes\.nuget\packages\moq\4.8.2\lib\netstandard1.3\Moq.dll</HintPath>
     </Reference>
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Areas\Prescriptions\" />
   </ItemGroup>
-
 </Project>
