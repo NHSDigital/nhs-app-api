@@ -33,14 +33,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         self.viewController.view.addSubview(activityIndicator)
     }
     
-    func stopErrorsHandling() {
-        shouldHandleErrors = false
-    }
-    
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        self.stopErrorsHandling()
+        shouldHandleErrors = false
+        
         if let url = navigationAction.request.url {
             if url.absoluteString != "about:blank" {
                 if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
@@ -48,6 +45,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                         let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
                         decisionHandler(.cancel)
                         webView.loadPage(url: urlString)
+                        
                         return
                     }
                 }
@@ -55,11 +53,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                 if shouldOpenInSafari(url: url) {
                     decisionHandler(.cancel)
                     openInSafari(url: url)
+                    
                     return;
                 }
             }
             
         }
+        
         self.callUpdateHeaderTextForURL(url: navigationAction.request.url!)
         decisionHandler(.allow)
     }
@@ -74,12 +74,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         if knownServices.shouldAllowNativeInteraction(host: webView.url?.host){
             webView.evaluateJavaScript(script, completionHandler: nil)
         }
+        
         self.showWebViewContainer()
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
         if(shouldHandleErrors) {
             var errorMessage: String? = nil
+            
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
                     if let url = info["NSErrorFailingURLKey"] as? URL {
@@ -93,6 +95,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                 failedUrl = webView.url
                 self.showNativeViewContainer(errorMessage: errorMessage!)
             }
+            
             os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
         }
     }
@@ -119,24 +122,27 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
             if message.name == "loggedIn" {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
             }
+            
             if (message.name == "updateHeaderText"){
                 callUpdateHeaderText(headerText: String(describing: message.body))
             }
         }
     }
+    
     func callUpdateHeaderTextForURL(url: URL) {
         let knownService = self.knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
         self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
     }
+    
     func callUpdateHeaderText(headerText: String?) {
             viewController.updateHeaderText(headerText: headerText)
     }
+    
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
             self.viewController.webViewController?.webView.stopLoading()
-            let errorMessage = knownServices.getGenericErrorMessage()
-            
+            let errorMessage = knownServices.getServiceUnavailableErrorMessage()            
             self.showNativeViewContainer(errorMessage: errorMessage)
         }
     }

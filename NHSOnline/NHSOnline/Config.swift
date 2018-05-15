@@ -3,11 +3,9 @@ import Foundation
 struct Config: Decodable {
     private enum CodingKeys: String, CodingKey {
         case HomeUrl, Nhs111Url, Nhs111LocationUrl, OrganDonationUrl
-        case AppointmentsUrlPath, MoreUrlPath, PrescriptionsUrlPath
-        case TitleNHS111, TitleOrganDonation
+        case AppointmentsUrlPath, MoreUrlPath, PrescriptionsUrlPath, MyAccountUrlPath
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime
-        case ErrorMessageGeneric, ErrorMessageOrganDonation, ErrorMessageNhs111
     }
     
     let HomeUrl: String
@@ -18,16 +16,10 @@ struct Config: Decodable {
     let MoreUrlPath: String
     let AppointmentsUrlPath: String
     let PrescriptionsUrlPath: String
-
-    let TitleNHS111:String
-    let TitleOrganDonation:String
+    let MyAccountUrlPath: String
 
     let NhsOnlineRequiredQueryString:String
     let ResponseWaitingTime: Double
-    
-    let ErrorMessageGeneric: String
-    let ErrorMessageOrganDonation: String
-    let ErrorMessageNhs111: String
 }
 
 func config() -> Config {

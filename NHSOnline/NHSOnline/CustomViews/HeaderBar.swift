@@ -5,6 +5,8 @@ class HeaderBar: UIView {
     @IBOutlet var headerBarView: UIView!
     @IBOutlet weak var headerTitle: UILabel!
     @IBOutlet weak var NHSHomeLogo: UIImageView!
+    @IBOutlet weak var myAccountIcon: UIImageView!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }

@@ -44,7 +44,7 @@ class WebViewUrlTests: XCTestCase {
         let webViewUrl = URL(string: urlString)
         let errorMessage = knownServices?.getUnavailabilityErrorMessageForService(url: webViewUrl!)
         
-        XCTAssertEqual(errorMessage, config().ErrorMessageOrganDonation)
+        XCTAssertEqual(errorMessage, NSLocalizedString("OrganDonationUnavailableErrorMessage", comment: ""))
     }
 
     
@@ -61,8 +61,8 @@ class WebViewUrlTests: XCTestCase {
         let knownServices = KnownServices(config: config())
         let serviceUrlTitleDictionary = [
             config().HomeUrl : "",
-            config().Nhs111Url:config().TitleNHS111,
-            config().OrganDonationUrl: config().TitleOrganDonation
+            config().Nhs111Url:NSLocalizedString("NHS111Title", comment: ""),
+            config().OrganDonationUrl: NSLocalizedString("OrganDonationTitle", comment: "")
         ]
         for (urlString, title) in serviceUrlTitleDictionary {
             let url = URL(string:urlString)
