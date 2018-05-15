@@ -1,5 +1,5 @@
 export default {
-  coursesAndRepeatPrescriptions: [],
+  prescriptionCourses: [],
   hasLoaded: false,
   hasErrored: false,
 };

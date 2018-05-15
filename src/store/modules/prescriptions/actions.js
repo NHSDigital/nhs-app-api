@@ -2,6 +2,7 @@ import Vue from 'vue';
 import moment from 'moment';
 import {
   PRESCRIPTIONS_LOADED,
+  PRESCRIPTIONS_CLEAR,
 } from './mutation-types';
 
 function getFromDate() {
@@ -22,6 +23,9 @@ export const load = ({ commit }) =>
       commit(PRESCRIPTIONS_LOADED, data);
     });
 
+export const clear = ({ commit }) => commit(PRESCRIPTIONS_CLEAR);
+
 export default {
   load,
+  clear,
 };

@@ -32,6 +32,9 @@ export default {
       title: 'You don\'t have any medications available to order right now.',
       contactGp: 'If you have medications available on repeat prescription that aren\'t showing here, contact your GP surgery for more information.',
     },
+    myRepeatPrescriptionLabels: {
+      orderDate: 'Order date',
+    },
   },
   common: {
     or: 'OR',

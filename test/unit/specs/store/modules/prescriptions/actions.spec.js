@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import { load } from '@/store/modules/prescriptions/actions';
-import { PRESCRIPTIONS_LOADED } from '@/store/modules/prescriptions/mutation-types';
+import { load, clear } from '@/store/modules/prescriptions/actions';
+import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '@/store/modules/prescriptions/mutation-types';
 
 const API_HOST = 'http://unit.test';
 
@@ -26,7 +26,7 @@ describe('load', () => {
       });
   });
 
-  it('will call commit with the data returned from the HTTP call', () => {
+  it('will call commit with PRESCRIPTIONS_LOADED and the data returned from the HTTP call', () => {
     const expected = {
       data: { foo: 'bar' },
     };
@@ -39,5 +39,13 @@ describe('load', () => {
 
     return load({ commit }, { API_HOST })
       .then(() => expect(commit).toBeCalledWith(PRESCRIPTIONS_LOADED, expected));
+  });
+});
+
+describe('clear', () => {
+  it('will call commit with PRESCRIPTIONS_CLEAR', () => {
+    const commit = jest.fn();
+    clear({ commit });
+    expect(commit).toBeCalledWith(PRESCRIPTIONS_CLEAR);
   });
 });

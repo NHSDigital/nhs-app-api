@@ -1,7 +1,7 @@
 import { assign } from 'lodash/fp';
 
-export const coursesAndRepeatPrescriptions = state =>
-  state.coursesAndRepeatPrescriptions.map((prescription) => {
+export const prescriptionCourses = state =>
+  state.prescriptionCourses.map((prescription) => {
     const result = assign({}, prescription);
 
     return result;
@@ -9,5 +9,5 @@ export const coursesAndRepeatPrescriptions = state =>
 
 
 export default {
-  coursesAndRepeatPrescriptions,
+  prescriptionCourses,
 };

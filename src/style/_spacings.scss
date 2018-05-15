@@ -5,6 +5,7 @@ $four : 30px;
 $five : 40px;
 $six: 50px;
 $seven: 60px;
+$marginBottomFullScreen: 80px;
 
 @mixin space($type:margin, $direction:all, $amount:$one){
   @if $type == padding {
