@@ -1,5 +1,6 @@
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
+using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Session;
 using NHSOnline.Backend.Worker.Session;
 

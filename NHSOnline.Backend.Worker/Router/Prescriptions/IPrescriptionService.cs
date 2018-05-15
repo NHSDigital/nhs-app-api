@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Session;
 
-namespace NHSOnline.Backend.Worker.Router
+namespace NHSOnline.Backend.Worker.Router.Prescriptions
 {
     public interface IPrescriptionService
     {
