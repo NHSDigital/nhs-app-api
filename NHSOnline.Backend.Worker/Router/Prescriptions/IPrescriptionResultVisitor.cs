@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Router.Prescription
+﻿namespace NHSOnline.Backend.Worker.Router.Prescriptions
 {
     public interface IPrescriptionResultVisitor<out T>
     {

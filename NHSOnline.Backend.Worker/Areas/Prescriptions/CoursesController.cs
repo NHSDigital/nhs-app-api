@@ -5,7 +5,7 @@ using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Session;
 
-namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Controllers
+namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
     [Route("patient/courses")]
     public class CoursesController : Controller

@@ -5,9 +5,9 @@ using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Appointment;
+using NHSOnline.Backend.Worker.Router.Appointments;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Controllers
+namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
     [Route("patient/appointment-slots")]
     public class AppointmentsSlotsController : Controller

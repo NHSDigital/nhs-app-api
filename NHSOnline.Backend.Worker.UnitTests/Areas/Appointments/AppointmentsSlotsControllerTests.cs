@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Appointments.Controllers;
+using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Appointment;
+using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Session;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments.Controllers
+namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
     [TestClass]
     public class AppointmentsSlotsControllerTests

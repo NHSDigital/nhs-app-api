@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Router.Appointment;
+using NHSOnline.Backend.Worker.Router.Appointments;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Controllers
+namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
     internal class AppointmentSlotsResultVisitor: IAppointmentSlotsResultVisitor<IActionResult>
     {

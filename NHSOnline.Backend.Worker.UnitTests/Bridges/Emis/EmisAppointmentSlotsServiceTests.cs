@@ -12,7 +12,7 @@ using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Date;
-using NHSOnline.Backend.Worker.Router.Appointment;
+using NHSOnline.Backend.Worker.Router.Appointments;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 {

@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Controllers;
+using NHSOnline.Backend.Worker.Areas.Prescriptions;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Prescription;
+using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Validators;
 using NHSOnline.Backend.Worker.Session;
 

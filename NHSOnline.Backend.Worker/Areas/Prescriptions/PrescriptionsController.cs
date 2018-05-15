@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Session;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Router.Validators;
+using NHSOnline.Backend.Worker.Session;
 
-namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Controllers
+namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
     [Route("patient/prescriptions")]
     public class PrescriptionsController : Controller

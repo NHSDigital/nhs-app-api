@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Appointments;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Date;
-using NHSOnline.Backend.Worker.Router.Appointment;
+using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis

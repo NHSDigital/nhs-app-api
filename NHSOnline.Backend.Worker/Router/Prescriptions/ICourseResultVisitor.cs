@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Router.Course
+﻿namespace NHSOnline.Backend.Worker.Router.Prescriptions
 {
     public interface ICourseResultVisitor<out T>
     {

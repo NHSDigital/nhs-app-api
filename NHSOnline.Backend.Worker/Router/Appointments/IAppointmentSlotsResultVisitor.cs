@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Router.Appointment
+﻿namespace NHSOnline.Backend.Worker.Router.Appointments
 {
     public interface IAppointmentSlotsResultVisitor<out T>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Areas.Appointments.Controllers
+namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
     public class PatientAppointmentSlotsQueryParameters
     {

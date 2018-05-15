@@ -2,7 +2,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Appointment;
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Session;

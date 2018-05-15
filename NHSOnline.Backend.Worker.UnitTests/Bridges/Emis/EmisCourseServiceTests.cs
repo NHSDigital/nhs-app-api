@@ -10,7 +10,7 @@ using Moq;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.Router.Course;
+using NHSOnline.Backend.Worker.Router.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 {

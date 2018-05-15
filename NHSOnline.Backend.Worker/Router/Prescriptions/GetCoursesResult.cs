@@ -1,6 +1,6 @@
 ﻿using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 
-namespace NHSOnline.Backend.Worker.Router.Course
+namespace NHSOnline.Backend.Worker.Router.Prescriptions
 {
     public abstract class GetCoursesResult
     {
