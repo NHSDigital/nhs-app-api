@@ -12,6 +12,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="HeaderBar" customModule="NHSOnline" customModuleProvider="target">
             <connections>
+                <outlet property="NHSHomeLogo" destination="kyn-vf-7A4" id="CSR-a4-p3k"/>
                 <outlet property="headerBarView" destination="iN0-l3-epB" id="9Wq-mY-ysG"/>
                 <outlet property="headerTitle" destination="2kX-eU-qpv" id="z5R-J1-Xaw"/>
             </connections>
@@ -21,14 +22,22 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="kyn-vf-7A4">
+                <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="kyn-vf-7A4">
                     <rect key="frame" x="16" y="16" width="50" height="18"/>
+                    <accessibility key="accessibilityConfiguration" hint="NHS Online - Logo" identifier="NHS Online - Logo" label="NHS Online - Logo">
+                        <accessibilityTraits key="traits" link="YES"/>
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
                     <constraints>
                         <constraint firstAttribute="width" constant="50" id="KiL-db-edk"/>
                     </constraints>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon - Header - Account" translatesAutoresizingMaskIntoConstraints="NO" id="edM-z3-SMh">
                     <rect key="frame" x="343" y="16" width="16" height="18"/>
+                    <accessibility key="accessibilityConfiguration" hint="User Icon" identifier="User Icon">
+                        <accessibilityTraits key="traits" button="YES"/>
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
                     <constraints>
                         <constraint firstAttribute="width" constant="16" id="QFx-sN-0OM"/>
                     </constraints>
@@ -43,6 +52,9 @@
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kX-eU-qpv">
                     <rect key="frame" x="16" y="51" width="343" height="49"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" staticText="YES" header="YES"/>
+                    </accessibility>
                     <constraints>
                         <constraint firstAttribute="height" constant="49" id="VZ7-Kj-L6a"/>
                     </constraints>

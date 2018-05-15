@@ -32,6 +32,13 @@ class HomeViewController : UIViewController {
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         tabBar.delegate = tabBarDelegate
         webViewController?.webView.loadPage(url: pageUrl)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(goHome(tapGestureRecognizer:)))
+        headerBar.NHSHomeLogo.addGestureRecognizer(tap)
+    }
+    @objc func goHome(tapGestureRecognizer: UITapGestureRecognizer) {
+        self.pageUrl = config().HomeUrl
+        self.tabBar.selectedItem = nil
+        self.webViewController?.loadUrl(url: self.pageUrl)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
