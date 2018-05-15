@@ -13,7 +13,7 @@
           {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
         </p>
       </div>
-      <floating-button-bottom @on-click="onFloatingButtonClicked">
+      <floating-button-bottom @on-click="onRepeatPrescriptionButtonClicked">
         {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
       </floating-button-bottom>
     </main>
@@ -37,7 +37,7 @@ export default {
     getButtonContainerClass() {
       return this.$store.state.device.isNativeApp ? 'button-container-native' : 'button-container';
     },
-    onFloatingButtonClicked() {
+    onRepeatPrescriptionButtonClicked() {
       this.$router.push('repeat-prescription-courses');
     },
   },

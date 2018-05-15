@@ -2,6 +2,7 @@ import More from '@/components/More';
 import Prescriptions from '@/components/Prescriptions';
 import RepeatPrescriptionCourses from '@/components/RepeatPrescriptionCourses';
 import Appointments from '@/components/appointments/Appointments';
+import AppointmentConfirmation from '@/components/appointments/AppointmentConfirmation';
 import AuthReturn from '@/components/AuthReturn';
 import HomeLoggedOut from '@/components/HomeLoggedOut';
 import HomeLoggedIn from '@/components/HomeLoggedIn';
@@ -30,6 +31,14 @@ export default [
     meta: {
       auth: true,
       headerKey: 'pageHeaderTitles.appointments',
+    },
+  }, {
+    path: '/appointment-confirmation',
+    name: 'appointmentConfirmation',
+    component: AppointmentConfirmation,
+    meta: {
+      auth: true,
+      headerKey: 'pageHeaderTitles.appointmentConfirmation',
     },
   }, {
     path: '/more',

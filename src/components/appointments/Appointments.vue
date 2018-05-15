@@ -13,7 +13,8 @@
           <appointment-slot :slotId="slot.id"/>
         </li>
       </ul>
-      <floating-button-bottom :clickable="hasASlotSelected">
+
+      <floating-button-bottom :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
         {{$t('appointments.bookAppointmentButtonText')}}
       </floating-button-bottom>
     </main>
@@ -27,7 +28,6 @@ import AppointmentsNoConnection from '@/components/appointments/AppointmentsNoCo
 import AppointmentSlot from '@/components/appointments/AppointmentSlot';
 import Spinner from '@/components/Spinner';
 import FloatingButtonBottom from '@/components/FloatingButtonBottom';
-
 
 export default {
   components: {
@@ -69,6 +69,9 @@ export default {
     },
     onRetryButtonClicked() {
       this.noConnection = !navigator.onLine;
+    },
+    onBookButtonClicked() {
+      this.$router.push('appointment-confirmation');
     },
   },
   mounted() {

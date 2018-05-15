@@ -14,6 +14,11 @@ export default {
       info: 'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
     bookAppointmentButtonText: 'Book this appointment',
+    confirmation: {
+      headerLabel: 'What is this appointment for?',
+      label: 'Describe your symptoms',
+      changeButtonText: 'Change this appointment',
+    },
   },
   prescriptions: {
     orderRepeatPrescriptionButton: 'Order a repeat prescription',
@@ -49,6 +54,7 @@ export default {
     prescriptions: 'My repeat prescriptions',
     repeatPrescriptionCourses: 'Order a repeat prescription',
     appointments: 'Appointments',
+    appointmentConfirmation: 'Check appointment details',
     myRecord: 'My record',
     more: 'More',
   },

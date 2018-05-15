@@ -51,15 +51,22 @@ export default {
     formatTime: dateTime => moment(dateTime).format('h:mm a'),
     formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
     select() {
-      this.$store.dispatch('appointmentSlots/select', this.slotId);
+      if (!this.alwaysDeselect) {
+        this.$store.dispatch('appointmentSlots/select', this.slotId);
+      }
     },
     getClass() {
-      return this.isSelected(this.slotId) ? this.$style.selectedContainer : this.$style.container;
+      const isSelected = !this.alwaysDeselect && this.isSelected(this.slotId);
+      return isSelected ? this.$style.selectedContainer : this.$style.container;
     },
   },
   props: {
     slotId: {
       type: String,
+    },
+    alwaysDeselect: {
+      default: false,
+      type: Boolean,
     },
   },
 };
