@@ -165,6 +165,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         runOnUiThread({
             run {
                 findViewById<TextView>(R.id.header_text_view).text = text
+                webview.announceForAccessibility(text);
             }
         })
     }
