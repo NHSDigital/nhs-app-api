@@ -52,10 +52,14 @@ export default {
   loginOrRegister: {
     createAccount: 'Create an NHS account',
   },
+  signOutButton: {
+    signOut: 'Sign out',
+  },
   pageHeaderTitles: {
     home: 'Home',
     prescriptions: 'My repeat prescriptions',
     repeatPrescriptionCourses: 'Order a repeat prescription',
+    account: 'My account',
     appointments: 'Appointments',
     appointmentConfirmation: 'Check appointment details',
     myRecord: 'My record',

@@ -1,3 +1,4 @@
+import Account from '@/components/Account';
 import More from '@/components/More';
 import Prescriptions from '@/components/Prescriptions';
 import RepeatPrescriptionCourses from '@/components/RepeatPrescriptionCourses';
@@ -28,6 +29,14 @@ export default [
     component: HomeLoggedOut,
     meta: {
       guest: true,
+    },
+  }, {
+    path: '/account',
+    name: 'account',
+    component: Account,
+    meta: {
+      auth: true,
+      headerKey: 'pageHeaderTitles.account',
     },
   }, {
     path: '/appointments',

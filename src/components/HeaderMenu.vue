@@ -3,7 +3,9 @@
         <router-link to="/">
             <home-icon/>
         </router-link>
-        <account-icon/>
+        <router-link to="/account">
+          <account-icon/>
+        </router-link>
         <hr :class="$style.rule">
         <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
     </header>
