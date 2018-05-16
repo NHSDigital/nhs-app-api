@@ -34,8 +34,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
         configureWebView()
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         retryButton.setOnClickListener { webview.reload() }
-
-        nhsOnlineLogoIcon.setOnClickListener{ onNhsOnlineLogoIconSelected() }
+        nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
+        myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
 
         val urlPath = intent?.data?.path
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
@@ -68,8 +68,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.addJavascriptInterface( WebAppInterface(this), "nativeApp")
     }
 
-    fun showMenuBar()
-    {
+    fun showMenuBar() {
         runOnUiThread({
             run {
                 menuBar.visibility = VISIBLE
@@ -77,8 +76,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         })
     }
 
-    fun showHeader()
-    {
+    fun showHeader() {
         runOnUiThread({
             run {
                 findViewById<Toolbar>(R.id.header).visibility = VISIBLE
@@ -111,6 +109,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun onPrescriptionsMenuSelected() = loadPrescriptionsPage()
 
     private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
+
+    private fun onMyAccountIconSelected() {
+         loadMyAccountPage()
+         setHeaderText(resources.getString(R.string.my_account_header))
+         menuBar.deselectActiveItem()
+    }
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
@@ -146,6 +150,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 .build()
         val prescriptionsURL = builtUri.toString()
         loadPage(prescriptionsURL)
+    }
+
+    private fun loadMyAccountPage() {
+        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
+                .buildUpon()
+                .appendEncodedPath(resources.getString(R.string.myAccountPath))
+                .build()
+        val myAccountURL = builtUri.toString()
+        loadPage(myAccountURL)
     }
 
     override fun setHeaderText(text: String) {

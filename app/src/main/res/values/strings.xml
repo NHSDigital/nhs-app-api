@@ -5,6 +5,8 @@
     <string name="prescription">Prescriptions</string>
     <string name="my_record">My Records</string>
     <string name="more">More</string>
+
+    <string name="my_account_header">My account</string>
     <string name="organ_donation_register_header">Organ donation register</string>
     <string name="nhs_111_header">Check your symptoms</string>
 

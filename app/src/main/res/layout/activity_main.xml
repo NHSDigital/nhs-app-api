@@ -37,9 +37,12 @@
                     android:src="@mipmap/icon_nhs_online_logo" />
 
                 <ImageView
+                    android:id="@+id/myAccountIcon"
+                    android:contentDescription="My account icon"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_50sdp"
                     android:layout_alignParentEnd="true"
+                    android:focusable="true"
                     android:src="@mipmap/icon_header_account" />
                 <View
                     android:layout_width="match_parent"

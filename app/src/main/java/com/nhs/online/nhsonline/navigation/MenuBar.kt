@@ -39,6 +39,14 @@ class MenuBar @JvmOverloads constructor(
         }
     }
 
+    fun deselectActiveItem() {
+        selectedPosition.ifPresent { selectedPosition ->
+            getMenuBarItemAt(selectedPosition).deselectItem()
+        }
+
+        selectedPosition = Optional.empty()
+    }
+
     private fun initialiseMenuItems() {
         for (i in 0 until childCount) {
             val menuBarItem = getMenuBarItemAt(i)
