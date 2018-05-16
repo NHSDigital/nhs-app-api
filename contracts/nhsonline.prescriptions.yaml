@@ -1,9 +1,9 @@
 swagger: "2.0"
 
 info:
-  version: 0.0.4
-  title: NHS Online Sub-API - Prescriptions
-  description: NHS Online Sub-API - endpoints pertaining to repeat prescriptions require NHSO-Session-Id cookie in header from session endpoint.
+  version: 0.0.5
+  title: NHS App Sub-API - Prescriptions
+  description: NHS App Sub-API - endpoints pertaining to repeat prescriptions require NHSO-Session-Id cookie in header from session endpoint.
 
 paths:
   /courses:

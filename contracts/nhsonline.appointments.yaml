@@ -1,9 +1,9 @@
 swagger: "2.0"
 
 info:
-  version: 0.0.4
-  title: NHS Online Sub-API - Appointments
-  description: NHS Online Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+  version: 0.0.5
+  title: NHS App Sub-API - Appointments
+  description: NHS App Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
 
 paths:
   /appointment-slots:

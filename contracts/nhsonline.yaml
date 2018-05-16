@@ -1,9 +1,9 @@
 swagger: '2.0'
 
 info:
-  version: 0.0.4
-  title: NHS Online API
-  description: This is the API for NHS online.
+  version: 0.0.5
+  title: NHS App API
+  description: This is the API for the NHS App.
 
 schemes:
   - https
