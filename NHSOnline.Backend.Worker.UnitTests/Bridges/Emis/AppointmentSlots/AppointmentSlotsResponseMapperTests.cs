@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
         }
         
         [TestMethod]
-        public void Map_WhentSessionInAppointmentsSlotsResponseIsNull_ReturnsEmptySetOfSlots()
+        public void Map_WhenSessionInAppointmentsSlotsResponseIsNull_ReturnsEmptySetOfSlots()
         {
             // Arrange
             var slotsResponse = new AppointmentsSlotsGetResponse();
@@ -62,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
         }
         
         [TestMethod]
-        public void Map_WhentSessionInAppointmentsSlotsResponseIsEmpty_ReturnsEmptySetOfSlots()
+        public void Map_WhenSessionInAppointmentsSlotsResponseIsEmpty_ReturnsEmptySetOfSlots()
         {
             // Arrange
             var slotsResponse = new AppointmentsSlotsGetResponse
@@ -233,7 +233,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
                 DisplayName = session.SessionName
             };
             
-            var expectedSlot = new Slot()
+            var expectedSlot = new Slot
             {
                 Id = Convert.ToString(appointmentSlotSession.Slots.First().SlotId),
                 AppointmentSessionId = Convert.ToString(appointmentSlotSession.SessionId),
@@ -241,7 +241,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
                 LocationId = "",
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointmentSlotSession.Slots.First().EndTime).ToUniversalTime(),
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointmentSlotSession.Slots.First().StartTime).ToUniversalTime(),
-                
             };
             
             var expectedResponse = new AppointmentSlotsResponse
@@ -291,13 +290,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
                 DisplayName = session.SessionName
             };
 
-            var expectedLocation = new Worker.Areas.Appointments.Models.Location()
+            var expectedLocation = new Worker.Areas.Appointments.Models.Location
             {
                 Id = Convert.ToString(location.LocationId),
                 DisplayName = location.LocationName
             };
             
-            var expectedSlot = new Slot()
+            var expectedSlot = new Slot
             {
                 Id = Convert.ToString(appointmentSlotSession.Slots.First().SlotId),
                 AppointmentSessionId = Convert.ToString(appointmentSlotSession.SessionId),
@@ -323,16 +322,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
         
-        private AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime)
+        private static AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime)
         {
-            var appointmentSlot = new AppointmentSlot()
+            var appointmentSlot = new AppointmentSlot
             {
                 SlotId = slotId,
                 EndTime = endTime,
                 StartTime = startTime,
             };
             
-            var appointmentSlotSession = new AppointmentSlotSession()
+            var appointmentSlotSession = new AppointmentSlotSession
             {
                 SessionId = sessionId,
                 Slots = new[]{ appointmentSlot }
@@ -341,7 +340,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             return appointmentSlotSession;
         }
 
-        private Location CreateLocation(int id, string name)
+        private static Location CreateLocation(int id, string name)
         {
             return new Location
             {
@@ -350,7 +349,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             };
         }
 
-        private SessionHolder CreateSessionHolder(int id, string name)
+        private static SessionHolder CreateSessionHolder(int id, string name)
         {
             return new SessionHolder
             {
@@ -359,7 +358,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             };
         }
 
-        private Worker.Bridges.Emis.Models.Session CreateSession(int locationId, int sessionId, string name)
+        private static Worker.Bridges.Emis.Models.Session CreateSession(int locationId, int sessionId, string name)
         {
             return new Worker.Bridges.Emis.Models.Session
             {
@@ -368,8 +367,5 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
                 SessionName = name
             };
         }
-        
     }
-    
-    
 }
