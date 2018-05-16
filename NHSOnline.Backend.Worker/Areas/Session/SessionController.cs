@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -95,6 +96,36 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
             return await Task.FromResult(new CreatedResult(string.Empty,
                 sessionCreatedResultVisited.UserSessionResponse));
+        }
+        
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            _logger.LogDebug("Starting DELETE /session");
+            
+            UserSession userSession = HttpContext.GetUserSession();
+            var sessionDeleted = false;
+            
+            try
+            {
+                sessionDeleted = await _sessionCacheService.DeleteUserSession(userSession.Key);
+            }
+            catch (Exception e)
+            {
+                _logger
+                        .LogError(e.ToString());
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+
+            if (!sessionDeleted)
+                {
+                    _logger
+                        .LogError("No active session was found");
+                }
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
         private async Task<Option<ISystemProvider>> GetSystemProvider(string odsCode)

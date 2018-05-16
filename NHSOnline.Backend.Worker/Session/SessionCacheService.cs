@@ -11,6 +11,7 @@ namespace NHSOnline.Backend.Worker.Session
     {
         Task<string> CreateUserSession(UserSession userSession);
         Task<Option<UserSession>> GetUserSession(string sessionId);
+        Task<bool> DeleteUserSession(string sessionId);
     }
 
     public class SessionCacheService : ISessionCacheService
@@ -71,7 +72,18 @@ namespace NHSOnline.Backend.Worker.Session
             var userSession = JsonConvert
                 .DeserializeObject<UserSession>(_cipherService.Decrypt(redisValue.Value), _serializerSettings);
 
+            userSession.Key = sessionId;
+
             return Option.Some(userSession);
+        }
+
+        public async Task<bool> DeleteUserSession(string sessionId)
+        {
+            var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
+            var database = multiplexer.GetDatabase();
+            RedisKey redisKey = sessionId;
+            
+            return await database.KeyDeleteAsync(redisKey);
         }
     }
 }
