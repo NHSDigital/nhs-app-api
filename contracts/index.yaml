@@ -1,9 +1,9 @@
 ---
   swagger: "2.0"
   info: 
-    version: "0.0.4"
-    title: "NHS Online API"
-    description: "This is the API for NHS online."
+    version: "0.0.5"
+    title: "NHS App API"
+    description: "This is the API for the NHS App."
   schemes: 
     - "https"
   paths: 
@@ -350,4 +350,18 @@
             description: "The GP system is currently unavailable."
           504: 
             description: "The GP system did not respond in a timely fashion."
+      delete: 
+        tags: 
+          - "session"
+        summary: "Deletes a user session for an authenticated user."
+        description: "Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id cookie obtained from post session endpoint."
+        responses: 
+          204: 
+            description: "Successfully deleted session and user signed out"
+          401: 
+            description: "User session has expired."
+          500: 
+            description: "An unexpected error occurred during the processing of the request."
+          502: 
+            description: "Session storage is unavailable"
 
