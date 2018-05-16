@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.View.*
-import android.support.v7.widget.Toolbar
-import android.webkit.WebView
 import android.widget.TextView
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
@@ -79,7 +77,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     fun showHeader() {
         runOnUiThread({
             run {
-                findViewById<Toolbar>(R.id.header).visibility = VISIBLE
+                header.visibility = VISIBLE
             }
         })
     }
@@ -216,6 +214,22 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 chromeClient.onLocationPermissionResponded(false)
             }
         }
+    }
+
+    override fun hideMenuBar() {
+        runOnUiThread({
+            run {
+                menuBar.visibility = GONE
+            }
+        })
+    }
+
+    override fun hideHeader() {
+        runOnUiThread({
+            run {
+                header.visibility = GONE
+            }
+        })
     }
 }
 

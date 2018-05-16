@@ -48,6 +48,7 @@ class WebClientInterceptor(
         activities.forEach { activity ->
             if (activity.canStart(view.context, url)) {
                 activity.start(view.context, url)
+
                 return true
             }
         }
@@ -59,9 +60,11 @@ class WebClientInterceptor(
                 context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectSymptomsMenuActive()
                 context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectMoreMenuActive()
             }
+
             if (matchingKnownService.hasMissingQueryString(url)) {
                 val urlWithMissingQueryStrings = matchingKnownService.addMissingQueryStrings(url)
                 view.loadUrl(urlWithMissingQueryStrings)
+
                 return true
             }
         }
@@ -71,11 +74,13 @@ class WebClientInterceptor(
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         cancelTrackingWebRequestResponse()
+
         if (shouldHandleUnavailability(url)) {
             trackWebRequestResponse(view)
         }
 
         shouldShowErrorPage = false
+
         super.onPageStarted(view, url, favicon)
     }
 
@@ -88,6 +93,7 @@ class WebClientInterceptor(
         if (!shouldShowErrorPage) {
             uiInteractor.showWebviewScreen()
         }
+
         super.onPageFinished(view, url)
     }
 
@@ -113,6 +119,7 @@ class WebClientInterceptor(
         if (urlString != null) {
             val matchingKnownService =
                 knownServices.findMatchingKnownService(urlString)
+
             if (matchingKnownService != null) {
                 return matchingKnownService.shouldHandleUnavailability
             }
@@ -148,6 +155,7 @@ class WebClientInterceptor(
 
     private fun getUnavailabilityErrorMessageForService(failingUrl: String?) : String? {
         val service = knownServices.findMatchingKnownService(failingUrl.toString())
+
         return service?.unavailabilityErrorMessage
     }
 }
