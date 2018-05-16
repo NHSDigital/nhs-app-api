@@ -51,7 +51,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            var date = DateTime.Now;
             var systemProvider = new Mock<ISystemProvider>();
             var courseService = new Mock<ICourseService>();
 

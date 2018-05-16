@@ -2,10 +2,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
-using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Session;
 
@@ -14,16 +12,16 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
     public class EmisAppointmentSlotsService: IAppointmentSlotsService
     {
         private readonly IEmisClient _emisClient;
-        private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private readonly IAppointmentSlotsResponseMapper _appointmentSlotsResponseMapper;
         private readonly ILogger<EmisAppointmentSlotsService> _logger;
         
         public EmisAppointmentSlotsService(IEmisClient emisClient,
             ILoggerFactory loggerFactory,
-            IDateTimeOffsetProvider dateTimeOffsetProvider)
+            IAppointmentSlotsResponseMapper appointmentSlotsResponseMapper)
         {
             _emisClient = emisClient;
             _logger = loggerFactory.CreateLogger<EmisAppointmentSlotsService>();
-            _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _appointmentSlotsResponseMapper = appointmentSlotsResponseMapper;
         }
         
         public async Task<AppointmentSlotsResult> Get(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
@@ -101,7 +99,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
             try
             {
-                return new AppointmentSlotsResult.SuccessfullyRetrieved(BuildResponse(slotBody, metaBody));
+                return new AppointmentSlotsResult.SuccessfullyRetrieved(_appointmentSlotsResponseMapper.Map(slotBody, metaBody));
             }
             catch (Exception e)
             {
@@ -109,19 +107,5 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 return new AppointmentSlotsResult.InternalServerError();
             }
         }
-
-        private AppointmentSlotsResponse BuildResponse(AppointmentsSlotsGetResponse slotsResponse, AppointmentSlotsMetadataGetResponse slotsMetadataResponse)
-        {
-            var response = new AppointmentSlotsResponse
-            {
-                Slots = new AppointmentSlotsMapper(_dateTimeOffsetProvider).Map(slotsResponse, slotsMetadataResponse),
-                Locations = new AppointmentLocationMapper().Map(slotsMetadataResponse),
-                Clinicians = new AppointmentClinicianMapper().Map(slotsMetadataResponse),
-                AppointmentSessions = new AppointmentSessionMapper().Map(slotsMetadataResponse),
-            };
-
-            return response;
-        }
-
     }
 }

@@ -10,7 +10,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
     [Route("patient/appointments")]
     public class AppointmentsController : Controller
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly ISystemProviderFactory _systemProviderFactory;
 
         public AppointmentsController(
@@ -18,7 +17,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             ISystemProviderFactory systemProviderFactory
             )
         {
-            _loggerFactory = loggerFactory;
             _systemProviderFactory = systemProviderFactory;
         }
 

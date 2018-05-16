@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
@@ -6,7 +7,6 @@ using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Session;
-using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
-            return new EmisAppointmentSlotsService(_emisClient, _loggerFactory,_dateTimeOffsetProvider);
+            return new EmisAppointmentSlotsService(_emisClient, _loggerFactory, new AppointmentSlotsResponseMapper(_dateTimeOffsetProvider));
         }
     }
 }

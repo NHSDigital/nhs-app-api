@@ -10,14 +10,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
     [TestClass]
     public class AppointmentSlotsDateRangeTests
     {
-        private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         
         [TestInitialize]
         public void TestInitialize()
         {
             _timeZoneInfoProvider = new TimeZoneInfoProvider();
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
         }
         
         [TestMethod]
@@ -52,16 +50,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
         [TestMethod]
         public void SetsDefaultToDate_WhenToDateIsNull()
         {
-            var fromDateAtMidnight = new DateTime(2018, 5, 12, 0, 0, 0, 0);
             var expectedFromDate = new DateTimeOffset(2018, 5, 12, 14, 15, 31, new TimeSpan(1,0,0));
             var expectedToDate = new DateTimeOffset(2018, 5, 27, 0, 0, 0, new TimeSpan(1,0,0));
             var expectedFromUtc = expectedFromDate.ToUniversalTime();
             var expectedToUtc = expectedToDate.ToUniversalTime();
             
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             var mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
-            //mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(DateTime.Now));
-            //mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset(fromDateAtMidnight)).Returns(dateTimeOffsetProvider.CreateDateTimeOffset(fromDateAtMidnight));
             
             var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, expectedFromDate, null);
 

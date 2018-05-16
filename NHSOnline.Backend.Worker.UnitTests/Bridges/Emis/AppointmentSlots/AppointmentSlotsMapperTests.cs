@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
-            actualResponse.Should().BeEquivalentTo(new Slot[0]);
+            actualResponse.Should().BeEmpty();
         }
         
         [TestMethod]
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             var actualResponse = mapper.Map(slotsResponse, slotsMetadataResponse);
 
             //then
-            actualResponse.Should().BeEquivalentTo(new Slot[0]);
+            actualResponse.Should().BeEmpty();
         }
         
         [DataTestMethod]
@@ -193,7 +193,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
             };
 
-            var expectedResponse = new Slot[]{ slot };
+            var expectedResponse = new[]{ slot };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
