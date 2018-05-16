@@ -126,4 +126,7 @@
   <data name="AppointmentsPost_InThePast" xml:space="preserve">
     <value>Appointment cannot be booked in the past</value>
   </data>
+  <data name="Appointments_NotEnabledOnEmisForUser" xml:space="preserve">
+    <value>Services Access violation</value>
+  </data>
 </root>

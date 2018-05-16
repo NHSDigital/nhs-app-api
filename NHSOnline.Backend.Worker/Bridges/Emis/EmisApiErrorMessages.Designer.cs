@@ -61,6 +61,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Services Access violation.
+        /// </summary>
+        public static string Appointments_NotEnabledOnEmisForUser {
+            get {
+                return ResourceManager.GetString("Appointments_NotEnabledOnEmisForUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Appointment cannot be booked in the past.
         /// </summary>
         public static string AppointmentsPost_InThePast {

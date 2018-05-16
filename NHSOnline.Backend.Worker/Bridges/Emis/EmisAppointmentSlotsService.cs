@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Router.Appointments;
@@ -66,6 +67,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!metaResponse.HasSuccessStatusCode)
                 {
+                    if (metaResponse.HasExceptionContainsMessage(EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser))
+                    {
+                        return new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse());
+                    }
+                    
                     _logger.LogError($"Retrieving appointment slots metadata failed with status code {metaResponse.StatusCode}");
                     return new AppointmentSlotsResult.SupplierSystemUnavailable();
                 }
@@ -80,6 +86,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!slotResponse.HasSuccessStatusCode)
                 {
+                    if (slotResponse.HasExceptionContainsMessage(EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser))
+                    {
+                        return new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse());
+                    }
+                    
                     _logger.LogError($"Retrieving appointment slots metadata failed with status code {slotResponse.StatusCode}");
                     return new AppointmentSlotsResult.SupplierSystemUnavailable();
                 }

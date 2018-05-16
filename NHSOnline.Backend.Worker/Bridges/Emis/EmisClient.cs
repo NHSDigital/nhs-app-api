@@ -216,6 +216,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             {
                 return ErrorResponse?.Exceptions?.Any(x => x.Message == message) ?? false;
             }
+            
+            public bool HasExceptionContainsMessage(string message)
+            {
+                return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message)) ?? false;
+            }
         }
 
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
