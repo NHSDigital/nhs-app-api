@@ -6,6 +6,7 @@ import AppointmentConfirmation from '@/components/appointments/AppointmentConfir
 import AuthReturn from '@/components/AuthReturn';
 import HomeLoggedOut from '@/components/HomeLoggedOut';
 import HomeLoggedIn from '@/components/HomeLoggedIn';
+import store from '@/store';
 
 export default [
   {
@@ -16,6 +17,10 @@ export default [
       headerKey: 'pageHeaderTitles.home',
     },
     component: HomeLoggedIn,
+    beforeEnter: (to, from, next) => {
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      next();
+    },
   },
   {
     path: '/login',

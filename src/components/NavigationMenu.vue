@@ -31,6 +31,7 @@ import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import PrescriptionsIcon from '@/components/icons/PrescriptionsIcon';
 import RecordIcon from '@/components/icons/MyRecordIcon';
 import MoreIcon from '@/components/icons/MoreIcon';
+import store from '@/store';
 
 export default {
   components: {
@@ -39,11 +40,11 @@ export default {
     PrescriptionsIcon,
     RecordIcon,
     MoreIcon,
+    store,
   },
   data() {
     return {
       symptomsCheckerUrl: this.$config.SYMPTOM_CHECKER_URL,
-      previousSelectedMenuItem: null,
     };
   },
   methods: {
@@ -75,20 +76,8 @@ export default {
     },
 
     handleMenuSelection(menuItem) {
-      this.clearSelectedMenuItem();
-      this.selectMenuItem(menuItem);
-    },
-
-    clearSelectedMenuItem() {
-      if (this.previousSelectedMenuItem) {
-        this.previousSelectedMenuItem.classList.remove('active');
-      }
-    },
-
-    selectMenuItem(menuItem) {
       if (menuItem) {
-        menuItem.classList.add('active');
-        this.previousSelectedMenuItem = menuItem;
+        store.dispatch('navigation/setNewMenuItem', menuItem);
       }
     },
   },

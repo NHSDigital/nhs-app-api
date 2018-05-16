@@ -11,6 +11,7 @@ import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeat-prescription-courses';
 import header from './modules/header';
 import device from './modules/device';
+import navigation from './modules/navigation';
 
 Vue.use(Vuex);
 
@@ -33,6 +34,7 @@ export default new Vuex.Store({
     http,
     header,
     device,
+    navigation,
   },
   /**
    * If strict mode should be enables
