@@ -32,7 +32,8 @@ namespace NHSOnline.Backend.Worker.Date
         }
         public DateTimeOffset CreateDateTimeOffset()
         {
-            return CreateDateTimeOffset(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Unspecified));
+            var dateTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, _localTimeZone);
+            return CreateDateTimeOffset(dateTime);
         }
     }
 }
