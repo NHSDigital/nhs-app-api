@@ -146,19 +146,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
             self.showNativeViewContainer(errorMessage: errorMessage)
         }
     }
-    
     private func showWebViewContainer() {
         self.timer.invalidate()
         self.activityIndicator.stopAnimating()
-        self.viewController.webViewContainer.alpha = 1
-        self.viewController.nativeViewContainer.alpha = 0
+        self.viewController.showWebViewContainer()
     }
     
     private func showNativeViewContainer(errorMessage: String) {
         self.timer.invalidate()
         self.activityIndicator.stopAnimating()
-        self.viewController.webViewContainer.alpha = 0
-        self.viewController.nativeViewContainer.alpha = 1
-        self.viewController.nativeViewController?.errorLabel.text = errorMessage
+        self.viewController.showNativeViewContainer(errorMessage: errorMessage)
     }
 }

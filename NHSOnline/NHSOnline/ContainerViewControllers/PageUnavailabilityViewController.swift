@@ -9,8 +9,8 @@ class PageUnavailabilityViewController: UIViewController {
 
     @IBAction func reloadPageTrigger(_ sender: Any) {
         let parentVC = self.parent as? HomeViewController
-        let webViewController = parentVC?.childViewControllers.first as? WebViewController
-        webViewController?.reloadWebView()
+        parentVC?.showWebViewContainer()
+        parentVC?.webViewController?.reloadWebView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
