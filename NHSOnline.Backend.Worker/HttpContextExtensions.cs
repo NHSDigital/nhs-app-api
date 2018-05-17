@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker
 {

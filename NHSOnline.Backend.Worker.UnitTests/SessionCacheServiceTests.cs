@@ -8,10 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Session;
 using StackExchange.Redis;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Session
+namespace NHSOnline.Backend.Worker.UnitTests
 {
     [TestClass]
     public class SessionCacheServiceTests

@@ -20,7 +20,6 @@ using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Validators;
-using NHSOnline.Backend.Worker.Session;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker

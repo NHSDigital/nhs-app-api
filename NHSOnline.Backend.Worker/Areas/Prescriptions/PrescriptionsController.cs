@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Validators;
-using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {

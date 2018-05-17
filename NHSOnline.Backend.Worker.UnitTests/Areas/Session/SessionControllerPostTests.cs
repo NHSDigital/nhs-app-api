@@ -16,7 +16,6 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Session;
-using NHSOnline.Backend.Worker.Session;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session

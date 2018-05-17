@@ -8,7 +8,6 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
-using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {

@@ -1,6 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Session;
-
-namespace NHSOnline.Backend.Worker.Areas.Session.Models
+﻿namespace NHSOnline.Backend.Worker.Areas.Session.Models
 {
     public class UserSessionResponse
     {

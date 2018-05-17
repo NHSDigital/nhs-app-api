@@ -14,7 +14,6 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
-using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {

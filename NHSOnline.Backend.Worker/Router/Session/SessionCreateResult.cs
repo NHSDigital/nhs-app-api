@@ -1,5 +1,4 @@
 ﻿using System;
-using NHSOnline.Backend.Worker.Session;
 
 namespace NHSOnline.Backend.Worker.Router.Session
 {

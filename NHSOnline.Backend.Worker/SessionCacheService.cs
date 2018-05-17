@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Support;
 using StackExchange.Redis;
 
-namespace NHSOnline.Backend.Worker.Session
+namespace NHSOnline.Backend.Worker
 {
     public interface ISessionCacheService
     {

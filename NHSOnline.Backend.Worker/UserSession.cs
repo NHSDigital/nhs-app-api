@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Session
+namespace NHSOnline.Backend.Worker
 {
     [Serializable]
     public abstract class UserSession

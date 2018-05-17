@@ -1,6 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Session;
-
-namespace NHSOnline.Backend.Worker.Bridges.Emis
+﻿namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisUserSession: UserSession
     {
