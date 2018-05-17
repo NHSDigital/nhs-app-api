@@ -8,10 +8,12 @@ using FluentAssertions;
 using FluentAssertions.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Session;
@@ -25,6 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private static IFixture _fixture;
         private Mock<ISystemProviderFactory> _systemProviderFactory;
         private UserSession _userSession;
+        private IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
         [TestInitialize]
         public void TestInitialize()
@@ -42,8 +45,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
+            
+            var timeZoneInfoProvider = new TimeZoneInfoProvider();
+            _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
-            _systemUnderTest = _fixture.Create<AppointmentSlotsController>();
+            _systemUnderTest = new AppointmentSlotsController(_systemProviderFactory.Object, _dateTimeOffsetProvider, _fixture.Create<ILoggerFactory>());
 
             _systemUnderTest.ControllerContext = new ControllerContext
             {
@@ -55,8 +61,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            var fromDate = new DateTime(2018, 4, 9).ToDateTimeOffset();
-            var toDate = new DateTime(2018, 4, 24).ToDateTimeOffset();
+            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
             var systemProvider = new Mock<ISystemProvider>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
             var appointmentSlotsServicesGetResponse = new AppointmentSlotsResponse();
@@ -93,8 +99,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_ReturnsBadRequest_WhenQueryParametersAreInvalid()
         {
-            var fromDate = new DateTime(2018, 4, 30).ToDateTimeOffset();
-            var toDate = new DateTime(2018, 4, 24).ToDateTimeOffset();
+            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(-14);
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(-6);
             // Act
             var queryParams = new PatientAppointmentSlotsQueryParameters
             {
@@ -110,8 +116,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_ReturnsBadRequest_WhenServiceReturnsBadRequest()
         {
-            var fromDate = new DateTime(2018, 4, 9).ToDateTimeOffset();
-            var toDate = new DateTime(2018, 4, 24).ToDateTimeOffset();
+            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
             var systemProvider = new Mock<ISystemProvider>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 
@@ -144,8 +150,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestMethod]
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenServiceReturnsBadRequest()
         {
-            var fromDate = new DateTime(2018, 4, 9).ToDateTimeOffset();
-            var toDate = new DateTime(2018, 4, 24).ToDateTimeOffset();
+            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
             var systemProvider = new Mock<ISystemProvider>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 

@@ -17,9 +17,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestInitialize]
         public void TestInitialize()
         {
-            _dateRangeValidator = new DateRangeValidator();
             _timeZoneInfoProvider = new TimeZoneInfoProvider();
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
+            _dateRangeValidator = new DateRangeValidator(_dateTimeOffsetProvider);
         }
 
         [TestMethod]
@@ -54,19 +54,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         }
         
         [TestMethod]
-        public void IsValid_ReturnsTrue_WhenFromdateAndToDateAreInThePast()
+        public void IsValid_ReturnsFalse_WhenFromdateAndToDateAreInThePast()
         {
             var fromdate = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 3, 20));
             var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 3, 29));
             
-            _dateRangeValidator.IsValid(fromdate, toDate).Should().BeTrue();
+            _dateRangeValidator.IsValid(fromdate, toDate).Should().BeFalse();
         }
         
         [TestMethod]
         public void IsValid_ReturnsFalse_WhenFromDateIsAfterToDate()
         {
-            var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 3, 2));
-            var toDate = fromDate.AddDays(-14);
+            var nowDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
+            var fromDate = nowDate.AddDays(14);
+            var toDate = nowDate.AddDays(7);
  
             _dateRangeValidator.IsValid(fromDate, toDate).Should().BeFalse();
         }

@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         [HttpGet, TimeoutExceptionFilter]
         public async Task<IActionResult> Get([FromQuery] PatientAppointmentSlotsQueryParameters queryParameters)
         {
-            if (!new DateRangeValidator().IsValid(queryParameters.FromDate, queryParameters.ToDate))
+            if (!new DateRangeValidator(_dateTimeOffsetProvider).IsValid(queryParameters.FromDate, queryParameters.ToDate))
             {
                 _logger
                     .LogError("Query parameters are invalid");
