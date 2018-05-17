@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments.Models
     [TestClass]
     public class AppointmentBookRequestTests
     {
-        private static Fixture _fixture;
+        private Fixture _fixture;
         private AppointmentBookRequest _systemUnderTest;
         private ValidationContext _context;
         private List<ValidationResult> _validationResults;

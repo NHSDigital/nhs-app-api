@@ -11,20 +11,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Models
     [TestClass]
     public class Im1ConnectionRequestTests
     {
-        private static Fixture _fixture;
+        private Fixture _fixture;
         private PatientIm1ConnectionRequest _sut;
         private ValidationContext _context;
         private List<ValidationResult> _validationResults;
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _fixture = new Fixture();
-        }
-
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture();
+
             _sut = _fixture.Create<PatientIm1ConnectionRequest>();
             _context = new ValidationContext(_sut, null, null);
             _validationResults = new List<ValidationResult>();

@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
     public class CoursesControllerTests
     {
         private CoursesController _systemUnderTest;
-        private static IFixture _fixture;
+        private IFixture _fixture;
         private Mock<ISystemProviderFactory> _systemProviderFactory;
         private UserSession _userSession;
 

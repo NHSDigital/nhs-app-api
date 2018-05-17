@@ -11,20 +11,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session.Models
     [TestClass]
     public class UserSessionRequestTests
     {
-        private static Fixture _fixture;
+        private Fixture _fixture;
         private UserSessionRequest _systemUnderTest;
         private ValidationContext _context;
         private List<ValidationResult> _validationResults;
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _fixture = new Fixture();
-        }
-
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture();
+
             _systemUnderTest = _fixture.Create<UserSessionRequest>();
             _context = new ValidationContext(_systemUnderTest, null, null);
             _validationResults = new List<ValidationResult>();

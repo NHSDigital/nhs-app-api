@@ -1,76 +1,78 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2018.1.0.9030">
-  <OutputDir KeepXmlFiles="False">C:\Users\ianfn\source\repos\nhs\nhsonline-backendworker\NDependOut</OutputDir>
+  <OutputDir KeepXmlFiles="False">C:\nhs\nhsonline-backendworker\NDependOut</OutputDir>
   <Assemblies>
     <Name>NHSOnline.Backend.Worker</Name>
     <Name>NHSOnline.Backend.Worker.UnitTests</Name>
-    <Name>NHSOnline.Backend.Worker.IntegrationTests</Name>
-    <Name>NHSOnline.Backend.Worker.Stubs</Name>
-    <Name>NHSOnline.Backend.Worker.Mocking</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>System.Runtime</Name>
-    <Name>StackExchange.Redis.StrongName</Name>
+    <Name>Microsoft.AspNetCore.DataProtection.Abstractions</Name>
     <Name>System.Diagnostics.Debug</Name>
+    <Name>StackExchange.Redis.StrongName</Name>
+    <Name>Microsoft.AspNetCore.Authentication.Cookies</Name>
+    <Name>Microsoft.Extensions.Logging.Abstractions</Name>
+    <Name>System.Threading.Tasks</Name>
+    <Name>Microsoft.AspNetCore.Authentication</Name>
+    <Name>System.Security.Claims</Name>
     <Name>System.Diagnostics.Tools</Name>
     <Name>System.Resources.ResourceManager</Name>
     <Name>System.Net.Http</Name>
+    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
     <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
     <Name>Microsoft.AspNetCore.Hosting.Abstractions</Name>
+    <Name>System.Net.Primitives</Name>
     <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
-    <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
     <Name>System.ComponentModel</Name>
     <Name>Microsoft.AspNetCore.Mvc.Core</Name>
     <Name>Microsoft.AspNetCore.Mvc.Formatters.Json</Name>
     <Name>Microsoft.AspNetCore.Cors</Name>
-    <Name>System.Threading.Tasks</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
-    <Name>System.Net.Primitives</Name>
-    <Name>System.Collections</Name>
     <Name>Newtonsoft.Json</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
+    <Name>System.Collections</Name>
     <Name>Microsoft.AspNetCore.Mvc.ViewFeatures</Name>
-    <Name>Microsoft.AspNetCore.Http.Features</Name>
+    <Name>Microsoft.AspNetCore.Authorization</Name>
     <Name>System.ComponentModel.Annotations</Name>
+    <Name>Microsoft.Extensions.Options</Name>
     <Name>System.Linq</Name>
     <Name>Microsoft.AspNetCore.Hosting</Name>
     <Name>Microsoft.Extensions.Configuration</Name>
     <Name>Microsoft.Extensions.Configuration.EnvironmentVariables</Name>
     <Name>Microsoft.AspNetCore</Name>
+    <Name>System.Console</Name>
+    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>Microsoft.Extensions.Options.ConfigurationExtensions</Name>
     <Name>Microsoft.AspNetCore.Mvc</Name>
+    <Name>Microsoft.AspNetCore.DataProtection</Name>
+    <Name>Microsoft.Extensions.Logging.Console</Name>
+    <Name>Microsoft.Extensions.Logging.Debug</Name>
     <Name>Microsoft.AspNetCore.Diagnostics</Name>
     <Name>System.Runtime.Extensions</Name>
-    <Name>Microsoft.AspNetCore.Http.Extensions</Name>
-    <Name>Microsoft.AI.DependencyCollector</Name>
+    <Name>System.Web.HttpUtility</Name>
     <Name>System.Text.RegularExpressions</Name>
+    <Name>Microsoft.AspNetCore.Http.Extensions</Name>
+    <Name>Microsoft.AspNetCore.Authentication.Abstractions</Name>
+    <Name>Microsoft.AI.DependencyCollector</Name>
+    <Name>Microsoft.EntityFrameworkCore</Name>
+    <Name>System.Security.Principal</Name>
     <Name>Microsoft.VisualStudio.TestPlatform.TestFramework</Name>
-    <Name>Microsoft.Extensions.DependencyInjection</Name>
-    <Name>Moq</Name>
-    <Name>System.Linq.Expressions</Name>
-    <Name>RichardSzalay.MockHttp</Name>
     <Name>AutoFixture</Name>
+    <Name>Moq</Name>
     <Name>Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions</Name>
-    <Name>FluentAssertions</Name>
-    <Name>Microsoft.Extensions.Primitives</Name>
-    <Name>Microsoft.AspNetCore.Http</Name>
-    <Name>Microsoft.AspNetCore.Routing.Abstractions</Name>
+    <Name>System.Linq.Expressions</Name>
+    <Name>Microsoft.Extensions.DependencyInjection</Name>
+    <Name>RichardSzalay.MockHttp</Name>
     <Name>AutoFixture.AutoMoq</Name>
-    <Name>mscorlib</Name>
-    <Name>TechTalk.SpecFlow</Name>
-    <Name>System</Name>
-    <Name>System.Core</Name>
-    <Name>netstandard</Name>
+    <Name>Microsoft.Extensions.Logging</Name>
+    <Name>FluentAssertions</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\Users\ianfn\source\repos\nhs\nhsonline-backendworker\NHSOnline.Backend.Worker\bin\debug\netcoreapp2.0</Dir>
-    <Dir>C:\Users\ianfn\source\repos\nhs\nhsonline-backendworker\NHSOnline.Backend.Worker.UnitTests\bin\debug\netcoreapp2.0</Dir>
-    <Dir>C:\Users\ianfn\source\repos\nhs\nhsonline-backendworker\NHSOnline.Backend.Worker.IntegrationTests\bin\Debug</Dir>
-    <Dir>C:\Users\ianfn\source\repos\nhs\nhsonline-backendworker\NHSOnline.Backend.Worker.Stubs\bin\debug\netcoreapp2.0</Dir>
-    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319</Dir>
-    <Dir>C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\WPF</Dir>
-    <Dir>C:\Users\ianfn\.nuget\packages</Dir>
-    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.5</Dir>
+    <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.6</Dir>
     <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.0</Dir>
     <Dir>C:\Program Files\dotnet\sdk\NuGetFallbackFolder</Dir>
+    <Dir>C:\Users\ianfn\.nuget\packages</Dir>
+    <Dir>C:\nhs\nhsonline-backendworker\NHSOnline.Backend.Worker\bin\debug\netcoreapp2.0</Dir>
+    <Dir>C:\nhs\nhsonline-backendworker\NHSOnline.Backend.Worker.UnitTests\bin\debug\netcoreapp2.0</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
   <Report Kind="0" SectionsEnabled="110591" XslPath="" Flags="261120" />
@@ -136,8 +138,7 @@
       <High2Critical_SeverityThreshold>72000000000</High2Critical_SeverityThreshold>
       <Critical2Blocker_SeverityThreshold>360000000000</Critical2Blocker_SeverityThreshold>
     </DebtSettings>
-  </ProjectDebtSettings>
-  <Queries>
+  </ProjectDebtSettings><Queries>
     <Group Name="Quality Gates" Active="True" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Quality Gates Evolution</Name>
 from qg in QualityGates
@@ -11521,6 +11522,4 @@ select new {
 //</HowToFix>]]></Query>
       </Group>
     </Group>
-  </Queries>
-  <WarnFilter />
-</NDepend>
+  </Queries></NDepend>

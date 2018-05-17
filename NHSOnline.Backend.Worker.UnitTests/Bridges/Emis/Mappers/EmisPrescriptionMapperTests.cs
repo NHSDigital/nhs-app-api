@@ -14,9 +14,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
     [TestClass]
     public class EmisPrescriptionMapperTests
     {
-        private static IFixture _fixture;
-
-        IEmisPrescriptionMapper _mapper;
+        private IFixture _fixture;
+        private IEmisPrescriptionMapper _mapper;
 
         [TestInitialize]
         public void TestInitialize()

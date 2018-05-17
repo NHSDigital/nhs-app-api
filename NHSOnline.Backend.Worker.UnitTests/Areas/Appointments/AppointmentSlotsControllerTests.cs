@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,7 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
     public class AppointmentsSlotsControllerTests
     {
         private AppointmentSlotsController _systemUnderTest;
-        private static IFixture _fixture;
+        private IFixture _fixture;
         private Mock<ISystemProviderFactory> _systemProviderFactory;
         private UserSession _userSession;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
@@ -55,7 +53,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             {
                 HttpContext = httpContextMock.Object
             };
-            
         }
         
         [TestMethod]

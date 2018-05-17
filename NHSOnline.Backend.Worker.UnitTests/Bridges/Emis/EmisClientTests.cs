@@ -31,17 +31,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         private Mock<IEmisConfig> _configMock;
         private HttpClient _httpClient;
         private Mock<IHttpClientFactory> _httpClientFactory;
-        private static IFixture _fixture;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-        }
+        private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
             _mockHttpHandler = new MockHttpMessageHandler();
 
             _configMock = new Mock<IEmisConfig>();

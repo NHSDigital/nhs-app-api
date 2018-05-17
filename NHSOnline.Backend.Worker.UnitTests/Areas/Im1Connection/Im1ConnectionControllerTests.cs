@@ -27,17 +27,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         private readonly ITokenValidationService _defaultTokenValidationService = new EmisTokenValidationService();
         private Im1ConnectionController _im1ConnectionController;
 
-        private static IFixture _fixture;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _fixture = new Fixture();
-        }
+        private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture();
+
             _im1ConnectionController = CreateIm1ConnectionController();
         }
 

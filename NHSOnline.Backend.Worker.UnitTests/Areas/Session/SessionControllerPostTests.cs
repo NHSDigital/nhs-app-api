@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -23,22 +22,22 @@ using NHSOnline.Backend.Worker.Support;
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {
     [TestClass]
-    public class SessionControllerTests
+    public class SessionControllerPostTests
     {
         private SessionController _systemUnderTest;
-        private static IFixture _fixture;
-        private static Mock<ICitizenIdService> _mockCitizenIdService;
-        private static Mock<ISystemProvider> _mockSystemProvider;
-        private static Mock<IOdsCodeLookup> _mockOdsCodeLookup;
-        private static Mock<ISessionCacheService> _mockSessionCacheService;
-        private static Mock<ISessionService> _mockSessionService;
-        private static Mock<ITokenValidationService> _mockTokenValidationService;
-        private static Mock<ISystemProviderFactory> _mockSystemProviderFactory;
+        private IFixture _fixture;
+        private Mock<ICitizenIdService> _mockCitizenIdService;
+        private Mock<ISystemProvider> _mockSystemProvider;
+        private Mock<IOdsCodeLookup> _mockOdsCodeLookup;
+        private Mock<ISessionCacheService> _mockSessionCacheService;
+        private Mock<ISessionService> _mockSessionService;
+        private Mock<ITokenValidationService> _mockTokenValidationService;
+        private Mock<ISystemProviderFactory> _mockSystemProviderFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
 
-        private static UserSessionRequest _userSessionRequest;
-        private static UserProfile _userProfile;
-        private static string _apiSessionId;
+        private UserSessionRequest _userSessionRequest;
+        private UserProfile _userProfile;
+        private string _apiSessionId;
         private string _givenName;
         private string _familyName;
         private SessionCreateResult _sessionCreateResult;

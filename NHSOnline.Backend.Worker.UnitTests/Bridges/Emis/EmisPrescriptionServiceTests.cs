@@ -25,17 +25,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         private Mock<IEmisClient> _emisClient;
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
         private EmisUserSession _userSession;
-        private static IFixture _fixture;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
-        {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-        }
+        private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
             _userSession = _fixture.Freeze<EmisUserSession>();

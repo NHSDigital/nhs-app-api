@@ -21,13 +21,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
     public class PrescriptionsControllerTests
     {
         private PrescriptionsController _systemUnderTest;
-        private static IFixture _fixture;
-        private static IOptions<ConfigurationSettings> _options;
+        private IFixture _fixture;
+        private IOptions<ConfigurationSettings> _options;
         private Mock<ISystemProviderFactory> _systemProviderFactory;
         private Mock<IPrescriptionRequestValidationService> _prescriptionRequestValidationService;
         private UserSession _userSession;
 
-        private static int _prescriptionsDefaultLastNumberMonthsToDisplay;
+        private int _prescriptionsDefaultLastNumberMonthsToDisplay;
 
         [TestInitialize]
         public void TestInitialize()

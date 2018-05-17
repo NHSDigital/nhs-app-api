@@ -25,19 +25,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         private const string DefaultUserPatientLinkToken = "link token";
         private const string DefaultIdentifierValue = "identifier";
 
-        private static IFixture _fixture;
+        private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisIm1ConnectionService _systemUnderTest;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-        }
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(

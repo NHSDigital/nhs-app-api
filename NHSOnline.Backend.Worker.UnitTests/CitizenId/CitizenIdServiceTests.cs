@@ -13,19 +13,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
     [TestClass]
     public class CitizenIdServiceTests
     {
-        private static IFixture _fixture;
-        private static CitizenIdService _systemUnderTest;
+        private IFixture _fixture;
+        private CitizenIdService _systemUnderTest;
         private Mock<ICitizenIdClient> _citizenIdClientMock;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
-        {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());
-        }
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
             _citizenIdClientMock = _fixture.Freeze<Mock<ICitizenIdClient>>();
             _systemUnderTest = _fixture.Create<CitizenIdService>();
         }

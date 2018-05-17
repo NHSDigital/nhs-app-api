@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
     [TestClass]
     public class EmisAppointmentsServiceTests
     {
-        private static IFixture _fixture;
+        private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private IAppointmentsService _sut;
         private AppointmentBookRequest _request;

@@ -16,16 +16,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Session
     [TestClass]
     public class SessionCacheServiceTests
     {
-        private static IFixture _fixture;
+        private IFixture _fixture;
+        private Mock<IConfiguration> _configuration;
+        private Mock<ICipherService> _cipherService;
+        private Mock<IDatabase> _database;
+        private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
         
-        private static Mock<IConfiguration> _configuration;
-        private static Mock<ICipherService> _cipherService;
-        private static Mock<IDatabase> _database;
-        private static Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
-        
-        
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext testContext)
+        [TestInitialize]
+        public void TestInitializeInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());

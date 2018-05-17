@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
     [TestClass]
     public class EmisSessionServiceTests
     {
-        private static IFixture _fixture;
+        private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisSessionService _systemUnderTest;
         private string _connectionToken;
