@@ -6,16 +6,11 @@ class HomeViewController : UIViewController {
     
     @IBOutlet weak var headerBar: HeaderBar!
     @IBOutlet weak var tabBar: UITabBar!
-    @IBOutlet weak var nativeViewContainer: UIView!
-    @IBOutlet weak var webViewContainer: UIView!
+    @IBOutlet weak var containerView: UIView!
     
     @IBOutlet weak var webviewHeaderTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var nativeViewHeaderTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var webviewNavMenuBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var nativeViewNavMenuBottomConstraint: NSLayoutConstraint!
     
-    let webViewSegue = "webViewSegue"
-    let nativeViewSegue = "nativeViewSegue"
     let knownServices = KnownServices(config: config())
     var webViewController: WebViewController?
     var nativeViewController: PageUnavailabilityViewController?
@@ -25,24 +20,35 @@ class HomeViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupNhsLogo()
         setupMyAccountIcon()
+        
         webViewDelegate = WebViewDelegate(controller: self, knownServices:knownServices)
         tabBarDelegate = TabBarDelegate(controller: self)
-        webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
         tabBar.delegate = tabBarDelegate
-        webViewController?.webView.loadPage(url: pageUrl)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(goHome(tapGestureRecognizer:)))
-        headerBar.NHSHomeLogo.addGestureRecognizer(tap)
+        
+        webViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
+        webViewController?.loadViewIfNeeded()
+        webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
+        webViewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        nativeViewController = self.storyboard?.instantiateViewController(withIdentifier: "PageUnavailabilityViewController") as? PageUnavailabilityViewController
+        nativeViewController?.view.translatesAutoresizingMaskIntoConstraints = false
+        nativeViewController?.loadViewIfNeeded()
+        
+        self.addChildViewController(self.webViewController!)
+        self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
+        self.webViewController?.webView.loadPage(url: pageUrl)
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == webViewSegue {
-            webViewController = segue.destination as? WebViewController
-        } else if segue.identifier == nativeViewSegue {
-            nativeViewController = (segue.destination as! PageUnavailabilityViewController)
-        }
+
+    func addSubview(subView:UIView, toView parentView:UIView) {
+        parentView.addSubview(subView)
+        var viewBindingsDict = [String: AnyObject]()
+        viewBindingsDict["subView"] = subView
+        parentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[subView]|",
+                                                                                 options: [], metrics: nil, views: viewBindingsDict))
+        parentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[subView]|",
+                                                                                 options: [], metrics: nil, views: viewBindingsDict))
     }
     
     func updateHeaderText(headerText: String?) {
@@ -52,7 +58,8 @@ class HomeViewController : UIViewController {
     }
     
     func setupNhsLogo() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(goHome(tapGestureRecognizer:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.goHome))
+        self.headerBar.NHSHomeLogo.isUserInteractionEnabled = true
         self.headerBar.NHSHomeLogo.addGestureRecognizer(tapGesture)
     }
     
@@ -73,14 +80,32 @@ class HomeViewController : UIViewController {
             }
             
             self.webviewHeaderTopConstraint.priority = constraintPriority
-            self.nativeViewHeaderTopConstraint.priority = constraintPriority
             self.webviewNavMenuBottomConstraint.priority = constraintPriority
-            self.nativeViewNavMenuBottomConstraint.priority = constraintPriority
             self.headerBar.isHidden = !visible
             self.tabBar.isHidden = !visible
         })
     }
     
+    func showWebViewContainer() {
+        self.cycleFromViewController(oldViewController: self.nativeViewController!, toViewController: self.webViewController!)
+    }
+    
+    func showNativeViewContainer(errorMessage: String) {
+        self.nativeViewController?.errorLabel.text = errorMessage
+        self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.nativeViewController!)
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.nativeViewController?.errorLabel)
+    }
+    
+    func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
+        oldViewController.willMove(toParentViewController: nil)
+        self.addChildViewController(newViewController)
+        self.addSubview(subView: newViewController.view, toView:self.containerView!)
+        oldViewController.view.accessibilityElementsHidden = true
+        newViewController.view.accessibilityElementsHidden = false
+        oldViewController.view.removeFromSuperview()
+        oldViewController.removeFromParentViewController()
+        newViewController.didMove(toParentViewController: self)
+    }
     func createHomeUrlSubRequestWithPath(urlPathToAppend: String) -> String {
         let homeUrl = URL(string: config().HomeUrl)
         let url = URL(string: urlPathToAppend, relativeTo: homeUrl)?.absoluteString
@@ -95,7 +120,7 @@ class HomeViewController : UIViewController {
         self.tabBar.selectedItem = nil
     }
     
-    @objc func goHome(tapGestureRecognizer: UITapGestureRecognizer) {
+    @objc func goHome(sender: UITapGestureRecognizer) {
         self.pageUrl = config().HomeUrl
         self.webViewController?.webView.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
