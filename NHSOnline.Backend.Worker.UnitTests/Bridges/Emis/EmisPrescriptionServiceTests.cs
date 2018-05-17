@@ -160,6 +160,186 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         }
 
         [TestMethod]
+        public async Task Get_PrescriptionsInResponseAreOrderedByDateRequestedDescending_WhenSuccessfulResponseFromEmis()
+        {
+            // Arrange
+            var date = DateTimeOffset.Now;
+            var toDate = DateTimeOffset.Now;
+
+            var repeatCourseGuidExpectedFirst = Guid.NewGuid().ToString();
+            var repeatCourseGuidExpectedSecond = Guid.NewGuid().ToString();
+            var repeatCourseGuidExpectedThird = Guid.NewGuid().ToString();
+
+            var prescriptionsResponse = new PrescriptionRequestsGetResponse
+            {
+                PrescriptionRequests = new List<PrescriptionRequest>
+                {
+                    new PrescriptionRequest
+                    {
+                        DateRequested = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseGuid = repeatCourseGuidExpectedSecond,
+                            }
+                        }
+                    },
+                    new PrescriptionRequest
+                    {
+                        DateRequested = new DateTimeOffset(new DateTime(2000, 1, 1)),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseGuid = repeatCourseGuidExpectedThird,
+                            },
+                        }
+                    },
+                    new PrescriptionRequest
+                    {
+                        DateRequested = new DateTimeOffset(new DateTime(2000, 1, 3)),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseGuid = repeatCourseGuidExpectedFirst,
+                            },
+                        }
+                    },
+                },
+                MedicationCourses = new List<MedicationCourse>
+                {
+                    new MedicationCourse
+                    {
+                        MedicationCourseGuid = repeatCourseGuidExpectedThird,
+                        PrescriptionType = PrescriptionType.Repeat,
+                    },
+                    new MedicationCourse
+                    {
+                        MedicationCourseGuid = repeatCourseGuidExpectedFirst,
+                        PrescriptionType = PrescriptionType.Repeat,
+                    },
+                    new MedicationCourse
+                    {
+                        MedicationCourseGuid = repeatCourseGuidExpectedSecond,
+                        PrescriptionType = PrescriptionType.Repeat,
+                    }
+                }
+            };
+
+            _emisClient.Setup(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = prescriptionsResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            var response = new PrescriptionListResponse();
+            PrescriptionRequestsGetResponse capturedItemToMap = null;
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<PrescriptionRequestsGetResponse>())).Returns(response).Callback<PrescriptionRequestsGetResponse>((x) =>
+            {
+                capturedItemToMap = x;
+            });
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+
+            // Assert
+            _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate));
+            result.Should().BeAssignableTo<GetPrescriptionsResult.SuccessfullyRetrieved>();
+            ((GetPrescriptionsResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+
+            var getPrescriptionsResult = (GetPrescriptionsResult.SuccessfullyRetrieved)result;
+            getPrescriptionsResult.Response.Should().Be(response);
+
+            capturedItemToMap.PrescriptionRequests.Should().HaveCount(3);
+
+            capturedItemToMap.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.Should().HaveCount(1);
+            capturedItemToMap.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid.Should().Be(repeatCourseGuidExpectedFirst);
+
+            capturedItemToMap.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.Should().HaveCount(1);
+            capturedItemToMap.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid.Should().Be(repeatCourseGuidExpectedSecond);
+
+            capturedItemToMap.PrescriptionRequests.ElementAt(2).RequestedMedicationCourses.Should().HaveCount(1);
+            capturedItemToMap.PrescriptionRequests.ElementAt(2).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid.Should().Be(repeatCourseGuidExpectedThird);
+        }
+
+        [DataTestMethod]
+        [DataRow(101, 100)]
+        [DataRow(100, 100)]
+        [DataRow(99, 99)]
+        public async Task Get_PrescriptionsInResponseAreLimitedToMax_WhenSuccessfulResponseFromEmis(int numberOfCoursesToCreate, int expectedNumberOfPrescriptions)
+        {
+            // Arrange
+            var date = DateTimeOffset.Now;
+            var toDate = DateTimeOffset.Now;
+
+            var prescriptionRequests = new List<PrescriptionRequest>();
+            var medicationCourses = new List<MedicationCourse>();
+
+            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            {
+                var courseGuid = Guid.NewGuid().ToString();
+
+                prescriptionRequests.Add(new PrescriptionRequest
+                {
+                    DateRequested = new DateTimeOffset(new DateTime(2000, 1, 2)),
+                    RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseGuid = courseGuid,
+                            }
+                        }
+                });
+
+                medicationCourses.Add(new MedicationCourse
+                {
+                    MedicationCourseGuid = courseGuid,
+                    PrescriptionType = PrescriptionType.Repeat,
+                });
+            }
+
+            var prescriptionsResponse = new PrescriptionRequestsGetResponse
+            {
+                PrescriptionRequests = prescriptionRequests,
+                MedicationCourses = medicationCourses,
+            };
+
+            _emisClient.Setup(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = prescriptionsResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null,
+                    }));
+
+            var response = new PrescriptionListResponse();
+            PrescriptionRequestsGetResponse capturedItemToMap = null;
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<PrescriptionRequestsGetResponse>())).Returns(response).Callback<PrescriptionRequestsGetResponse>((x) =>
+            {
+                capturedItemToMap = x;
+            });
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+
+            // Assert
+            _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate));
+            result.Should().BeAssignableTo<GetPrescriptionsResult.SuccessfullyRetrieved>();
+            ((GetPrescriptionsResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+
+            var getPrescriptionsResult = (GetPrescriptionsResult.SuccessfullyRetrieved)result;
+            getPrescriptionsResult.Response.Should().Be(response);
+
+            capturedItemToMap.PrescriptionRequests.Should().HaveCount(expectedNumberOfPrescriptions);
+        }
+
+        [TestMethod]
         public async Task Get_ReturnsBadRequest_WhenErrorReceivedFromEmis()
         {
             // Arrange

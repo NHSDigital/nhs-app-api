@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Session;
 
@@ -15,6 +14,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisPrescriptionService : IPrescriptionService
     {
+        public const int MaxCoursesSoftLimit = 100;
+
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
         private readonly ILogger _logger;
@@ -57,12 +58,18 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         private PrescriptionRequestsGetResponse GetPrescriptionsWithoutRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
         {
+            int totalCoursesRunningTotal = 0;
             var repeatCourses = prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat);
             var repeatCourseGuids = repeatCourses.Select(x => x.MedicationCourseGuid);
             
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
-            foreach (var prescription in prescriptionsResponse.PrescriptionRequests)
+            foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x => x.DateRequested))
             {
+                if (totalCoursesRunningTotal >= MaxCoursesSoftLimit)
+                {
+                    break;
+                }
+
                 var repeatCoursesInPrescription = prescription.RequestedMedicationCourses.Where(x => repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid));
 
                 if (repeatCoursesInPrescription.Any())
@@ -70,6 +77,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                     prescription.RequestedMedicationCourses = repeatCoursesInPrescription;
                     prescriptionsWithRepeatCourses.Add(prescription);
                 }
+
+                totalCoursesRunningTotal += repeatCoursesInPrescription.Count();
             }
 
             var prescriptionListResponseFiltered = new PrescriptionRequestsGetResponse
