@@ -103,10 +103,6 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 _logger.LogError($"HttpRequestException has been thrown with message: {e.Message}");
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
             }
-            catch (Exception)
-            {
-                return new AppointmentSlotsResult.BadRequest();
-            }
 
             try
             {
