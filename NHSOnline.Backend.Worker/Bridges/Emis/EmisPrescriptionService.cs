@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -35,12 +37,14 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!prescriptionsResponse.HasSuccessStatusCode)
                 {
-                    _logger.LogError($"Unsuccessful request retrieving prescriptions for {nameof(fromDate)}={fromDate:O}, {nameof(toDate)}={toDate:O}");
+                    _logger.LogError($"Unsuccessful request retrieving prescriptions for {nameof(fromDate)}={fromDate:O}, {nameof(toDate)}={toDate:O}. Status code: {(int)prescriptionsResponse.StatusCode}");
                     return new GetPrescriptionsResult.Unsuccessful();
                 }
 
+                var prescriptionListResponseFiltered = GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
+
                 _logger.LogDebug($"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
-                var result = _emisPrescriptionMapper.Map(prescriptionsResponse.Body);
+                var result = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
 
                 return new GetPrescriptionsResult.SuccessfullyRetrieved(result);
             }
@@ -49,6 +53,32 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
                 return new GetPrescriptionsResult.Unsuccessful();
             }
+        }
+
+        private PrescriptionRequestsGetResponse GetPrescriptionsWithoutRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
+        {
+            var repeatCourses = prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat);
+            var repeatCourseGuids = repeatCourses.Select(x => x.MedicationCourseGuid);
+            
+            var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
+            foreach (var prescription in prescriptionsResponse.PrescriptionRequests)
+            {
+                var repeatCoursesInPrescription = prescription.RequestedMedicationCourses.Where(x => repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid));
+
+                if (repeatCoursesInPrescription.Any())
+                {
+                    prescription.RequestedMedicationCourses = repeatCoursesInPrescription;
+                    prescriptionsWithRepeatCourses.Add(prescription);
+                }
+            }
+
+            var prescriptionListResponseFiltered = new PrescriptionRequestsGetResponse
+            {
+                PrescriptionRequests = prescriptionsWithRepeatCourses,
+                MedicationCourses = repeatCourses,
+            };
+
+            return prescriptionListResponseFiltered;
         }
     }
 }

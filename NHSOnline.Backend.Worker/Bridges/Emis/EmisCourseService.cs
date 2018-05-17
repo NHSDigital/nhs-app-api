@@ -1,10 +1,10 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Session;
 
@@ -33,9 +33,12 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!coursesResponse.HasSuccessStatusCode)
                 {
-                    _logger.LogError("Unsuccessful request retrieving courses");
+                    _logger.LogError($"Unsuccessful request retrieving courses. Status code: {(int)coursesResponse.StatusCode}");
                     return new GetCoursesResult.Unsuccessful();
                 }
+
+                _logger.LogDebug("Filtering courses from emis so we are left with only repeat courses which can be requested");
+                coursesResponse.Body.Courses = coursesResponse.Body.Courses.Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested);
 
                 _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
                 var result = _emisPrescriptionMapper.Map(coursesResponse.Body);
