@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Support;
 
@@ -114,10 +113,10 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             }
             else
             {
-                if (!Regex.IsMatch(odsCode, OdsCodeFormats.GpPracticeEnglandWales))
+                if (!Regex.IsMatch(odsCode, Constants.OdsCodeFormats.GpPracticeEnglandWales))
                 {
                     _logger.LogError($"The OdsCode {odsCode} provided in header {Constants.Headers.OdsCode} " +
-                                     $"does not match format {OdsCodeFormats.GpPracticeEnglandWales}.");
+                                     $"does not match format {Constants.OdsCodeFormats.GpPracticeEnglandWales}.");
                     argumentsAreValid = false;
                 }
             }

@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Ods;
-using NHSOnline.Backend.Worker.Router;
 using StackExchange.Redis;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Ods
+namespace NHSOnline.Backend.Worker.UnitTests
 {
     [TestClass]
     public class OdsCodeLookupTests

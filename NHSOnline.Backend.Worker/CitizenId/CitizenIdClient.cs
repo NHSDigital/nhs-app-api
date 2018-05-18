@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private const string UserInfoPath = "userinfo";
 
         private readonly HttpClient _httpClient;
-        private readonly string _redirectUri;
+        private readonly Uri _redirectUri;
         private readonly string _clientId;
         private readonly string _basicAuthCredentials;
 
@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             _httpClient = httpClientFactory.GetClient(HttpClientName.CitizenIdApiClient);
             _httpClient.BaseAddress = config.CitizenIdApiBaseUrl;
 
-            _redirectUri = new Uri(config.NhsWebAppBaseUrl, "auth-return").ToString();
+            _redirectUri = new Uri(config.NhsWebAppBaseUrl, "auth-return");
             _clientId = config.ClientId;
             _basicAuthCredentials = Convert.ToBase64String(
                 System.Text.Encoding.ASCII.GetBytes($"{config.ClientId}:{config.ClientSecret}"));
@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             {
                 { "grant_type", "authorization_code" },
                 { "code", authCode },
-                { "redirect_uri", _redirectUri },
+                { "redirect_uri", _redirectUri.ToString() },
                 { "code_verifier", codeVerifier },
                 { "client_id", _clientId },
                 { "code_challenge_method", "S256" }

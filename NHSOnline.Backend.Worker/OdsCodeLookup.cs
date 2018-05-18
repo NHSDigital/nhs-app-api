@@ -3,8 +3,13 @@ using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Support;
 using StackExchange.Redis;
 
-namespace NHSOnline.Backend.Worker.Ods
+namespace NHSOnline.Backend.Worker
 {
+    public interface IOdsCodeLookup
+    {
+        Task<Option<SupplierEnum>> LookupSupplier(string odsCode);
+    }
+
     public class OdsCodeLookup : IOdsCodeLookup
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;

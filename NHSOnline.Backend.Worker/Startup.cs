@@ -17,7 +17,6 @@ using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Validators;
 using StackExchange.Redis;

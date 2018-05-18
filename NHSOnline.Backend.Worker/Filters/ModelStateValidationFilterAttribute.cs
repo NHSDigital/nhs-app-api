@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace NHSOnline.Backend.Worker.Filters
 {
-    public class ModelStateValidationFilterAttribute : Attribute, IActionFilter
+    public class ModelStateValidationFilterAttribute : ActionFilterAttribute
     {
-        public void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!context.ModelState.IsValid)
             {
@@ -14,6 +14,6 @@ namespace NHSOnline.Backend.Worker.Filters
             }
         }
 
-        public void OnActionExecuted(ActionExecutedContext context) { }
+        public override void OnActionExecuted(ActionExecutedContext context) { }
     }
 }

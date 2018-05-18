@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2018.1.0.9030">
+<NDepend AppName="NHSOnline.Backend.Worker" Platform="DotNet" FileWrittenByProductVersion="2018.1.1.9040">
   <OutputDir KeepXmlFiles="False">C:\nhs\nhsonline-backendworker\NDependOut</OutputDir>
   <Assemblies>
     <Name>NHSOnline.Backend.Worker</Name>
@@ -58,7 +58,6 @@
     <Name>Microsoft.VisualStudio.TestPlatform.TestFramework</Name>
     <Name>AutoFixture</Name>
     <Name>Moq</Name>
-    <Name>Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions</Name>
     <Name>System.Linq.Expressions</Name>
     <Name>Microsoft.Extensions.DependencyInjection</Name>
     <Name>RichardSzalay.MockHttp</Name>
@@ -4435,7 +4434,7 @@ select new {
 //</HowToFix>]]></Query>
     </Group>
     <Group Name="API Breaking Changes" Active="True" ShownInReport="True">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Types</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Types</Name>
 
 warnif count > 0 from t in codeBase.OlderVersion().Application.Types
 where t.IsPubliclyVisible && 
@@ -4480,7 +4479,7 @@ select new {
 // because an API Breaking change can provoque significant
 // friction with consumers of the API.
 //</HowToFix>]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Methods</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Methods</Name>
 warnif count > 0 from m in codeBase.OlderVersion().Application.Methods
 where m.IsPubliclyVisible && 
 
@@ -4556,7 +4555,7 @@ select new {
 // friction with consumers of the API.
 //</HowToFix>
 ]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Fields</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Fields</Name>
 warnif count > 0 from f in codeBase.OlderVersion().Application.Fields
 where f.IsPubliclyVisible &&
 

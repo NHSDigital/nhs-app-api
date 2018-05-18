@@ -23,5 +23,10 @@
         {
             public const string UserSession = "UserSession";
         }
+
+        public class OdsCodeFormats
+        {
+            public const string GpPracticeEnglandWales = @"^[A-Z0-9]{6}$";
+        }
     }
 }

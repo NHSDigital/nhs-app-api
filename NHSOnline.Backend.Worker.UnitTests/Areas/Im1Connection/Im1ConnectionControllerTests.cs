@@ -9,7 +9,6 @@ using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Ods;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Support;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -70,12 +69,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Delete_DeletingSessionSucceeds_Returns500InternalServiceError()
+        public async Task Delete_DeletingSessionThrowsException_Returns500InternalServiceError()
         {
             // Arrange
             _mockSessionCacheService
                 .Setup(x => x.DeleteUserSession(It.IsAny<string>()))
-                .Throws(new Exception());
+                .Throws<Exception>();
 
             // Act
             var result = await _systemUnderTest.Delete();
