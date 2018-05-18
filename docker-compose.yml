@@ -28,10 +28,8 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  nhsonline.stub-data:
-      image: nhsonline.backend.stub-data
-      environment:
-        - WIREMOCK_AUTHORITY=nhsonline.stubs:8080
+  nhsonline.stubs.data:
+      image: nhsonline.stubs.data
       depends_on:
         - nhsonline.stubs
   nhsonline.redis-data.sds:
