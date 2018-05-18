@@ -19,7 +19,11 @@ class HeaderBar: UIView {
     func setupHeaderBar() {
         Bundle.main.loadNibNamed("HeaderBar", owner: self, options: nil)
         headerBarView.bounds = self.bounds
-        headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]    
+        headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        myAccountIcon.accessibilityLabel = NSLocalizedString("MyAccountTitle", comment: "")
+        myAccountIcon.accessibilityHint = NSLocalizedString("MyAccountHint", comment: "")
+        NHSHomeLogo.accessibilityLabel = NSLocalizedString("NHSAppHomeTitle", comment: "")
+        NHSHomeLogo.accessibilityHint = NSLocalizedString("NHSAppHomeHint", comment: "")
         addSubview(headerBarView)
     }
     
