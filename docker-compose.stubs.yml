@@ -1,26 +1,12 @@
 version: "3.2"
 services:
-  nhsonline.stub-data:
-    image: nhsonline.backend.stub-data
-    build:
-      context: .
-      dockerfile: NHSOnline.Backend.Worker.Stubs/Dockerfile
-    environment:
-      - WIREMOCK_AUTHORITY=nhsonline.stubs:8080
-    depends_on:
-      - nhsonline.stubs
   nhsonline.stubs:
     image: rodolpheche/wiremock
     command: --local-response-templating
     ports:
       - "8080:8080"
-  nhsonline.stub-data:
-      image: nhsonline.backend.stub-data
-      build:
-        context: .
-        dockerfile: NHSOnline.Backend.Worker.Stubs/Dockerfile
-      environment:
-        - WIREMOCK_AUTHORITY=nhsonline.stubs:8080
+  nhsonline.stubs.data:
+      image: nhsonline.stubs.data
       depends_on:
         - nhsonline.stubs
   nhsonline.redis-data.sds:

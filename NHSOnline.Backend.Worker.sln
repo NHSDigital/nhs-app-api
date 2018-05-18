@@ -20,12 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contracts", "Contracts", "{
 		contracts\ReadMe.md = contracts\ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NHSOnline.Backend.Worker.IntegrationTests", "NHSOnline.Backend.Worker.IntegrationTests\NHSOnline.Backend.Worker.IntegrationTests.csproj", "{5865A6BA-83D5-4CB0-9A5F-D168B7C40106}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Worker.Stubs", "NHSOnline.Backend.Worker.Stubs\NHSOnline.Backend.Worker.Stubs.csproj", "{9421696A-6A21-4810-BCA6-E6F88607C55C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHSOnline.Backend.Worker.Mocking", "NHSOnline.Backend.Worker.Mocking\NHSOnline.Backend.Worker.Mocking.csproj", "{7304F547-9B71-4EF1-9D38-7722903CE154}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

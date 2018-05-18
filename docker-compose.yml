@@ -14,15 +14,10 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - NHS_WEB_APP_BASE_URL=http://localhost:3000/
       - CORS_AUTHORITY=*
-  nhsonline.stub-data:
-    image: nhsonline.backend.stub-data
-    build:
-      context: .
-      dockerfile: NHSOnline.Backend.Worker.Stubs/Dockerfile
-    environment:
-      - WIREMOCK_AUTHORITY=nhsonline.stubs:8080
-    depends_on:
-      - nhsonline.stubs
+  nhsonline.stubs.data:
+      image: nhsonline.stubs.data
+      depends_on:
+        - nhsonline.stubs  
   nhsonline.stubs:
     image: rodolpheche/wiremock
     ports:
