@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -18,27 +19,38 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
     [TestClass]
     public class EmisAppointmentsServiceTests
     {
+        private const string BookingReason = "I caught a cold!";
+        private const string SlotId = "2862517";
+        private const string UserPatientLinkToken = "bbuiobui79t86f7d5d6fch";
+        private const string EndUserSessionId = "END_USER_SESSION_ID";
+        private const string SessionId = "SESSION_ID";
+        
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private IAppointmentsService _sut;
         private AppointmentBookRequest _request;
         private EmisUserSession _userSession;
-
+        
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _userSession = _fixture.Create<EmisUserSession>();
+           
             
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
+            _userSession = new EmisUserSession()
+            {
+                UserPatientLinkToken = UserPatientLinkToken,
+                EndUserSessionId = EndUserSessionId,
+                SessionId = SessionId
+            };
             
-            _sut = new EmisAppointmentsService(_mockEmisClient.Object, loggerFactory);
+            _sut = new EmisAppointmentsService(_mockEmisClient.Object, new LoggerFactory());
             
             _request = new AppointmentBookRequest
             {
-                BookingReason = "I caught a cold!",
-                SlotId = "2862517",
+                BookingReason = BookingReason,
+                SlotId = SlotId,
             };
         }
 
@@ -46,15 +58,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Book_HappyPath_ReturnsSuccessfullyBookedResponse()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.AppointmentPost(It.IsAny<EmisHeaderParameters>(),
-                It.IsAny<BookAppointmentSlotPostRequest>())).Returns(
-                Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode.OK)
-                    {
-                        Body = new BookAppointmentSlotPostResponse(),
-                        ErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode.OK)
+            {
+                Body = new BookAppointmentSlotPostResponse(){ BookingCreated = true },
+                ErrorResponse = null,
+                ErrorResponseBadRequest = null
+            };
+
+            MockEmisClientAppointmentPostMethod(response);
             
             // Act            
             var result = await _sut.Book(_userSession, _request);
@@ -88,12 +99,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsPost_NotFound;
             
-            _mockEmisClient
-                .Setup(x => x.AppointmentPost(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<BookAppointmentSlotPostRequest>()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .InternalServerError) {ErrorResponse = errorResponse}))
-                .Verifiable();
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                .InternalServerError) {ErrorResponse = errorResponse};
+            
+            MockEmisClientAppointmentPostMethod(response);
             
             // Act            
             var result = await _sut.Book(_userSession, _request);
@@ -109,13 +118,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             // Arrange
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsPost_InThePast;
+
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                .InternalServerError) { ErrorResponse = errorResponse };
             
-            _mockEmisClient
-                .Setup(x => x.AppointmentPost(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<BookAppointmentSlotPostRequest>()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .InternalServerError) {ErrorResponse = errorResponse}))
-                .Verifiable();
+            MockEmisClientAppointmentPostMethod(response);
             
             // Act            
             var result = await _sut.Book(_userSession, _request);
@@ -127,13 +134,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         
         [TestMethod]
         public async Task Book_WhenAppointmentsHasBeenAlreadyBooked_ReturnsSlotNotAvailable()
-        {   
-            _mockEmisClient
-                .Setup(x => x.AppointmentPost(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<BookAppointmentSlotPostRequest>()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .Conflict)))
-                .Verifiable();
+        {
+            //Arrange
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                .Conflict);
+            
+            MockEmisClientAppointmentPostMethod(response);
             
             // Act            
             var result = await _sut.Book(_userSession, _request);
@@ -144,14 +150,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         }
         
         [TestMethod]
-        public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsSlotNotAvailable()
-        {   
-            _mockEmisClient
-                .Setup(x => x.AppointmentPost(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<BookAppointmentSlotPostRequest>()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                    .Forbidden)))
-                .Verifiable();
+        public async Task Book_WhenEmisReturnsForbidden_ReturnsSlotNotAvailable()
+        {
+            //Arrange
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                .Forbidden);
+            
+            MockEmisClientAppointmentPostMethod(response);
             
             // Act            
             var result = await _sut.Book(_userSession, _request);
@@ -159,6 +164,44 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+        }
+        
+        [TestMethod]
+        public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsSlotNotAvailable()
+        {
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser;
+            
+            //Arrange
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                .InternalServerError) { ErrorResponse = errorResponse };
+            
+            MockEmisClientAppointmentPostMethod(response);
+            
+            // Act            
+            var result = await _sut.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+        }
+
+        private void MockEmisClientAppointmentPostMethod(EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response)
+        {
+            _mockEmisClient.Setup(x => x.AppointmentPost(
+                    It.Is<EmisHeaderParameters>(p =>
+                        p.EndUserSessionId == EndUserSessionId && p.SessionId == SessionId),
+                    It.Is<BookAppointmentSlotPostRequest>(p =>
+                        p.BookingReason == BookingReason
+                        && p.SlotId == Convert.ToInt64(SlotId)
+                        && p.UserPatientLinkToken == UserPatientLinkToken
+                    )
+                )
+            ).Returns(
+                Task.FromResult(
+                    response
+                )
+            ).Verifiable();;    
         }
     }
 }

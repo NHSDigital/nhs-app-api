@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             var emisHeaders = new EmisHeaderParameters
             {
                 EndUserSessionId = emisUserSession.EndUserSessionId,
-                SessionId = emisUserSession.EndUserSessionId,
+                SessionId = emisUserSession.SessionId,
             };
 
             EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response;
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 return new AppointmentBookResult.SlotNotAvailable();
             }
 
-            if (HasPatientNecessaryPermissions(response))
+            if (!HasPatientNecessaryPermissions(response))
             {
                 return new AppointmentBookResult.InsufficientPermissions();
             }
@@ -91,7 +91,12 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         private bool HasPatientNecessaryPermissions(EmisClient.EmisApiResponse response)
         {
-            return response.StatusCode == HttpStatusCode.Forbidden;
+            var isDisaabled = response.HasExceptionContainsMessage(
+                EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser);
+            
+            var isForbidden = response.StatusCode == HttpStatusCode.Forbidden;
+
+            return !isDisaabled && !isForbidden;
         }
     }
 }
