@@ -7,3 +7,8 @@
 "ServiceUnavailableErrorMessage" = "Service unavailable";
 "OrganDonationUnavailableErrorMessage" = "Organ donation unavailable";
 "Nhs111UnavailableErrorMessage" = "NHS 111 unavailable";
+
+/*Accessibility*/
+"MyAccountHint" = "Navigates to my account page";
+"NHSAppHomeTitle" = "NHS App Home";
+"NHSAppHomeHint" = "Takes you to NHS App home page";
