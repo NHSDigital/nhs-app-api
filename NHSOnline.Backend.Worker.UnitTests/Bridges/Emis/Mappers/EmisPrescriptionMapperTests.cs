@@ -102,6 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
                 {
                     new PrescriptionItem
                     {
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry

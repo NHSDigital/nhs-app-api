@@ -18,6 +18,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis.Mappers
             {
                 Prescriptions = (prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>()).Select(x => new PrescriptionItem
                 {
+                    OrderDate = x.DateRequested,
                     Courses = (x.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>()).Select(c => new CourseEntry
                     {
                         CourseId = c.RequestedMedicationCourseGuid,
