@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Date;
@@ -16,14 +17,20 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILoggerFactory _loggerFactory;
+        private readonly IOptions<ConfigurationSettings> _settings;
 
-        public EmisSystemProvider(ILoggerFactory loggerFactory, IEmisClient emisClient,
-            IEmisPrescriptionMapper emisPrescriptionMapper, IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public EmisSystemProvider(
+            ILoggerFactory loggerFactory,
+            IEmisClient emisClient,
+            IEmisPrescriptionMapper emisPrescriptionMapper,
+            IDateTimeOffsetProvider dateTimeOffsetProvider,
+            IOptions<ConfigurationSettings> settings)
         {
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _loggerFactory = loggerFactory;
+            _settings = settings;
         }
 
         public SupplierEnum Supplier => SupplierEnum.Emis;
@@ -35,7 +42,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public ICourseService GetCourseService()
         {
-            return new EmisCourseService(_loggerFactory, _emisClient, _emisPrescriptionMapper);
+            return new EmisCourseService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()
@@ -45,7 +52,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public IPrescriptionService GetPrescriptionService()
         {
-            return new EmisPrescriptionService(_loggerFactory, _emisClient, _emisPrescriptionMapper);
+            return new EmisPrescriptionService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
         }
 
         public ISessionService GetSessionService()

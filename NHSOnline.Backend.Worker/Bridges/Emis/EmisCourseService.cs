@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
@@ -11,15 +12,17 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisCourseService : ICourseService
     {
+        private readonly ILogger _logger;
+        private readonly ConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
-        private readonly ILogger _logger;
 
-        public EmisCourseService(ILoggerFactory loggerFactory, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+        public EmisCourseService(ILoggerFactory loggerFactory, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
+            _logger = loggerFactory.CreateLogger<EmisCourseService>();
+            _settings = settings.Value;
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
-            _logger = loggerFactory.CreateLogger<EmisCourseService>();
         }
 
         public async Task<GetCoursesResult> Get(UserSession userSession)
@@ -37,7 +40,10 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 }
 
                 _logger.LogDebug("Filtering courses from emis so we are left with only repeat courses which can be requested");
-                coursesResponse.Body.Courses = coursesResponse.Body.Courses.Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested);
+                coursesResponse.Body.Courses = coursesResponse.Body.Courses
+                    .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
+                    .OrderBy(x => x.Name)
+                    .Take(_settings.CoursesMaxCoursesLimit.Value);
 
                 _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
                 var result = _emisPrescriptionMapper.Map(coursesResponse.Body);

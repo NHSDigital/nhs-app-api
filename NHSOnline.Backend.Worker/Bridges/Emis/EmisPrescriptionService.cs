@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
@@ -13,15 +14,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisPrescriptionService : IPrescriptionService
     {
-        public const int MaxCoursesSoftLimit = 100;
-
+        private readonly ILogger _logger;
+        private readonly ConfigurationSettings _settings;
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
-        private readonly ILogger _logger;
 
-        public EmisPrescriptionService(ILoggerFactory loggerFactory, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+        public EmisPrescriptionService(ILoggerFactory loggerFactory, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _emisClient = emisClient;
+            _settings = settings.Value;
             _emisPrescriptionMapper = emisPrescriptionMapper;
             _logger = loggerFactory.CreateLogger<EmisPrescriptionService>();
         }
@@ -64,7 +65,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
             foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x => x.DateRequested))
             {
-                if (totalCoursesRunningTotal >= MaxCoursesSoftLimit)
+                if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit.Value)
                 {
                     break;
                 }

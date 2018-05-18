@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
@@ -24,8 +25,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         private EmisPrescriptionService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
+        private IOptions<ConfigurationSettings> _options;
         private EmisUserSession _userSession;
         private IFixture _fixture;
+
+        private const int PrescriptionsMaxCoursesSoftLimit = 100;
 
         [TestInitialize]
         public void TestInitialize()
@@ -35,6 +39,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
             _userSession = _fixture.Freeze<EmisUserSession>();
+            _options = Options.Create(new ConfigurationSettings
+            {
+                PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
+            });
+            _fixture.Inject(_options);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
         }
 
@@ -268,9 +277,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         }
 
         [DataTestMethod]
-        [DataRow(101, 100)]
-        [DataRow(100, 100)]
-        [DataRow(99, 99)]
+        [DataRow(PrescriptionsMaxCoursesSoftLimit + 1, PrescriptionsMaxCoursesSoftLimit)]
+        [DataRow(PrescriptionsMaxCoursesSoftLimit, PrescriptionsMaxCoursesSoftLimit)]
+        [DataRow(PrescriptionsMaxCoursesSoftLimit - 1, PrescriptionsMaxCoursesSoftLimit - 1)]
         public async Task Get_PrescriptionsInResponseAreLimitedToMax_WhenSuccessfulResponseFromEmis(int numberOfCoursesToCreate, int expectedNumberOfPrescriptions)
         {
             // Arrange

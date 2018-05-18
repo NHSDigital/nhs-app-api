@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
@@ -24,8 +25,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         private EmisCourseService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
         private Mock<IEmisPrescriptionMapper> _emisPrescriptionMapper;
+        private IOptions<ConfigurationSettings> _options;
         private EmisUserSession _userSession;
         private IFixture _fixture;
+
+        private const int CoursesMaxCoursesLimit = 100;
 
         [TestInitialize]
         public void TestInitialize()
@@ -35,6 +39,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _userSession = _fixture.Freeze<EmisUserSession>();
             _emisPrescriptionMapper = _fixture.Freeze<Mock<IEmisPrescriptionMapper>>();
+            _options = Options.Create(new ConfigurationSettings
+            {
+                CoursesMaxCoursesLimit = CoursesMaxCoursesLimit
+            });
+            _fixture.Inject(_options);
             _systemUnderTest = _fixture.Create<EmisCourseService>();
         }
 
@@ -127,6 +136,134 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             capturedItemToMap.Courses.Should().HaveCount(1);
             capturedItemToMap.Courses.ElementAt(0).MedicationCourseGuid.Should().Be(expectedMedicationCourseGuid);
+        }
+
+        [DataTestMethod]
+        [DataRow(CoursesMaxCoursesLimit + 1, CoursesMaxCoursesLimit)]
+        [DataRow(CoursesMaxCoursesLimit, CoursesMaxCoursesLimit)]
+        [DataRow(CoursesMaxCoursesLimit - 1, CoursesMaxCoursesLimit - 1)]
+        public async Task Get_CoursesInResponseAreLimitedToMax_WhenSuccessfulResponseFromEmis(int numberOfCoursesToCreate, int expectedNumberOfCourses)
+        {
+            // Arrange
+            var medicationCourses = new List<MedicationCourse>();
+            
+            for (int i = 0; i < numberOfCoursesToCreate; i++)
+            {
+                medicationCourses.Add(
+                    new MedicationCourse
+                    {
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                    });
+            }
+
+
+            var coursesResponse = new CoursesGetResponse
+            {
+                Courses = medicationCourses,
+            };
+
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = coursesResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            var response = new CourseListResponse();
+            CoursesGetResponse capturedItemToMap = null;
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response).Callback<CoursesGetResponse>((x) =>
+            {
+                capturedItemToMap = x;
+            });
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession);
+
+            // Assert
+            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
+            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+
+            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved)result;
+            getCoursesResult.Response.Should().Be(response);
+            capturedItemToMap.Courses.Should().HaveCount(expectedNumberOfCourses);
+        }
+
+        [TestMethod]
+        public async Task Get_CoursesInResponseAreOrderedByName_WhenSuccessfulResponseFromEmis()
+        {
+            // Arrange
+            var coursesResponse = new CoursesGetResponse
+            {
+                Courses = new List<MedicationCourse>
+                {
+                    new MedicationCourse
+                    {
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "b"
+                    },
+                    new MedicationCourse
+                    {
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "d"
+                    },
+                    new MedicationCourse
+                    {
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "c"
+                    },
+                    new MedicationCourse
+                    {
+                        CanBeRequested = true,
+                        PrescriptionType = PrescriptionType.Repeat,
+                        MedicationCourseGuid = Guid.NewGuid().ToString(),
+                        Name = "a"
+                    },
+                }
+            };
+
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = coursesResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            var response = new CourseListResponse();
+            CoursesGetResponse capturedItemToMap = null;
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response).Callback<CoursesGetResponse>((x) =>
+            {
+                capturedItemToMap = x;
+            });
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession);
+
+            // Assert
+            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
+            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+
+            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved)result;
+            getCoursesResult.Response.Should().Be(response);
+
+            capturedItemToMap.Courses.Should().HaveCount(4);
+            capturedItemToMap.Courses.ElementAt(0).Name.Should().Be("a");
+            capturedItemToMap.Courses.ElementAt(1).Name.Should().Be("b");
+            capturedItemToMap.Courses.ElementAt(2).Name.Should().Be("c");
+            capturedItemToMap.Courses.ElementAt(3).Name.Should().Be("d");
         }
 
         [TestMethod]

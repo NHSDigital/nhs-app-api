@@ -161,6 +161,16 @@ namespace NHSOnline.Backend.Worker
             {
                 throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.PrescriptionsDefaultLastNumberMonthsToDisplay)));
             }
+
+            if (config.PrescriptionsMaxCoursesSoftLimit == null)
+            {
+                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.PrescriptionsMaxCoursesSoftLimit)));
+            }
+
+            if (config.CoursesMaxCoursesLimit == null)
+            {
+                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.CoursesMaxCoursesLimit)));
+            }
         }
     }
 }
