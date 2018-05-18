@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public async Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request)
         {
             var emisUserSession = (EmisUserSession) userSession;
-            var postRequest = new BookAppointmentSlotPostRequest()
+            var postRequest = new BookAppointmentSlotPostRequest
             {
                 UserPatientLinkToken = emisUserSession.UserPatientLinkToken,
                 BookingReason = request.BookingReason,
@@ -53,18 +53,18 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 return new AppointmentBookResult.SuccessfullyBooked();
             }
 
-            return GetCorrectErroResult(response);
+            return GetCorrectErrorResult(response);
         }
 
-        private AppointmentBookResult GetCorrectErroResult(
+        private static AppointmentBookResult GetCorrectErrorResult(
             EmisClient.EmisApiResponse response)
         {
-            if (IsNotAvaillableForBooking(response) || IsInThePast(response) || NotFound(response))
+            if (IsNotAvailableForBooking(response) || IsInThePast(response) || NotFound(response))
             {
                 return new AppointmentBookResult.SlotNotAvailable();
             }
 
-            if (!HasPatientNecessaryPermissions(response))
+            if (HasInsufficientPermissions(response))
             {
                 return new AppointmentBookResult.InsufficientPermissions();
             }
@@ -72,31 +72,32 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }
 
-        private bool IsNotAvaillableForBooking(EmisClient.EmisApiResponse response)
+        private static bool IsNotAvailableForBooking(EmisClient.EmisApiResponse response)
         {
-            return (response.StatusCode == HttpStatusCode.Conflict);
+            return response.StatusCode == HttpStatusCode.Conflict;
         }
         
-        private bool NotFound(EmisClient.EmisApiResponse response)
+        private static bool NotFound(EmisClient.EmisApiResponse response)
         {
             return response.HasExceptionWithMessage(
                 EmisApiErrorMessages.AppointmentsPost_NotFound);
         }
         
-        private bool IsInThePast(EmisClient.EmisApiResponse response)
+        private static bool IsInThePast(EmisClient.EmisApiResponse response)
         {
             return response.HasExceptionWithMessage(
                 EmisApiErrorMessages.AppointmentsPost_InThePast);
         }
 
-        private bool HasPatientNecessaryPermissions(EmisClient.EmisApiResponse response)
+        private static bool HasInsufficientPermissions(EmisClient.EmisApiResponse response)
         {
-            var isDisaabled = response.HasExceptionContainsMessage(
-                EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser);
-            
-            var isForbidden = response.StatusCode == HttpStatusCode.Forbidden;
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return true;
+            }
 
-            return !isDisaabled && !isForbidden;
+            return response.HasExceptionWithMessageContaining(
+                EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser);
         }
     }
 }

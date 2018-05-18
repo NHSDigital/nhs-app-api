@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!metaResponse.HasSuccessStatusCode)
                 {
-                    if (metaResponse.HasExceptionContainsMessage(EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser))
+                    if (metaResponse.HasExceptionWithMessageContaining(EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser))
                     {
                         return new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse());
                     }
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!slotResponse.HasSuccessStatusCode)
                 {
-                    if (slotResponse.HasExceptionContainsMessage(EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser))
+                    if (slotResponse.HasExceptionWithMessageContaining(EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser))
                     {
                         return new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse());
                     }
