@@ -2,24 +2,24 @@
 @import './colours';
 @import './textstyles';
 a.button {
-	text-decoration: none;
-	text-align: center;
+  text-decoration: none;
+  text-align: center;
 }
 
 button.button,
 a.button {
-	@include button;
-	box-sizing: border-box;
-	width: 100%;
-	padding: 10px;
-	background-color: $nhs_blue;
-	border: none;
-	border-radius: 4px;
-	//box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color];
-	box-shadow: 0px 4px 0px 0px $dark_blue;
-	margin-bottom: 20px;
-	outline: none;
-	transition: all ease 0.5s;
+  @include button;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px;
+  background-color: $nhs_blue;
+  border: none;
+  border-radius: 4px;
+  //box-shadow: [horizontal offset] [vertical offset] [blur radius] [optional spread radius] [color];
+  box-shadow: 0px 4px 0px 0px $dark_blue;
+  margin-bottom: 20px;
+  outline: none;
+  transition: all ease 0.5s;
 
 	&.green {
 		background-color: $light_green;
@@ -46,11 +46,12 @@ a.button {
 }
 
 .button-container {
-	@include float-buttons;
-	bottom: 68px;
+  @include float-buttons;
+  bottom: 68px;
 }
 
 .button-container-native {
-	@include float-buttons;
-	bottom: 0;
+  @include float-buttons;
+  bottom: 0;
+  white-space: nowrap;
 }

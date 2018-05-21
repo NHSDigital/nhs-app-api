@@ -1,20 +1,20 @@
 <template>
-    <header :class="$style.header">
-        <router-link to="/">
-            <home-icon/>
-        </router-link>
-        <router-link to="/account">
-          <account-icon/>
-        </router-link>
-        <hr :class="$style.rule">
-        <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
-    </header>
+  <header :class="$style.header">
+    <router-link to="/">
+      <home-icon/>
+    </router-link>
+    <router-link to="/account">
+      <account-icon/>
+    </router-link>
+    <hr :class="$style.rule">
+    <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
+  </header>
 </template>
 
 <script>
-
-import AccountIcon from '@/components/icons/AccountIcon';
-import HomeIcon from '@/components/icons/HomeIcon';
+/* eslint-disable import/extensions */
+import AccountIcon from '../components/icons/AccountIcon';
+import HomeIcon from '../components/icons/HomeIcon';
 
 export default {
   components: {
@@ -22,33 +22,32 @@ export default {
     HomeIcon,
   },
 };
-
 </script>
 
-<style module lang="scss">
-  @import "../style/colours";
-  @import "../style/textstyles";
+<style lang="scss" module>
+@import "../style/colours";
+@import "../style/textstyles";
 
-  .header {
-    background: $nhs_blue;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    height: 100px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
-  }
+.header {
+  background: $nhs_blue;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 100px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
 
-  .title {
-    @include screen_title;
-    text-align: center;
-  }
+.title {
+  @include screen_title;
+  text-align: center;
+}
 
-  .rule {
-    margin: 54px 16px 9px 16px;
-    height: 1px;
-    border: none;
-    background-color: $white;
-    opacity: 0.4;
-  }
+.rule {
+  margin: 54px 16px 9px 16px;
+  height: 1px;
+  border: none;
+  background-color: $white;
+  opacity: 0.4;
+}
 </style>

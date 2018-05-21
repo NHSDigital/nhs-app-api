@@ -1,7 +1,6 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 114 112">
-    <defs>
-    </defs>
+    <defs/>
     <title>{{ $t('icons.appointmentsIcon.title') }}</title>
     <rect class="menu_stroke active" x="15.5" y="46" width="19" height="19" />
     <rect class="menu_stroke active" x="47.5" y="46" width="19" height="19" />
@@ -18,14 +17,13 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../../style/icons";
-  @import "../../style/colours";
-  .active {
-    svg {
-      .active {
-        fill: $nhs_blue;
-      }
+@import "../../style/icons";
+@import "../../style/colours";
+.active {
+  svg {
+    .active {
+      fill: $nhs_blue;
     }
   }
-
+}
 </style>

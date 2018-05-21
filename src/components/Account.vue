@@ -1,9 +1,9 @@
 <template>
   <div id="mainDiv">
     <main class="content">
-    <button class="button grey" id="signout-button" v-on:click="signoutClicked()">
-      {{ $t('signOutButton.signOut') }}
-    </button>
+      <button id="signout-button" class="button grey" @click="signoutClicked()">
+        {{ $t('signOutButton.signOut') }}
+      </button>
     </main>
   </div>
 </template>

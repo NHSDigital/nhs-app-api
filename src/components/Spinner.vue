@@ -1,6 +1,6 @@
 <template>
   <div v-show="isVisible">
-    <img id="loading-spinner" src="/static/images/spinner.gif" alt="loading" />
+    <img id="loading-spinner" src="~/assets/spinnerImg.gif" alt="loading" >
   </div>
 </template>
 

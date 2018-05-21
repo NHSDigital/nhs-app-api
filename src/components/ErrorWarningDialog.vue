@@ -1,6 +1,6 @@
 <template>
   <div>
-    <error-warning-icon :iconType="errorOrWarning"/>
+    <error-warning-icon :icon-type="errorOrWarning"/>
     <div :class="[msgClass, errorOrWarning]">
       <slot/>
     </div>
@@ -8,17 +8,18 @@
 </template>
 
 <script>
+/* eslint-disable import/extensions */
 import ErrorWarningIcon from '@/components/icons/ErrorWarningIcon';
 
 export default {
+  components: {
+    ErrorWarningIcon,
+  },
   props: {
     errorOrWarning: {
       default: 'error',
       type: String,
     },
-  },
-  components: {
-    ErrorWarningIcon,
   },
   data() {
     return {
@@ -29,6 +30,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import '../style/messages';
-
+@import "../style/messages";
 </style>

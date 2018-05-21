@@ -26,12 +26,12 @@
 </template>
 
 <script>
+/* eslint-disable import/extensions */
 import SymptomsIcon from '@/components/icons/SymptomsIcon';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import PrescriptionsIcon from '@/components/icons/PrescriptionsIcon';
 import RecordIcon from '@/components/icons/MyRecordIcon';
 import MoreIcon from '@/components/icons/MoreIcon';
-import store from '@/store';
 
 export default {
   components: {
@@ -40,11 +40,10 @@ export default {
     PrescriptionsIcon,
     RecordIcon,
     MoreIcon,
-    store,
   },
   data() {
     return {
-      symptomsCheckerUrl: this.$config.SYMPTOM_CHECKER_URL,
+      symptomsCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
     };
   },
   methods: {
@@ -77,7 +76,7 @@ export default {
 
     handleMenuSelection(menuItem) {
       if (menuItem) {
-        store.dispatch('navigation/setNewMenuItem', menuItem);
+        this.$store.dispatch('navigation/setNewMenuItem', menuItem);
       }
     },
   },
@@ -85,6 +84,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "../style/menu";
-
+@import "../style/menu";
 </style>

@@ -11,7 +11,8 @@ export default {
       dialogHeader: 'Connection error.',
       dialogText: 'Please check your internet connection and try again.',
       retryText: 'Try again',
-      info: 'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
+      info:
+        'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
     bookAppointmentButtonText: 'Book this appointment',
     confirmation: {
@@ -24,13 +25,16 @@ export default {
     orderRepeatPrescriptionButton: 'Order a repeat prescription',
     noPrescriptionsAvailable: {
       title: 'Looks like you have no repeat prescriptions ordered here.',
-      contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
-      orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
+      contactGp:
+        'If you think you have a pending repeat prescription, please contact your GP.',
+      orderRepeatPrescription:
+        'Otherwise you can order a new repeat prescription now.',
     },
     backToYourPrescriptionsButton: 'Back to my prescriptions',
     noRepeatPrescriptionsYouCanOrder: {
-      title: 'You don\'t have any medications available to order right now.',
-      contactGp: 'If you have medications available on repeat prescription that aren\'t showing here, contact your GP surgery for more information.',
+      title: "You don't have any medications available to order right now.",
+      contactGp:
+        "If you have medications available on repeat prescription that aren't showing here, contact your GP surgery for more information.",
     },
     myRepeatPrescriptionLabels: {
       orderDate: 'Order date',
@@ -44,7 +48,8 @@ export default {
   },
   homeLoggedIn: {
     welcome: 'Welcome',
-    description: 'Get medical advice, book GP appointments and order repeat prescriptions any time.',
+    description:
+      'Get medical advice, book GP appointments and order repeat prescriptions any time.',
   },
   loginButton: {
     login: 'Sign in with your NHS account',

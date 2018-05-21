@@ -1,0 +1,116 @@
+<template>
+  <div id="mainDiv">
+    <spinner />
+    <main :class="$style.main">
+      <div :class="$style['above-float-button']">
+        <div v-if="showNoPrescriptions" class="info">
+          <p>
+            <b>{{ $t('prescriptions.noPrescriptionsAvailable.title') }}</b>
+          </p>
+          <p>
+            {{ $t('prescriptions.noPrescriptionsAvailable.contactGp') }}
+          </p>
+          <p>
+            {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
+          </p>
+        </div>
+        <ul v-if="showPrescriptions">
+          <li
+            v-for="prescriptionCourse in prescriptionCoursesToDisplay"
+            :key="prescriptionCourse.courseId"
+            :class="$style['prescription-course']">
+            <div :class="$style.container">
+              <div>
+                <b>{{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}</b>
+                : {{ prescriptionCourse.orderDate | shortDate }}
+              </div>
+              <hr>
+              <b>{{ prescriptionCourse.name }}</b>
+              <div>{{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <floating-button-bottom @on-click="onRepeatPrescriptionButtonClicked">
+        {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
+      </floating-button-bottom>
+    </main>
+  </div>
+</template>
+
+<script>
+/* eslint-disable import/extensions */
+import Spinner from '@/components/Spinner';
+import FloatingButtonBottom from '@/components/FloatingButtonBottom';
+
+export default {
+  components: {
+    Spinner,
+    FloatingButtonBottom,
+  },
+  computed: {
+    showNoPrescriptions() {
+      return (
+        this.$store.state.prescriptions.hasLoaded &&
+        this.$store.state.prescriptions.prescriptionCourses.length === 0
+      );
+    },
+    showPrescriptions() {
+      return (
+        this.$store.state.prescriptions.hasLoaded &&
+        this.$store.state.prescriptions.prescriptionCourses.length > 0
+      );
+    },
+    prescriptionCoursesToDisplay() {
+      return this.$store.state.prescriptions.prescriptionCourses;
+    },
+  },
+  mounted() {
+    this.$store.dispatch('prescriptions/clear');
+    this.$store.dispatch('prescriptions/load', this.$config);
+  },
+  methods: {
+    onRepeatPrescriptionButtonClicked() {
+      this.$router.push('repeat-prescription-courses');
+    },
+  },
+};
+</script>
+
+<style module lang="scss">
+@import "../style/html";
+@import "../style/elements";
+@import "../style/buttons";
+@import "../style/fonts";
+@import "../style/spacings";
+
+.main {
+  @include space(padding, all, $three);
+}
+
+.prescription-course {
+  list-style: none;
+  @include space(margin, bottom, $three);
+}
+
+.container {
+  border: solid 1px $mid_grey;
+  border-radius: 5px;
+  background: $white;
+  @include space(padding, all, $three);
+  transition: all ease 0.5s;
+  hr {
+    height: 1px;
+    border: none;
+    background-color: $dark_grey;
+    opacity: 0.2;
+    @include space(margin, top, $two);
+    @include space(margin, bottom, $two);
+  }
+}
+
+.above-float-button {
+  margin-bottom: $marginBottomFullScreen;
+}
+</style>

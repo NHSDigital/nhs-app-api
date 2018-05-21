@@ -1,7 +1,6 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="30" viewBox="0 0 94.96 112.5">
-    <defs>
-    </defs>
+    <defs/>
     <title>{{ $t('icons.myRecordIcon.title') }}</title>
     <rect class="menu_stroke active" x="2" y="2" width="86.3" height="107.81" />
     <polyline class="menu_stroke" points="88.3 78.34 102 78.34 102 2 88.3 2" />
@@ -16,17 +15,16 @@
 </template>
 
 <style lang="scss" scoped>
-  @import "../../style/icons";
-  @import "../../style/colours";
-  .active {
-    svg {
-      .active {
-        fill: $nhs_blue;
-      }
-      .white {
-        stroke: $white;
-      }
+@import "../../style/icons";
+@import "../../style/colours";
+.active {
+  svg {
+    .active {
+      fill: $nhs_blue;
+    }
+    .white {
+      stroke: $white;
     }
   }
-
+}
 </style>

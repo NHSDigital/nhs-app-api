@@ -7,8 +7,8 @@
   </div>
 </template>
 
-<script>
 
+<script>
 export default {
   props: {
     clickable: {
@@ -44,10 +44,9 @@ export default {
     }
   },
 };
-
 </script>
 <style lang="scss" scoped>
-  @import '../style/buttons';
+@import "../style/buttons";
 
   button.button,
   a.button {

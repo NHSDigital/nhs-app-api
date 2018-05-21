@@ -1,21 +1,22 @@
 <template>
-  <button data-id="login-button" class="button green" v-on:click="loginClicked()">
+  <button data-id="login-button" class="button green" @click="loginClicked()">
     {{ $t('loginButton.login') }}
   </button>
 </template>
 
 <script>
-
-function loginClicked() {
-  this.$store.dispatch('auth/login', this.$config);
-}
-
 export default {
   methods: {
-    loginClicked,
+    async loginClicked() {
+      this.$store.dispatch('auth/login', process.env);
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
-  @import '../style/buttons';
+@import "../style/colours";
+@import "../style/textstyles";
+@import "../style/fonts";
+@import "../style/buttons";
+@import "../style/icons";
 </style>

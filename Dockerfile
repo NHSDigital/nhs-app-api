@@ -8,6 +8,7 @@ ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
 
 COPY package.json .
 COPY package-lock.json .
+COPY nuxt.config.js .
 
 # Deps
 FROM base AS dependencies
@@ -24,16 +25,16 @@ COPY . .
 # Build
 FROM dependencies as build
 COPY . .
-RUN npm run build
 
 # Final image
 FROM base AS release
 COPY --from=build /opt/app/prod_node_modules ./node_modules
-COPY --from=build /opt/app/dist ./dist
-COPY --from=build /opt/app/config ./config
-COPY --from=build /opt/app/server.js .
+COPY --from=build /opt/app/build ./build
+COPY --from=build /opt/app/contracts ./contracts
+COPY --from=build /opt/app/src ./src
+COPY --from=build /opt/app/src/pages ./pages
 COPY --from=build /opt/app/app_links ./app_links
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs
 EXPOSE 3000
-CMD npm run serve
+CMD npm run dev
