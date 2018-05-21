@@ -15,5 +15,10 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+        
+        public IActionResult Visit(GetPrescriptionsResult.SupplierBadData result)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 }

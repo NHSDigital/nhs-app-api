@@ -38,13 +38,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!prescriptionsResponse.HasSuccessStatusCode)
                 {
-                    _logger.LogError($"Unsuccessful request retrieving prescriptions for {nameof(fromDate)}={fromDate:O}, {nameof(toDate)}={toDate:O}. Status code: {(int)prescriptionsResponse.StatusCode}");
+                    _logger.LogError(
+                        $"Unsuccessful request retrieving prescriptions for {nameof(fromDate)}={fromDate:O}, {nameof(toDate)}={toDate:O}. Status code: {(int) prescriptionsResponse.StatusCode}");
                     return new GetPrescriptionsResult.Unsuccessful();
                 }
 
                 var prescriptionListResponseFiltered = GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
 
-                _logger.LogDebug($"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
+                _logger.LogDebug(
+                    $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
                 var result = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
 
                 return new GetPrescriptionsResult.SuccessfullyRetrieved(result);
@@ -53,6 +55,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             {
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
                 return new GetPrescriptionsResult.Unsuccessful();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Prescription retrieval return null body");
+                return new GetPrescriptionsResult.SupplierBadData();
             }
         }
 

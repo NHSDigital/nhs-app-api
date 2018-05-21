@@ -305,5 +305,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             result.Should().BeAssignableTo<GetCoursesResult.Unsuccessful>();
             _emisClient.Verify();
         }
+        
+        [TestMethod]
+        public async Task Get_ReturnsBadRequest_WhenNullReferenceExceptionOccursCallingEmis()
+        {
+            // Arrange
+            const string alreadyLinkedErrorMessage = "Error occurred";
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
+
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+                .Throws<NullReferenceException>()
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<GetCoursesResult.SupplierBadData>();
+            _emisClient.Verify();
+        }
     }
 }

@@ -28,5 +28,13 @@ namespace NHSOnline.Backend.Worker.Router.Prescriptions
                 return visitor.Visit(this);
             }
         }
+        
+        public class SupplierBadData : GetCoursesResult
+        {
+            public override T Accept<T>(ICourseResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

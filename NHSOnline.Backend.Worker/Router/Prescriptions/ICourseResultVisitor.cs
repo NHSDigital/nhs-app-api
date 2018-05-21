@@ -4,5 +4,6 @@
     {
         T Visit(GetCoursesResult.SuccessfullyRetrieved result);
         T Visit(GetCoursesResult.Unsuccessful result);
+        T Visit(GetCoursesResult.SupplierBadData result);
     }
 }

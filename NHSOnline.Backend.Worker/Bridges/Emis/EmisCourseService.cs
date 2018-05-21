@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -54,6 +55,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
                 return new GetCoursesResult.Unsuccessful();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Prescription retrieval return null body");
+                return new GetCoursesResult.SupplierBadData();
             }
         }
     }
