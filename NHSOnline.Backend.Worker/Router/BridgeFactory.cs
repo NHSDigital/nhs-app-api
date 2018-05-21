@@ -4,21 +4,21 @@ using NHSOnline.Backend.Worker.Bridges.Emis;
 
 namespace NHSOnline.Backend.Worker.Router
 {
-    public class SystemProviderFactory : ISystemProviderFactory
+    public class BridgeFactory : IBridgeFactory
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public SystemProviderFactory(IServiceProvider serviceProvider)
+        public BridgeFactory(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public ISystemProvider CreateSystemProvider(SupplierEnum supplier)
+        public IBridge CreateBridge(SupplierEnum supplier)
         {
             switch (supplier)
             {
                 case SupplierEnum.Emis:
-                    return _serviceProvider.GetService<EmisSystemProvider>();
+                    return _serviceProvider.GetService<EmisBridge>();
                 default:
                     throw new UnknownSupplierException();
             }

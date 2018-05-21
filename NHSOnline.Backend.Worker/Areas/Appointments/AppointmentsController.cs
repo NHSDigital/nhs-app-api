@@ -10,14 +10,14 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
     [Route("patient/appointments")]
     public class AppointmentsController : Controller
     {
-        private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly IBridgeFactory _bridgeFactory;
 
         public AppointmentsController(
             ILoggerFactory loggerFactory,
-            ISystemProviderFactory systemProviderFactory
+            IBridgeFactory bridgeFactory
             )
         {
-            _systemProviderFactory = systemProviderFactory;
+            _bridgeFactory = bridgeFactory;
         }
 
         [HttpPost, TimeoutExceptionFilter]
@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             var userSession = HttpContext.GetUserSession();
 
-            var appointmentsService = _systemProviderFactory
-                .CreateSystemProvider(userSession.Supplier)
+            var appointmentsService = _bridgeFactory
+                .CreateBridge(userSession.Supplier)
                 .GetAppointmentsService();
 
             var bookResult = await appointmentsService.Book(userSession, model);

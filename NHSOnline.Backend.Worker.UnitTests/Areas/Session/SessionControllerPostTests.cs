@@ -25,12 +25,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private SessionController _systemUnderTest;
         private IFixture _fixture;
         private Mock<ICitizenIdService> _mockCitizenIdService;
-        private Mock<ISystemProvider> _mockSystemProvider;
+        private Mock<IBridge> _mockBridge;
         private Mock<IOdsCodeLookup> _mockOdsCodeLookup;
         private Mock<ISessionCacheService> _mockSessionCacheService;
         private Mock<ISessionService> _mockSessionService;
         private Mock<ITokenValidationService> _mockTokenValidationService;
-        private Mock<ISystemProviderFactory> _mockSystemProviderFactory;
+        private Mock<IBridgeFactory> _mockBridgeFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
 
         private UserSessionRequest _userSessionRequest;
@@ -78,19 +78,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Setup(x => x.IsValidConnectionTokenFormat(_userProfile.Im1ConnectionToken))
                 .Returns(true);
 
-            _mockSystemProvider = _fixture.Freeze<Mock<ISystemProvider>>();
-            _mockSystemProvider
+            _mockBridge = _fixture.Freeze<Mock<IBridge>>();
+            _mockBridge
                 .Setup(x => x.GetTokenValidationService())
                 .Returns(_mockTokenValidationService.Object);
 
-            _mockSystemProvider
+            _mockBridge
                 .Setup(x => x.GetSessionService())
                 .Returns(_mockSessionService.Object);
 
-            _mockSystemProviderFactory = _fixture.Freeze<Mock<ISystemProviderFactory>>();
-            _mockSystemProviderFactory
-                .Setup(x => x.CreateSystemProvider(SupplierEnum.Emis))
-                .Returns(_mockSystemProvider.Object);
+            _mockBridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
+            _mockBridgeFactory
+                .Setup(x => x.CreateBridge(SupplierEnum.Emis))
+                .Returns(_mockBridge.Object);
 
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockSessionCacheService
@@ -246,8 +246,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             // Assert
             _mockCitizenIdService.VerifyAll();
-            _mockSystemProvider.VerifyAll();
-            _mockSystemProviderFactory.VerifyAll();
+            _mockBridge.VerifyAll();
+            _mockBridgeFactory.VerifyAll();
             _mockSessionCacheService.VerifyAll();
             _mockOdsCodeLookup.VerifyAll();
             _mockSessionService.VerifyAll();

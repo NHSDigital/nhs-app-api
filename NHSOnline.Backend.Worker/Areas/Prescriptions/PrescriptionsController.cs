@@ -13,19 +13,19 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     public class PrescriptionsController : Controller
     {
         private readonly ConfigurationSettings _settings;
-        private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly IBridgeFactory _bridgeFactory;
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly IPrescriptionRequestValidationService _prescriptionRequestValidationService;
 
         public PrescriptionsController(
             IOptions<ConfigurationSettings> settings,
             ILoggerFactory loggerFactory,
-            ISystemProviderFactory systemProviderFactory,
+            IBridgeFactory bridgeFactory,
             IPrescriptionRequestValidationService prescriptionRequestValidationService)
         {
             _settings = settings.Value;
             _logger = loggerFactory.CreateLogger<PrescriptionsController>();
-            _systemProviderFactory = systemProviderFactory;
+            _bridgeFactory = bridgeFactory;
             _prescriptionRequestValidationService = prescriptionRequestValidationService;
         }
         
@@ -42,8 +42,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             UserSession userSession = HttpContext.GetUserSession();
             
-            var prescriptionService = _systemProviderFactory
-                .CreateSystemProvider(userSession.Supplier)
+            var prescriptionService = _bridgeFactory
+                .CreateBridge(userSession.Supplier)
                 .GetPrescriptionService();
 
             var result = await prescriptionService.Get(userSession, fromDate, DateTimeOffset.Now);

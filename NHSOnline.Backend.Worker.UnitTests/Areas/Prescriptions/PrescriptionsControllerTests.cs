@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         private PrescriptionsController _systemUnderTest;
         private IFixture _fixture;
         private IOptions<ConfigurationSettings> _options;
-        private Mock<ISystemProviderFactory> _systemProviderFactory;
+        private Mock<IBridgeFactory> _mockBridgeFactory;
         private Mock<IPrescriptionRequestValidationService> _prescriptionRequestValidationService;
         private UserSession _userSession;
 
@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             });
 
             _fixture.Inject(_options);
-            _systemProviderFactory = _fixture.Freeze<Mock<ISystemProviderFactory>>();
+            _mockBridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
             _prescriptionRequestValidationService = _fixture.Freeze<Mock<IPrescriptionRequestValidationService>>();
             _userSession = _fixture.Create<UserSession>();
             var httpContextItems = new Dictionary<object, object>
@@ -67,7 +67,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             var date = DateTime.Now;
-            var systemProvider = new Mock<ISystemProvider>();
+            var mockBridge = new Mock<IBridge>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
@@ -75,10 +75,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var getPrescriptionsResult = new GetPrescriptionsResult.SuccessfullyRetrieved(prescriptionRequestsGetResponse);
 
             // Arrange
-            _systemProviderFactory.Setup(x => x.CreateSystemProvider(_userSession.Supplier))
-                .Returns(systemProvider.Object);
+            _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
+                .Returns(mockBridge.Object);
 
-            systemProvider.Setup(x => x.GetPrescriptionService())
+            mockBridge.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
             prescriptionService.Setup(x => x.Get(_userSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((GetPrescriptionsResult)getPrescriptionsResult));
@@ -91,8 +91,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Get(date);
 
             // Assert
-            _systemProviderFactory.Verify(x => x.CreateSystemProvider(_userSession.Supplier));
-            systemProvider.Verify(x => x.GetPrescriptionService());
+            _mockBridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
+            mockBridge.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.Get(_userSession, date, It.IsAny<DateTimeOffset>()));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         [TestMethod]
         public async Task Get_CallsServiceWithDateXMonthsAgoFromConfig_WhenFromDateNotValid()
         {
-            var emisSystemProvider = new Mock<ISystemProvider>();
+            var mockEmisBridge = new Mock<IBridge>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
@@ -111,10 +111,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var getPrescriptionsResult = new GetPrescriptionsResult.SuccessfullyRetrieved(prescriptionRequestsGetResponse);
 
             // Arrange
-            _systemProviderFactory.Setup(x => x.CreateSystemProvider(_userSession.Supplier))
-                .Returns(emisSystemProvider.Object);
+            _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
+                .Returns(mockEmisBridge.Object);
 
-            emisSystemProvider.Setup(x => x.GetPrescriptionService())
+            mockEmisBridge.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
             DateTimeOffset? fromDateGenerated = null;
@@ -130,8 +130,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Get(null);
 
             // Assert
-            _systemProviderFactory.Verify(x => x.CreateSystemProvider(_userSession.Supplier));
-            emisSystemProvider.Verify(x => x.GetPrescriptionService());
+            _mockBridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
+            mockEmisBridge.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.Get(_userSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);

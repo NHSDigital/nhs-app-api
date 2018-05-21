@@ -15,17 +15,17 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
     public class Im1ConnectionController : Controller
     {
         private readonly IOdsCodeLookup _odsCodeLookup;
-        private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly IBridgeFactory _bridgeFactory;
         private readonly ILogger<Im1ConnectionController> _logger;
 
         public Im1ConnectionController(
             IOdsCodeLookup odsCodeLookup, 
-            ISystemProviderFactory systemProviderFactory,
+            IBridgeFactory bridgeFactory,
             ILoggerFactory loggerFactory)
         {
             _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
-            _systemProviderFactory =
-                systemProviderFactory ?? throw new ArgumentNullException(nameof(systemProviderFactory));
+            _bridgeFactory =
+                bridgeFactory ?? throw new ArgumentNullException(nameof(bridgeFactory));
             _logger = loggerFactory.CreateLogger<Im1ConnectionController>();
         }
 
@@ -41,19 +41,19 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return BadRequest();
             }
 
-            var systemProviderOption = await GetSystemProvider(odsCode);
-            if (!systemProviderOption.HasValue)
+            var bridgeOption = await GetBridge(odsCode);
+            if (!bridgeOption.HasValue)
             {
                 _logger.LogDebug(
-                    $"No system provider was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
+                    $"No bridge was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
 
-                // If no system provider is returned it is because the supplier could not be determined from the ODS
+                // If no bridge is returned it is because the supplier could not be determined from the ODS
                 // code.  This, in turn, is because the ODS code is not found so a "Not Found" response is returned.
                 return NotFound();
             }
 
-            var systemProvider = systemProviderOption.ValueOrFailure();
-            var tokenValidationService = systemProvider.GetTokenValidationService();
+            var bridge = bridgeOption.ValueOrFailure();
+            var tokenValidationService = bridge.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
             {
                 _logger.LogError(
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return BadRequest();
             }
 
-            var im1ConnectionService = systemProvider.GetIm1ConnectionService();
+            var im1ConnectionService = bridge.GetIm1ConnectionService();
             var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
 
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
@@ -70,30 +70,30 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
-            var systemProviderOption = await GetSystemProvider(model.OdsCode);
-            if (!systemProviderOption.HasValue)
+            var bridgeOption = await GetBridge(model.OdsCode);
+            if (!bridgeOption.HasValue)
             {
                 _logger.LogDebug(
-                    $"No system provider was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
+                    $"No bridge was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
                 return NotFound();
             }
 
-            var systemProvider = systemProviderOption.ValueOrFailure();
-            var im1ConnectionService = systemProvider.GetIm1ConnectionService();
+            var bridge = bridgeOption.ValueOrFailure();
+            var im1ConnectionService = bridge.GetIm1ConnectionService();
             var registerResult = await im1ConnectionService.Register(model);
 
             return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
         }
 
-        private async Task<Option<ISystemProvider>> GetSystemProvider(string odsCode)
+        private async Task<Option<IBridge>> GetBridge(string odsCode)
         {
             var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
             if (!supplier.HasValue)
             {
-                return Option.None<ISystemProvider>();
+                return Option.None<IBridge>();
             }
 
-            return Option.Some(_systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure()));
+            return Option.Some(_bridgeFactory.CreateBridge(supplier.ValueOrFailure()));
         }
         
         private bool ArgumentsAreValid(string connectionToken, string odsCode)

@@ -20,20 +20,20 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     public class SessionController : Controller
     {
         private readonly ICitizenIdService _citizenIdService;
-        private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly IBridgeFactory _bridgeFactory;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly ILogger<SessionController> _logger;
 
         public SessionController(
             ICitizenIdService citizenIdService,
-            ISystemProviderFactory systemProviderFactory,
+            IBridgeFactory bridgeFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
             ILoggerFactory loggerFactory)
         {
             _citizenIdService = citizenIdService;
-            _systemProviderFactory = systemProviderFactory;
+            _bridgeFactory = bridgeFactory;
             _sessionCacheService = sessionCacheService;
             _odsCodeLookup = odsCodeLookup;
             _logger = loggerFactory.CreateLogger<SessionController>();
@@ -54,24 +54,24 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
             var cidUserProfile = cidUserProfileOption.ValueOrFailure();
 
-            // Get an suitable GP system Provider, based on the ODS code.
-            var systemProviderOption = await GetSystemProvider(cidUserProfile.OdsCode);
-            if (!systemProviderOption.HasValue)
+            // Get an suitable GP bridge, based on the ODS code.
+            var bridgeOption = await GetBridge(cidUserProfile.OdsCode);
+            if (!bridgeOption.HasValue)
             {
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
-            var systemProvider = systemProviderOption.ValueOrFailure();
+            var bridge = bridgeOption.ValueOrFailure();
 
             // Validate the format of the IM1 connection token for this GP system.
-            var tokenValidationService = systemProvider.GetTokenValidationService();
+            var tokenValidationService = bridge.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
             {
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
             // Create a session with the GP system, using the IM1 connection token.
-            var sessionService = systemProvider.GetSessionService();
+            var sessionService = bridge.GetSessionService();
             var sessionCreateResult =
                 await sessionService.Create(cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode);
 
@@ -126,16 +126,16 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
-        private async Task<Option<ISystemProvider>> GetSystemProvider(string odsCode)
+        private async Task<Option<IBridge>> GetBridge(string odsCode)
         {
             var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
             if (!supplier.HasValue)
             {
-                _logger.LogError($"Cannot find system provider for ODS code: {odsCode}");
-                return Option.None<ISystemProvider>();
+                _logger.LogError($"Cannot find bridge for ODS code: {odsCode}");
+                return Option.None<IBridge>();
             }
 
-            return Option.Some(_systemProviderFactory.CreateSystemProvider(supplier.ValueOrFailure()));
+            return Option.Some(_bridgeFactory.CreateBridge(supplier.ValueOrFailure()));
         }
 
         private async Task AppendCookieToResponse(string sessionId)

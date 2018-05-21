@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
     {
         private CoursesController _systemUnderTest;
         private IFixture _fixture;
-        private Mock<ISystemProviderFactory> _systemProviderFactory;
+        private Mock<IBridgeFactory> _mockBridgeFactory;
         private UserSession _userSession;
 
         [TestInitialize]
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
             
-            _systemProviderFactory = _fixture.Freeze<Mock<ISystemProviderFactory>>();
+            _mockBridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
             _userSession = _fixture.Create<UserSession>();
             var httpContextItems = new Dictionary<object, object>
             {
@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
-            var systemProvider = new Mock<ISystemProvider>();
+            var mockBridge = new Mock<IBridge>();
             var courseService = new Mock<ICourseService>();
 
             var coursesGetResponse = new CourseListResponse();
@@ -58,10 +58,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var getCoursesResult = new GetCoursesResult.SuccessfullyRetrieved(coursesGetResponse);
 
             // Arrange
-            _systemProviderFactory.Setup(x => x.CreateSystemProvider(_userSession.Supplier))
-                .Returns(systemProvider.Object);
+            _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
+                .Returns(mockBridge.Object);
 
-            systemProvider.Setup(x => x.GetCourseService())
+            mockBridge.Setup(x => x.GetCourseService())
                 .Returns(courseService.Object);
 
             courseService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
@@ -70,8 +70,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Get();
 
             // Assert
-            _systemProviderFactory.Verify(x => x.CreateSystemProvider(_userSession.Supplier));
-            systemProvider.Verify(x => x.GetCourseService());
+            _mockBridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
+            mockBridge.Verify(x => x.GetCourseService());
             courseService.Verify(x => x.Get(_userSession));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);

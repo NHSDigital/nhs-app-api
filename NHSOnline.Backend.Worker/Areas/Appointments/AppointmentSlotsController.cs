@@ -12,17 +12,17 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
     [Route("patient/appointment-slots")]
     public class AppointmentSlotsController : Controller
     {
-        private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly IBridgeFactory _bridgeFactory;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsController> _logger;
         
         public AppointmentSlotsController(
-            ISystemProviderFactory systemProviderFactory,
+            IBridgeFactory bridgeFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             ILoggerFactory loggerFactory
             )
         {
-            _systemProviderFactory = systemProviderFactory;
+            _bridgeFactory = bridgeFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = loggerFactory.CreateLogger<AppointmentSlotsController>();
         }
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             
             var userSession = HttpContext.GetUserSession();
-            var appointmentService = _systemProviderFactory.CreateSystemProvider(userSession.Supplier).GetAppointmentSlotsService();
+            var appointmentService = _bridgeFactory.CreateBridge(userSession.Supplier).GetAppointmentSlotsService();
             
             var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider, queryParameters.FromDate, queryParameters.ToDate);
             var result = await appointmentService.Get(userSession, dateRange.FromDate, dateRange.ToDate);

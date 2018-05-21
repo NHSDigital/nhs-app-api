@@ -9,15 +9,15 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     [Route("patient/courses")]
     public class CoursesController : Controller
     {
-        private readonly ISystemProviderFactory _systemProviderFactory;
+        private readonly IBridgeFactory _bridgeFactory;
         private readonly ILogger<CoursesController> _logger;
 
         public CoursesController(
             ILoggerFactory loggerFactory,
-            ISystemProviderFactory systemProviderFactory)
+            IBridgeFactory bridgeFactory)
         {
             _logger = loggerFactory.CreateLogger<CoursesController>();
-            _systemProviderFactory = systemProviderFactory;
+            _bridgeFactory = bridgeFactory;
         }
 
         [HttpGet, TimeoutExceptionFilter]
@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             UserSession userSession = HttpContext.GetUserSession();
 
-            var courseService = _systemProviderFactory
-                .CreateSystemProvider(userSession.Supplier)
+            var courseService = _bridgeFactory
+                .CreateBridge(userSession.Supplier)
                 .GetCourseService();
 
             var result = await courseService.Get(userSession);

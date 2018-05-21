@@ -19,8 +19,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
     {
         private AppointmentsController _systemUnderTest;
         private IFixture _fixture;
-        private Mock<ISystemProvider> _mockSystemProvider;
-        private Mock<ISystemProviderFactory> _mockSystemProviderFactory;
+        private Mock<IBridge> _mockBridge;
+        private Mock<IBridgeFactory> _mockBridgeFactory;
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private AppointmentBookRequest _appointmentBookRequest;
         private EmisUserSession _userSession;
@@ -42,15 +42,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) result));
 
-            _mockSystemProvider = _fixture.Freeze<Mock<ISystemProvider>>();
-            _mockSystemProvider
+            _mockBridge = _fixture.Freeze<Mock<IBridge>>();
+            _mockBridge
                 .Setup(x => x.GetAppointmentsService())
                 .Returns(_mockAppointmentsService.Object);
 
-            _mockSystemProviderFactory = _fixture.Freeze<Mock<ISystemProviderFactory>>();
-            _mockSystemProviderFactory
-                .Setup(x => x.CreateSystemProvider(SupplierEnum.Emis))
-                .Returns(_mockSystemProvider.Object);
+            _mockBridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
+            _mockBridgeFactory
+                .Setup(x => x.CreateBridge(SupplierEnum.Emis))
+                .Returns(_mockBridge.Object);
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
@@ -135,9 +135,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             await _systemUnderTest.Post(_appointmentBookRequest);
 
             // Assert
-            _mockSystemProvider.VerifyAll();
+            _mockBridge.VerifyAll();
             _mockAppointmentsService.VerifyAll();
-            _mockSystemProviderFactory.VerifyAll();
+            _mockBridgeFactory.VerifyAll();
         }
     }
 }

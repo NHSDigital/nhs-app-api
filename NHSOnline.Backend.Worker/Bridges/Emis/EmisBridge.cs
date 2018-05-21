@@ -11,7 +11,7 @@ using NHSOnline.Backend.Worker.Router.Session;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
-    public class EmisSystemProvider : ISystemProvider
+    public class EmisBridge : IBridge
     {
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private readonly ILoggerFactory _loggerFactory;
         private readonly IOptions<ConfigurationSettings> _settings;
 
-        public EmisSystemProvider(
+        public EmisBridge(
             ILoggerFactory loggerFactory,
             IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper,

@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.Worker
                 );
 
             services.AddDataProtection();
-            services.AddSingleton<ISystemProviderFactory, SystemProviderFactory>();
+            services.AddSingleton<IBridgeFactory, BridgeFactory>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
             services.AddSingleton<HttpClient>();
-            services.AddSingleton<EmisSystemProvider>();
+            services.AddSingleton<EmisBridge>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));

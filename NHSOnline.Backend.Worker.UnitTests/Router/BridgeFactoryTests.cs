@@ -10,37 +10,37 @@ using NHSOnline.Backend.Worker.Router;
 namespace NHSOnline.Backend.Worker.UnitTests.Router
 {
     [TestClass]
-    public class SystemProviderFactoryTests
+    public class BridgeFactoryTests
     {
-        private SystemProviderFactory _systemProviderFactory;
+        private BridgeFactory _bridgeFactory;
 
         [TestInitialize]
         public void TestInitialize()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<EmisSystemProvider, EmisSystemProvider>();
+            serviceCollection.AddSingleton<EmisBridge, EmisBridge>();
             serviceCollection.AddSingleton(new Mock<IEmisClient>().Object);
             serviceCollection.AddSingleton(new Mock<IEmisPrescriptionMapper>().Object);
             serviceCollection.AddSingleton(new Mock<TimeZoneInfoProvider>().Object);
             serviceCollection.AddSingleton(new Mock<IDateTimeOffsetProvider>().Object);
 
             var serviceProvider = serviceCollection.AddLogging().BuildServiceProvider();
-            _systemProviderFactory = new SystemProviderFactory(serviceProvider);
+            _bridgeFactory = new BridgeFactory(serviceProvider);
         }
 
         [TestMethod]
-        public void CreateSystemProvider_ReturnsAnEmisSystemProvider_WhenTheSupplierIsEmis()
+        public void CreateBridge_ReturnsAnEmisBridge_WhenTheSupplierIsEmis()
         {
-            var result = _systemProviderFactory.CreateSystemProvider(SupplierEnum.Emis);
+            var result = _bridgeFactory.CreateBridge(SupplierEnum.Emis);
 
-            Assert.IsInstanceOfType(result, typeof(EmisSystemProvider));
+            Assert.IsInstanceOfType(result, typeof(EmisBridge));
         }
 
         [TestMethod]
-        public void CreateSystemProvider_ThrowsAnUnknownSystemException_WhenTheSupplierNameIsUnknown()
+        public void CreateBridge_ThrowsAnUnknownSystemException_WhenTheSupplierNameIsUnknown()
         {
             Assert.ThrowsException<UnknownSupplierException>(() =>
-                _systemProviderFactory.CreateSystemProvider((SupplierEnum) (-1)));
+                _bridgeFactory.CreateBridge((SupplierEnum) (-1)));
         }
     }
 }
