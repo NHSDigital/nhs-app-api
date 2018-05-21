@@ -16,6 +16,3 @@ fi
 
 docker build . -t ${DOCKER_REGISTRY}/nhsonline-backendworker:$(git rev-parse HEAD) -f NHSOnline.Backend.Worker/Dockerfile
 docker tag ${DOCKER_REGISTRY}/nhsonline-backendworker:$(git rev-parse HEAD) ${DOCKER_REGISTRY}/nhsonline-backendworker:latest
-
-docker build . -t ${DOCKER_REGISTRY}/nhsonline-stubs:$(git rev-parse HEAD) -f NHSOnline.Backend.Worker.Stubs/Dockerfile
-docker tag ${DOCKER_REGISTRY}/nhsonline-stubs:$(git rev-parse HEAD) ${DOCKER_REGISTRY}/nhsonline-stubs:latest
