@@ -16,9 +16,11 @@ export default {
     singoutClicked() {
       Vue
         .$http
-        .deleteSession()
+        .deleteV1Session()
         .then(() => {
-          this.$router.push('/login');
+          localStorage.clear();
+          sessionStorage.clear();
+          window.location.href = '/login';
         });
     },
   },
