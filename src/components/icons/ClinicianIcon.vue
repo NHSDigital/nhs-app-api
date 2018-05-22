@@ -10,7 +10,7 @@
   </svg>
 </template>
 
-<style lang="scss" scoped="">g
+<style lang="scss" scoped="">
   @import "../../style/icons";
   @import "../../style/colours";
 </style>
