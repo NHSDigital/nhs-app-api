@@ -3,9 +3,9 @@
     <div v-bind:class="getClass()" v-on:click="select">
       <h5 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h5>
       <h4 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h4>
-      <hr/>
+      <hr aria-hidden="true"/>
       <p :class="$style.session">{{ appointmentSession | truncate(24)}}</p>
-      <hr/>
+      <hr aria-hidden="true"/>
       <div>
         <p><location-icon/>&nbsp;{{ location | truncate(24) }}</p>
       </div>
