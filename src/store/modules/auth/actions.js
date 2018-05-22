@@ -46,9 +46,13 @@ export const login = ({ dispatch, commit }, configObj) => {
 };
 
 export const logout = ({ commit }) => {
-  commit(LOGOUT, true);
-  Vue.router.push({
-    name: 'home.logout',
+    Vue
+    .$http
+    .deleteV1Session()
+    .then(() => {      
+      commit(LOGOUT, true);
+    }).catch((error) => {
+      commit(LOGOUT, true);
   });
 };
 

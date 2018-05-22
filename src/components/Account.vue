@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv">
     <main class="content">
-    <button class="button grey" id="signout-button" v-on:click="singoutClicked()">
+    <button class="button grey" id="signout-button" v-on:click="signoutClicked()">
       {{ $t('signOutButton.signOut') }}
     </button>
     </main>
@@ -11,18 +11,13 @@
 <script>
 import Vue from 'vue';
 
+function signoutClicked() {
+  this.$store.dispatch('auth/logout');
+}
+
 export default {
   methods: {
-    singoutClicked() {
-      Vue
-        .$http
-        .deleteV1Session()
-        .then(() => {
-          localStorage.clear();
-          sessionStorage.clear();
-          window.location.href = '/login';
-        });
-    },
+    signoutClicked,
   },
 };
 </script>
