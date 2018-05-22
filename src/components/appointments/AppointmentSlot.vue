@@ -1,5 +1,5 @@
 <template>
-  <appointment-slot>
+  <appointment-slot v-bind:aria-selected="isSelected(slotId)">
     <div v-bind:class="getClass()" v-on:click="select">
       <h5 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h5>
       <h4 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h4>
@@ -12,7 +12,7 @@
       <ul :key="clinician.id"
           v-for="clinician in appointmentSlot.clinicians" :class="$style.clinicians">
         <li>
-          <p><clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
+          <p><clinician-icon/><span>&nbsp;{{ clinician.displayName | truncate(24) }}</span></p>
         </li>
       </ul>
     </div>
