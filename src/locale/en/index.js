@@ -88,6 +88,7 @@ export default {
     },
     clinicianIcon: {
       title: 'Clinician',
+      description: 'Clinician Graphic',
     },
     homeIcon: {
       title: 'NHS Online',
@@ -95,6 +96,7 @@ export default {
     },
     locationIcon: {
       title: 'Location',
+      description: 'Location Graphic',
     },
     moreIcon: {
       title: 'More',
