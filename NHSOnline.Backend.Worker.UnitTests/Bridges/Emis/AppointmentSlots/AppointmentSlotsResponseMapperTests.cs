@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
@@ -33,23 +32,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             var slotsResponse = new AppointmentsSlotsGetResponse();
             
             var location = CreateLocation(23, "Lees");
-            var session = CreateSession(location.LocationId, 1, "General Appointment Session");
+            var session = CreateSession(location.LocationId, 1, "General Appointment Session", SessionType.Timed);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
                 Sessions = new[] { session }
             };
 
-            var appointmentSession = new AppointmentSession
+            var expectedAppointmentSession = new AppointmentSession
             {
-                DisplayName = session.SessionName,
-                Id = Convert.ToString(session.SessionId)
+                DisplayName = $"{SessionType.Timed}",
+                Id ="1"
             };
             
             var expectedResponse = new AppointmentSlotsResponse
             {
                 Clinicians = new Clinician[0],
-                AppointmentSessions = new[] { appointmentSession },
+                AppointmentSessions = new[] { expectedAppointmentSession },
                 Locations = new Worker.Areas.Appointments.Models.Location[0],
                 Slots = new Slot[0]
             };
@@ -71,23 +70,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             };
             
             var location = CreateLocation(23, "Lees");
-            var session = CreateSession(location.LocationId, 1, "General Appointment Session");
+            var session = CreateSession(location.LocationId, 1, "General Appointment Session", SessionType.Timed);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
                 Sessions = new[] { session }
             };
 
-            var appointmentSession = new AppointmentSession
+            var expectedAppointmentSession = new AppointmentSession
             {
-                DisplayName = session.SessionName,
+                DisplayName = $"{SessionType.Timed}",
                 Id = Convert.ToString(session.SessionId)
             };
             
             var expectedResponse = new AppointmentSlotsResponse
             {
                 Clinicians = new Clinician[0],
-                AppointmentSessions = new[] { appointmentSession },
+                AppointmentSessions = new[] { expectedAppointmentSession },
                 Locations = new Worker.Areas.Appointments.Models.Location[0],
                 Slots = new Slot[0]
             };
@@ -123,13 +122,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 
             var expectedClinician = new Clinician
             {
-                Id = Convert.ToString(sessionHolder.ClinicianId),
-                DisplayName = sessionHolder.DisplayName
+                Id = "34",
+                DisplayName = "Dr Who"
             };
             var expectedLocation = new Worker.Areas.Appointments.Models.Location
             {
-                Id = Convert.ToString(location.LocationId),
-                DisplayName = location.LocationName
+                Id = "14",
+                DisplayName = "Leeds"
             };
             
             var expectedResponse = new AppointmentSlotsResponse
@@ -171,13 +170,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 
             var expectedClinician = new Clinician
             {
-                Id = Convert.ToString(sessionHolder.ClinicianId),
-                DisplayName = sessionHolder.DisplayName
+                Id = "34",
+                DisplayName = "Dr Who"
             };
+            
             var expectedLocation = new Worker.Areas.Appointments.Models.Location
             {
-                Id = Convert.ToString(location.LocationId),
-                DisplayName = location.LocationName
+                Id = "14",
+                DisplayName = "Leeds"
             };
             
             var expectedResponse = new AppointmentSlotsResponse
@@ -200,10 +200,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
         {
             // Arrange
             var sessionHolder = CreateSessionHolder(34, "Dr Who");
-            var session = new Worker.Bridges.Emis.Models.Session
+            var session = new Session
             {
                 SessionId = 77,
-                SessionName = "General Session Appointment"
+                SessionName = "General Session Appointment",
+                SessionType = SessionType.Timed.ToString()
             };
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
@@ -223,24 +224,24 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 
             var expectedClinician = new Clinician
             {
-                Id = Convert.ToString(sessionHolder.ClinicianId),
-                DisplayName = sessionHolder.DisplayName
+                Id = "34",
+                DisplayName = "Dr Who"
             };
 
             var exoectedAppointmentSession = new AppointmentSession
             {
-                Id = Convert.ToString(session.SessionId),
-                DisplayName = session.SessionName
+                Id = "77",
+                DisplayName = $"{SessionType.Timed}"
             };
             
             var expectedSlot = new Slot
             {
-                Id = Convert.ToString(appointmentSlotSession.Slots.First().SlotId),
-                AppointmentSessionId = Convert.ToString(appointmentSlotSession.SessionId),
+                Id = "1",
+                AppointmentSessionId = "2",
                 ClinicianIds = new string[0],
                 LocationId = "",
-                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointmentSlotSession.Slots.First().EndTime).ToUniversalTime(),
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointmentSlotSession.Slots.First().StartTime).ToUniversalTime(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
             };
             
             var expectedResponse = new AppointmentSlotsResponse
@@ -265,6 +266,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             var session = new Worker.Bridges.Emis.Models.Session
             {
                 SessionId = 77,
+                SessionType = SessionType.Timed.ToString(),
                 SessionName = "General Session Appointment"
             };
             var location = CreateLocation(365, "Leeds");
@@ -286,24 +288,24 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 
             var exoectedAppointmentSession = new AppointmentSession
             {
-                Id = Convert.ToString(session.SessionId),
-                DisplayName = session.SessionName
+                Id = "77",
+                DisplayName = $"{SessionType.Timed}"
             };
 
             var expectedLocation = new Worker.Areas.Appointments.Models.Location
             {
-                Id = Convert.ToString(location.LocationId),
-                DisplayName = location.LocationName
+                Id = "365",
+                DisplayName = "Leeds"
             };
             
             var expectedSlot = new Slot
             {
-                Id = Convert.ToString(appointmentSlotSession.Slots.First().SlotId),
-                AppointmentSessionId = Convert.ToString(appointmentSlotSession.SessionId),
+                Id = "1",
+                AppointmentSessionId = "2",
                 ClinicianIds = new string[0],
                 LocationId = "",
-                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointmentSlotSession.Slots.First().EndTime).ToUniversalTime(),
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointmentSlotSession.Slots.First().StartTime).ToUniversalTime(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
                 
             };
             
@@ -358,13 +360,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             };
         }
 
-        private static Worker.Bridges.Emis.Models.Session CreateSession(int locationId, int sessionId, string name)
+        private static Session CreateSession(int locationId, int sessionId, string name, SessionType type)
         {
-            return new Worker.Bridges.Emis.Models.Session
+            return new Session
             {
                 LocationId = locationId,
                 SessionId = sessionId,
-                SessionName = name
+                SessionName = name,
+                SessionType = type.ToString()
             };
         }
     }

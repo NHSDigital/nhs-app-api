@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,44 +22,71 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
     [TestClass]
     public class EmisAppointmentSlotsServiceTests
     {
+        private const string UserPatientLinkToken = "USER_PATIENT_LINK_TOKEN";
+        private const string EndUserSessionId = "END_USER_SESSION_ID";
+        private const string SessionId = "SESSION_ID";
+        
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
-        private IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private TimeZoneInfoProvider _timeZoneInfoProvider;
-        private IAppointmentSlotsResponseMapper _appointmentSlotsResponseMapper;
+        private EmisUserSession _userSession;
+        private DateTimeOffset _fromdDteTimeOffset;
+        private DateTimeOffset _toDateTimeOffset;
+        private SlotsMetadataGetQueryParameters _slotsMetadataGetQueryParameters;
+        private SlotsGetQueryParameters _slotsGetQueryParameters;
+        private IAppointmentSlotsService _sut;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            var timeZoneInfoProvider = new TimeZoneInfoProvider();
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
+            var appointmentSlotsResponseMapper = new AppointmentSlotsResponseMapper(dateTimeOffsetProvider);
+            
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
-            _timeZoneInfoProvider = new TimeZoneInfoProvider();
-            _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
-            _appointmentSlotsResponseMapper = new AppointmentSlotsResponseMapper(_dateTimeOffsetProvider);
+            
+            _userSession = new EmisUserSession()
+            {
+                UserPatientLinkToken = UserPatientLinkToken,
+                EndUserSessionId = EndUserSessionId,
+                SessionId = SessionId
+            };
+            
+            _fromdDteTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
+            _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
+
+            _slotsMetadataGetQueryParameters = new SlotsMetadataGetQueryParameters()
+            {
+                SessionStartDate = _fromdDteTimeOffset,
+                SessionEndDate = _toDateTimeOffset,
+                UserPatientLinkToken = UserPatientLinkToken
+            };
+            
+            _slotsGetQueryParameters = new SlotsGetQueryParameters()
+            {
+                FromDateTime = _fromdDteTimeOffset,
+                ToDateTime = _toDateTimeOffset,
+                UserPatientLinkToken = UserPatientLinkToken
+            };
+            
+            _sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, new LoggerFactory(), appointmentSlotsResponseMapper);
         }
 
         [TestMethod]
         public async Task Get_EmisClientThrowsHttpRequestExceptionFromAppointmentSlots_ReturnsbadRequest()
         {
             // Arrange
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsMetadataGetQueryParameters>()))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK));
-            // emis client throws HttpRequestException
+            var metadataResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
+                
             _mockEmisClient
                 .Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(), It.IsAny<SlotsGetQueryParameters>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
-            
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
 
             // Act
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -66,27 +94,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         }
         
         [TestMethod]
-        public async Task Get_EmisClientThrowsHttpRequestExceptionFromAppointmentSlotsMetadata_ReturnsbadRequest()
+        public async Task Get_EmisClientThrowsHttpRequestExceptionFromAppointmentSlotsMetadata_SupplierSystemUnavailable()
         {
             // Arrange
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsGetQueryParameters>()))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK));
-            // emis client throws HttpRequestException
             _mockEmisClient
                 .Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(), It.IsAny<SlotsMetadataGetQueryParameters>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
             
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
-
             // Act
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -97,30 +114,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Get_EmisClientGetAppointmentSlotsUnsuccessful_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsMetadataGetQueryParameters>()))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK));
+            var metadataResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
             
-            var unsuccessfulResponse = _fixture
+            var unsuccessfulSlotResponse = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, null)
                 .Create();
-
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsGetQueryParameters>()))
-                .Returns(Task.FromResult(unsuccessfulResponse))
-                .Verifiable();
-
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
+            
+            MockEmisClientAppointmentSlotGetMethod(unsuccessfulSlotResponse);
             
             // Act
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -131,30 +138,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Get_EmisClientGetAppointmentSlotsMetadataUnsuccessful_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsGetQueryParameters>()))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK));
-            
-            var unsuccessfulResponse = _fixture
+            var unsuccessfulMetadataResponse = _fixture
                 .Build<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
                 .With(x => x.Body, null)
                 .Create();
-
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsMetadataGetQueryParameters>()))
-                .Returns(Task.FromResult(unsuccessfulResponse))
-                .Verifiable();
-
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
+                
+            MockEmisClientAppointmentSlotsMetadataGetMethod(unsuccessfulMetadataResponse);
+            
+            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotGetMethod(slotsResponse);
             
             // Act
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -165,29 +161,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Get_EmisClientGetAppointmentSlotsNotAvaillable_ReturnsEmptyAppointmentsSlots()
         {
             // Arrange
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsMetadataGetQueryParameters>()))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK));
+            var metadataResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
             
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser;
 
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsGetQueryParameters>()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode
-                    .InternalServerError) {ErrorResponse = errorResponse}))
-                .Verifiable();
+            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode
+                .InternalServerError) { ErrorResponse = errorResponse };
 
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
+            MockEmisClientAppointmentSlotGetMethod(slotsResponse);
             
             // Act
-            
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -198,29 +185,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Get_EmisClientGetAppointmentSlotsMetadataNotAvaillable_ReturnsEmptyAppointmentsSlots()
         {
             // Arrange
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsGetQueryParameters>()))
-                .ReturnsAsync(
-                    new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK));
-            
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser;
 
-            _mockEmisClient
-                .Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                    It.IsAny<SlotsMetadataGetQueryParameters>()))
-                .Returns(Task.FromResult(new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode
-                    .InternalServerError) {ErrorResponse = errorResponse}))
-                .Verifiable();
+            var errorMetadataResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
+                HttpStatusCode
+                    .InternalServerError) { ErrorResponse = errorResponse };
 
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
+            MockEmisClientAppointmentSlotsMetadataGetMethod(errorMetadataResponse);
             
+            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotGetMethod(slotsResponse);
+
             // Act
-            
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -242,7 +220,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             
             var location = CreateLocation(23, "Lees");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(location.LocationId, 1, "General Appointment Session");
+            var session = CreateSession(location.LocationId, 1, SessionType.Timed);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -251,32 +229,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
                 Sessions = new[] { session }
             };
 
-            _mockEmisClient.Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                It.IsAny<SlotsGetQueryParameters>())).Returns(
-                Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK)
-                    {
-                        Body = slotsResponse,
-                        ErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
+            var metadataResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK)
+                {
+                    Body = slotsMetadataResponse,
+                    ErrorResponse = null,
+                    ErrorResponseBadRequest = null
+                };
             
-            _mockEmisClient.Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                It.IsAny<SlotsMetadataGetQueryParameters>())).Returns(
-                Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK)
-                    {
-                        Body = slotsMetadataResponse,
-                        ErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
-            
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
-            
+            MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
+
+            var slotResponse = new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = slotsResponse,
+                ErrorResponse = null,
+                ErrorResponseBadRequest = null
+            };
+
+            MockEmisClientAppointmentSlotGetMethod(slotResponse);
+
             // Act
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
@@ -287,37 +260,72 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Create_HappyPath_ReturnsAppointmentSlots()
         {
             // Arrange
-            _mockEmisClient.Setup(x => x.AppointmentsSlotsGet(It.IsAny<EmisHeaderParameters>(),
-                It.IsAny<SlotsGetQueryParameters>())).Returns(
-                Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK)
-                    {
-                        Body = new AppointmentsSlotsGetResponse(),
-                        ErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
+            var metadataResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK)
+                {
+                    Body = new AppointmentSlotsMetadataGetResponse(),
+                    ErrorResponse = null,
+                    ErrorResponseBadRequest = null
+                };
             
-            _mockEmisClient.Setup(x => x.AppointmentsSlotsMetadataGet(It.IsAny<EmisHeaderParameters>(),
-                It.IsAny<SlotsMetadataGetQueryParameters>())).Returns(
-                Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK)
-                    {
-                        Body = new AppointmentSlotsMetadataGetResponse(),
-                        ErrorResponse = null,
-                        ErrorResponseBadRequest = null
-                    }));
+            MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
+
+            var slotResponse = new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode.OK)
+            {
+                Body = new AppointmentsSlotsGetResponse(),
+                ErrorResponse = null,
+                ErrorResponseBadRequest = null
+            };
             
-            var userSession = _fixture.Create<EmisUserSession>();
-            var loggerFactory = _fixture.Create<ILoggerFactory>();
-            var sut = new EmisAppointmentSlotsService(_mockEmisClient.Object, loggerFactory, _appointmentSlotsResponseMapper);
-            
+            MockEmisClientAppointmentSlotGetMethod(slotResponse);
+
             // Act
-            var result = await sut.Get(userSession, _dateTimeOffsetProvider.CreateDateTimeOffset(), _dateTimeOffsetProvider.CreateDateTimeOffset());
+            var result = await GetAppointmentSlotsResult();
 
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.SuccessfullyRetrieved>();
         }
+        
+        private void MockEmisClientAppointmentSlotGetMethod(
+            EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse> response)
+        {
+            _mockEmisClient.Setup(x => x.AppointmentsSlotsGet(
+                    It.Is<EmisHeaderParameters>(p =>
+                        p.EndUserSessionId == EndUserSessionId && p.SessionId == SessionId),
+                    It.Is<SlotsGetQueryParameters>(p =>
+                        p.FromDateTime == _slotsGetQueryParameters.FromDateTime
+                        && p.ToDateTime == _slotsGetQueryParameters.ToDateTime
+                        && p.UserPatientLinkToken == UserPatientLinkToken
+                    )
+                )
+            )
+            .ReturnsAsync(response)
+            .Verifiable();     
+        }
+        
+        private void MockEmisClientAppointmentSlotsMetadataGetMethod(
+            EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> response)
+        {
+            _mockEmisClient.Setup(x => x.AppointmentsSlotsMetadataGet(
+                        It.Is<EmisHeaderParameters>(p =>
+                            p.EndUserSessionId == EndUserSessionId && p.SessionId == SessionId),
+                        It.Is<SlotsMetadataGetQueryParameters>(p =>
+                            p.SessionStartDate == _slotsMetadataGetQueryParameters.SessionStartDate
+                            && p.SessionEndDate == _slotsMetadataGetQueryParameters.SessionEndDate
+                            && p.UserPatientLinkToken == UserPatientLinkToken
+                        )
+                    )
+                )
+                .ReturnsAsync(response)
+                .Verifiable();     
+        }
+
+        private async Task<AppointmentSlotsResult> GetAppointmentSlotsResult()
+        {
+            return await _sut.Get(_userSession, _fromdDteTimeOffset, _toDateTimeOffset);
+        }
+        
         
         private AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime)
         {
@@ -355,13 +363,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             };
         }
 
-        private Worker.Bridges.Emis.Models.Session CreateSession(int locationId, int sessionId, string name)
+        private Session CreateSession(int locationId, int sessionId, SessionType sessionType)
         {
-            return new Worker.Bridges.Emis.Models.Session
+            return new Session
             {
                 LocationId = locationId,
                 SessionId = sessionId,
-                SessionName = name
+                SessionType = sessionType.ToString()
             };
         }
     }

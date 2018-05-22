@@ -37,7 +37,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
            
-            
             _userSession = new EmisUserSession()
             {
                 UserPatientLinkToken = UserPatientLinkToken,

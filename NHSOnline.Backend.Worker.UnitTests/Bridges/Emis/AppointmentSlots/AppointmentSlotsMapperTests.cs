@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 23, "General Appointment Session");
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 23, SessionType.Unknown);
 
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //and
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "General Appointment Session");
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Timed);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given AppointmentSlotsMetadataGetResponse
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "General Appointment Session");
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Untimed);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -168,8 +168,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given AppointmentSlotsMetadataGetResponse
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "General Appointment Session");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, "General Appointment Session");
+            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Unknown);
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, SessionType.Timed);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -216,8 +216,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given AppointmentSlotsMetadataGetResponse
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "General Appointment Session");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, "General Appointment Session");
+            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Untimed);
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, SessionType.Unknown);
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -292,14 +292,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             };
         }
 
-        private Worker.Bridges.Emis.Models.Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string name)
+        private Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, SessionType sessionType)
         {
-            return new Worker.Bridges.Emis.Models.Session
+            return new Session
             {
                 ClinicianIds = clinicianIds,
                 LocationId = locationId,
                 SessionId = sessionId,
-                SessionName = name
+                SessionType = sessionType.ToString()
             };
         }
     }
