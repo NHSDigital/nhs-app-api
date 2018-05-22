@@ -40,14 +40,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             var session1 = new Session
             {
                 SessionId = 1,
-                SessionType = SessionType.Timed.ToString(),
+                SessionType = "Timed",
                 SessionName = "Public Session"
             };
 
             var session2 = new Session
             {
                 SessionId = 2,
-                SessionType = SessionType.Untimed.ToString(),
+                SessionType = "Untimed",
                 SessionName = "Private Session"
             };
 
@@ -61,13 +61,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             var expectedAppointmentSession1 = new AppointmentSession()
             {
                 Id = "1",
-                DisplayName = $"{SessionType.Timed.ToString()}" 
+                DisplayName = "Timed"
             };
             
             var expectedAppointmentSession2 = new AppointmentSession
             {
                 Id = "2",
-                DisplayName = $"{SessionType.Untimed.ToString()}"
+                DisplayName = "Untimed"
             };
 
 

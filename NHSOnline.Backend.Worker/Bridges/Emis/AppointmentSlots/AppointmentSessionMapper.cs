@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots
             appointmentSessions.AddRange(slotsMetadataResponse.Sessions.Select(emisSession => new AppointmentSession
             {
                 Id = emisSession.SessionId.ToString(),
-                DisplayName = $"{emisSession.SessionType}"
+                DisplayName = emisSession.SessionType
             }));
 
             return appointmentSessions.ToArray();

@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 23, SessionType.Unknown);
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 23, "Unknown");
 
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //and
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Timed);
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "Timed");
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -118,7 +118,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given AppointmentSlotsMetadataGetResponse
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Untimed);
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "Untimed");
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -168,8 +168,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given AppointmentSlotsMetadataGetResponse
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Unknown);
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, SessionType.Timed);
+            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "Unknown");
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, "Timed");
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -216,8 +216,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             //given AppointmentSlotsMetadataGetResponse
             var location = CreateLocation(23, "Leeds");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, SessionType.Untimed);
-            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, SessionType.Unknown);
+            var sessionWithInvalidStartTime = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 1, "Untimed");
+            var session = CreateSession(new[]{ sessionHolder.ClinicianId }, location.LocationId, 9, "Unknown");
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -292,14 +292,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
             };
         }
 
-        private Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, SessionType sessionType)
+        private Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType)
         {
             return new Session
             {
                 ClinicianIds = clinicianIds,
                 LocationId = locationId,
                 SessionId = sessionId,
-                SessionType = sessionType.ToString()
+                SessionType = sessionType
             };
         }
     }

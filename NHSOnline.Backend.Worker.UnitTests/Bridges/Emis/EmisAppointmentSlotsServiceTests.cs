@@ -220,7 +220,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             
             var location = CreateLocation(23, "Lees");
             var sessionHolder = CreateSessionHolder(55, "Dr House");
-            var session = CreateSession(location.LocationId, 1, SessionType.Timed);
+            var session = CreateSession(location.LocationId, 1, "Timed");
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
@@ -363,13 +363,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             };
         }
 
-        private Session CreateSession(int locationId, int sessionId, SessionType sessionType)
+        private Session CreateSession(int locationId, int sessionId, string sessionType)
         {
             return new Session
             {
                 LocationId = locationId,
                 SessionId = sessionId,
-                SessionType = sessionType.ToString()
+                SessionType = sessionType
             };
         }
     }
