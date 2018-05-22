@@ -14,7 +14,8 @@
         </li>
       </ul>
 
-      <floating-button-bottom :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
+      <floating-button-bottom :buttonClasses="['green']"
+        :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
         {{$t('appointments.bookAppointmentButtonText')}}
       </floating-button-bottom>
     </main>

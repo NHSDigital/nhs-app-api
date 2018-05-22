@@ -1,20 +1,18 @@
 <template>
   <appointment-slot>
     <div v-bind:class="getClass()" v-on:click="select">
-      <h2 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h2>
-      <h3 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h3>
+      <h5 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h5>
+      <h4 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h4>
       <hr/>
-      <h3 :class="$style.session">{{ appointmentSession | truncate(24)}}</h3>
+      <p :class="$style.session">{{ appointmentSession | truncate(24)}}</p>
       <hr/>
       <div>
-        <location-icon/>
-        &nbsp;{{ location | truncate(24) }}
+        <p><location-icon/>&nbsp;{{ location | truncate(24) }}</p>
       </div>
       <ul :key="clinician.id"
           v-for="clinician in appointmentSlot.clinicians" :class="$style.clinicians">
-        <li title="getType();">
-          <clinician-icon/>
-          &nbsp;{{ clinician.displayName | truncate(24) }}
+        <li>
+          <p><clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
         </li>
       </ul>
     </div>
@@ -77,17 +75,37 @@ export default {
   @import '../../style/colours';
   @import '../../style/spacings';
 
-  .startTime {
-    @include space(margin, bottom, $one);
+  .date {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
   }
 
-  .date {
-    font-size: 1.1em;
-    font-weight: normal;
+  .startTime {
+    @include space(margin, top, $one);
+    display: block;
+    font-weight: 700;
+    line-height: 22px;
+    font-size: 20px;
   }
 
   .session {
+    display: block;
     font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  p {
+    display: block;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  li {
+    list-style: none;
   }
 
   .selectedContainer {
@@ -121,13 +139,8 @@ export default {
       @include space(margin, top, $two);
       @include space(margin, bottom, $two);
     }
-  }
-
-  .clinicians {
-    font-size: 0.9em;
-  }
-
-  li {
-    list-style: none;
+    .startTime {
+      color: #999;
+    }
   }
 </style>

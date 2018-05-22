@@ -1,7 +1,7 @@
 <template>
   <div :class="stylingClass">
     <!--eslint-disable-next-line -->
-    <button class="button" id="btn_floating" @click="$emit('on-click')" :disabled="isButtonDisabled">
+    <button :class="buttonStylingClasses" id="btn_floating" @click="$emit('on-click')" :disabled="isButtonDisabled">
       <slot/>
     </button>
   </div>
@@ -12,8 +12,12 @@
 export default {
   props: {
     clickable: {
-      default: true,
       type: Boolean,
+      default: true,
+    },
+    buttonClasses: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -26,6 +30,13 @@ export default {
       return !this.clickable;
     },
 
+    buttonStylingClasses() {
+      const classes = ['button'].concat(this.buttonClasses);
+      if (!this.clickable) {
+        classes.push('disabled');
+      }
+      return classes;
+    },
   },
   created() {
     if (this.$store.state.device.isNativeApp) {
