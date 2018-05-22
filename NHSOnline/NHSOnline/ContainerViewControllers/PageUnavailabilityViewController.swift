@@ -9,7 +9,6 @@ class PageUnavailabilityViewController: UIViewController {
 
     @IBAction func reloadPageTrigger(_ sender: Any) {
         let parentVC = self.parent as? HomeViewController
-        parentVC?.showWebViewContainer()
         parentVC?.webViewController?.reloadWebView()
     }
     
