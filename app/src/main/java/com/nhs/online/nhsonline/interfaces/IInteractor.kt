@@ -16,4 +16,8 @@ interface IInteractor {
     fun showWebviewScreen()
 
     fun setHeaderText(text: String)
+
+    fun hideHeader()
+
+    fun hideMenuBar()
 }

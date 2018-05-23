@@ -21,10 +21,17 @@ class WebAppInterfaceTest {
     }
 
     @Test
-    fun loggedIn() {
-        webAppInterface.loggedIn()
+    fun onLogin() {
+        webAppInterface.onLogin()
         verify(contextMock).showHeader()
         verify(contextMock).showMenuBar()
+    }
+
+    @Test
+    fun onLogout() {
+        webAppInterface.onLogout()
+        verify(contextMock).hideHeader()
+        verify(contextMock).hideMenuBar()
     }
 
     @Test
