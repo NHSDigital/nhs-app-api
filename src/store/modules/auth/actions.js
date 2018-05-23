@@ -46,14 +46,14 @@ export const login = ({ dispatch, commit }, configObj) => {
 };
 
 export const logout = ({ commit }) => {
-    Vue
+  Vue
     .$http
     .deleteV1Session()
-    .then(() => {      
+    .then(() => {
       commit(LOGOUT, true);
-    }).catch((error) => {
+    }).catch(() => {
       commit(LOGOUT, true);
-  });
+    });
 };
 
 export default {

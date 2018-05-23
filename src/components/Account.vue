@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 
 function signoutClicked() {
   this.$store.dispatch('auth/logout');

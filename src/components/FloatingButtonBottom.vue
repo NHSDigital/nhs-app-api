@@ -50,7 +50,7 @@ export default {
   @import '../style/buttons';
 
   button.button,
-  a.button { 
+  a.button {
     margin-bottom: 0;
   }
 
