@@ -49,4 +49,9 @@ export default {
 <style lang="scss" scoped>
   @import '../style/buttons';
 
+  button.button,
+  a.button { 
+    margin-bottom: 0;
+  }
+
 </style>
