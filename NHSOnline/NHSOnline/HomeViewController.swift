@@ -106,6 +106,7 @@ class HomeViewController : UIViewController {
         oldViewController.removeFromParentViewController()
         newViewController.didMove(toParentViewController: self)
     }
+    
     func createHomeUrlSubRequestWithPath(urlPathToAppend: String) -> String {
         let homeUrl = URL(string: config().HomeUrl)
         let url = URL(string: urlPathToAppend, relativeTo: homeUrl)?.absoluteString

@@ -18,6 +18,8 @@
 	<string>/prescriptions</string>
 	<key>MyAccountUrlPath</key>
 	<string>/account</string>
+	<key>SessionUrlPath</key>
+	<string>/session</string>
 	<key>NhsOnlineRequiredQueryString</key>
 	<string>?source=mobile</string>
 	<key>ResponseWaitingTime</key>
