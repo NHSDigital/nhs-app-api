@@ -8,7 +8,8 @@ fi
 
 cd /repo
 git-crypt unlock ~/.cicd.key
+az login --service-principal -u ${ARM_CLIENT_ID} -p ${ARM_CLIENT_SECRET} --tenant ${ARM_TENANT_ID}
 mkdir -p ~/.kube
-echo $KUBECTL_CONFIG | base64 -d | zcat > ~/.kube/config
+az aks get-credentials -n $AKSCLUSTERNAME -g $AKSRESOURCEGROUP
 sed -i "s/latest/$(git rev-parse HEAD)/" kubernetes/deployment.yaml
 kubectl apply -f kubernetes/
