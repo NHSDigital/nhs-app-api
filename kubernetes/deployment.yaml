@@ -16,8 +16,8 @@ spec:
         - containerPort: 3000
         env:
         - name: CID_REDIRECT_URI
-          value: "https://www.develop.bitraft.io/auth-return"
+          value: "https://www-preview.nonliveeuw.bitraft.io/auth-return"
         - name: API_HOST
-          value: "https://api.develop.bitraft.io"
+          value: "https://api-preview.nonliveeuw.bitraft.io"
       imagePullSecrets:
        - name: azure-registry

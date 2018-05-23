@@ -7,7 +7,7 @@ metadata:
   name: nhsonline-web
 spec:
   rules:
-    - host: www.develop.bitraft.io
+    - host: www-preview.nonliveeuw.bitraft.io
       http:
         paths:
           - backend:
@@ -16,5 +16,5 @@ spec:
             path: /
   tls:
     - hosts:
-      - "www.develop.bitraft.io"
-      secretName: www-develop-bitraft-io
+      - "www-preview.nonliveeuw.bitraft.io"
+      secretName: www-preview-nonliveeuw-bitraft-io
