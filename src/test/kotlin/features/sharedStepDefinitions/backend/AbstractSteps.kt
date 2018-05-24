@@ -1,0 +1,36 @@
+package features.sharedStepDefinitions.backend
+
+import mocking.MockingClient
+import mocking.models.Mapping
+import net.serenitybdd.core.Serenity
+import worker.WorkerClient
+import kotlin.reflect.KClass
+
+abstract class AbstractSteps {
+
+    private val context: MutableMap<Any, Any> get() = Serenity.getCurrentSession()
+
+    private inline fun <reified T> getFromContext(throwIfNull: Boolean = true): T {
+        val type = T::class
+        val value = context.get(type.qualifiedName!!)
+        if (value == null && throwIfNull) throw IllegalArgumentException("No value in context for ${type.qualifiedName}")
+        return value as T
+    }
+
+    private fun <T : Any> setInContext(value: T) {
+        context[value.javaClass.kotlin.qualifiedName!!] = value
+    }
+
+    protected var mockingClient: MockingClient
+        get() = getFromContext()
+        set(value) = setInContext(value)
+
+    protected var workerClient: WorkerClient
+        get() = getFromContext()
+        set(value) = setInContext(value)
+
+    companion object {
+        val ConnectionToken: String = "09046ff6-74fe-4472-941a-ad973b0eca97"
+        val OdsCode: String = "A29928"
+    }
+}

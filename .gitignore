@@ -1,0 +1,28 @@
+#jar in libs folder 
+lib/*.jar
+
+
+# Java class files
+*.class
+
+# Log Files
+*.log
+
+# Generated files
+out/
+
+# OSX files
+.DS_Store
+
+# Gradle:
+.gradle/
+build/
+
+
+# User-specific stuff:
+.idea/
+local.properties
+gradle_abj
+resources/*
+*.swp
+target/*

@@ -1,0 +1,53 @@
+version: "3.2"
+services:
+  nhsonline.web:
+    image: nhsonline.web
+    ports:
+      - "3000:3000"
+    environment:
+      - API_HOST=http://localhost:8082
+      - CID_REDIRECT_URI=http://localhost:3000/auth-return
+      - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
+  nhsonline.backend.worker:
+    image: nhsonline.backend.worker
+    environment:
+      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
+      - CORS_AUTHORITY=*
+      - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/
+    depends_on:
+      - nhsonline.redis.sds
+    ports:
+      - "8082:8082"
+  nhsonline.stubs:
+    image: rodolpheche/wiremock
+    command: --local-response-templating
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:8080"
+    tty: true
+  nhsonline.redis-data.sds:
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds
+  nhsonline.redis.sds:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6379:6379"
+    volumes:
+      - 'redis_data:/bitnami/redis'
+  nhsonline.redis.session:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6380:6379"
+volumes:
+  redis_data:
+    driver: local
