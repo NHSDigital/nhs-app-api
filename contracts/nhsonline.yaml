@@ -13,6 +13,8 @@ paths:
     $ref: './nhsonline.appointments.yaml#/paths/~1appointment-slots'
   /v1/patient/appointments:
     $ref: './nhsonline.appointments.yaml#/paths/~1appointments'
+  /v1/patient/demographics:
+    $ref: './nhsonline.demographics.yaml#/paths/~1demographics'
   /v1/patient/prescriptions:
     $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
   /v1/patient/courses:

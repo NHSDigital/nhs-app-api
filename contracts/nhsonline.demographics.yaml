@@ -1,0 +1,75 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.5
+  title: NHS App Sub-API - Demographics
+  description: NHS App Sub-API - endpoints pertaining to demographics. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+
+paths:
+  /demographics:
+    get:
+      tags:
+        - demographics
+      summary: Gets demographic information for the logged on user.
+      description: Returns users personal details and address details for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns demographic data for the logged in user.
+          schema:
+            $ref: "#/definitions/DemographicResponse"
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+ 
+definitions:
+  DemographicResponse:
+    type: object
+    properties:
+      nhsNumber:
+        type: string
+        description: The persons NHS number.
+      firstName:
+        type: string
+        description: The persons first name.
+      surname:
+        type: string
+        description: The persons surname.
+      dateOfBirth:
+        type: string
+        format: date-time
+        description: The persons date of birth.
+      sex:
+        type: string
+        description: The persons sex.
+      address:
+        $ref: '#/definitions/Address'
+
+  Address:
+    type: object
+    properties:
+      line1:
+        type: string
+        description: Line 1 of the address.
+      line2:
+        type: string
+        description: Line 2 of the address.
+      line3:
+        type: string
+        description: Line 3 of the address.
+      town:
+        type: string
+        description: The name of the town.
+      county:
+        type: string
+        description: The name of the county.
+      postCode:
+        type: string
+        description: The postcode.
+
