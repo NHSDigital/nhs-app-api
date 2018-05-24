@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker
 
             if (!userSession.HasValue)
             {
-                _logger.LogWarning("No user session found.  Signing out.");
+                _logger.LogWarning("No user session found. Signing out.");
                 await RejectPrincipalAndSignOut(context);
             }
 

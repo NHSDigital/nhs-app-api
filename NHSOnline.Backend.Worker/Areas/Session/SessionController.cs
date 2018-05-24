@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             {
                 _logger
                     .LogError(
-                        $"Creating the session failed with status code: {sessionCreatedResultVisited.StatusCode}");
+                        $"Creating the session failed with status code: { sessionCreatedResultVisited.StatusCode }");
                 return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
             }
 
@@ -90,12 +90,13 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
             // Return the session token in a cookie.
             await AppendCookieToResponse(sessionId);
-
+            
             // Build response body
             var responseBody = new UserSessionResponse
             {
                 GivenName = sessionCreatedResultVisited.GivenName,
-                FamilyName = sessionCreatedResultVisited.FamilyName
+                FamilyName = sessionCreatedResultVisited.FamilyName,
+                SessionTimeout = sessionCreatedResultVisited.SessionTimeout
             };
 
             return await Task.FromResult(new CreatedResult(string.Empty, responseBody));
@@ -106,7 +107,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             _logger.LogDebug("Starting DELETE /session");
             
-            UserSession userSession = HttpContext.GetUserSession();
+            var userSession = HttpContext.GetUserSession();
             var sessionDeleted = false;
             
             try

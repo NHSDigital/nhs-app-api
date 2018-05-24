@@ -6,6 +6,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Router.Session;
@@ -16,13 +17,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
     public class EmisSessionServiceTests
     {
         private IFixture _fixture;
+        private Mock<IOptions<ConfigurationSettings>> _settings;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisSessionService _systemUnderTest;
         private string _connectionToken;
         private string _odsCode;
         private SessionsEndUserSessionPostResponse _endUserSessionResponse;
         private SessionsPostResponse _sessionsResponse;
-
+        private int _defaultSessionExpiryMinutes;
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -32,9 +35,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             _connectionToken = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
-
+            _defaultSessionExpiryMinutes = _fixture.Create<int>();
             _endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
 
+            _settings = new Mock<IOptions<ConfigurationSettings>>();
+            _settings.Setup(x => x.Value).Returns(
+                new ConfigurationSettings
+                {
+                    DefaultSessionExpiryMinutes = _defaultSessionExpiryMinutes
+                });
+            
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
@@ -202,9 +212,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData()
         {
             // Arrange
-
+            var sessionTimeoutInSeconds = _defaultSessionExpiryMinutes * 60;
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _settings.Object);
             // Act
-            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+            var result = await systemUnderTest.Create(_connectionToken, _odsCode);
 
             // Assert
             _mockEmisClient.VerifyAll();
@@ -213,7 +224,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var expectedResult = new SessionCreateResult.SuccessfullyCreated(
                 _sessionsResponse.FirstName, 
                 _sessionsResponse.Surname,
-                new EmisUserSession()
+                new EmisUserSession(),
+                sessionTimeoutInSeconds
             );
 
             (result as SessionCreateResult.SuccessfullyCreated).Should().BeEquivalentTo(expectedResult);

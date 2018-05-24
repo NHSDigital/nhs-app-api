@@ -38,6 +38,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private string _apiSessionId;
         private string _givenName;
         private string _familyName;
+        private int _sessionTimeout;
         private SessionCreateResult _sessionCreateResult;
 
         [TestInitialize]
@@ -52,11 +53,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _givenName = _fixture.Create<string>();
             _familyName = _fixture.Create<string>();
+            _sessionTimeout = _fixture.Create<int>();
 
             _apiSessionId = _fixture.Create<string>();
 
             _sessionCreateResult =
-                new SessionCreateResult.SuccessfullyCreated(_givenName, _familyName, new EmisUserSession());
+                new SessionCreateResult.SuccessfullyCreated(_givenName, _familyName, new EmisUserSession(), _sessionTimeout);
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockCitizenIdService
@@ -214,7 +216,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_HappyPath_ReturnsUsersNameInBodyOfResponse()
+        public async Task Post_HappyPath_ReturnsUsersSessionResponse()
         {
             // Arrange
 
@@ -228,11 +230,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var expectedUserSessionResponse = new UserSessionResponse
             {
                 FamilyName = _familyName,
-                GivenName = _givenName
+                GivenName = _givenName,
+                SessionTimeout = _sessionTimeout
             };
 
             actualUserSessionResponse.FamilyName.Should().Be(expectedUserSessionResponse.FamilyName);
             actualUserSessionResponse.GivenName.Should().Be(expectedUserSessionResponse.GivenName);
+            actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
         }
 
         [TestMethod]

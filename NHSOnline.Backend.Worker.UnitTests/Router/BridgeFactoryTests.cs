@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Bridges.Emis;
@@ -23,6 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Router
             serviceCollection.AddSingleton(new Mock<IEmisPrescriptionMapper>().Object);
             serviceCollection.AddSingleton(new Mock<TimeZoneInfoProvider>().Object);
             serviceCollection.AddSingleton(new Mock<IDateTimeOffsetProvider>().Object);
+            serviceCollection.AddSingleton(new Mock<IConfiguration>().Object);
 
             var serviceProvider = serviceCollection.AddLogging().BuildServiceProvider();
             _bridgeFactory = new BridgeFactory(serviceProvider);

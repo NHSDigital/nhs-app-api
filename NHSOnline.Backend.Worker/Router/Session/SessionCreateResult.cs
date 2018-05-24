@@ -15,17 +15,19 @@ namespace NHSOnline.Backend.Worker.Router.Session
             public UserSession UserSession { get; }
             public string GivenName { get; }
             public string FamilyName { get; }
-           
-            
+            public int SessionTimeout { get; }
 
             public SuccessfullyCreated(
                 string givenName, 
                 string familyName, 
-                UserSession userSession)
+                UserSession userSession,
+                int sessionTimeout
+                )
             {
                 GivenName = givenName;
                 FamilyName = familyName;
                 UserSession = userSession;
+                SessionTimeout = sessionTimeout;
             }
 
             public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)

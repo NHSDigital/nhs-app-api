@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Support;
 using StackExchange.Redis;
@@ -13,26 +13,22 @@ namespace NHSOnline.Backend.Worker
         Task<Option<UserSession>> GetUserSession(string sessionId);
         Task<bool> DeleteUserSession(string sessionId);
     }
-
+    
     public class SessionCacheService : ISessionCacheService
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
         private readonly ICipherService _cipherService;
-        private readonly int _sessionExpiryMinutes;
         private readonly JsonSerializerSettings _serializerSettings;
-
-        private const int DefaultSessionExpiryMinutes = 20;
+        private readonly ConfigurationSettings _settings;
 
         public SessionCacheService(IConnectionMultiplexerFactory connectionMultiplexerFactory,
-            ICipherService cipherService, IConfiguration configuration)
+            ICipherService cipherService, IOptions<ConfigurationSettings> settings)
         {
             _connectionMultiplexerFactory = connectionMultiplexerFactory ??
                                             throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
+            _settings = settings.Value;
             _cipherService = cipherService;
-            int.TryParse(configuration["SESSION_EXPIRY_MINUTES"], out _sessionExpiryMinutes);
-            _sessionExpiryMinutes = _sessionExpiryMinutes == default(int)
-                ? DefaultSessionExpiryMinutes
-                : _sessionExpiryMinutes;
+            
             _serializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All
@@ -43,7 +39,7 @@ namespace NHSOnline.Backend.Worker
         {
             var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
             var database = multiplexer.GetDatabase();
-            var sessionExpirationTime = TimeSpan.FromMinutes(_sessionExpiryMinutes);
+            var sessionExpirationTime = TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes);
             RedisValue sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
 
             RedisKey sessionKey = Guid.NewGuid().ToString();
@@ -67,7 +63,7 @@ namespace NHSOnline.Backend.Worker
                 return Option.None<UserSession>();
             }
 
-            await database.KeyExpireAsync(sessionId, TimeSpan.FromMinutes(_sessionExpiryMinutes));
+            await database.KeyExpireAsync(sessionId, TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes));
 
             var userSession = JsonConvert
                 .DeserializeObject<UserSession>(_cipherService.Decrypt(redisValue.Value), _serializerSettings);

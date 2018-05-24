@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -16,18 +16,25 @@ namespace NHSOnline.Backend.Worker.UnitTests
     public class SessionCacheServiceTests
     {
         private IFixture _fixture;
-        private Mock<IConfiguration> _configuration;
+        private Mock<IOptions<ConfigurationSettings>> _settings;
         private Mock<ICipherService> _cipherService;
         private Mock<IDatabase> _database;
         private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
+        private int _defaultSessionExpiryMinutes;
         
         [TestInitialize]
         public void TestInitializeInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-            
-            _configuration = new Mock<IConfiguration>();            
+
+            _defaultSessionExpiryMinutes = _fixture.Create<int>();
+            _settings = new Mock<IOptions<ConfigurationSettings>>();
+            _settings.Setup(x => x.Value).Returns(
+                new ConfigurationSettings
+                {
+                    DefaultSessionExpiryMinutes = _defaultSessionExpiryMinutes
+                });
             _cipherService = new Mock<ICipherService>();
 
             _database = new Mock<IDatabase>();
@@ -46,9 +53,6 @@ namespace NHSOnline.Backend.Worker.UnitTests
             var userSession = _fixture.Create<EmisUserSession>();
             RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
             
-            var sessionExpiryMinutes = _fixture.Create<int>();
-            _configuration.SetupGet(r => r["SESSION_EXPIRY_MINUTES"]).Returns(sessionExpiryMinutes.ToString);
-            
             string redisSessionKey = null;
             string redisValue = null;
             
@@ -59,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                     x.StringSetAsync(
                         It.IsAny<RedisKey>(),
                         _cipherService.Object.Encrypt(userSessionJson),
-                        TimeSpan.FromMinutes(sessionExpiryMinutes),
+                        TimeSpan.FromMinutes(_defaultSessionExpiryMinutes),
                         When.Always,
                         CommandFlags.None))
                 .Returns(Task.FromResult(true))
@@ -71,7 +75,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Verifiable();
                 
                 
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _configuration.Object);
+            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object);
             
             // Act
             var result = await systemUnderTest.CreateUserSession(userSession);
@@ -98,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Returns(Task.FromResult(true))
                 .Verifiable();
             
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _configuration.Object);
+            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object);
             
             // Act
             var result = await systemUnderTest.DeleteUserSession(redisSessionKey);

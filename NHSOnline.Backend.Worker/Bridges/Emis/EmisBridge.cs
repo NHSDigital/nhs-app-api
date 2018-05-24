@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Date;
@@ -24,7 +25,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
-            IOptions<ConfigurationSettings> settings)
+            IOptions<ConfigurationSettings> settings,
+            IConfiguration configuration)
         {
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
@@ -57,7 +59,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public ISessionService GetSessionService()
         {
-            return new EmisSessionService(_emisClient);
+            return new EmisSessionService(_emisClient, _settings);
         }
 
         public ITokenValidationService GetTokenValidationService()
