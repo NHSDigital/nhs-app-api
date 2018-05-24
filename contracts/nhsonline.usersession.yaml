@@ -72,3 +72,7 @@ definitions:
       familyName:
         type: string
         description: User's family name.
+      sessionTimeout: 
+        type: integer
+        description: User's session timeout period in seconds.
+        
