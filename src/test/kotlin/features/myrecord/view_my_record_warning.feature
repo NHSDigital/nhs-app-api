@@ -5,7 +5,6 @@ Feature: View My Record Warning
   Scenario: The one where my record warning page is navigated to
     Given I am logged in
     When I click my record button on menu bar
-    And I navigate to my record via the url
     Then I see record warning page opened
     And  I see header text is My record
     And  I see Your record may contain sensitive information message
