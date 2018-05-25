@@ -139,3 +139,22 @@ Feature: Registration
     When I register an EMIS user's IM1 credentials
     Then I receive a "Bad Request" error
 
+  @pending
+  @NHSO-313 
+  Scenario: User launches the create account CitizenID journey
+    Given I am not logged in
+    When I select to create an account
+    Then I am redirected to the CID create an account page
+
+  @pending
+  @NHSO-313
+  Scenario: User launches and completes account creation from web
+    Given I have completed account creation
+    Then I am redirected to the signed in home page
+
+  @manual
+  @pending
+  @NHSO-313
+  Scenario: User launches and completes account creation from native app
+    Given I have completed account creation
+    Then I am redirected to the app to the signed in home page
