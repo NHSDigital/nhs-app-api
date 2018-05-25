@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.Router.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
@@ -12,12 +11,9 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             return new SessionCreateResultVisitorOutput
             {
                 SessionWasCreated = true,
-                UserSessionResponse = new UserSessionResponse
-                {
-                    FamilyName = result.FamilyName,
-                    GivenName = result.GivenName,
-                    UserSession = result.UserSession
-                },
+                FamilyName = result.FamilyName,
+                GivenName = result.GivenName,
+                UserSession = result.UserSession
             };
         }
 

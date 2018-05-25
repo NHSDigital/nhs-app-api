@@ -1,11 +1,11 @@
-﻿using NHSOnline.Backend.Worker.Areas.Session.Models;
-
-namespace NHSOnline.Backend.Worker.Areas.Session
+﻿namespace NHSOnline.Backend.Worker.Areas.Session
 {
     public class SessionCreateResultVisitorOutput
     {
         public bool SessionWasCreated { get; set; }
         public int StatusCode { get; set; }
-        public UserSessionResponse UserSessionResponse { get; set; }
+        public string GivenName { get; set; }
+        public string FamilyName { get; set; }
+        public UserSession UserSession { get; set; }
     }
 }

@@ -86,14 +86,19 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
             // Build and save session token in our redis session cache
             var sessionId =
-                await _sessionCacheService.CreateUserSession(
-                    sessionCreatedResultVisited.UserSessionResponse.UserSession);
+                await _sessionCacheService.CreateUserSession(sessionCreatedResultVisited.UserSession);
 
             // Return the session token in a cookie.
             await AppendCookieToResponse(sessionId);
 
-            return await Task.FromResult(new CreatedResult(string.Empty,
-                sessionCreatedResultVisited.UserSessionResponse));
+            // Build response body
+            var responseBody = new UserSessionResponse
+            {
+                GivenName = sessionCreatedResultVisited.GivenName,
+                FamilyName = sessionCreatedResultVisited.FamilyName
+            };
+
+            return await Task.FromResult(new CreatedResult(string.Empty, responseBody));
         }
         
         [HttpDelete]

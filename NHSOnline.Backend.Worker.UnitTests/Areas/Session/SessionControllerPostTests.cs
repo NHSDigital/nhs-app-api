@@ -233,7 +233,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             actualUserSessionResponse.FamilyName.Should().Be(expectedUserSessionResponse.FamilyName);
             actualUserSessionResponse.GivenName.Should().Be(expectedUserSessionResponse.GivenName);
-            actualUserSessionResponse.UserSession.Should().NotBeNull();
         }
 
         [TestMethod]

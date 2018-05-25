@@ -4,6 +4,5 @@
     {
         public string GivenName { get; set; }
         public string FamilyName { get; set; }
-        public UserSession UserSession { get; set; }
     }
 }
