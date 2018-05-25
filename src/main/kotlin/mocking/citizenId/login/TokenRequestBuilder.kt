@@ -20,7 +20,8 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
 
         // add token query parameters
         val tokenRequest = TokenRequest(codeVerifier, code = authCode)
-        requestBuilder.andBody(tokenRequestToQueryParams(tokenRequest), "equalTo")
+        val body = tokenRequestToQueryParams(tokenRequest)
+        requestBuilder.andBody(body, "matches")
     }
 
     private fun tokenRequestToQueryParams(tokenRequest: TokenRequest): String {
@@ -30,7 +31,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
             map["code"] = tokenRequest.code
         }
         map["redirect_uri"] = tokenRequest.redirectUri
-        map["code_verifier"] = tokenRequest.codeVerifier
+        map["code_verifier"] = ".*"
         map["client_id"] = tokenRequest.clientId
         map["code_challenge_method"] = tokenRequest.codeChallengeMethod
 
@@ -38,12 +39,12 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
 
         for (key in map.keys) {
             if (stringBuilder.isNotEmpty()) {
-                stringBuilder.append(URLEncoder.encode("&", "UTF-8"))
+                stringBuilder.append("&")
             }
             val value = map[key]
             try {
-                stringBuilder.append(URLEncoder.encode(key, "UTF-8"))
-                stringBuilder.append(URLEncoder.encode("=", "UTF-8"))
+                stringBuilder.append(key)
+                stringBuilder.append("=")
                 stringBuilder.append(if (value != null) URLEncoder.encode(value, "UTF-8") else "")
             } catch (e: UnsupportedEncodingException) {
                 throw RuntimeException("This method requires UTF-8 encoding support", e)

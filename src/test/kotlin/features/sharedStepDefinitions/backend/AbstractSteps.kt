@@ -1,5 +1,6 @@
 package features.sharedStepDefinitions.backend
 
+import mocking.MockDefaults
 import mocking.MockingClient
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
@@ -30,7 +31,7 @@ abstract class AbstractSteps {
         set(value) = setInContext(value)
 
     companion object {
-        val ConnectionToken: String = "09046ff6-74fe-4472-941a-ad973b0eca97"
-        val OdsCode: String = "A29928"
+        val connectionToken: String = MockDefaults.DEFAULT_CONNECTION_TOKEN
+        val odsCode: String = MockDefaults.DEFAULT_ODS_CODE
     }
 }

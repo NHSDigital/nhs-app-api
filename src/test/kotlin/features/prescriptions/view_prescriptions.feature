@@ -5,7 +5,6 @@ Feature: View prescriptions
   Background:
     Given wiremock is initialised
 
-  @bug @NHSO-922
   Scenario: A user can see the prescriptions menu button
     Given I am logged in
     Then I see the prescriptions menu button

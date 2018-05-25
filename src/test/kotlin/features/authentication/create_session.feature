@@ -4,7 +4,6 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  @bug @NHSO-922
   Scenario: Creating user session returns a valid response with session guid token http-only cookie and given name and family name in body
     Given I have a valid authCode and codeVerifier for a patient
     When I create a user session with valid details
@@ -15,7 +14,6 @@ Feature: EMIS Session Registration
   @NHSO-63
   @tech-debt @NHSO-725
   @backend
-  @bug @NHSO-922
   Scenario: Creating user session returns a valid response with session guid token tls-only cookie and given name and family name in body
     Given I have a valid authCode and codeVerifier for a patient
     When I create a user session with valid details
@@ -54,7 +52,6 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  @bug @NHSO-922
   Scenario: EMIS end user session fails to create
     Given I have valid OAuth details and the EMIS end user session endpoint fails to create
     When I create a user session with valid details
@@ -62,7 +59,6 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  @bug @NHSO-922
   Scenario: EMIS session fails to create
     Given I have valid OAuth details and the EMIS session endpoint fails to create
     When I create a user session with valid details
@@ -70,7 +66,6 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  @bug @NHSO-922
   Scenario: EMIS is unavailable
     Given I have valid OAuth details and EMIS is unavailable
     When I create a user session with valid details
@@ -78,7 +73,6 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  @bug @NHSO-922
   Scenario: CID connection token fails to authenticate with EMIS
     Given I have invalid OAuth details and CID connection token fails to authenticate with emis
     When I create a user session with valid details
@@ -86,7 +80,6 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  @bug @NHSO-922
   Scenario: EMIS fails to respond in 30 seconds
     Given I have valid OAuth details and emis fails to respond in 30 seconds
     When I create a user session with valid details

@@ -8,12 +8,10 @@ import mocking.emis.models.appointmentslots.MetaSession
 import models.Patient
 import worker.models.session.UserSessionRequest
 
-const val DEFAULT_END_USER_SESSION_ID: String = "Ab42ZoP21dT4JE12avEWQ5"
-
 class MockDefaults(val config: Config, val mockingClient: MockingClient = MockingClient.instance) {
 
     fun mock() {
-        mockingClient.resetWiremock()
+        mockingClient.clearWiremock()
         mockingClient.favicon()
 
         mockingClient.forCitizenId {
@@ -23,7 +21,7 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
 
         mockingClient.forCitizenId {
             completeLoginRequest()
-                    .respondWithRedirectResponse()
+                    .respondWithRedirectResponse(userSessionRequest.codeVerifier)
         }
 
         mockingClient.forCitizenId {
@@ -37,7 +35,7 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest("our_bearer_token")
+            userInfoRequest("Bearer access_token")
                     .respondWithSuccess()
         }
 
@@ -115,6 +113,10 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
     }
 
     companion object {
+        const val DEFAULT_END_USER_SESSION_ID: String = "Ab42ZoP21dT4JE12avEWQ5"
+        const val DEFAULT_CONNECTION_TOKEN: String = "09046ff6-74fe-4472-941a-ad973b0eca97"
+        const val DEFAULT_ODS_CODE: String = "A29928"
+
         @JvmStatic
         fun main(arguments: Array<String>) {
             val config = Config.instance
@@ -131,13 +133,15 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 title = "Mr",
                 firstName = "John",
                 surname = "Smith",
-                odsCode = "A29928",
+                odsCode = DEFAULT_ODS_CODE,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
-                sessionId = "MT4vWCxTKXRYr7fFJWM3wB")
+                sessionId = "MT4vWCxTKXRYr7fFJWM3wB",
+                connectionToken = DEFAULT_CONNECTION_TOKEN,
+                endUserSessionId = DEFAULT_END_USER_SESSION_ID)
 
         val userSessionRequest = UserSessionRequest(
-                "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
-                "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e"
+            authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
+            codeVerifier = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e"
         )
     }
 }

@@ -13,7 +13,7 @@ class PatientRegistrationValidationSteps : AbstractSteps() {
             surname = "Yoda",
             dateOfBirth = "1919-12-24T14:03:15.892",
             accountId = "MASTER_YODA",
-            odsCode = OdsCode,
+            odsCode = odsCode,
             endUserSessionId = "Ab42ZoP21dT4JE12avEWQ5",
             linkageKey = "MASTER000YODA"
     )

@@ -34,8 +34,8 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Smith",
                 dateOfBirth = "1919-12-24T14:03:15.892Z",
                 accountId = "1195029928",
-                odsCode = OdsCode,
-                connectionToken = ConnectionToken,
+                odsCode = odsCode,
+                connectionToken = connectionToken,
                 sessionId = "MT4vWCxTKXRYr7fFJWM3wB",
                 endUserSessionId = "Ab42ZoP21dT4JE12avEWQ5",
                 linkageKey = "KjwzyFSEUAGj4",
@@ -67,8 +67,8 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Smith",
                 dateOfBirth = "1919-12-24T14:03:15Z",
                 accountId = "1195029928",
-                odsCode = OdsCode,
-                connectionToken = ConnectionToken,
+                odsCode = odsCode,
+                connectionToken = connectionToken,
                 endUserSessionId = "zVfHuYArbENW4aoAUeQPyS",
                 linkageKey = "KjwzyFSEUAGj4",
                 nhsNumbers = listOf("notExistingNhsNumber")
@@ -96,7 +96,7 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Smith",
                 dateOfBirth = "1919-12-24T14:03:15Z",
                 accountId = "1195029928",
-                odsCode = OdsCode,
+                odsCode = odsCode,
                 endUserSessionId = "zVfHuYArbENW4aoAUeQPyS",
                 linkageKey = "KjwzyFSEUAGj4"
         )
@@ -144,8 +144,8 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Jones",
                 dateOfBirth = "1965-08-12T00:00:00Z",
                 accountId = "1195029928",
-                odsCode = OdsCode,
-                connectionToken = ConnectionToken,
+                odsCode = odsCode,
+                connectionToken = connectionToken,
                 sessionId = "DPcqihby6RDaVrnf4hHyv7",
                 endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D",
                 linkageKey = "KjwzyFSEUAGj4",
@@ -154,7 +154,7 @@ class PatientRegistrationSteps : AbstractSteps() {
 
         )
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { meRequest(patient).respondWithSuccess(ConnectionToken) }
+        mockingClient.forEmis { meRequest(patient).respondWithSuccess(connectionToken) }
         mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
         mockingClient.forEmis {
             demographicsRequest(patient).respondWithSuccess(patient,
@@ -194,8 +194,8 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Thompson",
                 dateOfBirth = "2001-01-02T11:00:52Z",
                 accountId = "1195029928",
-                odsCode = OdsCode,
-                connectionToken = ConnectionToken,
+                odsCode = odsCode,
+                connectionToken = connectionToken,
                 sessionId = "h3pYG9By2tVTqcvPvpw3DL",
                 endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D",
                 linkageKey = "KjwzyFSEUAGj4",
@@ -235,7 +235,7 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "AlreadyLinked",
                 dateOfBirth = "1919-12-24T14:03:15Z",
                 accountId = "1195029928",
-                odsCode = OdsCode,
+                odsCode = odsCode,
                 linkageKey = "KjwzyFSEUAGj4",
                 endUserSessionId = "zVfHuYArbENW4aoAUeQPyS"
         )

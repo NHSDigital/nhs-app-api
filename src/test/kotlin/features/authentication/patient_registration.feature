@@ -102,7 +102,6 @@ Feature: Registration
     Then I receive a "Bad Request" error
 
 
-  @bug
   @NHSO-661
   @backend
   Scenario: Linkage Key not in the expected format

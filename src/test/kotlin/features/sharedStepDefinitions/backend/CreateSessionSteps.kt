@@ -5,6 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import junit.framework.TestCase.*
+import mocking.MockDefaults
 
 import mocking.emis.models.AssociationType
 import models.Patient
@@ -33,8 +34,8 @@ class CreateSessionSteps : AbstractSteps() {
             surname = surname,
             dateOfBirth = "1919-12-24T14:03:15.892Z",
             accountId = "1195029928",
-            odsCode = OdsCode,
-            connectionToken = ConnectionToken,
+            odsCode = odsCode,
+            connectionToken = connectionToken,
             sessionId = "MT4vWCxTKXRYr7fFJWM3wB",
             endUserSessionId = "Ab42ZoP21dT4JE12avEWQ5",
             linkageKey = "KjwzyFSEUAGj4",
@@ -42,10 +43,7 @@ class CreateSessionSteps : AbstractSteps() {
             nhsNumbers = listOf("7174450393")
     )
 
-    val userSessionRequest = UserSessionRequest(
-            "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
-            "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e"
-    )
+    private val userSessionRequest = MockDefaults.userSessionRequest
 
     @Given("^I have a valid authCode and codeVerifier for a patient$")
     fun iHaveAValidAuthCodeAndCodeVerifierForAPatient() {

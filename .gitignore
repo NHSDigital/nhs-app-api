@@ -18,6 +18,7 @@ out/
 .gradle/
 build/
 
+chromedriver*
 
 # User-specific stuff:
 .idea/

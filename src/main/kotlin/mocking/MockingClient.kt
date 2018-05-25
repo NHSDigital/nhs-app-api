@@ -8,6 +8,7 @@ import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpException
 import org.apache.http.HttpStatus
+import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.client.methods.HttpDelete
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.ContentType
@@ -35,7 +36,7 @@ class MockingClient(private val configuration: MockingConfiguration) {
     fun favicon() = this.postMapping(FaviconMappingBuilder().respondWithNotFound())
 
     private fun postMapping(mapping: Mapping): String {
-        val httpPost = HttpPost(configuration.wiremockBaseUrl + "/__admin/mappings")
+        val httpPost = HttpPost("${configuration.wiremockAdminUrl}/mappings")
 
         httpPost.addHeader("Content-Type", "application/json; charset=UTF-8")
         httpPost.entity = StringEntity(gson.toJson(mapping), ContentType.APPLICATION_JSON)
@@ -49,15 +50,31 @@ class MockingClient(private val configuration: MockingConfiguration) {
         return response.toString()
     }
 
-    fun resetWiremock() {
-        resetWiremockDetails("mappings")
-        resetWiremockDetails("requests")
+    fun clearWiremock() {
+        deleteWiremockDetails(endpoint = "mappings")
+        deleteWiremockDetails(endpoint = "requests")
     }
 
-    private fun resetWiremockDetails(endpoint: String) {
-        val httpDelete = HttpDelete(configuration.wiremockBaseUrl + endpoint)
-        HttpClients.createDefault().execute(httpDelete)
+    fun resetWiremock() {
+        MockDefaults(Config.instance, this).mock()
+    }
+
+    private fun deleteWiremockDetails(endpoint: String) {
+        val uri = "${configuration.wiremockAdminUrl}/$endpoint"
+        val httpDelete = HttpDelete(uri)
+        val response = HttpClients.createDefault().execute(httpDelete)
+        if (response.statusLine.statusCode != 200) {
+            reportWiremockError(response)
+            throw Exception("Failed to delete mappings using URI: $uri")
+        }
+
         httpDelete.releaseConnection()
+    }
+
+    private fun reportWiremockError(response: CloseableHttpResponse) {
+        println("Call to wiremock failed:")
+        println("  Status code: ${response.statusLine.statusCode}")
+        println("  Reason:      ${response.statusLine.reasonPhrase}")
     }
 
     companion object {
