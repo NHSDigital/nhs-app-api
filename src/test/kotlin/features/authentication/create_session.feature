@@ -3,22 +3,31 @@ Feature: EMIS Session Registration
   The application verifies the user session
 
   @NHSO-63
+  @NHSO-415
   @backend
-  Scenario: Creating user session returns a valid response with session guid token http-only cookie and given name and family name in body
+  @bug @NHSO-922
+  Scenario: We check the session cookie and response body
     Given I have a valid authCode and codeVerifier for a patient
     When I create a user session with valid details
-    Then I receive a response with given name and family name
-    And a cookie containing a session guid with http-only
+    Then I receive a response
+    And the response has a given name
+    And the response has a family name
+    And the response has a session length
+    And the cookie contains a session guid with http-only
 
-    # Combine these Scenarios once Tech Debt is resolved
   @NHSO-63
+  @NHSO-415
   @tech-debt @NHSO-725
   @backend
-  Scenario: Creating user session returns a valid response with session guid token tls-only cookie and given name and family name in body
+  @bug @NHSO-922
+  Scenario: We check the session cookie and response body
     Given I have a valid authCode and codeVerifier for a patient
     When I create a user session with valid details
-    Then I receive a response with given name and family name
-    And a cookie containing a session guid with tls-only
+    Then I receive a response
+    And the response has a given name
+    And the response has a family name
+    And the response has a session length
+    And the cookie contains a session guid with tls-only
 
   @NHSO-63
   @backend
