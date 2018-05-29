@@ -79,7 +79,6 @@ export default {
     select() {
       this.$store.dispatch('appointmentSlots/select', undefined);
       this.currentSlotId = undefined;
-      this.$forceUpdate();
       if (!this.alwaysDeselect) {
         this.$store.dispatch('appointmentSlots/select', this.slotId);
         this.currentSlotId = this.slotId;

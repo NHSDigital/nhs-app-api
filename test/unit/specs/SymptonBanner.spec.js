@@ -9,12 +9,14 @@ describe('SymptonBanner.vue', () => {
       .mockReturnValueOnce('How are you feeling right now?')
       .mockReturnValueOnce('Symptom checker');
 
+    process.env.SYMPTOM_CHECKER_URL = 'https://111.nhs.uk';
+
     const wrapper = shallowMount(SymptonBanner, {
       mocks: {
         $t: myMock,
         process: {
           env: {
-            SYMPTOM_CHECKER_URL: 'SymptomChecker Test URL',
+            SYMPTOM_CHECKER_URL: 'https://111.nhs.uk',
           },
         },
       },
