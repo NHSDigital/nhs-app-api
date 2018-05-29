@@ -3,14 +3,15 @@ package webdrivers
 import io.github.bonigarcia.wdm.WebDriverManager
 import net.thucydides.core.webdriver.DriverSource
 import org.openqa.selenium.WebDriver
-import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 
 
-open class ChromeDriver : DriverSource {
+open class FirefoxDriver : DriverSource {
 
     override fun newDriver(): WebDriver? {
         WebDriverManager.chromedriver().setup()
-        return ChromeDriver()
+        return FirefoxDriver()
     }
 
     override fun takesScreenshots(): Boolean {

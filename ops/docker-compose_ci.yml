@@ -1,0 +1,40 @@
+version: "3.2"
+services:
+  nhsonline.web:
+    image: nhsonline.azurecr.io/nhsonline-web:latest
+    env_file:
+      - vars_ci.env
+  nhsonline.backend.worker:
+    image: nhsonline.azurecr.io/nhsonline-backendworker:latest
+    depends_on:
+      - nhsonline.redis.sds
+      - nhsonline.redis.session
+    env_file:
+      - vars_ci.env
+  nhsonline.stubs:
+    image: nhsonline.azurecr.io/wiremock:2.17.0-alpine
+    command: --local-response-templating
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    tty: true
+  nhsonline.redis-data.sds:
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds
+  nhsonline.redis.sds:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    volumes:
+      - 'redis_data:/bitnami/redis'
+  nhsonline.redis.session:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+volumes:
+  redis_data:
+    driver: local
