@@ -3,7 +3,7 @@ package mocking
 import com.google.gson.Gson
 import mocking.models.Response
 
-internal class ResponseBuilder(private val statusCode: Int) {
+class ResponseBuilder(private val statusCode: Int) {
     companion object {
         private val gson = Gson()
     }

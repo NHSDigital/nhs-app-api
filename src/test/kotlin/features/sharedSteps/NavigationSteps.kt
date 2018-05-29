@@ -2,11 +2,13 @@ package features.sharedSteps
 
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import pages.navigation.Header
 import pages.navigation.NavBar
 
 open class NavigationSteps {
 
     lateinit var navBar: NavBar
+    lateinit var header: Header
 
     @Step
     fun hasSelectedTab(tab: String): Boolean {
@@ -25,6 +27,11 @@ open class NavigationSteps {
     @Step
     fun select(tab: String) {
         navBar.select(NavBar.NavBarType.valueOf(tab.toUpperCase()))
+    }
+
+    @Step
+    fun myAccount() {
+        header.clickMyAccount()
     }
 
     @Step

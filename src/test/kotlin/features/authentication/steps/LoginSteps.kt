@@ -16,4 +16,9 @@ open class LoginSteps {
     fun asDefault() {
         loginPage.signIn()
     }
+
+    @Step
+    fun assertPageIsDisplayed() {
+        loginPage.shouldBeDisplayed()
+    }
 }

@@ -18,6 +18,11 @@ open class BrowserSteps {
     }
 
     @Step
+    open fun browseTo(url: String) {
+        loginPage.driver.get(url)
+    }
+
+    @Step
     open fun shouldHaveTitle(title: String) {
         Assert.assertEquals(title, loginPage.title)
     }

@@ -13,4 +13,8 @@ class Header : HybridPageObject(Companion.PageType.NATIVE) {
 
         return logoIsVisible && accountIsVisible && headingIsVisible
     }
+
+    fun clickMyAccount() {
+        findByXpath("//a[@href='/account']/*[name()='svg']").click()
+    }
 }

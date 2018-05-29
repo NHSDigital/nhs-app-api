@@ -6,6 +6,9 @@ This repo houses the BDD-style acceptance tests for the project.
   subset of the app's functionality.
 
 #Getting Started
+[Download the latest chromedriver](http://chromedriver.chromium.org/) for your machine and place it
+  into the root of the repo (it will not be picked up by git).
+
 Start the app
 
 ```
@@ -16,7 +19,7 @@ docker-compose up
 Run the tests locally
 
 ```
-gradle clean test aggregate -Dcucumber.options="--tags ~@bug --tags ~@pending"
+gradle clean test aggregate -Dcucumber.options="--tags ~@bug --tags ~@pending --tags ~@native"
 ```
 
 View the serenity report by navigating to "<path to repo>/target/site/serenity" 

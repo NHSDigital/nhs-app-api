@@ -10,7 +10,7 @@ abstract class MappingBuilder(method: String, url: String) {
 
     internal val requestBuilder = RequestBuilder(method, url)
 
-    internal fun respondWith(statusCode: Int, milliSecondDelay: Int = 0, resolve: ResponseBuilder.() -> Unit): Mapping {
+    fun respondWith(statusCode: Int, milliSecondDelay: Int = 0, resolve: ResponseBuilder.() -> Unit): Mapping {
         val responseBuilder = ResponseBuilder(statusCode)
         responseBuilder.resolve()
 
@@ -19,7 +19,7 @@ abstract class MappingBuilder(method: String, url: String) {
         return Mapping(requestBuilder.build(), responseBuilder.build())
     }
 
-    internal fun redirectTo(url: String, milliSecondDelay: Int = 0): Mapping {
+    fun redirectTo(url: String, milliSecondDelay: Int = 0): Mapping {
         val responseBuilder = ResponseBuilder(SC_FOUND)
         responseBuilder.andHeader("Location", url).andTemplateTransformer()
 

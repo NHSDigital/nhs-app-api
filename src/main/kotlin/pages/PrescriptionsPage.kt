@@ -1,7 +1,9 @@
 package pages
 
+import net.thucydides.core.annotations.DefaultUrl
 import pages.navigation.Header
 
+@DefaultUrl("http://localhost:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     lateinit var headerBar: Header

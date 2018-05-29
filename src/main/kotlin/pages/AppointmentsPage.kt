@@ -3,9 +3,11 @@ package pages
 import models.Slot
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
+import net.thucydides.core.annotations.DefaultUrl
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 
+@DefaultUrl("http://localhost:3000/appointments")
 open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     @FindBy(className = "info")
