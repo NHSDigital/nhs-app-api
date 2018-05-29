@@ -41,6 +41,7 @@
 import FloatingButtonBottom from '@/components/FloatingButtonBottom';
 
 export default {
+  middleware: ['auth', 'meta'],
   components: {
     FloatingButtonBottom,
   },
@@ -68,18 +69,18 @@ export default {
   },
   methods: {
     onRepeatPrescriptionButtonClicked() {
-      this.$router.push('repeat-prescription-courses');
+      this.$router.push('/prescriptions/repeat-courses');
     },
   },
 };
 </script>
 
 <style module lang="scss">
-@import "../style/html";
-@import "../style/elements";
-@import "../style/buttons";
-@import "../style/fonts";
-@import "../style/spacings";
+@import "../../style/html";
+@import "../../style/elements";
+@import "../../style/buttons";
+@import "../../style/fonts";
+@import "../../style/spacings";
 
 .main {
   @include space(padding, all, $three);

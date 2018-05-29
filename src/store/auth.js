@@ -45,7 +45,7 @@ export const actions = {
       dispatch('navigation/init');
       dispatch('prescriptions/init');
       dispatch('repeatPrescriptionCourses/init');
-      this.app.router.push('login');
+      this.app.router.push('/login');
     });
   },
   init({ commit }) {

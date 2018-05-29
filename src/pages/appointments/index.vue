@@ -5,13 +5,12 @@
       <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>
     </div>
     <ul v-if="showAppointments" data-purpose="slots">
-      <li v-for="slot in slots" :key="slot.id" :class="$style.slot">
-        <appointment-slot :slot-id="slot.id"/>
+      <li :key="slot.id" v-for="(slot, index) in slots" :class="$style.slot">
+        <appointment-slot :slotId="slot.id" :aria-label="'slot ' + (index +1)" />
       </li>
     </ul>
 
-    <floating-button-bottom :button-classes="['green']"
-                            :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
+    <floating-button-bottom :button-classes="['green']" :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
       {{ $t('appointments.bookAppointmentButtonText') }}
     </floating-button-bottom>
   </main>
@@ -66,39 +65,45 @@ export default {
       return this.$style.main;
     },
     onBookButtonClicked() {
-      this.$router.push('appointment-confirmation');
+      this.$router.push('/appointments/confirmation');
     },
   },
 };
 </script>
 
 <style module lang="scss">
-@import "../../style/html";
-@import "../../style/fonts";
-@import "../../style/spacings";
+  @import "../../style/html";
+  @import "../../style/fonts";
+  @import "../../style/spacings";
 
-.main {
-  @include space(padding, all, $three);
-}
-.mainShowingSlots {
-  @include space(padding, all, $three);
-  padding-bottom: 78px;
-}
-.summary {
-  font-weight: bold;
-  @include space(margin, bottom, $three);
-}
-.info {
-  @include default_text;
-  font-size: 12pt;
-  @include space(margin, bottom, $three);
-}
-.slot {
-  list-style: none;
-  @include space(margin, bottom, $three);
-}
-.summary {
-  font-weight: bold;
-  @include space(margin, bottom, $three);
-}
+  .main {
+    @include space(padding, all, $three);
+  }
+
+  .mainShowingSlots {
+    @include space(padding, all, $three);
+    padding-bottom: 78px;
+  }
+
+  .summary {
+    font-weight: bold;
+    @include space(margin, bottom, $three);
+  }
+
+  .info {
+    @include default_text;
+    font-size: 12pt;
+    @include space(margin, bottom, $three);
+  }
+
+  .slot {
+    list-style: none;
+    @include space(margin, bottom, $three);
+  }
+
+  .summary {
+    font-weight: bold;
+    @include space(margin, bottom, $three);
+  }
+
 </style>

@@ -32,7 +32,7 @@
         </div>
 
       </div>
-      <nuxt-link to="prescriptions" tag="button" class="button grey">
+      <nuxt-link to="/prescriptions" tag="button" class="button grey">
         {{ $t('prescriptions.backToYourPrescriptionsButton') }}
       </nuxt-link>
     </main>

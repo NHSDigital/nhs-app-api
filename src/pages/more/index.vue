@@ -8,6 +8,7 @@
 
 <script>
 export default {
+   middleware: ['auth', 'meta'],
   data() {
     return {
       organDonationUrl: process.env.ORGAN_DONATION_URL,
@@ -17,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/html";
-@import "../style/elements";
-@import "../style/buttons";
+@import "../../style/html";
+@import "../../style/elements";
+@import "../../style/buttons";
 </style>

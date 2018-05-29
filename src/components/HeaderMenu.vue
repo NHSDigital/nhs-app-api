@@ -1,11 +1,11 @@
 <template>
   <header :class="$style.header">
-    <router-link to="/">
+    <nuxt-link to="/">
       <home-icon/>
-    </router-link>
-    <router-link to="/account">
+    </nuxt-link>
+    <nuxt-link to="/account">
       <account-icon/>
-    </router-link>
+    </nuxt-link>
     <hr :class="$style.rule">
     <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
   </header>

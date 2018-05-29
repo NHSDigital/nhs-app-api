@@ -33,7 +33,11 @@ export default {
     confirmation: {
       headerLabel: 'What is this appointment for?',
       label: 'Describe your symptoms',
+      maxReasonDesc: 'Description must be shorter than 150 characters (about 25 words)',
+      confirmButtonText: 'Confirm and book appointment',
       changeButtonText: 'Change this appointment',
+      noReasonDialogError: 'There\'s a problem: Enter a reason for this appointment',
+      noReasonError: 'Enter a reason for this appointment',
     },
     errors: {
       pageHeader: 'Error retrieving data',

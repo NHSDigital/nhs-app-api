@@ -19,7 +19,6 @@
   </div>
 </template>
 
-
 <script>
 /* eslint-disable import/extensions */
 import { find, get } from 'lodash/fp';
@@ -94,76 +93,77 @@ export default {
 </script>
 
 <style module lang="scss">
-@import "../style/html";
-@import "../style/colours";
-@import "../style/spacings";
+  @import "../style/html";
+  @import "../style/colours";
+  @import "../style/spacings";
 
-.date {
-  display: block;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 22px;
-}
-
-.startTime {
-  @include space(margin, top, $one);
-  display: block;
-  font-weight: 700;
-  line-height: 22px;
-  font-size: 20px;
-}
-
-.session {
-  display: block;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
-}
-
-p {
-  display: block;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
-}
-
-li {
-  list-style: none;
-}
-
-.selectedContainer {
-  border: solid 1px $mid_grey;
-  border-radius: 5px;
-  @include space(padding, all, $three);
-  transition: all ease 0.5s;
-  hr {
-    height: 1px;
-    border: none;
-    background-color: $dark_grey;
-    opacity: 0.2;
-    @include space(margin, top, $two);
-    @include space(margin, bottom, $two);
+  .date {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
   }
-  background: $nhs_blue;
-  color: $white;
-}
 
-.container {
-  border: solid 1px $mid_grey;
-  border-radius: 5px;
-  background: $white;
-  @include space(padding, all, $three);
-  transition: all ease 0.5s;
-  hr {
-    height: 1px;
-    border: none;
-    background-color: $dark_grey;
-    opacity: 0.2;
-    @include space(margin, top, $two);
-    @include space(margin, bottom, $two);
-  }
   .startTime {
-    color: #999;
+    @include space(margin, top, $one);
+    display: block;
+    font-weight: 700;
+    line-height: 22px;
+    font-size: 20px;
   }
-}
+
+  .session {
+    display: block;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  p {
+    display: block;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  li {
+    list-style: none;
+  }
+
+  .selectedContainer {
+    border: solid 1px $mid_grey;
+    border-radius: 5px;
+    @include space(padding, all, $three);
+    transition: all ease 0.5s;
+    hr {
+      height: 1px;
+      border: none;
+      background-color: $dark_grey;
+      opacity: 0.2;
+      @include space(margin, top, $two);
+      @include space(margin, bottom, $two);
+    }
+    background: $nhs_blue;
+    color: $white;
+  }
+
+  .container {
+    border: solid 1px $mid_grey;
+    border-radius: 5px;
+    background: $white;
+    @include space(padding, all, $three);
+    transition: all ease 0.5s;
+    hr {
+      height: 1px;
+      border: none;
+      background-color: $dark_grey;
+      opacity: 0.2;
+      @include space(margin, top, $two);
+      @include space(margin, bottom, $two);
+    }
+    .startTime {
+      color: #999;
+    }
+  }
+
 </style>

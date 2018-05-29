@@ -3,12 +3,12 @@ const PRESCRIPTIONS = 'prescriptions';
 const APPOINTMENTS = 'appointments';
 const INDEX = 'index';
 const MORE = 'more';
-const REPEAT_PRESCRIPTION_COURSES = 'repeat-prescription-courses';
-const APPOINTMENT_CONFIRMATIONS = 'appointment-confirmation';
+const REPEAT_PRESCRIPTION_COURSES = 'prescriptions-repeat-courses';
+const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
 const ACCOUNT = 'account';
+const LOGIN = 'login';
 
 export default function ({ route, store, app }) {
-
   switch (route.name) {
     case INDEX:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
@@ -32,7 +32,7 @@ export default function ({ route, store, app }) {
     case ACCOUNT:
       route.meta.headerKey = 'pageHeaderTitles.account';
       break;
-    case 'login':
+    case LOGIN:
       route.meta.headerKey = '';
       break;
     default:
