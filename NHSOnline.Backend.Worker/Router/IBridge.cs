@@ -1,5 +1,6 @@
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
+using NHSOnline.Backend.Worker.Router.MyRecord;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Session;
 
@@ -16,5 +17,6 @@ namespace NHSOnline.Backend.Worker.Router
         IPrescriptionService GetPrescriptionService();
         ICourseService GetCourseService();
         IAppointmentSlotsService GetAppointmentSlotsService();
+        IPatientRecordService GetPatientRecordService();
     }
 }

@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Helpers;
 using RichardSzalay.MockHttp;
 
@@ -251,6 +252,33 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
+        [TestMethod]
+        public async Task AllergiesGet_ReturnsAnAllergiesResponse_WhenValidlyRequested()
+        {
+            var userPatientLinkToken = _fixture.Create<string>();
+            var sessionId = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var expectedResponse = _fixture.Create<AllergyRequestsGetResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderSessionId, sessionId),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "record?userPatientLinkToken=" + userPatientLinkToken + "&itemType=Allergies")
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            var response = await _sut.AllergiesGet(userPatientLinkToken, sessionId, endUserSessionId);
+
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
+        }
+        
         [TestMethod]
         public async Task PrescriptionsGet_ReturnsAPrescriptionsResponse_WhenValidlyRequested()
         {

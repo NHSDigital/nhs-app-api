@@ -86,6 +86,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
+            services.AddTransient<IEmisAllergyMapper, EmisAllergyMapper>();
             services.AddTransient<IPrescriptionRequestValidationService, PrescriptionRequestValidationService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();

@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
+using NHSOnline.Backend.Worker.Router.MyRecord;
 using NHSOnline.Backend.Worker.Router.Session;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
@@ -15,6 +16,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
     {
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
+        private readonly IEmisAllergyMapper _emisAllergyMapper;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IOptions<ConfigurationSettings> _settings;
@@ -23,11 +25,13 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             ILoggerFactory loggerFactory,
             IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper,
+            IEmisAllergyMapper emisAllergyMapper,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             IOptions<ConfigurationSettings> settings)
         {
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
+            _emisAllergyMapper = emisAllergyMapper;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _loggerFactory = loggerFactory;
             _settings = settings;
@@ -53,6 +57,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public IPrescriptionService GetPrescriptionService()
         {
             return new EmisPrescriptionService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
+        }
+
+        public IPatientRecordService GetPatientRecordService()
+        {
+            return new EmisPatientRecordService(_loggerFactory, _settings, _emisClient, _emisAllergyMapper);
         }
 
         public ISessionService GetSessionService()

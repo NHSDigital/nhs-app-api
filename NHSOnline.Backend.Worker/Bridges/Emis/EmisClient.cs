@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.Date;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
@@ -25,6 +26,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
         private const string SessionsPath = "sessions";
         private const string DemographicsPath = "demographics?userPatientLinkToken={0}";
+        private const string PatientAllergiesPath = "record?userPatientLinkToken={0}&itemType=Allergies";
         private const string AppointmentSlotsMetaPath = "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
         private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
@@ -60,6 +62,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             var path = string.Format(DemographicsPath, userPatientLinkToken);
 
             var response = await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
+            return response;
+        }
+
+        public async Task<EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId)
+        {
+            var path = string.Format(PatientAllergiesPath, userPatientLinkToken);
+
+            var response = await Get<AllergyRequestsGetResponse>(path, endUserSessionId, responseSessionId);
             return response;
         }
 

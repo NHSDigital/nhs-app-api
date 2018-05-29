@@ -1,0 +1,49 @@
+﻿swagger: "2.0"
+
+info:
+  version: 0.0.5
+  title: NHS App Sub-API - My Record
+  description: NHS App Sub-API - endpoints pertaining to patient record. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+
+paths:
+  /allergies:
+    get:
+      tags:
+        - allergies
+      summary: Gets allergies for the logged on user.
+      description: Returns users allergies for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      produces:
+        - application/json
+      responses:
+        200:
+          description: Returns allergy data for the logged in user.
+          schema:
+            $ref: "#/definitions/AllergyListResponse"
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+ 
+definitions:
+  AllergyListResponse:
+    type: object
+    properties:
+      allergies:
+        type: array
+        description: Array of allergy items.
+        items:
+          $ref: '#/definitions/AllergyItem'
+  AllergyItem:
+    type: object
+    properties:
+      allergyName:
+        type: string
+        description: The name of the allergy.
+      availabilityDateTime:
+        type: string
+        format: date-time
+        description: When the record was entered.
