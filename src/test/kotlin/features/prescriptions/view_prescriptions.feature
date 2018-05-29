@@ -214,3 +214,10 @@ Feature: View prescriptions
     But the GP System is too slow
     When I request prescriptions for the last 6 months
     Then I get a "Gateway Timeout" error
+
+  @backend
+  Scenario: Requesting prescriptions with correct data returns a list of prescriptions when a patient had repeat prescriptions in the last 6 months (Date 6 months ago provided)
+    Given I have logged in and have a valid session cookie
+    And From date is 6 months ago and I have 10 prescriptions in the last 6 months
+    When I get the users prescriptions with a valid cookie
+    Then I receive a list of 10 prescriptions

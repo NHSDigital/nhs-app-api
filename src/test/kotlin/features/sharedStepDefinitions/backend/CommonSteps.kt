@@ -4,8 +4,12 @@ import config.Config
 import cucumber.api.java.Before
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import mocking.MockDefaults
+import mocking.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
+import mocking.MockDefaults.Companion.patient
 
 import mocking.MockingClient
+import mocking.emis.models.AssociationType
 import mocking.emis.session.EmisEndUserSessionBuilder
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -14,6 +18,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.session.UserSessionRequest
 
 
 class CommonSteps : AbstractSteps() {
@@ -45,7 +50,7 @@ class CommonSteps : AbstractSteps() {
     @Then("^I receive (?:a|an) \"(.*)\" error")
     fun thenIReceiveAMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
-        var exception = sessionVariableCalled<NhsoHttpException>("HttpException")
+        val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
         println("$exception")
         assertNotNull("An exception was expected but was not returned within the expected time limit.", exception)
         assertEquals(converted, exception.StatusCode)
@@ -66,4 +71,41 @@ class CommonSteps : AbstractSteps() {
         return _errorMapping[errorName.toLowerCase()]
                 ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
     }
+
+    @Given("I have logged in and have a valid session cookie")
+    fun givenIHaveLoggedInAndHaveAValidSessionCookie() {
+
+        mockingClient.forCitizenId {
+            tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
+                    .respondWithSuccess(
+                            "access_token",
+                            "30",
+                            "30",
+                            "refresh_token",
+                            "token_type")
+        }
+
+        mockingClient.forCitizenId {
+            userInfoRequest("access_token")
+                    .respondWithSuccess()
+        }
+
+        mockingClient.forEmis {
+            endUserSessionRequest()
+                    .respondWithSuccess(DEFAULT_END_USER_SESSION_ID)
+        }
+
+        mockingClient.forEmis {
+            sessionRequest(patient)
+                    .respondWithSuccess(patient, AssociationType.Self)
+        }
+
+        val userSessionRequest = UserSessionRequest(
+                MockDefaults.userSessionRequest.codeVerifier,
+                MockDefaults.userSessionRequest.authCode
+        )
+
+        sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(userSessionRequest)
+    }
+
 }

@@ -30,7 +30,7 @@ class Config private constructor() {
     init {
         url = envOrDefault("url", "http://localhost:3000")
         wiremockUrl = envOrDefault("wiremockUrl", "http://localhost:8080")
-        backendUrl = envOrDefault("backendUrl", "http://localhost:8082")
+        backendUrl = envOrDefault("backendUrl", "http://localhost:8082/")
         nodeEnv = envOrDefault("NODE_ENV", "production")
         port = envOrDefault("PORT", "3000")
 

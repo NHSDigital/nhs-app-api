@@ -1,0 +1,54 @@
+package mocking.emis.prescriptions
+
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.GsonBuilder
+import mocking.emis.*
+import mocking.emis.appointments.GetAppointmentSlotsResponseModel
+import mocking.emis.models.AppointmentSession
+import mocking.emis.models.AppointmentSlot
+import mocking.emis.models.PrescriptionRequestsGetResponse
+import mocking.models.Mapping
+import org.apache.http.HttpStatus
+import java.time.OffsetDateTime
+
+private const val QUERY_PRESCRIPTION_FROMDATE = "filterFromDate"
+private const val QUERY_PRESCRIPTION_TODATE = "filterToDate"
+
+class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
+                                linkToken: String,
+                                apiEndUserSessionId: String,
+                                apiSessionId: String,
+                                fromDate: OffsetDateTime,
+                                toDate: OffsetDateTime)
+    :EmisMappingBuilder(configuration, "GET", "/prescriptionrequests"){
+
+    init {
+        requestBuilder
+                .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
+                .andHeader(HEADER_API_SESSION_ID, apiSessionId)
+                .andQueryParameter(QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken,"equalTo")
+                .andQueryParameter(QUERY_PRESCRIPTION_FROMDATE, getDateFormattedString(fromDate), "contains" )
+                .andQueryParameter(QUERY_PRESCRIPTION_TODATE, getDateFormattedString(toDate), "contains" )
+    }
+
+    fun respondWithSuccess(prescriptionRequestsGetResponse: PrescriptionRequestsGetResponse): Mapping {
+
+        return respondWithSuccessAny(prescriptionRequestsGetResponse)
+    }
+
+    private fun getDateFormattedString(dateTime: OffsetDateTime): String{
+        return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
+    }
+
+    private fun formatDateToTwoDigits(daysOrMonths: Int): String{
+        return String.format("%02d", daysOrMonths)
+    }
+
+    private fun respondWithSuccessAny(body: Any): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andJsonBody(body, GsonBuilder()
+                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
+                    .create())
+        }
+    }
+}

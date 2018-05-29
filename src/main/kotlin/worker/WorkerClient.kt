@@ -16,11 +16,15 @@ import org.apache.http.impl.client.HttpClients
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import org.apache.http.entity.StringEntity
+import org.apache.http.protocol.HttpContext
+import worker.models.courses.CourseListResponse
+import worker.models.prescriptions.PrescriptionListResponse
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import worker.models.session.UserSessionResponse.UserSessionResponseCookie
 import java.io.InputStreamReader
 import java.io.BufferedReader
+import java.net.URLEncoder
 import javax.servlet.http.Cookie
 
 
@@ -86,8 +90,34 @@ class WorkerClient {
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
     }
 
-    private fun sendAsync(request: HttpUriRequest): HttpResponse {
-        val response = _client.execute(request)
+    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionListResponse {
+        var queryString = ""
+        if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
+        val response = sendAsync(httpGet, context)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+
+        return gson.fromJson<PrescriptionListResponse>(result, PrescriptionListResponse::class.java)
+    }
+
+
+    fun getCoursesConnection(context: HttpContext?): CourseListResponse {
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
+
+        val response = sendAsync(httpGet, context)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+
+        return gson.fromJson<CourseListResponse>(result, CourseListResponse::class.java)
+    }
+
+
+    private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse {
+        val response = if (context != null) _client.execute(request, context) else _client.execute(request)
+
         if (response.statusLine.statusCode != SC_OK && response.statusLine.statusCode != SC_CREATED) {
             // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
             // when values are not as expected.  This makes it easier to debug.

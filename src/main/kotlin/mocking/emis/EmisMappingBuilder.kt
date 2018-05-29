@@ -3,19 +3,23 @@ package mocking.emis
 import mocking.MappingBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsMetaBuilder
+import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.me.EmisMeBuilder
 import mocking.emis.models.ExceptionResponse
+import mocking.emis.prescriptions.EmisPrescriptionsBuilder
 import mocking.emis.session.EmisEndUserSessionBuilder
 import mocking.emis.session.EmisSessionBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
+import java.time.OffsetDateTime
 
 const val HEADER_API_APPLICATION_ID = "X-API-ApplicationId"
 const val HEADER_API_END_USER_SESSION_ID = "X-API-EndUserSessionId"
 const val HEADER_API_SESSION_ID = "X-API-SessionId"
 const val HEADER_API_VERSION = "X-API-Version"
+const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
 open class EmisMappingBuilder(private val configuration: EmisConfiguration, private val method: String, relativePath: String) : MappingBuilder(method, "/emis$relativePath") {
     init {
@@ -48,6 +52,19 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
 
     fun sessionRequest(patient: Patient) = EmisSessionBuilder(configuration, patient)
 
+    fun prescriptionsRequest(patient: Patient, fromDate: OffsetDateTime, toDate: OffsetDateTime) = EmisPrescriptionsBuilder(
+            configuration,
+            patient.userPatientLinkToken,
+            patient.endUserSessionId,
+            patient.sessionId,
+            fromDate,
+            toDate)
+
+    fun coursesRequest(patient: Patient) = EmisCoursesBuilder(
+            configuration,
+            patient.endUserSessionId,
+            patient.userPatientLinkToken,
+            patient.sessionId)
 
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
 
