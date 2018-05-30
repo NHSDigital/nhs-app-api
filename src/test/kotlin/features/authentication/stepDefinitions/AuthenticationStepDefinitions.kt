@@ -5,10 +5,13 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.authentication.steps.AuthReturnSteps
+import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myAccount.steps.MyAccountSteps
+import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
+import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockDefaults
 import mocking.MockingClient
@@ -25,7 +28,7 @@ import worker.models.session.UserSessionResponse
 import java.time.Duration
 
 
-class AuthenticationStepDefinitions {
+class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -36,9 +39,20 @@ class AuthenticationStepDefinitions {
     @Steps
     lateinit var nav: NavigationSteps
     @Steps
+    lateinit var authReturn: AuthReturnSteps
+    @Steps
+    lateinit var accountCreation: CIDAccountCreationSteps
+    @Steps
     lateinit var myAccount: MyAccountSteps
 
-    val mockingClient = MockingClient.instance
+    @And("^sign in verification is slow$")
+    fun signInVerificationIsSlow() {
+        mockingClient.forEmis {
+            endUserSessionRequest().respondWithSuccess(
+                    endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                    milliSecondDelay = 2000)
+        }
+    }
 
     private var authCode: String? = MockDefaults.userSessionRequest.authCode
     private var codeVerifier: String? = MockDefaults.userSessionRequest.codeVerifier
@@ -249,10 +263,14 @@ class AuthenticationStepDefinitions {
     fun hasASlowConnection() {
         // TODOs
     }
-
     @When("^I log in")
     fun logIn() {
         login.asDefault()
+    }
+    @When("I am on the home page")
+    fun gotoHomePage()
+    {
+        browser.changeTabToApp();
     }
 
     @When("^I browse to the page at (.*)$")
@@ -291,4 +309,46 @@ class AuthenticationStepDefinitions {
     fun iSeeNavbar() {
         nav.assertVisible()
     }
+
+    @Then("^I see create account button$")
+    fun iSeeCreateAccountButton() {
+        login.assertCreateAccountButtonIsVisible()
+    }
+
+    @When("I select to create an account")
+    fun iClickCreateAccountButton() {
+        login.clickCreateAccountButton()
+    }
+
+    @When("I have completed account creation")
+    fun iCreateAnAccount() {
+        login.createAccount()
+    }
+
+    @Then("^the spinner appears$")
+    @Throws(Exception::class)
+    fun theSpinnerAppears() {
+        authReturn.assertSpinnerVisible()
+    }
+
+    @Then ("^I am redirected to the CID create an account page$")
+    @Throws(Exception::class)
+    fun IAmRedirectedToTheCIDCreateAnAccountPage() {
+        accountCreation.assertPageIsVisible()
+    }
+
+    @Then ("^I am redirected to the signed in home page$")
+    @Throws(Exception::class)
+    fun IAmRedirectedToTheSignedInHomePage()
+    {
+        home.assertPageIsVisible();
+    }
+
+    @Then ("^I am redirected to the app to the signed in home page$")
+    @Throws(Exception::class)
+    fun IAmRedirectedToTheAppToTheSignedInHomePage()
+    {
+        home.assertPageIsVisible();
+    }
+
 }

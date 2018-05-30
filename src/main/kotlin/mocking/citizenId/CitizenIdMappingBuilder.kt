@@ -3,6 +3,7 @@ package mocking.citizenId
 import mocking.MappingBuilder
 import mocking.citizenId.login.CompleteLoginRequestBuilder
 import mocking.citizenId.login.InitialLoginRequestBuilder
+import mocking.citizenId.login.AccountRegistrationRequestBuilder
 import mocking.citizenId.login.TokenRequestBuilder
 import mocking.citizenId.login.UserInfoRequestBuilder
 
@@ -14,6 +15,8 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String)
     }
 
     fun initialLoginRequest(redirectUri: String, clientId: String) = InitialLoginRequestBuilder(redirectUri, clientId)
+
+    fun createAccountRequest(redirectUri: String, clientId: String) = AccountRegistrationRequestBuilder(redirectUri, clientId)
 
     fun completeLoginRequest() = CompleteLoginRequestBuilder()
 

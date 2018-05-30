@@ -23,6 +23,8 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     @FindBy(how = How.XPATH, using = "//*[@data-id='create-account-button']")
     lateinit var createAccountButton: WebElementFacade
 
+    lateinit var accountCreationPage : CIDAccountCreationPage
+
     fun checkMySymptoms() {
         symptomsButton
                 .waitUntilClickable<WebElementFacade>()
@@ -38,6 +40,27 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             // complete login until CID integration developed
             findByXpath("//*[@id='complete_login']").click()
         }
+    }
+
+    fun createAccount() {
+        clickCreateAccountButton()
+
+        if (onMobile()) {
+            switchToPage(CitizenIDPage::class.java).login("realmadmin@gmail.com", "Welcome123!")
+        } else {
+            // complete login until CID integration developed
+            accountCreationPage.completeAccountCreation()
+        }
+    }
+
+    fun isCreateAccountButtonVisible() : Boolean {
+
+        return createAccountButton.isVisible;
+    }
+
+    fun clickCreateAccountButton()
+    {
+        createAccountButton.click()
     }
 
     override fun shouldBeDisplayed() {
