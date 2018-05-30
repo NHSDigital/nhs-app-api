@@ -30,11 +30,11 @@ ENV ASPNETCORE_URLS http://*:8082
 ENV CITIZEN_ID_BASE_URL https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/
 ENV CITIZEN_ID_CLIENT_ID nhs-online-poc
 ENV CITIZEN_ID_CLIENT_SECRET 872b46c9-0afe-4037-8958-e7bbc209a379
-ENV CORS_AUTHORITY https://www.develop.bitraft.io
+ENV CORS_AUTHORITY https://www-preview.nonliveeuw.bitraft.io
 ENV EMIS_APPLICATION_ID D66BA979-60D2-49AA-BE82-AEC06356E41F
 ENV EMIS_BASE_URL http://nhsonline.stubs:8080/emis/
 ENV EMIS_VERSION 2.1.0.0
-ENV NHS_WEB_APP_BASE_URL https://www.develop.bitraft.io/
+ENV NHS_WEB_APP_BASE_URL https://www-preview.nonliveeuw.bitraft.io/
 ENV SESSION_EXPIRY_MINUTES 20
 ENV WAIT_FOR_TIMEOUT 60
 ENV REDIS_ODSLOOKUP_CONFIG nhsonline.redis.sds:6379
