@@ -25,12 +25,10 @@ export default {
       );
     },
   },
-  methods: {
-    created() {
-      if (this.$route.query.source === 'mobile') {
-        this.$store.dispatch('device/updateIsNativeApp', true);
-      }
-    },
+  created() {
+    if (this.$route.query.source === 'mobile') {
+      this.$store.dispatch('device/updateIsNativeApp', true);
+    }
   },
 };
 </script>

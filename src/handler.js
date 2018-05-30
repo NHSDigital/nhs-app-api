@@ -1,4 +1,4 @@
-module.exports = (req, res) => {
+module.exports = (req, res, next) => {
   if (req.url === '/apple-app-site-association') {
     res.setHeader('content-type', 'application/json');
     res.writeHead(200);
@@ -15,5 +15,7 @@ module.exports = (req, res) => {
     };
     res.write(JSON.stringify(links));
     res.end();
+  }else {
+    next();
   }
 };
