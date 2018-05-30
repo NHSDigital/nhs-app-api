@@ -49,6 +49,7 @@ export default {
     Spinner,
     FloatingButtonBottom,
   },
+  middleware: ['meta', 'auth'],
   computed: {
     showNoPrescriptions() {
       return (

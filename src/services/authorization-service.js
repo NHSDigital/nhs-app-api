@@ -91,7 +91,6 @@ class AuthorizationService {
     const url = `${baseUrl}?${query}`;
     window.location = url;
   }
-
 }
 
 export default AuthorizationService;

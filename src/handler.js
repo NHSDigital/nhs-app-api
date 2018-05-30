@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
     };
     res.write(JSON.stringify(links));
     res.end();
-  }else {
+  } else {
     next();
   }
 };
