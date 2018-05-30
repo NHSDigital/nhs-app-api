@@ -54,14 +54,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
             // Arrange
             var item = new AllergyRequestsGetResponse
             {
-                Allergies = new List<AllergyResponse>
+                MedicalRecord = new AllergyMedicalRecord 
                 {
-                    new AllergyResponse
+                    Allergies = new List<AllergyResponse>
                     {
-                        Term = _fixture.Create<string>(),
-                        AvailabilityDateTime = _fixture.Create<DateTimeOffset>(),
+                        new AllergyResponse
+                        {
+                            Term = _fixture.Create<string>(),
+                            AvailabilityDateTime = _fixture.Create<DateTimeOffset>(),
+                        },
                     },
-                },
+                }
             };
 
             // Act
@@ -69,7 +72,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
 
             // Assert
             result.Should().NotBeNull();
-            result.Allergies.Should().HaveCount(item.Allergies.Count());
+            result.Allergies.Should().HaveCount(item.MedicalRecord.Allergies.Count());
 
             var expectedResult = new AllergyListResponse
             {
@@ -77,8 +80,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
                 {
                     new AllergyItem
                     {
-                        AllergyName = item.Allergies.ElementAt(0).Term,
-                        AvailabilityDate = item.Allergies.ElementAt(0).AvailabilityDateTime,
+                        AllergyName = item.MedicalRecord.Allergies.ElementAt(0).Term,
+                        AvailabilityDate = item.MedicalRecord.Allergies.ElementAt(0).AvailabilityDateTime,
                     }
                 },
             };
