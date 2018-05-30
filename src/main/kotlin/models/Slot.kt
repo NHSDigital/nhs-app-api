@@ -5,5 +5,5 @@ class Slot {
     var time: String = ""
     var session: String = ""
     var location: String = ""
-    var clinictian: ArrayList<String> = ArrayList()
+    var clinician: ArrayList<String> = ArrayList()
 }

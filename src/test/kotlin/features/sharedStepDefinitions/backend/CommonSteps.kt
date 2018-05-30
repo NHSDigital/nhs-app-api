@@ -1,6 +1,5 @@
 package features.sharedStepDefinitions.backend
 
-import config.Config
 import cucumber.api.java.Before
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -10,7 +9,6 @@ import mocking.MockDefaults.Companion.patient
 
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
-import mocking.emis.session.EmisEndUserSessionBuilder
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpStatus
@@ -27,7 +25,7 @@ class CommonSteps : AbstractSteps() {
     fun beforeEachScenario() {
         mockingClient = MockingClient.instance
         workerClient = WorkerClient()
-        mockingClient.resetWiremock()
+        mockingClient.clearWiremock()
 
         setSessionVariable(MockingClient::class).to(mockingClient)
         setSessionVariable(WorkerClient::class).to(workerClient)
@@ -56,7 +54,7 @@ class CommonSteps : AbstractSteps() {
         assertEquals(converted, exception.StatusCode)
     }
 
-    private val _errorMapping: HashMap<String, Int> = hashMapOf<String, Int>(
+    private val _errorMapping: HashMap<String, Int> = hashMapOf(
             "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
             "bad request" to HttpStatus.SC_BAD_REQUEST,
             "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
@@ -72,13 +70,15 @@ class CommonSteps : AbstractSteps() {
                 ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
     }
 
-    @Given("I have logged in and have a valid session cookie")
+    @Given("^I have logged in and have a valid session cookie$")
     fun givenIHaveLoggedInAndHaveAValidSessionCookie() {
+
+        val accessToken = "access_token"
 
         mockingClient.forCitizenId {
             tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
                     .respondWithSuccess(
-                            "access_token",
+                            accessToken,
                             "30",
                             "30",
                             "refresh_token",
@@ -86,7 +86,7 @@ class CommonSteps : AbstractSteps() {
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest("access_token")
+            userInfoRequest("Bearer ".plus(accessToken))
                     .respondWithSuccess()
         }
 
@@ -100,12 +100,7 @@ class CommonSteps : AbstractSteps() {
                     .respondWithSuccess(patient, AssociationType.Self)
         }
 
-        val userSessionRequest = UserSessionRequest(
-                MockDefaults.userSessionRequest.codeVerifier,
-                MockDefaults.userSessionRequest.authCode
-        )
-
-        sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(userSessionRequest)
+        sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
     }
 
 }

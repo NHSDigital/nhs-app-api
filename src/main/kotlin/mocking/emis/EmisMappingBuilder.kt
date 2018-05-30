@@ -28,18 +28,18 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
                 .andHeader(HEADER_API_VERSION, configuration.version)
     }
 
-    fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? = null, toDateTime: String? = null, sessionId: String? = null) = EmisAppointmentSlotsBuilder(
+    fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? = null, toDateTime: String? = null) = EmisAppointmentSlotsBuilder(
             configuration,
             patient.endUserSessionId,
             patient.sessionId,
             fromDateTime,
             toDateTime,
-            sessionId)
+            patient.userPatientLinkToken)
 
     fun appointmentSlotsMetaRequest(patient: Patient, sessionStartDate: String? = null, sessionEndDate: String? = null) = EmisAppointmentSlotsMetaBuilder(
             configuration,
             patient.endUserSessionId,
-            patient.userPatientLinkToken,
+            patient.sessionId,
             sessionStartDate,
             sessionEndDate,
             patient.userPatientLinkToken)

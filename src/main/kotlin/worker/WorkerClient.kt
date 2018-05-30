@@ -12,11 +12,13 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import org.apache.http.entity.StringEntity
 import org.apache.http.protocol.HttpContext
+import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.courses.CourseListResponse
 import worker.models.prescriptions.PrescriptionListResponse
 import worker.models.session.UserSessionRequest
@@ -90,6 +92,20 @@ class WorkerClient {
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
     }
 
+    fun getAppointmentSlots(fromDate: String? = null, toDate: String? = null, sessionCookie: Cookie? = null): AppointmentSlotsResponse {
+        val uriBuilder = createUriBuilderForAppointmentSlots(fromDate, toDate)
+        val httpGet = HttpGet(uriBuilder.build())
+        if (sessionCookie != null) httpGet.addHeader("Cookie", sessionCookie.value.split(";")[0])
+
+        val response = sendAsync(httpGet, null)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+        println(result)
+
+        return gson.fromJson<AppointmentSlotsResponse>(result, AppointmentSlotsResponse::class.java)
+    }
+
     fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionListResponse {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
@@ -114,6 +130,16 @@ class WorkerClient {
         return gson.fromJson<CourseListResponse>(result, CourseListResponse::class.java)
     }
 
+    private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {
+        val uriBuilder = URIBuilder(config.backendUrl + WorkerPaths.appointmentSlots)
+        if (!fromDate.isNullOrEmpty()) {
+            uriBuilder.setParameter("fromDate", fromDate)
+        }
+        if (!toDate.isNullOrEmpty()) {
+            uriBuilder.setParameter("toDate", toDate)
+        }
+        return uriBuilder
+    }
 
     private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse {
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)

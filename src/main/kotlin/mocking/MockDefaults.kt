@@ -3,8 +3,8 @@ package mocking
 import mocking.emis.EmisConfiguration
 import config.Config
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
+import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
-import mocking.emis.models.appointmentslots.MetaSession
 import models.Patient
 import worker.models.session.UserSessionRequest
 
@@ -49,64 +49,65 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                     .respondWithSuccess(patient, AssociationType.Self)
         }
 
-        mockingClient
-                .forEmis {
-                    appointmentSlotsMetaRequest(patient)
-                            .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
-                                    locations = arrayListOf(
-                                            Location(
-                                                    locationId = 1,
-                                                    locationName = "Surgery",
-                                                    numberAndStreet = "12 Old Road",
-                                                    town = "Healthton",
-                                                    postcode = "HE4 1TH"
-                                            )
-                                    ),
-                                    sessions = arrayListOf(
-                                            MetaSession(
-                                                    sessionId = 1,
-                                                    sessionName = "Foot clinic",
-                                                    locationId = 1,
-                                                    defaultDuration = 60,
-                                                    sessionType = SessionType.Timed,
-                                                    numberOfSlots = 2
-                                            )
-                                    ),
-                                    sessionHolders = arrayListOf(
-                                            SessionHolder(
-                                                    clinicianId = 1,
-                                                    displayName = "Miss Sally",
-                                                    forenames = "Sally",
-                                                    surname = "Dobson",
-                                                    title = "Ms",
-                                                    sex = Sex.Female
-                                            )
-                                    )
-                            ))
-                }
+        val appointmentSlotsMetadataResponse = GetAppointmentSlotsMetaResponseModel(
+                locations = arrayListOf(
+                        Location(
+                                locationId = 1,
+                                locationName = "Surgery",
+                                numberAndStreet = "12 Old Road",
+                                town = "Healthton",
+                                postcode = "HE4 1TH"
+                        )
+                ),
+                sessions = arrayListOf(
+                        Session(
+                                sessionId = 1,
+                                sessionName = "Foot clinic",
+                                locationId = 1,
+                                defaultDuration = 60,
+                                sessionType = SessionType.Timed,
+                                numberOfSlots = 2
+                        )
+                ),
+                sessionHolders = arrayListOf(
+                        SessionHolder(
+                                clinicianId = 1,
+                                displayName = "Miss Sally",
+                                forenames = "Sally",
+                                surname = "Dobson",
+                                title = "Ms",
+                                sex = Sex.Female
+                        )
+                )
+        )
 
         mockingClient
                 .forEmis {
+                    appointmentSlotsMetaRequest(patient)
+                            .respondWithSuccess(appointmentSlotsMetadataResponse)
+                }
+
+        val appointmentSlotResponseSession = AppointmentSession("2017-05-08", 2,
+                arrayListOf(
+                        AppointmentSlot(
+                                slotId = 1,
+                                startTime = "2017-05-08T13:00:00.000Z",
+                                endTime = "2017-05-08T13:15:00.000Z",
+                                slotTypeName = "GP appointment",
+                                slotTypeStatus = SlotTypeStatus.Practice),
+                        AppointmentSlot(
+                                slotId = 2,
+                                startTime = "2017-05-08T13:00:00.000Z",
+                                endTime = "2017-05-08T13:15:00.000Z",
+                                slotTypeName = "Hearing test",
+                                slotTypeStatus = SlotTypeStatus.Practice)
+                )
+        )
+        val appointmentSlotResponse = GetAppointmentSlotsResponseModel(arrayListOf(appointmentSlotResponseSession))
+        mockingClient
+                .forEmis {
                     appointmentSlotsRequest(patient)
-                            .respondWithSuccess(
-                                    sessionDate = "2017-05-08",
-                                    sessionId = 2,
-                                    slots = arrayListOf(
-                                            AppointmentSlot(
-                                                    slotId = 1,
-                                                    startTime = "2017-05-08T13:00:00.000Z",
-                                                    endTime = "2017-05-08T13:15:00.000Z",
-                                                    slotTypeName = "GP appointment",
-                                                    slotTypeStatus = SlotTypeStatus.Practice
-                                            ), AppointmentSlot(
-                                            slotId = 2,
-                                            startTime = "2017-05-08T13:00:00.000Z",
-                                            endTime = "2017-05-08T13:15:00.000Z",
-                                            slotTypeName = "Hearing test",
-                                            slotTypeStatus = SlotTypeStatus.Practice
-                                    )
-                                    )
-                            )
+                            .respondWithSuccess(appointmentSlotResponse)
 
                 }
 
@@ -140,8 +141,8 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 endUserSessionId = DEFAULT_END_USER_SESSION_ID)
 
         val userSessionRequest = UserSessionRequest(
-            authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
-            codeVerifier = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e"
+                authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
+                codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
         )
     }
 }

@@ -19,14 +19,14 @@ class AppointmentsInBSTAndGMTtimeZoneFactory {
         slot1.date = bstDate.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy"))
         slot1.time = bstDate.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("H:m a"))
         slot1.session = "Appointment Session"
-        slot1.clinictian.add("Dr Emmett Brown")
+        slot1.clinician.add("Dr Emmett Brown")
         slot1.location = "Wiltshire, Surrey, South"
 
         var slot2 = Slot()
         slot2.date = gmtDate.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy"))
         slot2.time = gmtDate.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("H:m a"))
         slot2.session = "Appointment Session"
-        slot2.clinictian.add("Dr Who")
+        slot2.clinician.add("Dr Who")
         slot2.location = "Wiltshire, Surrey, South"
 
         return listOf(slot1, slot2)

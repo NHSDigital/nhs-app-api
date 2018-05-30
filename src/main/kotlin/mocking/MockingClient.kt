@@ -8,6 +8,7 @@ import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpException
 import org.apache.http.HttpStatus
+import org.apache.http.HttpStatus.SC_OK
 import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.client.methods.HttpDelete
 import org.apache.http.client.methods.HttpPost
@@ -55,15 +56,11 @@ class MockingClient(private val configuration: MockingConfiguration) {
         deleteWiremockDetails(endpoint = "requests")
     }
 
-    fun resetWiremock() {
-        MockDefaults(Config.instance, this).mock()
-    }
-
     private fun deleteWiremockDetails(endpoint: String) {
         val uri = "${configuration.wiremockAdminUrl}/$endpoint"
         val httpDelete = HttpDelete(uri)
         val response = HttpClients.createDefault().execute(httpDelete)
-        if (response.statusLine.statusCode != 200) {
+        if (response.statusLine.statusCode != SC_OK) {
             reportWiremockError(response)
             throw Exception("Failed to delete mappings using URI: $uri")
         }

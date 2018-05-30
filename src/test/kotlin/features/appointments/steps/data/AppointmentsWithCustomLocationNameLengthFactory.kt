@@ -1,10 +1,6 @@
 package features.appointments.steps.data
 
 import mocking.MockingClient
-import mocking.emis.appointments.GetAppointmentSlotsResponseModel
-import mocking.emis.models.AppointmentSession
-import mocking.emis.models.AppointmentSlot
-import mocking.emis.models.SlotTypeStatus
 import models.Slot
 import java.time.Instant
 import java.time.ZoneId
@@ -23,7 +19,7 @@ class AppointmentsWithCustomLocationNameLengthFactory(val mockingClient: Mocking
         slot.date = date.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy"))
         slot.time = date.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("H:m a"))
         slot.session = "Appointment Session"
-        slot.clinictian.add("Dr Who")
+        slot.clinician.add("Dr Who")
         slot.location = location
 
         return listOf(slot)

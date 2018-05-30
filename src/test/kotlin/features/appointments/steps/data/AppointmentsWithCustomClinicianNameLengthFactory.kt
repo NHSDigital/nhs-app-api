@@ -27,7 +27,7 @@ class AppointmentsWithCustomClinicianNameLengthFactory {
         slot.date = date.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("EEEE dd MMMM yyyy"))
         slot.time = date.withZoneSameInstant(ZoneId.of("Europe/London")).format(DateTimeFormatter.ofPattern("H:m a"))
         slot.session = "Appointment Session"
-        slot.clinictian = clinicians
+        slot.clinician = clinicians
         slot.location = "Leeds"
 
         return listOf(slot)

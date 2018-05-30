@@ -30,7 +30,7 @@ open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             val clinicians: List<WebElement> = el.findElement(By.xpath("//*[@class='clinicians']")).findElements(By.xpath("/li"))
             clinicians.forEach { clinician ->
                 val clinicianDisplayName = clinician.text.replace(clinician.findElement(By.xpath("//title")).text, "")
-                slot.clinictian.add(clinicianDisplayName)
+                slot.clinician.add(clinicianDisplayName)
             }
 
             slotList.add(slot)
