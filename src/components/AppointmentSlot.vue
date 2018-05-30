@@ -1,5 +1,5 @@
 <template>
-  <appointment-slot :aria-selected="isSelected(slotId)">
+  <div :aria-selected="isSelected(slotId)">
     <div :class="appointmentSelected" @click="select">
       <h5 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h5>
       <h4 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h4>
@@ -16,7 +16,7 @@
         </li>
       </ul>
     </div>
-  </appointment-slot>
+  </div>
 </template>
 
 
