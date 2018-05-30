@@ -216,7 +216,6 @@ Feature: View prescriptions
     Then I get a "Gateway Timeout" error
 
   @backend
-  @bug
   Scenario: Requesting prescriptions with correct data returns a list of prescriptions when a patient had repeat prescriptions in the last 6 months (Date 6 months ago provided)
     Given I have logged in and have a valid session cookie
     And From date is 6 months ago and I have 10 prescriptions in the last 6 months

@@ -1,6 +1,8 @@
 package features.sharedStepDefinitions.backend
 
+import config.Config
 import cucumber.api.java.Before
+import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.MockDefaults
@@ -11,15 +13,18 @@ import mocking.MockingClient
 import mocking.emis.models.AssociationType
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
+import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.session.UserSessionRequest
+import java.util.concurrent.TimeUnit
 
 
 class CommonSteps : AbstractSteps() {
+
+    private val config = Config.instance
 
     @Before
     fun beforeEachScenario() {
@@ -54,7 +59,16 @@ class CommonSteps : AbstractSteps() {
         assertEquals(converted, exception.StatusCode)
     }
 
-    private val _errorMapping: HashMap<String, Int> = hashMapOf(
+    @Then("^I receive (?:a|an) \"(.*)\" success code")
+    fun thenIReceiveASuccessMessage(expectedStatusCode: String) {
+        val converted = httpStatusCodeTransform(expectedStatusCode)
+        val httpResponse = sessionVariableCalled<HttpResponse>("HttpResponse")
+        assertEquals(converted, httpResponse.statusLine.statusCode)
+    }
+
+    private val _statusCodeMapping: HashMap<String, Int> = hashMapOf(
+            "ok" to HttpStatus.SC_OK,
+            "created" to HttpStatus.SC_CREATED,
             "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
             "bad request" to HttpStatus.SC_BAD_REQUEST,
             "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
@@ -62,12 +76,13 @@ class CommonSteps : AbstractSteps() {
             "internal server error" to HttpStatus.SC_INTERNAL_SERVER_ERROR,
             "conflict" to HttpStatus.SC_CONFLICT,
             "forbidden" to HttpStatus.SC_FORBIDDEN,
-            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE
+            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE,
+            "unauthorized" to HttpStatus.SC_UNAUTHORIZED
     )
 
-    fun httpStatusCodeTransform(errorName: String): Int? {
-        return _errorMapping[errorName.toLowerCase()]
-                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
+    fun httpStatusCodeTransform(statusName: String): Int? {
+        return _statusCodeMapping[statusName.toLowerCase()]
+                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $statusName")
     }
 
     @Given("^I have logged in and have a valid session cookie$")
@@ -103,4 +118,9 @@ class CommonSteps : AbstractSteps() {
         sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
     }
 
+    @And("I allow my session to expire")
+    fun andIDelayMyRequestByTheDefaultTime() {
+        var delayTime = TimeUnit.MINUTES.toMillis(config.sessionExpiryMinutes)
+        Thread.sleep(delayTime + 10)
+    }
 }
