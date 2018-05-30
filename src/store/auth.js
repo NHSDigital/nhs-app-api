@@ -60,6 +60,15 @@ export const actions = {
   performLogin({ state }) {
     new AuthorisationService().performLogin(state.config.codeVerifier);
   },
+  register({ dispatch, commit }, configObj) {
+    const config = Object.assign({}, configObj);
+    config.codeVerifier = AuthorisationService.createVerifier();
+    commit(UPDATE_CONFIG, config);
+    dispatch('performRegistration');
+  },
+  performRegistration({ state }) {
+    new AuthorisationService().performRegistration(state.config.codeVerifier);
+  },
   unauthorised({ commit }) {
     commit(LOGOUT, true);
     this.app.$router.push({

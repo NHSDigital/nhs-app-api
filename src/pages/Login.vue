@@ -6,9 +6,7 @@
 
       <hr :data-content="$t('common.or')" class="hr-text">
 
-      <button data-id="create-account-button" class="create-account-button button">
-        {{ $t('loginOrRegister.createAccount') }}
-      </button>
+      <RegistrationButton />
     </main>
   </div>
 </template>
@@ -16,10 +14,12 @@
 /* eslint-disable import/extensions */
 import LoginButton from '@/components/LoginButton';
 import HomeHeader from '@/components/HomeHeader';
+import RegistrationButton from '@/components/RegistrationButton';
 
 export default {
   middleware: ['meta'],
   components: {
+    RegistrationButton,
     LoginButton,
     HomeHeader,
   },

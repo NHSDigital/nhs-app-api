@@ -71,6 +71,27 @@ class AuthorizationService {
     const url = `${baseUrl}?${query}`;
     window.location = url;
   }
+
+  performRegistration(verifier) {
+    const challenge = createChallenge(verifier);
+    const myState = this.newState(this.cryptoGenerateRandom);
+    const redirectUri = process.env.CID_REDIRECT_URI;
+    const clientId = process.env.CID_CLIENT_ID;
+    const request = {
+      redirect_uri: redirectUri,
+      client_id: clientId,
+      response_type: 'code',
+      state: myState,
+      code_challenge: challenge,
+      code_challenge_method: 'S256',
+    };
+
+    const query = this.stringify(request);
+    const baseUrl = process.env.CID_REGISTER_ENDPOINT;
+    const url = `${baseUrl}?${query}`;
+    window.location = url;
+  }
+
 }
 
 export default AuthorizationService;

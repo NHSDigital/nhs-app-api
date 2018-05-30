@@ -40,5 +40,9 @@ module.exports = {
     CID_AUTH_ENDPOINT:
       process.env.CID_AUTH_ENDPOINT ||
       'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/auth',
+    CID_REGISTER_ENDPOINT:
+      process.env.CID_REGISTER_ENDPOINT ||
+      'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/registrations',
+
   },
 };
