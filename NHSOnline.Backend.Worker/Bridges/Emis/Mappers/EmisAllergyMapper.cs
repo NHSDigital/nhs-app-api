@@ -16,9 +16,9 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis.Mappers
 
             var result = new AllergyListResponse
             {
-                Allergies = (allergiesGetResponse.AllergyRequests ?? Enumerable.Empty<AllergyResponse>()).Select(x => new AllergyItem
+                Allergies = (allergiesGetResponse.Allergies ?? Enumerable.Empty<AllergyResponse>()).Select(x => new AllergyItem
                 {
-                    AllergyName = x.AllergyName,
+                    AllergyName = x.Term,
                     AvailabilityDate = x.AvailabilityDateTime,
                 }),
             };

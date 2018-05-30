@@ -4,6 +4,6 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord
 {
     public class AllergyRequestsGetResponse
     {
-        public IEnumerable<AllergyResponse> AllergyRequests { get; set; }        
+        public IEnumerable<AllergyResponse> Allergies { get; set; }        
     }
 }
