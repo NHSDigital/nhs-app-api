@@ -21,6 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Router
             serviceCollection.AddSingleton<EmisBridge, EmisBridge>();
             serviceCollection.AddSingleton(new Mock<IEmisClient>().Object);
             serviceCollection.AddSingleton(new Mock<IEmisPrescriptionMapper>().Object);
+            serviceCollection.AddSingleton(new Mock<IEmisAllergyMapper>().Object);
             serviceCollection.AddSingleton(new Mock<TimeZoneInfoProvider>().Object);
             serviceCollection.AddSingleton(new Mock<IDateTimeOffsetProvider>().Object);
 
