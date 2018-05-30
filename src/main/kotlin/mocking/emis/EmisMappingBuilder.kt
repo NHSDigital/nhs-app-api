@@ -62,11 +62,11 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
 
     fun sessionRequest(patient: Patient) = EmisSessionBuilder(configuration, patient)
 
-    fun prescriptionsRequest(patient: Patient, fromDate: OffsetDateTime, toDate: OffsetDateTime) = EmisPrescriptionsBuilder(
+    fun prescriptionsRequest(patient: Patient, fromDate: OffsetDateTime? = null, toDate: OffsetDateTime? = null) = EmisPrescriptionsBuilder(
             configuration,
-            patient.userPatientLinkToken,
             patient.endUserSessionId,
             patient.sessionId,
+            patient.userPatientLinkToken,
             fromDate,
             toDate)
 

@@ -48,9 +48,9 @@ open class PrescriptionsStepDefinitions {
         prescriptions.isLoaded()
     }
 
-    @Then("^I see (\\d+) prescriptions$")
-    fun thenISeeXPrescriptions(numPrescriptions: Int){
-        prescriptions.assertPrescriptionsMatch(getExpectedNumPrescriptions(prescriptionsMock), numPrescriptions)
+    @Then("^I see no prescriptions$")
+    fun iSeeNoPrescriptions() {
+        prescriptions.assertNoRepeatPrescriptionsMessageShown()
     }
 
     @Then("^I see a message indicating that I have no repeat prescriptions$")
@@ -63,11 +63,6 @@ open class PrescriptionsStepDefinitions {
         browser.goToApp()
         login.asDefault()
         navigation.select("Prescriptions")
-    }
-
-    @Given("^I have (\\d+) past repeat prescriptions$")
-    fun givenIHaveXPastRepeatPrescriptions(numPrescriptions: Int) {
-            numberOfPrescriptions = numPrescriptions
     }
 
     @And("^each repeat prescription contains (\\d+) courses of which (\\d+) are repeats$")
@@ -101,9 +96,9 @@ open class PrescriptionsStepDefinitions {
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     {
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        val prescriptionsData: PrescriptionRequestsGetResponse = PrescriptionsData.loadPrescriptionsData(10, 10, 10)
+        var prescriptionsData: PrescriptionRequestsGetResponse = PrescriptionsData.loadPrescriptionsData(10, 10, 10)
 
         mockingClient
                 .forEmis {
@@ -117,10 +112,10 @@ open class PrescriptionsStepDefinitions {
     @When("I get the users prescriptions with a valid cookie")
     fun whenIGetTheUsersPrescriptionsWithAValidCookie()
     {
-        val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
+        var formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
 
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(if(formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
+            var result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(if(formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
             Serenity.setSessionVariable(PrescriptionListResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
@@ -129,10 +124,10 @@ open class PrescriptionsStepDefinitions {
 
     @Then("I receive a list of 10 prescriptions")
     fun thenIReceiveAListOfTenPrescriptions() {
-        val result = Serenity.sessionVariableCalled<PrescriptionListResponse>(PrescriptionListResponse::class)
+        var result = Serenity.sessionVariableCalled<PrescriptionListResponse>(PrescriptionListResponse::class)
         Assert.assertNotNull(result)
         Assert.assertEquals(10, result.response.prescriptions.count())
-        val prescriptions = result.response.prescriptions
+        var prescriptions = result.response.prescriptions
 
         // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
         for(int in 0 until prescriptions.count()-2){
@@ -140,13 +135,22 @@ open class PrescriptionsStepDefinitions {
         }
     }
 
-    fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
-        return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
+    @Given("I have (.*) past repeat prescriptions")
+    fun givenIHaveXPastRepeatPrescriptions(count :String){
+
+        var countNum = count.toInt()
+        var prescriptionsData: PrescriptionRequestsGetResponse = PrescriptionsData.loadPrescriptionsData(countNum, countNum, countNum)
+        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+
+        mockingClient
+                .forEmis {
+                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            .respondWithSuccess(prescriptionsData)
+                }
     }
 
-    @Then("I see no prescriptions")
-    fun thenISeeNoPrescriptions() {
-        prescriptions.assertPrescriptionsMatch(getExpectedNumPrescriptions(prescriptionsMock), 0)
+    fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
+        return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
     private fun getExpectedNumPrescriptions(data: PrescriptionRequestsGetResponse): ArrayList<HistoricPrescription>{

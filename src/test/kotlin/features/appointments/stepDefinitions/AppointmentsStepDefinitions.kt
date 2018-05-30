@@ -32,6 +32,7 @@ import javax.servlet.http.Cookie
 
 class AppointmentsStepDefinitions {
 
+
     @Steps
     lateinit var browser: BrowserSteps
     @Steps

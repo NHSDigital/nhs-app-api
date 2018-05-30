@@ -11,6 +11,8 @@ open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
 
     lateinit var headerBar: Header
 
+    private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order a repeat prescription')]"
+
     fun isLoaded(): Boolean {
         return headerBar.isVisible("My repeat prescriptions")
     }
@@ -36,4 +38,17 @@ open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
 
         return historicPrescriptions
     }
+    fun doesOrderARepeatPrescriptionButtonExist () : Boolean {
+
+        val orderARepeatPrescriptionButton = findByXpath(orderARepeatPrescriptionButtonLocator)
+        return orderARepeatPrescriptionButton.isPresent
+    }
+
+    fun clickOrderARepeatPrescriptionButton ()
+    {
+        val orderARepeatPrescriptionButton = findByXpath(orderARepeatPrescriptionButtonLocator)
+        orderARepeatPrescriptionButton.click()
+    }
+
+
 }

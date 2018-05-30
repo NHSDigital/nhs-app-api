@@ -214,7 +214,6 @@ Feature: View prescriptions
     When I request prescriptions for the last 6 months
     Then I get a "Unauthorized" error
 
-
   @pending @NHSO-498
   @backend
   Scenario: GP system is unavailable

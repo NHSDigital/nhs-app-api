@@ -8,7 +8,7 @@ import pages.PrescriptionsPage
 
 open class PrescriptionsSteps {
 
-    lateinit var prescriptions: PrescriptionsPage
+    lateinit var prescriptions :PrescriptionsPage
 
     @Step
     open fun isLoaded() {

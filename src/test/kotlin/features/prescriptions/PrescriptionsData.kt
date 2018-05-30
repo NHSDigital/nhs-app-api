@@ -70,7 +70,7 @@ object PrescriptionsData {
     }
 
     fun getStringValue(list: List<String>): String {
-        return list.get(getrandomNumber(getMedicationCourseNames().size))
+        return list.get(getRandomNumber(getMedicationCourseNames().size))
     }
 
     fun getMedicationCourseNames(): List<String> {
@@ -93,18 +93,18 @@ object PrescriptionsData {
         )
     }
 
-    fun getQuatity(): String {
+    fun getQuantity(): String {
 
-        val quantity = getrandomNumber(100)
+        val quantity = getRandomNumber(100)
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",
                 "$quantity ml")
 
-        return list.get(getrandomNumber(list.size))
+        return list.get(getRandomNumber(list.size))
     }
 
-    fun getrandomNumber(maxNum: Int): Int {
+    fun getRandomNumber(maxNum: Int): Int {
         val random = Random()
         val minNum = 1
 

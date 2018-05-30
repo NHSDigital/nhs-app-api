@@ -15,24 +15,32 @@ private const val QUERY_PRESCRIPTION_FROMDATE = "filterFromDate"
 private const val QUERY_PRESCRIPTION_TODATE = "filterToDate"
 
 class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
-                                linkToken: String,
                                 apiEndUserSessionId: String,
                                 apiSessionId: String,
-                                fromDate: OffsetDateTime,
-                                toDate: OffsetDateTime)
+                                linkToken: String?,
+                                fromDate: OffsetDateTime?,
+                                toDate: OffsetDateTime?)
     :EmisMappingBuilder(configuration, "GET", "/prescriptionrequests"){
 
     init {
         requestBuilder
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
-                .andQueryParameter(QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken,"equalTo")
-                .andQueryParameter(QUERY_PRESCRIPTION_FROMDATE, getDateFormattedString(fromDate), "contains" )
-                .andQueryParameter(QUERY_PRESCRIPTION_TODATE, getDateFormattedString(toDate), "contains" )
+
+        if(linkToken != null) {
+            requestBuilder.andQueryParameter(QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken,"equalTo")
+        }
+
+        if(fromDate != null) {
+            requestBuilder.andQueryParameter(QUERY_PRESCRIPTION_FROMDATE, getDateFormattedString(fromDate), "contains")
+        }
+
+        if(toDate != null) {
+            requestBuilder.andQueryParameter(QUERY_PRESCRIPTION_TODATE, getDateFormattedString(toDate), "contains" )
+        }
     }
 
     fun respondWithSuccess(prescriptionRequestsGetResponse: PrescriptionRequestsGetResponse): Mapping {
-
         return respondWithSuccessAny(prescriptionRequestsGetResponse)
     }
 

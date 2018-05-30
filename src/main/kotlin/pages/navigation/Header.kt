@@ -4,7 +4,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By
 import pages.HybridPageObject
 
-class Header : HybridPageObject(Companion.PageType.NATIVE) {
+class Header: HybridPageObject(Companion.PageType.NATIVE) {
 
     fun isVisible(title: String): Boolean {
         val logoIsVisible = find<WebElementFacade>(By.id("nhs_logo")).isVisible
