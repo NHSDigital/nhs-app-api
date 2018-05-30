@@ -8,3 +8,9 @@ data class MedicationCourse(
         var prescriptionType: PrescriptionType,
         val constituents: List<String>,
         var canBeRequested: Boolean)
+
+{
+    fun getInstructionsText() : String {
+        return "$dosage - $quantityRepresentation"
+    }
+}

@@ -6,6 +6,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.courses.CoursesData
+import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
 import features.prescriptions.steps.PrescriptionsSteps
 import mocking.MockingClient
@@ -30,21 +31,25 @@ open class coursesStepDefinitions {
     lateinit var prescriptionsSteps: PrescriptionsSteps
     @Steps
     lateinit var courseSteps: CourseSteps
+    @Steps
+    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
 
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
 
     lateinit var coursesData: MutableList<MedicationCourse>
 
+    lateinit var selectedCourses: List<MedicationCourse>
+
     @Given("I have (\\d+) assigned prescriptions")
-    fun iHaveXAssignedPrescriptions(numberOfCourses: Int){
+    fun iHaveXAssignedPrescriptions(numberOfCourses: Int) {
         coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf())
         mockingClient.forEmis { coursesRequest(patient).respondWithSuccess(CourseRequestsGetResponse(coursesData)) }
     }
 
     @And("(\\d+) of my prescriptions are of type repeat")
     fun xOfMyPrescriptionsAreOfTypeRepeat(numOfRepeats: Int){
-        if(coursesData == null){
+        if(coursesData == null) {
             throw Exception("No courses have been provisioned")
         }
 
@@ -60,8 +65,12 @@ open class coursesStepDefinitions {
     }
 
     @And("(\\d+) of my prescriptions can be requested")
-    fun xOfMyPrescriptionCanBeRequested(numCanBeRequested: Int){
-        if(numCanBeRequested > coursesData.count()){
+    fun xOfMyPrescriptionCanBeRequested(numCanBeRequested: Int) {
+        if(coursesData == null) {
+            throw Exception("No courses have been provisioned")
+        }
+
+        if(numCanBeRequested > coursesData.count()) {
             throw Exception("Number of courses which can be requested must be less than or equal to total number of courses")
         }
 
@@ -120,11 +129,64 @@ open class coursesStepDefinitions {
     @Then("I see the available repeatable prescriptions")
     fun iSeeTheAvailableRepeatablePrescriptions() {
         courseSteps.isLoaded()
+        val coursesToCheck = getAvailableCoursesFilteredSortedOrdered()
+        courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
+    }
 
-        coursesData = coursesData.filter { medicationCourse -> medicationCourse.canBeRequested }.toMutableList()
-        coursesData = coursesData.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
-        coursesData = coursesData.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
-        coursesData = coursesData.take(100).toMutableList()
-        courseSteps.assertCorrectRepeatPrescriptionsShown(coursesData)
+    @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available")
+    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int, numberOfPrescriptionsToCreate: Int) {
+        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
+        iClickOrderARepeatPrescription()
+
+        val courses = getAvailableCoursesFilteredSortedOrdered()
+        val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
+        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        selectedCourses = coursesToSelect
+    }
+
+    @When("I click Continue on the Order a repeat prescription page")
+    fun iClickContinueOnTheOrderARepeatPrescriptionsPage() {
+        courseSteps.repeatPrescriptions.clickContinueButton()
+    }
+
+    @When("I click 'Change this repeat prescription' on the Prescription confirmation page")
+    fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
+        confirmRepeatPrescriptionOrderSteps.clickChangeThisPrescriptionButton()
+    }
+
+    @Then("I see the previously selected prescriptions on the Confirm repeat prescription page")
+    fun iSeeThePreviouslySelectedPrescriptionsOnTheConfirmRepeatPrescriptionPage() {
+        confirmRepeatPrescriptionOrderSteps.isLoaded()
+        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.verifySelectedRepeatPrescriptions(selectedCourses)
+    }
+
+    @Then("I see my previously selected repeat prescriptions selected")
+    fun iSeeMyPreviouslySelectedRepeatPrescriptionsSelected() {
+        courseSteps.isLoaded()
+        courseSteps.assertCorrectRepeatPrescriptionsSelected(selectedCourses)
+    }
+
+    @Then("A validation message is displayed indicating the user has not selected any repeat prescriptions")
+    fun aValidationMessageIsDisplayedIndicatingTheUserhasNotSelectedAnyRepeatPrescriptions() {
+        courseSteps.assertNoRepeatPrescriptionsSelectedMessageShown()
+    }
+
+    @When("I select (\\d+) additional repeat prescriptions")
+    fun iSelectXAdditionalRepeatPrescriptions(numberOfAdditionalRepeatPrescriptionsToSelect: Int) {
+        val courses = getAvailableCoursesFilteredSortedOrdered()
+        val coursesToSelect = courses.drop(selectedCourses.size).take(numberOfAdditionalRepeatPrescriptionsToSelect)
+        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        selectedCourses = selectedCourses.plus(coursesToSelect)
+    }
+
+    private fun getAvailableCoursesFilteredSortedOrdered() : List<MedicationCourse> {
+        var coursesDataFiltered = coursesData.filter { medicationCourse -> medicationCourse.canBeRequested }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.take(100).toMutableList()
+
+        return coursesDataFiltered
     }
 }

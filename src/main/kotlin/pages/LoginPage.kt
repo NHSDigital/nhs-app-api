@@ -56,8 +56,7 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun isCreateAccountButtonVisible() : Boolean {
-
-        return createAccountButton.isVisible;
+        return createAccountButton.isVisible
     }
 
     fun clickCreateAccountButton()

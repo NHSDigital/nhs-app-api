@@ -14,8 +14,24 @@ open class CourseSteps {
         repeatPrescriptions.shouldBeDisplayed()
     }
 
-    fun assertCorrectRepeatPrescriptionsShown(coursesData: MutableList<MedicationCourse>) {
-        repeatPrescriptions.checkVisiblePrescriptions(coursesData)
+    fun assertCorrectRepeatPrescriptionsShown(coursesData: List<MedicationCourse>) {
+        repeatPrescriptions.verifyVisiblePrescriptions(coursesData)
     }
 
+    fun assertCorrectRepeatPrescriptionsSelected(courses: List<MedicationCourse>) {
+        for (course in courses) {
+            repeatPrescriptions.verifyPrescriptionIsSelected(course)
+        }
+    }
+
+    fun selectRepeatPrescriptions(coursesToSelect: List<MedicationCourse>) {
+        for (course in coursesToSelect) {
+            repeatPrescriptions.selectRepeatPrescription(course)
+        }
+    }
+
+    @Step
+    fun assertNoRepeatPrescriptionsSelectedMessageShown() {
+        Assert.assertTrue(repeatPrescriptions.isNoRepeatPrescriptionsSelectedMessageVisible())
+    }
 }

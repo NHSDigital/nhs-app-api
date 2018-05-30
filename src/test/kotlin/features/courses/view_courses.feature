@@ -57,3 +57,37 @@ Feature: View courses
     And 3 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
     Then I see the available repeatable prescriptions
+
+  @NHSO-502
+  Scenario: The User has selected repeat prescriptions to order
+    And I select 5 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
+
+  @NHSO-502
+  Scenario: The User has selected one repeat prescription to order
+    Given I select 1 repeatable prescriptions out of 1 available
+    When I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
+
+  @NHSO-502
+  Scenario: The User has selected no repeat prescriptions to order
+    Given I select 0 repeatable prescriptions out of 5 available
+    When I click Continue on the Order a repeat prescription page
+    Then A validation message is displayed indicating the user has not selected any repeat prescriptions
+
+  @NHSO-502
+  Scenario: The User alters a repeat prescriptions selection and views previous selection
+    Given I select 5 repeatable prescriptions out of 5 available
+    And I click Continue on the Order a repeat prescription page
+    When I click 'Change this repeat prescription' on the Prescription confirmation page
+    Then I see my previously selected repeat prescriptions selected
+
+  @NHSO-502
+  Scenario: The User alters a repeat prescriptions selection and sees the updated confirmation
+    Given I select 4 repeatable prescriptions out of 5 available
+    And I click Continue on the Order a repeat prescription page
+    When I click 'Change this repeat prescription' on the Prescription confirmation page
+    And I select 1 additional repeat prescriptions
+    When I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
