@@ -3,7 +3,8 @@ Feature: Invoke Organ Donation
   A user can access Organ Donation preferences
 
   Background:
-    Given I am logged in
+    Given wiremock is initialised
+    And I am logged in
     And I navigate to more
 
   Scenario: User clicks on the 'Set organ donation preferences'
