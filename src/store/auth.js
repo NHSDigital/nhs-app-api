@@ -37,14 +37,14 @@ export const actions = {
   logout({ commit, dispatch }) {
     this.app.$http.deleteV1Session().then(() => {
       commit(LOGOUT, true);
-      dispatch('appointmentSlots/init');
-      dispatch('init');
-      dispatch('device/init');
-      dispatch('header/init');
-      dispatch('http/init');
-      dispatch('navigation/init');
-      dispatch('prescriptions/init');
-      dispatch('repeatPrescriptionCourses/init');
+      this.dispatch('appointmentSlots/init');
+      this.dispatch('auth/init');
+      this.dispatch('device/init');
+      this.dispatch('header/init');
+      this.dispatch('http/init');
+      this.dispatch('navigation/init');
+      this.dispatch('prescriptions/init');
+      this.dispatch('repeatPrescriptionCourses/init');
       this.app.router.push('/login');
     });
   },

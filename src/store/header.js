@@ -5,7 +5,7 @@ export const actions = {
   updateHeaderText({ commit }, header) {
     commit(UPDATE_HEADER_TEXT, header);
   },
-  initHeader({ commit }) {
+  init({ commit }) {
     commit(INIT_HEADER);
   },
 };

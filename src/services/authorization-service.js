@@ -64,6 +64,7 @@ class AuthorizationService {
       state: myState,
       code_challenge: challenge,
       code_challenge_method: 'S256',
+      prompt: 'login',
     };
 
     const query = this.stringify(request);
