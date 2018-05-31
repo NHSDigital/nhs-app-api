@@ -30,9 +30,9 @@ namespace NHSOnline.Backend.Worker
                 await RejectPrincipalAndSignOut(context);
             }
 
-            _logger.LogWarning($"User session found: {userSession.ValueOrFailure()}");
+            _logger.LogWarning($"User session found: {userSession.ValueOrDefault()}");
             
-            context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrFailure());
+            context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrDefault());
             _logger.LogDebug("Finish: Validate Principal");
         }
 
