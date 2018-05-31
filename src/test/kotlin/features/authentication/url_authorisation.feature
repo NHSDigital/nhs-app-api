@@ -2,6 +2,9 @@ Feature: Authorisation occurs during each URL visit
 
   Access to the secure area is only granted to authenticated users.  This feature ensures this occurs when directly navigating using URLs too.
 
+  Background:
+    Given wiremock is initialised
+
   @NHSO-906
   @tech-debt @NHSO-1012
   Scenario Outline: User has never logged in and attempts to navigate to secure routes
