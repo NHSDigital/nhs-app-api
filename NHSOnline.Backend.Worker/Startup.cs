@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
+using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Date;
@@ -78,6 +79,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
+            services.AddTransient<IEmisDemographicsMapper, EmisDemographicsMapper>();
             services.AddTransient<IPrescriptionRequestValidationService, PrescriptionRequestValidationService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();

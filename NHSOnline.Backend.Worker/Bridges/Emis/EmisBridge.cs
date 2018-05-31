@@ -2,10 +2,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
+using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.Router.Demographics;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Session;
@@ -16,6 +18,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
     {
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
+        private readonly IEmisDemographicsMapper _emisDemographicsMapper;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IOptions<ConfigurationSettings> _settings;
@@ -24,12 +27,14 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             ILoggerFactory loggerFactory,
             IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper,
+            IEmisDemographicsMapper emisDemographicsMapper,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             IOptions<ConfigurationSettings> settings,
             IConfiguration configuration)
         {
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
+            _emisDemographicsMapper = emisDemographicsMapper;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _loggerFactory = loggerFactory;
             _settings = settings;
@@ -45,6 +50,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public ICourseService GetCourseService()
         {
             return new EmisCourseService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
+        }
+        
+        public IDemographicsService GetDemographicsService()
+        {
+            return new EmisDemographicsService(_loggerFactory, _emisClient, _emisDemographicsMapper);
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()

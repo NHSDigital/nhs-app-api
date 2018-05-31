@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
@@ -32,9 +33,14 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private const string AppointmentsPath = "appointments";
 
         private readonly HttpClient _httpClient;
+        private readonly ILogger<EmisClient> _logger;
 
-        public EmisClient(IHttpClientFactory httpClientFactory, IEmisConfig config,TimeZoneConverter localTimeZoneConverter)
+        public EmisClient(IHttpClientFactory httpClientFactory, 
+            IEmisConfig config,
+            TimeZoneConverter localTimeZoneConverter,
+            ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger<EmisClient>();
             _localTimeZoneConverter = localTimeZoneConverter;
             _httpClient = httpClientFactory.GetClient(HttpClientName.EmisApiClient);
             _httpClient.DefaultRequestHeaders.Add(HeaderApplicationId, config.ApplicationId);
@@ -59,8 +65,9 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         {
             var path = string.Format(DemographicsPath, userPatientLinkToken);
 
-            var response = await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
-            return response;
+            _logger.LogInformation("DemographicsGet path:" + path);
+            
+            return await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId, MeApplicationsPostRequest model)
