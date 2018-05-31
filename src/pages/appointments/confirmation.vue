@@ -61,6 +61,7 @@ export default {
         return;
       }
       this.showValidationError = false;
+      this.$router.push('/appointments/booked');
     },
     onCancelButtonClicked() {
       this.$router.push('/appointments');

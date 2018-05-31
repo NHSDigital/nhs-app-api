@@ -1,4 +1,5 @@
 export default {
+  language: 'en',
   errors: {
     pageHeader: 'Server error',
     header: 'Sorry, we\'re experiencing technical difficulties',
@@ -17,7 +18,6 @@ export default {
     retryButtonText: 'Try again',
     message: 'Please try again later. If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
   },
-  language: 'en',
   appointments: {
     header: {
       title: 'Book an appointment',
@@ -39,6 +39,9 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'There\'s a problem: Enter a reason for this appointment',
       noReasonError: 'Enter a reason for this appointment',
+    },
+    booked: {
+      successText: 'Appointment Booked',
     },
     errors: {
       pageHeader: 'Error retrieving data',
@@ -95,6 +98,7 @@ export default {
     repeatPrescriptionCourses: 'Order a repeat prescription',
     account: 'My account',
     appointments: 'Appointments',
+    appointmentBooked: 'My Appointments',
     appointmentConfirmation: 'Check appointment details',
     myRecord: 'My record',
     more: 'More',
