@@ -7,7 +7,8 @@ data class UserSessionResponse(var userSessionResponseCookie: UserSessionRespons
     class UserSessionResponseCookie(var cookie: Cookie)
 
     class UserSessionResponseBody(var givenName: String,
-                                  var familyName: String)
+                                  var familyName: String,
+                                  var sessionTimeout: Number)
 
 
 }

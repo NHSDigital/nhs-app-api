@@ -11,6 +11,7 @@ import features.sharedSteps.NavigationSteps
 import mocking.MockDefaults
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
+import models.Patient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import java.net.URL
@@ -24,12 +25,13 @@ open class SharedStepDefinitions {
     @Steps
     lateinit var navBar: NavigationSteps
 
+    val mockingClient = MockingClient.instance
 
     @Given("^wiremock is initialised")
     fun initialiseWiremock() {
-        MockDefaults(Config.instance, MockingClient.instance).mock()
+        MockDefaults(Config.instance, mockingClient).mock()
 
-        MockingClient.instance.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
+        mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
     }
 
     @Given("^I am logged in$")
