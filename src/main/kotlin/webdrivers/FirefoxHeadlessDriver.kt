@@ -10,10 +10,9 @@ import org.openqa.selenium.firefox.FirefoxOptions
 open class FirefoxHeadlessDriver : DriverSource {
 
     override fun newDriver(): WebDriver? {
-        WebDriverManager.chromedriver().setup()
+        WebDriverManager.firefoxdriver().setup()
         val options = FirefoxOptions()
             options.addArguments("--headless")
-            options.addArguments("--disable-gpu");
         return FirefoxDriver(options)
     }
 

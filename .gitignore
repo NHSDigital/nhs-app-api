@@ -1,4 +1,4 @@
-#jar in libs folder 
+#jar in libs folder
 lib/*.jar
 
 
@@ -27,3 +27,4 @@ gradle_abj
 resources/*
 *.swp
 target/*
+browserstack.err

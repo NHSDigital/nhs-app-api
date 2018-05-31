@@ -13,7 +13,7 @@ services:
     image: nhsonline.backend.worker
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
+      - NHS_WEB_APP_BASE_URL=http://localhost:3000
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/
     depends_on:

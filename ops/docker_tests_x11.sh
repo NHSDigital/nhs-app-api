@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ## Dependencies: X11 server - XQuartz for MacOS, XMing for Windows, Docker
+# After installing XQuartz run it manually from Launchpad
 
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
@@ -34,7 +35,7 @@ docker run \
   $DOCKER_IMAGE /bin/bash -c " \
     cd /repo ; \
     ./gradlew clean test aggregate \
-      -Dcucumber.options='--tags ~@bug --tags ~@pending' \
+      -Dcucumber.options='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt' \
       -Dwebdriver.provided.type=$BROWSER \
       -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
   ;"

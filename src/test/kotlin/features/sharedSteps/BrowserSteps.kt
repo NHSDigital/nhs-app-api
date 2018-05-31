@@ -1,12 +1,12 @@
 package features.sharedSteps
 
-import net.thucydides.core.annotations.DefaultUrl
+import net.serenitybdd.core.SerenitySystemProperties
+import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.LoginPage
 import java.net.URL
 import java.util.NoSuchElementException
-import kotlin.reflect.full.findAnnotation
 
 open class BrowserSteps {
 
@@ -51,6 +51,6 @@ open class BrowserSteps {
 
     @Step
     fun changeTabToApp() {
-        changeTab(URL(loginPage::class.findAnnotation<DefaultUrl>()?.value))
+        changeTab(URL(SerenitySystemProperties.getProperties().getValue(ThucydidesSystemProperty.WEBDRIVER_BASE_URL)))
     }
 }

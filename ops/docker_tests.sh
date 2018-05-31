@@ -27,7 +27,7 @@ docker run \
   $DOCKER_IMAGE /bin/bash -c " \
     cd /repo ; \
     ./gradlew clean test aggregate \
-      -Dcucumber.options='--tags ~@bug --tags ~@pending' \
+      -Dcucumber.options='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt' \
       -Dwebdriver.provided.type=$BROWSER \
       -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
   ;"

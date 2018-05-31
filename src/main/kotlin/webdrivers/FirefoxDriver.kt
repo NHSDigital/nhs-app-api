@@ -10,7 +10,7 @@ import org.openqa.selenium.firefox.FirefoxOptions
 open class FirefoxDriver : DriverSource {
 
     override fun newDriver(): WebDriver? {
-        WebDriverManager.chromedriver().setup()
+        WebDriverManager.firefoxdriver().setup()
         return FirefoxDriver()
     }
 
