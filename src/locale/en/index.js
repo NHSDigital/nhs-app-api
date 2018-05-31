@@ -51,16 +51,14 @@ export default {
     orderRepeatPrescriptionButton: 'Order a repeat prescription',
     noPrescriptionsAvailable: {
       title: 'Looks like you have no repeat prescriptions ordered here.',
-      contactGp:
-        'If you think you have a pending repeat prescription, please contact your GP.',
-      orderRepeatPrescription:
-        'Otherwise you can order a new repeat prescription now.',
+      contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
+      orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
     },
     backToYourPrescriptionsButton: 'Back to my prescriptions',
     noRepeatPrescriptionsYouCanOrder: {
-      title: "You don't have any medications available to order right now.",
-      contactGp:
-        "If you have medications available on repeat prescription that aren't showing here, contact your GP surgery for more information.",
+      header: 'Medications currently available for repeat prescription:',
+      title: 'You don\'t have any medications available to order right now.',
+      contactGp: 'To discuss your medication or change your chosen pharmacy, contact your GP practice before ordering.',
     },
     myRepeatPrescriptionLabels: {
       orderDate: 'Order date',

@@ -37,4 +37,8 @@ export default {
   padding: 0;
   @include default_text;
 }
+
+.info .h5 {
+  color: $nhs_blue;
+}
 </style>

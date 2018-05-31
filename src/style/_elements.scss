@@ -24,7 +24,6 @@ main.content {
   }
   .info h5 {
     @include h5;
-    color: $nhs_blue !important;
     font-size: 16pt;
     color: $dark_grey;
     margin-bottom: 16px;
