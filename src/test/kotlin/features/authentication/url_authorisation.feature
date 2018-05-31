@@ -13,13 +13,13 @@ Feature: Authorisation occurs during each URL visit
     Then I see the login page
 
     Examples:
-      | URL                           |
-      | /                             |
-      | /appointments                 |
-      | /prescriptions                |
-      | /prescriptions/repeat-courses |
-      | /more                         |
-      | /account                      |
+    | URL                           |
+    | /                             |
+    | /appointments                 |
+    | /prescriptions                |
+    | /prescriptions/repeat-courses |
+    | /more                         |
+    | /account                      |
 
 
   @NHSO-906
@@ -30,13 +30,13 @@ Feature: Authorisation occurs during each URL visit
     Then I see the login page
 
     Examples:
-      | URL                           |
-      | /                             |
-      | /appointments                 |
-      | /prescriptions                |
-      | /prescriptions/repeat-courses |
-      | /more                         |
-      | /account                      |
+    | URL                           |
+    | /                             |
+    | /appointments                 |
+    | /prescriptions                |
+    | /prescriptions/repeat-courses |
+    | /more                         |
+    | /account                      |
 
   @manual @NHSO-906
   @tech-debt @NHSO-1012
@@ -46,13 +46,13 @@ Feature: Authorisation occurs during each URL visit
     Then I see the login page
 
     Examples:
-      | URL                          |
-      | /                            |
-      | /appointments                |
-      | /prescriptions               |
-      | /repeat-prescription-courses |
-      | /more                        |
-      | /account                     |
+    | URL                           |
+    | /                             |
+    | /appointments                 |
+    | /prescriptions                |
+    | /prescriptions/repeat-courses |
+    | /more                         |
+    | /account                      |
 
   @NHSO-906
   @tech-debt @NHSO-1012
@@ -62,13 +62,13 @@ Feature: Authorisation occurs during each URL visit
     Then I see the relevant page
 
     Examples:
-      | URL                          |
-      | /                            |
-      | /appointments                |
-      | /prescriptions               |
-      | /repeat-prescription-courses |
-      | /more                        |
-      | /account                     |
+    | URL                           |
+    | /                             |
+    | /appointments                 |
+    | /prescriptions                |
+    | /prescriptions/repeat-courses |
+    | /more                         |
+    | /account                      |
 
   @manual @native @NHSO-907
   @tech-debt @NHSO-1012
@@ -80,10 +80,10 @@ Feature: Authorisation occurs during each URL visit
     Then I see the relevant page
 
     Examples:
-      | URL                          |
-      | /                            |
-      | /appointments                |
-      | /prescriptions               |
-      | /repeat-prescription-courses |
-      | /more                        |
-      | /account                     |
+    | URL                           |
+    | /                             |
+    | /appointments                 |
+    | /prescriptions                |
+    | /prescriptions/repeat-courses |
+    | /more                         |
+    | /account                      |

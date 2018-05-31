@@ -1,10 +1,12 @@
 package features.sharedSteps
 
 import net.serenitybdd.core.SerenitySystemProperties
+import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.LoginPage
+import java.net.MalformedURLException
 import java.net.URL
 import java.util.NoSuchElementException
 
@@ -51,6 +53,11 @@ open class BrowserSteps {
 
     @Step
     fun changeTabToApp() {
-        changeTab(URL(SerenitySystemProperties.getProperties().getValue(ThucydidesSystemProperty.WEBDRIVER_BASE_URL)))
+        val baseUrl: String = SerenitySystemProperties.getProperties().getValue(ThucydidesSystemProperty.WEBDRIVER_BASE_URL)
+        try{
+            changeTab(URL(baseUrl))
+        } catch (e: MalformedURLException) {
+            throw SerenityManagedException("Malformed URL from ${ThucydidesSystemProperty.WEBDRIVER_BASE_URL}: $baseUrl", e)
+        }
     }
 }
