@@ -1,21 +1,24 @@
 <template>
-  <div :aria-selected="isSelected(slotId)">
-    <div :class="appointmentSelected" @click="select">
-      <h5 :class="$style.date">{{ formatDate(appointmentSlot.startTime) }}</h5>
-      <h4 :class="$style.startTime">{{ formatTime(appointmentSlot.startTime) }}</h4>
-      <hr aria-hidden="true">
-      <p :class="$style.session">{{ appointmentSession | truncate(24) }}</p>
-      <hr aria-hidden="true">
-      <div>
-        <p><location-icon/>&nbsp;{{ location | truncate(24) }}</p>
-      </div>
-      <ul v-for="clinician in appointmentSlot.clinicians"
-          :key="clinician.id" :class="$style.clinicians">
-        <li>
-          <p><clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
-        </li>
-      </ul>
-    </div>
+  <div :class="appointmentSelected" @click="select" :aria-selected="isSelected(slotId)">
+    <h5 :class="$style.date" aria-label="date">
+      {{ formatDate(appointmentSlot.startTime) }}
+    </h5>
+    <h4 :class="$style.startTime" aria-label="start time">
+      {{ formatTime(appointmentSlot.startTime) }}
+    </h4>
+    <hr aria-hidden="true" />
+    <p :class="$style.session" aria-label="session name">
+      {{ appointmentSession | truncate(24)}}
+    </p>
+    <hr aria-hidden="true" />
+    <p aria-label="location">
+      <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
+    <ul :key="clinician.id" aria-label="clinicians" v-for="clinician in appointmentSlot.clinicians" :class="$style.clinicians">
+      <li>
+        <p>
+          <clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
+      </li>
+    </ul>
   </div>
 </template>
 

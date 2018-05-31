@@ -32,6 +32,14 @@ export default {
       noConnection: false,
     };
   },
+  head() {
+    return {
+      htmlAttrs: {
+        lang: `${this.$t('language')}`,
+      },
+      title: `${this.$store.state.header.headerText} screen`,
+    }
+  },
   computed: {
     showMenu() {
       return (

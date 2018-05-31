@@ -3,23 +3,23 @@
     <ul>
       <li @click="onSymptomsMenuClicked">
         <symptoms-icon/>
-        <label>{{ $t('navigationMenu.symptomsLabel') }}</label>
+        <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
       </li>
       <li @click="onAppointmentsMenuClicked">
         <appointments-icon/>
-        <label>{{ $t('navigationMenu.appointmentsLabel') }}</label>
+        <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
       </li>
       <li @click="onPrescriptionsMenuClicked">
         <prescriptions-icon/>
-        <label>{{ $t('navigationMenu.prescriptionsLabel') }}</label>
+        <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
       </li>
       <li @click="onMyRecordMenuClicked">
         <record-icon/>
-        <label>{{ $t('navigationMenu.myRecordLabel') }}</label>
+        <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
       </li>
       <li @click="onMoreMenuClicked">
         <more-icon/>
-        <label>{{ $t('navigationMenu.moreLabel') }}</label>
+        <span>{{ $t('navigationMenu.moreLabel') }}</span>
       </li>
     </ul>
   </nav>

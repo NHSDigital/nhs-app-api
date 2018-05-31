@@ -17,6 +17,7 @@ export default {
     retryButtonText: 'Try again',
     message: 'Please try again later. If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
   },
+  language: 'en',
   appointments: {
     header: {
       title: 'Book an appointment',

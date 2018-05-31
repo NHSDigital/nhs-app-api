@@ -42,7 +42,7 @@ nav.menu {
         margin-bottom: 3px;
       }
 
-      label {
+      span {
         @include menu;
         display: block;
         box-sizing: border-box;
@@ -54,7 +54,7 @@ nav.menu {
     }
 
     li.active {
-      label {
+      span {
         @include menu_active;
       }
     }

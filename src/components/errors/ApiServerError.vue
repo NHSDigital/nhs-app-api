@@ -11,7 +11,7 @@
         {{message}}
       </p>
     </error-warning-dialog>
-    <button class="button" v-show="retryButtonText" @click="onRetryButtonClicked">
+    <button class="button" v-if="retryButtonText" @click="onRetryButtonClicked">
       {{retryButtonText}}
     </button>
   </main>
