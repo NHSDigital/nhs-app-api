@@ -8,6 +8,7 @@ const APPOINTMENT_CONFIRMATIONS = 'appointment-confirmation';
 const ACCOUNT = 'account';
 
 export default function ({ route, store, app }) {
+
   switch (route.name) {
     case INDEX:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
@@ -38,6 +39,8 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = '';
       break;
   }
+
+  store.dispatch('http/clearApiErrorResponse');
 
   if (process.client) {
     if (route.meta.headerKey === '') {

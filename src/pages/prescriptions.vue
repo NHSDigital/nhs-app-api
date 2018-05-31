@@ -1,52 +1,47 @@
 <template>
-  <div id="mainDiv">
-    <spinner />
-    <main :class="$style.main">
-      <div :class="$style['above-float-button']">
-        <div v-if="showNoPrescriptions" class="info">
-          <p>
-            <b>{{ $t('prescriptions.noPrescriptionsAvailable.title') }}</b>
-          </p>
-          <p>
-            {{ $t('prescriptions.noPrescriptionsAvailable.contactGp') }}
-          </p>
-          <p>
-            {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
-          </p>
-        </div>
-        <ul v-if="showPrescriptions">
-          <li
-            v-for="prescriptionCourse in prescriptionCoursesToDisplay"
-            :key="prescriptionCourse.courseId"
-            :class="$style['prescription-course']">
-            <div :class="$style.container">
-              <div>
-                <b>{{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}</b>
-                : {{ prescriptionCourse.orderDate | shortDate }}
-              </div>
-              <hr>
-              <b>{{ prescriptionCourse.name }}</b>
-              <div>{{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}</div>
-            </div>
-          </li>
-        </ul>
+  <main :class="$style.main">
+    <div :class="$style['above-float-button']">
+      <div v-if="showNoPrescriptions" class="info">
+        <p>
+          <b>{{ $t('prescriptions.noPrescriptionsAvailable.title') }}</b>
+        </p>
+        <p>
+          {{ $t('prescriptions.noPrescriptionsAvailable.contactGp') }}
+        </p>
+        <p>
+          {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
+        </p>
       </div>
+      <ul v-if="showPrescriptions">
+        <li
+          v-for="prescriptionCourse in prescriptionCoursesToDisplay"
+          :key="prescriptionCourse.courseId"
+          :class="$style['prescription-course']">
+          <div :class="$style.container">
+            <div>
+              <b>{{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}</b>
+              : {{ prescriptionCourse.orderDate | shortDate }}
+            </div>
+            <hr>
+            <b>{{ prescriptionCourse.name }}</b>
+            <div>{{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
 
-      <floating-button-bottom @on-click="onRepeatPrescriptionButtonClicked">
-        {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
-      </floating-button-bottom>
-    </main>
-  </div>
+    <floating-button-bottom @on-click="onRepeatPrescriptionButtonClicked">
+      {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
+    </floating-button-bottom>
+  </main>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import Spinner from '@/components/Spinner';
 import FloatingButtonBottom from '@/components/FloatingButtonBottom';
 
 export default {
   components: {
-    Spinner,
     FloatingButtonBottom,
   },
   middleware: ['meta', 'auth'],

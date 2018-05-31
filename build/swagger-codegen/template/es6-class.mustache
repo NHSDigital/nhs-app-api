@@ -98,7 +98,7 @@ class {{&className}} {
       this.store.dispatch('http/loadingCompleted');
       deferred.resolve(body);
     }).catch((error) => {
-      // possibly need to handle the reason for the error here.
+      this.store.dispatch('http/setApiErrorResponse', error);
       this.store.dispatch('http/loadingCompleted');
       deferred.reject(error);
     });

@@ -1,5 +1,5 @@
 <template>
-  <div id="mainDiv">
+  <div id="mainPageDiv">
     <main class="content">
       <div class="info">
         <h5>{{ greetingMessage }}</h5>
@@ -33,7 +33,7 @@ export default {
 @import "../style/textstyles";
 @import "../style/elements";
 
-#mainDiv {
+#mainPageDiv {
   padding: 0;
   @include default_text;
 }

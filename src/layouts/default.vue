@@ -1,7 +1,12 @@
 <template>
   <div id="app" :class="{ menusVisible: showMenu}">
     <header-menu v-if="showMenu"/>
-    <nuxt/>
+    <div id="mainDiv">
+      <spinner />
+      <connection-error />
+      <api-server-error />
+      <nuxt v-if="showView" />
+    </div>
     <navigation-menu v-if="showMenu"/>
   </div>
 </template>
@@ -10,11 +15,22 @@
 /* eslint-disable import/extensions */
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
+import Spinner from '@/components/Spinner';
+import ApiServerError from '@/components/errors/ApiServerError';
+import ConnectionError from '@/components/errors/ConnectionError';
 
 export default {
   components: {
     NavigationMenu,
     HeaderMenu,
+    Spinner,
+    ApiServerError,
+    ConnectionError,
+  },
+  data() {
+    return {
+      noConnection: false,
+    };
   },
   computed: {
     showMenu() {
@@ -24,6 +40,12 @@ export default {
         this.$route.name !== 'Login'
       );
     },
+    showView() {
+      return !this.noConnection && !this.$store.state.http.hasApiServerErrorResponse;
+    },
+  },
+  updated() {
+    this.noConnection = !navigator.onLine;
   },
   created() {
     if (this.$route.query.source === 'mobile') {

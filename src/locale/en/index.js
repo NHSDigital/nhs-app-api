@@ -1,4 +1,22 @@
 export default {
+  errors: {
+    pageHeader: 'Server error',
+    header: 'Sorry, we\'re experiencing technical difficulties',
+    subheader: 'Please try again later.',
+    message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+    502: {
+      pageHeader: 'Service currently unavailable',
+      header: 'Sorry, this service is unavailable right now',
+      retryButtonText: 'Please try again later.',
+      message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+    },
+  },
+  noConnection: {
+    header: 'Connection error.',
+    subheader: 'Please check your internet connection and try again.',
+    retryButtonText: 'Try again',
+    message: 'Please try again later. If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+  },
   appointments: {
     header: {
       title: 'Book an appointment',
@@ -8,10 +26,7 @@ export default {
       info: 'If you need an appointment, please contact your GP.',
     },
     noConnection: {
-      dialogHeader: 'Connection error.',
-      dialogText: 'Please check your internet connection and try again.',
-      retryText: 'Try again',
-      info:
+      message:
         'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
     bookAppointmentButtonText: 'Book this appointment',
@@ -19,6 +34,17 @@ export default {
       headerLabel: 'What is this appointment for?',
       label: 'Describe your symptoms',
       changeButtonText: 'Change this appointment',
+    },
+    errors: {
+      pageHeader: 'Error retrieving data',
+      header: 'Sorry, there\'s been a problem loading this page',
+      subheader: '',
+      message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+      504: {
+        message: 'If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+        subheader: 'Please try again',
+        retryButtonText: 'Try again',
+      },
     },
   },
   prescriptions: {

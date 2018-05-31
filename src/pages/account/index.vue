@@ -1,11 +1,9 @@
 <template>
-  <div id="mainDiv">
-    <main class="content">
-      <button id="signout-button" class="button grey" @click="signout()">
-        {{ $t('signOutButton.signOut') }}
-      </button>
-    </main>
-  </div>
+  <main class="content">
+    <button id="signout-button" class="button grey" @click="signout()">
+      {{ $t('signOutButton.signOut') }}
+    </button>
+  </main>
 </template>
 
 <script>

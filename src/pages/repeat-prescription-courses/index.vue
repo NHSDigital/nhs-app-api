@@ -1,31 +1,23 @@
 <template>
-  <div id="mainDiv">
-    <spinner />
-    <main class="content">
-      <div class="info">
-        <p>
-          <b>{{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.title') }}</b>
-        </p>
-        <p>
-          {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
-        </p>
-      </div>
-      <router-link to="prescriptions" tag="button" class="button grey">
-        {{ $t('prescriptions.backToYourPrescriptionsButton') }}
-      </router-link>
-    </main>
-  </div>
+  <main class="content">
+    <div class="info">
+      <p>
+        <b>{{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.title') }}</b>
+      </p>
+      <p>
+        {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
+      </p>
+    </div>
+    <router-link to="prescriptions" tag="button" class="button grey">
+      {{ $t('prescriptions.backToYourPrescriptionsButton') }}
+    </router-link>
+  </main>
 </template>
 
 <script>
-/* eslint-disable import/extensions */
-import Spinner from '@/components/Spinner';
 
 export default {
   middleware: ['auth', 'meta'],
-  components: {
-    Spinner,
-  },
   mounted() {
     this.$store.dispatch('repeatPrescriptionCourses/load', this.$config);
   },

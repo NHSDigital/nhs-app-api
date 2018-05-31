@@ -1,17 +1,15 @@
 <template>
-  <div id="mainDiv">
-    <main class="main">
-      <appointment-slot :slot-id="slotId" :always-deselect="true" />
-      <div class="form">
-        <label>{{ $t('appointments.confirmation.headerLabel') }}</label>
-        <p>{{ $t('appointments.confirmation.label') }}</p>
-        <textarea id="txt_reason"/>
-      </div>
-      <button id="btn_cancel_appointment" class="button grey" @click="onCancelButtonClicked">
-        {{ $t('appointments.confirmation.changeButtonText') }}
-      </button>
-    </main>
-  </div>
+  <main class="main">
+    <appointment-slot :slot-id="slotId" :always-deselect="true" />
+    <div class="form">
+      <label>{{ $t('appointments.confirmation.headerLabel') }}</label>
+      <p>{{ $t('appointments.confirmation.label') }}</p>
+      <textarea id="txt_reason"/>
+    </div>
+    <button id="btn_cancel_appointment" class="button grey" @click="onCancelButtonClicked">
+      {{ $t('appointments.confirmation.changeButtonText') }}
+    </button>
+  </main>
 </template>
 
 <script>

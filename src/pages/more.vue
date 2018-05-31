@@ -1,11 +1,9 @@
 <template>
-  <div id="mainDiv">
-    <main class="content">
-      <a id="btn_organdonation" :href="organDonationUrl" class="button" target="_blank">
-        {{ $t('more.organDonationButtonText') }}
-      </a>
-    </main>
-  </div>
+  <main class="content">
+    <a id="btn_organdonation" :href="organDonationUrl" class="button" target="_blank">
+      {{ $t('more.organDonationButtonText') }}
+    </a>
+  </main>
 </template>
 
 <script>

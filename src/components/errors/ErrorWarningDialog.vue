@@ -1,7 +1,7 @@
 <template>
   <div>
     <error-warning-icon :icon-type="errorOrWarning"/>
-    <div :class="[msgClass, errorOrWarning]">
+    <div :class="[msgClass]">
       <slot/>
     </div>
   </div>
@@ -30,5 +30,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/messages";
+@import "../../style/messages";
 </style>

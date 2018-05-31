@@ -1,48 +1,33 @@
 <template>
-  <div>
-    <appointments-no-connection v-if="noConnection" @retry="onRetryButtonClicked"/>
-    <div v-else id="mainDiv">
-      <spinner />
-      <main :class="bottomStyle()">
-        <div v-if="showNoAppointment" data-purpose="no-slots-error">
-          <p :class="$style.summary">{{ $t('appointments.noSlotErrorMessage.summary') }}</p>
-          <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>
-        </div>
-        <ul v-if="showAppointments" data-purpose="slots">
-          <li v-for="slot in slots" :key="slot.id" :class="$style.slot">
-            <appointment-slot :slot-id="slot.id"/>
-          </li>
-        </ul>
-
-        <floating-button-bottom :button-classes="['green']"
-                                :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
-          {{ $t('appointments.bookAppointmentButtonText') }}
-        </floating-button-bottom>
-      </main>
+  <main :class="bottomStyle()">
+    <div v-if="showNoAppointment" data-purpose="no-slots-error">
+      <p :class="$style.summary">{{ $t('appointments.noSlotErrorMessage.summary') }}</p>
+      <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>
     </div>
-  </div>
+    <ul v-if="showAppointments" data-purpose="slots">
+      <li v-for="slot in slots" :key="slot.id" :class="$style.slot">
+        <appointment-slot :slot-id="slot.id"/>
+      </li>
+    </ul>
+
+    <floating-button-bottom :button-classes="['green']"
+                            :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
+      {{ $t('appointments.bookAppointmentButtonText') }}
+    </floating-button-bottom>
+  </main>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import { mapGetters } from 'vuex';
-import AppointmentsNoConnection from '../../components/AppointmentsNoConnection';
 import AppointmentSlot from '../../components/AppointmentSlot';
-import Spinner from '../../components/Spinner';
 import FloatingButtonBottom from '../../components/FloatingButtonBottom';
 
 export default {
   middleware: ['auth', 'meta'],
   components: {
-    AppointmentsNoConnection,
     AppointmentSlot,
-    Spinner,
     FloatingButtonBottom,
-  },
-  data() {
-    return {
-      noConnection: true,
-    };
   },
   computed: {
     showNoAppointment() {
@@ -69,7 +54,6 @@ export default {
   mounted() {
     this.$store.dispatch('appointmentSlots/load', this.$config);
     this.$store.dispatch('appointmentSlots/select', undefined);
-    this.noConnection = !navigator.onLine;
   },
   methods: {
     bottomStyle() {
@@ -80,9 +64,6 @@ export default {
         return this.$style.mainShowingSlots;
       }
       return this.$style.main;
-    },
-    onRetryButtonClicked() {
-      this.noConnection = !navigator.onLine;
     },
     onBookButtonClicked() {
       this.$router.push('appointment-confirmation');

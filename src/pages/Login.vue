@@ -1,5 +1,5 @@
 <template>
-  <div id="mainDiv">
+  <content>
     <home-header/>
     <main class="login-or-register">
       <LoginButton />
@@ -8,7 +8,7 @@
 
       <RegistrationButton />
     </main>
-  </div>
+  </content>
 </template>
 <script>
 /* eslint-disable import/extensions */
