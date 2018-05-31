@@ -45,12 +45,6 @@ class CreateSessionSteps : AbstractSteps() {
 
     private val userSessionRequest = MockDefaults.userSessionRequest
 
-    @Given("^I have a valid authCode and codeVerifier for a patient$")
-    fun iHaveAValidAuthCodeAndCodeVerifierForAPatient() {
-        createSuccessCidStubs()
-        createSuccessEmisStubs()
-    }
-
     @Given("^I have incomplete OAuth details$")
     fun iHaveIncompleteOAuthDetails() {
         val incompleteUserSessionRequest = userSessionRequest.copy(authCode = null)

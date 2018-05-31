@@ -4,7 +4,6 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
-import net.serenitybdd.rest.SerenityRest
 
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_CREATED
@@ -38,7 +37,6 @@ class WorkerClient {
     private val gsonBuilder: GsonBuilder = GsonBuilder()
     private var gson: Gson
     private val config = Config.instance
-
 
     init {
         _client = HttpClients.createDefault()

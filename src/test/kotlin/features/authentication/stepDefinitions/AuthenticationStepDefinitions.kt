@@ -89,12 +89,12 @@ class AuthenticationStepDefinitions {
 
     @And("^the response has a given name$")
     fun theResponseHasAGivenName() {
-        checkNotNull(this.userSessionResponse?.userSessionResponseBody?.givenName)
+        Assert.assertEquals(MockDefaults.patient.firstName, this.userSessionResponse?.userSessionResponseBody?.givenName)
     }
 
     @And("^the response has a family name$")
     fun theResponseHasAFamilyName() {
-        checkNotNull(this.userSessionResponse?.userSessionResponseBody?.familyName)
+        Assert.assertEquals(MockDefaults.patient.surname, this.userSessionResponse?.userSessionResponseBody?.familyName)
     }
 
     @And("^the response has a session timeout$")
