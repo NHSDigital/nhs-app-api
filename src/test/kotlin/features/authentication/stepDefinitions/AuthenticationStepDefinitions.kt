@@ -14,13 +14,15 @@ import mocking.MockDefaults
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
 import models.Patient
-import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
+import org.apache.http.HttpStatus
 import org.junit.Assert
+import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
+import java.time.Duration
 
 
 class AuthenticationStepDefinitions {
@@ -38,26 +40,109 @@ class AuthenticationStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
-    private var authCode: String? = null
-    private var codeVerifier: String? = null
+    private var authCode: String? = MockDefaults.userSessionRequest.authCode
+    private var codeVerifier: String? = MockDefaults.userSessionRequest.codeVerifier
     private val accessToken = MockDefaults.DEFAULT_ACCESS_TOKEN
     private val bearerToken = MockDefaults.DEFAULT_BEARER_TOKEN
+    private val patient: Patient = MockDefaults.patient
+    private val associationType = AssociationType.Self
 
     private var userSessionResponse: UserSessionResponse? = null
+    private var errorResponse: NhsoHttpException? = null
 
     lateinit var currentUrl: String
 
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
-        this.authCode = MockDefaults.userSessionRequest.authCode
-        this.codeVerifier = MockDefaults.userSessionRequest.codeVerifier
-
-        createSuccessCidStubs()
-        createSuccessEmisStubs()
+        createCidStubs()
+        createEmisStubs()
     }
 
-    private fun createSuccessCidStubs(
-            authCode:String = this.authCode!!,
+    @Given("^I have incomplete OAuth details$")
+    fun iHaveIncompleteOAuthDetails() {
+        createCidStubs(authCode = null)
+    }
+
+
+    @Given("^I have invalid OAuth details$")
+    fun iHaveInvalidOAuthDetails() {
+        mockingClient.forCitizenId {
+            tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
+                    .respondWithBadRequest()
+        }
+        mockingClient.forCitizenId {
+            userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
+                    .respondWithSuccess()
+        }
+        
+        createEmisStubs()
+    }
+
+    @Given("^I have valid OAuth details and the CID tokens endpoint fails to process the request$")
+    fun iHaveValidOAuthDetailsAndCIDTokenEndpointFails() {
+        mockingClient.forCitizenId {
+            tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
+                    .respondWithServerError()
+        }
+        mockingClient.forCitizenId {
+            userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
+                    .respondWithSuccess()
+        }
+        
+        createEmisStubs()
+    }
+
+    @Given("^I have valid OAuth details and the CID user profile endpoint fails to process the request$")
+    fun iHaveValidOAuthDetailsAndCIDUserProfileEndpointFails() {
+        mockingClient.forCitizenId {
+            tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
+                    .respondWithSuccess(accessToken)
+        }
+        mockingClient.forCitizenId {
+            userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
+                    .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
+        }
+        
+        createEmisStubs()
+    }
+
+    @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
+    fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
+        createCidStubs()
+        mockingClient.forEmis { endUserSessionRequest().respondWithServerError() }
+        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+    }
+
+    @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
+    fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
+        createCidStubs()
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(patient).respondWithServerError() }
+    }
+
+    @Given("^I have valid OAuth details and EMIS is unavailable$")
+    fun iHaveValidOAuthDetailsAndEmisUnavailable() {
+        createCidStubs()
+        mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
+        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+    }
+
+    @Given("^I have invalid OAuth details and CID connection token fails to authenticate with emis$")
+    fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithEmis() {
+        createCidStubs()
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(patient).respondWithForbidden() }
+    }
+
+    @Given("^I have valid OAuth details and emis fails to respond in 30 seconds$")
+    fun iHaveValidOAuthDetailsAndEmisFailsToRespondInThirtySeconds() {
+        createCidStubs()
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
+        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+    }
+
+    private fun createCidStubs(
+            authCode:String? = this.authCode!!,
             codeVerifier: String = this.codeVerifier!!,
             accessToken: String = this.accessToken,
             bearerToken: String = this.bearerToken) {
@@ -71,15 +156,19 @@ class AuthenticationStepDefinitions {
         }
     }
 
-    private fun createSuccessEmisStubs(patient: Patient = MockDefaults.patient, defaultAssociationType: AssociationType = AssociationType.Self) {
+    private fun createEmisStubs(patient: Patient = this.patient, defaultAssociationType: AssociationType = this.associationType) {
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, defaultAssociationType) }
     }
 
     @When("^I create a user session$")
-    fun iCreateUserSessionWithValidDetails() {
-        val result = WorkerClient().postSessionConnection(UserSessionRequest(authCode = this.authCode, codeVerifier = this.codeVerifier!!))
-        this.userSessionResponse = result
+    fun iCreateUserSession() {
+        try {
+            this.userSessionResponse = WorkerClient().postSessionConnection(UserSessionRequest(authCode = this.authCode, codeVerifier = this.codeVerifier!!))
+        }
+        catch (httpException: NhsoHttpException) {
+            this.errorResponse = httpException
+        }
     }
 
     @Then("^I receive a response$")
@@ -123,6 +212,29 @@ class AuthenticationStepDefinitions {
             }
         }
         return cookieParams
+    }
+
+    @Then("^I get (?:a|an) \"(.*)\" error")
+    fun thenIReceiveAnError(expectedStatusCode: String) {
+        val code = httpStatusCodeTransform(expectedStatusCode)
+        checkNotNull(this.errorResponse)
+        Assert.assertEquals(code, this.errorResponse?.StatusCode)
+    }
+
+    private val _errorMapping: HashMap<String, Int> = hashMapOf(
+            "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
+            "bad request" to HttpStatus.SC_BAD_REQUEST,
+            "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
+            "not found" to HttpStatus.SC_NOT_FOUND,
+            "internal server error" to HttpStatus.SC_INTERNAL_SERVER_ERROR,
+            "conflict" to HttpStatus.SC_CONFLICT,
+            "forbidden" to HttpStatus.SC_FORBIDDEN,
+            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE
+    )
+
+    fun httpStatusCodeTransform(errorName: String): Int? {
+        return _errorMapping[errorName.toLowerCase()]
+                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
     }
 
     @Given("^I have just logged out$")
