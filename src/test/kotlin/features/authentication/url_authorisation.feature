@@ -13,19 +13,35 @@ Feature: Authorisation occurs during each URL visit
     Then I see the login page
 
     Examples:
-    | URL                          |
-    | /                            |
-    | /appointments                |
-    | /prescriptions               |
-    | /repeat-prescription-courses |
-    | /more                        |
-    | /account                     |
+      | URL                           |
+      | /                             |
+      | /appointments                 |
+      | /prescriptions                |
+      | /prescriptions/repeat-courses |
+      | /more                         |
+      | /account                      |
 
 
   @NHSO-906
   @tech-debt @NHSO-1012
   Scenario Outline: User has just logged out and attempts to navigate to secure routes
     Given I have just logged out
+    When I browse to the page at <URL>
+    Then I see the login page
+
+    Examples:
+      | URL                           |
+      | /                             |
+      | /appointments                 |
+      | /prescriptions                |
+      | /prescriptions/repeat-courses |
+      | /more                         |
+      | /account                      |
+
+  @manual @NHSO-906
+  @tech-debt @NHSO-1012
+  Scenario Outline: User session has expired and attempts to navigate to secure routes
+    Given my session has expired
     When I browse to the page at <URL>
     Then I see the login page
 
@@ -38,22 +54,6 @@ Feature: Authorisation occurs during each URL visit
       | /more                        |
       | /account                     |
 
-  @manual @NHSO-906
-  @tech-debt @NHSO-1012
-  Scenario Outline: User session has expired and attempts to navigate to secure routes
-    Given my session has expired
-    When I browse to the page at <URL>
-    Then I see the login page
-
-    Examples:
-    | URL                          |
-    | /                            |
-    | /appointments                |
-    | /prescriptions               |
-    | /repeat-prescription-courses |
-    | /more                        |
-    | /account                     |
-
   @NHSO-906
   @tech-debt @NHSO-1012
   Scenario Outline: User browses to deep link when logged in
@@ -62,13 +62,13 @@ Feature: Authorisation occurs during each URL visit
     Then I see the relevant page
 
     Examples:
-    | URL                          |
-    | /                            |
-    | /appointments                |
-    | /prescriptions               |
-    | /repeat-prescription-courses |
-    | /more                        |
-    | /account                     |
+      | URL                          |
+      | /                            |
+      | /appointments                |
+      | /prescriptions               |
+      | /repeat-prescription-courses |
+      | /more                        |
+      | /account                     |
 
   @manual @native @NHSO-907
   @tech-debt @NHSO-1012
@@ -80,10 +80,10 @@ Feature: Authorisation occurs during each URL visit
     Then I see the relevant page
 
     Examples:
-    | URL                          |
-    | /                            |
-    | /appointments                |
-    | /prescriptions               |
-    | /repeat-prescription-courses |
-    | /more                        |
-    | /account                     |
+      | URL                          |
+      | /                            |
+      | /appointments                |
+      | /prescriptions               |
+      | /repeat-prescription-courses |
+      | /more                        |
+      | /account                     |
