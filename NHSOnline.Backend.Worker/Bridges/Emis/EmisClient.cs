@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
@@ -93,6 +94,14 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
             var response = await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
             return response;
+        }
+
+        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(string userPatientLinkToken, string responseSessionId, string endUserSessionId,
+            PrescriptionRequestsPost model)
+        {
+            var path = string.Format(PrescriptionsPath, userPatientLinkToken);
+            
+            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, path, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(

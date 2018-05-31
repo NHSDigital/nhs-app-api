@@ -28,6 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         private IOptions<ConfigurationSettings> _options;
         private EmisUserSession _userSession;
         private IFixture _fixture;
+        private RepeatPrescriptionRequest _repeatPrescriptionRequest;
 
         private const int PrescriptionsMaxCoursesSoftLimit = 100;
 
@@ -45,7 +46,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             });
             _fixture.Inject(_options);
             _systemUnderTest = _fixture.Create<EmisPrescriptionService>();
+            _repeatPrescriptionRequest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    "766ecd82-3008-4454-95a5-98c423ce0527",
+                    "766ecd82-3008-4454-95a5-98c423ce0527"
+                }
+            };      
         }
+
+        #region Get Prescriptions
 
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
@@ -70,8 +81,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.SuccessfullyRetrieved>();
-            ((GetPrescriptionsResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
+            ((PrescriptionResult.SuccessfullGet)result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -155,10 +166,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.SuccessfullyRetrieved>();
-            ((GetPrescriptionsResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
+            ((PrescriptionResult.SuccessfullGet)result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (GetPrescriptionsResult.SuccessfullyRetrieved)result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet)result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(1);
@@ -258,10 +269,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.SuccessfullyRetrieved>();
-            ((GetPrescriptionsResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
+            ((PrescriptionResult.SuccessfullGet)result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (GetPrescriptionsResult.SuccessfullyRetrieved)result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet)result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(3);
@@ -339,17 +350,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<GetPrescriptionsResult.SuccessfullyRetrieved>();
-            ((GetPrescriptionsResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
+            ((PrescriptionResult.SuccessfullGet)result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (GetPrescriptionsResult.SuccessfullyRetrieved)result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet)result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(expectedNumberOfPrescriptions);
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenErrorReceivedFromEmis()
+        public async Task Get_ReturnsSupplierSystemUnavilable_WhenErrorReceivedFromEmis()
         {
             // Arrange
             var date = DateTimeOffset.Now;
@@ -367,11 +378,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var result = await _systemUnderTest.Get(_userSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Unsuccessful>();
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenHttpExceptionOccursCallingEmis()
+        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
             var date = DateTimeOffset.Now;
@@ -388,7 +399,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var result = await _systemUnderTest.Get(_userSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<GetPrescriptionsResult.Unsuccessful>();
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
             _emisClient.Verify();
         }
         
@@ -410,8 +421,112 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             var result = await _systemUnderTest.Get(_userSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<GetPrescriptionsResult.SupplierBadData>();
+            result.Should().BeAssignableTo<PrescriptionResult.UnexpectedError>();
             _emisClient.Verify();
         }
+        
+        #endregion
+
+        #region Post Prescription
+        
+        [TestMethod]
+        public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        {
+            // Arrange
+            _emisClient.Setup(x => x.PrescriptionsPost(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)));
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+
+            // Assert
+            _emisClient.Verify(x => x.PrescriptionsPost(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()));
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullPost>();
+            ((PrescriptionResult.SuccessfullPost)result).Should().NotBeNull();
+        }
+        
+        [TestMethod]
+        public async Task Post_ReturnsConflict_WhenErrorReceivedFromEmis()
+        {
+            // Arrange
+            var alreadyOrderedError = EmisApiErrorMessages.Prescriptions_AlreadyOrderedLast30Days;
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = alreadyOrderedError;
+            
+            _emisClient.Setup(x => x.PrescriptionsPost(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.Conflict)
+                        { ErrorResponse = errorResponse }));
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.CannotReorderPrescription>();
+        }
+        
+        [TestMethod]
+        public async Task Post_ReturnsForbidden_WhenErrorReceivedFromEmis()
+        {
+            // Arrange
+            var notEnabledError = EmisApiErrorMessages.EmisService_NotEnabledForUser;
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = notEnabledError;
+            
+            _emisClient.Setup(x => x.PrescriptionsPost(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.Forbidden)
+                        { ErrorResponse = errorResponse }));
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.InsufficientPermissions>();
+        }
+        
+        [TestMethod]
+        public async Task Post_ReturnsBadRequest_WhenErrorReceivedFromEmis()
+        {
+            // Arrange
+            var invalidCourseId = EmisApiErrorMessages.Prescriptions_InvalidCourseId;
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = invalidCourseId;
+            
+            _emisClient.Setup(x => x.PrescriptionsPost(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.BadRequest)
+                        { ErrorResponse = errorResponse }));
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.BadRequest>();
+        }
+        
+        [TestMethod]
+        public async Task Post_ReturnsBadGateway_WhenErrorReceivedFromEmis()
+        {
+            // Arrange
+            var generalError = "general error";
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = generalError;
+
+            _emisClient.Setup(x => x.PrescriptionsPost(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()))
+                .Returns(Task.FromResult(
+                           new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.InternalServerError)
+                       { ErrorResponse = errorResponse }));
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+        }
+        
+        #endregion
     }
 }

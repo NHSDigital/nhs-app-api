@@ -169,7 +169,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsSlotNotAvailable()
         {
             var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser;
+            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
             
             //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode

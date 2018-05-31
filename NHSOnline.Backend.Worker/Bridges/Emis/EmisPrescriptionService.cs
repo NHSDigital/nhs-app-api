@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
+using NHSOnline.Backend.Worker.Router.Validators;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
@@ -19,7 +21,9 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
-        public EmisPrescriptionService(ILoggerFactory loggerFactory, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+        public EmisPrescriptionService(ILoggerFactory loggerFactory, 
+            IOptions<ConfigurationSettings> settings, 
+            IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _emisClient = emisClient;
             _settings = settings.Value;
@@ -27,7 +31,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             _logger = loggerFactory.CreateLogger<EmisPrescriptionService>();
         }
 
-        public async Task<GetPrescriptionsResult> Get(UserSession userSession, DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        public async Task<PrescriptionResult> Get(UserSession userSession, DateTimeOffset? fromDate, DateTimeOffset? toDate)
         {
             var emisUserSession = (EmisUserSession) userSession;
 
@@ -40,7 +44,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 {
                     _logger.LogError(
                         $"Unsuccessful request retrieving prescriptions for {nameof(fromDate)}={fromDate:O}, {nameof(toDate)}={toDate:O}. Status code: {(int) prescriptionsResponse.StatusCode}");
-                    return new GetPrescriptionsResult.Unsuccessful();
+                    return new PrescriptionResult.SupplierSystemUnavailable();
                 }
 
                 var prescriptionListResponseFiltered = GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
@@ -49,17 +53,17 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                     $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
                 var result = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
 
-                return new GetPrescriptionsResult.SuccessfullyRetrieved(result);
+                return new PrescriptionResult.SuccessfullGet(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
-                return new GetPrescriptionsResult.Unsuccessful();
+                return new PrescriptionResult.SupplierSystemUnavailable();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "Prescription retrieval return null body");
-                return new GetPrescriptionsResult.SupplierBadData();
+                return new PrescriptionResult.UnexpectedError();
             }
         }
 
@@ -95,6 +99,80 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             };
 
             return prescriptionListResponseFiltered;
+        }
+        
+        public async Task<PrescriptionResult> Post(UserSession userSession, RepeatPrescriptionRequest request)
+        {            
+            var emisUserSession = (EmisUserSession) userSession;
+
+            var postRequest = new PrescriptionRequestsPost()
+            {
+                MedicationCourseGuids = request.CourseIds,
+                RequestComment = request.SpecialRequest,
+                UserPatientLinkToken = emisUserSession.UserPatientLinkToken
+            };       
+            
+            try
+            {
+                var response = await _emisClient.PrescriptionsPost(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, postRequest);
+
+                if (response.HasSuccessStatusCode)
+                {
+                    return new PrescriptionResult.SuccessfullPost();
+                }
+
+                return GetCorrectErrorResult(response);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError($"Repeat prescription order failed with message {e.Message}");
+                return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+        }
+        
+        private static PrescriptionResult GetCorrectErrorResult(
+            EmisClient.EmisApiResponse response)
+        {
+            if (HasAlreadyBeenOrderedLast30Days(response))
+            {
+                return new PrescriptionResult.CannotReorderPrescription();
+            }   
+
+            if (HasInsufficientPermissions(response))
+            {
+                return new PrescriptionResult.InsufficientPermissions();
+            }
+            
+            if (HasInvalidCourseId(response))
+            {
+                return new PrescriptionResult.BadRequest();
+            }
+            
+            return new PrescriptionResult.SupplierSystemUnavailable();
+        }
+        
+        private static bool HasInvalidCourseId(EmisClient.EmisApiResponse response)
+        {
+            return response.HasExceptionWithMessageContaining(
+                EmisApiErrorMessages.Prescriptions_InvalidCourseId);
+        }
+
+        private static bool HasInsufficientPermissions(EmisClient.EmisApiResponse response)
+        {
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                return true;
+            }
+
+            return response.HasExceptionWithMessageContaining(
+                EmisApiErrorMessages.EmisService_NotEnabledForUser);
+        }
+
+        private static bool HasAlreadyBeenOrderedLast30Days(EmisClient.EmisApiResponse response)
+        {
+            return response.HasExceptionWithMessageContaining(
+                EmisApiErrorMessages.Prescriptions_AlreadyOrderedLast30Days);
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.Validators;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
@@ -47,6 +50,30 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 .GetPrescriptionService();
 
             var result = await prescriptionService.Get(userSession, fromDate, DateTimeOffset.Now);
+
+            return result.Accept(new PrescriptionResultVisitor());
+        }
+
+        [HttpPost, TimeoutExceptionFilter]
+        public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest)
+        {
+            PrescriptionResult result;
+
+            if(!_prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
+            {
+                _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");             
+                result =  new PrescriptionResult.BadRequest();
+            }
+            else
+            {                    
+                UserSession userSession = HttpContext.GetUserSession();        
+      
+                var prescriptionService = _bridgeFactory
+                    .CreateBridge(userSession.Supplier)
+                    .GetPrescriptionService();
+
+                result = await prescriptionService.Post(userSession, repeatPrescriptionRequest);      
+            }
 
             return result.Accept(new PrescriptionResultVisitor());
         }
