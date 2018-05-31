@@ -21,7 +21,7 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
 
         mockingClient.forCitizenId {
             completeLoginRequest()
-                    .respondWithRedirectResponse(userSessionRequest.codeVerifier)
+                    .respondWithRedirectResponse(userSessionRequest.authCode!!)
         }
 
         mockingClient.forCitizenId {
