@@ -58,6 +58,8 @@ export default {
   created() {
     if (this.$route.query.source === 'mobile') {
       this.$store.dispatch('device/updateIsNativeApp', true);
+    } else {
+      this.$store.dispatch('device/updateIsNativeApp', false);
     }
   },
 };
