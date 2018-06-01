@@ -98,6 +98,9 @@ class {{&className}} {
       this.store.dispatch('http/loadingCompleted');
       deferred.resolve(body);
     }).catch((error) => {
+      if (401 === error.response.status) {
+        this.store.dispatch(auth/logout)
+      }
       this.store.dispatch('http/setApiErrorResponse', error);
       this.store.dispatch('http/loadingCompleted');
       deferred.reject(error);
