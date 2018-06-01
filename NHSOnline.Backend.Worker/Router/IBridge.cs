@@ -19,9 +19,6 @@ namespace NHSOnline.Backend.Worker.Router
         IPrescriptionService GetPrescriptionService();
         ISessionService GetSessionService();
         ITokenValidationService GetTokenValidationService();
-        IPrescriptionService GetPrescriptionService();
-        ICourseService GetCourseService();
-        IAppointmentSlotsService GetAppointmentSlotsService();
         IPatientRecordService GetPatientRecordService();
     }
 }
