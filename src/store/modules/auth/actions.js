@@ -3,12 +3,12 @@ import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-type
 
 export default {
   handleAuthResponse({ commit, state }, { code }) {
-  /**
-   * This needs to fire a proxy method
-   * as more work needs to be done before logging in
-   * for now we will just edit the state object.
-   */
-    this.app.$http
+    /**
+     * This needs to fire a proxy method
+     * as more work needs to be done before logging in
+     * for now we will just edit the state object.
+     */
+    return this.app.$http
       .postV1Session({
         userSession: {
           authCode: code,
@@ -16,6 +16,7 @@ export default {
         },
       })
       .then((response) => {
+        this.dispatch('session/setDurationSeconds', response.sessionTimeout);
         commit(AUTH_RESPONSE, response);
         this.app.router.push({
           name: 'index',
@@ -23,7 +24,11 @@ export default {
       });
   },
   logout({ commit }) {
-    this.app.$http.deleteV1Session().then(() => {
+    const { state: { session: lastUpdatedAt = undefined } } = this;
+    if (lastUpdatedAt) this.dispatch('session/showExpiryMessage');
+    this.dispatch('session/clear');
+
+    return this.app.$http.deleteV1Session().then(() => {
       commit(LOGOUT, true);
       this.dispatch('appointmentSlots/init');
       this.dispatch('auth/init');

@@ -3,10 +3,12 @@
     <div :class="$style.checkboxPanel" @click="check">
       <checked-icon :selected="selected" :id="prescriptionDetails.id" />
       <input
-        type="hidden"
         id="presciption-selection"
+        type="hidden"
         @click="check">
-      <label for="presciption-selection" :class="$style.checkboxLabel">{{ prescriptionDetails.name }}</label>
+      <label :class="$style.checkboxLabel" for="presciption-selection">
+        {{ prescriptionDetails.name }}
+      </label>
     </div>
     <label
       :class="$style.prescriptionDescription">

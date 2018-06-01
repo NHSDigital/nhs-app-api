@@ -12,7 +12,7 @@ export default ({ store, req, isDev }) => {
           : cookie.parse(req.headers.cookie || '')[key]),
       setItem: (key, value) => Cookies.set(
         key, value,
-        { secure: !isDev, expires: process.env.COOKIE_EXPIRY },
+        { secure: !isDev },
       ),
       removeItem: key => Cookies.remove(key),
     },

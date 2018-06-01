@@ -21,14 +21,14 @@ export default {
     AccountIcon,
     HomeIcon,
   },
-  head () {
+  head() {
     return {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.header.headerText} screen`,
-    }
-  }
+    };
+  },
 };
 </script>
 

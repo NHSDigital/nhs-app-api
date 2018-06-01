@@ -43,6 +43,5 @@ module.exports = {
     CID_REGISTER_ENDPOINT:
       process.env.CID_REGISTER_ENDPOINT ||
       'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/registrations',
-    COOKIE_EXPIRY: process.env.COOKIE_EXPIRY || 3600,
   },
 };

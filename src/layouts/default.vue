@@ -62,6 +62,13 @@ export default {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
   },
+  mounted() {
+    if (process.client && !window.validateSession) {
+      window.validateSession = () => {
+        this.$store.dispatch('session/validate');
+      };
+    }
+  },
   methods: {
     hasApiServerErrorResponse() {
       const response = this.$store.state.http.apiErrorResponse;

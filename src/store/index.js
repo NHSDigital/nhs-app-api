@@ -8,6 +8,7 @@ import http from './modules/http';
 import navigation from './modules/navigation';
 import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
+import session from './modules/session';
 import myRecord from './modules/myRecord';
 
 const createStore = () => new Vuex.Store({
@@ -20,6 +21,7 @@ const createStore = () => new Vuex.Store({
     navigation,
     prescriptions,
     repeatPrescriptionCourses,
+    session,
     myRecord,
   },
 });

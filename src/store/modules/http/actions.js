@@ -13,6 +13,7 @@ export default {
   },
   isLoading({ commit }) {
     commit(IS_LOADING, true);
+    this.dispatch('session/updateLastCalledAt');
   },
   setApiErrorResponse({ commit }, error) {
     commit(SET_API_ERROR_RESPONSE, error);
