@@ -28,11 +28,12 @@ namespace NHSOnline.Backend.Worker
             {
                 _logger.LogWarning("No user session found. Signing out.");
                 await RejectPrincipalAndSignOut(context);
+                return;
             }
 
-            _logger.LogWarning($"User session found: {userSession.ValueOrDefault()}");
+            _logger.LogWarning($"User session found: {userSession.ValueOrFailure()}");
             
-            context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrDefault());
+            context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrFailure());
             _logger.LogDebug("Finish: Validate Principal");
         }
 
