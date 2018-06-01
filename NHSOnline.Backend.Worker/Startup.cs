@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Bridges.Emis;
+using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Date;
@@ -26,16 +27,14 @@ namespace NHSOnline.Backend.Worker
     public class Startup
     {
         private const int DefaultHttpTimeoutSeconds = 10;
-        private const int DefaultSessionExpiryMinutes = 20;
         private readonly IHostingEnvironment _env;
+        private IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
             _env = env;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,13 +53,6 @@ namespace NHSOnline.Backend.Worker
                         ? CookieSecurePolicy.SameAsRequest
                         : CookieSecurePolicy.Always;
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
-
-                    int.TryParse(Configuration["SESSION_EXPIRY_MINUTES"], out var sessionExpiryMinutes);
-                    sessionExpiryMinutes = sessionExpiryMinutes == default(int)
-                        ? DefaultSessionExpiryMinutes
-                        : sessionExpiryMinutes;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(sessionExpiryMinutes);
-                    options.SlidingExpiration = true;
                 });
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
@@ -82,10 +74,12 @@ namespace NHSOnline.Backend.Worker
                 );
 
             services.AddDataProtection();
+            services.AddSingleton(Configuration);
             services.AddSingleton<IBridgeFactory, BridgeFactory>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
+            services.AddTransient<IEmisDemographicsMapper, EmisDemographicsMapper>();
             services.AddTransient<IEmisAllergyMapper, EmisAllergyMapper>();
             services.AddTransient<IPrescriptionRequestValidationService, PrescriptionRequestValidationService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
@@ -115,7 +109,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<TimeZoneInfoProvider>();
             services.AddSingleton<TimeZoneConverter>();
             services.AddSingleton<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
-            
+
             // Add functionality to inject IOptions<T>
             services.AddOptions();
 
@@ -155,7 +149,7 @@ namespace NHSOnline.Backend.Worker
             app.UseMvc();
         }
 
-        public void EnsureConfigurationSettingsPopulated(ConfigurationSettings config)
+        private void EnsureConfigurationSettingsPopulated(ConfigurationSettings config)
         {
             if (config.PrescriptionsDefaultLastNumberMonthsToDisplay == null)
             {
@@ -170,6 +164,11 @@ namespace NHSOnline.Backend.Worker
             if (config.CoursesMaxCoursesLimit == null)
             {
                 throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.CoursesMaxCoursesLimit)));
+            }
+            
+            if (config.DefaultSessionExpiryMinutes == default(int))
+            {
+                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.DefaultSessionExpiryMinutes)));
             }
         }
     }

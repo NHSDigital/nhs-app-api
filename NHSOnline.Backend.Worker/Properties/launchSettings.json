@@ -40,8 +40,7 @@
         "CITIZEN_ID_BASE_URL": "https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/",
         "CITIZEN_ID_CLIENT_ID": "nhs-online-poc",
         "CITIZEN_ID_CLIENT_SECRET": "872b46c9-0afe-4037-8958-e7bbc209a379",
-        "NHS_WEB_APP_BASE_URL": "http://localhost:3000/",
-        "SESSION_EXPIRY_MINUTES": "20"
+        "NHS_WEB_APP_BASE_URL": "http://localhost:3000/"
       }
     }
   }

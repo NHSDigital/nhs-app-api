@@ -26,5 +26,15 @@
 
             throw new OptionalValueMissingException();
         }
+
+        public T ValueOrDefault()
+        {
+            if (HasValue)
+            {
+                return Value;
+            }
+
+            return default(T);
+        }
     }
 }

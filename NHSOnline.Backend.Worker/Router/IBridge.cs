@@ -1,4 +1,5 @@
 using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.Router.Demographics;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.MyRecord;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
@@ -11,7 +12,11 @@ namespace NHSOnline.Backend.Worker.Router
         SupplierEnum Supplier { get; }
 
         IAppointmentsService GetAppointmentsService();
+        IAppointmentSlotsService GetAppointmentSlotsService();
+        ICourseService GetCourseService();
+        IDemographicsService GetDemographicsService();
         IIm1ConnectionService GetIm1ConnectionService();
+        IPrescriptionService GetPrescriptionService();
         ISessionService GetSessionService();
         ITokenValidationService GetTokenValidationService();
         IPrescriptionService GetPrescriptionService();

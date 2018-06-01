@@ -13,7 +13,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 SessionWasCreated = true,
                 FamilyName = result.FamilyName,
                 GivenName = result.GivenName,
-                UserSession = result.UserSession
+                UserSession = result.UserSession,
+                SessionTimeout = result.SessionTimeout
             };
         }
 

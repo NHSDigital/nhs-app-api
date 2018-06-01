@@ -1,10 +1,13 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
+using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.Router.Demographics;
 using NHSOnline.Backend.Worker.Router.Im1Connection;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
 using NHSOnline.Backend.Worker.Router.MyRecord;
@@ -17,6 +20,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
         private readonly IEmisAllergyMapper _emisAllergyMapper;
+        private readonly IEmisDemographicsMapper _emisDemographicsMapper;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILoggerFactory _loggerFactory;
         private readonly IOptions<ConfigurationSettings> _settings;
@@ -26,12 +30,15 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             IEmisClient emisClient,
             IEmisPrescriptionMapper emisPrescriptionMapper,
             IEmisAllergyMapper emisAllergyMapper,
+            IEmisDemographicsMapper emisDemographicsMapper,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
-            IOptions<ConfigurationSettings> settings)
+            IOptions<ConfigurationSettings> settings,
+            IConfiguration configuration)
         {
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
             _emisAllergyMapper = emisAllergyMapper;
+            _emisDemographicsMapper = emisDemographicsMapper;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _loggerFactory = loggerFactory;
             _settings = settings;
@@ -47,6 +54,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public ICourseService GetCourseService()
         {
             return new EmisCourseService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
+        }
+        
+        public IDemographicsService GetDemographicsService()
+        {
+            return new EmisDemographicsService(_loggerFactory, _emisClient, _emisDemographicsMapper);
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()
@@ -66,7 +78,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
         public ISessionService GetSessionService()
         {
-            return new EmisSessionService(_emisClient);
+            return new EmisSessionService(_emisClient, _settings);
         }
 
         public ITokenValidationService GetTokenValidationService()
