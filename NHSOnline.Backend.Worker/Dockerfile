@@ -35,10 +35,10 @@ ENV EMIS_APPLICATION_ID D66BA979-60D2-49AA-BE82-AEC06356E41F
 ENV EMIS_BASE_URL http://nhsonline.stubs:8080/emis/
 ENV EMIS_VERSION 2.1.0.0
 ENV NHS_WEB_APP_BASE_URL https://www-preview.nonliveeuw.bitraft.io/
-ENV SESSION_EXPIRY_MINUTES 20
 ENV WAIT_FOR_TIMEOUT 60
 ENV REDIS_ODSLOOKUP_CONFIG nhsonline.redis.sds:6379
 ENV REDIS_SESSION_CONFIG nhsonline.redis.session:6379
+ENV ConfigurationSettings__DefaultSessionExpiryMinutes 20
 
 WORKDIR /app
 EXPOSE 8082
