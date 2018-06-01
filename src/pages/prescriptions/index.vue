@@ -1,7 +1,7 @@
 <template>
   <main :class="$style.main">
     <div :class="$style['above-float-button']">
-      <div v-if="showNoPrescriptions" class="info">
+      <div v-if="showNoPrescriptions" class="info" data-purpose="no-prescriptions-error">
         <p>
           <b>{{ $t('prescriptions.noPrescriptionsAvailable.title') }}</b>
         </p>
@@ -12,19 +12,19 @@
           {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
         </p>
       </div>
-      <ul v-if="showPrescriptions">
+      <ul v-if="showPrescriptions" data-purpose="prescriptions">
         <li
           v-for="prescriptionCourse in prescriptionCoursesToDisplay"
           :key="prescriptionCourse.courseId"
           :class="$style['prescription-course']">
           <div :class="$style.container">
             <div>
-              <b>{{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}</b>
+              <b aria-label="order-date">{{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}</b>
               : {{ prescriptionCourse.orderDate | shortDate }}
             </div>
             <hr>
-            <b>{{ prescriptionCourse.name }}</b>
-            <div>{{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}</div>
+            <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
+            <div aria-label="dosage">{{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}</div>
           </div>
         </li>
       </ul>
