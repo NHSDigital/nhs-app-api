@@ -16,7 +16,9 @@
     <style name="default_warning_text" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/_16ssp</item>
-        <item name="android:padding">@dimen/_4sdp</item>
+        <item name="android:padding">@dimen/_12sdp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
         <item name="android:background">@drawable/warning_border</item>
     </style>
 

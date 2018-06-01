@@ -22,7 +22,7 @@ class KnownServicesTest {
             on {getString(R.string.organDonation)} doReturn "https://www.organdonation.nhs.uk/"
             on {getString(R.string.nhs111_connection_error)} doReturn "NHS 111 unavailable"
             on {getString(R.string.organ_donation_connection_error)} doReturn "Organ donation unavailable"
-            on {getString(R.string.connection_error)} doReturn "Service unavailable"
+            on {getString(R.string.service_unavailable)} doReturn "Service unavailable"
             on {getString(R.string.nhsOnlineRequiredQueries)} doReturn "?source=mobile"
         }
         var context: Context = mock(){on {resources} doReturn mockresource}

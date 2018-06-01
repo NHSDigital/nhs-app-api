@@ -21,7 +21,7 @@ class KnownServices(private val context: Context) {
             R.string.baseURL)),
             true,
             queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
-            unavailabilityErrorMessage = context.resources.getString(R.string.connection_error)))
+            unavailabilityErrorMessage = context.resources.getString(R.string.service_unavailable)))
 
         serviceList.add(KnownService(arrayOf(context.resources.getString(
             R.string.organDonation)),

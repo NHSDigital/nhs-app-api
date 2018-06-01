@@ -14,10 +14,13 @@ import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.error_layout.*
+import kotlinx.android.synthetic.main.header_layout.*
 
 class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var chromeClient: ChromeClientLocationHandler
@@ -63,7 +66,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         knownServices = KnownServices(this)
         webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities(), this)
 
-        webview.addJavascriptInterface( WebAppInterface(this), "nativeApp")
+        webview.addJavascriptInterface(WebAppInterface(this), "nativeApp")
     }
 
     fun showMenuBar() {
@@ -109,9 +112,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
 
     private fun onMyAccountIconSelected() {
-         loadMyAccountPage()
-         setHeaderText(resources.getString(R.string.my_account_header))
-         menuBar.deselectActiveItem()
+        loadMyAccountPage()
+        setHeaderText(resources.getString(R.string.my_account_header))
+        menuBar.deselectActiveItem()
     }
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
@@ -125,36 +128,36 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun loadMorePage() {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-                .buildUpon()
-                .appendEncodedPath(resources.getString(R.string.morePath))
-                .build()
+            .buildUpon()
+            .appendEncodedPath(resources.getString(R.string.morePath))
+            .build()
         val moreURL = builtUri.toString()
         loadPage(moreURL)
     }
 
     private fun loadAppointmentsPage() {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-                .buildUpon()
-                .appendEncodedPath(resources.getString(R.string.appointmentsPath))
-                .build()
+            .buildUpon()
+            .appendEncodedPath(resources.getString(R.string.appointmentsPath))
+            .build()
         val appointmentsURL = builtUri.toString()
         loadPage(appointmentsURL)
     }
 
     private fun loadPrescriptionsPage() {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-                .buildUpon()
-                .appendEncodedPath(resources.getString(R.string.prescriptionsPath))
-                .build()
+            .buildUpon()
+            .appendEncodedPath(resources.getString(R.string.prescriptionsPath))
+            .build()
         val prescriptionsURL = builtUri.toString()
         loadPage(prescriptionsURL)
     }
 
     private fun loadMyAccountPage() {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-                .buildUpon()
-                .appendEncodedPath(resources.getString(R.string.myAccountPath))
-                .build()
+            .buildUpon()
+            .appendEncodedPath(resources.getString(R.string.myAccountPath))
+            .build()
         val myAccountURL = builtUri.toString()
         loadPage(myAccountURL)
     }
@@ -189,7 +192,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun showUnavailabilityError(unavailabilityErrorMessage: String?) {
         showErrorScreen()
 
-        errorTextView.text = unavailabilityErrorMessage
+        if (unavailabilityErrorMessage != null)
+            errorTextView.setServiceError(unavailabilityErrorMessage)
+        else {
+            errorTextView.setServiceError(
+                resources.getString(R.string.connection_error),
+                resources.getString(R.string.connection_error_info),
+                resources.getString(R.string.connection_error_more_info)
+            )
+        }
     }
 
     private fun showErrorScreen() {
