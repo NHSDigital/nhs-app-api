@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="success-dialog">
     <success-icon/>
     <div :class="[$style.msg, $style.success]">
       <slot/>
@@ -7,20 +7,20 @@
   </div>
 </template>
 
-<script> 
-import SuccessIcon from '@/components/icons/SuccessIcon'; 
- 
-export default { 
-  components: { 
-    SuccessIcon, 
-  }, 
-  data() { 
-    return { 
-      msgClass: 'msg', 
-    }; 
-  }, 
-}; 
-</script> 
+<script>
+import SuccessIcon from '@/components/icons/SuccessIcon';
+
+export default {
+  components: {
+    SuccessIcon,
+  },
+  data() {
+    return {
+      msgClass: 'msg',
+    };
+  },
+};
+</script>
 
 <style module lang="scss">
   @import "../style/messages";
