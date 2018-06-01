@@ -71,10 +71,15 @@ export const actions = {
   },
   unauthorised({ commit }) {
     commit(LOGOUT, true);
-    this.app.$router.push({
-      name: 'home.logout',
-      params: { unauthorised: true },
-    });
+    this.dispatch('appointmentSlots/init');
+    this.dispatch('auth/init');
+    this.dispatch('device/init');
+    this.dispatch('header/init');
+    this.dispatch('http/init');
+    this.dispatch('navigation/init');
+    this.dispatch('prescriptions/init');
+    this.dispatch('repeatPrescriptionCourses/init');
+    this.app.router.push('/login');
   },
 };
 /* eslint-disable no-shadow */
