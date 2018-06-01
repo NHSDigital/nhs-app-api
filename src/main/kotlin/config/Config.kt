@@ -53,10 +53,8 @@ class Config private constructor() {
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {
-        var result = System.getenv(key) ?: defaultValue
+        return System.getenv(key) ?: defaultValue
                 .also { println("$key set as $it") }
-
-        return result
     }
 
     companion object {

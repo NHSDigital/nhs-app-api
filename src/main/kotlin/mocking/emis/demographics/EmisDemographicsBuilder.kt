@@ -2,11 +2,11 @@ package mocking.emis.demographics
 
 
 import mocking.emis.*
-import mocking.emis.models.DemographicsResponse
-import mocking.emis.models.PatientIdentifier
+import mocking.emis.models.*
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus.SC_OK
+import java.time.LocalDateTime
 
 class EmisDemographicsBuilder(configuration: EmisConfiguration,
                               linkToken: String,
@@ -26,6 +26,13 @@ class EmisDemographicsBuilder(configuration: EmisConfiguration,
 
         return respondWith(SC_OK) {
             andJsonBody(responseBody)
+                    .build()
+        }
+    }
+
+    fun respondWithSuccess(demographicResponse: DemographicsResponse): Mapping {
+        return respondWith(SC_OK) {
+            andJsonBody(demographicResponse)
                     .build()
         }
     }
