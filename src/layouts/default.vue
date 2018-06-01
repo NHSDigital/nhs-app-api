@@ -40,6 +40,12 @@ export default {
       title: `${this.$store.state.header.headerText} screen`,
     }
   },
+  methods: {
+    hasApiServerErrorResponse() {
+      const response = this.$store.state.http.apiErrorResponse;
+      return (response && response.status >= 500);
+    },
+  },
   computed: {
     showMenu() {
       return (
@@ -49,7 +55,7 @@ export default {
       );
     },
     showView() {
-      return !this.noConnection && !this.$store.state.http.hasApiServerErrorResponse;
+      return !this.noConnection && !this.hasApiServerErrorResponse();
     },
   },
   updated() {
