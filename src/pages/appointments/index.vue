@@ -5,12 +5,20 @@
       <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>
     </div>
     <ul v-if="showAppointments" data-purpose="slots">
-      <li :key="slot.id" v-for="(slot, index) in slots" :class="$style.slot">
-        <appointment-slot :slotId="slot.id" :aria-label="'slot ' + (index +1)" />
+      <li v-for="(slot, index) in slots" :key="slot.id" :class="$style.slot">
+        <appointment-slot
+          :selected="slot.selected"
+          :slot-id="slot.id"
+          :aria-label="'slot ' + (index +1)"
+        />
       </li>
     </ul>
 
-    <floating-button-bottom :button-classes="['green']" :clickable="hasASlotSelected" @on-click="onBookButtonClicked">
+    <floating-button-bottom
+      :button-classes="['green']"
+      :clickable="hasASlotSelected"
+      @on-click="onBookButtonClicked"
+    >
       {{ $t('appointments.bookAppointmentButtonText') }}
     </floating-button-bottom>
   </main>
@@ -23,6 +31,9 @@ import AppointmentSlot from '../../components/AppointmentSlot';
 import FloatingButtonBottom from '../../components/FloatingButtonBottom';
 
 export default {
+  async fetch({ store }) {
+    await store.dispatch('appointmentSlots/load');
+  },
   middleware: ['auth', 'meta'],
   components: {
     AppointmentSlot,
@@ -49,10 +60,6 @@ export default {
       findById: 'appointmentSlots/findById',
       currentSlot: 'appointmentSlots/currentSlot',
     }),
-  },
-  mounted() {
-    this.$store.dispatch('appointmentSlots/load', this.$config);
-    this.$store.dispatch('appointmentSlots/select', undefined);
   },
   methods: {
     bottomStyle() {

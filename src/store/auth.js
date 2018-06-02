@@ -34,7 +34,7 @@ export const actions = {
         });
       });
   },
-  logout({ commit, dispatch }) {
+  logout({ commit }) {
     this.app.$http.deleteV1Session().then(() => {
       commit(LOGOUT, true);
       this.dispatch('appointmentSlots/init');

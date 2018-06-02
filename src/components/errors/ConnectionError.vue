@@ -1,22 +1,23 @@
 <template>
-    <main class="content" v-show="isVisible">
-      <error-warning-dialog errorOrWarning="error">
-        <p class="header">
-          {{header}}
-        </p>
-        <p>
-          {{subheader}}
-        </p>
-      </error-warning-dialog>
-      <button class="button" @click="onRetryButtonClicked">
-        {{retryButtonText}}
-      </button>
-      <p>
-        {{message}}
+  <main v-show="isVisible" class="content">
+    <error-warning-dialog error-or-warning="error">
+      <p class="header">
+        {{ header }}
       </p>
-    </main>
+      <p>
+        {{ subheader }}
+      </p>
+    </error-warning-dialog>
+    <button class="button" @click="onRetryButtonClicked">
+      {{ retryButtonText }}
+    </button>
+    <p>
+      {{ message }}
+    </p>
+  </main>
 </template>
 <script>
+/* eslint-disable import/extensions */
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 
 export default {
@@ -27,6 +28,26 @@ export default {
     return {
       noConnection: false,
     };
+  },
+  computed: {
+    isVisible() {
+      return this.noConnection;
+    },
+    header() {
+      return this.getMessage('header');
+    },
+    subheader() {
+      return this.getMessage('subheader');
+    },
+    message() {
+      return this.getMessage('message');
+    },
+    retryButtonText() {
+      return this.getMessage('retryButtonText');
+    },
+  },
+  updated() {
+    this.noConnection = !navigator.onLine;
   },
   methods: {
     onRetryButtonClicked() {
@@ -50,26 +71,6 @@ export default {
       }
       return '';
     },
-  },
-  computed: {
-    isVisible() {
-      return this.noConnection;
-    },
-    header() {
-      return this.getMessage('header');
-    },
-    subheader() {
-      return this.getMessage('subheader');
-    },
-    message() {
-      return this.getMessage('message');
-    },
-    retryButtonText() {
-      return this.getMessage('retryButtonText');
-    },
-  },
-  updated() {
-    this.noConnection = !navigator.onLine;
   },
 };
 </script>

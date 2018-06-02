@@ -4,7 +4,9 @@ const { SLOT_SELECTED, SLOTS_LOADED } = mutations;
 
 describe('SLOT_SELECTED', () => {
   it('will set the selected slot to the slot with received ID', () => {
-    const state = {};
+    const state = {
+      slots: [],
+    };
     SLOT_SELECTED(state, '1');
     expect(state.selectedSlotId).toEqual('1');
   });
@@ -47,7 +49,9 @@ describe('SLOTS_LOADED', () => {
   it('will set the slots on the state from the received slot data', () => {
     const state = {};
     const receivedData = {
-      slots: [{}],
+      slots: [{
+        selected: false,
+      }],
     };
 
     SLOTS_LOADED(state, receivedData);
@@ -57,12 +61,14 @@ describe('SLOTS_LOADED', () => {
 
   it('will order the appointment slots by start time ascending', () => {
     const acending = [
-      { startTime: '2018-04-21T17:11:59.084865+01:00' },
-      { startTime: '2018-04-22T17:11:59.084865+01:00' },
-      { startTime: '2018-04-22T17:13:59.084865+01:00' },
-      { startTime: '2018-04-23T17:13:59.084865+01:00' },
+      { startTime: '2018-04-21T17:11:59.084865+01:00', selected: false },
+      { startTime: '2018-04-22T17:11:59.084865+01:00', selected: false },
+      { startTime: '2018-04-22T17:13:59.084865+01:00', selected: false },
+      { startTime: '2018-04-23T17:13:59.084865+01:00', selected: false },
     ];
-    const state = {};
+    const state = {
+      selected: false,
+    };
     const receivedData = {
       slots: [acending[2], acending[1], acending[0], acending[3]],
     };

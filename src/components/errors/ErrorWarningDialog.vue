@@ -26,7 +26,7 @@ export default {
       msgClass: 'msg',
     };
   },
-}
+};
 </script>
 
 <style lang="scss">

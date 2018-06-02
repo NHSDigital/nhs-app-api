@@ -2,15 +2,16 @@
   <main :class="$style.main">
     <success-dialog>
       <p>
-        {{$t('appointments.booked.successText')}}
+        {{ $t('appointments.booked.successText') }}
       </p>
     </success-dialog>
   </main>
 </template>
 
 <script>
-import SuccessDialog from '@/components/SuccessDialog'; 
- 
+/* eslint-disable import/extensions */
+import SuccessDialog from '@/components/SuccessDialog';
+
 export default {
   middleware: ['auth', 'meta'],
   components: {

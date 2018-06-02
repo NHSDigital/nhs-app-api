@@ -1,34 +1,41 @@
 <template>
   <main class="main">
-    <error-warning-dialog errorOrWarning="error" v-if="showValidationError">
+    <error-warning-dialog v-if="showValidationError" error-or-warning="error">
       <p>
-        {{$t('appointments.confirmation.noReasonDialogError')}}
+        {{ $t('appointments.confirmation.noReasonDialogError') }}
       </p>
     </error-warning-dialog>
 
-    <appointment-slot :slotId="slotId" :alwaysDeselect="true" aria-label="selected appointment" />
+    <appointment-slot :slot-id="slotId" :always-deselect="true" aria-label="selected appointment" />
     <div class="form" role="form">
-      <label for="reasonText">{{$t('appointments.confirmation.headerLabel')}}</label>
-      <p>{{$t('appointments.confirmation.label')}}</p>
+      <label for="reasonText">{{ $t('appointments.confirmation.headerLabel') }}</label>
+      <p>{{ $t('appointments.confirmation.label') }}</p>
 
       <error-message v-if="showValidationError" id="errorLabel">
-        {{$t('appointments.confirmation.noReasonError')}}
+        {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
-      <textarea maxlength="150" v-model="symptoms" :class="{error:showValidationError}" id="reasonText" ref="reason" :aria-labelledby="reasonBoxAriaLabelledBy"
+      <textarea
+        id="reasonText"
+        ref="reason"
+        v-model="symptoms"
+        :class="{error:showValidationError}"
+        :aria-labelledby="reasonBoxAriaLabelledBy"
+        maxlength="150"
       />
-      <p id="maxReasonDesc">{{$t('appointments.confirmation.maxReasonDesc')}}</p>
+      <p id="maxReasonDesc">{{ $t('appointments.confirmation.maxReasonDesc') }}</p>
     </div>
 
-    <button class="button green" id="btn_book_appointment" @click="onConfirmButtonClicked">
-      {{$t('appointments.confirmation.confirmButtonText')}}
+    <button id="btn_book_appointment" class="button green" @click="onConfirmButtonClicked">
+      {{ $t('appointments.confirmation.confirmButtonText') }}
     </button>
-    <button class="button grey" id="btn_cancel_appointment" @click="onCancelButtonClicked">
-      {{$t('appointments.confirmation.changeButtonText')}}
+    <button id="btn_cancel_appointment" class="button grey" @click="onCancelButtonClicked">
+      {{ $t('appointments.confirmation.changeButtonText') }}
     </button>
   </main>
 </template>
 
 <script>
+/* eslint-disable import/extensions */
 import AppointmentSlot from '@/components/AppointmentSlot';
 import ErrorMessage from '@/components/ErrorMessage';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
@@ -52,6 +59,9 @@ export default {
       return this.showValidationError ? 'errorLabel maxReasonDesc' : 'maxReasonDesc';
     },
   },
+  mounted() {
+    this.slotId = this.$store.state.appointmentSlots.selectedSlotId;
+  },
   methods: {
     onConfirmButtonClicked() {
       this.symptoms = this.symptoms.trim();
@@ -66,9 +76,6 @@ export default {
     onCancelButtonClicked() {
       this.$router.push('/appointments');
     },
-  },
-  mounted() {
-    this.slotId = this.$store.state.appointmentSlots.selectedSlotId;
   },
 };
 </script>

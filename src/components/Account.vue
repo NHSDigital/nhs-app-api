@@ -1,9 +1,9 @@
 <template>
-    <main class="content">
-      <button id="signout-button" class="button grey" @click="signoutClicked()">
-        {{ $t('signOutButton.signOut') }}
-      </button>
-    </main>
+  <main class="content">
+    <button id="signout-button" class="button grey" @click="signoutClicked()">
+      {{ $t('signOutButton.signOut') }}
+    </button>
+  </main>
 </template>
 
 <script>

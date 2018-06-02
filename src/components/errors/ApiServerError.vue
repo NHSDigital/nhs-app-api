@@ -1,24 +1,23 @@
 <template>
-  <main class="content" v-show="isVisible">
-    <error-warning-dialog errorOrWarning="error">
+  <main v-show="isVisible" class="content">
+    <error-warning-dialog error-or-warning="error">
       <p class="header">
-        {{header}}
+        {{ header }}
       </p>
       <p>
-        {{subheader}}
+        {{ subheader }}
       </p>
       <p>
-        {{message}}
+        {{ message }}
       </p>
     </error-warning-dialog>
-    <button class="button" v-if="retryButtonText" @click="onRetryButtonClicked">
-      {{retryButtonText}}
+    <button v-if="retryButtonText" class="button" @click="onRetryButtonClicked">
+      {{ retryButtonText }}
     </button>
   </main>
 </template>
 <script>
-
-import { mapGetters } from 'vuex';
+/* eslint-disable import/extensions */
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 
 export default {
@@ -29,6 +28,26 @@ export default {
     return {
       connection: true,
     };
+  },
+  computed: {
+    isVisible() {
+      return this.showError();
+    },
+    header() {
+      return this.getMessage('header');
+    },
+    subheader() {
+      return this.getMessage('subheader');
+    },
+    message() {
+      return this.getMessage('message');
+    },
+    retryButtonText() {
+      if (this.hasComponentErrorCodeKey('retryButtonText')) {
+        return this.getMessage('retryButtonText');
+      }
+      return '';
+    },
   },
   updated() {
     this.connection = navigator.onLine;
@@ -97,29 +116,6 @@ export default {
         const pageHeader = this.getMessage('pageHeader');
         this.$store.dispatch('header/updateHeaderText', pageHeader);
       }
-    },
-  },
-  computed: {
-    isVisible() {
-      return this.showError();
-    },
-    header() {
-      return this.getMessage('header');
-    },
-    subheader() {
-      return this.getMessage('subheader');
-    },
-    message() {
-      return this.getMessage('message');
-    },
-    showRetryButton() {
-      return this.hasComponentErrorCodeKey('retryButtonText');
-    },
-    retryButtonText() {
-      if (this.hasComponentErrorCodeKey('retryButtonText')) {
-        return this.getMessage('retryButtonText');
-      }
-      return '';
     },
   },
 };

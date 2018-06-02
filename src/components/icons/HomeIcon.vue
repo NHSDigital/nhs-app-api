@@ -1,5 +1,5 @@
 <template>
-  <svg viewBox="0 0 79 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" :class="$style.nhs_logo">
+  <svg :class="$style.nhs_logo" viewBox="0 0 79 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>{{ $t('icons.homeIcon.title') }}</title>
     <desc>{{ $t('icons.homeIcon.desc') }}</desc>
     <defs/>

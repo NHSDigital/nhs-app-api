@@ -1,22 +1,27 @@
 <template>
-  <div :class="appointmentSelected" @click="select" :aria-selected="isSelected(slotId)">
+  <div :class="getClass" :aria-selected="isSelected(slotId)" @click="select(slotId)">
     <h5 :class="$style.date" aria-label="date">
       {{ formatDate(appointmentSlot.startTime) }}
     </h5>
     <h4 :class="$style.startTime" aria-label="start time">
       {{ formatTime(appointmentSlot.startTime) }}
     </h4>
-    <hr aria-hidden="true" />
+    <hr aria-hidden="true">
     <p :class="$style.session" aria-label="session name">
-      {{ appointmentSession | truncate(24)}}
+      {{ appointmentSession | truncate(24) }}
     </p>
-    <hr aria-hidden="true" />
+    <hr aria-hidden="true">
     <p aria-label="location">
-      <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
-    <ul :key="clinician.id" aria-label="clinicians" v-for="clinician in appointmentSlot.clinicians" :class="$style.clinicians">
+    <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
+    <ul
+      v-for="clinician in appointmentSlot.clinicians"
+      :key="clinician.id"
+      :class="$style.clinicians"
+      aria-label="clinicians"
+    >
       <li>
         <p>
-          <clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
+        <clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
       </li>
     </ul>
   </div>
@@ -44,11 +49,10 @@ export default {
       default: false,
       type: Boolean,
     },
-  },
-  data() {
-    return {
-      currentSlotId: '',
-    };
+    selected: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     appointmentSlot() {
@@ -56,17 +60,11 @@ export default {
         find(slot => slot.id === this.slotId)(this.$store.state.appointmentSlots.slots) || {}
       );
     },
-    appointmentSelected() {
-      const slotID = this.currentSlotId;
-      const deselect = this.alwaysDeselect;
-      const { selectedSlotId } = this.$store.state.appointmentSlots;
-
-      return selectedSlotId === slotID && !deselect
-        ? this.$style.selectedContainer
-        : this.$style.container;
-    },
     appointmentSession() {
       return get('appointmentSession.displayName')(this.appointmentSlot);
+    },
+    getClass() {
+      return this.selected ? this.$style.selectedContainer : this.$style.container;
     },
     location() {
       return get('location.displayName')(this.appointmentSlot);
@@ -78,18 +76,8 @@ export default {
   methods: {
     formatTime: dateTime => moment(dateTime).format('h:mm a'),
     formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
-    select() {
-      this.$store.dispatch('appointmentSlots/select', undefined);
-      this.currentSlotId = undefined;
-      if (!this.alwaysDeselect) {
-        this.$store.dispatch('appointmentSlots/select', this.slotId);
-        this.currentSlotId = this.slotId;
-        this.$forceUpdate();
-      }
-    },
-    getClass() {
-      const isSelected = !this.alwaysDeselect && this.isSelected(this.slotId);
-      return isSelected ? this.$style.selectedContainer : this.$style.container;
+    select(slotId) {
+      this.$store.dispatch('appointmentSlots/select', slotId);
     },
   },
 };

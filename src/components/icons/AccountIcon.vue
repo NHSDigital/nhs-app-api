@@ -1,5 +1,5 @@
 <template>
-  <svg :class="$style.account" xmlns="http://www.w3.org/2000/svg" width="16.5" height="22" viewBox="0 0 83.63 111.84" id="accountIcon" >
+  <svg id="accountIcon" :class="$style.account" xmlns="http://www.w3.org/2000/svg" width="16.5" height="22" viewBox="0 0 83.63 111.84" >
     <defs/>
     <title>{{ $t('icons.accountIcon.title') }}</title>
     <!--eslint-disable-next-line -->

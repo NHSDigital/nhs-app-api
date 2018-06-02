@@ -8,7 +8,7 @@
 
 <script>
 export default {
-   middleware: ['auth', 'meta'],
+  middleware: ['auth', 'meta'],
   data() {
     return {
       organDonationUrl: process.env.ORGAN_DONATION_URL,

@@ -45,7 +45,6 @@ export default {
   components: {
     FloatingButtonBottom,
   },
-  middleware: ['meta', 'auth'],
   computed: {
     showNoPrescriptions() {
       return (

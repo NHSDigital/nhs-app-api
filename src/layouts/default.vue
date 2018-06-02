@@ -38,13 +38,7 @@ export default {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.header.headerText} screen`,
-    }
-  },
-  methods: {
-    hasApiServerErrorResponse() {
-      const response = this.$store.state.http.apiErrorResponse;
-      return (response && response.status >= 500);
-    },
+    };
   },
   computed: {
     showMenu() {
@@ -67,6 +61,12 @@ export default {
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
+  },
+  methods: {
+    hasApiServerErrorResponse() {
+      const response = this.$store.state.http.apiErrorResponse;
+      return (response && response.status >= 500);
+    },
   },
 };
 </script>

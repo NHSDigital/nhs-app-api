@@ -16,7 +16,7 @@ export const actions = {
   isLoading({ commit }) {
     commit(IS_LOADING, true);
   },
-  setApiErrorResponse ({ commit }, error ) {
+  setApiErrorResponse({ commit }, error) {
     commit(SET_API_ERROR_RESPONSE, error);
   },
   clearApiErrorResponse({ commit }) {

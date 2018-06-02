@@ -8,6 +8,7 @@
 </template>
 
 <script>
+/* eslint-disable import/extensions */
 import SuccessIcon from '@/components/icons/SuccessIcon';
 
 export default {

@@ -72,6 +72,10 @@ export const actions = {
 export const mutations = {
   [SLOT_SELECTED](state, slotId) {
     state.selectedSlotId = slotId;
+    state.slots = state.slots.map((slot) => {
+      slot.selected = slot.id === slotId;
+      return slot;
+    });
   },
   [INIT_APPOINTMENTS](state) {
     state = initialState;
@@ -98,6 +102,7 @@ export const mutations = {
         result.clinicians = clinicians;
       }
 
+      result.selected = false;
       return result;
     })(state.slots);
 
