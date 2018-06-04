@@ -1,8 +1,6 @@
-import {
-  mutations,
-  PRESCRIPTIONS_LOADED,
-  PRESCRIPTIONS_CLEAR,
-} from '../../../../../src/store/prescriptions';
+/* eslint-disable import/extensions */
+import mutations from '../../../../../src/store/modules/prescriptions/mutations';
+import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '../../../../../src/store/modules/prescriptions/mutation-types';
 
 describe('PRESCRIPTIONS_LOADED', () => {
   it('will set the prescription courses on the state to the received data', () => {

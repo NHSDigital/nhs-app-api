@@ -1,8 +1,5 @@
-import {
-  actions,
-  DEMOGRAPHICS_LOADED,
-  ALLERGIES_LOADED,
-} from '../../../../../src/store/myRecord';
+import actions from '../../../../../src/store/modules/myRecord/actions';
+import { DEMOGRAPHICS_LOADED, ALLERGIES_LOADED } from '../../../../../src/store/modules/myRecord/mutation-types';
 
 const API_HOST = 'http://unit.test';
 

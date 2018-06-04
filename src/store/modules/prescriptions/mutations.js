@@ -1,48 +1,9 @@
-import moment from 'moment';
 import { assign, find } from 'lodash/fp';
-
-export const PRESCRIPTIONS_LOADED = 'PRESCRIPTIONS_LOADED';
-export const PRESCRIPTIONS_CLEAR = 'PRESCRIPTIONS_CLEAR';
-const INIT_PRESCRIPTIONS = 'INIT_PRESCRIPTIONS';
-
-const initialState = {
-  prescriptionCourses: [],
-  hasLoaded: false,
-  hasErrored: false,
-};
-export const state = () => initialState;
-
-function getFromDate() {
-  return moment()
-    .subtract(6, 'months')
-    .toISOString();
-}
-
-function getPrescriptionsParameters() {
-  return {
-    fromDate: getFromDate(),
-  };
-}
-
-export const actions = {
-  load({ commit }) {
-    return this.app.$http
-      .getV1PatientPrescriptions(getPrescriptionsParameters())
-      .then((data) => {
-        commit(PRESCRIPTIONS_LOADED, data);
-      });
-  },
-  init({ commit }) {
-    commit(INIT_PRESCRIPTIONS);
-  },
-  clear({ commit }) {
-    commit(PRESCRIPTIONS_CLEAR);
-  },
-};
+import { PRESCRIPTIONS_CLEAR, PRESCRIPTIONS_LOADED, INIT_PRESCRIPTIONS, initialState } from './mutation-types';
 
 const findById = (id, collection) => find(item => item.id === id)(collection);
 
-export const mutations = {
+export default {
   /* eslint-disable no-shadow */
   /* eslint-disable no-param-reassign */
   /* eslint-disable no-unused-vars */
@@ -76,14 +37,5 @@ export const mutations = {
   [PRESCRIPTIONS_CLEAR](state) {
     state.prescriptionCourses = [];
     state.hasLoaded = false;
-  },
-};
-
-export const getters = {
-  prescriptionCourses(state) {
-    return state.prescriptionCourses.map((prescription) => {
-      const result = assign({}, prescription);
-      return result;
-    });
   },
 };

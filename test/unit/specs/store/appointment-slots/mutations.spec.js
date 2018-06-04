@@ -1,4 +1,4 @@
-import { mutations } from '../../../../../src/store/appointmentSlots';
+import mutations from '../../../../../src/store/modules/appointmentSlots/mutations';
 
 const { SLOT_SELECTED, SLOTS_LOADED } = mutations;
 

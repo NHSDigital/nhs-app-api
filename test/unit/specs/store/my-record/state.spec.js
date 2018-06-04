@@ -1,4 +1,6 @@
-import { state } from '../../../../../src/store/myRecord';
+import myRecord from '../../../../../src/store/modules/myRecord';
+
+const { state } = myRecord;
 
 describe('state', () => {
   it('will initialise state correctly', () => {

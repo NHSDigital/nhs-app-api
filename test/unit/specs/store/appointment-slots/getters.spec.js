@@ -1,7 +1,6 @@
-import { getters } from '../../../../../src/store/appointmentSlots';
+import getters from '../../../../../src/store/modules/appointmentSlots/getters';
 
 const { slots } = getters;
-
 describe('getters', () => {
   describe('slots', () => {
     it('will set the location on the slots from the state`s locations', () => {

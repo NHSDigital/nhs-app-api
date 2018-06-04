@@ -1,4 +1,5 @@
-import { actions, UPDATE_IS_NATIVE_APP } from '../../../../../src/store/device';
+import actions from '../../../../../src/store/modules/device/actions';
+import { UPDATE_IS_NATIVE_APP } from '../../../../../src/store/modules/device/mutation-types';
 
 const { updateIsNativeApp } = actions;
 describe('updateIsNativeApp', () => {

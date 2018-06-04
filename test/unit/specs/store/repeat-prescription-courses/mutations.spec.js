@@ -1,4 +1,7 @@
-import { REPEAT_PRESCRIPTION_COURSES_LOADED, mutations } from '../../../../../src/store/repeatPrescriptionCourses';
+/* eslint-disable import/extensions */
+import mutations from '../../../../../src/store/modules/repeatPrescriptionCourses/mutations';
+import { REPEAT_PRESCRIPTION_COURSES_LOADED } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
+
 
 describe('REPEAT_PRESCRIPTION_COURSES_LOADED', () => {
   it('will set the courses on the state from the received courses data', () => {

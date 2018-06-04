@@ -49,7 +49,6 @@ export default {
   },
   computed: {
     selectedPrescriptions() {
-      debugger;
       return this.$store.state.repeatPrescriptionCourses.selectedPrescriptions;
     },
     ...mapGetters({

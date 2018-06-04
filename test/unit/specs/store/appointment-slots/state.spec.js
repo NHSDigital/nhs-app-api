@@ -1,5 +1,6 @@
-import { state } from '../../../../../src/store/appointmentSlots';
+import appointmentSlots from '../../../../../src/store/modules/appointmentSlots';
 
+const { state } = appointmentSlots;
 describe('state', () => {
   it('will set the appointment sessions to an empty array', () => {
     expect(state().appointmentSessions).toEqual([]);

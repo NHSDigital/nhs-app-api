@@ -98,6 +98,7 @@ class {{&className}} {
       deferred.resolve(body);
     }).catch((error) => {
       if (error.response !== undefined && 401 === error.response.status) {
+        this.store.dispatch('http/loadingCompleted');
         this.store.dispatch('auth/unauthorised')
       }
       this.store.dispatch('http/setApiErrorResponse', error);

@@ -1,4 +1,6 @@
-import { actions, REPEAT_PRESCRIPTION_COURSES_LOADED } from '../../../../../src/store/repeatPrescriptionCourses';
+/* eslint-disable import/extensions */
+import actions from '../../../../../src/store/modules/repeatPrescriptionCourses/actions';
+import { REPEAT_PRESCRIPTION_COURSES_LOADED } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
 
 const { load } = actions;
 

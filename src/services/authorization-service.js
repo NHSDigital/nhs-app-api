@@ -69,8 +69,10 @@ class AuthorizationService {
 
     const query = this.stringify(request);
     const baseUrl = process.env.CID_AUTH_ENDPOINT;
-    const url = `${baseUrl}?${query}`;
-    window.location = url;
+    if (process.client) {
+      const url = `${baseUrl}?${query}`;
+      window.location = url;
+    }
   }
 
   performRegistration(verifier) {
@@ -90,7 +92,9 @@ class AuthorizationService {
     const query = this.stringify(request);
     const baseUrl = process.env.CID_REGISTER_ENDPOINT;
     const url = `${baseUrl}?${query}`;
-    window.location = url;
+    if (process.client) {
+      window.location = url;
+    }
   }
 }
 

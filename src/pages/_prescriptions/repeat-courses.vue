@@ -115,10 +115,10 @@ export default {
   @import "../../style/elements";
 
   .panel {
-   @include panel;
+    @include panel;
   }
   .panelHeader {
-   @include panelHeader;
+    @include panelHeader;
   }
 
   .panelContent {
@@ -142,6 +142,6 @@ export default {
   }
 
   .textArea {
-   @include text-area;
+    @include text-area;
   }
 </style>

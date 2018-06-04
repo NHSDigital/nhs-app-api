@@ -1,0 +1,14 @@
+import actions from './actions';
+import mutations from './mutations';
+import { initialState } from './mutation-types';
+import getters from './getters';
+
+export default {
+  namespaced: true,
+  state() {
+    return initialState;
+  },
+  actions,
+  mutations,
+  getters,
+};

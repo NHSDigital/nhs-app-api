@@ -1,8 +1,8 @@
 import {
-  actions,
   SLOT_SELECTED,
   SLOTS_LOADED,
-} from '../../../../../src/store/appointmentSlots';
+} from '../../../../../src/store/modules/appointmentSlots/mutation-types';
+import actions from '../../../../../src/store/modules/appointmentSlots/actions';
 
 const API_HOST = 'http://unit.test';
 

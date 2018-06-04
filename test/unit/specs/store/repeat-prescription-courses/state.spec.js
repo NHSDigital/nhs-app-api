@@ -1,4 +1,7 @@
-import { state } from '../../../../../src/store/repeatPrescriptionCourses';
+/* eslint-disable import/extensions */
+import repeatPrescriptions from '../../../../../src/store/modules/repeatPrescriptionCourses';
+
+const { state } = repeatPrescriptions;
 
 describe('state', () => {
   it('will set the repeat prescription courses to an empty array', () => {

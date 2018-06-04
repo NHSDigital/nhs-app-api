@@ -1,4 +1,5 @@
-import { mutations, UPDATE_HEADER_TEXT } from '../../../../../src/store/header';
+import mutations from '../../../../../src/store/modules/header/mutations';
+import { UPDATE_HEADER_TEXT } from '../../../../../src/store/modules/header/mutation-types';
 
 describe('UPDATE_HEADER_TEXT', () => {
   it('will call the native app handle to update the page header', () => {
@@ -6,6 +7,7 @@ describe('UPDATE_HEADER_TEXT', () => {
     window.nativeApp = {
       updateHeaderText: mockUpdateHeaderFunction,
     };
+    process.client = true;
     const state = {
       headerText: '',
     };

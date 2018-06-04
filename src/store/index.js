@@ -1,14 +1,27 @@
-import createPersistedState from 'vuex-persistedstate';
-import * as Cookies from 'js-cookie';
+import Vuex from 'vuex';
 
-const localStorage = () => {
-  createPersistedState({
-    storage: {
-      getItem: key => Cookies.get(key),
-      setItem: (key, value) => Cookies.set(key, value, { secure: true }),
-      removeItem: key => Cookies.remove(key),
-    },
-  });
-};
+import header from './modules/header';
+import appointmentSlots from './modules/appointmentSlots';
+import auth from './modules/auth';
+import device from './modules/device';
+import http from './modules/http';
+import navigation from './modules/navigation';
+import prescriptions from './modules/prescriptions';
+import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
+import myRecord from './modules/myRecord';
 
-export default [localStorage];
+const createStore = () => new Vuex.Store({
+  modules: {
+    header,
+    appointmentSlots,
+    auth,
+    device,
+    http,
+    navigation,
+    prescriptions,
+    repeatPrescriptionCourses,
+    myRecord,
+  },
+});
+
+export default createStore;

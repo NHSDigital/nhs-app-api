@@ -1,8 +1,6 @@
-import {
-  actions,
-  PRESCRIPTIONS_LOADED,
-  PRESCRIPTIONS_CLEAR,
-} from '../../../../../src/store/prescriptions';
+/* eslint-disable import/extensions */
+import actions from '../../../../../src/store/modules/prescriptions/actions';
+import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '../../../../../src/store/modules/prescriptions/mutation-types';
 
 const { load, clear } = actions;
 

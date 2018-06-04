@@ -1,8 +1,5 @@
-import {
-  mutations,
-  DEMOGRAPHICS_LOADED,
-  ALLERGIES_LOADED,
-} from '../../../../../src/store/myRecord';
+import mutations from '../../../../../src/store/modules/myRecord/mutations';
+import { DEMOGRAPHICS_LOADED, ALLERGIES_LOADED } from '../../../../../src/store/modules/myRecord/mutation-types';
 
 describe('DEMOGRAPHICS_LOADED', () => {
   it('will set the demographics data on the state to the received data', () => {

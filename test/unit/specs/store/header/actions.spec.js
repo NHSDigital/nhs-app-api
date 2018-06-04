@@ -1,4 +1,5 @@
-import { actions, UPDATE_HEADER_TEXT } from '../../../../../src/store/header';
+import actions from '../../../../../src/store/modules/header/actions';
+import { UPDATE_HEADER_TEXT } from '../../../../../src/store/modules/header/mutation-types';
 
 const { updateHeaderText } = actions;
 
