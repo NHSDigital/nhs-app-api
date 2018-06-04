@@ -27,6 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Router
             serviceCollection.AddSingleton(new Mock<TimeZoneInfoProvider>().Object);
             serviceCollection.AddSingleton(new Mock<IDateTimeOffsetProvider>().Object);
             serviceCollection.AddSingleton(new Mock<IConfiguration>().Object);
+            serviceCollection.AddSingleton<IBridge, EmisBridge>();
 
             var serviceProvider = serviceCollection.AddLogging().BuildServiceProvider();
             _bridgeFactory = new BridgeFactory(serviceProvider);

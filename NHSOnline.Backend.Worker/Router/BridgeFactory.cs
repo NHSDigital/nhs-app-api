@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Worker.Bridges.Emis;
 
 namespace NHSOnline.Backend.Worker.Router
 {
@@ -15,12 +15,15 @@ namespace NHSOnline.Backend.Worker.Router
 
         public IBridge CreateBridge(SupplierEnum supplier)
         {
-            switch (supplier)
+            var bridges = _serviceProvider.GetServices<IBridge>();
+
+            try
             {
-                case SupplierEnum.Emis:
-                    return _serviceProvider.GetService<EmisBridge>();
-                default:
-                    throw new UnknownSupplierException();
+                return bridges.Single(b => b.Supplier == supplier);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new UnknownSupplierException();
             }
         }
     }

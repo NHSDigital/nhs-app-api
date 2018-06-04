@@ -90,7 +90,6 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<ICipherService, CipherService>();
 
             services.AddSingleton<HttpClient>();
-            services.AddSingleton<EmisBridge>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
