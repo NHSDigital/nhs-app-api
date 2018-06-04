@@ -7,66 +7,16 @@
     android:layout_height="match_parent"
     tools:context="com.nhs.online.nhsonline.MainActivity">
 
-    <android.support.v7.widget.Toolbar
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_96sdp"
-        android:elevation="4dp"
         android:background="#005EB8"
-        android:visibility="gone"
-        android:gravity="bottom">
+        android:elevation="4dp"
+        android:gravity="bottom"
+        android:visibility="gone">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginRight="@dimen/_16sdp"
-            android:layout_marginLeft="@dimen/_16sdp">
-
-            <RelativeLayout
-                android:id="@+id/top_header"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp">
-
-                <ImageView
-                    android:id="@+id/nhsOnlineLogoIcon"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:layout_alignParentStart="true"
-                    android:contentDescription="@string/nhsAppHome"
-                    android:src="@mipmap/icon_nhs_online_logo" />
-
-                <ImageView
-                    android:id="@+id/myAccountIcon"
-                    android:contentDescription="My account icon"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:layout_alignParentEnd="true"
-                    android:focusable="true"
-                    android:src="@mipmap/icon_header_account" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_1sdp"
-                    android:layout_alignParentBottom="true"
-                    android:background="#64FFFFFF" />
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_below="@id/top_header"
-                android:id="@+id/bottom_header"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp">
-                <TextView
-                    android:id="@+id/header_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_marginTop="@dimen/_6sdp"
-                    android:textSize="@dimen/_18sdp"
-                    android:textColor="#FFFFFF"
-                    android:text="Home" />
-            </RelativeLayout>
-
-        </RelativeLayout>
+        <include layout="@layout/header_layout" />
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
@@ -96,40 +46,8 @@
             android:padding="@dimen/_12sdp"
             android:visibility="gone">
 
-            <ImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
-                android:background="@color/error"
-                android:contentDescription="@string/errorIconDesc"
-                android:src="@mipmap/ic_error" />
-
-            <TextView
-                android:id="@+id/errorTextView"
-                style="@style/default_warning_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:minHeight="@dimen/_40sdp" />
-
-            <TextView
-                android:id="@+id/tryAgainTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:text="@string/tryLaterText"
-                android:textSize="@dimen/errorTextSize" />
-
-            <Button
-                android:id="@+id/retryButton"
-                style="@style/blue_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_25sdp"
-                android:text="@string/retryButtonText"
-                android:textAllCaps="false" />
+            <include layout="@layout/error_layout" />
         </LinearLayout>
-
     </FrameLayout>
 
     <LinearLayout
@@ -137,8 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/progress_spinner_background"
-        android:gravity="center"
-        >
+        android:gravity="center">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -157,46 +74,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.nhs.online.nhsonline.navigation.MenuBarItem
-            android:id="@+id/symptoms"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:activeIcon="@mipmap/icon_menu_symptoms_active"
-            app:inactiveIcon="@mipmap/icon_menu_symptoms"
-            app:menuTitle="@string/symptoms" />
-
-        <com.nhs.online.nhsonline.navigation.MenuBarItem
-            android:id="@+id/appointments"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:activeIcon="@mipmap/icon_menu_appointments_active"
-            app:inactiveIcon="@mipmap/icon_menu_appointments"
-            app:menuTitle="@string/appointment" />
-
-        <com.nhs.online.nhsonline.navigation.MenuBarItem
-            android:id="@+id/prescriptions"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:activeIcon="@mipmap/icon_menu_prescriptions_active"
-            app:inactiveIcon="@mipmap/icon_menu_prescriptions"
-            app:menuTitle="@string/prescription" />
-
-        <com.nhs.online.nhsonline.navigation.MenuBarItem
-            android:id="@+id/myRecord"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:activeIcon="@mipmap/icon_menu_record_active"
-            app:inactiveIcon="@mipmap/icon_menu_record"
-            app:menuTitle="@string/my_record" />
-
-        <com.nhs.online.nhsonline.navigation.MenuBarItem
-            android:id="@+id/more"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:activeIcon="@mipmap/icon_menu_more_active"
-            app:inactiveIcon="@mipmap/icon_menu_more"
-            app:menuTitle="@string/more" />
-
+        <include layout="@layout/navigation_menu_layout" />
     </com.nhs.online.nhsonline.navigation.MenuBar>
 
 </android.support.constraint.ConstraintLayout>

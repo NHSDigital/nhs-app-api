@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline.activity
 
 import android.content.Context
+import android.widget.TextView
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.Assert
 import org.junit.Test
@@ -52,6 +53,6 @@ class OpenUrlInBrowserActivityTest {
             message =  exception?.message ?:  ""
         }
 
-        Assert.assertEquals("Cannot open url in browser", message);
+        Assert.assertEquals("Cannot open url in browser", message)
     }
 }
