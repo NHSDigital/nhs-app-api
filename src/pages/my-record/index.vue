@@ -19,14 +19,13 @@
 </template>
 
 <script>
-
 /* eslint-disable import/extensions */
 import PatientDetails from '@/components/my-record/PatientDetails';
 import AllergiesAndAdverseReactions from '@/components/my-record/AllergiesAndAdverseReactions';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 
 export default {
-  middleware: ['auth', 'meta'],
+  middleware: ['auth', 'meta', 'patientDemographicsHandler'],
   components: {
     ErrorWarningDialog,
     PatientDetails,

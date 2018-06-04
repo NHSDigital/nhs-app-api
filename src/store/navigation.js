@@ -1,25 +1,23 @@
 export const CLEAR_SELECTED_MENUITEM = 'CLEAR_SELECTED_MENUITEM';
 export const SET_NEWMENUITEM = 'SET_NEWMENUITEM';
-const INIT_NAVIGATION = 'INIT_NAVIGATION';
 
 export const state = () => ({
-  previousSelectedMenuItem: null,
+  menuItemStatusAt: [],
+
 });
+
 /* eslint-disable no-shadow */
 function clearPreviousSelectedMenuItem(state) {
-  if (
-    state.previousSelectedMenuItem &&
-    state.previousSelectedMenuItem.classList
-  ) {
-    state.previousSelectedMenuItem.classList.remove('active');
+  let i;
+  const x = [];
+  for (i = 0; i < 5; i += 1) {
+    x.push(false);
   }
+  state.menuItemStatusAt = x;
 }
 export const actions = {
   clearPreviousSelectedMenuItem({ commit }) {
     commit(CLEAR_SELECTED_MENUITEM);
-  },
-  init({ commit }) {
-    commit(INIT_NAVIGATION);
   },
   setNewMenuItem({ commit }, menuItem) {
     commit(SET_NEWMENUITEM, menuItem);
@@ -33,14 +31,8 @@ export const mutations = {
   [CLEAR_SELECTED_MENUITEM](state) {
     clearPreviousSelectedMenuItem(state);
   },
-  [INIT_NAVIGATION](state) {
-    state = {
-      previousSelectedMenuItem: null,
-    };
-  },
-  [SET_NEWMENUITEM](state, menuItem) {
+  [SET_NEWMENUITEM](state, menuItemIndex) {
     clearPreviousSelectedMenuItem(state);
-    menuItem.classList.add('active');
-    state.previousSelectedMenuItem = menuItem;
+    state.menuItemStatusAt[menuItemIndex] = true;
   },
 };

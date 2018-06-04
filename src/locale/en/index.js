@@ -109,7 +109,7 @@ export default {
     },
     viewRestOfHealthRecordWarning: 'You cannot view the rest of your health record online. To see more, ask your GP practice for access to your ‘Detailed Coded Record’.',
     allergiesAndAdverseReactions: {
-      sectionHeader: 'Allergies and Adverse Reactions',
+      sectionHeader: 'Allergies and adverse reactions',
     },
   },
   common: {
@@ -149,7 +149,7 @@ export default {
   navigationMenu: {
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',
-    myRecordLabel: 'My medical record',
+    myRecordLabel: 'My record',
     prescriptionsLabel: 'Prescriptions',
     symptomsLabel: 'Symptoms',
   },
@@ -180,7 +180,7 @@ export default {
       title: 'More',
     },
     myRecordIcon: {
-      title: 'My Medical Record',
+      title: 'My record',
     },
     nhsLogoIcon: {
       title: 'NHS app',

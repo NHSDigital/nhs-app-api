@@ -12,7 +12,7 @@
     <label>{{ $t('myRecord.patientInfo.fieldLabelAddress') }}</label>
     <p v-if="patientInfo && patientInfo.address">{{ `${patientInfo.address.line1},
     ${patientInfo.address.line2}, ${patientInfo.address.line3}, ${patientInfo.address.town},
-    ${patientInfo.address.country}, ${patientInfo.address.postcode}` }}</p>
+    ${patientInfo.address.county}, ${patientInfo.address.postcode}` }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelNHS') }}</label>
     <p v-if="patientInfo">{{ patientInfo.nhsNumber }}</p>
@@ -21,28 +21,22 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 
 export default {
-  components: {
-  },
   props: {
     isCollapsed: {
       type: Boolean,
       default: true,
     },
   },
-  data() {
-    return {
-      patientInfo: this.$store.state.myRecord.patientDemographics,
-      items: [],
-    };
-  },
   computed: {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
-  },
-  methods: {
+    ...mapGetters({
+      patientInfo: 'myRecord/patientDemographics',
+    }),
   },
 };
 

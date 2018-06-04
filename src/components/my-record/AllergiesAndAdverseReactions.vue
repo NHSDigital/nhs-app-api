@@ -13,17 +13,11 @@
 import { mapGetters } from 'vuex';
 
 export default {
-  components: {
-  },
   props: {
     isCollapsed: {
       type: Boolean,
       default: true,
     },
-  },
-  data() {
-    return {
-    };
   },
   computed: {
     getCollapseState() {

@@ -45,7 +45,6 @@ export default {
   },
   methods: {
     onContinueButtonClicked() {
-      this.$store.dispatch('myRecord/loadPatientDemographics');
       this.$router.push('../my-record');
     },
     onBackButtonClicked() {

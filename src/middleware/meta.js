@@ -19,15 +19,18 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaderTitles.home';
       break;
     case APPOINTMENTS:
+      store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaderTitles.appointments';
       break;
     case MORE:
+      store.dispatch('navigation/setNewMenuItem', 4);
       route.meta.headerKey = 'pageHeaderTitles.more';
       break;
     case REPEAT_PRESCRIPTION_COURSES:
       route.meta.headerKey = 'pageHeaderTitles.repeatPrescriptionCourses';
       break;
     case PRESCRIPTIONS:
+      store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaderTitles.prescriptions';
       break;
     case APPOINTMENT_CONFIRMATIONS:
@@ -42,6 +45,7 @@ export default function ({ route, store, app }) {
     case MYRECORD:
     case MYRECORDNOACCESS:
     case MYRECORDWARNING:
+      store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaderTitles.myRecord';
       break;
     case LOGIN:

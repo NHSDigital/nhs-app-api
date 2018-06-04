@@ -1,23 +1,23 @@
 <template>
   <nav class="menu">
     <ul>
-      <li @click="onSymptomsMenuClicked">
+      <li :class="getMenuitemState(0)" @click="setMenuitemState(0)">
         <symptoms-icon/>
         <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
       </li>
-      <li @click="onAppointmentsMenuClicked">
+      <li :class="getMenuitemState(1)" @click="setMenuitemState(1)">
         <appointments-icon/>
         <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
       </li>
-      <li @click="onPrescriptionsMenuClicked">
+      <li :class="getMenuitemState(2)" @click="setMenuitemState(2)">
         <prescriptions-icon/>
         <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
       </li>
-      <li @click="onMyRecordMenuClicked">
+      <li :class="getMenuitemState(3)" @click="setMenuitemState(3)">
         <record-icon/>
         <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
       </li>
-      <li @click="onMoreMenuClicked">
+      <li :class="getMenuitemState(4)" @click="setMenuitemState(4)">
         <more-icon/>
         <span>{{ $t('navigationMenu.moreLabel') }}</span>
       </li>
@@ -47,37 +47,31 @@ export default {
     };
   },
   methods: {
-    onSymptomsMenuClicked() {
-      window.open(this.symptomsCheckerUrl, '_blank');
+    getMenuitemState(menuItemIndex) {
+      // eslint-disable-next-line
+      return {
+        active: this.$store.state.navigation.menuItemStatusAt[menuItemIndex],
+      };
     },
-
-    onAppointmentsMenuClicked(event) {
-      const appointmentsMenu = event.currentTarget;
-      this.handleMenuSelection(appointmentsMenu);
-      this.$router.push('/appointments');
-    },
-
-    onPrescriptionsMenuClicked(event) {
-      const prescriptionsMenu = event.currentTarget;
-      this.handleMenuSelection(prescriptionsMenu);
-      this.$router.push('/prescriptions');
-    },
-
-    onMyRecordMenuClicked(event) {
-      const myRecordMenuItem = event.currentTarget;
-      this.handleMenuSelection(myRecordMenuItem);
-      this.$router.push('/my-record/myrecordwarning');
-    },
-
-    onMoreMenuClicked(event) {
-      const moreMenuItem = event.currentTarget;
-      this.handleMenuSelection(moreMenuItem);
-      this.$router.push('/more');
-    },
-
-    handleMenuSelection(menuItem) {
-      if (menuItem) {
-        this.$store.dispatch('navigation/setNewMenuItem', menuItem);
+    setMenuitemState(menuItemIndex) {
+      switch (menuItemIndex) {
+        case 0:
+          window.open(this.symptomsCheckerUrl, '_blank');
+          break;
+        case 1:
+          this.$router.push('/appointments');
+          break;
+        case 2:
+          this.$router.push('/prescriptions');
+          break;
+        case 3:
+          this.$router.push('/my-record/myrecordwarning');
+          break;
+        case 4:
+          this.$router.push('/more');
+          break;
+        default:
+          this.$router.push('/');
       }
     },
   },
