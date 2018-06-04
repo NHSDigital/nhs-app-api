@@ -9,6 +9,19 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddSingleton<IBridge, EmisBridge>();
+            services.AddSingleton<IEmisClient, EmisClient>();
+            services.AddSingleton<IEmisConfig, EmisConfig>();
+
+            services.AddTransient<EmisAppointmentsService>();
+            services.AddTransient<EmisAppointmentSlotsService>();
+            services.AddTransient<EmisCourseService>();
+            services.AddTransient<EmisDemographicsService>();
+            services.AddTransient<EmisIm1ConnectionService>();
+            services.AddTransient<EmisPrescriptionService>();
+            services.AddTransient<EmisSessionService>();
+            services.AddTransient<EmisTokenValidationService>();
+
+            base.ConfigureServices(services, configuration);
         }
     }
 }

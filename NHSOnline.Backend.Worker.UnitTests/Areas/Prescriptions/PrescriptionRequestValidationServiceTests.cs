@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.Worker.Areas.Prescriptions;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
-using NHSOnline.Backend.Worker.Router.Validators;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Router.Validators
+namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 {
     [TestClass]
     public class PrescriptionRequestValidationServiceTests

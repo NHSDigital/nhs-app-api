@@ -7545,7 +7545,7 @@ select new {
 warnif count > 0
 
 // Special type names for which multiple types with such name are allowed.
-let nonReportedTypeName = new [] { "Program", "NamespaceDoc", "Initial", "Startup", "SwaggerConfig" }
+let nonReportedTypeName = new [] { "Program", "NamespaceDoc", "Initial", "Startup", "SwaggerConfig", "Module" }
 
 // This rule matches also collisions between 
 // application and third-party types sharing a same name.

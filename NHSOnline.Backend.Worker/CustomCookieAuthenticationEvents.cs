@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker
     public class CustomCookieAuthenticationEvents : CookieAuthenticationEvents
     {
         private readonly ISessionCacheService _sessionCacheService;
-        private ILogger<CustomCookieAuthenticationEvents> _logger;
+        private readonly ILogger<CustomCookieAuthenticationEvents> _logger;
 
         public CustomCookieAuthenticationEvents(ISessionCacheService sessionCacheService, ILoggerFactory loggerFactory)
         {

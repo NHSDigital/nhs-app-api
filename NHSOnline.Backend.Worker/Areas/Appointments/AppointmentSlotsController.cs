@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
-using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {

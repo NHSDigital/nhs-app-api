@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.Date;
+using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {

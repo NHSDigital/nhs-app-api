@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
-using NHSOnline.Backend.Worker.Date;
+using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots
 {

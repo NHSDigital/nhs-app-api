@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace NHSOnline.Backend.Worker.Filters
 {
-    public class ModelStateValidationFilterAttribute : ActionFilterAttribute
+    public sealed class ModelStateValidationFilterAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

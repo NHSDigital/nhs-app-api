@@ -1,7 +1,7 @@
 ﻿using System;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 
-namespace NHSOnline.Backend.Worker.Router.Validators
+namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
     public interface IPrescriptionRequestValidationService
     {

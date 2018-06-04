@@ -5,7 +5,7 @@ using System.Net.Http;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using RichardSzalay.MockHttp;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Helpers
+namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
 {
     public static class EmisHttpMockingExtensions
     {

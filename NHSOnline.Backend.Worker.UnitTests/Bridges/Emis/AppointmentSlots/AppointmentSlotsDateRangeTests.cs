@@ -3,7 +3,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
-using NHSOnline.Backend.Worker.Date;
+using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Date
+namespace NHSOnline.Backend.Worker.Support.Date
 {
     public class TimeZoneConverter
     {

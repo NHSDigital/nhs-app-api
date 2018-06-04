@@ -1,10 +1,5 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Configuration;
-using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
-using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
-using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
-using NHSOnline.Backend.Worker.Date;
+using System;
+using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Appointments;
 using NHSOnline.Backend.Worker.Router.Demographics;
@@ -16,70 +11,53 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisBridge : IBridge
     {
-        private readonly IEmisClient _emisClient;
-        private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
-        private readonly IEmisDemographicsMapper _emisDemographicsMapper;
-        private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private readonly ILoggerFactory _loggerFactory;
-        private readonly IOptions<ConfigurationSettings> _settings;
+        private readonly IServiceProvider _serviceProvider;
 
-        public EmisBridge(
-            ILoggerFactory loggerFactory,
-            IEmisClient emisClient,
-            IEmisPrescriptionMapper emisPrescriptionMapper,
-            IEmisDemographicsMapper emisDemographicsMapper,
-            IDateTimeOffsetProvider dateTimeOffsetProvider,
-            IOptions<ConfigurationSettings> settings,
-            IConfiguration configuration)
+        public EmisBridge(IServiceProvider serviceProvider)
         {
-            _emisClient = emisClient;
-            _emisPrescriptionMapper = emisPrescriptionMapper;
-            _emisDemographicsMapper = emisDemographicsMapper;
-            _dateTimeOffsetProvider = dateTimeOffsetProvider;
-            _loggerFactory = loggerFactory;
-            _settings = settings;
+            _serviceProvider = serviceProvider;
         }
 
         public SupplierEnum Supplier => SupplierEnum.Emis;
 
         public IAppointmentsService GetAppointmentsService()
         {
-            return new EmisAppointmentsService(_emisClient, _loggerFactory);
-        }
-
-        public ICourseService GetCourseService()
-        {
-            return new EmisCourseService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
-        }
-        
-        public IDemographicsService GetDemographicsService()
-        {
-            return new EmisDemographicsService(_loggerFactory, _emisClient, _emisDemographicsMapper);
-        }
-
-        public IIm1ConnectionService GetIm1ConnectionService()
-        {
-            return new EmisIm1ConnectionService(_emisClient);
-        }
-
-        public IPrescriptionService GetPrescriptionService()
-        {
-            return new EmisPrescriptionService(_loggerFactory, _settings, _emisClient, _emisPrescriptionMapper);
-        }
-
-        public ISessionService GetSessionService()
-        {
-            return new EmisSessionService(_emisClient, _settings);
-        }
-
-        public ITokenValidationService GetTokenValidationService()
-        {
-            return new EmisTokenValidationService();
+            return _serviceProvider.GetService<EmisAppointmentsService>();
         }
 
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
-            return new EmisAppointmentSlotsService(_emisClient, _loggerFactory, new AppointmentSlotsResponseMapper(_dateTimeOffsetProvider));
+            return _serviceProvider.GetService<EmisAppointmentSlotsService>();
+        }
+
+        public ICourseService GetCourseService()
+        {
+            return _serviceProvider.GetService<EmisCourseService>();
+        }
+        
+        public IDemographicsService GetDemographicsService()
+        {
+            return _serviceProvider.GetService<EmisDemographicsService>();
+        }
+
+        public IIm1ConnectionService GetIm1ConnectionService()
+        {
+            return _serviceProvider.GetService<EmisIm1ConnectionService>();
+        }
+
+        public IPrescriptionService GetPrescriptionService()
+        {
+            return _serviceProvider.GetService<EmisPrescriptionService>();
+        }
+
+        public ISessionService GetSessionService()
+        {
+            return _serviceProvider.GetService<EmisSessionService>();
+        }
+
+        public ITokenValidationService GetTokenValidationService()
+        {
+            return _serviceProvider.GetService<EmisTokenValidationService>();
         }
     }
 }

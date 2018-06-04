@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Helpers;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis

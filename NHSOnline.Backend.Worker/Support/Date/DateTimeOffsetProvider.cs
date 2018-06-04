@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace NHSOnline.Backend.Worker.Date
+namespace NHSOnline.Backend.Worker.Support.Date
 {
     public interface IDateTimeOffsetProvider
     {

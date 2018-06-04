@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -8,7 +7,6 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
-using NHSOnline.Backend.Worker.Router.Validators;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {

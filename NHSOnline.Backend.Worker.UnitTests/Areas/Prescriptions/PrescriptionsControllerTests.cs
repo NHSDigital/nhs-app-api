@@ -12,7 +12,6 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Router;
 using NHSOnline.Backend.Worker.Router.Prescriptions;
-using NHSOnline.Backend.Worker.Router.Validators;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 {

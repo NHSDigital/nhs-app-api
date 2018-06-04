@@ -1,12 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
-using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
-using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Router;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Router
@@ -20,13 +14,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Router
         public void TestInitialize()
         {
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddSingleton<EmisBridge, EmisBridge>();
-            serviceCollection.AddSingleton(new Mock<IEmisClient>().Object);
-            serviceCollection.AddSingleton(new Mock<IEmisPrescriptionMapper>().Object);
-            serviceCollection.AddSingleton(new Mock<IEmisDemographicsMapper>().Object);
-            serviceCollection.AddSingleton(new Mock<TimeZoneInfoProvider>().Object);
-            serviceCollection.AddSingleton(new Mock<IDateTimeOffsetProvider>().Object);
-            serviceCollection.AddSingleton(new Mock<IConfiguration>().Object);
             serviceCollection.AddSingleton<IBridge, EmisBridge>();
 
             var serviceProvider = serviceCollection.AddLogging().BuildServiceProvider();

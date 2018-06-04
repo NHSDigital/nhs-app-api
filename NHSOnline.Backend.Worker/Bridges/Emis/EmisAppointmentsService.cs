@@ -9,7 +9,7 @@ using NHSOnline.Backend.Worker.Router.Appointments;
 
 namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
-    public class EmisAppointmentsService: IAppointmentsService
+    public class EmisAppointmentsService : IAppointmentsService
     {
         private readonly IEmisClient _emisClient;
         private readonly ILogger _logger;

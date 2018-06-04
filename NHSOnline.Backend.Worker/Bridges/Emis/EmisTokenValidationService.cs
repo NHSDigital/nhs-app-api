@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
     {
         public bool IsValidConnectionTokenFormat(string connectionToken)
         {
-            return Guid.TryParse(connectionToken, out var result);
+            return Guid.TryParse(connectionToken, out var _);
         }
     }
 }

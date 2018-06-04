@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models;
-using NHSOnline.Backend.Worker.Date;
+using NHSOnline.Backend.Worker.Support.Date;
 using Location = NHSOnline.Backend.Worker.Bridges.Emis.Models.Location;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.AppointmentSlots

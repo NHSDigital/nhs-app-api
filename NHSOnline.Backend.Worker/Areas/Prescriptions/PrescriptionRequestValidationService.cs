@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 
-namespace NHSOnline.Backend.Worker.Router.Validators
+namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
     public class PrescriptionRequestValidationService : IPrescriptionRequestValidationService
     {
@@ -17,22 +17,9 @@ namespace NHSOnline.Backend.Worker.Router.Validators
             return model.CourseIds.Any() && IsValidGuidList(model.CourseIds);
         }
 
-        private bool IsValidGuidList(IEnumerable<string> courseIds)
+        private static bool IsValidGuidList(IEnumerable<string> courseIds)
         {
-            Guid guidOutput;
-            bool isValid = true;
-                
-            foreach (string courseId in courseIds)
-            {
-                isValid = Guid.TryParse(courseId, out guidOutput);
-
-                if (!isValid)
-                {
-                    return false;
-                }
-            }
-
-            return isValid;
+            return courseIds.All(courseId => Guid.TryParse(courseId, out var _));
         }
     }
 }
