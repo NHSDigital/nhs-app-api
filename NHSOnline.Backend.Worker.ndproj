@@ -136,7 +136,8 @@
       <High2Critical_SeverityThreshold>72000000000</High2Critical_SeverityThreshold>
       <Critical2Blocker_SeverityThreshold>360000000000</Critical2Blocker_SeverityThreshold>
     </DebtSettings>
-  </ProjectDebtSettings><Queries>
+  </ProjectDebtSettings>
+  <Queries>
     <Group Name="Quality Gates" Active="True" ShownInReport="True">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Quality Gates Evolution</Name>
 from qg in QualityGates
@@ -2771,7 +2772,7 @@ let cctorSuspects = assembly.ChildMethods.Where(
        m.ParentType.Level == null)
 
 where cctorSuspects.Count() > 1
-let typesSuspects = cctorSuspects.ParentTypes().ToHashSet()
+let typesSuspects = cctorSuspects.ParentTypes().ToHashSetEx()
 
 //
 // dicoTmp associates to each type suspect T, a set of types from typesSuspects
@@ -2788,7 +2789,7 @@ let dicoTmp = cctorSuspects.ToDictionary(
               .Select(m => m.ParentType) // Don't need .Distinct() here, because of ToHashSet() below.
               .Except(cctor.ParentType)
               .Intersect(typesSuspects)
-              .ToHashSet()
+              .ToHashSetEx()
 ) 
 
 //
@@ -2805,7 +2806,7 @@ let dico = typesSuspects.Where(t => dicoTmp[t].Count() > 0).ToDictionary(
                                   select tUsed)
                    .DefinitionDomain
                    .Except(typeSuspect)
-                   .ToHashSet()
+                   .ToHashSetEx()
 )
 
 
@@ -3019,7 +3020,7 @@ let unmanagedResourcesFields = disposableTypes.ChildFields().Where(f =>
     f.FieldType.FullName.EqualsAny(
        "System.IntPtr",
        "System.UIntPtr",
-       "System.Runtime.InteropServices.HandleRef")).ToHashSet()
+       "System.Runtime.InteropServices.HandleRef")).ToHashSetEx()
 let disposableTypesWithUnmanagedResource = unmanagedResourcesFields.ParentTypes()
 
 from t in disposableTypesWithUnmanagedResource
@@ -3068,7 +3069,7 @@ where iDisposables.Any() // in case the code base doesn't use at all System.IDis
  
 // Build sequences of disposableTypes and disposeMethods
 let disposableTypes = Types.ThatImplementAny(iDisposables).Concat(iDisposables)
-let disposeMethods = disposableTypes.ChildMethods().WithName("Dispose()").ToHashSet()
+let disposeMethods = disposableTypes.ChildMethods().WithName("Dispose()").ToHashSetEx()
 
 
 // -> You can refine this code query by assigning to disposableTypesToLookAfter something like:
@@ -3500,7 +3501,7 @@ select new {
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Don't use obsolete types, methods or fields</Name>   
 warnif count > 0
 let obsoleteTypes =   Types.Where(t => t.IsObsolete)
-let obsoleteMethods = Methods.Where(m => m.IsObsolete).ToHashSet()
+let obsoleteMethods = Methods.Where(m => m.IsObsolete).ToHashSetEx()
 let obsoleteFields =  Fields.Where(f => f.IsObsolete)
 
 from m in JustMyCode.Methods.UsingAny(obsoleteTypes).Union(
@@ -4090,7 +4091,7 @@ let dbTypes = ThirdParty.Assemblies.WithNameIn("System.Data", "EntityFramework",
 
 // DAL layer is made of types using a DB framework
 // .ToHashSet() results to faster execution of    dalTypes.Intersect(uiType.TypesIUse).
-let dalTypes = Application.Types.UsingAny(dbTypes).ToHashSet()
+let dalTypes = Application.Types.UsingAny(dbTypes).ToHashSetEx()
 
 from uiType in uiTypes.UsingAny(dalTypes)
 let dalTypesUsed = dalTypes.Intersect(uiType.TypesUsed)
@@ -4156,7 +4157,7 @@ let types = a.ChildTypes.Where(
         !t.IsEnumeration &&
          JustMyCode.Contains(t))
         // Absolutly need ToHashet() to have fast Intersect() calls below.
-        .ToHashSet()
+        .ToHashSetEx()
 
 // Relational Cohesion metrics is relevant only if there are enough types
 where types.LongCount()> 20
@@ -4223,7 +4224,7 @@ warnif count > 0 from n in Application.Namespaces
 let types = n.ChildTypes.Where(
    t => JustMyCode.Contains(t) && !t.IsEnumeration)
         // Absolutly need ToHashet() to have fast Intersect() calls below.
-        .ToHashSet()
+        .ToHashSetEx()
 
 // Relational Cohesion metrics is relevant only if there are enough types
 where types.LongCount() > 20
@@ -5686,7 +5687,7 @@ let deadMethodsMetric = methodsUnused.FillIterative(
    methods => // Unique loop, just to let a chance to build the hashset.
               from o in (new object()).ToEnumerable()
               // Use a hashet to make Intersect calls much faster!
-              let hashset = methods.ToHashSet()
+              let hashset = methods.ToHashSetEx()
               from m in codeBase.Application.Methods.UsedByAny(methods).Except(methods)
               where canMethodBeConsideredAsDeadProc(m) &&
                     // Select methods called only by methods already considered as dead
@@ -7473,7 +7474,7 @@ warnif count > 0
 
 // First get test method for which we allow long names
 let testAttr = ThirdParty.Types.WithNameIn("FactAttribute", "TestAttribute", "TestCaseAttribute")
-let testMethods = Methods.TaggedWithAnyAttributes(testAttr).ToHashSet()
+let testMethods = Methods.TaggedWithAnyAttributes(testAttr).ToHashSetEx()
 
 from m in JustMyCode.Methods where 
 
@@ -7643,7 +7644,7 @@ select new {
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid naming types and namespaces with the same identifier</Name>
 warnif count > 0
-let hashsetShortNames = Namespaces.Where(n => n.Name.Length > 0).Select(n => n.SimpleName).ToHashSet()
+let hashsetShortNames = Namespaces.Where(n => n.Name.Length > 0).Select(n => n.SimpleName).ToHashSetEx()
 
 from t in JustMyCode.Types
 where hashsetShortNames.Contains(t.Name)
@@ -7729,7 +7730,7 @@ let collectionTypes = Types.Where(t =>
    t.FullName != "System.Collections.Generic.IDictionary<TKey,TValue>" &&
   !t.Implement("System.Collections.Generic.IDictionary<TKey,TValue>".AllowNoMatch()) &&
    t.FullName != "System.Collections.Generic.IReadOnlyDictionary<TKey,TValue>" &&
-  !t.Implement("System.Collections.Generic.IReadOnlyDictionary<TKey,TValue>".AllowNoMatch())).ToHashSet()
+  !t.Implement("System.Collections.Generic.IReadOnlyDictionary<TKey,TValue>".AllowNoMatch())).ToHashSetEx()
 
 let properties = from m in JustMyCode.Methods
 where (m.IsPropertyGetter || m.IsPropertySetter) && 
@@ -8421,7 +8422,7 @@ select new {
 warnif count > 0 
 
 let gcCollectMethods = ThirdParty.Methods.WithFullNameWildcardMatch(
-   "System.GC.Collect(*)").ToHashSet()
+   "System.GC.Collect(*)").ToHashSetEx()
 
 from m in Application.Methods.UsingAny(gcCollectMethods)
 select new { 
@@ -8449,7 +8450,7 @@ select new {
 warnif count > 0 
 
 let gcCollectMethods = ThirdParty.Methods.WithFullNameWildcardMatch(
-   "System.GC.Collect(*)").ToHashSet()
+   "System.GC.Collect(*)").ToHashSetEx()
 
 from m in Application.Methods.UsingAny(gcCollectMethods) where
   !m.IsUsing ("System.GC.WaitForPendingFinalizers()".AllowNoMatch())
@@ -8747,7 +8748,7 @@ let collectionInterfaces = ThirdParty.Types.WithFullNameIn(
 where collectionInterfaces.Count() > 0
 let collectionTypes = Types.ThatImplementAny(collectionInterfaces)
                            .Union(collectionInterfaces)
-                           .ToHashSet()
+                           .ToHashSetEx()
 
 // Then find all property setters that have an associated 
 // getter that returns a collection type.
@@ -9287,7 +9288,7 @@ let cultureUnawareMethods =
         (m.SimpleName.EqualsAny(
            "Parse", "TryParse", "ToString")) &&
         !m.Name.Contains("IFormatProvider")
-   select m).ToHashSet()
+   select m).ToHashSetEx()
 
 from m in Application.Methods.UsingAny(cultureUnawareMethods)
 let cultureUnawareMethodsCalled = m.MethodsCalled.Intersect(cultureUnawareMethods)
@@ -9532,9 +9533,9 @@ notmycode
 // Define some sets to quickly test EntityFramework generated types
 let efContexts = Application.Types.Where(t => 
   t.DeriveFrom("System.Data.Entity.DbContext".AllowNoMatch()) &&
-  t.SourceDecls.Count(sd => sd.SourceFile.FileName.ToLower().EndsWithAny(".context.cs", ".context.vb")) == 1).ToHashSet()
-let efEntities = Application.Types.UsedByAny(efContexts).ToHashSet()
-let efMigrations = Application.Types.Where(t => t.DeriveFrom("System.Data.Entity.Migrations.DbMigration".AllowNoMatch())).ToHashSet()
+  t.SourceDecls.Count(sd => sd.SourceFile.FileName.ToLower().EndsWithAny(".context.cs", ".context.vb")) == 1).ToHashSetEx()
+let efEntities = Application.Types.UsedByAny(efContexts).ToHashSetEx()
+let efMigrations = Application.Types.Where(t => t.DeriveFrom("System.Data.Entity.Migrations.DbMigration".AllowNoMatch())).ToHashSetEx()
 
 from t in Application.Types where
 
@@ -9657,7 +9658,7 @@ let sourceFilesPathsToDiscard = (
        // notmycode methods in source files in a directory containing generated
        filePathLower.Contains("generated")
   select filePath
-).ToHashSet() 
+).ToHashSetEx() 
   
 //
 // Second: discard methods in sourceFilesPathsToDiscard 
@@ -9713,7 +9714,7 @@ notmycode
 let winFormInitializeComponentsMethods = 
    Application.Methods.WithName("InitializeComponent()")
    .Where(m => m.ParentType.BaseClass != null && m.ParentType.BaseClass.ParentNamespace.Name == "System.Windows.Forms")                 
-let winFormFields = winFormInitializeComponentsMethods.SelectMany(m => m.FieldsAssigned).ToHashSet()
+let winFormFields = winFormInitializeComponentsMethods.SelectMany(m => m.FieldsAssigned).ToHashSetEx()
 
 from f in Application.Fields where 
 
@@ -10679,7 +10680,7 @@ select tMoved
 // and types *removed*.
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types directly using one or several types changed</Name>
-let typesChanged = Application.Types.Where(t => t.CodeWasChanged()).ToHashSet()
+let typesChanged = Application.Types.Where(t => t.CodeWasChanged()).ToHashSetEx()
 
 from t in JustMyCode.Types.UsingAny(typesChanged) where
   !t.CodeWasChanged() && 
@@ -10700,7 +10701,7 @@ select new { t, typesChangedUsed }
 // The query result includes types changed directly used,
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types indirectly using one or several types changed</Name>
-let typesChanged = Application.Types.Where(t => t.CodeWasChanged()).ToHashSet()
+let typesChanged = Application.Types.Where(t => t.CodeWasChanged()).ToHashSetEx()
 
 // 'depth' represents a code metric defined on types using
 // directly or indirectly any type where code was changed.
@@ -10780,7 +10781,7 @@ select new {
 // • Compare older and newer versions disassembled with Reflector
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods directly calling one or several methods changed</Name>
-let methodsChanged = Application.Methods.Where(m => m.CodeWasChanged()).ToHashSet()
+let methodsChanged = Application.Methods.Where(m => m.CodeWasChanged()).ToHashSetEx()
 
 from m in JustMyCode.Methods.UsingAny(methodsChanged ) where
   !m.CodeWasChanged() && 
@@ -10804,7 +10805,7 @@ select new {
 // The query result includes methods changed directly used,
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods indirectly calling one or several methods changed</Name>
-let methodsChanged = Application.Methods.Where(m => m.CodeWasChanged()).ToHashSet()
+let methodsChanged = Application.Methods.Where(m => m.CodeWasChanged()).ToHashSetEx()
 
 // 'depth' represents a code metric defined on methods using
 // directly or indirectly any method where code was changed.
@@ -10954,7 +10955,7 @@ select new {
 // used at *baseline* time, and that are not used anymore.
 //</Description>]]></Query>
     </Group>
-    <Group Name="Statistics" Active="False" ShownInReport="False">
+    <Group Name="Statistics" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="False" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Most used types (Rank)</Name>
 (from t in Application.Types 
  where !t.IsGeneratedByCompiler
@@ -11520,4 +11521,5 @@ select new {
 //</HowToFix>]]></Query>
       </Group>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>
