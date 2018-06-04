@@ -21,14 +21,16 @@ class KnownServices(private val context: Context) {
             R.string.baseURL)),
             true,
             queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
-            unavailabilityErrorMessage = context.resources.getString(R.string.service_unavailable)))
+            unavailabilityErrorMessage = context.resources.getString(R.string.service_unavailable),
+            shouldValidateSession = true))
 
         serviceList.add(KnownService(arrayOf(context.resources.getString(
             R.string.organDonation)),
             true,
             null,
              unavailabilityErrorMessage = context.resources.getString(R.string.organ_donation_connection_error),
-             nativeHeader = context.resources.getString(R.string.organ_donation_register_header)))
+             nativeHeader = context.resources.getString(R.string.organ_donation_register_header),
+             shouldValidateSession = false))
 
         serviceList.add(KnownService(arrayOf(context.resources.getString(
             R.string.nhs111), context.resources.getString(
@@ -36,7 +38,8 @@ class KnownServices(private val context: Context) {
             true,
             null,
             unavailabilityErrorMessage = context.resources.getString(R.string.nhs111_connection_error),
-            nativeHeader = context.resources.getString(R.string.nhs_111_header)))
+            nativeHeader = context.resources.getString(R.string.nhs_111_header),
+            shouldValidateSession = false))
     }
 
     fun findMatchingKnownService(urlString: String): KnownService? {
@@ -62,4 +65,8 @@ class KnownServices(private val context: Context) {
         }
     }
 
+    fun shouldValidateSession(urlString: String) : Boolean {
+        var knownService = findMatchingKnownService(urlString)
+        return knownService?.shouldValidateSession!!
+    }
 }

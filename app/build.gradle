@@ -36,6 +36,8 @@ dependencies {
     implementation 'com.android.support:support-vector-drawable:26.1.0'
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
     implementation 'com.intuit.ssp:ssp-android:1.0.5'
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.7.1"
