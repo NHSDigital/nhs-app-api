@@ -96,12 +96,10 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             return response;
         }
 
-        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(string userPatientLinkToken, string responseSessionId, string endUserSessionId,
+        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost( string responseSessionId, string endUserSessionId,
             PrescriptionRequestsPost model)
-        {
-            var path = string.Format(PrescriptionsPath, userPatientLinkToken);
-            
-            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, path, endUserSessionId, responseSessionId);
+        {  
+            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPath, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(

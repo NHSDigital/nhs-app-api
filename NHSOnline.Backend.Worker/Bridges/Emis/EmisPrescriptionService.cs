@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
 using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
@@ -21,8 +22,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
-        public EmisPrescriptionService(ILoggerFactory loggerFactory, 
-            IOptions<ConfigurationSettings> settings, 
+        public EmisPrescriptionService(ILoggerFactory loggerFactory,
+            IOptions<ConfigurationSettings> settings,
             IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
             _emisClient = emisClient;
@@ -31,7 +32,8 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             _logger = loggerFactory.CreateLogger<EmisPrescriptionService>();
         }
 
-        public async Task<PrescriptionResult> Get(UserSession userSession, DateTimeOffset? fromDate, DateTimeOffset? toDate)
+        public async Task<PrescriptionResult> Get(UserSession userSession, DateTimeOffset? fromDate,
+            DateTimeOffset? toDate)
         {
             var emisUserSession = (EmisUserSession) userSession;
 
@@ -67,21 +69,26 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             }
         }
 
-        private PrescriptionRequestsGetResponse GetPrescriptionsWithoutRepeatCourses(PrescriptionRequestsGetResponse prescriptionsResponse)
+        private PrescriptionRequestsGetResponse GetPrescriptionsWithoutRepeatCourses(
+            PrescriptionRequestsGetResponse prescriptionsResponse)
         {
             int totalCoursesRunningTotal = 0;
-            var repeatCourses = prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat);
+            var repeatCourses =
+                prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat);
             var repeatCourseGuids = repeatCourses.Select(x => x.MedicationCourseGuid);
-            
+
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
-            foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x => x.DateRequested))
+            foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x =>
+                x.DateRequested))
             {
                 if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit.Value)
                 {
                     break;
                 }
 
-                var repeatCoursesInPrescription = prescription.RequestedMedicationCourses.Where(x => repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid));
+                var repeatCoursesInPrescription =
+                    prescription.RequestedMedicationCourses.Where(x =>
+                        repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid));
 
                 if (repeatCoursesInPrescription.Any())
                 {
@@ -100,9 +107,9 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
             return prescriptionListResponseFiltered;
         }
-        
+
         public async Task<PrescriptionResult> Post(UserSession userSession, RepeatPrescriptionRequest request)
-        {            
+        {
             var emisUserSession = (EmisUserSession) userSession;
 
             var postRequest = new PrescriptionRequestsPost()
@@ -110,11 +117,11 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 MedicationCourseGuids = request.CourseIds,
                 RequestComment = request.SpecialRequest,
                 UserPatientLinkToken = emisUserSession.UserPatientLinkToken
-            };       
-            
+            };
+
             try
             {
-                var response = await _emisClient.PrescriptionsPost(emisUserSession.UserPatientLinkToken,
+                var response = await _emisClient.PrescriptionsPost(
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, postRequest);
 
                 if (response.HasSuccessStatusCode)
@@ -130,32 +137,34 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }
         }
-        
-        private static PrescriptionResult GetCorrectErrorResult(
+
+        private PrescriptionResult GetCorrectErrorResult(
             EmisClient.EmisApiResponse response)
         {
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
                 return new PrescriptionResult.CannotReorderPrescription();
-            }   
+            }
 
             if (HasInsufficientPermissions(response))
             {
                 return new PrescriptionResult.InsufficientPermissions();
             }
-            
-            if (HasInvalidCourseId(response))
+
+            if (IsBadRequest(response))
             {
+                _logger.LogError(
+                    $"The prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponseBadRequest)}");
+
                 return new PrescriptionResult.BadRequest();
             }
-            
+
             return new PrescriptionResult.SupplierSystemUnavailable();
         }
-        
-        private static bool HasInvalidCourseId(EmisClient.EmisApiResponse response)
+
+        private static bool IsBadRequest(EmisClient.EmisApiResponse response)
         {
-            return response.HasExceptionWithMessageContaining(
-                EmisApiErrorMessages.Prescriptions_InvalidCourseId);
+            return response.StatusCode == HttpStatusCode.BadRequest;
         }
 
         private static bool HasInsufficientPermissions(EmisClient.EmisApiResponse response)
