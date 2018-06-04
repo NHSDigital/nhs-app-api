@@ -1,12 +1,13 @@
 package features.myrecord.stepDefinitions
 
+import cucumber.api.java.en.But
+import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.courses.CoursesData
 import features.myrecord.DemographicsData
 import mocking.MockDefaults.Companion.patient
 import mocking.MockingClient
-import mocking.emis.models.*
+import mocking.emis.models.DemographicsResponse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -19,12 +20,30 @@ open class MyRecordStepDefinitions {
   val mockingClient = MockingClient.instance
   val HTTP_EXCEPTION = "HttpException"
 
-  @When("I get the users demographic data with a valid cookie")
-  fun whenIGetTheUsersDemographicsWithAValidCookie()
+  @When("I get the users demographic data")
+  fun whenIGetTheUsersDemographicsData()
   {
     try {
+      val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographicsConnection(null)
+
+      Serenity.setSessionVariable(DemographicsResponse::class).to(result)
+    } catch (httpException: NhsoHttpException) {
+      Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+    }
+  }
+
+  @Given("the GP Practice has enabled demographics functionality")
+  fun givenTheGPPracticeHasEnabledDemographicsFunctionality() {
+    mockingClient.forEmis {
+      demographicsRequest(patient).respondWithSuccess(DemographicsData.getDemographicData())
+    }
+  }
+
+  @But("the GP Practice has disabled demographics functionality")
+  fun butTheGPPracticeHasDisabledDemographicsFunctionality() {
+    try {
       mockingClient.forEmis {
-        demographicsRequest(patient).respondWithSuccess(DemographicsData.getDemographicData())
+        demographicsRequest(patient).respondWithExceptionWhenNotEnabled()
       }
 
       val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographicsConnection(null)
@@ -39,13 +58,5 @@ open class MyRecordStepDefinitions {
   fun thenIReceiveADemographicObject() {
     val result = Serenity.sessionVariableCalled<DemographicsResponse>(DemographicsResponse::class)
     Assert.assertNotNull(result)
-//    Assert.assertEquals(10, result.response.prescriptions.count())
-//    val prescriptions = result.response.prescriptions
-
-    // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
-//    for(int in 0 until prescriptions.count()-2){
-//      Assert.assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate) !!>= ZonedDateTime.parse(prescriptions[int+1].orderDate))
-//    }
   }
-
 }
