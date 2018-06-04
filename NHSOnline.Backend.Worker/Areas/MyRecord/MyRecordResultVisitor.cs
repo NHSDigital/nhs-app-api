@@ -6,6 +6,11 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
     internal class MyRecordResultVisitor : IMyRecordResultVisitor<IActionResult>
     {
+        public IActionResult Visit(GetMyRecordResult.UserHasNoAccess result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
+
         public IActionResult Visit(GetMyRecordResult.SuccessfullyRetrieved result)
         {
             return new OkObjectResult(result);

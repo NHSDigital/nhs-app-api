@@ -126,7 +126,13 @@
   <data name="AppointmentsPost_InThePast" xml:space="preserve">
     <value>Appointment cannot be booked in the past</value>
   </data>
-  <data name="Appointments_NotEnabledOnEmisForUser" xml:space="preserve">
+  <data name="EmisService_NotEnabledForUser" xml:space="preserve">
     <value>Services Access violation</value>
+  </data>
+    <data name="Prescriptions_AlreadyOrderedLast30Days" xml:space="preserve">
+    <value>already a pending request in the past 30 days</value>
+  </data>
+  <data name="Prescriptions_InvalidCourseId" xml:space="preserve">
+    <value>The request is invalid</value>
   </data>
 </root>

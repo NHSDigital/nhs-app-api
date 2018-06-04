@@ -31,6 +31,14 @@
             }
         }
         
+        public class UserHasNoAccess : GetMyRecordResult
+        {
+            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
         public class Unsuccessful : GetMyRecordResult
         {
             public override T Accept<T>(IMyRecordResultVisitor<T> visitor)

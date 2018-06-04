@@ -1,7 +1,7 @@
 swagger: "2.0"
 
 info:
-  version: 0.0.5
+  version: 0.0.6
   title: NHS App Sub-API - Prescriptions
   description: NHS App Sub-API - endpoints pertaining to repeat prescriptions require NHSO-Session-Id cookie in header from session endpoint.
 
@@ -37,11 +37,11 @@ paths:
         - application/json
       parameters:
         - in: body
-          name: PrescriptionRequest
+          name: RepeatPrescriptionRequest
           required: true
           description: Repeat prescription request details to be created.
           schema:
-            $ref: "#/definitions/PrescriptionRequest"
+            $ref: "#/definitions/RepeatPrescriptionRequest"
       responses:
         201:
           description: Successful operation. Repeat Prescription Created.
@@ -111,7 +111,7 @@ definitions:
         description: An array of prescription courses
         items:
           $ref: '#/definitions/Course'
-  PrescriptionRequest:
+  RepeatPrescriptionRequest:
     type: object
     required:
       - courseIds

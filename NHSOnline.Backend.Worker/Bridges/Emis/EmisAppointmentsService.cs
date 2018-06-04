@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             }
 
             return response.HasExceptionWithMessageContaining(
-                EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser);
+                EmisApiErrorMessages.EmisService_NotEnabledForUser);
         }
     }
 }

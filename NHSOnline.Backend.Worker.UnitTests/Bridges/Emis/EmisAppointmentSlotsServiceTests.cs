@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
             
             var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser;
+            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>(HttpStatusCode
                 .InternalServerError) { ErrorResponse = errorResponse };
@@ -186,7 +186,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
         {
             // Arrange
             var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.Appointments_NotEnabledOnEmisForUser;
+            errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             var errorMetadataResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
                 HttpStatusCode

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Router.Validators;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Router.Validators
@@ -70,6 +72,64 @@ namespace NHSOnline.Backend.Worker.UnitTests.Router.Validators
 
             // Assert
             result.Should().BeTrue();
+        }
+        
+        // Valid RepeatPrescriptionRequest
+        
+        [TestMethod]
+        public void IsValidRepeatPrescriptionRequest_ReturnsTrue_WhenModelIsValidType()
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
+                    "28985814-bb40-4b37-8f1d-c5f323b098da",
+                }               
+            };
+
+            // Act
+            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+
+            // Assert
+            result.Should().BeTrue();
+        }
+        
+        [TestMethod]
+        public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenModelIsInValidType()
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    "310dbe9a-c002-4d6f-aeba-7ce6717da2aa",
+                    "notAGuid",
+                }               
+            };
+
+            // Act
+            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+
+            // Assert
+            result.Should().BeFalse();
+        }
+        
+        [TestMethod]
+        public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenCourseIdsIsEmpty()
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>()  
+            };
+
+            // Act
+            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+
+            // Assert
+            result.Should().BeFalse();
         }
     }
 }

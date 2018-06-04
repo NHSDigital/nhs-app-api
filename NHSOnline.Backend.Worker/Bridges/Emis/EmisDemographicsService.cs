@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 {
     public class EmisDemographicsService : IDemographicsService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisDemographicsService> _logger;
         private readonly IEmisClient _emisClient;
         private readonly IEmisDemographicsMapper _emisDemographicsMapper;
 
@@ -17,7 +17,7 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
             IEmisClient emisClient,
             IEmisDemographicsMapper emisDemographicsMapper)
         {
-            _logger = loggerFactory.CreateLogger<EmisCourseService>();
+            _logger = loggerFactory.CreateLogger<EmisDemographicsService>();
             _emisClient = emisClient;
             _emisDemographicsMapper = emisDemographicsMapper;
         }
@@ -32,6 +32,13 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!demographicsResponse.HasSuccessStatusCode)
                 {
+                    // User does not have access
+                    if (demographicsResponse.HasExceptionWithMessageContaining("Services Access violation"))
+                    {
+                        _logger.LogWarning("User does not have access to their patient record");
+                        return new GetMyRecordResult.UserHasNoAccess();
+                    }
+
                     _logger.LogError($"Unsuccessful request retrieving demographics. Status code: {(int)demographicsResponse.StatusCode}");
                     return new GetMyRecordResult.Unsuccessful();
                 }
@@ -39,7 +46,6 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
                 var result = _emisDemographicsMapper.Map(demographicsResponse.Body);
 
                 return new GetMyRecordResult.SuccessfullyRetrieved(result);
-
             }
             catch (HttpRequestException e)
             {

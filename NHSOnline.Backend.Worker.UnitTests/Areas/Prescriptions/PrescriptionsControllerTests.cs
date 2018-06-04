@@ -53,7 +53,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-            var responseMock = new Mock<HttpResponse>();
 
             _systemUnderTest = _fixture.Create<PrescriptionsController>();
 
@@ -72,7 +71,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
 
-            var getPrescriptionsResult = new GetPrescriptionsResult.SuccessfullyRetrieved(prescriptionRequestsGetResponse);
+            var getPrescriptionsResult = new PrescriptionResult.SuccessfullGet(prescriptionRequestsGetResponse);
 
             // Arrange
             _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
@@ -81,7 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             mockBridge.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.Get(_userSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((GetPrescriptionsResult)getPrescriptionsResult));
+            prescriptionService.Setup(x => x.Get(_userSession, date, It.IsAny<DateTimeOffset>())).Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult));
 
             _prescriptionRequestValidationService
                 .Setup(x => x.IsValidFromDate(date, It.IsAny<DateTimeOffset>()))
@@ -96,7 +95,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             prescriptionService.Verify(x => x.Get(_userSession, date, It.IsAny<DateTimeOffset>()));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetPrescriptionsResult.SuccessfullyRetrieved;
+            var value = okObjectResult.Value as PrescriptionResult.SuccessfullGet;
             Assert.IsNotNull(value);
         }
 
@@ -108,7 +107,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
 
-            var getPrescriptionsResult = new GetPrescriptionsResult.SuccessfullyRetrieved(prescriptionRequestsGetResponse);
+            var getPrescriptionsResult = new PrescriptionResult.SuccessfullGet(prescriptionRequestsGetResponse);
 
             // Arrange
             _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
@@ -119,7 +118,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             DateTimeOffset? fromDateGenerated = null;
             prescriptionService.Setup(x => x.Get(_userSession, It.IsAny<DateTimeOffset?>(), It.IsAny<DateTimeOffset?>()))
-                .Returns(Task.FromResult((GetPrescriptionsResult)getPrescriptionsResult))
+                .Returns(Task.FromResult((PrescriptionResult)getPrescriptionsResult))
                 .Callback((UserSession s, DateTimeOffset? fd, DateTimeOffset? td) => fromDateGenerated = fd);
 
             _prescriptionRequestValidationService
@@ -135,12 +134,83 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             prescriptionService.Verify(x => x.Get(_userSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetPrescriptionsResult.SuccessfullyRetrieved;
+            var value = okObjectResult.Value as PrescriptionResult.SuccessfullGet;
             Assert.IsNotNull(value);
             Assert.IsTrue(fromDateGenerated.HasValue);
 
             var xMonthsAgo = DateTimeOffset.Now.AddMonths(-_prescriptionsDefaultLastNumberMonthsToDisplay);
             Assert.AreEqual(xMonthsAgo.Date, fromDateGenerated.Value.Date);
+        }
+        
+        [TestMethod]
+        public async Task Post_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        {
+            var requestModel = new RepeatPrescriptionRequest();
+            var mockBridge = new Mock<IBridge>();
+            var prescriptionService = new Mock<IPrescriptionService>();
+
+            var postPrescriptionResult = new PrescriptionResult.SuccessfullPost();
+
+            // Arrange
+            _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
+                .Returns(mockBridge.Object);
+
+            mockBridge.Setup(x => x.GetPrescriptionService())
+                .Returns(prescriptionService.Object);
+
+            prescriptionService.Setup(x => x.Post(_userSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
+            
+            _prescriptionRequestValidationService
+                .Setup(x => x.IsValidRepeatPrescriptionRequest(It.IsAny<RepeatPrescriptionRequest>()))
+                .Returns(true);
+
+            // Act
+            var result = await _systemUnderTest.Post(requestModel);
+
+            // Assert
+            _mockBridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
+            mockBridge.Verify(x => x.GetPrescriptionService());
+            prescriptionService.Verify(x => x.Post(_userSession, It.IsAny<RepeatPrescriptionRequest>()));
+            var createdresult = result as CreatedResult;
+            Assert.IsTrue(createdresult.StatusCode == 201);
+        }
+        
+        [TestMethod]
+        public async Task Post_ReturnsBadRequest_WhenModelValidationFails()
+        {
+            var requestModel = new RepeatPrescriptionRequest()
+            {
+                CourseIds = new List<string>
+                {
+                    "009211be-e36e-4833-8f74-0089637e7b7f",
+                    "6b1ad388-817b-4dc1-831a-e6ddea0f0ed2"
+                }
+            };
+            
+            var mockBridge = new Mock<IBridge>();
+            var prescriptionService = new Mock<IPrescriptionService>();
+
+            var postPrescriptionResult = new PrescriptionResult.SuccessfullPost();
+
+            // Arrange
+            _mockBridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
+                .Returns(mockBridge.Object);
+
+            mockBridge.Setup(x => x.GetPrescriptionService())
+                .Returns(prescriptionService.Object);
+
+            prescriptionService.Setup(x => x.Post(_userSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
+            
+            _prescriptionRequestValidationService
+                .Setup(x => x.IsValidRepeatPrescriptionRequest(It.IsAny<RepeatPrescriptionRequest>()))
+                .Returns(false);
+
+            // Act
+            var result = await _systemUnderTest.Post(requestModel);
+
+            // Assert
+            var statusCodeResult = result as StatusCodeResult;
+            Assert.IsTrue(statusCodeResult.StatusCode == 400);
         }
     }
 }
