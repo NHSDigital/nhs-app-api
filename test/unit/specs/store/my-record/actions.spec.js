@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import {
   actions,
   DEMOGRAPHICS_LOADED,
@@ -27,7 +25,7 @@ describe('loadPatientDemographics', () => {
   it('will call commit with DEMOGRAPHICS_LOADED and the data returned from the HTTP call', () => {
     const expected = {
       data: { foo: 'bar' },
-  };
+    };
 
     const that = {
       app: {
@@ -53,9 +51,10 @@ describe('loadAllergiesAndAdverseReactions', () => {
         },
       },
     };
-    return loadAllergiesAndAdverseReactions.call(that, { commit: jest.fn() }, { API_HOST }).then(() => {
-      expect(that.app.$http.getV1PatientMyRecordAllergies).toBeCalled();
-    });
+    return loadAllergiesAndAdverseReactions
+      .call(that, { commit: jest.fn() }, { API_HOST }).then(() => {
+        expect(that.app.$http.getV1PatientMyRecordAllergies).toBeCalled();
+      });
   });
 
   it('will call commit with ALLERGIES_LOADED and the data returned from the HTTP call', () => {

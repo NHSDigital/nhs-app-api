@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import {
   mutations,
   DEMOGRAPHICS_LOADED,
@@ -23,7 +21,7 @@ describe('DEMOGRAPHICS_LOADED', () => {
           town: 'Belfast',
           county: 'Northern Ireland',
           postcode: 'BT19 345',
-        }
+        },
       },
     };
     const expectedData = {
@@ -40,7 +38,7 @@ describe('DEMOGRAPHICS_LOADED', () => {
         county: 'Northern Ireland',
         postcode: 'BT19 345',
       },
-  };
+    };
 
     mutations[DEMOGRAPHICS_LOADED](state, recievedData);
     expect(state.patientDemographics).toEqual(expectedData);
