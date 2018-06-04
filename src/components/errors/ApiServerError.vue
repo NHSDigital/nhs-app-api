@@ -1,5 +1,5 @@
 <template>
-  <main v-show="isVisible" class="content">
+  <div v-show="isVisible" id="serverError" class="content">
     <error-warning-dialog error-or-warning="error">
       <p class="header">
         {{ header }}
@@ -14,7 +14,7 @@
     <button v-if="retryButtonText" class="button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
     </button>
-  </main>
+  </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
@@ -75,7 +75,7 @@ export default {
         return '';
       }
       const component = this.getRoutePath();
-      return `${component}.errors.${this.getApiErrorResponse.status}.${type}`;
+      return `${component}.errors.${this.getApiErrorResponse().status}.${type}`;
     },
     hasComponentErrorCodeKey(type) {
       return this.$te(this.getComponentErrorCodeKey(type));
@@ -94,7 +94,7 @@ export default {
       if (!this.showError()) {
         return '';
       }
-      return `errors.${this.getApiErrorResponse.status}.${type}`;
+      return `errors.${this.getApiErrorResponse().status}.${type}`;
     },
     hasDefaultErrorCodeKey(type) {
       return this.$te(this.getDefaultErrorCodeKey(type));
@@ -126,4 +126,9 @@ export default {
   @import '../../style/elements';
   @import '../../style/buttons';
 
+  #serverError {
+    padding: 16px 16px 5px 16px;
+    box-sizing: border-box;
+    width: 100%;
+  }
 </style>
