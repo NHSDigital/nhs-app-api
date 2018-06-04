@@ -21,6 +21,8 @@ paths:
             $ref: "#/definitions/DemographicResponse"
         401:
           description: User session has expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
         500:
           description: An unexpected error occurred processing the request.
         502:
