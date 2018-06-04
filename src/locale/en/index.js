@@ -195,7 +195,7 @@ export default {
       title: 'Prescriptions',
     },
     sessionExpired: {
-      title: 'Session Expired. Please Login again.',
+      title: 'Session Expired. Please sign in again.',
     },
     symptomsIcon: {
       title: 'Symptoms Checker',

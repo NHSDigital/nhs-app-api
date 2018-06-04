@@ -40,20 +40,13 @@ describe('actions', () => {
       }));
   });
 
-  describe('logout', () => {
-    it('will dispatch the session/showExpiryMessage if the lastUpdatedAt is set', () => {
-      state.session.lastUpdatedAt = new Date();
+  describe('logoutWhenExpired', () => {
+    it('will dispatch the session/showExpiryMessage and auth/logout event', () => {
       actions
-        .logout({ commit });
+        .logoutWhenExpired();
 
       expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
-    });
-
-    it('will dispatch the session/clear event', () => {
-      actions
-        .logout({ commit });
-
-      expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
+      expect(actions.dispatch).toHaveBeenCalledWith('auth/logout');
     });
   });
 });

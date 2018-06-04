@@ -1,6 +1,7 @@
 <template>
   <content>
-    <home-header/>
+    <home-header />
+    <SessionExpiredBanner />
     <main class="login-or-register">
       <LoginButton />
 
@@ -15,6 +16,7 @@
 import LoginButton from '@/components/LoginButton';
 import HomeHeader from '@/components/HomeHeader';
 import RegistrationButton from '@/components/RegistrationButton';
+import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 
 export default {
   middleware: ['meta'],
@@ -22,6 +24,7 @@ export default {
     RegistrationButton,
     LoginButton,
     HomeHeader,
+    SessionExpiredBanner,
   },
 };
 </script>

@@ -126,7 +126,7 @@ describe('actions', () => {
 
       it('will call global dispatch with the logout action', () => {
         app.validate(store);
-        expect(app.dispatch).toHaveBeenCalledWith('auth/logout');
+        expect(app.dispatch).toHaveBeenCalledWith('auth/logoutWhenExpired');
       });
 
       it('will return false', () => {

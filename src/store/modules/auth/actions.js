@@ -17,15 +17,18 @@ export default {
       })
       .then((response) => {
         this.dispatch('session/setDurationSeconds', response.sessionTimeout);
+        this.dispatch('session/hideExpiryMessage');
         commit(AUTH_RESPONSE, response);
         this.app.router.push({
           name: 'index',
         });
       });
   },
+  logoutWhenExpired() {
+    this.dispatch('session/showExpiryMessage');
+    this.dispatch('auth/logout');
+  },
   logout({ commit }) {
-    const { state: { session: lastUpdatedAt = undefined } } = this;
-    if (lastUpdatedAt) this.dispatch('session/showExpiryMessage');
     this.dispatch('session/clear');
 
     return this.app.$http.deleteV1Session().then(() => {
