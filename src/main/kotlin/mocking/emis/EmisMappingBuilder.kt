@@ -5,6 +5,7 @@ import mocking.emis.appointments.EmisAppointmentSlotsBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsMetaBuilder
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
+import mocking.emis.allergies.EmisAllergiesBuilder
 import mocking.emis.me.EmisMeBuilder
 import mocking.emis.models.ExceptionResponse
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
@@ -45,6 +46,8 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             patient.userPatientLinkToken)
 
     fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+
+    fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun meRequest(patient: Patient) = EmisMeBuilder(configuration, method, patient)
 

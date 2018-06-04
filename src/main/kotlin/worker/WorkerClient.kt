@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
+import mocking.emis.models.AllergiesResponse
 import mocking.emis.models.DemographicsResponse
 
 import org.apache.http.HttpResponse
@@ -136,6 +137,16 @@ class WorkerClient {
         httpGet.releaseConnection()
 
         return gson.fromJson<DemographicsResponse>(result, DemographicsResponse::class.java)
+    }
+
+    fun getAllergiesConnection(context: HttpContext?): AllergiesResponse {
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getMyRecordConnection + "/allergies")
+        val response = sendAsync(httpGet, context)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+
+        return gson.fromJson<AllergiesResponse>(result, AllergiesResponse::class.java)
     }
 
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {

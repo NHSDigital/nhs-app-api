@@ -2,8 +2,8 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.courses.CoursesData
 import features.myrecord.DemographicsData
+import features.myrecord.AllergiesData
 import mocking.MockDefaults.Companion.patient
 import mocking.MockingClient
 import mocking.emis.models.*
@@ -39,13 +39,28 @@ open class MyRecordStepDefinitions {
   fun thenIReceiveADemographicObject() {
     val result = Serenity.sessionVariableCalled<DemographicsResponse>(DemographicsResponse::class)
     Assert.assertNotNull(result)
-//    Assert.assertEquals(10, result.response.prescriptions.count())
-//    val prescriptions = result.response.prescriptions
-
-    // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
-//    for(int in 0 until prescriptions.count()-2){
-//      Assert.assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate) !!>= ZonedDateTime.parse(prescriptions[int+1].orderDate))
-//    }
   }
 
+
+  @When("I get the users allergy data with a valid cookie")
+  fun whenIGetTheUsersAllergiesWithAValidCookie()
+  {
+    try {
+      mockingClient.forEmis {
+        allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData())
+      }
+
+      val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getAllergiesConnection(null)
+
+      Serenity.setSessionVariable(AllergiesResponse::class).to(result)
+    } catch (httpException: NhsoHttpException) {
+      Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+    }
+  }
+
+  @Then("I receive the allergies object")
+  fun thenIReceiveAnAllergiesObject() {
+    val result = Serenity.sessionVariableCalled<AllergiesResponse>(AllergiesResponse::class)
+    Assert.assertNotNull(result)
+  }
 }
