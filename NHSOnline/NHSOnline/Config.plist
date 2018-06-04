@@ -12,6 +12,8 @@
 	<string>https://www.organdonation.nhs.uk/</string>
 	<key>MoreUrlPath</key>
 	<string>/more</string>
+	<key>MyRecordUrlPath</key>
+	<string>/my-record/myrecordwarning</string>
 	<key>AppointmentsUrlPath</key>
 	<string>/appointments</string>
 	<key>PrescriptionsUrlPath</key>
