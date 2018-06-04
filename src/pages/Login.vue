@@ -20,6 +20,11 @@ import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 
 export default {
   middleware: ['meta'],
+  head() {
+    return {
+      title: 'Login Screen',
+    };
+  },
   components: {
     RegistrationButton,
     LoginButton,

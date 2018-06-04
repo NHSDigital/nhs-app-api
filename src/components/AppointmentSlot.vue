@@ -1,10 +1,10 @@
 <template>
-  <div :class="getClass" :aria-selected="isSelected(slotId)" @click="select(slotId)">
+  <div :class="getClass" :aria-selected="isSelected" @click="select">
     <h5 :class="$style.date" aria-label="date">
-      {{ formatDate(appointmentSlot.startTime) }}
+      {{ formatDate(theSlot.startTime) }}
     </h5>
     <h4 :class="$style.startTime" aria-label="start time">
-      {{ formatTime(appointmentSlot.startTime) }}
+      {{ formatTime(theSlot.startTime) }}
     </h4>
     <hr aria-hidden="true">
     <p :class="$style.session" aria-label="session name">
@@ -14,7 +14,7 @@
     <p aria-label="location">
     <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
     <ul
-      v-for="clinician in appointmentSlot.clinicians"
+      v-for="clinician in theSlot.clinicians"
       :key="clinician.id"
       :class="$style.clinicians"
       aria-label="clinicians"
@@ -29,8 +29,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { find, get } from 'lodash/fp';
-import { mapGetters } from 'vuex';
+import { get } from 'lodash/fp';
 import moment from 'moment';
 import LocationIcon from '../components/icons/LocationIcon';
 import ClinicianIcon from '../components/icons/ClinicianIcon';
@@ -41,43 +40,37 @@ export default {
     LocationIcon,
   },
   props: {
-    slotId: {
-      type: String,
-      default: '',
-    },
     alwaysDeselect: {
       default: false,
       type: Boolean,
     },
-    selected: {
-      type: Boolean,
-      default: false,
+    theSlot: {
+      type: Object,
+      required: true,
     },
   },
   computed: {
-    appointmentSlot() {
-      return (
-        find(slot => slot.id === this.slotId)(this.$store.state.appointmentSlots.slots) || {}
-      );
-    },
     appointmentSession() {
-      return get('appointmentSession.displayName')(this.appointmentSlot);
+      return get('appointmentSession.displayName')(this.theSlot);
     },
     getClass() {
-      return this.selected ? this.$style.selectedContainer : this.$style.container;
+      const isSelected = this.theSlot.selected && !this.alwaysDeselect;
+      return isSelected ? this.$style.selectedContainer : this.$style.container;
     },
     location() {
-      return get('location.displayName')(this.appointmentSlot);
+      return get('location.displayName')(this.theSlot);
     },
-    ...mapGetters({
-      isSelected: 'appointmentSlots/isSelected',
-    }),
+    isSelected() {
+      return this.theSlot ? false : this.theSlot.selected;
+    },
   },
   methods: {
     formatTime: dateTime => moment(dateTime).format('h:mm a'),
     formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
-    select(slotId) {
-      this.$store.dispatch('appointmentSlots/select', slotId);
+    select() {
+      if (!this.alwaysDeselect) {
+        this.$store.dispatch('appointmentSlots/select', this.theSlot.id);
+      }
     },
   },
 };

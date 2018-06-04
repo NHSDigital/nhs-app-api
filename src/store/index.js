@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 
 import header from './modules/header';
+import appointment from './modules/appointment';
 import appointmentSlots from './modules/appointmentSlots';
 import auth from './modules/auth';
 import device from './modules/device';
@@ -14,6 +15,7 @@ import myRecord from './modules/myRecord';
 const createStore = () => new Vuex.Store({
   modules: {
     header,
+    appointment,
     appointmentSlots,
     auth,
     device,

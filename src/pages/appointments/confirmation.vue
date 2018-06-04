@@ -6,7 +6,8 @@
       </p>
     </error-warning-dialog>
 
-    <appointment-slot :slot-id="slotId" :always-deselect="true" aria-label="selected appointment" />
+    <appointment-slot v-if="slot" :the-slot="slot" :always-deselect="true"
+                      aria-label="selected appointment" />
     <div class="form" role="form">
       <label for="reasonText">{{ $t('appointments.confirmation.headerLabel') }}</label>
       <p>{{ $t('appointments.confirmation.label') }}</p>
@@ -14,14 +15,9 @@
       <error-message v-if="showValidationError" id="errorLabel">
         {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
-      <textarea
-        id="reasonText"
-        ref="reason"
-        v-model="symptoms"
-        :class="{error:showValidationError}"
-        :aria-labelledby="reasonBoxAriaLabelledBy"
-        maxlength="150"
-      />
+      <textarea id="reasonText" ref="reason" v-model="symptoms"
+                :aria-labelledby="reasonBoxAriaLabelledBy"
+                class="{error:showValidationError}" maxlength="150"/>
       <p id="maxReasonDesc">{{ $t('appointments.confirmation.maxReasonDesc') }}</p>
     </div>
 
@@ -33,6 +29,7 @@
     </button>
   </main>
 </template>
+
 
 <script>
 /* eslint-disable import/extensions */
@@ -49,7 +46,7 @@ export default {
   },
   data() {
     return {
-      slotId: null,
+      slot: null,
       symptoms: '',
       showValidationError: false,
     };
@@ -60,7 +57,10 @@ export default {
     },
   },
   mounted() {
-    this.slotId = this.$store.state.appointmentSlots.selectedSlotId;
+    this.slot = this.$store.state.appointment.tempSelectedSlot;
+    if (!this.slot) {
+      this.$router.push('/appointments');
+    }
   },
   methods: {
     onConfirmButtonClicked() {
@@ -71,7 +71,14 @@ export default {
         return;
       }
       this.showValidationError = false;
-      this.$router.push('/appointments/booked');
+      this.confirmTheBook(this.slot.id, this.symptoms);
+    },
+    confirmTheBook(slotId, reason) {
+      const bookingData = {
+        SlotId: slotId,
+        BookingReason: reason,
+      };
+      this.$store.dispatch('appointment/bookAppointment', bookingData);
     },
     onCancelButtonClicked() {
       this.$router.push('/appointments');

@@ -1,6 +1,6 @@
 <template>
   <main :class="$style.main">
-    <success-dialog>
+    <success-dialog v-if="justBookedAnAppointment">
       <p>
         {{ $t('appointments.booked.successText') }}
       </p>
@@ -16,6 +16,15 @@ export default {
   middleware: ['auth', 'meta'],
   components: {
     SuccessDialog,
+  },
+  data() {
+    return {
+      justBookedAnAppointment: false,
+    };
+  },
+  mounted() {
+    this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
+    this.$store.dispatch('appointmet/resetJustBooked');
   },
 };
 </script>

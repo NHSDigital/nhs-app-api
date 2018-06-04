@@ -6,11 +6,7 @@
     </div>
     <ul v-if="showAppointments" data-purpose="slots">
       <li v-for="(slot, index) in slots" :key="slot.id" :class="$style.slot">
-        <appointment-slot
-          :selected="slot.selected"
-          :slot-id="slot.id"
-          :aria-label="'slot ' + (index +1)"
-        />
+        <appointment-slot :the-slot = "slot" :aria-label="'slot ' + (index +1)"/>
       </li>
     </ul>
 
@@ -50,12 +46,11 @@ export default {
       );
     },
     hasASlotSelected() {
-      return typeof this.currentSlot !== 'undefined';
+      return this.slots.filter(slot => slot.selected === true).length > 0;
     },
     ...mapGetters({
       slots: 'appointmentSlots/slots',
       findById: 'appointmentSlots/findById',
-      currentSlot: 'appointmentSlots/currentSlot',
     }),
   },
   mounted() {
@@ -72,6 +67,7 @@ export default {
       return this.$style.main;
     },
     onBookButtonClicked() {
+      this.$store.dispatch('appointment/save');
       this.$router.push('/appointments/confirmation');
     },
   },
