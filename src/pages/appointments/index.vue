@@ -31,9 +31,6 @@ import AppointmentSlot from '../../components/AppointmentSlot';
 import FloatingButtonBottom from '../../components/FloatingButtonBottom';
 
 export default {
-  async fetch({ store }) {
-    await store.dispatch('appointmentSlots/load');
-  },
   middleware: ['auth', 'meta'],
   components: {
     AppointmentSlot,
@@ -60,6 +57,9 @@ export default {
       findById: 'appointmentSlots/findById',
       currentSlot: 'appointmentSlots/currentSlot',
     }),
+  },
+  mounted() {
+    this.$store.dispatch('appointmentSlots/load');
   },
   methods: {
     bottomStyle() {

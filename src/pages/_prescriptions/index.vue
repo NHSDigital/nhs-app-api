@@ -19,12 +19,17 @@
           :class="$style['prescription-course']">
           <div :class="$style.container">
             <div>
-              <b aria-label="order-date">{{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}</b>
+              <b aria-label="order-date">
+                {{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}
+              </b>
               : {{ prescriptionCourse.orderDate | shortDate }}
             </div>
             <hr>
             <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
-            <div aria-label="dosage">{{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}</div>
+            <div
+              aria-label="dosage">
+              {{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}
+            </div>
           </div>
         </li>
       </ul>

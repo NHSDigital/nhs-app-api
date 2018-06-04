@@ -19,7 +19,11 @@ describe('load', () => {
 
   it('will call commit with the data returned from the HTTP call', () => {
     const expected = {
-      data: { foo: 'bar' },
+      data: {
+        response: {
+          course: 'bar',
+        },
+      },
     };
 
     const that = {

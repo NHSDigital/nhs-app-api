@@ -10,7 +10,7 @@
     <p :class="$style.session" aria-label="session name">
       {{ appointmentSession | truncate(24) }}
     </p>
-    <hr aria-hidden="true">
+    <hr aria-hidden="true" >
     <p aria-label="location">
     <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
     <ul

@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv">
     <main class="content">
-      <error-warning-dialog errorOrWarning="warning">
+      <error-warning-dialog error-or-warning="warning">
         <p>
           <b>{{ $t('myRecord.noRecordAccess.warningHeader') }}</b>
           <br>

@@ -1,13 +1,15 @@
 <template>
   <div id="mainDiv">
-    <h5 v-bind:class="[$style.recordTitle, getCollapseStatePatientDetails]"
+    <h5 :class="[$style.recordTitle, getCollapseStatePatientDetails]"
         @click="patientDetailsHeaderClick">{{ $t('myRecord.patientInfo.sectionHeader') }}</h5>
-    <patient-details :isCollapsed="isPatientDetailsCollapsed"/>
-    <h5 v-bind:class="[$style.recordTitle, getCollapseStateAllergies]"
-        @click="allergiesAndAdverseReactionsClick">{{ $t('myRecord.allergiesAndAdverseReactions.sectionHeader') }}</h5>
-    <allergies-and-adverse-reactions :isCollapsed="isAllergiesAndAdverseReactionsCollapsed"/>
+    <patient-details :is-collapsed="isPatientDetailsCollapsed"/>
+    <h5 :class="[$style.recordTitle, getCollapseStateAllergies]"
+        @click="allergiesAndAdverseReactionsClick">
+      {{ $t('myRecord.allergiesAndAdverseReactions.sectionHeader') }}
+    </h5>
+    <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"/>
     <main :class="$style.content">
-      <error-warning-dialog errorOrWarning="warning">
+      <error-warning-dialog error-or-warning="warning">
         <p>
           {{ $t('myRecord.viewRestOfHealthRecordWarning') }}
         </p>
@@ -73,18 +75,18 @@ export default {
     padding: 16px;
     padding-right: 30px;
     box-sizing: border-box;
-    background: transparent url('/assets/icon_arrow_left.svg') no-repeat center right;
+    background: transparent url('~/assets/icon_arrow_left.svg') no-repeat center right;
     background-position: right 16px center;
     transition: ease 0.5s;
     border-bottom: 2px solid $white;
     margin-bottom: 0px !important;
 
     &.opened {
-      background: transparent url('/assets/icon_arrow_down.svg') no-repeat center right;
+      background: transparent url('~/assets/icon_arrow_down.svg') no-repeat center right;
       background-position: right 16px center;
     }
     &.closed {
-      background: transparent url('/assets/icon_arrow_left.svg') no-repeat center right;
+      background: transparent url('~/assets/icon_arrow_left.svg') no-repeat center right;
       background-position: right 16px center;
     }
   }

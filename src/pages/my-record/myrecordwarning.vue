@@ -1,7 +1,7 @@
 <template>
   <div id="mainDiv">
     <main class="content">
-      <error-warning-dialog errorOrWarning="warning">
+      <error-warning-dialog error-or-warning="warning">
         <p>
           {{ $t('myRecord.myRecordWarning.warningText') }}
         </p>
@@ -19,10 +19,10 @@
         <p>
           {{ $t('myRecord.myRecordWarning.agreementText') }}
         </p>
-        <generic-button :buttonClasses="['green']" @on-click="onContinueButtonClicked()">
+        <generic-button :button-classes="['green']" @on-click="onContinueButtonClicked()">
           {{ $t('myRecord.myRecordWarning.agreeButtonText') }}
         </generic-button>
-        <generic-button :buttonClasses="['grey']" @on-click="onBackButtonClicked()">
+        <generic-button :button-classes="['grey']" @on-click="onBackButtonClicked()">
           {{ $t('myRecord.myRecordWarning.backButtonText') }}
         </generic-button>
       </div>

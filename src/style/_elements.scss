@@ -52,7 +52,8 @@ main.content {
 footer {
   display: none;
 }
-.panel {
+
+@mixin panel {
   width: 100%;
   box-sizing: border-box;
   padding: 16px;
@@ -64,52 +65,39 @@ footer {
   display: table;
   transition: all ease 0.5s;
 
-  .panel-icon,
-  .panel-content,
-  .panel-selection {
-    transition: all ease 0.5s;
+  & hr {
+    height: 1px;
+    border: none;
+    background-color: #4A4A4A;
+    opacity: 0.2;
+    margin-bottom: 16px;
+    margin-top: 16px;
   }
+}
+@mixin panelHeader {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  color: $dark_grey;
+  font-family: $frutiger-bold;
+}
 
-  .panel-icon {
-    display: table-cell;
-    vertical-align: top;
-    width: 40px;
-  }
-  .panel-content {
-    display: table-cell;
-    vertical-align: top;
-  }
-  .panel-selection {
-    display: table-cell;
-    vertical-align: top;
-    width: 24px;
-    display: none; // FIRST STATE
-  }
-
-  .requested {
-    label {
-      color: #F5A623 !important;
-    }
-    p {
-      color: #F5A623 !important;
-    }
-  }
-  .issued {
-    label {
-      color: #427606 !important;
-    }
-    p {
-      color: #427606 !important;
-    }
-  }
-  .rejected {
-    label {
-      color: #990000 !important;
-    }
-    p {
-      color: #990000 !important;
-    }
-  }
+@mixin text-area {
+  min-height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: $white;
+  border-radius: 5px;
+  padding: 16px;
+  border: 1px #979797 solid;
+  outline: none;
+  transition: all ease 0.5s;
+  display: block;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: $dark_grey;
 }
 .panel-title {
   h5 {

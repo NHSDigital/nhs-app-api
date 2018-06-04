@@ -38,6 +38,7 @@ describe('PRESCRIPTIONS_LOADED', () => {
         name: 'Co-codamol 8mg/500mg capsules',
         dosage: 'One To Be Taken Four Times A Day',
         quantity: '20 capsule',
+        selected: false,
       },
     ];
 

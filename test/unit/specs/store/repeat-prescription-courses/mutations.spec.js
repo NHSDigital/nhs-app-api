@@ -4,7 +4,7 @@ describe('REPEAT_PRESCRIPTION_COURSES_LOADED', () => {
   it('will set the courses on the state from the received courses data', () => {
     const state = {};
     const receivedData = {
-      repeatPrescriptionCourses: [{}],
+      repeatPrescriptionCourses: [],
     };
 
     mutations[REPEAT_PRESCRIPTION_COURSES_LOADED](state, receivedData);

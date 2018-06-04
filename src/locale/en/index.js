@@ -71,6 +71,8 @@ export default {
     myRepeatPrescriptionLabels: {
       orderDate: 'Order date',
     },
+    noMedicinesSelected: 'Select at least one medicine',
+    specialRequestsLabel: 'Special requests relating to this order (optional)',
   },
   myRecord: {
     name: 'Name',

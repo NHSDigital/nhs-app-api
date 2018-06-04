@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="[$style.recordContent, getCollapseState]">
+  <div :class="[$style.recordContent, getCollapseState]">
     <ul :class="$style.allergyAndAdverseReactions">
       <li v-for="item in allergies" :key="item.name">
         <label>{{ item.date | longDate }}</label>
@@ -16,13 +16,14 @@ export default {
   components: {
   },
   props: {
-    isCollapsed: true,
+    isCollapsed: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
     };
-  },
-  methods: {
   },
   computed: {
     getCollapseState() {

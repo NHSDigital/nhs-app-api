@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="[$style.recordContent, getCollapseState]">
+  <div :class="[$style.recordContent, getCollapseState]">
     <label>{{ $t('myRecord.patientInfo.fieldLabelName') }}</label>
     <p v-if="patientInfo">{{ `${patientInfo.firstName} ${patientInfo.surname}` }}</p>
     <hr>
@@ -26,7 +26,10 @@ export default {
   components: {
   },
   props: {
-    isCollapsed: true,
+    isCollapsed: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {

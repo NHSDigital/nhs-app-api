@@ -63,6 +63,7 @@ export const mutations = {
           name: course.name,
           dosage: course.dosage,
           quantity: course.quantity,
+          selected: false,
         });
       }
     }
