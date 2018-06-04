@@ -12,6 +12,7 @@ class HomeViewController : UIViewController {
     @IBOutlet weak var webviewNavMenuBottomConstraint: NSLayoutConstraint!
     
     let knownServices = KnownServices(config: config())
+    var lifecycleHandlers: LifecycleHandlers?
     var webViewController: WebViewController?
     var nativeViewController: PageUnavailabilityViewController?
     var webViewDelegate: WebViewDelegate?
@@ -39,6 +40,8 @@ class HomeViewController : UIViewController {
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
         self.webViewController?.webView.loadPage(url: pageUrl)
+        
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webView: webViewController!.webView)
     }
 
     func addSubview(subView:UIView, toView parentView:UIView) {

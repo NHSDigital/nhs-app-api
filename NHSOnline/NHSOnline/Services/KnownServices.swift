@@ -15,9 +15,9 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: serviceUnavailableErrorMessage, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, serviceErrorMessage: nhs111UnavailableErrorMessage, shouldHandleUnavailability: true))
-        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, serviceErrorMessage: organDonationUnavailableErrorMessage, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: serviceUnavailableErrorMessage, shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, serviceErrorMessage: nhs111UnavailableErrorMessage, shouldHandleUnavailability: true, shouldValidateSession:false))
+        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, serviceErrorMessage: organDonationUnavailableErrorMessage, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, shouldValidateSession:false, urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func getAllKnownHosts() -> [String?] {
@@ -51,5 +51,12 @@ class KnownServices {
             return knownService.shouldAllowNativeInteraction
         }
         return false
+    }
+    
+    func shouldValidateSession(host:String?) -> Bool {
+        if let knownService = findMatchingKnownServiceForHostname(hostname: host) {
+            return knownService.shouldValidateSession
+        }
+        return true
     }
 }
