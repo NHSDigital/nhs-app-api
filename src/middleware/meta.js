@@ -7,6 +7,9 @@ const REPEAT_PRESCRIPTION_COURSES = 'prescriptions-repeat-courses';
 const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
 const APPOINTMENT_BOOKED = 'appointments-booked';
 const ACCOUNT = 'account';
+const MYRECORDWARNING = 'my-record-myrecordwarning';
+const MYRECORD = 'my-record';
+const MYRECORDNOACCESS = 'my-record-noaccess';
 const LOGIN = 'login';
 
 export default function ({ route, store, app }) {
@@ -35,6 +38,11 @@ export default function ({ route, store, app }) {
       break;
     case ACCOUNT:
       route.meta.headerKey = 'pageHeaderTitles.account';
+      break;
+    case MYRECORD:
+    case MYRECORDNOACCESS:
+    case MYRECORDWARNING:
+      route.meta.headerKey = 'pageHeaderTitles.myRecord';
       break;
     case LOGIN:
       route.meta.headerKey = '';

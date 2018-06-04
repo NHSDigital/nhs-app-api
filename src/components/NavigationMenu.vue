@@ -66,6 +66,7 @@ export default {
     onMyRecordMenuClicked(event) {
       const myRecordMenuItem = event.currentTarget;
       this.handleMenuSelection(myRecordMenuItem);
+      this.$router.push('/my-record/myrecordwarning');
     },
 
     onMoreMenuClicked(event) {

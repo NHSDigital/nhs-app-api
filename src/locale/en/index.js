@@ -72,6 +72,44 @@ export default {
       orderDate: 'Order date',
     },
   },
+  myRecord: {
+    name: 'Name',
+    dateOfBirthday: 'Date of Birthday',
+    sex: 'Sex',
+    address: 'Address',
+    nhsNumber: 'NHS Number',
+    gpPractice: 'GP Practice',
+    patient: 'Patient',
+    myRecordWarning: {
+      warningText: 'Your record may contain sensitive information.',
+      title: 'Sensitive information may include:',
+      bulletPoints: {
+        bp1: 'Personal data, such as your details, allergies and care preferences',
+        bp2: 'Medical history, such as your conditions and medications',
+        bp3: 'Test results that you may not have discussed with your doctor',
+        bp4: 'Clinical terms that you may not be familiar with',
+      },
+      agreementText: 'By clicking continue, you agree to viewing sensitive information within your medical record.',
+      agreeButtonText: 'Agree and continue',
+      backButtonText: 'Back to home',
+    },
+    noRecordAccess: {
+      warningHeader: 'Sorry, you don\'t currently have access to this service',
+      warningBody: 'Please contact your GP surgery for more information.',
+    },
+    patientInfo: {
+      fieldLabelName: 'Name',
+      fieldLabelDOB: 'Date of birth',
+      fieldLabelSex: 'Sex',
+      fieldLabelAddress: 'Address',
+      fieldLabelNHS: 'NHS number',
+      sectionHeader: 'My details',
+    },
+    viewRestOfHealthRecordWarning: 'You cannot view the rest of your health record online. To see more, ask your GP practice for access to your ‘Detailed Coded Record’.',
+    allergiesAndAdverseReactions: {
+      sectionHeader: 'Allergies and Adverse Reactions',
+    },
+  },
   common: {
     or: 'OR',
   },
@@ -100,7 +138,7 @@ export default {
     appointments: 'Appointments',
     appointmentBooked: 'My Appointments',
     appointmentConfirmation: 'Check appointment details',
-    myRecord: 'My record',
+    myRecord: 'My medical record',
     more: 'More',
   },
   more: {
@@ -109,7 +147,7 @@ export default {
   navigationMenu: {
     appointmentsLabel: 'Appointments',
     moreLabel: 'More',
-    myRecordLabel: 'My record',
+    myRecordLabel: 'My medical record',
     prescriptionsLabel: 'Prescriptions',
     symptomsLabel: 'Symptoms',
   },
@@ -140,7 +178,7 @@ export default {
       title: 'More',
     },
     myRecordIcon: {
-      title: 'My Record',
+      title: 'My Medical Record',
     },
     nhsLogoIcon: {
       title: 'NHS app',

@@ -11,3 +11,6 @@ Vue.filter(
   'shortDate',
   value => (value ? moment(value).format('D MMM YYYY') : ''),
 );
+
+Vue.filter('longDate',
+  value => (value ? moment(value).format('Do MMMM YYYY') : ''));
