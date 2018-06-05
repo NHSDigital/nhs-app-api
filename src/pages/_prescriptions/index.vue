@@ -1,5 +1,6 @@
 <template>
   <main :class="$style.main">
+
     <div :class="$style['above-float-button']">
       <div v-if="showNoPrescriptions" class="info" data-purpose="no-prescriptions-error">
         <p>
@@ -19,10 +20,10 @@
           :class="$style['prescription-course']">
           <div :class="$style.container">
             <div>
-              <b aria-label="order-date">
+              <b>
                 {{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}
               </b>
-              : {{ prescriptionCourse.orderDate | shortDate }}
+              : <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
             </div>
             <hr>
             <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
