@@ -10,9 +10,7 @@
     <p v-if="patientInfo">{{ patientInfo.sex }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelAddress') }}</label>
-    <p v-if="patientInfo && patientInfo.address">{{ `${patientInfo.address.line1},
-    ${patientInfo.address.line2}, ${patientInfo.address.line3}, ${patientInfo.address.town},
-    ${patientInfo.address.county}, ${patientInfo.address.postcode}` }}</p>
+    <p v-if="patientInfo && patientInfo.address">{{ formatAddress(patientInfo.address) }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelNHS') }}</label>
     <p v-if="patientInfo">{{ patientInfo.nhsNumber }}</p>
@@ -37,6 +35,14 @@ export default {
     ...mapGetters({
       patientInfo: 'myRecord/patientDemographics',
     }),
+  },
+  methods: {
+    formatAddress(address) {
+      const addressParts = [address.line1, address.line2, address.line3, address.town,
+        address.county, address.postcode];
+
+      return addressParts.filter(part => part).join(', ');
+    },
   },
 };
 
