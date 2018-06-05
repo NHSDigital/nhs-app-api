@@ -26,6 +26,8 @@ class Config private constructor() {
     var appPath: String
     var appiumServer: String
 
+    var sessionExpiryMinutes: Long
+
 
     init {
         url = envOrDefault("url", "http://localhost:3000")
@@ -50,11 +52,20 @@ class Config private constructor() {
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
+
+        sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", 1)
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {
         return System.getenv(key) ?: defaultValue
                 .also { println("$key set as $it") }
+    }
+
+    private fun envOrDefault(key: String, defaultValue: Long): Long {
+        var result = System.getenv(key)?.toLong() ?: defaultValue
+                .also { println("$key set as $it") }
+
+        return result
     }
 
     companion object {

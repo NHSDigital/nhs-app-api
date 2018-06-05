@@ -22,6 +22,7 @@ import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.courses.CourseListResponse
 import worker.models.prescriptions.PrescriptionListResponse
+import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import worker.models.session.UserSessionResponse.UserSessionResponseCookie
@@ -115,6 +116,17 @@ class WorkerClient {
         httpGet.releaseConnection()
 
         return gson.fromJson<PrescriptionListResponse>(result, PrescriptionListResponse::class.java)
+    }
+
+    fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?, context: HttpContext?): HttpResponse {
+        val httpPost = HttpPost(config.backendUrl + WorkerPaths.postPrescriptionsConnection)
+        val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
+        entity.setContentType("application/json")
+        httpPost.entity = entity
+
+        val response = sendAsync(httpPost, context)
+        httpPost.releaseConnection()
+        return response
     }
 
     fun getCoursesConnection(context: HttpContext?): CourseListResponse {
