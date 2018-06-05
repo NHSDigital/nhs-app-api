@@ -3,9 +3,10 @@ package pages
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.WebElementFacade
-import net.thucydides.core.annotations.At
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import org.openqa.selenium.By
+import java.util.concurrent.TimeUnit
 
 
 @DefaultUrl("http://localhost:3000/login")
@@ -78,5 +79,11 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     private fun headingIsDisplayed(): Boolean {
         return heading.isDisplayed
+    }
+    // Checks to see the menu item is not present on the page.
+    fun assertMenuIsNotVisible() {
+        setImplicitTimeout(100, TimeUnit.MILLISECONDS);
+        Assert.assertFalse(find<WebElementFacade>(By.className("menu")).isVisible);
+        resetImplicitTimeout();
     }
 }

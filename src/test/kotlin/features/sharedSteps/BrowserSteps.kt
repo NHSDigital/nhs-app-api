@@ -34,6 +34,25 @@ open class BrowserSteps {
         Assert.assertEquals(url, loginPage.driver.currentUrl)
     }
 
+    @Step()
+    open fun CheckLoginDetailsAreReset() {
+        val driver = loginPage.driver
+        var nhso =driver.manage().cookies.first { x -> x.name == "nhso" }.toString();
+
+        // No user details...
+        Assert.assertEquals(-1, nhso.indexOf("familyName"));
+        Assert.assertEquals(-1, nhso.indexOf("givenName"));
+        Assert.assertEquals(-1, nhso.indexOf("userSession"));
+        Assert.assertTrue("user details should be blank", nhso.indexOf("%22user%22:{}") > 0);
+        Assert.assertTrue("No one is log in", nhso.indexOf("%22loggedIn%22:false") > 0);
+
+        // No remaining personal data left...
+        Assert.assertTrue("Appointments should be blank", nhso.indexOf("{%22appointmentSlots%22:{%22appointmentSessions%22:[]%2C%22clinicians%22:[]%2C%22locations%22:[]%2C%22slots%22:[]%2C%22hasLoaded%22:false%2C%22hasErrored%22:false}") > 0);
+        Assert.assertTrue("Prescriptions should be blank", nhso.indexOf("%22prescriptions%22:{%22prescriptionCourses%22:[]%2C%22hasLoaded%22:false%2C%22hasErrored%22:false}") > 0);
+        Assert.assertTrue("Repeat prescriptions should be blank", nhso.indexOf("%22repeatPrescriptionCourses%22:{%22repeatPrescriptionCourses%22:[]%2C%22hasLoaded%22:false%2C%22hasErrored%22:false}") > 0);
+
+    }
+
     @Step
     fun changeTab(url: URL) {
         val driver = loginPage.driver

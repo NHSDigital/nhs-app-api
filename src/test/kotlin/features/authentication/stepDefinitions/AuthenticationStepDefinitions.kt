@@ -13,6 +13,7 @@ import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.NavigationSteps
+import junit.framework.TestCase
 import mocking.MockDefaults
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
@@ -280,17 +281,17 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         this.currentUrl = fullUrl
     }
 
-    @Then("^I see the home page")
+    @Then("^I see the home page$")
     fun iSeeTheHomePage() {
         home.assertPageIsVisible()
     }
 
-    @Then("^I see the login page")
+    @Then("^I see the login page$")
     fun iSeeTheLoginPage() {
         login.assertPageIsDisplayed()
     }
 
-    @Then("^I see the relevant page")
+    @Then("^I see the relevant page$")
     fun iSeeTheRelevantPage() {
         browser.shouldHaveUrl(this.currentUrl)
     }
@@ -310,6 +311,28 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         nav.assertVisible()
     }
 
+    @When("^I click the account icon$")
+    fun iClickTheAccountIcon() {
+        nav.myAccount()
+    }
+
+    @When("^I click the Sign out button$")
+    @Throws(Exception::class)
+    fun iClickTheSignOutButton() {
+        myAccount.signOut();
+    }
+
+    @Then("^I do not see the menu bar$")
+    @Throws(Exception::class)
+    fun iDoNotSeeMenuBar() {
+        login.assertMenuIsNotVisible();
+    }
+
+    @Then("^the user login details are cleared from cookies$")
+    @Throws(Exception::class)
+    fun theUserLoginDetailsAreClearedFromCookies() {
+        browser.CheckLoginDetailsAreReset();
+    }
     @Then("^I see create account button$")
     fun iSeeCreateAccountButton() {
         login.assertCreateAccountButtonIsVisible()

@@ -39,4 +39,10 @@ open class LoginSteps {
     fun assertPageIsDisplayed() {
         loginPage.shouldBeDisplayed()
     }
+
+    @Step
+    fun assertMenuIsNotVisible()
+    {
+        loginPage.assertMenuIsNotVisible();
+    }
 }
