@@ -30,6 +30,8 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
             selectPage(pageUrl: prescriptionsUrl)
             break
         case .MyRecord:
+            let myRecordUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
+            selectPage(pageUrl: myRecordUrl)
             break
         case .More:
             let moreUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
