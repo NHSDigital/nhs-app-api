@@ -6,9 +6,12 @@ export const REPEAT_PRESCRIPTION_VALIDATED = 'REPEAT_PRESCRIPTION_VALIDATED';
 
 
 export const initialState = {
+  courses: [],
+  loaded: false,
+  errored: false,
   repeatPrescriptionCourses: [],
   hasLoaded: false,
   hasErrored: false,
   validated: false,
-  isValid: false,
+  valid: false,
 };

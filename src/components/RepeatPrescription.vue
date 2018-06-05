@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="$style.checkboxPanel" @click="check">
-      <checked-icon :selected="prescriptionDetails.selected" :id="prescriptionDetails.id" />
+      <checked-icon :selected="selected" :id="prescriptionDetails.id" />
       <input
         type="hidden"
         @click="check">
@@ -28,11 +28,10 @@ export default{
       type: Object,
       required: true,
     },
-  },
-  data() {
-    return {
-      checked: false,
-    };
+    selected: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapGetters({

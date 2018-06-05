@@ -18,19 +18,8 @@
               {{ selectedPrescription.dosage }} - {{ selectedPrescription.quantity }}
             </p>
           </div>
-          <hr>
-          <h5 :class="$style.panelHeader">
-            {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.header') }}
-          </h5>
         </div>
       </div>
-      <nuxt-link
-        id="btn_order_prescription"
-        to="prescriptions/repeat-courses"
-        tag="button"
-        class="button green">
-        Confirm and order repeat prescription
-      </nuxt-link>
       <nuxt-link to="/prescriptions/repeat-courses" tag="button" type="submit" class="button grey">
         Change this repeat prescription
       </nuxt-link>

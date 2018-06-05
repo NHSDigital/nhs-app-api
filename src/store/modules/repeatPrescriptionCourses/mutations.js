@@ -26,7 +26,9 @@ export default {
     state.loaded = true;
   },
   [INIT_REPEAT_PRESCRIPTIONS](state) {
-    state = initialState;
+    mapKeys((key) => {
+      state[key] = initialState[key];
+    })(initialState);
   },
   [REPEAT_PRESCRIPTION_VALIDATED](state, validationObject) {
     if (validationObject.submitted) {

@@ -12,6 +12,7 @@ describe('load', () => {
           getV1PatientPrescriptions: jest.fn().mockResolvedValue(),
         },
       },
+      dispatch: jest.fn(),
     };
     return load.call(that, { commit: jest.fn() }).then(() => {
       expect(that.app.$http.getV1PatientPrescriptions).toBeCalled();
@@ -29,6 +30,7 @@ describe('load', () => {
           getV1PatientPrescriptions: () => Promise.resolve(expected),
         },
       },
+      dispatch: jest.fn(),
     };
 
     const commit = jest.fn();

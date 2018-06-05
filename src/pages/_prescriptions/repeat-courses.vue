@@ -16,16 +16,9 @@
             <repeat-prescription
               v-for="repeatPrescription in repeatPrescriptionCourses"
               :key="repeatPrescription.id"
+              :selected="repeatPrescription.selected"
               :prescription-details="repeatPrescription" />
           </div>
-
-          <div :class="$style.form">
-            <label :class="$style.formLabel">
-              {{ $t('prescriptions.specialRequestsLabel') }}
-            </label>
-            <textarea :class="$style.textArea"/>
-          </div>
-
           <p>
             {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
           </p>
@@ -83,7 +76,9 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('repeatPrescriptionCourses/load');
+    if (!this.$store.state.repeatPrescriptionCourses.loaded) {
+      this.$store.dispatch('repeatPrescriptionCourses/load');
+    }
   },
   methods: {
     validate() {
