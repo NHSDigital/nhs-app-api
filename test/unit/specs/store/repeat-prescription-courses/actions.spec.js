@@ -40,10 +40,8 @@ describe('load', () => {
 
     return load
       .call(that, { commit })
-      .then(() =>
-        expect(commit).toBeCalledWith(
-          REPEAT_PRESCRIPTION_COURSES_LOADED,
-          expected,
-        ));
+      .then(() => {
+        expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_COURSES_LOADED, expected);
+      });
   });
 });

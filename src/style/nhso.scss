@@ -107,7 +107,7 @@ $default: 'Roboto', sans-serif;
 @mixin menu {
   font-family: $default;
   font-weight: normal;
-  font-size: 9px;
+  font-size: 10px;
   text-transform: uppercase;
   line-height: 10px;
   color: $dark_grey;
@@ -115,7 +115,7 @@ $default: 'Roboto', sans-serif;
 @mixin menu_active {
   font-family: $default;
   font-weight: normal;
-  font-size: 9px;
+  font-size: 10px;
   text-transform: uppercase;
   line-height: 10px;
   color: $nhs_blue;

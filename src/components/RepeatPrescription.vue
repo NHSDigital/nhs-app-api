@@ -4,8 +4,9 @@
       <checked-icon :selected="selected" :id="prescriptionDetails.id" />
       <input
         type="hidden"
+        id="presciption-selection"
         @click="check">
-      <label :class="$style.checkboxLabel">{{ prescriptionDetails.name }}</label>
+      <label for="presciption-selection" :class="$style.checkboxLabel">{{ prescriptionDetails.name }}</label>
     </div>
     <label
       :class="$style.prescriptionDescription">

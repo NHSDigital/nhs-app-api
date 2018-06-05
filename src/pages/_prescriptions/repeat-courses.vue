@@ -5,9 +5,9 @@
       <form @submit.prevent="validate">
         <div v-if="showRepeatCourses">
           <div :class="$style.panel">
-            <h5 :class="$style.panelHeader">
+            <h2 :class="$style.panelHeader">
               {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.header') }}
-            </h5>
+            </h2>
             <hr>
             <p v-if="error" style="color:#DA291C; font-weight: 700; margin-bottom: 16px;">
               <inline-error-icon />
