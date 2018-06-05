@@ -68,6 +68,9 @@ export default {
       title: 'You don\'t have any medications available to order right now.',
       contactGp: 'To discuss your medication or change your chosen pharmacy, contact your GP practice before ordering.',
     },
+    confirmPrescriptionOrder: {
+      header: 'Check your prescription details',
+    },
     myRepeatPrescriptionLabels: {
       orderDate: 'Order date',
     },

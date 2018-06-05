@@ -22,6 +22,7 @@
           <p>
             {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
           </p>
+          <br>
         </div>
         <button id="btn_order_prescription" class="button green">
           Continue
@@ -103,7 +104,7 @@ export default {
 </script>
 
 
-<style module lang="scss">
+<style module lang="scss" scoped>
   @import "../../style/html";
   @import "../../style/fonts";
   @import "../../style/buttons";
@@ -114,6 +115,7 @@ export default {
   }
   .panelHeader {
     @include panelHeader;
+    font-family: $frutiger-bold!important;
   }
 
   .panelContent {

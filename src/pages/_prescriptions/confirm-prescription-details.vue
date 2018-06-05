@@ -4,9 +4,9 @@
     <main class="content">
       <div :class="$style.panel">
         <div :class="$style.panelContent">
-          <h5 :class="$style.panelHeader">
-            {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.header') }}
-          </h5>
+          <b><h5 :class="$style.panelHeader">
+            {{ $t('prescriptions.confirmPrescriptionOrder.header') }}
+          </h5></b>
           <hr>
           <div
             v-for="selectedPrescription in selectedPrescriptions"
@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style module lang="scss">
+<style module lang="scss" scoped>
   @import "../../style/html";
   @import "../../style/fonts";
   @import "../../style/buttons";
@@ -58,6 +58,7 @@ export default {
   }
   .panelHeader {
     @include panelHeader;
+    font-family: $frutiger-bold!important;
   }
 
   .panelContent {
@@ -72,7 +73,7 @@ export default {
     font-size: 16px;
     line-height: 22px;
     color: #4A4A4A;
-    font-family: $frutiger-bold;
+    font-family: $frutiger-bold!important;
   }
   .prescriptionDescription {
     display: block;
