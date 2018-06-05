@@ -95,6 +95,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         when (menuBarItem.id) {
             R.id.symptoms -> onSymptomMenuSelected()
             R.id.more -> onMoreMenuSelected()
+            R.id.myRecord -> onMyRecordMenuSelected()
             R.id.appointments -> onAppointmentsMenuSelected()
             R.id.prescriptions -> onPrescriptionsMenuSelected()
             else -> loadWelcomePage()
@@ -103,16 +104,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
 
-    private fun onMoreMenuSelected() = loadMorePage()
+    private fun onMoreMenuSelected() = loadMenuItemPage(resources.getString(R.string.morePath))
 
-    private fun onAppointmentsMenuSelected() = loadAppointmentsPage()
+    private fun onMyRecordMenuSelected() = loadMenuItemPage(resources.getString(R.string.myRecordPath))
 
-    private fun onPrescriptionsMenuSelected() = loadPrescriptionsPage()
+    private fun onAppointmentsMenuSelected() = loadMenuItemPage(resources.getString(R.string.appointmentsPath))
+
+    private fun onPrescriptionsMenuSelected() = loadMenuItemPage(resources.getString(R.string.prescriptionsPath))
 
     private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
 
     private fun onMyAccountIconSelected() {
-        loadMyAccountPage()
+        loadMenuItemPage(resources.getString(R.string.myAccountPath))
         setHeaderText(resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
     }
@@ -126,40 +129,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.loadUrl(urlWithMissingQueryStrings)
     }
 
-    private fun loadMorePage() {
+    private fun loadMenuItemPage(designatedPath: String) {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-            .buildUpon()
-            .appendEncodedPath(resources.getString(R.string.morePath))
-            .build()
-        val moreURL = builtUri.toString()
-        loadPage(moreURL)
-    }
-
-    private fun loadAppointmentsPage() {
-        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-            .buildUpon()
-            .appendEncodedPath(resources.getString(R.string.appointmentsPath))
-            .build()
-        val appointmentsURL = builtUri.toString()
-        loadPage(appointmentsURL)
-    }
-
-    private fun loadPrescriptionsPage() {
-        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-            .buildUpon()
-            .appendEncodedPath(resources.getString(R.string.prescriptionsPath))
-            .build()
-        val prescriptionsURL = builtUri.toString()
-        loadPage(prescriptionsURL)
-    }
-
-    private fun loadMyAccountPage() {
-        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-            .buildUpon()
-            .appendEncodedPath(resources.getString(R.string.myAccountPath))
-            .build()
-        val myAccountURL = builtUri.toString()
-        loadPage(myAccountURL)
+                .buildUpon()
+                .appendEncodedPath(designatedPath)
+                .build()
+        val destinationURL = builtUri.toString()
+        loadPage(destinationURL)
     }
 
     override fun setHeaderText(text: String) {
