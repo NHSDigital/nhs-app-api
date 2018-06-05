@@ -2,6 +2,8 @@ import Foundation
 
 class KnownServices {
     private let config:Config
+    private let nhsOnlineErrorTitle = NSLocalizedString("ConnectionErrorTitle", comment: "")
+    private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
     private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
@@ -14,10 +16,10 @@ class KnownServices {
         self.buildKnownServices()
     }
     
-    func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: serviceUnavailableErrorMessage, shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, serviceErrorMessage: nhs111UnavailableErrorMessage, shouldHandleUnavailability: true, shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, serviceErrorMessage: organDonationUnavailableErrorMessage, shouldHandleUnavailability: true, shouldAllowNativeInteraction:true, shouldValidateSession:false, urlQueryString: config.NhsOnlineRequiredQueryString))
+   func buildKnownServices() {
+        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, serviceErrorMessage: ErrorMessage(title: nhs111UnavailableErrorMessage), shouldValidateSession:false))
+        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, serviceErrorMessage: ErrorMessage(title: organDonationUnavailableErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func getAllKnownHosts() -> [String?] {
@@ -25,12 +27,12 @@ class KnownServices {
         return knownHosts
     }
     
-    func getUnavailabilityErrorMessageForService(url:URL) -> String? {
+    func getUnavailabilityErrorMessageForService(url:URL) -> ErrorMessage? {
         return ((findMatchingKnownServiceForHostname(hostname: url.host))?.serviceErrorMessage)!
     }
     
-    func getServiceUnavailableErrorMessage() -> String {
-        return serviceUnavailableErrorMessage
+    func getServiceUnavailableErrorMessage() -> ErrorMessage {
+        return ErrorMessage(title: serviceUnavailableErrorMessage)
     }
     
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {

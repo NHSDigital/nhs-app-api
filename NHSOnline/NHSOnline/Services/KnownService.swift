@@ -2,16 +2,14 @@ import Foundation
 
  class KnownService {
     var urls = [URLComponents]()
-    let shouldHandleUnavailability:Bool
     let shouldAllowNativeInteraction:Bool
     let shouldValidateSession:Bool
     let serviceTitle: String?
-    let serviceErrorMessage: String?
+    let serviceErrorMessage: ErrorMessage
     private var urlQueryItems = Array<URLQueryItem>()
     
-    init(urlStrings:[String], serviceTitle: String? = "", serviceErrorMessage: String? = nil, shouldHandleUnavailability:Bool = false, shouldAllowNativeInteraction:Bool = false, shouldValidateSession:Bool = true, urlQueryString:String? = nil) {
+    init(urlStrings:[String], serviceTitle: String? = "", serviceErrorMessage: ErrorMessage, shouldAllowNativeInteraction:Bool = false,shouldValidateSession:Bool = true, urlQueryString:String? = nil) {
         self.urls = urlStrings.map { URLComponents(string: $0)! }
-        self.shouldHandleUnavailability = shouldHandleUnavailability
         self.shouldAllowNativeInteraction = shouldAllowNativeInteraction
         self.shouldValidateSession = shouldValidateSession
         self.serviceTitle = serviceTitle
@@ -38,7 +36,7 @@ import Foundation
     }
     
     func hasMissingQueryString(urlString: String) -> Bool {
-        if(self.urlQueryItems.isEmpty) {
+        if self.urlQueryItems.isEmpty {
             return false
         }
         
@@ -60,7 +58,7 @@ import Foundation
     }
     
     func addingMissingQueryParameters(urlString:String) -> String {
-        if(self.urlQueryItems.isEmpty) {
+        if self.urlQueryItems.isEmpty {
             return urlString
         }
         
@@ -71,7 +69,7 @@ import Foundation
         var queryItems = urlComponents.queryItems ?? [URLQueryItem]()
         
         urlQueryItems.forEach { urlQueryItem in
-            if(!queryItems.contains(urlQueryItem)) {
+            if !queryItems.contains(urlQueryItem) {
                 queryItems.append(urlQueryItem)
             }
         }

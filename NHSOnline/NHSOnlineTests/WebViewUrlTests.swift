@@ -44,7 +44,7 @@ class WebViewUrlTests: XCTestCase {
         let webViewUrl = URL(string: urlString)
         let errorMessage = knownServices?.getUnavailabilityErrorMessageForService(url: webViewUrl!)
         
-        XCTAssertEqual(errorMessage, NSLocalizedString("OrganDonationUnavailableErrorMessage", comment: ""))
+        XCTAssertEqual(errorMessage?.title, NSLocalizedString("OrganDonationUnavailableErrorMessage", comment: ""))
     }
 
     

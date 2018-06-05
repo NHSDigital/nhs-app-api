@@ -2,17 +2,25 @@ import UIKit
 import os.log
 
 class PageUnavailabilityViewController: UIViewController {
-    @IBOutlet weak var errorLabelWrapper: UIView!
-    @IBOutlet weak var errorLabel: UILabel!
-    
+    @IBOutlet weak var errorTextView: ErrorTextView!
+    @IBOutlet weak var tryAgainLabel: UILabel!
     var failedUrl: String? = nil
-
+    
     @IBAction func reloadPageTrigger(_ sender: Any) {
         let parentVC = self.parent as? HomeViewController
         parentVC?.webViewController?.reloadWebView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        errorLabelWrapper.layer.addTopBorder(color: UIColor.red, thickness: 1)
+        errorTextView.layer.addTopBorder(color: UIColor.red, thickness: 1)
+    }
+    
+    func setUnavailabilityError(errorMessage:ErrorMessage) {
+        if errorMessage.message != nil {
+            self.tryAgainLabel.isHidden = true
+        } else {
+            self.tryAgainLabel.isHidden = false
+        }
+        errorTextView.setServiceError(title: errorMessage.title, message: errorMessage.message)
     }
 }

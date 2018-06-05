@@ -16,7 +16,7 @@ class WebViewController: UIViewController {
     }
     
     func reloadWebView() {
-        if((webViewDelegate!.failedUrl) != nil) {
+        if  webViewDelegate!.failedUrl != nil {
             webView.load(URLRequest(url: webViewDelegate!.failedUrl!))
         } else {
             //potentially insert, an error has occured alert
