@@ -1,4 +1,4 @@
-FROM microsoft/aspnetcore:2.0 AS runtime
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y netcat && \
@@ -7,7 +7,7 @@ RUN apt-get update && \
     curl -L -o /usr/local/bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for && \
     chmod +rx /usr/local/bin/wait-for
 
-FROM microsoft/aspnetcore-build:2.0 AS build
+FROM microsoft/dotnet:2.1-sdk AS build
 RUN apt-get update && \
     apt-get upgrade -y && \
     rm -rf /var/lib/apt/lists/*
