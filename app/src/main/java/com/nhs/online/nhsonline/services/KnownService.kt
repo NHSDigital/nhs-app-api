@@ -8,7 +8,8 @@ import java.net.URL
         val shouldHandleUnavailability: Boolean = false,
         queryString: String? = null,
         val unavailabilityErrorMessage: String? = null,
-        var nativeHeader: String? = null
+        var nativeHeader: String? = null,
+        var shouldValidateSession: Boolean = true
 ) {
     private val serviceQueryMap: MutableMap<String, String> = mutableMapOf()
     val urlList: Array<URL> = urlString.map { URL(it) }.toTypedArray()

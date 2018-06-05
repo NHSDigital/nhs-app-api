@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.View.*
 import android.widget.TextView
+import android.arch.lifecycle.ProcessLifecycleOwner
+import android.webkit.CookieManager
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.ValidateSessionLifeCycleObserver
 import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
@@ -24,10 +27,19 @@ import kotlinx.android.synthetic.main.header_layout.*
 
 class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var chromeClient: ChromeClientLocationHandler
-
     private lateinit var knownServices: KnownServices
+    private val lollypopApiNumber: Int = 21
+    private val apiVersion : Int = android.os.Build.VERSION.SDK_INT
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if(apiVersion >= lollypopApiNumber) {
+            CookieManager.getInstance().removeAllCookies(null);
+        } else {
+            CookieManager.getInstance().removeAllCookie();
+        }
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -37,6 +49,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         retryButton.setOnClickListener { webview.reload() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
+
+        ProcessLifecycleOwner.get().lifecycle
+               .addObserver(ValidateSessionLifeCycleObserver(this, AppWebInterface(this),knownServices))
 
         val urlPath = intent?.data?.path
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
@@ -104,18 +119,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
 
-    private fun onMoreMenuSelected() = loadMenuItemPage(resources.getString(R.string.morePath))
+    private fun onMyRecordMenuSelected() = loadSubPage(resources.getString(R.string.myRecordPath))
 
-    private fun onMyRecordMenuSelected() = loadMenuItemPage(resources.getString(R.string.myRecordPath))
+    private fun onMoreMenuSelected() = loadSubPage(resources.getString(R.string.morePath))
 
-    private fun onAppointmentsMenuSelected() = loadMenuItemPage(resources.getString(R.string.appointmentsPath))
+    private fun onAppointmentsMenuSelected() = loadSubPage(resources.getString(R.string.appointmentsPath))
 
-    private fun onPrescriptionsMenuSelected() = loadMenuItemPage(resources.getString(R.string.prescriptionsPath))
+    private fun onPrescriptionsMenuSelected() = loadSubPage(resources.getString(R.string.prescriptionsPath))
 
-    private fun onNhsOnlineLogoIconSelected() = loadPage(resources.getString(R.string.baseURL))
+    private fun onNhsOnlineLogoIconSelected() = loadWelcomePage()
 
     private fun onMyAccountIconSelected() {
-        loadMenuItemPage(resources.getString(R.string.myAccountPath))
+        loadSubPage(resources.getString(R.string.myAccountPath))
         setHeaderText(resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
     }
@@ -129,13 +144,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.loadUrl(urlWithMissingQueryStrings)
     }
 
-    private fun loadMenuItemPage(designatedPath: String) {
+    private fun loadSubPage(pageEndPoint: String) {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
                 .buildUpon()
-                .appendEncodedPath(designatedPath)
+                .appendEncodedPath(pageEndPoint)
                 .build()
-        val destinationURL = builtUri.toString()
-        loadPage(destinationURL)
+        val fullUrl = builtUri.toString()
+        loadPage(fullUrl)
     }
 
     override fun setHeaderText(text: String) {
