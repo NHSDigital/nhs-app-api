@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
@@ -14,19 +14,19 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     public class PrescriptionsController : Controller
     {
         private readonly ConfigurationSettings _settings;
-        private readonly IBridgeFactory _bridgeFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<PrescriptionsController> _logger;
         private readonly IPrescriptionRequestValidationService _prescriptionRequestValidationService;
 
         public PrescriptionsController(
             IOptions<ConfigurationSettings> settings,
             ILoggerFactory loggerFactory,
-            IBridgeFactory bridgeFactory,
+            IGpSystemFactory gpSystemFactory,
             IPrescriptionRequestValidationService prescriptionRequestValidationService)
         {
             _settings = settings.Value;
             _logger = loggerFactory.CreateLogger<PrescriptionsController>();
-            _bridgeFactory = bridgeFactory;
+            _gpSystemFactory = gpSystemFactory;
             _prescriptionRequestValidationService = prescriptionRequestValidationService;
         }
         
@@ -43,8 +43,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             UserSession userSession = HttpContext.GetUserSession();
             
-            var prescriptionService = _bridgeFactory
-                .CreateBridge(userSession.Supplier)
+            var prescriptionService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
                 .GetPrescriptionService();
 
             var result = await prescriptionService.Get(userSession, fromDate, DateTimeOffset.Now);
@@ -66,8 +66,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             {                    
                 UserSession userSession = HttpContext.GetUserSession();        
       
-                var prescriptionService = _bridgeFactory
-                    .CreateBridge(userSession.Supplier)
+                var prescriptionService = _gpSystemFactory
+                    .CreateGpSystem(userSession.Supplier)
                     .GetPrescriptionService();
 
                 result = await prescriptionService.Post(userSession, repeatPrescriptionRequest);      

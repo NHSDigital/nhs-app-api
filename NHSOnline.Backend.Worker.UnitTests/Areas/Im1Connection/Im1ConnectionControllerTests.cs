@@ -8,9 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
@@ -39,21 +39,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         [TestMethod]
         public void Constructor_NullOdsCodeLookup_Throws()
         {
-            var bridgeFactory = MockBridgeFactory();
+            var gpSystemFactory = MockGpSystemFactory();
 
-            Action act = () => new Im1ConnectionController(null, bridgeFactory.Object, new LoggerFactory());
+            Action act = () => new Im1ConnectionController(null, gpSystemFactory.Object, new LoggerFactory());
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCodeLookup");
         }
 
         [TestMethod]
-        public void Constructor_NullBridgeFactory_Throws()
+        public void Constructor_NullGpSystemFactoryFactory_Throws()
         {
             var odsCodeLookup = MockOdsCodeLookup();
 
             Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, new LoggerFactory());
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("bridgeFactory");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("gpSystemFactory");
         }
 
         [TestMethod]
@@ -120,12 +120,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
                 new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
-            var bridgeMock = MockBridge(im1ConnectionService);
-            var bridgeFactoryMock = MockBridgeFactory(supplier, bridgeMock);
+            var gpSystemMock = MockGpSystem(im1ConnectionService);
+            var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
             im1ConnectionService.Setup(x => x.Verify(DefaultConnectionToken, odsCode))
                 .ReturnsAsync(new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
             _im1ConnectionController =
-                CreateIm1ConnectionController(bridgeFactoryMock: bridgeFactoryMock);
+                CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
 
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, odsCode);
 
@@ -179,12 +179,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         }
 
         private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null,
-            Mock<IBridgeFactory> bridgeFactoryMock = null)
+            Mock<IGpSystemFactory> gpSystemFactoryMock = null)
         {
             odsCodeLookupMock = odsCodeLookupMock ?? MockOdsCodeLookup();
-            bridgeFactoryMock = bridgeFactoryMock ?? MockBridgeFactory();
+            gpSystemFactoryMock = gpSystemFactoryMock ?? MockGpSystemFactory();
 
-            return new Im1ConnectionController(odsCodeLookupMock.Object, bridgeFactoryMock.Object, new LoggerFactory());
+            return new Im1ConnectionController(odsCodeLookupMock.Object, gpSystemFactoryMock.Object, new LoggerFactory());
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode,
@@ -195,18 +195,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             return mockOdsCodeLookup;
         }
 
-        private Mock<IBridgeFactory> MockBridgeFactory(
+        private Mock<IGpSystemFactory> MockGpSystemFactory(
             SupplierEnum supplier = DefaultSupplier,
-            Mock<IBridge> bridgeMock = null)
+            Mock<IGpSystem> gpSystemMock = null)
         {
-            bridgeMock = bridgeMock ?? MockBridge();
-            var mockBridgeFactory = new Mock<IBridgeFactory>();
-            mockBridgeFactory.Setup(x => x.CreateBridge(supplier)).Returns(bridgeMock.Object);
+            gpSystemMock = gpSystemMock ?? MockGpSystem();
+            var mockGpSystemFactory = new Mock<IGpSystemFactory>();
+            mockGpSystemFactory.Setup(x => x.CreateGpSystem(supplier)).Returns(gpSystemMock.Object);
 
-            return mockBridgeFactory;
+            return mockGpSystemFactory;
         }
 
-        private Mock<IBridge> MockBridge(
+        private Mock<IGpSystem> MockGpSystem(
             Mock<IIm1ConnectionService> nhsNumberProvider = null,
             ITokenValidationService tokenValidationService = null
         )
@@ -214,11 +214,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             nhsNumberProvider = nhsNumberProvider ?? MockIm1ConnectionService();
             tokenValidationService = tokenValidationService ?? _defaultTokenValidationService;
 
-            var mockBridge = new Mock<IBridge>();
-            mockBridge.Setup(x => x.GetIm1ConnectionService()).Returns(nhsNumberProvider.Object);
-            mockBridge.Setup(x => x.GetTokenValidationService()).Returns(tokenValidationService);
+            var mockGpSystem = new Mock<IGpSystem>();
+            mockGpSystem.Setup(x => x.GetIm1ConnectionService()).Returns(nhsNumberProvider.Object);
+            mockGpSystem.Setup(x => x.GetTokenValidationService()).Returns(tokenValidationService);
 
-            return mockBridge;
+            return mockGpSystem;
         }
 
         private static Mock<IIm1ConnectionService> MockIm1ConnectionService(

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
@@ -15,17 +15,17 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
     public class Im1ConnectionController : Controller
     {
         private readonly IOdsCodeLookup _odsCodeLookup;
-        private readonly IBridgeFactory _bridgeFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<Im1ConnectionController> _logger;
 
         public Im1ConnectionController(
             IOdsCodeLookup odsCodeLookup, 
-            IBridgeFactory bridgeFactory,
+            IGpSystemFactory gpSystemFactory,
             ILoggerFactory loggerFactory)
         {
             _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
-            _bridgeFactory =
-                bridgeFactory ?? throw new ArgumentNullException(nameof(bridgeFactory));
+            _gpSystemFactory =
+                gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
             _logger = loggerFactory.CreateLogger<Im1ConnectionController>();
         }
 
@@ -41,19 +41,19 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return BadRequest();
             }
 
-            var bridgeOption = await GetBridge(odsCode);
-            if (!bridgeOption.HasValue)
+            var gpSystemOption = await GetGpSystem(odsCode);
+            if (!gpSystemOption.HasValue)
             {
                 _logger.LogDebug(
-                    $"No bridge was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
+                    $"No GP system was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
 
-                // If no bridge is returned it is because the supplier could not be determined from the ODS
+                // If no GP system is returned it is because the supplier could not be determined from the ODS
                 // code.  This, in turn, is because the ODS code is not found so a "Not Found" response is returned.
                 return NotFound();
             }
 
-            var bridge = bridgeOption.ValueOrFailure();
-            var tokenValidationService = bridge.GetTokenValidationService();
+            var gpSystem = gpSystemOption.ValueOrFailure();
+            var tokenValidationService = gpSystem.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
             {
                 _logger.LogError(
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return BadRequest();
             }
 
-            var im1ConnectionService = bridge.GetIm1ConnectionService();
+            var im1ConnectionService = gpSystem.GetIm1ConnectionService();
             var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
 
             return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
@@ -70,30 +70,30 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
-            var bridgeOption = await GetBridge(model.OdsCode);
-            if (!bridgeOption.HasValue)
+            var gpSystemOption = await GetGpSystem(model.OdsCode);
+            if (!gpSystemOption.HasValue)
             {
                 _logger.LogDebug(
-                    $"No bridge was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
+                    $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
                 return NotFound();
             }
 
-            var bridge = bridgeOption.ValueOrFailure();
-            var im1ConnectionService = bridge.GetIm1ConnectionService();
+            var gpSystem = gpSystemOption.ValueOrFailure();
+            var im1ConnectionService = gpSystem.GetIm1ConnectionService();
             var registerResult = await im1ConnectionService.Register(model);
 
             return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
         }
 
-        private async Task<Option<IBridge>> GetBridge(string odsCode)
+        private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)
         {
             var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
             if (!supplier.HasValue)
             {
-                return Option.None<IBridge>();
+                return Option.None<IGpSystem>();
             }
 
-            return Option.Some(_bridgeFactory.CreateBridge(supplier.ValueOrFailure()));
+            return Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
         }
         
         private bool ArgumentsAreValid(string connectionToken, string odsCode)

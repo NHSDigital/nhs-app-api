@@ -3,21 +3,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
     [Route("patient/appointments")]
     public class AppointmentsController : Controller
     {
-        private readonly IBridgeFactory _bridgeFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
 
         public AppointmentsController(
             ILoggerFactory loggerFactory,
-            IBridgeFactory bridgeFactory
+            IGpSystemFactory gpSystemFactory
             )
         {
-            _bridgeFactory = bridgeFactory;
+            _gpSystemFactory = gpSystemFactory;
         }
 
         [HttpPost, TimeoutExceptionFilter]
@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             var userSession = HttpContext.GetUserSession();
 
-            var appointmentsService = _bridgeFactory
-                .CreateBridge(userSession.Supplier)
+            var appointmentsService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
                 .GetAppointmentsService();
 
             var bookResult = await appointmentsService.Book(userSession, model);

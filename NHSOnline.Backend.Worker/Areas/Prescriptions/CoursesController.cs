@@ -2,22 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
     [Route("patient/courses")]
     public class CoursesController : Controller
     {
-        private readonly IBridgeFactory _bridgeFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<CoursesController> _logger;
 
         public CoursesController(
             ILoggerFactory loggerFactory,
-            IBridgeFactory bridgeFactory)
+            IGpSystemFactory gpSystemFactory)
         {
             _logger = loggerFactory.CreateLogger<CoursesController>();
-            _bridgeFactory = bridgeFactory;
+            _gpSystemFactory = gpSystemFactory;
         }
 
         [HttpGet, TimeoutExceptionFilter]
@@ -25,8 +25,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             UserSession userSession = HttpContext.GetUserSession();
 
-            var courseService = _bridgeFactory
-                .CreateBridge(userSession.Supplier)
+            var courseService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
                 .GetCourseService();
 
             var result = await courseService.Get(userSession);

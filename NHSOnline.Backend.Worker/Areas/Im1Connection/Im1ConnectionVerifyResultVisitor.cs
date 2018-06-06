@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Router.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 {

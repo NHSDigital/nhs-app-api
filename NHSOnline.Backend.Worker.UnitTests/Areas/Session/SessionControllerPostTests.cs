@@ -11,10 +11,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Session;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
@@ -25,12 +25,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private SessionController _systemUnderTest;
         private IFixture _fixture;
         private Mock<ICitizenIdService> _mockCitizenIdService;
-        private Mock<IBridge> _mockBridge;
+        private Mock<IGpSystem> _mockGpSystem;
         private Mock<IOdsCodeLookup> _mockOdsCodeLookup;
         private Mock<ISessionCacheService> _mockSessionCacheService;
         private Mock<ISessionService> _mockSessionService;
         private Mock<ITokenValidationService> _mockTokenValidationService;
-        private Mock<IBridgeFactory> _mockBridgeFactory;
+        private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
 
         private UserSessionRequest _userSessionRequest;
@@ -80,19 +80,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Setup(x => x.IsValidConnectionTokenFormat(_userProfile.Im1ConnectionToken))
                 .Returns(true);
 
-            _mockBridge = _fixture.Freeze<Mock<IBridge>>();
-            _mockBridge
+            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem
                 .Setup(x => x.GetTokenValidationService())
                 .Returns(_mockTokenValidationService.Object);
 
-            _mockBridge
+            _mockGpSystem
                 .Setup(x => x.GetSessionService())
                 .Returns(_mockSessionService.Object);
 
-            _mockBridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
-            _mockBridgeFactory
-                .Setup(x => x.CreateBridge(SupplierEnum.Emis))
-                .Returns(_mockBridge.Object);
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory
+                .Setup(x => x.CreateGpSystem(SupplierEnum.Emis))
+                .Returns(_mockGpSystem.Object);
 
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
             _mockSessionCacheService
@@ -249,8 +249,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             // Assert
             _mockCitizenIdService.VerifyAll();
-            _mockBridge.VerifyAll();
-            _mockBridgeFactory.VerifyAll();
+            _mockGpSystem.VerifyAll();
+            _mockGpSystemFactory.VerifyAll();
             _mockSessionCacheService.VerifyAll();
             _mockOdsCodeLookup.VerifyAll();
             _mockSessionService.VerifyAll();

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Router.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {

@@ -11,8 +11,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
     {
         private AppointmentSlotsController _systemUnderTest;
         private IFixture _fixture;
-        private Mock<IBridgeFactory> _bridgeFactory;
+        private Mock<IGpSystemFactory> _gpSystemFactory;
         private UserSession _userSession;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
 
-            _bridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
+            _gpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _userSession = _fixture.Create<UserSession>();
             var httpContextItems = new Dictionary<object, object>
             {
@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var timeZoneInfoProvider = new TimeZoneInfoProvider();
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
-            _systemUnderTest = new AppointmentSlotsController(_bridgeFactory.Object, _dateTimeOffsetProvider, _fixture.Create<ILoggerFactory>());
+            _systemUnderTest = new AppointmentSlotsController(_gpSystemFactory.Object, _dateTimeOffsetProvider, _fixture.Create<ILoggerFactory>());
 
             _systemUnderTest.ControllerContext = new ControllerContext
             {
@@ -59,17 +59,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
             var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
-            var bridge = new Mock<IBridge>();
+            var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
             var appointmentSlotsServicesGetResponse = new AppointmentSlotsResponse();
 
             var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.SuccessfullyRetrieved(appointmentSlotsServicesGetResponse);
 
             // Arrange
-            _bridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
-                .Returns(bridge.Object);
+            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+                .Returns(gpSystem.Object);
 
-            bridge.Setup(x => x.GetAppointmentSlotsService())
+            gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
             appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
@@ -83,8 +83,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get(queryParams);
 
             // Assert
-            _bridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
-            bridge.Verify(x => x.GetAppointmentSlotsService());
+            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
@@ -114,16 +114,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
             var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
-            var bridge = new Mock<IBridge>();
+            var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 
             var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.BadRequest();
 
             // Arrange
-            _bridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
-                .Returns(bridge.Object);
+            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+                .Returns(gpSystem.Object);
 
-            bridge.Setup(x => x.GetAppointmentSlotsService())
+            gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
             appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
@@ -137,8 +137,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get(queryParams);
 
             // Assert
-            _bridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
-            bridge.Verify(x => x.GetAppointmentSlotsService());
+            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(BadRequestResult));
         }
@@ -148,16 +148,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
             var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
-            var bridge = new Mock<IBridge>();
+            var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 
             var getAppointmentSlotsServiceResult = new AppointmentSlotsResult.SupplierSystemUnavailable();
 
             // Arrange
-            _bridgeFactory.Setup(x => x.CreateBridge(_userSession.Supplier))
-                .Returns(bridge.Object);
+            _gpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+                .Returns(gpSystem.Object);
 
-            bridge.Setup(x => x.GetAppointmentSlotsService())
+            gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
             appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
@@ -171,8 +171,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var result = await _systemUnderTest.Get(queryParams);
 
             // Assert
-            _bridgeFactory.Verify(x => x.CreateBridge(_userSession.Supplier));
-            bridge.Verify(x => x.GetAppointmentSlotsService());
+            _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 

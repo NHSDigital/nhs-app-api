@@ -2,21 +2,21 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
     [Route("patient/my-record")]
     public class MyRecordController : Controller
     {
-        private readonly IBridgeFactory _bridgeFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger _logger;
         
         public MyRecordController(
             ILoggerFactory loggerFactory,
-            IBridgeFactory bridgeFactory)
+            IGpSystemFactory gpSystemFactory)
         {
-            _bridgeFactory = bridgeFactory;
+            _gpSystemFactory = gpSystemFactory;
             _logger = loggerFactory.CreateLogger<MyRecordController>();
         }
 
@@ -26,8 +26,8 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
         {
             var userSession = HttpContext.GetUserSession();
 
-            var demographicsService = _bridgeFactory
-                .CreateBridge(userSession.Supplier)
+            var demographicsService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
                 .GetDemographicsService();
 
             _logger.LogDebug("Fetching Demographics");

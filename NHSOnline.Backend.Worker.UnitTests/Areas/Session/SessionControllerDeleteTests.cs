@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
-using NHSOnline.Backend.Worker.Bridges.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {
