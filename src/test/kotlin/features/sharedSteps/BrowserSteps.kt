@@ -46,10 +46,12 @@ open class BrowserSteps {
         Assert.assertTrue("user details should be blank", nhso.indexOf("%22user%22:{}") > 0);
         Assert.assertTrue("No one is log in", nhso.indexOf("%22loggedIn%22:false") > 0);
 
+        nhso=nhso.replace("%22", "'")
+        nhso=nhso.replace("%2C", ",")
         // No remaining personal data left...
-        Assert.assertTrue("Appointments should be blank", nhso.indexOf("{%22appointmentSlots%22:{%22appointmentSessions%22:[]%2C%22clinicians%22:[]%2C%22locations%22:[]%2C%22slots%22:[]%2C%22hasLoaded%22:false%2C%22hasErrored%22:false}") > 0);
-        Assert.assertTrue("Prescriptions should be blank", nhso.indexOf("%22prescriptions%22:{%22prescriptionCourses%22:[]%2C%22hasLoaded%22:false%2C%22hasErrored%22:false}") > 0);
-        Assert.assertTrue("Repeat prescriptions should be blank", nhso.indexOf("%22repeatPrescriptionCourses%22:{%22repeatPrescriptionCourses%22:[]%2C%22hasLoaded%22:false%2C%22hasErrored%22:false}") > 0);
+        Assert.assertTrue("Appointments should be blank", nhso.indexOf("'appointmentSlots':{'appointmentSessions':[],'clinicians':[],'locations':[],'slots':[],'hasLoaded':false,'hasErrored':false}") > 0);
+        Assert.assertTrue("Prescriptions should be blank", nhso.indexOf("'prescriptions':{'prescriptionCourses':[],'hasLoaded':false,'hasErrored':false}") > 0);
+        Assert.assertTrue("Repeat prescriptions should be blank", nhso.indexOf("'repeatPrescriptionCourses':{'courses':[],'loaded':false,'errored':false,'repeatPrescriptionCourses':[],'hasLoaded':false,'hasErrored':false,'validated':false,'valid':false}") > 0);
 
     }
 
