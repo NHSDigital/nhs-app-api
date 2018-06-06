@@ -25,7 +25,7 @@ import AllergiesAndAdverseReactions from '@/components/my-record/AllergiesAndAdv
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 
 export default {
-  middleware: ['auth', 'meta', 'patientDemographicsHandler'],
+  middleware: ['auth', 'meta'],
   components: {
     ErrorWarningDialog,
     PatientDetails,
@@ -45,6 +45,10 @@ export default {
       return this.isAllergiesAndAdverseReactionsCollapsed ? this.$style.closed : this.$style.opened;
     },
   },
+  mounted() {
+    this.$store.dispatch('myRecord/loadPatientDemographics');
+    this.$store.dispatch('myRecord/loadAllergiesAndAdverseReactions');
+  },
   methods: {
     patientDetailsHeaderClick() {
       this.isPatientDetailsCollapsed = !this.isPatientDetailsCollapsed;
@@ -52,9 +56,6 @@ export default {
     allergiesAndAdverseReactionsClick() {
       this.isAllergiesAndAdverseReactionsCollapsed = !this.isAllergiesAndAdverseReactionsCollapsed;
     },
-  },
-  async fetch({ store }) {
-    await store.dispatch('myRecord/loadAllergiesAndAdverseReactions');
   },
 };
 

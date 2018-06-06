@@ -62,13 +62,9 @@ export default function ({ route, store, app }) {
 
   store.dispatch('http/clearApiErrorResponse');
 
-  if (process.client) {
-    let headerText = '';
-
-    if (route.meta.headerKey !== '') {
-      headerText = app.i18n.tc(route.meta.headerKey);
-    }
-
-    store.dispatch('header/updateHeaderText', headerText);
+  let headerText = '';
+  if (route.meta.headerKey !== '') {
+    headerText = app.i18n.tc(route.meta.headerKey);
   }
+  store.dispatch('header/updateHeaderText', headerText);
 }
