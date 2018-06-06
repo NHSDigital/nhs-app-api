@@ -23,15 +23,20 @@
             {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
           </p>
           <br>
+          <button id="btn_order_prescription" class="button green">
+            {{ $t('prescriptions.continue') }}
+          </button>
         </div>
-        <button id="btn_order_prescription" class="button green">
-          Continue
-        </button>
 
         <div v-if="showNoRepeatCourses">
           <p>
             <b>{{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.title') }}</b>
           </p>
+          <br>
+          <p>
+            {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
+          </p>
+          <br>
         </div>
 
       </form>

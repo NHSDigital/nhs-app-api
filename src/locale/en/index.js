@@ -62,14 +62,17 @@ export default {
       contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
       orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
     },
-    backToYourPrescriptionsButton: 'Back to my prescriptions',
+    backToYourPrescriptionsButton: 'Back',
+    continue: 'Continue',
     noRepeatPrescriptionsYouCanOrder: {
-      header: 'Medications currently available for repeat prescription:',
+      header: 'Medication currently available to order',
       title: 'You don\'t have any medications available to order right now.',
-      contactGp: 'To discuss your medication or change your chosen pharmacy, contact your GP practice before ordering.',
+      //contactGp: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.',
+      contactGp: 'If you have medications available on repeat prescription that aren’t shown here, contact your GP surgery for more information.',
     },
     confirmPrescriptionOrder: {
-      header: 'Check your prescription details',
+      header: 'Check your prescription details before ordering',
+      changeButton: 'Change this prescription',
     },
     myRepeatPrescriptionLabels: {
       orderDate: 'Order date',
@@ -138,7 +141,8 @@ export default {
   pageHeaderTitles: {
     home: 'Home',
     prescriptions: 'My repeat prescriptions',
-    repeatPrescriptionCourses: 'Order a repeat prescription',
+    repeatPrescriptionCourses: 'Select medication',
+    confirmPrescription: 'Confirm prescription',
     account: 'My account',
     appointments: 'Appointments',
     appointmentBooked: 'My Appointments',

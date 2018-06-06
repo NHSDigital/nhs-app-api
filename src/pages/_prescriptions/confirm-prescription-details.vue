@@ -21,7 +21,7 @@
         </div>
       </div>
       <nuxt-link to="/prescriptions/repeat-courses" tag="button" type="submit" class="button grey">
-        Change this repeat prescription
+        {{ $t('prescriptions.confirmPrescriptionOrder.changeButton') }}
       </nuxt-link>
     </main>
   </div>

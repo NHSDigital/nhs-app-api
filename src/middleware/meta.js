@@ -4,6 +4,7 @@ const APPOINTMENTS = 'appointments';
 const INDEX = 'index';
 const MORE = 'more';
 const REPEAT_PRESCRIPTION_COURSES = 'prescriptions-repeat-courses';
+const CONFIRM_COURSES = 'prescriptions-confirm-prescription-details';
 const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
 const APPOINTMENT_BOOKED = 'appointments-booked';
 const ACCOUNT = 'account';
@@ -32,6 +33,9 @@ export default function ({ route, store, app }) {
     case PRESCRIPTIONS:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaderTitles.prescriptions';
+      break;
+    case CONFIRM_COURSES:
+      route.meta.headerKey = 'pageHeaderTitles.confirmPrescription';
       break;
     case APPOINTMENT_CONFIRMATIONS:
       route.meta.headerKey = 'pageHeaderTitles.appointmentConfirmation';
