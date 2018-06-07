@@ -34,25 +34,32 @@ open class BrowserSteps {
         Assert.assertEquals(url, loginPage.driver.currentUrl)
     }
 
-    @Step()
-    open fun CheckLoginDetailsAreReset() {
+    // checks whether or not he names cookie contains the specified contents in it's value.
+    // note: the codes %22 (') and %2C (,) are replaced with real charactors to make the test strings easier to read.
+    private fun cookieContains(cookieName:String, content:String) : Boolean {
         val driver = loginPage.driver
-        var nhso =driver.manage().cookies.first { x -> x.name == "nhso" }.toString();
+        var cookieValue= driver.manage().cookies.first { x -> x.name == cookieName }.toString()
+        cookieValue = cookieValue.replace("%22", "'")
+        cookieValue = cookieValue.replace("%2C", ",")
+
+        return cookieValue.indexOf(content) > 0;
+    }
+
+    @Step()
+    open fun checkLoginDetailsAreReset() {
+        val vuexCookieName = "nhso";
 
         // No user details...
-        Assert.assertEquals(-1, nhso.indexOf("familyName"));
-        Assert.assertEquals(-1, nhso.indexOf("givenName"));
-        Assert.assertEquals(-1, nhso.indexOf("userSession"));
-        Assert.assertTrue("user details should be blank", nhso.indexOf("%22user%22:{}") > 0);
-        Assert.assertTrue("No one is log in", nhso.indexOf("%22loggedIn%22:false") > 0);
+        Assert.assertFalse(cookieContains(vuexCookieName,"familyName"));
+        Assert.assertFalse(cookieContains(vuexCookieName,"givenName"));
+        Assert.assertFalse(cookieContains(vuexCookieName,"userSession"));
+        Assert.assertTrue("user details should be blank", cookieContains(vuexCookieName,"'user':{}"));
+        Assert.assertTrue("No one is logged in", cookieContains(vuexCookieName,"'loggedIn':false"));
 
-        nhso=nhso.replace("%22", "'")
-        nhso=nhso.replace("%2C", ",")
         // No remaining personal data left...
-        Assert.assertTrue("Appointments should be blank", nhso.indexOf("'appointmentSlots':{'appointmentSessions':[],'clinicians':[],'locations':[],'slots':[],'hasLoaded':false,'hasErrored':false}") > 0);
-        Assert.assertTrue("Prescriptions should be blank", nhso.indexOf("'prescriptions':{'prescriptionCourses':[],'hasLoaded':false,'hasErrored':false}") > 0);
-        Assert.assertTrue("Repeat prescriptions should be blank", nhso.indexOf("'repeatPrescriptionCourses':{'courses':[],'loaded':false,'errored':false,'repeatPrescriptionCourses':[],'hasLoaded':false,'hasErrored':false,'validated':false,'valid':false}") > 0);
-
+        Assert.assertTrue("Appointments should be blank", cookieContains(vuexCookieName,"'appointmentSlots':{'appointmentSessions':[],'clinicians':[],'locations':[],'slots':[],'hasLoaded':false,'hasErrored':false}"));
+        Assert.assertTrue("Prescriptions should be blank", cookieContains(vuexCookieName,"'prescriptions':{'prescriptionCourses':[],'hasLoaded':false,'hasErrored':false}"));
+        Assert.assertTrue("Repeat prescriptions should be blank", cookieContains(vuexCookieName,"'repeatPrescriptionCourses':{'courses':[],'loaded':false,'errored':false,'repeatPrescriptionCourses':[],'hasLoaded':false,'hasErrored':false,'validated':false,'valid':false}"));
     }
 
     @Step

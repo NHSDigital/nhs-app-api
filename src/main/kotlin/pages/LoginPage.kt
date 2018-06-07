@@ -6,6 +6,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.internal.FindsByXPath
 import java.util.concurrent.TimeUnit
 
 
@@ -82,8 +83,6 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
     // Checks to see the menu item is not present on the page.
     fun assertMenuIsNotVisible() {
-        setImplicitTimeout(100, TimeUnit.MILLISECONDS);
-        Assert.assertFalse(find<WebElementFacade>(By.className("menu")).isVisible);
-        resetImplicitTimeout();
+        Assert.assertFalse(findByXpath("//nav[@class='menu']").isVisible);
     }
 }

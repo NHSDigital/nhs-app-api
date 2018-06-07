@@ -7,15 +7,14 @@ Feature: Sign out of mobile web
     Given wiremock is initialised
 
   @NHSO-186
-  Scenario: When a signed in user is looking at the my account page and clicks the "Sign out" button the user is shown the onboarding sign in screen
+  Scenario: A user is shown the onboarding sign in screen after clicking the "Sign out" button
     Given I am logged in
-    When I click the account icon
-    And I click the Sign out button
+    When I sign out
     Then I see the login page
 
   @NHSO-186
   @manual
-    Scenario: When a signed in user has clicked the sign out button and waits to be signed out a spinner is shown
+    Scenario: A spinner is shown if there is a delay in the action of the "Sign out" button
     # Cannot slow the sign-out down enough to detect the spinner icon.
 
   @NHSO-186
@@ -34,13 +33,11 @@ Feature: Sign out of mobile web
   @NHSO-186
   Scenario: A signed out user should not see the navigation bar or header on the onboarding sign in screen
     Given I am logged in
-    When I click the account icon
-    And I click the Sign out button
+    When I sign out
     Then I do not see the menu bar
 
   @NHSO-186
-  Scenario: After a user has signed out the nsho cookie should be cleared of session and user information
+  Scenario: The nsho cookie should be clear of session and user information if the user is not signed in
     Given I am logged in
-    When I click the account icon
-    And I click the Sign out button
+    When I sign out
     Then the user login details are cleared from cookies

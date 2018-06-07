@@ -311,14 +311,10 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         nav.assertVisible()
     }
 
-    @When("^I click the account icon$")
-    fun iClickTheAccountIcon() {
-        nav.myAccount()
-    }
-
-    @When("^I click the Sign out button$")
+    @When("^I sign out")
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
+        nav.myAccount()
         myAccount.signOut();
     }
 
@@ -331,7 +327,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^the user login details are cleared from cookies$")
     @Throws(Exception::class)
     fun theUserLoginDetailsAreClearedFromCookies() {
-        browser.CheckLoginDetailsAreReset();
+        browser.checkLoginDetailsAreReset();
     }
     @Then("^I see create account button$")
     fun iSeeCreateAccountButton() {
