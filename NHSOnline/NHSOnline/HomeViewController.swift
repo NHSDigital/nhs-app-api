@@ -43,15 +43,15 @@ class HomeViewController : UIViewController {
         
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webView: webViewController!.webView)
     }
-
+    
     func addSubview(subView:UIView, toView parentView:UIView) {
         parentView.addSubview(subView)
         var viewBindingsDict = [String: AnyObject]()
         viewBindingsDict["subView"] = subView
         parentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[subView]|",
-                                                                                 options: [], metrics: nil, views: viewBindingsDict))
+                                                                 options: [], metrics: nil, views: viewBindingsDict))
         parentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[subView]|",
-                                                                                 options: [], metrics: nil, views: viewBindingsDict))
+                                                                 options: [], metrics: nil, views: viewBindingsDict))
     }
     
     func updateHeaderText(headerText: String?) {
@@ -76,7 +76,7 @@ class HomeViewController : UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             let constraintPriority:UILayoutPriority
             
-            if(visible) {
+            if visible {
                 constraintPriority = self.showConstraintPriority
             } else {
                 constraintPriority = self.hideConstraintPriority
@@ -93,10 +93,10 @@ class HomeViewController : UIViewController {
         self.cycleFromViewController(oldViewController: self.nativeViewController!, toViewController: self.webViewController!)
     }
     
-    func showNativeViewContainer(errorMessage: String) {
-        self.nativeViewController?.errorLabel.text = errorMessage
+    func showNativeViewContainer(errorMessage: ErrorMessage) {
+        self.nativeViewController?.setUnavailabilityError(errorMessage: errorMessage)
         self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.nativeViewController!)
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.nativeViewController?.errorLabel)
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.nativeViewController?.errorTextView)
     }
     
     func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {

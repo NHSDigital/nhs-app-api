@@ -32,7 +32,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         if let url = navigationAction.request.url {
             if url.absoluteString != "about:blank" {
                 if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
-                    if(matchingKnownService.hasMissingQueryString(urlString: url.absoluteString)) {
+                    if matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
                         let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
                         decisionHandler(.cancel)
                         webView.loadPage(url: urlString)
@@ -73,8 +73,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
-        if(shouldHandleErrors) {
-            var errorMessage: String? = nil
+        if shouldHandleErrors {
+            var errorMessage: ErrorMessage? = nil
             
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
@@ -141,8 +141,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
             self.viewController.webViewController?.webView.stopLoading()
-            let errorMessage = knownServices.getServiceUnavailableErrorMessage()            
-            self.showNativeViewContainer(errorMessage: errorMessage)
+            let url = self.viewController.webViewController?.webView.url
+            if let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: url?.host){
+                self.showNativeViewContainer(errorMessage: knownService.serviceErrorMessage)
+            } else {
+                self.showNativeViewContainer(errorMessage: knownServices.getServiceUnavailableErrorMessage())
+            }
         }
     }
     
@@ -152,7 +156,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         self.viewController.showWebViewContainer()
     }
     
-    private func showNativeViewContainer(errorMessage: String) {
+    private func showNativeViewContainer(errorMessage: ErrorMessage) {
         self.timer.invalidate()
         self.activityIndicator.stopAnimating()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)

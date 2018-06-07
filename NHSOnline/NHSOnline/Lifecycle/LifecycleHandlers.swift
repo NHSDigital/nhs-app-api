@@ -21,7 +21,7 @@ class LifecycleHandlers: NSObject {
     }
     
     private func validateSession(knownServices: KnownServices, webView: WKWebView) {
-        if (knownServices.shouldValidateSession(host: webView.url?.host)) {
+        if knownServices.shouldValidateSession(host: webView.url?.host) {
             webView.evaluateJavaScript(validateSessionString, completionHandler: nil)
         }
     }
