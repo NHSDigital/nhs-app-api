@@ -8,6 +8,7 @@
 export default {
   methods: {
     async loginClicked() {
+      this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaderTitles.login'));
       this.$store.dispatch('auth/login', process.env);
     },
   },

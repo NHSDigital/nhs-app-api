@@ -148,6 +148,7 @@ export default {
     appointmentConfirmation: 'Check appointment details',
     myRecord: 'My medical record',
     more: 'More',
+    login: 'Login',
   },
   more: {
     organDonationButtonText: 'Organ donation register',
