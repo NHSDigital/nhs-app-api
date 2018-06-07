@@ -14,6 +14,7 @@ services:
       - NHS_WEB_APP_BASE_URL=http://localhost:3000/
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/
+      - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
       - nhsonline.redis.sds
     ports:
