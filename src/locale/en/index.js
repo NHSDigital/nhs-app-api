@@ -67,7 +67,6 @@ export default {
     noRepeatPrescriptionsYouCanOrder: {
       header: 'Medication currently available to order',
       title: 'You don\'t have any medications available to order right now.',
-      //contactGp: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.',
       contactGp: 'If you have medications available on repeat prescription that aren’t shown here, contact your GP surgery for more information.',
     },
     confirmPrescriptionOrder: {
