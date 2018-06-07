@@ -23,7 +23,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Bridges\Emis\EmisApiErrorMessages.Designer.cs">
+    <Compile Update="GpSystems\Suppliers\Emis\EmisApiErrorMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>EmisApiErrorMessages.resx</DependentUpon>
@@ -34,7 +34,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="Bridges\Emis\EmisApiErrorMessages.resx">
+    <EmbeddedResource Update="GpSystems\Suppliers\Emis\EmisApiErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EmisApiErrorMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>

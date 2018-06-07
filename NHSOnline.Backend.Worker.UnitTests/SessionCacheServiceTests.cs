@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.Bridges.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests

@@ -1,28 +1,28 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
-using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
+using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
     [Route("patient/appointment-slots")]
     public class AppointmentSlotsController : Controller
     {
-        private readonly IBridgeFactory _bridgeFactory;
+        private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsController> _logger;
         
         public AppointmentSlotsController(
-            IBridgeFactory bridgeFactory,
+            IGpSystemFactory gpSystemFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
             ILoggerFactory loggerFactory
             )
         {
-            _bridgeFactory = bridgeFactory;
+            _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = loggerFactory.CreateLogger<AppointmentSlotsController>();
         }
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
             
             var userSession = HttpContext.GetUserSession();
-            var appointmentService = _bridgeFactory.CreateBridge(userSession.Supplier).GetAppointmentSlotsService();
+            var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.Supplier).GetAppointmentSlotsService();
             
             var dateRange = new AppointmentSlotsDateRange(_dateTimeOffsetProvider, queryParameters.FromDate, queryParameters.ToDate);
             var result = await appointmentService.Get(userSession, dateRange.FromDate, dateRange.ToDate);

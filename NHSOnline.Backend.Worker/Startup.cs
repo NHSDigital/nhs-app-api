@@ -12,14 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Bridges.Emis.Demographics;
-using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
-using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.Date;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Validators;
+using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker
@@ -30,13 +24,18 @@ namespace NHSOnline.Backend.Worker
         private readonly IHostingEnvironment _env;
         private IConfiguration Configuration { get; }
 
+        private readonly ModularStartup _modularStartup;
+
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
             _env = env;
+
+            _modularStartup = new ModularStartup(configuration);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        // Note that some service registration has now been moved into Module classes within the namespaces containing the services that they register, to avoid namespace dependency cycles.
         public void ConfigureServices(IServiceCollection services)
         {
             var configurationSettings = Configuration.GetSection("ConfigurationSettings").Get<ConfigurationSettings>();
@@ -85,11 +84,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICipherService, CipherService>();
-            services.AddSingleton<ICitizenIdService, CitizenIdService>();
-            services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
-            services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
-            services.AddSingleton<HttpClient>();
-            services.AddSingleton<EmisBridge>();
+
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));
@@ -106,9 +101,6 @@ namespace NHSOnline.Backend.Worker
             }));
             services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
-            services.AddSingleton<TimeZoneInfoProvider>();
-            services.AddSingleton<TimeZoneConverter>();
-            services.AddSingleton<IDateTimeOffsetProvider, DateTimeOffsetProvider>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
@@ -119,6 +111,8 @@ namespace NHSOnline.Backend.Worker
             {
                 services.Remove(module);
             }
+
+            _modularStartup.ConfigureServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -147,6 +141,8 @@ namespace NHSOnline.Backend.Worker
             }
 
             app.UseMvc();
+
+            _modularStartup.Configure(app, env);
         }
 
         private void EnsureConfigurationSettingsPopulated(ConfigurationSettings config)

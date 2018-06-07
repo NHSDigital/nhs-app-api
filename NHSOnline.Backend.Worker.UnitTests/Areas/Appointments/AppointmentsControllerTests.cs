@@ -8,9 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Router;
-using NHSOnline.Backend.Worker.Router.Appointments;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
@@ -19,8 +19,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
     {
         private AppointmentsController _systemUnderTest;
         private IFixture _fixture;
-        private Mock<IBridge> _mockBridge;
-        private Mock<IBridgeFactory> _mockBridgeFactory;
+        private Mock<IGpSystem> _mockGpSystem;
+        private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private AppointmentBookRequest _appointmentBookRequest;
         private EmisUserSession _userSession;
@@ -42,15 +42,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
                 .Returns(Task.FromResult((AppointmentBookResult) result));
 
-            _mockBridge = _fixture.Freeze<Mock<IBridge>>();
-            _mockBridge
+            _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
+            _mockGpSystem
                 .Setup(x => x.GetAppointmentsService())
                 .Returns(_mockAppointmentsService.Object);
 
-            _mockBridgeFactory = _fixture.Freeze<Mock<IBridgeFactory>>();
-            _mockBridgeFactory
-                .Setup(x => x.CreateBridge(SupplierEnum.Emis))
-                .Returns(_mockBridge.Object);
+            _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
+            _mockGpSystemFactory
+                .Setup(x => x.CreateGpSystem(SupplierEnum.Emis))
+                .Returns(_mockGpSystem.Object);
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.Setup(x => x.Items[Constants.HttpContextItems.UserSession]).Returns(_userSession);
@@ -135,9 +135,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             await _systemUnderTest.Post(_appointmentBookRequest);
 
             // Assert
-            _mockBridge.VerifyAll();
+            _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
-            _mockBridgeFactory.VerifyAll();
+            _mockGpSystemFactory.VerifyAll();
         }
     }
 }

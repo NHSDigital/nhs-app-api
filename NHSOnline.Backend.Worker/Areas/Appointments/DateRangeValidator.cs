@@ -1,6 +1,6 @@
 ﻿using System;
-using NHSOnline.Backend.Worker.Date;
-using NHSOnline.Backend.Worker.Router;
+using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
