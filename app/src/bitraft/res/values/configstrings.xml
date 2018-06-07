@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="baseScheme">https</string>
+    <string name="baseHost">www-preview.nonliveeuw.bitraft.io</string>
+    <string name="baseURL">https://www-preview.nonliveeuw.bitraft.io/</string>
+</resources>

@@ -14,10 +14,10 @@
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
     <string name="organ_donation_connection_error">Organ donation unavailable</string>
-    <string name="connection_error">There\'s an issue with your internet connection</string>
-    <string name="connection_error_info">Please check your connection and try again.</string>
-    <string name="connection_error_more_info">
-        If the problem persists and you need to book an appointment or get a prescription now,
+    <string name="connection_error_title">There\'s an issue with your internet connection</string>
+    <string name="connection_error_message">
+        Please check your connection and try again.
+        \n\nIf the problem persists and you need to book an appointment or get a prescription now,
         contact your GP surgery directly. For immediate medical advice, call 111.
     </string>
     <string name="service_unavailable">Service unavailable</string>

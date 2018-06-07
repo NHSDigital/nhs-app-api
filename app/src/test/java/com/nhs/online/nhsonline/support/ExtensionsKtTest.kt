@@ -17,7 +17,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric.buildActivity
 import org.robolectric.RobolectricTestRunner
-import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 
@@ -39,10 +38,10 @@ class ExtensionsKtTest {
     }
 
     @Test
-    fun textviewExtensionSetServiceErrorWithInfoText_SetInfoText() {
+    fun textviewExtensionSetServiceErrorWithMessage_SetInfoText() {
         val textView = createTextView()
-        val header = context.resources.getString(R.string.connection_error)
-        val info = context.resources.getString(R.string.connection_error_info)
+        val header = context.resources.getString(R.string.connection_error_title)
+        val info = context.resources.getString(R.string.connection_error_message)
         textView.setServiceError(header, info)
         Assert.assertTrue(textView.text.contains(info))
     }
@@ -116,9 +115,8 @@ class ExtensionsKtTest {
     private fun mockContext(): Context {
         val mockedResource: Resources = mock {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.connection_error) } doReturn "There's an issue with your internet connection"
-            on { getString(R.string.connection_error_info) } doReturn "Please check your connection and try again."
-            on { getString(R.string.connection_error_more_info) } doReturn "If the problem persists and you need to " +
+            on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
+            on { getString(R.string.connection_error_message) } doReturn "Please check your connection and try again. \n\nIf the problem persists and you need to " +
                     "book an appointment or get a prescription now, contact your GP surgery directly." +
                     " For immediate medical advice, call 111."
         }

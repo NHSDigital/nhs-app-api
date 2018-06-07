@@ -13,6 +13,7 @@ import android.arch.lifecycle.ProcessLifecycleOwner
 import android.webkit.CookieManager
 import com.nhs.online.nhsonline.activity.ActivityInterface
 import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
+import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.services.KnownServices
@@ -35,9 +36,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         if(apiVersion >= lollypopApiNumber) {
-            CookieManager.getInstance().removeAllCookies(null);
+            CookieManager.getInstance().removeAllCookies(null)
         } else {
-            CookieManager.getInstance().removeAllCookie();
+            CookieManager.getInstance().removeAllCookie()
         }
 
         setContentView(R.layout.activity_main)
@@ -189,17 +190,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         menuBar.switchActiveMenuItemTo(R.id.more)
     }
 
-    override fun showUnavailabilityError(unavailabilityErrorMessage: String?) {
+    override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         showErrorScreen()
-
-        if (unavailabilityErrorMessage != null)
-            errorTextView.setServiceError(unavailabilityErrorMessage)
-        else {
-            errorTextView.setServiceError(
-                resources.getString(R.string.connection_error),
-                resources.getString(R.string.connection_error_info),
-                resources.getString(R.string.connection_error_more_info)
-            )
+        errorTextView.setServiceError(unavailabilityErrorMessage.title, unavailabilityErrorMessage.message)
+        if(unavailabilityErrorMessage.message != null){
+            tryAgainTextView.visibility = INVISIBLE
+        } else {
+            tryAgainTextView.visibility = VISIBLE
         }
     }
 
