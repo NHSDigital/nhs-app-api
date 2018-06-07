@@ -2,6 +2,11 @@
 "MyAccountTitle" = "My account";
 "OrganDonationTitle" = "Organ donation register";
 "NHS111Title" = "111 Online";
+"AppointmentsTitle" = "Appointments";
+"PrescriptionsTitle" = "Prescriptions";
+"MyRecordTitle" = "My medical record";
+"MoreTitle" = "More";
+"HomeTitle" = "Home";
 
 /*Error messages*/
 "ServiceUnavailableErrorMessage" = "Service unavailable";

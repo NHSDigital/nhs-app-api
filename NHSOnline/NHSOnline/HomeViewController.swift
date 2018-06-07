@@ -118,16 +118,19 @@ class HomeViewController : UIViewController {
     }
     
     @objc func selectMyAccount(sender : UITapGestureRecognizer) {
-        self.headerBar.headerTitle.text = NSLocalizedString("MyAccountTitle", comment: "")
         self.pageUrl = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
         webViewController?.webView.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
+        updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
+
     }
     
     @objc func goHome(sender: UITapGestureRecognizer) {
         self.pageUrl = config().HomeUrl
         self.webViewController?.webView.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
+        updateHeaderText(headerText: NSLocalizedString("HomeTitle", comment: ""))
+
     }
 }
 

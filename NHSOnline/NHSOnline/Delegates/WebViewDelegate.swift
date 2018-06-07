@@ -125,16 +125,24 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
             if (message.name == "updateHeaderText") {
                 callUpdateHeaderText(headerText: String(describing: message.body))
             }
+            if (message.name == "clearMenuBarItem") {
+                clearMenuBarItem()
+            }
         }
     }
     
     func callUpdateHeaderTextForURL(url: URL) {
         let knownService = self.knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
-        self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
+        if (knownService?.serviceTitle != "") {
+            self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
+        }
     }
     
     func callUpdateHeaderText(headerText: String?) {
         viewController.updateHeaderText(headerText: headerText)
+    }
+    func clearMenuBarItem() {
+        self.viewController.tabBar.selectedItem = nil
     }
     
     @objc func pageIsNotResponding() {
