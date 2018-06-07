@@ -19,16 +19,29 @@ Feature: Sign out of mobile web
 
   @NHSO-186
   @manual
-  Scenario: If session fails to clear when a signed in user clicks the sign out button, the local and session storage is cleared and the user is shown the onboarding sign in screen
+  Scenario: The nsho cookie should be clear of session and user information if server side sign out fails
     # Cannot enduce session signout failure.
+    Given I am logged in
+    When I sign out
+    And session fails to clear
+    Then the user login details are cleared from cookies
 
   @NHSO-415
   @pending
-  Scenario: When a signed in user clicks the sign out button and loses connection a "Service is unavailable" message and "Try again" button is displayed
+  Scenario: "Service is unavailable" message and "Try again" button are displayed on connection lost
+    Given I am logged in
+    When I sign out
+    And lose connection
+    Then a "Service is unavailable" message and "Try again" button are displayed
 
   @NHSO-415
   @pending
-  Scenario: When a signed in user lost connection while attempting to reach the my account page and clicks the "Try again" button the user should be shown the onboarding sign in screen
+  Scenario: The log out "Try again" button completes the sign out
+    Given I am logged in
+    When I sign out
+    And lose connection
+    And Press Try Again Button
+    Then I see the login page
 
   @NHSO-186
   Scenario: A signed out user should not see the navigation bar or header on the onboarding sign in screen
