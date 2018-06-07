@@ -20,6 +20,12 @@
           </div>
         </div>
       </div>
+      <button
+        id="btn_confirm_and_order_prescription"
+        class="button green"
+        @click="onConfirmButtonClicked">
+        {{ $t('prescriptions.confirmPrescriptionOrder.confirmButtonText') }}
+      </button>
       <nuxt-link to="/prescriptions/repeat-courses" tag="button" type="submit" class="button grey">
         {{ $t('prescriptions.confirmPrescriptionOrder.changeButton') }}
       </nuxt-link>
@@ -43,6 +49,15 @@ export default {
     ...mapGetters({
       selectedPrescriptions: 'repeatPrescriptionCourses/selectedPrescriptions',
     }),
+  },
+  methods: {
+    onConfirmButtonClicked() {
+      const repeatPrescriptionOrder = {
+        CourseIds: this.selectedPrescriptions.map(x => x.id),
+        SpecialRequest: null,
+      };
+      this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
+    },
   },
 };
 </script>

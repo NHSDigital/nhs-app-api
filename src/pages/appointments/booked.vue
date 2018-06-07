@@ -24,7 +24,7 @@ export default {
   },
   mounted() {
     this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
-    this.$store.dispatch('appointmet/resetJustBooked');
+    this.$store.dispatch('appointment/resetJustBooked');
   },
 };
 </script>

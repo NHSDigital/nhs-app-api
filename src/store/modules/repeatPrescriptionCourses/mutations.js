@@ -4,6 +4,7 @@ import {
   INIT_REPEAT_PRESCRIPTIONS,
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
+  REPEAT_PRESCRIPTION_ORDER_SUCCESS,
   initialState,
 } from './mutation-types';
 
@@ -43,6 +44,9 @@ export default {
       }
       return course;
     });
+  },
+  [REPEAT_PRESCRIPTION_ORDER_SUCCESS](state) {
+    state.justOrderedARepeatPrescription = true;
   },
 };
 

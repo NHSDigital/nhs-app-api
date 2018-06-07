@@ -72,12 +72,14 @@ export default {
     confirmPrescriptionOrder: {
       header: 'Check your prescription details before ordering',
       changeButton: 'Change this prescription',
+      confirmButtonText: 'Confirm and order repeat prescription',
     },
     myRepeatPrescriptionLabels: {
       orderDate: 'Order date',
     },
     noMedicinesSelected: 'Select at least one medicine',
     specialRequestsLabel: 'Special requests relating to this order (optional)',
+    orderSuccessText: 'Your repeat prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
   },
   myRecord: {
     name: 'Name',

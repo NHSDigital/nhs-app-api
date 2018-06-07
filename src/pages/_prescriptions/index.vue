@@ -2,6 +2,13 @@
   <main :class="$style.main">
 
     <div :class="$style['above-float-button']">
+
+      <success-dialog v-if="justOrderedARepeatPrescription">
+        <p>
+          {{ $t('prescriptions.orderSuccessText') }}
+        </p>
+      </success-dialog>
+
       <div v-if="showNoPrescriptions" class="info" data-purpose="no-prescriptions-error">
         <p>
           <b>{{ $t('prescriptions.noPrescriptionsAvailable.title') }}</b>
@@ -45,11 +52,18 @@
 <script>
 /* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/FloatingButtonBottom';
+import SuccessDialog from '@/components/SuccessDialog';
 
 export default {
   middleware: ['auth', 'meta'],
   components: {
     FloatingButtonBottom,
+    SuccessDialog,
+  },
+  data() {
+    return {
+      justOrderedARepeatPrescription: false,
+    };
   },
   computed: {
     showNoPrescriptions() {
@@ -70,6 +84,8 @@ export default {
   },
   mounted() {
     this.$store.dispatch('prescriptions/clear');
+    this.justOrderedARepeatPrescription =
+      this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
     this.$store.dispatch('prescriptions/load', this.$config);
   },
   methods: {

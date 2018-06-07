@@ -7,4 +7,7 @@ describe('state', () => {
   it('will set the repeat prescription courses to an empty array', () => {
     expect(state().repeatPrescriptionCourses).toEqual([]);
   });
+  it('will set the justOrderedARepeatPrescription flag to false', () => {
+    expect(state().justOrderedARepeatPrescription).toEqual(false);
+  });
 });

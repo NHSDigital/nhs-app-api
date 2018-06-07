@@ -1,8 +1,8 @@
 /* eslint-disable import/extensions */
 import actions from '../../../../../src/store/modules/repeatPrescriptionCourses/actions';
-import { REPEAT_PRESCRIPTION_COURSES_LOADED } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
+import { REPEAT_PRESCRIPTION_COURSES_LOADED, REPEAT_PRESCRIPTION_ORDER_SUCCESS } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
 
-const { load } = actions;
+const { load, orderRepeatPrescription } = actions;
 
 describe('load', () => {
   it('will request repeat prescription courses from the backend', () => {
@@ -42,6 +42,36 @@ describe('load', () => {
       .call(that, { commit })
       .then(() => {
         expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_COURSES_LOADED, expected);
+      });
+  });
+});
+
+describe('orderRepeatPrescription', () => {
+  it('will request to order repeat prescriptions from the backend and redirect to prescriptions', () => {
+    const that = {
+      app: {
+        $http: {
+          postV1PatientPrescriptions: jest.fn().mockResolvedValue(),
+        },
+        router: {
+          push: jest.fn().mockResolvedValue(),
+        },
+      },
+    };
+
+    const commit = jest.fn();
+
+    const repeatPrescriptionOrder = {
+      CourseIds: [123, 456],
+      SpecialRequest: null,
+    };
+
+    orderRepeatPrescription
+      .call(that, { commit }, { repeatPrescriptionOrder })
+      .then(() => {
+        expect(that.app.$http.postV1PatientPrescriptions).toBeCalledWith(repeatPrescriptionOrder);
+        expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_ORDER_SUCCESS);
+        expect(that.app.router.push).toBeCalledWith('/prescriptions');
       });
   });
 });
