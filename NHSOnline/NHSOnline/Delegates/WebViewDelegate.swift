@@ -64,8 +64,8 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         if knownServices.shouldAllowNativeInteraction(host: webView.url?.host) {
             let fileReader = FileReader();
-            let nativeEventsJSLocation = Bundle.main.path(forResource: "NativeEvents", ofType: "js")!
-            javascript = fileReader.readContentFromLocation(fileLocation: nativeEventsJSLocation)
+            let webEventsJSLocation = Bundle.main.path(forResource: "WebEvents", ofType: "js")!
+            javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
             webView.evaluateJavaScript(javascript!, completionHandler: nil)
         }
         
