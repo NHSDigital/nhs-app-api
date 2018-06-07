@@ -15,7 +15,11 @@ function clearPreviousSelectedMenuItem(state) {
 
 export default {
   [CLEAR_SELECTED_MENUITEM](state) {
-    clearPreviousSelectedMenuItem(state);
+    if (process.client && typeof window.nativeApp !== 'undefined') {
+      window.nativeApp.clearMenuBarItem();
+    } else {
+      clearPreviousSelectedMenuItem(state);
+    }
   },
   [SET_NEWMENUITEM](state, menuItemIndex) {
     clearPreviousSelectedMenuItem(state);

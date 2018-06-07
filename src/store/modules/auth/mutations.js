@@ -5,12 +5,12 @@ export default {
     state.loggedIn = true;
     state.authorised = true;
     state.user = Object.assign({}, state.user, user);
-    if (process.client && window !== undefined && typeof window.nativeApp !== 'undefined') {
+    if (window !== undefined && typeof window.nativeApp !== 'undefined') {
       window.nativeApp.onLogin();
     }
   },
   [LOGOUT](state) {
-    if (process.client && typeof window.nativeApp !== 'undefined') {
+    if (typeof window.nativeApp !== 'undefined') {
       window.nativeApp.onLogout();
     }
 
@@ -25,3 +25,4 @@ export default {
     state.config = config;
   },
 };
+
