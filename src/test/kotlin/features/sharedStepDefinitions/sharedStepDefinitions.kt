@@ -61,7 +61,7 @@ open class SharedStepDefinitions {
         Assert.assertTrue(navBar.hasSelectedTab(type))
     }
 
-    @Then("^I am redirected to (.*)$")
+    @Then("^I am redirected to '(.*)'$")
     fun iAmRedirectedTo(url: String) {
         browser.shouldHaveUrl(url)
     }
@@ -72,10 +72,4 @@ open class SharedStepDefinitions {
         browser.shouldHaveUrl(url)
         browser.changeTabToApp()
     }
-
-    @Then("^the spinner appears$")
-    fun theSpinnerAppears() {
-        // TODO
-    }
-
 }

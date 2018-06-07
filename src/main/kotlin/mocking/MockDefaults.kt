@@ -20,6 +20,11 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         }
 
         mockingClient.forCitizenId {
+            createAccountRequest(config.cidRedirectUri, config.cidClientId)
+                    .respondWithLoginPage()
+        }
+
+        mockingClient.forCitizenId {
             completeLoginRequest()
                     .respondWithRedirectResponse(userSessionRequest.authCode!!)
         }
@@ -33,7 +38,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                             "refresh_token",
                             "token_type")
         }
-
         mockingClient.forCitizenId {
             userInfoRequest("Bearer access_token")
                     .respondWithSuccess()
@@ -110,7 +114,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                             .respondWithSuccess(appointmentSlotResponse)
 
                 }
-
     }
 
     companion object {

@@ -9,7 +9,7 @@ Feature: Login
   Scenario: User logs in using CitizenID
     Given I am not logged in
     When I log in
-    Then I am redirected to http://citizenidaddresshere
+    Then I am redirected to 'http://citizenidaddresshere'
 
   @bug @NHSO-922
   Scenario: User sees the home page
@@ -24,7 +24,7 @@ Feature: Login
   @pending
   Scenario: The spinner is shown while loading
     Given I am not logged in
-    And I have a slow connection
+    And sign in verification is slow
     When I log in
     Then the spinner appears
 

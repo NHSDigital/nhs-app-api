@@ -9,6 +9,7 @@ services:
       - API_HOST=http://localhost:8082
       - CID_REDIRECT_URI=http://localhost:3000/auth-return
       - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
+      - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:

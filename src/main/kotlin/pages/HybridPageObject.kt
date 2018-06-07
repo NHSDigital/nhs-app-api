@@ -2,6 +2,8 @@ package pages
 
 import config.Config
 import io.appium.java_client.android.AndroidDriver
+import net.serenitybdd.core.annotations.findby.FindBy
+import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.WebDriverFacade
@@ -78,4 +80,10 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
     }
 
+    @FindBy(how = How.XPATH, using = "//*[@id='loading-spinner']")
+    lateinit var spinner: WebElementFacade
+
+    fun spinnerVisible(): Boolean {
+        return spinner.isCurrentlyVisible
+    }
 }
