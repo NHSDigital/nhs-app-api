@@ -9,5 +9,6 @@ Feature: Get allergy data
   @backend
   Scenario: Requesting allergies returns allergies data
     Given I have logged in and have a valid session cookie
-    When I get the users allergy data with a valid cookie
+    Given the GP Practice has enabled allergies functionality
+    When I get the users allergy data
     Then I receive the allergies object
