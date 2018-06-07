@@ -145,7 +145,7 @@ Feature: View available appointment slots
     And internet connection drops
     When I click appointments button in menu
     Then I see appropriate information message when there is no internet connection
-    And there should not be an option to try again
+    And there should be a button to try again
 
   @NHSO-1168
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
