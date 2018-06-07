@@ -139,22 +139,45 @@ Feature: Registration
     When I register an EMIS user's IM1 credentials
     Then I receive a "Bad Request" error
 
-  @pending
+  @NHSO-313
+  Scenario: A user who is not signed in sees create account button
+    Given wiremock is initialised
+    Given I am not logged in
+    When I am on the home page
+    Then I see create account button
+
   @NHSO-313 
   Scenario: User launches the create account CitizenID journey
+    Given wiremock is initialised
     Given I am not logged in
     When I select to create an account
     Then I am redirected to the CID create an account page
 
-  @pending
   @NHSO-313
   Scenario: User launches and completes account creation from web
-    Given I have completed account creation
+    Given wiremock is initialised
+    Given I am not logged in
+    And I have completed account creation
     Then I am redirected to the signed in home page
+    And I see a welcome message for John Smith
+    And I see the navigation menu
+    And I see the header
 
   @manual
-  @pending
   @NHSO-313
   Scenario: User launches and completes account creation from native app
-    Given I have completed account creation
+    Given wiremock is initialised
+    Given I am not logged in
+    And I have completed account creation
     Then I am redirected to the app to the signed in home page
+    And I see a welcome message for John Smith
+    #And I see the navigation menu
+    #And I see the header
+
+  @NHSO-313
+  Scenario: While a new user who has creared an account waits to be logged in a spinner is shown
+    Given wiremock is initialised
+    Given I am not logged in
+    And sign in verification is slow
+    When I have completed account creation
+    Then the spinner appears

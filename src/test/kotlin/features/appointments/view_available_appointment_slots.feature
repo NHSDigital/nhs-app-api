@@ -174,7 +174,6 @@ Feature: View available appointment slots
     And there should not be an option to try again
 
   @NHSO-470
-  @pending
   @backend
   Scenario: Requesting available appointment slots with correct data returns lists of available slots, locations, clinicians, and appointment sessions
     Given I have logged in and have a valid session cookie
@@ -187,7 +186,6 @@ Feature: View available appointment slots
     And available appointment session are returned containing an id and display name
 
   @NHSO-470
-  @pending
   @backend
   Scenario: Online appointment booking is not available to a particular patient
     Given I have logged in and have a valid session cookie
@@ -196,7 +194,6 @@ Feature: View available appointment slots
     Then I get a response with an empty set of slots
 
   @NHSO-470
-  @pending
   @backend
   Scenario: Requesting available appointment slots returns an unknown exception, returns a Bad Gateway error
     Given I have logged in and have a valid session cookie

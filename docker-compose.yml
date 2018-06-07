@@ -9,6 +9,7 @@ services:
       - API_HOST=http://localhost:8082
       - CID_REDIRECT_URI=http://localhost:3000/auth-return
       - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
+      - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:
@@ -16,6 +17,7 @@ services:
       - NHS_WEB_APP_BASE_URL=http://localhost:3000
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/
+      - ConfigurationSettings__DefaultSessionExpiryMinutes=1
     depends_on:
       - nhsonline.redis.sds
     ports:

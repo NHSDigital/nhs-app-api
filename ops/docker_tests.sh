@@ -34,6 +34,11 @@ docker run \
 
 test_exit_code=$?
 
+mkdir -p logs
+for container in $(docker-compose -f docker-compose_ci.yml ps | tail -n +3 | awk '{print $1}' ); do
+  docker logs $container >& ./logs/$container.log
+done
+
 docker-compose -f docker-compose_ci.yml stop
 docker rm $(docker ps -aq)
 

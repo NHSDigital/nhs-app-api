@@ -7,13 +7,17 @@ import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.allergies.EmisAllergiesBuilder
 import mocking.emis.me.EmisMeBuilder
+import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ExceptionResponse
+import mocking.emis.models.PrescriptionRequest
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
+import mocking.emis.prescriptionsSubmission.EmisPrescriptionsSubmissionBuilder
 import mocking.emis.session.EmisEndUserSessionBuilder
 import mocking.emis.session.EmisSessionBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
+import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
 
 const val HEADER_API_APPLICATION_ID = "X-API-ApplicationId"
@@ -69,6 +73,13 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             patient.userPatientLinkToken,
             patient.sessionId)
 
+    fun repeatPrescriptionSubmissionRequest(patient: Patient, prescriptionSubmissionRequest: PrescriptionSubmissionRequest?) = EmisPrescriptionsSubmissionBuilder(
+            configuration,
+            patient.endUserSessionId,
+            patient.sessionId,
+            patient.userPatientLinkToken,
+            prescriptionSubmissionRequest)
+
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
 
         val responseBody = ExceptionResponse(internalResponseCode.toLong(), message)
@@ -79,4 +90,13 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
         }
     }
 
+    protected fun respondWithBadRequest(message: String, fieldName: String): Mapping {
+
+        val responseBody = BadRequestResponse(message, fieldName)
+
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+            andJsonBody(responseBody)
+                    .build()
+        }
+    }
 }

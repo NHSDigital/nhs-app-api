@@ -13,10 +13,10 @@ class EmisEndUserSessionBuilder(configuration: EmisConfiguration)
         // no extra params required
     }
 
-    fun respondWithSuccess(endUserSessionId: String): Mapping {
+    fun respondWithSuccess(endUserSessionId: String, milliSecondDelay: Int = 0): Mapping {
 
         val responseBody = EndUserSessionResponse(endUserSessionId)
-        return respondWith(HttpStatus.SC_OK) {
+        return respondWith(HttpStatus.SC_OK, milliSecondDelay) {
             andJsonBody(responseBody)
                     .build()
         }
