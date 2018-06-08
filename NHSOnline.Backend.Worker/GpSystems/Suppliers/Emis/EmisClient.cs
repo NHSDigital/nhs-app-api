@@ -29,6 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string AppointmentSlotsMetaPath = "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
         private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
+        private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
         private const string AppointmentsPath = "appointments";
 
@@ -95,10 +96,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return response;
         }
 
-        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost( string responseSessionId, string endUserSessionId,
+        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
+            string responseSessionId,
+            string endUserSessionId,
             PrescriptionRequestsPost model)
         {  
-            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPath, endUserSessionId, responseSessionId);
+            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPostPath, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
