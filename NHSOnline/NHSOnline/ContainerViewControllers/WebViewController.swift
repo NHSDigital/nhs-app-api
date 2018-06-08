@@ -11,6 +11,7 @@ class WebViewController: UIViewController {
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
         webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
+        webView.configuration.userContentController.add(delegate, name: "clearMenuBarItem")
         webView.configuration.userContentController.add(delegate, name: "onLogin")
         webView.configuration.userContentController.add(delegate, name: "onLogout")
     }

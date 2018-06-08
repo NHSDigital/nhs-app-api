@@ -13,10 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         let webPageUrl = userActivity.webpageURL?.absoluteString
-        
         rootViewController?.webViewController?.webView.loadPage(url: webPageUrl!)
         rootViewController?.webViewController?.dismissSafariViewController()
-        
         return true
     }
 }

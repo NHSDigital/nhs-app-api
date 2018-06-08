@@ -24,18 +24,23 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         case .Appointments:
             let appointmentsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
             selectPage(pageUrl: appointmentsUrl)
+            self.viewController.updateHeaderText(headerText: NSLocalizedString("AppointmentsTitle", comment: ""))
             break
         case .Prescriptions:
             let prescriptionsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
             selectPage(pageUrl: prescriptionsUrl)
+            self.viewController.updateHeaderText(headerText: NSLocalizedString("PrescriptionsTitle", comment: ""))
+
             break
         case .MyRecord:
             let myRecordUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
             selectPage(pageUrl: myRecordUrl)
+            self.viewController.updateHeaderText(headerText: NSLocalizedString("MyRecordTitle", comment: ""))
             break
         case .More:
             let moreUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
             selectPage(pageUrl: moreUrl)
+            self.viewController.updateHeaderText(headerText: NSLocalizedString("MoreTitle", comment: ""))
             break
         }
     }
