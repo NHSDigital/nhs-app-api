@@ -11,7 +11,10 @@ class RequestBuilder internal constructor(private val method: String, private va
     private var bodyPatterns: MutableList<Map<String, String>> = mutableListOf()
 
     fun andJsonBody(body: Any, condition: String = "equalToJson", gson: Gson = Gson()): RequestBuilder {
-        bodyPatterns.add(mapOf(Pair(condition, gson.toJson(body))))
+        if (condition.isNotEmpty()) {
+            bodyPatterns.add(mapOf(Pair(condition, gson.toJson(body))))
+        }
+
         if (!headers.containsKey("Content-Type")) {
             andHeader("Content-Type", "application/json; charset=UTF-8")
         }

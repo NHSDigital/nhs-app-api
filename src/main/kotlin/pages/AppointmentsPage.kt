@@ -13,6 +13,9 @@ open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     @FindBy(className = "info")
     lateinit var infoMessage: WebElementFacade
 
+    @FindBy(xpath = "//button[contains(text(),'Book this appointment')]")
+    lateinit var bookAppointmentButton: WebElementFacade
+
     fun getAllSlots(): ArrayList<Slot> {
         val slotList = ArrayList<Slot>()
 
@@ -41,5 +44,15 @@ open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun getInformationMessage(): WebElementFacade {
         return infoMessage
+    }
+
+    fun selectFirstSlot()
+    {
+        findAllByXpath("//ul[@data-purpose='slots']/li").first().waitUntilClickable<WebElementFacade>().click()
+    }
+
+    fun clickOnBookAppointmentButton()
+    {
+        bookAppointmentButton.waitUntilClickable<WebElementFacade>().click()
     }
 }

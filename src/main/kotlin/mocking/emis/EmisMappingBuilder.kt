@@ -3,12 +3,12 @@ package mocking.emis
 import mocking.MappingBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsMetaBuilder
+import mocking.emis.appointments.EmisBookAppointmentsBuilder
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.me.EmisMeBuilder
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ExceptionResponse
-import mocking.emis.models.PrescriptionRequest
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
 import mocking.emis.prescriptionsSubmission.EmisPrescriptionsSubmissionBuilder
 import mocking.emis.session.EmisEndUserSessionBuilder
@@ -16,6 +16,7 @@ import mocking.emis.session.EmisSessionBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
+import worker.models.appointments.BookAppointmentSlotRequest
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
 
@@ -47,6 +48,8 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             sessionStartDate,
             sessionEndDate,
             patient.userPatientLinkToken)
+
+    fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration, patient.endUserSessionId, patient.sessionId, request)
 
     fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 

@@ -60,4 +60,9 @@ open class BrowserSteps {
             throw SerenityManagedException("Malformed URL from ${ThucydidesSystemProperty.WEBDRIVER_BASE_URL}: $baseUrl", e)
         }
     }
+
+    @Step
+    fun refreshPage() {
+        loginPage.driver.navigate().refresh()
+    }
 }

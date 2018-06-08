@@ -6,7 +6,6 @@ import org.hamcrest.Matcher
 import org.junit.Assert
 import pages.AppointmentsPage
 
-
 open class AppointmentsSteps {
 
     lateinit var appointments: AppointmentsPage
@@ -16,4 +15,13 @@ open class AppointmentsSteps {
         Assert.assertThat(appointments.getAllSlots(), matches)
     }
 
+    @Step
+    fun selectSlot() {
+        appointments.selectFirstSlot()
+    }
+
+    @Step
+    fun clickOnBookAppointmentButton() {
+        appointments.clickOnBookAppointmentButton()
+    }
 }
