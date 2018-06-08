@@ -159,7 +159,7 @@ Feature: Registration
     Given I am not logged in
     And I have completed account creation
     Then I am redirected to the signed in home page
-    And I see a welcome message for John Smith
+    And I see a welcome message for Montel Frye
     And I see the navigation menu
     And I see the header
 
@@ -170,7 +170,7 @@ Feature: Registration
     Given I am not logged in
     And I have completed account creation
     Then I am redirected to the app to the signed in home page
-    And I see a welcome message for John Smith
+    And I see a welcome message for Montel Frye
     #And I see the navigation menu
     #And I see the header
 

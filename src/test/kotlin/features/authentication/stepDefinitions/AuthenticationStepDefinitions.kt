@@ -13,9 +13,7 @@ import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.NavigationSteps
-import junit.framework.TestCase
-import mocking.MockDefaults
-import mocking.MockingClient
+import mocking.defaults.MockDefaults
 import mocking.emis.models.AssociationType
 import models.Patient
 import net.thucydides.core.annotations.Steps

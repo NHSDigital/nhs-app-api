@@ -1,13 +1,17 @@
 package mocking.emis
 
 import mocking.MappingBuilder
+import mocking.emis.appointments.EmisAppointmentBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsBuilder
 import mocking.emis.appointments.EmisAppointmentSlotsMetaBuilder
 import mocking.emis.appointments.EmisBookAppointmentsBuilder
+import mocking.emis.appointments.PostAppointmentRequestModel
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.allergies.EmisAllergiesBuilder
+import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.EmisMeBuilder
+import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ExceptionResponse
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
@@ -34,6 +38,8 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
                 .andHeader(HEADER_API_VERSION, configuration.version)
     }
 
+    fun appointmentRequest(postAppointmentRequestModel: PostAppointmentRequestModel) = EmisAppointmentBuilder(configuration, postAppointmentRequestModel)
+
     fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? = null, toDateTime: String? = null) = EmisAppointmentSlotsBuilder(
             configuration,
             patient.endUserSessionId,
@@ -57,6 +63,8 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
     fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun meRequest(patient: Patient) = EmisMeBuilder(configuration, method, patient)
+
+    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(configuration, patient.endUserSessionId, model)
 
     fun endUserSessionRequest() = EmisEndUserSessionBuilder(configuration)
 

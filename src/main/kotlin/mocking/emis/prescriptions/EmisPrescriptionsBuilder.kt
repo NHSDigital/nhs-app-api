@@ -1,11 +1,7 @@
 package mocking.emis.prescriptions
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
+import mocking.GsonFactory
 import mocking.emis.*
-import mocking.emis.appointments.GetAppointmentSlotsResponseModel
-import mocking.emis.models.AppointmentSession
-import mocking.emis.models.AppointmentSlot
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
@@ -54,9 +50,7 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
 
     private fun respondWithSuccessAny(body: Any): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
+            andJsonBody(body, GsonFactory.asPascal)
         }
     }
 }

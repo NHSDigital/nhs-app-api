@@ -9,7 +9,7 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import junit.framework.Assert.*
-import mocking.MockDefaults
+import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
 import mocking.emis.appointments.GetAppointmentSlotsResponseModel

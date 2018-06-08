@@ -4,8 +4,7 @@ import cucumber.api.PendingException
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import junit.framework.TestCase.*
-
-import models.Patient
+import mocking.defaults.MockDefaults
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import org.apache.commons.lang3.StringUtils
 import worker.models.session.UserSessionResponse

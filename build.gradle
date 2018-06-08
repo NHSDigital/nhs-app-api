@@ -44,7 +44,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.jetbrains.kotlin:kotlin-reflect"
     compile 'io.github.bonigarcia:webdrivermanager:2.2.0'
-    testCompile "com.github.tomakehurst:wiremock-standalone:2.17.0"
+    compile "com.github.tomakehurst:wiremock-standalone:2.17.0"
 }
 
 compileKotlin {
@@ -55,13 +55,13 @@ compileTestKotlin {
 }
 
 task mock(type: JavaExec) {
-    dependsOn assemble, compileTestKotlin
+    dependsOn assemble, compileKotlin
     classpath = jar.outputs.files
     classpath += sourceSets.main.runtimeClasspath
     classpath += sourceSets.test.runtimeClasspath
     systemProperty "url", System.getProperty("url")
     systemProperty "wiremockUrl", System.getProperty("wiremockUrl")
-    main = "mocking.MockDefaults"
+    main = "mocking.defaults.MockDataPopulate"
 }
 
 test {

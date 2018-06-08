@@ -96,7 +96,10 @@ open class BrowserSteps {
         try{
             changeTab(URL(baseUrl))
         } catch (e: MalformedURLException) {
-            throw SerenityManagedException("Malformed URL from ${ThucydidesSystemProperty.WEBDRIVER_BASE_URL}: $baseUrl", e)
+            val message = "Malformed URL from ${ThucydidesSystemProperty.WEBDRIVER_BASE_URL}: $baseUrl"
+            println("ERROR:")
+            println(message)
+            throw SerenityManagedException(message, e)
         }
     }
 
@@ -105,3 +108,4 @@ open class BrowserSteps {
         loginPage.driver.navigate().refresh()
     }
 }
+

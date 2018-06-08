@@ -19,7 +19,9 @@ docker-compose up
 Run the tests locally
 
 ```
-gradle clean test aggregate -Dcucumber.options="--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt"
+gradle clean test aggregate \
+-Dcucumber.options="--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt" \
+-Dwebdriver.base.url="http://localhost:3000"
 ```
 
 View the serenity report by navigating to "<path to repo>/target/site/serenity"

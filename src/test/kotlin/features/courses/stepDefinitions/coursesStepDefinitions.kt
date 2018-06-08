@@ -8,8 +8,8 @@ import features.authentication.steps.LoginSteps
 import features.courses.CoursesData
 import features.courses.steps.CourseSteps
 import features.prescriptions.steps.PrescriptionsSteps
-import mocking.MockDefaults.Companion.patient
 import mocking.MockingClient
+import mocking.defaults.MockDefaults
 import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -17,7 +17,6 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CourseListResponse
-import java.util.function.Consumer
 
 
 open class coursesStepDefinitions {
@@ -33,6 +32,7 @@ open class coursesStepDefinitions {
     lateinit var courseSteps: CourseSteps
 
     val mockingClient = MockingClient.instance
+    val patient = MockDefaults.patient
 
     lateinit var coursesData: MutableList<MedicationCourse>
 

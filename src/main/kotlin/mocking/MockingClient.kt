@@ -3,6 +3,7 @@ package mocking
 import com.google.gson.Gson
 import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
+import mocking.defaults.MockDefaults
 import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping

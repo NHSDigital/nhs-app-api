@@ -1,6 +1,7 @@
 package mocking.emis.session
 
 import mocking.CONTENT_TYPE_APPLICATION_JSON
+import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
@@ -33,7 +34,7 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
                 associationType = associationType)
 
         return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(responseBody)
+            andJsonBody(responseBody, GsonFactory.asPascal)
                     .build()
         }
     }

@@ -2,6 +2,7 @@ package mocking.emis.appointments
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
@@ -24,9 +25,9 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
-        if (sessionStartDate != null) requestBuilder.andQueryParameter("sessionStartDate", sessionStartDate)
-        if (sessionEndDate != null) requestBuilder.andQueryParameter("sessionEndDate", sessionEndDate)
-        if (userPatientLinkToken != null) requestBuilder.andQueryParameter("userPatientLinkToken", userPatientLinkToken)
+        if (!sessionStartDate.isNullOrEmpty()) requestBuilder.andQueryParameter("sessionStartDate", sessionStartDate!!)
+        if (!sessionEndDate.isNullOrEmpty()) requestBuilder.andQueryParameter("sessionEndDate", sessionEndDate!!)
+        if (!userPatientLinkToken.isNullOrEmpty()) requestBuilder.andQueryParameter("userPatientLinkToken", userPatientLinkToken!!)
     }
 
     fun respondWithSuccess(model: GetAppointmentSlotsMetaResponseModel): Mapping {
@@ -51,9 +52,8 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
 
     private fun respondWithBody(body: Any, statusCode: Int = SC_OK): Mapping {
         return respondWith(statusCode) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
+            andJsonBody(body, GsonFactory.asPascal)
         }
+
     }
 }

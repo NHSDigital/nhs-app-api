@@ -1,7 +1,5 @@
 package pages
 
-import net.serenitybdd.core.pages.WebElementFacade
-import net.thucydides.core.annotations.At
 import net.thucydides.core.annotations.DefaultUrl
 
 @DefaultUrl("http://localhost:3000/")

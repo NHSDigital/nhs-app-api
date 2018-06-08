@@ -4,7 +4,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.sharedStepDefinitions.backend.CommonSteps
-import mocking.MockDefaults.Companion.patient
+import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException

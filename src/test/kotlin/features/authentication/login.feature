@@ -14,7 +14,7 @@ Feature: Login
   @bug @NHSO-922
   Scenario: User sees the home page
     Given I am logged in
-    Then I see a welcome message for John Smith
+    Then I see a welcome message for Montel Frye
     And I see the header
     And I see the navigation menu
 

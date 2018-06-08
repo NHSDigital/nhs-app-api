@@ -8,7 +8,7 @@ import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.MockDefaults
+import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
 import models.Patient
@@ -71,5 +71,7 @@ open class SharedStepDefinitions {
         browser.changeTab(URL(url))
         browser.shouldHaveUrl(url)
         browser.changeTabToApp()
+//        browser.shouldBeOnTheAppTab()
+
     }
 }

@@ -1,15 +1,12 @@
 package mocking.emis.demographics
 
-
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
+import mocking.GsonFactory
 import mocking.emis.*
 import mocking.emis.models.*
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
-import java.time.LocalDateTime
 
 class EmisDemographicsBuilder(configuration: EmisConfiguration,
                               linkToken: String,
@@ -52,9 +49,7 @@ class EmisDemographicsBuilder(configuration: EmisConfiguration,
 
     private fun respondWithBody(body: Any, statusCode: Int = SC_OK): Mapping {
         return respondWith(statusCode) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
+            andJsonBody(body, GsonFactory.asPascal)
         }
     }
 }

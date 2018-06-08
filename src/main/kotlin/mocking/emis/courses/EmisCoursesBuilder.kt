@@ -2,6 +2,7 @@ package mocking.emis.courses
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import mocking.GsonFactory
 import mocking.emis.*
 import mocking.emis.models.CourseRequestsGetResponse
 import mocking.models.Mapping
@@ -27,9 +28,7 @@ class EmisCoursesBuilder(configuration: EmisConfiguration,
 
     private fun respondWithSuccessAny(body: Any): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andJsonBody(body, GsonBuilder()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .create())
+            andJsonBody(body, GsonFactory.asPascal)
         }
     }
 

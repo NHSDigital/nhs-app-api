@@ -18,7 +18,7 @@ class MoreStepDefinitions {
 
     @And("^the app remains on the More Page$")
     fun appRemainsOnMorePage() {
-        more.isDisplayed()
+        assert(more.isDisplayed())
     }
 
 }

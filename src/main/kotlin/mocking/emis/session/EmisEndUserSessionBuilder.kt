@@ -1,5 +1,6 @@
 package mocking.emis.session
 
+import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.EndUserSessionResponse

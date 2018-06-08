@@ -6,11 +6,12 @@ import features.prescriptions.PrescriptionsData
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.MockDefaults.Companion.patient
 import mocking.MockingClient
+import mocking.defaults.MockDefaults
 import mocking.emis.models.MedicationCourse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.PrescriptionType
+import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -28,6 +29,7 @@ open class PrescriptionsStepDefinitions {
     lateinit var prescriptions: PrescriptionsSteps
 
     val mockingClient = MockingClient.instance
+    val patient = Patient.montelFrye
     val FROM_DATE = "FromDate"
     val TO_DATE = OffsetDateTime.now()
     val HTTP_EXCEPTION = "HttpException"
@@ -102,7 +104,7 @@ open class PrescriptionsStepDefinitions {
 
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                    prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
                             .respondWithSuccess(prescriptionsData)
                 }
 

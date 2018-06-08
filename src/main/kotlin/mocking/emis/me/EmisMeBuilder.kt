@@ -4,9 +4,9 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import mocking.CONTENT_TYPE_APPLICATION_JSON
+import mocking.GsonFactory
 import mocking.emis.*
 import mocking.emis.models.BadRequestResponse
-import mocking.emis.models.ExceptionResponse
 import mocking.emis.models.LinkApplicationRequestData
 import mocking.emis.models.LinkApplicationResponse
 import mocking.models.Mapping
@@ -40,7 +40,7 @@ class EmisMeBuilder(configuration: EmisConfiguration,
         val responseBody = LinkApplicationResponse(accessIdentityGuid)
 
         return respondWith(SC_OK) {
-            andJsonBody(responseBody)
+            andJsonBody(responseBody, GsonFactory.asPascal)
                     .build()
         }
     }
@@ -49,7 +49,7 @@ class EmisMeBuilder(configuration: EmisConfiguration,
         val responseBody = BadRequestResponse(message)
 
         return respondWith(SC_BAD_REQUEST) {
-            andJsonBody(responseBody)
+            andJsonBody(responseBody, GsonFactory.asPascal)
                     .build()
         }
     }

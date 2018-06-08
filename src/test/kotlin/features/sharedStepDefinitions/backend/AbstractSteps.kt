@@ -1,11 +1,9 @@
 package features.sharedStepDefinitions.backend
 
-import mocking.MockDefaults
+import mocking.defaults.MockDefaults
 import mocking.MockingClient
-import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
 import worker.WorkerClient
-import kotlin.reflect.KClass
 
 abstract class AbstractSteps {
 

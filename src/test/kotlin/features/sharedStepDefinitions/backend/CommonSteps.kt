@@ -5,9 +5,9 @@ import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import mocking.MockDefaults
-import mocking.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
-import mocking.MockDefaults.Companion.patient
+import mocking.defaults.MockDefaults
+import mocking.defaults.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
+import mocking.defaults.MockDefaults.Companion.patient
 
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
@@ -23,9 +23,6 @@ import java.util.concurrent.TimeUnit
 
 
 class CommonSteps : AbstractSteps() {
-
-    private val config = Config.instance
-
     @Before
     fun beforeEachScenario() {
         mockingClient = MockingClient.instance
@@ -120,7 +117,7 @@ class CommonSteps : AbstractSteps() {
 
     @And("I allow my session to expire")
     fun andIDelayMyRequestByTheDefaultTime() {
-        var delayTime = TimeUnit.MINUTES.toMillis(config.sessionExpiryMinutes)
+        var delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
         Thread.sleep(delayTime + 10)
     }
 }

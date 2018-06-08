@@ -1,6 +1,5 @@
 package pages
 
-import config.Config
 import io.appium.java_client.android.AndroidDriver
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
