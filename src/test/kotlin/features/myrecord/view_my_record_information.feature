@@ -1,27 +1,31 @@
-Feature: View My Record Information
+Feature: View My Medical Record Information
 
-  @pending
-  @NHSO-361
-  Scenario: The one where the user has no access to view record information page
-    Given I am on the the record warning page
-    And I click the agree and continue button
-    Then I see the no access message
+  Background:
+    Given wiremock is initialised
 
-  @pending
   @NHSO-361
-  Scenario: The one where the patient information page is navigated to
+  Scenario: An EMIS user with access navigates to the patient record information page
     Given I am logged in
+    Given the GP Practice has enabled demographics functionality
+    And I am on the record warning page
+    When I click agree and continue
+    Then the my record information screen is loaded
+
+  @NHSO-361
+  Scenario: An EMIS user navigates to patient information page
+    Given I am logged in
+    Given the GP Practice has enabled demographics functionality
     And I am on the record warning page
     Then I click agree and continue
-    And  I see header text is My record
-    And I see heading Patient
+    And I see header text is My medical record
+    And I see heading My details
     And I see patient information details
     And I see my record button on the nav bar is highlighted
 
-  @pending
   @NHSO-361
-  Scenario: The one where a user collapses the patient details
+  Scenario: An EMIS user collapses the patient details section
     Given I am logged in
+    Given the GP Practice has enabled demographics functionality
     And I am on my record information page
-    When I click Patient heading
+    When I click My details heading
     Then I do not see patient information details

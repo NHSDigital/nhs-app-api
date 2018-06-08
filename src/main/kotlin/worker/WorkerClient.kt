@@ -47,6 +47,7 @@ class WorkerClient {
         gson = gsonBuilder.create()
     }
 
+
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.patientIm1Connection)
         httpGet.setHeader(WorkerHeaders.ConnectionToken, connectionToken)
@@ -58,6 +59,7 @@ class WorkerClient {
         httpGet.releaseConnection()
 
         return gson.fromJson(result, Im1ConnectionResponse::class.java)
+
     }
 
     fun postIm1Connection(requestBody: Im1ConnectionRequest): Im1ConnectionResponse {
@@ -129,7 +131,6 @@ class WorkerClient {
         httpPost.releaseConnection()
         return response
     }
-
 
     fun getCoursesConnection(context: HttpContext?): CourseListResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
