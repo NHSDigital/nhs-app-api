@@ -69,6 +69,21 @@ open class MyRecordStepDefinitions {
     }
   }
 
+  @But("the GP Practice has disabled allergies functionality")
+  fun butTheGPPracticeHasDisabledAllergiesFunctionality() {
+    try {
+      mockingClient.forEmis {
+        allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
+      }
+
+      val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getAllergiesConnection(null)
+
+      Serenity.setSessionVariable(AllergiesResponse::class).to(result)
+    } catch (httpException: NhsoHttpException) {
+      Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+    }
+  }
+
   @When("I get the users allergy data")
   fun whenIGetTheUsersAllergies()
   {
