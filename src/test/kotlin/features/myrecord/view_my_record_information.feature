@@ -30,7 +30,7 @@ Feature: View My Medical Record Information
     When I click My details heading
     Then I do not see patient information details
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user views acute medications
     Given I am logged in
@@ -40,7 +40,7 @@ Feature: View My Medical Record Information
     When I click acute medications
     Then I see acute medication information
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user views current repeat medications
     Given I am logged in
@@ -50,6 +50,7 @@ Feature: View My Medical Record Information
     When I click current repeat medications
     Then I see current repeat medication information
 
+  @pending
   @NHSO-678
   Scenario: An EMIS user views discontinued repeat medications
     Given I am logged in
@@ -59,7 +60,7 @@ Feature: View My Medical Record Information
     When I click discontinued repeat medications
     Then I see current repeat medication information
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user has no acute medications
     Given I am logged in
@@ -68,7 +69,7 @@ Feature: View My Medical Record Information
     When I click acute medications
     Then I see a message indicating that I have no medications
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user has no current repeat medications
     Given I am logged in
@@ -77,7 +78,7 @@ Feature: View My Medical Record Information
     When I click current repeat medications
     Then I see a message indicating that I have no medications
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user has no discontinued repeat medications
     Given I am logged in
@@ -86,29 +87,26 @@ Feature: View My Medical Record Information
     When I click discontinued repeat medications
     Then I see a message indicating that I have no medications
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user has no access to view acute medications
     Given I am logged in
     Given the GP Practice has disabled summary care record functionality
     And I am on my record information page
-    When I click acute medications
     Then I see a message indicating that I have no access to view my record
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user has no access to view current repeat medications
     Given I am logged in
     Given the GP Practice has disabled summary care record functionality
     And I am on my record information page
-    When I click current repeat medications
     Then I see a message indicating that I have no access to view my record
 
-  @wip
+  @pending
   @NHSO-678
   Scenario: An EMIS user has no access to view discontinued repeat medications
     Given I am logged in
     Given the GP Practice has disabled summary care record functionality
     And I am on my record information page
-    When I click discontinued repeat medications
     Then I see a message indicating that I have no access to view my record
