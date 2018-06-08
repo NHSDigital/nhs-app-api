@@ -22,10 +22,18 @@ x509_extensions = v3_req
 commonName = "localhost"
 
 [ v3_req ]
-subjectAltName = DNS:localhost
+subjectAltName = @alt_names
 basicConstraints = critical, CA:true
 keyUsage = critical, keyEncipherment
 extendedKeyUsage = critical, 1.3.6.1.5.5.7.3.1
+
+[alt_names]
+DNS.1      = local.bitraft.io
+DNS.2      = android.local.bitraft.io
+DNS.3      = localhost
+
+[ CA_default ]
+copy_extensions = copy
 EOF
 
 echo Creating certificate signing request

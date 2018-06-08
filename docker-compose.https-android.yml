@@ -6,15 +6,15 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - ~/.nhsonline/local-development-certificate:/etc/ssl
     ports:
-      - "8443:443"
-      - "8444:444"
+      - "443:443"
+      - "444:444"
     depends_on:
       - nhsonline.web
       - nhsonline.backend.worker
   nhsonline.web:
     environment:
-      - API_HOST=https://localhost:8444
-      - CID_REDIRECT_URI=https://localhost:8443/auth-return
+      - API_HOST=https://android.local.bitraft.io:444
+      - CID_REDIRECT_URI=https://android.local.bitraft.io/auth-return
   nhsonline.backend.worker:
     environment:
-      - NHS_WEB_APP_BASE_URL=https://localhost:8443/
+      - NHS_WEB_APP_BASE_URL=https://android.local.bitraft.io/
