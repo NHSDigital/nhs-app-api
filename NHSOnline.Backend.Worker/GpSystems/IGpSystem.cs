@@ -3,6 +3,7 @@ using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems
 {
@@ -18,5 +19,6 @@ namespace NHSOnline.Backend.Worker.GpSystems
         IPrescriptionService GetPrescriptionService();
         ISessionService GetSessionService();
         ITokenValidationService GetTokenValidationService();
+        IPatientRecordService GetPatientRecordService();
     }
 }

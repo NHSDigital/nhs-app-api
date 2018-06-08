@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -26,9 +27,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
         private const string SessionsPath = "sessions";
         private const string DemographicsPath = "demographics?userPatientLinkToken={0}";
+        private const string PatientAllergiesPath = "record?userPatientLinkToken={0}&itemType=Allergies";
         private const string AppointmentSlotsMetaPath = "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
         private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
+        private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
         private const string AppointmentsPath = "appointments";
 
@@ -70,6 +73,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
+        public async Task<EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId)
+        {
+            var path = string.Format(PatientAllergiesPath, userPatientLinkToken);
+
+            var response = await Get<AllergyRequestsGetResponse>(path, endUserSessionId, responseSessionId);
+            return response;
+        }
+
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId, MeApplicationsPostRequest model)
         {
             var response = await Post<MeApplicationsPostRequest, MeApplicationsPostResponse>(model, MeApplicationsPath, endUserSessionId);
@@ -95,10 +107,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return response;
         }
 
-        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost( string responseSessionId, string endUserSessionId,
+        public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
+            string responseSessionId,
+            string endUserSessionId,
             PrescriptionRequestsPost model)
         {  
-            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPath, endUserSessionId, responseSessionId);
+            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPostPath, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(

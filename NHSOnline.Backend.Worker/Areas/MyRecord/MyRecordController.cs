@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 
@@ -35,6 +36,21 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             var myRecordGetResult = await demographicsService.Get(userSession);
 
             return myRecordGetResult.Accept(new MyRecordResultVisitor());
+        }
+        
+        [HttpGet("allergies")]
+        [TimeoutExceptionFilter]
+        public async Task<IActionResult> GetPatientAllergies()
+        {   
+            UserSession userSession = HttpContext.GetUserSession();
+            
+            var patientRecordService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
+                .GetPatientRecordService();
+
+            var result = await patientRecordService.GetPatientAllergies(userSession);
+
+            return result.Accept(new AllergyResultVisitor());
         }
     }
 }

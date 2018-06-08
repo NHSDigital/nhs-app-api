@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -30,7 +31,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);
-
+        
+        // Patient Record
+        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId);
+        
         // AppointmentSlots
         Task<EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
             EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);

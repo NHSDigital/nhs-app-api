@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.Areas.MyRecord;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
 {
@@ -45,6 +46,61 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             {
                 HttpContext = httpContextMock.Object
             };
+        }
+        
+        [TestMethod]
+        public async Task GetAllergies_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
+        {
+            var mockGpSystem = new Mock<IGpSystem>();
+            var patientRecordService = new Mock<IPatientRecordService>();
+            var allergyRequestResponse = new AllergyListResponse();
+            var getAllergiesResponse = new GetAllergyResult.SuccessfullyRetrieved(allergyRequestResponse);
+            
+            // Arrange
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+                .Returns(mockGpSystem.Object);
+
+            mockGpSystem.Setup(x => x.GetPatientRecordService())
+                .Returns(patientRecordService.Object);
+
+            patientRecordService.Setup(x => x.GetPatientAllergies(_userSession)).Returns(Task.FromResult((GetAllergyResult)getAllergiesResponse));
+
+            // Act
+            var result = await _systemUnderTest.GetPatientAllergies();
+
+            // Assert
+            _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
+            mockGpSystem.Verify(x => x.GetPatientRecordService());
+            patientRecordService.Verify(x => x.GetPatientAllergies(_userSession));
+            var okObjectResult = result as OkObjectResult;
+            Assert.IsNotNull(okObjectResult);
+            var value = okObjectResult.Value as GetAllergyResult.SuccessfullyRetrieved;
+            Assert.IsNotNull(value);
+        }
+         
+        [TestMethod]
+        public async Task GetAllergies_Status403Forbidden_When_Patient_Does_Not_Have_Access_To_Data()
+        {
+            var mockGpSystem = new Mock<IGpSystem>();
+            var patientRecordService = new Mock<IPatientRecordService>();
+            var getAllergiesResponse = new GetAllergyResult.UserHasNoAccess();
+
+            // Arrange
+            _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
+                .Returns(mockGpSystem.Object);
+
+            mockGpSystem.Setup(x => x.GetPatientRecordService())
+                .Returns(patientRecordService.Object);
+
+            patientRecordService.Setup(x => x.GetPatientAllergies(_userSession)).Returns(Task.FromResult((GetAllergyResult)getAllergiesResponse));
+
+            // Act
+            var result = await _systemUnderTest.GetPatientAllergies();
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            patientRecordService.Verify();
         }
 
         [TestMethod]
