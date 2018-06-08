@@ -38,13 +38,14 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             return myRecordGetResult.Accept(new MyRecordResultVisitor());
         }
         
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet("allergies")]
+        [TimeoutExceptionFilter]
         public async Task<IActionResult> GetPatientAllergies()
         {   
             UserSession userSession = HttpContext.GetUserSession();
             
-            var patientRecordService = _bridgeFactory
-                .CreateBridge(userSession.Supplier)
+            var patientRecordService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
                 .GetPatientRecordService();
 
             var result = await patientRecordService.GetPatientAllergies(userSession);

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace NHSOnline.Backend.Worker.Router.MyRecord
+namespace NHSOnline.Backend.Worker.GpSystems.PatientRecord
 {
     public interface IPatientRecordService
     {

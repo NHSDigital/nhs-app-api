@@ -33,4 +33,13 @@
       <HintPath>..\..\..\Users\a.broughton-janes\.nuget\packages\moq\4.8.2\lib\netstandard1.3\Moq.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Bridges\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Bridges\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Bridges\**" />
+  </ItemGroup>
 </Project>

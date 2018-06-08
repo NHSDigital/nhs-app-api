@@ -7,13 +7,13 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using Moq;
-using NHSOnline.Backend.Worker.Bridges.Emis;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord;
-using NHSOnline.Backend.Worker.Router.MyRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord
 {
     [TestClass]
     public class EmisPatientRecordServiceTests

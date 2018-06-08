@@ -2,6 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
@@ -37,6 +38,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         public IDemographicsService GetDemographicsService()
         {
             return _serviceProvider.GetService<EmisDemographicsService>();
+        }
+        
+        public IPatientRecordService GetPatientRecordService()
+        {
+            return _serviceProvider.GetService<EmisPatientRecordService>();
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()

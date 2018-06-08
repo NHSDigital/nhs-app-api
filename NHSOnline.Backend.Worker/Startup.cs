@@ -74,13 +74,6 @@ namespace NHSOnline.Backend.Worker
 
             services.AddDataProtection();
             services.AddSingleton(Configuration);
-            services.AddSingleton<IBridgeFactory, BridgeFactory>();
-            services.AddSingleton<IEmisClient, EmisClient>();
-            services.AddSingleton<IEmisConfig, EmisConfig>();
-            services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
-            services.AddTransient<IEmisDemographicsMapper, EmisDemographicsMapper>();
-            services.AddTransient<IEmisAllergyMapper, EmisAllergyMapper>();
-            services.AddTransient<IPrescriptionRequestValidationService, PrescriptionRequestValidationService>();
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICipherService, CipherService>();

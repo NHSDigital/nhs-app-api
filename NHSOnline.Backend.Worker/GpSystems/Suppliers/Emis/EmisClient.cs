@@ -10,13 +10,8 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.Support.Date;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.AppointmentSlots;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord;
-using NHSOnline.Backend.Worker.Date;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {

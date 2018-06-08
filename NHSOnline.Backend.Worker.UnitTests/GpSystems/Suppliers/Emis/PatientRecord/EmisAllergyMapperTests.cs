@@ -6,10 +6,10 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Bridges.Emis.Mappers
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord
 {
     [TestClass]
     public class EmisAllergyMapperTests

@@ -8,6 +8,14 @@
     <Content Remove="wwwroot\**" />
     <EmbeddedResource Remove="wwwroot\**" />
     <None Remove="wwwroot\**" />
+    <Compile Remove="Bridges\**" />
+    <EmbeddedResource Remove="Bridges\**" />
+    <None Remove="Bridges\**" />
+    <Content Remove="Bridges\**" />
+    <Compile Remove="Router\**" />
+    <EmbeddedResource Remove="Router\**" />
+    <None Remove="Router\**" />
+    <Content Remove="Router\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />

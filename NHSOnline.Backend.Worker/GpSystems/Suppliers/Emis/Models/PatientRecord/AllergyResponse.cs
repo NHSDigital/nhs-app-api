@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord
 {
     public class AllergyResponse
     {

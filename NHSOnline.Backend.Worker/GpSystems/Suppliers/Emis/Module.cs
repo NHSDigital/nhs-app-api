@@ -14,11 +14,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             services.AddTransient<EmisAppointmentsService>();
             services.AddTransient<EmisAppointmentSlotsService>();
             services.AddTransient<EmisCourseService>();
-            services.AddTransient<EmisDemographicsService>();
             services.AddTransient<EmisIm1ConnectionService>();
             services.AddTransient<EmisPrescriptionService>();
             services.AddTransient<EmisSessionService>();
             services.AddTransient<EmisTokenValidationService>();
+            services.AddTransient<EmisDemographicsService>();
+            services.AddTransient<EmisPatientRecordService>();
 
             base.ConfigureServices(services, configuration);
         }

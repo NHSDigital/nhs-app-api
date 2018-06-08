@@ -1,18 +1,14 @@
-﻿using NHSOnline.Backend.Worker.Router.MyRecord;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
-using NHSOnline.Backend.Worker.Bridges.Emis.Mappers;
-using NHSOnline.Backend.Worker.Bridges.Emis.Models.PatientRecord;
-using NHSOnline.Backend.Worker.Router.MyRecord;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
-
-namespace NHSOnline.Backend.Worker.Bridges.Emis
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
     public class EmisPatientRecordService : IPatientRecordService
     {
@@ -40,6 +36,13 @@ namespace NHSOnline.Backend.Worker.Bridges.Emis
 
                 if (!allergiesResponse.HasSuccessStatusCode)
                 {
+                    // User does not have access
+                    if (allergiesResponse.HasExceptionWithMessageContaining("Services Access violation"))
+                    {
+                        _logger.LogWarning("User does not have access to their patient record");
+                        return new GetAllergyResult.UserHasNoAccess();
+                    }
+                    
                     _logger.LogError(
                         $"Unsuccessful request retrieving Allergy list for patient. Status code: {(int) allergiesResponse.StatusCode}");
                     return new GetAllergyResult.Unsuccessful();

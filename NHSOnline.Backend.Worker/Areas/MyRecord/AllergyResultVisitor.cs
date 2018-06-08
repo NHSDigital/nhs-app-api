@@ -1,11 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Router.MyRecord;
+using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
     internal class AllergyResultVisitor : IAllergyResultVisitor<IActionResult>
     {
+        public IActionResult Visit(GetAllergyResult.UserHasNoAccess result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
+        
         public IActionResult Visit(GetAllergyResult.SuccessfullyRetrieved result)
         {
             return new OkObjectResult(result);
