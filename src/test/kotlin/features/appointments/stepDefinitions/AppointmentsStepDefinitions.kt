@@ -16,12 +16,14 @@ import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus.*
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -56,7 +58,13 @@ class AppointmentsStepDefinitions {
     private val dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
     private val defaultFromDateAsDate = LocalDateTime.now()
     private val defaultFromDate = defaultFromDateAsDate.format(dateTimeFormat)
-    private val defaultToDate = LocalDateTime.parse(defaultFromDate, dateTimeFormat).plusWeeks(2).plusDays(1).withHour(0).withMinute(0).withSecond(0).format(dateTimeFormat)
+    private val defaultToDate = LocalDateTime.parse(defaultFromDate, dateTimeFormat)
+            .plusWeeks(2)
+            .plusDays(1)
+            .withHour(0)
+            .withMinute(0)
+            .withSecond(0)
+            .format(dateTimeFormat)
 
     private val defaultSessionStartDate = explicitFromDate
     private val defaultSessionEndDate = explicitToDate
@@ -153,17 +161,66 @@ class AppointmentsStepDefinitions {
 
     @Given("^there are available appointment slots for an explicit date-time range$")
     fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange() {
-        val emisSlotLocations = defaultEmisMetaSlotLocations
-        val emisSlotSessionHolders = defaultEmisMetaSlotSessionHolders
-        val emisSlotSessions = defaultEmisMetaSlotSessions
-        val emisAppointmentSessions = defaultEmisAppointmentSessions
-        generateAppropriateStubsForAppointmentSlots(emisSlotLocations, emisSlotSessionHolders, emisSlotSessions, emisAppointmentSessions)
+        generateStubsForAppointmentSlotsForSpecificDates()
     }
 
     @Given("^there are available appointment slots$")
     fun thereAreAvailableAppointmentSlots() {
-        thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange()
+        generateStubsForAppointmentSlotsForNextTwoWeeks()
     }
+
+    @Given("^GP system doesn't respond a timely fashion for available appointment slots$")
+    @Throws(Exception::class)
+    fun gp_system_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
+        generateStubsForAppointmentSlotsForNextTwoWeeks(delayedInSeconds = 30)
+    }
+
+    @When("^GP system responds a timely fashion for available appointment slots$")
+    @Throws(Exception::class)
+    fun gp_system_responds_a_timely_fashion_for_available_appointment_slots() {
+        thereAreAvailableAppointmentSlots()
+    }
+
+    @Given("^GP system is unavailable for available appointment slots$")
+    @Throws(Exception::class)
+    fun gp_system_is_unavailable_for_available_appointment_slots() {
+        mockingClient
+                .forEmis {
+                    appointmentSlotsMetaRequest(patient)
+                            .respondWith(SC_INTERNAL_SERVER_ERROR, 0, {
+                                andHtmlBody("Internal server Error")
+                            })
+                }
+
+        mockingClient
+                .forEmis {
+                    appointmentSlotsRequest(patient)
+                            .respondWith(SC_INTERNAL_SERVER_ERROR, 0, {
+                                andHtmlBody("Internal server Error")
+                            })
+                }
+    }
+
+    @Given("^GP system returns corrupt data for appointment slots$")
+    @Throws(Exception::class)
+    fun gp_system_returns_corrupt_data_for_appointment_slots() {
+        mockingClient
+                .forEmis {
+                    appointmentSlotsMetaRequest(patient)
+                            .respondWith(SC_OK, 0, {
+                                andHtmlBody("appointment slots metadata")
+                            })
+                }
+
+        mockingClient
+                .forEmis {
+                    appointmentSlotsRequest(patient)
+                            .respondWith(SC_OK, 0, {
+                                andHtmlBody("appointment slots")
+                            })
+                }
+    }
+
 
     @Given("^there are available appointment slots, but session has expired$")
     fun thereAreAvailableAppointmentSlotsButExpiredSession() {
@@ -330,29 +387,118 @@ class AppointmentsStepDefinitions {
         assertEquals(0, result.appointmentSessions.size)
     }
 
-    private fun generateAppropriateStubsForAppointmentSlots(emisSlotLocations: ArrayList<Location>,
-                                                            emisSlotSessionHolders: ArrayList<SessionHolder>,
-                                                            emisSlotSessions: ArrayList<Session>,
-                                                            emisAppointmentSessions: ArrayList<AppointmentSession>) {
-        mockingClient
-                .forEmis {
-                    appointmentSlotsMetaRequest(patient)
-                            .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
-                                    emisSlotLocations,
-                                    emisSlotSessionHolders,
-                                    emisSlotSessions
-                            ))
-                }
+    @Then("^I see appropriate information message after 10 seconds when it times-out$")
+    @Throws(Exception::class)
+    fun i_see_appropriate_information_message_after_seconds_when_it_times_out() {
+        appointments.checkTimeoutErrorMessage()
+    }
 
-        mockingClient
-                .forEmis {
-                    appointmentSlotsRequest(patient)
-                            .respondWithSuccess(GetAppointmentSlotsResponseModel(
-                                    emisAppointmentSessions
-                            ))
-                }
+    @Then("^there should be a button to try again$")
+    @Throws(Exception::class)
+    fun there_should_be_a_button_to_try_again() {
+        appointments.checkIfTyAgainButtonDisplayed()
+    }
+
+    @Then("^I see appropriate information message when there is a error retrieving data$")
+    @Throws(Exception::class)
+    fun i_see_appropriate_information_message_when_there_is_a_error_retrieving_data() {
+        appointments.checkUnavailableErrorMessage()
+    }
+
+    @Then("^there should not be an option to try again$")
+    @Throws(Exception::class)
+    fun there_should_not_be_an_option_to_try_again() {
+        appointments.checkIfTyAgainButtonIsNotDisplayed()
+    }
+
+    @When("^I click try again button on appointment page$")
+    @Throws(Exception::class)
+    fun i_click_try_again_button_on_appointment_page() {
+        appointments.clickOnTryAgainButton()
+    }
+
+    @Then("^I see available appointment slots$")
+    @Throws(Exception::class)
+    fun i_see_available_appointment_slots() {
+        appointments.checkIfSlotsAreDisplayed()
+    }
+
+
+    private fun generateStubsForAppointmentSlotsForSpecificDates(
+            emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
+            emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
+            emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
+            emisAppointmentSessions: ArrayList<AppointmentSession> = defaultEmisAppointmentSessions,
+            delayedInSeconds: Long = 0
+    ) {
+        generateStubForMetaAppointmentSlotRequest(
+                emisSlotLocations,
+                emisSlotSessionHolders,
+                emisSlotSessions,
+                delayedInSeconds,
+                defaultSessionStartDate,
+                defaultSessionEndDate
+        )
+
+        generateStubForAppointmentSlotRequest(
+                emisAppointmentSessions,
+                delayedInSeconds,
+                defaultSessionStartDate,
+                defaultSessionEndDate
+        )
+    }
+
+    private fun generateStubsForAppointmentSlotsForNextTwoWeeks(
+            emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
+            emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
+            emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
+            emisAppointmentSessions: ArrayList<AppointmentSession> = defaultEmisAppointmentSessions,
+            delayedInSeconds: Long = 0
+    ) {
+        generateStubForMetaAppointmentSlotRequest(
+                emisSlotLocations,
+                emisSlotSessionHolders,
+                emisSlotSessions,
+                delayedInSeconds
+        )
+
+        generateStubForAppointmentSlotRequest(emisAppointmentSessions, delayedInSeconds)
 
         appointmentsConfirmationSteps.mockEmisSuccessResponse()
+    }
+
+    private fun generateStubForMetaAppointmentSlotRequest(
+            emisSlotLocations: ArrayList<Location>,
+            emisSlotSessionHolders: ArrayList<SessionHolder>,
+            emisSlotSessions: ArrayList<Session>,
+            delayedInSeconds: Long,
+            fromDate: String? = null,
+            toDate: String? = null
+    ) {
+        val getAppointmentSlotsMetaResponseModel = GetAppointmentSlotsMetaResponseModel(
+                emisSlotLocations,
+                emisSlotSessionHolders,
+                emisSlotSessions
+        )
+        mockingClient.forEmis {
+            appointmentSlotsMetaRequest(patient, fromDate, toDate)
+                    .respondWithSuccess(getAppointmentSlotsMetaResponseModel)
+                    .delayedBy(Duration.ofSeconds(delayedInSeconds))
+        }
+    }
+
+    private fun generateStubForAppointmentSlotRequest(
+            emisAppointmentSessions: ArrayList<AppointmentSession>,
+            delayedInSeconds: Long,
+            fromDate: String? = null,
+            toDate: String? = null
+    ) {
+        val getAppointmentSlotsResponseModel = GetAppointmentSlotsResponseModel(emisAppointmentSessions)
+        mockingClient.forEmis {
+            appointmentSlotsRequest(patient, fromDate, toDate)
+                    .respondWithSuccess(getAppointmentSlotsResponseModel)
+                    .delayedBy(Duration.ofSeconds(delayedInSeconds))
+        }
     }
 
     private fun toLocalTime(date: String?): String {

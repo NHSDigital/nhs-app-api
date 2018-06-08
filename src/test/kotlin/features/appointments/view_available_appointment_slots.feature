@@ -2,9 +2,10 @@ Feature: View available appointment slots
 
   Users can view available appointments from the Appointments Page.
 
+  Background:
+    Given wiremock is initialised
+
   @bug @NHSO-922
-  @native
-  @mobile
   Scenario: A user who is signed in sees the appointments button
     Given I am on the appointments page
     Then I see the appointments menu button
@@ -98,57 +99,41 @@ Feature: View available appointment slots
     Then I see appropriate information message when no slots are available
 
   @NHSO-616
-  @pending  @NHSO-616
-  @mobile
-  @native
   Scenario: A user sees appropriate information message when there is a timeout
     Given I am logged in
-    And GP system doesn't respond a timely fashion
-    When I click appointments button in menu
-    Then I see appropriate information message after 10 seconds when it times-out
-    And there should be a button to try again
-
-  @NHSO-616
-  @pending  @NHSO-616
-  @mobile
-  @native
-  Scenario: A user tries again after a timeout and it times-out again
-    Given A user sees appropriate information message when there is a timeout
     And GP system doesn't respond a timely fashion for available appointment slots
-    When I click appointments button in menu
+    When I navigate to Appointments
     Then I see appropriate information message after 10 seconds when it times-out
     And there should be a button to try again
 
   @NHSO-616
-  @pending  @NHSO-616
-  @mobile
-  @native
-  Scenario: A user tries again after a timeout and it is now successful
-    Given A user sees appropriate information message when there is a timeout for available appointment slots
-    And there are available appointment slots
-    When I click appointments button in menu
+  Scenario: A user tries again after a timeout and it times-out again
+    Given GP system doesn't respond a timely fashion for available appointment slots
+    And I am on the appointments page
+    When I click try again button on appointment page
     Then I see appropriate information message after 10 seconds when it times-out
-    And the appointment slots are ordered ascending start date and time then first clinician name
+    And there should be a button to try again
 
   @NHSO-616
-  @pending  @NHSO-616
-  @mobile
-  @native
+  Scenario: A user tries again after a timeout and it is now successful
+    Given GP system doesn't respond a timely fashion for available appointment slots
+    And I am on the appointments page
+    When GP system responds a timely fashion for available appointment slots
+    And I click try again button on appointment page
+    Then I see available appointment slots
+
+  @NHSO-616
   Scenario: A user sees appropriate information message when GP system is unavailable
     Given I am logged in
-    And GP system is unavailable
-    When I click appointments button in menu
+    And GP system is unavailable for available appointment slots
+    When I navigate to Appointments
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
   @NHSO-616
-  @pending  @NHSO-616
-  @mobile
-  @native
   Scenario: A user sees appropriate information message when GP system returns corrupt data
-    Given I am logged in
-    And GP system returns corrupt data for appointment slots
-    When I click appointments button in menu
+    Given GP system returns corrupt data for appointment slots
+    When I am on the appointments page
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 

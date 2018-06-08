@@ -42,8 +42,12 @@ open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return slotList
     }
 
-    fun getInformationMessage(): WebElementFacade {
-        return infoMessage
+    fun countSlots(): Int{
+        return findAllByXpath("//ul[@data-purpose='slots']/li").size
+    }
+
+    fun getServerErrorElement(): WebElementFacade {
+        return findBy<WebElementFacade>("#serverError").waitUntilVisible<WebElementFacade>();
     }
 
     fun selectFirstSlot()
@@ -54,5 +58,15 @@ open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     fun clickOnBookAppointmentButton()
     {
         bookAppointmentButton.waitUntilClickable<WebElementFacade>().click()
+    }
+
+    fun getTryAgainButton(): WebElement
+    {
+        return getServerErrorElement().findElement(By.className("button"))
+    }
+
+    fun hasTryAgainButton(): Boolean
+    {
+        return getServerErrorElement().containsElements(By.className("button"))
     }
 }
