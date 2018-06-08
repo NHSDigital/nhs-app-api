@@ -22,7 +22,7 @@ RUN dotnet restore
 RUN dotnet build -c Release -o /app
 
 FROM built AS publish
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o /app -r linux-x64
 
 FROM runtime AS final
 ENV ASPNETCORE_ENVIRONMENT Production
