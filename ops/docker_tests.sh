@@ -12,6 +12,7 @@ BROWSER=chromeheadless
 #### 4. Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
 DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 
+docker-compose -f docker-compose_ci.yml pull
 docker-compose -f docker-compose_ci.yml up -d --build
 
 ##################### Runtime vars
