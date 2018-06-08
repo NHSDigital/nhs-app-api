@@ -48,10 +48,18 @@ namespace NHSOnline.Backend.Worker
                 {
                     options.Cookie.Name = Constants.Cookies.SessionId;
                     options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = _env.IsDevelopment()
-                        ? CookieSecurePolicy.SameAsRequest
-                        : CookieSecurePolicy.Always;
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
+
+                    if (_env.IsDevelopment())
+                    {
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                        options.Cookie.SameSite = SameSiteMode.None;
+                    }
+                    else
+                    {
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                        options.Cookie.SameSite = SameSiteMode.Lax;
+                    }
                 });
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
