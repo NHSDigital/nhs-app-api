@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 if (!demographicsResponse.HasSuccessStatusCode)
                 {
                     // User does not have access
-                    if (demographicsResponse.HasExceptionWithMessageContaining("Services Access violation"))
+                    if (demographicsResponse.HasForbiddenResponse())
                     {
                         _logger.LogWarning("User does not have access to their patient record");
                         return new GetMyRecordResult.UserHasNoAccess();

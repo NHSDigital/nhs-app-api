@@ -53,7 +53,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Arrange
             var coursesResponse = _fixture.Create<CoursesGetResponse>();
 
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
@@ -61,18 +62,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         ErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
-            
+
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                _userSession.EndUserSessionId));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
-        public async Task Get_CoursesInResponseAreFilteredSoOnlyRepeatCoursesWhichCanBeRequestedAreReturned_WhenSuccessfulResponseFromEmis()
+        public async Task
+            Get_CoursesInResponseAreFilteredSoOnlyRepeatCoursesWhichCanBeRequestedAreReturned_WhenSuccessfulResponseFromEmis()
         {
             // Arrange
             string expectedMedicationCourseGuid = Guid.NewGuid().ToString();
@@ -107,7 +110,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 }
             };
 
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
@@ -118,20 +122,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             var response = new CourseListResponse();
             CoursesGetResponse capturedItemToMap = null;
-            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response).Callback<CoursesGetResponse>((x) =>
-            {
-                capturedItemToMap = x;
-            });
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response)
+                .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                _userSession.EndUserSessionId));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
-            
-            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved)result;
+            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+
+            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved) result;
             getCoursesResult.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(1);
@@ -142,11 +145,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         [DataRow(CoursesMaxCoursesLimit + 1, CoursesMaxCoursesLimit)]
         [DataRow(CoursesMaxCoursesLimit, CoursesMaxCoursesLimit)]
         [DataRow(CoursesMaxCoursesLimit - 1, CoursesMaxCoursesLimit - 1)]
-        public async Task Get_CoursesInResponseAreLimitedToMax_WhenSuccessfulResponseFromEmis(int numberOfCoursesToCreate, int expectedNumberOfCourses)
+        public async Task Get_CoursesInResponseAreLimitedToMax_WhenSuccessfulResponseFromEmis(
+            int numberOfCoursesToCreate, int expectedNumberOfCourses)
         {
             // Arrange
             var medicationCourses = new List<MedicationCourse>();
-            
+
             for (int i = 0; i < numberOfCoursesToCreate; i++)
             {
                 medicationCourses.Add(
@@ -164,7 +168,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 Courses = medicationCourses,
             };
 
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
@@ -175,20 +180,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             var response = new CourseListResponse();
             CoursesGetResponse capturedItemToMap = null;
-            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response).Callback<CoursesGetResponse>((x) =>
-            {
-                capturedItemToMap = x;
-            });
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response)
+                .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                _userSession.EndUserSessionId));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
 
-            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved)result;
+            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved) result;
             getCoursesResult.Response.Should().Be(response);
             capturedItemToMap.Courses.Should().HaveCount(expectedNumberOfCourses);
         }
@@ -232,7 +236,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 }
             };
 
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
@@ -243,20 +248,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             var response = new CourseListResponse();
             CoursesGetResponse capturedItemToMap = null;
-            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response).Callback<CoursesGetResponse>((x) =>
-            {
-                capturedItemToMap = x;
-            });
+            _emisPrescriptionMapper.Setup(x => x.Map(It.IsAny<CoursesGetResponse>())).Returns(response)
+                .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                _userSession.EndUserSessionId));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
-            ((GetCoursesResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
 
-            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved)result;
+            var getCoursesResult = (GetCoursesResult.SuccessfullyRetrieved) result;
             getCoursesResult.Response.Should().Be(response);
 
             capturedItemToMap.Courses.Should().HaveCount(4);
@@ -267,14 +271,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenErrorReceivedFromEmis()
+        public async Task Get_Returns502SystemUnavailable_WhenErrorReceivedFromEmis()
         {
             // Arrange
             const string alreadyLinkedErrorMessage = "Error occurred";
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
-            
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError)
                         { ErrorResponse = errorResponse }));
@@ -283,7 +288,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
         }
 
         [TestMethod]
@@ -294,7 +299,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
 
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
@@ -302,28 +308,50 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
             _emisClient.Verify();
         }
-        
+
         [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenNullReferenceExceptionOccursCallingEmis()
+        public async Task Get_ReturnsInternalServerError_WhenNullExceptionOccursCallingEmis()
         {
             // Arrange
-            const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
-
-            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
-                .Throws<NullReferenceException>()
-                .Verifiable();
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = null,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetCoursesResult.SupplierBadData>();
+            result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
             _emisClient.Verify();
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenErrorReceivedFromEmis()
+        {
+            // Arrange
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = EmisApiErrorMessages.EmisService_NotEnabledForUser;
+
+            _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError)
+                        { ErrorResponse = errorResponse }));
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();
         }
     }
 }

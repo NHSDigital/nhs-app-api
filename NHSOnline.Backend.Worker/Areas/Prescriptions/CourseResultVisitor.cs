@@ -11,14 +11,19 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             return new OkObjectResult(result);
         }
 
-        public IActionResult Visit(GetCoursesResult.Unsuccessful result)
+        public IActionResult Visit(GetCoursesResult.SupplierSystemUnavailable result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
         
-        public IActionResult Visit(GetCoursesResult.SupplierBadData result)
+        public IActionResult Visit(GetCoursesResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+        
+        public IActionResult Visit(GetCoursesResult.SupplierNotEnabled result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
     }
 }

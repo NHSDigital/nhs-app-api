@@ -34,33 +34,56 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             {
                 var coursesResponse = await _emisClient.CoursesGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, emisUserSession.EndUserSessionId);
 
-                if (!coursesResponse.HasSuccessStatusCode)
+                if (coursesResponse.HasSuccessStatusCode)
                 {
-                    _logger.LogError($"Unsuccessful request retrieving courses. Status code: {(int)coursesResponse.StatusCode}");
-                    return new GetCoursesResult.Unsuccessful();
+                    try
+                    {
+                    _logger.LogDebug(
+                        "Filtering courses from emis so we are left with only repeat courses which can be requested");
+                    coursesResponse.Body.Courses = coursesResponse.Body.Courses
+                        .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
+                        .OrderBy(x => x.Name)
+                        .Take(_settings.CoursesMaxCoursesLimit.Value);
+
+                    _logger.LogDebug(
+                        $"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
+
+                        var courseListResponse = _emisPrescriptionMapper.Map(coursesResponse.Body);
+                        
+                        return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
+                        
+                        return new GetCoursesResult.InternalServerError();   
+                    }
                 }
 
-                _logger.LogDebug("Filtering courses from emis so we are left with only repeat courses which can be requested");
-                coursesResponse.Body.Courses = coursesResponse.Body.Courses
-                    .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
-                    .OrderBy(x => x.Name)
-                    .Take(_settings.CoursesMaxCoursesLimit.Value);
-
-                _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
-                var result = _emisPrescriptionMapper.Map(coursesResponse.Body);
-
-                return new GetCoursesResult.SuccessfullyRetrieved(result);
+                return GetCorrectErrorResult(coursesResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
-                return new GetCoursesResult.Unsuccessful();
+                return new GetCoursesResult.SupplierSystemUnavailable();
             }
-            catch (NullReferenceException e)
+        }
+
+        private GetCoursesResult GetCorrectErrorResult(
+            EmisClient.EmisApiResponse response)
+        {  
+            if (response.HasForbiddenResponse())
             {
-                _logger.LogError(e, "Prescription retrieval return null body");
-                return new GetCoursesResult.SupplierBadData();
+                _logger.LogInformation(
+                    "The emis prescriptions service is not enabled");
+                
+                return new GetCoursesResult.SupplierNotEnabled();
             }
+            
+            _logger.LogError(
+                "Emis system is currently unavailable");
+
+            return new GetCoursesResult.SupplierSystemUnavailable();       
         }
     }
 }

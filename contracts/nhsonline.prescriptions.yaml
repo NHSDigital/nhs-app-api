@@ -21,6 +21,8 @@ paths:
             $ref: "#/definitions/CourseListResponse"
         401:
           description: User session missing or expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
         500:
           description: An unexpected error occurred processing the request.
         502:
@@ -82,6 +84,8 @@ paths:
           description: Bad request. All headers must be provided.
         401:
           description: User session has expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
         500:
           description: An unexpected error occurred processing the request.
         502:

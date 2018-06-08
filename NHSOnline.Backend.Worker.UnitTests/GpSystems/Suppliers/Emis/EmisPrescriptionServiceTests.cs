@@ -416,26 +416,52 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenNullReferenceExceptionOccursCallingEmis()
+        public async Task Get_ReturnsInternalServerError_WhenNullExceptionOccursCallingEmis()
         {
             // Arrange
             var date = DateTimeOffset.Now;
             var toDate = DateTimeOffset.Now;
-            const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
 
             _emisClient.Setup(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                     _userSession.EndUserSessionId, date, toDate))
-                .Throws<NullReferenceException>()
-                .Verifiable();
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = null,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
 
             // Act
             var result = await _systemUnderTest.Get(_userSession, date, toDate);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.UnexpectedError>();
+            result.Should().BeAssignableTo<PrescriptionResult.InternalServerError>();
             _emisClient.Verify();
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenErrorReceivedFromEmis()
+        {
+            // Arrange
+            var date = DateTimeOffset.Now;
+            var toDate = DateTimeOffset.Now;
+
+            var notEnabledError = EmisApiErrorMessages.EmisService_NotEnabledForUser;
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = notEnabledError;
+
+            _emisClient.Setup(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
+                    _userSession.EndUserSessionId, date, toDate))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>(HttpStatusCode.Forbidden)
+                        { ErrorResponse = errorResponse }));
+
+            // Act
+            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
         }
 
         #endregion
@@ -500,7 +526,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
 
             // Assert
-            result.Should().BeAssignableTo<PrescriptionResult.InsufficientPermissions>();
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
         }
 
         [TestMethod]

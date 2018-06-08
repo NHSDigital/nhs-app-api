@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 return new AppointmentBookResult.SlotNotAvailable();
             }
 
-            if (HasInsufficientPermissions(response))
+            if (response.HasForbiddenResponse())
             {
                 return new AppointmentBookResult.InsufficientPermissions();
             }

@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
             }
         }
 
-        public class InsufficientPermissions : PrescriptionResult
+        public class SupplierNotEnabled : PrescriptionResult
         {
             public override T Accept<T>(IPrescriptionResultVisitor<T> visitor)
             {
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
             }
         }
         
-        public class UnexpectedError : PrescriptionResult
+        public class InternalServerError : PrescriptionResult
         {
             public override T Accept<T>(IPrescriptionResultVisitor<T> visitor)
             {

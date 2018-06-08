@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
                 if (!slotResponse.HasSuccessStatusCode)
                 {
-                    if (slotResponse.HasExceptionWithMessageContaining(EmisApiErrorMessages.EmisService_NotEnabledForUser))
+                    if (slotResponse.HasForbiddenResponse())
                     {
                         return new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse());
                     }

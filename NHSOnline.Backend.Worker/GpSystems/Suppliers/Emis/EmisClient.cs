@@ -252,6 +252,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             {
                 return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message)) ?? false;
             }
+            
+            public bool HasForbiddenResponse()
+            {
+                if (StatusCode == HttpStatusCode.Forbidden)
+                {
+                    return true;
+                }
+
+                return HasExceptionWithMessageContaining(
+                    EmisApiErrorMessages.EmisService_NotEnabledForUser);
+            }     
         }
 
         public class EmisApiObjectResponse<TBody> : EmisApiResponse

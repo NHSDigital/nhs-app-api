@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
         
-        public IActionResult Visit(PrescriptionResult.InsufficientPermissions result)
+        public IActionResult Visit(PrescriptionResult.SupplierNotEnabled result)
         {
             return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             return new StatusCodeResult(StatusCodes.Status400BadRequest);
         }
         
-        public IActionResult Visit(PrescriptionResult.UnexpectedError result)
+        public IActionResult Visit(PrescriptionResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }

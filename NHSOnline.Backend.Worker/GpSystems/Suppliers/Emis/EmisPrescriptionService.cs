@@ -41,31 +41,34 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, fromDate, toDate);
 
-                if (!prescriptionsResponse.HasSuccessStatusCode)
+                if (prescriptionsResponse.HasSuccessStatusCode)
                 {
-                    _logger.LogError(
-                        $"Unsuccessful request retrieving prescriptions for {nameof(fromDate)}={fromDate:O}, {nameof(toDate)}={toDate:O}. Status code: {(int) prescriptionsResponse.StatusCode}");
-                    return new PrescriptionResult.SupplierSystemUnavailable();
-                }
+                    try
+                    {   
+                    var prescriptionListResponseFiltered =
+                        GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
 
-                var prescriptionListResponseFiltered = GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
-
-                _logger.LogDebug(
-                    $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
-                var result = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
-
-                return new PrescriptionResult.SuccessfullGet(result);
+                        _logger.LogDebug(
+                            $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
+                        var mapppedPrescriptionList = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
+                        
+                        return new PrescriptionResult.SuccessfullGet(mapppedPrescriptionList);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
+                        
+                        return new PrescriptionResult.InternalServerError();
+                    }
+                }    
+                
+               return GetCorrectErrorResult(prescriptionsResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
-            }
-            catch (NullReferenceException e)
-            {
-                _logger.LogError(e, "Prescription retrieval return null body");
-                return new PrescriptionResult.UnexpectedError();
-            }
+            }                                     
         }
 
         private PrescriptionRequestsGetResponse GetPrescriptionsWithoutRepeatCourses(
@@ -142,12 +145,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
+                _logger.LogInformation(
+                    "The prescription request is invalid as the prescription has already been ordered in the last 30 days");
+
                 return new PrescriptionResult.CannotReorderPrescription();
             }
 
-            if (HasInsufficientPermissions(response))
+            if (response.HasForbiddenResponse())
             {
-                return new PrescriptionResult.InsufficientPermissions();
+                _logger.LogInformation(
+                    "The emis prescriptions service is not enabled");
+                
+                return new PrescriptionResult.SupplierNotEnabled();
             }
 
             if (IsBadRequest(response))
@@ -157,6 +166,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
                 return new PrescriptionResult.BadRequest();
             }
+            
+            _logger.LogError(
+                "Emis system is currently unavailable");
 
             return new PrescriptionResult.SupplierSystemUnavailable();
         }
@@ -164,17 +176,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private static bool IsBadRequest(EmisClient.EmisApiResponse response)
         {
             return response.StatusCode == HttpStatusCode.BadRequest;
-        }
-
-        private static bool HasInsufficientPermissions(EmisClient.EmisApiResponse response)
-        {
-            if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                return true;
-            }
-
-            return response.HasExceptionWithMessageContaining(
-                EmisApiErrorMessages.EmisService_NotEnabledForUser);
         }
 
         private static bool HasAlreadyBeenOrderedLast30Days(EmisClient.EmisApiResponse response)

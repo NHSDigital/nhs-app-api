@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
             }
         }
 
-        public class Unsuccessful : GetCoursesResult
+        public class SupplierNotEnabled : GetCoursesResult
         {
             public override T Accept<T>(ICourseResultVisitor<T> visitor)
             {
@@ -29,7 +29,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
             }
         }
         
-        public class SupplierBadData : GetCoursesResult
+        public class InternalServerError : GetCoursesResult
+        {
+            public override T Accept<T>(ICourseResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+        
+        public class SupplierSystemUnavailable : GetCoursesResult
         {
             public override T Accept<T>(ICourseResultVisitor<T> visitor)
             {
