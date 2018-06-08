@@ -17,6 +17,8 @@ interface IInteractor {
 
     fun setHeaderText(text: String)
 
+    fun clearMenuBarItem()
+
     fun hideHeader()
 
     fun hideMenuBar()

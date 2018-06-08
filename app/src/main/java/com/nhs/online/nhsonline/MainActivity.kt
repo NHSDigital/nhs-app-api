@@ -119,19 +119,22 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
 
-    private fun onMyRecordMenuSelected() = loadSubPage(resources.getString(R.string.myRecordPath))
+    private fun onMyRecordMenuSelected() = loadSubPage(resources.getString(R.string.myRecordPath), resources.getString(R.string.my_record_header))
 
-    private fun onMoreMenuSelected() = loadSubPage(resources.getString(R.string.morePath))
+    private fun onMoreMenuSelected() = loadSubPage(resources.getString(R.string.morePath), resources.getString(R.string.more))
 
-    private fun onAppointmentsMenuSelected() = loadSubPage(resources.getString(R.string.appointmentsPath))
+    private fun onAppointmentsMenuSelected() = loadSubPage(resources.getString(R.string.appointmentsPath), resources.getString(R.string.appointment))
 
-    private fun onPrescriptionsMenuSelected() = loadSubPage(resources.getString(R.string.prescriptionsPath))
+    private fun onPrescriptionsMenuSelected() = loadSubPage(resources.getString(R.string.prescriptionsPath), resources.getString(R.string.prescription))
 
-    private fun onNhsOnlineLogoIconSelected() = loadWelcomePage()
+    private fun onNhsOnlineLogoIconSelected() {
+        loadWelcomePage()
+        menuBar.deselectActiveItem()
+        setHeaderText(resources.getString(R.string.home_header))
+    }
 
     private fun onMyAccountIconSelected() {
-        loadSubPage(resources.getString(R.string.myAccountPath))
-        setHeaderText(resources.getString(R.string.my_account_header))
+        loadSubPage(resources.getString(R.string.myAccountPath), resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
     }
 
@@ -144,14 +147,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.loadUrl(urlWithMissingQueryStrings)
     }
 
-    private fun loadSubPage(pageEndPoint: String) {
+    private fun loadSubPage(pageEndPoint: String, headerText: String?) {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
                 .buildUpon()
                 .appendEncodedPath(pageEndPoint)
                 .build()
         val fullUrl = builtUri.toString()
         loadPage(fullUrl)
+        if (headerText != null) {
+            setHeaderText(headerText)
+        }
     }
+
 
     override fun setHeaderText(text: String) {
         runOnUiThread({
@@ -216,6 +223,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 chromeClient.onLocationPermissionResponded(false)
             }
         }
+    }
+    override fun clearMenuBarItem() {
+        runOnUiThread({
+            run {
+                menuBar.deselectActiveItem()
+            }
+        })
     }
 
     override fun hideMenuBar() {

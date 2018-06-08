@@ -9,6 +9,8 @@
     <string name="my_account_header">My account</string>
     <string name="organ_donation_register_header">Organ donation register</string>
     <string name="nhs_111_header">Check your symptoms</string>
+    <string name="my_record_header">My medical record</string>
+    <string name="home_header">Home</string>
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
     <string name="organ_donation_connection_error">Organ donation unavailable</string>
