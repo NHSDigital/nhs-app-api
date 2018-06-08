@@ -109,5 +109,5 @@ class MockingClient(private val configuration: MockingConfiguration) {
     companion object {
         val instance: MockingClient by lazy { MockDefaults.createMockingClient(Config.instance) }
     }
-
+    
 }

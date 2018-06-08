@@ -1,7 +1,5 @@
 package mocking.emis.appointments
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -11,6 +9,7 @@ import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
+import java.time.Duration
 
 class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
                                       apiEndUserSessionId: String,
@@ -20,6 +19,8 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
                                       userPatientLinkToken: String? = null)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointmentslots/meta") {
 
+    var delayMillisecs = 0;
+
     init {
         requestBuilder
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
@@ -28,6 +29,11 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
         if (!sessionStartDate.isNullOrEmpty()) requestBuilder.andQueryParameter("sessionStartDate", sessionStartDate!!)
         if (!sessionEndDate.isNullOrEmpty()) requestBuilder.andQueryParameter("sessionEndDate", sessionEndDate!!)
         if (!userPatientLinkToken.isNullOrEmpty()) requestBuilder.andQueryParameter("userPatientLinkToken", userPatientLinkToken!!)
+    }
+
+    fun withDelay(delayMilliseconds : Duration):EmisAppointmentSlotsMetaBuilder{
+        delayMillisecs = delayMilliseconds.toMillis().toInt()
+        return this;
     }
 
     fun respondWithSuccess(model: GetAppointmentSlotsMetaResponseModel): Mapping {
@@ -51,8 +57,11 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = SC_OK): Mapping {
+
         return respondWith(statusCode) {
             andJsonBody(body, GsonFactory.asPascal)
+                    .andDelay(delayMillisecs)
+
         }
 
     }

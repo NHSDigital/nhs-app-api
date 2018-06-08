@@ -12,6 +12,7 @@ import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
+import java.time.Duration
 
 class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
                                   apiEndUserSessionId: String,
@@ -37,6 +38,13 @@ class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
         val model = GetAppointmentSlotsResponseModel(arrayListOf(session))
         return respondWithBody(model)
     }
+    var delayMillisecs = 0;
+
+    fun withDelay(delayMilliseconds : Duration):EmisAppointmentSlotsBuilder{
+        delayMillisecs = delayMilliseconds.toMillis().toInt()
+        return this;
+    }
+
     fun respondWithSuccess(model: GetAppointmentSlotsResponseModel): Mapping {
         return respondWithBody(model)
     }
@@ -60,6 +68,7 @@ class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
     private fun respondWithBody(body: Any, statusCode: Int = SC_OK): Mapping {
         return respondWith(statusCode) {
             andJsonBody(body, GsonFactory.asPascal)
+                    .andDelay(delayMillisecs)
         }
     }
 }
