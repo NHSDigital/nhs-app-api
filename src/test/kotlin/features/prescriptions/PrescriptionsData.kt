@@ -26,9 +26,10 @@ object PrescriptionsData {
             var courseNum = medicationCourses.count().minus(1)
 
             while (prescriptionNum <= maxPrescriptions) {
-                val requestedMedicationCourses = mutableListOf<RequestedMedicationCourse>()
+                var requestedMedicationCourses = mutableListOf<RequestedMedicationCourse>()
                 var time = OffsetDateTime.now()
-                time = time.plusSeconds(1)
+
+                time = time.minusDays(prescriptionNum.toLong())
 
                 if (!isSecondIteration) {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
@@ -43,7 +44,7 @@ object PrescriptionsData {
 
                 courseNum--
 
-                if (prescriptionNum == maxPrescriptions && courseNum > 0) {
+                if (prescriptionNum == maxPrescriptions && courseNum >= 0) {
                     isSecondIteration = true
                     maxPrescriptions = noPrescriptions.minus(1)
                     prescriptionNum = 0
@@ -98,7 +99,7 @@ object PrescriptionsData {
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",
-                "$quantity  ml")
+                "$quantity ml")
 
         return list.get(getrandomNumber(list.size))
     }

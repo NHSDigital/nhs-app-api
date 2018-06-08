@@ -11,7 +11,7 @@ class Header : HybridPageObject(Companion.PageType.NATIVE) {
         val accountIsVisible = find<WebElementFacade>(By.id("accountIcon")).isVisible
         val headingIsVisible = findBy<WebElementFacade>("//header/h1[text()='$title']").isVisible
 
-        return logoIsVisible && accountIsVisible && headingIsVisible
+       return logoIsVisible && accountIsVisible && headingIsVisible
     }
 
     fun clickMyAccount() {
