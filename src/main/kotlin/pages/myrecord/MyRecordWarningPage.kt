@@ -46,6 +46,7 @@ class MyRecordWarningPage : PageObject() {
     }
 
     fun clickBacktoHome() {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", btnBack2Home);
         btnBack2Home.click()
     }
 
