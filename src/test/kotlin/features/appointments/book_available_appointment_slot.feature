@@ -3,6 +3,10 @@ Feature: Book an available appointment slot
   As a logged in user
   I want to be able to select, confirm and book selected appointment
 
+  Background:
+    Given wiremock is initialised
+    And there are available appointment slots
+
   @pending  @NHSO-986
   @native
   @mobile
@@ -92,72 +96,55 @@ Feature: Book an available appointment slot
     Then I see selected appointment stay selected
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
   Scenario: A user tries to book an appointment without describing symptoms
-    Given I have selected an appointment slot to book
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
     When I click the 'Confirm and book appointment' button
     Then an error is displayed that "Describe your symptoms" is mandatory
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
   Scenario: A user tries to book an appointment describing symptoms at least 1 character
-    Given I have selected an appointment slot to book
-    And I enter symptoms of 1 character
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
+    And I enter symptoms of 1 characters
     When I click the 'Confirm and book appointment' button
-    Then booking request is successfully made
-    And Appointment Booking confirmation screen is displayed
+    Then Appointment Booking confirmation screen is displayed
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
   Scenario: A user tries to book an appointment describing symptoms no more 150 characters
-    Given I have selected an appointment slot to book
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
     And I enter symptoms of 150 characters
     When I click the 'Confirm and book appointment' button
-    Then booking request is successfully made
     And Appointment Booking confirmation screen is displayed
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
   Scenario: A user tries to enter symptoms with over 150 characters
-    Given I have selected an appointment slot to book
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
     When I enter symptoms of 151 characters
     Then only the first 150 characters will be displayed
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
   Scenario: A user tries to paste symptoms with over 150 characters
-    Given I have selected an appointment slot to book
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
     When I paste symptoms of 151 characters
     Then only the first 150 characters will be displayed
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
-  Scenario: A user tries to enter symptoms with over 150 characters and then tries to book
-    Given I have selected an appointment slot to book
-    And I enter symptoms of 151 characters
+  Scenario: A user tries to enter symptoms with 150 characters and then tries to book
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
+    And I enter symptoms of 150 characters
     When I click the 'Confirm and book appointment' button
-    Then booking request is successfully made
     And Appointment Booking confirmation screen is displayed
 
   @NHSO-72
-  @pending  @NHSO-72
-  @native
-  @mobile
   Scenario: A user tries to book an appointment when there is a problem
-    Given I have selected an appointment slot to book
+    Given I am on the appointments page
+    And I have selected an appointment slot to book
     And GP system doesn't respond a timely fashion for booking an appointment
-    And I enter symptoms
-    When I click the 'Confirm and book appointment' button
-    Then Appointment Booking confirmation screen is not displayed
+    When I enter symptoms of 150 characters
+    And I click the 'Confirm and book appointment' button
+    Then I see appropriate information message when there is an error on appointment confirmation page

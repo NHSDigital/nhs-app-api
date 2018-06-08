@@ -9,25 +9,49 @@ Feature: View prescriptions
     Given I am logged in
     Then I see the prescriptions menu button
 
-  @bug @NHSO-922
   Scenario: A user selects the prescriptions menu button
-    Given I am logged in
-    When I navigate to prescriptions
+    Given I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    When I am on the prescriptions page
     Then I see prescriptions page loaded
     And the prescriptions menu button is highlighted
 
-  @pending
-  Scenario: An EMIS user with no past repeat prescriptions opens the page
-    Given I am logged in
-    When I navigate to prescriptions
-    Then I see a message indicating that I have no repeat prescriptions
+  Scenario: A user with no past repeat prescriptions
+    Given I have 0 past repeat prescriptions
+    And each repeat prescription contains 0 courses of which 0 are repeats
+    When I am on the prescriptions page
+    Then I see no prescriptions
+    And I see a message indicating that I have no repeat prescriptions
 
-  @pending
-  Scenario: An EMIS user with 1 or more past repeat prescriptions > 6 months old opens the page
-    Given I am logged in
-    When I navigate to prescriptions
-    Then I see a message indicating that I have no repeat prescriptions
+  Scenario: A user who has prescriptions totalling more than one hundred courses
+    Given I have 110 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    When I am on the prescriptions page
+    Then I see 100 prescriptions
 
+  Scenario: A user who has multiple prescription each containing one course
+    Given I have 3 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    When I am on the prescriptions page
+    Then I see 3 prescriptions
+
+  Scenario: A user who has multiple prescription each containing the same repeat prescription
+    Given I have 3 past repeat prescriptions
+    And each repeat prescription shares the same course
+    When I am on the prescriptions page
+    Then I see 3 prescriptions
+
+  Scenario: A user who has only one prescription containing multiple courses
+    Given I have 1 past repeat prescriptions
+    And each repeat prescription contains 3 courses of which 3 are repeats
+    When I am on the prescriptions page
+    Then I see 3 prescriptions
+
+  Scenario: A user who has acute prescriptions
+    Given I have 1 past repeat prescriptions
+    And each repeat prescription contains 3 courses of which 2 are repeats
+    When I am on the prescriptions page
+    Then I see 2 prescriptions
 
   @pending
   @NHSO-599

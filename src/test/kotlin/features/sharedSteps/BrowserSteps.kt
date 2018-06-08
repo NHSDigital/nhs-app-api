@@ -34,6 +34,45 @@ open class BrowserSteps {
         Assert.assertEquals(url, loginPage.driver.currentUrl)
     }
 
+    private fun fetchCookieContents(cookieName:String) : String
+    {
+        val driver = loginPage.driver
+        var cookieValue = driver.manage().cookies.first { x -> x.name == cookieName }.toString()
+        cookieValue = cookieValue.replace("%22", "'")
+        cookieValue = cookieValue.replace("%2C", ",")
+        return cookieValue
+    }
+    // checks whether or not he names cookie contains the specified contents in it's value.
+    // note: the codes %22 (') and %2C (,) are replaced with real charactors to make the test strings easier to read.
+    private fun cookieContains(cookieName:String, content:String) : Boolean {
+        var cookieValue = fetchCookieContents(cookieName)
+        return cookieValue.indexOf(content) > 0;
+    }
+
+    private fun assertCookieContains(errorMessage:String, cookieName:String, content:String) {
+        if(cookieContains(cookieName, content) == false)
+        {
+            Assert.assertEquals(errorMessage, content, fetchCookieContents(cookieName))
+        }
+    }
+
+    @Step()
+    open fun checkLoginDetailsAreReset() {
+        val vuexCookieName = "nhso";
+
+        // No user details...
+        Assert.assertFalse(cookieContains(vuexCookieName,"familyName"));
+        Assert.assertFalse(cookieContains(vuexCookieName,"givenName"));
+        Assert.assertFalse(cookieContains(vuexCookieName,"userSession"));
+        Assert.assertTrue("user details should be blank", cookieContains(vuexCookieName,"'user':{}"));
+        Assert.assertTrue("No one is logged in", cookieContains(vuexCookieName,"'loggedIn':false"));
+
+        // No remaining personal data left...
+        assertCookieContains("Appointments should be blank", vuexCookieName,"'appointmentSlots':{'appointmentSessions':[],'clinicians':[],'locations':[],'slots':[],'hasLoaded':false,'hasErrored':false}");
+        assertCookieContains("Prescriptions should be blank", vuexCookieName,"'prescriptions':{'prescriptionCourses':[],'hasLoaded':false,'hasErrored':false}");
+        assertCookieContains("Repeat prescriptions should be blank", vuexCookieName,"'repeatPrescriptionCourses':{'courses':[],'loaded':false,'errored':false,'repeatPrescriptionCourses':[],'hasLoaded':false,'hasErrored':false,'validated':false,'valid':false}");
+    }
+
     @Step
     fun changeTab(url: URL) {
         val driver = loginPage.driver
@@ -59,5 +98,10 @@ open class BrowserSteps {
         } catch (e: MalformedURLException) {
             throw SerenityManagedException("Malformed URL from ${ThucydidesSystemProperty.WEBDRIVER_BASE_URL}: $baseUrl", e)
         }
+    }
+
+    @Step
+    fun refreshPage() {
+        loginPage.driver.navigate().refresh()
     }
 }

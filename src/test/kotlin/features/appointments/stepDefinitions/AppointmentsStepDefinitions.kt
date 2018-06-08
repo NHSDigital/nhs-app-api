@@ -3,6 +3,7 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
@@ -37,6 +38,8 @@ class AppointmentsStepDefinitions {
     lateinit var navigation: NavigationSteps
     @Steps
     lateinit var appointments: AppointmentsSteps
+    @Steps
+    lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
@@ -149,12 +152,17 @@ class AppointmentsStepDefinitions {
     }
 
     @Given("^there are available appointment slots for an explicit date-time range$")
-    fun thereAreAvailableAppointmentSlots() {
+    fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange() {
         val emisSlotLocations = defaultEmisMetaSlotLocations
         val emisSlotSessionHolders = defaultEmisMetaSlotSessionHolders
         val emisSlotSessions = defaultEmisMetaSlotSessions
         val emisAppointmentSessions = defaultEmisAppointmentSessions
         generateAppropriateStubsForAppointmentSlots(emisSlotLocations, emisSlotSessionHolders, emisSlotSessions, emisAppointmentSessions)
+    }
+
+    @Given("^there are available appointment slots$")
+    fun thereAreAvailableAppointmentSlots() {
+        thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange()
     }
 
     @Given("^there are available appointment slots, but session has expired$")
@@ -328,7 +336,7 @@ class AppointmentsStepDefinitions {
                                                             emisAppointmentSessions: ArrayList<AppointmentSession>) {
         mockingClient
                 .forEmis {
-                    appointmentSlotsMetaRequest(patient, defaultSessionStartDate, defaultSessionEndDate)
+                    appointmentSlotsMetaRequest(patient)
                             .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
                                     emisSlotLocations,
                                     emisSlotSessionHolders,
@@ -338,11 +346,13 @@ class AppointmentsStepDefinitions {
 
         mockingClient
                 .forEmis {
-                    appointmentSlotsRequest(patient, defaultSessionStartDate, defaultSessionEndDate)
+                    appointmentSlotsRequest(patient)
                             .respondWithSuccess(GetAppointmentSlotsResponseModel(
                                     emisAppointmentSessions
                             ))
                 }
+
+        appointmentsConfirmationSteps.mockEmisSuccessResponse()
     }
 
     private fun toLocalTime(date: String?): String {
