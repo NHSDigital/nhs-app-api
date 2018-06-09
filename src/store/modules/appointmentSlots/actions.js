@@ -1,4 +1,4 @@
-import { INIT_APPOINTMENTS, SLOT_SELECTED, SLOTS_LOADED } from './mutation-types';
+import { INIT_APPOINTMENTS, SLOT_SELECTED, SLOTS_LOADED, SLOTS_CLEAR } from './mutation-types';
 
 export default {
   getAppointmentsSlotsParameters: () => {
@@ -18,6 +18,9 @@ export default {
   },
   init({ commit }) {
     commit(INIT_APPOINTMENTS);
+  },
+  reset({ commit }) {
+    commit(SLOTS_CLEAR);
   },
   load({ commit }) {
     const getFromDate = () => new Date();

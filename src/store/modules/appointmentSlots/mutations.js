@@ -2,7 +2,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 import { assign, find, get, map, mapKeys, sortBy } from 'lodash/fp';
-import { initialState, INIT_APPOINTMENTS, SLOT_SELECTED, SLOTS_LOADED } from './mutation-types';
+import { initialState, INIT_APPOINTMENTS, SLOTS_LOADED, SLOT_SELECTED, SLOTS_CLEAR } from './mutation-types';
 
 const findById = (id, collection) => find(item => item.id === id)(collection);
 const findByIds = (ids, collection) => map(id => findById(id, collection))(ids);
@@ -18,6 +18,11 @@ export default {
       slot.selected = slot.id === slotId;
       return slot;
     });
+  },
+  [SLOTS_CLEAR](state) {
+    state.slots = [];
+    state.hasLoaded = false;
+    state.selectedSlotId = undefined;
   },
   [INIT_APPOINTMENTS](state) {
     state = initialState;
@@ -46,7 +51,6 @@ export default {
       result.selected = false;
       return result;
     })(state.slots);
-
     state.slots = sortSlots(state.slots);
     state.hasLoaded = true;
   },

@@ -56,11 +56,21 @@ export default {
       return this.showValidationError ? 'errorLabel maxReasonDesc' : 'maxReasonDesc';
     },
   },
+  watch: {
+    symptoms(val, oldValue) {
+      if (val.length > 150) {
+        this.symptoms = oldValue;
+      }
+    },
+  },
   mounted() {
     this.slot = this.$store.state.appointment.tempSelectedSlot;
     if (!this.slot) {
       this.$router.push('/appointments');
     }
+  },
+  beforeDestroy() {
+    this.$store.dispatch('appointment/reset');
   },
   methods: {
     onConfirmButtonClicked() {
