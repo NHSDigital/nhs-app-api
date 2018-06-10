@@ -1,115 +1,74 @@
 <template>
-  <main :class="bottomStyle()">
-    <div v-if="showNoAppointment" data-purpose="no-slots-error">
-      <p :class="$style.summary">{{ $t('appointments.noSlotErrorMessage.summary') }}</p>
-      <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>
+  <main :class="$style.main">
+    <success-dialog v-if="justBookedAnAppointment">
+      <p>
+        {{ $t('appointments.index.successText') }}
+      </p>
+    </success-dialog>
+    <div :class="$style.info">
+      <h3>{{ $t('appointments.index.empty.header') }}</h3>
+      <p>{{ $t('appointments.index.empty.text1') }}</p>
+      <p>{{ $t('appointments.index.empty.text2') }} </p>
     </div>
-    <ul v-if="showAppointments" data-purpose="slots">
-      <li v-for="(slot, index) in slots" :key="slot.id" :class="$style.slot">
-        <appointment-slot :the-slot = "slot" :aria-label="'slot ' + (index +1)"/>
-      </li>
-    </ul>
-
-    <floating-button-bottom
-      :button-classes="['green']"
-      :clickable="hasASlotSelected"
-      @on-click="onBookButtonClicked"
-    >
-      {{ $t('appointments.bookAppointmentButtonText') }}
+    <floating-button-bottom @on-click="onBookButtonClicked">
+      {{ $t('appointments.index.bookButtonText') }}
     </floating-button-bottom>
   </main>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import { mapGetters } from 'vuex';
-import AppointmentSlot from '../../components/AppointmentSlot';
+import SuccessDialog from '@/components/SuccessDialog';
 import FloatingButtonBottom from '../../components/FloatingButtonBottom';
 
 export default {
   middleware: ['auth', 'meta'],
   components: {
-    AppointmentSlot,
+    SuccessDialog,
     FloatingButtonBottom,
   },
-  computed: {
-    showNoAppointment() {
-      return (
-        this.$store.state.appointmentSlots.hasLoaded &&
-        this.$store.state.appointmentSlots.slots.length === 0
-      );
-    },
-    showAppointments() {
-      return (
-        this.$store.state.appointmentSlots.hasLoaded &&
-        this.$store.state.appointmentSlots.slots.length > 0
-      );
-    },
-    hasASlotSelected() {
-      return this.slots.filter(slot => slot.selected === true).length > 0;
-    },
-    ...mapGetters({
-      slots: 'appointmentSlots/slots',
-      findById: 'appointmentSlots/findById',
-    }),
+  data() {
+    return {
+      justBookedAnAppointment: false,
+    };
   },
   mounted() {
-    this.$store.dispatch('appointmentSlots/load');
+    this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
+    this.$store.dispatch('appointment/resetJustBooked');
   },
   beforeDestroy() {
     this.$store.dispatch('appointmentSlots/reset');
   },
   methods: {
-    bottomStyle() {
-      if (
-        this.$store.state.appointmentSlots.hasLoaded &&
-        this.$store.state.appointmentSlots.slots.length !== 0
-      ) {
-        return this.$style.mainShowingSlots;
-      }
-      return this.$style.main;
-    },
     onBookButtonClicked() {
-      this.$store.dispatch('appointment/save');
-      this.$router.push('/appointments/confirmation');
+      this.$router.push('/appointments/booking');
     },
   },
 };
 </script>
 
 <style module lang="scss">
-  @import "../../style/html";
-  @import "../../style/fonts";
   @import "../../style/spacings";
+  @import "../../style/textstyles";
+  @import "../../style/colours";
 
   .main {
     @include space(padding, all, $three);
-  }
 
-  .mainShowingSlots {
-    @include space(padding, all, $three);
-    padding-bottom: 78px;
-  }
-
-  .summary {
-    font-weight: bold;
-    @include space(margin, bottom, $three);
-  }
-
-  .info {
-    @include default_text;
-    font-size: 12pt;
-    @include space(margin, bottom, $three);
-  }
-
-  .slot {
-    list-style: none;
-    @include space(margin, bottom, $three);
-  }
-
-  .summary {
-    font-weight: bold;
-    @include space(margin, bottom, $three);
+    .info {
+      p {
+        @include default_text;
+        font-size: 12pt;
+        display: block;
+        margin-bottom: 16px;
+      }
+      h3 {
+        @include h5;
+        font-size: 13pt;
+        color: $dark_grey;
+        margin-bottom: 16px;
+      }
+    }
   }
 
 </style>

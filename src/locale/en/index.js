@@ -25,8 +25,14 @@ export default {
     message: 'Please try again later. If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
   },
   appointments: {
-    header: {
-      title: 'Book an appointment',
+    index: {
+      successText: 'Appointment Booked',
+      bookButtonText: 'Book new appointment',
+      empty: {
+        header: 'You don\'t currently have any appointments booked',
+        text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details, cancel it and see your appointment history.',
+        text2: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
+      },
     },
     noSlotErrorMessage: {
       summary: 'There are no appointments available at the moment',
@@ -36,7 +42,9 @@ export default {
       message:
         'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
-    bookAppointmentButtonText: 'Book this appointment',
+    booking: {
+      bookButtonText: 'Book this appointment',
+    },
     confirmation: {
       headerLabel: 'What is this appointment for?',
       label: 'Describe your symptoms',
@@ -45,9 +53,6 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'Please, enter a reason for this appointment',
       noReasonError: 'Please describe your symptoms',
-    },
-    booked: {
-      successText: 'Appointment Booked',
     },
     errors: {
       pageHeader: 'Error retrieving data',
@@ -171,8 +176,8 @@ export default {
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
-    appointments: 'Appointments',
-    appointmentBooked: 'My Appointments',
+    appointments: 'My Appointments',
+    appointmentBooking: 'Appointments',
     appointmentConfirmation: 'Check appointment details',
     myRecord: 'My medical record',
     more: 'More',

@@ -91,7 +91,7 @@ export default {
       this.$store.dispatch('appointment/bookAppointment', bookingData);
     },
     onCancelButtonClicked() {
-      this.$router.push('/appointments');
+      this.$router.push('/appointments/booking');
     },
   },
 };

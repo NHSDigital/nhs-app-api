@@ -28,7 +28,7 @@ export default{
       .postV1PatientAppointments(param)
       .then(() => {
         commit(BOOK_SUCCESS);
-        this.app.router.push('/appointments/booked');
+        this.app.router.push('/appointments');
       });
   },
 };

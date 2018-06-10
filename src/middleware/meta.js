@@ -6,7 +6,7 @@ const MORE = 'more';
 const REPEAT_PRESCRIPTION_COURSES = 'prescriptions-repeat-courses';
 const CONFIRM_COURSES = 'prescriptions-confirm-prescription-details';
 const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
-const APPOINTMENT_BOOKED = 'appointments-booked';
+const APPOINTMENT_BOOKING = 'appointments-booking';
 const ACCOUNT = 'account';
 const MYRECORDWARNING = 'my-record-myrecordwarning';
 const MYRECORD = 'my-record';
@@ -37,11 +37,11 @@ export default function ({ route, store, app }) {
     case CONFIRM_COURSES:
       route.meta.headerKey = 'pageHeaderTitles.confirmPrescription';
       break;
+    case APPOINTMENT_BOOKING:
+      route.meta.headerKey = 'pageHeaderTitles.appointmentBooking';
+      break;
     case APPOINTMENT_CONFIRMATIONS:
       route.meta.headerKey = 'pageHeaderTitles.appointmentConfirmation';
-      break;
-    case APPOINTMENT_BOOKED:
-      route.meta.headerKey = 'pageHeaderTitles.appointmentBooked';
       break;
     case ACCOUNT:
       route.meta.headerKey = 'pageHeaderTitles.account';
