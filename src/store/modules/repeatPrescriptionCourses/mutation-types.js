@@ -8,12 +8,10 @@ export const REPEAT_PRESCRIPTION_ORDER_SUCCESS = 'REPEAT_PRESCRIPTION_ORDER_SUCC
 
 export const initialState = {
   courses: [],
-  loaded: false,
-  errored: false,
   repeatPrescriptionCourses: [],
   justOrderedARepeatPrescription: false,
   hasLoaded: false,
   hasErrored: false,
   validated: false,
-  valid: false,
+  isValid: false,
 };

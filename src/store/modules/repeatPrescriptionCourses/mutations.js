@@ -24,7 +24,7 @@ export default {
       result.selected = false;
       return result;
     })(state.courses);
-    state.loaded = true;
+    state.hasLoaded = true;
   },
   [INIT_REPEAT_PRESCRIPTIONS](state) {
     mapKeys((key) => {

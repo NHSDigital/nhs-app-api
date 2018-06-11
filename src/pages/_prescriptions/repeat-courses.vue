@@ -73,16 +73,16 @@ export default {
       return repeatPrescriptionCourses;
     },
     showNoRepeatCourses() {
-      const { repeatPrescriptionCourses, loaded } = this.$store.state.repeatPrescriptionCourses;
-      return loaded && repeatPrescriptionCourses.length === 0;
+      const { repeatPrescriptionCourses, hasLoaded } = this.$store.state.repeatPrescriptionCourses;
+      return hasLoaded && repeatPrescriptionCourses.length === 0;
     },
     showRepeatCourses() {
-      const { repeatPrescriptionCourses, loaded } = this.$store.state.repeatPrescriptionCourses;
-      return loaded && repeatPrescriptionCourses.length > 0;
+      const { repeatPrescriptionCourses, hasLoaded } = this.$store.state.repeatPrescriptionCourses;
+      return hasLoaded && repeatPrescriptionCourses.length > 0;
     },
   },
   mounted() {
-    if (!this.$store.state.repeatPrescriptionCourses.loaded) {
+    if (!this.$store.state.repeatPrescriptionCourses.hasLoaded) {
       this.$store.dispatch('repeatPrescriptionCourses/load');
     }
   },
