@@ -66,10 +66,14 @@ describe('orderRepeatPrescription', () => {
       SpecialRequest: null,
     };
 
-    orderRepeatPrescription
+    const expectedRequest = {
+      repeatPrescriptionRequest: { repeatPrescriptionOrder },
+    };
+
+    return orderRepeatPrescription
       .call(that, { commit }, { repeatPrescriptionOrder })
       .then(() => {
-        expect(that.app.$http.postV1PatientPrescriptions).toBeCalledWith(repeatPrescriptionOrder);
+        expect(that.app.$http.postV1PatientPrescriptions).toBeCalledWith(expectedRequest);
         expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_ORDER_SUCCESS);
         expect(that.app.router.push).toBeCalledWith('/prescriptions');
       });
