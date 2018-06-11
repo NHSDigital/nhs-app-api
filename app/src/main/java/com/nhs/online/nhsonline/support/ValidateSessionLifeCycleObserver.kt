@@ -14,8 +14,10 @@ class ValidateSessionLifeCycleObserver(private var context: MainActivity,
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onMoveToForeground() {
-        if (knownServices.shouldValidateSession(context.webview.url)) {
-            appWebInterface.validateSession();
+        var knownService = knownServices.findMatchingKnownService(context.webview.url)
+
+        if (knownService != null && knownService.shouldValidateSession) {
+            appWebInterface.validateSession()
         }
     }
 }

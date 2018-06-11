@@ -6,6 +6,6 @@ class AppWebInterface(private val context: MainActivity) {
     private val validateSessionString: String = "window.validateSession();"
 
     fun validateSession() {
-        context.webview.evaluateJavascript(validateSessionString, null);
+        context.webview.evaluateJavascript(validateSessionString, null)
     }
 }
