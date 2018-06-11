@@ -4,7 +4,7 @@
     <div id="mainDiv">
       <spinner />
       <connection-error />
-      <api-server-error />
+      <api-error />
       <nuxt v-if="showView" />
     </div>
     <navigation-menu v-if="showMenu"/>
@@ -16,7 +16,7 @@
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/Spinner';
-import ApiServerError from '@/components/errors/ApiServerError';
+import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 
 export default {
@@ -24,13 +24,8 @@ export default {
     NavigationMenu,
     HeaderMenu,
     Spinner,
-    ApiServerError,
+    ApiError,
     ConnectionError,
-  },
-  data() {
-    return {
-      noConnection: false,
-    };
   },
   head() {
     return {
@@ -49,11 +44,8 @@ export default {
       );
     },
     showView() {
-      return !this.noConnection && !this.hasApiServerErrorResponse();
+      return !this.$store.getters['errors/showApiError'];
     },
-  },
-  updated() {
-    this.noConnection = !navigator.onLine;
   },
   created() {
     if (this.$route.query.source === 'mobile') {
@@ -68,12 +60,6 @@ export default {
         this.$store.dispatch('session/validate');
       };
     }
-  },
-  methods: {
-    hasApiServerErrorResponse() {
-      const response = this.$store.state.http.apiErrorResponse;
-      return (response && response.status >= 500);
-    },
   },
 };
 </script>

@@ -24,14 +24,9 @@ export default {
   components: {
     ErrorWarningDialog,
   },
-  data() {
-    return {
-      noConnection: false,
-    };
-  },
   computed: {
     isVisible() {
-      return this.noConnection;
+      return this.$store.state.http.hasConnectionProblem;
     },
     header() {
       return this.getMessage('header');
@@ -47,7 +42,7 @@ export default {
     },
   },
   updated() {
-    this.noConnection = !navigator.onLine;
+    this.$store.dispatch('errors/setConnectionProblem', !navigator.onLine);
   },
   methods: {
     onRetryButtonClicked() {

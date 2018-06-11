@@ -101,7 +101,7 @@ class {{&className}} {
         this.store.dispatch('http/loadingCompleted');
         this.store.dispatch('auth/unauthorised')
       }
-      this.store.dispatch('http/setApiErrorResponse', error);
+      this.store.dispatch('errors/addApiError', error);
       this.store.dispatch('http/loadingCompleted');
       deferred.reject(error);
     });

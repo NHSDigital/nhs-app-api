@@ -10,6 +10,7 @@ import navigation from './modules/navigation';
 import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
 import session from './modules/session';
+import errors from './modules/errors';
 
 const createStore = () => new Vuex.Store({
   modules: {
@@ -23,6 +24,7 @@ const createStore = () => new Vuex.Store({
     prescriptions,
     repeatPrescriptionCourses,
     session,
+    errors,
   },
 });
 

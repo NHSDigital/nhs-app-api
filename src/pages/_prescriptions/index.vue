@@ -87,6 +87,8 @@ export default {
     this.justOrderedARepeatPrescription =
       this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
     this.$store.dispatch('prescriptions/load', this.$config);
+
+    this.$store.dispatch('errors/setApiErrorButtonPath', '/appointments');
   },
   methods: {
     onRepeatPrescriptionButtonClicked() {

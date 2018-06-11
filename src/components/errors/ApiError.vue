@@ -24,11 +24,6 @@ export default {
   components: {
     ErrorWarningDialog,
   },
-  data() {
-    return {
-      connection: true,
-    };
-  },
   computed: {
     isVisible() {
       return this.showError();
@@ -50,22 +45,22 @@ export default {
     },
   },
   updated() {
-    this.connection = navigator.onLine;
     this.setPageHeader();
   },
   methods: {
     showError() {
-      return this.hasApiServerErrorResponse() && this.connection;
+      return this.$store.getters['errors/showApiError'];
     },
     onRetryButtonClicked() {
-      this.$router.go();
+      const path = this.$store.state.errors.apiErrorButtonPath;
+      if (path === '') {
+        this.$router.go();
+      } else {
+        this.$router.push(path);
+      }
     },
     getApiErrorResponse() {
-      return this.$store.state.http.apiErrorResponse;
-    },
-    hasApiServerErrorResponse() {
-      const response = this.$store.state.http.apiErrorResponse;
-      return (response && response.status >= 500);
+      return this.$store.state.errors.apiErrors[0];
     },
     getRoutePath() {
       return this.$route.path.substring(1).replace('/', '.').replace('-', '_');

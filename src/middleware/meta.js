@@ -60,7 +60,7 @@ export default function ({ route, store, app }) {
       break;
   }
 
-  store.dispatch('http/clearApiErrorResponse');
+  store.dispatch('errors/clearAllApiErrors');
 
   let headerText = '';
   if (route.meta.headerKey !== '') {

@@ -6,7 +6,6 @@ export default {
   state() {
     return {
       isLoading: false,
-      apiErrorResponse: null,
     };
   },
   actions,
