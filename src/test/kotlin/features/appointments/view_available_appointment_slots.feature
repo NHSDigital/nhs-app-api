@@ -103,7 +103,7 @@ Feature: View available appointment slots
     Given I am logged in
     And GP system doesn't respond a timely fashion for available appointment slots
     When I navigate to Appointments
-    Then I see appropriate information message after 10 seconds when it times-out
+    Then I see appropriate information message for time-outs
     And there should be a button to try again
 
   @NHSO-616
@@ -111,7 +111,7 @@ Feature: View available appointment slots
     Given GP system doesn't respond a timely fashion for available appointment slots
     And I am on the appointments page
     When I click try again button on appointment page
-    Then I see appropriate information message after 10 seconds when it times-out
+    Then I see appropriate information message for time-outs
     And there should be a button to try again
 
   @NHSO-616
@@ -146,6 +146,24 @@ Feature: View available appointment slots
     When I click appointments button in menu
     Then I see appropriate information message when there is no internet connection
     And there should not be an option to try again
+
+  @NHSO-1168
+  Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
+    Given there are available appointment slots
+    But there is a slight delay in retrieving them
+    And I am on the appointments page
+    When I navigate to Prescriptions
+    And I wait 5 seconds
+    Then I don't see appointment slots
+
+  @NHSO-1168
+  Scenario: A user has different problems with prescriptions and appointments and selects appointments and prescriptions in quick succession
+    Given I am logged in
+    And GP system doesn't respond a timely fashion for available appointment slots
+    And I navigate to Appointments
+    When I navigate to Prescriptions
+    And I wait 11 seconds
+    Then I don't see a time-out error
 
   @NHSO-617
   @pending  @NHSO-617

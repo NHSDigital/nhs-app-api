@@ -111,7 +111,6 @@ Feature: Book an available appointment slot
     Then Appointment Booking confirmation screen is displayed
     And booking request is successfully made with valid details
 
-
   @NHSO-72
   Scenario: A user tries to book an appointment describing symptoms no more 150 characters
     Given I am on the appointments page

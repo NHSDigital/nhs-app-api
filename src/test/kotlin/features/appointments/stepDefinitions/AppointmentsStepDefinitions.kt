@@ -176,6 +176,12 @@ class AppointmentsStepDefinitions {
         generateStubsForAppointmentSlotsForNextTwoWeeks(delayedInSeconds = 30)
     }
 
+    @Given("^there is a slight delay in retrieving them$")
+    @Throws(Exception::class)
+    fun slightDelayForRetrievingAvailableAppointmentSlots() {
+        generateStubsForAppointmentSlotsForNextTwoWeeks(delayedInSeconds = 1)
+    }
+
     @When("^GP system responds a timely fashion for available appointment slots$")
     @Throws(Exception::class)
     fun gp_system_responds_a_timely_fashion_for_available_appointment_slots() {
@@ -388,10 +394,16 @@ class AppointmentsStepDefinitions {
         assertEquals(0, result.appointmentSessions.size)
     }
 
-    @Then("^I see appropriate information message after 10 seconds when it times-out$")
+    @Then("^I see appropriate information message for time-outs$")
     @Throws(Exception::class)
-    fun i_see_appropriate_information_message_after_seconds_when_it_times_out() {
+    fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {
         appointments.checkTimeoutErrorMessage()
+    }
+
+    @Then("^I don't see a time-out error$")
+    @Throws(Exception::class)
+    fun iDoNotSeeATimeOutError() {
+        appointments.checkTimeoutErrorMessage(false)
     }
 
     @Then("^there should be a button to try again$")
@@ -424,6 +436,11 @@ class AppointmentsStepDefinitions {
         appointments.checkIfSlotsAreDisplayed()
     }
 
+    @Then("^I don't see appointment slots$")
+    @Throws(Exception::class)
+    fun iDoNotSeeAppointmentSlots() {
+        appointments.checkIfSlotsAreNotDisplayed()
+    }
 
     private fun generateStubsForAppointmentSlotsForSpecificDates(
             emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,

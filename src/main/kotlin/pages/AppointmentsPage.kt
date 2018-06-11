@@ -60,6 +60,10 @@ open class AppointmentsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         bookAppointmentButton.waitUntilClickable<WebElementFacade>().click()
     }
 
+    fun getServerErrorMessage(): String {
+        return getServerErrorElement().findElement(By.className("msg")).text
+    }
+
     fun getTryAgainButton(): WebElement
     {
         return getServerErrorElement().findElement(By.className("button"))

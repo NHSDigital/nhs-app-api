@@ -50,6 +50,10 @@ open class SharedStepDefinitions {
         navBar.select(tab)
     }
 
+    @When("^I wait (\\d*) seconds$")
+    open fun iWait(waitInSeconds: Int) {
+        Thread.sleep(waitInSeconds * 1000L)
+    }
 
     @Then("^I see the (.*) menu button")
     fun iSeeAMenuButton(type: String) {
