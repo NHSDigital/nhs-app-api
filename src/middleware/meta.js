@@ -60,6 +60,7 @@ export default function ({ route, store, app }) {
       break;
   }
 
+  store.dispatch('http/cancelRequests');
   store.dispatch('errors/clearAllApiErrors');
 
   let headerText = '';

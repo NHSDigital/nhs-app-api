@@ -82,9 +82,16 @@ class {{&className}} {
       body = undefined;
     }
 
+    const CancelToken = axios.CancelToken;
+    let cancel;
+
     this.store.dispatch('http/isLoading');
 
     axios({
+      cancelToken: new CancelToken(function executor(c) {
+        // An executor function receives a cancel function as a parameter
+        cancel = c;
+      }),
       url: urlWithParams,
       method,
       headers,
@@ -97,14 +104,20 @@ class {{&className}} {
       this.store.dispatch('http/loadingCompleted');
       deferred.resolve(body);
     }).catch((error) => {
-      if (error.response !== undefined && 401 === error.response.status) {
-        this.store.dispatch('http/loadingCompleted');
-        this.store.dispatch('auth/unauthorised')
-      }
-      this.store.dispatch('errors/addApiError', error);
       this.store.dispatch('http/loadingCompleted');
+
+      if(!axios.isCancel(error)) {
+        if (error.response !== undefined && 401 === error.response.status) {
+          this.store.dispatch('auth/unauthorised')
+        }
+
+        this.store.dispatch('errors/addApiError', error);
+      }
+
       deferred.reject(error);
     });
+
+    this.store.dispatch('http/addCancelRequestHandler', cancel);
   }
 
   {{#isSecure}}
