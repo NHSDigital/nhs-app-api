@@ -109,6 +109,8 @@ Feature: Book an available appointment slot
     And I enter symptoms of 1 characters
     When I click the 'Confirm and book appointment' button
     Then Appointment Booking confirmation screen is displayed
+    And booking request is successfully made with valid details
+
 
   @NHSO-72
   Scenario: A user tries to book an appointment describing symptoms no more 150 characters
@@ -116,7 +118,8 @@ Feature: Book an available appointment slot
     And I have selected an appointment slot to book
     And I enter symptoms of 150 characters
     When I click the 'Confirm and book appointment' button
-    And Appointment Booking confirmation screen is displayed
+    Then Appointment Booking confirmation screen is displayed
+    And booking request is successfully made with valid details
 
   @NHSO-72
   Scenario: A user tries to enter symptoms with over 150 characters
@@ -133,12 +136,13 @@ Feature: Book an available appointment slot
     Then only the first 150 characters will be displayed
 
   @NHSO-72
-  Scenario: A user tries to enter symptoms with 150 characters and then tries to book
+  Scenario: A user who books successfully, but only the first 150 characters of the symptoms are sent
     Given I am on the appointments page
     And I have selected an appointment slot to book
-    And I enter symptoms of 150 characters
+    And I enter symptoms of 151 characters
     When I click the 'Confirm and book appointment' button
-    And Appointment Booking confirmation screen is displayed
+    Then Appointment Booking confirmation screen is displayed
+    And booking request is successfully made with valid details
 
   @NHSO-72
   Scenario: A user tries to book an appointment when there is a problem
