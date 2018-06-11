@@ -12,6 +12,7 @@ using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.CitizenId.Models;
+using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
@@ -35,7 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
+            _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
             _citizenIdApiBaseUrl = _fixture.Create<Uri>();
             _nhsWebAppBaseUrl = _fixture.Create<Uri>();
             _clientId = _fixture.Create<string>();

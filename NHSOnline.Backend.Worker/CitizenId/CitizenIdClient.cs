@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.CitizenId.Models;
+using NHSOnline.Backend.Worker.ResponseParsers;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {
@@ -25,15 +26,18 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private readonly Uri _redirectUri;
         private readonly string _clientId;
         private readonly string _basicAuthCredentials;
+        private readonly IJsonResponseParser _responseParser;
 
         public CitizenIdClient(
             IHttpClientFactory httpClientFactory, 
             ICitizenIdConfig config, 
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IJsonResponseParser responseParser)
         {
             _logger = loggerFactory.CreateLogger<CitizenIdClient>();
             _httpClient = httpClientFactory.GetClient(HttpClientName.CitizenIdApiClient);
             _httpClient.BaseAddress = config.CitizenIdApiBaseUrl;
+            _responseParser = responseParser;
 
             _redirectUri = new Uri(config.NhsWebAppBaseUrl, "auth-return");
             _clientId = config.ClientId;
@@ -91,8 +95,8 @@ namespace NHSOnline.Backend.Worker.CitizenId
             
             if (string.IsNullOrEmpty(stringResponse)) return response;
             
-            response.Body = stringResponse.ParseBody<TResponse>(responseMessage);
-            response.ErrorResponse = stringResponse.ParseError<ErrorResponse>(responseMessage);
+            response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
+            response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage);
 
             return response;
         }

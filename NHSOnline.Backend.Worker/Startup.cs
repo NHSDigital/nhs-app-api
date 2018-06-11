@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Filters;
+using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using StackExchange.Redis;
 
@@ -85,7 +86,8 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICipherService, CipherService>();
-
+            services.AddSingleton<IJsonResponseParser, JsonResponseParser>();
+            services.AddSingleton<IXmlResponseParser, XmlResponseParser>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.OdsCodeLookup,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_ODSLOOKUP_CONFIG"])));

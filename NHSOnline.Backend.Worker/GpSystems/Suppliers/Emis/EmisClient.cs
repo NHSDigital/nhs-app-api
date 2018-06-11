@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -37,11 +38,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         private readonly HttpClient _httpClient;
         private readonly ILogger<EmisClient> _logger;
+        private readonly IJsonResponseParser _responseParser;
 
         public EmisClient(IHttpClientFactory httpClientFactory, 
             IEmisConfig config,
             TimeZoneConverter localTimeZoneConverter,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IJsonResponseParser responseParser)
         {
             _logger = loggerFactory.CreateLogger<EmisClient>();
             _localTimeZoneConverter = localTimeZoneConverter;
@@ -49,6 +52,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             _httpClient.DefaultRequestHeaders.Add(HeaderApplicationId, config.ApplicationId);
             _httpClient.DefaultRequestHeaders.Add(HeaderVersion, config.Version);
             _httpClient.BaseAddress = config.BaseUrl;
+            _responseParser = responseParser;
         }
 
         public async Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost()
@@ -220,9 +224,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             if (string.IsNullOrEmpty(stringResponse)) return response;
             
-            response.Body = stringResponse.ParseBody<TResponse>(responseMessage);
-            response.ErrorResponseBadRequest = stringResponse.ParseBadRequest<BadRequestErrorResponse>(responseMessage);
-            response.ErrorResponse = stringResponse.ParseError<ErrorResponse>(responseMessage, HttpStatusCode.BadRequest);
+            response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
+            response.ErrorResponseBadRequest = _responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
+            response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
 
             return response;
         }
