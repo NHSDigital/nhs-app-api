@@ -64,9 +64,4 @@ class KnownServices(private val context: Context) {
             urlString
         }
     }
-
-    fun shouldValidateSession(urlString: String) : Boolean {
-        var knownService = findMatchingKnownService(urlString)
-        return knownService?.shouldValidateSession!!
-    }
 }

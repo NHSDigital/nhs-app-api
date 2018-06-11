@@ -68,7 +68,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onNewIntent(intent)
 
         val data = intent?.data
-        loadPage(data.toString())
+        if(data != null) {
+            loadPage(data.toString())
+        }
     }
 
     private fun configureWebView() {
