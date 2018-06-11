@@ -27,6 +27,10 @@ class ResponseBuilder(private val statusCode: Int) {
         return andBody(body, "text/html")
     }
 
+    fun andXmlBody(body: String): ResponseBuilder {
+        return andBody(body, "text/xml")
+    }
+
     fun andBody(body: String, contentType: String): ResponseBuilder {
         this.body = body
         andHeader("Content-Type", contentType)

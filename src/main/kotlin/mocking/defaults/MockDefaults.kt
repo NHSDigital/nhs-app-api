@@ -5,6 +5,7 @@ import config.Config
 import mocking.MockingConfiguration
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
 import mocking.emis.models.*
+import mocking.tpp.models.*
 import models.Patient
 import worker.models.demographics.Sex
 import worker.models.session.UserSessionRequest
@@ -52,6 +53,26 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         mockingClient.forEmis {
             sessionRequest(patient)
                     .respondWithSuccess(patient, AssociationType.Self)
+        }
+
+        mockingClient.forTpp {
+            sessionRequest(tppAuthenticateRequest)
+                    .respondWithSuccess(tppAuthenticateReplySuccessfulResponse)
+        }
+
+        mockingClient.forTpp {
+            sessionRequest(tppAuthenticateWithNonExistingAccountIdRequest)
+                    .respondWithError(tppNonExistingAccountIdErrorResponse)
+        }
+
+        mockingClient.forTpp {
+            sessionRequest(tppAuthenticateWithInvalidPassphraseRequest)
+                    .respondWithError(tppInvalidPassphraseErrorResponse)
+        }
+
+        mockingClient.forTpp {
+            sessionRequest(tppAuthenticateWithInvalidProviderIdRequest)
+                    .respondWithError(tppInvalidProviderIdErrorResponse)
         }
 
         val appointmentSlotsMetadataResponse = GetAppointmentSlotsMetaResponseModel(
@@ -138,6 +159,100 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         val userSessionRequest = UserSessionRequest(
                 authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
+        )
+
+        val tppAuthenticateRequest = Authenticate(
+                apiVersion = "1",
+                accountId = "520993083",
+                passphrase = "aVw+Kah/YFTHMfnWyRP9v74kMrELnyr4Vb5f65fYFrIgcH2vJgJX62iPxRFMi6WptLGfM4fSBOk8Xf/YOkIgh6aJNJilflpZHD0fsPN0EBO4SDr2d7mDYFPgAMJnBSrzQ5rzU8WOry+wtvocYgTt+EQoDqsjYYlHDiPUyMH+ZZo=",
+                unitId = "KGPD",
+                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
+                application = Application(
+                        name = "NhsApp",
+                        version = "1.0",
+                        providerId = "akfdkjn345kjnkjn",
+                        deviceType = "NhsApp"
+                )
+        )
+
+        val tppAuthenticateWithNonExistingAccountIdRequest = Authenticate(
+                apiVersion = "1",
+                accountId = "invalid",
+                passphrase = "aVw+Kah/YFTHMfnWyRP9v74kMrELnyr4Vb5f65fYFrIgcH2vJgJX62iPxRFMi6WptLGfM4fSBOk8Xf/YOkIgh6aJNJilflpZHD0fsPN0EBO4SDr2d7mDYFPgAMJnBSrzQ5rzU8WOry+wtvocYgTt+EQoDqsjYYlHDiPUyMH+ZZo=",
+                unitId = "KGPD",
+                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
+                application = Application(
+                        name = "NhsApp",
+                        version = "1.0",
+                        providerId = "akfdkjn345kjnkjn",
+                        deviceType = "NhsApp"
+                )
+        )
+
+        val tppAuthenticateWithInvalidPassphraseRequest = Authenticate(
+                apiVersion = "1",
+                accountId = "520993083",
+                passphrase = "invalid",
+                unitId = "KGPD",
+                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
+                application = Application(
+                        name = "NhsApp",
+                        version = "1.0",
+                        providerId = "akfdkjn345kjnkjn",
+                        deviceType = "NhsApp"
+                )
+        )
+
+        val tppAuthenticateWithInvalidProviderIdRequest = Authenticate(
+                apiVersion = "1",
+                accountId = "520993083",
+                passphrase = "aVw+Kah/YFTHMfnWyRP9v74kMrELnyr4Vb5f65fYFrIgcH2vJgJX62iPxRFMi6WptLGfM4fSBOk8Xf/YOkIgh6aJNJilflpZHD0fsPN0EBO4SDr2d7mDYFPgAMJnBSrzQ5rzU8WOry+wtvocYgTt+EQoDqsjYYlHDiPUyMH+ZZo=",
+                unitId = "KGPD",
+                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
+                application = Application(
+                        name = "NhsApp",
+                        version = "1.0",
+                        providerId = "invalid",
+                        deviceType = "NhsApp"
+                )
+        )
+
+        val tppAuthenticateReplySuccessfulResponse = AuthenticateReply(
+                patientId = "84df400000000000",
+                onlineUserId = "84df400000000000",
+                uuid = "01068966-0a47-429c-9abd-e5c05736a6f7",
+                user = User(
+                    person = Person(
+                            patientId = "84df400000000000",
+                            dateOfBirth = patient.dateOfBirth,
+                            gender = patient.sex.name,
+                            nationalId = NationalId(
+                                    type = "NHS",
+                                    value = patient.nhsNumbers.first()
+                            ),
+                            personName = PersonName(
+                                    name = "${patient.title} ${patient.firstName} ${patient.surname}"
+                            )
+                    )
+                )
+        )
+
+        val tppNonExistingAccountIdErrorResponse = Error(
+                errorCode = "9",
+                userFriendlyMessage = "There was a problem logging on",
+                uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
+        )
+
+        val tppInvalidPassphraseErrorResponse = Error(
+                errorCode = "9",
+                userFriendlyMessage = "There was a problem logging on",
+                uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
+        )
+
+        val tppInvalidProviderIdErrorResponse = Error(
+                errorCode = "5",
+                userFriendlyMessage = "There was a problem logging on",
+                uuid = null
         )
     }
 }

@@ -7,6 +7,7 @@ import mocking.defaults.MockDefaults
 import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
+import mocking.tpp.TppMappingBuilder
 import org.apache.http.HttpException
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
@@ -26,6 +27,13 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun forEmis(method: String = "GET", resolver: EmisMappingBuilder.() -> Mapping) {
         val mappingBuilder = EmisMappingBuilder(configuration.emisConfiguration, method, "/emis")
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forTpp(method: String = "POST", resolver: TppMappingBuilder.() -> Mapping) {
+        val mappingBuilder = TppMappingBuilder(method, "/tpp")
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
