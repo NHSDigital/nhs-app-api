@@ -6,7 +6,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myrecord.DemographicsData
 import features.myrecord.AllergiesData
-import mocking.MockDefaults.Companion.patient
+import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
 import mocking.emis.models.AllergiesResponse
 import features.authentication.steps.HomeSteps

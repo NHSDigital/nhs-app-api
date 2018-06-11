@@ -2,7 +2,7 @@ package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Then
 import features.appointments.steps.AppointmentsBookedSteps
-import mocking.MockDefaults
+import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 

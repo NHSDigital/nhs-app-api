@@ -71,7 +71,5 @@ open class SharedStepDefinitions {
         browser.changeTab(URL(url))
         browser.shouldHaveUrl(url)
         browser.changeTabToApp()
-//        browser.shouldBeOnTheAppTab()
-
     }
 }

@@ -81,10 +81,10 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
     fun coursesRequest(patient: Patient) = EmisCoursesBuilder(
             configuration,
             patient.endUserSessionId,
-            patient.userPatientLinkToken,
-            patient.sessionId)
+            patient.sessionId,
+            patient.userPatientLinkToken)
 
-    fun repeatPrescriptionSubmissionRequest(patient: Patient, prescriptionSubmissionRequest: PrescriptionSubmissionRequest?) = EmisPrescriptionsSubmissionBuilder(
+    fun repeatPrescriptionSubmissionRequest(patient: Patient, prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null) = EmisPrescriptionsSubmissionBuilder(
             configuration,
             patient.endUserSessionId,
             patient.sessionId,

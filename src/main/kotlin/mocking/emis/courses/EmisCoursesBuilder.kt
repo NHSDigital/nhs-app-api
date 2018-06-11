@@ -10,15 +10,18 @@ import org.apache.http.HttpStatus
 
 class EmisCoursesBuilder(configuration: EmisConfiguration,
                          apiEndUserSessionId: String,
-                         linkToken: String,
-                         apiSessionId: String)
+                         apiSessionId: String,
+                         linkToken: String?)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/courses") {
 
     init {
         requestBuilder
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
-                .andQueryParameter(QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken, "equalTo")
+
+        if (!linkToken.isNullOrEmpty()) {
+            requestBuilder.andQueryParameter(QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken!!, "equalTo")
+        }
     }
 
     fun respondWithSuccess(courseRequestsGetResponse: CourseRequestsGetResponse): Mapping {

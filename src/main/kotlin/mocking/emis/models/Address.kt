@@ -1,9 +1,9 @@
 package mocking.emis.models
 
 class Address(
-    var HouseNameFlatNumber: String? = null,
-    var NumberStreet: String? = null,
-    var Village: String? = null,
-    var Town: String? = null,
-    var County: String? = null,
-    var Postcode: String? = null)
+    var houseNameFlatNumber: String? = null,
+    var numberStreet: String? = null,
+    var village: String? = null,
+    var town: String? = null,
+    var county: String? = null,
+    var postcode: String? = null)

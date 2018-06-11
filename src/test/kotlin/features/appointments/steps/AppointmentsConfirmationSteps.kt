@@ -1,6 +1,6 @@
 package features.appointments.steps
 
-import mocking.MockDefaults
+import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import net.thucydides.core.annotations.Step
 import org.junit.Assert

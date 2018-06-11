@@ -1,7 +1,5 @@
 package mocking.emis.allergies
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import mocking.GsonFactory
 import mocking.emis.*
 import mocking.emis.models.*

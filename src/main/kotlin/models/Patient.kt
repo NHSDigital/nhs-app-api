@@ -1,12 +1,19 @@
 package models
 
 import mocking.defaults.MockDefaults
+import mocking.emis.models.Address
+import mocking.emis.models.ContactDetails
+import mocking.emis.models.Sex
 
 data class Patient(
         val title:String = "",
         val firstName:String = "",
         val surname:String = "",
+        val callingName: String = "",
         val dateOfBirth:String = "",
+        val sex:Sex = Sex.NotSpecified,
+        val contactDetails: ContactDetails = ContactDetails(),
+        val address: Address = Address(),
         val accountId:String = "",
         val odsCode:String = "",
         val connectionToken:String = "",
@@ -17,6 +24,21 @@ data class Patient(
         val nhsNumbers: List<String> = emptyList()
 ) {
     companion object {
+        private val defaultAddress = Address(
+                houseNameFlatNumber = "99",
+                numberStreet = "Fake Street",
+                village = "Fake village",
+                town = "Fake town",
+                county  = "Fake county",
+                postcode = "AA00 0AA"
+        )
+
+        private val defaultContactDetails = ContactDetails(
+                telephoneNumber = "02837483567",
+                mobileNumber = "07737483567",
+                emailAddress= "HalleD@fakeemail.com"
+        )
+
         val paulSmith = Patient(
                 title = "Mr",
                 firstName = "Paul",
@@ -67,6 +89,8 @@ data class Patient(
                 firstName =  "Montel",
                 surname =  "Frye",
                 dateOfBirth =  "1972-04-12T00:00:00",
+                address = defaultAddress,
+                contactDetails = defaultContactDetails,
                 odsCode =  MockDefaults.DEFAULT_ODS_CODE,
                 sessionId =  "2jM47sZ0ic4FIAcVogI4WI",
                 connectionToken =  "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc",
