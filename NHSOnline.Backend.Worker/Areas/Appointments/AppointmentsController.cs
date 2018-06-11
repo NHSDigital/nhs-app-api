@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
@@ -18,6 +20,23 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             )
         {
             _gpSystemFactory = gpSystemFactory;
+        }
+
+        [HttpGet, TimeoutExceptionFilter]
+        public async Task<IActionResult> Get([FromQuery] bool includePastAppointments,
+            [FromQuery] DateTimeOffset? pastAppointmentsFromDate = null)
+        {
+            var userSession = HttpContext.GetUserSession();
+
+            var appointmentsService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
+                .GetAppointmentsService();
+
+            var result =
+                await appointmentsService.GetMyAppointments(userSession, includePastAppointments,
+                    pastAppointmentsFromDate);
+
+            return result.Accept(new MyAppointmentsResultVisitor());
         }
 
         [HttpPost, TimeoutExceptionFilter]

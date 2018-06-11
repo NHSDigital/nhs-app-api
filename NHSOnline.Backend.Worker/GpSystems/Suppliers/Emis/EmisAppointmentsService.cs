@@ -56,6 +56,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return GetCorrectErrorResult(response);
         }
 
+        public Task<MyAppointmentsResult> GetMyAppointments(UserSession userSession, bool includePastAppointments, DateTimeOffset? pastAppointmentsFromDate)
+        {
+            throw new NotImplementedException();
+        }
+
         private static AppointmentBookResult GetCorrectErrorResult(
             EmisClient.EmisApiResponse response)
         {

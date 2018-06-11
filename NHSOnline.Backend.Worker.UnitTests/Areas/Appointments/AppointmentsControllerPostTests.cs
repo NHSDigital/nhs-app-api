@@ -15,7 +15,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
     [TestClass]
-    public class AppointmentsControllerTests
+    public class AppointmentsControllerPostTests
     {
         private AppointmentsController _systemUnderTest;
         private IFixture _fixture;
