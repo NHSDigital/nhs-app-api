@@ -4,8 +4,7 @@ Feature: Book an available appointment slot
   I want to be able to select, confirm and book selected appointment
 
   Background:
-    Given wiremock is initialised
-    And there are available appointment slots
+    Given there are available appointment slots
 
   @pending  @NHSO-986
   @native

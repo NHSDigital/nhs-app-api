@@ -6,6 +6,6 @@ import mocking.tpp.session.TppSessionBuilder
 
 open class TppMappingBuilder(private val method: String, relativePath: String) : MappingBuilder(method, "$relativePath") {
 
-    fun sessionRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
+    fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
 
 }

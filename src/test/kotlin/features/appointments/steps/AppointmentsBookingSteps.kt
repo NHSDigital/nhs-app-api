@@ -3,6 +3,7 @@ package features.appointments.steps
 import models.Slot
 import net.thucydides.core.annotations.Step
 import org.hamcrest.Matcher
+import org.junit.Assert
 import org.junit.Assert.*
 import pages.appointments.AppointmentsBookingPage
 
@@ -44,12 +45,19 @@ open class AppointmentsBookingSteps {
 
     @Step
     fun checkTimeoutErrorMessage(presence: Boolean = true) {
-        val message = appointmentsBooking.getServerErrorMessage()
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedBody = "Please try again\n" +
                 "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-        assertTrue(String.format("Actual text: %s. Expected text: %s? %b", message, "$expectedHeader\n$expectedBody", presence),
-                presence == message.contains("$expectedHeader\n$expectedBody"))
+
+        val message: String? = appointmentsBooking.getServerErrorMessage()
+
+        if (presence && message != null) {
+            assertTrue("Expected text:\n$expectedHeader\n$expectedBody\nbut was:\n$message",
+                    message.contains("$expectedHeader\n$expectedBody"))
+        } else {
+            Assert.assertNull(message)
+        }
+
     }
 
     @Step
@@ -70,7 +78,8 @@ open class AppointmentsBookingSteps {
         val message = appointmentsBooking.getServerErrorMessage()
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-        assertTrue(String.format("Actual text: %s. Expected text: %s. ", message, "$expectedHeader\n$expectedBody"), message.contains("$expectedHeader\n$expectedBody"))
+        assertNotNull("No error message displayed, expecting $expectedHeader\n$expectedBody", message)
+        assertTrue("Actual text: $message. Expected text: $expectedHeader\n$expectedBody", message!!.contains("$expectedHeader\n$expectedBody"))
     }
 
     @Step

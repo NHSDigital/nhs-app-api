@@ -25,6 +25,10 @@ class RequestBuilder internal constructor(private val method: String, private va
         return andBody(body, "equalToXml")
     }
 
+    fun andBodyMatchingXpath(xpath: String): RequestBuilder {
+        return andBody(xpath, "matchesXPath")
+    }
+
     fun andBody(body: String, condition: String = "equalToJson"): RequestBuilder {
         bodyPatterns.add(hashMapOf(condition to body))
         return this

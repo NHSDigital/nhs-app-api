@@ -8,7 +8,7 @@ Feature: Authorisation occurs during each URL visit
   @NHSO-906
   @tech-debt @NHSO-1012
   @smoketest
-  Scenario Outline: User has never logged in and attempts to navigate to secure routes
+  Scenario Outline: User has never logged in and attempts to navigate to <URL>
     Given I am not logged in
     When I browse to the page at <URL>
     Then I see the login page
@@ -25,7 +25,7 @@ Feature: Authorisation occurs during each URL visit
 
   @NHSO-906
   @tech-debt @NHSO-1012
-  Scenario Outline: User has just logged out and attempts to navigate to secure routes
+  Scenario Outline: User has just logged out and attempts to navigate to <URL>
     Given I have just logged out
     When I browse to the page at <URL>
     Then I see the login page
@@ -41,7 +41,7 @@ Feature: Authorisation occurs during each URL visit
 
   @manual @NHSO-906
   @tech-debt @NHSO-1012
-  Scenario Outline: User session has expired and attempts to navigate to secure routes
+  Scenario Outline: User session has expired and attempts to navigate to <URL>
     Given my session has expired
     When I browse to the page at <URL>
     Then I see the login page
@@ -58,7 +58,7 @@ Feature: Authorisation occurs during each URL visit
   @NHSO-906
   @tech-debt @NHSO-1012
   @smoketest
-  Scenario Outline: User browses to deep link when logged in
+  Scenario Outline: User browses to <URL> when logged in
     Given I am logged in
     When I browse to the page at <URL>
     Then I see the relevant page
@@ -74,7 +74,7 @@ Feature: Authorisation occurs during each URL visit
 
   @manual @native @NHSO-907
   @tech-debt @NHSO-1012
-  Scenario Outline: Mobile Web User switches app then browses to a specific URL
+  Scenario Outline: Mobile Web User switches app then browses to <URL>
     Given I am logged in
     And I switch apps
     When I switch to the NHS App

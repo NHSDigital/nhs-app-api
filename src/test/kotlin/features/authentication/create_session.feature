@@ -1,4 +1,4 @@
-Feature: EMIS Session Registration
+Feature: Session Registration
 
   The application verifies the user session
 
@@ -72,29 +72,51 @@ Feature: EMIS Session Registration
 
   @NHSO-63
   @backend
-  Scenario: EMIS is unavailable
-    Given I have valid OAuth details and EMIS is unavailable
+  Scenario Outline: <GP System> is unavailable
+    Given I have valid OAuth details and <GP System> is unavailable
     When I create a user session
     Then I get a "Bad Gateway" error
+
+    Examples:
+    |GP System|
+    |EMIS     |
+    |TPP      |
 
   @NHSO-63
   @backend
   Scenario: CID connection token fails to authenticate with EMIS
-    Given I have invalid OAuth details and CID connection token fails to authenticate with emis
+    Given I have invalid OAuth details and CID connection token fails to authenticate with EMIS
     When I create a user session
     Then I get a "Forbidden" error
 
   @NHSO-63
   @backend
-  Scenario: EMIS fails to respond in 30 seconds
-    Given I have valid OAuth details and emis fails to respond in 30 seconds
+  Scenario: CID connection token fails to authenticate with TPP
+    Given I have invalid OAuth details and CID connection token fails to authenticate with TPP
+    When I create a user session
+    Then I get a "Bad Gateway" error
+
+  @NHSO-63
+  @backend
+  Scenario Outline: <GP System> fails to respond in 30 seconds
+    Given I have valid OAuth details and <GP System> fails to respond in 30 seconds
     When I create a user session
     Then I get a "Gateway Timeout" error
+
+    Examples:
+    |GP System|
+    |EMIS     |
+    |TPP      |
 
   @NHSO-63
   @manual @NHSO-449
   @backend
-  Scenario: EMIS session fails to be saved in cache
-    Given I have valid OAuth details and the EMIS session fails to be saved in cache
+  Scenario Outline: <GP System> session fails to be saved in cache
+    Given I have valid OAuth details and the <GP System> session fails to be saved in cache
     When I create a user session
     Then I get a "Server Error" error
+
+    Examples:
+    |GP System|
+    |EMIS     |
+    |TPP      |

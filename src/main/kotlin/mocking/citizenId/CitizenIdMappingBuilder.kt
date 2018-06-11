@@ -1,5 +1,6 @@
 package mocking.citizenId
 
+import config.Config
 import mocking.MappingBuilder
 import mocking.citizenId.login.CompleteLoginRequestBuilder
 import mocking.citizenId.login.InitialLoginRequestBuilder
@@ -16,7 +17,8 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String)
 
     fun initialLoginRequest(redirectUri: String, clientId: String) = InitialLoginRequestBuilder(redirectUri, clientId)
 
-    fun createAccountRequest(redirectUri: String, clientId: String) = AccountRegistrationRequestBuilder(redirectUri, clientId)
+    fun createAccountRequest(redirectUri: String = Config.instance.cidRedirectUri, clientId: String = Config.instance.cidClientId) =
+            AccountRegistrationRequestBuilder(redirectUri, clientId)
 
     fun completeLoginRequest() = CompleteLoginRequestBuilder()
 

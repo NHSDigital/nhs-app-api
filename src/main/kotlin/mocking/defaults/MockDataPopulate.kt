@@ -1,6 +1,5 @@
 package mocking.defaults
 
-import config.Config
 import mocking.MockingClient
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
 import mocking.dataPopulation.journies.prescriptions.PrescriptionsJournies
@@ -12,8 +11,6 @@ import mocking.defaults.dataPopulation.journies.session.SessionJournies
 
 open class MockDataPopulate(private val mockingClient: MockingClient) {
 
-    private val defaults: MockDefaults = MockDefaults(Config.instance)
-
     companion object {
         @JvmStatic fun main(arguments: Array<String>) {
             val client = MockingClient.instance
@@ -22,7 +19,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
     }
 
     fun populate() {
-        this.defaults.mock()
+        mockingClient.clearWiremock()
+        mockingClient.favicon()
 
         Im1ConnectionJournies(mockingClient).create()
         SessionJournies(mockingClient).create()

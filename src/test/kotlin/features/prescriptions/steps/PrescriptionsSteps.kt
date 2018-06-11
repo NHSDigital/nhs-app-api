@@ -39,7 +39,14 @@ open class PrescriptionsSteps {
                                        subHeaderText: String,
                                        messageText: String,
                                        retryButtonText: String){
-        Assert.assertTrue(prescriptions.isErrorMessageContentCorrect(pageTitle, pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
+        Assert.assertTrue("Expected error message: { " +
+                "page title: $pageTitle, " +
+                "page header text: $pageHeaderText, " +
+                "header text: $headerText, " +
+                "sub-header text: $subHeaderText, " +
+                "message text: $messageText, " +
+                "retry button text: $retryButtonText } ",
+                prescriptions.isErrorMessageContentCorrect(pageTitle, pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
     }
 
     @Step

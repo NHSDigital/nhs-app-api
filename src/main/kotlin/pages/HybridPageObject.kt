@@ -157,7 +157,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
             retryButtonIsValid = isAnyXpathVisible("//button[contains(text(), \"$retryButtonText\")]")
         }
 
-        return pageTitleValid &&  pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
+        return pageTitleValid && pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
     }
 
     private fun isAnyXpathVisible(xpath:String) : Boolean {

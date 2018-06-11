@@ -21,7 +21,10 @@ data class Patient(
         val endUserSessionId:String = "",
         val linkageKey:String = "",
         val userPatientLinkToken:String = "",
-        val nhsNumbers: List<String> = emptyList()
+        val nhsNumbers: List<String> = emptyList(),
+        val patientId: String = "",
+        val passphrase: String = "",
+        val onlineUserId: String = ""
 ) {
     companion object {
         private val defaultAddress = Address(
@@ -38,6 +41,14 @@ data class Patient(
                 mobileNumber = "07737483567",
                 emailAddress = "HalleD@fakeemail.com"
         )
+
+        fun getDefault(gpSystem: String): Patient {
+            return when(gpSystem.toUpperCase()) {
+                "EMIS" -> montelFrye
+                "TPP" -> kevinBarry
+                else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
+            }
+        }
 
         val paulSmith = Patient(
                 title = "Mr",
@@ -85,7 +96,7 @@ data class Patient(
         )
         
         val montelFrye = Patient(
-                title =  "Mr",
+                title =  "",
                 firstName =  "Montel",
                 surname =  "Frye",
                 dateOfBirth =  "1972-04-12T00:00:00",
@@ -99,6 +110,31 @@ data class Patient(
                 accountId =  "4140044939",
                 linkageKey =  "vVGO8bgV6fvPb",
                 userPatientLinkToken =  "gpSWtREiH9499bPzix8v5b"
+        )
+
+        val kevinBarry = Patient(
+                title =  "Mr",
+                firstName =  "Kevin",
+                surname =  "Barry",
+                dateOfBirth =  "1985-05-29T00:00:00.0Z",
+                sex = Sex.Male,
+                address = Address(
+                        houseNameFlatNumber = "28 Central Path",
+                        numberStreet = "Troy Road",
+                        village = "Horsforth",
+                        town = "Leeds",
+                        county = "West Yorkshire",
+                        postcode = "LS18 5TN"
+                ),
+                contactDetails = defaultContactDetails,
+                odsCode =  MockDefaults.DEFAULT_ODS_CODE_TPP,
+                nhsNumbers =  listOf("5785445875"),
+                accountId =  "520993083",
+                patientId = "84df400000000000",
+                onlineUserId = "84df400000000000",
+                passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=",
+                connectionToken =  "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID
         )
     }
 }

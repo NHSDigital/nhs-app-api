@@ -11,6 +11,7 @@ import mocking.defaults.MockDefaults.Companion.patient
 
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
+import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpResponse
@@ -99,7 +100,7 @@ class CommonSteps : AbstractSteps() {
 
         mockingClient.forCitizenId {
             userInfoRequest("Bearer ".plus(accessToken))
-                    .respondWithSuccess()
+                    .respondWithSuccess(Patient.getDefault("EMIS"))
         }
 
         mockingClient.forEmis {

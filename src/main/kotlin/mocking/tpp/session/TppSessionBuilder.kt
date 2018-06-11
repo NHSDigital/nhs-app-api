@@ -11,27 +11,21 @@ import java.io.StringWriter
 import javax.xml.bind.Marshaller
 
 
-class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", "/tpp") {
+class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", "/tpp/") {
     init {
-        val jaxbContext = JAXBContext.newInstance(Authenticate::class.java)
-        val marshaller = jaxbContext.createMarshaller()
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
-
-        val stringWriter = StringWriter()
-        stringWriter.use {
-            marshaller.marshal(authenticate, stringWriter)
-        }
-
         val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml"
+        val contentTypeValue = "text/xml; charset=UTF-8"
         val typeHeader = "type"
         val typeValue = "Authenticate"
-
 
         requestBuilder
                 .andHeader(contentTypeHeader, contentTypeValue)
                 .andHeader(typeHeader, typeValue)
-                .andXmlBody(stringWriter.toString())
+                .andBodyMatchingXpath("//Authenticate[" +
+                        "@apiVersion='${authenticate.apiVersion}' and " +
+                        "@accountId='${authenticate.accountId}' and " +
+                        "@unitId='${authenticate.unitId}' and " +
+                        "@passphrase='${authenticate.passphrase}']")
     }
 
     fun respondWithSuccess(authenticateReply: AuthenticateReply): Mapping {

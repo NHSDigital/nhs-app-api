@@ -1,6 +1,6 @@
 package features.sharedStepDefinitions
 
-import config.Config
+import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -10,8 +10,10 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
 import mocking.MockingClient
+import mocking.defaults.MockDataPopulate
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.emis.models.AssociationType
-import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -28,10 +30,14 @@ open class SharedStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
+    @Before
+    fun resetWiremock() {
+        MockingClient.instance.clearWiremock()
+    }
+
     @Given("^wiremock is initialised")
     fun initialiseWiremock() {
-        MockDefaults(Config.instance, mockingClient).mock()
-
+        MockDataPopulate(mockingClient).populate()
         mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
     }
 
@@ -44,6 +50,8 @@ open class SharedStepDefinitions {
     @Given("^I am not logged in$")
     open fun iAmNotLoggedIn() {
         browser.goToApp()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(MockDefaults.patient)
     }
 
     @When("^I navigate to (.*)$")

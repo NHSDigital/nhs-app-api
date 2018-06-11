@@ -1,4 +1,4 @@
-Feature: View prescriptions (errors)
+Feature: View prescriptions error cases
 
   A user can view information about their prescriptions after logging in
 

@@ -1,5 +1,6 @@
 package pages
 
+import models.Patient
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.WebElementFacade

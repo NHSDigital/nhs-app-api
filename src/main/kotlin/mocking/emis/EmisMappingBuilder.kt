@@ -37,8 +37,6 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
                 .andHeader(HEADER_API_VERSION, configuration.version)
     }
 
-    fun appointmentRequest(postAppointmentRequestModel: PostAppointmentRequestModel) = EmisAppointmentBuilder(configuration, postAppointmentRequestModel)
-
     fun appointmentGetRequest(patient: Patient, fetchPreviousAppointments: Boolean = false) = EmisGetAppointmentBuilder(
             configuration,
             patient.endUserSessionId,

@@ -7,7 +7,9 @@ import org.junit.runner.RunWith
 import org.openqa.selenium.WebDriver
 
 @RunWith(CucumberWithSerenity::class)
-@CucumberOptions(features = ["src/test/kotlin/features/authentication"], glue = ["features"])
+@CucumberOptions(
+        features = ["src/test/kotlin/features/authentication"],
+        glue = ["features"])
 class AuthenticationTestRunner {
 
     @Managed

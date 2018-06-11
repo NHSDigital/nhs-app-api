@@ -14,8 +14,15 @@ import features.sharedSteps.BrowserSteps
 import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.models.AssociationType
+import mocking.tpp.models.Authenticate
+import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.Error
 import models.Patient
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
@@ -44,26 +51,26 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Steps
     lateinit var myAccount: MyAccountSteps
 
-    @And("^sign in verification is slow$")
-    fun signInVerificationIsSlow() {
-        mockingClient.forEmis {
-            endUserSessionRequest().respondWithSuccess(
-                    endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                    milliSecondDelay = 2000)
-        }
-    }
-
     private var authCode: String? = MockDefaults.userSessionRequest.authCode
     private var codeVerifier: String? = MockDefaults.userSessionRequest.codeVerifier
     private val accessToken = MockDefaults.DEFAULT_ACCESS_TOKEN
     private val bearerToken = MockDefaults.DEFAULT_BEARER_TOKEN
-    private val patient: Patient = MockDefaults.patient
+    lateinit private var patient: Patient
     private val associationType = AssociationType.Self
 
     private var userSessionResponse: UserSessionResponse? = null
     private var errorResponse: NhsoHttpException? = null
 
     lateinit var currentUrl: String
+
+    @And("^sign in verification is slow$")
+    fun signInVerificationIsSlow() {
+        mockingClient.forEmis {
+            endUserSessionRequest().respondWithSuccess(
+                    endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID)
+                    .delayedBy(Duration.ofSeconds(2))
+        }
+    }
 
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
@@ -85,7 +92,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
         mockingClient.forCitizenId {
             userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
-                    .respondWithSuccess()
+                    .respondWithSuccess(Patient.montelFrye)
         }
         
         createEmisStubs()
@@ -99,7 +106,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
         mockingClient.forCitizenId {
             userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
-                    .respondWithSuccess()
+                    .respondWithSuccess(Patient.montelFrye)
         }
         
         createEmisStubs()
@@ -123,55 +130,83 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
         createCidStubs()
         mockingClient.forEmis { endUserSessionRequest().respondWithServerError() }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
         createCidStubs()
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithServerError() }
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
     }
 
-    @Given("^I have valid OAuth details and EMIS is unavailable$")
-    fun iHaveValidOAuthDetailsAndEmisUnavailable() {
+    @Given("^I have valid OAuth details and (.*) is unavailable$")
+    fun iHaveValidOAuthDetailsAndGpSystemUnavailable(gpSystem: String) {
         createCidStubs()
-        mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+        when(gpSystem.toUpperCase()){
+            "EMIS" -> {
+                mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
+                mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
+            }
+            "TPP" -> {
+                mockingClient.forTpp { authenticateRequest(Authenticate())
+                        // respond with error.  Unconfirmed format.
+                        .respondWithError(Error(errorCode = "0", userFriendlyMessage = "Service Unavailable")) }
+            }
+        }
     }
 
-    @Given("^I have invalid OAuth details and CID connection token fails to authenticate with emis$")
-    fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithEmis() {
+    @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
+    fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
         createCidStubs()
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithForbidden() }
+        when(gpSystem.toUpperCase()){
+            "EMIS" -> {
+                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault(gpSystem).endUserSessionId) }
+                mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithForbidden() }
+            }
+            "TPP" -> {
+                mockingClient.forTpp { authenticateRequest(Authenticate())
+                        // respond with error.  Unconfirmed format.
+                        .respondWithError(Error(errorCode = "9", userFriendlyMessage = "There was a problem logging on")) }
+            }
+        }
     }
 
-    @Given("^I have valid OAuth details and emis fails to respond in 30 seconds$")
-    fun iHaveValidOAuthDetailsAndEmisFailsToRespondInThirtySeconds() {
-        createCidStubs()
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+    @Given("^I have valid OAuth details and (.*) fails to respond in 30 seconds$")
+    fun iHaveValidOAuthDetailsAndEmisFailsToRespondInThirtySeconds(gpSystem: String) {
+
+        when(gpSystem.toUpperCase()){
+            "EMIS" -> {
+                createCidStubs()
+                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
+                mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
+            }
+            "TPP" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
+                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(AuthenticateReply()).delayedBy(Duration.ofSeconds(31)) }
+            }
+        }
     }
 
     private fun createCidStubs(
             authCode:String? = this.authCode!!,
             codeVerifier: String = this.codeVerifier!!,
             accessToken: String = this.accessToken,
-            bearerToken: String = this.bearerToken) {
+            bearerToken: String = this.bearerToken,
+            patient: Patient = MockDefaults.patient) {
         mockingClient.forCitizenId {
             tokenRequest(codeVerifier, authCode)
                     .respondWithSuccess(accessToken)
         }
         mockingClient.forCitizenId {
             userInfoRequest(bearerToken)
-                    .respondWithSuccess()
+                    .respondWithSuccess(patient)
         }
     }
 
-    private fun createEmisStubs(patient: Patient = this.patient, defaultAssociationType: AssociationType = this.associationType) {
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, defaultAssociationType) }
+    private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
     }
 
     @When("^I create a user session$")
@@ -253,12 +288,21 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         myAccount.signOut()
     }
 
-    @And("^I have a slow connection$")
-    fun hasASlowConnection() {
-        // TODOs
+    @Given("^I am logged in as a (.*) user$")
+    fun iAmLoggedInTo(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem)
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        when(gpSystem.toUpperCase()) {
+            "EMIS" -> { EmisSessionCreateJourneyFactory(mockingClient).createFor(patient) }
+            "TPP" -> { TppSessionCreateJourneyFactory(mockingClient).createFor(patient) }
+        }
+
+        browser.goToApp()
+        login.asDefault()
     }
 
-    @When("^I log in")
+    @When("^I log in$")
     fun logIn() {
         login.asDefault(false)
     }
@@ -266,7 +310,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @When("I am on the home page")
     fun gotoHomePage()
     {
-        browser.changeTabToApp();
+        browser.changeTabToApp()
     }
 
     @When("^I browse to the page at (.*)$")
@@ -291,9 +335,10 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         browser.shouldHaveUrl(this.currentUrl)
     }
 
-    @Then("^I see a welcome message for (.*)$")
-    fun iSeeAWelcomeMessageFor(name: String) {
-        home.assertWelcomeMessageShownFor(name)
+    @Then("^I see a welcome message$")
+    fun iSeeAWelcomeMessageFor() {
+        val fullName = "${patient.title} ${patient.firstName} ${patient.surname}".trim()
+        home.assertWelcomeMessageShownFor(fullName)
     }
 
     @And("^I see the header$")
@@ -316,7 +361,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I do not see the menu bar$")
     @Throws(Exception::class)
     fun iDoNotSeeMenuBar() {
-        login.assertMenuIsNotVisible();
+        login.assertMenuIsNotVisible()
     }
 
     @Then("^the user login details are cleared from cookies$")
@@ -324,18 +369,34 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun theUserLoginDetailsAreClearedFromCookies() {
         browser.checkLoginDetailsAreReset();
     }
+
+    @Given("^I want to register for an account$")
+    fun iWantToRegisterForAnAccount() {
+        this.patient = MockDefaults.patient
+        browser.goToApp()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(this.patient)
+    }
+
     @Then("^I see create account button$")
     fun iSeeCreateAccountButton() {
         login.assertCreateAccountButtonIsVisible()
     }
 
-    @When("I select to create an account")
+    @When("^I select to create an account$")
     fun iClickCreateAccountButton() {
         login.clickCreateAccountButton()
     }
 
-    @When("I have completed account creation")
+    @When("^I have completed account creation$")
     fun iCreateAnAccount() {
+        this.patient = MockDefaults.patient
+        iWantToRegisterForAnAccount()
+        iCompleteAccountRegistration()
+    }
+
+    @And("^I complete the account registration$")
+    fun iCompleteAccountRegistration() {
         login.createAccount()
     }
 

@@ -24,9 +24,7 @@ private const val SESSION_ID_EARCLINIC = 3
 class AppointmentData private constructor() {
     private val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
 
-    val expectedMyAppointment by lazy {
-        Slot(session = SessionType.Timed.toString())
-    }
+    private val expectedMyAppointment = Slot(session = SessionType.Timed.toString())
 
     val locations = arrayListOf(
             Location(locationId = LOCATION_ID_SURGERY, locationName = "Main Surgery"),
@@ -57,42 +55,36 @@ class AppointmentData private constructor() {
                     clinicianIds = arrayListOf(CLINICIAN_ID_MSBROWN))
     )
 
-    val telephoneAppointmentDetails1 by lazy {
+    val telephoneAppointmentDetails1 =
         TelephoneAppointmentDetails(
                 telephoneNumber = "0987654321",
                 contactType = "Mobile")
-    }
 
-    val telephoneAppointmentDetails2 by lazy {
+    val telephoneAppointmentDetails2 =
         TelephoneAppointmentDetails(
                 telephoneNumber = "0012345678",
                 contactType = "Home")
-    }
 
-    val emisCancellationReason1 by lazy {
+    val emisCancellationReason1 =
         AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
-    }
 
-    val emisCancellationReason2 by lazy {
+    val emisCancellationReason2 =
         AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
-    }
-    private val unspecifiedTimeAppointment1 by lazy {
+
+    private val unspecifiedTimeAppointment1 =
         Appointment(slotId = 1,
                 sessionId = SESSION_ID_FOOTCLINIC,
                 bookingReason = "My back hurts")
-    }
 
-    private val unspecifiedTimeAppointment2 by lazy {
+    private val unspecifiedTimeAppointment2 =
         Appointment(slotId = 2,
                 sessionId = SESSION_ID_EARCLINIC,
                 bookingReason = "My stomach hurts")
-    }
 
-    private val unspecifiedTimeAppointment3 by lazy {
+    private val unspecifiedTimeAppointment3 =
         Appointment(slotId = 3,
                 sessionId = SESSION_ID_EYECLINIC,
                 bookingReason = "My leg hurts")
-    }
 
     private var appointments: ArrayList<Appointment> = arrayListOf()
 

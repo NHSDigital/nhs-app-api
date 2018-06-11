@@ -5,7 +5,7 @@ Feature: Switching Apps on Mobile Devices
 
   @NHSO-893  
   @pending
-  Scenario Outline: User is on a page and switches apps
+  Scenario Outline: User is on <start page> and switches apps
     Given I am on the <start page> page
     And I switch apps
     When I switch to the NHS App
@@ -22,7 +22,7 @@ Feature: Switching Apps on Mobile Devices
 
   @NHSO-893
   @manual
-  Scenario Outline: User switches back to app after session times out
+  Scenario Outline: User switches back to <start page> after session times out
     Given I am on the <start page> page
     And I switch apps
     And I wait for 20 minutes

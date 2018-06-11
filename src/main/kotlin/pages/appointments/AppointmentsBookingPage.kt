@@ -19,8 +19,14 @@ class AppointmentsBookingPage : AppointmentSharedElementsPage() {
         findAllByXpath("//ul[@data-purpose='slots']/li").first().waitUntilClickable<WebElementFacade>().click()
     }
 
-    fun getServerErrorMessage(): String {
-        return serverError.text
+    fun getServerErrorMessage(): String? {
+        val message: String?
+        if (serverError.isPresent) {
+            message = serverError.text
+        }
+        else message = null
+
+        return message
     }
 
     fun getTryAgainButton(): WebElement {

@@ -5,11 +5,17 @@ import models.Patient
 
 class SessionJournies(private val client: MockingClient) {
     fun create() {
-        val factory = EmisSessionCreateJourneyFactory(client)
+        val cidFactory = CitizenIdSessionCreateJourney(client)
+        val emisFactory = EmisSessionCreateJourneyFactory(client)
+        val tppFactory = TppSessionCreateJourneyFactory(client)
 
-        factory.createFor(Patient.alanCook)
-        factory.createFor(Patient.jackJackson)
-        factory.createFor(Patient.paulSmith)
-        factory.createFor(Patient.montelFrye)
+        cidFactory.createFor(Patient.alanCook)
+        emisFactory.createFor(Patient.alanCook)
+        cidFactory.createFor(Patient.jackJackson)
+        emisFactory.createFor(Patient.jackJackson)
+        cidFactory.createFor(Patient.paulSmith)
+        emisFactory.createFor(Patient.paulSmith)
+        cidFactory.createFor(Patient.montelFrye)
+        emisFactory.createFor(Patient.montelFrye)
     }
 }

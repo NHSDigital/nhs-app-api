@@ -152,9 +152,9 @@ open class AppointmentsSteps {
         assertTrue("EMIS cancellation options count doesn't match",
                 cancellationReasons.size == expectedCancellationReasons.size)
         expectedCancellationReasons.forEach { expectedReason ->
-            val acutalReason = cancellationReasons.firstOrNull { expectedReason.displayName == it.displayName }
+            val actualReason = cancellationReasons.firstOrNull { expectedReason.displayName == it.displayName }
             assertNotNull("Expected reason ${expectedReason.displayName} not found",
-                    acutalReason)
+                    actualReason)
         }
     }
 }

@@ -17,7 +17,7 @@ open class HomeSteps {
 
     @Step
     fun assertWelcomeMessageShownFor(name: String) {
-        Assert.assertTrue(homePage.hasWelcomeMessageFor(name))
+        Assert.assertTrue("Welcome message did not match $name", homePage.hasWelcomeMessageFor(name))
     }
 
     @Step
