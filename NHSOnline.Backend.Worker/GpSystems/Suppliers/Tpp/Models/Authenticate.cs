@@ -14,6 +14,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
         
         [XmlAttribute("passphrase")]
         public string Passphrase { get; set; }
+        
+        [XmlAttribute("unitId")]
+        public string UnitId { get; set; }
+        
+        [XmlAttribute("uuid")]
+        public Guid Uuid { get; set; }
 
         public Application Application { get; set; }
     }
