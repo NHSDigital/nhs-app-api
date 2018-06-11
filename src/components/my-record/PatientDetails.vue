@@ -1,19 +1,20 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
     <label>{{ $t('myRecord.patientInfo.fieldLabelName') }}</label>
-    <p v-if="patientInfo">{{ `${patientInfo.firstName} ${patientInfo.surname}` }}</p>
+    <p v-if="patientDetails">{{ `${patientDetails.firstName} ${patientDetails.surname}` }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelDOB') }}</label>
-    <p v-if="patientInfo">{{ patientInfo.dateOfBirth | longDate }}</p>
+    <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelSex') }}</label>
-    <p v-if="patientInfo">{{ patientInfo.sex }}</p>
+    <p v-if="patientDetails">{{ patientDetails.sex }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelAddress') }}</label>
-    <p v-if="patientInfo && patientInfo.address">{{ formatAddress(patientInfo.address) }}</p>
+    <p v-if="patientDetails && patientDetails.address">
+      {{ formatAddress(patientDetails.address) }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelNHS') }}</label>
-    <p v-if="patientInfo">{{ patientInfo.nhsNumber }}</p>
+    <p v-if="patientDetails">{{ patientDetails.nhsNumber }}</p>
     <hr>
   </div>
 </template>
@@ -23,6 +24,10 @@ import { mapGetters } from 'vuex';
 
 export default {
   props: {
+    patientDetails: {
+      type: Object,
+      default: null,
+    },
     isCollapsed: {
       type: Boolean,
       default: true,

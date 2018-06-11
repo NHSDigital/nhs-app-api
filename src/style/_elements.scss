@@ -174,6 +174,8 @@ footer {
     transition: max-height 0.5s ease 0.3s;
 
     p,
+    ul,
+    li,
     label,
     hr {
       opacity: 0;
@@ -186,6 +188,8 @@ footer {
     transition: max-height 0.5s ease;
 
     p,
+    ul,
+    li,
     label,
     hr {
       opacity: 1;

@@ -1,19 +1,24 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
     <ul :class="$style.allergyAndAdverseReactions">
-      <li v-for="item in allergies" :key="item.name">
-        <label>{{ item.date | longDate }}</label>
-        <p>{{ item.symptom }}</p>
+      <li v-for="allergy in orderedAllergies" :key="allergy.name">
+        <label>{{ allergy.date | longDate }}</label>
+        <p>{{ allergy.symptom }}</p>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+
+import _ from 'lodash';
 
 export default {
   props: {
+    data: {
+      type: Array,
+      default: () => [],
+    },
     isCollapsed: {
       type: Boolean,
       default: true,
@@ -23,9 +28,9 @@ export default {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
-    ...mapGetters({
-      allergies: 'myRecord/allergies',
-    }),
+    orderedAllergies() {
+      return _.orderBy(this.data, [obj => obj.date], ['asc']);
+    },
   },
 };
 

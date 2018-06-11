@@ -118,6 +118,15 @@ export default {
     allergiesAndAdverseReactions: {
       sectionHeader: 'Allergies and adverse reactions',
     },
+    acuteMedications: {
+      sectionHeader: 'Acute medications',
+    },
+    currentRepeatMedications: {
+      sectionHeader: 'Current repeat medications',
+    },
+    discontinuedRepeatMedications: {
+      sectionHeader: 'Discontinued repeat medications',
+    },
   },
   common: {
     or: 'OR',
