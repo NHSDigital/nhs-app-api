@@ -1,7 +1,7 @@
 swagger: "2.0"
 
 info:
-  version: 0.0.5
+  version: 0.0.6
   title: NHS App Sub-API - Appointments
   description: NHS App Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
 
@@ -43,6 +43,40 @@ paths:
         504:
           description: The GP system did not respond in a timely fashion.
   /appointments:
+    get:
+      tags:
+        - appointments
+      summary: Gets a list of existing appointments for the logged on user.
+      description: Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: includePastAppointments
+          type: boolean
+          required: true
+          description: Indicates whether the response should include historical appointments. See also the optional pastAppointmentsFromDate parameter that can be used to limit the number of returned historical appointments.
+        - in: query
+          name: pastAppointmentsFromDate
+          type: string
+          format: date-time
+          required: false
+          description: Earliest datetime for which to return historical appointments. Will only have any effect if includePastAppointments is set to true.
+      responses:
+        200:
+          description: Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns.
+          schema:
+            $ref: "#/definitions/AppointmentsResponse"
+        400:
+          description: Bad request. A querystring parameter is not in the expected format.
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respons in a timely fashion.
     post:
       tags:
         - appointments
@@ -90,6 +124,34 @@ definitions:
         description: Reason for booking appointment. e.g. symptoms being experienced by the patient.
         minLength: 1
         maxLength: 150
+  AppointmentsResponse:
+    type: object
+    properties:
+      appointments:
+        type: array
+        description: Array of booked Appointments.
+        items:
+          $ref: '#/definitions/Appointment'
+      clinicians:
+        type: array
+        description: Array of attending Clinicians.
+        items:
+          $ref: '#/definitions/Clinician'
+      appointmentSessions:
+        type: array
+        description: Array of Appointment Sessions.
+        items:
+          $ref: '#/definitions/AppointmentSession'
+      locations:
+        type: array
+        description: Array of Locations.
+        items:
+          $ref: '#/definitions/Location'
+      cancellationReasons:
+        type: array
+        description: Array of Cancellation Reasons.
+        items:
+          $ref: '#/definitions/CancellationReason'
   AppointmentSlotsResponse:
     type: object
     properties:
@@ -113,15 +175,49 @@ definitions:
         description: Available Appointment Slots.
         items:
           $ref: '#/definitions/Slot'
+  Appointment:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Appointment Identifier.
+      startTime:
+        type: string
+        format: date-time
+        description: Appointment Start Date Time.
+      endTime:
+        type: string
+        format: date-time
+        description: Appointment End Date Time.
+      locationId:
+        type: string
+        description: Location Identifier
+      appointmentSessionId:
+        type: string
+        description: GP system appointment session Identifier.
+      clinicianIds:
+        type: array
+        description: Array of Clinicians, accounts for joint sessions.
+        items:
+          type: string
   AppointmentSession:
     type: object
     properties:
-        id:
-         type: string
-         description: Appointment Session Identifier.
-        displayName:
-         type: string
-         description: Appointment Session Name.
+      id:
+        type: string
+        description: Appointment Session Identifier.
+      displayName:
+        type: string
+        description: Appointment Session Name.
+  CancellationReason:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Cancellation Reason Identifier.
+      displayName:
+        type: string
+        description: Cancellation Reason Description.
   Clinician:
     type: object
     properties:
