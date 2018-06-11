@@ -79,7 +79,7 @@ export default {
     },
     noMedicinesSelected: 'Select at least one medicine',
     specialRequestsLabel: 'Special requests relating to this order (optional)',
-    orderSuccessText: 'Your repeat prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
+    orderSuccessText: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
   },
   myRecord: {
     name: 'Name',
