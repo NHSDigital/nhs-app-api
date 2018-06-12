@@ -194,7 +194,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title, unavailabilityErrorMessage.message)
         if(unavailabilityErrorMessage.message != null){
-            tryAgainTextView.visibility = INVISIBLE
+            tryAgainTextView.visibility = GONE
         } else {
             tryAgainTextView.visibility = VISIBLE
         }
