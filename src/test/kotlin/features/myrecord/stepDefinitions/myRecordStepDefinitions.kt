@@ -247,8 +247,7 @@ open class MyRecordStepDefinitions {
     }
 
     @When("I get the users allergy data")
-    fun whenIGetTheUsersAllergies()
-    {
+    fun whenIGetTheUsersAllergies() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getAllergiesConnection(null)
 
@@ -256,58 +255,53 @@ open class MyRecordStepDefinitions {
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
+    }
 
-        @When("^I click the Allergies and Adverse Reactions section$")
-        @Throws(Exception::class)
-        fun i_click_the_Allergies_and_Adverse_Reactions_section() {
-            recordSteps.clickAllergiesAndAdverseReactionsSection()
-        }
+    @When("^I click the Allergies and Adverse Reactions section$")
+    @Throws(Exception::class)
+    fun i_click_the_Allergies_and_Adverse_Reactions_section() {
+        recordSteps.clickAllergiesAndAdverseReactionsSection()
+    }
 
-        @Then("I receive the allergies object")
-        fun thenIReceiveAnAllergiesObject() {
-            val result = Serenity.sessionVariableCalled<AllergiesResponse>(AllergiesResponse::class)
-            Assert.assertNotNull(result)
-            @Then("^I see the Allergies and Adverse Reactions heading$")
-            @Throws(Exception::class)
-            fun i_see_the_Allergies_and_Adverse_Reactions_heading() {
-                Assert.assertEquals("Allergies and Adverse Reactions", recordSteps.getAllergiesAndAdverseReactionsHeaderText())
-            }
+    @Then("I receive the allergies object")
+    fun thenIReceiveAnAllergiesObject() {
+        val result = Serenity.sessionVariableCalled<AllergiesResponse>(AllergiesResponse::class)
+        Assert.assertNotNull(result)
+    }
 
-            @Then("^I see the Allergies and Adverse Reactions section collapsed$")
-            @Throws(Exception::class)
-            fun i_see_the_Allergies_and_Adverse_Reactions_section_collapsed() {
-                Assert.assertFalse(recordSteps.isAllergiesTextMsgVisible())
-            }
+    @Then("^I see the Allergies and Adverse Reactions heading$")
+    @Throws(Exception::class)
+    fun i_see_the_Allergies_and_Adverse_Reactions_heading() {
+        Assert.assertEquals("Allergies and Adverse Reactions", recordSteps.getAllergiesAndAdverseReactionsHeaderText())
+    }
 
-            @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
-            @Throws(Exception::class)
-            fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
-                Assert.assertEquals("Service not offered by GP or to specific user or access revoked", recordSteps.getAccessRevokedMessage())
-            }
+    @Then("^I see the Allergies and Adverse Reactions section collapsed$")
+    @Throws(Exception::class)
+    fun i_see_the_Allergies_and_Adverse_Reactions_section_collapsed() {
+        Assert.assertFalse(recordSteps.isAllergiesTextMsgVisible())
+    }
 
-            @When("^I click the Allergies and Adverse Reactions section$")
-            @Throws(Exception::class)
-            fun i_click_the_Allergies_and_Adverse_Reactions_section() {
+    @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
+    @Throws(Exception::class)
+    fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
+        Assert.assertEquals("Service not offered by GP or to specific user or access revoked", recordSteps.getAccessRevokedMessage())
+    }
 
-            }
+    @Then("^I see a message indicating I have no allergies$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_I_have_no_allergies() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getAllergyMessage())
+    }
 
-            @Then("^I see a message indicating I have no allergies$")
-            @Throws(Exception::class)
-            fun i_see_a_message_indicating_I_have_no_allergies() {
-                Assert.assertEquals("No information recorded for this section", recordSteps.getAllergyMessage())
-            }
+    @Then("^I see one or more drug type allergies record displayed$")
+    @Throws(Exception::class)
+    fun i_see_one_or_more_drug_type_allergies_record_displayed() {
+        Assert.assertEquals("Drug Allergy", recordSteps.getAllergyMessage())
+    }
 
-            @Then("^I see one or more drug type allergies record displayed$")
-            @Throws(Exception::class)
-            fun i_see_one_or_more_drug_type_allergies_record_displayed() {
-                Assert.assertEquals("Drug Allergy", recordSteps.getAllergyMessage())
-            }
-
-            @Then("^I see one or more non drug type allergies record displayed$")
-            @Throws(Exception::class)
-            fun i_see_one_or_more_non_drug_type_allergies_record_displayed() {
-                Assert.assertEquals("non Drug Allergy", recordSteps.getAllergyMessage())
-            }
-        }
+    @Then("^I see one or more non drug type allergies record displayed$")
+    @Throws(Exception::class)
+    fun i_see_one_or_more_non_drug_type_allergies_record_displayed() {
+        Assert.assertEquals("non Drug Allergy", recordSteps.getAllergyMessage())
     }
 }

@@ -111,6 +111,7 @@ Feature: View My Medical Record Information
     And I am on my record information page
     Then I see a message indicating that I have no access to view my record
 
+  @pending
   @NHSO-677
   Scenario: An EMIS user can view allergies and adverse reactions section
     Given I am logged in
