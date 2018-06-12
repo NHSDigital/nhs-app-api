@@ -1,7 +1,7 @@
 import {
   ADD_API_ERROR,
   SET_API_ERROR_BUTTON_PATH,
-  SET_SHOWING_API_ERROR_CONDITION,
+  DISABLE_API_ERROR,
   CLEAR_ALL_API_ERRORS,
   SET_CONNECTION_PROBLEM,
 } from './mutation-types';
@@ -13,8 +13,8 @@ export default {
   setApiErrorButtonPath({ commit }, path) {
     commit(SET_API_ERROR_BUTTON_PATH, path);
   },
-  setShowingApiErrorCondition({ commit }, condition) {
-    commit(SET_SHOWING_API_ERROR_CONDITION, condition);
+  disableApiError({ commit }) {
+    commit(DISABLE_API_ERROR);
   },
   clearAllApiErrors({ commit }) {
     commit(CLEAR_ALL_API_ERRORS);

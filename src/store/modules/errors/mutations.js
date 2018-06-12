@@ -1,12 +1,10 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-/* eslint-disable object-shorthand */
-/* eslint-disable func-names */
 import {
   ADD_API_ERROR,
   SET_API_ERROR_BUTTON_PATH,
-  SET_SHOWING_API_ERROR_CONDITION,
+  DISABLE_API_ERROR,
   CLEAR_ALL_API_ERRORS,
   SET_CONNECTION_PROBLEM,
 } from './mutation-types';
@@ -28,14 +26,12 @@ export default {
   [SET_API_ERROR_BUTTON_PATH](state, path) {
     state.apiErrorButtonPath = path;
   },
-  [SET_SHOWING_API_ERROR_CONDITION](state, condition) {
-    state.showingApiErrorCondition = condition;
+  [DISABLE_API_ERROR](state) {
+    state.showApiError = false;
   },
   [CLEAR_ALL_API_ERRORS](state) {
     state.apiErrors = [];
-    state.showingApiErrorCondition = function (status) {
-      return (status >= 500 || status === 403);
-    };
+    state.showApiError = true;
     state.apiErrorButtonPath = '';
   },
   [SET_CONNECTION_PROBLEM](state, hasConnectionProblem) {
