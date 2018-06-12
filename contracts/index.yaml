@@ -1,560 +1,557 @@
 ---
   swagger: "2.0"
-  info: 
+  info:
     version: "0.0.5"
     title: "NHS App API"
     description: "This is the API for the NHS App."
-  schemes: 
+  schemes:
     - "https"
-  paths: 
-    /v1/patient/appointment-slots: 
-      get: 
-        tags: 
+  paths:
+    /v1/patient/appointment-slots:
+      get:
+        tags:
           - "appointment-slots"
         summary: "Gets a list of available appointments for the logged on user."
         description: "For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "fromDate"
             type: "string"
             format: "date-time"
             required: false
             description: "Appointment search from date. If not supplied and no toDate supplied, defaults to current datetime. If not supplied but toDate supplied, defaults to start of the day two weeks before toDate."
-          - 
+          -
             in: "query"
             name: "toDate"
             type: "string"
             format: "date-time"
             required: false
             description: "Appointment search to date. If not supplied and no fromDate supplied, defaults to end of the day two weeks after current datetime. If not supplied but fromDate supplied, defaults to end of the day two weeks after fromDate."
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                clinicians: 
+              properties:
+                clinicians:
                   type: "array"
                   description: "Array of attending Clinicians."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Clinician Identifier."
-                      displayName: 
+                      displayName:
                         type: "string"
                         description: "Clinician Name."
-                appointmentSessions: 
+                appointmentSessions:
                   type: "array"
                   description: "Array of Appointment Sessions."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Appointment Session Identifier."
-                      displayName: 
+                      displayName:
                         type: "string"
                         description: "Appointment Session Name."
-                locations: 
+                locations:
                   type: "array"
                   description: "Array of Locations."
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1appointments/get/responses/200/schema/properties/locations/items"
-                slots: 
+                slots:
                   type: "array"
                   description: "Available Appointment Slots."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Slot Identifier."
-                      startTime: 
+                      startTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Slot Start Date Time."
-                      endTime: 
+                      endTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Slot End Date Time."
-                      locationId: 
+                      locationId:
                         type: "string"
                         description: "Location Identifier"
-                      appointmentSessionId: 
+                      appointmentSessionId:
                         type: "string"
                         description: "GP system appointment session Identifier."
-                      clinicianIds: 
+                      clinicianIds:
                         type: "array"
                         description: "Array of Clinicians, accounts for joint sessions."
-                        items: 
+                        items:
                           type: "string"
-          400: 
+          400:
             description: "Bad request. A querystring parameter is not in the expected format."
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/appointments: 
-      get: 
-        tags: 
+    /v1/patient/appointments:
+      get:
+        tags:
           - "appointments"
         summary: "Gets a list of existing appointments for the logged on user."
         description: "Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "includePastAppointments"
             type: "boolean"
             required: true
             description: "Indicates whether the response should include historical appointments. See also the optional pastAppointmentsFromDate parameter that can be used to limit the number of returned historical appointments."
-          - 
+          -
             in: "query"
             name: "pastAppointmentsFromDate"
             type: "string"
             format: "date-time"
             required: false
             description: "Earliest datetime for which to return historical appointments. Will only have any effect if includePastAppointments is set to true."
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                appointments: 
+              properties:
+                appointments:
                   type: "array"
                   description: "Array of booked Appointments."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Appointment Identifier."
-                      startTime: 
+                      startTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment Start Date Time."
-                      endTime: 
+                      endTime:
                         type: "string"
                         format: "date-time"
                         description: "Appointment End Date Time."
-                      locationId: 
+                      locationId:
                         type: "string"
                         description: "Location Identifier"
-                      appointmentSessionId: 
+                      appointmentSessionId:
                         type: "string"
                         description: "GP system appointment session Identifier."
-                      clinicianIds: 
+                      clinicianIds:
                         type: "array"
                         description: "Array of Clinicians, accounts for joint sessions."
-                        items: 
+                        items:
                           type: "string"
-                clinicians: 
+                clinicians:
                   type: "array"
                   description: "Array of attending Clinicians."
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1appointment-slots/get/responses/200/schema/properties/clinicians/items"
-                appointmentSessions: 
+                appointmentSessions:
                   type: "array"
                   description: "Array of Appointment Sessions."
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1appointment-slots/get/responses/200/schema/properties/appointmentSessions/items"
-                locations: 
+                locations:
                   type: "array"
                   description: "Array of Locations."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Location Identifier."
-                      displayName: 
+                      displayName:
                         type: "string"
                         description: "Location Name."
-                cancellationReasons: 
+                cancellationReasons:
                   type: "array"
                   description: "Array of Cancellation Reasons."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Cancellation Reason Identifier."
-                      displayName: 
+                      displayName:
                         type: "string"
                         description: "Cancellation Reason Description."
-          400: 
+          400:
             description: "Bad request. A querystring parameter is not in the expected format."
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respons in a timely fashion."
-      post: 
-        tags: 
+      post:
+        tags:
           - "appointments"
         summary: "Creates a GP Appointment for the logged on user."
         description: "Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "AppointmentBookRequest"
             required: true
             description: "Details of the appointment slot to be booked, along with reasons for the booking being made."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "slotId"
                 - "bookingReason"
-              properties: 
-                slotId: 
+              properties:
+                slotId:
                   type: "string"
                   description: "Identifier of appointment slot to be booked."
                   minLength: 1
-                bookingReason: 
+                bookingReason:
                   type: "string"
                   description: "Reason for booking appointment. e.g. symptoms being experienced by the patient."
                   minLength: 1
                   maxLength: 150
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Appointment successfully created."
-          400: 
+          400:
             description: "Bad request. Supplied request is incomplete or invalid."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          409: 
+          409:
             description: "Conflict. The chosen appointment slot is not available for booking."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/my-record/demographics: 
-      get: 
-        tags: 
+    /v1/patient/my-record/demographics:
+      get:
+        tags:
           - "demographics"
         summary: "Gets demographic information for the logged on user."
         description: "Returns users personal details and address details for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns demographic data for the logged in user."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                nhsNumber: 
+              properties:
+                nhsNumber:
                   type: "string"
                   description: "The persons NHS number."
-                firstName: 
+                firstName:
                   type: "string"
                   description: "The persons first name."
-                surname: 
+                surname:
                   type: "string"
                   description: "The persons surname."
-                dateOfBirth: 
+                dateOfBirth:
                   type: "string"
                   format: "date-time"
                   description: "The persons date of birth."
-                sex: 
+                sex:
                   type: "string"
                   description: "The persons sex."
-                address: 
+                address:
                   type: "object"
-                  properties: 
-                    line1: 
+                  properties:
+                    line1:
                       type: "string"
                       description: "Line 1 of the address."
-                    line2: 
+                    line2:
                       type: "string"
                       description: "Line 2 of the address."
-                    line3: 
+                    line3:
                       type: "string"
                       description: "Line 3 of the address."
-                    town: 
+                    town:
                       type: "string"
                       description: "The name of the town."
-                    county: 
+                    county:
                       type: "string"
                       description: "The name of the county."
-                    postCode: 
+                    postCode:
                       type: "string"
                       description: "The postcode."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/my-record/allergies: 
-      get: 
-        tags: 
+    /v1/patient/my-record/allergies:
+      get:
+        tags:
           - "allergies"
         summary: "Gets allergies for the logged on user."
         description: "Returns users allergies for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns allergy data for the logged in user."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                allergies: 
+              properties:
+                allergies:
                   type: "array"
                   description: "Array of allergy items."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      allergyName: 
+                    properties:
+                      allergyName:
                         type: "string"
                         description: "The name of the allergy."
-                      availabilityDateTime: 
+                      availabilityDateTime:
                         type: "string"
                         format: "date-time"
                         description: "When the record was entered."
-          401: 
+          401:
             description: "User session has expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/prescriptions: 
-      post: 
-        tags: 
+    /v1/patient/prescriptions:
+      post:
+        tags:
           - "prescriptions"
         summary: "Creates a repeat prescription request for the logged in user"
         description: "For the given logged on user, will request a repeat prescription for a list of prescription courses. Requires NHSO-Session-Id cookie in header from session endpoint."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "RepeatPrescriptionRequest"
             required: true
             description: "Repeat prescription request details to be created."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "courseIds"
-              properties: 
-                courseIds: 
+              properties:
+                courseIds:
                   type: "array"
                   description: "Array of course identifiers to create the prescription for."
-                  items: 
+                  items:
                     type: "string"
-                specialRequest: 
+                specialRequest:
                   type: "string"
                   description: "Optional free text that a user may supply in order to add a special request for the given prescription"
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Successful operation. Repeat Prescription Created."
-          400: 
+          400:
             description: "Bad request. Supplied connection details or request data is incomplete or invalid."
-          401: 
+          401:
             description: "User session missing or expired."
-          403: 
+          403:
             description: "The patient does not have the necessary permissions within the GP system."
-          409: 
+          409:
             description: "Conflict. A repeat prescription for the given course already exists preventing a new one to be created."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-      get: 
-        tags: 
+      get:
+        tags:
           - "prescriptions"
         summary: "Gets a list of requested repeat prescriptions for the logged on user."
         description: "For a given date range, returns a list of courses and repeat prescriptions for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
-        produces: 
+        produces:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "query"
             name: "fromDate"
             type: "string"
             format: "date-time"
             required: false
             description: "Repeat Prescription from date. Will default to 6 months ago if no value is supplied"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of requested repeat prescriptions and associated meta data. Returns empty collection of repeat prescriptions if GP system does not return a list of prescriptions."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                prescriptions: 
+              properties:
+                prescriptions:
                   type: "array"
                   description: "Array of repeat prescriptions."
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      courses: 
+                    properties:
+                      courses:
                         type: "array"
                         description: "Array of prescription courses."
-                        items: 
+                        items:
                           type: "object"
-                          properties: 
-                            courseId: 
+                          properties:
+                            courseId:
                               type: "string"
                               description: "Course identifier."
-                            status: 
+                            status:
                               type: "string"
-                              enum: 
+                              enum:
                                 - "approved"
                                 - "ordered"
                                 - "rejected"
                                 - "cancelled"
-                      orderDate: 
+                      orderDate:
                         type: "string"
                         format: "date-time"
                         description: "The date on which the repeat prescription was ordered."
-                courses: 
+                courses:
                   type: "array"
                   description: "Array of prescription courses."
-                  items: 
+                  items:
                     $ref: "#/paths/~1v1~1patient~1courses/get/responses/200/schema/properties/courses/items"
-          400: 
+          400:
             description: "Bad request. All headers must be provided."
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/courses: 
-      get: 
-        tags: 
+    /v1/patient/courses:
+      get:
+        tags:
           - "courses"
         summary: "Gets a list of prescriptions courses for the given patient."
         description: "Returns a list of prescriptions courses for the logged in user. Requires NHSO-Session-Id cookie in header from session endpoint."
-        produces: 
+        produces:
           - "application/json"
-        responses: 
-          200: 
+        responses:
+          200:
             description: "Returns list of courses and associated meta data. Returns empty collection of courses if GP system does not return a list of courses."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                courses: 
+              properties:
+                courses:
                   type: "array"
                   description: "An array of prescription courses"
-                  items: 
+                  items:
                     type: "object"
-                    properties: 
-                      id: 
+                    properties:
+                      id:
                         type: "string"
                         description: "Course identifier."
-                      name: 
+                      name:
                         type: "string"
                         description: "Course name."
-                      dosage: 
+                      dosage:
                         type: "string"
                         description: "The required dosage for the course."
-                      quantity: 
+                      quantity:
                         type: "string"
                         description: "The quantity of the drug for the course."
-          401: 
+          401:
             description: "User session missing or expired."
-          500: 
+          500:
             description: "An unexpected error occurred processing the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/session: 
-      post: 
-        tags: 
+    /v1/session:
+      post:
+        tags:
           - "session"
         summary: "Creates a user session for an authenticated user."
         description: "Given an OAuth authorisation code and PKCE code verifier, creates and returns a user session."
-        consumes: 
+        consumes:
           - "application/json"
-        parameters: 
-          - 
+        parameters:
+          -
             in: "body"
             name: "userSession"
             required: true
             description: "OAuth details for the session to be created."
-            schema: 
+            schema:
               type: "object"
-              required: 
+              required:
                 - "authCode"
                 - "codeVerifier"
-              properties: 
-                authCode: 
+              properties:
+                authCode:
                   type: "string"
                   description: "OAuth authorization code."
-                codeVerifier: 
+                codeVerifier:
                   type: "string"
                   description: "PKCE code verifier."
-        responses: 
-          201: 
+        responses:
+          201:
             description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests."
-            schema: 
+            schema:
               type: "object"
-              properties: 
-                givenName: 
+              properties:
+                name:
                   type: "string"
-                  description: "User's given name"
-                familyName: 
-                  type: "string"
-                  description: "User's family name."
-                sessionTimeout: 
+                  description: "User's name"
+                sessionTimeout:
                   type: "integer"
                   description: "User's session timeout period in seconds."
-          400: 
+          400:
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
-          403: 
+          403:
             description: "Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system."
-          500: 
+          500:
             description: "An unexpected error occurred during the processing of the request."
-          502: 
+          502:
             description: "The GP system is currently unavailable."
-          504: 
+          504:
             description: "The GP system did not respond in a timely fashion."
-      delete: 
-        tags: 
+      delete:
+        tags:
           - "session"
         summary: "Deletes a user session for an authenticated user."
         description: "Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id cookie obtained from post session endpoint."
-        responses: 
-          204: 
+        responses:
+          204:
             description: "Successfully deleted session and user signed out"
-          401: 
+          401:
             description: "User session has expired."
-          500: 
+          500:
             description: "An unexpected error occurred during the processing of the request."
-          502: 
+          502:
             description: "Session storage is unavailable"
 

@@ -21,8 +21,8 @@ export default {
   computed: {
     greetingMessage() {
       const message = this.$t('homeLoggedIn.welcome');
-      const { givenName, familyName } = this.$store.state.auth.user;
-      return `${message}, ${givenName} ${familyName}`;
+      const { name } = this.$store.state.auth.user;
+      return `${message}, ${name}`;
     },
   },
 };
