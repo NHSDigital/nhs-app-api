@@ -6,7 +6,7 @@ Feature: View My Medical Record Warning
   @NHSO-359
   Scenario: An EMIS user navigates to my record warning page
     Given I am logged in
-    Given the GP Practice has enabled demographics functionality
+    And the GP Practice has enabled demographics functionality
     When I click my record button on menu bar
     Then I see record warning page opened
     And I see header text is My medical record
@@ -20,8 +20,8 @@ Feature: View My Medical Record Warning
   @NHSO-359
   Scenario: An EMIS user navigates back to home
     Given I am logged in
-    Given the GP Practice has enabled demographics functionality
-    Given I am on the record warning page
+    And the GP Practice has enabled demographics functionality
+    And I am on the record warning page
     When I click the back to home button
     Then I will return to the home page
     And No navigation menu bar item will be selected

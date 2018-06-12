@@ -94,5 +94,31 @@ open class MyRecordSteps {
     fun isNameVisible(): Boolean {
         return myRecordInfoPage.isNameVisible()
     }
+
+    @Step
+    fun getAllergiesAndAdverseReactionsHeaderText(): String {
+        return myRecordInfoPage.getAllergiesAndAdverseReactionsHeaderText()
+    }
+
+    @Step
+    fun getAllergyMessage(): String{
+        return myRecordInfoPage.getAllergyMessage()
+    }
+
+    @Step
+    fun isAllergiesTextMsgVisible(): Boolean {
+        return myRecordInfoPage.isAllergiesTextMsgVisible()
+    }
+
+    @Step
+    fun getAccessRevokedMessage(): String{
+        return myRecordInfoPage.getAccessRevokedMessage()
+    }
+
+    @Step
+    fun clickAllergiesAndAdverseReactionsSection(){
+        return myRecordInfoPage.clickAllergiesAndAdverseReactionsSection()
+    }
+
 }
 
