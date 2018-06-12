@@ -1,23 +1,33 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
-    <ul :class="$style.medications">
-      <li v-for="(medication, medIndex) in orderedMedications" :key="`medication-${medIndex}`"
-          :class="$style.medication">
-        <label>{{ medication.date | longDate }}</label>
+    <div v-if="hasError">
+      <p>  {{ $t('myRecord.genericErrorMessage') }} </p>
+    </div>
+    <div v-else>
+      <div v-if="data.length > 0">
         <ul>
-          <li v-for="(lineItem, lineItemIndex) in medication.lineItems"
-              :key="`line-${lineItemIndex}`" :class="$style.medicationLine">
-            {{ lineItem.text }}
+          <li v-for="(medication, medIndex) in orderedMedications" :key="`medication-${medIndex}`"
+              :class="$style.medication">
+            <label>{{ medication.date | longDate }}</label>
             <ul>
-              <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
-                  :key="`innerline-${innerLineItemIndex}`" :class="$style.medicationLine">
-                {{ innerLineItem }}
+              <li v-for="(lineItem, lineItemIndex) in medication.lineItems"
+                  :key="`line-${lineItemIndex}`" :class="$style.medicationLine">
+                {{ lineItem.text }}
+                <ul>
+                  <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
+                      :key="`innerline-${innerLineItemIndex}`" :class="$style.medicationLine">
+                    {{ innerLineItem }}
+                  </li>
+                </ul>
               </li>
             </ul>
           </li>
         </ul>
-      </li>
-    </ul>
+      </div>
+      <div v-else>
+        <p> {{ $t('myRecord.genericNoDataMessage') }} </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +44,10 @@ export default {
     isCollapsed: {
       type: Boolean,
       default: true,
+    },
+    hasError: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

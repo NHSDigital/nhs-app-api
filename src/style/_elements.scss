@@ -211,6 +211,10 @@ footer {
     }
   }
 
+  ul li {
+    @include small_text;
+  }
+
   label {
     @include small_label;
     padding-left: 16px;

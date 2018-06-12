@@ -4,49 +4,49 @@
       <p>  {{ $t('myRecord.genericErrorMessage') }} </p>
     </div>
     <div v-else>
-      <div v-if="data.data.length > 0">
-        <ul :class="$style.allergyAndAdverseReactions">
-          <li v-for="allergy in orderedAllergies" :key="allergy.name">
-            <label>{{ allergy.date | longDate }}</label>
-            <p>{{ allergy.symptom }}</p>
-          </li>
-        </ul>
+      <div v-if="data.hasAccess">
+        <div v-if="data.data.length > 0">
+          <ul :class="$style.immunisations">
+            <li v-for="item in data.data" :key="item.name">
+              <label>{{ item.date | longDate }}</label>
+              <p class="immunisationTerm">{{ item.term }}</p>
+            </li>
+          </ul>
+        </div>
+        <div v-else>
+          <p> {{ $t('myRecord.genericNoDataMessage') }} </p>
+        </div>
       </div>
       <div v-else>
-        <p> {{ $t('myRecord.genericNoDataMessage') }} </p>
+        <p> {{ $t('myRecord.genericNoAccessMessage') }} </p>
       </div>
     </div>
+    <hr>
   </div>
 </template>
 
 <script>
-
-import _ from 'lodash';
-
 export default {
   props: {
-    data: {
-      type: Array,
-      default: () => [],
-    },
     isCollapsed: {
       type: Boolean,
       default: true,
+    },
+    data: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
-    orderedAllergies() {
-      return _.orderBy(this.data.data, [obj => obj.date], ['asc']);
-    },
   },
 };
 
 </script>
 
-<style module lang="scss">
+<style lang="scss" module>
   @import '../../style/html';
   @import '../../style/fonts';
   @import '../../style/spacings';
@@ -55,7 +55,7 @@ export default {
 
   .recordContent { @include record-content };
 
-  .allergyAndAdverseReactions li{
+  .immunisations li{
     border-bottom: 1px solid #e8edee;
   }
 </style>

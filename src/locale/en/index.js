@@ -90,6 +90,9 @@ export default {
     },
   },
   myRecord: {
+    genericErrorMessage: 'An error has occurred trying to retrieve this data.',
+    genericNoDataMessage: 'No information recorded for this section.',
+    genericNoAccessMessage: 'You do not have access to this section.',
     name: 'Name',
     dateOfBirthday: 'Date of Birthday',
     sex: 'Sex',
@@ -134,6 +137,12 @@ export default {
     },
     discontinuedRepeatMedications: {
       sectionHeader: 'Discontinued repeat medications',
+    },
+    immunisations: {
+      sectionHeader: 'Immunisations',
+    },
+    testResults: {
+      sectionHeader: 'Test results',
     },
   },
   common: {
