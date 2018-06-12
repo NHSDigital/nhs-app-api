@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Mappers;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {

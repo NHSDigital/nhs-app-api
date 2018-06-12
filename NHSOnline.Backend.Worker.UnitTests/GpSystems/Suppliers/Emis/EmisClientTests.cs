@@ -350,7 +350,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .WithEmisHeaders()
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _sut.AppointmentPost(new EmisHeaderParameters(), new BookAppointmentSlotPostRequest());
+            var response = await _sut.AppointmentsPost(new EmisHeaderParameters(), new BookAppointmentSlotPostRequest());
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);

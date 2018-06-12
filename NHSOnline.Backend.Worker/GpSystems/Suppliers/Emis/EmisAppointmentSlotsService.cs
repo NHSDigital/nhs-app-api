@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             var emisSserSession = (EmisUserSession) userSession;
             AppointmentSlotsMetadataGetResponse metaBody;
-            AppointmentsSlotsGetResponse slotBody;
+            AppointmentSlotsGetResponse slotBody;
             
             try
             {
@@ -51,8 +51,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                     SessionId = emisSserSession.SessionId
                 };
 
-                var metaTask = _emisClient.AppointmentsSlotsMetadataGet(headerParams, metaParams);
-                var slotTask = _emisClient.AppointmentsSlotsGet(headerParams, slotsParams);
+                var metaTask = _emisClient.AppointmentSlotsMetadataGet(headerParams, metaParams);
+                var slotTask = _emisClient.AppointmentSlotsGet(headerParams, slotsParams);
 
                 await Task.WhenAll(metaTask, slotTask);
 
@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             }
             catch (Exception e)
             {
-                _logger.LogError($"Something went wrong during buildin the response. Exception message: {e.Message}");
+                _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
                 return new AppointmentSlotsResult.InternalServerError();
             }
         }
