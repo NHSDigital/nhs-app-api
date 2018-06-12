@@ -11,6 +11,12 @@ export default {
       retryButtonText: 'Please try again later.',
       message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
     },
+    403: {
+      pageHeader: 'Service unavailable',
+      header: 'Sorry, you don\'t currently have access to this service',
+      subheader: '',
+      message: 'Contact your GP surgery for more information.',
+    },
   },
   noConnection: {
     header: 'Connection error.',
@@ -81,14 +87,6 @@ export default {
       header: 'Check your prescription details before ordering',
       changeButton: 'Change this prescription',
       confirmButtonText: 'Confirm and order repeat prescription',
-    },
-    errors: {
-      403: {
-        pageHeader: 'Service unavailable',
-        header: 'Sorry, you don\'t currently have access to this service',
-        subheader: '',
-        message: 'Contact your GP surgery for more information.',
-      },
     },
   },
   myRecord: {
