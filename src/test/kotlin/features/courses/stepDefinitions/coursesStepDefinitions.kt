@@ -61,10 +61,6 @@ open class coursesStepDefinitions {
 
     @And("(\\d+) of my prescriptions can be requested")
     fun xOfMyPrescriptionCanBeRequested(numCanBeRequested: Int){
-        if(coursesData == null){
-            throw Exception("No courses have been provisioned")
-        }
-
         if(numCanBeRequested > coursesData.count()){
             throw Exception("Number of courses which can be requested must be less than or equal to total number of courses")
         }

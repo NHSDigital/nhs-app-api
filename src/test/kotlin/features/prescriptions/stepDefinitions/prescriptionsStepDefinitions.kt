@@ -137,18 +137,14 @@ open class PrescriptionsStepDefinitions {
         }
     }
 
-    @Given("I have (.*) past repeat prescriptions")
-    fun givenIHaveXPastRepeatPrescriptions(count :String){
+    @Given("^I have (\\d+) past repeat prescriptions$")
+    fun givenIHaveXPastRepeatPrescriptions(numPrescriptions: Int) {
+        numberOfPrescriptions = numPrescriptions
+    }
 
-        var countNum = count.toInt()
-        var prescriptionsData: PrescriptionRequestsGetResponse = PrescriptionsData.loadPrescriptionsData(countNum, countNum, countNum)
-        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsData)
-                }
+    @Then("^I see (\\d+) prescriptions$")
+    fun thenISeeXPrescriptions(numPrescriptions: Int){
+        prescriptions.assertPrescriptionsMatch(getExpectedNumPrescriptions(prescriptionsMock), numPrescriptions)
     }
 
     fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
