@@ -5,26 +5,20 @@ Feature: Login
   Background:
     Given wiremock is initialised
 
-  @pending
+  @manual
   Scenario: User logs in using CitizenID
     Given I am not logged in
     When I log in
     Then I am redirected to 'http://citizenidaddresshere'
 
-  @bug @NHSO-922
   Scenario: User sees the home page
     Given I am logged in
     Then I see a welcome message for Montel Frye
     And I see the header
     And I see the navigation menu
 
-  @pending
-  Scenario: User has been inactive for less than 20 minutes
-
-  @pending
   Scenario: The spinner is shown while loading
     Given I am not logged in
     And sign in verification is slow
     When I log in
     Then the spinner appears
-
