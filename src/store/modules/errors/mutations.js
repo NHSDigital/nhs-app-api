@@ -33,7 +33,9 @@ export default {
   },
   [CLEAR_ALL_API_ERRORS](state) {
     state.apiErrors = [];
-    state.showingApiErrorCondition = function (status) { return status >= 500; };
+    state.showingApiErrorCondition = function (status) {
+      return (status >= 500 || status === 403);
+    };
     state.apiErrorButtonPath = '';
   },
   [SET_CONNECTION_PROBLEM](state, hasConnectionProblem) {

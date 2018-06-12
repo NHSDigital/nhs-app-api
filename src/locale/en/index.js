@@ -56,14 +56,22 @@ export default {
     },
   },
   prescriptions: {
-    orderRepeatPrescriptionButton: 'Order a repeat prescription',
+    myRepeatPrescriptions: {
+      orderDate: 'Order date',
+      orderRepeatPrescriptionButton: 'Order a repeat prescription',
+      orderSuccessText: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
+    },
+    repeatCourses: {
+      noMedicinesSelected: 'Select at least one medicine',
+      specialRequestsLabel: 'Special requests relating to this order (optional)',
+      backToYourPrescriptionsButton: 'Back',
+      continue: 'Continue',
+    },
     noPrescriptionsAvailable: {
       title: 'Looks like you have no repeat prescriptions ordered here.',
       contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
       orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
     },
-    backToYourPrescriptionsButton: 'Back',
-    continue: 'Continue',
     noRepeatPrescriptionsYouCanOrder: {
       header: 'Medication currently available to order',
       title: 'You don\'t have any medications available to order right now.',
@@ -74,12 +82,14 @@ export default {
       changeButton: 'Change this prescription',
       confirmButtonText: 'Confirm and order repeat prescription',
     },
-    myRepeatPrescriptionLabels: {
-      orderDate: 'Order date',
+    errors: {
+      403: {
+        pageHeader: 'Service unavailable',
+        header: 'Sorry, you don\'t currently have access to this service',
+        subheader: '',
+        message: 'Contact your GP surgery for more information.',
+      },
     },
-    noMedicinesSelected: 'Select at least one medicine',
-    specialRequestsLabel: 'Special requests relating to this order (optional)',
-    orderSuccessText: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
   },
   myRecord: {
     name: 'Name',

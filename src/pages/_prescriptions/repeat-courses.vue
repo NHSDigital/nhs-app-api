@@ -11,7 +11,7 @@
             <hr>
             <p v-if="error" style="color:#DA291C; font-weight: 700; margin-bottom: 16px;">
               <inline-error-icon />
-              {{ $t('prescriptions.noMedicinesSelected') }}
+              {{ $t('prescriptions.repeatCourses.noMedicinesSelected') }}
             </p>
             <repeat-prescription
               v-for="repeatPrescription in repeatPrescriptionCourses"
@@ -24,7 +24,7 @@
           </p>
           <br>
           <button id="btn_order_prescription" class="button green">
-            {{ $t('prescriptions.continue') }}
+            {{ $t('prescriptions.repeatCourses.continue') }}
           </button>
         </div>
 
@@ -41,7 +41,7 @@
 
       </form>
       <nuxt-link to="/prescriptions" tag="button" type="submit" class="button grey">
-        {{ $t('prescriptions.backToYourPrescriptionsButton') }}
+        {{ $t('prescriptions.repeatCourses.backToYourPrescriptionsButton') }}
       </nuxt-link>
     </main>
   </div>

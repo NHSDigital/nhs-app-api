@@ -8,7 +8,9 @@ export default {
   namespaced: true,
   state() {
     return {
-      showingApiErrorCondition: function (status) { return status >= 500; },
+      showingApiErrorCondition: function (status) {
+        return (status >= 500 || status === 403);
+      },
       apiErrors: [],
       apiErrorButtonPath: '',
       hasConnectionProblem: false,

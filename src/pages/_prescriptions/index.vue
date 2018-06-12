@@ -5,7 +5,7 @@
 
       <success-dialog v-if="justOrderedARepeatPrescription">
         <p>
-          {{ $t('prescriptions.orderSuccessText') }}
+          {{ $t('prescriptions.myRepeatPrescriptions.orderSuccessText') }}
         </p>
       </success-dialog>
 
@@ -28,7 +28,7 @@
           <div :class="$style.container">
             <div>
               <b>
-                {{ $t('prescriptions.myRepeatPrescriptionLabels.orderDate') }}
+                {{ $t('prescriptions.myRepeatPrescriptions.orderDate') }}
               </b>
               : <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
             </div>
@@ -44,7 +44,7 @@
     </div>
 
     <floating-button-bottom @on-click="onRepeatPrescriptionButtonClicked">
-      {{ $t('prescriptions.orderRepeatPrescriptionButton') }}
+      {{ $t('prescriptions.myRepeatPrescriptions.orderRepeatPrescriptionButton') }}
     </floating-button-bottom>
   </main>
 </template>
