@@ -9,7 +9,7 @@ object PrescriptionsData {
 
     fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?): PrescriptionRequestsGetResponse {
 
-        var prescriptionRequests = mutableListOf<PrescriptionRequest>()
+        val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
 
         if(noPrescriptions != 0) {
@@ -23,7 +23,7 @@ object PrescriptionsData {
             var courseNum = medicationCourses.count().minus(1)
 
             while (prescriptionNum <= maxPrescriptions) {
-                var requestedMedicationCourses = mutableListOf<RequestedMedicationCourse>()
+                val requestedMedicationCourses = mutableListOf<RequestedMedicationCourse>()
                 var time = OffsetDateTime.now()
                 time = time.plusSeconds(1)
 

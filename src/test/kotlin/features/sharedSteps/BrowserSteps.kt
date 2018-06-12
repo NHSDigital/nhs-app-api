@@ -61,8 +61,7 @@ open class BrowserSteps {
         val vuexCookieName = "nhso";
 
         // No user details...
-        Assert.assertFalse(cookieContains(vuexCookieName,"familyName"));
-        Assert.assertFalse(cookieContains(vuexCookieName,"givenName"));
+        Assert.assertFalse(cookieContains(vuexCookieName,"name"));
         Assert.assertFalse(cookieContains(vuexCookieName,"userSession"));
         Assert.assertTrue("user details should be blank", cookieContains(vuexCookieName,"'user':{}"));
         Assert.assertTrue("No one is logged in", cookieContains(vuexCookieName,"'loggedIn':false"));

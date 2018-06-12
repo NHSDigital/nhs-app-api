@@ -9,8 +9,7 @@ Feature: EMIS Session Registration
     Given I have a valid authCode and codeVerifier
     When I create a user session
     Then I receive a response
-    And the response has a given name
-    And the response has a family name
+    And the response has a name
     And the response has a session timeout
     And the cookie contains a session guid with http-only
 
@@ -23,8 +22,7 @@ Feature: EMIS Session Registration
     Given I have a valid authCode and codeVerifier
     When I create a user session
     Then I receive a response
-    And the response has a given name
-    And the response has a family name
+    And the response has a name
     And the response has a session timeout
     And the cookie contains a session guid with tls-only
 

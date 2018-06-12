@@ -6,9 +6,6 @@ data class UserSessionResponse(var userSessionResponseCookie: UserSessionRespons
 
     class UserSessionResponseCookie(var cookie: Cookie)
 
-    class UserSessionResponseBody(var givenName: String,
-                                  var familyName: String,
+    class UserSessionResponseBody(var name: String,
                                   var sessionTimeout: Number)
-
-
 }

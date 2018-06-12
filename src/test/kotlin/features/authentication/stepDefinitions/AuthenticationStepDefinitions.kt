@@ -189,14 +189,9 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         checkNotNull(this.userSessionResponse)
     }
 
-    @And("^the response has a given name$")
-    fun theResponseHasAGivenName() {
-        Assert.assertEquals(MockDefaults.patient.firstName, this.userSessionResponse?.userSessionResponseBody?.givenName)
-    }
-
-    @And("^the response has a family name$")
-    fun theResponseHasAFamilyName() {
-        Assert.assertEquals(MockDefaults.patient.surname, this.userSessionResponse?.userSessionResponseBody?.familyName)
+    @And("^the response has a name$")
+    fun theResponseHasAName() {
+        Assert.assertEquals("${MockDefaults.patient.firstName} ${MockDefaults.patient.surname}", this.userSessionResponse?.userSessionResponseBody?.name)
     }
 
     @And("^the response has a session timeout$")
