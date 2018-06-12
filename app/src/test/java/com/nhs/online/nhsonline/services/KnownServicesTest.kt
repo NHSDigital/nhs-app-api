@@ -15,19 +15,23 @@ import java.net.URL
 @RunWith(RobolectricTestRunner::class)
 class KnownServicesTest {
 
-    fun mockContext():Context {
-        var mockresource: Resources = mock() {on {getString(R.string.baseURL)} doReturn "http://10.0.2.2:3000"
-            on {getString(R.string.nhs111)} doReturn "https://111.nhs.uk"
-            on {getString(R.string.nhs111Location)} doReturn "https://111.service.nhs.uk/"
-            on {getString(R.string.organDonation)} doReturn "https://www.organdonation.nhs.uk/"
-            on {getString(R.string.nhs111_connection_error)} doReturn "NHS 111 unavailable"
-            on {getString(R.string.organ_donation_connection_error)} doReturn "Organ donation unavailable"
-            on {getString(R.string.service_unavailable)} doReturn "Service unavailable"
-            on {getString(R.string.nhsOnlineRequiredQueries)} doReturn "?source=mobile"
+    private fun mockContext(): Context {
+        var mockresource: Resources = mock {
+            on { getString(R.string.baseURL) } doReturn "http://10.0.2.2:3000"
+            on { getString(R.string.nhs111) } doReturn "https://111.nhs.uk"
+            on { getString(R.string.nhs111Location) } doReturn "https://111.service.nhs.uk/"
+            on { getString(R.string.organDonation) } doReturn "https://www.organdonation.nhs.uk/"
+            on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
+            on { getString(R.string.connection_error_message) } doReturn "Please check your connection and try again." +
+                    "\n\nIf the problem persists and you need to book an appointment or get a prescription now, " +
+                    "contact your GP surgery directly. For immediate medical advice, call 111."
+            on { getString(R.string.nhs111_connection_error) } doReturn "NHS 111 unavailable"
+            on { getString(R.string.organ_donation_connection_error) } doReturn "Organ donation unavailable"
+            on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
+            on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=mobile"
         }
-        var context: Context = mock(){on {resources} doReturn mockresource}
 
-        return context
+        return mock { on { resources } doReturn mockresource }
     }
 
     @Test
@@ -57,7 +61,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findMatchingKnownService("https://111.NHS.UK")
 
-        Assert.assertEquals(URL("https://111.nhs.uk"),result?.urlList?.get(0))
+        Assert.assertEquals(URL("https://111.nhs.uk"), result?.urlList?.get(0))
     }
 
     @Test
@@ -65,9 +69,10 @@ class KnownServicesTest {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
-        val result = testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=mobile")
+        val result =
+            testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=mobile")
 
-        Assert.assertEquals(URL("http://10.0.2.2:3000"),result?.urlList?.get(0))
+        Assert.assertEquals(URL("http://10.0.2.2:3000"), result?.urlList?.get(0))
     }
 
     @Test
@@ -77,7 +82,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findKnownServiceAddMissingQueryFor("https://111.nhs.uk")
 
-        Assert.assertEquals("https://111.nhs.uk",result)
+        Assert.assertEquals("https://111.nhs.uk", result)
     }
 
     @Test
@@ -87,7 +92,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findKnownServiceAddMissingQueryFor("https://111.NHS.UK")
 
-        Assert.assertEquals("https://111.NHS.UK",result)
+        Assert.assertEquals("https://111.NHS.UK", result)
     }
 
     @Test
@@ -97,7 +102,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000")
 
-        Assert.assertEquals("http://10.0.2.2:3000?source=mobile",result)
+        Assert.assertEquals("http://10.0.2.2:3000?source=mobile", result)
     }
 
     @Test
@@ -105,9 +110,10 @@ class KnownServicesTest {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
-        val result = testKnownServices.findKnownServiceAddMissingQueryFor("https://111.nhs.uk?param1=param1Value")
+        val result =
+            testKnownServices.findKnownServiceAddMissingQueryFor("https://111.nhs.uk?param1=param1Value")
 
-        Assert.assertEquals("https://111.nhs.uk?param1=param1Value",result)
+        Assert.assertEquals("https://111.nhs.uk?param1=param1Value", result)
     }
 
     @Test
@@ -115,9 +121,10 @@ class KnownServicesTest {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
-        val result = testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?source=mobile")
+        val result =
+            testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?source=mobile")
 
-        Assert.assertEquals("http://10.0.2.2:3000?source=mobile",result)
+        Assert.assertEquals("http://10.0.2.2:3000?source=mobile", result)
     }
 
     @Test
@@ -125,9 +132,10 @@ class KnownServicesTest {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
-        val result = testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?param1=param1Value")
+        val result =
+            testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?param1=param1Value")
 
-        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=mobile",result)
+        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=mobile", result)
     }
 
     @Test
@@ -135,9 +143,10 @@ class KnownServicesTest {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
-        val result = testKnownServices.findKnownServiceAddMissingQueryFor("https://www.google.co.uk?param1=param1Value")
+        val result =
+            testKnownServices.findKnownServiceAddMissingQueryFor("https://www.google.co.uk?param1=param1Value")
 
-        Assert.assertEquals("https://www.google.co.uk?param1=param1Value",result)
+        Assert.assertEquals("https://www.google.co.uk?param1=param1Value", result)
     }
 
     @Test
@@ -145,9 +154,10 @@ class KnownServicesTest {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
-        val result = testKnownServices.findKnownServiceAddMissingQueryFor("https://www.google.co.uk")
+        val result =
+            testKnownServices.findKnownServiceAddMissingQueryFor("https://www.google.co.uk")
 
-        Assert.assertEquals("https://www.google.co.uk",result)
+        Assert.assertEquals("https://www.google.co.uk", result)
     }
-    
+
 }

@@ -7,9 +7,9 @@ import android.webkit.WebViewClient
 import android.content.Context
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activity.ActivityInterface
+import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.KnownServices
-import java.net.URL
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME = 500L
@@ -33,7 +33,7 @@ class WebClientInterceptor(
         if (!url.isNullOrEmpty()) {
             val matchingKnownService = knownServices.findMatchingKnownService(url!!)
 
-            when(matchingKnownService?.hasNativeHeader()) {
+            when (matchingKnownService?.hasNativeHeader()) {
                 true -> {
                     uiInteractor.setHeaderText(matchingKnownService.nativeHeader!!)
                 }
@@ -56,7 +56,7 @@ class WebClientInterceptor(
         val matchingKnownService = knownServices.findMatchingKnownService(url)
 
         if (matchingKnownService != null) {
-            when(matchingKnownService.nativeHeader) {
+            when (matchingKnownService.nativeHeader) {
                 context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectSymptomsMenuActive()
                 context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectMoreMenuActive()
             }
@@ -76,7 +76,7 @@ class WebClientInterceptor(
         cancelTrackingWebRequestResponse()
 
         if (shouldHandleUnavailability(url)) {
-            trackWebRequestResponse(view)
+            trackWebRequestResponse(view, url)
         }
 
         shouldShowErrorPage = false
@@ -111,7 +111,7 @@ class WebClientInterceptor(
 
             val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
             uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
-            logger.info(unavailabilityErrorMessage)
+            logger.info("Failing Url: $failingUrl with error code: $errorCode")
         }
     }
 
@@ -121,14 +121,14 @@ class WebClientInterceptor(
                 knownServices.findMatchingKnownService(urlString)
 
             if (matchingKnownService != null) {
-                return matchingKnownService.shouldHandleUnavailability
+                return true
             }
         }
 
         return false
     }
 
-    private fun trackWebRequestResponse(view: WebView?) {
+    private fun trackWebRequestResponse(view: WebView?, url: String?) {
         val showDialogFn = { uiInteractor.showProgressDialog() }
 
         val expireRequestFn = {
@@ -136,10 +136,10 @@ class WebClientInterceptor(
             view?.stopLoading()
             uiInteractor.dismissProgressDialog()
 
-            val failingUrl: String? = (URL(view?.url)).host
-            val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
+
+            val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(url)
             uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
-            logger.info(unavailabilityErrorMessage)
+            logger.info("Failing Url: $url")
         }
 
         handler.postDelayed(showDialogFn,
@@ -153,9 +153,8 @@ class WebClientInterceptor(
         handler.removeCallbacksAndMessages(null)
     }
 
-    private fun getUnavailabilityErrorMessageForService(failingUrl: String?) : String? {
+    private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {
         val service = knownServices.findMatchingKnownService(failingUrl.toString())
-
-        return service?.unavailabilityErrorMessage
+        return service?.unavailabilityErrorMessage ?: knownServices.getServiceUnavailabilityError()
     }
 }

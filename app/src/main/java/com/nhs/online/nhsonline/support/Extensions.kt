@@ -6,11 +6,10 @@ import android.text.style.StyleSpan
 import android.widget.TextView
 
 
-fun TextView.setServiceError(header: String, info: String? = null, moreInfo: String? = null) {
+fun TextView.setServiceError(header: String, message: String? = null) {
     val builder = SpannableStringBuilder()
     builder.appendText(header, 0, true)
-    info?.let { builder.appendText(it) }
-    moreInfo?.let { builder.appendText(it, 2) }
+    message?.let { builder.appendText(it) }
 
     this.text = builder
 }

@@ -1,5 +1,7 @@
 package com.nhs.online.nhsonline.interfaces
 
+import com.nhs.online.nhsonline.data.ErrorMessage
+
 
 interface IInteractor {
 
@@ -11,7 +13,7 @@ interface IInteractor {
 
     fun selectMoreMenuActive()
 
-    fun showUnavailabilityError(unavailabilityErrorMessage: String?)
+    fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage)
 
     fun showWebviewScreen()
 

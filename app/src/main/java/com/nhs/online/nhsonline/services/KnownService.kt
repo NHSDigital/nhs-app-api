@@ -1,15 +1,15 @@
 package com.nhs.online.nhsonline.services
 
 import android.net.Uri
+import com.nhs.online.nhsonline.data.ErrorMessage
 import java.net.URL
 
  class KnownService(
-        urlString: Array<String>,
-        val shouldHandleUnavailability: Boolean = false,
-        queryString: String? = null,
-        val unavailabilityErrorMessage: String? = null,
-        var nativeHeader: String? = null,
-        var shouldValidateSession: Boolean = true
+     urlString: Array<String>,
+     val unavailabilityErrorMessage: ErrorMessage,
+     queryString: String? = null,
+     var nativeHeader: String? = null,
+     var shouldValidateSession: Boolean = true
 ) {
     private val serviceQueryMap: MutableMap<String, String> = mutableMapOf()
     val urlList: Array<URL> = urlString.map { URL(it) }.toTypedArray()
