@@ -1,4 +1,8 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="@dimen/_20sdp"
@@ -37,4 +41,4 @@
         android:layout_marginTop="@dimen/_25sdp"
         android:text="@string/retryButtonText"
         android:textAllCaps="false" />
-</merge>
+</LinearLayout>
