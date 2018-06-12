@@ -6,23 +6,21 @@ info:
   description: NHS App Sub-API - endpoints pertaining to patient record. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
 
 paths:
-  /allergies:
+  /my-record:
     get:
       tags:
-        - allergies
-      summary: Gets allergies for the logged on user.
-      description: Returns users allergies for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+        - myrecord
+      summary: Gets the record for the logged on user.
+      description: Returns the users medical record for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
       produces:
         - application/json
       responses:
         200:
-          description: Returns allergy data for the logged in user.
+          description: Returns myrecord data for the logged in user.
           schema:
-            $ref: "#/definitions/AllergyListResponse"
+            $ref: '#/definitions/MyRecordResponse'
         401:
           description: User session has expired.
-        403:
-          description: The patient does not have the necessary permissions within the GP system.
         500:
           description: An unexpected error occurred processing the request.
         502:
@@ -31,21 +29,100 @@ paths:
           description: The GP system did not respond in a timely fashion.
  
 definitions:
-  AllergyListResponse:
+  MyRecordResponse:
     type: object
     properties:
+      hasSummaryRecordAccess:
+        type: boolean
+        description: Shows if the patient has access to their summary record.
+      hasDetailedRecordAccess:
+        type: boolean
+        description: Shows if the patient has access to their detailed record.
       allergies:
+        type: object
+        description: An object containing all allergy details.
+        $ref: '#/definitions/Allergies'
+      medications:
+        type: object
+        description:  An object containing all medication details.
+        $ref: '#/definitions/Medications'
+
+  Allergies:
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
         type: array
-        description: Array of allergy items.
+        description: An array of allergy information objects.
         items:
           $ref: '#/definitions/AllergyItem'
+
   AllergyItem:
     type: object
     properties:
-      allergyName:
+      name:
         type: string
         description: The name of the allergy.
-      availabilityDateTime:
+      date:
         type: string
         format: date-time
         description: When the record was entered.
+
+  Medications:
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
+        type: object
+        properties:
+          acuteMedications:
+            type: array
+            description: Array of acuteMedications
+            items:
+              $ref: '#/definitions/MedicationItem'
+          currentRepeatMedications:
+            type: array
+            description: Array of acuteMedications
+            items:
+              $ref: '#/definitions/MedicationItem'
+          discontinuedRepeatMedications:
+            type: array
+            description: Array of acuteMedications
+            items:
+              $ref: '#/definitions/MedicationItem'
+
+  MedicationItem:
+    type: object
+    properties:
+      date:
+        type: string
+        format: date-time
+        description: The date/time of the item.
+      lineItems:
+        type: array
+        description: An array of line items.
+        items:
+          $ref: '#/definitions/LineItem'
+
+  LineItem:
+    type: object
+    properties:
+      text:
+        type: string
+        description: When the record was entered.
+      lineItems:
+        type: array
+        description: An array of line items
+        items:
+          type: string
+          

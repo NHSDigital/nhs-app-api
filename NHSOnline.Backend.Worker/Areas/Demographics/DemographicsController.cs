@@ -1,18 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.MyRecord;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 
-namespace NHSOnline.Backend.Worker.Areas.MyRecord
+namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
-    [Route("patient/my-record")]
-    public class MyRecordController : Controller
+    [Route("patient")]
+    public class DemographicsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger _logger;
         
-        public MyRecordController(
+        public DemographicsController(
             ILoggerFactory loggerFactory,
             IGpSystemFactory gpSystemFactory)
         {
@@ -20,19 +21,21 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             _logger = loggerFactory.CreateLogger<MyRecordController>();
         }
 
-        [HttpGet]
+        [HttpGet("demographics")]
         [TimeoutExceptionFilter]
-        public async Task<IActionResult> GetMyRecord()
-        {   
+        public async Task<IActionResult> Get()
+        {
             var userSession = HttpContext.GetUserSession();
-            
-            var patientRecordService = _gpSystemFactory
+
+            var demographicsService = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier)
-                .GetPatientRecordService();
+                .GetDemographicsService();
 
-            var result = await patientRecordService.Get(userSession);
+            _logger.LogDebug("Fetching Demographics");
 
-            return result.Accept(new MyRecordResultVisitor());
+            var myRecordGetResult = await demographicsService.Get(userSession);
+
+            return myRecordGetResult.Accept(new DemographicsResultVisitor());
         }
     }
 }

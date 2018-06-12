@@ -15,12 +15,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     public class EmisAllergyMapperTests
     {
         private IFixture _fixture;
-        private IEmisAllergyMapper _mapper;
+        private IEmisMyRecordMapper _mapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _mapper = new EmisAllergyMapper();
+            _mapper = new EmisMyRecordMapper();
 
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         [TestMethod]
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapper.Map((AllergyRequestsGetResponse)null);
+            Action act = () => _mapper.Map(null);
             
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("allergiesGetResponse");
         }   
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
 
             // Assert
             result.Should().NotBeNull();
-            result.Allergies.Should().BeEmpty();
+            result.Allergies.Data.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         new AllergyResponse
                         {
                             Term = _fixture.Create<string>(),
-                            AvailabilityDateTime = _fixture.Create<DateTimeOffset>(),
+                            AvailabilityDateTime = _fixture.Create<DateTimeOffset>()
                         },
                     },
                 }
@@ -72,18 +72,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
 
             // Assert
             result.Should().NotBeNull();
-            result.Allergies.Should().HaveCount(item.MedicalRecord.Allergies.Count());
+            result.Allergies.Data.Should().HaveCount(item.MedicalRecord.Allergies.Count());
 
-            var expectedResult = new AllergyListResponse
+            var expectedResult = new MyRecordResponse
             {
-                Allergies = new List<AllergyItem>
+                Allergies = new Allergies
                 {
-                    new AllergyItem
+                    Data = new List<AllergyItem>
                     {
-                        AllergyName = item.MedicalRecord.Allergies.ElementAt(0).Term,
-                        AvailabilityDate = item.MedicalRecord.Allergies.ElementAt(0).AvailabilityDateTime,
+                        new AllergyItem
+                        {
+                            Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
+                            Date = item.MedicalRecord.Allergies.ElementAt(0).AvailabilityDateTime,
+                        }
                     }
-                },
+                }
             };
 
             result.Should().BeEquivalentTo(expectedResult);

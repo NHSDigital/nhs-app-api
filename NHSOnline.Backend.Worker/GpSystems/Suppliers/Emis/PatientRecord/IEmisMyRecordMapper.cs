@@ -3,8 +3,8 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
-    public interface IEmisAllergyMapper
+    public interface IEmisMyRecordMapper
     {
-        AllergyListResponse Map(AllergyRequestsGetResponse allergiesGetResponse);        
+        MyRecordResponse Map(AllergyRequestsGetResponse allergiesGetResponse);        
     }
 }

@@ -82,8 +82,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             var path = string.Format(PatientAllergiesPath, userPatientLinkToken);
 
-            var response = await Get<AllergyRequestsGetResponse>(path, endUserSessionId, responseSessionId);
-            return response;
+            return await Get<AllergyRequestsGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId, MeApplicationsPostRequest model)

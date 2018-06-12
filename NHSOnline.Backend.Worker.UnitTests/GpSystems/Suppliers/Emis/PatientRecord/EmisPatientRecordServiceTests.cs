@@ -47,12 +47,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetPatientAllergies(_userSession);
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
             _emisClient.Verify(x => x.AllergiesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
-            result.Should().BeAssignableTo<GetAllergyResult.SuccessfullyRetrieved>();
-            ((GetAllergyResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
+            ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
         }
         
         [TestMethod]
@@ -69,10 +69,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.GetPatientAllergies(_userSession);
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetAllergyResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GetMyRecordResult.Unsuccessful>();
         }
 
         [TestMethod]
@@ -88,10 +88,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPatientAllergies(_userSession);
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetAllergyResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GetMyRecordResult.Unsuccessful>();
             _emisClient.Verify();
         }
         
@@ -108,10 +108,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetPatientAllergies(_userSession);
+            var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetAllergyResult.SupplierBadData>();
+            result.Should().BeAssignableTo<GetMyRecordResult.SupplierBadData>();
             _emisClient.Verify();
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Demographics
 {
     public class Address
     {

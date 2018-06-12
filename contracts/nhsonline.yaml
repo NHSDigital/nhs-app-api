@@ -13,10 +13,10 @@ paths:
     $ref: './nhsonline.appointments.yaml#/paths/~1appointment-slots'
   /v1/patient/appointments:
     $ref: './nhsonline.appointments.yaml#/paths/~1appointments'
-  /v1/patient/my-record/demographics:
+  /v1/patient/demographics:
     $ref: './nhsonline.demographics.yaml#/paths/~1demographics'
-  /v1/patient/my-record/allergies:
-    $ref: './nhsonline.myrecord.yaml#/paths/~1allergies'
+  /v1/patient/my-record:
+    $ref: './nhsonline.myrecord.yaml#/paths/~1my-record'
   /v1/patient/prescriptions:
     $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
   /v1/patient/courses:

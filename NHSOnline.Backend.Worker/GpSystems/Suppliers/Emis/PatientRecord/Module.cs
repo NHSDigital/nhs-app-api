@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IEmisAllergyMapper, EmisAllergyMapper>();
+            services.AddTransient<IEmisMyRecordMapper, EmisMyRecordMapper>();
             base.ConfigureServices(services, configuration);
         }
     }

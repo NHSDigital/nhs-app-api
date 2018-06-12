@@ -2,11 +2,14 @@ Viewing Complete Contract
 ------------------------
 Install if you dont already have it
 
-**npm install --global http-server**
-
+```bash
+$ npm install --global http-server
+```
 run the http server in the contracts folder
 
-**cd <path/to/yaml/folder>**
+```bash
+$ cd <path/to/yaml/folder>
+```
 
 **http-server --cors**
 
@@ -25,10 +28,16 @@ Generating Single Contract Document
 ---------------------------
 
 Swagger-cli outputs json version
-**npm install -g swagger-cli**
+```bash
+$ npm install -g swagger-cli
+```
 
 Converts json contract to yaml
-**npm install -g json2yaml**
+```bash
+$ npm install -g json2yaml
+```
 
 Outputs contract to index.yaml
-**swagger-cli bundle nhsonline.yaml | json2yaml > index.yaml**
+```bash
+$ swagger-cli bundle nhsonline.yaml | json2yaml > index.yaml
+```
