@@ -33,10 +33,10 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 .GetAppointmentsService();
 
             var result =
-                await appointmentsService.GetMyAppointments(userSession, includePastAppointments,
+                await appointmentsService.GetAppointments(userSession, includePastAppointments,
                     pastAppointmentsFromDate);
 
-            return result.Accept(new MyAppointmentsResultVisitor());
+            return result.Accept(new AppointmentsResultVisitor());
         }
 
         [HttpPost, TimeoutExceptionFilter]
