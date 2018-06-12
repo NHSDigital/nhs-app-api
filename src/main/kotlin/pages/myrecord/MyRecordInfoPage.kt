@@ -30,23 +30,9 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "//label[contains(text(),'NHS number')]")
     lateinit var nhsNumberLabel: WebElementFacade
 
-    @FindBy(xpath = "//h5[contains(text(),'Allergies and adverse reactions')]")
-    lateinit var allergiesAndAdverseReactionsHeader: WebElementFacade
-
-    @FindBy(xpath = "//h5[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]")
-    lateinit var txtAllergyMsg: WebElementFacade
-
-    @FindBy(xpath = "")
-    lateinit var txtAccessRevokedMsg: WebElementFacade
-
     fun isNameVisible(): Boolean {
         waitABit(2000)
         return txtName.isCurrentlyVisible
-    }
-
-    fun isAllergiesTextMsgVisible(): Boolean {
-        waitABit(2000)
-        return txtAllergyMsg.isCurrentlyVisible
     }
 
     fun isOnMyRecordInfoPage(): Boolean {
@@ -81,22 +67,5 @@ class MyRecordInfoPage : PageObject() {
     fun getNHSNumberLabelText(): String {
         return nhsNumberLabel.text
     }
-
-    fun getAllergiesAndAdverseReactionsHeaderText(): String {
-        return allergiesAndAdverseReactionsHeader.text
-    }
-
-    fun clickAllergiesAndAdverseReactionsSection() {
-        allergiesAndAdverseReactionsHeader.click()
-    }
-
-    fun getAllergyMessage(): String {
-        return txtAllergyMsg.text
-    }
-
-    fun getAccessRevokedMessage(): String {
-            return txtAccessRevokedMsg.text
-    }
-
 }
 
