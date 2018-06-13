@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.CitizenId
 {
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
         public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier)
         {
-            _logger.LogDebug("Starting ExchangeAuthToken");
+            _logger.LogDebug($"Starting ExchangeAuthToken, with authCode '{authCode}', codeVerifier '{ codeVerifier}' ");
             var dict = new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
@@ -81,12 +82,11 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
         private async Task<CitizenIdApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
-        {
-            var message = "Sending request to:" +
-                          $"   RequestUri: {request.RequestUri}";
-            
-            _logger.LogDebug(message);
+        {   
+            _logger.LogHttpRequest(request);
             var responseMessage = await _httpClient.SendAsync(request);
+            _logger.LogHttpResponse(request, responseMessage);
+
             var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             var stringResponse = responseMessage.Content != null

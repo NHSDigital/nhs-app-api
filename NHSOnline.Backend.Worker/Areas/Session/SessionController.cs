@@ -47,8 +47,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier);
             if (!cidUserProfileOption.HasValue)
             {
-                _logger
-                    .LogError("No CID profile was found for received authcode and code verifier");
+                _logger.LogError(
+                    "No CID profile was found for received authcode and code verifier");
                 return BadRequest();
             }
 
@@ -58,15 +58,20 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
             if (!gpSystemOption.HasValue)
             {
+                _logger.LogDebug($"Failed to determin the GP system bases on Ods Code '{cidUserProfile.OdsCode}'");
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
+
             var gpSystem = gpSystemOption.ValueOrFailure();
+
+            _logger.LogDebug($"Fetch GP System '{gpSystem.Supplier}'.");
 
             // Validate the format of the IM1 connection token for this GP system.
             var tokenValidationService = gpSystem.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
             {
+                _logger.LogDebug($"Failed to validate Im1 connection '{cidUserProfile.Im1ConnectionToken}'");
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
@@ -78,8 +83,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var sessionCreatedResultVisited = sessionCreateResult.Accept(new SessionCreateResultVisitor());
             if (!sessionCreatedResultVisited.SessionWasCreated)
             {
-                _logger
-                    .LogError(
+                _logger.LogError(
                         $"Creating the session failed with status code: { sessionCreatedResultVisited.StatusCode }");
                 return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
             }
@@ -87,6 +91,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             // Build and save session token in our redis session cache
             var sessionId =
                 await _sessionCacheService.CreateUserSession(sessionCreatedResultVisited.UserSession);
+
+            _logger.LogDebug($"Fetched session Id { sessionId }");
 
             // Return the session token in a cookie.
             await AppendCookieToResponse(sessionId);

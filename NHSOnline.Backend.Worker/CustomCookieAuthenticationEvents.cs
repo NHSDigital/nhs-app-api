@@ -18,23 +18,26 @@ namespace NHSOnline.Backend.Worker
             _logger = loggerFactory.CreateLogger<CustomCookieAuthenticationEvents>();
             _sessionCacheService = sessionCacheService;
         }
-
+        
         public override async Task ValidatePrincipal(CookieValidatePrincipalContext context)
         {
-            _logger.LogDebug("Start: Validate Principal");
-            var userSession = await GetUserSession(context);
-
-            if (!userSession.HasValue)
+            using (_logger.BeginScope(context.HttpContext))
             {
-                _logger.LogWarning("No user session found. Signing out.");
-                await RejectPrincipalAndSignOut(context);
-                return;
-            }
+                _logger.LogDebug("Start: Validate Principal");
+                var userSession = await GetUserSession(context);
 
-            _logger.LogWarning($"User session found: {userSession.ValueOrFailure()}");
-            
-            context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrFailure());
-            _logger.LogDebug("Finish: Validate Principal");
+                if (!userSession.HasValue)
+                {
+                    _logger.LogWarning("No user session found. Signing out.");
+                    await RejectPrincipalAndSignOut(context);
+                    return;
+                }
+
+                _logger.LogInformation($"User session found: {userSession.ValueOrFailure()}");
+
+                context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrFailure());
+                _logger.LogDebug("Finish: Validate Principal");
+            }
         }
 
         private async Task<Option<UserSession>> GetUserSession(CookieValidatePrincipalContext context)

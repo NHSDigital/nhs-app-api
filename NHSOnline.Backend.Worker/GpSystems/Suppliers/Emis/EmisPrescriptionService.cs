@@ -44,20 +44,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 if (prescriptionsResponse.HasSuccessStatusCode)
                 {
                     try
-                    {   
-                    var prescriptionListResponseFiltered =
-                        GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
+                    {
+                        var prescriptionListResponseFiltered =
+                            GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
 
                         _logger.LogDebug(
                             $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
                         var mapppedPrescriptionList = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
-                        
+
                         return new PrescriptionResult.SuccessfullGet(mapppedPrescriptionList);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        
+
                         return new PrescriptionResult.InternalServerError();
                     }
                 }    

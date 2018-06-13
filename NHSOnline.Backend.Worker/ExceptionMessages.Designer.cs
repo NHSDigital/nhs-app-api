@@ -88,6 +88,15 @@ namespace NHSOnline.Backend.Worker {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Configured log level of &apos;{0}&apos; is invalid..
+        /// </summary>
+        internal static string InvalidLogLevel {
+            get {
+                return ResourceManager.GetString("InvalidLogLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ODS Code &apos;{0}&apos; could not be found..
         /// </summary>
         internal static string OdsCodeLookupUnknownOdsCode {

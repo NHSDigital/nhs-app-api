@@ -29,12 +29,12 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _gpSystemFactory = gpSystemFactory;
             _prescriptionRequestValidationService = prescriptionRequestValidationService;
         }
-        
+
         [HttpGet, TimeoutExceptionFilter]
         public async Task<IActionResult> Get([FromQuery] DateTimeOffset? fromDate)
         {
             var defaultFromDate = GetDefaultFromDate();
-            
+
             if (!_prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate))
             {
                 _logger.LogWarning($"Setting {nameof(fromDate)} to default {defaultFromDate:O} because value {fromDate:O} is earlier than allowed.");
@@ -42,13 +42,12 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             }
 
             UserSession userSession = HttpContext.GetUserSession();
-            
+
             var prescriptionService = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier)
                 .GetPrescriptionService();
 
             var result = await prescriptionService.Get(userSession, fromDate, DateTimeOffset.Now);
-
             return result.Accept(new PrescriptionResultVisitor());
         }
 
@@ -57,20 +56,20 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             PrescriptionResult result;
 
-            if(!_prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
+            if (!_prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
             {
-                _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");             
-                result =  new PrescriptionResult.BadRequest();
+                _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
+                result = new PrescriptionResult.BadRequest();
             }
             else
-            {                    
-                UserSession userSession = HttpContext.GetUserSession();        
-      
+            {
+                UserSession userSession = HttpContext.GetUserSession();
+
                 var prescriptionService = _gpSystemFactory
                     .CreateGpSystem(userSession.Supplier)
                     .GetPrescriptionService();
 
-                result = await prescriptionService.Post(userSession, repeatPrescriptionRequest);      
+                result = await prescriptionService.Post(userSession, repeatPrescriptionRequest);
             }
 
             return result.Accept(new PrescriptionResultVisitor());

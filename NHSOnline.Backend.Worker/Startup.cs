@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Net.Http;
 using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +12,11 @@ using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
+using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
+using System;
+using System.Linq;
+using System.Net.Http;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -70,6 +71,7 @@ namespace NHSOnline.Backend.Worker
                 .AddMvc(
                     options =>
                     {
+                        options.Filters.Add(typeof(HttpContextLogActionFilterAttribute));
                         options.Filters.Add(typeof(ModelStateValidationFilterAttribute));
                         options.Filters.Add(new AuthorizeFilter(
                             new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
@@ -123,9 +125,12 @@ namespace NHSOnline.Backend.Worker
         {
             app.UseAuthentication();
 
+            // Read in optional log configuration...
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, LogLevel.Information, Configuration["Logging:Application:StandardLevel"], LogLevel.Error, Configuration["Logging:Application:ErrorLevel"]));
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, LogLevel.Error, Configuration["Logging:Application:ErrorLevel"]));
+
             if (env.IsDevelopment())
             {
-                loggerFactory.AddConsole();
                 loggerFactory.AddDebug();
                 app.UseDeveloperExceptionPage();
             }

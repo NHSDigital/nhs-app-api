@@ -14,6 +14,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Mod
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -246,7 +247,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private async Task<EmisApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
+            _logger.LogHttpRequest(request);
             var responseMessage = await _httpClient.SendAsync(request);
+            _logger.LogHttpResponse(request, responseMessage);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             var stringResponse = responseMessage.Content != null
@@ -274,7 +277,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             public HttpStatusCode StatusCode { get; set; }
             public ErrorResponse ErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
-            public bool HasSuccessStatusCode => (int) StatusCode >= 200 && (int) StatusCode <= 299;
+            public bool HasSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
 
             public bool HasExceptionWithMessage(string message)
             {

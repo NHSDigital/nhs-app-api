@@ -55,6 +55,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             var userInfo = await _citizenIdClient.GetUserInfo(tokenResponse.Body.AccessToken);
             if (!userInfo.HasSuccessStatusCode)
             {
+                _logger.LogError("Failed to get user information from Citizen Id.");
                 return Option.None<UserProfile>();
             }
 
