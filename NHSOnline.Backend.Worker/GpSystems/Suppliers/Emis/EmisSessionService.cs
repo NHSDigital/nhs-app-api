@@ -56,8 +56,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 var sessionResponseBody = sessionsResponse.Body;
 
                 return new SessionCreateResult.SuccessfullyCreated(
-                    sessionResponseBody.FirstName,
-                    sessionResponseBody.Surname,
+                    $"{sessionResponseBody.FirstName} {sessionResponseBody.Surname}",
                     new EmisUserSession
                     {
                         SessionId = sessionResponseBody.SessionId,

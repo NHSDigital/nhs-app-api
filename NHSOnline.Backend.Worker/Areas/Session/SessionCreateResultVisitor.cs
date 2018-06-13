@@ -11,8 +11,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             return new SessionCreateResultVisitorOutput
             {
                 SessionWasCreated = true,
-                FamilyName = result.FamilyName,
-                GivenName = result.GivenName,
+                Name = result.Name,
                 UserSession = result.UserSession,
                 SessionTimeout = result.SessionTimeout
             };

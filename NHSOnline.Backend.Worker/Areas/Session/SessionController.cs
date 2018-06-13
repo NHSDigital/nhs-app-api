@@ -94,8 +94,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             // Build response body
             var responseBody = new UserSessionResponse
             {
-                GivenName = sessionCreatedResultVisited.GivenName,
-                FamilyName = sessionCreatedResultVisited.FamilyName,
+                Name = sessionCreatedResultVisited.Name,
                 SessionTimeout = sessionCreatedResultVisited.SessionTimeout
             };
 

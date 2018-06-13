@@ -36,8 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
         private string _apiSessionId;
-        private string _givenName;
-        private string _familyName;
+        private string _name;
         private int _sessionTimeout;
         private SessionCreateResult _sessionCreateResult;
 
@@ -51,14 +50,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
 
-            _givenName = _fixture.Create<string>();
-            _familyName = _fixture.Create<string>();
+            _name = _fixture.Create<string>();
             _sessionTimeout = _fixture.Create<int>();
 
             _apiSessionId = _fixture.Create<string>();
 
             _sessionCreateResult =
-                new SessionCreateResult.SuccessfullyCreated(_givenName, _familyName, new EmisUserSession(), _sessionTimeout);
+                new SessionCreateResult.SuccessfullyCreated(_name, new EmisUserSession(), _sessionTimeout);
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockCitizenIdService
@@ -229,13 +227,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             var expectedUserSessionResponse = new UserSessionResponse
             {
-                FamilyName = _familyName,
-                GivenName = _givenName,
+                Name = _name,
                 SessionTimeout = _sessionTimeout
             };
 
-            actualUserSessionResponse.FamilyName.Should().Be(expectedUserSessionResponse.FamilyName);
-            actualUserSessionResponse.GivenName.Should().Be(expectedUserSessionResponse.GivenName);
+            actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
             actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
         }
 

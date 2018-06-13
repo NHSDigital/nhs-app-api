@@ -4,8 +4,7 @@
     {
         public bool SessionWasCreated { get; set; }
         public int StatusCode { get; set; }
-        public string GivenName { get; set; }
-        public string FamilyName { get; set; }
+        public string Name { get; set; }
         public int SessionTimeout { get; set; }
         public UserSession UserSession { get; set; }
     }

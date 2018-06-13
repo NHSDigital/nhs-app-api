@@ -222,8 +222,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>();
 
             var expectedResult = new SessionCreateResult.SuccessfullyCreated(
-                _sessionsResponse.FirstName, 
-                _sessionsResponse.Surname,
+                $"{_sessionsResponse.FirstName} {_sessionsResponse.Surname}",
                 new EmisUserSession(),
                 sessionTimeoutInSeconds
             );

@@ -66,12 +66,9 @@ definitions:
   UserSessionResponse:
     type: object
     properties:
-      givenName:
+      name:
         type: string
-        description: User's given name
-      familyName:
-        type: string
-        description: User's family name.
+        description: User's name
       sessionTimeout: 
         type: integer
         description: User's session timeout period in seconds.

@@ -11,19 +11,15 @@
         public class SuccessfullyCreated : SessionCreateResult
         {
             public UserSession UserSession { get; }
-            public string GivenName { get; }
-            public string FamilyName { get; }
+            public string Name { get; }
             public int SessionTimeout { get; }
 
             public SuccessfullyCreated(
-                string givenName, 
-                string familyName, 
+                string name, 
                 UserSession userSession,
-                int sessionTimeout
-                )
+                int sessionTimeout)
             {
-                GivenName = givenName;
-                FamilyName = familyName;
+                Name = name;
                 UserSession = userSession;
                 SessionTimeout = sessionTimeout;
             }
