@@ -30,8 +30,9 @@ export default {
   },
   logout({ commit }) {
     this.dispatch('session/clear');
+    this.dispatch('errors/disableApiError');
 
-    return this.app.$http.deleteV1Session().then(() => {
+    const final = () => {
       commit(LOGOUT, true);
       this.dispatch('appointmentSlots/init');
       this.dispatch('auth/init');
@@ -41,8 +42,11 @@ export default {
       this.dispatch('navigation/init');
       this.dispatch('prescriptions/init');
       this.dispatch('repeatPrescriptionCourses/init');
+      this.dispatch('errors/clearAllApiErrors');
       this.app.router.push('/login');
-    });
+    };
+
+    return this.app.$http.deleteV1Session().then(final).catch(final);
   },
   init({ commit }) {
     commit(INIT_AUTH);

@@ -53,6 +53,7 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaderTitles.myRecord';
       break;
     case LOGIN:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = '';
       break;
     default:
