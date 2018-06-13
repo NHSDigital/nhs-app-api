@@ -17,6 +17,7 @@
 		C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D555207669C500F3B1E5 /* KnownServices.swift */; };
 		C276D5582077842300F3B1E5 /* KnownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D5572077842300F3B1E5 /* KnownService.swift */; };
 		C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D563207B638400F3B1E5 /* HeaderBar.swift */; };
+		C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */; };
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
 		F0099A8C205557C700530DE3 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0099A8B205557C700530DE3 /* Config.plist */; };
@@ -60,6 +61,7 @@
 		C276D555207669C500F3B1E5 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
 		C276D5572077842300F3B1E5 /* KnownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
 		C276D563207B638400F3B1E5 /* HeaderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBar.swift; sourceTree = "<group>"; };
+		C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView_Extension.swift; sourceTree = "<group>"; };
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextViewTests.swift; sourceTree = "<group>"; };
 		F0099A8B205557C700530DE3 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 			children = (
 				F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */,
 				C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */,
+				C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
 				C276D5582077842300F3B1E5 /* KnownService.swift in Sources */,
+				C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

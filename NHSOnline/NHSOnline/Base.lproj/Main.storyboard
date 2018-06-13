@@ -154,7 +154,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Qz-lq-7kU">
-                                <rect key="frame" x="16" y="180" width="343" height="34"/>
+                                <rect key="frame" x="16" y="161" width="343" height="34"/>
                                 <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="IfL-FP-Acc"/>
@@ -187,7 +187,7 @@
                             <constraint firstItem="4Qz-lq-7kU" firstAttribute="leading" secondItem="Nch-Qq-RUf" secondAttribute="leading" constant="16" id="mpG-q9-2ze"/>
                             <constraint firstItem="Nch-Qq-RUf" firstAttribute="trailing" secondItem="eyJ-Zq-YNl" secondAttribute="trailing" constant="16" id="nSG-Io-xby"/>
                             <constraint firstItem="7J3-ga-aZb" firstAttribute="top" secondItem="Nch-Qq-RUf" secondAttribute="top" id="oKR-sf-dAA"/>
-                            <constraint firstItem="4Qz-lq-7kU" firstAttribute="top" secondItem="eyJ-Zq-YNl" secondAttribute="bottom" constant="35" id="ya4-t9-eyw"/>
+                            <constraint firstItem="4Qz-lq-7kU" firstAttribute="top" secondItem="eyJ-Zq-YNl" secondAttribute="bottom" constant="16" id="ya4-t9-eyw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Nch-Qq-RUf"/>
                     </view>

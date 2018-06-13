@@ -1,8 +1,6 @@
 import UIKit
 
 class ErrorTextView: UITextView {
-    private var isFirstTime = true
-    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -18,16 +16,12 @@ class ErrorTextView: UITextView {
             attributedServiceError.append(toAttributedText(text: attributedInfo , anyNewLines: 1))
         }
         
-        if self.isFirstTime {
-            resizeErrorTextView()
-            self.isFirstTime = false
-        }
-        
         self.attributedText = attributedServiceError
         resizeErrorTextView()
     }
     
     func resizeErrorTextView() {
+        self.textContainerInset = UIEdgeInsetsMake(10, 12, 10, 12)
         let size = CGSize(width: self.bounds.width, height: .infinity)
         let estimatedSize = self.sizeThatFits(size)
         self.constraints.forEach{(constraint) in
@@ -35,7 +29,6 @@ class ErrorTextView: UITextView {
                 constraint.constant = estimatedSize.height
             }
         }
-        self.textContainerInset = UIEdgeInsetsMake(10, 12, 10, 12)
     }
     
     private func toHeaderAttributedText(headerText:String)-> NSMutableAttributedString {

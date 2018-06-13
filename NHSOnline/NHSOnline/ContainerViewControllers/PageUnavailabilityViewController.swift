@@ -13,13 +13,14 @@ class PageUnavailabilityViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         errorTextView.layer.addTopBorder(color: UIColor.red, thickness: 1)
+        errorTextView.resizeErrorTextView()
     }
     
     func setUnavailabilityError(errorMessage:ErrorMessage) {
         if errorMessage.message != nil {
-            self.tryAgainLabel.isHidden = true
+            self.tryAgainLabel.hideView()
         } else {
-            self.tryAgainLabel.isHidden = false
+            self.tryAgainLabel.showView()
         }
         errorTextView.setServiceError(title: errorMessage.title, message: errorMessage.message)
     }
