@@ -11,10 +11,16 @@
           <div
             v-for="selectedPrescription in selectedPrescriptions"
             :key="selectedPrescription.courseId"
+            data-purpose="selected-prescription"
           >
-            <label :class="$style.formLabel">{{ selectedPrescription.name }}</label>
+            <label
+              :class="$style.formLabel"
+              data-purpose="prescription-name">
+              {{ selectedPrescription.name }}
+            </label>
             <p
-              :class="$style.prescriptionDescription">
+              :class="$style.prescriptionDescription"
+              data-purpose="prescription-description">
               {{ selectedPrescription.dosage }} - {{ selectedPrescription.quantity }}
             </p>
           </div>

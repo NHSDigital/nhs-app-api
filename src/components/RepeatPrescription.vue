@@ -1,12 +1,21 @@
 <template>
-  <div>
-    <div :class="$style.checkboxPanel" @click="check">
-      <checked-icon :selected="selected" :id="prescriptionDetails.id" />
+  <div data-purpose="repeat-prescription">
+    <div :class="$style.checkboxPanel">
+      <div @click="check">
+        <checked-icon :selected="selected" :id="prescriptionDetails.id" />
+      </div>
       <input
-        id="prescription-selection"
-        type="hidden"
+        :value="prescriptionDetails.id"
+        :class="$style.prescriptionCheckbox"
+        :id="'prescription-' + prescriptionDetails.id"
+        :checked="check"
+        v-model="selected"
+        type="checkbox"
+        name="prescription">
+      <label
+        :class="$style.checkboxLabel"
+        :for="'prescription-' + prescriptionDetails.id"
         @click="check">
-      <label :class="$style.checkboxLabel" for="prescription-selection">
         {{ prescriptionDetails.name }}
       </label>
     </div>
@@ -32,15 +41,19 @@ export default{
       type: Object,
       required: true,
     },
-    selected: {
-      type: Boolean,
-      default: false,
-    },
   },
   computed: {
     ...mapGetters({
       isValid: 'repeatPrescriptionCourses/isValid',
     }),
+    selected: {
+      get() {
+        return this.prescriptionDetails.selected;
+      },
+      set() {
+        // not needed, computed value is for hidden input
+      },
+    },
   },
   methods: {
     check() {
@@ -75,5 +88,8 @@ export default{
     color: #4A4A4A;
     padding-left: 42px;
     margin-bottom: 16px;
+  }
+  .prescriptionCheckbox {
+    display: none;
   }
 </style>
