@@ -44,6 +44,17 @@ export default {
     },
     booking: {
       bookButtonText: 'Book this appointment',
+      errors: {
+        pageHeader: 'Error retrieving data',
+        header: 'Sorry, there\'s been a problem loading this page',
+        subheader: '',
+        message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+        504: {
+          message: 'If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+          subheader: 'Please try again',
+          retryButtonText: 'Try again',
+        },
+      },
     },
     confirmation: {
       headerLabel: 'What is this appointment for?',
@@ -53,17 +64,6 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'Please, enter a reason for this appointment',
       noReasonError: 'Please describe your symptoms',
-    },
-    errors: {
-      pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem loading this page',
-      subheader: '',
-      message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
-      504: {
-        message: 'If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
-        subheader: 'Please try again',
-        retryButtonText: 'Try again',
-      },
     },
   },
   prescriptions: {
