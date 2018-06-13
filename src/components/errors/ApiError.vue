@@ -71,6 +71,7 @@ export default {
         return '';
       }
       const component = this.getRoutePath();
+
       return `${component}.errors.${this.getApiErrorResponse().status}.${type}`;
     },
     hasComponentErrorCodeKey(type) {

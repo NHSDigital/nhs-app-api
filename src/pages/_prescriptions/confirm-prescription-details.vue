@@ -56,6 +56,9 @@ export default {
       selectedPrescriptions: 'repeatPrescriptionCourses/selectedPrescriptions',
     }),
   },
+  mounted() {
+    this.$store.dispatch('errors/setApiErrorButtonPath', '/prescriptions');
+  },
   methods: {
     onConfirmButtonClicked() {
       const repeatPrescriptionOrder = {

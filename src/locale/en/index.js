@@ -100,6 +100,45 @@ export default {
       changeButton: 'Change this prescription',
       confirmButtonText: 'Confirm and order repeat prescription',
     },
+    errors: {
+      pageHeader: 'Error retrieving data',
+      header: 'Sorry, there\'s been a problem getting your prescription information',
+      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: '',
+      retryButtonText: '',
+      504: {
+        pageHeader: 'Error retrieving data',
+        header: 'Sorry, there\'s been a problem getting your prescription information',
+        subheader: 'Please try again',
+        message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
+        retryButtonText: 'Try again',
+      },
+    },
+    repeat_courses: {
+      errors: {
+        pageHeader: 'Error retrieving data',
+        header: 'Sorry, there\'s been a problem getting your prescription information',
+        subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+        message: '',
+        retryButtonText: '',
+        504: {
+          pageHeader: 'Error retrieving data',
+          header: 'Sorry, there\'s been a problem getting your prescription information',
+          subheader: 'Please try again',
+          message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
+          retryButtonText: 'Try again',
+        },
+      },
+    },
+    'confirm_prescription-details': {
+      errors: {
+        pageHeader: 'Error sending request',
+        header: 'Sorry, there\'s been a problem sending your request',
+        subheader: 'Please go back and try again.',
+        message: 'If the problem persists and you need to order a repeat prescription now, please contact your GP surgery directly.',
+        retryButtonText: 'Back to my repeat prescriptions',
+      },
+    },
   },
   myRecord: {
     genericErrorMessage: 'An error has occurred trying to retrieve this data.',
