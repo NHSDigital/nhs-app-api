@@ -146,6 +146,7 @@ Feature: Book an available appointment slot
 
         # To be removed once NHSO-517 is complete
   @NHSO-72
+  @pending  @NHSO-517
   Scenario: A user tries to book an appointment when there is a problem
     Given I am on the appointments page
     And I have selected an appointment slot to book

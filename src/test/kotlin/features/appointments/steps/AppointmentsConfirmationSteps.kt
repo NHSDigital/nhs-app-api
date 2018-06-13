@@ -58,7 +58,7 @@ open class AppointmentsConfirmationSteps {
     @Step
     fun checkTimeoutErrorMessage() {
         val message = appointmentsConfirmation.getServerErrorElement()
-        Assert.assertTrue(message.text.contains("Sorry, we're experiencing technical difficulties"))
+        Assert.assertTrue(message.text.contains("Sorry, there's been a problem sending your request"))
 
     }
 
