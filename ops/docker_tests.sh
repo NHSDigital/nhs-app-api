@@ -12,6 +12,22 @@ BROWSER=chromeheadless
 #### 4. Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
 DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 
+# Specify specfic version of images we require
+
+if [ -z $BDD_TEST_MODE ] then
+  case $BDD_TEST_MODE in
+    web)
+      sed -i "s/CI_WEB_VERSION=latest/CI_WEB_VERSION=${BDD_COMMIT_HASH}/" .env
+    ;;
+    backend)
+      sed -i "s/CI_BACKEND_VERSION=latest/CI_BACKEND_VERSION=${BDD_COMMIT_HASH}/" .env
+    ;;
+    *)
+      # Safe default - do nothing and assume latest
+    ;;
+  esac
+fi
+
 docker-compose -f docker-compose_ci.yml pull
 docker-compose -f docker-compose_ci.yml up -d --build
 
