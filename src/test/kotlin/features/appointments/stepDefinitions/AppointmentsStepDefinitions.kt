@@ -5,6 +5,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AppointmentsSteps
+import features.appointments.steps.data.MyAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -17,6 +18,7 @@ import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.*
+import pages.navigation.MyAppointmentsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -39,6 +41,8 @@ class AppointmentsStepDefinitions {
     lateinit var login: LoginSteps
     @Steps
     lateinit var navigation: NavigationSteps
+    @Steps
+    lateinit var myAppointments: MyAppointmentsSteps
     @Steps
     lateinit var appointments: AppointmentsSteps
     @Steps
@@ -158,6 +162,7 @@ class AppointmentsStepDefinitions {
         browser.goToApp()
         login.asDefault()
         navigation.select("appointments")
+        myAppointments.clickOnBookNewAppointmentButton()
     }
 
     @Given("^there are available appointment slots for an explicit date-time range$")

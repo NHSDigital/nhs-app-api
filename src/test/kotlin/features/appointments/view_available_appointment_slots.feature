@@ -100,9 +100,8 @@ Feature: View available appointment slots
 
   @NHSO-616
   Scenario: A user sees appropriate information message when there is a timeout
-    Given I am logged in
-    And GP system doesn't respond a timely fashion for available appointment slots
-    When I navigate to Appointments
+    Given GP system doesn't respond a timely fashion for available appointment slots
+    When I am on the appointments page
     Then I see appropriate information message for time-outs
     And there should be a button to try again
 
@@ -124,9 +123,8 @@ Feature: View available appointment slots
 
   @NHSO-616
   Scenario: A user sees appropriate information message when GP system is unavailable
-    Given I am logged in
-    And GP system is unavailable for available appointment slots
-    When I navigate to Appointments
+    Given GP system is unavailable for available appointment slots
+    When I am on the appointments page
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
