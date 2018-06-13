@@ -5,11 +5,13 @@
         public MyRecordResponse()
         {
             Allergies = new Allergies();
+            
         }
         
         public bool HasSummaryRecordAccess { get; set; }
         public bool HasDetailedRecordAccess { get; set; }
         
         public Allergies Allergies { get; set; }
+        public Medications Medications { get; set; }
     }
 }

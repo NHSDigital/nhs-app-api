@@ -27,21 +27,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         } 
 
         [TestMethod]
-        public void MapAllergyRequestsGetResponseToAllergyListResponse_WhenPassingNull_ThrowsNullReferenceException()
-        {
-            Action act = () => _mapper.Map(null);
-            
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("allergiesGetResponse");
-        }   
-
-        [TestMethod]
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange
             var item = new AllergyRequestsGetResponse();
 
             // Act
-            var result = _mapper.Map(item);
+            var result = _mapper.Map(new EmisAllergyMapper().Map(item), null);
 
             // Assert
             result.Should().NotBeNull();
@@ -68,7 +60,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             };
 
             // Act
-            var result = _mapper.Map(item);
+            var result = _mapper.Map(new EmisAllergyMapper().Map(item), null);
 
             // Assert
             result.Should().NotBeNull();

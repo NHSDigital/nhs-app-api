@@ -2,10 +2,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -28,53 +26,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             try
             {
-                var allergiesTask = _emisClient.AllergiesGet(emisUserSession.UserPatientLinkToken,
+                var medicationsTask = _emisClient.MedicationsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId);
                 
-                await Task.WhenAll(allergiesTask);
-
-                if (!allergiesTask.IsCompletedSuccessfully)
-                {
-                    _logger.LogError("Retrieving allergies task completed unsuccessfully");
-                    return new GetMyRecordResult.SuccessfullyRetrieved(new MyRecordResponse
-                    {
-                        Allergies = new Allergies
-                        {
-                            HasErrored = true
-                        }
-                    });  
-                }
-                
-                var allergiesResponse = allergiesTask.Result;
-                
-                if (!allergiesResponse.HasSuccessStatusCode)
-                {
-                    // User does not have access
-                    if (allergiesResponse.HasExceptionWithMessageContaining("Services Access violation"))
-                    {
-                        _logger.LogWarning("User does not have access to their patient record");
-                        return new GetMyRecordResult.SuccessfullyRetrieved(new MyRecordResponse());
-                    }
+                var allergiesTask = _emisClient.AllergiesGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId);
                     
-                    _logger.LogError(
-                        $"Unsuccessful request retrieving Allergy list for patient. Status code: {(int) allergiesResponse.StatusCode}");
-                    return new GetMyRecordResult.SuccessfullyRetrieved(new MyRecordResponse
-                    {
-                        Allergies = new Allergies
-                        {
-                            HasErrored = true
-                        }
-                    });
-                }
+                await Task.WhenAll(allergiesTask, medicationsTask);
 
-                _logger.LogInformation($"Mapping response from {nameof(AllergyRequestsGetResponse)} to {nameof(MyRecordResponse)}");
+                var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
+                var medications = new GetMedicationsTaskChecker(_logger).Check(medicationsTask);
 
-                var result = _emisMyRecordMapper.Map(allergiesResponse.Body);
-                result.Allergies.HasAccess = true;
+                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications);
                 
-                _logger.LogInformation("MyRecordResponse: " + result);
+                _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
-                return new GetMyRecordResult.SuccessfullyRetrieved(result);
+                return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
             }
             catch (HttpRequestException e)
             {

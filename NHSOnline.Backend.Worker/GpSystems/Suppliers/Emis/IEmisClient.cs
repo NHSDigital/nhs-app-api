@@ -36,6 +36,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
             string endUserSessionId);
         
+        Task<EmisClient.EmisApiObjectResponse<MedicationRequestsGetResponse>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId);
+        
         // AppointmentSlots
         Task<EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
             EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);

@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
         public Allergies()
         {
             Data = new List<AllergyItem>();
-            HasAccess = false;
+            HasAccess = true;
             HasErrored = false;
         }
         

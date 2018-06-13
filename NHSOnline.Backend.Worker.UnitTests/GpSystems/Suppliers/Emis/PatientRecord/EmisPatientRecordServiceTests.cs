@@ -72,7 +72,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            result.Should().BeAssignableTo<GetMyRecordResult.Unsuccessful>();
+            result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
+            ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Allergies.HasAccess.Should().BeFalse();
         }
 
         [TestMethod]

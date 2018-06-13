@@ -35,6 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
         private const string AppointmentsPath = "appointments";
+        private const string PatientMedicationsPath = "record?userPatientLinkToken={0}&itemType=Medication";
 
         private readonly HttpClient _httpClient;
         private readonly ILogger<EmisClient> _logger;
@@ -83,6 +84,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             var path = string.Format(PatientAllergiesPath, userPatientLinkToken);
 
             return await Get<AllergyRequestsGetResponse>(path, endUserSessionId, responseSessionId);
+        }
+        
+        public async Task<EmisApiObjectResponse<MedicationRequestsGetResponse>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId)
+        {
+            var path = string.Format(PatientMedicationsPath, userPatientLinkToken);
+
+            return await Get<MedicationRequestsGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId, MeApplicationsPostRequest model)
@@ -169,8 +178,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             string endUserSessionId = null, string sessionId = null)
         {
             var request = BuildEmisRequest(HttpMethod.Get, path, endUserSessionId, sessionId);
-            var response = await SendRequestAndParseResponse<TResponse>(request);
-            return response;
+            return await SendRequestAndParseResponse<TResponse>(request);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string path,
@@ -263,6 +271,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                     EmisApiErrorMessages.EmisService_NotEnabledForUser);
             }     
         }
+        
+     
+
 
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
         {
