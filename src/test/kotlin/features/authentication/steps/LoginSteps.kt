@@ -42,6 +42,11 @@ open class LoginSteps {
     }
 
     @Step
+    fun assertTimeoutBannerIsShown() {
+        loginPage.timeoutBannerShouldBeVisible()
+    }
+
+    @Step
     fun assertMenuIsNotVisible()
     {
         loginPage.assertMenuIsNotVisible();

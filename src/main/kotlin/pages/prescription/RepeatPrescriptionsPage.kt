@@ -54,6 +54,21 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         }
     }
 
+    fun selectXPrescriptionsToOrder(numberOfSubscriptionsToSelect: Int) {
+        val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
+
+        for (i in 0..(numberOfSubscriptionsToSelect-1)) {
+            var label = repeatPrescriptionContainers[i].findElement(By.tagName( "label"))
+            label.click()
+        }
+    }
+
+    fun clickConfirmAndOrderRepeatSubscriptionButton() {
+        var confirmAndOrderRepeatButtonLocator = "//button[contains(text(), 'Confirm and order repeat prescription')]"
+        var confirmAndOrderRepeatButton = findByXpath(confirmAndOrderRepeatButtonLocator)
+        confirmAndOrderRepeatButton.click()
+    }
+
     fun selectRepeatPrescription(courseToSelect: MedicationCourse) {
         val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
 

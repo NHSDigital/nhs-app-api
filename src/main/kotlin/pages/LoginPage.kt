@@ -24,6 +24,9 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     lateinit var accountCreationPage : CIDAccountCreationPage
 
+    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Session expired. Please log in again.')]")
+    lateinit var timeoutBanner: WebElementFacade
+
     fun checkMySymptoms() {
         symptomsButton
                 .waitUntilClickable<WebElementFacade>()
@@ -84,5 +87,9 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     // Checks to see the menu item is not present on the page.
     fun assertMenuIsNotVisible() {
         Assert.assertFalse(findByXpath("//nav[@class='menu']").isVisible);
+    }
+
+    fun timeoutBannerShouldBeVisible() {
+        Assert.assertTrue(timeoutBanner.isVisible)
     }
 }

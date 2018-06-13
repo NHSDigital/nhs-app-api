@@ -12,6 +12,7 @@ import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
 import models.Patient
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import java.net.URL
@@ -75,5 +76,16 @@ open class SharedStepDefinitions {
         browser.changeTab(URL(url))
         browser.shouldHaveUrl(url)
         browser.changeTabToApp()
+    }
+
+    @Then("I wait for (\\d+) seconds")
+    fun iWaitForXSeconds(secondsToWaitFor: Long) {
+        Thread.sleep(((secondsToWaitFor) * 1000))
+    }
+
+    @Given("My session has expired")
+    fun givenMySessionHasExpired(){
+        Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
+        iWaitForXSeconds(61)
     }
 }

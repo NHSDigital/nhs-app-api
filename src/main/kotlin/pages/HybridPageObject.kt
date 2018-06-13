@@ -118,4 +118,61 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         Assert.assertEquals(1, buttons.size)
         return buttons[0].text
     }
+
+    fun isErrorMessageContentCorrect(pageTitle: String,
+                                     pageHeaderText: String,
+                                     headerText: String,
+                                     subHeaderText: String,
+                                     messageText: String,
+                                     retryButtonText: String) : Boolean {
+
+        var pageTitleValid = true
+        var pageHeadIsValid = true
+        var headerIsValid = true
+        var subHeaderIsValid = true
+        var messageIsValid = true
+        var retryButtonIsValid = true
+
+
+        // Commenting out until page titles properly implemented
+        /*
+        if(!pageTitle.isNullOrEmpty()) {
+            pageTitleValid = pageTitle == title
+        }
+        */
+
+        if(!pageHeaderText.isNullOrEmpty()){
+            pageHeadIsValid = isAnyXpathVisible("//h1[contains(text(), \"$pageHeaderText\")]")
+        }
+        if(!headerText.isNullOrEmpty()){
+            headerIsValid = isAnyXpathVisible("//p[contains(text(), \"$headerText\")]")
+        }
+        if(!subHeaderText.isNullOrEmpty()){
+            subHeaderIsValid = isAnyXpathVisible("//p[contains(text(), \"$subHeaderText\")]")
+        }
+        if(!messageText.isNullOrEmpty()){
+            messageIsValid = isAnyXpathVisible("//p[contains(text(), \"$messageText\")]")
+        }
+        if(!retryButtonText.isNullOrEmpty()){
+            retryButtonIsValid = isAnyXpathVisible("//button[contains(text(), \"$retryButtonText\")]")
+        }
+
+        return pageTitleValid &&  pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
+    }
+
+    private fun isAnyXpathVisible(xpath:String) : Boolean {
+
+        var allElements = findAllByXpath(xpath)
+
+        var anyVisible = false
+
+        allElements.forEach( {
+            if(it.isVisible){
+                anyVisible = true
+            }
+        })
+
+
+        return anyVisible
+    }
 }

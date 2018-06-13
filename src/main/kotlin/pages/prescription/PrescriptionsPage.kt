@@ -6,11 +6,27 @@ import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
 import pages.HybridPageObject.Companion.PageType
 import pages.navigation.Header
+import java.net.URLEncoder
+import java.util.function.Consumer
 
 @DefaultUrl("http://localhost:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     lateinit var headerBar: Header
+
+    val timeoutPageTitle = "Prescription data error"
+    val timeoutPageHeader = "Error retrieving data"
+    val timeoutHeader = "Sorry, there\'s been a problem getting your prescription information"
+    val timeoutSubHeader = "Please try again"
+    val timeoutMessage = "If the problem persists and you need this information now, please contact your GP surgery directly."
+    val timeoutRetryButtonText = "Try again"
+
+    val serverErrorPageTitle = "Prescription data error"
+    val serverErrorPageHeader = "Error retrieving data"
+    val serverErrorHeader = "Sorry, there\'s been a problem getting your prescription information"
+    val serverErrorSubHeader = "Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly."
+    val serverErrorMessage = ""
+    val serverErrorretryButtonText = ""
 
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order a repeat prescription')]"
 

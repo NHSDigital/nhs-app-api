@@ -24,6 +24,13 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Change this prescription')]")
     private lateinit var changeThisPrescriptionButton: WebElementFacade
 
+    val serverErrorPageTitle = "Error Sending Prescription"
+    val serverErrorPageHeader = "Error sending request"
+    val serverErrorHeader = "Sorry, there's been a problem sending your request"
+    val serverErrorSubHeader = "Please go back and try again."
+    val serverErrorMessage = "If the problem persists and you need to order a repeat prescription now, please contact your GP surgery directly."
+    val serverErrorRetryButtonText = "Back to my repeat prescriptions"
+
     override fun shouldBeDisplayed() {
         if(!headerBar.isVisible(headerText)) {
             throw WrongPageError("The expected header is not visible, you are on the wrong page.")

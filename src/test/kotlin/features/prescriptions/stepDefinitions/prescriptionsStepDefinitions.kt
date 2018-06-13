@@ -8,6 +8,7 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
+import mocking.emis.models.CourseRequestsGetResponse
 import mocking.emis.models.MedicationCourse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.PrescriptionType
@@ -18,6 +19,8 @@ import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.junit.Assert
+import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
+import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionListResponse
@@ -43,6 +46,9 @@ open class PrescriptionsStepDefinitions {
     lateinit var prescriptionListResponse: PrescriptionListResponse
 
     lateinit var prescriptionsMock: PrescriptionRequestsGetResponse
+
+    lateinit var prescriptionsPage: PrescriptionsPage
+    lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -317,5 +323,101 @@ open class PrescriptionsStepDefinitions {
         val errorContent = "Contact your GP surgery for more information."
 
         Assert.assertEquals(em, (errorTitle + errorContent))
+    }
+
+    @But("The prescriptions endpoint is timing out")
+    fun butThePrescriptionsEndpointIsTimingOut(){
+        mockingClient
+                .forEmis {
+                    prescriptionsRequest(patient)
+                            .respondWith(504, resolve = {}, milliSecondDelay = 10000)
+                }
+    }
+
+
+    @But("The prescriptions endpoint is throwing a server error")
+    fun butThePrescriptionsEndpointIsThrowingAServerError(){
+        mockingClient
+                .forEmis {
+                    prescriptionsRequest(patient)
+                            .respondWith(500, resolve = {})
+                }
+    }
+
+    @But("The courses endpoint is timing out")
+    fun butTheCoursesEndpointIsTimingOut() {
+        mockingClient.forEmis { coursesRequest(patient)
+                .respondWith(504, resolve = {}, milliSecondDelay = 10000)
+        }
+    }
+
+    @But("The courses endpoint is throwing a server error")
+    fun butTheCoursesEndpointIsThrowingAServerError() {
+        mockingClient.forEmis { coursesRequest(patient)
+                .respondWith(500, resolve = {}) }
+    }
+
+    @But("The prescription submission endpoint is timing out")
+    fun butThePrescriptionSubmissionEndpointIsTimingOut() {
+        mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 10000) }
+    }
+
+    @But("The prescription submission endpoint is throwing a server error")
+    fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
+        mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(500, resolve = {}) }
+    }
+
+    @Then("I see the appropriate error message for a prescription timeout")
+    fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
+
+        var pageTitle = prescriptionsPage.timeoutPageTitle
+        var pageHeader = prescriptionsPage.timeoutPageHeader
+        var header = prescriptionsPage.timeoutHeader
+        var subHeader = prescriptionsPage.timeoutSubHeader
+        var message = prescriptionsPage.timeoutMessage
+        var retryButtonText = prescriptionsPage.timeoutRetryButtonText
+
+        prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+    }
+
+    @Then("I see the appropriate error message for a prescription server error")
+    fun thenISeeTheAppropriateErrorMessageForAPrescriptionServerError() {
+
+        var pageTitle = prescriptionsPage.serverErrorPageTitle
+        var pageHeader = prescriptionsPage.serverErrorPageHeader
+        var header = prescriptionsPage.serverErrorHeader
+        var subHeader = prescriptionsPage.serverErrorSubHeader
+        var message = prescriptionsPage.serverErrorMessage
+        var retryButtonText = prescriptionsPage.serverErrorretryButtonText
+
+        prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+    }
+
+    @Then("I see the appropriate error message for a course request error")
+    fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
+
+        var pageTitle = confirmRepeatPrescriptionsOrderPage.serverErrorPageTitle
+        var pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
+        var header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
+        var subHeader = confirmRepeatPrescriptionsOrderPage.serverErrorSubHeader
+        var message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
+        var retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
+
+        prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+    }
+
+    @Then("I select (\\d+) prescription to order")
+    fun iSelectXPrescriptionsToOrder(prescriptionToOrder: Int){
+        prescriptions.selectSubscriptionsToOrder(prescriptionToOrder)
+        prescriptions.clickContinue()
+        prescriptions.clickConfirmAndOrderRepeat()
+    }
+
+    @Then("I am kicked back to the login page")
+    fun thenIAmKickedBackToTheLoginPage() {
+        login.assertPageIsDisplayed()
+
+        // There is a bug with NHSO-415, which means that this banner isn't shown on a server-session timeout. Uncomment once bug is fixed.
+        // login.assertTimeoutBannerIsShown()
     }
 }
