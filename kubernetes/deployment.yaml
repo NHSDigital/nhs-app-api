@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: nhsonline-backendworker
-        image: nhsonline.azurecr.io/nhsonline-backendworker:latest
+        image: nhsapp.azurecr.io/nhsonline-backendworker:latest
         ports:
         - containerPort: 8082
         env:
@@ -47,7 +47,7 @@ spec:
     spec:
       containers:
       - name: nhsonline-wiremock
-        image: rodolpheche/wiremock
+        image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
         ports:
         - containerPort: 8080
         env:
