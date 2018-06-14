@@ -14,7 +14,7 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 
 # Specify specfic version of images we require
 
-if [ -z $BDD_TEST_MODE ] then
+if ! [ -z $BDD_TEST_MODE ]; then
   case $BDD_TEST_MODE in
     web)
       sed -i "s/CI_WEB_VERSION=latest/CI_WEB_VERSION=${BDD_COMMIT_HASH}/" .env
