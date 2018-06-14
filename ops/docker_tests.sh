@@ -1,9 +1,17 @@
 #!/bin/bash
 
+function die () {
+    echo >&2 "===]> Error: $@ "
+    exit 1
+}
+
+function info () {
+    echo >&2 "===]> Info: $@ ";
+}
+
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
 # set -x
-
 if [ -z "${DOCKER_REGISTRY}" ];
 then
   DOCKER_REGISTRY=nhsapp.azurecr.io
@@ -23,30 +31,49 @@ DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 if ! [ -z $BDD_TEST_MODE ]; then
   case $BDD_TEST_MODE in
     web)
-    echo MODE=Web
-    for s in $DOCKER_SERVICES; do
-      if ! [ "$s" = "nhsonline.web" ]; then #Do not pull the web image
-        docker-compose -f docker-compose_ci.yml pull $s
-      fi
-    done
+      info MODE=Web
+
+      # Replace docker tags with overrides from TeamCity
+      [ -z $WEB_DOCKER_TAG ] || sed -i "s/WEB_TAG=latest/WEB_TAG=${WEB_DOCKER_TAG}/" .env
+
+      # Pull images
+      for s in $DOCKER_SERVICES; do
+        if ! [ "$s" = "nhsonline.web" ]; then #Do not pull the web image as we'll use the local copy
+          docker-compose -f docker-compose_ci.yml pull $s
+        fi
+      done
     ;;
     backend)
-    echo MODE=Backend
-    for s in $DOCKER_SERVICES; do
-      if ! [ "$s" = "nhsonline.backend.worker" ]; then #Do not pull the backend image
-        docker-compose -f docker-compose_ci.yml pull $s
-      fi
-    done
+      info MODE=Backend
+
+      # Replace docker tags with overrides from TeamCity
+      [ -z $BACKEND_DOCKER_TAG ]    || sed -i "s/BACKEND_TAG=latest/BACKEND_TAG=${WEB_DOCKER_TAG}/" .env
+      [ -z $REDIS_DATA_DOCKER_TAG ] || sed -i "s/REDIS_DATA_TAG=latest/REDIS_DATA_TAG=${WEB_DOCKER_TAG}/" .env
+
+      # Pull images
+      for s in $DOCKER_SERVICES; do
+        if ! [ "$s" = "nhsonline.backend.worker" ]; then #Do not pull the backend image as we'll use the local copy
+          docker-compose -f docker-compose_ci.yml pull $s
+        fi
+      done
     ;;
   esac
 else
+  info MODE=Default
   docker-compose -f docker-compose_ci.yml pull
 fi
 
-docker-compose -f docker-compose_ci.yml up -d --build
+# Output list of images contained in config
+docker-compose -f docker-compose_ci.yml config | grep image
+
+docker-compose -f docker-compose_ci.yml up -d --build || die "Docker compose failure"
 
 ##################### Runtime vars
-WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:latest)
+if [ -z $WEB_DOCKER_TAG ]; then
+  WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:latest)
+else
+  WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:$WEB_DOCKER_TAG)
+fi
 NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
 
