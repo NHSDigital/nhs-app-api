@@ -28,7 +28,7 @@ if ! [ -z $BDD_TEST_MODE ]; then
     backend)
     echo MODE=Backend
     for s in $DOCKER_SERVICES; do
-      if ! [ "$s" = "nhsonline.backendworker" ]; then #Do not pull the web image
+      if ! [ "$s" = "nhsonline.backend.worker" ]; then #Do not pull the backend image
         docker-compose -f docker-compose_ci.yml pull $s
       fi
     done
