@@ -14,7 +14,6 @@ export default {
         state.appointmentSessions,
       );
       result.clinicians = findByIds(slot.clinicianIds, state.clinicians);
-
       return result;
     });
   },

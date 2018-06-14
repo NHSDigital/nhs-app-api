@@ -87,6 +87,10 @@ class {{&className}} {
 
     this.store.dispatch('http/isLoading');
 
+    if(this.cookie && this.cookie.length > 0) {
+      headers['Cookie'] = this.cookie;
+    }
+
     axios({
       cancelToken: new CancelToken(function executor(c) {
         // An executor function receives a cancel function as a parameter

@@ -4,6 +4,7 @@ import header from './modules/header';
 import appointment from './modules/appointment';
 import appointmentSlots from './modules/appointmentSlots';
 import auth from './modules/auth';
+import { UPDATE_CONFIG } from './modules/auth/mutation-types';
 import device from './modules/device';
 import http from './modules/http';
 import navigation from './modules/navigation';
@@ -25,6 +26,11 @@ const createStore = () => new Vuex.Store({
     repeatPrescriptionCourses,
     session,
     errors,
+  },
+  actions: {
+    nuxtServerInit({ state, commit }) {
+      commit(UPDATE_CONFIG, state.auth.config);
+    },
   },
 });
 

@@ -33,6 +33,10 @@ export default {
     FloatingButtonBottom,
   },
   computed: {
+    ...mapGetters({
+      slots: 'appointmentSlots/slots',
+      findById: 'appointmentSlots/findById',
+    }),
     showNoAppointment() {
       return (
         this.$store.state.appointmentSlots.hasLoaded &&
@@ -48,10 +52,6 @@ export default {
     hasASlotSelected() {
       return this.slots.filter(slot => slot.selected === true).length > 0;
     },
-    ...mapGetters({
-      slots: 'appointmentSlots/slots',
-      findById: 'appointmentSlots/findById',
-    }),
   },
   mounted() {
     this.$store.dispatch('appointmentSlots/load');
