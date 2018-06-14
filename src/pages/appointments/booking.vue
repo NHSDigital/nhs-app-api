@@ -50,7 +50,7 @@ export default {
       );
     },
     hasASlotSelected() {
-      return this.slots.filter(slot => slot.selected === true).length > 0;
+      return this.$store.state.appointmentSlots.selectedSlot !== null;
     },
   },
   mounted() {

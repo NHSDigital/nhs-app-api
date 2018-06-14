@@ -3,12 +3,12 @@ import mutations from '../../../../../src/store/modules/appointmentSlots/mutatio
 const { SLOT_SELECTED, SLOTS_LOADED } = mutations;
 
 describe('SLOT_SELECTED', () => {
-  it('will set the selected slot to the slot with received ID', () => {
+  it('will set the selected slot to the slot', () => {
     const state = {
       slots: [],
     };
-    SLOT_SELECTED(state, '1');
-    expect(state.selectedSlotId).toEqual('1');
+    SLOT_SELECTED(state, { id: 1 });
+    expect(state.selectedSlot).toEqual({ id: 1 });
   });
 });
 

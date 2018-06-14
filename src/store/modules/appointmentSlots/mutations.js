@@ -12,17 +12,13 @@ const sortSlots = sortBy(slot => [
 ]);
 
 export default {
-  [SLOT_SELECTED](state, slotId) {
-    state.selectedSlotId = slotId;
-    state.slots = state.slots.map((slot) => {
-      slot.selected = slot.id === slotId;
-      return slot;
-    });
+  [SLOT_SELECTED](state, slot) {
+    state.selectedSlot = slot;
   },
   [SLOTS_CLEAR](state) {
     state.slots = [];
     state.hasLoaded = false;
-    state.selectedSlotId = undefined;
+    state.selectedSlot = null;
   },
   [INIT_APPOINTMENTS](state) {
     state = initialState;
@@ -48,10 +44,11 @@ export default {
       if (clinicians && clinicians.length > 0) {
         result.clinicians = clinicians;
       }
-      result.selected = false;
+
       return result;
     })(state.slots);
     state.slots = sortSlots(state.slots);
     state.hasLoaded = true;
+    state.selectedSlot = null;
   },
 };

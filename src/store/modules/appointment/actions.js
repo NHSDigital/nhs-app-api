@@ -11,8 +11,7 @@ export default{
     commit(INIT_APPOINTMENT);
   },
   save({ commit }) {
-    const selected = this.state.appointmentSlots.slots.find(slot => slot.selected);
-    commit(SAVE_SELECTED, selected);
+    commit(SAVE_SELECTED, this.state.appointmentSlots.selectedSlot);
   },
   reset({ commit }) {
     commit(RESET_SELECTED);

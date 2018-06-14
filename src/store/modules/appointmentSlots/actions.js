@@ -43,7 +43,7 @@ export default {
         commit(SLOTS_LOADED, data);
       });
   },
-  select({ commit }, slotId) {
-    commit(SLOT_SELECTED, slotId);
+  select({ commit }, slot) {
+    commit(SLOT_SELECTED, slot);
   },
 };

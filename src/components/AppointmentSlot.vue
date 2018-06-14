@@ -54,14 +54,14 @@ export default {
       return get('appointmentSession.displayName')(this.theSlot);
     },
     getClass() {
-      const isSelected = this.theSlot.selected && !this.alwaysDeselect;
+      const isSelected = this.isSlotSelected() && !this.alwaysDeselect;
       return isSelected ? this.$style.selectedContainer : this.$style.container;
     },
     location() {
       return get('location.displayName')(this.theSlot);
     },
     isSelected() {
-      return this.theSlot ? false : this.theSlot.selected;
+      return this.theSlot ? false : this.isSlotSelected();
     },
   },
   methods: {
@@ -69,8 +69,12 @@ export default {
     formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
     select() {
       if (!this.alwaysDeselect) {
-        this.$store.dispatch('appointmentSlots/select', this.theSlot.id);
+        this.$store.dispatch('appointmentSlots/select', this.theSlot);
       }
+    },
+    isSlotSelected() {
+      return this.$store.state.appointmentSlots.selectedSlot !== null
+        && this.$store.state.appointmentSlots.selectedSlot.id === this.theSlot.id;
     },
   },
 };

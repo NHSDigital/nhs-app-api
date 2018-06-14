@@ -9,5 +9,5 @@ export const initialState = {
   slots: [],
   hasLoaded: false,
   hasErrored: false,
-  selectedSlotId: undefined,
+  selectedSlot: null,
 };
