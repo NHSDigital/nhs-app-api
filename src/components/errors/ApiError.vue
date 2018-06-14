@@ -38,9 +38,10 @@ export default {
       return this.getMessage('message');
     },
     retryButtonText() {
-      if (this.hasComponentErrorCodeKey('retryButtonText')) {
+      if (this.hasComponentErrorCodeKey('retryButtonText') || this.hasComponentKey('retryButtonText')) {
         return this.getMessage('retryButtonText');
       }
+
       return '';
     },
   },

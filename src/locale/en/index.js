@@ -64,6 +64,13 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'Please, enter a reason for this appointment',
       noReasonError: 'Please describe your symptoms',
+      errors: {
+        pageHeader: 'Error sending request',
+        header: 'Sorry, there\'s been a problem sending your request',
+        subheader: 'Please go back and try again.',
+        message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
+        retryButtonText: 'Back to my appointments',
+      },
     },
   },
   prescriptions: {
