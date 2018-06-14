@@ -73,9 +73,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Assert
             result.Should().BeTrue();
         }
-        
+
         // Valid RepeatPrescriptionRequest
-        
+
         [TestMethod]
         public void IsValidRepeatPrescriptionRequest_ReturnsTrue_WhenModelIsValidType()
         {
@@ -130,6 +130,29 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             // Assert
             result.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow(999, true)]
+        [DataRow(1000, true)]
+        [DataRow(1001, false)]
+        public void IsValidRepeatPrescriptionRequest_ReturnsFalse_WhenSpecialRequestExceedsMaxLength(int specialRequestLength, bool isValid)
+        {
+            // Arrange
+            var modelUnderTest = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string>
+                {
+                    Guid.NewGuid().ToString(),
+                },
+                SpecialRequest = new String('x', specialRequestLength),
+            };
+
+            // Act
+            var result = _prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(modelUnderTest);
+
+            // Assert
+            result.Should().Be(isValid);
         }
     }
 }
