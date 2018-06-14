@@ -12,11 +12,15 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import org.apache.http.entity.StringEntity
+import org.apache.http.impl.client.BasicCookieStore
+import org.apache.http.impl.cookie.BasicClientCookie
+import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.courses.CourseListResponse
@@ -182,6 +186,31 @@ class WorkerClient {
             throw NhsoHttpException(request, response)
         } else {
             return response
+        }
+    }
+
+    companion object{
+
+        fun  getHttpContext(includeBadCookie: Boolean): HttpContext{
+            val localContext = BasicHttpContext()
+            val cookieStore = BasicCookieStore()
+
+            if (includeBadCookie) {
+                val cookie = BasicClientCookie("NHSO-Session-Id", "ErrorCookieId")
+                cookie.path = "/"
+                cookie.domain = "localhost"
+                cookie.setAttribute("httponly", "null")
+                cookie.setAttribute("path", "/")
+                cookie.setAttribute("samesite", "lax")
+                cookie.isSecure = false
+                cookie.version = 0
+
+                cookieStore.addCookie(cookie)
+            }
+
+            localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore)
+
+            return localContext
         }
     }
 }

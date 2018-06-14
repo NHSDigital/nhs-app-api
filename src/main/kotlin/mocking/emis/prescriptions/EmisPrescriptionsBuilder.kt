@@ -39,6 +39,9 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
     fun respondWithSuccess(prescriptionRequestsGetResponse: PrescriptionRequestsGetResponse): Mapping {
         return respondWithSuccessAny(prescriptionRequestsGetResponse)
     }
+    fun respondWithPrescriptionsNotEnabled(): Mapping {
+        return respondWithException(-1030, "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'RepeatPrescribing' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, AppointmentBooking, RecordViewer, SharedRecordAuditView'. Extra info: Services Access violation")
+    }
 
     private fun getDateFormattedString(dateTime: OffsetDateTime): String{
         return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
