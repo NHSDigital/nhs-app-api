@@ -47,8 +47,8 @@ if ! [ -z $BDD_TEST_MODE ]; then
       info MODE=Backend
 
       # Replace docker tags with overrides from TeamCity
-      [ -z $BACKEND_DOCKER_TAG ]    || sed -i "s/BACKEND_TAG=latest/BACKEND_TAG=${WEB_DOCKER_TAG}/" .env
-      [ -z $REDIS_DATA_DOCKER_TAG ] || sed -i "s/REDIS_DATA_TAG=latest/REDIS_DATA_TAG=${WEB_DOCKER_TAG}/" .env
+      [ -z $BACKEND_DOCKER_TAG ]    || sed -i "s/BACKEND_TAG=latest/BACKEND_TAG=${BACKEND_DOCKER_TAG}/" .env
+      [ -z $REDIS_DATA_DOCKER_TAG ] || sed -i "s/REDIS_DATA_TAG=latest/REDIS_DATA_TAG=${REDIS_DATA_DOCKER_TAG}/" .env
 
       # Pull images
       for s in $DOCKER_SERVICES; do
