@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: nhsonline-web
-        image: nhsonline.azurecr.io/nhsonline-web:latest
+        image: nhsapp.azurecr.io/nhsonline-web:latest
         ports:
         - containerPort: 3000
         env:
