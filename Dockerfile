@@ -1,4 +1,4 @@
-FROM nhsonline.azurecr.io/nhsonline-web-base:latest AS base
+FROM nhsapp.azurecr.io/nhsonline-web-base:latest AS base
 
 ENV HOST 0.0.0.0
 ENV PORT 3000
@@ -6,10 +6,13 @@ ENV API_HOST https://api-preview.nonliveeuw.bitraft.io
 ENV ORGAN_DONATION_URL https://www.organdonation.nhs.uk/
 ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
 
-COPY package.json .
-COPY package-lock.json .
-COPY nuxt.config.js .
-COPY .babelrc .
+RUN chown nodejs:nodejs -R /opt/app
+USER nodejs
+
+COPY --chown=nodejs:nodejs package.json .
+COPY --chown=nodejs:nodejs package-lock.json .
+COPY --chown=nodejs:nodejs nuxt.config.js .
+COPY --chown=nodejs:nodejs .babelrc .
 
 # Deps
 FROM base AS dependencies
@@ -29,14 +32,13 @@ COPY . .
 
 # Final image
 FROM base AS release
-COPY --from=build /opt/app/prod_node_modules ./node_modules
-COPY --from=build /opt/app/build ./build
-COPY --from=build /opt/app/contracts ./contracts
-COPY --from=build /opt/app/src ./src
-COPY --from=build /opt/app/src/pages ./pages
-COPY --from=build /opt/app/app_links ./app_links
-COPY --from=build /opt/app/test ./test
-RUN chown nodejs:nodejs -R /opt/app
-USER nodejs
+COPY --chown=nodejs:nodejs --from=build /opt/app/prod_node_modules ./node_modules
+COPY --chown=nodejs:nodejs --from=build /opt/app/build ./build
+COPY --chown=nodejs:nodejs --from=build /opt/app/contracts ./contracts
+COPY --chown=nodejs:nodejs --from=build /opt/app/src ./src
+COPY --chown=nodejs:nodejs --from=build /opt/app/src/pages ./pages
+COPY --chown=nodejs:nodejs --from=build /opt/app/app_links ./app_links
+COPY --chown=nodejs:nodejs --from=build /opt/app/test ./test
+
 EXPOSE 3000
 CMD npm run dev
