@@ -66,7 +66,7 @@ export default {
   mounted() {
     this.slot = this.$store.state.appointment.tempSelectedSlot;
     if (!this.slot) {
-      this.$router.push('/appointments');
+      this.$router.push('/appointments/booking');
     }
   },
   beforeDestroy() {

@@ -56,6 +56,9 @@ export default {
   mounted() {
     this.$store.dispatch('appointmentSlots/load');
   },
+  beforeDestroy() {
+    this.$store.dispatch('appointmentSlots/reset');
+  },
   methods: {
     bottomStyle() {
       if (

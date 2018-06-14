@@ -36,9 +36,6 @@ export default {
     this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
     this.$store.dispatch('appointment/resetJustBooked');
   },
-  beforeDestroy() {
-    this.$store.dispatch('appointmentSlots/reset');
-  },
   methods: {
     onBookButtonClicked() {
       this.$router.push('/appointments/booking');
