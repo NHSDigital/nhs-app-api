@@ -69,6 +69,17 @@ class MockingClient(private val configuration: MockingConfiguration) {
         deleteWiremockDetails(endpoint = "requests")
     }
 
+    fun resetScenarios() {
+        val httpPost = HttpPost("${configuration.wiremockAdminUrl}/scenarios/reset/")
+
+        val response = HttpClients.createDefault().execute(httpPost).also { println("Resetting Scenarios... Response: $it") }
+        httpPost.releaseConnection()
+
+        if (response.statusLine.statusCode != HttpStatus.SC_OK) {
+            throw HttpException(String.format("Resetting Scenarios failed, response was %1\$s: %2\$s", response.statusLine.statusCode, response.toString()))
+        }
+    }
+
     private fun deleteWiremockDetails(endpoint: String) {
         val uri = "${configuration.wiremockAdminUrl}/$endpoint"
         val httpDelete = HttpDelete(uri)

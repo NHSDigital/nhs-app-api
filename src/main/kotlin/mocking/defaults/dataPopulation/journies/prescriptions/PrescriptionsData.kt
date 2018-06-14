@@ -15,7 +15,7 @@ object PrescriptionsData {
         if(noPrescriptions != 0) {
 
             // Create courses first as these will be used in the prescriptions
-            medicationCourses = CoursesData.getCourseData(noCourses, if (noRepeats == null) noPrescriptions else noRepeats!!, if (noRepeats == null) noPrescriptions else noRepeats, medicationCourses)
+            medicationCourses = CoursesData.getCourseData(noCourses, if (noRepeats == null) noPrescriptions else noRepeats, if (noRepeats == null) noPrescriptions else noRepeats, medicationCourses)
 
             var maxPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false

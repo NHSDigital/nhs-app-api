@@ -34,7 +34,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW
     }
 
     fun verifyVisiblePrescriptions(coursesData: List<MedicationCourse>) {
-        var nameXpath = "//label[@for='prescription-selection']"
+        var nameXpath = "//label[contains(@for, 'prescription-')]"
         var instructionsXpath = "//span[@aria-label=\"prescription-description\"]"
 
         var namesListed = findAllByXpath(nameXpath)

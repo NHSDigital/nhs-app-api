@@ -1,16 +1,24 @@
 package features.prescriptionsSubmission.stepDefinitions
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.courses.stepDefinitions.coursesStepDefinitions
+import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
+import features.prescriptions.PrescriptionsData
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
+import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
+import net.thucydides.core.annotations.Steps
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
+import java.time.OffsetDateTime
 import java.util.*
 
 open class PrescriptionsSubmissionStepDefinitions {
@@ -22,7 +30,18 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     var prescriptionSubmissionRequest : PrescriptionSubmissionRequest? = null
 
+    @Steps
+    lateinit var coursesStepDefinitions: coursesStepDefinitions
+
+    @Steps
+    lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
+
     private val commonSteps : CommonSteps = CommonSteps()
+
+    var perscriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
+
+    lateinit var scenarioTitle: String
+    var currentScenarioState: String = Scenario.STARTED
 
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest()
@@ -107,4 +126,107 @@ open class PrescriptionsSubmissionStepDefinitions {
     {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(patient, prescriptionSubmissionRequest).respondWithGenericInternalServerError() }
     }
+
+    @Given("I select (\\d+) repeatable prescriptions to order")
+    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int) {
+
+        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, amount)
+
+        //redefine mock for scenario value...
+        mockingClient.forEmis {
+            coursesRequest(patient)
+                    .respondWithSuccess(CourseRequestsGetResponse(coursesStepDefinitions.coursesData))
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+        }
+        val submitted = "SUBMITTED"
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patient)
+                    .respondWithCreated()
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+                    .willSetStateTo(submitted)
+        }
+
+        currentScenarioState = submitted
+
+        buildNewPrescriptionData(coursesStepDefinitions.coursesData)
+
+        mockingClient.forEmis {
+            prescriptionsRequest(patient)
+                    .respondWithSuccess(perscriptionMap[currentScenarioState]!!)
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+        }
+    }
+
+    private fun buildNewPrescriptionData(orderedCourses: MutableList<MedicationCourse>) {
+
+        //1 create new prescription object and add ordered courses to it..
+        val cr = mutableListOf<RequestedMedicationCourse>()
+        orderedCourses.forEach {
+            c -> cr.add(
+                RequestedMedicationCourse(
+                        c.medicationCourseGuid, RequestedMedicationCourseStatus.Requested))
+        }
+        val oldPrescriptions = perscriptionMap[Scenario.STARTED]
+        val prs = mutableListOf<PrescriptionRequest>()
+        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr))
+
+        oldPrescriptions!!.prescriptionRequests.forEach {
+            pr -> prs.add(pr)
+        }
+
+        //2. update course list
+        val cs = mutableSetOf<MedicationCourse>()
+        oldPrescriptions.medicationCourses.forEach {
+            c -> cs.add(c)
+        }
+
+        orderedCourses.forEach {
+            c -> cs.add(MedicationCourse(
+                c.medicationCourseGuid,
+                c.name,
+                c.dosage,
+                c.quantityRepresentation,
+                c.prescriptionType,
+                c.constituents,
+                c.canBeRequested))
+        }
+
+        perscriptionMap[currentScenarioState] = PrescriptionRequestsGetResponse(prs, cs.toList())
+    }
+
+    @And("^the scenario is (.*)$")
+    fun theScenarioIsX(title: String) {
+        scenarioTitle = title
+    }
+
+    @And("^I have historic prescriptions in this scenario$")
+    fun iHaveHistoricPrescriptionsInThisScenario() {
+        val pr = PrescriptionsData.loadPrescriptionsData(1,1,1)
+        mockingClient.forEmis {
+            prescriptionsRequest(patient)
+                    .respondWithSuccess(pr)
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+        }
+
+        perscriptionMap[Scenario.STARTED] = pr
+
+    }
+
+    @When("I click Confirm and order repeat prescription")
+    fun iClickConfirmAndOrderRepeatPrescription() {
+
+        confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.clickConfirmAndOrderRepeatPrescriptionButton()
+
+    }
+
+
+    @Then("I see a order successful message on the Repeat prescription page")
+    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPage() {
+    }
+
+
 }

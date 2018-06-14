@@ -2,80 +2,24 @@ Feature: Prescriptions submission
 
   A user can submit a request for a repeat prescription
 
-  @backend
-  @NHSO-945
-  Scenario: Repeat prescription request with null body
-    Given I have an empty repeat prescription request
-    When I submit the repeat prescription
-    Then I receive a "Bad Request" error
+  Background:
+    Given wiremock is initialised
+    And the scenario is submit prescription
+    And I have historic prescriptions in this scenario
+    And I am logged in
+    And I navigate to prescriptions
 
-  @backend
-  @NHSO-945
-  Scenario: Repeat prescription request for valid courses
-    Given I have a repeat prescription request with 1 courses
-    And EMIS responds with a Created success code when submitting the repeat prescription
-    When I submit the repeat prescription
-    Then I receive a "Created" success code
+  @pending @NHSO-860
+  Scenario: The User orders a repeat prescription with 5 entries
+    Given I select 5 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    When I click Confirm and order repeat prescription
+    Then I see a order successful message on the Repeat prescription page
 
-  @backend
-  @NHSO-945
-  Scenario: Repeat prescription request with 0 courses
-    Given I have a repeat prescription request with 0 courses
-    When I submit the repeat prescription
-    Then I receive a "Bad Request" error
+  @pending @NHSO-860
+  Scenario: The User orders a repeat prescription with 1 entries
+    Given I select 1 repeatable prescriptions to order
+    And I click Continue on the Order a repeat prescription page
+    When I click Confirm and order repeat prescription
+    Then I see a order successful message on the Repeat prescription page
 
-  @backend
-  @NHSO-945
-  Scenario: Repeat prescription request with an invalid course id format
-    Given I have a repeat prescription request with 100 courses
-    And 1 invalid courses
-    When I submit the repeat prescription
-    Then I receive a "Bad Request" error
-
-  @backend
-  @NHSO-945
-  Scenario: Repeat prescription request with an invalid course id
-    Given I have a repeat prescription request with 1 courses
-    But Emis responds with an error indicating a course is invalid
-    When I submit the repeat prescription
-    Then I receive a "Bad Request" error
-
-  @backend
-  @NHSO-945
-  Scenario: Repeat prescription request with a course which has been ordered within the last 30 days
-    Given I have a repeat prescription request with 1 courses
-    But EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription
-    When I submit the repeat prescription
-    Then I receive a "Conflict" error
-
-  @backend
-  @NHSO-945
-  Scenario: Session expired (redis)
-    Given I have a repeat prescription request with 1 courses
-    But I allow my session to expire
-    When I submit the repeat prescription
-    Then I receive a "Unauthorized" error
-
-  @backend
-  @NHSO-945
-  Scenario: GP practice has disabled prescriptions functionality
-    Given I have a repeat prescription request with 1 courses
-    But EMIS responds with an error indicating prescriptions is not enabled when submitting the repeat prescription
-    When I submit the repeat prescription
-    Then I receive a "Forbidden" error
-
-  @backend
-  @NHSO-945
-  Scenario: GP system returns unknown error
-    Given I have a repeat prescription request with 1 courses
-    But EMIS responds with an unknown internal server error when a repeat prescription is submitted
-    When I submit the repeat prescription
-    Then I receive a "Bad Gateway" error
-
-  @backend
-  @NHSO-945
-  Scenario: GP system fails to return in a timely fashion
-    Given I have a repeat prescription request with 1 courses
-    But EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted
-    When I submit the repeat prescription
-    Then I receive a "Gateway Timeout" error

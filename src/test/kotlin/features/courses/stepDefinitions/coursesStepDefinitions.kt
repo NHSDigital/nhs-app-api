@@ -44,7 +44,10 @@ open class coursesStepDefinitions {
     @Given("I have (\\d+) assigned prescriptions")
     fun iHaveXAssignedPrescriptions(numberOfCourses: Int) {
         coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf())
-        mockingClient.forEmis { coursesRequest(patient).respondWithSuccess(CourseRequestsGetResponse(coursesData)) }
+        mockingClient.forEmis {
+            coursesRequest(patient)
+                    .respondWithSuccess(CourseRequestsGetResponse(coursesData))
+        }
     }
 
     @And("(\\d+) of my prescriptions are of type repeat")
