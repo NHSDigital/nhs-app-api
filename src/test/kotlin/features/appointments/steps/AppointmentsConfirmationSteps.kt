@@ -23,6 +23,11 @@ open class AppointmentsConfirmationSteps {
     }
 
     @Step
+    fun clickOnButton(button: String) {
+        appointmentsConfirmation.clickOnButton(button)
+    }
+
+    @Step
     fun mockEmisSuccessResponse() {
         //accept all requests
         mockEmisSuccessResponseDelayedBy(0)
@@ -35,6 +40,24 @@ open class AppointmentsConfirmationSteps {
                 .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
                         .respondWithSuccess()
                         .delayedBy(Duration.ofSeconds(delayedBy))
+                }
+    }
+
+    @Step
+    fun mockEmisUnavailableResponse() {
+        //accept all requests
+        mockingClient
+                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
+                        .respondWithUnavailableException()
+                }
+    }
+
+    @Step
+    fun mockEmisConflictesponse() {
+        //accept all requests
+        mockingClient
+                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
+                        .respondWithConflictException()
                 }
     }
 
@@ -57,14 +80,28 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkTimeoutErrorMessage() {
-        val message = appointmentsConfirmation.getServerErrorElement()
-        Assert.assertTrue(message.text.contains("Sorry, there's been a problem sending your request"))
+        checkErrorSendingMessage()
+    }
 
+    @Step
+    fun checkErrorSendingMessage() {
+        val message = appointmentsConfirmation.getServerErrorElement()
+
+        Assert.assertTrue(message.text.contains("Sorry, there's been a problem sending your request"))
+        Assert.assertTrue(message.text.contains("Please go back and try again."))
+        Assert.assertTrue(message.text.contains("If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly."))
     }
 
     @Step
     fun pasteSymptoms(length: Int)
     {
         appointmentsConfirmation.pasteSymptoms("x".repeat(length))
+    }
+
+    @Step
+    fun checkIfButtonIsVisible(button: String)
+    {
+        val isVisible = appointmentsConfirmation.isButtonVisible(button)
+        Assert.assertTrue(isVisible)
     }
 }

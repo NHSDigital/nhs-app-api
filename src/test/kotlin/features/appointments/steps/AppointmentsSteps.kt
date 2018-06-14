@@ -1,74 +1,58 @@
 package features.appointments.steps
 
-import models.Slot
+import mocking.MockingClient
+import mocking.defaults.MockDefaults
+import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
-import org.hamcrest.Matcher
-import org.junit.Assert.*
+import org.junit.Assert
+import org.junit.Assert.assertTrue
 import pages.AppointmentsPage
 
 open class AppointmentsSteps {
 
-    lateinit var appointments: AppointmentsPage
+    val mockingClient = MockingClient.instance
+    val patient = MockDefaults.patient
+
+    lateinit var appointmentsPage: AppointmentsPage
 
     @Step
-    fun slots(matches: Matcher<ArrayList<Slot>>) {
-        assertThat(appointments.getAllSlots(), matches)
+    fun checkBookingWasRequested() {
+        val wiremockRequests = mockingClient.getRequests().split("\n")
+        var validBookingBody = false
+        val expectedBookRequestBody = "\\\"UserPatientLinkToken\\\":\\\"" +
+                patient.userPatientLinkToken +
+                "\\\",\\\"SlotId\\\":301,\\\"BookingReason\\\":\\\"" +
+                sessionVariableCalled<String>("Symptoms").take(150) +
+                "\\\""
+        var bookingCreated = false
+        for (requestLine in wiremockRequests) {
+            if (requestLine.contains(expectedBookRequestBody)) {
+                validBookingBody = true
+            }
+            if (requestLine.contains("\\\"BookingCreated\\\":true")) {
+                bookingCreated = true
+                break
+            }
+        }
+        assertTrue("Incorrect booking was requested. ", validBookingBody)
+        assertTrue("No booking was created. ", bookingCreated)
     }
 
     @Step
-    fun checkIfSlotsAreDisplayed() {
-        assertTrue(appointments.countSlots() > 0)
+    fun checkSuccessMessage() {
+        val message = appointmentsPage.getSuccessMessage()
+        assertTrue(message.contains("Appointment Booked"))
     }
 
     @Step
-    fun checkIfSlotsAreNotDisplayed() {
-        assertTrue(appointments.countSlots() == 0)
+    fun clickOnButton(button: String) {
+        appointmentsPage.clickOnButton(button)
     }
 
     @Step
-    fun selectSlot() {
-        appointments.selectFirstSlot()
-    }
-
-    @Step
-    fun clickOnBookAppointmentButton() {
-        appointments.clickOnBookAppointmentButton()
-    }
-
-    @Step
-    fun checkTimeoutErrorMessage(presence: Boolean = true) {
-        val message = appointments.getServerErrorMessage()
-        val expectedHeader = "Sorry, there's been a problem loading this page"
-        val expectedBody = "Please try again\n" +
-                "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-        assertTrue(String.format("Actual text: %s. Expected text: %s? %b", message, "$expectedHeader\n$expectedBody", presence),
-                presence == message.contains("$expectedHeader\n$expectedBody"))
-    }
-
-    @Step
-    fun checkIfTyAgainButtonDisplayed() {
-        val button = appointments.getTryAgainButton()
-        assertEquals("Try again", button.text)
-        assertTrue(button.isDisplayed)
-    }
-
-    @Step
-    fun checkIfTyAgainButtonIsNotDisplayed() {
-        val hasButton = appointments.hasTryAgainButton()
-        assertFalse(hasButton)
-    }
-
-    @Step
-    fun checkUnavailableErrorMessage() {
-        val message = appointments.getServerErrorMessage()
-        val expectedHeader = "Sorry, there's been a problem loading this page"
-        val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-        assertTrue(String.format("Actual text: %s. Expected text: %s. ", message, "$expectedHeader\n$expectedBody"), message.contains("$expectedHeader\n$expectedBody"))
-    }
-
-    @Step
-    fun clickOnTryAgainButton() {
-        val button = appointments.getTryAgainButton()
-        button.click()
+    fun checkHeader(expectedHeader: String)
+    {
+        val actualHeader = appointmentsPage.getHeader()
+        Assert.assertEquals(expectedHeader, actualHeader);
     }
 }

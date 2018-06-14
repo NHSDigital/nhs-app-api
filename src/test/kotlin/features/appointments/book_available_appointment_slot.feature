@@ -97,14 +97,14 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   Scenario: A user tries to book an appointment without describing symptoms
-    Given I am on the appointments page
+    Given I am on the appointments booking page
     And I have selected an appointment slot to book
     When I click the 'Confirm and book appointment' button
     Then an error is displayed that "Describe your symptoms" is mandatory
 
   @NHSO-72
   Scenario: A user tries to book an appointment describing symptoms at least 1 character
-    Given I am on the appointments page
+    Given I am on the appointments booking page
     And I have selected an appointment slot to book
     And I enter symptoms of 1 characters
     When I click the 'Confirm and book appointment' button
@@ -113,7 +113,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   Scenario: A user tries to book an appointment describing symptoms no more 150 characters
-    Given I am on the appointments page
+    Given I am on the appointments booking page
     And I have selected an appointment slot to book
     And I enter symptoms of 150 characters
     When I click the 'Confirm and book appointment' button
@@ -122,95 +122,63 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   Scenario: A user tries to enter symptoms with over 150 characters
-    Given I am on the appointments page
+    Given I am on the appointments booking page
     And I have selected an appointment slot to book
     When I enter symptoms of 151 characters
     Then only the first 150 characters will be displayed
 
   @NHSO-72
   Scenario: A user tries to paste symptoms with over 150 characters
-    Given I am on the appointments page
+    Given I am on the appointments booking page
     And I have selected an appointment slot to book
     When I paste symptoms of 151 characters
     Then only the first 150 characters will be displayed
 
   @NHSO-72
   Scenario: A user who books successfully, but only the first 150 characters of the symptoms are sent
-    Given I am on the appointments page
+    Given I am on the appointments booking page
     And I have selected an appointment slot to book
     And I enter symptoms of 151 characters
     When I click the 'Confirm and book appointment' button
     Then Appointment Booking confirmation screen is displayed
     And booking request is successfully made with valid details
 
-
-        # To be removed once NHSO-517 is complete
-  @NHSO-72
-  @pending  @NHSO-517
-  Scenario: A user tries to book an appointment when there is a problem
-    Given I am on the appointments page
-    And I have selected an appointment slot to book
-    And GP system doesn't respond a timely fashion for booking an appointment
-    When I enter symptoms of 150 characters
-    And I click the 'Confirm and book appointment' button
-    Then I see appropriate information message when there is an error on appointment confirmation page
-    
-
   @NHSO-517
-  @pending  @NHSO-517
   Scenario: A user sees appropriate information message when there is a timeout
     Given GP system doesn't respond a timely fashion when booking an appointment
+    And I am on the appointments booking page
     And I have selected an appointment slot to book
     When I enter symptoms
-    And  click the 'Confirm and book appointment' button
-    Then I see appropriate information message after 10 seconds when it times-out
+    And  I click the 'Confirm and book appointment' button
+    Then I see appropriate information message after 10 seconds when it times-out on appointment confirmation page
     And there should be a button to go back to my appointments
 
   @NHSO-517
-  @pending  @NHSO-517
-  Scenario: A user tries again after a timeout and it times-out again
-    Given I have tried to book an appointment and it has timed-out
-    And GP system still doesn't respond a timely fashion when booking an appointment
-    And I have selected an appointment slot to book
-    When I enter symptoms
-    And  click the 'Confirm and book appointment' button
-    Then I see appropriate information message after 10 seconds when it times-out
-    And there should be a button to go back to my appointments
-
-  @NHSO-517
-  @pending  @NHSO-517
-  Scenario: A user tries again after a timeout and it is now successful
-    Given I have tried to book an appointment and it has timed-out
-    And GP system will now allow the appointment to be successfully booked
-    And I have selected an appointment slot to book
-    When I enter symptoms
-    And  click the 'Confirm and book appointment' button
-    Then booking request is successfully made
-    And Appointment Booking confirmation screen is displayed
-
-  @NHSO-517
-  @pending  @NHSO-517
   Scenario: A user sees appropriate information message when GP system is unavailable
     Given GP system is unavailable when booking an appointment
+    And I am on the appointments booking page
     And I have selected an appointment slot to book
     When I enter symptoms
-    And  click the 'Confirm and book appointment' button
-    Then I see appropriate information message when there is a error retrieving data
+    And  I click the 'Confirm and book appointment' button
+    Then I see appropriate information message when there is an error sending data on appointment confirmation page
     And there should be a button to go back to my appointments
 
   @NHSO-517
-  @pending  @NHSO-517
   Scenario: A user sees appropriate information message when appointment has already been booked
-    Given I have selected an appointment slot to book
-    And the appointment slot has already been booked by somebody else
+    Given the appointment slot has already been booked by somebody else
+    And I am on the appointments booking page
+    And I have selected an appointment slot to book
     When I enter symptoms
-    And  click the 'Confirm and book appointment' button
-    Then I see appropriate information message when there is a error retrieving data
+    And  I click the 'Confirm and book appointment' button
+    Then I see appropriate information message when appointment has already been booked
     And there should be a button to go back to my appointments
 
   @NHSO-517
-  @pending  @NHSO-517
   Scenario: A user can return directly back to their appointments after trying to book one already booked
-    Given I have tried to an appointment slot that has already been booked by somebody else
+    Given the appointment slot has already been booked by somebody else
+    And I am on the appointments booking page
+    And I have selected an appointment slot to book
+    And I enter symptoms
+    And  I click the 'Confirm and book appointment' button
     When I click the button to go back to my appointments
-    Then I will be on the "My Appointments" screen
+    Then I will be on the My Appointments screen

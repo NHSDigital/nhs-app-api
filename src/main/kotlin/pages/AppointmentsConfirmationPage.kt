@@ -3,6 +3,7 @@ package pages
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
 
 @DefaultUrl("http://localhost:3000/appointments/confirmation")
@@ -24,6 +25,17 @@ open class AppointmentsConfirmationPage: HybridPageObject(Companion.PageType.WEB
         confirmAndBookAppointmentButton.click()
     }
 
+    fun clickOnButton(button: String)
+    {
+        val element = find<WebElementFacade>(By.ByXPath("//button[contains(text(),'$button')]"))
+        element.waitUntilVisible<WebElementFacade>()
+
+        val jsExecutor = driver as JavascriptExecutor
+        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
+
+        element.click()
+    }
+
     fun getValidationErrorMessage(): WebElementFacade
     {
         return findBy<WebElementFacade>("#errorLabel p")
@@ -43,5 +55,10 @@ open class AppointmentsConfirmationPage: HybridPageObject(Companion.PageType.WEB
 
     fun getServerErrorElement(): WebElementFacade {
         return findBy<WebElementFacade>("#serverError").waitUntilVisible<WebElementFacade>()
+    }
+
+    fun isButtonVisible(button: String): Boolean
+    {
+        return findBy<WebElementFacade>("//button[contains(text(),'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
     }
 }
