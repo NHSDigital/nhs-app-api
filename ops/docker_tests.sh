@@ -12,23 +12,35 @@ BROWSER=chromeheadless
 #### 4. Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
 DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 
-# Specify specfic version of images we require
+# List all docker images in the docker compose setup
+DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 
 if ! [ -z $BDD_TEST_MODE ]; then
   case $BDD_TEST_MODE in
     web)
-      sed -i "s/CI_WEB_VERSION=latest/CI_WEB_VERSION=${BDD_COMMIT_HASH}/" .env
+    echo MODE=Web
+    for s in $DOCKER_SERVICES; do
+      if ! [ "$s" = "nhsonline.web" ]; then #Do not pull the web image
+        docker-compose -f docker-compose_ci.yml pull $s
+      fi
+    done
     ;;
     backend)
-      sed -i "s/CI_BACKEND_VERSION=latest/CI_BACKEND_VERSION=${BDD_COMMIT_HASH}/" .env
+    echo MODE=Backend
+    for s in $DOCKER_SERVICES; do
+      if ! [ "$s" = "nhsonline.backendworker" ]; then #Do not pull the web image
+        docker-compose -f docker-compose_ci.yml pull $s
+      fi
+    done
     ;;
     *)
-      # Safe default - do nothing and assume latest
+      echo MODE=Default
+      # Safe default - pull all images
+      docker-compose -f docker-compose_ci.yml pull
     ;;
   esac
 fi
 
-docker-compose -f docker-compose_ci.yml pull
 docker-compose -f docker-compose_ci.yml up -d --build
 
 ##################### Runtime vars

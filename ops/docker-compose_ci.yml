@@ -1,37 +1,37 @@
 version: "3.2"
 services:
   nhsonline.web:
-    image: nhsonline.azurecr.io/nhsonline-web:${CI_WEB_VERSION}
+    image: nhsonline.azurecr.io/nhsonline-web:latest
     env_file:
       - vars_ci.env
   nhsonline.backend.worker:
-    image: nhsonline.azurecr.io/nhsonline-backendworker:${CI_BACKEND_VERSION}
+    image: nhsonline.azurecr.io/nhsonline-backendworker:latest
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session
     env_file:
       - vars_ci.env
   nhsonline.stubs:
-    image: nhsonline.azurecr.io/wiremock:${CI_WIREMOCK_VERSION}
+    image: nhsonline.azurecr.io/wiremock:latest
     command: --local-response-templating
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     tty: true
   nhsonline.redis-data.sds:
-    image: nhsonline.azurecr.io/nhsonline-redis-data:${CI_REDIS_DATA_VERSION}
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
     environment:
       - REDIS_HOST=nhsonline.redis.sds
     depends_on:
       - nhsonline.redis.sds
   nhsonline.redis.sds:
-    image: bitnami/redis:${CI_REDIS_VERSION}
+    image: bitnami/redis:latest
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     volumes:
       - 'redis_data:/bitnami/redis'
   nhsonline.redis.session:
-    image: bitnami/redis:${CI_REDIS_VERSION}
+    image: bitnami/redis:latest
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
       - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
