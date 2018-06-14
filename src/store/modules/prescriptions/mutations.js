@@ -1,5 +1,13 @@
-import { assign, find } from 'lodash/fp';
-import { PRESCRIPTIONS_CLEAR, PRESCRIPTIONS_LOADED, INIT_PRESCRIPTIONS, initialState } from './mutation-types';
+import {
+  assign,
+  find,
+} from 'lodash/fp';
+import {
+  PRESCRIPTIONS_CLEAR,
+  PRESCRIPTIONS_LOADED,
+  INIT_PRESCRIPTIONS,
+  initialState,
+} from './mutation-types';
 
 const findById = (id, collection) => find(item => item.id === id)(collection);
 
@@ -10,6 +18,7 @@ export default {
   [PRESCRIPTIONS_LOADED](state, data) {
     const prescriptionsResponse = assign({}, data.response);
     const prescriptionCourses = [];
+    let id = 0;
     for (let i = 0; i < prescriptionsResponse.prescriptions.length; i += 1) {
       const prescription = prescriptionsResponse.prescriptions[i];
       for (let j = 0; j < prescription.courses.length; j += 1) {
@@ -19,13 +28,16 @@ export default {
           prescriptionsResponse.courses,
         );
         prescriptionCourses.push({
-          courseId: course.id,
+          id,
+          courseNumber: prescriptionCourse.courseId,
           orderDate: prescription.orderDate,
           name: course.name,
+          status: prescriptionCourse.status,
           dosage: course.dosage,
           quantity: course.quantity,
           selected: false,
         });
+        id += 1;
       }
     }
     state.prescriptionCourses = prescriptionCourses;

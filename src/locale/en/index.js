@@ -76,6 +76,7 @@ export default {
       orderDate: 'Order date',
       orderRepeatPrescriptionButton: 'Order a repeat prescription',
       orderSuccessText: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
+      status: 'Status',
     },
     repeatCourses: {
       noMedicinesSelected: 'Select at least one medicine',

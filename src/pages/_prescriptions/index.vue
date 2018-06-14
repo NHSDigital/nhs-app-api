@@ -23,7 +23,7 @@
       <ul v-if="showPrescriptions" data-purpose="prescriptions">
         <li
           v-for="prescriptionCourse in prescriptionCoursesToDisplay"
-          :key="prescriptionCourse.courseId"
+          :key="prescriptionCourse.id"
           :class="$style['prescription-course']">
           <div :class="$style.container">
             <div>
@@ -37,6 +37,13 @@
             <div
               aria-label="dosage">
               {{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}
+            </div>
+            <hr>
+            <div>
+              <b>
+                {{ $t('prescriptions.myRepeatPrescriptions.status') }}
+              </b>
+              : <span aria-label="status">{{ prescriptionCourse.status }}</span>
             </div>
           </div>
         </li>
@@ -88,7 +95,7 @@ export default {
   mounted() {
     this.$store.dispatch('prescriptions/clear');
     this.justOrderedARepeatPrescription =
-      this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
+    this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
     this.$store.dispatch('prescriptions/load', this.$config);
 
     this.$store.dispatch('errors/setApiErrorButtonPath', '');
