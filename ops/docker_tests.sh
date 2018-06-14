@@ -3,8 +3,13 @@
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
 # set -x
-DOCKER_IMAGE_CHROME=nhsonline.azurecr.io/chrome:latest
-DOCKER_IMAGE_FIREFOX=nhsonline.azurecr.io/firefox:latest
+
+if [ -z "${DOCKER_REGISTRY}" ];
+then
+  DOCKER_REGISTRY=nhsapp.azurecr.io
+fi
+DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
+DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 
 #### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
 BROWSER=chromeheadless
@@ -33,18 +38,15 @@ if ! [ -z $BDD_TEST_MODE ]; then
       fi
     done
     ;;
-    *)
-      echo MODE=Default
-      # Safe default - pull all images
-      docker-compose -f docker-compose_ci.yml pull
-    ;;
   esac
+else
+  docker-compose -f docker-compose_ci.yml pull
 fi
 
 docker-compose -f docker-compose_ci.yml up -d --build
 
 ##################### Runtime vars
-WEB_ID=$(docker ps -qf ancestor=nhsonline.azurecr.io/nhsonline-web:latest)
+WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:latest)
 NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
 

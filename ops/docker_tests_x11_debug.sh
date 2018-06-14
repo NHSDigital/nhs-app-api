@@ -1,12 +1,18 @@
 #!/bin/bash
 
 ## Dependencies: X11 server - XQuartz for MacOS, XMing for Windows, Docker
+# After installing XQuartz run it manually from Launchpad
 
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
 # set -x
-DOCKER_IMAGE_CHROME=nhsonline.azurecr.io/chrome:latest
-DOCKER_IMAGE_FIREFOX=nhsonline.azurecr.io/firefox:latest
+if [ -z "${DOCKER_REGISTRY}" ];
+then
+  DOCKER_REGISTRY=nhsapp.azurecr.io
+fi
+
+DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
+DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 
 IP_local_docker=$(ifconfig en0 | grep inet | awk '$1=="inet" {print $2}')
 xhost + $IP_local_docker
@@ -20,7 +26,7 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 docker-compose -f docker-compose_ci.yml up -d --build
 
 ##################### Runtime vars
-WEB_ID=$(docker ps -qf ancestor=nhsonline.azurecr.io/nhsonline-web:latest)
+WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:latest)
 NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
 
