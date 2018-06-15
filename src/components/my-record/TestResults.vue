@@ -9,10 +9,12 @@
           <ul >
             <li v-for="(testResult, testIndex) in orderedTestResults"
                 :key="`testResult-${testIndex}`" :class="$style.testResult">
-              <label>{{ testResult.date | longDate }}</label>
+              <label>
+                {{ testResult.effectiveDate.value | datePart(testResult.effectiveDate.datePart) }}
+              </label>
               <p :class="$style.testTerm">{{ testResult.term }}</p>
               <ul>
-                <li v-for="(lineItem, lineItemIndex) in testResult.lineItems"
+                <li v-for="(lineItem, lineItemIndex) in testResult.testResultLineItems"
                     :key="`line-${lineItemIndex}`" :class="$style.testResultLine">
                   {{ lineItem }}
                 </li>

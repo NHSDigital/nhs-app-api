@@ -181,6 +181,7 @@
                       displayName:
                         type: "string"
                         description: "Location Name."
+                    $ref: "#/paths/~1v1~1patient~1appointment-slots/get/responses/200/schema/properties/locations/items"
                 cancellationReasons:
                   type: "array"
                   description: "Array of Cancellation Reasons."
@@ -202,7 +203,7 @@
           502:
             description: "The GP system is currently unavailable."
           504:
-            description: "The GP system did not respons in a timely fashion."
+            description: "The GP system did not respond in a timely fashion."
       post:
         tags:
           - "appointments"
@@ -248,7 +249,7 @@
             description: "The GP system is currently unavailable."
           504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/my-record/demographics:
+    /v1/patient/demographics:
       get:
         tags:
           - "demographics"
@@ -309,37 +310,163 @@
             description: "The GP system is currently unavailable."
           504:
             description: "The GP system did not respond in a timely fashion."
-    /v1/patient/my-record/allergies:
+    /v1/patient/my-record:
       get:
         tags:
-          - "allergies"
-        summary: "Gets allergies for the logged on user."
-        description: "Returns users allergies for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+          - "myrecord"
+        summary: "Gets the record for the logged on user."
+        description: "Returns the users medical record for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         produces:
           - "application/json"
         responses:
           200:
-            description: "Returns allergy data for the logged in user."
+            description: "Returns myrecord data for the logged in user."
             schema:
               type: "object"
               properties:
+                hasSummaryRecordAccess:
+                  type: "boolean"
+                  description: "Shows if the patient has access to their summary record."
+                hasDetailedRecordAccess:
+                  type: "boolean"
+                  description: "Shows if the patient has access to their detailed record."
                 allergies:
-                  type: "array"
-                  description: "Array of allergy items."
-                  items:
-                    type: "object"
-                    properties:
-                      allergyName:
-                        type: "string"
-                        description: "The name of the allergy."
-                      availabilityDateTime:
-                        type: "string"
-                        format: "date-time"
-                        description: "When the record was entered."
+                  type: "object"
+                  description: "An object containing all allergy details."
+                  properties:
+                    hasAccess:
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored:
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data:
+                      type: "array"
+                      description: "An array of allergy information objects."
+                      items:
+                        type: "object"
+                        properties:
+                          name:
+                            type: "string"
+                            description: "The name of the allergy."
+                          date:
+                            type: "object"
+                            properties:
+                              value:
+                                type: "string"
+                                format: "date-time"
+                                description: "date/time value."
+                              datePart:
+                                type: "string"
+                                description: "date part to display."
+                                enum:
+                                  - "Unknown"
+                                  - "Year"
+                                  - "YearMonth"
+                                  - "YearMonthDay"
+                                  - "YearMonthDayTime"
+                medications:
+                  type: "object"
+                  description: "An object containing all medication details."
+                  properties:
+                    hasAccess:
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored:
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data:
+                      type: "object"
+                      properties:
+                        acuteMedications:
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items:
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                        currentRepeatMedications:
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items:
+                            type: "object"
+                            properties:
+                              date:
+                                type: "string"
+                                format: "date-time"
+                                description: "The date/time of the item."
+                              lineItems:
+                                type: "array"
+                                description: "An array of line items."
+                                items:
+                                  type: "object"
+                                  properties:
+                                    text:
+                                      type: "string"
+                                      description: "When the record was entered."
+                                    lineItems:
+                                      type: "array"
+                                      description: "An array of line items"
+                                      items:
+                                        type: "string"
+                        discontinuedRepeatMedications:
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items:
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                immunisations:
+                  type: "object"
+                  description: "An object containing all immunisation details."
+                  properties:
+                    hasAccess:
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored:
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data:
+                      type: "object"
+                      properties:
+                        immunisations:
+                          type: "array"
+                          description: "Array of immunisations."
+                          items:
+                            type: "object"
+                            properties:
+                              effectiveDate:
+                                $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
+                              term:
+                                type: "string"
+                                description: "The name of the immunisation."
+                testResults:
+                  type: "object"
+                  description: "An object containing all test result details."
+                  properties:
+                    hasAccess:
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored:
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data:
+                      type: "object"
+                      properties:
+                        immunisations:
+                          type: "array"
+                          description: "Array of test results"
+                          items:
+                            type: "object"
+                            properties:
+                              effectiveDate:
+                                $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
+                              term:
+                                type: "string"
+                                description: "The name of the test result."
+                              testResultLineItems:
+                                type: "array"
+                                description: "Array of test result line items."
+                                items:
+                                  type: "string"
           401:
             description: "User session has expired."
-          403:
-            description: "The patient does not have the necessary permissions within the GP system."
           500:
             description: "An unexpected error occurred processing the request."
           502:
@@ -446,6 +573,8 @@
             description: "Bad request. All headers must be provided."
           401:
             description: "User session has expired."
+          403:
+            description: "The patient does not have the necessary permissions within the GP system."
           500:
             description: "An unexpected error occurred processing the request."
           502:
@@ -486,6 +615,8 @@
                         description: "The quantity of the drug for the course."
           401:
             description: "User session missing or expired."
+          403:
+            description: "The patient does not have the necessary permissions within the GP system."
           500:
             description: "An unexpected error occurred processing the request."
           502:

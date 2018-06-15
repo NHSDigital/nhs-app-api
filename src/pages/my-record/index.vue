@@ -4,7 +4,7 @@
         @click="myRecordSectionClick(PATIENTDETAILS)">
       {{ $t('myRecord.patientInfo.sectionHeader') }}</h5>
     <patient-details :is-collapsed="isPatientDetailsCollapsed"
-                     :patient-details="myRecord.patientDetails.data"/>
+                     :patient-details="patientDetails"/>
 
     <div v-if="myRecord.hasSummaryRecordAccess">
       <h5 :class="[$style.recordTitle, getCollapseState(isAllergiesAndAdverseReactionsCollapsed)]"
@@ -63,16 +63,18 @@
         </main>
       </div>
     </div>
-    <div v-else>
-      <main :class="$style.content">
-        <error-warning-dialog error-or-warning="warning">
-          <p>
-            <b>{{ $t('myRecord.noRecordAccess.warningHeader') }}</b>
-            <br>
-            {{ $t('myRecord.noRecordAccess.warningBody') }}
-          </p>
-        </error-warning-dialog>
-      </main>
+    <div v-else >
+      <div v-if="hasLoaded">
+        <main :class="$style.content">
+          <error-warning-dialog error-or-warning="warning">
+            <p>
+              <b>{{ $t('myRecord.noRecordAccess.warningHeader') }}</b>
+              <br>
+              {{ $t('myRecord.noRecordAccess.warningBody') }}
+            </p>
+          </error-warning-dialog>
+        </main>
+      </div>
     </div>
   </div>
 </template>
@@ -113,249 +115,31 @@ export default {
       DISCONTINUEDREPEATMEDICATIONS,
       IMMUNISATIONS,
       TESTRESULTS,
-      isPatientDetailsCollapsed: false,
+      isPatientDetailsCollapsed: true,
+      hasLoaded: false,
       isAllergiesAndAdverseReactionsCollapsed: true,
       isAcuteMedicationsCollapsed: true,
       isCurrentRepeatMedicationsCollapsed: true,
       isDiscontinuedRepeatMedicationsCollapsed: true,
       isImmunisationsCollapsed: true,
       isTestResultsCollapsed: true,
-      myRecord: {
-        hasSummaryRecordAccess: true,
-        hasDetailedRecordAccess: true,
-        patientDetails: {
-          hasAccess: true,
-          hasErrored: false,
-          errors: '',
-          data: {
-            title: 'Mr',
-            firstName: 'Test',
-            surname: 'Tester',
-            callingName: 'Test Tester 1',
-            nhsNumber: '123456789',
-            dateOfBirth: '1994-02-21T00:00:00',
-            sex: 'Male',
-            contactDetails: {
-              telephoneNumber: '00000 111111',
-              mobileNumber: '',
-              emailAddress: '',
-            },
-            address: {
-              line1: '14',
-              line2: 'Test street',
-              line3: 'Test Village',
-              town: 'Test Town',
-              county: 'Test County',
-              postcode: 'BT3 3XY',
-            },
-          },
-        },
-        allergies: {
-          hasAccess: false,
-          hasErrored: false,
-          errors: '',
-          data:
-            [
-              { name: 'test', symptom: 'sympton 1', date: '2003-02-21T00:00:00' },
-              { name: 'another test', symptom: 'symptom 2', date: '2010-02-21T00:00:00' },
-            ],
-        },
-        medications: {
-          hasAccess: true,
-          hasErrored: false,
-          errors: '',
-          data: {
-            acuteMedications: [
-              {
-                date: '2003-02-21T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Mixture Drug Name 250mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Mixture Name consisting of:',
-                    lineItems:
-                      [
-                        'Constituent Item 1 - 50mg',
-                        'Constituent Item 2 - 100mg',
-                      ],
-                  },
-                  {
-                    text: 'One to Be Taken Four Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '28 capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Ended:  5 June 2018', lineItems: [],
-                  },
-                ],
-              },
-              {
-                date: '2013-02-21T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Simple Drug Name 10mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Two to Be Taken Three Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '12 capsules', lineItems: [],
-                  },
-                ],
-              },
-            ],
-            currentRepeatMedications: [
-              {
-                date: '2012-03-21T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Mixture Drug Name 250mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Mixture Name consisting of:',
-                    lineItems:
-                      [
-                        'Constituent Item 1 - 50mg',
-                        'Constituent Item 2 - 100mg',
-                      ],
-                  },
-                  {
-                    text: 'One to Be Taken Four Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '28 capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Ended:  5 June 2018', lineItems: [],
-                  },
-                ],
-              },
-              {
-                date: '2013-02-21T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Another Simple Drug Name 10mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Two to Be Taken Three Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '12 capsules', lineItems: [],
-                  },
-                ],
-              },
-              {
-                date: '2013-02-23T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Simple Drug Name 30mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Two to Be Taken Twice Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '35 capsules', lineItems: [],
-                  },
-                ],
-              },
-            ],
-            discontinuedRepeatMedications: [
-              {
-                date: '2008-02-21T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Mixture Drug Name 989mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Mixture Name consisting of:',
-                    lineItems:
-                      [
-                        'Constituent Item 1 - 50mg',
-                        'Constituent Item 2 - 23mg',
-                      ],
-                  },
-                  {
-                    text: 'One to Be Taken Eight Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '89 capsules', lineItems: [],
-                  },
-                  {
-                    text: 'Ended:  5 June 2018', lineItems: [],
-                  },
-                ],
-              },
-              {
-                date: '2014-02-21T00:00:00',
-                lineItems:
-                [
-                  {
-                    text: 'Another Simple Drug Name 30mg capsules', lineItems: [],
-                  },
-                  {
-                    text: 'One to Be Taken Three Times A Day', lineItems: [],
-                  },
-                  {
-                    text: '100 capsules', lineItems: [],
-                  },
-                ],
-              },
-            ],
-          },
-        },
-        immunisations: {
-          hasAccess: true,
-          hasErrored: false,
-          errors: '',
-          data: [
-            { date: '2003-02-21T00:00:00', term: 'First meningitis C vaccination' },
-            { date: '2018-07-14T00:00:00', term: 'Chicken pox shots' },
-          ],
-        },
-        testResults: {
-          hasAccess: true,
-          hasErrored: false,
-          errors: '',
-          data: [{
-            date: '2014-02-21T00:00:00',
-            term: 'O/E –   weight:  67 Kg',
-            lineItems: [],
-          },
-          {
-            date: '2014-02-21T00:00:00',
-            term: 'Neutrophil count:  5.58 x10^9/L  (normal range:  1.7 – 6)',
-            lineItems: [],
-          },
-          {
-            date: '2018-05-31T00:00:00',
-            term: 'O/E - blood pressure reading',
-            lineItems: [
-              'Systolic blood pressure:  124 mmHg',
-              'Diastolic blood pressure:  78 mmHg',
-            ],
-          },
-          {
-            date: '2014-02-21T00:00:00',
-            term: 'Urea and electrolytes',
-            lineItems: [
-              'Serum sodium:  140 mmol/L  (normal range:  133 – 146)',
-              'Serum potassium:  4.1 mmol/L  (normal range:  3.5 –   5.3',
-              ' Serum urea level:  5.6 mmol/L  (normal range:  2.5 –   7.',
-              'Serum creatinine:  92 umol/L  (normal range:  64 -  104',
-              'GFR calculated abbreviated MDRD:  79 mL/min/1.72m*2',
-            ],
-          }],
-        },
-      },
+      myRecord: {},
+      patientDetails: {},
     };
+  },
+  created() {
+    this.$store.app.$http
+      .getV1PatientMyRecord({})
+      .then((data) => {
+        this.myRecord = data.response;
+        this.isPatientDetailsCollapsed = false;
+        this.hasLoaded = true;
+      });
+    this.$store.app.$http
+      .getV1PatientDemographics({})
+      .then((data) => {
+        this.patientDetails = data.response;
+      });
   },
   methods: {
     getCollapseState(collapsed) {

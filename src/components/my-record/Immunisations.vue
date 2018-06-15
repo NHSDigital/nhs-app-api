@@ -7,8 +7,8 @@
       <div v-if="data.hasAccess">
         <div v-if="data.data.length > 0">
           <ul :class="$style.immunisations">
-            <li v-for="item in data.data" :key="item.name">
-              <label>{{ item.date | longDate }}</label>
+            <li v-for="(item, index) in data.data" :key="`item-${index}`">
+              <label>{{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}</label>
               <p class="immunisationTerm">{{ item.term }}</p>
             </li>
           </ul>

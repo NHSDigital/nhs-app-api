@@ -6,9 +6,9 @@
     <div v-else>
       <div v-if="data.data.length > 0">
         <ul :class="$style.allergyAndAdverseReactions">
-          <li v-for="allergy in orderedAllergies" :key="allergy.name">
-            <label>{{ allergy.date | longDate }}</label>
-            <p>{{ allergy.symptom }}</p>
+          <li v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`">
+            <label>{{ allergy.date.value | datePart(allergy.date.datePart) }}</label>
+            <p>{{ allergy.name }}</p>
           </li>
         </ul>
       </div>
@@ -26,8 +26,8 @@ import _ from 'lodash';
 export default {
   props: {
     data: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => {},
     },
     isCollapsed: {
       type: Boolean,

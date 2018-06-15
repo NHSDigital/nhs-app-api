@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
     <label>{{ $t('myRecord.patientInfo.fieldLabelName') }}</label>
-    <p v-if="patientDetails">{{ `${patientDetails.firstName} ${patientDetails.surname}` }}</p>
+    <p v-if="patientDetails">{{ patientDetails.firstName }} {{ patientDetails.surname }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelDOB') }}</label>
     <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>

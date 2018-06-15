@@ -4,7 +4,7 @@
       <p>  {{ $t('myRecord.genericErrorMessage') }} </p>
     </div>
     <div v-else>
-      <div v-if="data.length > 0">
+      <div v-if="data != null && data.length > 0 ">
         <ul>
           <li v-for="(medication, medIndex) in orderedMedications" :key="`medication-${medIndex}`"
               :class="$style.medication">
