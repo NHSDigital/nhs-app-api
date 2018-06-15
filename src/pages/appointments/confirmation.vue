@@ -33,7 +33,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import AppointmentSlot from '@/components/AppointmentSlot';
+import AppointmentSlot from '@/components/appointments/AppointmentSlot';
 import ErrorMessage from '@/components/ErrorMessage';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 

@@ -27,6 +27,10 @@ export default {
         text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details, cancel it and see your appointment history.',
         text2: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
       },
+      upcoming: {
+        header: 'Upcoming appointments',
+        info: 'Click in the appointment if you need to cancel it',
+      },
     },
     noSlotErrorMessage: {
       summary: 'There are no appointments available at the moment',

@@ -31,8 +31,8 @@
 /* eslint-disable import/extensions */
 import { get } from 'lodash/fp';
 import moment from 'moment';
-import LocationIcon from '../components/icons/LocationIcon';
-import ClinicianIcon from '../components/icons/ClinicianIcon';
+import LocationIcon from '@/components/icons/LocationIcon';
+import ClinicianIcon from '@/components/icons/ClinicianIcon';
 
 export default {
   components: {
@@ -81,9 +81,9 @@ export default {
 </script>
 
 <style module lang="scss">
-  @import "../style/html";
-  @import "../style/colours";
-  @import "../style/spacings";
+  @import "../../style/html";
+  @import "../../style/colours";
+  @import "../../style/spacings";
 
   .date {
     display: block;

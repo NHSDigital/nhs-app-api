@@ -23,8 +23,8 @@
 <script>
 /* eslint-disable import/extensions */
 import { mapGetters } from 'vuex';
-import AppointmentSlot from '../../components/AppointmentSlot';
-import FloatingButtonBottom from '../../components/FloatingButtonBottom';
+import AppointmentSlot from '@/components/appointments/AppointmentSlot';
+import FloatingButtonBottom from '@/components/FloatingButtonBottom';
 
 export default {
   middleware: ['auth', 'meta'],
