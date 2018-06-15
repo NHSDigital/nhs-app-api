@@ -1,4 +1,4 @@
-package mocking.emis.models
+package worker.models.demographics
 
 class ContactDetails(
     var telephoneNumber: String? = null,

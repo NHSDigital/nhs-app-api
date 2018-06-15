@@ -1,25 +1,20 @@
 package features.myrecord.stepDefinitions
 
-import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.myrecord.DemographicsData
-import features.myrecord.AllergiesData
-import mocking.defaults.MockDefaults.Companion.patient
-import mocking.MockingClient
-import mocking.emis.models.AllergiesResponse
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.emis.models.DemographicsResponse
+import mocking.MockingClient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordStepDefinitions {
 
@@ -38,24 +33,6 @@ open class MyRecordStepDefinitions {
     val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
 
-    @When("I get the users demographic data")
-    fun whenIGetTheUsersDemographicsData() {
-        try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographicsConnection(null)
-
-            Serenity.setSessionVariable(DemographicsResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-        }
-    }
-
-    @Given("the GP Practice has enabled demographics functionality")
-    fun givenTheGPPracticeHasEnabledDemographicsFunctionality() {
-        mockingClient.forEmis {
-            demographicsRequest(patient).respondWithSuccess(DemographicsData.getDemographicData())
-        }
-    }
-
     @Given("the GP Practice has enabled summary care record functionality")
     fun givenTheGPPracticeHasEnabledSummaryCareRecordFunctionality() {
 
@@ -64,27 +41,6 @@ open class MyRecordStepDefinitions {
     @Given("the GP Practice has disabled summary care record functionality")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
 
-    }
-
-    @But("the GP Practice has disabled demographics functionality")
-    fun butTheGPPracticeHasDisabledDemographicsFunctionality() {
-        try {
-            mockingClient.forEmis {
-                demographicsRequest(patient).respondWithExceptionWhenNotEnabled()
-            }
-
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographicsConnection(null)
-
-            Serenity.setSessionVariable(DemographicsResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-        }
-    }
-
-    @Then("I receive the demographic object")
-    fun thenIReceiveADemographicObject() {
-        val result = Serenity.sessionVariableCalled<DemographicsResponse>(DemographicsResponse::class)
-        Assert.assertNotNull(result)
     }
 
     @When("^I click my record button on menu bar$")
@@ -224,34 +180,13 @@ open class MyRecordStepDefinitions {
         Assert.assertFalse(recordSteps.isNameVisible())
     }
 
-    @Given("the GP Practice has enabled allergies functionality")
-    fun givenTheGPPracticeHasEnabledAllergiesFunctionality() {
-        mockingClient.forEmis {
-            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData())
-        }
-    }
-
-    @But("the GP Practice has disabled allergies functionality")
-    fun butTheGPPracticeHasDisabledAllergiesFunctionality() {
+    @When("I get the users my record data")
+    fun whenIGetTheUsersMyRecordData()
+    {
         try {
-            mockingClient.forEmis {
-                allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
-            }
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
 
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getAllergiesConnection(null)
-
-            Serenity.setSessionVariable(AllergiesResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
-        }
-    }
-
-    @When("I get the users allergy data")
-    fun whenIGetTheUsersAllergies() {
-        try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getAllergiesConnection(null)
-
-            Serenity.setSessionVariable(AllergiesResponse::class).to(result)
+            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -261,12 +196,6 @@ open class MyRecordStepDefinitions {
     @Throws(Exception::class)
     fun i_click_the_Allergies_and_Adverse_Reactions_section() {
         recordSteps.clickAllergiesAndAdverseReactionsSection()
-    }
-
-    @Then("I receive the allergies object")
-    fun thenIReceiveAnAllergiesObject() {
-        val result = Serenity.sessionVariableCalled<AllergiesResponse>(AllergiesResponse::class)
-        Assert.assertNotNull(result)
     }
 
     @Then("^I see the Allergies and Adverse Reactions heading$")
@@ -303,5 +232,23 @@ open class MyRecordStepDefinitions {
     @Throws(Exception::class)
     fun i_see_one_or_more_non_drug_type_allergies_record_displayed() {
         Assert.assertEquals("non Drug Allergy", recordSteps.getAllergyMessage())
+    }
+
+    @Given("^I see heading Acute medications$")
+    @Throws(Exception::class)
+    fun i_see_heading_acute_medications() {
+        Assert.assertEquals("Acute medications", recordSteps.getAcuteMedicationsHeaderText())
+    }
+
+    @When("^I click acute medications$")
+    @Throws(Exception::class)
+    fun i_click_acute_medications() {
+        recordSteps.clickAcuteMedications()
+    }
+
+    @Then("^I see acute medication information$")
+    @Throws(Exception::class)
+    fun i_see_acute_medication_information() {
+        Assert.assertEquals("Medications", recordSteps.getAcuteMedications())
     }
 }

@@ -39,6 +39,12 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "")
     lateinit var txtAccessRevokedMsg: WebElementFacade
 
+    @FindBy(xpath = "//h5[contains(text(),'Acute medications')]")
+    lateinit var acuteMedicationsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Acute medications')]/following-sibling::div[1]")
+    lateinit var acuteMedications: WebElementFacade
+
     fun isNameVisible(): Boolean {
         waitABit(2000)
         return txtName.isCurrentlyVisible
@@ -96,6 +102,18 @@ class MyRecordInfoPage : PageObject() {
 
     fun getAccessRevokedMessage(): String {
             return txtAccessRevokedMsg.text
+    }
+
+    fun clickAcuteMedications() {
+        acuteMedicationsHeading.click()
+    }
+
+    fun getAcuteMedicationsHeaderText(): String {
+        return acuteMedicationsHeading.text
+    }
+
+    fun getAcuteMedications(): String {
+        return acuteMedications.text
     }
 
 }

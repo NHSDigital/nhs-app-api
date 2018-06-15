@@ -3,6 +3,8 @@ package mocking.dataPopulation.journies.myRecord
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.emis.models.*
+import worker.models.demographics.DemographicsResponse
+import worker.models.demographics.PatientIdentifier
 
 class MyRecordJourney(private val client: MockingClient) {
     val patient = SuccessfulRegistrationJourney.patient

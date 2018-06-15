@@ -8,4 +8,5 @@ object WorkerPaths {
     val getCoursesConnection = "v1/patient/courses"
     val appointmentSlots = "v1/patient/appointment-slots"
     val getMyRecordConnection = "v1/patient/my-record"
+    val getDemographicsConnection = "v1/patient/demographics"
 }

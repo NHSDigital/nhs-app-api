@@ -1,4 +1,4 @@
-package mocking.emis.models
+package worker.models.demographics
 
 class Address(
     var houseNameFlatNumber: String? = null,

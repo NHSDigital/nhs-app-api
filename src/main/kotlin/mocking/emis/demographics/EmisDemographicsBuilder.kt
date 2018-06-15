@@ -7,6 +7,8 @@ import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
+import worker.models.demographics.DemographicsResponse
+import worker.models.demographics.PatientIdentifier
 
 class EmisDemographicsBuilder(configuration: EmisConfiguration,
                               linkToken: String,

@@ -1,5 +1,7 @@
 package mocking.emis.models
 
+import worker.models.demographics.Sex
+
 data class SessionHolder(
         var clinicianId: Int? = null,
         var displayName: String? = null,

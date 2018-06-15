@@ -120,5 +120,19 @@ open class MyRecordSteps {
         return myRecordInfoPage.clickAllergiesAndAdverseReactionsSection()
     }
 
+    @Step
+    fun clickAcuteMedications() {
+        myRecordInfoPage.clickAcuteMedications()
+    }
+
+    @Step
+    fun getAcuteMedicationsHeaderText(): String {
+        return myRecordInfoPage.getAcuteMedicationsHeaderText()
+    }
+
+    @Step
+    fun getAcuteMedications(): String{
+        return myRecordInfoPage.getAcuteMedications()
+    }
 }
 

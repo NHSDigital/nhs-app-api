@@ -4,9 +4,9 @@ import mocking.emis.EmisConfiguration
 import config.Config
 import mocking.MockingConfiguration
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
 import models.Patient
+import worker.models.demographics.Sex
 import worker.models.session.UserSessionRequest
 
 class MockDefaults(val config: Config, val mockingClient: MockingClient = MockingClient.instance) {

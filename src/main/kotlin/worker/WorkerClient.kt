@@ -4,8 +4,6 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
-import mocking.emis.models.AllergiesResponse
-import mocking.emis.models.DemographicsResponse
 
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_CREATED
@@ -22,6 +20,9 @@ import org.apache.http.entity.StringEntity
 import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.courses.CourseListResponse
+import worker.models.demographics.Demographics
+import worker.models.demographics.DemographicsResponse
+import worker.models.myrecord.MyRecordResponse
 import worker.models.prescriptions.PrescriptionListResponse
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
@@ -47,7 +48,6 @@ class WorkerClient {
         gson = gsonBuilder.create()
     }
 
-
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.patientIm1Connection)
         httpGet.setHeader(WorkerHeaders.ConnectionToken, connectionToken)
@@ -59,7 +59,6 @@ class WorkerClient {
         httpGet.releaseConnection()
 
         return gson.fromJson(result, Im1ConnectionResponse::class.java)
-
     }
 
     fun postIm1Connection(requestBody: Im1ConnectionRequest): Im1ConnectionResponse {
@@ -143,24 +142,24 @@ class WorkerClient {
         return gson.fromJson<CourseListResponse>(result, CourseListResponse::class.java)
     }
 
-    fun getDemographicsConnection(context: HttpContext?): DemographicsResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getMyRecordConnection + "/demographics")
+    fun getDemographics(context: HttpContext?): Demographics {
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getDemographicsConnection)
         val response = sendAsync(httpGet, context)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<DemographicsResponse>(result, DemographicsResponse::class.java)
+        return gson.fromJson<Demographics>(result, Demographics::class.java)
     }
 
-    fun getAllergiesConnection(context: HttpContext?): AllergiesResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getMyRecordConnection + "/allergies")
+    fun getMyRecord(context: HttpContext?): MyRecordResponse {
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getMyRecordConnection)
         val response = sendAsync(httpGet, context)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<AllergiesResponse>(result, AllergiesResponse::class.java)
+        return gson.fromJson<MyRecordResponse>(result, MyRecordResponse::class.java)
     }
 
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {

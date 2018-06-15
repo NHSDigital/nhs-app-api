@@ -1,4 +1,4 @@
-package mocking.emis.allergies
+package mocking.emis.testResults
 
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
@@ -10,10 +10,10 @@ import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
 
-class EmisAllergiesBuilder(configuration: EmisConfiguration,
-                           linkToken: String,
-                           apiEndUserSessionId: String,
-                           apiSessionId: String)
+class EmisTestResultsBuilder(configuration: EmisConfiguration,
+                             linkToken: String,
+                             apiEndUserSessionId: String,
+                             apiSessionId: String)
     : EmisMappingBuilder(configuration, "GET", "/record") {
 
     init {
@@ -21,10 +21,10 @@ class EmisAllergiesBuilder(configuration: EmisConfiguration,
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
                 .andQueryParameter("userPatientLinkToken", linkToken, "equalTo")
-                .andQueryParameter("itemType", "Allergies", "equalTo")
+                .andQueryParameter("itemType", "TestResults", "equalTo")
     }
 
-    fun respondWithSuccess(model: AllergyResponseModel): Mapping {
+    fun respondWithSuccess(model: TestResultResponseModel): Mapping {
         return respondWith(SC_OK) {
             andJsonBody(model)
                     .build()

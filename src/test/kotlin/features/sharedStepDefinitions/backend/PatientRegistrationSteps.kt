@@ -4,13 +4,9 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 
-import mocking.emis.demographics.EmisDemographicsBuilder
-import mocking.emis.session.EmisEndUserSessionBuilder
-import mocking.emis.me.EmisMeBuilder
-import mocking.emis.session.EmisSessionBuilder
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import mocking.emis.models.PatientIdentifier
+import worker.models.demographics.PatientIdentifier
 import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable

@@ -1,21 +1,24 @@
 package features.myrecord
 
-import mocking.emis.models.*
+import mocking.emis.allergies.AllergyMedicalRecord
+import mocking.emis.allergies.AllergyResponse
+import mocking.emis.allergies.AllergyResponseModel
+import mocking.emis.allergies.EffectiveDate
 
 object AllergiesData {
 
-    fun getAllergiesData(): AllergiesResponse {
+    fun getAllergiesData(count: Int): AllergyResponseModel {
 
-        val allergies = mutableListOf<AllergyItem>()
-        allergies.add(AllergyItem(term = "Hay Fever", availabilityDateTime = "2018-05-15T09:52:44.927"))
-        allergies.add(AllergyItem(term = "H/O: rotavirus vaccine allergy", availabilityDateTime = "2018-05-14T09:52:44.927"))
+        val allergies = mutableListOf<AllergyResponse>()
 
-        var result = AllergiesResponse (
+        for (i in 1..count) {
+            allergies.add(AllergyResponse(term = "Hay Fever", effectiveDate = EffectiveDate("UnKnown", "2018-05-15T09:52:44.927")))
+        }
+
+        return AllergyResponseModel (
                 medicalRecord = AllergyMedicalRecord (
                         allergies = allergies
                 )
         )
-
-        return result;
     }
 }

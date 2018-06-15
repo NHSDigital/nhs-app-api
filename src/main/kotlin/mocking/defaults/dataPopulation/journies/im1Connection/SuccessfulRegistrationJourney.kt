@@ -5,7 +5,7 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import mocking.emis.models.PatientIdentifier
+import worker.models.demographics.PatientIdentifier
 import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {

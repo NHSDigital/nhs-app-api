@@ -9,15 +9,18 @@ import mocking.emis.appointments.PostAppointmentRequestModel
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.allergies.EmisAllergiesBuilder
+import mocking.emis.immunisations.EmisImmunisationsBuilder
 import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.EmisMeBuilder
 import mocking.emis.me.LinkApplicationRequestModel
+import mocking.emis.medications.EmisMedicationsBuilder
 import mocking.emis.models.BadRequestResponse
 import mocking.emis.models.ExceptionResponse
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
 import mocking.emis.prescriptionsSubmission.EmisPrescriptionsSubmissionBuilder
 import mocking.emis.session.EmisEndUserSessionBuilder
 import mocking.emis.session.EmisSessionBuilder
+import mocking.emis.testResults.EmisTestResultsBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
@@ -61,6 +64,12 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
     fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+
+    fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+
+    fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+
+    fun testResultsRequest(patient: Patient) = EmisTestResultsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun meRequest(patient: Patient) = EmisMeBuilder(configuration, method, patient)
 

@@ -1,9 +1,9 @@
 package models
 
 import mocking.defaults.MockDefaults
-import mocking.emis.models.Address
-import mocking.emis.models.ContactDetails
-import mocking.emis.models.Sex
+import worker.models.demographics.Address
+import worker.models.demographics.ContactDetails
+import worker.models.demographics.Sex
 
 data class Patient(
         val title:String = "",
@@ -11,7 +11,7 @@ data class Patient(
         val surname:String = "",
         val callingName: String = "",
         val dateOfBirth:String = "",
-        val sex:Sex = Sex.NotSpecified,
+        val sex: Sex = Sex.NotSpecified,
         val contactDetails: ContactDetails = ContactDetails(),
         val address: Address = Address(),
         val accountId:String = "",
@@ -29,14 +29,14 @@ data class Patient(
                 numberStreet = "Fake Street",
                 village = "Fake village",
                 town = "Fake town",
-                county  = "Fake county",
+                county = "Fake county",
                 postcode = "AA00 0AA"
         )
 
         private val defaultContactDetails = ContactDetails(
                 telephoneNumber = "02837483567",
                 mobileNumber = "07737483567",
-                emailAddress= "HalleD@fakeemail.com"
+                emailAddress = "HalleD@fakeemail.com"
         )
 
         val paulSmith = Patient(

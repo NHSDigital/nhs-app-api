@@ -1,4 +1,4 @@
-package mocking.emis.models
+package worker.models.demographics
 
 data class DemographicsResponse(
         var title: String? = null,

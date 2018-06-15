@@ -3,6 +3,17 @@ Feature: View My Medical Record Information
   Background:
     Given wiremock is initialised
 
+
+  @pending
+  @NHSO-678
+  Scenario: An EMIS user views acute medications
+    Given I am logged in
+    And the GP Practice has enabled summary care record functionality
+    And I am on my record information page
+    And I see heading Acute medications
+    When I click acute medications
+    Then I see acute medication information
+
   @NHSO-361
   Scenario: An EMIS user with access navigates to the patient record information page
     Given I am logged in

@@ -5,6 +5,7 @@ Feature: Get demographic data
   Background:
     Given wiremock is initialised
 
+  @NHSO-691
   @backend
   Scenario: Requesting demographics returns demographic data
     Given I have logged in and have a valid session cookie
@@ -12,6 +13,7 @@ Feature: Get demographic data
     When I get the users demographic data
     Then I receive the demographic object
 
+  @NHSO-691
   @backend
   Scenario: GP practice has disabled demographics functionality
     Given I have logged in and have a valid session cookie
@@ -19,6 +21,7 @@ Feature: Get demographic data
     When I get the users demographic data
     Then I receive a "Forbidden" error
 
+  @NHSO-691
   @pending
   @backend
   Scenario: GP System Unavailable
@@ -27,6 +30,7 @@ Feature: Get demographic data
     When I communicate with EMIS
     Then I get a "Bad gateway" error
 
+  @NHSO-691
   @pending
   @backend
   Scenario: GP System Times Out
