@@ -40,7 +40,12 @@
         </div>
 
       </form>
-      <nuxt-link to="/prescriptions" tag="button" type="submit" class="button grey">
+      <nuxt-link
+        v-if="hasLoaded"
+        to="/prescriptions"
+        tag="button"
+        type="submit"
+        class="button grey">
         {{ $t('prescriptions.repeatCourses.backToYourPrescriptionsButton') }}
       </nuxt-link>
     </main>
@@ -79,6 +84,9 @@ export default {
     showRepeatCourses() {
       const { repeatPrescriptionCourses, hasLoaded } = this.$store.state.repeatPrescriptionCourses;
       return hasLoaded && repeatPrescriptionCourses.length > 0;
+    },
+    hasLoaded() {
+      return this.$store.state.repeatPrescriptionCourses.hasLoaded;
     },
   },
   mounted() {

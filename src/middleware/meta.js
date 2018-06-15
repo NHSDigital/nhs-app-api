@@ -62,7 +62,13 @@ export default function ({ route, store, app }) {
   }
 
   store.dispatch('http/cancelRequests');
-  store.dispatch('errors/clearAllApiErrors');
+
+  // Executing clearAllApiErrors within setTimeout, otherwise the view
+  // component is re-rendered before the page navigates (and page init events
+  // like 'mounted' are called again).
+  setTimeout(() => {
+    store.dispatch('errors/clearAllApiErrors');
+  });
 
   let headerText = '';
   if (route.meta.headerKey !== '') {

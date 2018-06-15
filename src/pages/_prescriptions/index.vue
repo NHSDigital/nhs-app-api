@@ -43,7 +43,7 @@
       </ul>
     </div>
 
-    <floating-button-bottom @on-click="onRepeatPrescriptionButtonClicked">
+    <floating-button-bottom v-if="hasLoaded" @on-click="onRepeatPrescriptionButtonClicked">
       {{ $t('prescriptions.myRepeatPrescriptions.orderRepeatPrescriptionButton') }}
     </floating-button-bottom>
   </main>
@@ -80,6 +80,9 @@ export default {
     },
     prescriptionCoursesToDisplay() {
       return this.$store.state.prescriptions.prescriptionCourses;
+    },
+    hasLoaded() {
+      return this.$store.state.prescriptions.hasLoaded;
     },
   },
   mounted() {
