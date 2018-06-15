@@ -18,6 +18,9 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
 
+    @FindBy(how = How.ID, using = "specialRequestText")
+    private lateinit var specialRequestText: WebElementFacade
+
     @FindBy(how = How.ID, using = "btn_confirm_and_order_prescription")
     private lateinit var confirmAndOrderRepeatPrescriptionButton: WebElementFacade
 
@@ -54,6 +57,10 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
             Assert.assertEquals(expectedCourse.name, nameOnScreen.text)
             Assert.assertEquals(expectedCourse.getInstructionsText(), instructionsOnScreen.text)
         }
+    }
+
+    fun getSpecialRequest(): String {
+        return specialRequestText.text
     }
 
     fun clickConfirmAndOrderRepeatPrescriptionButton() {

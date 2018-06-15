@@ -77,14 +77,25 @@ Feature: View courses
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     Then I see my previously selected repeat prescriptions selected
 
-  @NHSO-502
-  Scenario: The User alters a repeat prescriptions selection and sees the updated confirmation
+  @NHSO-502 @NHSO-655
+  Scenario: The User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I select 4 repeatable prescriptions out of 5 available
+    And I enter text "Please call when prescription received." for special request
     And I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
+    And I see the special request text "Please call when prescription received."
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     And I select 1 additional repeat prescriptions
+    And I enter text "Note I'm allergic to paracetamol." for special request
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
+    And I see the special request text "Note I'm allergic to paracetamol."
+
+  @NHSO-655
+  Scenario: Special request text is optional and 'None' is displayed if they don't enter a value
+    Given I select 1 repeatable prescriptions out of 1 available
+    And I click Continue on the Order a repeat prescription page
+    Then I see the special request text "None"
 
   @NHSO-556
   Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level

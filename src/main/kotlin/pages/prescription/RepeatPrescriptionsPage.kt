@@ -19,6 +19,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
 
+    @FindBy(how = How.ID, using = "specialRequest")
+    lateinit var specialRequestTextArea: WebElementFacade
+
     @FindBy(how = How.ID, using = "btn_order_prescription")
     lateinit var orderPrescriptionButton: WebElementFacade
 
@@ -109,5 +112,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     fun clickContinueButton() {
         orderPrescriptionButton.sendKeys(Keys.ENTER)
+    }
+
+    fun typeTextIntoSpecialRequestTextArea(text: String) {
+        typeInto(specialRequestTextArea, text)
     }
 }

@@ -149,6 +149,11 @@ open class coursesStepDefinitions {
         selectedCourses = coursesToSelect
     }
 
+    @And("I enter text \"(.*)\" for special request")
+    fun iEnterTextForSpecialRequest(text: String) {
+        courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text)
+    }
+
     @When("I click Continue on the Order a repeat prescription page")
     fun iClickContinueOnTheOrderARepeatPrescriptionsPage() {
         courseSteps.repeatPrescriptions.clickContinueButton()
@@ -163,6 +168,12 @@ open class coursesStepDefinitions {
     fun iSeeThePreviouslySelectedPrescriptionsOnTheConfirmRepeatPrescriptionPage() {
         confirmRepeatPrescriptionOrderSteps.isLoaded()
         confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.verifySelectedRepeatPrescriptions(selectedCourses)
+    }
+
+    @Then("I see the special request text \"(.*)\"")
+    fun iSeeTheSpecialRequestText(value: String) {
+        confirmRepeatPrescriptionOrderSteps.isLoaded()
+        confirmRepeatPrescriptionOrderSteps.assertSpecialRequest(value)
     }
 
     @Then("I see my previously selected repeat prescriptions selected")

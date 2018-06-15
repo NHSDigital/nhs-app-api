@@ -306,12 +306,12 @@ open class PrescriptionsStepDefinitions {
     fun prescriptionsIsDisabledAtAGPLevel() {
         mockingClient
             .forEmis {
-                prescriptionsRequest(patient).respondWith(HttpStatus.SC_FORBIDDEN) {}
+                prescriptionsRequest(patient).respondWithPrescriptionsNotEnabled()
             }
 
         mockingClient
             .forEmis {
-                coursesRequest(patient).respondWith(HttpStatus.SC_FORBIDDEN) {}
+                coursesRequest(patient).respondWithPrescriptionsNotEnabled()
             }
     }
 
@@ -322,7 +322,7 @@ open class PrescriptionsStepDefinitions {
         val errorTitle = "Sorry, you don't currently have access to this service"
         val errorContent = "Contact your GP surgery for more information."
 
-        Assert.assertEquals(em, (errorTitle + errorContent))
+        Assert.assertEquals("$errorTitle$errorContent", em)
     }
 
     @But("The prescriptions endpoint is timing out")
