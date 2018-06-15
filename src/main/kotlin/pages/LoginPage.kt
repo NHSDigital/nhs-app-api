@@ -5,10 +5,6 @@ import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
-import org.openqa.selenium.By
-import org.openqa.selenium.internal.FindsByXPath
-import org.openqa.selenium.support.ui.ExpectedCondition
-import java.util.concurrent.TimeUnit
 
 
 @DefaultUrl("http://localhost:3000/login")

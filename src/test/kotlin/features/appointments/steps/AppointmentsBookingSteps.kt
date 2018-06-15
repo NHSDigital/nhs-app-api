@@ -4,7 +4,7 @@ import models.Slot
 import net.thucydides.core.annotations.Step
 import org.hamcrest.Matcher
 import org.junit.Assert.*
-import pages.AppointmentsBookingPage
+import pages.appointments.AppointmentsBookingPage
 
 open class AppointmentsBookingSteps {
 
@@ -31,8 +31,15 @@ open class AppointmentsBookingSteps {
     }
 
     @Step
-    fun clickOnBookAppointmentButton() {
-        appointmentsBooking.clickOnBookAppointmentButton()
+    fun checkIfPageHeaderIsCorrect() {
+        val actualHeader = appointmentsBooking.getPageHeaderText()
+        assertEquals("Expected Header text ${appointmentsBooking.pageHeader} of the page is not found",
+                appointmentsBooking.pageHeader, actualHeader)
+    }
+
+    @Step
+    fun clickOnBookAppointmentButton(bookButtonText:String = appointmentsBooking.bookThisButtonText) {
+        appointmentsBooking.clickOnButton(bookButtonText)
     }
 
     @Step

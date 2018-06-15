@@ -23,9 +23,9 @@ import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
+import worker.models.appointments.MyAppointmentsResponse
 import worker.models.courses.CourseListResponse
 import worker.models.demographics.Demographics
-import worker.models.demographics.DemographicsResponse
 import worker.models.myrecord.MyRecordResponse
 import worker.models.prescriptions.PrescriptionListResponse
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -96,6 +96,23 @@ class WorkerClient {
 
         val userSessionResponseCookie = UserSessionResponseCookie(Cookie(cookieHeaderKey, response.getHeaders(cookieHeaderKey).first().value))
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
+    }
+
+    fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false): MyAppointmentsResponse {
+        val uriBuilder = URIBuilder(config.backendUrl)
+                .setPath(WorkerPaths.myAppointments)
+                .addParameter("pastAppointmentsFromDate", fromDate)
+                .addParameter("includePastAppointments", includePastAppointments.toString())
+
+        val httpGet = HttpGet(uriBuilder.build())
+
+        val response = sendAsync(httpGet, null)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+        println(result)
+
+        return gson.fromJson<MyAppointmentsResponse>(result, MyAppointmentsResponse::class.java)
     }
 
     fun getAppointmentSlots(fromDate: String? = null, toDate: String? = null, sessionCookie: Cookie? = null): AppointmentSlotsResponse {

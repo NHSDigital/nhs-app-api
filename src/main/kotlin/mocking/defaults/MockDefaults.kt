@@ -4,6 +4,7 @@ import mocking.emis.EmisConfiguration
 import config.Config
 import mocking.MockingConfiguration
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
+import mocking.emis.data.AppointmentData
 import mocking.emis.models.*
 import mocking.tpp.models.*
 import models.Patient
@@ -111,6 +112,11 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                         )
                 )
         )
+
+        mockingClient.forEmis {
+            appointmentGetRequest(patient, false)
+                    .respondWithSuccess(AppointmentData.instance.createGetAppointmentsResponseForNoUpcomingAppoinments())
+        }
 
         mockingClient
                 .forEmis {

@@ -1,0 +1,244 @@
+package mocking.emis.data
+
+import addDays
+import addHours
+import addMinutes
+import mocking.emis.appointments.GetAppointmentsResponseModel
+import mocking.emis.models.*
+import models.Slot
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+
+private const val LOCATION_ID_SURGERY: Int = 1
+private const val LOCATION_ID_HOSPITAL: Int = 2
+
+private const val CLINICIAN_ID_DRSMITH: Int = 1
+private const val CLINICIAN_ID_NURSEJONES = 2
+private const val CLINICIAN_ID_MSBROWN = 3
+
+private const val SESSION_ID_FOOTCLINIC = 1
+private const val SESSION_ID_EYECLINIC = 2
+private const val SESSION_ID_EARCLINIC = 3
+private const val SESSION_ID_DEFAULT = 0
+
+class AppointmentData private constructor() {
+    private val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+
+    val expectedMyAppointment by lazy {
+        Slot(session = SessionType.Timed.toString())
+    }
+
+    val location1: Location by lazy { Location(locationId = LOCATION_ID_SURGERY, locationName = "Main Surgery") }
+    val location2: Location by lazy { Location(locationId = LOCATION_ID_HOSPITAL, locationName = "Hospital") }
+
+    val locationsMap = mapOf(
+            Pair(location1.locationId, location1),
+            Pair(location2.locationId, location2)
+    )
+
+    val sessionHolder1: SessionHolder by lazy { SessionHolder(clinicianId = CLINICIAN_ID_DRSMITH, displayName = "Dr. Smith") }
+    val sessionHolder2: SessionHolder by lazy { SessionHolder(clinicianId = CLINICIAN_ID_NURSEJONES, displayName = "Nurse Jones") }
+    val sessionHolder3: SessionHolder by lazy { SessionHolder(clinicianId = CLINICIAN_ID_MSBROWN, displayName = "Ms. Brown") }
+
+    val session1: Session by lazy {
+        Session(sessionId = SESSION_ID_FOOTCLINIC,
+                sessionName = "Nose clinic",
+                sessionType = SessionType.Timed,
+                locationId = LOCATION_ID_SURGERY,
+                clinicianIds = arrayListOf(CLINICIAN_ID_DRSMITH))
+    }
+    val session2: Session by lazy {
+        Session(sessionId = SESSION_ID_EYECLINIC,
+                sessionName = "Eye clinic",
+                sessionType = SessionType.Timed,
+                locationId = LOCATION_ID_HOSPITAL,
+                clinicianIds = arrayListOf(CLINICIAN_ID_NURSEJONES, CLINICIAN_ID_MSBROWN))
+    }
+
+    val session3: Session by lazy {
+        Session(sessionId = SESSION_ID_EARCLINIC,
+                sessionName = "Ear clinic",
+                sessionType = SessionType.Timed,
+                locationId = LOCATION_ID_SURGERY,
+                clinicianIds = arrayListOf(CLINICIAN_ID_MSBROWN))
+    }
+
+    val sessionsMap = mapOf(
+            Pair(session1.sessionId, session1),
+            Pair(session2.sessionId, session2),
+            Pair(session3.sessionId, session3)
+    )
+
+    val telephoneAppointmentDetails1 by lazy {
+        TelephoneAppointmentDetails(
+                telephoneNumber = "0987654321",
+                contactType = "Mobile")
+    }
+
+    val telephoneAppointmentDetails2 by lazy {
+        TelephoneAppointmentDetails(
+                telephoneNumber = "0012345678",
+                contactType = "Home")
+    }
+
+    val emisCancellationReason1 by lazy {
+        AppointmentCancellationReason("1", "No longer required")
+    }
+
+    val emisCancellationReason2 by lazy {
+        AppointmentCancellationReason("2", "Unable to attend")
+    }
+    private val unspecifiedTimeAppointment1 by lazy {
+        Appointment(slotId = 1,
+                sessionId = SESSION_ID_FOOTCLINIC,
+                bookingReason = "My back hurts")
+    }
+
+    private val unspecifiedTimeAppointment2 by lazy {
+        Appointment(slotId = 2,
+                sessionId = SESSION_ID_EARCLINIC,
+                bookingReason = "My stomach hurts")
+    }
+
+    private val unspecifiedTimeAppointment3 by lazy {
+        Appointment(slotId = 3,
+                sessionId = SESSION_ID_EYECLINIC,
+                bookingReason = "My leg hurts")
+    }
+
+    var expectedTempMyAppointmets = arrayListOf<Slot>()
+
+    fun createAppointmentSessions(): ArrayList<AppointmentSession> {
+        val baseTime = Calendar.getInstance()
+
+        var startTime = copyCalendarDate(baseTime, 1)
+        var sessionDate = dateTimeFormat.format(startTime.time)
+        val slot1 = createAppointmentSlot(1, startTime, 15)
+        startTime.addDays(1).addMinutes(15)
+        val slot2 = createAppointmentSlot(2, startTime, 1)
+        val footClinicSession = AppointmentSession(
+                sessionId = SESSION_ID_FOOTCLINIC,
+                sessionDate = sessionDate,
+                slots = arrayListOf(slot1, slot2)
+        )
+
+        startTime = copyCalendarDate(baseTime, 2)
+        sessionDate = dateTimeFormat.format(startTime.time)
+        val slot3 = createAppointmentSlot(3, startTime, 15)
+        startTime.addDays(1)
+        val slot4 = createAppointmentSlot(4, startTime, 20)
+        val eyeClinicSession = AppointmentSession(
+                sessionId = SESSION_ID_EYECLINIC,
+                sessionDate = sessionDate,
+                slots = arrayListOf(slot3, slot4)
+        )
+
+        startTime = copyCalendarDate(baseTime, 4)
+        sessionDate = dateTimeFormat.format(startTime.time)
+        val slot5 = createAppointmentSlot(3, startTime, 15)
+        val earClinicSession = AppointmentSession(
+                sessionId = SESSION_ID_EYECLINIC,
+                sessionDate = sessionDate,
+                slots = arrayListOf(slot5)
+        )
+        return arrayListOf(footClinicSession, eyeClinicSession, earClinicSession)
+    }
+
+    fun createGetAppointmentsResponse(): GetAppointmentsResponseModel {
+        val baseDate = Calendar.getInstance()
+
+        var bookingDate = copyCalendarDate(baseDate)
+        val appointment1 = addDateToAppointment(unspecifiedTimeAppointment1.copy(), bookingDate, 1, 30)
+        appointment1.telephoneAppointmentDetails = telephoneAppointmentDetails1
+
+        bookingDate = copyCalendarDate(baseDate, addHours = 2)
+        val appointment2 = addDateToAppointment(unspecifiedTimeAppointment2.copy(), bookingDate, 2, 20)
+        appointment2.telephoneAppointmentDetails = telephoneAppointmentDetails2
+
+        bookingDate = copyCalendarDate(baseDate, addHours = 2, addMinutes = 20)
+        val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(), bookingDate, 3, 15)
+        appointment3.telephoneAppointmentDetails = telephoneAppointmentDetails1
+
+        val appointments = arrayListOf(appointment1, appointment2, appointment3)
+        val appointmentsFromDate = appointment1.startTime
+        val locations = arrayListOf(location1, location2)
+        val sessionHolders = arrayListOf(sessionHolder1, sessionHolder2, sessionHolder3)
+        val sessions = arrayListOf(session1, session2, session3)
+
+        populateExpectedMyAppointments(appointments)
+        return GetAppointmentsResponseModel(appointmentsFromDate, appointments, locations, sessionHolders, sessions)
+    }
+
+    fun getEmisAppointmentCancellationReasons(): List<AppointmentCancellationReason> {
+        return arrayListOf(emisCancellationReason1, emisCancellationReason2)
+    }
+
+    fun createGetAppointmentsResponseForNoUpcomingAppoinments(): GetAppointmentsResponseModel {
+        val baseDate = Calendar.getInstance()
+        val appointmentsFromDate = dateTimeFormat.format(baseDate.time)
+
+        expectedTempMyAppointmets.clear()
+
+        return GetAppointmentsResponseModel(appointmentsFromDate)
+    }
+
+    private fun addDateToAppointment(appointment: Appointment, bookingDate: Calendar, bookInDay: Int, durationInMinutes: Int): Appointment {
+        appointment.bookingDate = dateTimeFormat.format(bookingDate.time)
+        val startDate = bookingDate.addDays(bookInDay)
+        appointment.startTime = dateTimeFormat.format(startDate.time)
+        appointment.endTime = dateTimeFormat.format(startDate.addMinutes(durationInMinutes).time)
+        return appointment
+    }
+
+    private fun copyCalendarDate(baseTime: Calendar, addDays: Int = 0, addHours: Int = 0, addMinutes: Int = 0): Calendar {
+        val theStartTime = baseTime.clone() as Calendar
+        return theStartTime.addDays(addDays).addHours(addHours).addMinutes(addMinutes)
+    }
+
+    private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlot {
+        val startSession = dateTimeFormat.format(startTime.time)
+        val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes))
+        return AppointmentSlot(sessionId, startSession, endSession)
+    }
+
+    private class AppointmentDataHolder {
+        private var instance: AppointmentData? = null
+
+        fun getInstance(): AppointmentData {
+            if (instance == null) {
+                val newInstance = AppointmentData()
+                instance = newInstance
+            }
+            return instance as AppointmentData
+        }
+    }
+
+    private fun populateExpectedMyAppointments(appointments: ArrayList<Appointment>) {
+        expectedTempMyAppointmets.clear()
+        val slotDateFormat = SimpleDateFormat("EEEE dd MMMM yyyy")
+        val slotTimeFormat = SimpleDateFormat("h:mm a")
+        appointments.forEach { appointment ->
+            val startDate = dateTimeFormat.parse(appointment.startTime)
+            val date = slotDateFormat.format(startDate)
+            val time = slotTimeFormat.format(startDate).toLowerCase()
+            val location = sessionsMap[appointment.sessionId]!!.locationId.toString()
+            val cliniciansIdsAsStrings: ArrayList<String> = ArrayList()
+            val clinicianIdsAsIntegers = sessionsMap[appointment.sessionId]!!.clinicianIds
+            clinicianIdsAsIntegers.forEach { clinicianId ->
+                cliniciansIdsAsStrings.add(clinicianId.toString())
+            }
+            expectedTempMyAppointmets.add(expectedMyAppointment.copy(
+                    date = date,
+                    time = time,
+                    location = location,
+                    clinician = cliniciansIdsAsStrings
+            ))
+        }
+    }
+
+    companion object {
+        private val appointmentHolder = AppointmentDataHolder()
+        val instance by lazy { appointmentHolder.getInstance() }
+    }
+}

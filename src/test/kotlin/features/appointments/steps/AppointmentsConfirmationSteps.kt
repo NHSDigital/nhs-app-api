@@ -2,11 +2,10 @@ package features.appointments.steps
 
 import mocking.defaults.MockDefaults
 import mocking.MockingClient
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import pages.AppointmentsConfirmationPage
+import pages.appointments.AppointmentsConfirmationPage
 import worker.models.appointments.BookAppointmentSlotRequest
 import java.time.Duration
 

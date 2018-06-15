@@ -1,14 +1,10 @@
 package mocking.emis
 
 import mocking.MappingBuilder
-import mocking.emis.appointments.EmisAppointmentBuilder
-import mocking.emis.appointments.EmisAppointmentSlotsBuilder
-import mocking.emis.appointments.EmisAppointmentSlotsMetaBuilder
-import mocking.emis.appointments.EmisBookAppointmentsBuilder
-import mocking.emis.appointments.PostAppointmentRequestModel
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.allergies.EmisAllergiesBuilder
+import mocking.emis.appointments.*
 import mocking.emis.immunisations.EmisImmunisationsBuilder
 import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.EmisMeBuilder
@@ -42,6 +38,14 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
     }
 
     fun appointmentRequest(postAppointmentRequestModel: PostAppointmentRequestModel) = EmisAppointmentBuilder(configuration, postAppointmentRequestModel)
+
+    fun appointmentGetRequest(patient: Patient, fetchPreviousAppointments: Boolean = false) = EmisGetAppointmentBuilder(
+            configuration,
+            patient.endUserSessionId,
+            patient.sessionId,
+            patient.userPatientLinkToken,
+            fetchPreviousAppointments = fetchPreviousAppointments)
+
 
     fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? = null, toDateTime: String? = null) = EmisAppointmentSlotsBuilder(
             configuration,

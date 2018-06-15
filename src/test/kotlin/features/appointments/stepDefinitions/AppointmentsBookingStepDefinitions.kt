@@ -537,6 +537,12 @@ class AppointmentsBookingStepDefinitions {
         return queryDateFormat.format(dateToPass)
     }
 
+    @Then("^I am taken to the available appointment slots screen$")
+    @Throws(Exception::class)
+    fun i_am_taken_to_the_available_appointment_slots_screen() {
+        appointmentsBooking.checkIfPageHeaderIsCorrect()
+    }
+
 
     /*************************************************/
     // STEPS COPIED FROM OLD REPO -- needs cleaning

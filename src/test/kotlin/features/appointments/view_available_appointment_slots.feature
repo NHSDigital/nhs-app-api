@@ -1,4 +1,3 @@
-@pending  @NHSO-524
 Feature: View available appointment slots
 
   Users can view available appointments from the Appointments Page.

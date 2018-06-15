@@ -6,8 +6,8 @@ import mocking.emis.EmisMappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-open class EmisAppointmentBuilder(configuration: EmisConfiguration, postAppointmentRequest: PostAppointmentRequestModel):
-    EmisMappingBuilder(configuration, "POST", "/appointments") {
+class EmisAppointmentBuilder(configuration: EmisConfiguration, postAppointmentRequest: PostAppointmentRequestModel) :
+        EmisMappingBuilder(configuration, "POST", "/appointments") {
 
     init {
         requestBuilder.andJsonBody(postAppointmentRequest, gson = GsonFactory.asPascal)

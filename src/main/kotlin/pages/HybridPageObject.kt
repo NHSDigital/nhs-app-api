@@ -27,15 +27,15 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     private fun switchView(): AndroidDriver<WebElementFacade> {
-        when (this.pageType) {
+        return when (this.pageType) {
             PageType.WEBVIEW_APP -> {
-                return switchContext("nhsonline")
+                switchContext("nhsonline")
             }
             PageType.WEBVIEW_BROWSER -> {
-                return switchContext("chrome")
+                switchContext("chrome")
             }
             PageType.NATIVE -> {
-                return switchContext("native")
+                switchContext("native")
             }
         }
     }
@@ -62,12 +62,22 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return appiumDriver
     }
 
+    fun findByXpath(parent: WebElementFacade, xpath: String): WebElementFacade {
+        if (onMobile()) switchView()
+        return parent.findBy(By.xpath(xpath))
+    }
+
     fun findByXpath(xpath: String): WebElementFacade {
         if (onMobile()) switchView()
         return findBy(xpath)
     }
 
-    fun findAllByXpath(xpath: String): MutableList<WebElementFacade> {
+    fun findAllByXpath(parent: WebElementFacade, xpath: String):List<WebElementFacade> {
+        if (onMobile()) switchView()
+        return parent.thenFindAll(xpath)
+    }
+
+    fun findAllByXpath(xpath: String): List<WebElementFacade> {
         if (onMobile()) switchView()
         return findAll(By.xpath(xpath))
     }

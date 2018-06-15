@@ -1,10 +1,11 @@
-package pages
+package pages.appointments
 
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
+import pages.HybridPageObject
 
 @DefaultUrl("http://localhost:3000/appointments/confirmation")
 open class AppointmentsConfirmationPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
@@ -54,7 +55,7 @@ open class AppointmentsConfirmationPage: HybridPageObject(Companion.PageType.WEB
     }
 
     fun getServerErrorElement(): WebElementFacade {
-        return findBy<WebElementFacade>("#serverError").waitUntilVisible<WebElementFacade>()
+        return findByXpath("//div[@id='mainDiv']/div[@class='content']").waitUntilVisible<WebElementFacade>()
     }
 
     fun isButtonVisible(button: String): Boolean
