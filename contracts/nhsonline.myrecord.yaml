@@ -46,6 +46,14 @@ definitions:
         type: object
         description:  An object containing all medication details.
         $ref: '#/definitions/Medications'
+      immunisations:
+        type: object
+        description: An object containing all immunisation details.
+        $ref: '#/definitions/Immunisations'
+      testResults:
+        type: object
+        description: An object containing all test result details.
+        $ref: '#/definitions/TestResults'
 
   Allergies:
     type: object
@@ -69,9 +77,7 @@ definitions:
         type: string
         description: The name of the allergy.
       date:
-        type: string
-        format: date-time
-        description: When the record was entered.
+        $ref: '#/definitions/Date'
 
   Medications:
     type: object
@@ -126,3 +132,79 @@ definitions:
         items:
           type: string
           
+  Immunisations:
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
+        type: object
+        properties: 
+          immunisations:
+            type: array
+            description: Array of immunisations.
+            items:
+              $ref: '#/definitions/ImmunisationItem'
+        
+  ImmunisationItem:
+    type: object
+    properties:
+      effectiveDate:
+        $ref: '#/definitions/Date'
+      term:
+        type: string
+        description: The name of the immunisation.
+            
+  TestResults:
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
+        type: object
+        properties: 
+           immunisations:
+            type: array
+            description: Array of test results
+            items:
+              $ref: '#/definitions/TestResultItem'
+        
+  TestResultItem:
+    type: object
+    properties:
+      effectiveDate:
+        $ref: '#/definitions/Date'
+      term:
+        type: string
+        description: The name of the test result.
+      testResultLineItems:
+        type: array
+        description: Array of test result line items.
+        items:
+          type: string
+  
+  Date:
+    type: object
+    properties:
+      value:
+        type: string
+        format: date-time
+        description: date/time value.
+      datePart:
+        type: string
+        description: date part to display.
+        enum:
+          - Unknown
+          - Year
+          - YearMonth
+          - YearMonthDay
+          - YearMonthDayTime
+            

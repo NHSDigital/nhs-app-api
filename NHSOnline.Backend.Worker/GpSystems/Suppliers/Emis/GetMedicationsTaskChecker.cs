@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -15,7 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             _logger = logger;
         }
         
-        public Medications Check(Task<EmisClient.EmisApiObjectResponse<MedicationRequestsGetResponse>> task)
+        public Medications Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
         {
             Medications medications = null;
             
@@ -33,7 +34,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             if (!medicationsResponse.HasSuccessStatusCode)
             {
                 // User does not have access
-                if (medicationsResponse.HasExceptionWithMessageContaining("Services Access violation"))
+                if (medicationsResponse.HasExceptionWithMessageContaining("Services Access violation") ||
+                    medicationsResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
                 {
                     _logger.LogWarning("User does not have access to their patient record");
                     medications = new Medications

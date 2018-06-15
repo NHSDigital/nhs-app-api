@@ -26,18 +26,26 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             try
             {
-                var medicationsTask = _emisClient.MedicationsGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId);
+                var medicationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Medication);
                 
-                var allergiesTask = _emisClient.AllergiesGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId);
+                var allergiesTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Allergies);
+                   
+                var immunisationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Immunisations);
+                
+                var testResultsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);
                     
-                await Task.WhenAll(allergiesTask, medicationsTask);
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask);
 
                 var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
                 var medications = new GetMedicationsTaskChecker(_logger).Check(medicationsTask);
-
-                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications);
+                var immunisations = new GetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
+                var testResults = new GetTestResultsTaskChecker(_logger).Check(testResultsTask);
+                
+                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults);
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 

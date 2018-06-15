@@ -14,6 +14,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
 
@@ -260,7 +261,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var sessionId = _fixture.Create<string>();
             var endUserSessionId = _fixture.Create<string>();
 
-            var expectedResponse = _fixture.Create<AllergyRequestsGetResponse>();
+            var expectedResponse = _fixture.Create<MedicationRootObject>();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
@@ -273,7 +274,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _sut.AllergiesGet(userPatientLinkToken, sessionId, endUserSessionId);
+            var response = await _sut.MedicalRecordGet(userPatientLinkToken, sessionId, endUserSessionId, RecordType.Allergies);
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);

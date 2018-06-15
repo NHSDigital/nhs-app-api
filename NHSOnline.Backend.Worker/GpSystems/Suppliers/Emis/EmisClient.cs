@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Date;
 
@@ -28,20 +28,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
         private const string SessionsPath = "sessions";
         private const string DemographicsPath = "demographics?userPatientLinkToken={0}";
-        private const string PatientAllergiesPath = "record?userPatientLinkToken={0}&itemType=Allergies";
-        private const string AppointmentSlotsMetaPath = "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
-        private const string AppointmentSlotsPath = "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
+        private const string PatientRecordPath = "record?userPatientLinkToken={0}&itemType={1}";
+
+        private const string AppointmentSlotsMetaPath =
+            "appointmentslots/meta?userPatientLinkToken={0}&sessionStartDate={1}&sessionEndDate={2}";
+
+        private const string AppointmentSlotsPath =
+            "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
+
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
         private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
         private const string AppointmentsPath = "appointments";
-        private const string PatientMedicationsPath = "record?userPatientLinkToken={0}&itemType=Medication";
 
         private readonly HttpClient _httpClient;
         private readonly ILogger<EmisClient> _logger;
         private readonly IJsonResponseParser _responseParser;
 
-        public EmisClient(IHttpClientFactory httpClientFactory, 
+        public EmisClient(IHttpClientFactory httpClientFactory,
             IEmisConfig config,
             TimeZoneConverter localTimeZoneConverter,
             ILoggerFactory loggerFactory,
@@ -58,49 +62,42 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public async Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost()
         {
-            var response = await Post<SessionsEndUserSessionPostResponse>(SessionsEndUserSessionPath);
-            return response;
+            return await Post<SessionsEndUserSessionPostResponse>(SessionsEndUserSessionPath);
         }
 
-        public async Task<EmisApiObjectResponse<SessionsPostResponse>> SessionsPost(string endUserSessionId, SessionsPostRequest model)
+        public async Task<EmisApiObjectResponse<SessionsPostResponse>> SessionsPost(string endUserSessionId,
+            SessionsPostRequest model)
         {
-            var response = await Post<SessionsPostRequest, SessionsPostResponse>(model, SessionsPath, endUserSessionId);
-            return response;
+            return await Post<SessionsPostRequest, SessionsPostResponse>(model, SessionsPath, endUserSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(string userPatientLinkToken, string responseSessionId,
+        public async Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(string userPatientLinkToken,
+            string responseSessionId,
             string endUserSessionId)
         {
             var path = string.Format(DemographicsPath, userPatientLinkToken);
 
-            _logger.LogInformation("DemographicsGet path:" + path);
-            
             return await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
-            string endUserSessionId)
+        public async Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken,
+            string responseSessionId, string endUserSessionId,
+            RecordType recordType)
         {
-            var path = string.Format(PatientAllergiesPath, userPatientLinkToken);
+            var path = string.Format(PatientRecordPath, userPatientLinkToken, recordType.ToString());
 
-            return await Get<AllergyRequestsGetResponse>(path, endUserSessionId, responseSessionId);
-        }
-        
-        public async Task<EmisApiObjectResponse<MedicationRequestsGetResponse>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
-            string endUserSessionId)
-        {
-            var path = string.Format(PatientMedicationsPath, userPatientLinkToken);
-
-            return await Get<MedicationRequestsGetResponse>(path, endUserSessionId, responseSessionId);
+            return await Get<MedicationRootObject>(path, endUserSessionId, responseSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId, MeApplicationsPostRequest model)
+        public async Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
+            MeApplicationsPostRequest model)
         {
-            var response = await Post<MeApplicationsPostRequest, MeApplicationsPostResponse>(model, MeApplicationsPath, endUserSessionId);
-            return response;
+            return await Post<MeApplicationsPostRequest, MeApplicationsPostResponse>(model, MeApplicationsPath,
+                endUserSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(string userPatientLinkToken, string responseSessionId,
+        public async Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
+            string userPatientLinkToken, string responseSessionId,
             string endUserSessionId, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime)
         {
             var path = string.Format(PrescriptionsPath, userPatientLinkToken);
@@ -115,16 +112,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 path += $"&filterToDate={EncodeDateTimeOffsetToIso(toDateTime.Value)}";
             }
 
-            var response = await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
-            return response;
+            return await Get<PrescriptionRequestsGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId,
             string endUserSessionId,
             PrescriptionRequestsPost model)
-        {  
-            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPostPath, endUserSessionId, responseSessionId);
+        {
+            return await Post<PrescriptionRequestsPost, PrescriptionRequestPostResponse>(model, PrescriptionsPostPath,
+                endUserSessionId, responseSessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
@@ -132,46 +129,52 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             var dateStringFormatter = new DateStringFormatter();
 
-            var fromDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.FromDateTime));
-            var toDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.ToDateTime));
+            var fromDateTime =
+                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.FromDateTime));
+            var toDateTime =
+                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.ToDateTime));
 
             var path = string.Format(AppointmentSlotsPath,
                 getQueryParameters.UserPatientLinkToken,
                 fromDateTime,
                 toDateTime);
 
-            var response = await Get<AppointmentsSlotsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
-            return response;
+            return await Get<AppointmentsSlotsGetResponse>(path, headerParameters.EndUserSessionId,
+                headerParameters.SessionId);
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
             EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters getQueryParameters)
         {
             var dateStringFormatter = new DateStringFormatter();
-            var fromDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionStartDate));
-            var toDateTime = dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionEndDate));
+            var fromDateTime =
+                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionStartDate));
+            var toDateTime =
+                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionEndDate));
 
             var path = string.Format(AppointmentSlotsMetaPath,
                 getQueryParameters.UserPatientLinkToken,
                 fromDateTime,
                 toDateTime);
 
-            var response = await Get<AppointmentSlotsMetadataGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
-            return response;
+            return await Get<AppointmentSlotsMetadataGetResponse>(path, headerParameters.EndUserSessionId,
+                headerParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken, string responseSessionId, string endUserSessionId)
+        public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
+            string responseSessionId, string endUserSessionId)
         {
             var path = string.Format(CoursesPath, userPatientLinkToken);
 
-            var response = await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
-            return response;
+            return await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
         }
-        
-        public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentPost(EmisHeaderParameters headerParameters,
+
+        public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentPost(
+            EmisHeaderParameters headerParameters,
             BookAppointmentSlotPostRequest postRequest)
         {
-            return await Post<BookAppointmentSlotPostRequest, BookAppointmentSlotPostResponse>(postRequest, AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            return await Post<BookAppointmentSlotPostRequest, BookAppointmentSlotPostResponse>(postRequest,
+                AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Get<TResponse>(string path,
@@ -189,8 +192,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             var body = JsonConvert.SerializeObject(model);
             request.Content = new StringContent(body, Encoding.UTF8, "application/json");
 
-            var response = await SendRequestAndParseResponse<TResponse>(request);
-            return response;
+            return await SendRequestAndParseResponse<TResponse>(request);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Post<TResponse>(string path,
@@ -198,22 +200,22 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             var request = BuildEmisRequest(HttpMethod.Post, path, endUserSessionId, sessionId);
 
-            var response = await SendRequestAndParseResponse<TResponse>(request);
-            return response;
+            return await SendRequestAndParseResponse<TResponse>(request);
         }
 
-        private static HttpRequestMessage BuildEmisRequest(HttpMethod httpMethod, string path, string endUserSessionId = null, string sessionId = null)
+        private static HttpRequestMessage BuildEmisRequest(HttpMethod httpMethod, string path,
+            string endUserSessionId = null, string sessionId = null)
         {
             var request = new HttpRequestMessage(httpMethod, path);
 
             if (!string.IsNullOrEmpty(endUserSessionId))
             {
-                request.Headers.Add(HeaderEndUserSessionId, new[] {endUserSessionId});
+                request.Headers.Add(HeaderEndUserSessionId, new[] { endUserSessionId });
             }
 
             if (!string.IsNullOrEmpty(sessionId))
             {
-                request.Headers.Add(HeaderSessionId, new[] {sessionId});
+                request.Headers.Add(HeaderSessionId, new[] { sessionId });
             }
 
             return request;
@@ -230,14 +232,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 : null;
 
             if (string.IsNullOrEmpty(stringResponse)) return response;
-            
+
             response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
-            response.ErrorResponseBadRequest = _responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
-            response.ErrorResponse = _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
+            response.ErrorResponseBadRequest =
+                _responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
+            response.ErrorResponse =
+                _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
 
             return response;
         }
-        
+
         public class EmisApiResponse
         {
             public EmisApiResponse(HttpStatusCode statusCode)
@@ -248,18 +252,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             public HttpStatusCode StatusCode { get; set; }
             public ErrorResponse ErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
-            public bool HasSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+            public bool HasSuccessStatusCode => (int) StatusCode >= 200 && (int) StatusCode <= 299;
 
             public bool HasExceptionWithMessage(string message)
             {
                 return ErrorResponse?.Exceptions?.Any(x => x.Message == message) ?? false;
             }
-            
+
             public bool HasExceptionWithMessageContaining(string message)
             {
                 return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message)) ?? false;
             }
-            
+
             public bool HasForbiddenResponse()
             {
                 if (StatusCode == HttpStatusCode.Forbidden)
@@ -269,11 +273,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
                 return HasExceptionWithMessageContaining(
                     EmisApiErrorMessages.EmisService_NotEnabledForUser);
-            }     
+            }
         }
-        
-     
-
 
         public class EmisApiObjectResponse<TBody> : EmisApiResponse
         {

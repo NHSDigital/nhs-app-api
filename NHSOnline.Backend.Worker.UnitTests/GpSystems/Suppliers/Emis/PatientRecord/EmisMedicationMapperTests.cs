@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord
@@ -13,7 +14,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     {
         private IEmisMedicationMapper _mapper;
         private const string DATE_FORMAT = "dd MMMM yyyy";
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         public void MapMedicationRequestsGetResponseToMedicationListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange
-            var item = new MedicationRequestsGetResponse();
+            var item = new MedicationRootObject();
 
             // Act
             var result = _mapper.Map(item);
@@ -54,9 +55,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             var oneYearAgo = now.AddYears(-1);
             var twoYearsAgo = now.AddYears(-2);
             
-            var item = new MedicationRequestsGetResponse
+            var item = new MedicationRootObject
             {
-                MedicalRecord = new MedicationMedicalRecord 
+                MedicalRecord = new MedicalRecord 
                 {
                     Medication = GetSampleMedicationResponse(now)
                 }
@@ -237,15 +238,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             result.Should().BeEquivalentTo(expectedResult);
         }
 
-        private List<MedicationResponse> GetSampleMedicationResponse(DateTimeOffset now)
+        private List<Medication> GetSampleMedicationResponse(DateTimeOffset now)
         {
             // List consists of
             // 3 acute medications, 2 in the last year
             // 2 active repeat medications
             // 1 inactive repeat medication
-            var result = new List<MedicationResponse>
+            var result = new List<Medication>
             {
-                new MedicationResponse
+                new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
                     Term = "Second Acute Drug",
@@ -255,7 +256,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     PrescriptionType = "Acute",
                     LastIssueDate = now.AddMonths(-1)
                 },
-                new MedicationResponse
+                new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
                     Term = "First Acute Drug",
@@ -265,7 +266,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     PrescriptionType = "Acute",
                     LastIssueDate = now
                 },
-                new MedicationResponse
+                new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
                     Term = "Removed Acute Drug",
@@ -273,22 +274,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     PrescriptionType = "Acute",
                     LastIssueDate = now.AddYears(-1)
                 },
-                new MedicationResponse
+                new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
                     Term = "First Repeat Drug",
                     IsMixture = true,
-                    Mixture = new MedicationMixtureResponse
+                    Mixture = new Mixture
                     {
                         MixtureName = "MegaMix",
-                        Constituents = new List<MedicationMixtureConstituentResponse>
+                        Constituents = new List<Constituent>
                         {
-                            new MedicationMixtureConstituentResponse
+                            new Constituent
                             {
                                 ConstituentName = "Ibuprofen oral suspension",
                                 Strength = "100ml",
                             },
-                            new MedicationMixtureConstituentResponse
+                            new Constituent
                             {
                                 ConstituentName = "Paracetamol oral suspension",
                                 Strength = "50ml",
@@ -301,7 +302,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     DrugStatus = "Active",
                     LastIssueDate = now
                 },
-                new MedicationResponse
+                new Medication
                 {
                     Term = "Second Repeat Drug",
                     IsMixture = false,
@@ -312,7 +313,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     FirstIssueDate = now.AddYears(-1),
                     LastIssueDate = now.AddMonths(-1)
                 },
-                new MedicationResponse
+                new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
                     Term = "Second Repeat Cancelled Drug",
@@ -323,7 +324,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     DrugStatus = "Cancelled",
                     LastIssueDate = now.AddYears(-2)
                 },
-                new MedicationResponse
+                new Medication
                 {
                     FirstIssueDate = now.AddYears(-1),
                     Term = "First Repeat Cancelled Drug",

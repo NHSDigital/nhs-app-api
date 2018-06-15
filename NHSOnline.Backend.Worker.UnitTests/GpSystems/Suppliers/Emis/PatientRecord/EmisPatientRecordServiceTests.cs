@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -35,13 +36,43 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
         {
-            var allergiesResponse = _fixture.Create<AllergyRequestsGetResponse>();
-
-            _emisClient.Setup(x => x.AllergiesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
+            var allergiesResponse = _fixture.Create<MedicationRootObject>();
+            var medicationsResponse = _fixture.Create<MedicationRootObject>();
+            var immunisationsResponse = _fixture.Create<MedicationRootObject>();
+            var testResultsResponse = _fixture.Create<MedicationRootObject>();
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Medication))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = medicationsResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Allergies))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = allergiesResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Immunisations))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = immunisationsResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.TestResults))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = testResultsResponse,
                         ErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
@@ -50,70 +81,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _emisClient.Verify(x => x.AllergiesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId));
+            _emisClient.Verify(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Allergies));
             result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
             ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
-        }
-        
-        [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenErrorReceivedFromEmis()
-        {
-            // Arrange
-            const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
-            
-            _emisClient.Setup(x => x.AllergiesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>(HttpStatusCode.InternalServerError)
-                        { ErrorResponse = errorResponse }));
-
-            // Act
-            var result = await _systemUnderTest.Get(_userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
-            ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Allergies.HasAccess.Should().BeFalse();
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenHttpExceptionOccursCallingEmis()
-        {
-            // Arrange
-            const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
-
-            _emisClient.Setup(x => x.AllergiesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
-                .Throws<HttpRequestException>()
-                .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.Get(_userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<GetMyRecordResult.Unsuccessful>();
-            _emisClient.Verify();
-        }
-        
-        [TestMethod]
-        public async Task Get_ReturnsBadRequest_WhenNullReferenceExceptionOccursCallingEmis()
-        {
-            // Arrange
-            const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
-
-            _emisClient.Setup(x => x.AllergiesGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId))
-                .Throws<NullReferenceException>()
-                .Verifiable();
-
-            // Act
-            var result = await _systemUnderTest.Get(_userSession);
-
-            // Assert
-            result.Should().BeAssignableTo<GetMyRecordResult.SupplierBadData>();
-            _emisClient.Verify();
         }
     }
 }

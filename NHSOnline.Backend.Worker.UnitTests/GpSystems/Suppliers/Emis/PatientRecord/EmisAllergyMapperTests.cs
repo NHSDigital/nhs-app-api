@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -30,10 +31,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange
-            var item = new AllergyRequestsGetResponse();
+            var item = new MedicationRootObject();
 
             // Act
-            var result = _mapper.Map(new EmisAllergyMapper().Map(item), null);
+            var result = _mapper.Map(new EmisAllergyMapper().Map(item), new Medications(), new Immunisations(), new TestResults());
 
             // Assert
             result.Should().NotBeNull();
@@ -44,39 +45,42 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         public void MapAllergyRequestsGetResponseToAllergyListResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
-            var item = new AllergyRequestsGetResponse
-            {
-                MedicalRecord = new AllergyMedicalRecord 
+            var item = new MedicationRootObject {
+                MedicalRecord = new MedicalRecord
                 {
-                    Allergies = new List<AllergyResponse>
+                    Allergies = new List<Allergy>
                     {
-                        new AllergyResponse
+                        new Allergy
                         {
                             Term = _fixture.Create<string>(),
-                            AvailabilityDateTime = _fixture.Create<DateTimeOffset>()
+                            EffectiveDate = new EffectiveDate
+                            {
+                                DatePart = "Unknown",
+                                Value = _fixture.Create<DateTime>()
+                            }
                         },
                     },
                 }
             };
-
+            
             // Act
-            var result = _mapper.Map(new EmisAllergyMapper().Map(item), null);
+            var result = new EmisAllergyMapper().Map(item);
 
             // Assert
             result.Should().NotBeNull();
-            result.Allergies.Data.Should().HaveCount(item.MedicalRecord.Allergies.Count());
+            result.Data.Should().HaveCount(item.MedicalRecord.Allergies.Count);
 
-            var expectedResult = new MyRecordResponse
+            var expectedResult = new Allergies
             {
-                Allergies = new Allergies
+                Data = new List<AllergyItem>
                 {
-                    Data = new List<AllergyItem>
+                    new AllergyItem
                     {
-                        new AllergyItem
-                        {
-                            Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
-                            Date = item.MedicalRecord.Allergies.ElementAt(0).AvailabilityDateTime,
-                        }
+                        Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
+                        Date = new Date { 
+                            Value = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.Value,
+                            DatePart = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.DatePart
+                         }
                     }
                 }
             };

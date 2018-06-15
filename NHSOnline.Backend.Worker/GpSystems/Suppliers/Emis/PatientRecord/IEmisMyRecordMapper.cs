@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public interface IEmisMyRecordMapper
     {
-        MyRecordResponse Map(Allergies allergies, Medications medications);        
+        MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, TestResults testResults);        
     }
 }

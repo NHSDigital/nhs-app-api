@@ -1,0 +1,42 @@
+version: "3.2"
+services:
+  nhsonline.backend.worker:
+    image: nhsonline.backend.worker
+    build:
+      context: .
+      dockerfile: NHSOnline.Backend.Worker/Dockerfile
+    depends_on:
+      - nhsonline.redis.sds
+      - nhsonline.redis.session
+    ports:
+      - "8082:8082"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
+      - CORS_AUTHORITY=*
+      - EMIS_BASE_URL=http://185.13.72.81/PFS/
+  nhsonline.redis-data.sds:
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds
+  nhsonline.redis.sds:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6379:6379"
+    volumes:
+      - 'redis_data:/bitnami/redis'
+  nhsonline.redis.session:
+    image: bitnami/redis:4.0.8-r7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - "6380:6379"
+volumes:
+  redis_data:
+    driver: local

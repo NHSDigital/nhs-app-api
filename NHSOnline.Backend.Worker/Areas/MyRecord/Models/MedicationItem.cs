@@ -4,8 +4,12 @@ using System.Collections.Generic;
 namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
     public class MedicationItem
-    {        
-        public DateTimeOffset Date { get; set; }
-        public IEnumerable<MedicationLineItem> LineItems { get; set; }
+    {
+        public MedicationItem()
+        {
+            LineItems = new List<MedicationLineItem>();
+        }
+        public DateTimeOffset? Date { get; set; }
+        public List<MedicationLineItem> LineItems { get; set; }
     }
 }

@@ -5,7 +5,9 @@
         public MyRecordResponse()
         {
             Allergies = new Allergies();
-            
+            Immunisations = new Immunisations();
+            TestResults = new TestResults();
+            Medications = new Medications();
         }
         
         public bool HasSummaryRecordAccess { get; set; }
@@ -13,5 +15,7 @@
         
         public Allergies Allergies { get; set; }
         public Medications Medications { get; set; }
+        public Immunisations Immunisations { get; set; }
+        public TestResults TestResults { get; set; }
     }
 }

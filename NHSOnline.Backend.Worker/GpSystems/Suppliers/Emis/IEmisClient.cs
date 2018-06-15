@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -32,12 +34,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);
         
-        // Patient Record
-        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
-            string endUserSessionId);
+        Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken, string responseSessionId,
+            string endUserSessionId, RecordType recordType);
         
-        Task<EmisClient.EmisApiObjectResponse<MedicationRequestsGetResponse>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
-            string endUserSessionId);
+        // Patient Record
+//        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
+//            string endUserSessionId);
+        
+//        Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
+//            string endUserSessionId);
+        
+//        Task<EmisClient.EmisApiObjectResponse<ImmunisationRequestsGetResponse>> ImmunisationsGet(string userPatientLinkToken, string responseSessionId,
+//            string endUserSessionId);
+        
+//        Task<EmisClient.EmisApiObjectResponse<TestResultRequestsGetResponse>> TestResultsGet(string userPatientLinkToken, string responseSessionId,
+//            string endUserSessionId);
         
         // AppointmentSlots
         Task<EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
