@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
     {
         Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request);
 
-        Task<AppointmentsResult> GetAppointments(UserSession userSession, bool includePastAppointments,
+        Task<MyAppointmentsResult> GetMyAppointments(UserSession userSession, bool includePastAppointments,
             DateTimeOffset? pastAppointmentsFromDate);
     }
 }

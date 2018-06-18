@@ -13,9 +13,9 @@ using Moq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Mappers;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 {

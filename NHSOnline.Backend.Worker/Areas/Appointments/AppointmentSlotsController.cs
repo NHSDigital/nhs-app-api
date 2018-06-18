@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments

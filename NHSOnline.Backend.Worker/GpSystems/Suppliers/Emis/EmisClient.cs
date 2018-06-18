@@ -5,10 +5,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
@@ -125,7 +124,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 endUserSessionId, responseSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
+        public async Task<EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
             EmisHeaderParameters headerParameters, SlotsGetQueryParameters getQueryParameters)
         {
             var dateStringFormatter = new DateStringFormatter();
@@ -140,11 +139,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 fromDateTime,
                 toDateTime);
 
-            var response = await Get<AppointmentSlotsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
-            return response;
+            return await Get<AppointmentsSlotsGetResponse>(path, headerParameters.EndUserSessionId,
+                headerParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
+        public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
             EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters getQueryParameters)
         {
             var dateStringFormatter = new DateStringFormatter();
@@ -170,33 +169,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
         }
 
-        public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
+        public async Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentPost(
             EmisHeaderParameters headerParameters,
             BookAppointmentSlotPostRequest postRequest)
         {
             return await Post<BookAppointmentSlotPostRequest, BookAppointmentSlotPostResponse>(postRequest,
                 AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
-        }
-
-        public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
-            DateTimeOffset? previousAppointmentsFromDate)
-        {
-            var qb = new QueryBuilder
-            {
-                { "userPatientLinkToken", userPatientLinkToken },
-                { "fetchPreviousAppointments", fetchPreviousAppointments.ToString().ToLowerInvariant() }
-            };
-
-            if (fetchPreviousAppointments && previousAppointmentsFromDate.HasValue)
-            {
-                qb.Add("previousAppointmentsFromDate", EncodeDateTimeOffsetToIso(previousAppointmentsFromDate.Value));
-            }
-
-            var path = $"{AppointmentsPath}{qb.ToQueryString()}";
-
-            var response =
-                await Get<AppointmentsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
-            return response;
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Get<TResponse>(string path,

@@ -31,11 +31,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="GpSystems\Suppliers\Emis\Appointments\CancellationReasons.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>CancellationReasons.resx</DependentUpon>
-    </Compile>
     <Compile Update="GpSystems\Suppliers\Emis\EmisApiErrorMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -46,10 +41,6 @@
     <EmbeddedResource Update="ExceptionMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="GpSystems\Suppliers\Emis\Appointments\CancellationReasons.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>CancellationReasons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="GpSystems\Suppliers\Emis\EmisApiErrorMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

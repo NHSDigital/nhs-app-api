@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
+using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.AppointmentSlots;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -50,24 +51,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 //            string endUserSessionId);
         
         // AppointmentSlots
-        Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
+        Task<EmisClient.EmisApiObjectResponse<AppointmentsSlotsGetResponse>> AppointmentsSlotsGet(
             EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);
 
         // AppointmentSlotsMetadata
-        Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
+        Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentsSlotsMetadataGet(
             EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters);
 
         // Courses
         Task<EmisClient.EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
             string responseSessionId, string endUserSessionId);
 
-        // Appointments
-        Task<EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
+        Task<EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentPost(
             EmisHeaderParameters headerParameters,
             BookAppointmentSlotPostRequest postRequest);
-
-        Task<EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
-            EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
-            DateTimeOffset? previousAppointmentsFromDate);
     }
 }
