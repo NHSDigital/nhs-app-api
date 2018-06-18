@@ -13,14 +13,14 @@ Vue.filter(
 );
 
 Vue.filter('longDate',
-  value => (value ? moment(value).format('Do MMMM YYYY') : ''));
+  value => (value ? moment(value).format('D MMMM YYYY') : ''));
 
 Vue.filter('datePart',
   function(value, datePart) {
       switch (datePart) {
         case "Unknown":
         case "YearMonthDay":
-          return value ? moment(value).format('Do MMMM YYYY') : ''
+          return value ? moment(value).format('D MMMM YYYY') : ''
           break;
         case "Year":
           return value ? moment(value).format('YYYY') : ''
@@ -29,10 +29,10 @@ Vue.filter('datePart',
           return value ? moment(value).format('MMMM YYYY') : ''
           break;
         case "YearMonthDayTime":
-          return value ? moment(value).format("Do MMMM YYYY hh:mm") : ''
+          return value ? moment(value).utc().format("D MMMM YYYY hh:mm") : ''
           break;
         default:
-          return value ? moment(value).format('Do MMMM YYYY'): ''
+          return value ? moment(value).format('D MMMM YYYY'): ''
           break;
       }
   }
