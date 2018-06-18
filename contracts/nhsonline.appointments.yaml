@@ -43,6 +43,20 @@ paths:
         504:
           description: The GP system did not respond in a timely fashion.
   /appointments:
+    delete:
+      tags:
+        - appointments
+      summary: Cancels an upcoming appointment for the logged on user.
+      description: Cancels a specified appointment for the logged on user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: AppointmentCancelRequest
+          required: true
+          description: Details of the appointment to be cancelled, along with reason for the booking being cancelled.
+          schema:
+            $ref: "#/definitions/AppointmentCancelRequest"
     get:
       tags:
         - appointments
@@ -124,6 +138,18 @@ definitions:
         description: Reason for booking appointment. e.g. symptoms being experienced by the patient.
         minLength: 1
         maxLength: 150
+  AppointmentCancelRequest:
+    type: object
+    required:
+      - appointmentId
+    properties:
+      appointmentId:
+        type: string
+        description: Identifier of the appointment to be cancelled.
+        minLength: 1
+      cancellationReasonId:
+        type: string
+        description: Identifier of the reason for the appointment being cancelled. Array of valid cancellation reasons is returned when requesting a user's current appointments.
   AppointmentsResponse:
     type: object
     properties:
