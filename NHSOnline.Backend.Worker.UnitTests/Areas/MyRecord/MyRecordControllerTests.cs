@@ -12,7 +12,6 @@ using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Demographics;
 using GetMyRecordResult = NHSOnline.Backend.Worker.GpSystems.PatientRecord.GetMyRecordResult;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord

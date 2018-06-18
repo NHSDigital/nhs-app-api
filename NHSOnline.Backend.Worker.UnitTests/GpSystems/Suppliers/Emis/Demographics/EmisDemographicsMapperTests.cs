@@ -4,10 +4,10 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Demographics;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographics
 {
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographi
                     new PatientIdentifier
                     {
                         IdentifierType = IdentifierType.NhsNumber,
-                        IdentifierValue = "123"
+                        IdentifierValue = "1234567890"
                     }
                 },
                 Address = new EmisAddress
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographi
                 Surname = item.Surname,
                 DateOfBirth = item.DateOfBirth,
                 Sex = item.Sex,
-                NhsNumber = "123",
+                NhsNumber = "123 456 7890",
                 Address = new Address
                 {
                     Line1 = item.Address.HouseNameFlatNumber,

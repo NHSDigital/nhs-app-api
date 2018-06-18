@@ -1,4 +1,4 @@
-﻿using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Demographics;
+﻿using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Demographics
 {
