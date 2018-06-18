@@ -29,7 +29,7 @@ Vue.filter('datePart',
           return value ? moment(value).format('MMMM YYYY') : ''
           break;
         case "YearMonthDayTime":
-          return value ? moment(value).format("MMMM Do YYYY h:mm") : ''
+          return value ? moment(value).format("Do MMMM YYYY hh:mm") : ''
           break;
         default:
           return value ? moment(value).format('Do MMMM YYYY'): ''

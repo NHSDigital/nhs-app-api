@@ -55,7 +55,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedMedications() {
-      return _.orderBy(this.data, [obj => obj.date], ['asc']);
+      return _.orderBy(this.data, [obj => obj.date], ['desc']);
     },
   },
 };

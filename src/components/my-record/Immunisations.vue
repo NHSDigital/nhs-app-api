@@ -7,7 +7,7 @@
       <div v-if="data.hasAccess">
         <div v-if="data.data.length > 0">
           <ul :class="$style.immunisations">
-            <li v-for="(item, index) in data.data" :key="`item-${index}`">
+            <li v-for="(item, index) in orderedImmunisations" :key="`item-${index}`">
               <label>{{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}</label>
               <p class="immunisationTerm">{{ item.term }}</p>
             </li>
@@ -26,6 +26,9 @@
 </template>
 
 <script>
+
+import _ from 'lodash';
+
 export default {
   props: {
     isCollapsed: {
@@ -40,6 +43,9 @@ export default {
   computed: {
     getCollapseState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
+    },
+    orderedImmunisations() {
+      return _.orderBy(this.data.data, [obj => obj.effectiveDate.value], ['desc']);
     },
   },
 };

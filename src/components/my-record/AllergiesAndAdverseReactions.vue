@@ -39,7 +39,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedAllergies() {
-      return _.orderBy(this.data.data, [obj => obj.date], ['asc']);
+      return _.orderBy(this.data.data, [obj => obj.date.value], ['desc']);
     },
   },
 };
