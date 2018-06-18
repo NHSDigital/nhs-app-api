@@ -66,7 +66,7 @@
     <div v-else >
       <div v-if="hasLoaded">
         <main :class="$style.content">
-          <error-warning-dialog error-or-warning="warning">
+          <error-warning-dialog error-or-warning="error">
             <p>
               <b>{{ $t('myRecord.noRecordAccess.warningHeader') }}</b>
               <br>
@@ -188,6 +188,9 @@ export default {
   @import '../../style/fonts';
   @import '../../style/spacings';
 
+  .content {
+    @include space(padding, all, $three);
+  }
   .recordTitle {
     font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
     font-weight: 700;
