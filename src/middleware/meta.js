@@ -13,6 +13,17 @@ const MYRECORD = 'my-record';
 const MYRECORDNOACCESS = 'my-record-noaccess';
 const LOGIN = 'login';
 
+function setPageTitle(route, store, app) {
+  let header = '';
+
+  if (route.meta.headerKey !== '') {
+    header = app.i18n.tc(route.meta.headerKey);
+    header += ' screen';
+  }
+
+  store.dispatch('header/updateHeaderText', header);
+}
+
 export default function ({ route, store, app }) {
   switch (route.name) {
     case INDEX:
@@ -71,9 +82,5 @@ export default function ({ route, store, app }) {
     store.dispatch('errors/clearAllApiErrors');
   });
 
-  let headerText = '';
-  if (route.meta.headerKey !== '') {
-    headerText = app.i18n.tc(route.meta.headerKey);
-  }
-  store.dispatch('header/updateHeaderText', headerText);
+  setPageTitle(route, store, app);
 }

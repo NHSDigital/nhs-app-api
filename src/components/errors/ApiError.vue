@@ -4,7 +4,7 @@
       <p class="header">
         {{ header }}
       </p>
-      <p>
+      <p :class="$style.subheader">
         {{ subheader }}
       </p>
       <p>
@@ -127,5 +127,9 @@ export default {
     padding: 16px 16px 5px 16px;
     box-sizing: border-box;
     width: 100%;
+  }
+
+  .subheader {
+    padding-top: 10px;
   }
 </style>
