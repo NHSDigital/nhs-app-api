@@ -25,8 +25,8 @@ open class MyRecordImmunisationStepDefinitions {
     val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
 
-    @Given("the GP Practice has enabled immunisations functionality")
-    fun givenTheGPPracticeHasEnabledImmunisationsFunctionality() {
+    @Given("the GP Practice has enabled immunisations functionality and multiple immunisation records exist")
+    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExist() {
 
         mockingClient.forEmis {
             testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
@@ -45,6 +45,66 @@ open class MyRecordImmunisationStepDefinitions {
         }
     }
 
+    @Given("no immunisation records exist for the patient")
+    fun givenNoImmunisationRecordsExistForThePatient() {
+
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+        }
+
+        mockingClient.forEmis {
+            immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getEmptyImmunisationsData())
+        }
+
+        mockingClient.forEmis {
+            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
+        }
+
+        mockingClient.forEmis {
+            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
+        }
+    }
+
+    @Given("the user does not have access to view immunisations")
+    fun givenUserDoesNotHaveAccessToViewImmunisations() {
+
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+        }
+
+        mockingClient.forEmis {
+            immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
+        }
+
+        mockingClient.forEmis {
+            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
+        }
+
+        mockingClient.forEmis {
+            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
+        }
+    }
+
+    @Given("there is an error retrieving immunisations data")
+    fun givenThereIsAnErrorRetrievingImmunisationsData() {
+
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+        }
+
+        mockingClient.forEmis {
+            immunisationsRequest(patient).respondWithNonDataAccessException()
+        }
+
+        mockingClient.forEmis {
+            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
+        }
+
+        mockingClient.forEmis {
+            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
+        }
+    }
+    
     @When("I get the users immunisations")
     fun whenIGetTheUsersMyRecordData()
     {

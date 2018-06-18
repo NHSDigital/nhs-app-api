@@ -251,4 +251,40 @@ open class MyRecordStepDefinitions {
     fun i_see_acute_medication_information() {
         Assert.assertEquals("Medications", recordSteps.getAcuteMedications())
     }
+
+    @When("^I click the Immunisations section$")
+    @Throws(Exception::class)
+    fun i_click_the_Immunisaations_section () {
+        recordSteps.clickImmunisations()
+    }
+
+    @Then("^I see heading Immunisations$")
+    @Throws(Exception::class)
+    fun i_see_heading_Immunisations() {
+        Assert.assertEquals("Immunisations", recordSteps.getImmunisationsHeaderText())
+    }
+
+    @Then("^I see immunisation records displayed$")
+    @Throws(Exception::class)
+    fun i_see_immunisation_records_displayed() {
+        Assert.assertEquals(2, recordSteps.getImmunisationRecordCount())
+    }
+
+    @Then("^I see message No information recorded for this section$")
+    @Throws(Exception::class)
+    fun i_see_no_information_recorded_for_this_section_message() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getImmunisationsMessage())
+    }
+
+    @Then("^I see message You do not have access to this section$")
+    @Throws(Exception::class)
+    fun i_see_you_do_not_have_access_to_this_section_message() {
+        Assert.assertEquals("You do not have access to this section", recordSteps.getImmunisationsMessage())
+    }
+
+    @Then("^I see message An error has occurred trying to retrieve this data$")
+    @Throws(Exception::class)
+    fun i_see_an_error_has_occurred_trying_to_retrieve_this_data() {
+        Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getImmunisationsMessage())
+    }
 }

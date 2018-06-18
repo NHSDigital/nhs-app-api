@@ -33,7 +33,12 @@ class EmisImmunisationsBuilder(configuration: EmisConfiguration,
 
     fun respondWithExceptionWhenNotEnabled(): Mapping {
         val exceptionResponse = ExceptionResponse(500,
-                "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'RecordViewer' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Extra info: Services Access violation")
+                "Requested record access is disabled by the practice")
+        return respondWithException(exceptionResponse)
+    }
+
+    fun respondWithNonDataAccessException(): Mapping {
+        val exceptionResponse = ExceptionResponse(503, "")
         return respondWithException(exceptionResponse)
     }
 

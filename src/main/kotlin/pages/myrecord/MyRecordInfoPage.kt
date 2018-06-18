@@ -3,6 +3,7 @@ package pages.myrecord
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
+import org.openqa.selenium.By
 
 class MyRecordInfoPage : PageObject() {
 
@@ -44,6 +45,13 @@ class MyRecordInfoPage : PageObject() {
 
     @FindBy(xpath = "//h5[contains(text(),'Acute medications')]/following-sibling::div[1]")
     lateinit var acuteMedications: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Immunisations')]")
+    lateinit var immunisationsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Immunisations')]/following-sibling::div[1]")
+    lateinit var immunisations: WebElementFacade
+
 
     fun isNameVisible(): Boolean {
         waitABit(2000)
@@ -114,6 +122,23 @@ class MyRecordInfoPage : PageObject() {
 
     fun getAcuteMedications(): String {
         return acuteMedications.text
+    }
+
+    fun getImmunistionsHeaderText(): String {
+        return immunisationsHeading.text
+    }
+
+    fun getImmunisationRecordCount(): Int {
+        return immunisations.thenFindAll(By.cssSelector("ul li")).count()
+    }
+
+    fun clickImmunisations() {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", immunisations)
+        immunisationsHeading.click()
+    }
+
+    fun getImmunisationsMessage(): String {
+        return immunisations.then<WebElementFacade>(By.cssSelector("p")).text;
     }
 
 }

@@ -11,11 +11,22 @@ object ImmunisationsData {
 
         val immunisations = mutableListOf<ImmunisationResponse>()
 
-        immunisations.add(ImmunisationResponse(term = "Hay Fever",
-                effectiveDate =  EffectiveDate("Unknown", "2018-05-15T09:52:44.927")))
+        immunisations.add(ImmunisationResponse(term = "First meningitis C Vaccination",
+                effectiveDate =  EffectiveDate("Unknown", "2002-05-15T09:52:44.927")))
 
-        immunisations.add(ImmunisationResponse(term = "Hay Fever",
-                effectiveDate =  EffectiveDate("YearMonthDay", "2019-02-18T14:23:44.927")))
+        immunisations.add(ImmunisationResponse(term = "Second meningitis C Vaccination",
+                effectiveDate =  EffectiveDate("YearMonthDay", "2018-02-18T14:23:44.927")))
+
+        return ImmunisationResponseModel (
+                medicalRecord = ImmunisationMedicalRecord (
+                        immunisations = immunisations
+                )
+        )
+    }
+
+    fun getEmptyImmunisationsData(): ImmunisationResponseModel {
+
+        val immunisations = mutableListOf<ImmunisationResponse>()
 
         return ImmunisationResponseModel (
                 medicalRecord = ImmunisationMedicalRecord (

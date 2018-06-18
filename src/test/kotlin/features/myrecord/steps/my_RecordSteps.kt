@@ -134,5 +134,25 @@ open class MyRecordSteps {
     fun getAcuteMedications(): String{
         return myRecordInfoPage.getAcuteMedications()
     }
+
+    @Step
+    fun clickImmunisations() {
+        myRecordInfoPage.clickImmunisations()
+    }
+
+    @Step
+    fun getImmunisationsHeaderText(): String {
+        return myRecordInfoPage.getImmunistionsHeaderText()
+    }
+
+    @Step
+    fun getImmunisationRecordCount(): Int {
+        return myRecordInfoPage.getImmunisationRecordCount()
+    }
+
+    @Step
+    fun getImmunisationsMessage(): String {
+        return myRecordInfoPage.getImmunisationsMessage()
+    }
 }
 
