@@ -151,7 +151,7 @@ open class PrescriptionsStepDefinitions {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
-    private fun getExpectedNumPrescriptions(data: PrescriptionRequestsGetResponse): ArrayList<HistoricPrescription>{
+    fun getExpectedNumPrescriptions(data: PrescriptionRequestsGetResponse): ArrayList<HistoricPrescription>{
 
         var totalCoursesRunningTotal = 0
 

@@ -8,12 +8,16 @@ import cucumber.api.java.en.When
 import features.courses.stepDefinitions.coursesStepDefinitions
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.prescriptions.PrescriptionsData
+import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
+import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
 import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
+import pages.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -42,6 +46,14 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     lateinit var scenarioTitle: String
     var currentScenarioState: String = Scenario.STARTED
+
+    lateinit var prescriptionPage : PrescriptionsPage
+
+    @Steps
+    lateinit var prescriptionSteps: PrescriptionsSteps
+
+    @Steps
+    lateinit var prescriptionStepDefinitions: PrescriptionsStepDefinitions
 
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest()
@@ -202,9 +214,9 @@ open class PrescriptionsSubmissionStepDefinitions {
         scenarioTitle = title
     }
 
-    @And("^I have historic prescriptions in this scenario$")
-    fun iHaveHistoricPrescriptionsInThisScenario() {
-        val pr = PrescriptionsData.loadPrescriptionsData(1,1,1)
+    @And("^I have (\\d+) historic prescriptions in this scenario$")
+    fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
+        val pr = PrescriptionsData.loadPrescriptionsData(amount, amount, amount)
         mockingClient.forEmis {
             prescriptionsRequest(patient)
                     .respondWithSuccess(pr)
@@ -224,8 +236,13 @@ open class PrescriptionsSubmissionStepDefinitions {
     }
 
 
-    @Then("I see a order successful message on the Repeat prescription page")
-    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPage() {
+    @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
+    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
+
+        Assert.assertTrue(prescriptionPage.isOrdeSuccessfulTextVisible())
+
+        prescriptionSteps.assertPrescriptionsMatch(prescriptionStepDefinitions.getExpectedNumPrescriptions(
+                perscriptionMap[currentScenarioState]!!), amount)
     }
 
 

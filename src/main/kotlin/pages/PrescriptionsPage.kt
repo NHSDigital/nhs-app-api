@@ -2,6 +2,8 @@ package pages
 
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
+import net.serenitybdd.core.annotations.findby.FindBy
+import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.navigation.Header
@@ -13,6 +15,7 @@ open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
 
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order a repeat prescription')]"
 
+
     fun isLoaded(): Boolean {
         return headerBar.isVisible("My repeat prescriptions")
     }
@@ -20,6 +23,11 @@ open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
     fun isNoPrescriptionsMessageVisible(): Boolean {
         val message = "Looks like you have no repeat prescriptions ordered here."
         return findByXpath("//div[@class='info']//b[contains(.,'$message')]").isVisible
+    }
+
+    fun isOrdeSuccessfulTextVisible(): Boolean {
+        val successText = "Your prescription has been ordered."
+        return findByXpath("//div[@id='success-dialog']//p[contains(.,'$successText')]").isVisible
     }
 
     fun getAllPrescriptions(): ArrayList<HistoricPrescription> {
