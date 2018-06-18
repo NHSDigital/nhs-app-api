@@ -6,14 +6,14 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertTrue
-import pages.AppointmentsPage
+import pages.MyAppointmentsPage
 
 open class AppointmentsSteps {
 
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
 
-    lateinit var appointmentsPage: AppointmentsPage
+    lateinit var myAppointmentsPage: MyAppointmentsPage
 
     @Step
     fun checkBookingWasRequested() {
@@ -40,19 +40,20 @@ open class AppointmentsSteps {
 
     @Step
     fun checkSuccessMessage() {
-        val message = appointmentsPage.getSuccessMessage()
+        val message = myAppointmentsPage.getSuccessMessage()
         assertTrue(message.contains("Appointment Booked"))
     }
 
     @Step
-    fun clickOnButton(button: String) {
-        appointmentsPage.clickOnButton(button)
+    fun clickOnBookAppointmentButton()
+    {
+        myAppointmentsPage.clickOnButton("Book an appointment")
     }
 
     @Step
     fun checkHeader(expectedHeader: String)
     {
-        val actualHeader = appointmentsPage.getHeader()
+        val actualHeader = myAppointmentsPage.getHeader()
         Assert.assertEquals(expectedHeader, actualHeader);
     }
 }

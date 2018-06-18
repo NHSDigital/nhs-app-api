@@ -257,10 +257,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun hasASlowConnection() {
         // TODOs
     }
+
     @When("^I log in")
     fun logIn() {
-        login.asDefault()
+        login.asDefault(false)
     }
+
     @When("I am on the home page")
     fun gotoHomePage()
     {

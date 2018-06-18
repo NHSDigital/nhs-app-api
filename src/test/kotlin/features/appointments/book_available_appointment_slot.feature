@@ -181,4 +181,4 @@ Feature: Book an available appointment slot
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
     When I click the button to go back to my appointments
-    Then I will be on the My Appointments screen
+    Then I will be on the My appointments screen

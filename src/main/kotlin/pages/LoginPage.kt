@@ -7,6 +7,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.internal.FindsByXPath
+import org.openqa.selenium.support.ui.ExpectedCondition
 import java.util.concurrent.TimeUnit
 
 
@@ -42,6 +43,10 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             // complete login until CID integration developed
             findByXpath("//*[@id='complete_login']").click()
         }
+    }
+
+    fun waitForSpinnerToDisappear() {
+        waitFor({ !spinnerVisible() })
     }
 
     fun createAccount() {

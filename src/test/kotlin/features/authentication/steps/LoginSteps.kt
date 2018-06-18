@@ -14,8 +14,9 @@ open class LoginSteps {
     }
 
     @Step
-    fun asDefault() {
+    fun asDefault(waitForSpinnerToDisappear: Boolean = true) {
         loginPage.signIn()
+        if (waitForSpinnerToDisappear) loginPage.waitForSpinnerToDisappear()
     }
 
     @Step

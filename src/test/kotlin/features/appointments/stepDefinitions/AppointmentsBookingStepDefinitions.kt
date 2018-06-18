@@ -9,7 +9,6 @@ import features.appointments.steps.AppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import junit.framework.Assert.*
 import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
@@ -18,6 +17,7 @@ import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.*
+import org.junit.Assert.*
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -167,7 +167,7 @@ class AppointmentsBookingStepDefinitions {
     @Given("^I am on the appointments booking page$")
     fun iAmOnTheAppointmentsBookingPage() {
         iAmOnTheAppointmentsPage()
-        appointments.clickOnButton("Book new appointment")
+        appointments.clickOnBookAppointmentButton()
     }
 
     @Given("^there are available appointment slots for an explicit date-time range$")

@@ -21,9 +21,9 @@ class AppointmentsStepDefinitions {
         appointmentsSteps.checkSuccessMessage()
     }
 
-    @Then("^I will be on the My Appointments screen$")
+    @Then("^I will be on the My appointments screen$")
     @Throws(Exception::class)
     fun i_will_be_on_the_my_appointments_screen() {
-        appointmentsSteps.checkHeader("My Appointments")
+        appointmentsSteps.checkHeader("My appointments")
     }
 }
