@@ -31,6 +31,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var knownServices: KnownServices
     private val lollypopApiNumber: Int = 21
     private val apiVersion : Int = android.os.Build.VERSION.SDK_INT
+    private var sessionValidator : ValidateSessionLifeCycleObserver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +52,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
 
-        ProcessLifecycleOwner.get().lifecycle
-               .addObserver(ValidateSessionLifeCycleObserver(this, AppWebInterface(this),knownServices))
-
         val urlPath = intent?.data?.path
         val authRedirectPath = resources.getString(R.string.authRedirectPath)
 
@@ -63,6 +61,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         } else {
             loadWelcomePage()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if(sessionValidator == null) {
+            sessionValidator = ValidateSessionLifeCycleObserver(this, AppWebInterface(this),knownServices)
+        }
+
+        sessionValidator?.onMoveToForeground()
     }
 
     override fun onNewIntent(intent: Intent?) {
