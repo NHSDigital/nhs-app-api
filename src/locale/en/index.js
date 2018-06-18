@@ -27,7 +27,7 @@ export default {
   appointments: {
     index: {
       successText: 'Appointment Booked',
-      bookButtonText: 'Book new appointment',
+      bookButtonText: 'Book an appointment',
       empty: {
         header: 'You don\'t currently have any appointments booked',
         text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details, cancel it and see your appointment history.',
@@ -222,9 +222,9 @@ export default {
     repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
-    appointments: 'My Appointments',
-    appointmentBooking: 'Appointments',
-    appointmentConfirmation: 'Check appointment details',
+    appointments: 'My appointments',
+    appointmentBooking: 'Book an appointment',
+    appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
     more: 'More',
     login: 'Login',
