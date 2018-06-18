@@ -9,7 +9,7 @@
           <ul >
             <li v-for="(testResult, testIndex) in orderedTestResults"
                 :key="`testResult-${testIndex}`" :class="$style.testResult">
-              <label>
+              <label v-if="testResult.effectiveDate.value">
                 {{ testResult.effectiveDate.value | datePart(testResult.effectiveDate.datePart) }}
               </label>
               <p :class="$style.testTerm">{{ testResult.term }}</p>

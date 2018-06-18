@@ -55,11 +55,9 @@
       </div>
       <div v-else>
         <main :class="$style.content">
-          <error-warning-dialog error-or-warning="warning">
-            <p>
-              {{ $t('myRecord.viewRestOfHealthRecordWarning') }}
-            </p>
-          </error-warning-dialog>
+          <p>
+            {{ $t('myRecord.viewRestOfHealthRecordWarning') }}
+          </p>
         </main>
       </div>
     </div>

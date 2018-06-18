@@ -7,7 +7,9 @@
       <div v-if="data.data.length > 0">
         <ul :class="$style.allergyAndAdverseReactions">
           <li v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`">
-            <label>{{ allergy.date.value | datePart(allergy.date.datePart) }}</label>
+            <label v-if="allergy.date.value">
+              {{ allergy.date.value | datePart(allergy.date.datePart) }}
+            </label>
             <p>{{ allergy.name }}</p>
           </li>
         </ul>

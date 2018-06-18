@@ -8,7 +8,7 @@
         <ul>
           <li v-for="(medication, medIndex) in orderedMedications" :key="`medication-${medIndex}`"
               :class="$style.medication">
-            <label>{{ medication.date | longDate }}</label>
+            <label v-if="medication.date">{{ medication.date | longDate }}</label>
             <ul>
               <li v-for="(lineItem, lineItemIndex) in medication.lineItems"
                   :key="`line-${lineItemIndex}`" :class="$style.medicationLine">
