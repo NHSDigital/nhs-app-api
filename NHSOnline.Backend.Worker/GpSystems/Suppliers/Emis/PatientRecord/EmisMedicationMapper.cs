@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         private const string PRESCRIPTION_TYPE_REPEAT = "Repeat";
         private const string DRUG_STATUS_ACTIVE = "Active";
         private const string DRUG_STATUS_CANCELLED = "Cancelled";
-        private const string DATE_FORMAT = "dd MMMM yyyy";
+        private const string DATE_FORMAT = "d MMMM yyyy";
 
         public Medications Map(MedicationRootObject medicationGetResponse)
         {

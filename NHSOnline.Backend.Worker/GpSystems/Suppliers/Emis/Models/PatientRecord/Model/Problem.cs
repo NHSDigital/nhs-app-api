@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model
 {
     public class Problem
     {

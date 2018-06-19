@@ -4,7 +4,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord
@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     public class EmisMedicationMapperTests
     {
         private IEmisMedicationMapper _mapper;
-        private const string DATE_FORMAT = "dd MMMM yyyy";
+        private const string DATE_FORMAT = "d MMMM yyyy";
 
         [TestInitialize]
         public void TestInitialize()

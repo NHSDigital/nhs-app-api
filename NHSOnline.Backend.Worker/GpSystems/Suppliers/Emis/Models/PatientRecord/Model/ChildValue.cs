@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Medication
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model
 {
-    public class Allergy
+    public class ChildValue
     {
         public string ObservationType { get; set; }
         public string Episodicity { get; set; }
