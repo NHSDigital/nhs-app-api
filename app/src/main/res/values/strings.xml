@@ -10,6 +10,8 @@
     <string name="organ_donation_register_header">Organ donation register</string>
     <string name="nhs_111_header">Check your symptoms</string>
     <string name="my_record_header">My medical record</string>
+    <string name="appointments_header">My appointments</string>
+    <string name="prescriptions_header">My repeat prescriptions</string>
     <string name="home_header">Home</string>
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
