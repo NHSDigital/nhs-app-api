@@ -26,7 +26,7 @@ export default {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
-      title: `${this.$store.state.header.headerText}`,
+      title: `${this.$store.state.header.headerText} screen`,
     };
   },
 };

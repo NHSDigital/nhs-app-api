@@ -18,7 +18,6 @@ function setPageTitle(route, store, app) {
 
   if (route.meta.headerKey !== '') {
     header = app.i18n.tc(route.meta.headerKey);
-    header += ' screen';
   }
 
   store.dispatch('header/updateHeaderText', header);
