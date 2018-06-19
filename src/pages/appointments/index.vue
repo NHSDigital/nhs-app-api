@@ -6,7 +6,7 @@
       </p>
     </success-dialog>
 
-    <div v-if="!showUpcomingAppointments" :class="$style.info">
+    <div v-if="showNoUpcomingAppointments" :class="$style.info">
       <h3>{{ $t('appointments.index.empty.header') }}</h3>
       <p>{{ $t('appointments.index.empty.text1') }}</p>
       <p>{{ $t('appointments.index.empty.text2') }} </p>
@@ -39,6 +39,12 @@ export default {
     };
   },
   computed: {
+    showNoUpcomingAppointments() {
+      return (
+        this.$store.state.myAppointments.hasLoaded &&
+        this.$store.state.myAppointments.appointments.length === 0
+      );
+    },
     showUpcomingAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
