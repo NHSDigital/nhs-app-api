@@ -6,13 +6,13 @@
       </p>
     </success-dialog>
 
-    <div v-if="showUpcomingAppointments" :class="$style.info">
+    <div v-if="!showUpcomingAppointments" :class="$style.info">
       <h3>{{ $t('appointments.index.empty.header') }}</h3>
       <p>{{ $t('appointments.index.empty.text1') }}</p>
       <p>{{ $t('appointments.index.empty.text2') }} </p>
     </div>
 
-    <upcoming-appointments :appointments = "upcomingAppointments" />
+    <upcoming-appointments v-if="showUpcomingAppointments" :appointments = "upcomingAppointments" />
 
     <floating-button-bottom @on-click="onBookButtonClicked">
       {{ $t('appointments.index.bookButtonText') }}
@@ -42,7 +42,7 @@ export default {
     showUpcomingAppointments() {
       return (
         this.$store.state.myAppointments.hasLoaded &&
-        this.$store.state.myAppointments.appointments.length === 0
+        this.$store.state.myAppointments.appointments.length > 0
       );
     },
     upcomingAppointments() {
