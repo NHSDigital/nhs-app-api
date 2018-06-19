@@ -140,7 +140,7 @@ export default {
         },
       },
     },
-    'confirm_prescription-details': {
+    confirm_prescription_details: {
       errors: {
         pageHeader: 'Error sending request',
         header: 'Sorry, there\'s been a problem sending your request',

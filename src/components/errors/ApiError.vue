@@ -64,7 +64,7 @@ export default {
       return this.$store.state.errors.apiErrors[0];
     },
     getRoutePath() {
-      return this.$route.path.substring(1).replace('/', '.').replace('-', '_');
+      return this.$route.path.substring(1).replace(/\//g, '.').replace(/-/g, '_');
     },
     getComponentErrorCodeKey(type) {
       if (!this.showError()) {

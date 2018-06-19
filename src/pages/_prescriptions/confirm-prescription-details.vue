@@ -56,6 +56,11 @@ export default {
       selectedPrescriptions: 'repeatPrescriptionCourses/selectedPrescriptions',
     }),
   },
+  created() {
+    if (this.selectedPrescriptions.length === 0) {
+      this.$router.push('/prescriptions');
+    }
+  },
   mounted() {
     this.$store.dispatch('errors/setApiErrorButtonPath', '/prescriptions');
   },
