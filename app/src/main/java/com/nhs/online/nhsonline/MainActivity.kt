@@ -133,9 +133,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun onMoreMenuSelected() = loadSubPage(resources.getString(R.string.morePath), resources.getString(R.string.more))
 
-    private fun onAppointmentsMenuSelected() = loadSubPage(resources.getString(R.string.appointmentsPath), resources.getString(R.string.appointment))
+    private fun onAppointmentsMenuSelected() = loadSubPage(resources.getString(R.string.appointmentsPath), resources.getString(R.string.appointments_header))
 
-    private fun onPrescriptionsMenuSelected() = loadSubPage(resources.getString(R.string.prescriptionsPath), resources.getString(R.string.prescription))
+    private fun onPrescriptionsMenuSelected() = loadSubPage(resources.getString(R.string.prescriptionsPath), resources.getString(R.string.prescriptions_header))
 
     private fun onNhsOnlineLogoIconSelected() {
         loadWelcomePage()
