@@ -1,15 +1,24 @@
 <template>
-  <content>
-    <home-header />
-    <SessionExpiredBanner />
-    <main class="login-or-register">
-      <LoginButton />
+  <form :action="redirectUrl" method="get">
+    <content>
+      <home-header />
+      <SessionExpiredBanner />
+      <main class="login-or-register">
+        <input :value="clientId" type="hidden" name="client_id" >
+        <input :value="codeChallenge" type="hidden" name="code_challenge">
+        <input :value ="codeMethod" type="hidden" name="code_challenge_method" >
+        <input :value="prompt" type="hidden" name="prompt">
+        <input :value="redirectUri" type="hidden" name="redirect_uri">
+        <input :value="state" type="hidden" name="state">
+        <input :value="responseType" type="hidden" name="response_type">
+        <LoginButton />
 
-      <hr :data-content="$t('common.or')" class="hr-text">
+        <hr :data-content="$t('common.or')" class="hr-text">
 
-      <RegistrationButton />
-    </main>
-  </content>
+        <RegistrationButton />
+      </main>
+    </content>
+  </form>
 </template>
 <script>
 /* eslint-disable import/extensions */
@@ -19,7 +28,7 @@ import RegistrationButton from '@/components/RegistrationButton';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 
 export default {
-  middleware: ['meta'],
+  middleware: ['meta', 'buildAuth'],
   head() {
     return {
       title: 'Login Screen',
@@ -30,6 +39,32 @@ export default {
     LoginButton,
     HomeHeader,
     SessionExpiredBanner,
+  },
+  computed: {
+    redirectUrl() {
+      return this.$store.state.auth.config.baseUrl;
+    },
+    clientId() {
+      return this.$store.state.auth.config.client_id;
+    },
+    codeChallenge() {
+      return this.$store.state.auth.config.code_challenge;
+    },
+    codeMethod() {
+      return this.$store.state.auth.config.code_challenge_method;
+    },
+    state() {
+      return this.$store.state.auth.config.state;
+    },
+    prompt() {
+      return this.$store.state.auth.config.prompt;
+    },
+    redirectUri() {
+      return this.$store.state.auth.config.redirect_uri;
+    },
+    responseType() {
+      return this.$store.state.auth.config.response_type;
+    },
   },
 };
 </script>

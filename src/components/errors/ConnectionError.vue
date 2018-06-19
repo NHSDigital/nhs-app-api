@@ -1,5 +1,5 @@
 <template>
-  <main v-show="isVisible" class="content">
+  <main v-if="isVisible" class="content">
     <error-warning-dialog error-or-warning="error">
       <p class="header">
         {{ header }}

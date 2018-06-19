@@ -52,6 +52,12 @@ export default {
   init({ commit }) {
     commit(INIT_AUTH);
   },
+  buildLogin({ commit }) {
+    const codeVerifier = AuthorisationService.createVerifier();
+    const loginObj = new AuthorisationService().buildLoginObject(codeVerifier);
+    loginObj.codeVerifier = codeVerifier;
+    commit(UPDATE_CONFIG, loginObj);
+  },
   login({ dispatch, commit }, configObj) {
     const config = Object.assign({}, configObj);
     config.codeVerifier = AuthorisationService.createVerifier();

@@ -52,7 +52,7 @@ class AuthorizationService {
     return encoded.join('&');
   }
 
-  performLogin(verifier) {
+  buildLoginObject(verifier) {
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
     const redirectUri = process.env.CID_REDIRECT_URI;
@@ -65,10 +65,30 @@ class AuthorizationService {
       code_challenge: challenge,
       code_challenge_method: 'S256',
       prompt: 'login',
+      baseUrl: process.env.CID_AUTH_ENDPOINT,
+    };
+    return request;
+  }
+
+  performLogin(verifier) {
+    const challenge = createChallenge(verifier);
+    const myState = this.newState(this.cryptoGenerateRandom);
+    const redirectUri = process.env.CID_REDIRECT_URI;
+    const clientId = process.env.CID_CLIENT_ID;
+
+    const request = {
+      redirect_uri: redirectUri,
+      client_id: clientId,
+      response_type: 'code',
+      state: myState,
+      code_challenge: challenge,
+      code_challenge_method: 'S256',
+      prompt: 'login',
     };
 
-    const query = this.stringify(request);
     const baseUrl = process.env.CID_AUTH_ENDPOINT;
+
+    const query = this.stringify(request);
     if (process.client) {
       const url = `${baseUrl}?${query}`;
       window.location = url;

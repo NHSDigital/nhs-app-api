@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isVisible" :id="$style.serverError" class="content">
+  <div v-if="isVisible" :id="$style.serverError" class="content">
     <error-warning-dialog error-or-warning="error">
       <p class="header">
         {{ header }}
