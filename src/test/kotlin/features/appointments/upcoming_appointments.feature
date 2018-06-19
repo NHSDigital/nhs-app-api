@@ -1,3 +1,4 @@
+@pending  @NHSO-524
 Feature: View upcoming appointments
 
   Users can view their upcoming appointments in the My Appointments screen.
