@@ -76,43 +76,43 @@ open class MyRecordTestResultsStepDefinitions {
     @Then("I receive \"(.*)\" test results as part of the my record object")
     fun thenIReceiveATestResultsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.testResults?.data?.count())
+        Assert.assertEquals(count, result.response.testResults.data.count())
     }
 
     @Then("I receive the test result with term set correctly to Term")
     fun thenIReceiveATestResultWithTermSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count", result.response.testResults?.data?.first().term)
+        Assert.assertEquals("Neutrophil count", result.response.testResults.data.first().term)
     }
 
     @Then("the line item displays text value and range")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults?.data?.first().testResultLineItems.first())
+        Assert.assertEquals("Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultLineItems.first())
     }
 
     @Then("the line item value is set correctly")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Platelet count: 5.9 x10^9/L", result.response.testResults?.data?.first().testResultLineItems.first())
+        Assert.assertEquals("Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultLineItems.first())
     }
 
     @Then("I receive line items for each child value")
     fun thenIReceiveATestResultWithLineItemsForEachChildValue() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(2, result.response.testResults?.data?.first().testResultLineItems.count())
+        Assert.assertEquals(2, result.response.testResults.data.first().testResultLineItems.count())
     }
 
     @Then("I receive a single test result with the term set correctly to Term TextValue NumericUnits")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnits() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults?.data?.first().term)
+        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults.data.first().term)
     }
 
     @Then("I receive the term set correctly to Term TextValue NumericUnits Range")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults?.data?.first().term)
+        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults.data.first().term)
     }
 }
 

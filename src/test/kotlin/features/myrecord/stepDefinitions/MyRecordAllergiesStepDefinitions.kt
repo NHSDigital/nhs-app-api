@@ -34,19 +34,19 @@ open class MyRecordAllergiesStepDefinitions {
     @Then("I receive \"(.*)\" allergies as part of the my record object")
     fun thenIReceiveAnAllergiesObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.allergies?.data?.count())
+        Assert.assertEquals(count, result.response.allergies.data.count())
     }
 
     @And("the flag informing that the patient has access to the allergy data is set to \"(.*)\"")
     fun andHasAccessToAllergiesDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.allergies?.hasAccess)
+        Assert.assertEquals(value, result.response.allergies.hasAccess)
     }
 
     @And("the flag informing that there was an error retrieving the allergy data is set to \"(.*)\"")
     fun andHasErrorsWhenRetrievingAllergiesDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.allergies?.hasErrored)
+        Assert.assertEquals(value, result.response.allergies.hasErrored)
     }
 }
 

@@ -120,6 +120,6 @@ open class MyRecordImmunisationStepDefinitions {
     @Then("I receive \"(.*)\" immunisations as part of the my record object")
     fun thenIReceiveAnImmunisationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.immunisations?.data?.count())
+        Assert.assertEquals(count, result.response.immunisations.data.count())
     }
 }
