@@ -16,6 +16,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - NHS_WEB_APP_BASE_URL=http://localhost:3000/
       - CORS_AUTHORITY=*
+      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
+      - TPP_CERTIFICATE_PASSWORD
     depends_on:
       - nhsonline.redis.sds
     ports:
@@ -29,11 +31,13 @@ services:
       - "8080:8080"
     tty: true
   nhsonline.stubs.data:
-      image: nhsonline.stubs.data
-      depends_on:
-        - nhsonline.stubs
+    image: nhsonline.stubs.data
+    environment:
+      - wiremockUrl=http://nhsonline.stubs:8080
+    depends_on:
+      - nhsonline.stubs
   nhsonline.redis-data.sds:
-    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:
       - REDIS_HOST=nhsonline.redis.sds
     depends_on:

@@ -21,3 +21,4 @@ coverage/
 *.njsproj
 *.sln
 .nuxt
+docker-compose.override.yml
