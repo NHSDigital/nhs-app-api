@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             {
                 Data = new MedicationsData
                 {
-                    AcuteMedications = new List<MedicationItem>()
+                    AcuteMedications = new List<MedicationItem>
                     {
                         new MedicationItem
                         {
@@ -94,10 +94,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                 new MedicationLineItem
                                 {
                                     Text = "14 capsules",
-                                },
-                                new MedicationLineItem
-                                {
-                                    Text = "Ended: " + now.ToString(DATE_FORMAT),
                                 },
                             }
                         },
@@ -118,14 +114,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                 {
                                     Text = "28 capsules",
                                 },
-                                new MedicationLineItem
-                                {
-                                    Text = "Ended: " + oneMonthAgo.ToString(DATE_FORMAT),
-                                },
                             }
                         },
                     },
-                    CurrentRepeatMedications = new List<MedicationItem>()
+                    CurrentRepeatMedications = new List<MedicationItem>
                     {
                         new MedicationItem
                         {
@@ -153,10 +145,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                 {
                                     Text = "14 capsules",
                                 },
-                                new MedicationLineItem
-                                {
-                                    Text = "Ended: " + now.ToString(DATE_FORMAT),
-                                },
                             }
                         },
                         new MedicationItem
@@ -176,14 +164,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                 {
                                     Text = "14 capsules",
                                 },
-                                new MedicationLineItem
-                                {
-                                    Text = "Ended: " + oneMonthAgo.ToString(DATE_FORMAT),
-                                },
                             }
                         },
                     },
-                    DiscontinuedRepeatMedications = new List<MedicationItem>()
+                    DiscontinuedRepeatMedications = new List<MedicationItem>
                     {
                         new MedicationItem
                         {

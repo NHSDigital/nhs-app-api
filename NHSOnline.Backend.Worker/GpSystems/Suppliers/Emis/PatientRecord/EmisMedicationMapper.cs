@@ -89,7 +89,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             medicationLineItems.Add(dosage);
             var quantityRepresentation = new MedicationLineItem { Text = responseItem.QuantityRepresentation };
             medicationLineItems.Add(quantityRepresentation);
-            if (responseItem.LastIssueDate != null)
+            if (responseItem.PrescriptionType == PRESCRIPTION_TYPE_REPEAT &&
+                responseItem.DrugStatus == DRUG_STATUS_CANCELLED &&
+                responseItem.LastIssueDate != null)
             {
                 var lastIssueDate = new MedicationLineItem
                 {
