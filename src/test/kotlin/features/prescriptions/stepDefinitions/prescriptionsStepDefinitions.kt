@@ -6,8 +6,6 @@ import features.prescriptions.PrescriptionsData
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertTrue
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.emis.models.MedicationCourse
@@ -17,6 +15,7 @@ import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.junit.Assert
 import worker.NhsoHttpException
@@ -203,9 +202,9 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I get a response with a list of prescriptions for the last 6 months$")
     fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
-        assertNotNull(prescriptionListResponse)
-        assertTrue(prescriptionListResponse.response.prescriptions.isNotEmpty())
-        assertTrue(prescriptionListResponse.response.courses.isNotEmpty())
+        Assert.assertNotNull(prescriptionListResponse)
+        Assert.assertTrue(prescriptionListResponse.response.prescriptions.isNotEmpty())
+        Assert.assertTrue(prescriptionListResponse.response.courses.isNotEmpty())
     }
 
     @But("^a fromDate in an unexpected format$")
@@ -295,5 +294,28 @@ open class PrescriptionsStepDefinitions {
         repeatCourses.forEach { it -> courseGuids.add(it.medicationCourseGuid) }
 
         return courseGuids
+    }
+
+    @Given ("prescriptions is disabled at a GP Practice level")
+    fun prescriptionsIsDisabledAtAGPLevel() {
+        mockingClient
+            .forEmis {
+                prescriptionsRequest(patient).respondWith(HttpStatus.SC_FORBIDDEN) {}
+            }
+
+        mockingClient
+            .forEmis {
+                coursesRequest(patient).respondWith(HttpStatus.SC_FORBIDDEN) {}
+            }
+    }
+
+    @Then("I see a message informing me that I don't currently have access to this service")
+    fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
+        val em = prescriptions.prescriptions.getErrorText()
+
+        val errorTitle = "Sorry, you don't currently have access to this service"
+        val errorContent = "Contact your GP surgery for more information."
+
+        Assert.assertEquals(em, (errorTitle + errorContent))
     }
 }

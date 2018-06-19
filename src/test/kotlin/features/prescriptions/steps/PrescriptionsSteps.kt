@@ -4,11 +4,11 @@ import com.google.gson.GsonBuilder
 import models.prescriptions.HistoricPrescription
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import pages.PrescriptionsPage
+import pages.prescription.PrescriptionsPage
 
 open class PrescriptionsSteps {
 
-    lateinit var prescriptions :PrescriptionsPage
+    lateinit var prescriptions : PrescriptionsPage
 
     @Step
     open fun isLoaded() {

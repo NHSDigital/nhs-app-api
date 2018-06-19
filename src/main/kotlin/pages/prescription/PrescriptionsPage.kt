@@ -1,20 +1,18 @@
-package pages
+package pages.prescription
 
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.annotations.findby.How
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageObject
+import pages.HybridPageObject.Companion.PageType
 import pages.navigation.Header
 
 @DefaultUrl("http://localhost:3000/prescriptions")
-open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     lateinit var headerBar: Header
 
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order a repeat prescription')]"
-
 
     fun isLoaded(): Boolean {
         return headerBar.isVisible("My repeat prescriptions")
@@ -57,6 +55,4 @@ open class PrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
         val orderARepeatPrescriptionButton = findByXpath(orderARepeatPrescriptionButtonLocator)
         orderARepeatPrescriptionButton.click()
     }
-
-
 }

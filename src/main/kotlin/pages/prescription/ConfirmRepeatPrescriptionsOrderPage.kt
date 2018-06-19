@@ -1,8 +1,6 @@
-package pages
+package pages.prescription
 
 import mocking.emis.models.MedicationCourse
-import models.prescriptions.HistoricPrescription
-import models.prescriptions.RepeatPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
@@ -11,12 +9,12 @@ import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WrongPageError
 import org.junit.Assert
 import org.openqa.selenium.Keys
+import pages.HybridPageObject
+import pages.HybridPageObject.Companion.PageType
 import pages.navigation.Header
-import java.util.function.Consumer
 
 @DefaultUrl("http://localhost:3000/prescriptions/confirm-prescription-details")
-open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
-
+open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
 

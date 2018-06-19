@@ -3,7 +3,7 @@ package features.courses.steps
 import mocking.emis.models.MedicationCourse
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import pages.RepeatPrescriptionsPage
+import pages.prescription.RepeatPrescriptionsPage
 
 open class CourseSteps {
 

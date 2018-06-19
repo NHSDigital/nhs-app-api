@@ -1,7 +1,7 @@
 package features.courses.steps
 
 import net.thucydides.core.annotations.Step
-import pages.ConfirmRepeatPrescriptionsOrderPage
+import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 
 open class ConfirmRepeatPrescriptionOrderSteps {
 

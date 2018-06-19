@@ -6,6 +6,7 @@ import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.WebDriverFacade
+import org.junit.Assert
 import org.openqa.selenium.By
 
 
@@ -84,5 +85,27 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     fun spinnerVisible(): Boolean {
         return spinner.isCurrentlyVisible
+    }
+
+    fun getErrorText(): String {
+        val paragraphs = findAllByXpath("//div[@class='msg error']//p")
+        var content = StringBuilder()
+
+        paragraphs.forEach( { el ->
+            if ( el.isVisible ) {
+                val t = el.text
+                if (t != null) {
+                    content.append(t)
+                }
+            }
+        })
+
+        return content.toString()
+    }
+
+    fun getRetryButtonText() : String {
+        val buttons = findAllByXpath("//div[@class='msg error']//button")
+        Assert.assertEquals(1, buttons.size)
+        return buttons[0].text
     }
 }

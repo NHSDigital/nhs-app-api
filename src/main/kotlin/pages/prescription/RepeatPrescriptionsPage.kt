@@ -1,4 +1,4 @@
-package pages
+package pages.prescription
 
 import mocking.emis.models.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
@@ -9,10 +9,12 @@ import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WrongPageError
 import org.junit.Assert
 import org.openqa.selenium.Keys
+import pages.HybridPageObject
 import pages.navigation.Header
+import pages.HybridPageObject.Companion.PageType
 
 @DefaultUrl("http://localhost:3000/prescriptions/repeat-courses")
-open class RepeatPrescriptionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     var headerText: String = "Select medication"
     lateinit var headerBar: Header

@@ -53,6 +53,13 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see 2 prescriptions
 
+  @NHSO-556
+  Scenario: The User clicks on the Prescriptions button and the service is disabled at a GP Practice level
+    Given prescriptions is disabled at a GP Practice level
+    When I am on the prescriptions page
+    Then I see a message informing me that I don't currently have access to this service
+
+  @NHSO-599
   @backend
   Scenario: Requesting prescriptions with correct data returns a list of prescriptions when a patient had repeat prescriptions in the last 6 months (Date 6 months ago provided)
     Given I have logged in and have a valid session cookie

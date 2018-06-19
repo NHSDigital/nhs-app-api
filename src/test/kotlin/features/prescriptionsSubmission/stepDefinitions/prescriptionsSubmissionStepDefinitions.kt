@@ -17,7 +17,7 @@ import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.PrescriptionsPage
+import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
