@@ -28,7 +28,7 @@ export default {
         text2: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
       },
       upcoming: {
-        header: 'Upcoming appointments',
+        header: 'Next appointments',
         info: 'Click in the appointment if you need to cancel it',
       },
     },

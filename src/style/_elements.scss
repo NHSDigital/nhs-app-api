@@ -100,6 +100,13 @@ footer {
   color: $dark_grey;
 }
 .panel-title {
+  h2 {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 24px;
+    color: $nhs_blue;
+    margin-bottom: 16px;
+  }
   h5 {
     @include h5;
     margin-bottom: 8px;
@@ -220,7 +227,7 @@ footer {
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 4px;
-    
+
     &:first-child {
       padding-top: 16px;
     }

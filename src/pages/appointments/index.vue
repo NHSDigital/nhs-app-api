@@ -5,11 +5,15 @@
         {{ $t('appointments.index.successText') }}
       </p>
     </success-dialog>
-    <div :class="$style.info">
+
+    <div v-if="showUpcomingAppointments" :class="$style.info">
       <h3>{{ $t('appointments.index.empty.header') }}</h3>
       <p>{{ $t('appointments.index.empty.text1') }}</p>
       <p>{{ $t('appointments.index.empty.text2') }} </p>
     </div>
+
+    <upcoming-appointments :appointments = "upcomingAppointments" />
+
     <floating-button-bottom @on-click="onBookButtonClicked">
       {{ $t('appointments.index.bookButtonText') }}
     </floating-button-bottom>
@@ -18,6 +22,7 @@
 
 <script>
 /* eslint-disable import/extensions */
+import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 import SuccessDialog from '@/components/SuccessDialog';
 import FloatingButtonBottom from '../../components/FloatingButtonBottom';
 
@@ -26,15 +31,29 @@ export default {
   components: {
     SuccessDialog,
     FloatingButtonBottom,
+    UpcomingAppointments,
   },
   data() {
     return {
       justBookedAnAppointment: false,
     };
   },
+  computed: {
+    showUpcomingAppointments() {
+      return (
+        this.$store.state.myAppointments.hasLoaded &&
+        this.$store.state.myAppointments.appointments.length === 0
+      );
+    },
+    upcomingAppointments() {
+      return this.$store.state.myAppointments.appointments;
+    },
+  },
   mounted() {
     this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
     this.$store.dispatch('appointment/resetJustBooked');
+    this.$store.dispatch('myAppointments/clear');
+    this.$store.dispatch('myAppointments/load');
   },
   methods: {
     onBookButtonClicked() {

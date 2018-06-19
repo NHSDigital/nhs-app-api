@@ -1,0 +1,54 @@
+import { assign, find, get, map, mapKeys, sortBy } from 'lodash/fp';
+import { CLEAR, LOADED, INIT, initialState } from './mutation-types';
+
+const findById = (id, collection) => find(item => item.id === id)(collection);
+const findByIds = (ids, collection) => map(id => findById(id, collection))(ids);
+const sortSlots = sortBy(slot => [
+  slot.startTime,
+  get('clinicians[0].displayName')(slot),
+]);
+
+export default {
+  /* eslint-disable no-shadow */
+  /* eslint-disable no-param-reassign */
+  /* eslint-disable no-unused-vars */
+  [LOADED](state, data) {
+    mapKeys((key) => {
+      state[key] = data[key];
+    })(data);
+
+    state.appointments = map((appointment) => {
+      const result = assign({}, appointment);
+      const location = findById(appointment.locationId, state.locations);
+      if (location) {
+        result.location = location;
+      }
+
+      const appointmentSession =
+        findById(appointment.appointmentSessionId, state.appointmentSessions);
+      if (appointmentSession) {
+        result.appointmentSession = appointmentSession;
+      }
+
+      const clinicians = findByIds(appointment.clinicianIds, state.clinicians);
+      if (clinicians && clinicians.length > 0) {
+        result.clinicians = clinicians;
+      }
+      return result;
+    })(state.appointments);
+    state.appointments = sortSlots(state.appointments);
+    state.hasLoaded = true;
+  },
+  [INIT](state) {
+    state = initialState;
+  },
+  [CLEAR](state) {
+    state.appointmentSessions = [];
+    state.clinicians = [];
+    state.locations = [];
+    state.appointments = [];
+    state.cancellationReasons = [];
+    state.hasLoaded = false;
+    state.hasErrored = false;
+  },
+};

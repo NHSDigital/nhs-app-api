@@ -12,6 +12,7 @@ import prescriptions from './modules/prescriptions';
 import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
 import session from './modules/session';
 import errors from './modules/errors';
+import myAppointments from './modules/myAppointments';
 
 const createStore = () => new Vuex.Store({
   modules: {
@@ -26,6 +27,7 @@ const createStore = () => new Vuex.Store({
     repeatPrescriptionCourses,
     session,
     errors,
+    myAppointments,
   },
   actions: {
     nuxtServerInit({ state, commit }) {

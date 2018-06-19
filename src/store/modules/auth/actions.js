@@ -35,6 +35,7 @@ export default {
     const final = () => {
       commit(LOGOUT, true);
       this.dispatch('appointmentSlots/init');
+      this.dispatch('myAppointments/init');
       this.dispatch('auth/init');
       this.dispatch('device/init');
       this.dispatch('header/init');
