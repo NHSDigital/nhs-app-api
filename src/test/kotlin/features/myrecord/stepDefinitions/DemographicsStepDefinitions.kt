@@ -1,7 +1,6 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.AllergiesData
 import features.myrecord.DemographicsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -12,7 +11,6 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
 import worker.models.demographics.DemographicsResponse
-import worker.models.myrecord.MyRecordResponse
 
 open class DemographicsStepDefinitions {
 

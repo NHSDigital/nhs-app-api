@@ -3,15 +3,8 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.*
 import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
-import features.authentication.steps.HomeSteps
-import features.authentication.steps.LoginSteps
 import features.myrecord.*
-import features.myrecord.steps.MyRecordSteps
-import features.sharedSteps.BrowserSteps
-import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
-import mocking.emis.models.MedicationsResponse
-import worker.models.demographics.DemographicsResponse
 import worker.models.myrecord.MyRecordResponse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps

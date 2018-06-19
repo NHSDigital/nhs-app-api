@@ -101,8 +101,43 @@ open class MyRecordSteps {
     }
 
     @Step
-    fun getAllergyMessage(): String{
+    fun getAllergyMessage(): String {
         return myRecordInfoPage.getAllergyMessage()
+    }
+
+    @Step
+    fun getNoAllergyMessage(): String {
+        return myRecordInfoPage.getNoAllergyMessage()
+    }
+
+    @Step
+    fun getNoAcuteMedicationMsg(): String {
+        return myRecordInfoPage.getNoAcuteMedicationMsg()
+    }
+
+    @Step
+    fun getNoCurrentRepeatMedicationMsg(): String {
+        return myRecordInfoPage.getNoCurrentRepeatMedicationMsg()
+    }
+
+    @Step
+    fun getNoDiscontinuedRepeatMedicationMsg(): String {
+        return myRecordInfoPage.getNoDiscontinuedRepeatMedicationMsg()
+    }
+
+    @Step
+    fun getAllergyCount(): Int {
+        return myRecordInfoPage.getAllergyCount()
+    }
+
+    @Step
+    fun getAllergyMessages(): ArrayList<String> {
+        return myRecordInfoPage.getAllergyMessages()
+    }
+
+    @Step
+    fun getAllergyDates(): ArrayList<String> {
+        return myRecordInfoPage.getAllergyDates()
     }
 
     @Step
@@ -111,12 +146,12 @@ open class MyRecordSteps {
     }
 
     @Step
-    fun getAccessRevokedMessage(): String{
+    fun getAccessRevokedMessage(): String {
         return myRecordInfoPage.getAccessRevokedMessage()
     }
 
     @Step
-    fun clickAllergiesAndAdverseReactionsSection(){
+    fun clickAllergiesAndAdverseReactionsSection() {
         return myRecordInfoPage.clickAllergiesAndAdverseReactionsSection()
     }
 
@@ -126,16 +161,70 @@ open class MyRecordSteps {
     }
 
     @Step
+    fun clickCurrentRepeatMedications() {
+        myRecordInfoPage.clickCurrentRepeatMedications()
+    }
+
+    @Step
+    fun clickDiscontinuedRepeatMedications() {
+        myRecordInfoPage.clickDiscontinuedRepeatMedications()
+    }
+
+    @Step
     fun getAcuteMedicationsHeaderText(): String {
         return myRecordInfoPage.getAcuteMedicationsHeaderText()
     }
 
     @Step
-    fun getAcuteMedications(): String{
+    fun getAcuteMedications(): String {
         return myRecordInfoPage.getAcuteMedications()
     }
 
     @Step
+    fun isAcuteMedicationsAvailable(): Boolean {
+        return myRecordInfoPage.isAcuteMedicationsAvailable()
+    }
+
+    @Step
+    fun isRepeatMedicationsAvailable(): Boolean {
+        return myRecordInfoPage.isRepeatMedicationsAvailable()
+    }
+
+    @Step
+    fun isDiscontinuedMedicationsAvailable(): Boolean {
+        return myRecordInfoPage.isDiscontinuedMedicationsAvailable()
+    }
+
+    @Step
+    fun getTestResultsHeaderText(): String {
+        return myRecordInfoPage.getTestResultsHeaderText()
+    }
+
+    @Step
+    fun clickTestResultsSection() {
+        return myRecordInfoPage.clickTestResultsSection()
+    }
+
+    @Step
+    fun isTestResultsTextMsgVisible(): Boolean {
+        return myRecordInfoPage.isTestResultsTextMsgVisible()
+    }
+
+    @Step
+    fun getTestResultMsg(): String {
+        return myRecordInfoPage.getTestResultMsg()
+    }
+
+    @Step
+    fun getTestResultCount(): Int {
+        return myRecordInfoPage.getTestResultCount()
+    }
+
+    @Step
+    fun getTestResultChildCount(): Int {
+        return myRecordInfoPage.getTestResultChildCount()
+    }
+
     fun clickImmunisations() {
         myRecordInfoPage.clickImmunisations()
     }

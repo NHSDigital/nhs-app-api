@@ -5,10 +5,12 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.myrecord.AllergiesData
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
+import mocking.defaults.MockDefaults
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -40,7 +42,9 @@ open class MyRecordStepDefinitions {
 
     @Given("the GP Practice has disabled summary care record functionality")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
-
+        mockingClient.forEmis {
+            allergiesRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+        }
     }
 
     @When("^I click my record button on menu bar$")
@@ -181,8 +185,7 @@ open class MyRecordStepDefinitions {
     }
 
     @When("I get the users my record data")
-    fun whenIGetTheUsersMyRecordData()
-    {
+    fun whenIGetTheUsersMyRecordData() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
 
@@ -201,7 +204,7 @@ open class MyRecordStepDefinitions {
     @Then("^I see the Allergies and Adverse Reactions heading$")
     @Throws(Exception::class)
     fun i_see_the_Allergies_and_Adverse_Reactions_heading() {
-        Assert.assertEquals("Allergies and Adverse Reactions", recordSteps.getAllergiesAndAdverseReactionsHeaderText())
+        Assert.assertEquals("Allergies and adverse reactions", recordSteps.getAllergiesAndAdverseReactionsHeaderText())
     }
 
     @Then("^I see the Allergies and Adverse Reactions section collapsed$")
@@ -213,19 +216,36 @@ open class MyRecordStepDefinitions {
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
     @Throws(Exception::class)
     fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
-        Assert.assertEquals("Service not offered by GP or to specific user or access revoked", recordSteps.getAccessRevokedMessage())
+        Assert.assertEquals("Sorry, you don't currently have access to this service\nPlease contact your GP surgery for more information.", recordSteps.getAccessRevokedMessage())
     }
 
     @Then("^I see a message indicating I have no allergies$")
     @Throws(Exception::class)
     fun i_see_a_message_indicating_I_have_no_allergies() {
-        Assert.assertEquals("No information recorded for this section", recordSteps.getAllergyMessage())
+        Assert.assertEquals("No information recorded for this section", recordSteps.getNoAllergyMessage())
     }
 
     @Then("^I see one or more drug type allergies record displayed$")
     @Throws(Exception::class)
     fun i_see_one_or_more_drug_type_allergies_record_displayed() {
-        Assert.assertEquals("Drug Allergy", recordSteps.getAllergyMessage())
+        Assert.assertEquals(2, recordSteps.getAllergyCount())
+        var expected = ArrayList<String>()
+        for (i in 1..2) {
+            expected.add(AllergiesData.TERM)
+        }
+
+        Assert.assertArrayEquals(expected.toArray(), recordSteps.getAllergyMessages().toArray())
+    }
+
+    @Then("^I see 5 allergies with different date formats$")
+    @Throws(Exception::class)
+    fun i_see_five_allergies_with_different_date_formats() {
+
+        Assert.assertEquals(5, recordSteps.getAllergyCount())
+        Assert.assertTrue(recordSteps.getAllergyDates().contains("15 May 2018"))
+        Assert.assertTrue(recordSteps.getAllergyDates().contains("May 2018"))
+        Assert.assertTrue(recordSteps.getAllergyDates().contains("2018"))
+        Assert.assertTrue(recordSteps.getAllergyDates().contains("15 May 2018 09:52"))
     }
 
     @Then("^I see one or more non drug type allergies record displayed$")
@@ -249,7 +269,131 @@ open class MyRecordStepDefinitions {
     @Then("^I see acute medication information$")
     @Throws(Exception::class)
     fun i_see_acute_medication_information() {
-        Assert.assertEquals("Medications", recordSteps.getAcuteMedications())
+        Assert.assertTrue(recordSteps.isAcuteMedicationsAvailable())
+    }
+
+    @Given("^the GP Practice has enabled datailed coded record functionality$")
+    @Throws(Exception::class)
+    fun the_GP_Practice_has_enabled_datailed_coded_record_functionality() {
+
+    }
+
+    @When("^I click the test result section$")
+    @Throws(Exception::class)
+    fun i_click_the_test_result_section() {
+        recordSteps.clickTestResultsSection()
+    }
+
+    @Then("^I see one test result with one value$")
+    @Throws(Exception::class)
+    fun i_see_one_test_result_with_one_value() {
+        Assert.assertEquals(1, recordSteps.getTestResultCount())
+        Assert.assertEquals(1, recordSteps.getTestResultChildCount())
+        //Assert.assertEquals("No information recorded for this section", recordSteps.getTestResultMsg())
+    }
+
+    @Then("^I see one test result with one value and a range$")
+    @Throws(Exception::class)
+    fun i_see_one_test_result_with_one_value_and_a_range() {
+        Assert.assertEquals(1, recordSteps.getTestResultCount())
+        Assert.assertEquals(1, recordSteps.getTestResultChildCount())
+    }
+
+    @Then("^I see one test result with multiple child values$")
+    @Throws(Exception::class)
+    fun i_see_one_test_result_with_multiple_child_values() {
+        Assert.assertTrue(recordSteps.getTestResultCount() >= 1)
+        Assert.assertTrue(recordSteps.getTestResultChildCount() > 1)
+    }
+
+    @Then("^I see test results with multiple child values some of which have ranges$")
+    @Throws(Exception::class)
+    fun i_see_test_results_with_multiple_child_values_some_of_which_ave_ranges() {
+        Assert.assertTrue(recordSteps.getTestResultCount() >= 1)
+        Assert.assertTrue(recordSteps.getTestResultChildCount() > 1)
+    }
+
+    @Then("^I see the test result heading$")
+    @Throws(Exception::class)
+    fun i_see_the_test_result_heading() {
+        Assert.assertEquals("Test results", recordSteps.getTestResultsHeaderText())
+    }
+
+    @Then("^I see the test result section collapsed$")
+    @Throws(Exception::class)
+    fun i_see_the_test_result_section_collapsed() {
+        Assert.assertFalse(recordSteps.isTestResultsTextMsgVisible())
+    }
+
+    @Then("^I see test result information$")
+    @Throws(Exception::class)
+    fun i_see_test_result_information() {
+        Assert.assertTrue(recordSteps.isTestResultsTextMsgVisible())
+    }
+
+    @Then("^I see a message indicating that I have no access to view test result$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_test_result() {
+        Assert.assertEquals("You do not have access to this section", recordSteps.getAccessRevokedMessage())
+    }
+
+    @Then("^I see a message indicating that I have No information recorded for this section$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_this_section() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getTestResultMsg())
+    }
+
+    @Then("^I see an error occured message$")
+    @Throws(Exception::class)
+    fun i_see_an_error_occured_message() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getTestResultMsg())
+    }
+
+    @Given("^I see heading Current repeat medications$")
+    @Throws(Exception::class)
+    fun i_see_heading_Current_repeat_medications() {
+
+    }
+
+    @When("^I click current repeat medications$")
+    @Throws(Exception::class)
+    fun i_click_current_repeat_medications() {
+        recordSteps.clickCurrentRepeatMedications()
+    }
+
+    @Then("^I see current repeat medication information$")
+    @Throws(Exception::class)
+    fun i_see_current_repeat_medication_information() {
+        Assert.assertTrue(recordSteps.isRepeatMedicationsAvailable())
+    }
+
+    @Then("^I see discontinued repeat medication information$")
+    @Throws(Exception::class)
+    fun i_see_discontinued_repeat_medication_information() {
+        Assert.assertTrue(recordSteps.isDiscontinuedMedicationsAvailable())
+    }
+
+    @When("^I click discontinued repeat medications$")
+    @Throws(Exception::class)
+    fun i_click_discontinued_repeat_medications() {
+        recordSteps.clickDiscontinuedRepeatMedications()
+    }
+
+    @Then("^I see a message indicating that I have no \"(.*)\" medications$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_no_medications(medication: String) {
+        val msg = when (medication) {
+            "acute" -> recordSteps.getNoAcuteMedicationMsg()
+            "current repeat" -> recordSteps.getNoCurrentRepeatMedicationMsg()
+            else -> recordSteps.getNoDiscontinuedRepeatMedicationMsg()
+        }
+        Assert.assertEquals("No information recorded for this section", msg)
+    }
+
+    @Then("^I see a message indicating that I have no access to view my record$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_my_record() {
+        Assert.assertEquals("Sorry, you don't currently have access to this service\nPlease contact your GP surgery for more information.", recordSteps.getAccessRevokedMessage())
     }
 
     @When("^I click the Immunisations section$")

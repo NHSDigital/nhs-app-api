@@ -1,9 +1,6 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.AllergiesData
-import features.myrecord.ImmunisationsData
-import features.myrecord.MedicationsData
 import features.myrecord.TestResultsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -36,6 +33,14 @@ open class MyRecordTestResultsStepDefinitions {
         }
     }
 
+    @Given("the GP Practice has a single test result with single child values with no ranges")
+    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRanges() {
+
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+        }
+    }
+
     @Given("the GP Practice has a single test result with multiple child values with ranges")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRanges() {
 
@@ -44,6 +49,13 @@ open class MyRecordTestResultsStepDefinitions {
         }
     }
 
+    @Given("the GP Practice has a single test result with single child value with A range")
+    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithaRanges() {
+
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
+        }
+    }
 
     @Given("the GP Practice has test results enabled and a single test result exists with no child values or range")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRange() {

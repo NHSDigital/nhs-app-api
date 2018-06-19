@@ -24,6 +24,13 @@ open class MyRecordAllergiesStepDefinitions {
         }
     }
 
+    @Given("the GP Practice has enabled allergies functionality and has 5 different allergies with different date formats")
+    fun givenTheGPPracticeHasEnabledAllergiesFunctionalityAndHasFiveDifferentAllergiesWithDifferentDateFormats() {
+        mockingClient.forEmis {
+            allergiesRequest(MockDefaults.patient).respondWithSuccess(AllergiesData.getAllergyRecordsWithDifferentDateParts())
+        }
+    }
+
     @But("the GP Practice has disabled allergies functionality")
     fun butTheGPPracticeHasDisabledAllergiesFunctionality() {
         mockingClient.forEmis {

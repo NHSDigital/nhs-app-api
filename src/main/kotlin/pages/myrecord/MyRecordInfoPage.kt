@@ -37,7 +37,7 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "//h5[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]")
     lateinit var txtAllergyMsg: WebElementFacade
 
-    @FindBy(xpath = "")
+    @FindBy(xpath = "//div[@id='mainDiv']//div[@id='mainDiv']//main//child::div[@class='msg error']")
     lateinit var txtAccessRevokedMsg: WebElementFacade
 
     @FindBy(xpath = "//h5[contains(text(),'Acute medications')]")
@@ -45,6 +45,24 @@ class MyRecordInfoPage : PageObject() {
 
     @FindBy(xpath = "//h5[contains(text(),'Acute medications')]/following-sibling::div[1]")
     lateinit var acuteMedications: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Current repeat medications')]")
+    lateinit var currentRepeatMedicationsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Current repeat medications')]/following-sibling::div[1]")
+    lateinit var txtcurrentRepeatMedications: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Discontinued repeat medications')]")
+    lateinit var discontinuedRepeatMedicationsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Discontinued repeat medications')]/following-sibling::div[1]")
+    lateinit var txtdiscontinuedRepeatMedications: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Test results')]")
+    lateinit var testResultsHeader: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Test results')]/following-sibling::div[1]")
+    lateinit var txttestResultsMsg: WebElementFacade
 
     @FindBy(xpath = "//h5[contains(text(),'Immunisations')]")
     lateinit var immunisationsHeading: WebElementFacade
@@ -60,7 +78,7 @@ class MyRecordInfoPage : PageObject() {
 
     fun isAllergiesTextMsgVisible(): Boolean {
         waitABit(2000)
-        return txtAllergyMsg.isCurrentlyVisible
+        return txtAllergyMsg.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
     }
 
     fun isOnMyRecordInfoPage(): Boolean {
@@ -101,6 +119,7 @@ class MyRecordInfoPage : PageObject() {
     }
 
     fun clickAllergiesAndAdverseReactionsSection() {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", allergiesAndAdverseReactionsHeader);
         allergiesAndAdverseReactionsHeader.click()
     }
 
@@ -108,12 +127,61 @@ class MyRecordInfoPage : PageObject() {
         return txtAllergyMsg.text
     }
 
+    fun getNoAllergyMessage(): String {
+        return txtAllergyMsg.findBy<WebElementFacade>(By.tagName("p")).text
+    }
+
+    fun getNoAcuteMedicationMsg(): String {
+        return acuteMedications.findBy<WebElementFacade>(By.tagName("p")).text
+    }
+
+    fun getNoCurrentRepeatMedicationMsg(): String {
+        return txtcurrentRepeatMedications.findBy<WebElementFacade>(By.tagName("p")).text
+    }
+
+    fun getNoDiscontinuedRepeatMedicationMsg(): String {
+        return txtdiscontinuedRepeatMedications.findBy<WebElementFacade>(By.tagName("p")).text
+    }
+
+    fun getAllergyCount(): Int {
+        return txtAllergyMsg.thenFindAll(By.tagName("li")).size
+    }
+
+    fun getAllergyMessages(): ArrayList<String> {
+        var msgs = ArrayList<String>()
+        var list = txtAllergyMsg.thenFindAll(By.tagName("p"))
+        for (item in list) {
+            msgs.add(item.text)
+        }
+        return msgs
+    }
+
+    fun getAllergyDates(): ArrayList<String> {
+        var msgs = ArrayList<String>()
+        var list = txtAllergyMsg.thenFindAll(By.tagName("label"))
+        for (item in list) {
+            msgs.add(item.text)
+        }
+        return msgs
+    }
+
     fun getAccessRevokedMessage(): String {
-            return txtAccessRevokedMsg.text
+        return txtAccessRevokedMsg.text
     }
 
     fun clickAcuteMedications() {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", acuteMedicationsHeading);
         acuteMedicationsHeading.click()
+    }
+
+    fun clickCurrentRepeatMedications() {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", currentRepeatMedicationsHeading);
+        currentRepeatMedicationsHeading.click()
+    }
+
+    fun clickDiscontinuedRepeatMedications() {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", discontinuedRepeatMedicationsHeading);
+        discontinuedRepeatMedicationsHeading.click()
     }
 
     fun getAcuteMedicationsHeaderText(): String {
@@ -121,7 +189,28 @@ class MyRecordInfoPage : PageObject() {
     }
 
     fun getAcuteMedications(): String {
-        return acuteMedications.text
+        return acuteMedications.findBy<WebElementFacade>(By.tagName("p")).text
+    }
+
+    fun isAcuteMedicationsAvailable(): Boolean {
+        waitABit(1000)
+        return acuteMedications.findBy<WebElementFacade>(By.tagName("li")).isPresent
+    }
+
+    fun isRepeatMedicationsAvailable(): Boolean {
+        waitABit(1000)
+        return txtcurrentRepeatMedications.findBy<WebElementFacade>(By.tagName("li")).isPresent
+    }
+
+    fun isDiscontinuedMedicationsAvailable(): Boolean {
+        waitABit(1000)
+        return txtdiscontinuedRepeatMedications.findBy<WebElementFacade>(By.tagName("li")).isPresent
+    }
+
+    fun clickTestResultsSection() {
+        waitABit(2000)
+        evaluateJavascript("arguments[0].scrollIntoView(true);", testResultsHeader);
+        testResultsHeader.click()
     }
 
     fun getImmunistionsHeaderText(): String {
@@ -141,5 +230,24 @@ class MyRecordInfoPage : PageObject() {
         return immunisations.then<WebElementFacade>(By.cssSelector("p")).text;
     }
 
-}
+    fun getTestResultsHeaderText(): String {
+        return testResultsHeader.text
+    }
 
+    fun getTestResultMsg(): String {
+        return txttestResultsMsg.text
+    }
+
+    fun getTestResultCount(): Int {
+        return txttestResultsMsg.thenFindAll(By.tagName("p")).size
+    }
+
+    fun getTestResultChildCount(): Int {
+        return txttestResultsMsg.thenFindAll(By.tagName("p")).get(0).findBy<WebElementFacade>(By.xpath("..")).thenFindAll(By.tagName("li")).size
+    }
+
+    fun isTestResultsTextMsgVisible(): Boolean {
+        waitABit(2000)
+        return txttestResultsMsg.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+    }
+}

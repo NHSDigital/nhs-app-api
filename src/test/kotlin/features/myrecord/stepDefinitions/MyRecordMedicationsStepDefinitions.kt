@@ -4,7 +4,6 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.myrecord.AllergiesData
 import features.myrecord.MedicationsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -35,8 +34,8 @@ open class MyRecordMedicationsStepDefinitions {
         }
     }
 
-    @But("the GP Practice has disabled medications functionality")
-    fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
+    @Given("the GP Practice has enabled medication functionality and the patient has no medications")
+    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityandpatienthasnomedications() {
         try {
             mockingClient.forEmis {
                 medicationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
@@ -47,6 +46,13 @@ open class MyRecordMedicationsStepDefinitions {
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+        }
+    }
+
+    @But("the GP Practice has disabled medications functionality")
+    fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
+        mockingClient.forEmis {
+            medicationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
         }
     }
 
