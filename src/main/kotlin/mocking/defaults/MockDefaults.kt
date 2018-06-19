@@ -61,6 +61,11 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         }
 
         mockingClient.forTpp {
+            sessionRequest(tppAuthenticateRequest)
+                    .respondWithSuccesssWithoutSuid(tppAuthenticateReplySuccessfulResponse)
+        }
+
+        mockingClient.forTpp {
             sessionRequest(tppAuthenticateWithNonExistingAccountIdRequest)
                     .respondWithError(tppNonExistingAccountIdErrorResponse)
         }

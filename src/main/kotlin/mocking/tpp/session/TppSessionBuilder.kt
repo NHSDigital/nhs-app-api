@@ -22,13 +22,45 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
             marshaller.marshal(authenticate, stringWriter)
         }
 
+        val contentTypeHeader = "content-type"
+        val contentTypeValue = "text/xml"
+        val typeHeader = "type"
+        val typeValue = "Authenticate"
+
+
         requestBuilder
-                .andHeader("content-type", "text/xml")
-                .andHeader("type", "Authenticate")
+                .andHeader(contentTypeHeader, contentTypeValue)
+                .andHeader(typeHeader, typeValue)
                 .andXmlBody(stringWriter.toString())
     }
 
     fun respondWithSuccess(authenticateReply: AuthenticateReply): Mapping {
+        val responseBody = AuthenticateReply(
+                authenticateReply.patientId,
+                authenticateReply.onlineUserId,
+                authenticateReply.uuid,
+                authenticateReply.user)
+
+        val suidHeader = "suid"
+        val suidValue = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+
+        val jaxbContext = JAXBContext.newInstance(AuthenticateReply::class.java)
+        val marshaller = jaxbContext.createMarshaller()
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
+
+        val stringWriter = StringWriter()
+        stringWriter.use {
+            marshaller.marshal(responseBody, stringWriter)
+        }
+
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(stringWriter.toString())
+                    .andHeader(suidHeader, suidValue)
+                    .build()
+        }
+    }
+
+    fun respondWithSuccesssWithoutSuid(authenticateReply: AuthenticateReply): Mapping {
         val responseBody = AuthenticateReply(
                 authenticateReply.patientId,
                 authenticateReply.onlineUserId,
