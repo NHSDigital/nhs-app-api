@@ -17,7 +17,8 @@
         <location-icon/>&nbsp;{{ displayName(appointment.location) | truncate(24) }}
       </p>
 
-      <p v-for="clinician in appointment.clinicians" :key="clinician.id" aria-label="clinicians">
+      <p v-for="clinician in appointment.clinicians" :key="clinician.id"
+         :class="$style.clinician" aria-label="clinicians">
         <clinician-icon/>&nbsp;{{ displayName(clinician) | truncate(24) }}
       </p>
     </div>
@@ -73,6 +74,10 @@ export default {
 
   .appointments {
     margin-bottom: 80px;
+  }
+
+  .location, .clinician {
+    margin-bottom: 8px;
   }
 
 </style>
