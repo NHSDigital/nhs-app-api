@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isVisible" id="serverError" class="content">
+  <div v-show="isVisible" :id="$style.serverError" class="content">
     <error-warning-dialog error-or-warning="error">
       <p class="header">
         {{ header }}
@@ -118,7 +118,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style module lang="scss" scoped>
   @import '../../style/html';
   @import '../../style/elements';
   @import '../../style/buttons';
