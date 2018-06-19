@@ -4,6 +4,7 @@ import {
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_ORDER_SUCCESS,
+  REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
 } from './mutation-types';
 
 export default {
@@ -31,5 +32,8 @@ export default {
         commit(REPEAT_PRESCRIPTION_ORDER_SUCCESS);
         this.app.router.push('/prescriptions');
       });
+  },
+  updateAdditionalInfo({ commit }, repeatPrescriptionAdditionalInfo) {
+    commit(REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO, repeatPrescriptionAdditionalInfo);
   },
 };

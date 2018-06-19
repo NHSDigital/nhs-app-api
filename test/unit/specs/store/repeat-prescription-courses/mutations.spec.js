@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import mutations from '../../../../../src/store/modules/repeatPrescriptionCourses/mutations';
-import { REPEAT_PRESCRIPTION_COURSES_LOADED, REPEAT_PRESCRIPTION_ORDER_SUCCESS } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
+import { REPEAT_PRESCRIPTION_COURSES_LOADED, REPEAT_PRESCRIPTION_ORDER_SUCCESS, REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
 
 
 describe('REPEAT_PRESCRIPTION_COURSES_LOADED', () => {
@@ -188,5 +188,19 @@ describe('REPEAT_PRESCRIPTION_ORDER_SUCCESS', () => {
     mutations[REPEAT_PRESCRIPTION_ORDER_SUCCESS](state);
 
     expect(state.justOrderedARepeatPrescription).toEqual(true);
+  });
+});
+
+describe('REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO', () => {
+  it('will set the appropriate data on the state from the source', () => {
+    const state = {};
+
+    const additionalInfo = {
+      specialRequest: 'Please call me when prescription is ready',
+    };
+
+    mutations[REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO](state, additionalInfo);
+
+    expect(state.specialRequest).toEqual(additionalInfo.specialRequest);
   });
 });

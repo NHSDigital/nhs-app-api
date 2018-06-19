@@ -79,7 +79,8 @@ export default {
     },
     repeatCourses: {
       noMedicinesSelected: 'Select at least one medicine',
-      specialRequestsLabel: 'Special requests relating to this order (optional)',
+      specialRequestLabel: 'Special requests relating to this order (optional)',
+      maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words)',
       backToYourPrescriptionsButton: 'Back',
       continue: 'Continue',
     },
@@ -97,6 +98,8 @@ export default {
       header: 'Check your prescription details before ordering',
       changeButton: 'Change this prescription',
       confirmButtonText: 'Confirm and order repeat prescription',
+      specialRequestLabel: 'Special requests relating to this order',
+      noSpecialRequestDefaultText: 'None',
     },
     errors: {
       pageHeader: 'Error retrieving data',

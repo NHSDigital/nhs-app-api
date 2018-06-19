@@ -11,8 +11,7 @@
           <div
             v-for="selectedPrescription in selectedPrescriptions"
             :key="selectedPrescription.courseId"
-            data-purpose="selected-prescription"
-          >
+            data-purpose="selected-prescription">
             <label
               :class="$style.formLabel"
               data-purpose="prescription-name">
@@ -22,6 +21,18 @@
               :class="$style.prescriptionDescription"
               data-purpose="prescription-description">
               {{ selectedPrescription.dosage }} - {{ selectedPrescription.quantity }}
+            </p>
+          </div>
+          <hr>
+          <div>
+            <span :class="$style.formLabel">
+              {{ $t('prescriptions.confirmPrescriptionOrder.specialRequestLabel') }}
+            </span>
+            <p v-if="specialRequest" id="specialRequestText" :class="$style.specialRequest">
+              {{ specialRequest }}
+            </p>
+            <p v-else id="specialRequestText">
+              {{ $t('prescriptions.confirmPrescriptionOrder.noSpecialRequestDefaultText') }}
             </p>
           </div>
         </div>
@@ -48,6 +59,11 @@ export default {
   components: {
     Spinner,
   },
+  data() {
+    return {
+      specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
+    };
+  },
   computed: {
     selectedPrescriptions() {
       return this.$store.state.repeatPrescriptionCourses.selectedPrescriptions;
@@ -68,7 +84,7 @@ export default {
     onConfirmButtonClicked() {
       const repeatPrescriptionOrder = {
         CourseIds: this.selectedPrescriptions.map(x => x.id),
-        SpecialRequest: null,
+        SpecialRequest: this.specialRequest,
       };
       this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
     },
@@ -104,6 +120,7 @@ export default {
     color: #4A4A4A;
     font-family: $frutiger-bold!important;
   }
+
   .prescriptionDescription {
     display: block;
     font-weight: normal;
@@ -111,5 +128,10 @@ export default {
     line-height: 22px;
     color: #4A4A4A;
     margin-bottom: 16px;
+  }
+
+  .specialRequest {
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 </style>

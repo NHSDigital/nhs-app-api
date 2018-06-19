@@ -4,11 +4,13 @@ export const INIT_REPEAT_PRESCRIPTIONS = 'INIT_REPEAT_PRESCRIPTIONS';
 export const SELECT_REPEAT_PRESCRIPTION = 'SELECT_REPEAT_PRESCRIPTION';
 export const REPEAT_PRESCRIPTION_VALIDATED = 'REPEAT_PRESCRIPTION_VALIDATED';
 export const REPEAT_PRESCRIPTION_ORDER_SUCCESS = 'REPEAT_PRESCRIPTION_ORDER_SUCCESS';
+export const REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO = 'REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO';
 
 
 export const initialState = {
   courses: [],
   repeatPrescriptionCourses: [],
+  specialRequest: null,
   justOrderedARepeatPrescription: false,
   hasLoaded: false,
   hasErrored: false,

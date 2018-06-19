@@ -19,7 +19,19 @@
               :selected="repeatPrescription.selected"
               :prescription-details="repeatPrescription" />
           </div>
-          <p>
+          <div role="form">
+            <label :class="$style.formLabel" for="specialRequest">
+              {{ $t('prescriptions.repeatCourses.specialRequestLabel') }}
+            </label>
+            <textarea
+              id="specialRequest"
+              ref="specialRequest"
+              :class="$style.textArea"
+              v-model="specialRequest"
+              maxlength="1000"/>
+            <p id="maxSpecialRequest">{{ $t('prescriptions.repeatCourses.maxSpecialRequest') }}</p>
+          </div>
+          <p :class="$style.prescription_not_shown">
             {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
           </p>
           <br>
@@ -65,6 +77,11 @@ export default {
     RepeatPrescription,
   },
   middleware: ['auth', 'meta'],
+  data() {
+    return {
+      specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
+    };
+  },
   computed: {
     error() {
       const { isValid, validated } = this.$store.state.repeatPrescriptionCourses;
@@ -102,11 +119,15 @@ export default {
           selectedCourses.push(course);
         }
       });
-      if (selectedCourses.length !== 0) {
+      if (selectedCourses.length > 0) {
+        const repeatPrescriptionCoursesAdditionalInfo = {
+          specialRequest: this.specialRequest,
+        };
+        this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
         this.$router.push('../prescriptions/confirm-prescription-details');
       } else {
         const validationObj = {
-          isValid: selectedCourses.length !== 0,
+          isValid: selectedCourses.length > 0,
           submitted: true,
         };
         this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
@@ -122,6 +143,13 @@ export default {
   @import "../../style/fonts";
   @import "../../style/buttons";
   @import "../../style/elements";
+  @import "../../style/spacings";
+
+  .formLabel {
+    @include default_label;
+    padding-top: 16px;
+    padding-bottom: 8px;
+  }
 
   .panel {
     @include panel;
@@ -142,16 +170,11 @@ export default {
     display: block;
   }
 
-  .formLabel {
-    display: block;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 22px;
-    color: #4A4A4A;
-    font-family: $frutiger-bold;
-  }
-
   .textArea {
     @include text-area;
+  }
+
+  .prescription_not_shown {
+    margin-top: 10px;
   }
 </style>

@@ -5,6 +5,7 @@ import {
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_ORDER_SUCCESS,
+  REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
   initialState,
 } from './mutation-types';
 
@@ -47,6 +48,9 @@ export default {
   },
   [REPEAT_PRESCRIPTION_ORDER_SUCCESS](state) {
     state.justOrderedARepeatPrescription = true;
+  },
+  [REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO](state, repeatPrescriptionAdditionalInfo) {
+    state.specialRequest = repeatPrescriptionAdditionalInfo.specialRequest;
   },
 };
 
