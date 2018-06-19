@@ -73,6 +73,28 @@ open class MyRecordTestResultsStepDefinitions {
         }
     }
 
+    @Given("I do not have access to test results")
+    fun givenIDoNotHaveAccessToTestResults() {
+
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+        }
+    }
+
+    @Given("I have no test results")
+    fun givenIHaveNoTestResults() {
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getEmptyTestResults())
+        }
+    }
+
+    @Given("an error occurred retrieving the test results from EMIS")
+    fun givenAnErrorOccurredRetrievingTestResultsFromEMIS() {
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+        }
+    }
+
     @When("I get the users test results")
     fun whenIGetTheUsersMyRecordData()
     {

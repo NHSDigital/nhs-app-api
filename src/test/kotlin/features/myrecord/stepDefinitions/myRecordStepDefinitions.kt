@@ -216,7 +216,7 @@ open class MyRecordStepDefinitions {
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
     @Throws(Exception::class)
     fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
-        Assert.assertEquals("Sorry, you don't currently have access to this service\nPlease contact your GP surgery for more information.", recordSteps.getAccessRevokedMessage())
+        Assert.assertEquals("Sorry, you don't currently have access to this service\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
     }
 
     @Then("^I see a message indicating I have no allergies$")
@@ -270,12 +270,6 @@ open class MyRecordStepDefinitions {
     @Throws(Exception::class)
     fun i_see_acute_medication_information() {
         Assert.assertTrue(recordSteps.isAcuteMedicationsAvailable())
-    }
-
-    @Given("^the GP Practice has enabled datailed coded record functionality$")
-    @Throws(Exception::class)
-    fun the_GP_Practice_has_enabled_datailed_coded_record_functionality() {
-
     }
 
     @When("^I click the test result section$")
@@ -334,19 +328,19 @@ open class MyRecordStepDefinitions {
     @Then("^I see a message indicating that I have no access to view test result$")
     @Throws(Exception::class)
     fun i_see_a_message_indicating_that_I_have_no_access_to_view_test_result() {
-        Assert.assertEquals("You do not have access to this section", recordSteps.getAccessRevokedMessage())
+        Assert.assertEquals("You do not have access to this section", recordSteps.getTestResultsMessage())
     }
 
-    @Then("^I see a message indicating that I have No information recorded for this section$")
+    @Then("^I see a message indicating that I have no information recorded for this section$")
     @Throws(Exception::class)
     fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_this_section() {
-        Assert.assertEquals("No information recorded for this section", recordSteps.getTestResultMsg())
+        Assert.assertEquals("No information recorded for this section", recordSteps.getTestResultsMessage())
     }
 
     @Then("^I see an error occured message$")
     @Throws(Exception::class)
     fun i_see_an_error_occured_message() {
-        Assert.assertEquals("No information recorded for this section", recordSteps.getTestResultMsg())
+        Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getTestResultsMessage())
     }
 
     @Given("^I see heading Current repeat medications$")
@@ -390,10 +384,10 @@ open class MyRecordStepDefinitions {
         Assert.assertEquals("No information recorded for this section", msg)
     }
 
-    @Then("^I see a message indicating that I have no access to view my record$")
+    @Then("^I see a message indicating that I have no access to view my summary care record$")
     @Throws(Exception::class)
     fun i_see_a_message_indicating_that_I_have_no_access_to_view_my_record() {
-        Assert.assertEquals("Sorry, you don't currently have access to this service\nPlease contact your GP surgery for more information.", recordSteps.getAccessRevokedMessage())
+        Assert.assertEquals("Sorry, you don't currently have access to this service\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
     }
 
     @When("^I click the Immunisations section$")

@@ -20,34 +20,32 @@ Feature: View My Medical Record Information
     When I click the test result section
     Then I see test result information
 
-#  @pending
-#  @NHSO-686
-#  Scenario: An EMIS user has no access to test result section
-#    Given I am logged in
-#    And the GP Practice has enabled demographics functionality
-#    And the GP Practice has enabled datailed coded record functionality
-#    And I am on my record information page
-#    Then I see a message indicating that I have no access to view test result
+  @NHSO-686
+  Scenario: An EMIS user has no access to test result section
+    Given I am logged in
+    And the GP Practice has enabled demographics functionality
+    And I do not have access to test results
+    And I am on my record information page
+    When I click the test result section
+    Then I see a message indicating that I have no access to view test result
 
-#  @pending
-#  @NHSO-686
-#  Scenario: An EMIS user has no test results
-#    Given I am logged in
-#    And the GP Practice has enabled demographics functionality
-#    Given the GP Practice has enabled datailed coded record functionality
-#    And I am on my record information page
-#    When I click the test result section
-#    Then I see a message indicating that I have No information recorded for this section
+  @NHSO-686
+  Scenario: An EMIS user has no test results
+    Given I am logged in
+    And the GP Practice has enabled demographics functionality
+    And I have no test results
+    And I am on my record information page
+    When I click the test result section
+    Then I see a message indicating that I have no information recorded for this section
 
-  #  @pending
-#  @NHSO-686
-#  Scenario: An error occurs when trying to retrieve test result data from EMIS
-#    Given I am logged in
-#    And the GP Practice has enabled demographics functionality
-#    Given the GP Practice has enabled datailed coded record functionality
-#    And I am on my record information page
-#    When I click the test result section
-#    Then I see an error occured message
+  @NHSO-686
+  Scenario: An error occurs when trying to retrieve test result data from EMIS
+    Given I am logged in
+    And the GP Practice has enabled demographics functionality
+    And an error occurred retrieving the test results from EMIS
+    And I am on my record information page
+    When I click the test result section
+    Then I see an error occured message
 
   @NHSO-686
   Scenario: An EMIS user has one test result with one value

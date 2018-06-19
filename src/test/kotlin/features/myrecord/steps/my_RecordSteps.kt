@@ -146,8 +146,13 @@ open class MyRecordSteps {
     }
 
     @Step
-    fun getAccessRevokedMessage(): String {
-        return myRecordInfoPage.getAccessRevokedMessage()
+    fun getTestResultsMessage(): String {
+        return myRecordInfoPage.getTestResultsMessage()
+    }
+
+    @Step
+    fun getSummaryCareNoAccessMessage(): String {
+        return myRecordInfoPage.getSummaryCareNoAccessMessage()
     }
 
     @Step
@@ -208,11 +213,6 @@ open class MyRecordSteps {
     @Step
     fun isTestResultsTextMsgVisible(): Boolean {
         return myRecordInfoPage.isTestResultsTextMsgVisible()
-    }
-
-    @Step
-    fun getTestResultMsg(): String {
-        return myRecordInfoPage.getTestResultMsg()
     }
 
     @Step

@@ -59,25 +59,9 @@ Feature: View My Medical Record Information
     Then I see a message indicating that I have no "discontinued repeat" medications
 
   @NHSO-678
-  Scenario: An EMIS user has no access to view acute medications
+  Scenario: An EMIS user has no access to view medications
     Given I am logged in
     And the GP Practice has enabled demographics functionality
     And the GP Practice has disabled summary care record functionality
     And I am on my record information page
-    Then I see a message indicating that I have no access to view my record
-
-  @NHSO-678
-  Scenario: An EMIS user has no access to view current repeat medications
-    Given I am logged in
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has disabled summary care record functionality
-    And I am on my record information page
-    Then I see a message indicating that I have no access to view my record
-
-  @NHSO-678
-  Scenario: An EMIS user has no access to view discontinued repeat medications
-    Given I am logged in
-    And the GP Practice has enabled demographics functionality
-    And the GP Practice has disabled summary care record functionality
-    And I am on my record information page
-    Then I see a message indicating that I have no access to view my record
+    Then I see a message indicating that I have no access to view my summary care record

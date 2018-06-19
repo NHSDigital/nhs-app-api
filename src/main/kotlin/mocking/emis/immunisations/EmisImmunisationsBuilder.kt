@@ -38,7 +38,8 @@ class EmisImmunisationsBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithNonDataAccessException(): Mapping {
-        val exceptionResponse = ExceptionResponse(503, "")
+        val exceptionResponse = ExceptionResponse(503,
+                "An Exception Occurred")
         return respondWithException(exceptionResponse)
     }
 

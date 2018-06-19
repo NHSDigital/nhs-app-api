@@ -37,8 +37,8 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "//h5[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]")
     lateinit var txtAllergyMsg: WebElementFacade
 
-    @FindBy(xpath = "//div[@id='mainDiv']//div[@id='mainDiv']//main//child::div[@class='msg error']")
-    lateinit var txtAccessRevokedMsg: WebElementFacade
+    @FindBy(xpath = "//div[@id='mainDiv']//div[@id='mainDiv']//main//child::div[@class='msg error'][1]")
+    lateinit var noSummaryCareAccessMessage: WebElementFacade
 
     @FindBy(xpath = "//h5[contains(text(),'Acute medications')]")
     lateinit var acuteMedicationsHeading: WebElementFacade
@@ -165,8 +165,9 @@ class MyRecordInfoPage : PageObject() {
         return msgs
     }
 
-    fun getAccessRevokedMessage(): String {
-        return txtAccessRevokedMsg.text
+    fun getTestResultsMessage(): String {
+        evaluateJavascript("arguments[0].scrollIntoView(true);", txttestResultsMsg);
+        return txttestResultsMsg.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun clickAcuteMedications() {
@@ -234,10 +235,6 @@ class MyRecordInfoPage : PageObject() {
         return testResultsHeader.text
     }
 
-    fun getTestResultMsg(): String {
-        return txttestResultsMsg.text
-    }
-
     fun getTestResultCount(): Int {
         return txttestResultsMsg.thenFindAll(By.tagName("p")).size
     }
@@ -249,5 +246,9 @@ class MyRecordInfoPage : PageObject() {
     fun isTestResultsTextMsgVisible(): Boolean {
         waitABit(2000)
         return txttestResultsMsg.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+    }
+
+    fun getSummaryCareNoAccessMessage(): String {
+        return noSummaryCareAccessMessage.text
     }
 }
