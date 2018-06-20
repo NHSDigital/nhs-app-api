@@ -54,6 +54,10 @@ definitions:
         type: object
         description: An object containing all test result details.
         $ref: '#/definitions/TestResults'
+      problems:
+              type: object
+              description: An object containing all problems details.
+              $ref: '#/definitions/Problems'
 
   Allergies:
     type: object
@@ -188,6 +192,38 @@ definitions:
       testResultLineItems:
         type: array
         description: Array of test result line items.
+        items:
+          type: string
+          
+  Problems:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties: 
+             problems:
+              type: array
+              description: Array of problems
+              items:
+                $ref: '#/definitions/ProblemItem'
+          
+  ProblemItem:
+    type: object
+    properties:
+      effectiveDate:
+        $ref: '#/definitions/Date'
+      detail:
+        type: string
+        description: A detail of the problem.
+      problemLineItems:
+        type: array
+        description: Array of problem line items.
         items:
           type: string
   

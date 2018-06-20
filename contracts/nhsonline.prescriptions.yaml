@@ -147,7 +147,6 @@ definitions:
         type: string
         description: Course identifier.
       status:
-      status:
         type: string
         enum:
           - approved
