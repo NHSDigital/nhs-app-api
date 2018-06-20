@@ -29,6 +29,7 @@ Feature: View My Medical Record Information
     When I click the Allergies and Adverse Reactions section
     Then I see a message indicating I have no allergies
 
+  @smoketest
   @NHSO-677
   Scenario: An EMIS user has one or more allergy records
     Given I am logged in

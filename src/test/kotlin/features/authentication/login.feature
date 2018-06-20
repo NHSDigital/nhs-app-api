@@ -11,6 +11,7 @@ Feature: Login
     When I log in
     Then I am redirected to 'http://citizenidaddresshere'
 
+  @smoketest
   Scenario: User sees the home page
     Given I am logged in
     Then I see a welcome message for Montel Frye

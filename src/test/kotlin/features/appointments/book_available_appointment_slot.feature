@@ -47,6 +47,7 @@ Feature: Book an available appointment slot
   @pending  @NHSO-986
   @native
   @mobile
+  @smoketest
   Scenario: A user is navigated to 'Appointments Confirmation' screen when the user selects a slot and  clicks on 'Book this appointment' button.
     Given I am logged in
     And there are available appointment slots
@@ -77,6 +78,7 @@ Feature: Book an available appointment slot
   @pending  @NHSO-986
   @native
   @mobile
+  @smoketest
   Scenario: A user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
     Given I am logged in
     And there are available appointment slots
@@ -103,6 +105,7 @@ Feature: Book an available appointment slot
     Then an error is displayed that "Describe your symptoms" is mandatory
 
   @NHSO-72
+  @smoketest
   Scenario: A user tries to book an appointment describing symptoms at least 1 character
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
@@ -128,6 +131,7 @@ Feature: Book an available appointment slot
     Then only the first 150 characters will be displayed
 
   @NHSO-72
+  @smoketest
   Scenario: A user tries to paste symptoms with over 150 characters
     Given I am on the appointments booking page
     And I have selected an appointment slot to book

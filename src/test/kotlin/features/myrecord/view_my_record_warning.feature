@@ -4,6 +4,7 @@ Feature: View My Medical Record Warning
     Given wiremock is initialised
     And the my record wiremocks are initialised
 
+  @smoketest
   @NHSO-359
   Scenario: An EMIS user navigates to my record warning page
     Given I am logged in

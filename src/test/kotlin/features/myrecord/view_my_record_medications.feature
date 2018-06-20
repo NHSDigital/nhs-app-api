@@ -4,6 +4,7 @@ Feature: View My Medical Record Information
     Given wiremock is initialised
     And the my record wiremocks are initialised
 
+  @smoketest
   @NHSO-678
   Scenario: An EMIS user views acute medications
     Given I am logged in
@@ -14,6 +15,7 @@ Feature: View My Medical Record Information
     When I click acute medications
     Then I see acute medication information
 
+  @smoketest
   @NHSO-678
   Scenario: An EMIS user views current repeat medications
     Given I am logged in

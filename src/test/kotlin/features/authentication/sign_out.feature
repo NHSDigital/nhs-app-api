@@ -7,6 +7,7 @@ Feature: Sign out of mobile web
     Given wiremock is initialised
 
   @NHSO-186
+  @smoketest
   Scenario: A user is shown the onboarding sign in screen after clicking the "Sign out" button
     Given I am logged in
     When I sign out

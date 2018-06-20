@@ -154,6 +154,7 @@ Feature: Registration
     Then I am redirected to the CID create an account page
 
   @NHSO-313
+  @smoketest
   Scenario: User launches and completes account creation from web
     Given wiremock is initialised
     Given I am not logged in

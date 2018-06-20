@@ -12,6 +12,7 @@ Feature: View My Medical Record Information
     Then I see the test result heading
     And I see the test result section collapsed
 
+  @smoketest
   @NHSO-686
   Scenario: An EMIS user can view test result information
     Given I am logged in

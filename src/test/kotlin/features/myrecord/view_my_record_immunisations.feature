@@ -4,6 +4,7 @@ Feature: View My Medical Record Information
     Given wiremock is initialised
     And the my record wiremocks are initialised
 
+  @smoketest
   @NHSO-685
   Scenario: An EMIS user has immunisations on their record
     Given I am logged in

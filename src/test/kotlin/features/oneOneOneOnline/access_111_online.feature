@@ -5,11 +5,13 @@ Feature: Access 111 Online
   Background:
     Given wiremock is initialised
 
+  @smoketest
   Scenario: The user is not logged in
     Given I am not logged in
     When I Check My Symptoms
     Then I am redirected to 'https://111.nhs.uk/'
 
+  @smoketest
   @bug @NHSO-1121
   @pending
   Scenario: The user is logged in

@@ -16,6 +16,7 @@ Feature: View prescriptions
     Then I see prescriptions page loaded
     And the prescriptions menu button is highlighted
 
+  @smoketest
   Scenario: A user with no past repeat prescriptions
     Given I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
@@ -29,6 +30,7 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see 100 prescriptions
 
+  @smoketest
   Scenario: A user who has multiple prescription each containing one course
     Given I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats

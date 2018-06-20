@@ -13,6 +13,7 @@ Feature: View available appointment slots
   @pending
   @native
   @mobile
+  @smoketest
   Scenario: A user sees available appointment slots
     Given I am on the appointments booking page
     And there are available appointment slots

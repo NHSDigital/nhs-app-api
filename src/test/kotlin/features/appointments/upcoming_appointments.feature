@@ -23,6 +23,7 @@ Feature: View upcoming appointments
     But I can book an appointment
 
   @NHSO-524
+  @smoketest
   Scenario: A user proceeds to book an appointment
     Given I have no upcoming appointments
     And I am on the appointments page
@@ -31,6 +32,7 @@ Feature: View upcoming appointments
 
   @NHSO-196
   @pending  @NHSO-196
+  @smoketest
   Scenario: A user has upcoming appointments
     Given I have upcoming appointments
     When I am on the appointments page

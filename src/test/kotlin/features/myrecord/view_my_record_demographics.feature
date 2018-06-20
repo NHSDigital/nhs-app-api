@@ -12,6 +12,7 @@ Feature: View My Medical Record Information
     When I click agree and continue
     Then the my record information screen is loaded
 
+  @smoketest
   @NHSO-361
   Scenario: An EMIS user navigates to patient information page
     Given I am logged in

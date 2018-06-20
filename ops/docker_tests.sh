@@ -28,6 +28,25 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 
+if [ -z $BDD_FLAG ]; then
+  # Run full BDD tests if BDD_FLAGS is undefined.
+  BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
+else
+  case $s in
+    full)
+      BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
+    ;;
+    smoketests)
+      BDD_CUCUMBER_OPTIONS='--tags @smoketest ~@bug ~@pending ~@native ~@manual'
+    ;;
+    *)
+      die "Unknown BDD_FLAG value"
+    ;;
+  esac
+fi
+info "BDD_FLAG: $BDD_FLAG"
+info "Cucumber options: $BDD_CUCUMBER_OPTIONS"
+
 if ! [ -z $BDD_TEST_MODE ]; then
   case $BDD_TEST_MODE in
     web)
@@ -85,7 +104,7 @@ docker run \
   $DOCKER_IMAGE /bin/bash -c " \
     cd /repo ; \
     ./gradlew clean test aggregate \
-      -Dcucumber.options='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt' \
+      -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
       -Dwebdriver.provided.type=$BROWSER \
       -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
   ;"

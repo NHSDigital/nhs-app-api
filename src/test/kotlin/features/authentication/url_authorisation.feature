@@ -7,6 +7,7 @@ Feature: Authorisation occurs during each URL visit
 
   @NHSO-906
   @tech-debt @NHSO-1012
+  @smoketest
   Scenario Outline: User has never logged in and attempts to navigate to secure routes
     Given I am not logged in
     When I browse to the page at <URL>
@@ -56,6 +57,7 @@ Feature: Authorisation occurs during each URL visit
 
   @NHSO-906
   @tech-debt @NHSO-1012
+  @smoketest
   Scenario Outline: User browses to deep link when logged in
     Given I am logged in
     When I browse to the page at <URL>

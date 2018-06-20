@@ -10,6 +10,7 @@ Feature: View courses
     And I am logged in
     And I navigate to prescriptions
 
+  @smoketest
   Scenario: The User has repeatable prescriptions
     Given I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
@@ -52,6 +53,7 @@ Feature: View courses
     When I click 'Order a repeat prescription'
     Then I see the available repeatable prescriptions
 
+  @smoketest
   @NHSO-502
   Scenario: The User has selected repeat prescriptions to order
     And I select 5 repeatable prescriptions out of 5 available
@@ -77,6 +79,7 @@ Feature: View courses
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     Then I see my previously selected repeat prescriptions selected
 
+  @smoketest
   @NHSO-502 @NHSO-655
   Scenario: The User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I select 4 repeatable prescriptions out of 5 available
