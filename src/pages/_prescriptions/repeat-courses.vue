@@ -31,6 +31,7 @@
               maxlength="1000"/>
             <p id="maxSpecialRequest">{{ $t('prescriptions.repeatCourses.maxSpecialRequest') }}</p>
           </div>
+          <br/>
           <p :class="$style.prescription_not_shown">
             {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
           </p>
