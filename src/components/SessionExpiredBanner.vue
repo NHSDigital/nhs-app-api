@@ -1,5 +1,5 @@
 <template>
-  <div v-show="$store.state.session.showExpiryMessage" class="alertContainer">
+  <div v-if="$store.state.session.showExpiryMessage" class="alertContainer">
     <h3>{{ $t('icons.sessionExpired.title') }}</h3>
   </div>
 </template>
