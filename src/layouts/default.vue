@@ -5,7 +5,7 @@
       <spinner />
       <connection-error />
       <api-error />
-      <nuxt v-if="showView" />
+      <nuxt />
     </div>
     <navigation-menu v-if="showMenu"/>
   </div>
@@ -42,9 +42,6 @@ export default {
         this.$store.state.auth.loggedIn &&
         this.$route.name !== 'Login'
       );
-    },
-    showView() {
-      return !this.$store.getters['errors/showApiError'];
     },
   },
   created() {

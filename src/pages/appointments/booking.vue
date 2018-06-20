@@ -1,5 +1,5 @@
 <template>
-  <main :class="bottomStyle()">
+  <main v-if="showTemplate" :class="bottomStyle()">
     <div v-if="showNoAppointment" data-purpose="no-slots-error">
       <p :class="$style.summary">{{ $t('appointments.noSlotErrorMessage.summary') }}</p>
       <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>

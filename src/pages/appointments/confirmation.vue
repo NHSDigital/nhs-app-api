@@ -1,5 +1,5 @@
 <template>
-  <main class="main">
+  <main v-if="showTemplate" class="main">
     <error-warning-dialog v-if="showValidationError" error-or-warning="error">
       <p>
         {{ $t('appointments.confirmation.noReasonDialogError') }}

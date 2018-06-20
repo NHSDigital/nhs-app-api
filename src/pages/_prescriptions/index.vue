@@ -1,5 +1,5 @@
 <template>
-  <main :class="$style.main">
+  <main v-if="showTemplate" :class="$style.main">
 
     <div :class="$style['above-float-button']">
 

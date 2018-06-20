@@ -21,6 +21,7 @@ module.exports = {
     '~/plugins/i18n.js',
     '~/plugins/api.js',
     '~/plugins/filters.js',
+    '~/plugins/mixins.js',
   ],
   serverMiddleware: [
     './handler.js',

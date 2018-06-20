@@ -1,5 +1,5 @@
 <template>
-  <div id="mainDiv">
+  <div v-if="showTemplate" id="mainDiv">
     <h5 :class="[$style.recordTitle, getCollapseState(isPatientDetailsCollapsed)]"
         @click="myRecordSectionClick(PATIENTDETAILS)">
       {{ $t('myRecord.patientInfo.sectionHeader') }}</h5>

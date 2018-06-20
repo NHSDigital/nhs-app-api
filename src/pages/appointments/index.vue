@@ -1,5 +1,5 @@
 <template>
-  <main :class="$style.main">
+  <main v-if="showTemplate" :class="$style.main">
     <success-dialog v-if="justBookedAnAppointment">
       <p>
         {{ $t('appointments.index.successText') }}

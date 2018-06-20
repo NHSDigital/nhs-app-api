@@ -1,5 +1,5 @@
 <template>
-  <div id="mainDiv">
+  <div v-if="showTemplate" id="mainDiv">
     <main class="content">
       <error-warning-dialog error-or-warning="warning">
         <p>

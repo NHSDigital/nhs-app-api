@@ -1,5 +1,5 @@
 <template>
-  <main class="content">
+  <main v-if="showTemplate" class="content">
     <button id="signout-button" class="button grey" @click="signout()">
       {{ $t('signOutButton.signOut') }}
     </button>
