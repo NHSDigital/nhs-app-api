@@ -40,31 +40,24 @@
                   type: "array"
                   description: "Array of attending Clinicians."
                   items: 
-                    type: "object"
-                    properties: 
-                      id: 
-                        type: "string"
-                        description: "Clinician Identifier."
-                      displayName: 
-                        type: "string"
-                        description: "Clinician Name."
+                    $ref: "#/paths/~1v1~1patient~1appointments/get/responses/200/schema/properties/clinicians/items"
                 appointmentSessions: 
                   type: "array"
                   description: "Array of Appointment Sessions."
                   items: 
-                    type: "object"
-                    properties: 
-                      id: 
-                        type: "string"
-                        description: "Appointment Session Identifier."
-                      displayName: 
-                        type: "string"
-                        description: "Appointment Session Name."
+                    $ref: "#/paths/~1v1~1patient~1appointments/get/responses/200/schema/properties/appointmentSessions/items"
                 locations: 
                   type: "array"
                   description: "Array of Locations."
                   items: 
-                    $ref: "#/paths/~1v1~1patient~1appointments/get/responses/200/schema/properties/locations/items"
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Location Identifier."
+                      displayName: 
+                        type: "string"
+                        description: "Location Name."
                 slots: 
                   type: "array"
                   description: "Available Appointment Slots."
@@ -205,24 +198,31 @@
                   type: "array"
                   description: "Array of attending Clinicians."
                   items: 
-                    $ref: "#/paths/~1v1~1patient~1appointment-slots/get/responses/200/schema/properties/clinicians/items"
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Clinician Identifier."
+                      displayName: 
+                        type: "string"
+                        description: "Clinician Name."
                 appointmentSessions: 
                   type: "array"
                   description: "Array of Appointment Sessions."
-                  items: 
-                    $ref: "#/paths/~1v1~1patient~1appointment-slots/get/responses/200/schema/properties/appointmentSessions/items"
-                locations: 
-                  type: "array"
-                  description: "Array of Locations."
                   items: 
                     type: "object"
                     properties: 
                       id: 
                         type: "string"
-                        description: "Location Identifier."
+                        description: "Appointment Session Identifier."
                       displayName: 
                         type: "string"
-                        description: "Location Name."
+                        description: "Appointment Session Name."
+                locations: 
+                  type: "array"
+                  description: "Array of Locations."
+                  items: 
+                    $ref: "#/paths/~1v1~1patient~1appointment-slots/get/responses/200/schema/properties/locations/items"
                 cancellationReasons: 
                   type: "array"
                   description: "Array of Cancellation Reasons."
@@ -423,8 +423,13 @@
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/discontinuedRepeatMedications/items"
                         currentRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/discontinuedRepeatMedications/items"
+                        discontinuedRepeatMedications: 
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
@@ -438,21 +443,7 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
-                                  type: "object"
-                                  properties: 
-                                    text: 
-                                      type: "string"
-                                      description: "When the record was entered."
-                                    lineItems: 
-                                      type: "array"
-                                      description: "An array of line items"
-                                      items: 
-                                        type: "string"
-                        discontinuedRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
                 immunisations: 
                   type: "object"
                   description: "An object containing all immunisation details."
@@ -490,7 +481,7 @@
                     data: 
                       type: "object"
                       properties: 
-                        immunisations: 
+                        testResults: 
                           type: "array"
                           description: "Array of test results"
                           items: 
@@ -506,6 +497,41 @@
                                 description: "Array of test result line items."
                                 items: 
                                   type: "string"
+                problems: 
+                  type: "object"
+                  description: "An object containing all problems details."
+                  properties: 
+                    hasAccess: 
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored: 
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data: 
+                      type: "object"
+                      properties: 
+                        problems: 
+                          type: "array"
+                          description: "Array of problems"
+                          items: 
+                            type: "object"
+                            properties: 
+                              effectiveDate: 
+                                $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
+                              lineItems: 
+                                type: "array"
+                                description: "An array of line items."
+                                items: 
+                                  type: "object"
+                                  properties: 
+                                    text: 
+                                      type: "string"
+                                      description: "When the record was entered."
+                                    lineItems: 
+                                      type: "array"
+                                      description: "An array of line items"
+                                      items: 
+                                        type: "string"
           401: 
             description: "User session has expired."
           500: 

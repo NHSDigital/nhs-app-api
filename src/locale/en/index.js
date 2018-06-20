@@ -209,6 +209,9 @@ export default {
     testResults: {
       sectionHeader: 'Test results',
     },
+    problems: {
+      sectionHeader: 'Problems',
+    },
   },
   common: {
     or: 'OR',

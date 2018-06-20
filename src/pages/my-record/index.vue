@@ -52,6 +52,14 @@
         </h5>
         <test-results :is-collapsed="isTestResultsCollapsed"
                       :data="myRecord.testResults"/>
+
+        <h5 :class="[$style.recordTitle, getCollapseState(isProblemsCollapsed)]"
+            @click="myRecordSectionClick(PROBLEMS)">
+          {{ $t('myRecord.problems.sectionHeader') }}
+        </h5>
+        <problems :is-collapsed="isProblemsCollapsed"
+                  :data="myRecord.problems"/>
+
       </div>
       <div v-else>
         <main :class="$style.content">
@@ -85,6 +93,7 @@ import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 import Medications from '@/components/my-record/Medications';
 import Immunisations from '@/components/my-record/Immunisations';
 import TestResults from '@/components/my-record/TestResults';
+import Problems from '@/components/my-record/Problems';
 
 const PATIENTDETAILS = 'patientdetails';
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
@@ -93,6 +102,7 @@ const CURRENTREPEATMEDICATIONS = 'currentrepeatmedications';
 const DISCONTINUEDREPEATMEDICATIONS = 'discontinuedrepeatmedications';
 const IMMUNISATIONS = 'immunisations';
 const TESTRESULTS = 'testresults';
+const PROBLEMS = 'problems';
 
 export default {
   middleware: ['auth', 'meta'],
@@ -103,6 +113,7 @@ export default {
     Medications,
     Immunisations,
     TestResults,
+    Problems,
   },
   data() {
     return {
@@ -113,6 +124,7 @@ export default {
       DISCONTINUEDREPEATMEDICATIONS,
       IMMUNISATIONS,
       TESTRESULTS,
+      PROBLEMS,
       isPatientDetailsCollapsed: true,
       hasLoaded: false,
       isAllergiesAndAdverseReactionsCollapsed: true,
@@ -121,6 +133,7 @@ export default {
       isDiscontinuedRepeatMedicationsCollapsed: true,
       isImmunisationsCollapsed: true,
       isTestResultsCollapsed: true,
+      isProblemsCollapsed: true,
       myRecord: {},
       patientDetails: {},
     };
@@ -129,7 +142,22 @@ export default {
     this.$store.app.$http
       .getV1PatientMyRecord({})
       .then((data) => {
-        this.myRecord = data.response;
+        const mockData = data;
+        mockData.response.problems = {
+          data: [{
+            effectiveDate: { datePart: 'YearMonthDay', value: '2018-05-31T00:00:00+00:00' },
+            lineItems: [
+              { text: 'Lower back pain', lineItems: [] },
+              { text: 'Significance:  Minor', lineItems: [] },
+              { text: 'Status:  Past', lineItems: [] },
+              { text: 'Notes: ', lineItems: ['Due to lifting child awkwardly', 'Advised to bend knees when lifting'] },
+              { text: 'Ended:  7 June 2018', lineItems: [] },
+            ],
+          }],
+          hasAccess: true,
+          hasErrored: false,
+        };
+        this.myRecord = mockData.response;
         this.isPatientDetailsCollapsed = false;
         this.hasLoaded = true;
       });
@@ -171,6 +199,10 @@ export default {
         case TESTRESULTS:
           this.isTestResultsCollapsed =
             !this.isTestResultsCollapsed;
+          break;
+        case PROBLEMS:
+          this.isProblemsCollapsed =
+            !this.isProblemsCollapsed;
           break;
         default:
           break;
