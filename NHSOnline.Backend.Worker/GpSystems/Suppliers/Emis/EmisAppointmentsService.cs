@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Resources;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
@@ -56,6 +57,61 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return InterpretAppointmentsPostResponse(response);
         }
 
+        public async Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request)
+        {
+            var emisUserSession = (EmisUserSession) userSession;
+
+            if (!TryGetCancellationReason(request.CancellationReasonId, out var cancellationReasonText))
+            {
+                _logger.LogError("Supplied cancellation reason ID '{0}' was not found in cancellation reasons resource file.", request.CancellationReasonId);
+                return new AppointmentCancelResult.BadRequest();
+            }
+
+            if (!long.TryParse(request.AppointmentId, out var slotId))
+            {
+                _logger.LogError("Supplied appointment ID '{0}' could not be converted to a 64-bit integer.", request.AppointmentId);
+                return new AppointmentCancelResult.BadRequest();
+            }
+
+            var deleteRequest = new CancelAppointmentDeleteRequest
+            {
+                UserPatientLinkToken = emisUserSession.UserPatientLinkToken,
+                CancellationReason = cancellationReasonText,
+                SlotId = slotId
+            };
+
+            var emisHeaders = new EmisHeaderParameters
+            {
+                EndUserSessionId = emisUserSession.EndUserSessionId,
+                SessionId = emisUserSession.SessionId,
+            };
+
+            EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse> response;
+
+            try
+            {
+                response = await _emisClient.AppointmentsDelete(emisHeaders, deleteRequest);
+            }
+            catch (HttpRequestException exception)
+            {
+                _logger.LogError($"Cancelling appointment failed with message {exception.Message}");
+                return new AppointmentCancelResult.SupplierSystemUnavailable();
+            }
+
+            return InterpretAppointmentsDeleteResponse(response);
+        }
+
+        private static bool TryGetCancellationReason(string requestCancellationReasonId, out string cancellationReasonText)
+        {
+            cancellationReasonText = string.Empty;
+
+            var resourceManager = new ResourceManager(typeof(CancellationReasons));
+            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+            cancellationReasonText = resourceSet.GetString(requestCancellationReasonId);
+
+            return cancellationReasonText != null;
+        }
+
         public async Task<AppointmentsResult> GetAppointments(UserSession userSession, bool includePastAppointments,
             DateTimeOffset? pastAppointmentsFromDate)
         {
@@ -100,7 +156,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 }
             }
 
-            if (HasInsufficientPermissions(response))
+            if (response.HasForbiddenResponse())
             {
                 return new AppointmentsResult.SuccessfullyRetrieved(new AppointmentsResponse());
             }
@@ -116,7 +172,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 return new AppointmentBookResult.SuccessfullyBooked();
             }
 
-            if (IsNotAvailableForBooking(response) || IsInThePast(response) || NotFound(response))
+            if (SlotIsNotAvailableForBooking(response) || SlotIsInThePast(response) || SlotNotFound(response))
             {
                 return new AppointmentBookResult.SlotNotAvailable();
             }
@@ -129,32 +185,59 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }
 
-        private static bool IsNotAvailableForBooking(EmisClient.EmisApiResponse response)
+        private static AppointmentCancelResult InterpretAppointmentsDeleteResponse(
+            EmisClient.EmisApiResponse response)
+        {
+            if (response.HasSuccessStatusCode)
+            {
+                return new AppointmentCancelResult.SuccessfullyCancelled();
+            }
+
+            if (AppointmentIsNotAvailableForCancelling(response) || AppointmentIsInThePast(response) || AppointmentNotFound(response))
+            {
+                return new AppointmentCancelResult.AppointmentNotCancellable();
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                return new AppointmentCancelResult.InsufficientPermissions();
+            }
+
+            return new AppointmentCancelResult.SuccessfullyCancelled();
+        }
+
+        private static bool SlotIsNotAvailableForBooking(EmisClient.EmisApiResponse response)
         {
             return response.StatusCode == HttpStatusCode.Conflict;
         }
 
-        private static bool NotFound(EmisClient.EmisApiResponse response)
+        private static bool SlotNotFound(EmisClient.EmisApiResponse response)
         {
             return response.HasExceptionWithMessage(
                 EmisApiErrorMessages.AppointmentsPost_NotFound);
         }
 
-        private static bool IsInThePast(EmisClient.EmisApiResponse response)
+        private static bool SlotIsInThePast(EmisClient.EmisApiResponse response)
         {
             return response.HasExceptionWithMessage(
                 EmisApiErrorMessages.AppointmentsPost_InThePast);
         }
 
-        private static bool HasInsufficientPermissions(EmisClient.EmisApiResponse response)
+        private static bool AppointmentIsNotAvailableForCancelling(EmisClient.EmisApiResponse response)
         {
-            if (response.StatusCode == HttpStatusCode.Forbidden)
-            {
-                return true;
-            }
+            return response.StatusCode == HttpStatusCode.Conflict;
+        }
 
-            return response.HasExceptionWithMessageContaining(
-                EmisApiErrorMessages.EmisService_NotEnabledForUser);
+        private static bool AppointmentIsInThePast(EmisClient.EmisApiResponse response)
+        {
+            return response.HasExceptionWithMessage(
+                EmisApiErrorMessages.AppointmentsDelete_InThePast);
+        }
+
+        private static bool AppointmentNotFound(EmisClient.EmisApiResponse response)
+        {
+            return response.HasExceptionWithMessage(
+                EmisApiErrorMessages.AppointmentsDelete_NotFound);
         }
     }
 }

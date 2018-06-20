@@ -179,7 +179,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
+        public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
+            EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
             DateTimeOffset? previousAppointmentsFromDate)
         {
             var qb = new QueryBuilder
@@ -198,6 +199,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             var response =
                 await Get<AppointmentsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
             return response;
+        }
+
+        public async Task<EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
+            EmisHeaderParameters headerParameters, CancelAppointmentDeleteRequest deleteRequest)
+        {
+            return await Delete<CancelAppointmentDeleteRequest, CancelAppointmentDeleteResponse>(
+                deleteRequest, AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+        }
+
+        private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,
+            string endUserSessionId = null, string sessionId = null)
+        {
+            var request = BuildEmisRequest(HttpMethod.Delete, path, endUserSessionId, sessionId);
+
+            var body = JsonConvert.SerializeObject(model);
+            request.Content = new StringContent(body, Encoding.UTF8, "application/json");
+
+            return await SendRequestAndParseResponse<TResponse>(request);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Get<TResponse>(string path,

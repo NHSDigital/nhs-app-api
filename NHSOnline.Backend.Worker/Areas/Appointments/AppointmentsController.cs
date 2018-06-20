@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
@@ -20,6 +19,19 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             )
         {
             _gpSystemFactory = gpSystemFactory;
+        }
+
+        [HttpDelete, TimeoutExceptionFilter]
+        public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest model)
+        {
+            var userSession = HttpContext.GetUserSession();
+
+            var appointmentsService = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier)
+                .GetAppointmentsService();
+
+            var cancelResult = await appointmentsService.Cancel(userSession, model);
+            return cancelResult.Accept(new AppointmentCancelResultVisitor());
         }
 
         [HttpGet, TimeoutExceptionFilter]

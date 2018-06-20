@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="1" xml:space="preserve">
+  <data name="R1_NoLongerRequired" xml:space="preserve">
     <value>No longer required</value>
   </data>
-  <data name="2" xml:space="preserve">
+  <data name="R2_UnableToAttend" xml:space="preserve">
     <value>Unable to attend</value>
   </data>
 </root>

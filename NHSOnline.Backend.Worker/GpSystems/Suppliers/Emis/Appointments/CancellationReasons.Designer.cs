@@ -64,18 +64,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments {
         /// <summary>
         ///   Looks up a localized string similar to No longer required.
         /// </summary>
-        internal static string _1 {
+        internal static string R1_NoLongerRequired {
             get {
-                return ResourceManager.GetString("1", resourceCulture);
+                return ResourceManager.GetString("R1_NoLongerRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Unable to attend.
         /// </summary>
-        internal static string _2 {
+        internal static string R2_UnableToAttend {
             get {
-                return ResourceManager.GetString("2", resourceCulture);
+                return ResourceManager.GetString("R2_UnableToAttend", resourceCulture);
             }
         }
     }

@@ -58,10 +58,9 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
             if (!gpSystemOption.HasValue)
             {
-                _logger.LogDebug($"Failed to determin the GP system bases on Ods Code '{cidUserProfile.OdsCode}'");
+                _logger.LogDebug($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
-
 
             var gpSystem = gpSystemOption.ValueOrFailure();
 

@@ -129,10 +129,16 @@
   <data name="EmisService_NotEnabledForUser" xml:space="preserve">
     <value>Services Access violation</value>
   </data>
-    <data name="Prescriptions_AlreadyOrderedLast30Days" xml:space="preserve">
+  <data name="Prescriptions_AlreadyOrderedLast30Days" xml:space="preserve">
     <value>already a pending request in the past 30 days</value>
   </data>
   <data name="Prescriptions_InvalidCourseId" xml:space="preserve">
     <value>The request is invalid</value>
+  </data>
+  <data name="AppointmentsDelete_InThePast" xml:space="preserve">
+    <value>Past appointments cannot be cancelled</value>
+  </data>
+  <data name="AppointmentsDelete_NotFound" xml:space="preserve">
+    <value>Appointment not found</value>
   </data>
 </root>

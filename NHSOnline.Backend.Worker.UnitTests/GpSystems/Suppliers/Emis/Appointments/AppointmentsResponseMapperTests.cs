@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -23,7 +21,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _systemUnderTest = _fixture.Create<AppointmentsResponseMapper>();
-
         }
 
         [TestMethod]
@@ -38,8 +35,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Assert
             var expectedCancellationReasons = new  List<CancellationReason>
             {
-                new CancellationReason { DisplayName = "No longer required", Id = "1" },
-                new CancellationReason { DisplayName = "Unable to attend", Id = "2" }
+                new CancellationReason { DisplayName = "No longer required", Id = "R1_NoLongerRequired" },
+                new CancellationReason { DisplayName = "Unable to attend", Id = "R2_UnableToAttend" }
             };
 
             response.CancellationReasons.Should().BeEquivalentTo(expectedCancellationReasons);

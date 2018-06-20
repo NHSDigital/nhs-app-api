@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +17,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 {
     [TestClass]
-    public class EmisAppointmentServiceGetAppointmentsTests
+    public class EmisAppointmentsServiceGetAppointmentsTests
     {
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;

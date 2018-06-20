@@ -69,5 +69,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         Task<EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
             EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
             DateTimeOffset? previousAppointmentsFromDate);
+
+        Task<EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
+            EmisHeaderParameters headerParameters,
+            CancelAppointmentDeleteRequest deleteRequest);
     }
 }

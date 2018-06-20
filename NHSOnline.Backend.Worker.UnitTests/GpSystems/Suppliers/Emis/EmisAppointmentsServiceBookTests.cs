@@ -140,7 +140,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
         
         [TestMethod]
-        public async Task Book_WhenEmisReturnsForbidden_ReturnsSlotNotAvailable()
+        public async Task Book_WhenEmisReturnsForbidden_ReturnsInsufficientPermissions()
         {
             //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
