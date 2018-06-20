@@ -132,6 +132,7 @@ export default {
           submitted: true,
         };
         this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);
+        window.scrollTo(0, 0);
       }
     },
   },
