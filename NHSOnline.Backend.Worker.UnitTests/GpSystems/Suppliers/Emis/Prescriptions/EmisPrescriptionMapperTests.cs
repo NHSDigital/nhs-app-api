@@ -108,6 +108,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                             new CourseEntry
                             {
                                 CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid,
+                                Status = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseStatus.ToString(),
                             }
                         }
                     }

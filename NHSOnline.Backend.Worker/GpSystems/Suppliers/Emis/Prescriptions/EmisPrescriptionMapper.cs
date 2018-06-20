@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 
@@ -16,16 +18,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
             var result = new PrescriptionListResponse
             {
-                Prescriptions = (prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>()).Select(x => new PrescriptionItem
-                {
-                    OrderDate = x.DateRequested,
-                    Courses = (x.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>()).Select(c => new CourseEntry
-                    {
-                        CourseId = c.RequestedMedicationCourseGuid,
-                        // Status is not mapped due to unknowns - future story to address this: NHSO-516
-                    })
-                }),
-                Courses = (prescriptionGetResponse.MedicationCourses ?? Enumerable.Empty<MedicationCourse>()).Select(x => MapMedicationCourseToCourse(x)),
+                Prescriptions =
+                    (prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>()).Select(
+                        x => new PrescriptionItem
+                        {
+                            OrderDate = x.DateRequested,
+                            Courses = (x.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
+                                .Select(c => new CourseEntry
+                                {
+                                    CourseId = c.RequestedMedicationCourseGuid,
+                                    Status = c.RequestedMedicationCourseStatus.ToString()
+                                })
+                        }),
+                Courses =
+                    (prescriptionGetResponse.MedicationCourses ?? Enumerable.Empty<MedicationCourse>()).Select(x =>
+                        MapMedicationCourseToCourse(x)),
             };
 
             return result;
@@ -40,7 +47,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
             var result = new CourseListResponse
             {
-                Courses = (coursesGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(x => MapMedicationCourseToCourse(x)),
+                Courses = (coursesGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(x =>
+                    MapMedicationCourseToCourse(x)),
             };
 
             return result;
@@ -55,6 +63,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                 Name = course.Name,
                 Quantity = course.QuantityRepresentation,
             };
+        }
+    }   
+       
+    // TODO To be used in NHSO-1460
+    public static class Extentions
+    {
+        public static Status ToFrontEndStatus(this RequestedMedicationCourseStatus value)
+        {
+            switch (value)
+            {
+                case RequestedMedicationCourseStatus.Issued:
+                    return Status.Approved;
+                case RequestedMedicationCourseStatus.Requested:
+                    return Status.Ordered;
+                case RequestedMedicationCourseStatus.ForwardedForSigning:
+                    return Status.Ordered;
+                case RequestedMedicationCourseStatus.Rejected:
+                    return Status.Rejected;   
+                default:
+                    throw new InvalidEnumArgumentException(nameof(value));
+            }
         }
     }
 }
