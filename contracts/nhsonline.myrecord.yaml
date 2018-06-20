@@ -175,7 +175,7 @@ definitions:
       data:
         type: object
         properties: 
-           immunisations:
+          testResults:
             type: array
             description: Array of test results
             items:
@@ -218,14 +218,11 @@ definitions:
     properties:
       effectiveDate:
         $ref: '#/definitions/Date'
-      detail:
-        type: string
-        description: A detail of the problem.
-      problemLineItems:
+      lineItems:
         type: array
-        description: Array of problem line items.
+        description: An array of line items.
         items:
-          type: string
+          $ref: '#/definitions/LineItem'
   
   Date:
     type: object
