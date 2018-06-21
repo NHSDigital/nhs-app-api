@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -9,7 +10,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
@@ -25,6 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         private string _odsCode;
         private SessionsEndUserSessionPostResponse _endUserSessionResponse;
         private SessionsPostResponse _sessionsResponse;
+        private DemographicsGetResponse _demographicsResponse;
         private int _defaultSessionExpiryMinutes;
         
         [TestInitialize]
@@ -65,6 +69,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                     new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
                     {
                         Body = _sessionsResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+
+            _demographicsResponse = _fixture.Create<DemographicsGetResponse>();
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(_sessionsResponse.ExtractUserPatientLinkToken(), _sessionsResponse.SessionId, _endUserSessionResponse.EndUserSessionId))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = _demographicsResponse,
                         ErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
@@ -210,10 +225,80 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         }
 
         [TestMethod]
+        public async Task Create_EmisClientDemographicsPostReturnsInternalServerError_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange
+            var forbiddenSession = _fixture
+                .Build<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>>()
+                .With(x => x.StatusCode, HttpStatusCode.InternalServerError)
+                .With(x => x.Body, null)
+                .Create();
+
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(_sessionsResponse.ExtractUserPatientLinkToken(), _sessionsResponse.SessionId, _endUserSessionResponse.EndUserSessionId))
+                .Returns(Task.FromResult(forbiddenSession))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
+        }
+
+        [TestMethod]
+        public async Task Create_EmisClientDemographicsPostReturnsBadRequest_ReturnsInvalidIm1ConnectionToken()
+        {
+            // Arrange
+            var forbiddenSession = _fixture
+                .Build<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>>()
+                .With(x => x.StatusCode, HttpStatusCode.BadRequest)
+                .With(x => x.Body, null)
+                .Create();
+
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(_sessionsResponse.ExtractUserPatientLinkToken(), _sessionsResponse.SessionId, _endUserSessionResponse.EndUserSessionId))
+                .Returns(Task.FromResult(forbiddenSession))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<SessionCreateResult.InvalidIm1ConnectionToken>();
+        }
+
+        [TestMethod]
+        public async Task Create_EmisClientDemographicsPostReturnsForbidden_ReturnsInvalidIm1ConnectionToken()
+        {
+            // Arrange
+            var forbiddenSession = _fixture
+                .Build<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>>()
+                .With(x => x.StatusCode, HttpStatusCode.Forbidden)
+                .With(x => x.Body, null)
+                .Create();
+
+            _mockEmisClient
+                .Setup(x => x.DemographicsGet(_sessionsResponse.ExtractUserPatientLinkToken(), _sessionsResponse.SessionId, _endUserSessionResponse.EndUserSessionId))
+                .Returns(Task.FromResult(forbiddenSession))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Create(_connectionToken, _odsCode);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<SessionCreateResult.InvalidIm1ConnectionToken>();
+        }
+
+        [TestMethod]
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData()
         {
             // Arrange
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _settings.Object);
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _settings.Object, new EmisDemographicsMapper(),
+                _fixture.Freeze<Microsoft.Extensions.Logging.ILogger<EmisSessionService>>());
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode);
 
@@ -223,7 +308,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
 
             var expectedResult = new SessionCreateResult.SuccessfullyCreated(
                 $"{_sessionsResponse.FirstName} {_sessionsResponse.Surname}",
-                new EmisUserSession()
+                new EmisUserSession { NhsNumber = _demographicsResponse.ExtractNhsNumbers().First().NhsNumber}
             );
 
             (result as SessionCreateResult.SuccessfullyCreated).Should().BeEquivalentTo(expectedResult);

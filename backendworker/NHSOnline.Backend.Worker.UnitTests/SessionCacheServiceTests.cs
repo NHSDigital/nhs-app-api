@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests
@@ -22,13 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
         private Mock<IDatabase> _database;
         private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
         private int _defaultSessionExpiryMinutes;
-
         private ILogger<SessionCacheService> _logger;
-
-        private SessionCacheService SessionCacheService  => new SessionCacheService(_connectionMultiplexerFactory.Object, 
-            _cipherService.Object, 
-            _settings.Object,
-            _logger);
         
         [TestInitialize]
         public void TestInitializeInitialize()
@@ -85,7 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Verifiable();
                 
                 
-            var systemUnderTest = SessionCacheService;
+            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
             
             // Act
             var result = await systemUnderTest.CreateUserSession(userSession);
@@ -112,7 +107,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Returns(Task.FromResult(true))
                 .Verifiable();
             
-            var systemUnderTest = SessionCacheService;
+            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
             
             // Act
             var result = await systemUnderTest.DeleteUserSession(redisSessionKey);

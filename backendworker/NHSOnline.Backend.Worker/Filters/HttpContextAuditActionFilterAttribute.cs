@@ -1,22 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Filters
 {
-    public class HttpContextLogActionFilterAttribute : Attribute, IActionFilter, IResultFilter
+    public class HttpContextAuditActionFilterAttribute : Attribute, IActionFilter, IResultFilter
     {
         private IDisposable _context;
-        private readonly ILogger<HttpContextLogActionFilterAttribute> _logger;
+        private readonly IAuditor _auditor;
 
-        public HttpContextLogActionFilterAttribute(ILoggerFactory loggerFactory)
+        public HttpContextAuditActionFilterAttribute(IAuditor auditor)
         {
-            _logger = loggerFactory.CreateLogger<HttpContextLogActionFilterAttribute>();
+            _auditor = auditor;
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            _context = _logger.BeginScope(context.HttpContext);
+            _context = _auditor.BeginScope(context.HttpContext);
         }
 
         public void OnActionExecuted(ActionExecutedContext context) { }
