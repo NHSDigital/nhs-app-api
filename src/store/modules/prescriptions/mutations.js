@@ -16,7 +16,7 @@ export default {
   /* eslint-disable no-param-reassign */
   /* eslint-disable no-unused-vars */
   [PRESCRIPTIONS_LOADED](state, data) {
-    const prescriptionsResponse = assign({}, data.response);
+    const prescriptionsResponse = assign({}, data);
     const prescriptionCourses = [];
     let id = 0;
     for (let i = 0; i < prescriptionsResponse.prescriptions.length; i += 1) {

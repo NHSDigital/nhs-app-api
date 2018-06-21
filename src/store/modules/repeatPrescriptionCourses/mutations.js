@@ -15,7 +15,7 @@ export default {
   /* eslint-disable no-param-reassign */
   /* eslint-disable no-unused-vars */
   [REPEAT_PRESCRIPTION_COURSES_LOADED](state, data) {
-    const { response: courses } = data;
+    const courses = assign({}, data);
     mapKeys((key) => {
       state[key] = courses[key];
     })(courses);
