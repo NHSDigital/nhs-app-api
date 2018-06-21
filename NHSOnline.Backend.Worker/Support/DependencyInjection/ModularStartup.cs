@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Support.DependencyInjection
 {
@@ -12,11 +13,13 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
     {
         private readonly IEnumerable<IModule> _modules;
         private readonly IConfiguration _configuration;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public ModularStartup(IConfiguration configuration)
+        public ModularStartup(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _configuration = configuration ??
                              throw new ArgumentNullException(nameof(configuration));
+            _loggerFactory = loggerFactory;
 
             _modules = FindAllLoadedModules();
         }
@@ -37,14 +40,25 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
             }
         }
 
-        private static IEnumerable<IModule> FindAllLoadedModules()
+        private IEnumerable<IModule> FindAllLoadedModules()
         {
             return AppDomain.CurrentDomain.GetAssemblies().ToList()
                 .SelectMany(x => x.GetTypes())
                 .Where(t => typeof(IModule).IsAssignableFrom(t))
                 .Where(t => !t.IsAbstract)
                 .Where(t => t.IsClass)
-                .Select(t => (IModule)Activator.CreateInstance(t))
+                .Select(t =>
+                {
+                    if (t
+                        .GetConstructors()
+                        .SelectMany(c => c.GetParameters())
+                        .Any(p => p.ParameterType == typeof(ILoggerFactory)))
+                    {
+                        return (IModule) Activator.CreateInstance(t, _loggerFactory);    
+                    }
+                    
+                    return (IModule) Activator.CreateInstance(t);
+                })
                 .ToList();
         }
     }

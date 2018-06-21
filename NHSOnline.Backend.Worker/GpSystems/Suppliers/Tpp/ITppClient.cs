@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public interface ITppClient
     {
-        Task<AuthenticateReply> AuthenticatePost(Authenticate authenticate);
+        Task<TppClient.TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate model);
     }
 }

@@ -9,5 +9,7 @@
         public int? CoursesMaxCoursesLimit { get; set; }
 
         public int DefaultSessionExpiryMinutes { get; set; }
+
+        public int DefaultHttpTimeoutSeconds { get; set; }
     }
 }

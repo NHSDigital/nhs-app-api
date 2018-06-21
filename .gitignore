@@ -1,5 +1,5 @@
 # NHSOnline Specific
-
+NHSOnline.Backend.Worker/certs
 SwaggerGenerated
 
 # NDepend Outputs
@@ -19,6 +19,7 @@ NDependOut/
 *.user
 *.userosscache
 *.sln.docstates
+docker-compose.override.yml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

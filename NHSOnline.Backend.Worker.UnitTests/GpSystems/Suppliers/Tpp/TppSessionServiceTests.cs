@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -6,7 +10,6 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Session;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 
@@ -21,6 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private TppSessionService _systemUnderTest;
         private Authenticate _actual;
         private ConfigurationSettings _configurationSettings;
+        private const string ResponseSuidHeader = "suid";
 
         [TestInitialize]
         public void TestInitialize()
@@ -39,6 +43,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _mockConfigurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
             _mockConfigurationSettings.SetupGet(x => x.Value).Returns(_configurationSettings);
         }
+
+        [TestMethod]
+        public async Task
+            Create_TppClientThrowsHttpRequestExceptionFromSessionCreate_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange
+            // Tpp client throws HttpRequestException
+            _mockTppClient
+                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+                .Throws<HttpRequestException>()
+                .Verifiable();
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "bar");
+
+            // Assert
+            _mockTppClient.Verify();
+            result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
+        }
+
 
         [TestMethod]
         public void Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()
@@ -118,7 +144,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             // Arrange
             const string expectedSessionId = "ff5246bc-ef03-458a-a1ff-4b6e80268671";
-            var reply = CreateReply(suid: expectedSessionId);
+            const string expectedOnlineUserId = "abcde";
+            const string expectedPatientId = "12345";
+            const string odsCode = "1234";
+            var reply = CreateReply(
+                suid: expectedSessionId, 
+                onlineUserId: expectedOnlineUserId, 
+                patiendId: expectedPatientId);
         
             _mockTppClient.Setup(x => x
                     .AuthenticatePost(It.IsAny<Authenticate>()))
@@ -127,26 +159,85 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234");
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), odsCode);
         
             // Assert
             var created = (SessionCreateResult.SuccessfullyCreated) result;
             created.UserSession.Should().BeOfType<TppUserSession>();
-            ((TppUserSession) created.UserSession).SessionId.Should().Be(expectedSessionId);
+            ((TppUserSession) created.UserSession).Suid.Should().Be(expectedSessionId);
+            ((TppUserSession)created.UserSession).OnlineUserId.Should().Be(expectedOnlineUserId);
+            ((TppUserSession)created.UserSession).PatientId.Should().Be(expectedPatientId);
+            ((TppUserSession)created.UserSession).UnitId.Should().Be(odsCode);
+        }
+
+        [TestMethod]
+        public async Task Create_WhenCalledWithErrorResponse_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange 
+            var reply = CreateReply();
+            reply.ErrorResponse = new Error();
+
+            _mockTppClient.Setup(x => x
+                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .ReturnsAsync(() => reply);
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act 
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234");
+            
+            // Assert 
+            result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
+        }
+
+        [TestMethod]
+        public async Task Create_WhenCalledWithHttpError_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange 
+            var reply = CreateReply();
+            reply.StatusCode = HttpStatusCode.BadGateway;
+
+            _mockTppClient.Setup(x => x
+                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .ReturnsAsync(() => reply);
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act 
+            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234");
+
+            // Assert 
+            result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
         }
 
         private string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
-        private AuthenticateReply CreateReply(string name  = "Joanie", string suid = "dimsum") => new AuthenticateReply {
-            Suid = suid,
-            User = new User
+        private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",
+            string onlineUserId = "123", string patiendId = "234")
+        {
+            var response = new TppClient.TppApiObjectResponse<AuthenticateReply>();
+
+            response.StatusCode = HttpStatusCode.OK;
+            response.Body = new AuthenticateReply
             {
-                Person = new Person
+                OnlineUserId = onlineUserId,
+                PatientId = patiendId,
+                User = new User
                 {
-                    PersonName = new PersonName { Name = name }
+                    Person = new Person
+                    {
+                        PersonName = new PersonName { Name = name }
+                    }
                 }
-            }
-        };
+            };
+
+            response.Headers = new Dictionary<string, string>
+            {
+                { ResponseSuidHeader, suid }
+            };
+
+            return response;
+        }   
     }
 }

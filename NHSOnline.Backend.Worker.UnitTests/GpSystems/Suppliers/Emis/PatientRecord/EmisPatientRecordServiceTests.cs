@@ -11,7 +11,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using Moq;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRecord

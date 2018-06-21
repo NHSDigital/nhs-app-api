@@ -32,7 +32,8 @@ namespace NHSOnline.Backend.Worker
     public enum HttpClientName
     {
         CitizenIdApiClient,
-        EmisApiClient
+        EmisApiClient,
+        TppApiClient
     }
 
     public class NamedHttpClient

@@ -88,17 +88,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
 
-        [DataTestMethod]
-        [DataRow("AB123")]
-        [DataRow("AB12345")]
-        [DataRow("!£$123HJ")]
-        public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsInAnInvalidFormat(string badOdsCode)
-        {
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, badOdsCode);
-
-            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
-        }
-
         [TestMethod]
         public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
@@ -148,19 +137,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             result.Should().BeAssignableTo<NotFoundResult>();
         }
 
-        [TestMethod]
-        public async Task Get_UnknownOdsCodeFormat_ReturnsBadRequest()
-        {
-            var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
-            mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
-                .Returns(Task.FromResult(Option.Some(SupplierEnum.Emis)));
-
-            _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
-
-            var result = await _im1ConnectionController.Get(DefaultConnectionToken, "foo");
-
-            result.Should().BeAssignableTo<BadRequestResult>();
-        }
 
         [TestMethod]
         public async Task Post_UnknownOdsCode_ReturnsNotFound()

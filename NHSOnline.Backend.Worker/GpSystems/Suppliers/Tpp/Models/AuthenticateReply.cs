@@ -16,8 +16,5 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
         
         [XmlAttribute("uuid")]
         public Guid Uuid { get; set; }
-        
-        [XmlIgnore]
-        public string Suid { get; set; }
     }
 }

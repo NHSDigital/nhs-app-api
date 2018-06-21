@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         public const string DefaultEmisVersion = "2.1.0.0";
         public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
 
-        public static readonly Uri BaseUri = new Uri("http://185.13.72.81/PFS/");
+        public static readonly Uri BaseUri = new Uri("http://emis_base_url/");
 
         private IEmisClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;

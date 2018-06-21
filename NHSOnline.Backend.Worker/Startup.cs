@@ -22,18 +22,24 @@ namespace NHSOnline.Backend.Worker
 {
     public class Startup
     {
-        private const int DefaultHttpTimeoutSeconds = 10;
         private readonly IHostingEnvironment _env;
+        private readonly ILoggerFactory _loggerFactory;
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
             _env = env;
-
-            _modularStartup = new ModularStartup(configuration);
+            _loggerFactory = loggerFactory;
+            
+            if (env.IsDevelopment())
+            {
+                loggerFactory.AddConsole(LogLevel.Debug);
+            }
+            
+            _modularStartup = new ModularStartup(configuration, loggerFactory);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -97,15 +103,12 @@ namespace NHSOnline.Backend.Worker
                 ConnectionMultiplexerName.Session,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
-            int.TryParse(Configuration["HTTP_TIMEOUT_SECONDS"], out var timeout);
-            timeout = timeout == default(int) ? DefaultHttpTimeoutSeconds : timeout;
-
+            
             services.AddSingleton(x => new NamedHttpClient(HttpClientName.EmisApiClient, new HttpClient
             {
-                Timeout = TimeSpan.FromSeconds(timeout)
+                Timeout = TimeSpan.FromSeconds(configurationSettings.DefaultHttpTimeoutSeconds)
             }));
             services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
-            services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
@@ -173,6 +176,11 @@ namespace NHSOnline.Backend.Worker
             if (config.DefaultSessionExpiryMinutes == default(int))
             {
                 throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.DefaultSessionExpiryMinutes)));
+            }
+
+            if (config.DefaultHttpTimeoutSeconds == default(int))
+            {
+                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.DefaultHttpTimeoutSeconds)));
             }
         }
     }

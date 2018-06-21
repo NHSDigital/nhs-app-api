@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Models
 {
     [TestClass]
-    public class AuthenticateTests: XmlTestBase<Authenticate>
+    public class AuthenticateTests : XmlTestBase<Authenticate>
     {
         private const string AccountId = "1234";
         private const string ApiVersion = "5678";

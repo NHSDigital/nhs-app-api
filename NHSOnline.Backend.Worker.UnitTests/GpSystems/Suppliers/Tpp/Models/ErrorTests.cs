@@ -10,12 +10,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Models
     {
         private const string ErrorCode = "23";
         private const string UserFriendlyMessage = "This is for the user";
+        private const string TechnicalMessage = "This is for the support";
         private readonly Guid _uuid = new Guid("f6c2227e-96aa-41ea-8614-efa6cf81c353");
 
         protected override Error CreateModel() => new Error
         {
             ErrorCode = ErrorCode,
             UserFriendlyMessage = UserFriendlyMessage,
+            TechnicalMessage = TechnicalMessage,
             Uuid = _uuid
         };
 
@@ -29,6 +31,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Models
         public void Serialization_UserFriendlyMessage_SerializesAsAttribute()
         {
             Element.Attribute("userFriendlyMessage").Should().HaveValue(UserFriendlyMessage);
+        }
+        
+        [TestMethod]
+        public void Serialization_TechnicalMessage_SerializesAsAttribute()
+        {
+            Element.Attribute("technicalMessage").Should().HaveValue(TechnicalMessage);
         }
         
         [TestMethod]

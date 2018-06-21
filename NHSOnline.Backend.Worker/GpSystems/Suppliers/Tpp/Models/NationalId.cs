@@ -6,7 +6,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
     {
         [XmlAttribute("type")]
         public string Type { get; set; }
-        
+
+        [XmlText]
         public string Value { get; set; }
     }
 }

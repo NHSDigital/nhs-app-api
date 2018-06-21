@@ -107,7 +107,6 @@ paths:
         502:
           description: The GP system is currently unavailable.
         504:
-          description: The GP system did not respond in a timely fashion.
     post:
       tags:
         - appointments

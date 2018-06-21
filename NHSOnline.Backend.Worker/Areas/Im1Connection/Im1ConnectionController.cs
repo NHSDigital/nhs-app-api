@@ -111,15 +111,6 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 _logger.LogError($"The header {Constants.Headers.OdsCode}, has not been supplied in the request.");
                 argumentsAreValid = false;
             }
-            else
-            {
-                if (!Regex.IsMatch(odsCode, Constants.OdsCodeFormats.GpPracticeEnglandWales))
-                {
-                    _logger.LogError($"The OdsCode {odsCode} provided in header {Constants.Headers.OdsCode} " +
-                                     $"does not match format {Constants.OdsCodeFormats.GpPracticeEnglandWales}.");
-                    argumentsAreValid = false;
-                }
-            }
 
             return argumentsAreValid;
         }

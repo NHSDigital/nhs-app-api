@@ -296,7 +296,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             public HttpStatusCode StatusCode { get; set; }
             public ErrorResponse ErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
-            public bool HasSuccessStatusCode => (int)StatusCode >= 200 && (int)StatusCode <= 299;
+            public bool HasSuccessStatusCode => StatusCode.IsSuccessStatusCode();
 
             public bool HasExceptionWithMessage(string message)
             {

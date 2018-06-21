@@ -1,18 +1,7 @@
 version: "3.2"
 services:
-  nhsonline.stubs:
-    image: rodolpheche/wiremock
-    command: --local-response-templating
-    ports:
-      - "8080:8080"
-  nhsonline.stubs.data:
-    image: nhsonline.stubs.data
-    depends_on:
-      - nhsonline.stubs
-    environment:
-      - wiremockUrl=http://nhsonline.stubs:8080
   nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
+    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
     environment:
       - REDIS_HOST=nhsonline.redis.sds
     depends_on:
