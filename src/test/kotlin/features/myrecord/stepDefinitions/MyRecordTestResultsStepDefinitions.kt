@@ -84,7 +84,7 @@ open class MyRecordTestResultsStepDefinitions {
     @Given("I have no test results")
     fun givenIHaveNoTestResults() {
         mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getEmptyTestResults())
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
         }
     }
 

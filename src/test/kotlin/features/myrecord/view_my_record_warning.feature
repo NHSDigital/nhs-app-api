@@ -2,6 +2,7 @@ Feature: View My Medical Record Warning
 
   Background:
     Given wiremock is initialised
+    And the my record wiremocks are initialised
 
   @NHSO-359
   Scenario: An EMIS user navigates to my record warning page

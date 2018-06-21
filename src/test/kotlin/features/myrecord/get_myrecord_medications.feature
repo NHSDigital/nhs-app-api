@@ -4,6 +4,7 @@ Feature: Get medications data
 
   Background:
     Given wiremock is initialised
+    And the my record wiremocks are initialised
 
   @NHSO-689
   @backend

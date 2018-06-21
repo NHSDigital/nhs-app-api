@@ -166,12 +166,11 @@ object TestResultsData {
         )
     }
 
-    fun getEmptyTestResults(): TestResultResponseModel {
-        val testResults = mutableListOf<TestResultResponse>()
+    fun getDefaultTestResultsModel(): TestResultResponseModel {
 
         return TestResultResponseModel(
                 medicalRecord =  TestResultMedicalRecord(
-                        testResults = testResults
+                        testResults = mutableListOf()
                 ))
     }
 }

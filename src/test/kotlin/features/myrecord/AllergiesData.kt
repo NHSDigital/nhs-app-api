@@ -4,6 +4,9 @@ import mocking.emis.allergies.AllergyMedicalRecord
 import mocking.emis.allergies.AllergyResponse
 import mocking.emis.allergies.AllergyResponseModel
 import mocking.emis.allergies.EffectiveDate
+import mocking.emis.models.MedicationItem
+import mocking.emis.models.MedicationMedicalRecord
+import mocking.emis.models.MedicationsResponse
 
 object AllergiesData {
 
@@ -38,6 +41,14 @@ object AllergiesData {
         return AllergyResponseModel(
                 medicalRecord = AllergyMedicalRecord(
                         allergies = allergies
+                )
+        )
+    }
+
+    fun getDefaultAllergyModel(): AllergyResponseModel {
+        return AllergyResponseModel(
+                medicalRecord = AllergyMedicalRecord(
+                        allergies = mutableListOf()
                 )
         )
     }

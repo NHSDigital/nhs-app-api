@@ -6,6 +6,9 @@ import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.AllergiesData
+import features.myrecord.ImmunisationsData
+import features.myrecord.MedicationsData
+import features.myrecord.TestResultsData
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -34,6 +37,25 @@ open class MyRecordStepDefinitions {
     @Steps
     val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
+
+    @Given("the my record wiremocks are initialised")
+    fun givenMyRecordWiremocksAreInitialised() {
+        mockingClient.forEmis {
+            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+        }
+
+        mockingClient.forEmis {
+            immunisationsRequest(MockDefaults.patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+        }
+
+        mockingClient.forEmis {
+            allergiesRequest(MockDefaults.patient).respondWithSuccess(AllergiesData.getDefaultAllergyModel())
+        }
+
+        mockingClient.forEmis {
+            medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getDefaultMedicationsModel())
+        }
+    }
 
     @Given("the GP Practice has enabled summary care record functionality")
     fun givenTheGPPracticeHasEnabledSummaryCareRecordFunctionality() {

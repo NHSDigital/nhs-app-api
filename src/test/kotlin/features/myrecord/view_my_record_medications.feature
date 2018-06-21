@@ -2,6 +2,7 @@ Feature: View My Medical Record Information
 
   Background:
     Given wiremock is initialised
+    And the my record wiremocks are initialised
 
   @NHSO-678
   Scenario: An EMIS user views acute medications

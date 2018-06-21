@@ -22,39 +22,16 @@ open class MyRecordImmunisationStepDefinitions {
     fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExist() {
 
         mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
-        }
-
-        mockingClient.forEmis {
             immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getImmunisationsData())
         }
 
-        mockingClient.forEmis {
-            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
-        }
-
-        mockingClient.forEmis {
-            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
-        }
     }
 
     @Given("no immunisation records exist for the patient")
     fun givenNoImmunisationRecordsExistForThePatient() {
 
         mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
-        }
-
-        mockingClient.forEmis {
-            immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getEmptyImmunisationsData())
-        }
-
-        mockingClient.forEmis {
-            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
-        }
-
-        mockingClient.forEmis {
-            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
+            immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
         }
     }
 
@@ -62,19 +39,7 @@ open class MyRecordImmunisationStepDefinitions {
     fun givenUserDoesNotHaveAccessToViewImmunisations() {
 
         mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
-        }
-
-        mockingClient.forEmis {
             immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
-        }
-
-        mockingClient.forEmis {
-            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
-        }
-
-        mockingClient.forEmis {
-            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
         }
     }
 
@@ -82,20 +47,9 @@ open class MyRecordImmunisationStepDefinitions {
     fun givenThereIsAnErrorRetrievingImmunisationsData() {
 
         mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
-        }
-
-        mockingClient.forEmis {
             immunisationsRequest(patient).respondWithNonDataAccessException()
         }
 
-        mockingClient.forEmis {
-            allergiesRequest(patient).respondWithSuccess(AllergiesData.getAllergiesData(2))
-        }
-
-        mockingClient.forEmis {
-            medicationsRequest(patient).respondWithSuccess(MedicationsData.getMedicationData())
-        }
     }
     
     @When("I get the users immunisations")

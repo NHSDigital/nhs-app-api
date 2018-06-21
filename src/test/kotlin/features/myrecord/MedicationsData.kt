@@ -1,6 +1,9 @@
 package features.myrecord
 
 import mocking.emis.models.*
+import mocking.emis.testResults.TestResultMedicalRecord
+import mocking.emis.testResults.TestResultResponse
+import mocking.emis.testResults.TestResultResponseModel
 import java.time.LocalDateTime
 
 object MedicationsData {
@@ -101,5 +104,13 @@ object MedicationsData {
                 )
             )
         )
+    }
+
+    fun getDefaultMedicationsModel(): MedicationsResponse {
+
+        return MedicationsResponse(
+                medicalRecord =  MedicationMedicalRecord(
+                        medication = mutableListOf()
+                ))
     }
 }

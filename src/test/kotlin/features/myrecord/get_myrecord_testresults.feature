@@ -4,6 +4,7 @@ Feature: Get Immunisations Data
 
   Background:
     Given wiremock is initialised
+    And the my record wiremocks are initialised
 
   @backend
   Scenario: Requesting multiple test results returns multiple test results data

@@ -24,13 +24,11 @@ object ImmunisationsData {
         )
     }
 
-    fun getEmptyImmunisationsData(): ImmunisationResponseModel {
-
-        val immunisations = mutableListOf<ImmunisationResponse>()
+    fun getDefaultImmunisationsModel(): ImmunisationResponseModel {
 
         return ImmunisationResponseModel (
                 medicalRecord = ImmunisationMedicalRecord (
-                        immunisations = immunisations
+                        immunisations = mutableListOf()
                 )
         )
     }
