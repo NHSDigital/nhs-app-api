@@ -28,7 +28,9 @@
             <span :class="$style.formLabel">
               {{ $t('prescriptions.confirmPrescriptionOrder.specialRequestLabel') }}
             </span>
-            <p v-if="specialRequest" :id="$style.specialRequestText">{{ specialRequest }}</p>
+            <p v-if="specialRequest"
+               id="specialRequestText"
+               :class="$style.specialRequestText">{{ specialRequest }}</p>
             <p v-else id="specialRequestText">
               {{ $t('prescriptions.confirmPrescriptionOrder.noSpecialRequestDefaultText') }}
             </p>
@@ -128,7 +130,7 @@ export default {
     margin-bottom: 16px;
   }
 
-  #specialRequestText {
+  .specialRequestText {
     white-space: pre-wrap;
     word-break: break-all;
   }
