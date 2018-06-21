@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     {
         public IActionResult Visit(GetCoursesResult.SuccessfullyRetrieved result)
         {
-            return new OkObjectResult(result);
+            return new OkObjectResult(result.Response);
         }
 
         public IActionResult Visit(GetCoursesResult.SupplierSystemUnavailable result)

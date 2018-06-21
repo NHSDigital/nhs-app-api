@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     {
         public IActionResult Visit(PrescriptionResult.SuccessfullGet result)
         {
-            return new OkObjectResult(result);
+            return new OkObjectResult(result.Response);
         }
         
         public IActionResult Visit(PrescriptionResult.SuccessfullPost result)
