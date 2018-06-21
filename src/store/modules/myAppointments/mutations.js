@@ -1,5 +1,5 @@
 import { assign, find, get, map, mapKeys, sortBy } from 'lodash/fp';
-import { CLEAR, LOADED, INIT, initialState } from './mutation-types';
+import { CLEAR, LOADED, INIT, SELECT, CLEAR_SELECTED_APPOINTMENT, CLEAR_APPOINTMENTS, initialState } from './mutation-types';
 
 const findById = (id, collection) => find(item => item.id === id)(collection);
 const findByIds = (ids, collection) => map(id => findById(id, collection))(ids);
@@ -7,7 +7,18 @@ const sortSlots = sortBy(slot => [
   slot.startTime,
   get('clinicians[0].displayName')(slot),
 ]);
-
+const clearAppointments = (state) => {
+  state.appointmentSessions = [];
+  state.clinicians = [];
+  state.locations = [];
+  state.appointments = [];
+  state.hasLoaded = false;
+  state.hasErrored = false;
+};
+const clearSelectedAppointment = (state) => {
+  state.selectedAppointment = null;
+  state.cancellationReasons = [];
+};
 export default {
   /* eslint-disable no-shadow */
   /* eslint-disable no-param-reassign */
@@ -43,12 +54,16 @@ export default {
     state = initialState;
   },
   [CLEAR](state) {
-    state.appointmentSessions = [];
-    state.clinicians = [];
-    state.locations = [];
-    state.appointments = [];
-    state.cancellationReasons = [];
-    state.hasLoaded = false;
-    state.hasErrored = false;
+    clearAppointments(state);
+    clearSelectedAppointment(state);
+  },
+  [SELECT](state, selected) {
+    state.selectedAppointment = selected;
+  },
+  [CLEAR_SELECTED_APPOINTMENT](state) {
+    clearSelectedAppointment(state);
+  },
+  [CLEAR_APPOINTMENTS](state) {
+    clearAppointments(state);
   },
 };

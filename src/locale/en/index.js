@@ -22,6 +22,7 @@ export default {
     index: {
       successText: 'Appointment Booked',
       bookButtonText: 'Book an appointment',
+      cancelButtonText: 'Cancel appointment',
       empty: {
         header: 'You don\'t currently have any appointments booked',
         text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details, cancel it and see your appointment history.',

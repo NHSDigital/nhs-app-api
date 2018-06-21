@@ -11,7 +11,7 @@
       {{ appointmentSession | truncate(24) }}
     </p>
     <hr aria-hidden="true" >
-    <p aria-label="location">
+    <p :class="$style.location" aria-label="location">
     <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
     <ul
       v-for="clinician in theSlot.clinicians"
@@ -152,6 +152,10 @@ export default {
     .startTime {
       color: #999;
     }
+  }
+
+  .location, .clinicians {
+    margin-bottom: 8px;
   }
 
 </style>

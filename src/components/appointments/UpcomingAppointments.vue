@@ -21,6 +21,13 @@
          :class="$style.clinician" aria-label="clinicians">
         <clinician-icon/>&nbsp;{{ displayName(clinician) | truncate(24) }}
       </p>
+
+      <hr aria-hidden="true">
+      <p>
+        <nuxt-link to="#" @click.native="select(appointment)">
+          {{ $t('appointments.index.cancelButtonText') }}
+        </nuxt-link>
+      </p>
     </div>
   </div>
 </template>
@@ -48,6 +55,9 @@ export default {
     displayName(property) {
       return (property) ? property.displayName : '';
     },
+    select(appointment) {
+      this.$store.dispatch('myAppointments/select', appointment);
+    },
   },
 };
 </script>
@@ -71,6 +81,14 @@ export default {
      display: table;
      transition: all ease 0.5s;
    }
+
+  .panel p {
+    display: block;
+    font-weight: normal;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #4A4A4A;
+  }
 
   .appointments {
     margin-bottom: 80px;

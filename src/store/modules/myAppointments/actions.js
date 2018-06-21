@@ -1,4 +1,4 @@
-import { CLEAR, LOADED, INIT } from './mutation-types';
+import { CLEAR, LOADED, INIT, SELECT, CLEAR_SELECTED_APPOINTMENT, CLEAR_APPOINTMENTS } from './mutation-types';
 
 export default {
   load({ commit }) {
@@ -14,5 +14,14 @@ export default {
   },
   clear({ commit }) {
     commit(CLEAR);
+  },
+  select({ commit }, appointment) {
+    commit(SELECT, appointment);
+  },
+  clearSelectedSlot({ commit }) {
+    commit(CLEAR_SELECTED_APPOINTMENT);
+  },
+  clearAppointments({ commit }) {
+    commit(CLEAR_APPOINTMENTS);
   },
 };

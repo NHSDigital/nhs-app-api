@@ -61,6 +61,9 @@ export default {
     this.$store.dispatch('myAppointments/clear');
     this.$store.dispatch('myAppointments/load');
   },
+  beforeDestroy() {
+    this.$store.dispatch('myAppointments/clearAppointments');
+  },
   methods: {
     onBookButtonClicked() {
       this.$router.push('/appointments/booking');
@@ -90,6 +93,11 @@ export default {
         color: $dark_grey;
         margin-bottom: 16px;
       }
+    }
+
+    a:link, a:visited {
+      color: $red;
+      display: inline-block;
     }
   }
 
