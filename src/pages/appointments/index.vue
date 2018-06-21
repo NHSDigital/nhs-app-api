@@ -66,7 +66,7 @@ export default {
   },
   methods: {
     onBookButtonClicked() {
-      this.$router.push('/appointments/booking');
+      this.$router.push('/appointments/booking-guidance');
     },
   },
 };

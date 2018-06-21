@@ -1,17 +1,21 @@
 /* eslint-disable no-param-reassign */
-const PRESCRIPTIONS = 'prescriptions';
-const APPOINTMENTS = 'appointments';
 const INDEX = 'index';
-const MORE = 'more';
+const LOGIN = 'login';
+const ACCOUNT = 'account';
+
+const APPOINTMENTS = 'appointments';
+const APPOINTMENT_BOOKING_GUIDANCE = 'appointments-booking-guidance';
+const APPOINTMENT_BOOKING = 'appointments-booking';
+const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
+
+const PRESCRIPTIONS = 'prescriptions';
 const REPEAT_PRESCRIPTION_COURSES = 'prescriptions-repeat-courses';
 const CONFIRM_COURSES = 'prescriptions-confirm-prescription-details';
-const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
-const APPOINTMENT_BOOKING = 'appointments-booking';
-const ACCOUNT = 'account';
-const MYRECORDWARNING = 'my-record-myrecordwarning';
+
 const MYRECORD = 'my-record';
+const MYRECORDWARNING = 'my-record-myrecordwarning';
 const MYRECORDNOACCESS = 'my-record-noaccess';
-const LOGIN = 'login';
+const MORE = 'more';
 
 function setPageTitle(route, store, app) {
   let header = '';
@@ -29,32 +33,40 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaderTitles.home';
       break;
+    case LOGIN:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = '';
+      break;
+    case ACCOUNT:
+      route.meta.headerKey = 'pageHeaderTitles.account';
+      break;
     case APPOINTMENTS:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaderTitles.appointments';
       break;
-    case MORE:
-      store.dispatch('navigation/setNewMenuItem', 4);
-      route.meta.headerKey = 'pageHeaderTitles.more';
+    case APPOINTMENT_BOOKING_GUIDANCE:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaderTitles.appointmentGuidance';
       break;
-    case REPEAT_PRESCRIPTION_COURSES:
-      route.meta.headerKey = 'pageHeaderTitles.repeatPrescriptionCourses';
+    case APPOINTMENT_BOOKING:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaderTitles.appointmentBooking';
+      break;
+    case APPOINTMENT_CONFIRMATIONS:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaderTitles.appointmentConfirmation';
       break;
     case PRESCRIPTIONS:
       store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaderTitles.prescriptions';
       break;
+    case REPEAT_PRESCRIPTION_COURSES:
+      store.dispatch('navigation/setNewMenuItem', 2);
+      route.meta.headerKey = 'pageHeaderTitles.repeatPrescriptionCourses';
+      break;
     case CONFIRM_COURSES:
+      store.dispatch('navigation/setNewMenuItem', 2);
       route.meta.headerKey = 'pageHeaderTitles.confirmPrescription';
-      break;
-    case APPOINTMENT_BOOKING:
-      route.meta.headerKey = 'pageHeaderTitles.appointmentBooking';
-      break;
-    case APPOINTMENT_CONFIRMATIONS:
-      route.meta.headerKey = 'pageHeaderTitles.appointmentConfirmation';
-      break;
-    case ACCOUNT:
-      route.meta.headerKey = 'pageHeaderTitles.account';
       break;
     case MYRECORD:
     case MYRECORDNOACCESS:
@@ -62,9 +74,9 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaderTitles.myRecord';
       break;
-    case LOGIN:
-      store.dispatch('navigation/clearPreviousSelectedMenuItem');
-      route.meta.headerKey = '';
+    case MORE:
+      store.dispatch('navigation/setNewMenuItem', 4);
+      route.meta.headerKey = 'pageHeaderTitles.more';
       break;
     default:
       route.meta.headerKey = '';

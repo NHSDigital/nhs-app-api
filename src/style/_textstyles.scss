@@ -1,6 +1,13 @@
 //* TEXT STYLES */
 @import './fonts';
 @import './colours';
+
+$kernel: -0.063em;
+@mixin kerneliOS {
+	@supports (-webkit-overflow-scrolling: touch) {
+		letter-spacing: $kernel;
+	}
+}
 @mixin h1 {
   display: block;
   font-family: $frutiger-roman;
@@ -16,6 +23,14 @@
   font-size: 20px;
   line-height: 24px;
   color: $white;
+}
+@mixin h2Blue {
+	font-family: $frutiger-bold;
+	font-weight: 700;
+	font-size: 1.375em;
+	line-height: 1.375em;
+	color: $nhs_blue;
+	@include kerneliOS;
 }
 @mixin screen_title {
   display: block;
@@ -59,9 +74,9 @@
 @mixin default_text {
   display: block;
   font-family: $default;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 22px;
+	font-weight: normal;
+	font-size: 1em;
+	line-height: 1.5em;
   color: $dark_grey;
 }
 @mixin default_text_white {

@@ -70,7 +70,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import '../../style/html';
   @import '../../style/elements';
   @import '../../style/buttons';

@@ -101,6 +101,24 @@ export default {
         info: 'Click in the appointment if you need to cancel it',
       },
     },
+    guidance: {
+      header: 'Want to avoid waiting?',
+      text: 'If it isn\'t urgent, you can try three things before booking an appointment:',
+      li1: {
+        header: 'Self care​',
+        text: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
+      },
+      li2: {
+        header: 'Check your symptoms​',
+        text: 'Using trusted NHS online information​',
+      },
+      li3: {
+        header: 'Get advice from a pharmacist​',
+        text: 'They\'re highly skilled healthcare professionals who can offer valuable advice​',
+      },
+      symptomButttonText: 'Check your symptoms',
+      bookButtonText: 'Book an appointment',
+    },
     noSlotErrorMessage: {
       summary: 'There are no appointments available at the moment',
       info: 'If you need an appointment, please contact your GP.',
@@ -304,6 +322,7 @@ export default {
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
     appointments: 'My appointments',
+    appointmentGuidance: 'Check before you book',
     appointmentBooking: 'Book an appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
