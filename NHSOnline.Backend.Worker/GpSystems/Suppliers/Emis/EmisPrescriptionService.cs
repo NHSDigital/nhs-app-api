@@ -52,6 +52,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                             $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
                         var mapppedPrescriptionList = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
 
+                        if (mapppedPrescriptionList.Prescriptions != null)
+                        {
+                            var allowedStatuses = new List<Status> { Status.Approved, Status.Rejected, Status.Requested };
+                            mapppedPrescriptionList.Prescriptions = mapppedPrescriptionList?.Prescriptions
+                                .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
+                        }
+                        
                         return new PrescriptionResult.SuccessfullGet(mapppedPrescriptionList);
                     }
                     catch (Exception e)

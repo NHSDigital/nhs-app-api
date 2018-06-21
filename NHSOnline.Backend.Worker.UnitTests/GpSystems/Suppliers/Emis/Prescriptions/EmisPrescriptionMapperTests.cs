@@ -103,12 +103,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     new PrescriptionItem
                     {
                         OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        Status = Status.Approved,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry
                             {
                                 CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid,
-                                Status = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseStatus.ToString(),
                             }
                         }
                     }
@@ -117,12 +117,144 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 {
                     new Course
                     {
-                        Dosage = item.MedicationCourses.ElementAt(0).Dosage,
+                        Details = $"{item.MedicationCourses.ElementAt(0).Dosage} - {item.MedicationCourses.ElementAt(0).QuantityRepresentation}",
                         Id = item.MedicationCourses.ElementAt(0).MedicationCourseGuid,
                         Name = item.MedicationCourses.ElementAt(0).Name,
-                        Quantity = item.MedicationCourses.ElementAt(0).QuantityRepresentation,
                     }
                 }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [TestMethod]
+        public void MapPrescriptionRequestsGetResponseToPrescriptionListResponse_WhenPrescriptionRequestsHaveDifferentStatus_MapsCorrectly()
+        {
+            // Arrange
+            var item = new PrescriptionRequestsGetResponse
+            {
+                PrescriptionRequests = new List<PrescriptionRequest>
+                {
+                    new PrescriptionRequest
+                    {
+                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Requested,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                        },
+                    },
+                    new PrescriptionRequest
+                    {
+                        // 2 courses with issued status should be grouped, 1 course with requested status should be standalone.
+                        DateRequested = _fixture.Create<DateTimeOffset>(),
+                        RequestedMedicationCourses = new List<RequestedMedicationCourse>
+                        {
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Issued,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                            new RequestedMedicationCourse
+                            {
+                                RequestedMedicationCourseStatus = RequestedMedicationCourseStatus.Requested,
+                                RequestedMedicationCourseGuid = Guid.NewGuid().ToString(),
+                            },
+                        },
+                    },
+                },
+                MedicationCourses = Enumerable.Empty<MedicationCourse>(),
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Prescriptions.Should().HaveCount(4);
+            result.Courses.Should().HaveCount(item.MedicationCourses.Count());
+
+            var expectedResult = new PrescriptionListResponse
+            {
+                Prescriptions = new List<PrescriptionItem>
+                {
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        Status = Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid,
+                            },
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(1).RequestedMedicationCourseGuid,
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.PrescriptionRequests.ElementAt(0).DateRequested,
+                        Status = Status.Requested,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(0).RequestedMedicationCourses.ElementAt(2).RequestedMedicationCourseGuid,
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        Status = Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(0).RequestedMedicationCourseGuid,
+                            },
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(1).RequestedMedicationCourseGuid,
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.PrescriptionRequests.ElementAt(1).DateRequested,
+                        Status = Status.Requested,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = item.PrescriptionRequests.ElementAt(1).RequestedMedicationCourses.ElementAt(2).RequestedMedicationCourseGuid,
+                            }
+                        }
+                    }
+                },
+                Courses = new List<Course>()
             };
 
             result.Should().BeEquivalentTo(expectedResult);
@@ -149,7 +281,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
             result.Should().NotBeNull();
             result.Courses.Should().BeEmpty();
         }
-
+        
         [TestMethod]
         public void MapCoursesGetResponseToCourseListResponse_WithValues_ReturnsResultValues()
         {
@@ -187,16 +319,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 {
                     new Course
                     {
-                        Dosage = item.Courses.ElementAt(0).Dosage,
                         Id = item.Courses.ElementAt(0).MedicationCourseGuid,
                         Name = item.Courses.ElementAt(0).Name,
-                        Quantity = item.Courses.ElementAt(0).QuantityRepresentation,
+                        Details = $"{item.Courses.ElementAt(0).Dosage} - {item.Courses.ElementAt(0).QuantityRepresentation}",
+
                     }
                 }
             };
 
             result.Should().BeEquivalentTo(expectedResult);
         }
-
     }
 }

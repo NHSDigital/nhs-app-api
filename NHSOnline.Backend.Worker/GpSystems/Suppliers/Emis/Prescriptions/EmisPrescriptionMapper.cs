@@ -1,7 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 
@@ -16,20 +15,41 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                 throw new ArgumentNullException(nameof(prescriptionGetResponse));
             }
 
+            var allPrescriptionsGrouped = new List<PrescriptionItem>();
+
+            foreach (var prescription in prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>())
+            {
+                foreach (var course in prescription.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
+                {
+                    var foundPrescriptionGroup = allPrescriptionsGrouped.FirstOrDefault(x => x.OrderDate == prescription.DateRequested && x.Status == course.RequestedMedicationCourseStatus.ToStatus());
+
+                    var newCourseEntry = new CourseEntry
+                    {
+                        CourseId = course.RequestedMedicationCourseGuid,
+                    };
+
+                    if (foundPrescriptionGroup != null)
+                    {
+                        foundPrescriptionGroup.Courses.Add(newCourseEntry);
+                    }
+                    else
+                    {
+                        allPrescriptionsGrouped.Add(new PrescriptionItem
+                        {
+                            OrderDate = prescription.DateRequested,
+                            Status = course.RequestedMedicationCourseStatus.ToStatus(),
+                            Courses = new List<CourseEntry>
+                            {
+                                newCourseEntry,
+                            }
+                        });
+                    }
+                }
+            }
+
             var result = new PrescriptionListResponse
             {
-                Prescriptions =
-                    (prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>()).Select(
-                        x => new PrescriptionItem
-                        {
-                            OrderDate = x.DateRequested,
-                            Courses = (x.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
-                                .Select(c => new CourseEntry
-                                {
-                                    CourseId = c.RequestedMedicationCourseGuid,
-                                    Status = c.RequestedMedicationCourseStatus.ToString()
-                                })
-                        }),
+                Prescriptions = allPrescriptionsGrouped,
                 Courses =
                     (prescriptionGetResponse.MedicationCourses ?? Enumerable.Empty<MedicationCourse>()).Select(x =>
                         MapMedicationCourseToCourse(x)),
@@ -56,34 +76,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
         private Course MapMedicationCourseToCourse(MedicationCourse course)
         {
+            string details = null;
+            
+            if (!string.IsNullOrEmpty(course.Dosage) && !string.IsNullOrEmpty(course.QuantityRepresentation))
+            {
+                details = $"{course.Dosage} - {course.QuantityRepresentation}";
+            }
+            else if (!string.IsNullOrEmpty(course.Dosage))
+            {
+                details = course.Dosage;
+            }
+            else if (!string.IsNullOrEmpty(course.Dosage))
+            {
+                details = course.QuantityRepresentation;
+            }
+
             return new Course
             {
-                Dosage = course.Dosage,
                 Id = course.MedicationCourseGuid,
                 Name = course.Name,
-                Quantity = course.QuantityRepresentation,
+                Details = details,
             };
-        }
-    }   
-       
-    // TODO To be used in NHSO-1460
-    public static class Extentions
-    {
-        public static Status ToFrontEndStatus(this RequestedMedicationCourseStatus value)
-        {
-            switch (value)
-            {
-                case RequestedMedicationCourseStatus.Issued:
-                    return Status.Approved;
-                case RequestedMedicationCourseStatus.Requested:
-                    return Status.Ordered;
-                case RequestedMedicationCourseStatus.ForwardedForSigning:
-                    return Status.Ordered;
-                case RequestedMedicationCourseStatus.Rejected:
-                    return Status.Rejected;   
-                default:
-                    throw new InvalidEnumArgumentException(nameof(value));
-            }
         }
     }
 }

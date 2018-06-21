@@ -140,19 +140,19 @@ definitions:
         type: string
         format: date-time
         description: The date on which the repeat prescription was ordered.
+      status:
+        type: string
+        enum:
+          - Unknown
+          - Rejected
+          - Requested
+          - Approved
   CourseEntry:
     type: object
     properties:
       courseId:
         type: string
         description: Course identifier.
-      status:
-        type: string
-        enum:
-          - approved
-          - ordered
-          - rejected
-          - cancelled
   Course:
     type: object
     properties:
@@ -162,9 +162,6 @@ definitions:
       name:
         type: string
         description: Course name.
-      dosage:
+      details:
         type: string
-        description: The required dosage for the course.
-      quantity:
-        type: string
-        description: The quantity of the drug for the course.
+        description: 'Details of the course. Depending on the provider this may contain different information like dosage, quantity and status.'

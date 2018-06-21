@@ -3,7 +3,5 @@
     public class CourseEntry
     {
         public string CourseId { get; set; }
-
-        public string Status { get; set; }
     }
 }
