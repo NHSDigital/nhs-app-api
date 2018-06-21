@@ -183,7 +183,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
         val oldPrescriptions = perscriptionMap[Scenario.STARTED]
         val prs = mutableListOf<PrescriptionRequest>()
-        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr))
+        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr, RequestedMedicationCourseStatus.Requested.toString()))
 
         oldPrescriptions!!.prescriptionRequests.forEach {
             pr -> prs.add(pr)

@@ -15,7 +15,10 @@ object PrescriptionsData {
         if(noPrescriptions != 0) {
 
             // Create courses first as these will be used in the prescriptions
-            medicationCourses = CoursesData.getCourseData(noCourses, if (noRepeats == null) noPrescriptions else noRepeats, if (noRepeats == null) noPrescriptions else noRepeats, medicationCourses)
+            medicationCourses = CoursesData.getCourseData(
+                    noCourses,
+                    if (noRepeats == null) noPrescriptions else noRepeats,
+                    if (noRepeats == null) noPrescriptions else noRepeats, medicationCourses)
 
             var maxPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false
@@ -23,14 +26,15 @@ object PrescriptionsData {
             var courseNum = medicationCourses.count().minus(1)
 
             while (prescriptionNum <= maxPrescriptions) {
-                val requestedMedicationCourses = mutableListOf<RequestedMedicationCourse>()
+                var requestedMedicationCourses = mutableListOf<RequestedMedicationCourse>()
                 var time = OffsetDateTime.now()
-                time = time.plusSeconds(1)
+
+                time = time.minusDays(prescriptionNum.toLong())
 
                 if (!isSecondIteration) {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses))
+                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
                 } else {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
@@ -40,7 +44,7 @@ object PrescriptionsData {
 
                 courseNum--
 
-                if (prescriptionNum == maxPrescriptions && courseNum > 0) {
+                if (prescriptionNum == maxPrescriptions && courseNum >= 0) {
                     isSecondIteration = true
                     maxPrescriptions = noPrescriptions.minus(1)
                     prescriptionNum = 0
@@ -66,7 +70,7 @@ object PrescriptionsData {
     }
 
     fun getStringValue(list: List<String>): String {
-        return list.get(getrandomNumber(getMedicationCourseNames().size))
+        return list.get(getRandomNumber(getMedicationCourseNames().size))
     }
 
     fun getMedicationCourseNames(): List<String> {
@@ -89,20 +93,24 @@ object PrescriptionsData {
         )
     }
 
-    fun getQuatity(): String {
+    fun getQuantity(): String {
 
-        val quantity = getrandomNumber(100)
+        val quantity = getRandomNumber(100)
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",
-                "$quantity  ml")
+                "$quantity ml")
 
-        return list.get(getrandomNumber(list.size))
+        return list.get(getRandomNumber(list.size))
     }
 
-    fun getrandomNumber(maxNum: Int): Int {
+    fun getPrescriptionStatus(): RequestedMedicationCourseStatus {
+        return RequestedMedicationCourseStatus.values()[getRandomNumber(6)]
+    }
+
+    fun getRandomNumber(maxNum: Int): Int {
         val random = Random()
-        var minNum = 1
+        val minNum = 1
 
         var localMaxNum = maxNum
 

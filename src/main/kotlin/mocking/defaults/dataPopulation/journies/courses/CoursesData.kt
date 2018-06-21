@@ -9,22 +9,21 @@ object CoursesData {
 
     fun getCourseData(maxCourses: Int, numOfRepeats: Int, numCanBeRequested: Int, medicationCourses: MutableList<MedicationCourse>) : MutableList<MedicationCourse> {
 
-        var numberOfRepeats = numOfRepeats;
+        var numberOfRepeats = numOfRepeats
         var numberCanBerequested = numCanBeRequested
 
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {
             val constituents = mutableListOf<String>()
-            for (constituentNo in 1..PrescriptionsData.getrandomNumber(5)) {
+            for (constituentNo in 1..PrescriptionsData.getRandomNumber(5)) {
                 constituents.add("Constituent" + constituentNo)
             }
 
-
             // Create a default course
-            var createdCourse = MedicationCourse(UUID.randomUUID().toString(),
+            val createdCourse = MedicationCourse(UUID.randomUUID().toString(),
                     PrescriptionsData.getCourseName(),
                     PrescriptionsData.getDosage(),
-                    PrescriptionsData.getQuatity(),
+                    PrescriptionsData.getQuantity(),
                     PrescriptionType.Acute,
                     constituents,
                     false)
@@ -38,7 +37,7 @@ object CoursesData {
             // Check if the course needs to be true for canBeRequested
             if(numberCanBerequested != 0){
                 createdCourse.canBeRequested = true
-                numberCanBerequested = numberCanBerequested - 1
+                numberCanBerequested--
             }
 
             medicationCourses.add(createdCourse)

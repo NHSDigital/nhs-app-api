@@ -265,13 +265,13 @@ open class PrescriptionsStepDefinitions {
 
         var historicPrescriptions = ArrayList<HistoricPrescription>()
 
-        for (prescription in data.prescriptionRequests.toList().sortedByDescending { it.DateRequested }) {
+        for(prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
 
             if (totalCoursesRunningTotal >= 100) {
                 break
             }
 
-            var datetime = DateTime.parse(prescription.DateRequested).toString("d MMM yyyy")
+            var datetime = DateTime.parse(prescription.dateRequested).toString("d MMM yyyy")
 
             var repeaCoursesInPrescription = prescription.requestedMedicationCourses.filter { it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid) }
 
@@ -283,7 +283,8 @@ open class PrescriptionsStepDefinitions {
                 var historicPrescription = HistoricPrescription(
                         orderDate = datetime,
                         name = course.name,
-                        dosage = course.dosage + " - " + course.quantityRepresentation
+                        dosage = course.dosage + " - " + course.quantityRepresentation,
+                        status = courseEntry.requestedMedicationCourseStatus.toString()
                 )
 
                 historicPrescriptions.add(historicPrescription)
