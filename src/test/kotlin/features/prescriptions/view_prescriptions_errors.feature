@@ -10,7 +10,7 @@ Feature: View prescriptions (errors)
   Scenario: A user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
     Given The prescriptions endpoint is timing out
     When I navigate to prescriptions
-    And I wait for 10 seconds
+    And I wait for 11 seconds
     Then I see the appropriate error message for a prescription timeout
 
   @NHSO-498
@@ -34,7 +34,7 @@ Feature: View prescriptions (errors)
     But The courses endpoint is timing out
     When I navigate to prescriptions
     And I click 'Order a repeat prescription'
-    And I wait for 10 seconds
+    And I wait for 11 seconds
     Then I see the appropriate error message for a prescription timeout
 
   @NHSO-513
@@ -57,7 +57,7 @@ Feature: View prescriptions (errors)
     When I navigate to prescriptions
     And I click 'Order a repeat prescription'
     And I select 1 prescription to order
-    And I wait for 10 seconds
+    And I wait for 11 seconds
     Then I see the appropriate error message for a course request error
 
   @NHSO-514

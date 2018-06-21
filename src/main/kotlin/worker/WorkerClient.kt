@@ -25,9 +25,11 @@ import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.MyAppointmentsResponse
 import worker.models.courses.CourseListResponse
+import worker.models.courses.CoursesResponseData
 import worker.models.demographics.Demographics
 import worker.models.myrecord.MyRecordResponse
 import worker.models.prescriptions.PrescriptionListResponse
+import worker.models.prescriptions.PrescriptionsResponseData
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
@@ -129,7 +131,7 @@ class WorkerClient {
         return gson.fromJson<AppointmentSlotsResponse>(result, AppointmentSlotsResponse::class.java)
     }
 
-    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionListResponse {
+    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionsResponseData {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
@@ -138,7 +140,7 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<PrescriptionListResponse>(result, PrescriptionListResponse::class.java)
+        return gson.fromJson<PrescriptionsResponseData>(result, PrescriptionsResponseData::class.java)
     }
 
     fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?, context: HttpContext?): HttpResponse {
@@ -152,7 +154,7 @@ class WorkerClient {
         return response
     }
 
-    fun getCoursesConnection(context: HttpContext?): CourseListResponse {
+    fun getCoursesConnection(context: HttpContext?): CoursesResponseData {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
 
         val response = sendAsync(httpGet, context)
@@ -160,7 +162,7 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<CourseListResponse>(result, CourseListResponse::class.java)
+        return gson.fromJson<CoursesResponseData>(result, CoursesResponseData::class.java)
     }
 
     fun getDemographics(context: HttpContext?): Demographics {

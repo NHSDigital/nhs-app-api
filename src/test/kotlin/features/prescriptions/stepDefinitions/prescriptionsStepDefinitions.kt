@@ -24,6 +24,7 @@ import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptions.PrescriptionListResponse
+import worker.models.prescriptions.PrescriptionsResponseData
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
@@ -43,7 +44,7 @@ open class PrescriptionsStepDefinitions {
     lateinit var currentPatient: Patient
     var fromDate: String? = null
 
-    lateinit var prescriptionListResponse: PrescriptionListResponse
+    lateinit var prescriptionsResponseData: PrescriptionsResponseData
 
     lateinit var prescriptionsMock: PrescriptionRequestsGetResponse
 
@@ -123,7 +124,7 @@ open class PrescriptionsStepDefinitions {
         var formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
 
         try {
-            prescriptionListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
+            prescriptionsResponseData = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -131,9 +132,9 @@ open class PrescriptionsStepDefinitions {
 
     @Then("I receive a list of 10 prescriptions")
     fun thenIReceiveAListOfTenPrescriptions() {
-        Assert.assertNotNull(prescriptionListResponse)
-        Assert.assertEquals(10, prescriptionListResponse.response.prescriptions.count())
-        var prescriptions = prescriptionListResponse.response.prescriptions
+        Assert.assertNotNull(prescriptionsResponseData)
+        Assert.assertEquals(10, prescriptionsResponseData.prescriptions.count())
+        var prescriptions = prescriptionsResponseData.prescriptions
 
         // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
         for (int in 0 until prescriptions.count() - 2) {
@@ -191,7 +192,7 @@ open class PrescriptionsStepDefinitions {
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
-            prescriptionListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, null)
+            prescriptionsResponseData = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, null)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -200,7 +201,7 @@ open class PrescriptionsStepDefinitions {
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
         try {
-            prescriptionListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+            prescriptionsResponseData = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -208,9 +209,9 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I get a response with a list of prescriptions for the last 6 months$")
     fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
-        Assert.assertNotNull(prescriptionListResponse)
-        Assert.assertTrue(prescriptionListResponse.response.prescriptions.isNotEmpty())
-        Assert.assertTrue(prescriptionListResponse.response.courses.isNotEmpty())
+        Assert.assertNotNull(prescriptionsResponseData)
+        Assert.assertTrue(prescriptionsResponseData.prescriptions.isNotEmpty())
+        Assert.assertTrue(prescriptionsResponseData.courses.isNotEmpty())
     }
 
     @But("^a fromDate in an unexpected format$")

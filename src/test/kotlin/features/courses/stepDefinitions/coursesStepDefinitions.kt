@@ -18,6 +18,7 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CourseListResponse
+import worker.models.courses.CoursesResponseData
 
 
 open class coursesStepDefinitions {
@@ -92,7 +93,7 @@ open class coursesStepDefinitions {
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .getCoursesConnection(null)
 
-            Serenity.setSessionVariable(CourseListResponse::class).to(result)
+            Serenity.setSessionVariable(CoursesResponseData::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -100,10 +101,10 @@ open class coursesStepDefinitions {
 
     @Then("^I receive a list of (\\d+) repeating prescriptions that can be requested$")
     fun thenIReceiveAListOfXRepeatingPrescriptionsDateDescending(expectedNumberOfRepeatingPrescriptions: Int) {
-        val result = Serenity.sessionVariableCalled<CourseListResponse>(CourseListResponse::class)
+        val result = Serenity.sessionVariableCalled<CoursesResponseData>(CoursesResponseData::class)
         Assert.assertNotNull("No courses in session", result)
 
-        var actualNumberOfRepeatPrescriptions = result.response.courses.count()
+        var actualNumberOfRepeatPrescriptions = result.courses.count()
 
         Assert.assertEquals(
                 "Unexpected number of repeat prescriptions. Expected: "
@@ -111,7 +112,7 @@ open class coursesStepDefinitions {
                         + ". Actual: "
                         +  actualNumberOfRepeatPrescriptions,
                 expectedNumberOfRepeatingPrescriptions,
-                result.response.courses.count())
+                result.courses.count())
     }
 
     @Given("^I have historic prescriptions$")
