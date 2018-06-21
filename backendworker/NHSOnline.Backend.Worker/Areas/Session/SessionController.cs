@@ -13,6 +13,7 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {
@@ -24,19 +25,22 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly ILogger<SessionController> _logger;
+        private readonly IAuditor _auditor;
 
         public SessionController(
             ICitizenIdService citizenIdService,
             IGpSystemFactory gpSystemFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
-            ILogger<SessionController> logger)
+            ILogger<SessionController> logger,
+            IAuditor auditor)
         {
             _citizenIdService = citizenIdService;
             _gpSystemFactory = gpSystemFactory;
             _sessionCacheService = sessionCacheService;
             _odsCodeLookup = odsCodeLookup;
             _logger = logger;
+            _auditor = auditor;
         }
 
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
@@ -80,6 +84,10 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
             // Build and save session token in our redis session cache
             await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
+
+            // Audit that the use is logged on.
+            HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
+            _auditor.Audit("SessionCreation", "user session created");
 
             return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited));
         }
