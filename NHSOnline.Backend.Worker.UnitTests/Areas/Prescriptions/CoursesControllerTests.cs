@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -73,10 +74,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetCourseService());
             courseService.Verify(x => x.Get(_userSession));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetCoursesResult.SuccessfullyRetrieved;
-            Assert.IsNotNull(value);
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            value.Should().BeEquivalentTo(coursesGetResponse);
         }
     }
 }

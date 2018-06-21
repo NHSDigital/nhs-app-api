@@ -130,9 +130,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockEmisGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.Get(_userSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as PrescriptionResult.SuccessfullGet;
+            var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
+            value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
             Assert.IsNotNull(value);
             Assert.IsTrue(fromDateGenerated.HasValue);
 
