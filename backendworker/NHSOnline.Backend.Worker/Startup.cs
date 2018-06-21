@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Net.Http;
 using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -11,18 +14,16 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
-using System;
-using System.Linq;
 
 namespace NHSOnline.Backend.Worker
 {
     public class Startup
     {
         private readonly IHostingEnvironment _env;
-        private readonly ILoggerFactory _loggerFactory;
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
@@ -31,7 +32,6 @@ namespace NHSOnline.Backend.Worker
         {
             Configuration = configuration;
             _env = env;
-            _loggerFactory = loggerFactory;
             
             if (env.IsDevelopment())
             {
@@ -76,6 +76,7 @@ namespace NHSOnline.Backend.Worker
                 .AddMvc(
                     options =>
                     {
+                        options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute));
                         options.Filters.Add(typeof(HttpContextLogActionFilterAttribute));
                         options.Filters.Add(typeof(ModelStateValidationFilterAttribute));
                         options.Filters.Add(new AuthorizeFilter(
@@ -90,6 +91,8 @@ namespace NHSOnline.Backend.Worker
 
             services.AddDataProtection();
             services.AddSingleton(Configuration);
+            services.AddSingleton<IAuditorFactory>(new AuditorFactory(new StreamAuditSink(new System.IO.FileStream(Configuration["Audit:AuditFile"], System.IO.FileMode.Append))));
+            services.AddTransient(AuditorFactory.BuildAuditor);
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<ICipherService, CipherService>();

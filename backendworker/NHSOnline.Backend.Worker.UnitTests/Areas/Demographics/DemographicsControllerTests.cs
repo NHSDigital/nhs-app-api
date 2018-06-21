@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetDemographicsService());
             demographicsService.Verify(x => x.Get(_userSession));
-            var okObjectResult = result as OkObjectResult;
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value as GetDemographicsResult.SuccessfullyRetrieved;
             Assert.IsNotNull(value);

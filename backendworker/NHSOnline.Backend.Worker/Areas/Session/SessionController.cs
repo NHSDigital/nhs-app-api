@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -14,6 +14,7 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {
@@ -26,6 +27,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly IOptions<ConfigurationSettings> _settings;
         private readonly ILogger<SessionController> _logger;
+        private readonly IAuditor _auditor;
 
         public SessionController(
             ICitizenIdService citizenIdService,
@@ -33,7 +35,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
             IOptions<ConfigurationSettings> settings,
-            ILogger<SessionController> logger)
+            ILogger<SessionController> logger,
+            IAuditor auditor)
         {
             _citizenIdService = citizenIdService;
             _gpSystemFactory = gpSystemFactory;
@@ -41,6 +44,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             _odsCodeLookup = odsCodeLookup;
             _settings = settings;
             _logger = logger;
+            _auditor = auditor;
         }
 
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
@@ -84,6 +88,10 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
             // Build and save session token in our redis session cache
             await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
+
+            // Audit that the use is logged on.
+            HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
+            _auditor.Audit("SessionCreation", "user session created");
 
             return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited));
         }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support;
@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 return Option.None<UserProfile>();
             }
 
-            // Exchange authorization code for bearer access token.
+            // Exchange authorisation code for bearer access token.
             var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier);
             if (!tokenResponse.HasSuccessStatusCode)
             {
@@ -71,6 +71,6 @@ namespace NHSOnline.Backend.Worker.CitizenId
         {
             _logger.LogError($"{errorMessage} Error code: '{apiResponse.ErrorResponse?.Error}', Error message: '{apiResponse.ErrorResponse?.ErrorDescription}'");
 
-        }
+    }
     }
 }

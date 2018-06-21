@@ -5,16 +5,16 @@ using NHSOnline.Backend.Worker.Support.Logging;
 using System;
 using System.IO;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.Logging
+namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
 {
     [TestClass]
     public class LogLevelTests
     {
-        const string logFormat = "This is a log at level '{0}'";
+        private const string LogFormat = "This is a log at level '{0}'";
 
-        const string LoggedMessageFormat = /* | Timestamp | Scope */ "| LogLevelTests | {0} | " + logFormat + " |";
+        private const string LoggedMessageFormat = /* | Timestamp | Scope */ "| LogLevelTests | {0} | " + LogFormat + " |";
 
-        Stream _stream;
+        private Stream _stream;
 
         [TestInitialize]
         public void TestInitialise()
@@ -38,12 +38,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Logging
         private StreamReader Log(HttpContexedLoggerProvider logProvider)
         {
             var logger = logProvider.CreateLogger("LogLevelTests");
-            logger.LogTrace(logFormat, LogLevel.Trace);
-            logger.LogDebug(logFormat, LogLevel.Debug);
-            logger.LogInformation(logFormat, LogLevel.Information);
-            logger.LogWarning(logFormat, LogLevel.Warning);
-            logger.LogError(logFormat, LogLevel.Error);
-            logger.LogCritical(logFormat, LogLevel.Critical);
+            logger.LogTrace(LogFormat, LogLevel.Trace);
+            logger.LogDebug(LogFormat, LogLevel.Debug);
+            logger.LogInformation(LogFormat, LogLevel.Information);
+            logger.LogWarning(LogFormat, LogLevel.Warning);
+            logger.LogError(LogFormat, LogLevel.Error);
+            logger.LogCritical(LogFormat, LogLevel.Critical);
             _stream.Position = 0;
             return new StreamReader(_stream);
         }
