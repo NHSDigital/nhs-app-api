@@ -78,14 +78,14 @@ class AppointmentsBookingStepDefinitions {
                     slotId = 301,
                     startTime = "2018-12-27T14:30:00",
                     endTime = "2018-12-27T15:00:00",
-                    slotTypeName = "Physio",
+                    slotTypeName = "Immunisations",
                     slotTypeStatus = SlotTypeStatus.Visit
             ),
             AppointmentSlot(
                     slotId = 302,
                     startTime = "2018-12-28T09:00:00",
                     endTime = "2018-12-28T09:30:00",
-                    slotTypeName = "Physio",
+                    slotTypeName = "Back",
                     slotTypeStatus = SlotTypeStatus.Practice
             )
     )
@@ -114,7 +114,7 @@ class AppointmentsBookingStepDefinitions {
 
     private val defaultEmisMetaSlotSessions = arrayListOf(
             Session(
-                    "Bob 1",
+                    "Nurse Clinic",
                     201,
                     1,
                     30,
@@ -125,7 +125,7 @@ class AppointmentsBookingStepDefinitions {
                     defaultEmisAppointmentSlots[0].endTime
             ),
             Session(
-                    "Steve 2",
+                    "Physio",
                     202,
                     2,
                     30,
@@ -384,10 +384,23 @@ class AppointmentsBookingStepDefinitions {
             assertNotNull(actualAppointmentSession.displayName)
             val expectedSession = unmatchedExpectedSessions[actualAppointmentSession.id]
             assertNotNull(expectedSession)
-            assertEquals(expectedSession!!.sessionType.toString(), actualAppointmentSession.displayName)
+            assertEquals(expectedSession!!.sessionName + " - " + getSlotNameForSession(expectedSession), actualAppointmentSession.displayName)
             unmatchedExpectedSessions.remove(actualAppointmentSession.id)
         }
         assertTrue("Expected Appointment Session missing. ", unmatchedExpectedSessions.isEmpty())
+    }
+
+    private fun getSlotNameForSession(expectedSession: Session): String? {
+        for (appointmentSession in defaultEmisAppointmentSessions) {
+            if (expectedSession.sessionId == appointmentSession.sessionId) {
+                for (appointmentSlot in defaultEmisAppointmentSlots) {
+                    if (appointmentSession.slots[0] == appointmentSlot) {
+                        return appointmentSlot.slotTypeName
+                    }
+                }
+            }
+        }
+        return null
     }
 
     @Then("^I get a response with an empty set of slots$")

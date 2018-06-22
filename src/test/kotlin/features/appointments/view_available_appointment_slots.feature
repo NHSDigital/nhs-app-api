@@ -172,31 +172,3 @@ Feature: View available appointment slots
     When I click appointments button in menu
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
-
-  @NHSO-470
-  @backend
-  Scenario: Requesting available appointment slots with correct data returns lists of available slots, locations, clinicians, and appointment sessions
-    Given I have logged in and have a valid session cookie
-    And there are available appointment slots for an explicit date-time range
-    When the available appointment slots are retrieved for explicit date-time range
-    Then available slots, locations, clinicians and appointment sessions are returned for the given date-time range
-    And available slots are returned containing id, start date and time, end date and time, location identifier, appointment session identifier, clinician identifiers
-    And available locations are returned containing an id and display name
-    And available clinicians are returned containing an id and display name
-    And available appointment session are returned containing an id and display name
-
-  @NHSO-470
-  @backend
-  Scenario: Online appointment booking is not available to a particular patient
-    Given I have logged in and have a valid session cookie
-    But the practice does not offer online booking to my patient
-    When the available appointment slots are retrieved for explicit date-time range
-    Then I get a response with an empty set of slots
-
-  @NHSO-470
-  @backend
-  Scenario: Requesting available appointment slots returns an unknown exception, returns a Bad Gateway error
-    Given I have logged in and have a valid session cookie
-    But an unknown exception will occur when wanting to view appointment slots
-    When the available appointment slots are retrieved for explicit date-time range
-    Then I receive a "Bad Gateway" error
