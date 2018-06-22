@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -21,6 +22,13 @@ namespace NHSOnline.Backend.Worker.UnitTests
         private Mock<IDatabase> _database;
         private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
         private int _defaultSessionExpiryMinutes;
+
+        private ILogger<SessionCacheService> _logger;
+
+        private SessionCacheService SessionCacheService  => new SessionCacheService(_connectionMultiplexerFactory.Object, 
+            _cipherService.Object, 
+            _settings.Object,
+            _logger);
         
         [TestInitialize]
         public void TestInitializeInitialize()
@@ -44,6 +52,8 @@ namespace NHSOnline.Backend.Worker.UnitTests
             _connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
             _connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.Session))
                 .Returns(connectionMultiplexer.Object);
+
+            _logger = new LoggerFactory().CreateLogger<SessionCacheService>();
         }
         
         [TestMethod]
@@ -75,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Verifiable();
                 
                 
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object);
+            var systemUnderTest = SessionCacheService;
             
             // Act
             var result = await systemUnderTest.CreateUserSession(userSession);
@@ -102,7 +112,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 .Returns(Task.FromResult(true))
                 .Verifiable();
             
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object);
+            var systemUnderTest = SessionCacheService;
             
             // Act
             var result = await systemUnderTest.DeleteUserSession(redisSessionKey);

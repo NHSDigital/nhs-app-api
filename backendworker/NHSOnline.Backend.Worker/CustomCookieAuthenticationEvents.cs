@@ -13,9 +13,9 @@ namespace NHSOnline.Backend.Worker
         private readonly ISessionCacheService _sessionCacheService;
         private readonly ILogger<CustomCookieAuthenticationEvents> _logger;
 
-        public CustomCookieAuthenticationEvents(ISessionCacheService sessionCacheService, ILoggerFactory loggerFactory)
+        public CustomCookieAuthenticationEvents(ISessionCacheService sessionCacheService, ILogger<CustomCookieAuthenticationEvents> logger)
         {
-            _logger = loggerFactory.CreateLogger<CustomCookieAuthenticationEvents>();
+            _logger = logger;
             _sessionCacheService = sessionCacheService;
         }
         
@@ -23,20 +23,19 @@ namespace NHSOnline.Backend.Worker
         {
             using (_logger.BeginScope(context.HttpContext))
             {
-                _logger.LogDebug("Start: Validate Principal");
-                var userSession = await GetUserSession(context);
+                var userSessionOption = await GetUserSession(context);
 
-                if (!userSession.HasValue)
+                if (!userSessionOption.HasValue)
                 {
                     _logger.LogWarning("No user session found. Signing out.");
                     await RejectPrincipalAndSignOut(context);
                     return;
                 }
+                var userSession = userSessionOption.ValueOrFailure();
 
-                _logger.LogInformation($"User session found: {userSession.ValueOrFailure()}");
+                _logger.LogInformation($"User session found: '{userSession.GetType()}'");
 
-                context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession.ValueOrFailure());
-                _logger.LogDebug("Finish: Validate Principal");
+                context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession);
             }
         }
 

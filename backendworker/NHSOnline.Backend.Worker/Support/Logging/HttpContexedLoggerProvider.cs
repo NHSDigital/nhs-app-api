@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                 {
                     lock (_textWriter)
                     {
-                        _textWriter.WriteLine($"| {DateTime.Now.ToString("yyy-MM-dd HH:mm:ss:fff")} | { GetScope(state) } | {_categoryName} | { logLevel } | {formatter(state, exception)} |");
+                        _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {formatter(state, exception)} |");
                         _textWriter.Flush();
                     }
                 }

@@ -30,122 +30,123 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             IGpSystemFactory gpSystemFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
-            ILoggerFactory loggerFactory)
+            ILogger<SessionController> logger)
         {
             _citizenIdService = citizenIdService;
             _gpSystemFactory = gpSystemFactory;
             _sessionCacheService = sessionCacheService;
             _odsCodeLookup = odsCodeLookup;
-            _logger = loggerFactory.CreateLogger<SessionController>();
+            _logger = logger;
         }
 
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserSessionRequest model)
         {
-            _logger.LogDebug("Starting POST /session");
             // Call Citizen ID to get the IM1 connection token and ODS code.
             var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier);
             if (!cidUserProfileOption.HasValue)
             {
-                _logger.LogError(
-                    "No CID profile was found for received authcode and code verifier");
+                _logger.LogError("No CID profile was found for received authcode and code verifier");
                 return BadRequest();
             }
-
             var cidUserProfile = cidUserProfileOption.ValueOrFailure();
 
             // Get a suitable GP system, based on the ODS code.
             var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
             if (!gpSystemOption.HasValue)
             {
-                _logger.LogDebug($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
+                _logger.LogError($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
             var gpSystem = gpSystemOption.ValueOrFailure();
-
-            _logger.LogDebug($"Fetch GP System '{gpSystem.Supplier}'.");
+            _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
 
             // Validate the format of the IM1 connection token for this GP system.
             var tokenValidationService = gpSystem.GetTokenValidationService();
             if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
             {
-                _logger.LogDebug($"Failed to validate Im1 connection '{cidUserProfile.Im1ConnectionToken}'");
+                _logger.LogError("Failed to validate Im1 connection");
                 return new StatusCodeResult(StatusCodes.Status403Forbidden);
             }
 
             // Create a session with the GP system, using the IM1 connection token.
-            var sessionService = gpSystem.GetSessionService();
-            var sessionCreateResult =
-                await sessionService.Create(cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode);
-
-            var sessionCreatedResultVisited = sessionCreateResult.Accept(new SessionCreateResultVisitor());
+            var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, cidUserProfile);
             if (!sessionCreatedResultVisited.SessionWasCreated)
             {
-                _logger.LogError(
-                        $"Creating the session failed with status code: { sessionCreatedResultVisited.StatusCode }");
+                _logger.LogError($"Creating the session failed with status code: '{sessionCreatedResultVisited.StatusCode}'");
                 return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
             }
 
             // Build and save session token in our redis session cache
-            var sessionId =
-                await _sessionCacheService.CreateUserSession(sessionCreatedResultVisited.UserSession);
+            await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
 
-            _logger.LogDebug($"Fetched session Id { sessionId }");
-
-            // Return the session token in a cookie.
-            await AppendCookieToResponse(sessionId);
-            
-            // Build response body
-            var responseBody = new UserSessionResponse
-            {
-                Name = sessionCreatedResultVisited.Name,
-                SessionTimeout = sessionCreatedResultVisited.SessionTimeout
-            };
-
-            return await Task.FromResult(new CreatedResult(string.Empty, responseBody));
+            return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited));
         }
-        
+
+
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {
-            _logger.LogDebug("Starting DELETE /session");
-            
             var userSession = HttpContext.GetUserSession();
-            var sessionDeleted = false;
             
+            var sessionDeleted = false;
+
             try
             {
                 sessionDeleted = await _sessionCacheService.DeleteUserSession(userSession.Key);
             }
             catch (Exception e)
             {
-                _logger
-                        .LogError(e.ToString());
+                _logger.LogError(e, "Delete session failed");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
 
             if (!sessionDeleted)
-                {
-                    _logger
-                        .LogError("No active session was found");
-                }
+            {
+                _logger.LogError("No active session was found");
+            }
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             return new StatusCodeResult(StatusCodes.Status204NoContent);
         }
 
+        private CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited)
+        {
+            var responseBody = new UserSessionResponse
+            {
+                Name = sessionCreatedResultVisited.Name,
+                SessionTimeout = sessionCreatedResultVisited.SessionTimeout
+            };
+
+            return new CreatedResult(string.Empty, responseBody);
+        }
+
+        private async Task FetchSessionIdAndSaveInCookie(SessionCreateResultVisitorOutput sessionCreatedResultVisited)
+        {
+            // Build and save session token in our redis session cache
+            var sessionId = await _sessionCacheService.CreateUserSession(sessionCreatedResultVisited.UserSession);
+
+            _logger.LogDebug($"Fetched Session Id: '{sessionId}'");
+
+            // Return the session token in a cookie.
+            await AppendCookieToResponse(sessionId);
+        }
+
+        private async Task<SessionCreateResultVisitorOutput> GetSessionCreateResultVisitorOutput(IGpSystem gpSystem, UserProfile cidUserProfile)
+        {
+            var sessionService = gpSystem.GetSessionService();
+            var sessionCreateResult = await sessionService.Create(cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode);
+            return sessionCreateResult.Accept(new SessionCreateResultVisitor());
+        }
+
         private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)
         {
             var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
-            if (!supplier.HasValue)
-            {
-                _logger.LogError($"Cannot find GP system for ODS code: {odsCode}");
-                return Option.None<IGpSystem>();
-            }
-
-            return Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+            return !supplier.HasValue
+                ? Option.None<IGpSystem>()
+                : Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
         }
 
         private async Task AppendCookieToResponse(string sessionId)

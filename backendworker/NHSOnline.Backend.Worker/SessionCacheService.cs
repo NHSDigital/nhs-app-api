@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Support;
@@ -20,9 +21,11 @@ namespace NHSOnline.Backend.Worker
         private readonly ICipherService _cipherService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly ConfigurationSettings _settings;
+        private readonly ILogger<SessionCacheService> _logger;
 
         public SessionCacheService(IConnectionMultiplexerFactory connectionMultiplexerFactory,
-            ICipherService cipherService, IOptions<ConfigurationSettings> settings)
+            ICipherService cipherService, IOptions<ConfigurationSettings> settings,
+            ILogger<SessionCacheService> logger)
         {
             _connectionMultiplexerFactory = connectionMultiplexerFactory ??
                                             throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
@@ -33,6 +36,8 @@ namespace NHSOnline.Backend.Worker
             {
                 TypeNameHandling = TypeNameHandling.All
             };
+
+            _logger = logger;
         }
 
         public async Task<string> CreateUserSession(UserSession userSession)
@@ -60,6 +65,7 @@ namespace NHSOnline.Backend.Worker
 
             if (redisValue.Value.IsNull)
             {
+                _logger.LogDebug("No redis value Found");
                 return Option.None<UserSession>();
             }
 
