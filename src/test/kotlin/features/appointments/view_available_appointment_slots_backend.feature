@@ -4,8 +4,8 @@ Feature: View available appointment slots backend
   I want to see available appointment slots
 
   @NHSO-470
+  @NHSO-1552
   @backend
-  @pending  @NHSO-1552
   Scenario: Requesting available appointment slots with correct data returns lists of available slots, locations, clinicians, and appointment sessions
     Given I have logged in and have a valid session cookie
     And there are available appointment slots for an explicit date-time range

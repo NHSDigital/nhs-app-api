@@ -309,6 +309,7 @@ class AppointmentsBookingStepDefinitions {
         for (i in 0..1)
             unmatchedExpectedSlots[defaultEmisAppointmentSlots[i].slotId.toString()] = SlotResponseObject(
                     defaultEmisAppointmentSlots[i].slotId.toString(),
+                    defaultEmisAppointmentSlots[i].slotTypeName!!,
                     defaultEmisAppointmentSlots[i].startTime!!,
                     defaultEmisAppointmentSlots[i].endTime!!,
                     defaultEmisMetaSlotSessions[i].locationId.toString(),
@@ -318,6 +319,7 @@ class AppointmentsBookingStepDefinitions {
         for (actualSlot in result.slots) {
             println(actualSlot.toString())
             assertNotNull(actualSlot.id)
+            assertNotNull(actualSlot.type)
             assertNotNull(actualSlot.startTime)
             assertNotNull(actualSlot.endTime)
             assertNotNull(actualSlot.locationId)
@@ -325,6 +327,7 @@ class AppointmentsBookingStepDefinitions {
             assertNotNull(actualSlot.clinicianIds)
             val expectedSlot = unmatchedExpectedSlots[actualSlot.id]!!
             assertNotNull("Expected slot not found. ", expectedSlot)
+            assertEquals(expectedSlot.type, actualSlot.type)
             assertEquals(expectedSlot.startTime + "+00:00", actualSlot.startTime)
             assertEquals(expectedSlot.endTime + "+00:00", actualSlot.endTime)
             assertEquals(expectedSlot.locationId, actualSlot.locationId)
@@ -384,7 +387,7 @@ class AppointmentsBookingStepDefinitions {
             assertNotNull(actualAppointmentSession.displayName)
             val expectedSession = unmatchedExpectedSessions[actualAppointmentSession.id]
             assertNotNull(expectedSession)
-            assertEquals(expectedSession!!.sessionName + " - " + getSlotNameForSession(expectedSession), actualAppointmentSession.displayName)
+            assertEquals(expectedSession!!.sessionName, actualAppointmentSession.displayName)
             unmatchedExpectedSessions.remove(actualAppointmentSession.id)
         }
         assertTrue("Expected Appointment Session missing. ", unmatchedExpectedSessions.isEmpty())
