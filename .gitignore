@@ -307,5 +307,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# Gradle:
+./gradle/
+
 
 # End of https://www.gitignore.io/api/osx,aspnetcore

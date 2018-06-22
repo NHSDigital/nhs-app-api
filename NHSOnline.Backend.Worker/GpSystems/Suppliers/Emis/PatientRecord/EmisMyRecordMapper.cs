@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class EmisMyRecordMapper : IEmisMyRecordMapper
     {
-        public MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, TestResults testResults)
+        public MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, TestResults testResults, Problems problems)
         {
             return new MyRecordResponse
             {
@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 Medications = medications,
                 Immunisations = immunisations,
                 TestResults = testResults,
+                Problems = problems,
                 HasSummaryRecordAccess = allergies?.HasAccess ?? false,
                 HasDetailedRecordAccess = immunisations.HasAccess || testResults.HasAccess
             };

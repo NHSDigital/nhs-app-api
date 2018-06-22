@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         Allergies,
         Immunisations,
         Medication,
-        TestResults
+        TestResults,
+        Problems
     }
 }

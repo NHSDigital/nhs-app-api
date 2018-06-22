@@ -17,5 +17,6 @@
         public Medications Medications { get; set; }
         public Immunisations Immunisations { get; set; }
         public TestResults TestResults { get; set; }
+        public Problems Problems { get; set; }
     }
 }

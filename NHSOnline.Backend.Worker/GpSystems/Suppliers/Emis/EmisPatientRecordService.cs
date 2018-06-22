@@ -37,15 +37,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 
                 var testResultsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);
+                
+                var problemsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Problems);
                     
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask);
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask);
 
                 var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
                 var medications = new GetMedicationsTaskChecker(_logger).Check(medicationsTask);
                 var immunisations = new GetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
                 var testResults = new GetTestResultsTaskChecker(_logger).Check(testResultsTask);
+                var problems = new GetProblemsTaskChecker(_logger).Check(problemsTask);
                 
-                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults);
+                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems);
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
