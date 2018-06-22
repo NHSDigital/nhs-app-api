@@ -105,6 +105,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             cancellationReasonText = string.Empty;
 
+            if (string.IsNullOrWhiteSpace(requestCancellationReasonId))
+            {
+                return false;
+            }
+
             var resourceManager = new ResourceManager(typeof(CancellationReasons));
             var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
             cancellationReasonText = resourceSet.GetString(requestCancellationReasonId);
