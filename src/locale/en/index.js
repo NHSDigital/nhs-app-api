@@ -41,6 +41,17 @@ export default {
       message:
         'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
+    errors: {
+      pageHeader: 'Error retrieving data',
+      header: 'Sorry, there\'s been a problem getting your appointment history',
+      subheader: '',
+      message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      504: {
+        subheader: 'Please try again',
+        message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
+        retryButtonText: 'Try again',
+      },
+    },
     booking: {
       bookButtonText: 'Book this appointment',
       errors: {
