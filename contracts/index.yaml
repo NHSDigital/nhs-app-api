@@ -626,17 +626,17 @@
                             courseId: 
                               type: "string"
                               description: "Course identifier."
-                            status: 
-                              type: "string"
-                              enum: 
-                                - "approved"
-                                - "ordered"
-                                - "rejected"
-                                - "cancelled"
                       orderDate: 
                         type: "string"
                         format: "date-time"
                         description: "The date on which the repeat prescription was ordered."
+                      status: 
+                        type: "string"
+                        enum: 
+                          - "Unknown"
+                          - "Rejected"
+                          - "Requested"
+                          - "Approved"
                 courses: 
                   type: "array"
                   description: "Array of prescription courses."
@@ -680,12 +680,9 @@
                       name: 
                         type: "string"
                         description: "Course name."
-                      dosage: 
+                      details: 
                         type: "string"
-                        description: "The required dosage for the course."
-                      quantity: 
-                        type: "string"
-                        description: "The quantity of the drug for the course."
+                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
           401: 
             description: "User session missing or expired."
           403: 

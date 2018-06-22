@@ -203,6 +203,20 @@ export default {
         retryButtonText: 'Back to my repeat prescriptions',
       },
     },
+    prescriptionStatus: {
+      rejected: {
+        text: 'Rejected',
+        description: 'Contact your GP for more information',
+      },
+      requested: {
+        text: 'Requested',
+        description: 'Waiting for GP approval',
+      },
+      approved: {
+        text: 'Approved',
+        description: 'Contact your chosen pharmacy for collection information',
+      },
+    },
   },
   myRecord: {
     genericErrorMessage: 'An error has occurred trying to retrieve this data.',

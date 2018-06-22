@@ -17,29 +17,31 @@ export default {
   /* eslint-disable no-unused-vars */
   [PRESCRIPTIONS_LOADED](state, data) {
     const prescriptionsResponse = assign({}, data);
-    const prescriptionCourses = [];
-    let id = 0;
+    const prescriptionCourses = {};
+
     for (let i = 0; i < prescriptionsResponse.prescriptions.length; i += 1) {
       const prescription = prescriptionsResponse.prescriptions[i];
+
+      if (!prescriptionCourses[prescription.status]) {
+        prescriptionCourses[prescription.status] = [];
+      }
+
       for (let j = 0; j < prescription.courses.length; j += 1) {
         const prescriptionCourse = prescription.courses[j];
         const course = findById(
           prescriptionCourse.courseId,
           prescriptionsResponse.courses,
         );
-        prescriptionCourses.push({
-          id,
-          courseNumber: prescriptionCourse.courseId,
+        prescriptionCourses[prescription.status].push({
+          courseId: prescriptionCourse.courseId,
           orderDate: prescription.orderDate,
           name: course.name,
-          status: prescriptionCourse.status,
-          dosage: course.dosage,
-          quantity: course.quantity,
-          selected: false,
+          status: prescription.status,
+          details: course.details,
         });
-        id += 1;
       }
     }
+
     state.prescriptionCourses = prescriptionCourses;
     state.hasLoaded = true;
   },

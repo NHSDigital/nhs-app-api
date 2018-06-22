@@ -22,30 +22,20 @@
       </div>
       <ul v-if="showPrescriptions" data-purpose="prescriptions">
         <li
-          v-for="prescriptionCourse in prescriptionCoursesToDisplay"
-          :key="prescriptionCourse.id"
+          v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
+          :key="key"
           :class="$style['prescription-course']">
-          <div :class="$style.container">
-            <div>
-              <b>
-                {{ $t('rp02.orderDate') }}
-              </b>
-              : <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
-            </div>
-            <hr>
-            <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
-            <div
-              aria-label="dosage">
-              {{ prescriptionCourse.dosage }} - {{ prescriptionCourse.quantity }}
-            </div>
-            <hr>
-            <div>
-              <b>
-                {{ $t('rp02.status') }}
-              </b>
-              : <span aria-label="status">{{ prescriptionCourse.status }}</span>
-            </div>
+          <div class="panel-title">
+            <h2>{{ getMedicationCourseStatus(key) }}</h2>
           </div>
+          <ul>
+            <li
+              v-for="(prescriptionCourse, key) in statusGroup"
+              :key="key"
+              :class="$style['prescription-course']">
+              <historic-prescription :prescription-course="prescriptionCourse" />
+            </li>
+          </ul>
         </li>
       </ul>
     </div>
@@ -60,33 +50,57 @@
 /* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/FloatingButtonBottom';
 import SuccessDialog from '@/components/SuccessDialog';
+import HistoricPrescription from '@/components/HistoricPrescription';
+import { MedicationCourseStatus } from '@/lib/medication-course-status';
+import _ from 'lodash';
 
 export default {
   middleware: ['auth', 'meta'],
   components: {
     FloatingButtonBottom,
     SuccessDialog,
+    HistoricPrescription,
   },
   data() {
     return {
       justOrderedARepeatPrescription: false,
+      statusDisplayPriority: {
+        [MedicationCourseStatus.Rejected]: 1,
+        [MedicationCourseStatus.Requested]: 2,
+        [MedicationCourseStatus.Approved]: 3,
+      },
     };
   },
   computed: {
     showNoPrescriptions() {
       return (
         this.$store.state.prescriptions.hasLoaded &&
-        this.$store.state.prescriptions.prescriptionCourses.length === 0
+        this.$store.state.prescriptions.prescriptionCourses === null
       );
     },
     showPrescriptions() {
       return (
         this.$store.state.prescriptions.hasLoaded &&
-        this.$store.state.prescriptions.prescriptionCourses.length > 0
+        this.$store.state.prescriptions.prescriptionCourses !== null
       );
     },
     prescriptionCoursesToDisplay() {
-      return this.$store.state.prescriptions.prescriptionCourses;
+      const context = this;
+      const keys = _.sortBy(
+        _.keys(this.$store.state.prescriptions.prescriptionCourses),
+        item => context.statusDisplayPriority[item],
+      );
+
+      const orderedMap = {};
+
+      _.each(
+        keys,
+        (k) => {
+          orderedMap[k] = context.$store.state.prescriptions.prescriptionCourses[k];
+        },
+      );
+
+      return orderedMap;
     },
     hasLoaded() {
       return this.$store.state.prescriptions.hasLoaded;
@@ -95,7 +109,7 @@ export default {
   mounted() {
     this.$store.dispatch('prescriptions/clear');
     this.justOrderedARepeatPrescription =
-    this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
+      this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
     this.$store.dispatch('prescriptions/load', this.$config);
 
     this.$store.dispatch('errors/setApiErrorButtonPath', '');
@@ -122,22 +136,6 @@ export default {
 .prescription-course {
   list-style: none;
   @include space(margin, bottom, $three);
-}
-
-.container {
-  border: solid 1px $mid_grey;
-  border-radius: 5px;
-  background: $white;
-  @include space(padding, all, $three);
-  transition: all ease 0.5s;
-  hr {
-    height: 1px;
-    border: none;
-    background-color: $dark_grey;
-    opacity: 0.2;
-    @include space(margin, top, $two);
-    @include space(margin, bottom, $two);
-  }
 }
 
 .above-float-button {

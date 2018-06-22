@@ -20,7 +20,7 @@
             <p
               :class="$style.prescriptionDescription"
               data-purpose="prescription-description">
-              {{ selectedPrescription.dosage }} - {{ selectedPrescription.quantity }}
+              {{ selectedPrescription.details }}
             </p>
           </div>
           <hr>

@@ -22,7 +22,7 @@
     <span
       :class="$style.prescriptionDescription"
       aria-label="prescription-description">
-      {{ prescriptionDetails.dosage }} - {{ prescriptionDetails.quantity }}
+      {{ prescriptionDetails.details }}
     </span>
   </div>
 </template>
