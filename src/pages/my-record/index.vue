@@ -142,22 +142,7 @@ export default {
     this.$store.app.$http
       .getV1PatientMyRecord({})
       .then((data) => {
-        const mockData = data;
-        mockData.response.problems = {
-          data: [{
-            effectiveDate: { datePart: 'YearMonthDay', value: '2018-05-31T00:00:00+00:00' },
-            lineItems: [
-              { text: 'Lower back pain', lineItems: [] },
-              { text: 'Significance:  Minor', lineItems: [] },
-              { text: 'Status:  Past', lineItems: [] },
-              { text: 'Notes: ', lineItems: ['Due to lifting child awkwardly', 'Advised to bend knees when lifting'] },
-              { text: 'Ended:  7 June 2018', lineItems: [] },
-            ],
-          }],
-          hasAccess: true,
-          hasErrored: false,
-        };
-        this.myRecord = mockData.response;
+        this.myRecord = data.response;
         this.isPatientDetailsCollapsed = false;
         this.hasLoaded = true;
       });
