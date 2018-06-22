@@ -198,7 +198,7 @@ class AppointmentData private constructor() {
 
     private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlot {
         val startSession = dateTimeFormat.format(startTime.time)
-        val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes))
+        val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes).time)
         return AppointmentSlot(sessionId, startSession, endSession)
     }
 

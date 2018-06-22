@@ -32,6 +32,12 @@ class AvailableSlotsJourney(private val client: MockingClient) {
                 sessions = sessions)
 
         val patient = SuccessfulRegistrationJourney.patient
+
+        client.forEmis {
+            appointmentGetRequest(patient)
+                    .respondWithSuccess(AppointmentData.instance.createGetAppointmentsResponse())
+        }
+
         client.forEmis {
             appointmentSlotsMetaRequest(patient)
                     .respondWithSuccess(appointmentSlotsMetaResponseModel)
