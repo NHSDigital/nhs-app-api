@@ -51,7 +51,8 @@ export default {
   },
   computed: {
     appointmentSession() {
-      return get('appointmentSession.displayName')(this.theSlot);
+      const slotType = (this.theSlot.type) ? ` - ${this.theSlot.type}` : '';
+      return get('appointmentSession.displayName')(this.theSlot) + slotType;
     },
     getClass() {
       const isSelected = this.isSlotSelected() && !this.alwaysDeselect;
