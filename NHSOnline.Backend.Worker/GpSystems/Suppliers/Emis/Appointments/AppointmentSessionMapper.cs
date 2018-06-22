@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             return new AppointmentSession
             {
                 Id = source.SessionId.ToString(),
-                DisplayName = source.SessionType
+                DisplayName = source.SessionName ?? string.Empty
             };
         }
     }

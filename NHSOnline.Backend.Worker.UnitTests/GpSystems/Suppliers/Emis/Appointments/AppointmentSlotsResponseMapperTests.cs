@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedAppointmentSession = new AppointmentSession
             {
-                DisplayName = "Timed",
+                DisplayName = "General Appointment Session",
                 Id ="1"
             };
             
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedAppointmentSession = new AppointmentSession
             {
-                DisplayName = "Timed",
+                DisplayName = "General Appointment Session",
                 Id = Convert.ToString(session.SessionId)
             };
             
@@ -235,7 +235,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var exoectedAppointmentSession = new AppointmentSession
             {
                 Id = "77",
-                DisplayName = "Timed",
+                DisplayName = "General Session Appointment",
             };
             
             var expectedSlot = new Slot
@@ -294,7 +294,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var exoectedAppointmentSession = new AppointmentSession
             {
                 Id = "77",
-                DisplayName = "Timed"
+                DisplayName = "General Session Appointment"
             };
 
             var expectedLocation = new Worker.Areas.Appointments.Models.Location

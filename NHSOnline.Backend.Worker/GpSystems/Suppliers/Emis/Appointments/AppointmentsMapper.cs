@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     EndTime = endTime,
                     ClinicianIds = FindClinicianIdsForSession(sessionId, sessions),
                     LocationId = FindLocationIdForSession(sessionId, sessions),
-                    SlotType = sourceAppointment.SlotTypeName,
+                    SlotType = sourceAppointment.SlotTypeName ?? string.Empty,
                 };
 
                 appointments.Add(appointment);

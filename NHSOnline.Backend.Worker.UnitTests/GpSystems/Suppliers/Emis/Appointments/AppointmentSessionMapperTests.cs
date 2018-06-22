@@ -47,24 +47,37 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 SessionName = "Private Session"
             };
 
-            var sessionList = new List<Session> { session1, session2 };
+            var session3 = new Session
+            {
+                SessionId = 2,
+                SessionType = "Untimed",
+                SessionName = null
+            };
+
+            var sessionList = new List<Session> { session1, session2, session3 };
 
             var mapper = new AppointmentSessionMapper();
             var appointmentSessions = mapper.Map(sessionList);
 
-            var expectedAppointmentSession1 = new AppointmentSession()
+            var expectedAppointmentSession1 = new AppointmentSession
             {
                 Id = "1",
-                DisplayName = "Timed"
+                DisplayName = "Public Session"
             };
             
             var expectedAppointmentSession2 = new AppointmentSession
             {
                 Id = "2",
-                DisplayName = "Untimed"
+                DisplayName = "Private Session"
             };
 
-            var expectedAppointmentSessionArray = new[]{ expectedAppointmentSession1, expectedAppointmentSession2 };
+            var expectedAppointmentSession3 = new AppointmentSession
+            {
+                Id = "2",
+                DisplayName = string.Empty
+            };
+
+            var expectedAppointmentSessionArray = new[]{ expectedAppointmentSession1, expectedAppointmentSession2, expectedAppointmentSession3 };
 
             appointmentSessions.Should().BeEquivalentTo(expectedAppointmentSessionArray);
         }
