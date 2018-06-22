@@ -140,9 +140,9 @@ Feature: View available appointment slots
   @native
   @manual
   Scenario: A user sees appropriate information message when internet connection has been lost
-    Given I am logged in
+    Given I am on my appointments page
     And internet connection drops
-    When I click appointments button in menu
+    When I press the "Book this appointment" button
     Then I see appropriate information message when there is no internet connection
     And there should be a button to try again
 
