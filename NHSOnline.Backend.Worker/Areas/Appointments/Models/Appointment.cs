@@ -10,5 +10,6 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public string LocationId { get; set; }
         public string AppointmentSessionId { get; set; }
         public string[] ClinicianIds { get; set; }
+        public string SlotType { get; set; }
     }
 }

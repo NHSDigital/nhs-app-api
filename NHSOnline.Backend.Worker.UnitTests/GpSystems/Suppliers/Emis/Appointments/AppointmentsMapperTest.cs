@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var sessionHolders = new[] { sessionHolder };
 
             var appointment =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19");
+                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
 
             var appointments = new[] { appointment };
 
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var sessionHolders = new[] { sessionHolder };
 
             var appointment =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19");
+                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
 
             var appointments = new[] { appointment };
 
@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointment =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", invalidEndTime);
+                CreateAppointment(101, 1, "2018-05-09T10:59:19", invalidEndTime, "Emergency");
 
             var appointments = new[] { appointment };
 
@@ -139,7 +139,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 ClinicianIds = new[] { "55" },
                 EndTime = null,
                 LocationId = "23",
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19")
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
+                SlotType = "Emergency"
             };
             var expectedResponse = new[] { expectedAppointment };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -153,10 +154,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointmentWithInvalidStartTime =
-                CreateAppointment(101, 1, invalidStartTime, "2018-05-09T10:59:19");
+                CreateAppointment(101, 1, invalidStartTime, "2018-05-09T10:59:19", "Emergency");
 
             var appointment2 =
-                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19");
+                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
 
             var appointments = new[] { appointmentWithInvalidStartTime, appointment2 };
 
@@ -181,6 +182,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
                 LocationId = "23",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                SlotType = "Emergency"
             };
 
             var expectedResponse = new[] { expectedAppointment };
@@ -193,10 +195,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var appointment1 =
-                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19");
+                CreateAppointment(101, 1, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
             
             var appointment2=
-                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19");
+                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
 
             var appointnments = new[] { appointment1, appointment2 };
             
@@ -221,6 +223,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
                 LocationId = "23",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                SlotType = "Emergency"
             };
             
             var expectedAppointment2 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
@@ -231,6 +234,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
                 LocationId = "23",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
+                SlotType = "Emergency"
             };
 
             var expectedResponse = new[]{ expectedAppointment1, expectedAppointment2 };
@@ -238,14 +242,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
-        private static Appointment CreateAppointment(int slotId, int sessionId, string startTime, string endTime)
+        private static Appointment CreateAppointment(int slotId, int sessionId, string startTime, string endTime, string slotTypeName)
         {
             var appointment = new Appointment
             {
                 SlotId = slotId,
                 EndTime = endTime,
                 StartTime = startTime,
-                SessionId = sessionId
+                SessionId = sessionId,
+                SlotTypeName = slotTypeName
             };
 
             return appointment;

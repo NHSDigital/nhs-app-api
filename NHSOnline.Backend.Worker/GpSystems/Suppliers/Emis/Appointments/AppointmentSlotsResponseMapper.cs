@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly IMapper<Location, Areas.Appointments.Models.Location> _locationMapper;
         private readonly IMapper<Models.Session, AppointmentSession> _sessionMapper;
-        private readonly IMapper<Models.SessionHolder, Clinician> _clinicianMapper;
+        private readonly IMapper<SessionHolder, Clinician> _clinicianMapper;
         private readonly IAppointmentSlotsMapper _slotMapper;
 
         public AppointmentSlotsResponseMapper(IMapper<SessionHolder, Clinician> clinicianMapper,

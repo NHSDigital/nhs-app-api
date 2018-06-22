@@ -6,5 +6,6 @@
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public int SessionId { get; set; }
+        public string SlotTypeName { get; set; }
     }
 }
