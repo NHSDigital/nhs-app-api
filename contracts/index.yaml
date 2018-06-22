@@ -67,6 +67,9 @@
                       id: 
                         type: "string"
                         description: "Slot Identifier."
+                      type: 
+                        type: "string"
+                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
                       startTime: 
                         type: "string"
                         format: "date-time"
@@ -175,6 +178,9 @@
                       id: 
                         type: "string"
                         description: "Appointment Identifier."
+                      slotType: 
+                        type: "string"
+                        description: "Type of appointment slot, e.g. \"Baby immunisations\"."
                       startTime: 
                         type: "string"
                         format: "date-time"
@@ -217,7 +223,7 @@
                         description: "Appointment Session Identifier."
                       displayName: 
                         type: "string"
-                        description: "Appointment Session Name."
+                        description: "Appointment Session Name, e.g. \"Nurse Clinic\"."
                 locations: 
                   type: "array"
                   description: "Array of Locations."
