@@ -32,7 +32,7 @@ if [ -z $BDD_FLAG ]; then
   # Run full BDD tests if BDD_FLAGS is undefined.
   BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
 else
-  case $s in
+  case $BDD_FLAG in
     full)
       BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
     ;;
