@@ -37,7 +37,7 @@ else
       BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
     ;;
     smoketests)
-      BDD_CUCUMBER_OPTIONS='--tags @smoketest --tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native ~@tech-debt'
+      BDD_CUCUMBER_OPTIONS='--tags @smoketest --tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
     ;;
     *)
       die "Unknown BDD_FLAG value"
