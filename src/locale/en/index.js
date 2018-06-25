@@ -259,7 +259,9 @@ export default {
     login: 'Login',
   },
   more: {
-    organDonationButtonText: 'Organ donation register',
+    organDonationLabel: 'Organ donation preferences',
+    organDonationDesc: 'Help us save thousands of lives in the UK every year by signing up to become an organ donor. Register your decision and choose what you want to donate on the NHS Organ Donor Register.',
+    organDonationButtonText: 'Set organ donation preferences',
   },
   navigationMenu: {
     appointmentsLabel: 'Appointments',

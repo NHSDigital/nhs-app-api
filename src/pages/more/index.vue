@@ -1,9 +1,18 @@
 <template>
-  <main v-if="showTemplate" class="content">
-    <a id="btn_organdonation" :href="organDonationUrl" class="button" target="_blank">
-      {{ $t('more.organDonationButtonText') }}
-    </a>
-  </main>
+  <div v-if="showTemplate" id="mainDiv">
+    <main class="content">
+      <div id="organdonantion" class="panel-title">
+        <h2>{{ $t('more.organDonationLabel') }}</h2>
+        <p>
+          {{ $t('more.organDonationDesc') }}
+        </p>
+      </div>
+      <a id="btn_organdonation" :href="organDonationUrl" class="button" target="_blank">
+        {{ $t('more.organDonationButtonText') }}
+      </a>
+      <hr>
+    </main>
+  </div>
 </template>
 
 <script>
@@ -15,10 +24,11 @@ export default {
     };
   },
 };
+
 </script>
 
-<style lang="scss">
-@import "../../style/html";
-@import "../../style/elements";
-@import "../../style/buttons";
+<style module lang="scss" scoped>
+  @import "../../style/html";
+  @import "../../style/fonts";
+  @import "../../style/buttons";
 </style>
