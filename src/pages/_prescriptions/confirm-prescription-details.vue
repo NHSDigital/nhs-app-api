@@ -53,7 +53,6 @@
 <script>
 /* eslint-disable import/extensions */
 import Spinner from '@/components/Spinner';
-import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -62,18 +61,11 @@ export default {
   data() {
     return {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
+      selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
     };
   },
-  computed: {
-    selectedPrescriptions() {
-      return this.$store.state.repeatPrescriptionCourses.selectedPrescriptions;
-    },
-    ...mapGetters({
-      selectedPrescriptions: 'repeatPrescriptionCourses/selectedPrescriptions',
-    }),
-  },
   created() {
-    if (this.selectedPrescriptions.length === 0) {
+    if (this.selectedPrescriptions === null || this.selectedPrescriptions.length === 0) {
       this.$router.push('/prescriptions');
     }
   },
