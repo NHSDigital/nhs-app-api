@@ -4,7 +4,7 @@ Feature: View upcoming appointments
 
   Background:
     Given wiremock is initialised
-
+    
   @NHSO-524
   @backend
   Scenario: API appropriately filters for upcoming appointments

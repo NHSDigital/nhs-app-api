@@ -79,6 +79,7 @@ Feature: View courses
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     Then I see my previously selected repeat prescriptions selected
 
+  @pending
   @smoketest
   @NHSO-502 @NHSO-655
   Scenario: The User alters a repeat prescriptions selection and the special request text and sees the updated confirmation

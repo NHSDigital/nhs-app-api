@@ -6,6 +6,7 @@ Feature: View prescriptions (errors)
     Given wiremock is initialised
     And I am logged in
 
+  @pending
   @NHSO-498
   Scenario: A user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
     Given The prescriptions endpoint is timing out
@@ -27,6 +28,7 @@ Feature: View prescriptions (errors)
     When I navigate to prescriptions
     Then I am kicked back to the login page
 
+  @pending
   @NHSO-513
   Scenario: A user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order times out
     Given I have 10 past repeat prescriptions
@@ -34,7 +36,7 @@ Feature: View prescriptions (errors)
     But The courses endpoint is timing out
     When I navigate to prescriptions
     And I click 'Order a repeat prescription'
-    And I wait for 11 seconds
+    And I wait for 12 seconds
     Then I see the appropriate error message for a prescription timeout
 
   @NHSO-513

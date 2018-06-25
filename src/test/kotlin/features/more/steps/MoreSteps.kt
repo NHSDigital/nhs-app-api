@@ -20,4 +20,19 @@ open class MoreSteps {
     fun setOrganDonationPreferences() {
         more.clickOrganDonations()
     }
+
+    @Step
+    fun organDonationHeaderVisible(): Boolean {
+        return more.isDonationHeaderVisible()
+    }
+
+    @Step
+    fun organDonationDescriptionVisible(): Boolean {
+        return more.isDonationDescriptionVisible()
+    }
+
+    @Step
+    fun organDonationButtonVisible(): Boolean {
+        return more.isDonationButtonVisible()
+    }
 }
