@@ -32,6 +32,7 @@ Feature: View prescriptions
     Then I see 100 prescriptions
 
   @smoketest
+  @pending
   Scenario: A user who has multiple prescription each containing one course
     Given I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats

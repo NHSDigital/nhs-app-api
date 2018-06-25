@@ -11,6 +11,7 @@ Feature: View courses
     And I navigate to prescriptions
 
   @smoketest
+  @pending
   Scenario: The User has repeatable prescriptions
     Given I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
@@ -55,6 +56,7 @@ Feature: View courses
 
   @smoketest
   @NHSO-502
+  @pending
   Scenario: The User has selected repeat prescriptions to order
     And I select 5 repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page

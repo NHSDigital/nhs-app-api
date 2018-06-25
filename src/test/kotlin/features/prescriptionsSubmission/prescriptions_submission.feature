@@ -11,6 +11,7 @@ Feature: Prescriptions submission
 
   @NHSO-860
   @smoketest
+  @pending
   Scenario: The User orders a repeat prescription with 5 entries
     Given I select 5 repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
