@@ -5,7 +5,7 @@
       <div :class="$style.panel">
         <div :class="$style.panelContent">
           <b><h5 :class="$style.panelHeader">
-            {{ $t('prescriptions.confirmPrescriptionOrder.header') }}
+            {{ $t('rp04.subHeader') }}
           </h5></b>
           <hr>
           <div
@@ -26,13 +26,13 @@
           <hr>
           <div>
             <span :class="$style.formLabel">
-              {{ $t('prescriptions.confirmPrescriptionOrder.specialRequestLabel') }}
+              {{ $t('rp03.specialRequestsLabel') }}
             </span>
             <p v-if="specialRequestValid"
                id="specialRequestText"
                :class="$style.specialRequestText">{{ specialRequest }}</p>
             <p v-else id="specialRequestText">
-              {{ $t('prescriptions.confirmPrescriptionOrder.noSpecialRequestDefaultText') }}
+              {{ $t('rp03.noSpecialRequestDefaultText') }}
             </p>
           </div>
         </div>
@@ -41,10 +41,10 @@
         id="btn_confirm_and_order_prescription"
         class="button green"
         @click="onConfirmButtonClicked">
-        {{ $t('prescriptions.confirmPrescriptionOrder.confirmButtonText') }}
+        {{ $t('rp04.confirmButton') }}
       </button>
       <nuxt-link to="/prescriptions/repeat-courses" tag="button" type="submit" class="button grey">
-        {{ $t('prescriptions.confirmPrescriptionOrder.changeButton') }}
+        {{ $t('rp04.backButton') }}
       </nuxt-link>
     </main>
   </div>

@@ -12,6 +12,74 @@ export default {
       message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
     },
   },
+  rp01: {
+    pageTitle: 'TBC',
+    pageHeader: 'My repeat prescriptions',
+    empty: {
+      subHeader: 'You don\'t currently have any repeat prescriptions ordered',
+      body: 'Once you’ve placed an order here, you\'ll be able to view your repeat prescription status and history.\n' +
+            '\n' +
+            'If you have an existing order that isn’t shown here, contact your GP surgery or pharmacy for more information.',
+    },
+    orderPrescriptionButton: 'Order a repeat prescription',
+  },
+  rp02: {
+    pageTitle: 'TBC',
+    pageHeader: 'My repeat prescriptions',
+    orderDate: 'Order date',
+    status: 'Status',
+    statusRejected: {
+      subHeader: 'Rejected',
+      description: 'Rejected: contact your GP',
+    },
+    statusRequested: {
+      subHeader: 'Requested',
+      description: 'Requested: waiting for GP approval',
+    },
+    statusApproved: {
+      subHeader: 'Approved',
+      description: 'Approved: contact your nominated pharmacy for collection information',
+    },
+  },
+  rp06: {
+    pageTitle: 'TBC',
+    pageHeader: 'Select medication',
+    empty: {
+      subHeader: 'You don\'t have any medication available to order right now',
+      body: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
+      contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
+    },
+    backButton: 'Back',
+  },
+  rp03: {
+    pageTitle: 'TBC',
+    pageHeader: 'Select medication',
+    subHeader: 'Medication currently available to order',
+    noMedicinesSelected: 'Select at least one medicine',
+    specialRequestsLabel: 'Special requests relating to this order (optional)​',
+    maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words)',
+    changePharmacyText: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
+    noSpecialRequestDefaultText: 'None',
+    continueButton: 'Continue',
+    backButton: 'Back',
+  },
+  rp04: {
+    pageTitle: 'TBC',
+    pageHeader: 'Confirm prescription',
+    subHeader: 'Check your prescription details before ordering',
+    confirmButton: 'Confirm and order prescription',
+    backButton: 'Change this prescription',
+  },
+  rp05: {
+    confirmationMessage: 'Your prescription has been ordered. The order status will be updated once it’s been reviewed by your GP.​',
+  },
+  rp12: {
+    reasonMissing: {
+      summarySubHeader: 'There\'s a problem',
+      summaryBody: 'Select a medication',
+      inline: 'Select a medication',
+    },
+  },
   noConnection: {
     header: 'Connection error.',
     subheader: 'Please check your internet connection and try again.',
@@ -84,36 +152,6 @@ export default {
     },
   },
   prescriptions: {
-    myRepeatPrescriptions: {
-      orderDate: 'Order date',
-      orderRepeatPrescriptionButton: 'Order a repeat prescription',
-      orderSuccessText: 'Your prescription has been ordered. The order status will be updated once it\'s been reviewed by your GP.',
-      status: 'Status',
-    },
-    repeatCourses: {
-      noMedicinesSelected: 'Select at least one medicine',
-      specialRequestLabel: 'Special requests relating to this order (optional)',
-      maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words)',
-      backToYourPrescriptionsButton: 'Back',
-      continue: 'Continue',
-    },
-    noPrescriptionsAvailable: {
-      title: 'Looks like you have no repeat prescriptions ordered here.',
-      contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
-      orderRepeatPrescription: 'Otherwise you can order a new repeat prescription now.',
-    },
-    noRepeatPrescriptionsYouCanOrder: {
-      header: 'Medication currently available to order',
-      title: 'You don\'t have any medications available to order right now.',
-      contactGp: 'If you have medications available on repeat prescription that aren’t shown here, contact your GP surgery for more information.',
-    },
-    confirmPrescriptionOrder: {
-      header: 'Check your prescription details before ordering',
-      changeButton: 'Change this prescription',
-      confirmButtonText: 'Confirm and order repeat prescription',
-      specialRequestLabel: 'Special requests relating to this order',
-      noSpecialRequestDefaultText: 'None',
-    },
     errors: {
       pageHeader: 'Error retrieving data',
       header: 'Sorry, there\'s been a problem getting your prescription information',

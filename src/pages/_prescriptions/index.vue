@@ -5,19 +5,19 @@
 
       <success-dialog v-if="justOrderedARepeatPrescription">
         <p>
-          {{ $t('prescriptions.myRepeatPrescriptions.orderSuccessText') }}
+          {{ $t('rp05.confirmationMessage') }}
         </p>
       </success-dialog>
 
       <div v-if="showNoPrescriptions" class="info" data-purpose="no-prescriptions-error">
         <p>
-          <b>{{ $t('prescriptions.noPrescriptionsAvailable.title') }}</b>
+          <b>{{ $t('rp06.empty.subHeader') }}</b>
         </p>
         <p>
-          {{ $t('prescriptions.noPrescriptionsAvailable.contactGp') }}
+          {{ $t('rp06.empty.contactGp') }}
         </p>
         <p>
-          {{ $t('prescriptions.noPrescriptionsAvailable.orderRepeatPrescription') }}
+          {{ $t('rp06.empty.body') }}
         </p>
       </div>
       <ul v-if="showPrescriptions" data-purpose="prescriptions">
@@ -28,7 +28,7 @@
           <div :class="$style.container">
             <div>
               <b>
-                {{ $t('prescriptions.myRepeatPrescriptions.orderDate') }}
+                {{ $t('rp02.orderDate') }}
               </b>
               : <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
             </div>
@@ -41,7 +41,7 @@
             <hr>
             <div>
               <b>
-                {{ $t('prescriptions.myRepeatPrescriptions.status') }}
+                {{ $t('rp02.status') }}
               </b>
               : <span aria-label="status">{{ prescriptionCourse.status }}</span>
             </div>
@@ -51,7 +51,7 @@
     </div>
 
     <floating-button-bottom v-if="hasLoaded" @on-click="onRepeatPrescriptionButtonClicked">
-      {{ $t('prescriptions.myRepeatPrescriptions.orderRepeatPrescriptionButton') }}
+      {{ $t('rp01.orderPrescriptionButton') }}
     </floating-button-bottom>
   </main>
 </template>

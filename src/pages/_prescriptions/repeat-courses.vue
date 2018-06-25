@@ -6,12 +6,12 @@
         <div v-if="showRepeatCourses">
           <div :class="$style.panel">
             <h2 :class="$style.panelHeader">
-              {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.header') }}
+              {{ $t('rp03.subHeader') }}
             </h2>
             <hr>
             <p v-if="error" style="color:#DA291C; font-weight: 700; margin-bottom: 16px;">
               <inline-error-icon />
-              {{ $t('prescriptions.repeatCourses.noMedicinesSelected') }}
+              {{ $t('rp03.noMedicinesSelected') }}
             </p>
             <repeat-prescription
               v-for="repeatPrescription in repeatPrescriptionCourses"
@@ -21,7 +21,7 @@
           </div>
           <div role="form">
             <label :class="$style.formLabel" for="specialRequest">
-              {{ $t('prescriptions.repeatCourses.specialRequestLabel') }}
+              {{ $t('rp03.specialRequestsLabel') }}
             </label>
             <textarea
               id="specialRequest"
@@ -29,25 +29,25 @@
               :class="$style.textArea"
               v-model="specialRequest"
               maxlength="1000"/>
-            <p id="maxSpecialRequest">{{ $t('prescriptions.repeatCourses.maxSpecialRequest') }}</p>
+            <p id="maxSpecialRequest">{{ $t('rp03.maxSpecialRequest') }}</p>
           </div>
           <br>
           <p :class="$style.prescription_not_shown">
-            {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
+            {{ $t('rp06.empty.contactGp') }}
           </p>
           <br>
           <button id="btn_order_prescription" class="button green">
-            {{ $t('prescriptions.repeatCourses.continue') }}
+            {{ $t('rp03.continueButton') }}
           </button>
         </div>
 
         <div v-if="showNoRepeatCourses">
           <p>
-            <b>{{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.title') }}</b>
+            <b>{{ $t('rp06.empty.subHeader') }}</b>
           </p>
           <br>
           <p>
-            {{ $t('prescriptions.noRepeatPrescriptionsYouCanOrder.contactGp') }}
+            {{ $t('rp06.empty.contactGp') }}
           </p>
           <br>
         </div>
@@ -59,7 +59,7 @@
         tag="button"
         type="submit"
         class="button grey">
-        {{ $t('prescriptions.repeatCourses.backToYourPrescriptionsButton') }}
+        {{ $t('rp03.backButton') }}
       </nuxt-link>
     </main>
   </div>
