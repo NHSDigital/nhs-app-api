@@ -83,11 +83,11 @@ class AppointmentData private constructor() {
     }
 
     val emisCancellationReason1 by lazy {
-        AppointmentCancellationReason("1", "No longer required")
+        AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
     }
 
     val emisCancellationReason2 by lazy {
-        AppointmentCancellationReason("2", "Unable to attend")
+        AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
     }
     private val unspecifiedTimeAppointment1 by lazy {
         Appointment(slotId = 1,
