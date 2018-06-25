@@ -17,6 +17,7 @@ Feature: View prescriptions
     And the prescriptions menu button is highlighted
 
   @smoketest
+  @pending
   Scenario: A user with no past repeat prescriptions
     Given I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
