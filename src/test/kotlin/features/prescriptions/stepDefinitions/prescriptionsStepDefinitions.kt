@@ -332,7 +332,7 @@ open class PrescriptionsStepDefinitions {
         mockingClient
                 .forEmis {
                     prescriptionsRequest(patient)
-                            .respondWith(504, resolve = {}, milliSecondDelay = 10000)
+                            .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                 }
     }
 
@@ -349,7 +349,7 @@ open class PrescriptionsStepDefinitions {
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
         mockingClient.forEmis { coursesRequest(patient)
-                .respondWith(504, resolve = {}, milliSecondDelay = 10000)
+                .respondWith(504, resolve = {}, milliSecondDelay = 15000)
         }
     }
 
@@ -361,7 +361,7 @@ open class PrescriptionsStepDefinitions {
 
     @But("The prescription submission endpoint is timing out")
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
-        mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 10000) }
+        mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")

@@ -35,8 +35,8 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {
-        val message = "Looks like you have no repeat prescriptions ordered here."
-        return findByXpath("//div[@class='info']//b[contains(.,'$message')]").isVisible
+        val message = "You don't have any medication available to order right now"
+        return findByXpath("//div[@class='info']//b[contains(.,\"$message\")]").isVisible
     }
 
     fun isOrdeSuccessfulTextVisible(): Boolean {

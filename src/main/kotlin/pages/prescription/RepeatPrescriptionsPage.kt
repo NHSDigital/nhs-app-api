@@ -67,7 +67,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun clickConfirmAndOrderRepeatSubscriptionButton() {
-        var confirmAndOrderRepeatButtonLocator = "//button[contains(text(), 'Confirm and order repeat prescription')]"
+        var confirmAndOrderRepeatButtonLocator = "//button[contains(text(), 'Confirm and order prescription')]"
         var confirmAndOrderRepeatButton = findByXpath(confirmAndOrderRepeatButtonLocator)
         confirmAndOrderRepeatButton.click()
     }
