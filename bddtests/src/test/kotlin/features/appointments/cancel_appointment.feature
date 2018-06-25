@@ -6,7 +6,6 @@ Feature: Ability to cancel an appointment
     Given wiremock is initialised
 
   @NHSO-663
-  @pending  @NHSO-663
   Scenario: A user is presented with the cancel appointment screen
     Given I have upcoming appointments
     And I am on the appointments page
@@ -18,11 +17,10 @@ Feature: Ability to cancel an appointment
       | Unable to attend   |
 
   @NHSO-663
-  @pending  @NHSO-663
   Scenario: A user navigates back to the "My appointments" screen
-    Given I am on the cancellation screen
-    When I select "Back to my appointments" button
-    Then I will be on the "My appointments" screen
+    Given I am on the appointment cancellation screen
+    When I select "Back" button
+    Then I will be on the My appointments screen
 
   @NHSO-1027
   @backend

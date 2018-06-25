@@ -101,14 +101,14 @@ Feature: View available appointment slots
   @NHSO-616
   Scenario: A user sees appropriate information message when there is a timeout
     Given GP system doesn't respond a timely fashion for available appointment slots
-    When I am on the appointments booking page
+    When I try to progress to the appointments booking page
     Then I see appropriate information message for time-outs
     And there should be a button to try again
 
   @NHSO-616
   Scenario: A user tries again after a timeout and it times-out again
     Given GP system doesn't respond a timely fashion for available appointment slots
-    And I am on the appointments booking page
+    And I try to progress to the appointments booking page
     When I click try again button on appointment page
     Then I see appropriate information message for time-outs
     And there should be a button to try again
@@ -116,7 +116,7 @@ Feature: View available appointment slots
   @NHSO-616
   Scenario: A user tries again after a timeout and it is now successful
     Given GP system doesn't respond a timely fashion for available appointment slots
-    And I am on the appointments booking page
+    And I try to progress to the appointments booking page
     When GP system responds a timely fashion for available appointment slots
     And I click try again button on appointment page
     Then I see available appointment slots
@@ -124,14 +124,14 @@ Feature: View available appointment slots
   @NHSO-616
   Scenario: A user sees appropriate information message when GP system is unavailable
     Given GP system is unavailable for available appointment slots
-    When I am on the appointments booking page
+    When I try to progress to the appointments booking page
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
   @NHSO-616
   Scenario: A user sees appropriate information message when GP system returns corrupt data
     Given GP system returns corrupt data for appointment slots
-    When I am on the appointments booking page
+    When I try to progress to the appointments booking page
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 

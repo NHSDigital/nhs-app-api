@@ -27,6 +27,7 @@ class AppointmentsStepDefinitions {
     @Throws(Exception::class)
     fun i_will_be_on_the_my_appointments_screen() {
         appointmentsSteps.checkHeaderTextIsCorrect()
+        appointmentsSteps.checkIfBookAnAppointmentButtonExistAndEnabled()
     }
 
     @Then("^I am informed I have no booked appointments$")
@@ -89,5 +90,12 @@ class AppointmentsStepDefinitions {
     fun a_list_of_cancellation_reasons() {
         appointmentsSteps.checkEmisCancellationReasonExist()
     }
+
+    @When("^I select a \"Cancel appointment\" link$")
+    fun iSelectACancelLink() {
+        appointmentsSteps.storeDetailsOfFirstAppointment()
+        appointmentsSteps.clickFirstCancelLink()
+    }
+
 
 }

@@ -9,6 +9,9 @@ import pages.appointments.AppointmentsBookingPage
 
 open class AppointmentsBookingSteps {
 
+    private val pageHeader by lazy { "Book an appointment" }
+    private val bookThisButtonText by lazy { "Book this appointment" }
+
     lateinit var appointmentsBooking: AppointmentsBookingPage
 
     @Step
@@ -34,13 +37,13 @@ open class AppointmentsBookingSteps {
     @Step
     fun checkIfPageHeaderIsCorrect() {
         val actualHeader = appointmentsBooking.getPageHeaderText()
-        assertEquals("Expected Header text ${appointmentsBooking.pageHeader} of the page is not found",
-                appointmentsBooking.pageHeader, actualHeader)
+        assertEquals("Expected Header text ${pageHeader} of the page is not found",
+                pageHeader, actualHeader)
     }
 
     @Step
-    fun clickOnBookAppointmentButton(bookButtonText:String = appointmentsBooking.bookThisButtonText) {
-        appointmentsBooking.clickOnButton(bookButtonText)
+    fun clickOnBookAppointmentButton() {
+        appointmentsBooking.clickOnButton(bookThisButtonText)
     }
 
     @Step

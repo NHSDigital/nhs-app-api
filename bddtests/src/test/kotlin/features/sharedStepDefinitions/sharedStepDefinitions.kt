@@ -83,7 +83,6 @@ open class SharedStepDefinitions {
     fun aNewTabOpens(url: String) {
         browser.changeTab(URL(url))
         browser.shouldHaveUrl(url)
-        browser.changeTabToApp()
     }
 
     @Then("I wait for (\\d+) seconds")

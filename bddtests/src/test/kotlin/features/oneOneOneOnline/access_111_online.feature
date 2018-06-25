@@ -12,8 +12,6 @@ Feature: Access 111 Online
     Then I am redirected to 'https://111.nhs.uk/'
 
   @smoketest
-  @bug @NHSO-1121
-  @pending
   Scenario: The user is logged in
     Given I am logged in
     When I navigate to Symptoms

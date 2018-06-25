@@ -13,6 +13,9 @@ import org.openqa.selenium.JavascriptExecutor
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
+    @FindBy(xpath = "//header/h1")
+    private lateinit var pageHeader: WebElementFacade
+
     override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
         val page = super.switchToPage(pageObjectClass)
         this.pageType = (page as HybridPageObject).pageType
@@ -104,8 +107,6 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return spinner.isCurrentlyVisible
     }
 
-    fun getPageHeaderText(): String = findByXpath("//*[@id='app']/header/h1").text
-
     fun getErrorText(): String {
         val paragraphs = findAllByXpath("//div[@class='msg error']//p")
         var content = StringBuilder()
@@ -167,6 +168,10 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
 
         return pageTitleValid && pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
+    }
+
+    fun getPageHeaderText(): String {
+        return pageHeader.text
     }
 
     private fun isAnyXpathVisible(xpath:String) : Boolean {

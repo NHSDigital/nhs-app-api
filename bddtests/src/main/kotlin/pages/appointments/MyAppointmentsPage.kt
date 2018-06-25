@@ -4,8 +4,6 @@ import models.Slot
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import java.text.SimpleDateFormat
-import java.util.*
 
 @DefaultUrl("http://localhost:3000/appointments")
 class MyAppointmentsPage : AppointmentSharedElementsPage() {
@@ -14,50 +12,33 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     lateinit var bookButton: WebElementFacade
 
     @FindBy(id = "success-dialog")
-    lateinit var successMessage: WebElementFacade
+    private lateinit var successMessage: WebElementFacade
 
     @FindBy(xpath = "//h3/..")
-    lateinit var actualNoUpcomingText: WebElementFacade
+    private lateinit var actualNoUpcomingText: WebElementFacade
 
-    val appointmentSlotParentXpath = "//*[@class='panel-title']/.."
+    @FindBy(xpath = "//a[contains(text(),'Cancel appointment')]")
+    private lateinit var cancelAppointmentLink: WebElementFacade
+
+    private val upcomingAppointmentParentXpath = "//div[@data-purpose='appointments']"
 
     fun getSuccessMessage(): String = successMessage.text
 
     fun getNoUpcomingText(): String = actualNoUpcomingText.text
 
     fun getDateTimestampsOfSlots(): List<Long> {
-        val slotTimestamps = arrayListOf<Long>()
-        val dateTimeFormat = SimpleDateFormat("h:mm a EEEE dd MMMM yyyy")
-        val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentSlotParentXpath)
-
-        appointmentSlotDivs.forEach { slotDiv ->
-            val timestamp = retrieveDateTimeFromSlotElement(slotDiv)
-            slotTimestamps.add(dateTimeFormat.parse(timestamp).time)
-        }
-        return slotTimestamps
+        return getDateTimestampsOfSlots(upcomingAppointmentParentXpath)
     }
 
     fun getAllSlots(): ArrayList<Slot> {
-        val slotList = arrayListOf<Slot>()
-        val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentSlotParentXpath)
-
-        appointmentSlotDivs.forEach { slotDiv ->
-            val slot = convertToSlotObject(slotDiv, isMyAppointmentSlot = true)
-            slotList.add(slot)
-        }
-        return slotList
+        return getAllSlots(upcomingAppointmentParentXpath)
     }
 
-    private fun retrieveDateTimeFromSlotElement(slotElement: WebElementFacade): String {
-        val time = findByXpath(slotElement, "//h4").text
-        val date = findByXpath(slotElement, "//h5").text
-        return "$time $date"
+    fun getSlotAtIndex(index: Int): Slot {
+        return getSlotAtIndex(upcomingAppointmentParentXpath, index)
     }
 
-    private fun retrieveAppointmentSlotDivs(containerDivXpath: String): List<WebElementFacade> {
-        val slotDivs = findAllByXpath("$containerDivXpath/div")
-        return if (slotDivs.size > 1) {
-            slotDivs.subList(1, slotDivs.size)
-        } else slotDivs
+    fun clickFirstCancelAppointmentLink() {
+        cancelAppointmentLink.click()
     }
 }

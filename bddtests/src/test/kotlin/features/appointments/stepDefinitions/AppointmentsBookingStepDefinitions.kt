@@ -39,6 +39,12 @@ import javax.servlet.http.Cookie
 class AppointmentsBookingStepDefinitions {
 
     @Steps
+    lateinit var login: LoginSteps
+    @Steps
+    lateinit var navigation: NavigationSteps
+    @Steps
+    lateinit var appointments: AppointmentsSteps
+    @Steps
     lateinit var appointmentsBooking: AppointmentsBookingSteps
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps

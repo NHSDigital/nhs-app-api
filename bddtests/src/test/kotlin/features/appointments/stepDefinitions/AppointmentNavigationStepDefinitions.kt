@@ -1,7 +1,9 @@
 package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
+import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
+import features.appointments.steps.AppointmentsBookingSteps
 import features.appointments.steps.AppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
@@ -19,6 +21,8 @@ class AppointmentNavigationStepDefinitions {
     lateinit var appointments: AppointmentsSteps
     @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
+    @Steps
+    lateinit var appointmentsBooking: AppointmentsBookingSteps
 
     @Given("^I am on the appointments page$")
     fun iAmOnTheAppointmentsPage() {
@@ -36,6 +40,12 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the appointments booking page$")
     fun iAmOnTheAppointmentsBookingPage() {
+        iTryToProgressToTheAppointmentsBookingPage()
+        appointmentsBooking.checkIfPageHeaderIsCorrect()
+    }
+
+    @When("^I try to progress to the appointments booking page$")
+    fun iTryToProgressToTheAppointmentsBookingPage() {
         i_am_on_the_guidance_page()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
     }

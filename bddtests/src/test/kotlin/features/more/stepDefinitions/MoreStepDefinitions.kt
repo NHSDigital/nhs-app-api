@@ -4,11 +4,14 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.more.steps.MoreSteps
+import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 
 
 class MoreStepDefinitions {
 
+    @Steps
+    lateinit var browser: BrowserSteps
     @Steps
     lateinit var more: MoreSteps
 
@@ -19,6 +22,7 @@ class MoreStepDefinitions {
 
     @And("^the app remains on the More Page$")
     fun appRemainsOnMorePage() {
+        browser.changeTabToApp()
         assert(more.isDisplayed())
     }
 

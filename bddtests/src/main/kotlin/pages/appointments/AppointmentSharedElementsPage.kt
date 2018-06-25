@@ -6,21 +6,65 @@ import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
+import java.text.SimpleDateFormat
+import java.util.ArrayList
 
 open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    fun convertToSlotObject(parentContainer: WebElementFacade, parentToSlotDivRelativePath: String = "", isMyAppointmentSlot: Boolean = false): Slot {
-        val slot = Slot()
-        val relativePath = if (parentToSlotDivRelativePath.isEmpty()) "./" else "$parentToSlotDivRelativePath/"
-        slot.time = findByXpath(parentContainer, relativePath + "h4").text
-        slot.session = findByXpath(parentContainer, relativePath + "p[@aria-label='session name']").text
-        slot.date = findByXpath(parentContainer, relativePath + "h5").text
+    private val xPathRoot = "//*"
+    private val appointmentDateXpath = "[@aria-label='date']"
+    private val appointmentTimeXpath = "[@aria-label='start time']"
+    private val appointmentSessionNameXpath = "[@aria-label='session name']"
+    private val appointmentLocationXpath = "[@aria-label='location']"
+    private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
 
-        val locationElement = findByXpath(parentContainer, relativePath + "p[@aria-label='location']")
-        slot.location = getSlotChildElementDisplayingText(locationElement)
+    fun getSelectedAppointmentDateText(): String {
+        return findByXpath(xPathRoot + appointmentDateXpath).text
+    }
 
-        retrieveClinicianAndAddToSlot(slot, parentContainer, relativePath, isMyAppointmentSlot)
-        return slot
+    fun getSelectedAppointmentTimeText(): String {
+        return findByXpath(xPathRoot + appointmentTimeXpath).text
+    }
+
+    fun getSelectedAppointmentSessionNameText(): String {
+        return findByXpath(xPathRoot + appointmentSessionNameXpath).text
+    }
+
+    fun getSelectedAppointmentLocationText(): String {
+        return findByXpath(xPathRoot + appointmentLocationXpath).text
+    }
+
+    fun getDateTimestampsOfSlots(appointmentListParentXpath: String): List<Long> {
+        val slotTimestamps = arrayListOf<Long>()
+        val dateTimeFormat = SimpleDateFormat("h:mm a EEEE dd MMMM yyyy")
+        val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentListParentXpath)
+        appointmentSlotDivs.forEach { slotDiv ->
+            val timestamp = retrieveDateTimeFromSlotElement(slotDiv)
+            slotTimestamps.add(dateTimeFormat.parse(timestamp).time)
+        }
+        return slotTimestamps
+    }
+
+    fun getAllSlots(appointmentListParentXpath: String): ArrayList<Slot> {
+        val slotList = arrayListOf<Slot>()
+        val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentListParentXpath)
+
+        appointmentSlotDivs.forEach { slotDiv ->
+            val slot = convertToSlotObject(slotDiv, isMyAppointmentSlot = true)
+            slotList.add(slot)
+        }
+        return slotList
+    }
+
+    fun getSlotAtIndex(appointmentListParentXpath: String, index: Int): Slot {
+        val appointmentSlotDiv = retrieveAppointmentSlotDivAtPosition(appointmentListParentXpath, index + 1)
+        return convertToSlotObject(appointmentSlotDiv, isMyAppointmentSlot = true)
+    }
+
+
+
+    fun getSelectedAppointmentClinicianTextAtPosition(position: Int): String {
+        return findByXpath(String.format(xPathRoot + appointmentClinicianXPath, position)).text
     }
 
     fun clickOnButton(button: String) {
@@ -29,9 +73,40 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         element.click()
     }
 
+    private fun convertToSlotObject(parentContainer: WebElementFacade, parentToSlotDivRelativePath: String = "", isMyAppointmentSlot: Boolean = false): Slot {
+        val slot = Slot()
+        val relativePath = if (parentToSlotDivRelativePath.isEmpty()) xPathRoot else "$parentToSlotDivRelativePath/"
+        slot.time = findByXpath(parentContainer, relativePath + appointmentTimeXpath).text
+        slot.session = findByXpath(parentContainer, relativePath + appointmentSessionNameXpath).text
+        slot.date = findByXpath(parentContainer, relativePath + appointmentDateXpath).text
+
+        val locationElement = findByXpath(parentContainer, relativePath + appointmentLocationXpath)
+        slot.location = getSlotChildElementDisplayingText(locationElement)
+
+        retrieveClinicianAndAddToSlot(slot, parentContainer, relativePath + appointmentClinicianXPath, isMyAppointmentSlot)
+        return slot
+    }
+
+    private fun retrieveDateTimeFromSlotElement(slotElement: WebElementFacade): String {
+        val time = findByXpath(slotElement, appointmentTimeXpath).text
+        val date = findByXpath(slotElement, appointmentDateXpath).text
+        return "$time $date"
+    }
+
+    private fun retrieveAppointmentSlotDivs(containerDivXpath: String): List<WebElementFacade> {
+        val slotDivs = findAllByXpath("$containerDivXpath/div")
+        return if (slotDivs.size > 1) {
+            slotDivs.subList(1, slotDivs.size)
+        } else slotDivs
+    }
+
+    private fun retrieveAppointmentSlotDivAtPosition(containerDivXpath: String, index: Int): WebElementFacade {
+        return findByXpath("$containerDivXpath/div[$index]")
+    }
+
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointmentSlot: Boolean) {
         if (isMyAppointmentSlot) {
-            val clinicianElements = findAllByXpath(parentContainer, relativePath + "p[@aria-label='clinicians']")
+            val clinicianElements = findAllByXpath(parentContainer, "$relativePath/*/span[starts-with(@aria-label, 'clinician')]")
             clinicianElements.forEach { clinicianElement ->
                 val clinicianDisplayName = getSlotChildElementDisplayingText(clinicianElement)
                 slot.clinician.add(clinicianDisplayName)
@@ -54,5 +129,4 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
             childElementText.trim()
         }
     }
-
 }

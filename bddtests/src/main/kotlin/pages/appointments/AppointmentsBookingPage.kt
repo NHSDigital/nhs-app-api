@@ -6,17 +6,22 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
+import java.util.ArrayList
 
 @DefaultUrl("http://localhost:3000/appointments/booking")
 class AppointmentsBookingPage : AppointmentSharedElementsPage() {
-    val pageHeader by lazy { "Book an appointment" }
-    val bookThisButtonText by lazy { "Book this appointment" }
 
     @FindBy(xpath = "//div[@id='mainDiv']/div[@class='content']")
     lateinit var serverError: WebElementFacade
 
+    private val appointmentSlotParentXpath = "//ul[@data-purpose='slots']/li"
+
     fun selectFirstSlot() {
-        findAllByXpath("//ul[@data-purpose='slots']/li").first().waitUntilClickable<WebElementFacade>().click()
+        findAllByXpath(appointmentSlotParentXpath).first().waitUntilClickable<WebElementFacade>().click()
+    }
+
+    fun getAllSlots(): ArrayList<Slot> {
+        return getAllSlots(appointmentSlotParentXpath)
     }
 
     fun getServerErrorMessage(): String? {
@@ -38,16 +43,7 @@ class AppointmentsBookingPage : AppointmentSharedElementsPage() {
     }
 
     fun countSlots(): Int {
-        return findAllByXpath("//ul[@data-purpose='slots']/li").size
+        return getAllSlots().size
     }
 
-    fun getAllSlots(): ArrayList<Slot> {
-        val slots = arrayListOf<Slot>()
-        val slotElementList = findAllByXpath("//ul[@data-purpose='slots']/li")
-        slotElementList.forEach { slotLiElement ->
-            val slot = convertToSlotObject(slotLiElement, "./div")
-            slots.add(slot)
-        }
-        return slots
-    }
 }

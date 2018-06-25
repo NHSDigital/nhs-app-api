@@ -5,6 +5,7 @@ import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.emis.data.AppointmentData
 import models.Patient
+import models.Slot
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
@@ -156,5 +157,14 @@ open class AppointmentsSteps {
             assertNotNull("Expected reason ${expectedReason.displayName} not found",
                     actualReason)
         }
+    }
+
+    @Step
+    fun clickFirstCancelLink() {
+        myAppointmentsPage.clickFirstCancelAppointmentLink()
+    }
+
+    fun storeDetailsOfFirstAppointment() {
+        Serenity.setSessionVariable(Slot::class.java).to(myAppointmentsPage.getSlotAtIndex(0))
     }
 }

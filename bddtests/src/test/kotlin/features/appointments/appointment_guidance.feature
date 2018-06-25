@@ -6,8 +6,6 @@ Feature: Guidance prior to booking an appointment
     Given wiremock is initialised
 
   @NHSO-420
-  @NHSO-420
-  @RunMe
   Scenario: A user with upcoming appointments is presented with guidance
     Given I have upcoming appointments
     And I am on the appointments page
@@ -15,8 +13,6 @@ Feature: Guidance prior to booking an appointment
     Then I am given guidance as to my options before booking an appointment
 
   @NHSO-420
-  @NHSO-420
-  @RunMe
   Scenario: A user with no upcoming appointments is presented with guidance
     Given I have no upcoming appointments
     And I am on the appointments page
@@ -24,9 +20,7 @@ Feature: Guidance prior to booking an appointment
     Then I am given guidance as to my options before booking an appointment
 
   @NHSO-420
-  @NHSO-420
-  @manual
   Scenario: A user proceeds to check their symptoms
     Given I am on the guidance page
     When I select Appointment Guidance Page Check your symptoms button
-    Then a new tab opens https://111-int2.staging.111.service.nhs.uk/
+    Then a new tab opens https://111.nhs.uk/
