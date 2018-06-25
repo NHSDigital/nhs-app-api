@@ -28,7 +28,7 @@
             <span :class="$style.formLabel">
               {{ $t('rp03.specialRequestsLabel') }}
             </span>
-            <p v-if="specialRequestValid"
+            <p v-if="specialRequest"
                id="specialRequestText"
                :class="$style.specialRequestText">{{ specialRequest }}</p>
             <p v-else id="specialRequestText">
@@ -62,7 +62,6 @@ export default {
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
-      specialRequestValid: this.specialRequest && this.specialRequest.trim() !== '',
     };
   },
   created() {

@@ -121,8 +121,12 @@ export default {
         }
       });
       if (selectedCourses.length > 0) {
+        let specialRequest = null;
+        if (this.specialRequest) {
+          specialRequest = this.specialRequest.trim();
+        }
         const repeatPrescriptionCoursesAdditionalInfo = {
-          specialRequest: this.specialRequest,
+          specialRequest,
         };
         this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
         this.$router.push('../prescriptions/confirm-prescription-details');
