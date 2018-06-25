@@ -9,8 +9,6 @@ import pages.HybridPageObject
 
 open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    fun getPageHeaderText(): String = findByXpath("//*[@id='app']/header/h1").text
-
     fun convertToSlotObject(parentContainer: WebElementFacade, parentToSlotDivRelativePath: String = "", isMyAppointmentSlot: Boolean = false): Slot {
         val slot = Slot()
         val relativePath = if (parentToSlotDivRelativePath.isEmpty()) "./" else "$parentToSlotDivRelativePath/"
@@ -55,12 +53,6 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         } catch (e: Exception) {
             childElementText.trim()
         }
-    }
-
-    private fun scrollToTheElement(element: WebElementFacade) {
-        element.waitUntilVisible<WebElementFacade>()
-        val jsExecutor = driver as JavascriptExecutor
-        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
     }
 
 }

@@ -8,6 +8,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
 import org.openqa.selenium.By
+import org.openqa.selenium.JavascriptExecutor
 
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
@@ -82,6 +83,12 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return findAll(By.xpath(xpath))
     }
 
+    fun scrollToTheElement(element: WebElementFacade) {
+        element.waitUntilVisible<WebElementFacade>()
+        val jsExecutor = driver as JavascriptExecutor
+        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
+    }
+
     companion object {
         enum class PageType {
             WEBVIEW_APP,
@@ -97,18 +104,20 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return spinner.isCurrentlyVisible
     }
 
+    fun getPageHeaderText(): String = findByXpath("//*[@id='app']/header/h1").text
+
     fun getErrorText(): String {
         val paragraphs = findAllByXpath("//div[@class='msg error']//p")
         var content = StringBuilder()
 
-        paragraphs.forEach( { el ->
+        paragraphs.forEach { el ->
             if ( el.isVisible ) {
                 val t = el.text
                 if (t != null) {
                     content.append(t)
                 }
             }
-        })
+        }
 
         return content.toString()
     }
@@ -166,11 +175,11 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
         var anyVisible = false
 
-        allElements.forEach( {
+        allElements.forEach {
             if(it.isVisible){
                 anyVisible = true
             }
-        })
+        }
 
 
         return anyVisible

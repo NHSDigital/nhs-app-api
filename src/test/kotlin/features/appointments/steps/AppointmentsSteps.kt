@@ -23,12 +23,12 @@ open class AppointmentsSteps {
 
     lateinit var myAppointmentsPage: MyAppointmentsPage
 
-    val pageHeader by lazy { "My appointments" }
-    val expectedNoUpcomingText by lazy { "You don't currently have any appointments booked\n" +
+    val pageHeader = "My appointments"
+    val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
             "Once you've booked an appointment here, you'll be able to view details, cancel it and see your appointment history.\n" +
-            "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information." }
-    val bookingSuccessMessage by lazy { "Appointment Booked" }
-    val bookAnButtonText by lazy { "Book an appointment" }
+            "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
+    val bookingSuccessMessage = "Appointment Booked"
+    val bookAnButtonText = "Book an appointment"
 
     @Step
     fun checkBookingWasRequested() {

@@ -29,6 +29,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
         val slotTimestamps = arrayListOf<Long>()
         val dateTimeFormat = SimpleDateFormat("h:mm a EEEE dd MMMM yyyy")
         val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentSlotParentXpath)
+
         appointmentSlotDivs.forEach { slotDiv ->
             val timestamp = retrieveDateTimeFromSlotElement(slotDiv)
             slotTimestamps.add(dateTimeFormat.parse(timestamp).time)
