@@ -1,4 +1,6 @@
-﻿namespace NHSOnline.Backend.Worker.Support
+﻿using System;
+
+namespace NHSOnline.Backend.Worker.Support
 {
     public static class Option
     {
@@ -27,6 +29,11 @@
             }
 
             throw new OptionalValueMissingException();
+        }
+
+        public Option<T> IfNone(Func<Option<T>> next)
+        {
+            return HasValue ? this : next.Invoke();
         }
     }
 }

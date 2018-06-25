@@ -4,8 +4,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
     public class SlotsMetadataGetQueryParameters
     {
-        public string UserPatientLinkToken { get; set; }
-        public DateTimeOffset SessionStartDate { get; set; }
-        public DateTimeOffset SessionEndDate { get; set; }
+        public SlotsMetadataGetQueryParameters(DateTimeOffset fromDate, DateTimeOffset toDate, string userPatientLinkToken)
+        {
+            SessionStartDate = fromDate;
+            SessionEndDate = toDate;
+            UserPatientLinkToken = userPatientLinkToken;
+
+        }
+
+        public string UserPatientLinkToken { get;}
+        public DateTimeOffset SessionStartDate { get;  }
+        public DateTimeOffset SessionEndDate { get;  }
     }
 }

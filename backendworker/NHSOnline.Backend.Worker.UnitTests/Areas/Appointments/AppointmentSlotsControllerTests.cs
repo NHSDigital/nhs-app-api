@@ -46,12 +46,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var timeZoneInfoProvider = new TimeZoneInfoProvider();
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
-            _systemUnderTest = new AppointmentSlotsController(_gpSystemFactory.Object, _dateTimeOffsetProvider, _fixture.Create<ILoggerFactory>());
-
-            _systemUnderTest.ControllerContext = new ControllerContext
+            _systemUnderTest = new AppointmentSlotsController(_gpSystemFactory.Object,
+                _dateTimeOffsetProvider,
+                _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsController>())
             {
-                HttpContext = httpContextMock.Object
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = httpContextMock.Object
+                }
             };
+
         }
         
         [TestMethod]
