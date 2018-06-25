@@ -39,6 +39,7 @@ Feature: View prescriptions (errors)
     And I wait for 12 seconds
     Then I see the appropriate error message for a prescription timeout
 
+    @pending
   @NHSO-513
   Scenario: A user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
     Given I have 10 past repeat prescriptions
@@ -48,6 +49,7 @@ Feature: View prescriptions (errors)
     And I click 'Order a repeat prescription'
     Then I see the appropriate error message for a prescription server error
 
+  @pending
   @NHSO-514
   Scenario: A user tries to place an order for a repeat subscription, but the request times out
     Given I have 10 past repeat prescriptions
@@ -62,6 +64,7 @@ Feature: View prescriptions (errors)
     And I wait for 11 seconds
     Then I see the appropriate error message for a course request error
 
+  @pending
   @NHSO-514
   Scenario: A user tries to place an order for a repeat subscription, but the request throws a server error
     Given I have 10 past repeat prescriptions

@@ -10,7 +10,7 @@ Feature: Prescriptions submission
     And I navigate to prescriptions
 
   @NHSO-860
-  @smoketest
+  #@smoketest
   @pending
   Scenario: The User orders a repeat prescription with 5 entries
     Given I select 5 repeatable prescriptions to order
@@ -18,6 +18,7 @@ Feature: Prescriptions submission
     When I click Confirm and order repeat prescription
     Then I see a order successful message on the Repeat prescription page with 6 prescriptions
 
+    @pending
   @NHSO-860
   Scenario: The User orders a repeat prescription with 1 entries
     Given I select 1 repeatable prescriptions to order

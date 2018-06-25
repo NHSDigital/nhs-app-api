@@ -25,32 +25,34 @@ Feature: View prescriptions
     Then I see no prescriptions
     And I see a message indicating that I have no repeat prescriptions
 
+    @pending
   Scenario: A user who has prescriptions totalling more than one hundred courses
     Given I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     When I am on the prescriptions page
     Then I see 100 prescriptions
 
-  @smoketest
+  # @smoketest
   @pending
   Scenario: A user who has multiple prescription each containing one course
     Given I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     When I am on the prescriptions page
     Then I see 3 prescriptions
-
+@pending
   Scenario: A user who has multiple prescription each containing the same repeat prescription
     Given I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
     When I am on the prescriptions page
     Then I see 3 prescriptions
-
+@pending
   Scenario: A user who has only one prescription containing multiple courses
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
     When I am on the prescriptions page
     Then I see 3 prescriptions
 
+    @pending
   Scenario: A user who has acute prescriptions
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
