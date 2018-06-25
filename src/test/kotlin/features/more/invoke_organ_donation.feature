@@ -6,8 +6,7 @@ Feature: Invoke Organ Donation
     Given wiremock is initialised
     And I am logged in
     And I navigate to more
-
-  @pending
+    
   @smoketest
   Scenario: User clicks on the 'Set organ donation preferences'
     Given I am on the More Page

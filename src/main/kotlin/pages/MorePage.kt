@@ -7,7 +7,7 @@ import net.thucydides.core.annotations.DefaultUrl
 @DefaultUrl("http://localhost:3000/more")
 open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    @FindBy(xpath = "//button[contains(text(),'Set organ donation preferences')]")
+    @FindBy(xpath = "//a[contains(text(),'Set organ donation preferences')]")
     lateinit var btnOrganDonation: WebElementFacade
 
     @FindBy(xpath = "//h2[contains(text(),'Organ donation preferences')]")
