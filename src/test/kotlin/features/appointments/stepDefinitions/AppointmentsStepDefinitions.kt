@@ -32,7 +32,7 @@ class AppointmentsStepDefinitions {
     @Then("^I am informed I have no booked appointments$")
     @Throws(Exception::class)
     fun i_am_informed_I_have_no_booked_appointments() {
-        appointmentsSteps.checkNoUpcomingAppointmentsHeaderIsDisplaying()
+        appointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
     }
 
     @Given("^I have no upcoming appointments$")

@@ -15,21 +15,10 @@ class AvailableSlotsJourney(private val client: MockingClient) {
     private val appointmentData = AppointmentData.instance
 
     fun create() {
-        val locations = arrayListOf(appointmentData.location1, appointmentData.location2)
-        val sessionHolders = arrayListOf(
-                appointmentData.sessionHolder1,
-                appointmentData.sessionHolder2,
-                appointmentData.sessionHolder3)
-
-        val sessions = arrayListOf(
-                appointmentData.session1,
-                appointmentData.session2,
-                appointmentData.session3)
-
         val appointmentSlotsMetaResponseModel = GetAppointmentSlotsMetaResponseModel(
-                locations = locations,
-                sessionHolders = sessionHolders,
-                sessions = sessions)
+                locations = appointmentData.locations,
+                sessionHolders = appointmentData.sessionHolders,
+                sessions = appointmentData.sessions)
 
         val patient = SuccessfulRegistrationJourney.patient
 

@@ -33,9 +33,11 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointmentSlot: Boolean) {
         if (isMyAppointmentSlot) {
-            val clinicianElement = findByXpath(parentContainer, relativePath + "p[@aria-label='clinicians']")
-            val clinicianDisplayName = getSlotChildElementDisplayingText(clinicianElement)
-            slot.clinician.add(clinicianDisplayName)
+            val clinicianElements = findAllByXpath(parentContainer, relativePath + "p[@aria-label='clinicians']")
+            clinicianElements.forEach { clinicianElement ->
+                val clinicianDisplayName = getSlotChildElementDisplayingText(clinicianElement)
+                slot.clinician.add(clinicianDisplayName)
+            }
         } else {
             val clinicians: List<WebElement> = findAllByXpath(parentContainer, relativePath + "ul/li")
             clinicians.forEach { clinician ->

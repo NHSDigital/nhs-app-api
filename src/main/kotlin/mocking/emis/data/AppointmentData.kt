@@ -20,7 +20,6 @@ private const val CLINICIAN_ID_MSBROWN = 3
 private const val SESSION_ID_FOOTCLINIC = 1
 private const val SESSION_ID_EYECLINIC = 2
 private const val SESSION_ID_EARCLINIC = 3
-private const val SESSION_ID_DEFAULT = 0
 
 class AppointmentData private constructor() {
     private val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -29,45 +28,33 @@ class AppointmentData private constructor() {
         Slot(session = SessionType.Timed.toString())
     }
 
-    val location1: Location by lazy { Location(locationId = LOCATION_ID_SURGERY, locationName = "Main Surgery") }
-    val location2: Location by lazy { Location(locationId = LOCATION_ID_HOSPITAL, locationName = "Hospital") }
-
-    val locationsMap = mapOf(
-            Pair(location1.locationId, location1),
-            Pair(location2.locationId, location2)
+    val locations = arrayListOf(
+            Location(locationId = LOCATION_ID_SURGERY, locationName = "Main Surgery"),
+            Location(locationId = LOCATION_ID_HOSPITAL, locationName = "Hospital")
     )
 
-    val sessionHolder1: SessionHolder by lazy { SessionHolder(clinicianId = CLINICIAN_ID_DRSMITH, displayName = "Dr. Smith") }
-    val sessionHolder2: SessionHolder by lazy { SessionHolder(clinicianId = CLINICIAN_ID_NURSEJONES, displayName = "Nurse Jones") }
-    val sessionHolder3: SessionHolder by lazy { SessionHolder(clinicianId = CLINICIAN_ID_MSBROWN, displayName = "Ms. Brown") }
+    val sessionHolders = arrayListOf(
+            SessionHolder(clinicianId = CLINICIAN_ID_DRSMITH, displayName = "Dr. Smith"),
+            SessionHolder(clinicianId = CLINICIAN_ID_NURSEJONES, displayName = "Nurse Jones"),
+            SessionHolder(clinicianId = CLINICIAN_ID_MSBROWN, displayName = "Ms. Brown")
+    )
 
-    val session1: Session by lazy {
-        Session(sessionId = SESSION_ID_FOOTCLINIC,
-                sessionName = "Nose clinic",
-                sessionType = SessionType.Timed,
-                locationId = LOCATION_ID_SURGERY,
-                clinicianIds = arrayListOf(CLINICIAN_ID_DRSMITH))
-    }
-    val session2: Session by lazy {
-        Session(sessionId = SESSION_ID_EYECLINIC,
-                sessionName = "Eye clinic",
-                sessionType = SessionType.Timed,
-                locationId = LOCATION_ID_HOSPITAL,
-                clinicianIds = arrayListOf(CLINICIAN_ID_NURSEJONES, CLINICIAN_ID_MSBROWN))
-    }
-
-    val session3: Session by lazy {
-        Session(sessionId = SESSION_ID_EARCLINIC,
-                sessionName = "Ear clinic",
-                sessionType = SessionType.Timed,
-                locationId = LOCATION_ID_SURGERY,
-                clinicianIds = arrayListOf(CLINICIAN_ID_MSBROWN))
-    }
-
-    val sessionsMap = mapOf(
-            Pair(session1.sessionId, session1),
-            Pair(session2.sessionId, session2),
-            Pair(session3.sessionId, session3)
+    val sessions = arrayListOf(
+            Session(sessionId = SESSION_ID_FOOTCLINIC,
+                    sessionName = "Nose clinic",
+                    sessionType = SessionType.Timed,
+                    locationId = LOCATION_ID_SURGERY,
+                    clinicianIds = arrayListOf(CLINICIAN_ID_DRSMITH)),
+            Session(sessionId = SESSION_ID_EYECLINIC,
+                    sessionName = "Eye clinic",
+                    sessionType = SessionType.Timed,
+                    locationId = LOCATION_ID_HOSPITAL,
+                    clinicianIds = arrayListOf(CLINICIAN_ID_NURSEJONES, CLINICIAN_ID_MSBROWN)),
+            Session(sessionId = SESSION_ID_EARCLINIC,
+                    sessionName = "Ear clinic",
+                    sessionType = SessionType.Timed,
+                    locationId = LOCATION_ID_SURGERY,
+                    clinicianIds = arrayListOf(CLINICIAN_ID_MSBROWN))
     )
 
     val telephoneAppointmentDetails1 by lazy {
@@ -107,7 +94,7 @@ class AppointmentData private constructor() {
                 bookingReason = "My leg hurts")
     }
 
-    var expectedTempMyAppointmets = arrayListOf<Slot>()
+    private var appointments: ArrayList<Appointment> = arrayListOf()
 
     fun createAppointmentSessions(): ArrayList<AppointmentSession> {
         val baseTime = Calendar.getInstance()
@@ -160,13 +147,9 @@ class AppointmentData private constructor() {
         val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(), bookingDate, 3, 15)
         appointment3.telephoneAppointmentDetails = telephoneAppointmentDetails1
 
-        val appointments = arrayListOf(appointment1, appointment2, appointment3)
+        appointments = arrayListOf(appointment1, appointment2, appointment3)
         val appointmentsFromDate = appointment1.startTime
-        val locations = arrayListOf(location1, location2)
-        val sessionHolders = arrayListOf(sessionHolder1, sessionHolder2, sessionHolder3)
-        val sessions = arrayListOf(session1, session2, session3)
 
-        populateExpectedMyAppointments(appointments)
         return GetAppointmentsResponseModel(appointmentsFromDate, appointments, locations, sessionHolders, sessions)
     }
 
@@ -174,13 +157,37 @@ class AppointmentData private constructor() {
         return arrayListOf(emisCancellationReason1, emisCancellationReason2)
     }
 
-    fun createGetAppointmentsResponseForNoUpcomingAppoinments(): GetAppointmentsResponseModel {
+    fun createGetAppointmentsResponseForNoUpcomingAppointments(): GetAppointmentsResponseModel {
         val baseDate = Calendar.getInstance()
         val appointmentsFromDate = dateTimeFormat.format(baseDate.time)
 
-        expectedTempMyAppointmets.clear()
-
         return GetAppointmentsResponseModel(appointmentsFromDate)
+    }
+
+    fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot> {
+        val expectedTempMyAppointments = arrayListOf<Slot>()
+        val slotDateFormat = SimpleDateFormat("EEEE dd MMMM yyyy")
+        val slotTimeFormat = SimpleDateFormat("h:mm a")
+        appointments.forEach { appointment ->
+            val frontendTime = convertToBrowserTimezone(appointment.startTime, timezone)
+            val startDate = dateTimeFormat.parse(frontendTime)
+            val date = slotDateFormat.format(startDate)
+            val time = slotTimeFormat.format(startDate).toLowerCase()
+            val location = locations[sessions[appointment.sessionId - 1].locationId!! - 1]
+            val cliniciansNames: ArrayList<String> = ArrayList()
+            val clinicianIds = sessions[appointment.sessionId - 1].clinicianIds!!
+            clinicianIds.forEach { clinicianId ->
+                cliniciansNames.add(sessionHolders[clinicianId - 1].displayName!!)
+            }
+            expectedTempMyAppointments.add(expectedMyAppointment.copy(
+                    date = date,
+                    time = time,
+                    location = location.locationName!!,
+                    clinician = cliniciansNames
+            ))
+        }
+
+        return expectedTempMyAppointments
     }
 
     private fun addDateToAppointment(appointment: Appointment, bookingDate: Calendar, bookInDay: Int, durationInMinutes: Int): Appointment {
@@ -214,27 +221,11 @@ class AppointmentData private constructor() {
         }
     }
 
-    private fun populateExpectedMyAppointments(appointments: ArrayList<Appointment>) {
-        expectedTempMyAppointmets.clear()
-        val slotDateFormat = SimpleDateFormat("EEEE dd MMMM yyyy")
-        val slotTimeFormat = SimpleDateFormat("h:mm a")
-        appointments.forEach { appointment ->
-            val startDate = dateTimeFormat.parse(appointment.startTime)
-            val date = slotDateFormat.format(startDate)
-            val time = slotTimeFormat.format(startDate).toLowerCase()
-            val location = sessionsMap[appointment.sessionId]!!.locationId.toString()
-            val cliniciansIdsAsStrings: ArrayList<String> = ArrayList()
-            val clinicianIdsAsIntegers = sessionsMap[appointment.sessionId]!!.clinicianIds
-            clinicianIdsAsIntegers.forEach { clinicianId ->
-                cliniciansIdsAsStrings.add(clinicianId.toString())
-            }
-            expectedTempMyAppointmets.add(expectedMyAppointment.copy(
-                    date = date,
-                    time = time,
-                    location = location,
-                    clinician = cliniciansIdsAsStrings
-            ))
-        }
+    private fun convertToBrowserTimezone(time: String, timezone: String): String {
+        val dateFormatWithUtcTimeZone = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+        dateFormatWithUtcTimeZone.timeZone = TimeZone.getTimeZone(timezone)
+        val browserDate = dateTimeFormat.parse(time)
+        return dateFormatWithUtcTimeZone.format(browserDate)
     }
 
     companion object {

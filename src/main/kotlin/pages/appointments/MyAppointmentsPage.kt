@@ -4,29 +4,31 @@ import models.Slot
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import org.openqa.selenium.By
-import org.openqa.selenium.JavascriptExecutor
 import java.text.SimpleDateFormat
 import java.util.*
 
 @DefaultUrl("http://localhost:3000/appointments")
 class MyAppointmentsPage : AppointmentSharedElementsPage() {
-    val pageHeader by lazy { "My appointments" }
-    val noUpcomingHeader by lazy { "You don't currently have any appointments booked" }
-    val bookingSuccessMessage by lazy { "Appointment Booked" }
-    val bookAnButtonText by lazy { "Book an appointment" }
 
     @FindBy(id = "btn_floating")
     lateinit var bookButton: WebElementFacade
 
-    fun getSuccessMessage(): String = find<WebElementFacade>(By.id("success-dialog")).text
+    @FindBy(id = "success-dialog")
+    lateinit var successMessage: WebElementFacade
 
-    fun getNoUpcomingHeaderText(): String = findByXpath("//*[@id='mainDiv']/main[2]/div[1]/h3").text
+    @FindBy(xpath = "//h3/..")
+    lateinit var actualNoUpcomingText: WebElementFacade
+
+    val appointmentSlotParentXpath = "//*[@class='panel-title']/.."
+
+    fun getSuccessMessage(): String = successMessage.text
+
+    fun getNoUpcomingText(): String = actualNoUpcomingText.text
 
     fun getDateTimestampsOfSlots(): List<Long> {
         val slotTimestamps = arrayListOf<Long>()
         val dateTimeFormat = SimpleDateFormat("h:mm a EEEE dd MMMM yyyy")
-        val appointmentSlotDivs = retrieveAppointmentSlotDivs("//*[@id='mainDiv']/main[2]/div[1]")
+        val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentSlotParentXpath)
         appointmentSlotDivs.forEach { slotDiv ->
             val timestamp = retrieveDateTimeFromSlotElement(slotDiv)
             slotTimestamps.add(dateTimeFormat.parse(timestamp).time)
@@ -36,7 +38,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun getAllSlots(): ArrayList<Slot> {
         val slotList = arrayListOf<Slot>()
-        val appointmentSlotDivs = retrieveAppointmentSlotDivs("//*[@id='mainDiv']/main[2]/div[1]")
+        val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentSlotParentXpath)
 
         appointmentSlotDivs.forEach { slotDiv ->
             val slot = convertToSlotObject(slotDiv, isMyAppointmentSlot = true)

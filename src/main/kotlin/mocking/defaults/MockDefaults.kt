@@ -115,7 +115,7 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
 
         mockingClient.forEmis {
             appointmentGetRequest(patient, false)
-                    .respondWithSuccess(AppointmentData.instance.createGetAppointmentsResponseForNoUpcomingAppoinments())
+                    .respondWithSuccess(AppointmentData.instance.createGetAppointmentsResponseForNoUpcomingAppointments())
         }
 
         mockingClient

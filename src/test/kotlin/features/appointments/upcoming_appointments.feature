@@ -15,7 +15,6 @@ Feature: View upcoming appointments
     And a list of cancellation reasons
 
   @NHSO-524
-  @bug  @NHSO-1510
   Scenario: A user has never booked an appointment
     Given I have no upcoming appointments
     When I am on the appointments page
@@ -31,8 +30,8 @@ Feature: View upcoming appointments
     Then I am taken to the available appointment slots screen
 
   @NHSO-196
-  @pending  @NHSO-196
   @smoketest
+  @bug  @NHSO-1591
   Scenario: A user has upcoming appointments
     Given I have upcoming appointments
     When I am on the appointments page
