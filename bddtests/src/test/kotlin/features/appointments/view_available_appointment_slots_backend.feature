@@ -48,7 +48,7 @@ Feature: View available appointment slots backend
 
   @NHSO-470
   @backend
-  @pending
+  @tech-debt  @NHSO-1595
   Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 2 weeks from now
     Given there are available appointment slots within the next two weeks
     And I have logged in and have a valid session cookie
