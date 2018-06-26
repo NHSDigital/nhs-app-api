@@ -23,7 +23,7 @@ if [ "${TPP_CERT_TC}" ];
 then
   TPP_CERT=$(echo ${TPP_CERT_TC} | base64 -d)
 else
-  TPP_CERT=$(cat ./../../nhsonline-backendworker/certs/TppNhsTest.crt)
+  TPP_CERT=$(cat ./../../nhsonline-backendworker/NHSOnline.Backend.Worker/certs/TppNhsTest.pfx)
 fi
 
 #### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
@@ -106,7 +106,7 @@ NETWORK=$(docker inspect $BACKEND_ID --format '{{range .NetworkSettings.Networks
 ### ADD TPP cert to backend container
 docker exec $BACKEND_ID /bin/bash -c " \
   mkdir -p ./certs ; \
-  echo \"$TPP_CERT\" > ./certs/TppNhsTest.crt ; \
+  echo \"$TPP_CERT\" > ./certs/TppNhsTest.pfx ; \
   "
 
 docker run \
