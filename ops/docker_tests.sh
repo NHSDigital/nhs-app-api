@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# set -x
 function die () {
     echo >&2 "===]> Error: $@ "
     exit 1
@@ -12,19 +11,13 @@ function info () {
 
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
+# set -x
 if [ -z "${DOCKER_REGISTRY}" ];
 then
   DOCKER_REGISTRY=nhsapp.azurecr.io
 fi
 DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
-
-if [ "${TPP_CERT_TC}" ];
-then
-  TPP_CERT=$(echo ${TPP_CERT_TC} | base64 -d)
-else
-  TPP_CERT=$(cat ./../../nhsonline-backendworker/NHSOnline.Backend.Worker/certs/TppNhsTest.pfx)
-fi
 
 #### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
 BROWSER=chromeheadless
@@ -95,19 +88,13 @@ docker-compose -f docker-compose_ci.yml config | grep image
 docker-compose -f docker-compose_ci.yml up -d --build || die "Docker compose failure"
 
 ##################### Runtime vars
-if [ -z $BACKEND_DOCKER_TAG ]; then
-  BACKEND_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-backendworker:latest)
+if [ -z $WEB_DOCKER_TAG ]; then
+  WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:latest)
 else
-  BACKEND_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-backendworker:$WEB_DOCKER_TAG)
+  WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:$WEB_DOCKER_TAG)
 fi
-NETWORK=$(docker inspect $BACKEND_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
+NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
-
-### ADD TPP cert to backend container
-docker exec $BACKEND_ID /bin/bash -c " \
-  mkdir -p ./certs ; \
-  echo \"$TPP_CERT\" > ./certs/TppNhsTest.pfx ; \
-  "
 
 docker run \
   --rm \

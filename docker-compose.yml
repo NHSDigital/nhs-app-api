@@ -17,7 +17,6 @@ services:
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
-      - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
       - TPP_BASE_URL=http://nhsonline.stubs:8080/tpp/
     depends_on:
