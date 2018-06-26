@@ -11,13 +11,10 @@
 
       <div v-if="showNoPrescriptions" class="info" data-purpose="no-prescriptions-error">
         <p>
-          <b>{{ $t('rp06.empty.subHeader') }}</b>
+          <b>{{ $t('rp01.empty.subHeader') }}</b>
         </p>
         <p>
-          {{ $t('rp06.empty.contactGp') }}
-        </p>
-        <p>
-          {{ $t('rp06.empty.body') }}
+          {{ $t('rp01.empty.body') }}
         </p>
       </div>
       <ul v-if="showPrescriptions" data-purpose="prescriptions">
@@ -32,7 +29,8 @@
             <li
               v-for="(prescriptionCourse, key) in statusGroup"
               :key="key"
-              :class="$style['prescription-course']">
+              :class="$style['prescription-course']"
+              aria-label="historic-prescription">
               <historic-prescription :prescription-course="prescriptionCourse" />
             </li>
           </ul>
@@ -73,16 +71,16 @@ export default {
   },
   computed: {
     showNoPrescriptions() {
-      return (
-        this.$store.state.prescriptions.hasLoaded &&
-        this.$store.state.prescriptions.prescriptionCourses === null
-      );
+      const { hasLoaded, prescriptionCourses } = this.$store.state.prescriptions;
+
+      return hasLoaded
+        && (prescriptionCourses === null || Object.keys(prescriptionCourses).length === 0);
     },
     showPrescriptions() {
-      return (
-        this.$store.state.prescriptions.hasLoaded &&
-        this.$store.state.prescriptions.prescriptionCourses !== null
-      );
+      const { hasLoaded, prescriptionCourses } = this.$store.state.prescriptions;
+
+      return hasLoaded && prescriptionCourses !== null
+        && Object.keys(prescriptionCourses).length > 0;
     },
     prescriptionCoursesToDisplay() {
       const context = this;

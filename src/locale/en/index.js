@@ -206,7 +206,7 @@ export default {
     prescriptionStatus: {
       rejected: {
         text: 'Rejected',
-        description: 'Contact your GP for more information',
+        description: 'Contact your GP',
       },
       requested: {
         text: 'Requested',

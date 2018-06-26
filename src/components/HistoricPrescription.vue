@@ -15,7 +15,7 @@
     <div :class="getStatusStyle()">
       <hr>
       <component :is="getIcon()"/>
-      <b :class="$style.statusText">{{ getStatusText() }}</b>
+      <b :class="$style.statusText" aria-label="status">{{ getStatusText() }}</b>
       <div>
         <p area-label="status">{{ getStatusDescription() }}</p>
       </div>
@@ -60,7 +60,7 @@ export default {
       [MedicationCourseStatus.Approved]: {
         style: 'medication-status-approved',
         text: this.$t('prescriptions.prescriptionStatus.approved.text'),
-        description: this.$t('prescriptions.prescriptionStatus.requested.description'),
+        description: this.$t('prescriptions.prescriptionStatus.approved.description'),
         icon: 'ReadyIcon',
       },
     };
