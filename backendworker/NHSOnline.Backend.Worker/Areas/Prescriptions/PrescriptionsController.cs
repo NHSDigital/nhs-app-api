@@ -43,6 +43,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             UserSession userSession = HttpContext.GetUserSession();
 
+            _logger.LogInformation($"Fetching prescriptions interface for supplier {userSession.Supplier}");
             var prescriptionService = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier)
                 .GetPrescriptionService();

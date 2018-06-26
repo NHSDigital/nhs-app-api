@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
 
-            var getPrescriptionsResult = new PrescriptionResult.SuccessfullGet(prescriptionRequestsGetResponse);
+            var getPrescriptionsResult = new PrescriptionResult.SuccessfulGet(prescriptionRequestsGetResponse);
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
 
-            var getPrescriptionsResult = new PrescriptionResult.SuccessfullGet(prescriptionRequestsGetResponse);
+            var getPrescriptionsResult = new PrescriptionResult.SuccessfulGet(prescriptionRequestsGetResponse);
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
@@ -146,7 +146,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
-            var postPrescriptionResult = new PrescriptionResult.SuccessfullPost();
+            var postPrescriptionResult = new PrescriptionResult.SuccessfulPost();
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
-            var postPrescriptionResult = new PrescriptionResult.SuccessfullPost();
+            var postPrescriptionResult = new PrescriptionResult.SuccessfulPost();
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))

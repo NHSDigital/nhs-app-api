@@ -38,25 +38,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 {
                     try
                     {
-                    _logger.LogDebug(
-                        "Filtering courses from emis so we are left with only repeat courses which can be requested");
-                    coursesResponse.Body.Courses = coursesResponse.Body.Courses
+                        _logger.LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");
+                        coursesResponse.Body.Courses = coursesResponse.Body.Courses
                         .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
                         .OrderBy(x => x.Name)
                         .Take(_settings.CoursesMaxCoursesLimit.Value);
 
-                    _logger.LogDebug(
-                        $"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
+                        _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
 
                         var courseListResponse = _emisPrescriptionMapper.Map(coursesResponse.Body);
-                        
+
                         return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
-                        
-                        return new GetCoursesResult.InternalServerError();   
+                        _logger.LogError(e, $"Something went wrong while building the response.");
+
+                        return new GetCoursesResult.InternalServerError();
                     }
                 }
 
@@ -74,14 +72,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {  
             if (response.HasForbiddenResponse())
             {
-                _logger.LogInformation(
-                    "The emis prescriptions service is not enabled");
+                _logger.LogError("The emis prescriptions service is not enabled");
                 
                 return new GetCoursesResult.SupplierNotEnabled();
             }
             
-            _logger.LogError(
-                "Emis system is currently unavailable");
+            _logger.LogError("Emis system is currently unavailable");
 
             return new GetCoursesResult.SupplierSystemUnavailable();       
         }

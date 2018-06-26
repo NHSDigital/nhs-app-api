@@ -101,6 +101,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Logging
                     }
                 }
             }
+
+            public void ControllerCatchExceptionMethod()
+            {
+                try
+                {
+                    throw new Exception("Something has gone wrong!");
+                }
+                catch (Exception exception)
+                {
+                    _logger.LogCritical(exception, "Logging an exception.");
+                }
+            }
         }
 
         private IFixture _fixture;
@@ -223,6 +235,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Logging
             testString.Should().NotBeEmpty();
             testString.Should().Contain(sessionId);
             testString.Should().Contain(MethodLogPrefix + "NestedCallMethod");
+        }
+
+        [TestMethod]
+        public void LogExceptionMethod()
+        {
+            var methodName = RunControllerMethod(_systemUnderTest.ControllerCatchExceptionMethod);
+
+            _stream.Position = 0;
+            var testString = new StreamReader(_stream).ReadLine();
+            testString.Should().NotBeEmpty();
+            testString.Should().Contain(sessionId);
+            testString.Should().EndWith("| Logging an exception. [Exception, message: 'Something has gone wrong!'] |");
         }
     }
 }

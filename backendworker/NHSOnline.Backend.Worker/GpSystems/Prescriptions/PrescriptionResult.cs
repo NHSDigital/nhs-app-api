@@ -6,11 +6,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
     {   
         public abstract T Accept<T>(IPrescriptionResultVisitor<T> visitor);
 
-        public class SuccessfullGet : PrescriptionResult
+        public class SuccessfulGet : PrescriptionResult
         {
             public PrescriptionListResponse Response { get; }
 
-            public SuccessfullGet(PrescriptionListResponse response)
+            public SuccessfulGet(PrescriptionListResponse response)
             {
                 Response = response;
             }
@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
             }
         }
         
-        public class SuccessfullPost : PrescriptionResult
+        public class SuccessfulPost : PrescriptionResult
         {
             public override T Accept<T>(IPrescriptionResultVisitor<T> visitor)
             {

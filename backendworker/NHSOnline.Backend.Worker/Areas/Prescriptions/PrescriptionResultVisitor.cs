@@ -6,12 +6,12 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
     internal class PrescriptionResultVisitor : IPrescriptionResultVisitor<IActionResult>
     {
-        public IActionResult Visit(PrescriptionResult.SuccessfullGet result)
+        public IActionResult Visit(PrescriptionResult.SuccessfulGet result)
         {
             return new OkObjectResult(result.Response);
         }
         
-        public IActionResult Visit(PrescriptionResult.SuccessfullPost result)
+        public IActionResult Visit(PrescriptionResult.SuccessfulPost result)
         {
             return new CreatedResult(string.Empty, null);
         }

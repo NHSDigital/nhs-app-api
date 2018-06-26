@@ -48,22 +48,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                         var prescriptionListResponseFiltered =
                             GetPrescriptionsWithoutRepeatCourses(prescriptionsResponse.Body);
 
-                        _logger.LogDebug(
-                            $"Mapping response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
-                        var mapppedPrescriptionList = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
+                        _logger.LogDebug($"Mapping successful response from {nameof(PrescriptionRequestsGetResponse)} to {nameof(PrescriptionListResponse)}");
+                        var mappedPrescriptionList = _emisPrescriptionMapper.Map(prescriptionListResponseFiltered);
 
-                        if (mapppedPrescriptionList.Prescriptions != null)
+                        if (mappedPrescriptionList.Prescriptions != null)
                         {
                             var allowedStatuses = new List<Status> { Status.Approved, Status.Rejected, Status.Requested };
-                            mapppedPrescriptionList.Prescriptions = mapppedPrescriptionList?.Prescriptions
+                            mappedPrescriptionList.Prescriptions = mappedPrescriptionList?.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
-                        
-                        return new PrescriptionResult.SuccessfullGet(mapppedPrescriptionList);
+
+                        return new PrescriptionResult.SuccessfulGet(mappedPrescriptionList);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"Something went wrong during building the response. Exception message: {e.Message}");
+                        _logger.LogError(e, $"Something went wrong during building the response.");
 
                         return new PrescriptionResult.InternalServerError();
                     }
@@ -135,7 +134,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
                 if (response.HasSuccessStatusCode)
                 {
-                    return new PrescriptionResult.SuccessfullPost();
+                    return new PrescriptionResult.SuccessfulPost();
                 }
 
                 return GetCorrectErrorResult(response);
@@ -152,30 +151,26 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
-                _logger.LogInformation(
-                    "The prescription request is invalid as the prescription has already been ordered in the last 30 days");
+                _logger.LogError("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
 
                 return new PrescriptionResult.CannotReorderPrescription();
             }
 
             if (response.HasForbiddenResponse())
             {
-                _logger.LogInformation(
-                    "The emis prescriptions service is not enabled");
+                _logger.LogError("The emis prescriptions service is not enabled");
                 
                 return new PrescriptionResult.SupplierNotEnabled();
             }
 
             if (IsBadRequest(response))
             {
-                _logger.LogError(
-                    $"The prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponseBadRequest)}");
+                _logger.LogError($"The prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponseBadRequest)}");
 
                 return new PrescriptionResult.BadRequest();
             }
             
-            _logger.LogError(
-                "Emis system is currently unavailable");
+            _logger.LogError("Emis system is currently unavailable");
 
             return new PrescriptionResult.SupplierSystemUnavailable();
         }

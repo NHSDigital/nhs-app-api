@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                             $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
                         var mapppedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
 
-                        return new PrescriptionResult.SuccessfullGet(mapppedPrescriptionList);
+                        return new PrescriptionResult.SuccessfulGet(mapppedPrescriptionList);
                     }
                     catch (Exception e)
                     {

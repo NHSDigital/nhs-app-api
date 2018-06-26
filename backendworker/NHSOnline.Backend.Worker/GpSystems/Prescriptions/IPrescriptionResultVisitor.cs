@@ -2,8 +2,8 @@
 {
     public interface IPrescriptionResultVisitor<out T>
     {
-        T Visit(PrescriptionResult.SuccessfullGet result);
-        T Visit(PrescriptionResult.SuccessfullPost result);
+        T Visit(PrescriptionResult.SuccessfulGet result);
+        T Visit(PrescriptionResult.SuccessfulPost result);
         T Visit(PrescriptionResult.SupplierSystemUnavailable result);
         T Visit(PrescriptionResult.SupplierNotEnabled result);
         T Visit(PrescriptionResult.InternalServerError result);

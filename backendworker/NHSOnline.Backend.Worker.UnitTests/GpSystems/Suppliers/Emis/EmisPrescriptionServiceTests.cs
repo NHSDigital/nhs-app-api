@@ -83,8 +83,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                 _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
-            ((PrescriptionResult.SuccessfullGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
+            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -169,10 +169,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                 _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
-            ((PrescriptionResult.SuccessfullGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
+            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet) result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(1);
@@ -274,10 +274,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                 _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
-            ((PrescriptionResult.SuccessfullGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
+            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet) result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(3);
@@ -359,10 +359,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                 _userSession.EndUserSessionId, date, toDate));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
-            ((PrescriptionResult.SuccessfullGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
+            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet) result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.PrescriptionRequests.Should().HaveCount(expectedNumberOfPrescriptions);
@@ -483,8 +483,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             _emisClient.Verify(x => x.PrescriptionsPost(_userSession.SessionId,
                 _userSession.EndUserSessionId, It.IsAny<PrescriptionRequestsPost>()));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullPost>();
-            ((PrescriptionResult.SuccessfullPost) result).Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
+            ((PrescriptionResult.SuccessfulPost) result).Should().NotBeNull();
         }
 
         [TestMethod]

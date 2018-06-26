@@ -66,8 +66,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
-            ((PrescriptionResult.SuccessfullGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
+            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
         }
 
         [DataTestMethod]
@@ -114,10 +114,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             // Assert
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
-            result.Should().BeAssignableTo<PrescriptionResult.SuccessfullGet>();
-            ((PrescriptionResult.SuccessfullGet) result).Response.Should().NotBeNull();
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulGet>();
+            ((PrescriptionResult.SuccessfulGet) result).Response.Should().NotBeNull();
 
-            var getPrescriptionsResult = (PrescriptionResult.SuccessfullGet) result;
+            var getPrescriptionsResult = (PrescriptionResult.SuccessfulGet) result;
             getPrescriptionsResult.Response.Should().Be(response);
 
             capturedItemToMap.Should().HaveCount(expectedNumberOfPrescriptions);
