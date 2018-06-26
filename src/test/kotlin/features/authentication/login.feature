@@ -13,7 +13,6 @@ Feature: Login
     | EMIS |
     | TPP  |
 
-  @pending
   @smoketest
   Scenario Outline: <GPSS> User sees the home page
     Given I am logged in as a <GPSS> user

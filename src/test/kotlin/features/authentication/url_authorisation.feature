@@ -6,7 +6,7 @@ Feature: Authorisation occurs during each URL visit
     Given wiremock is initialised
 
   @NHSO-906
-  @tech-debt @NHSO-1012
+  @NHSO-1012
   @smoketest
   Scenario Outline: User has never logged in and attempts to navigate to <URL>
     Given I am not logged in
@@ -24,7 +24,7 @@ Feature: Authorisation occurs during each URL visit
 
 
   @NHSO-906
-  @tech-debt @NHSO-1012
+  @NHSO-1012
   Scenario Outline: User has just logged out and attempts to navigate to <URL>
     Given I have just logged out
     When I browse to the page at <URL>
@@ -40,7 +40,7 @@ Feature: Authorisation occurs during each URL visit
     | /account                      |
 
   @manual @NHSO-906
-  @tech-debt @NHSO-1012
+  @NHSO-1012
   Scenario Outline: User session has expired and attempts to navigate to <URL>
     Given my session has expired
     When I browse to the page at <URL>
@@ -56,7 +56,7 @@ Feature: Authorisation occurs during each URL visit
     | /account                      |
 
   @NHSO-906
-  @tech-debt @NHSO-1012
+  @NHSO-1012
   @smoketest
   Scenario Outline: User browses to <URL> when logged in
     Given I am logged in
@@ -73,7 +73,7 @@ Feature: Authorisation occurs during each URL visit
     | /account                      |
 
   @manual @native @NHSO-907
-  @tech-debt @NHSO-1012
+  @NHSO-1012
   Scenario Outline: Mobile Web User switches app then browses to <URL>
     Given I am logged in
     And I switch apps
