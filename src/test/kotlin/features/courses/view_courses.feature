@@ -11,7 +11,6 @@ Feature: View courses
     And I navigate to prescriptions
 
   @smoketest
-  @pending
   Scenario: The User has repeatable prescriptions
     Given I have 10 assigned prescriptions
     And 10 of my prescriptions are of type repeat
@@ -26,21 +25,20 @@ Feature: View courses
     When I click 'Order a repeat prescription'
     Then I see the available repeatable prescriptions
 
-    @pending
   Scenario: The user has 1 repeatable prescription
     Given I have 1 assigned prescriptions
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
     Then I see the available repeatable prescriptions
-@pending
+
   Scenario: The user should only see max 100 repeatable prescriptions
     Given I have 101 assigned prescriptions
     And 101 of my prescriptions are of type repeat
     And 101 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
     Then I see the available repeatable prescriptions
-@pending
+
   Scenario: The user has the max number of repeatable prescriptions
     Given I have 100 assigned prescriptions
     And 100 of my prescriptions are of type repeat
@@ -48,7 +46,6 @@ Feature: View courses
     When I click 'Order a repeat prescription'
     Then I see the available repeatable prescriptions
 
-    @pending
   Scenario: The user has over 5 repeat dispense prescriptions
     Given I have 10 assigned prescriptions
     And 5 of my prescriptions are of type repeat
@@ -58,13 +55,11 @@ Feature: View courses
 
   @smoketest
   @NHSO-502
-  @pending
   Scenario: The User has selected repeat prescriptions to order
     And I select 5 repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
-  @pending
   @NHSO-502
   Scenario: The User has selected one repeat prescription to order
     Given I select 1 repeatable prescriptions out of 1 available
@@ -77,7 +72,6 @@ Feature: View courses
     When I click Continue on the Order a repeat prescription page
     Then A validation message is displayed indicating the user has not selected any repeat prescriptions
 
-  @pending
   @NHSO-502
   Scenario: The User alters a repeat prescriptions selection and views previous selection
     Given I select 5 repeatable prescriptions out of 5 available
@@ -85,7 +79,7 @@ Feature: View courses
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     Then I see my previously selected repeat prescriptions selected
 
-  @pending
+  @smoketest
   @NHSO-502 @NHSO-655
   Scenario: The User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given I select 4 repeatable prescriptions out of 5 available
@@ -100,7 +94,6 @@ Feature: View courses
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     And I see the special request text "Note I'm allergic to paracetamol."
 
-    @pending
   @NHSO-655
   Scenario: Special request text is optional and 'None' is displayed if they don't enter a value
     Given I select 1 repeatable prescriptions out of 1 available

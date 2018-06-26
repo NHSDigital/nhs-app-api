@@ -42,7 +42,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     private val commonSteps : CommonSteps = CommonSteps()
 
-    var perscriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
+    var prescriptionMap = mutableMapOf<String, PrescriptionRequestsGetResponse>()
 
     lateinit var scenarioTitle: String
     var currentScenarioState: String = Scenario.STARTED
@@ -166,7 +166,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
         mockingClient.forEmis {
             prescriptionsRequest(patient)
-                    .respondWithSuccess(perscriptionMap[currentScenarioState]!!)
+                    .respondWithSuccess(prescriptionMap[currentScenarioState]!!)
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(currentScenarioState)
         }
@@ -181,7 +181,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                 RequestedMedicationCourse(
                         c.medicationCourseGuid, RequestedMedicationCourseStatus.Requested))
         }
-        val oldPrescriptions = perscriptionMap[Scenario.STARTED]
+        val oldPrescriptions = prescriptionMap[Scenario.STARTED]
         val prs = mutableListOf<PrescriptionRequest>()
         prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr, RequestedMedicationCourseStatus.Requested.toString()))
 
@@ -206,7 +206,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                 c.canBeRequested))
         }
 
-        perscriptionMap[currentScenarioState] = PrescriptionRequestsGetResponse(prs, cs.toList())
+        prescriptionMap[currentScenarioState] = PrescriptionRequestsGetResponse(prs, cs.toList())
     }
 
     @And("^the scenario is (.*)$")
@@ -224,7 +224,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                     .whenScenarioStateIs(currentScenarioState)
         }
 
-        perscriptionMap[Scenario.STARTED] = pr
+        prescriptionMap[Scenario.STARTED] = pr
 
     }
 
@@ -241,8 +241,8 @@ open class PrescriptionsSubmissionStepDefinitions {
 
         Assert.assertTrue(prescriptionPage.isOrdeSuccessfulTextVisible())
 
-        prescriptionSteps.assertPrescriptionsMatch(prescriptionStepDefinitions.getExpectedNumPrescriptions(
-                perscriptionMap[currentScenarioState]!!), amount)
+        prescriptionSteps.assertPrescriptionsMatch(prescriptionStepDefinitions.mapEmisResponseToExpectedPrescriptionFormat(
+                prescriptionMap[currentScenarioState]!!), amount)
     }
 
 

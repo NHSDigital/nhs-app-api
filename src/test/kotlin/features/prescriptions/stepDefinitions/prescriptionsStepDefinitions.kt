@@ -149,7 +149,7 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I see (\\d+) prescriptions$")
     fun thenISeeXPrescriptions(numPrescriptions: Int) {
-        prescriptions.assertPrescriptionsMatch(getExpectedNumPrescriptions(prescriptionsMock), numPrescriptions)
+        prescriptions.assertPrescriptionsMatch(mapEmisResponseToExpectedPrescriptionFormat(prescriptionsMock), numPrescriptions)
     }
 
     @And("^I have a patient$")
@@ -255,7 +255,7 @@ open class PrescriptionsStepDefinitions {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
-    fun getExpectedNumPrescriptions(data: PrescriptionRequestsGetResponse): ArrayList<HistoricPrescription>{
+    fun mapEmisResponseToExpectedPrescriptionFormat(data: PrescriptionRequestsGetResponse): ArrayList<HistoricPrescription>{
 
         var totalCoursesRunningTotal = 0
 

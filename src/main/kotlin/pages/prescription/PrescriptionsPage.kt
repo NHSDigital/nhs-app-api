@@ -4,10 +4,7 @@ import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
-import pages.HybridPageObject.Companion.PageType
 import pages.navigation.Header
-import java.net.URLEncoder
-import java.util.function.Consumer
 
 @DefaultUrl("http://localhost:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
@@ -35,8 +32,9 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {
-        val message = "You don't have any medication available to order right now"
-        return findByXpath("//div[@class='info']//b[contains(.,\"$message\")]").isVisible
+        // note: needs double quotes in "contains" expression because message has apostrophe
+        val message = "You don't currently have any repeat prescriptions ordered"
+        return findByXpath("//div[@class='info']//b[contains(., \"$message\")]").isVisible
     }
 
     fun isOrdeSuccessfulTextVisible(): Boolean {
@@ -44,10 +42,10 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         return findByXpath("//div[@id='success-dialog']//p[contains(.,'$successText')]").isVisible
     }
 
-    fun getAllPrescriptions(): ArrayList<HistoricPrescription> {
+    fun getAllPrescriptions(): List<HistoricPrescription> {
         val historicPrescriptions = ArrayList<HistoricPrescription>()
 
-        val prescriptions = findAllByXpath("//ul[@data-purpose='prescriptions']/li")
+        val prescriptions = findAllByXpath("//li[@aria-label='historic-prescription']")
 
         prescriptions.forEach( { el ->
             var p = HistoricPrescription(
@@ -56,11 +54,13 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
                     dosage = el.findElement(By.xpath(".//*[@aria-label='dosage']")).text,
                     status = el.findElement(By.xpath(".//*[@aria-label='status']")).text
             )
+
             historicPrescriptions.add(p)
         })
 
         return historicPrescriptions
     }
+
     fun doesOrderARepeatPrescriptionButtonExist () : Boolean {
 
         val orderARepeatPrescriptionButton = findByXpath(orderARepeatPrescriptionButtonLocator)
