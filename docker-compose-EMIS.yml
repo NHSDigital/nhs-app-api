@@ -16,7 +16,7 @@ services:
       - CORS_AUTHORITY=*
       - EMIS_BASE_URL=http://185.13.72.81/PFS/
   nhsonline.redis-data.sds:
-    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:
       - REDIS_HOST=nhsonline.redis.sds
     depends_on:

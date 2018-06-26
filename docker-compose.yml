@@ -17,13 +17,13 @@ services:
   nhsonline.stubs.data:
       image: nhsonline.stubs.data
       depends_on:
-        - nhsonline.stubs  
+        - nhsonline.stubs
   nhsonline.stubs:
     image: rodolpheche/wiremock
     ports:
       - "8080:8080"
   nhsonline.redis-data.sds:
-    image: nhsonline.azurecr.io/nhsonline-redis-data:latest
+    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:
       - REDIS_HOST=nhsonline.redis.sds
     depends_on:
