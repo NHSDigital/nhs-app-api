@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.nhs.online.nhsonline.MainActivity">
+
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_96sdp"
+        android:background="#005EB8"
+        android:elevation="4dp"
+        android:gravity="bottom"
+        android:visibility="gone">
+
+        <include layout="@layout/header_layout" />
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:id="@+id/viewSwitcher"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/menuBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintVertical_bias="1.0">
+
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:visibility="visible" />
+
+        <ScrollView
+            android:id="@+id/errorViewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background"
+            android:padding="@dimen/_12sdp"
+            android:visibility="gone">
+
+            <include layout="@layout/error_layout" />
+        </ScrollView>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/progressBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/progress_spinner_background"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/progressbar_color"
+            android:indeterminateTintMode="src_in" />
+    </LinearLayout>
+
+    <com.nhs.online.nhsonline.navigation.MenuBar
+        android:id="@+id/menuBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_45sdp"
+        android:background="@drawable/menu_top_shadow"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <include layout="@layout/navigation_menu_layout" />
+    </com.nhs.online.nhsonline.navigation.MenuBar>
+
+</android.support.constraint.ConstraintLayout>

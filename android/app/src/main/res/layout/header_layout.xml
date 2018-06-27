@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/_16sdp"
+    android:layout_marginRight="@dimen/_16sdp"
+    android:layout_marginTop="@dimen/_16sdp">
+
+    <RelativeLayout
+        android:id="@+id/top_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp">
+
+        <ImageView
+            android:id="@+id/nhsOnlineLogoIcon"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_alignParentStart="true"
+            android:contentDescription="@string/nhsAppHome"
+            android:src="@mipmap/icon_nhs_online_logo" />
+
+        <ImageView
+            android:id="@+id/myAccountIcon"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_alignParentEnd="true"
+            android:contentDescription="My account icon"
+            android:focusable="true"
+            android:src="@mipmap/icon_header_account" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:layout_alignParentBottom="true"
+            android:background="#64FFFFFF" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_below="@id/top_header">
+
+        <TextView
+            android:id="@+id/header_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:gravity="center"
+            android:text="Home"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_18sdp" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Theme colors-->
+    <color name="colorPrimary">@color/nhsBlue</color>
+    <color name="colorPrimaryDark">@color/darkBlue</color>
+    <color name="colorAccent">@color/lightGreen</color>
+
+    <!--MenuBar and MenuBarItem colors-->
+    <color name="defaultMenuTextColor">#4A4A4A</color>
+    <color name="activeMenuTextColor">#005EB8</color>
+    <color name="menuBarTopBorder">#BCC0C4</color>
+
+    <color name="progressbar_color">#0054af</color>
+
+    <color name="background">#E8EDEE</color>
+    <color name="error">#DA291C</color>
+    <color name="nhsBlue">#005EB8</color>
+    <color name="darkBlue">#003087</color>
+    <color name="lightGreen">#006747</color>
+    <color name="darkGreen">#004D34</color>
+    <color name="lightGrey">#979797</color>
+    <color name="darkGrey">#4A4A4A</color>
+    <color name="homeGradientStart">#0072DF</color>
+    <color name="homeGradientEnd">#0053A3</color>
+    <color name="black">#231F20</color>
+    <color name="warning">#FCED66</color>
+</resources>
