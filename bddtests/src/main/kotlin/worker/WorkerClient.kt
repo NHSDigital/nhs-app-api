@@ -6,12 +6,9 @@ import com.google.gson.GsonBuilder
 import config.Config
 
 import org.apache.http.HttpResponse
-import org.apache.http.HttpStatus.SC_CREATED
-import org.apache.http.HttpStatus.SC_OK
+import org.apache.http.HttpStatus.*
 import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.methods.HttpUriRequest
+import org.apache.http.client.methods.*
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
@@ -23,6 +20,7 @@ import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
+import worker.models.appointments.CancelAppointmentRequest
 import worker.models.appointments.MyAppointmentsResponse
 import worker.models.courses.CourseListResponse
 import worker.models.courses.CoursesResponseData
@@ -36,6 +34,7 @@ import worker.models.session.UserSessionResponse
 import worker.models.session.UserSessionResponse.UserSessionResponseCookie
 import java.io.InputStreamReader
 import java.io.BufferedReader
+import java.net.URI
 import java.net.URLEncoder
 import javax.servlet.http.Cookie
 
@@ -143,6 +142,17 @@ class WorkerClient {
         return gson.fromJson<PrescriptionsResponseData>(result, PrescriptionsResponseData::class.java)
     }
 
+    fun deleteAppointment(requestBody: CancelAppointmentRequest, context: HttpContext?): HttpResponse {
+        val httpDelete = HttpDeleteWithBody(config.backendUrl + WorkerPaths.myAppointments)
+        val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
+        entity.setContentType("application/json")
+        httpDelete.entity = entity
+
+        val response = sendAsync(httpDelete, context)
+        httpDelete.releaseConnection()
+        return response
+    }
+
     fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?, context: HttpContext?): HttpResponse {
         val httpPost = HttpPost(config.backendUrl + WorkerPaths.postPrescriptionsConnection)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
@@ -199,7 +209,7 @@ class WorkerClient {
     private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse {
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)
 
-        if (response.statusLine.statusCode != SC_OK && response.statusLine.statusCode != SC_CREATED) {
+        if (response.statusLine.statusCode != SC_OK && response.statusLine.statusCode != SC_CREATED && response.statusLine.statusCode != SC_NO_CONTENT) {
             // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
             // when values are not as expected.  This makes it easier to debug.
             throw NhsoHttpException(request, response)
@@ -230,6 +240,21 @@ class WorkerClient {
             localContext.setAttribute(HttpClientContext.COOKIE_STORE, cookieStore)
 
             return localContext
+        }
+    }
+    class HttpDeleteWithBody constructor(): HttpEntityEnclosingRequestBase() {
+        val METHOD_NAME = "DELETE"
+
+        constructor(uri: URI): this() {
+            setURI(uri)
+        }
+
+        constructor(uri: String): this() {
+            setURI(URI.create(uri))
+        }
+
+        override fun getMethod(): String {
+            return METHOD_NAME
         }
     }
 }

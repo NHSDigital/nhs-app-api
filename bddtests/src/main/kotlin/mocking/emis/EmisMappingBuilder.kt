@@ -21,6 +21,7 @@ import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotRequest
+import mocking.emis.appointments.CancelAppointmentRequest
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
 
@@ -62,6 +63,8 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             patient.userPatientLinkToken)
 
     fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration, patient.endUserSessionId, patient.sessionId, request)
+
+    fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentRequest) = EmisDeleteAppointmentsBuilder(configuration, patient, request)
 
     fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
