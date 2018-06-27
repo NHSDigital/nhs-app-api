@@ -105,6 +105,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @smoketest
+  @pending
   Scenario: A user tries to book an appointment describing symptoms at least 1 character
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
@@ -131,6 +132,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @smoketest
+  @pending
   Scenario: A user tries to paste symptoms with over 150 characters
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
