@@ -1,0 +1,163 @@
+﻿using System.Globalization;
+using System.Net;
+using System.Net.Http;
+using System.Resources;
+using System.Threading.Tasks;
+using Microsoft.Data.OData;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Logging;
+
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
+{
+    public class EmisAppointmentsServiceCancel
+    {
+        private readonly IEmisClient _emisClient;
+        private readonly ILogger _logger;
+
+        public EmisAppointmentsServiceCancel(
+            ILogger logger,
+            IEmisClient emisClient)
+        {
+            _emisClient = emisClient;
+            _logger = logger;
+        }
+
+        public async Task<AppointmentCancelResult> Cancel(EmisUserSession emisUserSession,
+            AppointmentCancelRequest request)
+        {
+            var deleteRequestOption = GetCancelAppointmentDeleteRequest(emisUserSession, request);
+            if (deleteRequestOption.IsEmpty)
+            {
+                return new AppointmentCancelResult.BadRequest();
+            }
+            var deleteRequest = deleteRequestOption.ValueOrFailure();
+
+            var emisHeaders = new EmisHeaderParameters(emisUserSession);
+
+            try
+            {
+                var response = await _emisClient.AppointmentsDelete(emisHeaders, deleteRequest);
+                return InterpretAppointmentsDeleteResponse(response);
+            }
+            catch (HttpRequestException exception)
+            {
+                _logger.LogError(exception, "Cancelling appointment failed");
+                return new AppointmentCancelResult.SupplierSystemUnavailable();
+            }
+        }
+
+        private Option<CancelAppointmentDeleteRequest> GetCancelAppointmentDeleteRequest(
+            EmisUserSession emisUserSession,
+            AppointmentCancelRequest request
+        )
+        {
+            if (TryGetCancellationReason(request.CancellationReasonId, out var cancellationReasonText) &&
+                TryGetAppointmentId(request, out var slotId))
+            {
+                var deleteRequest = new CancelAppointmentDeleteRequest(emisUserSession.UserPatientLinkToken,
+                    cancellationReasonText, slotId);
+
+                return Option.Some(deleteRequest);
+            }
+
+            return Option.None<CancelAppointmentDeleteRequest>();
+        }
+
+        private bool TryGetAppointmentId(AppointmentCancelRequest request, out long slotId)
+        {
+            if (long.TryParse(request.AppointmentId, out slotId))
+            {
+                return true;
+            }
+            _logger.LogError(
+                $"Supplied appointment ID '{request.AppointmentId}' could not be converted to a 64-bit integer.");
+            return false;
+        }
+
+        private bool TryGetCancellationReason(string requestCancellationReasonId, out string cancellationReasonText)
+        {
+            cancellationReasonText = GetCancellationReason(requestCancellationReasonId);
+            if (cancellationReasonText != null)
+            {
+                return true;
+            }
+            _logger.LogError(
+                $"Supplied cancellation reason ID '{requestCancellationReasonId}' was not found in cancellation reasons resource file.");
+            return false;
+        }
+
+        private string GetCancellationReason(string requestCancellationReasonId)
+        {
+            if (string.IsNullOrWhiteSpace(requestCancellationReasonId))
+            {
+                return null;
+            }
+
+            var resourceManager = new ResourceManager(typeof(CancellationReasons));
+            var resourceSet = resourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+            var cancellationReasonText = resourceSet.GetString(requestCancellationReasonId);
+            return cancellationReasonText;
+        }
+
+        private AppointmentCancelResult InterpretAppointmentsDeleteResponse(
+            EmisClient.EmisApiResponse response)
+        {
+            if (response.HasSuccessStatusCode)
+            {
+                return new AppointmentCancelResult.SuccessfullyCancelled();
+            }
+
+            if (AppointmentIsNotAvailableForCancelling(response) ||
+                AppointmentIsInThePast(response) ||
+                AppointmentNotFound(response))
+            {
+                return new AppointmentCancelResult.AppointmentNotCancellable();
+            }
+
+            if (response.HasForbiddenResponse())
+            {
+                _logger.LogEmisResponseIsForbidden();
+                return new AppointmentCancelResult.InsufficientPermissions();
+            }
+
+            _logger.LogEmisUnknownError(response);
+            return new AppointmentCancelResult.SupplierSystemUnavailable();
+        }
+
+
+        private bool AppointmentIsNotAvailableForCancelling(EmisClient.EmisApiResponse response)
+        {
+            var check = response.StatusCode == HttpStatusCode.Conflict;
+            if (check)
+            {
+                _logger.LogError("Slot is not available for cancelling.");
+            }
+            return check;
+        }
+
+        private bool AppointmentIsInThePast(EmisClient.EmisApiResponse response)
+        {
+            var check = response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_InThePast);
+            if (check)
+            {
+                _logger.LogError("Appointment is in the past.");
+            }
+            return check;
+        }
+
+        private bool AppointmentNotFound(EmisClient.EmisApiResponse response)
+        {
+            var check = response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_NotFound);
+            if (check)
+            {
+                _logger.LogError("Appointment not found.");
+            }
+
+            return check;
+        }
+    }
+}

@@ -176,6 +176,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
         }
 
+        [TestMethod]
+        public async Task Book_EmisReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        {
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = "Extra info: Unhandled Error";
+
+            //Arrange
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                    .InternalServerError)
+                { ErrorResponse = errorResponse };
+
+            MockEmisClientAppointmentPostMethod(response);
+
+            // Act            
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+        }
+
         private void MockEmisClientAppointmentPostMethod(EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response)
         {
             _mockEmisClient.Setup(x => x.AppointmentsPost(

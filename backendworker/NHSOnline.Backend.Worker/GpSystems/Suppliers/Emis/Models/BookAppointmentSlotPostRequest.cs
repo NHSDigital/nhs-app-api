@@ -1,9 +1,19 @@
-﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
+﻿using System;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
     public class BookAppointmentSlotPostRequest
     {
-        public string UserPatientLinkToken { get; set; }
-        public long SlotId { get; set; }
-        public string BookingReason { get; set; }
+       public BookAppointmentSlotPostRequest (EmisUserSession emisUserSession, AppointmentBookRequest request)
+       {
+           UserPatientLinkToken = emisUserSession.UserPatientLinkToken;
+           BookingReason = request.BookingReason;
+           SlotId = Convert.ToInt64(request.SlotId);
+       }
+
+        public string UserPatientLinkToken { get;  }
+        public long SlotId { get;  }
+        public string BookingReason { get;  }
     }
 }

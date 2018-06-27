@@ -133,6 +133,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+
+        }
+
+        [TestMethod]
+        public async Task GetAppointments_EmisClientReturnsUnknownError_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message ="Extra info: UnknownError";
+            var emisResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Ambiguous)
+                {
+                    ErrorResponse = errorResponse
+                };
+            MockEmisClientAppointmentsGetMethod(emisResponse);
+
+            // Act
+            var result = await _systemUnderTest.GetAppointments(_userSession, false, null);
+
+            // Assert
+            result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
         }
 
         private void MockEmisClientAppointmentsGetMethod(

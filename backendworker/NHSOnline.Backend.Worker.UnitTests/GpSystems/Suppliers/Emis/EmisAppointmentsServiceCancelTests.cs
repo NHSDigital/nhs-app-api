@@ -120,11 +120,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task Cancel_AppointmentNotFound_ReturnsNotCancellable()
+        public async Task Cancel_EmisReturnsUnknownError_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
             var errorResponse = _fixture.Create<ErrorResponse>();
-            errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsDelete_NotFound;
+            errorResponse.Exceptions.First().Message = "Unknown Error";
 
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                     .InternalServerError)
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
+            result.Should().BeAssignableTo<AppointmentCancelResult.SupplierSystemUnavailable>();
         }
 
         [TestMethod]
@@ -146,6 +146,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Arrange
             var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
                 .Conflict);
+
+            MockEmisClientAppointmentCancelMethod(response);
+
+            // Act            
+            var result = await _systemUnderTest.Cancel(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
+        }
+        
+        [TestMethod]
+        public async Task Cancel_AppointmentNotFound_ReturnsNotCancellable()
+        {
+            // Arrange
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = EmisApiErrorMessages.AppointmentsDelete_NotFound;
+
+            var response = new EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>(HttpStatusCode
+                    .InternalServerError)
+                { ErrorResponse = errorResponse };
 
             MockEmisClientAppointmentCancelMethod(response);
 

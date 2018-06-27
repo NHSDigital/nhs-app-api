@@ -10,6 +10,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
@@ -334,7 +335,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             response.StatusCode.Should().Be(200);
             response.ErrorResponse.Should().Be(null);
         }
-        
+
         [TestMethod]
         public async Task ApplicationsPost_ReturnsTrue_WhenValidlyRequested()
         {
@@ -348,7 +349,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .WithEmisHeaders()
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
-            var response = await _sut.AppointmentsPost(new EmisHeaderParameters(), new BookAppointmentSlotPostRequest());
+            var userSession = new EmisUserSession();
+            var apptBookRequest = new AppointmentBookRequest();
+
+            var response = await _sut.AppointmentsPost(new EmisHeaderParameters(userSession),
+                new BookAppointmentSlotPostRequest(userSession, apptBookRequest));
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);

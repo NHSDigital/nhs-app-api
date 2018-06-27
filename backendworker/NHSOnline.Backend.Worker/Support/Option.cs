@@ -9,6 +9,8 @@
     public struct Option<T>
     {
         public bool HasValue { get; }
+
+        public bool IsEmpty => !HasValue;
         private T Value { get; }
 
         internal Option(T value, bool hasValue)

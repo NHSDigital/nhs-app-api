@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         
         public async Task<AppointmentSlotsResult> Get(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
         {
-            var emisSserSession = (EmisUserSession) userSession;
+            var emisUserSession = (EmisUserSession) userSession;
             AppointmentSlotsMetadataGetResponse metaBody;
             AppointmentSlotsGetResponse slotBody;
             
@@ -36,20 +36,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 {
                     SessionStartDate = fromDate,
                     SessionEndDate = toDate,
-                    UserPatientLinkToken = emisSserSession.UserPatientLinkToken
+                    UserPatientLinkToken = emisUserSession.UserPatientLinkToken
                 };
 
                 var slotsParams = new SlotsGetQueryParameters()
                 {
                     FromDateTime = fromDate,
                     ToDateTime = toDate,
-                    UserPatientLinkToken = emisSserSession.UserPatientLinkToken
+                    UserPatientLinkToken = emisUserSession.UserPatientLinkToken
                 };
-                var headerParams = new EmisHeaderParameters()
-                {
-                    EndUserSessionId = emisSserSession.EndUserSessionId,
-                    SessionId = emisSserSession.SessionId
-                };
+                var headerParams = new EmisHeaderParameters(emisUserSession);
 
                 var metaTask = _emisClient.AppointmentSlotsMetadataGet(headerParams, metaParams);
                 var slotTask = _emisClient.AppointmentSlotsGet(headerParams, slotsParams);
