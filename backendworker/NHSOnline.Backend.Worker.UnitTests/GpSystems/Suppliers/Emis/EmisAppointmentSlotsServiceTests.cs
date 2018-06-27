@@ -158,7 +158,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
         
         [TestMethod]
-        public async Task Get_EmisClientGetAppointmentSlotsNotAvailable_ReturnsEmptyAppointmentsSlots()
+        public async Task Get_EmisClientGetAppointmentSlotsNotAvailable_ReturnsCannotBookAppointments()
         {
             // Arrange
             var metadataResponse =
@@ -178,7 +178,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             // Assert
             _mockEmisClient.Verify();
-            result.Should().BeEquivalentTo(new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse()));
+            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
         }
         
         [TestMethod]

@@ -25,5 +25,10 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
+
+        public IActionResult Visit(AppointmentsResult.CannotViewAppointments result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
     }
 }

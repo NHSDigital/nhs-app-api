@@ -48,5 +48,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
                 return visitor.Visit(this);
             }
         }
+
+        public class CannotViewAppointments : AppointmentsResult
+        {
+            public override T Accept<T>(IAppointmentsResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

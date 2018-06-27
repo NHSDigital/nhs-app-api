@@ -4,7 +4,7 @@ using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    internal class AppointmentSlotsResultVisitor: IAppointmentSlotsResultVisitor<IActionResult>
+    internal class AppointmentSlotsResultVisitor : IAppointmentSlotsResultVisitor<IActionResult>
     {
         public IActionResult Visit(AppointmentSlotsResult.SuccessfullyRetrieved result)
         {
@@ -15,15 +15,20 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             return new BadRequestResult();
         }
-        
+
         public IActionResult Visit(AppointmentSlotsResult.SupplierSystemUnavailable result)
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
-        
+
         public IActionResult Visit(AppointmentSlotsResult.InternalServerError result)
         {
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        public IActionResult Visit(AppointmentSlotsResult.CannotBookAppointments result)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
         }
     }
 }

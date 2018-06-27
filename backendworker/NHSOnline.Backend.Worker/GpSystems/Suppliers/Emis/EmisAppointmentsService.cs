@@ -163,7 +163,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             if (response.HasForbiddenResponse())
             {
-                return new AppointmentsResult.SuccessfullyRetrieved(new AppointmentsResponse());
+                return new AppointmentsResult.CannotViewAppointments();
             }
 
             return new AppointmentsResult.SupplierSystemUnavailable();

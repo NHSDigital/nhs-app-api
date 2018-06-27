@@ -6,5 +6,6 @@
         T Visit(AppointmentsResult.BadRequest result);
         T Visit(AppointmentsResult.SupplierSystemUnavailable result);
         T Visit(AppointmentsResult.InternalServerError result);
+        T Visit(AppointmentsResult.CannotViewAppointments result);
     }
 }

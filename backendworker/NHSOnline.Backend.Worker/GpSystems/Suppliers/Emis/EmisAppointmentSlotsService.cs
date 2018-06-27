@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 {
                     if (slotResponse.HasForbiddenResponse())
                     {
-                        return new AppointmentSlotsResult.SuccessfullyRetrieved(new AppointmentSlotsResponse());
+                        return new AppointmentSlotsResult.CannotBookAppointments();
                     }
                     
                     _logger.LogError($"Retrieving appointment slots metadata failed with status code {slotResponse.StatusCode}");

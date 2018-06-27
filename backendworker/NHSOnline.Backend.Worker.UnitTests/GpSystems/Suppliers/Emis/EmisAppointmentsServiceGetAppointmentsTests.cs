@@ -101,7 +101,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientReturnsForbiddenCode_ReturnsSuccessfulEmptyResponse()
+        public async Task GetAppointments_EmisClientReturnsForbiddenCode_ReturnsCannotViewAppointments()
         {
             // Arrange
             var emisResponse = new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden);
@@ -111,12 +111,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var result = await _systemUnderTest.GetAppointments(_userSession, false, null);
 
             // Assert
-            var apiResponse = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
-            apiResponse.Should().BeEquivalentTo(new AppointmentsResponse());
+            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
         }
 
         [TestMethod]
-        public async Task GetAppointments_EmisClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsSuccessfulEmptyResponse()
+        public async Task GetAppointments_EmisClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsCannotViewAppointments()
         {
             // Arrange
             var errorResponse = _fixture.Create<ErrorResponse>();
@@ -133,8 +132,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var result = await _systemUnderTest.GetAppointments(_userSession, false, null);
 
             // Assert
-            var apiResponse = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
-            apiResponse.Should().BeEquivalentTo(new AppointmentsResponse());
+            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
         }
 
         private void MockEmisClientAppointmentsGetMethod(
