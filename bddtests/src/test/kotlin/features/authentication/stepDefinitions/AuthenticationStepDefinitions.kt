@@ -20,14 +20,12 @@ import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
-import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.demographics.PatientIdentifier
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.session.UserSessionRequest

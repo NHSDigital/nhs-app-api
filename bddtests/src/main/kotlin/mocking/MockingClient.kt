@@ -8,6 +8,8 @@ import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
+import net.serenitybdd.core.Serenity
+import net.serenitybdd.rest.SerenityRest
 import org.apache.http.HttpException
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
@@ -49,18 +51,15 @@ class MockingClient(private val configuration: MockingConfiguration) {
     fun favicon() = this.postMapping(FaviconMappingBuilder().respondWithNotFound())
 
     private fun postMapping(mapping: Mapping): String {
-        val httpPost = HttpPost("${configuration.wiremockAdminUrl}/mappings")
+        val response = SerenityRest.given()
+                .header("Content-Type", "application/json; charset=UTF-8")
+                .and()
+                .body(gson.toJson(mapping))
+                .expect().statusCode(HttpStatus.SC_CREATED)
+                .`when`()
+                .post("${configuration.wiremockAdminUrl}/mappings")
 
-        httpPost.addHeader("Content-Type", "application/json; charset=UTF-8")
-        httpPost.entity = StringEntity(gson.toJson(mapping), ContentType.APPLICATION_JSON)
-
-        val response = HttpClients.createDefault().execute(httpPost).also { println("Posting $mapping... Response: $it") }
-        httpPost.releaseConnection()
-
-        if (response.statusLine.statusCode != HttpStatus.SC_CREATED) {
-            throw HttpException(String.format("PostMapping failed, response was %1\$s: %2\$s", response.statusLine.statusCode, response.toString()))
-        }
-        return response.toString()
+        return response.body.prettyPrint()
     }
 
     fun getRequests(): String {
