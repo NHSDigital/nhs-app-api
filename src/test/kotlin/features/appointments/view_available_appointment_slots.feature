@@ -1,3 +1,4 @@
+@pending
 Feature: View available appointment slots
 
   Users can view available appointments from the Appointments Page.

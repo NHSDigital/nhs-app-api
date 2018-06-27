@@ -1,3 +1,4 @@
+@pending
 Feature: View available appointment slots backend
   In order book appointment
   As a logged user

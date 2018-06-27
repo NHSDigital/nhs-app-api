@@ -1,3 +1,4 @@
+@pending
 Feature: Guidance prior to booking an appointment
 
   Users are given guidance before booking a new appointment.
