@@ -1,0 +1,46 @@
+swagger: '2.0'
+
+info:
+  version: 1.0.0
+  title: EMIS - NHS App Get Linkage Details Approach
+  description: This describes an extension to the EMIS PFS API to allow a patient's linkage details to be retrieved by their NHS Number.
+
+schemes:
+  - https
+
+paths:
+  /patient/linkage:
+    get:
+      summary: Retrieves a patient's Linkage details using their NHS Number
+      description: This call finds a user, given their NHS Number and returns the fields required to link the user.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: nhsNumber
+          type: string
+          description: Patient's NHS Number ID.
+          required: True
+      responses:
+        200:
+          description: Successful operation. User linked Successfully.
+          schema:
+            $ref: "#/definitions/GetLinkageResponse"
+        404:
+          description: NHS Number not found.
+
+definitions:
+  GetLinkageResponse:
+    type: object
+    properties:
+      accountId:
+        type: string
+        description: The user's ROSU Account id.
+      organisationCode:
+        type: string
+        description: The ODS code for the Patient's GP.
+      linkagePassphrase:
+        type: string
+        description: The user's linkage passphrase.

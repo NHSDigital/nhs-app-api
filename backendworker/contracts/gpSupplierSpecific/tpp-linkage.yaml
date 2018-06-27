@@ -1,0 +1,60 @@
+swagger: '2.0'
+
+info:
+  version: 1.1.0
+  title: TPP - NHS App Get Linkage Details Approach
+  description: This describes an extension to the TPP PFS API to allow a patient's linkage details to be retrieved by their NHS Number.
+
+schemes:
+  - https
+
+paths:
+  /patient/linkage:
+    post:
+      summary: Retrieves a patient's Linkage details using their NHS Number
+      description: This call finds a user, given their NHS Number and returns the fields required to link the user.
+      consumes:
+        - application/xml
+      produces:
+        - application/xml
+      parameters:
+        - in: body
+          name: linkageDetailsRequest
+          description: Request object required to link user.
+          schema:
+            $ref: "#/definitions/LinkageDetailsRequest"
+      responses:
+        200:
+          description: Successful operation. User linked Successfully.
+          schema:
+            $ref: "#/definitions/LinkageDetailsResponse"
+        404:
+          description: NHS Number not found.
+
+definitions:
+  LinkageDetailsRequest:
+    type: object
+    required:
+     - nhsNumber
+     - providerId
+    properties:
+      nhsNumber:
+        type: string
+        description: Patient's NHS Number ID.
+      providerId:
+        type: string
+        description: The secret TPP Provider id for the subsidiary (i.e NHS APP).
+
+
+  LinkageDetailsResponse:
+    type: object
+    properties:
+      accountId:
+        type: string
+        description: The user's ROSU Account id.
+      organisationCode:
+        type: string
+        description: The ODS code for the Patient's GP.
+      linkagePassphrase:
+        type: string
+        description: The user's linkage passphrase.

@@ -1,0 +1,26 @@
+swagger: '2.0'
+
+info:
+  version: 0.0.5
+  title: NHS App API
+  description: This is the API for the NHS App.
+
+schemes:
+  - https
+
+paths:
+  /v1/patient/appointment-slots:
+    $ref: './nhsonline.appointments.yaml#/paths/~1appointment-slots'
+  /v1/patient/appointments:
+    $ref: './nhsonline.appointments.yaml#/paths/~1appointments'
+  /v1/patient/demographics:
+    $ref: './nhsonline.demographics.yaml#/paths/~1demographics'
+  /v1/patient/my-record:
+    $ref: './nhsonline.myrecord.yaml#/paths/~1my-record'
+  /v1/patient/prescriptions:
+    $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
+  /v1/patient/courses:
+    # Course endpoints are in the prescriptions file as they share the course definitions
+    $ref: './nhsonline.prescriptions.yaml#/paths/~1courses'
+  /v1/session:
+    $ref: './nhsonline.usersession.yaml#/paths/~1session'

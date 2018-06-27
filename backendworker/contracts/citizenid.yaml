@@ -1,0 +1,127 @@
+swagger: '2.0'
+
+info:
+  version: 0.0.2
+  title: NHS Online API - Citizen ID.
+  description: This is the API for NHS Online endpoints that are intended for consumption by Citizen ID.
+
+schemes:
+  - https
+
+paths:
+  /v1/patient/im1Connection:
+    get:
+      tags:
+        - im1-connection
+      summary: Gets an IM1 connection token.
+      description: This call returns an IM1 connection token and an array of NHS Numbers, given an IM1 Connection Token and ODS Code.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: NHSO-Connection-Token
+          type: string
+          required: true
+          description: IM1 Connection token
+        - in: header
+          name: NHSO-ODS-Code
+          type: string
+          required: true
+          description: ODS Code
+      responses:
+        200:
+          description: Successful operation. IM1 Connection Token and NHS Numbers returned.
+          schema:
+            $ref: "#/definitions/PatientIm1ConnectionResponse"
+        400:
+          description: Bad request. All headers must be provided.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
+        404:
+          description: Not found. No patient could be found matching the supplied headers.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+    post:
+      tags:
+        - im1-connection
+      summary: Creates an IM1 connection for specified Citizen ID registration data.
+      description: Given a set of attributes to identify a patient, creates and returns an IM1 connection object.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: im1Connection
+          required: true
+          description: Patient account details for the connection to be created.
+          schema:
+            $ref: "#/definitions/PatientIm1ConnectionRequest"
+      responses:
+        201:
+          description: Successful operation. IM1 Connection Token created and returned with NHS Numbers.
+          schema:
+            $ref: "#/definitions/PatientIm1ConnectionResponse"
+        400:
+          description: Bad request. Supplied connection details are incomplete or invalid.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
+        404:
+          description: Not found. No patient was found matching the supplied connection details.
+        409:
+          description: Conflict. Account has already been associated with the application in the GP system.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+definitions:
+  PatientIm1ConnectionRequest:
+    type: object
+    required:
+     - accountId
+     - linkageKey
+     - odsCode
+     - surname
+     - dateOfBirth
+    properties:
+      accountId:
+        type: string
+        description: Patient's GP IM1 Account ID.
+      linkageKey:
+        type: string
+        description: Patient's GP IM1 Linkage Key.
+      odsCode:
+        type: string
+        description: GP's ODS Code.
+      surname:
+        type: string
+        description: Patient's Surname.
+      dateOfBirth:
+        type: string
+        format: date
+        description: Patient's Date of Birth.
+
+  PatientIm1ConnectionResponse:
+    type: object
+    properties:
+      connectionToken:
+        type: string
+        description: IM1 Connection Token.
+      nhsNumbers:
+        type: array
+        description: Array of the Patient's NHS numbers.
+        items:
+          $ref: '#/definitions/PatientNhsNumber'
+
+  PatientNhsNumber:
+    type: object
+    properties:
+        nhsNumber:
+         type: string
+         description: Patient's NHS number.

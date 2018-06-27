@@ -1,0 +1,8 @@
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
+{
+    public class EmisHeaderParameters
+    {
+        public string EndUserSessionId { get; set; }
+        public string SessionId { get; set; }
+    }
+}

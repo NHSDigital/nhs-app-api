@@ -1,0 +1,75 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.5
+  title: NHS App Sub-API - User Sessions.
+  description: NHS App Sub-API - endpoints pertaining to User Sessions.
+
+paths:
+  /session:
+    post:
+      tags:
+        - session
+      summary: Creates a user session for an authenticated user.
+      description: Given an OAuth authorisation code and PKCE code verifier, creates and returns a user session.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: userSession
+          required: true
+          description: OAuth details for the session to be created.
+          schema:
+            $ref: '#/definitions/UserSessionRequest'
+      responses:
+        201:
+          description: Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests.
+          schema:
+            $ref: "#/definitions/UserSessionResponse"
+        400:
+          description: Bad request. Supplied OAuth details are incomplete or invalid
+        403:
+          description: Forbidden. Can occur if the IM1 connection token received from Citizen ID does not successfully authenticate with the GP system.
+        500:
+          description: An unexpected error occurred during the processing of the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+    delete:
+      tags:
+        - session
+      summary: Deletes a user session for an authenticated user.
+      description: Given a valid session cookie deletes the users session and signs the user out. Requires NHSO-Session-Id cookie obtained from post session endpoint.
+      responses:
+        204:
+          description: Successfully deleted session and user signed out
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred during the processing of the request.
+        502:
+          description: Session storage is unavailable
+definitions:
+  UserSessionRequest:
+    type: object
+    required:
+     - authCode
+     - codeVerifier
+    properties:
+      authCode:
+        type: string
+        description: OAuth authorization code.
+      codeVerifier:
+        type: string
+        description: PKCE code verifier.
+  UserSessionResponse:
+    type: object
+    properties:
+      name:
+        type: string
+        description: User's name
+      sessionTimeout: 
+        type: integer
+        description: User's session timeout period in seconds.
+        

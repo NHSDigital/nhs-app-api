@@ -1,0 +1,311 @@
+swagger: "2.0"
+
+info:
+  version: 0.0.6
+  title: NHS App Sub-API - Appointments
+  description: NHS App Sub-API - endpoints pertaining to appointments. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+
+paths:
+  /appointment-slots:
+    get:
+      tags:
+        - appointment-slots
+      summary: Gets a list of available appointments for the logged on user.
+      description: For a given date range, returns lists of clinicians, appointment sessions, locations and available appointment slots for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: fromDate
+          type: string
+          format: date-time
+          required: false
+          description: Appointment search from date. If not supplied and no toDate supplied, defaults to current datetime. If not supplied but toDate supplied, defaults to start of the day two weeks before toDate.
+        - in: query
+          name: toDate
+          type: string
+          format: date-time
+          required: false
+          description: Appointment search to date. If not supplied and no fromDate supplied, defaults to end of the day two weeks after current datetime. If not supplied but fromDate supplied, defaults to end of the day two weeks after fromDate.
+      responses:
+        200:
+          description: Returns list of available slots and associated meta data. Returns empty collection of slots if GP system does not return a list of available slots.
+          schema:
+            $ref: "#/definitions/AppointmentSlotsResponse"
+        400:
+          description: Bad request. A querystring parameter is not in the expected format.
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+  /appointments:
+    delete:
+      tags:
+        - appointments
+      summary: Cancels an upcoming appointment for the logged on user.
+      description: Cancels a specified appointment for the logged on user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: AppointmentCancelRequest
+          required: true
+          description: Details of the appointment to be cancelled, along with reason for the booking being cancelled.
+          schema:
+            $ref: "#/definitions/AppointmentCancelRequest"
+      responses:
+        204:
+          description: Successfully cancelled the specified appointment.
+        400:
+          description: Bad request. Supplied request is incomplete or invalid.
+        401:
+          description: User session has expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
+        409:
+          description: The specified appointment does not exist or is not in a suitable state to be cancelled.
+        500:
+          description: An unexpected error occurred during the processing of the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+    get:
+      tags:
+        - appointments
+      summary: Gets a list of existing appointments for the logged on user.
+      description: Returns list of booked appointments for the logged on user, and associated metadata including list of cancellation reasons that can be used to cancel upcoming appointments. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: includePastAppointments
+          type: boolean
+          required: true
+          description: Indicates whether the response should include historical appointments. See also the optional pastAppointmentsFromDate parameter that can be used to limit the number of returned historical appointments.
+        - in: query
+          name: pastAppointmentsFromDate
+          type: string
+          format: date-time
+          required: false
+          description: Earliest datetime for which to return historical appointments. Will only have any effect if includePastAppointments is set to true.
+      responses:
+        200:
+          description: Returns list of booked appointments and associated meta data. Returns empty collection of appointments if GP system does not return a list of appointmetns.
+          schema:
+            $ref: "#/definitions/AppointmentsResponse"
+        400:
+          description: Bad request. A querystring parameter is not in the expected format.
+        401:
+          description: User session has expired.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+    post:
+      tags:
+        - appointments
+      summary: Creates a GP Appointment for the logged on user.
+      description: Books an appointment slot for the logged on user, given a slot identifier. Identifiers of available slots can be obtained using the appointment-slots endpoint. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: AppointmentBookRequest
+          required: true
+          description: Details of the appointment slot to be booked, along with reasons for the booking being made.
+          schema:
+            $ref: "#/definitions/AppointmentBookRequest"
+      responses:
+        201:
+          description: Appointment successfully created.
+        400:
+          description: Bad request. Supplied request is incomplete or invalid.
+        401:
+          description: User session has expired.
+        403:
+          description: The patient does not have the necessary permissions within the GP system.
+        409:
+          description: Conflict. The chosen appointment slot is not available for booking.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+definitions:
+  AppointmentBookRequest:
+    type: object
+    required:
+      - slotId
+      - bookingReason
+    properties:
+      slotId:
+        type: string
+        description: Identifier of appointment slot to be booked.
+        minLength: 1
+      bookingReason:
+        type: string
+        description: Reason for booking appointment. e.g. symptoms being experienced by the patient.
+        minLength: 1
+        maxLength: 150
+  AppointmentCancelRequest:
+    type: object
+    required:
+      - appointmentId
+    properties:
+      appointmentId:
+        type: string
+        description: Identifier of the appointment to be cancelled.
+        minLength: 1
+      cancellationReasonId:
+        type: string
+        description: Identifier of the reason for the appointment being cancelled. Array of valid cancellation reasons is returned when requesting a user's current appointments.
+  AppointmentsResponse:
+    type: object
+    properties:
+      appointments:
+        type: array
+        description: Array of booked Appointments.
+        items:
+          $ref: '#/definitions/Appointment'
+      clinicians:
+        type: array
+        description: Array of attending Clinicians.
+        items:
+          $ref: '#/definitions/Clinician'
+      appointmentSessions:
+        type: array
+        description: Array of Appointment Sessions.
+        items:
+          $ref: '#/definitions/AppointmentSession'
+      locations:
+        type: array
+        description: Array of Locations.
+        items:
+          $ref: '#/definitions/Location'
+      cancellationReasons:
+        type: array
+        description: Array of Cancellation Reasons.
+        items:
+          $ref: '#/definitions/CancellationReason'
+  AppointmentSlotsResponse:
+    type: object
+    properties:
+      clinicians:
+        type: array
+        description: Array of attending Clinicians.
+        items:
+         $ref: '#/definitions/Clinician'
+      appointmentSessions:
+        type: array
+        description: Array of Appointment Sessions.
+        items:
+          $ref: '#/definitions/AppointmentSession'
+      locations:
+        type: array
+        description: Array of Locations.
+        items:
+          $ref: '#/definitions/Location'
+      slots:
+        type: array
+        description: Available Appointment Slots.
+        items:
+          $ref: '#/definitions/Slot'
+  Appointment:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Appointment Identifier.
+      slotType: 
+        type: string
+        description: Type of appointment slot, e.g. "Baby immunisations".
+      startTime:
+        type: string
+        format: date-time
+        description: Appointment Start Date Time.
+      endTime:
+        type: string
+        format: date-time
+        description: Appointment End Date Time.
+      locationId:
+        type: string
+        description: Location Identifier
+      appointmentSessionId:
+        type: string
+        description: GP system appointment session Identifier.
+      clinicianIds:
+        type: array
+        description: Array of Clinicians, accounts for joint sessions.
+        items:
+          type: string
+  AppointmentSession:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Appointment Session Identifier.
+      displayName:
+        type: string
+        description: Appointment Session Name, e.g. "Nurse Clinic".
+  CancellationReason:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Cancellation Reason Identifier.
+      displayName:
+        type: string
+        description: Cancellation Reason Description.
+  Clinician:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Clinician Identifier.
+      displayName:
+        type: string
+        description: Clinician Name.
+  Location:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Location Identifier.
+      displayName:
+        type: string
+        description: Location Name.
+  Slot:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Slot Identifier.
+      type: 
+        type: string
+        description: Type of appointment slot, e.g. "Baby immunisations".
+      startTime:
+        type: string
+        format: date-time
+        description: Appointment Slot Start Date Time.
+      endTime:
+        type: string
+        format: date-time
+        description: Appointment Slot End Date Time.
+      locationId:
+        type: string
+        description: Location Identifier
+      appointmentSessionId:
+        type: string
+        description: GP system appointment session Identifier.
+      clinicianIds:
+        type: array
+        description: Array of Clinicians, accounts for joint sessions.
+        items:
+          type: string
