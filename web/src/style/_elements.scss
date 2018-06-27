@@ -1,0 +1,246 @@
+@import './colours';
+@import './fonts';
+@import './textstyles';
+main.content {
+  padding: 16px 16px 5px 16px;
+  box-sizing: border-box;
+  width: 100%;
+
+  &.slim {
+    padding: 66px 16px 75px 16px;
+  }
+  &.nopadding {
+    padding: 100px 0px 50px 0px;
+  }
+  &.slim.nopadding  {
+    padding: 50px 0px 50px 0px;
+  }
+
+  .info p {
+    @include default_text;
+    font-size: 12pt;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .info h5 {
+    @include h5;
+    font-size: 16pt;
+    color: $dark_grey;
+    margin-bottom: 16px;
+  }
+  .info h4 {
+    @include h5;
+    font-size: 16pt;
+    color: $dark_grey;
+    margin-bottom: 16px;
+  }
+  .info a {
+    @include default_text;
+    font-size: 14pt;
+    display: block;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .info ul {
+    li {
+      margin-left: 24px;
+      margin-bottom: 16px;
+    }
+  }
+}
+footer {
+  display: none;
+}
+
+@mixin panel {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: $white;
+  -webkit-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+  -moz-box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.2);
+  display: table;
+  transition: all ease 0.5s;
+
+  & hr {
+    height: 1px;
+    border: none;
+    background-color: #4A4A4A;
+    opacity: 0.2;
+    margin-bottom: 16px;
+    margin-top: 16px;
+  }
+}
+@mixin panelHeader {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  color: $dark_grey;
+  font-family: $frutiger-bold;
+}
+
+@mixin text-area {
+  min-height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: $white;
+  border-radius: 5px;
+  padding: 16px;
+  border: 1px #979797 solid;
+  outline: none;
+  transition: all ease 0.5s;
+  display: block;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  color: $dark_grey;
+}
+.panel-title {
+  h2 {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 24px;
+    color: $nhs_blue;
+    margin-bottom: 16px;
+  }
+  h5 {
+    @include h5;
+    margin-bottom: 8px;
+    margin-top: 24px;
+  }
+  p {
+    @include default_text;
+    margin-bottom: 16px;
+  }
+}
+
+.panel,
+.form {
+  .checkbox {
+    border: 1px #979797 solid;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+
+    &:active {
+      border-color: $black;
+    }
+
+    .checked {
+      margin-left: 4px;
+      margin-top: 6px;
+      display: none;
+    }
+  }
+  h6 {
+    @include small_label;
+    padding-top: 16px;
+  }
+  h5 {
+    @include default_label;
+  }
+  h4 {
+    @include default_label;
+    padding-top: 8px;
+    color: #999;
+    font-size: 20px;
+  }
+  p {
+    @include default_text;
+
+    b {
+      display: inline-block;
+    }
+  }
+  label {
+    @include default_label;
+    padding-top: 16px;
+  }
+  hr {
+    height: 1px;
+    border: none;
+    background-color: $dark_grey;
+    opacity: 0.2;
+    margin-bottom: 16px;
+    margin-top: 16px;
+  }
+}
+
+@mixin record-content {
+  background: $white;
+  box-sizing: border-box;
+  height:auto;
+  overflow: auto;
+
+  &.closed {
+    max-height: 0;
+    transition: max-height 0.5s ease 0.3s;
+
+    p,
+    ul,
+    li,
+    label,
+    hr {
+      opacity: 0;
+      transition: opacity 0.5s linear;
+    }
+  }
+
+  &.opened {
+    max-height:6000px;
+    transition: max-height 0.5s ease;
+
+    p,
+    ul,
+    li,
+    label,
+    hr {
+      opacity: 1;
+      transition: opacity 0.1s linear 0.3s;
+    }
+  }
+
+  p {
+    @include small_text;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+
+    &:first-child {
+      padding-top: 16px;
+    }
+    &:last-child {
+      padding-bottom: 16px;
+    }
+  }
+
+  ul li {
+    @include small_text;
+  }
+
+  label {
+    @include small_label;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 4px;
+
+    &:first-child {
+      padding-top: 16px;
+    }
+  }
+
+  hr {
+    margin-bottom: 16px;
+    border: none;
+    height: 1px;
+    background: $background;
+
+    &:last-child {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+@import './textstyles';
+@import './colours';
+
+body {
+  padding: 0px;
+  margin: 0px;
+  background: $background;
+  @include default_text;
+}
+* {
+  padding: 0;
+  margin: 0;
+}

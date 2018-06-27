@@ -1,0 +1,18 @@
+/* eslint-disable import/extensions */
+import repeatPrescriptions from '../../../../../src/store/modules/repeatPrescriptionCourses';
+
+const { state } = repeatPrescriptions;
+
+describe('state', () => {
+  it('will set the repeat prescription courses to an empty array', () => {
+    expect(state().repeatPrescriptionCourses).toEqual([]);
+  });
+
+  it('will set the justOrderedARepeatPrescription flag to false', () => {
+    expect(state().justOrderedARepeatPrescription).toEqual(false);
+  });
+
+  it('will set specialRequest to null', () => {
+    expect(state().specialRequest).toEqual(null);
+  });
+});

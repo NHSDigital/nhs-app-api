@@ -1,0 +1,97 @@
+@import './colours';
+@import './fonts';
+@import './textstyles';
+
+nav.menu {
+  background-color: $white;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  height: 70px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+  z-index: 1000;
+
+  ul {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin: 0;
+
+
+    li {
+      flex-grow: 1;
+      text-align: center;
+      vertical-align: bottom;
+      list-style: none;
+      margin-top: 4px;
+      align-self: stretch;
+      justify-content: space-around;
+      display: flex;
+      flex-direction: column;
+
+      svg {
+        display: block;
+        align-self: center;
+        flex-grow: 1;
+        margin-top: 6px;
+        margin-bottom: 3px;
+      }
+
+      span {
+        @include menu;
+        display: block;
+        box-sizing: border-box;
+        align-self: flex-end;
+        text-align: center;
+        width: 100%;
+        margin-top: 6px;
+      }
+    }
+
+    li.active {
+      span {
+        @include menu_active;
+      }
+    }
+  }
+}
+
+header {
+  background: $nhs_blue;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 100px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+
+  h1 {
+    @include screen_title;
+    text-align: center;
+  }
+
+  .nhs_logo {
+    margin: 16px;
+    height: 22px;
+    float: left;
+  }
+
+  .account {
+    margin: 16px;
+    float: right;
+    height: 22px;
+  }
+
+  hr {
+    margin: 54px 16px 9px 16px;
+    height: 1px;
+    border: none;
+    background-color: white;
+    opacity: 0.4;
+  }
+}
