@@ -5,10 +5,9 @@ Feature: View available appointment slots
   Background:
     Given wiremock is initialised
 
-  @bug @NHSO-922
-  Scenario: A user who is signed in sees the appointments button
+  Scenario: A user who is signed in sees the appointments navigation button highlighted
     Given I am on the appointments booking page
-    Then I see the appointments menu button
+    Then the appointments menu button is highlighted
 
   @pending
   @native

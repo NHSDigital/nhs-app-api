@@ -17,7 +17,6 @@ Feature: Session Registration
   @NHSO-415
   @tech-debt @NHSO-725
   @backend
-  @bug @NHSO-922
   Scenario: We check the session cookie and response body for https
     Given I have a valid authCode and codeVerifier
     When I create a user session
@@ -41,7 +40,7 @@ Feature: Session Registration
     Then I get a "Bad Request" error
 
   @NHSO-63
-  @bug @NHSO-720 @NHSO-922
+  @bug @NHSO-720
   @backend
   Scenario: CID tokens endpoint fails to process the request
     Given I have valid OAuth details and the CID tokens endpoint fails to process the request
@@ -49,7 +48,7 @@ Feature: Session Registration
     Then I get a "Bad Gateway" error
 
   @NHSO-63
-  @bug @NHSO-720 @NHSO-922
+  @bug @NHSO-720
   @backend
   Scenario: CID user profile endpoint fails to process the request
     Given I have valid OAuth details and the CID user profile endpoint fails to process the request

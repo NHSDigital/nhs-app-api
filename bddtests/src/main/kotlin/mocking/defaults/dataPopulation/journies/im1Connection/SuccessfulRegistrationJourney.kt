@@ -10,7 +10,7 @@ import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {
 
-    fun create() {
+    fun create(patient: Patient = SuccessfulRegistrationJourney.patient) {
         client.forEmis{endUserSessionRequest().respondWithSuccess(patient.endUserSessionId)}
 
         client.forEmis {
@@ -21,13 +21,13 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
         client.forEmis {
                     demographicsRequest(patient)
                             .respondWithSuccess(patient,
-                                    patientIdentifiers = arrayOf(
-                                            PatientIdentifier(
-                                                    identifierType = IdentifierType.NhsNumber,
-                                                    identifierValue = patient.nhsNumbers[0]
-                                            )
+                                    patientIdentifiers =
+                                            patient.nhsNumbers.map {
+                                                PatientIdentifier(
+                                                        identifierType = IdentifierType.NhsNumber,
+                                                        identifierValue = it
+                                                )}.toTypedArray()
                                     )
-                            )
                 }
 
         client

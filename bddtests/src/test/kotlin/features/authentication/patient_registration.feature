@@ -3,25 +3,18 @@ Feature: Registration
   A user can create a new NHS account from the login page, allowing them to access the app
 
   @backend
-  @bug @NHSO-922
-  Scenario: Patient has no NHS Numbers
-    Given I have valid patient data to register new account
+  Scenario Outline: Patient registers for an EMIS account with NHS Numbers of <NHS Numbers>
+    Given I have a new patient with Nhs Numbers of <NHS Numbers>
     When I register an EMIS user's IM1 credentials
-    Then I receive the expected connection token and single NHS Number
+    Then I receive a response
+    And the response has the expected connection token
+    And the response has the expected NHS numbers
 
-  @backend
-  @bug @NHSO-922
-  Scenario: Patient has NHS Numbers
-    Given I have valid patient data with multiple nhs numbers to register new account
-    When I register an EMIS user's IM1 credentials
-    Then I receive the expected connection token and multiple NHS Numbers
-
-  @backend
-  @bug @NHSO-922
-  Scenario: NHS Number does not exist
-    Given I have valid data for a patient with no NHS Number
-    When I register an EMIS user's IM1 credentials
-    Then I receive the expected connection token without NHS Numbers
+    Examples:
+    |NHS Numbers|
+    |           |
+    |"one"      |
+    |"one","two"|
 
   @bug
   @NHSO-666
@@ -83,18 +76,18 @@ Feature: Registration
   Scenario: ODS Code not in the expected format
     Given I have an EMIS user's IM1 credentials with an ODS Code not in the expected format
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
 
-  @bug @NHSO-661 @NHSO-922
+  @bug @NHSO-661
   @backend
   Scenario: Surname not in the expected format
     Given I have an EMIS user's IM1 credentials with a Surname not in the expected format
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
 
-  @bug @NHSO-661 @NHSO-922
+  @bug @NHSO-661
   @backend
   Scenario: Account ID not in the expected format
     Given I have an EMIS user's IM1 credentials with an Account ID not in the expected format
@@ -102,42 +95,42 @@ Feature: Registration
     Then I receive a "Bad Request" error
 
 
-  @NHSO-661
+  @bug @NHSO-661
   @backend
   Scenario: Linkage Key not in the expected format
     Given I have an EMIS user's IM1 credentials with a Linkage Key not in the expected format
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
   @backend
   Scenario: Date Of Birth not in the expected format
     Given I have an EMIS user's IM1 credentials with a Date Of Birth not in the expected format
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
   @backend
   Scenario: Missing ODS Code
     Given I have an EMIS user's IM1 credentials with missing ODS Code
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
   @backend
   Scenario: Missing Surname
     Given I have an EMIS user's IM1 credentials with missing Surname
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
   @backend
   Scenario: Missing Account ID
     Given I have an EMIS user's IM1 credentials with missing Account ID
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
   @backend
   Scenario: Missing Linkage Key
     Given I have an EMIS user's IM1 credentials with missing Linkage Key
     When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+    Then I get a "Bad Request" error
 
   @NHSO-313 
   Scenario: User launches the create account CitizenID journey

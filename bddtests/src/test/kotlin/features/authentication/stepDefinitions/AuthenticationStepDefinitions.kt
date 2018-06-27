@@ -1,10 +1,7 @@
 package features.authentication.stepDefinitions
 
 import config.Config
-import cucumber.api.java.en.And
-import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
+import cucumber.api.java.en.*
 import features.authentication.steps.AuthReturnSteps
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
@@ -14,6 +11,7 @@ import features.sharedSteps.BrowserSteps
 import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
+import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
@@ -29,10 +27,14 @@ import org.apache.http.HttpStatus
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
+import worker.models.demographics.PatientIdentifier
+import worker.models.patient.Im1ConnectionRequest
+import worker.models.patient.Im1ConnectionResponse
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.time.Duration
 
+const val INVALID_VALUE = "xxx-wrong-format-xxx"
 
 class AuthenticationStepDefinitions : AbstractSteps() {
 
@@ -58,6 +60,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     lateinit private var patient: Patient
     private val associationType = AssociationType.Self
 
+    private var im1ConnectionRequest: Im1ConnectionRequest? = null
+    private var im1ConnectionResponse: Im1ConnectionResponse? = null
     private var userSessionResponse: UserSessionResponse? = null
     private var errorResponse: NhsoHttpException? = null
 
@@ -90,12 +94,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
                     .respondWithBadRequest()
         }
-        mockingClient.forCitizenId {
-            userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
-                    .respondWithSuccess(Patient.montelFrye)
-        }
-        
-        createEmisStubs()
     }
 
     @Given("^I have valid OAuth details and the CID tokens endpoint fails to process the request$")
@@ -122,8 +120,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
                     .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
         }
-        
-        createEmisStubs()
     }
 
     @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
@@ -188,6 +184,135 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
     }
 
+    @Given("^I have a new patient with Nhs Numbers of (.*)$")
+    fun iHaveValidPatientDataToRegisterNewAccount(nhsNumbers: String) {
+        val nhsNumbersList = nhsNumbers.split(",").filter { it.isNotEmpty() }
+        this.patient = Patient.johnSmith.copy(nhsNumbers = nhsNumbersList)
+
+        SuccessfulRegistrationJourney(mockingClient).create(this.patient)
+
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+             AccountId = patient.accountId,
+             LinkageKey = patient.linkageKey,
+             OdsCode = patient.odsCode,
+             Surname = patient.surname,
+             DateOfBirth = patient.dateOfBirth
+        )
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with an ODS Code not in the expected format$")
+    fun iHaveAnEMISUsersIMCredentialsWithAnODSCodeNotInTheExpectedFormat() {
+        this.patient = Patient.johnSmith.copy(odsCode = INVALID_VALUE)
+        this. im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with a Surname not in the expected format$")
+    fun iHaveAnEMISUsersIMCredentialsWithASurnameNotInTheExpectedFormat() {
+        this.patient = Patient.johnSmith.copy(surname = INVALID_VALUE)
+        this. im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            meRequest(patient)
+                    .respondWithBadRequest("The Surname value cannot exceed 100 characters.")
+        }
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with an Account ID not in the expected format$")
+    fun iHaveAnEMISUsersIMCredentialsWithAnAccountIdNotInTheExpectedFormat() {
+        this.patient = Patient.johnSmith.copy(accountId = INVALID_VALUE)
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            meRequest(patient)
+                    .respondWithBadRequest("AccountId length outside of valid range. Must be between 10 - 15 (inclusive) characters.")
+        }
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with a Linkage Key not in the expected format$")
+    fun iHaveAnEMISUsersIMCredentialsWithALinkageKeyNotInTheExpectedFormat() {
+        this.patient = Patient.johnSmith.copy(linkageKey = INVALID_VALUE)
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            meRequest(patient)
+                    .respondWithBadRequest("LinkageKey length outside of valid range. Must be between 6 - 15 (inclusive) characters.")
+        }
+
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with a Date Of Birth not in the expected format$")
+    fun iHaveAnEMISUsersIMCredentialsWithADateOfBirthNotInTheExpectedFormat() {
+        this.patient = Patient.johnSmith.copy(dateOfBirth = INVALID_VALUE)
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with missing ODS Code$")
+    fun iHaveAnEMISUsersIMCredentialsWithMissingODSCode() {
+        this.patient = Patient.johnSmith
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with missing Surname$")
+    fun iHaveAnEMISUsersIMCredentialsWithMissingSurname() {
+        this.patient = Patient.johnSmith
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with missing Account ID$")
+    fun iHaveAnEMISUsersIMCredentialsWithMissingAccountID() {
+        this.patient = Patient.johnSmith
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have an EMIS user's IM1 credentials with missing Linkage Key$")
+    fun iHaveAn_EMISUsersIMCredentialsWithMissingLinkageKey() {
+        this.patient = Patient.johnSmith
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+
     private fun createCidStubs(
             authCode:String? = this.authCode!!,
             codeVerifier: String = this.codeVerifier!!,
@@ -219,9 +344,20 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
     }
 
+    @When("^I register an EMIS user's IM1 credentials$")
+    fun iRegisterAnEMISUsersIMCredentials() {
+        try {
+            this.workerClient.postIm1Connection(this.im1ConnectionRequest!!).also { this.im1ConnectionResponse = it }
+        } catch (httpException: NhsoHttpException) {
+            this.errorResponse = httpException
+        }
+    }
+
     @Then("^I receive a response$")
     fun iReceiveAResponse() {
-        checkNotNull(this.userSessionResponse)
+        val responses = arrayListOf(this.userSessionResponse, this.im1ConnectionResponse).filter { it != null }
+        Assert.assertTrue(responses!!.size == 1)
+        Assert.assertTrue(this.errorResponse == null)
     }
 
     @And("^the response has a name$")
@@ -232,6 +368,21 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @And("^the response has a session timeout$")
     fun theResponseHasASessionLength() {
         checkNotNull(this.userSessionResponse?.userSessionResponseBody?.sessionTimeout)
+    }
+
+    @Then("^the response has the expected connection token$")
+    fun theResponseHasTheExpectedConnectionToken() {
+        val result = this.im1ConnectionResponse
+
+        Assert.assertEquals(this.patient.connectionToken, result!!.connectionToken)
+    }
+
+    @Then("^the response has the expected NHS numbers$")
+    fun theResponseHasTheExpectedNhsNumbers() {
+        val response = this.im1ConnectionResponse
+        val responseNhsNumbers = response!!.nhsNumbers!!.map { it.nhsNumber.replace(" ", "") }
+
+        Assert.assertEquals(this.patient.nhsNumbers, responseNhsNumbers)
     }
 
     @Then("^the cookie contains a session guid with http-only$")

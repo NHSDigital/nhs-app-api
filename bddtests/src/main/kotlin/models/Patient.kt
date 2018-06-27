@@ -49,6 +49,8 @@ data class Patient(
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }
+        
+        //////////// EMIS PATIENTS /////////////
 
         val paulSmith = Patient(
                 title = "Mr",
@@ -88,7 +90,7 @@ data class Patient(
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 sessionId = "4RDwmQVi3OfSbp47dbAnRF",
                 connectionToken = "1da4fe9d-0fd2-45bc-90a9-014e57291d0f",
-                endUserSessionId = "7YjG1LYkOkSY1iAcXGG8ZU",
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers = listOf("2227007273"),
                 accountId = "4937786121",
                 linkageKey = "tTALtBP3rLR16",
@@ -105,12 +107,29 @@ data class Patient(
                 odsCode =  MockDefaults.DEFAULT_ODS_CODE,
                 sessionId =  "2jM47sZ0ic4FIAcVogI4WI",
                 connectionToken =  "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc",
-                endUserSessionId =  "7YjG1LYkOkSY1iAcXGG8ZU",
+                endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers =  listOf("0968764215"),
                 accountId =  "4140044939",
                 linkageKey =  "vVGO8bgV6fvPb",
                 userPatientLinkToken =  "gpSWtREiH9499bPzix8v5b"
         )
+
+        val johnSmith = Patient(
+                title = "Mr",
+                firstName = "John",
+                surname = "Smith",
+                dateOfBirth = "1919-12-24T14:03:15.892Z",
+                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
+                sessionId = "MT4vWCxTKXRYr7fFJWM3wB",
+                endUserSessionId = "Ab42ZoP21dT4JE12avEWQ5",
+                accountId = "1195029928",
+                linkageKey = "KjwzyFSEUAGj4",
+                userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
+                nhsNumbers = listOf("7174450393")
+        )
+
+        ////////// TPP PATIENTS /////////////
 
         val kevinBarry = Patient(
                 title =  "Mr",
