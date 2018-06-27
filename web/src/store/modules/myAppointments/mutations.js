@@ -1,5 +1,14 @@
 import { assign, find, get, map, mapKeys, sortBy } from 'lodash/fp';
-import { CLEAR, LOADED, INIT, SELECT, CLEAR_SELECTED_APPOINTMENT, CLEAR_APPOINTMENTS, initialState } from './mutation-types';
+import {
+  CLEAR,
+  LOADED,
+  INIT,
+  SELECT,
+  CLEAR_SELECTED_APPOINTMENT,
+  CLEAR_APPOINTMENTS,
+  CANCEL_SUCCESS,
+  initialState,
+} from './mutation-types';
 
 const findById = (id, collection) => find(item => item.id === id)(collection);
 const findByIds = (ids, collection) => map(id => findById(id, collection))(ids);
@@ -56,6 +65,7 @@ export default {
   [CLEAR](state) {
     clearAppointments(state);
     clearSelectedAppointment(state);
+    state.justCancelledAnAppointment = false;
   },
   [SELECT](state, selected) {
     state.selectedAppointment = selected;
@@ -65,5 +75,8 @@ export default {
   },
   [CLEAR_APPOINTMENTS](state) {
     clearAppointments(state);
+  },
+  [CANCEL_SUCCESS](state) {
+    state.justCancelledAnAppointment = true;
   },
 };

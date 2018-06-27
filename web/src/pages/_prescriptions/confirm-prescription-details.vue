@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
+  <div v-if="showTemplate">
     <spinner />
     <main class="content">
       <div :class="$style.panel">
@@ -39,11 +39,12 @@
       </div>
       <button
         id="btn_confirm_and_order_prescription"
-        class="button green"
+        :class="[$style.button, $style.green]"
         @click="onConfirmButtonClicked">
         {{ $t('rp04.confirmButton') }}
       </button>
-      <nuxt-link to="/prescriptions/repeat-courses" tag="button" type="submit" class="button grey">
+      <nuxt-link :class="[$style.button, $style.grey]"
+                 to="/prescriptions/repeat-courses" tag="button" type="submit" >
         {{ $t('rp04.backButton') }}
       </nuxt-link>
     </main>
@@ -52,7 +53,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/widgets/Spinner';
 
 export default {
   components: {
@@ -84,7 +85,7 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style module lang="scss">
   @import "../../style/html";
   @import "../../style/fonts";
   @import "../../style/buttons";

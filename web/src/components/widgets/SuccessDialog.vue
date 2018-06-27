@@ -24,6 +24,6 @@ export default {
 </script>
 
 <style module lang="scss">
-  @import "../style/messages";
+  @import "../../style/messages";
 
 </style>

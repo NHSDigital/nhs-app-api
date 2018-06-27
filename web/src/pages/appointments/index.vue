@@ -6,6 +6,12 @@
       </p>
     </success-dialog>
 
+    <success-dialog v-if="justCancelledAnAppointment">
+      <p>
+        {{ $t('appointments.cancel.successText') }}
+      </p>
+    </success-dialog>
+
     <div v-if="showNoUpcomingAppointments" :class="$style.info">
       <h3>{{ $t('appointments.index.empty.header') }}</h3>
       <p>{{ $t('appointments.index.empty.text1') }}</p>
@@ -23,8 +29,8 @@
 <script>
 /* eslint-disable import/extensions */
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
-import SuccessDialog from '@/components/SuccessDialog';
-import FloatingButtonBottom from '../../components/FloatingButtonBottom';
+import SuccessDialog from '@/components/widgets/SuccessDialog';
+import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 
 export default {
   middleware: ['auth', 'meta'],
@@ -36,6 +42,7 @@ export default {
   data() {
     return {
       justBookedAnAppointment: false,
+      justCancelledAnAppointment: false,
     };
   },
   computed: {
@@ -57,6 +64,7 @@ export default {
   },
   mounted() {
     this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
+    this.justCancelledAnAppointment = this.$store.state.myAppointments.justCancelledAnAppointment;
     this.$store.dispatch('appointment/resetJustBooked');
     this.$store.dispatch('myAppointments/clear');
     this.$store.dispatch('myAppointments/load');

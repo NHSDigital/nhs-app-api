@@ -33,8 +33,8 @@
 <script>
 /* eslint-disable import/extensions */
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
-import FloatingButtonBottom from '@/components/FloatingButtonBottom';
-import GenericButton from '@/components/GenericButton';
+import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
   middleware: ['auth', 'meta'],

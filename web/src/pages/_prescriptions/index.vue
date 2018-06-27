@@ -46,8 +46,8 @@
 
 <script>
 /* eslint-disable import/extensions */
-import FloatingButtonBottom from '@/components/FloatingButtonBottom';
-import SuccessDialog from '@/components/SuccessDialog';
+import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import SuccessDialog from '@/components/widgets/SuccessDialog';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import { MedicationCourseStatus } from '@/lib/medication-course-status';
 import _ from 'lodash';

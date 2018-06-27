@@ -15,7 +15,7 @@
 /* eslint-disable import/extensions */
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 

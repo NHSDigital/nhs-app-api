@@ -5,6 +5,7 @@ const ACCOUNT = 'account';
 
 const APPOINTMENTS = 'appointments';
 const APPOINTMENT_BOOKING_GUIDANCE = 'appointments-booking-guidance';
+const APPOINTMENT_CANCELLING = 'appointments-cancel';
 const APPOINTMENT_BOOKING = 'appointments-booking';
 const APPOINTMENT_CONFIRMATIONS = 'appointments-confirmation';
 
@@ -47,6 +48,10 @@ export default function ({ route, store, app }) {
     case APPOINTMENT_BOOKING_GUIDANCE:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaderTitles.appointmentGuidance';
+      break;
+    case APPOINTMENT_CANCELLING:
+      store.dispatch('navigation/setNewMenuItem', 1);
+      route.meta.headerKey = 'pageHeaderTitles.appointmentCancelling';
       break;
     case APPOINTMENT_BOOKING:
       store.dispatch('navigation/setNewMenuItem', 1);

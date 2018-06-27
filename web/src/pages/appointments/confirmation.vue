@@ -34,7 +34,7 @@
 <script>
 /* eslint-disable import/extensions */
 import AppointmentSlot from '@/components/appointments/AppointmentSlot';
-import ErrorMessage from '@/components/ErrorMessage';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 
 export default {

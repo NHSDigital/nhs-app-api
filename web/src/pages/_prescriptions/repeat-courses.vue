@@ -36,7 +36,7 @@
             {{ $t('rp06.empty.contactGp') }}
           </p>
           <br>
-          <button id="btn_order_prescription" class="button green">
+          <button id="btn_order_prescription" :class="[$style.button, $style.green]">
             {{ $t('rp03.continueButton') }}
           </button>
         </div>
@@ -55,10 +55,10 @@
       </form>
       <nuxt-link
         v-if="hasLoaded"
+        :class="[$style.button, $style.grey]"
         to="/prescriptions"
         tag="button"
-        type="submit"
-        class="button grey">
+        type="submit">
         {{ $t('rp03.backButton') }}
       </nuxt-link>
     </main>
@@ -67,7 +67,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/widgets/Spinner';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import InlineErrorIcon from '../../components/icons/InlineErrorIcon';
 
@@ -144,7 +144,7 @@ export default {
 </script>
 
 
-<style module lang="scss" scoped>
+<style module lang="scss">
   @import "../../style/html";
   @import "../../style/fonts";
   @import "../../style/buttons";

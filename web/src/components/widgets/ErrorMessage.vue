@@ -19,8 +19,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../style/fonts';
-  @import '../style/colours';
+  @import '../../style/fonts';
+  @import '../../style/colours';
 
   #errorMessage {
     display: block;

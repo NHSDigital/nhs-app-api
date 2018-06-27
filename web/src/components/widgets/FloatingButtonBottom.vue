@@ -46,7 +46,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../style/buttons";
+@import "../../style/buttons";
 
   button.button,
   a.button {

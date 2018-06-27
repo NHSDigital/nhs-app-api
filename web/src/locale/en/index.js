@@ -138,6 +138,16 @@ export default {
         retryButtonText: 'Try again',
       },
     },
+    cancel: {
+      info: 'Check your appointment details before cancelling',
+      form_label: 'Reason for cancelling',
+      backButtonText: 'Back',
+      cancelButtonText: 'Cancel appointment',
+      noReasonDialogError: 'There\'s a problem',
+      noReasonError: 'Select a reason for cancelling',
+      dropdownDefaultOption: 'Select reason',
+      successText: 'Your appointment has been cancelled.',
+    },
     booking: {
       bookButtonText: 'Book this appointment',
       errors: {
@@ -324,6 +334,7 @@ export default {
     appointments: 'My appointments',
     appointmentGuidance: 'Check before you book',
     appointmentBooking: 'Book an appointment',
+    appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
     more: 'More',
