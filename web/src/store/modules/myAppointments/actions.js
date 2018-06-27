@@ -35,10 +35,14 @@ export default {
   cancel({ commit }, data) {
     /* eslint-disable no-unused-vars */
     const param = {
-      AppointmentCancelRequest: data,
+      appointmentCancelRequest: data,
     };
 
-    commit(CANCEL_SUCCESS);
-    this.app.router.push('/appointments');
+    this.app.$http
+      .deleteV1PatientAppointments(param)
+      .then(() => {
+        commit(CANCEL_SUCCESS);
+        this.app.router.push('/appointments');
+      });
   },
 };

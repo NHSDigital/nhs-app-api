@@ -3,7 +3,7 @@ import actions from '../../../../../src/store/modules/myAppointments/actions';
 
 const API_HOST = 'http://unit.test';
 
-const { load } = actions;
+const { load, cancel } = actions;
 
 describe('load', () => {
   it('will request the patient appointments from the backend', () => {
@@ -39,5 +39,21 @@ describe('load', () => {
     return load
       .call(that, { commit }, { API_HOST })
       .then(() => expect(commit).toBeCalledWith(LOADED, expected));
+  });
+});
+
+describe('cancel', () => {
+  it('will delete the patients appointment from the backend', () => {
+    const that = {
+      app: {
+        $http: {
+          deleteV1PatientAppointments: jest.fn().mockResolvedValue(),
+        },
+      },
+      dispatch: jest.fn(),
+    };
+
+    cancel.call(that, { commit: jest.fn() }, { API_HOST });
+    expect(that.app.$http.deleteV1PatientAppointments).toBeCalled();
   });
 });
