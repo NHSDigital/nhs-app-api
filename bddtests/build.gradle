@@ -1,0 +1,72 @@
+buildscript {
+    ext.kotlin_version = '1.2.40'
+    ext.serenity_version = '1.9.6'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "net.serenity-bdd:serenity-gradle-plugin:$serenity_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+group 'org.nhsonline.tests'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+configurations {
+    cucumberRuntime {
+        extendsFrom testRuntime
+    }
+}
+
+dependencies {
+    compile "junit:junit:4.12"
+    compile "net.serenity-bdd:serenity-core:1.9.6"
+    compile "net.serenity-bdd:serenity-junit:1.9.4"
+    compile 'net.serenity-bdd:serenity-cucumber:1.9.4'
+    compile 'net.serenity-bdd:serenity-rest-assured:1.9.4'
+    compile "org.assertj:assertj-core:3.6.2"
+    compile "org.slf4j:slf4j-simple:1.7.7"
+    compile group: 'com.browserstack', name: 'browserstack-local-java', version: '1.0.2'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
+    compile 'io.github.bonigarcia:webdrivermanager:2.2.0'
+    compile "com.github.tomakehurst:wiremock-standalone:2.17.0"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+task mock(type: JavaExec) {
+    dependsOn assemble, compileKotlin
+    classpath = jar.outputs.files
+    classpath += sourceSets.main.runtimeClasspath
+    classpath += sourceSets.test.runtimeClasspath
+    systemProperty "url", System.getProperty("url")
+    systemProperty "wiremockUrl", System.getProperty("wiremockUrl")
+    main = "mocking.defaults.MockDataPopulate"
+}
+
+test {
+    /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
+    systemProperties System.properties
+}
+
+gradle.startParameter.continueOnFailure = true

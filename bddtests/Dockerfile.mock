@@ -1,0 +1,8 @@
+FROM java:8 AS base
+
+ENV WIREMOCK_URL=http://nhsonline.stubs:8080
+
+WORKDIR /repo
+COPY . .
+
+CMD ./gradlew mock -DwiremockUrl=$WIREMOCK_URL
