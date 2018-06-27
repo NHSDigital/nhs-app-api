@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HomeUrl</key>
+	<string>https://www-preview.nonliveeuw.bitraft.io/</string>
+	<key>Nhs111Url</key>
+	<string>https://111.nhs.uk/</string>
+	<key>Nhs111LocationUrl</key>
+	<string>https://111.service.nhs.uk/</string>
+	<key>OrganDonationUrl</key>
+	<string>https://www.organdonation.nhs.uk/</string>
+	<key>MoreUrlPath</key>
+	<string>/more</string>
+	<key>MyRecordUrlPath</key>
+	<string>/my-record/myrecordwarning</string>
+	<key>AppointmentsUrlPath</key>
+	<string>/appointments</string>
+	<key>PrescriptionsUrlPath</key>
+	<string>/prescriptions</string>
+	<key>MyAccountUrlPath</key>
+	<string>/account</string>
+	<key>SessionUrlPath</key>
+	<string>/session</string>
+	<key>NhsOnlineRequiredQueryString</key>
+	<string>?source=mobile</string>
+	<key>ResponseWaitingTime</key>
+	<integer>10</integer>
+</dict>
+</plist>
