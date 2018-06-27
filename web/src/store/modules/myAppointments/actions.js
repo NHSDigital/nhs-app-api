@@ -38,7 +38,7 @@ export default {
       appointmentCancelRequest: data,
     };
 
-    this.app.$http
+    return this.app.$http
       .deleteV1PatientAppointments(param)
       .then(() => {
         commit(CANCEL_SUCCESS);

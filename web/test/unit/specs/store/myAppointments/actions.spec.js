@@ -1,4 +1,4 @@
-import { LOADED } from '../../../../../src/store/modules/myAppointments/mutation-types';
+import { LOADED, CANCEL_SUCCESS } from '../../../../../src/store/modules/myAppointments/mutation-types';
 import actions from '../../../../../src/store/modules/myAppointments/actions';
 
 const API_HOST = 'http://unit.test';
@@ -55,5 +55,25 @@ describe('cancel', () => {
 
     cancel.call(that, { commit: jest.fn() }, { API_HOST });
     expect(that.app.$http.deleteV1PatientAppointments).toBeCalled();
+  });
+
+  it('will call commit to mark cancellation success', () => {
+    const expected = {};
+
+    const that = {
+      app: {
+        $http: {
+          deleteV1PatientAppointments: () => Promise.resolve(expected),
+        },
+      },
+      dispatch: jest.fn(),
+    };
+
+    const commit = jest.fn();
+    const data = { foo: 'bar' };
+
+    cancel.call(that, ({ commit }, data)).then(() => {
+      expect(commit).toBeCalledWith(CANCEL_SUCCESS);
+    });
   });
 });
