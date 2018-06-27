@@ -34,7 +34,7 @@ object PrescriptionsData {
                 if (!isSecondIteration) {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
+                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses))
                 } else {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
@@ -102,10 +102,6 @@ object PrescriptionsData {
                 "$quantity ml")
 
         return list.get(getRandomNumber(list.size))
-    }
-
-    fun getPrescriptionStatus(): RequestedMedicationCourseStatus {
-        return RequestedMedicationCourseStatus.values()[getRandomNumber(6)]
     }
 
     fun getRandomNumber(maxNum: Int): Int {

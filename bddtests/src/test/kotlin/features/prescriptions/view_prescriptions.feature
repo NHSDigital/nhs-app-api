@@ -28,32 +28,46 @@ Feature: View prescriptions
     Given I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     When I am on the prescriptions page
-    Then I see 100 prescriptions
+    Then I see expected prescriptions
 
   @smoketest
   Scenario: A user who has multiple prescription each containing one course
     Given I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     When I am on the prescriptions page
-    Then I see 3 prescriptions
+    Then I see expected prescriptions
+
+  @pending
+  Scenario: A user who has multiple prescriptions but medication status should not be displayed
+    Given I have 6 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And courses have status
+    | Issued |
+    | Requested |
+    | ForwardedForSigning |
+    | Rejected |
+    | Unknown |
+    | Cancelled |
+    When I am on the prescriptions page
+    Then I see expected prescriptions
 
   Scenario: A user who has multiple prescription each containing the same repeat prescription
     Given I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
     When I am on the prescriptions page
-    Then I see 3 prescriptions
+    Then I see expected prescriptions
 
   Scenario: A user who has only one prescription containing multiple courses
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
     When I am on the prescriptions page
-    Then I see 3 prescriptions
+    Then I see expected prescriptions
 
   Scenario: A user who has acute prescriptions
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
     When I am on the prescriptions page
-    Then I see 2 prescriptions
+    Then I see expected prescriptions
 
   @NHSO-556
   Scenario: The User clicks on the Prescriptions button and the service is disabled at a GP Practice level

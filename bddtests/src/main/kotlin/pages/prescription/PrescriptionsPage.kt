@@ -35,10 +35,10 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     fun isNoPrescriptionsMessageVisible(): Boolean {
         // note: needs double quotes in "contains" expression because message has apostrophe
         val message = "You don't currently have any repeat prescriptions ordered"
-        return findByXpath("//div[@class='info']//b[contains(., \"$message\")]").isVisible
+        return findByXpath("//h3[contains(., \"$message\")]").isVisible
     }
 
-    fun isOrdeSuccessfulTextVisible(): Boolean {
+    fun isOrderSuccessfullTextVisible(): Boolean {
         val successText = "Your prescription has been ordered."
         return findByXpath("//div[@id='success-dialog']//p[contains(.,'$successText')]").isVisible
     }

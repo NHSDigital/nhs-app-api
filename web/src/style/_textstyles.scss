@@ -40,6 +40,13 @@ $kernel: -0.063em;
   line-height: 24px;
   color: $white;
 }
+@mixin h3 {
+  font-family: $frutiger-bold;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 23px;
+  color: $mid_grey;
+}
 @mixin h4 {
   display: block;
   font-family: $frutiger-bold;

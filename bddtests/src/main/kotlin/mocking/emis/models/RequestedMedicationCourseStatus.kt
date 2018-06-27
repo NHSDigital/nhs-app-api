@@ -2,10 +2,10 @@ package mocking.emis.models
 
 enum class RequestedMedicationCourseStatus(val requestedMedicationCourseStatus: Int)
 {
-    Issued(1),
-    Requested(2),
-    ForwardedForSigning(3),
-    Rejected (4),
-    Unknown(5),
-    Cancelled(6),
+    Issued(0),
+    Requested(1),
+    ForwardedForSigning(2),
+    Rejected (3),
+    Unknown(4),
+    Cancelled(5),
 }

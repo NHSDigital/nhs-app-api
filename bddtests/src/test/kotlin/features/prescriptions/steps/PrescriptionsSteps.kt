@@ -18,13 +18,13 @@ open class PrescriptionsSteps {
     }
 
     @Step
-    fun assertPrescriptionsMatch(list : ArrayList<HistoricPrescription>, expectedPrescriptions : Int) {
+    fun assertPrescriptionsMatch(list : List<HistoricPrescription>) {
 
         val gson = GsonBuilder().setPrettyPrinting().create()
         var p = prescriptions.getAllPrescriptions()
 
         Assert.assertTrue(gson.toJson(p).toString().equals(gson.toJson(list).toString()))
-        Assert.assertTrue(p.count() == expectedPrescriptions)
+        Assert.assertEquals(list.count(), p.size)
     }
 
     @Step

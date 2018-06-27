@@ -31,14 +31,13 @@ object PrescriptionsData {
 
                 time = time.minusDays(prescriptionNum.toLong())
 
-                if (!isSecondIteration) {
-                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
-                            RequestedMedicationCourseStatus.Requested))
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
-                } else {
-                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
-                            RequestedMedicationCourseStatus.Requested))
+                requestedMedicationCourses.add(RequestedMedicationCourse(
+                        medicationCourses.get(courseNum).medicationCourseGuid,
+                        RequestedMedicationCourseStatus.Requested))
 
+                if (!isSecondIteration) {
+                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses))
+                } else {
                     prescriptionRequests.get(prescriptionNum).requestedMedicationCourses.addAll(requestedMedicationCourses)
                 }
 

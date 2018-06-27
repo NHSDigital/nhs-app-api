@@ -1,5 +1,5 @@
 <template>
-  <main v-if="showTemplate" :class="$style.main">
+  <main v-if="showTemplate" :class="$style.content">
 
     <div :class="$style['above-float-button']">
 
@@ -9,10 +9,8 @@
         </p>
       </success-dialog>
 
-      <div v-if="showNoPrescriptions" class="info" data-purpose="no-prescriptions-error">
-        <p>
-          <b>{{ $t('rp01.empty.subHeader') }}</b>
-        </p>
+      <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
+        <h3>{{ $t('rp01.empty.subHeader') }}</h3>
         <p>
           {{ $t('rp01.empty.body') }}
         </p>
@@ -126,10 +124,8 @@ export default {
 @import "../../style/buttons";
 @import "../../style/fonts";
 @import "../../style/spacings";
-
-.main {
-  @include space(padding, all, $three);
-}
+@import "../../style/textstyles";
+@import "../../style/colours";
 
 .prescription-course {
   list-style: none;

@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <spinner />
-    <main class="content">
+    <main :class="$style.content">
       <form @submit.prevent="validate">
         <div v-if="showRepeatCourses">
           <div :class="$style.panel">
@@ -41,15 +41,11 @@
           </button>
         </div>
 
-        <div v-if="showNoRepeatCourses">
-          <p>
-            <b>{{ $t('rp06.empty.subHeader') }}</b>
-          </p>
-          <br>
+        <div v-if="showNoRepeatCourses" :class="$style.info">
+          <h3>{{ $t('rp06.empty.subHeader') }}</h3>
           <p>
             {{ $t('rp06.empty.contactGp') }}
           </p>
-          <br>
         </div>
 
       </form>
@@ -150,6 +146,8 @@ export default {
   @import "../../style/buttons";
   @import "../../style/elements";
   @import "../../style/spacings";
+  @import "../../style/textstyles";
+  @import "../../style/colours";
 
   .formLabel {
     @include default_label;

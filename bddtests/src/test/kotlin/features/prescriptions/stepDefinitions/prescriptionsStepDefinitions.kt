@@ -1,5 +1,6 @@
 package features.prescriptions.stepDefinitions
 
+import cucumber.api.DataTable
 import cucumber.api.java.en.*
 import features.authentication.steps.LoginSteps
 import features.prescriptions.PrescriptionsData
@@ -8,22 +9,17 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.emis.models.CourseRequestsGetResponse
-import mocking.emis.models.MedicationCourse
-import mocking.emis.models.PrescriptionRequestsGetResponse
-import mocking.emis.models.PrescriptionType
+import mocking.emis.models.*
 import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.junit.Assert
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.prescriptions.PrescriptionListResponse
 import worker.models.prescriptions.PrescriptionsResponseData
 import java.time.Duration
 import java.time.OffsetDateTime
@@ -43,6 +39,7 @@ open class PrescriptionsStepDefinitions {
     var numberOfPrescriptions: Int = 0
     lateinit var currentPatient: Patient
     var fromDate: String? = null
+    val historicPrescriptionOrderPriority = hashMapOf( "Rejected" to 1, "Requested" to 2, "Approved" to 3)
 
     lateinit var prescriptionsResponseData: PrescriptionsResponseData
 
@@ -106,6 +103,29 @@ open class PrescriptionsStepDefinitions {
                 }
     }
 
+    @And("^courses have status$")
+    fun givenCoursesHaveStatus(statuses: DataTable) {
+
+        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+
+        var statusIndex = 0
+        val data = statuses.raw()
+
+        for (prescription in prescriptionsMock.prescriptionRequests) {
+            for (course in prescription.requestedMedicationCourses) {
+                val status = data.get(statusIndex).get(0)
+                course.requestedMedicationCourseStatus = RequestedMedicationCourseStatus.valueOf(status)
+                statusIndex++
+            }
+        }
+
+        mockingClient
+                .forEmis {
+                    prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            .respondWithSuccess(prescriptionsMock)
+                }
+    }
+
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
         var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
@@ -147,9 +167,11 @@ open class PrescriptionsStepDefinitions {
         numberOfPrescriptions = numPrescriptions
     }
 
-    @Then("^I see (\\d+) prescriptions$")
-    fun thenISeeXPrescriptions(numPrescriptions: Int) {
-        prescriptions.assertPrescriptionsMatch(mapEmisResponseToExpectedPrescriptionFormat(prescriptionsMock), numPrescriptions)
+    @Then("^I see expected prescriptions$")
+    fun thenISeeXPrescriptions() {
+        val expectedPrescriptions = mapEmisResponseToExpectedPrescriptionFormat(prescriptionsMock)
+
+        prescriptions.assertPrescriptionsMatch(expectedPrescriptions)
     }
 
     @And("^I have a patient$")
@@ -255,7 +277,19 @@ open class PrescriptionsStepDefinitions {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
-    fun mapEmisResponseToExpectedPrescriptionFormat(data: PrescriptionRequestsGetResponse): ArrayList<HistoricPrescription>{
+    fun mapEmisResponseToExpectedPrescriptionFormat(data: PrescriptionRequestsGetResponse): List<HistoricPrescription>{
+
+        val displayedEmisMedicationCourseStatuses = listOf(
+                RequestedMedicationCourseStatus.Rejected,
+                RequestedMedicationCourseStatus.Requested,
+                RequestedMedicationCourseStatus.ForwardedForSigning,
+                RequestedMedicationCourseStatus.Issued)
+
+        val emisMedicationCourseStatusToDisplayedStatus = mapOf(
+                RequestedMedicationCourseStatus.Rejected to "Rejected",
+                RequestedMedicationCourseStatus.Requested to "Requested",
+                RequestedMedicationCourseStatus.ForwardedForSigning to "Requested",
+                RequestedMedicationCourseStatus.Issued to "Approved")
 
         var totalCoursesRunningTotal = 0
 
@@ -265,7 +299,7 @@ open class PrescriptionsStepDefinitions {
 
         var historicPrescriptions = ArrayList<HistoricPrescription>()
 
-        for(prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
+        for (prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
 
             if (totalCoursesRunningTotal >= 100) {
                 break
@@ -273,10 +307,12 @@ open class PrescriptionsStepDefinitions {
 
             var datetime = DateTime.parse(prescription.dateRequested).toString("d MMM yyyy")
 
-            var repeaCoursesInPrescription = prescription.requestedMedicationCourses.filter { it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid) }
+            var filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
+                it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)
+                    && it.requestedMedicationCourseStatus in displayedEmisMedicationCourseStatuses
+            }
 
-            for (courseEntry in repeaCoursesInPrescription) {
-
+            for (courseEntry in filteredCoursesInPrescription) {
 
                 var course = repeatCourses.toList().filter { it.medicationCourseGuid == courseEntry.requestedMedicationCourseGuid }.single()
 
@@ -284,16 +320,18 @@ open class PrescriptionsStepDefinitions {
                         orderDate = datetime,
                         name = course.name,
                         dosage = course.dosage + " - " + course.quantityRepresentation,
-                        status = courseEntry.requestedMedicationCourseStatus.toString()
+                        status = emisMedicationCourseStatusToDisplayedStatus[courseEntry.requestedMedicationCourseStatus]
                 )
 
                 historicPrescriptions.add(historicPrescription)
             }
 
-            totalCoursesRunningTotal += repeaCoursesInPrescription.size
+            totalCoursesRunningTotal += filteredCoursesInPrescription.size
         }
 
-        return historicPrescriptions
+        val historicPrescriptionsOrderedByStatusOnScreen = historicPrescriptions.sortedWith(compareBy({ historicPrescriptionOrderPriority[it.status] }))
+
+        return historicPrescriptionsOrderedByStatusOnScreen
     }
 
     private fun getCourseGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {

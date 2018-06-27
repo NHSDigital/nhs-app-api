@@ -183,7 +183,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
         val oldPrescriptions = prescriptionMap[Scenario.STARTED]
         val prs = mutableListOf<PrescriptionRequest>()
-        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr, RequestedMedicationCourseStatus.Requested.toString()))
+        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr))
 
         oldPrescriptions!!.prescriptionRequests.forEach {
             pr -> prs.add(pr)
@@ -230,20 +230,16 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @When("I click Confirm and order repeat prescription")
     fun iClickConfirmAndOrderRepeatPrescription() {
-
         confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.clickConfirmAndOrderRepeatPrescriptionButton()
-
     }
 
 
-    @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
-    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
+    @Then("I see a order successful message on the Repeat prescription page with the correct prescriptions")
+    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions() {
 
-        Assert.assertTrue(prescriptionPage.isOrdeSuccessfulTextVisible())
+        Assert.assertTrue(prescriptionPage.isOrderSuccessfullTextVisible())
 
         prescriptionSteps.assertPrescriptionsMatch(prescriptionStepDefinitions.mapEmisResponseToExpectedPrescriptionFormat(
-                prescriptionMap[currentScenarioState]!!), amount)
+                prescriptionMap[currentScenarioState]!!))
     }
-
-
 }

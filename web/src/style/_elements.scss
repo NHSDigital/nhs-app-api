@@ -34,6 +34,12 @@ main.content {
     color: $dark_grey;
     margin-bottom: 16px;
   }
+  .info h3 {
+    @include h3;
+    font-size: 13pt;
+    color: $dark_grey;
+    margin-bottom: 16px;
+  }
   .info a {
     @include default_text;
     font-size: 14pt;
