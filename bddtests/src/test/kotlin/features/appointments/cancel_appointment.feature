@@ -1,4 +1,3 @@
-@pending
 Feature: Ability to cancel an appointment
 
   Users are given the ability to cancel an appointment.

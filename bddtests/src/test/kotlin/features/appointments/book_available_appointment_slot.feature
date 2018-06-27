@@ -1,4 +1,3 @@
-@pending
 Feature: Book an available appointment slot
   In order to complete a booking appointment
   As a logged in user

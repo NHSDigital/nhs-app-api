@@ -1,4 +1,3 @@
-@pending
 Feature: My appointments
 
   Users can view their upcoming and past appointments in the My Appointments screen.
