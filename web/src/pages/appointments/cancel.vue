@@ -31,7 +31,7 @@
       </select-dropdown>
     </div>
 
-    <button v-if="false" id="btn_cancel_appointment"
+    <button id="btn_cancel_appointment"
             :class="[$style.button, $style.green]"
             @click="onCancelButtonClicked">
       {{ $t('appointments.cancel.cancelButtonText') }}
