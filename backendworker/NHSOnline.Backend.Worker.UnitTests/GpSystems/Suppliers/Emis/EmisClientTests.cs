@@ -31,8 +31,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         private IEmisClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
         private Mock<IEmisConfig> _configMock;
-        private HttpClient _httpClient;
-        private Mock<IHttpClientFactory> _httpClientFactory;
+        private EmisHttpClient _httpClient;
         private IFixture _fixture;
 
         [TestInitialize]
@@ -42,17 +41,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
             
             _mockHttpHandler = new MockHttpMessageHandler();
-
+            
             _configMock = new Mock<IEmisConfig>();
             _configMock.SetupGet(x => x.BaseUrl).Returns(BaseUri);
             _configMock.SetupGet(x => x.Version).Returns(DefaultEmisVersion);
             _configMock.SetupGet(x => x.ApplicationId).Returns(DefaultEmisApplicationId);
-            _httpClient = new HttpClient(_mockHttpHandler);
 
-            _httpClientFactory = _fixture.Freeze<Mock<IHttpClientFactory>>();
-            _httpClientFactory.Setup(x => x.GetClient(HttpClientName.EmisApiClient)).Returns(_httpClient);
+            _httpClient = new EmisHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
             _fixture.Inject(_configMock);
+            _fixture.Inject(_httpClient);
 
             _sut = _fixture.Create<EmisClient>();
         }

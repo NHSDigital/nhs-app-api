@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -21,24 +21,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public const string RequestSuidHeader = "suid";
         private static readonly Regex ErrorRegex = new Regex("errorCode\\s?=");
 
-        private readonly HttpClient _httpClient;
+        private readonly TppHttpClient _httpClient;
         private readonly ITppConfig _tppConfig;
         private readonly IXmlResponseParser _responseParser;
         private readonly ILogger<TppClient> _logger;
-
-        private const string MediaType = "text/xml";
-
-        public TppClient(IHttpClientFactory httpClientFactory, ITppConfig tppConfig, IXmlResponseParser responseParser,
-            ILoggerFactory loggerFactory)
+        
+        public TppClient(TppHttpClient httpClient, ITppConfig tppConfig, IXmlResponseParser responseParser, ILoggerFactory loggerFactory)
         {
-            _httpClient = httpClientFactory.GetClient(HttpClientName.TppApiClient);
+            _httpClient = httpClient;
             _tppConfig = tppConfig;
             _responseParser = responseParser;
-            _httpClient.BaseAddress = new Uri(_tppConfig.ApiUrl);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
+
             _logger = loggerFactory.CreateLogger<TppClient>();
         }
-
+        
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticateModel)
         {
             authenticateModel.Application = new Application
@@ -48,7 +44,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 ProviderId = _tppConfig.ApplicationProviderId,
                 DeviceType = _tppConfig.ApplicationDeviceType
             };
-
+            
             var response = await Post<Authenticate, AuthenticateReply>(authenticateModel);
 
             return response;
@@ -75,7 +71,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             model.ApplyConfig(_tppConfig);
             var authenticateXml = model.SerializeXml();
-            var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, MediaType);
+            var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
             var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
 
             var response = await SendRequestAndParseResponse<TResponse>(request);
@@ -86,7 +82,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         private async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
-            var responseMessage = await _httpClient.SendAsync(request);
+            var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             if (!response.HasSuccessResponse) return response;

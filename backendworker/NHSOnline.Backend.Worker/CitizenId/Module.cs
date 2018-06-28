@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         {
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
-            services.AddScoped<ICitizenIdConfig, CitizenIdConfig>();
+            services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();
 
             base.ConfigureServices(services, configuration);
         }

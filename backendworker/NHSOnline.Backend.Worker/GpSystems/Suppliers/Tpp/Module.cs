@@ -14,25 +14,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             _loggerFactory = loggerFactory;
         }
-        
+
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             var configValue = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
                 _loggerFactory.CreateLogger<Module>());
             var timeout = int.Parse(configValue);
-            
-            services.AddSingleton<TppHttpClientHandler>();
-            services.AddSingleton(x => new NamedHttpClient(
-                HttpClientName.TppApiClient,
-                new HttpClient(
-                    new TppHttpClientHandler(configuration, _loggerFactory.CreateLogger<TppHttpClientHandler>())
-                )
-                {
-                    Timeout = TimeSpan.FromSeconds(timeout)
-                }));
 
-            services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
-            
+            services.AddSingleton<TppHttpClientHandler>();
+
+            services.AddHttpClient<TppHttpClient>(client => 
+                {
+                    client.Timeout = TimeSpan.FromSeconds(timeout);
+                })
+                .ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    return new TppHttpClientHandler(configuration, _loggerFactory.CreateLogger<TppHttpClientHandler>());
+                });
+
             services.AddSingleton<IGpSystem, TppGpSystem>();
             services.AddSingleton<ITppClient, TppClient>();
             services.AddSingleton<ITppConfig, TppConfig>();

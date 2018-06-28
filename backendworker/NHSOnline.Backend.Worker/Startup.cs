@@ -9,7 +9,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -103,12 +106,13 @@ namespace NHSOnline.Backend.Worker
                 ConnectionMultiplexerName.Session,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
-            
-            services.AddSingleton(x => new NamedHttpClient(HttpClientName.EmisApiClient, new HttpClient
+
+            services.AddHttpClient<EmisHttpClient>(client => 
             {
-                Timeout = TimeSpan.FromSeconds(configurationSettings.DefaultHttpTimeoutSeconds)
-            }));
-            services.AddSingleton(x => new NamedHttpClient(HttpClientName.CitizenIdApiClient, new HttpClient()));
+                client.Timeout = TimeSpan.FromSeconds(configurationSettings.DefaultHttpTimeoutSeconds);
+            });
+
+            services.AddHttpClient<CitizenIdHttpClient>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

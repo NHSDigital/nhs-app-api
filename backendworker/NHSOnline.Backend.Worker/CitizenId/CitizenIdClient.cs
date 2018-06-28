@@ -23,21 +23,21 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private const string TokenPath = "token";
         private const string UserInfoPath = "userinfo";
 
-        private readonly HttpClient _httpClient;
+        private readonly CitizenIdHttpClient _httpClient;
         private readonly Uri _redirectUri;
         private readonly string _clientId;
         private readonly string _basicAuthCredentials;
         private readonly IJsonResponseParser _responseParser;
 
         public CitizenIdClient(
-            IHttpClientFactory httpClientFactory, 
+            CitizenIdHttpClient httpClient, 
             ICitizenIdConfig config, 
             ILoggerFactory loggerFactory,
             IJsonResponseParser responseParser)
         {
             _logger = loggerFactory.CreateLogger<CitizenIdClient>();
-            _httpClient = httpClientFactory.GetClient(HttpClientName.CitizenIdApiClient);
-            _httpClient.BaseAddress = config.CitizenIdApiBaseUrl;
+            _httpClient = httpClient;
+            
             _responseParser = responseParser;
 
             _redirectUri = new Uri(config.NhsWebAppBaseUrl, "auth-return");
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             HttpRequestMessage request)
         {   
             _logger.LogHttpRequest(request);
-            var responseMessage = await _httpClient.SendAsync(request);
+            var responseMessage = await _httpClient.Client.SendAsync(request);
             _logger.LogHttpResponse(request, responseMessage);
 
             var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);

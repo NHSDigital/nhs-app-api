@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private Mock<ICitizenIdConfig> _mockConfig;
         private CitizenIdClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
-        private HttpClient _httpClient;
+        private CitizenIdHttpClient _httpClient;
         private Mock<IHttpClientFactory> _httpClientFactory;
 
         [TestInitialize]
@@ -42,6 +42,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _clientId = _fixture.Create<string>();
             _clientSecret = _fixture.Create<string>();
 
+            _mockHttpHandler = new MockHttpMessageHandler();
             _mockConfig = _fixture.Freeze<Mock<ICitizenIdConfig>>();
 
             _mockConfig.SetupGet(x => x.CitizenIdApiBaseUrl).Returns(_citizenIdApiBaseUrl);
@@ -49,11 +50,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _mockConfig.SetupGet(x => x.ClientId).Returns(_clientId);
             _mockConfig.SetupGet(x => x.ClientSecret).Returns(_clientSecret);
 
-            _mockHttpHandler = new MockHttpMessageHandler();
-            _httpClient = new HttpClient(_mockHttpHandler);
-
-            _httpClientFactory = _fixture.Freeze<Mock<IHttpClientFactory>>();
-            _httpClientFactory.Setup(x => x.GetClient(HttpClientName.CitizenIdApiClient)).Returns(_httpClient);
+            _httpClient = new CitizenIdHttpClient(new HttpClient(_mockHttpHandler), _mockConfig.Object);
+            _fixture.Inject(_httpClient);
 
             _systemUnderTest = _fixture.Create<CitizenIdClient>();
         }

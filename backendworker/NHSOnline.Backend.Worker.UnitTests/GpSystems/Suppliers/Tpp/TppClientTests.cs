@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         
         private ITppClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
-        private HttpClient _httpClient;
+        private TppHttpClient _httpClient;
         private Mock<ITppConfig> _configMock;
         private Mock<IHttpClientFactory> _httpClientFactory;
         private IFixture _fixture;
@@ -53,14 +53,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _configMock.SetupGet(x => x.ApiVersion).Returns(ApiVersion);
             _configMock.Setup(x => x.CreateGuid()).Returns(new Guid("8a1c6b80-7bcb-49fd-9c6f-4801e12207d6"));
             
-            _fixture.Inject(_configMock);
-            
             _mockHttpHandler = new MockHttpMessageHandler();
-            _httpClient = new HttpClient(_mockHttpHandler);
+            _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
-            _httpClientFactory = _fixture.Freeze<Mock<IHttpClientFactory>>();
-            _httpClientFactory.Setup(x => x.GetClient(HttpClientName.TppApiClient)).Returns(_httpClient);
-            
+            _fixture.Inject(_configMock);
+            _fixture.Inject(_httpClient);
+
             _sut = _fixture.Create<TppClient>();
         }
         

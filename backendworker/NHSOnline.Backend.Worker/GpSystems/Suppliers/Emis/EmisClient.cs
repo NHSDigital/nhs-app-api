@@ -21,10 +21,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
     public class EmisClient : IEmisClient
     {
         private readonly TimeZoneConverter _localTimeZoneConverter;
-        public const string HeaderApplicationId = "X-API-ApplicationId";
+
         public const string HeaderEndUserSessionId = "X-API-EndUserSessionId";
         public const string HeaderSessionId = "X-API-SessionId";
-        public const string HeaderVersion = "X-API-Version";
+
 
         private const string MeApplicationsPath = "me/applications";
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
@@ -43,11 +43,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
         private const string AppointmentsPath = "appointments";
 
-        private readonly HttpClient _httpClient;
+        private readonly EmisHttpClient _httpClient;
         private readonly ILogger<EmisClient> _logger;
         private readonly IJsonResponseParser _responseParser;
 
-        public EmisClient(IHttpClientFactory httpClientFactory,
+        public EmisClient(EmisHttpClient httpClient,
             IEmisConfig config,
             TimeZoneConverter localTimeZoneConverter,
             ILoggerFactory loggerFactory,
@@ -55,10 +55,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             _logger = loggerFactory.CreateLogger<EmisClient>();
             _localTimeZoneConverter = localTimeZoneConverter;
-            _httpClient = httpClientFactory.GetClient(HttpClientName.EmisApiClient);
-            _httpClient.DefaultRequestHeaders.Add(HeaderApplicationId, config.ApplicationId);
-            _httpClient.DefaultRequestHeaders.Add(HeaderVersion, config.Version);
-            _httpClient.BaseAddress = config.BaseUrl;
+            _httpClient = httpClient;
+
             _responseParser = responseParser;
         }
 
@@ -267,7 +265,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             HttpRequestMessage request)
         {
             _logger.LogHttpRequest(request);
-            var responseMessage = await _httpClient.SendAsync(request);
+            var responseMessage = await _httpClient.Client.SendAsync(request);
             _logger.LogHttpResponse(request, responseMessage);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
