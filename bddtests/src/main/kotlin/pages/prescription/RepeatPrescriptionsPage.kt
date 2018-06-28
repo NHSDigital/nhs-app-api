@@ -16,7 +16,7 @@ import pages.HybridPageObject.Companion.PageType
 @DefaultUrl("http://localhost:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
-    var headerText: String = "Select medication"
+    var headerText: String = "Confirm Prescription"
     lateinit var headerBar: Header
 
     @FindBy(how = How.ID, using = "specialRequest")

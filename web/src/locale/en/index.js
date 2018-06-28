@@ -47,7 +47,6 @@ export default {
     empty: {
       subHeader: 'You don\'t have any medication available to order right now',
       body: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
-      contactGp: 'If you think you have a pending repeat prescription, please contact your GP.',
     },
     backButton: 'Back',
   },
@@ -56,7 +55,7 @@ export default {
     pageHeader: 'Select medication',
     subHeader: 'Medication currently available to order',
     noMedicinesSelected: 'Select at least one medicine',
-    specialRequestsLabel: 'Special requests relating to this order (optional)​',
+    specialRequestsLabel: 'Special requests relating to this order',
     maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words)',
     changePharmacyText: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
     noSpecialRequestDefaultText: 'None',
@@ -347,7 +346,7 @@ export default {
   pageHeaderTitles: {
     home: 'Home',
     prescriptions: 'My repeat prescriptions',
-    repeatPrescriptionCourses: 'Select medication',
+    repeatPrescriptionCourses: 'Confirm Prescription',
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
     appointments: 'My appointments',

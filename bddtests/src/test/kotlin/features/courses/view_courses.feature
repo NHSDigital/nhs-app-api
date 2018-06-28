@@ -1,3 +1,4 @@
+@courses
 Feature: View courses
 
   In order to view courses associated with a user

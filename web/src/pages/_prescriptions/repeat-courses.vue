@@ -1,7 +1,14 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <spinner />
-    <main :class="$style.content">
+    <main class="content">
+
+      <error-warning-dialog v-if="error" error-or-warning="error">
+        <p>
+          {{ $t('rp12.reasonMissing.summarySubHeader') }}
+        </p>
+      </error-warning-dialog>
+
       <form @submit.prevent="validate">
         <div v-if="showRepeatCourses">
           <div :class="$style.panel">
@@ -9,15 +16,19 @@
               {{ $t('rp03.subHeader') }}
             </h2>
             <hr>
-            <p v-if="error" style="color:#DA291C; font-weight: 700; margin-bottom: 16px;">
-              <inline-error-icon />
-              {{ $t('rp03.noMedicinesSelected') }}
-            </p>
-            <repeat-prescription
-              v-for="repeatPrescription in repeatPrescriptionCourses"
-              :key="repeatPrescription.id"
-              :selected="repeatPrescription.selected"
-              :prescription-details="repeatPrescription" />
+
+            <div :class="{ 'validation-border-left': error }">
+              <p v-if="error" style="color:#DA291C; font-weight: 700; margin-bottom: 16px;">
+                <inline-error-icon />
+                {{ $t('rp03.noMedicinesSelected') }}
+              </p>
+              <repeat-prescription
+                v-for="repeatPrescription in repeatPrescriptionCourses"
+                :key="repeatPrescription.id"
+                :selected="repeatPrescription.selected"
+                :prescription-details="repeatPrescription" />
+            </div>
+
           </div>
           <div role="form">
             <label :class="$style.formLabel" for="specialRequest">
@@ -33,7 +44,7 @@
           </div>
           <br>
           <p :class="$style.prescription_not_shown">
-            {{ $t('rp06.empty.contactGp') }}
+            {{ $t('rp03.changePharmacyText') }}
           </p>
           <br>
           <button id="btn_order_prescription" :class="[$style.button, $style.green]">
@@ -44,7 +55,7 @@
         <div v-if="showNoRepeatCourses" :class="$style.info">
           <h3>{{ $t('rp06.empty.subHeader') }}</h3>
           <p>
-            {{ $t('rp06.empty.contactGp') }}
+            {{ $t('rp06.empty.body') }}
           </p>
         </div>
 
@@ -63,6 +74,7 @@
 
 <script>
 /* eslint-disable import/extensions */
+import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 import Spinner from '@/components/widgets/Spinner';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import InlineErrorIcon from '../../components/icons/InlineErrorIcon';
@@ -72,6 +84,7 @@ export default {
     InlineErrorIcon,
     Spinner,
     RepeatPrescription,
+    ErrorWarningDialog,
   },
   middleware: ['auth', 'meta'],
   data() {
