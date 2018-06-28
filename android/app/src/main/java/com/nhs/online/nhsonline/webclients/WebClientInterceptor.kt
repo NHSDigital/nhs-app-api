@@ -5,8 +5,9 @@ import android.os.Handler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Context
+import android.net.ConnectivityManager
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.activity.ActivityInterface
+import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.KnownServices
@@ -27,54 +28,36 @@ class WebClientInterceptor(
     }
 
     private val handler = Handler()
+    private var noConnectionHandled = false
     private var shouldShowErrorPage = false
-
-    override fun onLoadResource(view: WebView?, url: String?) {
-        if (!url.isNullOrEmpty()) {
-            val matchingKnownService = knownServices.findMatchingKnownService(url!!)
-
-            when (matchingKnownService?.hasNativeHeader()) {
-                true -> {
-                    uiInteractor.setHeaderText(matchingKnownService.nativeHeader!!)
-                }
-            }
-        }
-
-        super.onLoadResource(view, url)
-    }
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
         activities.forEach { activity ->
             if (activity.canStart(view.context, url)) {
                 activity.start(view.context, url)
-
                 return true
             }
         }
-
-        val matchingKnownService = knownServices.findMatchingKnownService(url)
-
-        if (matchingKnownService != null) {
-            when (matchingKnownService.nativeHeader) {
-                context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectSymptomsMenuActive()
-                context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectMoreMenuActive()
-            }
-
-            if (matchingKnownService.hasMissingQueryString(url)) {
-                val urlWithMissingQueryStrings = matchingKnownService.addMissingQueryStrings(url)
-                view.loadUrl(urlWithMissingQueryStrings)
-
-                return true
-            }
-        }
-
         return false
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         cancelTrackingWebRequestResponse()
 
+        if (!isConnectedToInternet()) {
+            stopLoadingWebviewAndShowNoConnectionError(view)
+            noConnectionHandled = true
+            return
+        }
+
+        if (hasMissingQueryString(url)) {
+            view?.stopLoading()
+            url?.let { uiInteractor.loadPage(it) }
+            return
+        }
+
+        updateHeaderAndNavMenu(url)
         if (shouldHandleUnavailability(url)) {
             trackWebRequestResponse(view, url)
         }
@@ -84,17 +67,16 @@ class WebClientInterceptor(
         super.onPageStarted(view, url, favicon)
     }
 
-    override fun onPageFinished(view: WebView?, url: String?) {
-        if (shouldHandleUnavailability(url)) {
-            cancelTrackingWebRequestResponse()
-            uiInteractor.dismissProgressDialog()
+    override fun onLoadResource(view: WebView?, url: String?) {
+        if (!isConnectedToInternet()) {
+            if (!noConnectionHandled) {
+                cancelTrackingWebRequestResponse()
+                stopLoadingWebviewAndShowNoConnectionError(view)
+            }
+            return
         }
-
-        if (!shouldShowErrorPage) {
-            uiInteractor.showWebviewScreen()
-        }
-
-        super.onPageFinished(view, url)
+        noConnectionHandled = false
+        super.onLoadResource(view, url)
     }
 
 
@@ -115,6 +97,25 @@ class WebClientInterceptor(
         }
     }
 
+    override fun onPageFinished(view: WebView?, url: String?) {
+        if (shouldHandleUnavailability(url)) {
+            cancelTrackingWebRequestResponse()
+        }
+
+        super.onPageFinished(view, url)
+    }
+
+    override fun onPageCommitVisible(view: WebView?, url: String?) {
+        if(shouldHandleUnavailability(url)){
+            uiInteractor.dismissProgressDialog()
+        }
+
+        if (!shouldShowErrorPage) {
+            uiInteractor.showWebviewScreen()
+        }
+        super.onPageCommitVisible(view, url)
+    }
+
     private fun shouldHandleUnavailability(urlString: String?): Boolean {
         if (urlString != null) {
             val matchingKnownService =
@@ -126,6 +127,38 @@ class WebClientInterceptor(
         }
 
         return false
+    }
+
+    private fun isConnectedToInternet(): Boolean {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return cm.activeNetworkInfo?.isConnectedOrConnecting == true
+    }
+
+    private fun hasMissingQueryString(url: String?): Boolean {
+        if (url == null)
+            return false
+        return knownServices.findMatchingKnownService(url)?.hasMissingQueryString(url) ?: false
+    }
+
+    private fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
+        val errorMessage = getUnavailabilityErrorMessageForService(view?.url)
+        uiInteractor.showUnavailabilityError(errorMessage)
+        view?.stopLoading()
+        shouldShowErrorPage = true
+    }
+
+    private fun updateHeaderAndNavMenu(url: String?) {
+        url?.let {
+            val matchingKnownService = knownServices.findMatchingKnownService(it)
+            val header = matchingKnownService?.nativeHeader
+            if (header != null) {
+                when (header) {
+                    context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectSymptomsMenuActive()
+                    context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectMoreMenuActive()
+                }
+                uiInteractor.setHeaderText(header)
+            }
+        }
     }
 
     private fun trackWebRequestResponse(view: WebView?, url: String?) {

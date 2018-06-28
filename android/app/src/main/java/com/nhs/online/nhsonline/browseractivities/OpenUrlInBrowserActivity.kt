@@ -1,4 +1,4 @@
-package com.nhs.online.nhsonline.activity
+package com.nhs.online.nhsonline.browseractivities
 
 import android.content.Context
 import android.content.Intent

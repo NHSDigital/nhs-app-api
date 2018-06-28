@@ -2,6 +2,8 @@ package com.nhs.online.nhsonline
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
+import com.nhs.online.nhsonline.activities.MainActivity
+import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import org.junit.Test
 
 import org.junit.Before

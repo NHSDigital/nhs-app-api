@@ -1,18 +1,18 @@
-package com.nhs.online.nhsonline
+package com.nhs.online.nhsonline.activities
 
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.View.*
-import android.widget.TextView
-import android.arch.lifecycle.ProcessLifecycleOwner
 import android.webkit.CookieManager
-import com.nhs.online.nhsonline.activity.ActivityInterface
-import com.nhs.online.nhsonline.activity.OpenUrlInBrowserActivity
+import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.browseractivities.ActivityInterface
+import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
@@ -22,21 +22,23 @@ import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
+import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 
 class MainActivity : IInteractor, AppCompatActivity() {
+
     private lateinit var chromeClient: ChromeClientLocationHandler
     private lateinit var knownServices: KnownServices
-    private val lollypopApiNumber: Int = 21
-    private val apiVersion : Int = android.os.Build.VERSION.SDK_INT
-    private var sessionValidator : ValidateSessionLifeCycleObserver? = null
+    private val apiVersion: Int = android.os.Build.VERSION.SDK_INT
+    private var sessionValidator: ValidateSessionLifeCycleObserver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(apiVersion >= lollypopApiNumber) {
+        if (apiVersion >= Build.VERSION_CODES.LOLLIPOP) {
             CookieManager.getInstance().removeAllCookies(null)
         } else {
             CookieManager.getInstance().removeAllCookie()
@@ -65,8 +67,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if(sessionValidator == null) {
-            sessionValidator = ValidateSessionLifeCycleObserver(this, AppWebInterface(this),knownServices)
+        if (sessionValidator == null) {
+            sessionValidator =
+                    ValidateSessionLifeCycleObserver(this,
+                        AppWebInterface(this), knownServices)
         }
 
         sessionValidator?.onMoveToForeground()
@@ -76,7 +80,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onNewIntent(intent)
 
         val data = intent?.data
-        if(data != null) {
+        if (data != null) {
             loadPage(data.toString())
         }
     }
@@ -92,22 +96,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities(), this)
 
         webview.addJavascriptInterface(WebAppInterface(this), "nativeApp")
-    }
-
-    fun showMenuBar() {
-        runOnUiThread({
-            run {
-                menuBar.visibility = VISIBLE
-            }
-        })
-    }
-
-    fun showHeader() {
-        runOnUiThread({
-            run {
-                header.visibility = VISIBLE
-            }
-        })
     }
 
     private fun createActivities(): List<ActivityInterface> {
@@ -127,15 +115,26 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
-    private fun onSymptomMenuSelected() = loadPage(resources.getString(R.string.nhs111))
+    private fun onSymptomMenuSelected() {
+        loadPage(resources.getString(R.string.nhs111))
+        setHeaderText(resources.getString(R.string.nhs_111_header))
+    }
 
-    private fun onMyRecordMenuSelected() = loadSubPage(resources.getString(R.string.myRecordPath), resources.getString(R.string.my_record_header))
+    private fun onMyRecordMenuSelected() =
+        loadSubPage(resources.getString(R.string.myRecordPath),
+            resources.getString(R.string.my_record_header))
 
-    private fun onMoreMenuSelected() = loadSubPage(resources.getString(R.string.morePath), resources.getString(R.string.more))
+    private fun onMoreMenuSelected() =
+        loadSubPage(resources.getString(R.string.morePath), resources.getString(
+            R.string.more))
 
-    private fun onAppointmentsMenuSelected() = loadSubPage(resources.getString(R.string.appointmentsPath), resources.getString(R.string.appointments_header))
+    private fun onAppointmentsMenuSelected() =
+        loadSubPage(resources.getString(R.string.appointmentsPath),
+            resources.getString(R.string.appointments_header))
 
-    private fun onPrescriptionsMenuSelected() = loadSubPage(resources.getString(R.string.prescriptionsPath), resources.getString(R.string.prescriptions_header))
+    private fun onPrescriptionsMenuSelected() =
+        loadSubPage(resources.getString(R.string.prescriptionsPath),
+            resources.getString(R.string.prescriptions_header))
 
     private fun onNhsOnlineLogoIconSelected() {
         loadWelcomePage()
@@ -144,13 +143,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onMyAccountIconSelected() {
-        loadSubPage(resources.getString(R.string.myAccountPath), resources.getString(R.string.my_account_header))
+        loadSubPage(resources.getString(R.string.myAccountPath),
+            resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
     }
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
-    private fun loadPage(url: String) {
+    override fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
             knownServices.findKnownServiceAddMissingQueryFor(url)
 
@@ -159,9 +159,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun loadSubPage(pageEndPoint: String, headerText: String?) {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-                .buildUpon()
-                .appendEncodedPath(pageEndPoint)
-                .build()
+            .buildUpon()
+            .appendEncodedPath(pageEndPoint)
+            .build()
         val fullUrl = builtUri.toString()
         loadPage(fullUrl)
         if (headerText != null) {
@@ -169,14 +169,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
-
     override fun setHeaderText(text: String) {
-        runOnUiThread({
-            run {
-                findViewById<TextView>(R.id.header_text_view).text = text
-                webview.announceForAccessibility(text);
-            }
-        })
+        runOnUiThread {
+            header_text_view.text = text
+            webview.announceForAccessibility(text)
+        }
     }
 
     override fun showProgressDialog() {
@@ -190,17 +187,20 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun selectSymptomsMenuActive() {
-        menuBar.switchActiveMenuItemTo(R.id.symptoms)
+        if (menuBar.visibility == VISIBLE)
+            menuBar.switchActiveMenuItemTo(R.id.symptoms)
     }
 
     override fun selectMoreMenuActive() {
-        menuBar.switchActiveMenuItemTo(R.id.more)
+        if (menuBar.visibility == VISIBLE)
+            menuBar.switchActiveMenuItemTo(R.id.more)
     }
 
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         showErrorScreen()
-        errorTextView.setServiceError(unavailabilityErrorMessage.title, unavailabilityErrorMessage.message)
-        if(unavailabilityErrorMessage.message != null){
+        errorTextView.setServiceError(unavailabilityErrorMessage.title,
+            unavailabilityErrorMessage.message)
+        if (unavailabilityErrorMessage.message != null) {
             tryAgainTextView.visibility = GONE
         } else {
             tryAgainTextView.visibility = VISIBLE
@@ -230,28 +230,34 @@ class MainActivity : IInteractor, AppCompatActivity() {
             }
         }
     }
+
     override fun clearMenuBarItem() {
-        runOnUiThread({
-            run {
-                menuBar.deselectActiveItem()
-            }
-        })
+        runOnUiThread {
+            menuBar.deselectActiveItem()
+        }
     }
 
     override fun hideMenuBar() {
-        runOnUiThread({
-            run {
-                menuBar.visibility = GONE
-            }
-        })
+        runOnUiThread {
+            menuBar.visibility = GONE
+        }
     }
 
     override fun hideHeader() {
-        runOnUiThread({
-            run {
-                header.visibility = GONE
-            }
-        })
+        runOnUiThread {
+            header.visibility = GONE
+        }
+    }
+
+    fun showMenuBar() {
+        runOnUiThread {
+            menuBar.visibility = VISIBLE
+        }
+    }
+
+    fun showHeader() {
+        runOnUiThread {
+            header.visibility = VISIBLE
+        }
     }
 }
-

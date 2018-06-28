@@ -1,7 +1,7 @@
-package com.nhs.online.nhsonline
+package com.nhs.online.nhsonline.webinterfaces
 
 import android.webkit.JavascriptInterface
-import kotlinx.android.synthetic.main.activity_main.*
+import com.nhs.online.nhsonline.activities.MainActivity
 
 class WebAppInterface(private val context: MainActivity) {
 
