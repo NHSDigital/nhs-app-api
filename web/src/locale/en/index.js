@@ -137,6 +137,12 @@ export default {
         message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
         retryButtonText: 'Try again',
       },
+      403: {
+        pageHeader: 'Service unavailable',
+        header: 'Sorry, you don\'t currently have access to this service',
+        subheader: '',
+        message: 'Contact your GP surgery for more information.',
+      },
     },
     cancel: {
       info: 'Check your appointment details before cancelling',
@@ -167,6 +173,12 @@ export default {
           subheader: 'Please try again',
           retryButtonText: 'Try again',
         },
+        403: {
+        pageHeader: 'Service unavailable',
+        header: 'Sorry, you don\'t currently have access to this service',
+        subheader: '',
+        message: 'Contact your GP surgery for more information.',
+      },
       },
     },
     confirmation: {
