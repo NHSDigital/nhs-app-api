@@ -147,6 +147,13 @@ export default {
       noReasonError: 'Select a reason for cancelling',
       dropdownDefaultOption: 'Select reason',
       successText: 'Your appointment has been cancelled.',
+      errors: {
+        pageHeader: 'Error sending request',
+        header: 'Sorry, there\'s been a problem sending your request',
+        subheader: 'Please go back and try again.',
+        message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
+        retryButtonText: 'Back to my appointments',
+      },
     },
     booking: {
       bookButtonText: 'Book this appointment',
