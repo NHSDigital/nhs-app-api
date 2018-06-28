@@ -2,8 +2,12 @@
   <main v-if="showTemplate" :class="$style.main">
     <error-warning-dialog v-if="showValidationError" error-or-warning="error">
       <p>
-        {{ $t('appointments.cancel.noReasonDialogError') }}
-        <br> {{ $t('appointments.cancel.noReasonError') }}
+        <span data-purpose="error-heading">
+          {{ $t('appointments.cancel.noReasonDialogError') }}
+        </span><br>
+        <span data-purpose="error">
+          {{ $t('appointments.cancel.noReasonError') }}
+        </span>
       </p>
     </error-warning-dialog>
     <div :class="$style.info">
@@ -12,8 +16,8 @@
 
     <appointment v-if="appointment" :appointment="appointment" :show-cancellation-link="false" />
 
-    <div v-if="isReasonRequired" class="form" style="margin-bottom: 24px;">
-      <label style="padding-top: 8px;" for="txt_reason">
+    <div v-if="isReasonRequired" :class="$style.form">
+      <label for="txt_reason">
         {{ $t('appointments.cancel.form_label') }}
       </label>
 
@@ -115,6 +119,16 @@ export default {
   &.error {
     border: 3px $error solid;
   }
+
+  .form {
+      margin-bottom: 24px;
+      label {
+        @include default_label;
+        padding-top: 16px;
+        padding-bottom: 8px;
+      }
+  }
+
   .info p {
     display: block;
     font-weight: normal;
