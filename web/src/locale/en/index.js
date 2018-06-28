@@ -174,11 +174,11 @@ export default {
           retryButtonText: 'Try again',
         },
         403: {
-        pageHeader: 'Service unavailable',
-        header: 'Sorry, you don\'t currently have access to this service',
-        subheader: '',
-        message: 'Contact your GP surgery for more information.',
-      },
+          pageHeader: 'Service unavailable',
+          header: 'Sorry, you don\'t currently have access to this service',
+          subheader: '',
+          message: 'Contact your GP surgery for more information.',
+        },
       },
     },
     confirmation: {
