@@ -1,19 +1,14 @@
 <template>
-  <main v-if="showTemplate" :class="$style.main">
+  <main v-if="showTemplate" class="main">
     <error-warning-dialog v-if="showValidationError" error-or-warning="error">
       <p>
-        <span data-purpose="error-heading">
-          {{ $t('appointments.confirmation.noReasonDialogError') }}
-        </span><br>
-        <span data-purpose="error">
-          {{ $t('appointments.confirmation.noReasonError') }}
-        </span>
+        {{ $t('appointments.confirmation.noReasonDialogError') }}
       </p>
     </error-warning-dialog>
 
     <appointment-slot v-if="slot" :the-slot="slot" :always-deselect="true"
                       aria-label="selected appointment" />
-    <div :class="$style.form" role="form">
+    <div class="form" role="form">
       <label for="reasonText">{{ $t('appointments.confirmation.headerLabel') }}</label>
       <p>{{ $t('appointments.confirmation.label') }}</p>
 
@@ -22,14 +17,14 @@
       </error-message>
       <textarea id="reasonText" ref="reason" v-model="symptoms"
                 :aria-labelledby="reasonBoxAriaLabelledBy"
-                :class="textareaClass" maxlength="150"/>
+                class="{error:showValidationError}" maxlength="150"/>
       <p id="maxReasonDesc">{{ $t('appointments.confirmation.maxReasonDesc') }}</p>
     </div>
 
-    <button id="btn_book_appointment" :class="[$style.button, $style.green]" @click="onConfirmButtonClicked">
+    <button id="btn_book_appointment" class="button green" @click="onConfirmButtonClicked">
       {{ $t('appointments.confirmation.confirmButtonText') }}
     </button>
-    <button id="btn_cancel_appointment" :class="[$style.button,$style.grey]" @click="onCancelButtonClicked">
+    <button id="btn_cancel_appointment" class="button grey" @click="onCancelButtonClicked">
       {{ $t('appointments.confirmation.changeButtonText') }}
     </button>
   </main>
@@ -59,9 +54,6 @@ export default {
   computed: {
     reasonBoxAriaLabelledBy() {
       return this.showValidationError ? 'errorLabel maxReasonDesc' : 'maxReasonDesc';
-    },
-    textareaClass() {
-      return this.showValidationError ? this.$style.error : undefined
     },
   },
   watch: {
@@ -107,7 +99,7 @@ export default {
 };
 </script>
 
-<style module lang="scss">
+<style lang="scss">
   @import "../../style/textstyles";
   @import "../../style/spacings";
   @import "../../style/colours";
