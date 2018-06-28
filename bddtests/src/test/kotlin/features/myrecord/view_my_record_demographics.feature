@@ -5,6 +5,7 @@ Feature: View My Medical Record Information
     And the my record wiremocks are initialised
 
   @NHSO-361
+  @pending
   Scenario: An EMIS user with access navigates to the patient record information page
     Given I am logged in
     And the GP Practice has enabled demographics functionality

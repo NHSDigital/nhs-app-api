@@ -1,6 +1,6 @@
 package mocking.emis.models
 
-import worker.models.demographics.Sex
+import mocking.emis.demographics.Sex
 
 data class SessionHolder(
         var clinicianId: Int? = null,

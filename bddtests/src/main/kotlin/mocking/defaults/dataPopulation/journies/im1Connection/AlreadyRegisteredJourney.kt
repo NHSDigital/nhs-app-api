@@ -1,11 +1,11 @@
 package mocking.defaults.dataPopulation.journies.im1Connection
 
 import mocking.MockingClient
+import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import worker.models.demographics.PatientIdentifier
 import models.Patient
 
 class AlreadyRegisteredJourney(private val client: MockingClient) {

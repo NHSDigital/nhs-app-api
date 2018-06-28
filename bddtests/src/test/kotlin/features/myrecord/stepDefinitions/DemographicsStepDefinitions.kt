@@ -33,7 +33,7 @@ open class DemographicsStepDefinitions {
     @Given("the GP Practice has enabled demographics functionality")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionality() {
         mockingClient.forEmis {
-            demographicsRequest(MockDefaults.patient).respondWithSuccess(DemographicsData.getDemographicData())
+            demographicsRequest(MockDefaults.patient).respondWithSuccess(DemographicsData.getEmisDemographicData())
         }
     }
 

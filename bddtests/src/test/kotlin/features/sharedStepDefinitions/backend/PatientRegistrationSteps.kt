@@ -3,10 +3,10 @@ package features.sharedStepDefinitions.backend
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.emis.demographics.PatientIdentifier
 
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import worker.models.demographics.PatientIdentifier
 import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable

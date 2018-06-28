@@ -1,9 +1,9 @@
 package models
 
 import mocking.defaults.MockDefaults
-import worker.models.demographics.Address
-import worker.models.demographics.ContactDetails
-import worker.models.demographics.Sex
+import mocking.emis.demographics.Address
+import mocking.emis.demographics.ContactDetails
+import mocking.emis.demographics.Sex
 
 data class Patient(
         val title:String = "",

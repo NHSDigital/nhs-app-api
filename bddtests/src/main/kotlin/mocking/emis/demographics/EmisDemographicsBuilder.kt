@@ -7,8 +7,6 @@ import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
-import worker.models.demographics.DemographicsResponse
-import worker.models.demographics.PatientIdentifier
 
 class EmisDemographicsBuilder(configuration: EmisConfiguration,
                               linkToken: String,
@@ -24,7 +22,7 @@ class EmisDemographicsBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithSuccess(patient: Patient, patientIdentifiers: Array<PatientIdentifier>): Mapping {
-        val responseBody = DemographicsResponse(patient.title, patient.firstName, patient.surname, patientIdentifiers = patientIdentifiers.toMutableList())
+        val responseBody = EmisDemographicsResponse(patient.title, patient.firstName, patient.surname, patientIdentifiers = patientIdentifiers.toMutableList())
 
         return respondWith(SC_OK) {
             andJsonBody(responseBody)
@@ -32,7 +30,7 @@ class EmisDemographicsBuilder(configuration: EmisConfiguration,
         }
     }
 
-    fun respondWithSuccess(demographicResponse: DemographicsResponse): Mapping {
+    fun respondWithSuccess(demographicResponse: EmisDemographicsResponse): Mapping {
         return respondWith(SC_OK) {
             andJsonBody(demographicResponse)
                     .build()
