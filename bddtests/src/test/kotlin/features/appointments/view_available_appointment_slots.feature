@@ -163,13 +163,3 @@ Feature: View available appointment slots
     And I wait 11 seconds
     Then I don't see a time-out error
 
-  @NHSO-617
-  @pending  @NHSO-617
-  @mobile
-  @native
-  Scenario: A user sees appropriate information message when GP system is not offering the service
-    Given I am logged in
-    And GP system is not offering the service
-    When I click appointments button in menu
-    Then I see appropriate information message when there is a error retrieving data
-    And there should not be an option to try again
