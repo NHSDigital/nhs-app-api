@@ -9,6 +9,9 @@ function info () {
     echo >&2 "===]> Info: $@ ";
 }
 
+# Check if DOCKER_TAG exists in envvar
+[ -z $APP_DOCKER_TAG ] && die "APP_DOCKER_TAG is not specified, it should be so we can pin builds to a specific version rather than latest"
+
 #### 1. First login to azure docker registry (you can do it by running docker-login.sh script from keybase repo)
 #### 2. Then check if your repo names match default ones (if not change them in docker-compose_ci.yml from i.e. `context: ./../nhsonline-web/` to `context: ./../your_name_of_web_repo/`)
 # set -x
@@ -28,59 +31,19 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 
-if [ -z $BDD_FLAG ]; then
-  # Run full BDD tests if BDD_FLAGS is undefined.
-  BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
-else
-  case $BDD_FLAG in
-    full)
-      BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
-    ;;
-    smoketests)
-      BDD_CUCUMBER_OPTIONS='--tags @smoketest --tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
-    ;;
-    *)
-      die "Unknown BDD_FLAG value"
-    ;;
-  esac
-fi
-info "BDD_FLAG: $BDD_FLAG"
-info "Cucumber options: $BDD_CUCUMBER_OPTIONS"
+BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
 
-if ! [ -z $BDD_TEST_MODE ]; then
-  case $BDD_TEST_MODE in
-    web)
-      info MODE=Web
+# Pin versions of docker images
+sed -i "s/WEB_TAG=latest/WEB_TAG=${APP_DOCKER_TAG}/" .env
+sed -i "s/BACKEND_TAG=latest/BACKEND_TAG=${APP_DOCKER_TAG}/" .env
+[ -z $REDIS_DATA_DOCKER_TAG ] || sed -i "s/REDIS_DATA_TAG=latest/REDIS_DATA_TAG=${REDIS_DATA_DOCKER_TAG}/" .env
 
-      # Replace docker tags with overrides from TeamCity
-      [ -z $WEB_DOCKER_TAG ] || sed -i "s/WEB_TAG=latest/WEB_TAG=${WEB_DOCKER_TAG}/" .env
-
-      # Pull images
-      for s in $DOCKER_SERVICES; do
-        if ! [ "$s" = "nhsonline.web" ]; then #Do not pull the web image as we'll use the local copy
-          docker-compose -f docker-compose_ci.yml pull $s
-        fi
-      done
-    ;;
-    backend)
-      info MODE=Backend
-
-      # Replace docker tags with overrides from TeamCity
-      [ -z $BACKEND_DOCKER_TAG ]    || sed -i "s/BACKEND_TAG=latest/BACKEND_TAG=${BACKEND_DOCKER_TAG}/" .env
-      [ -z $REDIS_DATA_DOCKER_TAG ] || sed -i "s/REDIS_DATA_TAG=latest/REDIS_DATA_TAG=${REDIS_DATA_DOCKER_TAG}/" .env
-
-      # Pull images
-      for s in $DOCKER_SERVICES; do
-        if ! [ "$s" = "nhsonline.backend.worker" ]; then #Do not pull the backend image as we'll use the local copy
-          docker-compose -f docker-compose_ci.yml pull $s
-        fi
-      done
-    ;;
-  esac
-else
-  info MODE=Default
-  docker-compose -f docker-compose_ci.yml pull
-fi
+# Pull images
+for s in $DOCKER_SERVICES; do
+  if [[ "$s" != "nhsonline.web" && "$s" != "nhsonline.backend.worker" ]]; then #Don't pull local images we've built as part of the pipeline
+    docker-compose -f docker-compose_ci.yml pull $s
+  fi
+done
 
 # Output list of images contained in config
 docker-compose -f docker-compose_ci.yml config | grep image
