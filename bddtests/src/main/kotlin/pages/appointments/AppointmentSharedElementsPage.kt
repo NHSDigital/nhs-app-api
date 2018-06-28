@@ -2,8 +2,8 @@ package pages.appointments
 
 import models.Slot
 import net.serenitybdd.core.annotations.findby.By
+import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
-import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import java.text.SimpleDateFormat
@@ -17,6 +17,15 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentSessionNameXpath = "[@aria-label='session name']"
     private val appointmentLocationXpath = "[@aria-label='location']"
     private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
+
+    @FindBy(xpath = "//*[@id='errorLabel']/p/span[@data-purpose='error']")
+    private lateinit var inLineError: WebElementFacade
+
+    @FindBy(xpath = "//*[@data-purpose='error-heading']")
+    private lateinit var errorSummaryHeading: WebElementFacade
+
+    @FindBy(xpath = "//*[@data-purpose='error']")
+    private lateinit var errorSummaryBody: WebElementFacade
 
     fun getSelectedAppointmentDateText(): String {
         return findByXpath(xPathRoot + appointmentDateXpath).text
@@ -61,16 +70,20 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return convertToSlotObject(appointmentSlotDiv, isMyAppointmentSlot = true)
     }
 
-
-
     fun getSelectedAppointmentClinicianTextAtPosition(position: Int): String {
         return findByXpath(String.format(xPathRoot + appointmentClinicianXPath, position)).text
     }
 
-    fun clickOnButton(button: String) {
-        val element: WebElementFacade = findByXpath("//button[contains(text(),'$button')]")
-        scrollToTheElement(element)
-        element.click()
+    fun getInlineValidationError(): String {
+        return inLineError.text
+    }
+
+    fun getErrorSummaryHeading(): String {
+        return errorSummaryHeading.text
+    }
+
+    fun getErrorSummaryBody(): String {
+        return errorSummaryBody.text
     }
 
     private fun convertToSlotObject(parentContainer: WebElementFacade, parentToSlotDivRelativePath: String = "", isMyAppointmentSlot: Boolean = false): Slot {

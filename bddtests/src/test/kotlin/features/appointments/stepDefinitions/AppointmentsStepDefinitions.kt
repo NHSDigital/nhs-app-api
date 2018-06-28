@@ -20,7 +20,7 @@ class AppointmentsStepDefinitions {
     @Then("^Appointment Booking confirmation screen is displayed$")
     @Throws(Exception::class)
     fun appointmentBookingConfirmationScreenIsDisplayed() {
-        appointmentsSteps.checkSuccessMessage()
+        appointmentsSteps.checkBookingSuccessMessage()
     }
 
     @Then("^I will be on the My appointments screen$")
@@ -57,7 +57,7 @@ class AppointmentsStepDefinitions {
     @When("^I select \"([^\"]*)\" button$")
     @Throws(Exception::class)
     fun i_select_button(buttonText: String) {
-        appointmentsSteps.clickOnBookAppointmentButton(buttonText)
+        appointmentsSteps.clickOnButtonByText(buttonText)
     }
 
     @Then("^I am given the list of upcoming appointments$")
@@ -97,5 +97,8 @@ class AppointmentsStepDefinitions {
         appointmentsSteps.clickFirstCancelLink()
     }
 
-
+    @Then("^a \"Cancellation confirmed\" message is displayed$")
+    fun cancellationConfirmationMessage() {
+        appointmentsSteps.verifyCancellationConfirmationMessage()
+    }
 }

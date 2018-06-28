@@ -12,9 +12,7 @@ Feature: Ability to cancel an appointment
     When I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
-    And there is a cancellation reasons drop-down with the appropriate reasons
-      | No longer required |
-      | Unable to attend   |
+    And there is a cancellation reasons drop-down
 
   @NHSO-663
   Scenario: A user navigates back to the "My appointments" screen
@@ -37,13 +35,12 @@ Feature: Ability to cancel an appointment
     Then I receive a "Bad request" error
 
   @NHSO-1026
-  @pending  @NHSO-1026
-    # Remove cancellation reason assertion in first scenario, once this is implemented
   Scenario Outline: User cancels appointment with selected reason
-    Given I am on the cancellation screen
+    Given I am on the appointment cancellation screen
+    And the Emis is available to cancel an appointment for <Reason>
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
-    Then I will be on the "My appointments" screen
+    Then I will be on the My appointments screen
     And a "Cancellation confirmed" message is displayed
     Examples:
       | Reason             |
@@ -51,9 +48,8 @@ Feature: Ability to cancel an appointment
       | Unable to attend   |
 
   @NHSO-1026
-  @pending  @NHSO-1026
   Scenario: A validation message will be displayed if no reason is provided
-    Given I am on the cancellation screen
+    Given I am on the appointment cancellation screen
     When I select "Cancel appointment" button
     Then I will receive a cancellation validation error
 

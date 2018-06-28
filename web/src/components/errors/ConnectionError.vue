@@ -1,14 +1,14 @@
 <template>
   <main v-if="isVisible" class="content">
     <error-warning-dialog error-or-warning="error">
-      <p class="header">
+      <p :class="$style.header">
         {{ header }}
       </p>
       <p>
         {{ subheader }}
       </p>
     </error-warning-dialog>
-    <button class="button" @click="onRetryButtonClicked">
+    <button :class="$style.button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
     </button>
     <p>
@@ -70,7 +70,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style module lang="scss">
   @import '../../style/html';
   @import '../../style/elements';
   @import '../../style/buttons';

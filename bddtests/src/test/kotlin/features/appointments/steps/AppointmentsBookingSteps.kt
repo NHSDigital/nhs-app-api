@@ -52,33 +52,36 @@ open class AppointmentsBookingSteps {
         val expectedBody = "Please try again\n" +
                 "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
 
-        val message: String? = appointmentsBooking.getServerErrorMessage()
+        val message: String? = appointmentsBooking.getErrorText()
 
         if (presence && message != null) {
-            assertTrue("Expected text:\n$expectedHeader\n$expectedBody\nbut was:\n$message",
-                    message.contains("$expectedHeader\n$expectedBody"))
+            assertEquals("$expectedHeader\n$expectedBody", message)
         } else {
-            Assert.assertNull(message)
+            assertNull(message)
         }
 
     }
 
     @Step
-    fun checkIfTyAgainButtonDisplayed() {
-        val button = appointmentsBooking.getTryAgainButton()
-        assertEquals("Try again", button.text)
-        assertTrue(button.isDisplayed)
+    fun checkIfTryAgainButtonDisplayed() {
+        val buttonExists = doesTryAgainButtonExist()
+        assertTrue(buttonExists)
     }
 
     @Step
-    fun checkIfTyAgainButtonIsNotDisplayed() {
-        val hasButton = appointmentsBooking.hasTryAgainButton()
-        assertFalse(hasButton)
+    fun checkIfTryAgainButtonIsNotDisplayed() {
+        val buttonExists = doesTryAgainButtonExist()
+        assertFalse(buttonExists)
+    }
+
+    private fun doesTryAgainButtonExist(): Boolean {
+        val buttonExists = appointmentsBooking.doesButtonExistBasedOnVisibleText("Try again")
+        return buttonExists
     }
 
     @Step
     fun checkUnavailableErrorMessage() {
-        val message = appointmentsBooking.getServerErrorMessage()
+        val message = appointmentsBooking.getErrorText()
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
         assertNotNull("No error message displayed, expecting $expectedHeader\n$expectedBody", message)
@@ -87,7 +90,6 @@ open class AppointmentsBookingSteps {
 
     @Step
     fun clickOnTryAgainButton() {
-        val button = appointmentsBooking.getTryAgainButton()
-        button.click()
+        appointmentsBooking.clickOnButton("Try again")
     }
 }

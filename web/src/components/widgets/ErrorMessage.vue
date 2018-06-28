@@ -2,7 +2,9 @@
   <div>
     <p :id="$style.errorMessage">
       <error-marker-icon/>
-      <slot/>
+      <span data-purpose="error">
+        <slot/>
+      </span>
     </p>
   </div>
 </template>
@@ -18,7 +20,7 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style module lang="scss">
   @import '../../style/fonts';
   @import '../../style/colours';
 

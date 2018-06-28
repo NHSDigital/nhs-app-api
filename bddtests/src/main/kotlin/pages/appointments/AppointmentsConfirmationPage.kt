@@ -8,7 +8,7 @@ import org.openqa.selenium.JavascriptExecutor
 import pages.HybridPageObject
 
 @DefaultUrl("http://localhost:3000/appointments/confirmation")
-open class AppointmentsConfirmationPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
 
     @FindBy(id = "btn_book_appointment")
     lateinit var confirmAndBookAppointmentButton: WebElementFacade
@@ -24,22 +24,6 @@ open class AppointmentsConfirmationPage: HybridPageObject(Companion.PageType.WEB
         jsExecutor.executeScript("arguments[0].scrollIntoView(true);", confirmAndBookAppointmentButton)
 
         confirmAndBookAppointmentButton.click()
-    }
-
-    fun clickOnButton(button: String)
-    {
-        val element = find<WebElementFacade>(By.ByXPath("//button[contains(text(),'$button')]"))
-        element.waitUntilVisible<WebElementFacade>()
-
-        val jsExecutor = driver as JavascriptExecutor
-        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", element)
-
-        element.click()
-    }
-
-    fun getValidationErrorMessage(): WebElementFacade
-    {
-        return findBy<WebElementFacade>("#errorLabel p")
     }
 
     fun describeSymptoms(symptoms: String) {

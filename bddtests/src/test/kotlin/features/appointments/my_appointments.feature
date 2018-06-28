@@ -16,7 +16,6 @@ Feature: My appointments
     And a list of cancellation reasons
 
   @NHSO-524
-  @bug  @NHSO-1510
   Scenario: A user has never booked an appointment
     Given I have no upcoming appointments
     When I am on the appointments page

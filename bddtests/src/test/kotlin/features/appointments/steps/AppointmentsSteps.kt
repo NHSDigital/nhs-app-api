@@ -29,7 +29,8 @@ open class AppointmentsSteps {
             "Once you've booked an appointment here, you'll be able to view details, cancel it and see your appointment history.\n" +
             "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
     val bookingSuccessMessage = "Appointment Booked"
-    val bookAnButtonText = "Book an appointment"
+    val cancellationSuccessMessage = "Your appointment has been cancelled."
+    val bookAppotintmentButtonText = "Book an appointment"
 
     @Step
     fun checkBookingWasRequested() {
@@ -55,21 +56,25 @@ open class AppointmentsSteps {
     }
 
     @Step
-    fun checkSuccessMessage() {
+    fun checkBookingSuccessMessage() {
         val message = myAppointmentsPage.getSuccessMessage()
-        assertTrue(message.contains(bookingSuccessMessage))
+        assertEquals(bookingSuccessMessage, message)
     }
 
     @Step
-    fun clickOnBookAppointmentButton(buttonText: String = bookAnButtonText) {
+    fun clickOnBookAppointmentButton() {
+        clickOnButtonByText(bookAppotintmentButtonText)
+    }
+
+    @Step
+    fun clickOnButtonByText(buttonText: String) {
         myAppointmentsPage.clickOnButton(buttonText)
     }
 
     @Step
     fun checkHeaderTextIsCorrect() {
-        val actualHeader = myAppointmentsPage.getPageHeaderText()
-        assertEquals("Expected Header text is not found",
-                pageHeader, actualHeader)
+        assertTrue("Expected Header text is not found: $pageHeader",
+                myAppointmentsPage.waitForPageHeaderText(pageHeader))
     }
 
     @Step
@@ -164,7 +169,14 @@ open class AppointmentsSteps {
         myAppointmentsPage.clickFirstCancelAppointmentLink()
     }
 
+    @Step
     fun storeDetailsOfFirstAppointment() {
         Serenity.setSessionVariable(Slot::class.java).to(myAppointmentsPage.getSlotAtIndex(0))
+    }
+
+    @Step
+    fun verifyCancellationConfirmationMessage() {
+        val message = myAppointmentsPage.getSuccessMessage()
+        assertEquals(cancellationSuccessMessage, message)
     }
 }

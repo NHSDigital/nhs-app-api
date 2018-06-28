@@ -186,8 +186,8 @@ export default {
       maxReasonDesc: 'Description must be shorter than 150 characters (about 25 words)',
       confirmButtonText: 'Confirm and book appointment',
       changeButtonText: 'Change this appointment',
-      noReasonDialogError: 'Please, enter a reason for this appointment',
-      noReasonError: 'Please describe your symptoms',
+      noReasonDialogError: 'There\'s a problem',
+      noReasonError: 'Enter a reason for this appointment',
       errors: {
         pageHeader: 'Error sending request',
         header: 'Sorry, there\'s been a problem sending your request',

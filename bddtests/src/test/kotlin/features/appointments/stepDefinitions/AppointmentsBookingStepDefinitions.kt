@@ -3,16 +3,13 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.steps.AppointmentGuidanceSteps
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AppointmentsBookingSteps
 import features.appointments.steps.AppointmentsSteps
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
 import mocking.MockingClient
-import mocking.defaults.dataPopulation.journies.appointmentSlots.AppointmentSlotsJournies
 import mocking.defaults.dataPopulation.journies.appointmentSlots.AvailableSlotsJourney
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
@@ -30,8 +27,6 @@ import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.servlet.http.Cookie
 
@@ -407,7 +402,7 @@ class AppointmentsBookingStepDefinitions {
     @Then("^there should be a button to try again$")
     @Throws(Exception::class)
     fun there_should_be_a_button_to_try_again() {
-        appointmentsBooking.checkIfTyAgainButtonDisplayed()
+        appointmentsBooking.checkIfTryAgainButtonDisplayed()
     }
 
     @Then("^I see appropriate information message when there is a error retrieving data$")
@@ -419,7 +414,7 @@ class AppointmentsBookingStepDefinitions {
     @Then("^there should not be an option to try again$")
     @Throws(Exception::class)
     fun there_should_not_be_an_option_to_try_again() {
-        appointmentsBooking.checkIfTyAgainButtonIsNotDisplayed()
+        appointmentsBooking.checkIfTryAgainButtonIsNotDisplayed()
     }
 
     @When("^I click try again button on appointment page$")

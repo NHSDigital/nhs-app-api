@@ -48,16 +48,27 @@ open class CancelAppointmentSteps {
     }
 
     @Step
-    fun verifyTheReasonIsAvailable(reason: String) {
-        assertTrue("$reason is not available as a Cancellation Reason. ", cancelAppointmentPage.isReasonAvailable(reason))
-    }
-
-    @Step
     fun progressToAppointmentCancellationScreen() {
         appointmentsSteps.mockEMISMyAppointmentResponse()
         browser.goToApp()
         login.asDefault()
         navigation.select("appointments")
         appointmentsSteps.clickFirstCancelLink()
+    }
+
+    @Step
+    fun verifyTheValidationErrorSummary() {
+        assertEquals("There's a problem", cancelAppointmentPage.getErrorSummaryHeading())
+        assertEquals("Select a reason for cancelling", cancelAppointmentPage.getErrorSummaryBody())
+    }
+
+    @Step
+    fun verifyTheInlineReasonValidationError() {
+        assertEquals("Select a reason for cancelling", cancelAppointmentPage.getInlineValidationError())
+    }
+
+    @Step
+    fun selectReason(reason: String) {
+        assertTrue("$reason is not available as a Cancellation Reason. ", cancelAppointmentPage.selectReason(reason))
     }
 }

@@ -27,7 +27,7 @@ const createApiErrorComponent = ($route, apiError) => {
     store,
     localVue,
     mocks: {
-      $style: { serverError: 'error' },
+      $style: { serverError: 'error', button: 'button' },
       $route,
       $t,
       $te,

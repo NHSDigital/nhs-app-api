@@ -24,6 +24,8 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var appointmentsBooking: AppointmentsBookingSteps
 
+    val bookAnAppiontmentButtonText = "Book an appointment"
+
     @Given("^I am on the appointments page$")
     fun iAmOnTheAppointmentsPage() {
         browser.goToApp()

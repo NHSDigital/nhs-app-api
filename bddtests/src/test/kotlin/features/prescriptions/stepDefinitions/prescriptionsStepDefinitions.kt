@@ -16,6 +16,7 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.joda.time.DateTime
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
@@ -362,7 +363,7 @@ open class PrescriptionsStepDefinitions {
         val errorTitle = "Sorry, you don't currently have access to this service"
         val errorContent = "Contact your GP surgery for more information."
 
-        Assert.assertEquals("$errorTitle$errorContent", em)
+        assertEquals("$errorTitle\n$errorContent", em)
     }
 
     @But("The prescriptions endpoint is timing out")

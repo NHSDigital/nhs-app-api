@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible" :id="$style.serverError" class="content">
     <error-warning-dialog error-or-warning="error">
-      <p class="header">
+      <p :class="$style.header">
         {{ header }}
       </p>
       <p :class="$style.subheader">
@@ -11,7 +11,7 @@
         {{ message }}
       </p>
     </error-warning-dialog>
-    <button v-if="retryButtonText" class="button" @click="onRetryButtonClicked">
+    <button v-if="retryButtonText" :class="$style.button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
     </button>
   </div>
@@ -118,7 +118,7 @@ export default {
 };
 </script>
 
-<style module lang="scss" scoped>
+<style module lang="scss">
   @import '../../style/html';
   @import '../../style/elements';
   @import '../../style/buttons';

@@ -15,6 +15,11 @@ class CancelAppointmentStepDefinitions {
         cancelAppointmentSteps.progressToAppointmentCancellationScreen()
     }
 
+    @Given("^I select a cancellation reason of (.*)$")
+    fun iSelectACancellationReason(reason: String) {
+        cancelAppointmentSteps.selectReason(reason)
+    }
+
     @Then("^I will be on the \"Cancellation reason\" screen$")
     fun iWillBeOnTheCancellationScreen() {
         cancelAppointmentSteps.verifyWeAreOnTheCancelAppointmentScreen()
@@ -25,12 +30,15 @@ class CancelAppointmentStepDefinitions {
         cancelAppointmentSteps.verifyTheCorrectAppointmentDetailsAreDisplayed()
     }
 
-    @Then("^there is a cancellation reasons drop-down with the appropriate reasons$")
-    fun thereIsACancellationReasonsDropDownWithTheAppropriateReasons(reasons: List<String>) {
+    @Then("^there is a cancellation reasons drop-down$")
+    fun thereIsACancellationReasonsDropDownWithTheAppropriateReasons() {
         cancelAppointmentSteps.verifyTheDropDownMenuLabel()
-        cancelAppointmentSteps.verifyTheReasonIsAvailable("Select reason")
-        reasons.forEach {
-            cancelAppointmentSteps.verifyTheReasonIsAvailable(it)
-        }
+        cancelAppointmentSteps.selectReason("Select reason")
+    }
+
+    @Then("^I will receive a cancellation validation error$")
+    fun iWillReceiveACancellationValidationError() {
+        cancelAppointmentSteps.verifyTheValidationErrorSummary()
+        cancelAppointmentSteps.verifyTheInlineReasonValidationError()
     }
 }

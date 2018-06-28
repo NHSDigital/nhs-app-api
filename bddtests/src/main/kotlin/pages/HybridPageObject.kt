@@ -9,12 +9,18 @@ import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
 import org.openqa.selenium.By
 import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.NoSuchElementException
 
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     @FindBy(xpath = "//header/h1")
     private lateinit var pageHeader: WebElementFacade
+
+    @FindBy(xpath = "//div[@class='msg error']")
+    private lateinit var errorMessage: WebElementFacade
+
+    private val buttonXpath = "//button[contains(text(),'%s')]"
 
     override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
         val page = super.switchToPage(pageObjectClass)
@@ -107,20 +113,12 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return spinner.isCurrentlyVisible
     }
 
-    fun getErrorText(): String {
-        val paragraphs = findAllByXpath("//div[@class='msg error']//p")
-        var content = StringBuilder()
-
-        paragraphs.forEach { el ->
-            if ( el.isVisible ) {
-                val t = el.text
-                if (t != null) {
-                    content.append(t)
-                }
-            }
+    fun getErrorText(): String? {
+        return try {
+            errorMessage.text
+        } catch(e: NoSuchElementException) {
+            null
         }
-
-        return content.toString()
     }
 
     fun getRetryButtonText() : String {
@@ -170,8 +168,22 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return pageTitleValid && pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
     }
 
+    fun waitForPageHeaderText(expectedHeaderText: String): Boolean {
+        return waitFor({ getPageHeaderText() == expectedHeaderText }) !=  null
+    }
+
     fun getPageHeaderText(): String {
         return pageHeader.text
+    }
+
+    fun doesButtonExistBasedOnVisibleText(visibleText: String): Boolean {
+        return findByXpath(String.format(buttonXpath, visibleText)).isPresent
+    }
+
+    fun clickOnButton(button: String) {
+        val element: WebElementFacade = findByXpath(String.format(buttonXpath, button))
+        scrollToTheElement(element)
+        element.click()
     }
 
     private fun isAnyXpathVisible(xpath:String) : Boolean {

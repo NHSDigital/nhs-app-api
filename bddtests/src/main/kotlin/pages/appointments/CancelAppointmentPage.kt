@@ -16,6 +16,7 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
     @FindBy(xpath = "//select[@id='txt_reason']")
     private lateinit var dropDownMenu: WebElementFacade
 
+
     fun getCheckDetailsText(): String {
         return checkDetailsText.text
     }
@@ -24,7 +25,7 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
         return dropDownMenuLabel.text
     }
 
-    fun isReasonAvailable(reason: String): Boolean {
+    fun selectReason(reason: String): Boolean {
         return try {
             dropDownMenu.selectByVisibleText<WebElementFacade>(reason)
             true

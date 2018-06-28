@@ -11,7 +11,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     @FindBy(id = "btn_floating")
     lateinit var bookButton: WebElementFacade
 
-    @FindBy(id = "success-dialog")
+    @FindBy(xpath = "//*[@id='success-dialog']/div/p")
     private lateinit var successMessage: WebElementFacade
 
     @FindBy(xpath = "//h3/..")

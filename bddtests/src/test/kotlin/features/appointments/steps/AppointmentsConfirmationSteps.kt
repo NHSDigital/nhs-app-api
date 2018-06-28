@@ -5,6 +5,7 @@ import mocking.MockingClient
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import pages.appointments.AppointmentsConfirmationPage
 import worker.models.appointments.BookAppointmentSlotRequest
 import java.time.Duration
@@ -62,8 +63,8 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkValidationErrorMessage() {
-        val message = appointmentsConfirmation.getValidationErrorMessage()
-        Assert.assertTrue(message.containsText("Please describe your symptoms"))
+        val message = appointmentsConfirmation.getInlineValidationError()
+        assertEquals("Enter a reason for this appointment", message)
     }
 
     @Step
