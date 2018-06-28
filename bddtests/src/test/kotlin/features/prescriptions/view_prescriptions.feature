@@ -5,10 +5,12 @@ Feature: View prescriptions
   Background:
     Given wiremock is initialised
 
+  @NHSO-497
   Scenario: A user can see the prescriptions menu button
     Given I am logged in
     Then I see the prescriptions menu button
 
+  @NHSO-497
   Scenario: A user selects the prescriptions menu button
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -17,6 +19,7 @@ Feature: View prescriptions
     And the prescriptions menu button is highlighted
 
   @smoketest
+  @NHSO-497
   Scenario: A user with no past repeat prescriptions
     Given I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
@@ -24,6 +27,7 @@ Feature: View prescriptions
     Then I see no prescriptions
     And I see a message indicating that I have no repeat prescriptions
 
+  @NHSO-497
   Scenario: A user who has prescriptions totalling more than one hundred courses
     Given I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -31,6 +35,7 @@ Feature: View prescriptions
     Then I see expected prescriptions
 
   @smoketest
+  @NHSO-497
   Scenario: A user who has multiple prescription each containing one course
     Given I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -51,18 +56,21 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see expected prescriptions
 
+  @NHSO-497
   Scenario: A user who has multiple prescription each containing the same repeat prescription
     Given I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
     When I am on the prescriptions page
     Then I see expected prescriptions
 
+  @NHSO-497
   Scenario: A user who has only one prescription containing multiple courses
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
     When I am on the prescriptions page
     Then I see expected prescriptions
 
+  @NHSO-497
   Scenario: A user who has acute prescriptions
     Given I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
@@ -161,3 +169,27 @@ Feature: View prescriptions
     But the GP System is too slow
     When I request prescriptions for the last 6 months
     Then I receive a "Gateway Timeout" error
+
+  @NHSO-1509
+  Scenario: A user with historic prescriptions with missing quantity info
+    Given I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And each course has only dosage info
+    When I am on the prescriptions page
+    Then I see expected prescriptions
+
+  @NHSO-1509
+  Scenario: A user with historic prescriptions with missing dosage info
+    Given I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And each course has only quantity info
+    When I am on the prescriptions page
+    Then I see expected prescriptions
+
+  @NHSO-1509
+  Scenario: A user with historic prescriptions with missing dosage and quantity info
+    Given I have 1 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    And each course has no info
+    When I am on the prescriptions page
+    Then I see expected prescriptions

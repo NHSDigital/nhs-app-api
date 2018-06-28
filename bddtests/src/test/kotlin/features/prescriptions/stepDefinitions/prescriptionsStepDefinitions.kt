@@ -25,6 +25,7 @@ import worker.models.prescriptions.PrescriptionsResponseData
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
+import pages.prescription.RepeatPrescriptionsPage;
 
 open class PrescriptionsStepDefinitions {
 
@@ -38,6 +39,8 @@ open class PrescriptionsStepDefinitions {
     val HTTP_EXCEPTION = "HttpException"
     val PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY: Long = 6
     var numberOfPrescriptions: Int = 0
+    var numOfCourses: Int = 0
+    var numOfRepeats: Int = 0
     lateinit var currentPatient: Patient
     var fromDate: String? = null
     val historicPrescriptionOrderPriority = hashMapOf( "Rejected" to 1, "Requested" to 2, "Approved" to 3)
@@ -81,6 +84,8 @@ open class PrescriptionsStepDefinitions {
     @And("^each repeat prescription contains (\\d+) courses of which (\\d+) are repeats$")
     fun givenEachRepeatPrescriptionContainsXCoursesOfWhichXAreRepeats(numOfCourses: Int, numOfRepeats: Int) {
         val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        this.numOfCourses = numOfCourses
+        this.numOfRepeats = numOfRepeats
 
         prescriptionsMock = PrescriptionsData.loadPrescriptionsData(numberOfPrescriptions, numOfCourses * numberOfPrescriptions, numOfRepeats * numberOfPrescriptions)
 
@@ -320,7 +325,7 @@ open class PrescriptionsStepDefinitions {
                 var historicPrescription = HistoricPrescription(
                         orderDate = datetime,
                         name = course.name,
-                        dosage = course.dosage + " - " + course.quantityRepresentation,
+                        detail = pages.prescription.resolveDetailsField(course.dosage, course.quantityRepresentation),
                         status = emisMedicationCourseStatusToDisplayedStatus[courseEntry.requestedMedicationCourseStatus]
                 )
 
@@ -460,5 +465,27 @@ open class PrescriptionsStepDefinitions {
 
         // There is a bug with NHSO-415, which means that this banner isn't shown on a server-session timeout. Uncomment once bug is fixed.
         // login.assertTimeoutBannerIsShown()
+    }
+
+    @And("each course has (.*)")
+    fun eachCourseHasX(contents: String) {
+        val showDosage = contents.toLowerCase().contains("dosage")
+        val showQuantity = contents.toLowerCase().contains("quantity")
+
+        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+
+        prescriptionsMock = PrescriptionsData.loadPrescriptionsData(
+                numberOfPrescriptions,
+                numOfCourses * numberOfPrescriptions,
+                numOfRepeats * numberOfPrescriptions,
+                showDosage, showQuantity)
+
+        mockingClient
+                .forEmis {
+                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            .respondWithSuccess(prescriptionsMock)
+                }
+
+
     }
 }

@@ -9,7 +9,7 @@
       <hr>
     </div>
     <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
-    <div :class="$style.dosage" aria-label="dosage">{{ prescriptionCourse.details }}</div>
+    <div :class="$style.dosage" aria-label="detail">{{ prescriptionCourse.details }}</div>
     <div v-if="prescriptionCourse.status != null">
       <div :class="getStatusStyle()">
         <hr>

@@ -13,6 +13,20 @@ import pages.HybridPageObject
 import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
 
+fun resolveDetailsField(dosage: String?, quantity: String?): String {
+
+    if (dosage != null && quantity != null) {
+        return dosage + " - " + quantity.replace("  ", " ")
+    }
+    else if (dosage != null) {
+        return dosage
+    }
+    else if (quantity != null) {
+        return quantity
+    }
+    return ""
+}
+
 @DefaultUrl("http://localhost:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
@@ -47,7 +61,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         for (i in coursesData.indices) {
             var name = coursesData[i].name
-            var instructions = coursesData[i].dosage + " - " + coursesData[i].quantityRepresentation.replace("  ", " ")
+            var instructions = resolveDetailsField(coursesData[i].dosage, coursesData[i].quantityRepresentation)
 
             var nameAtIndex = namesListed[i].text
             var instructionAtIndex = instructionsListed[i].text

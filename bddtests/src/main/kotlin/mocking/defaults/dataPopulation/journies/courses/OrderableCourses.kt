@@ -12,7 +12,12 @@ class OrderableCourses(private val client: MockingClient) {
                 .forEmis {
                     coursesRequest(patient)
                             .respondWithSuccess(CourseRequestsGetResponse(
-                                    CoursesData.getCourseData(10,10, 10, mutableListOf())))
+                                    CoursesData.getCourseData(
+                                            10,
+                                            10,
+                                            10,
+                                            mutableListOf(),
+                                            true, true)))
                 }
     }
 }

@@ -42,9 +42,21 @@ open class coursesStepDefinitions {
 
     lateinit var selectedCourses: List<MedicationCourse>
 
-    @Given("I have (\\d+) assigned prescriptions")
+    @Given("^I have (\\d+) assigned prescriptions$")
     fun iHaveXAssignedPrescriptions(numberOfCourses: Int) {
-        coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf())
+        coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf(), true, true)
+        mockingClient.forEmis {
+            coursesRequest(patient)
+                    .respondWithSuccess(CourseRequestsGetResponse(coursesData))
+        }
+    }
+
+    @Given("I have (\\d+) assigned prescriptions which have (.*)")
+    fun iHaveXAssignedPrescriptionsWhichHasX(numberOfCourses: Int, content: String) {
+        val showDosage = content.toLowerCase().contains("dosage")
+        val showQuantity = content.toLowerCase().contains("quantity")
+
+        coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf(), showDosage, showQuantity)
         mockingClient.forEmis {
             coursesRequest(patient)
                     .respondWithSuccess(CourseRequestsGetResponse(coursesData))
@@ -137,9 +149,22 @@ open class coursesStepDefinitions {
         courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
     }
 
-    @Given("I select (\\d+) repeatable prescriptions out of (\\d+) available")
+    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available$")
     fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int, numberOfPrescriptionsToCreate: Int) {
         iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
+        xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
+        iClickOrderARepeatPrescription()
+
+        val courses = getAvailableCoursesFilteredSortedOrdered()
+        val coursesToSelect = courses.take(numberOfPrescriptionsToSelect)
+        courseSteps.selectRepeatPrescriptions(coursesToSelect)
+        selectedCourses = coursesToSelect
+    }
+
+    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available which have (.*)")
+    fun iSelectXRepeatablePrescriptionsWhichHaveX(numberOfPrescriptionsToSelect: Int, numberOfPrescriptionsToCreate: Int, content: String) {
+        iHaveXAssignedPrescriptionsWhichHasX(numberOfPrescriptionsToCreate, content)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
         iClickOrderARepeatPrescription()

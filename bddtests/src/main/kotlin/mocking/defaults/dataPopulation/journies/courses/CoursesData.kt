@@ -7,7 +7,12 @@ import java.util.*
 
 object CoursesData {
 
-    fun getCourseData(maxCourses: Int, numOfRepeats: Int, numCanBeRequested: Int, medicationCourses: MutableList<MedicationCourse>) : MutableList<MedicationCourse> {
+    fun getCourseData(maxCourses: Int,
+                      numOfRepeats: Int,
+                      numCanBeRequested: Int,
+                      medicationCourses: MutableList<MedicationCourse>,
+                      includeDosage: Boolean,
+                      includeQuantity: Boolean) : MutableList<MedicationCourse> {
 
         var numberOfRepeats = numOfRepeats
         var numberCanBerequested = numCanBeRequested
@@ -19,11 +24,19 @@ object CoursesData {
                 constituents.add("Constituent" + constituentNo)
             }
 
+            var prefix = ""
+            if (!includeDosage) {
+                prefix += "no-dosage "
+            }
+            if (!includeQuantity) {
+                prefix += "no-quantity "
+            }
+
             // Create a default course
             val createdCourse = MedicationCourse(UUID.randomUUID().toString(),
-                    PrescriptionsData.getCourseName(),
-                    PrescriptionsData.getDosage(),
-                    PrescriptionsData.getQuantity(),
+                    prefix + PrescriptionsData.getCourseName(),
+                    if (includeDosage) PrescriptionsData.getDosage() else null,
+                    if (includeQuantity) PrescriptionsData.getQuantity() else null,
                     PrescriptionType.Acute,
                     constituents,
                     false)

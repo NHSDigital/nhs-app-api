@@ -52,7 +52,7 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             var p = HistoricPrescription(
                     orderDate = el.findElement(By.xpath(".//*[@aria-label='order-date']")).text,
                     name = el.findElement(By.xpath(".//*[@aria-label='course-name']")).text,
-                    dosage = el.findElement(By.xpath(".//*[@aria-label='dosage']")).text,
+                    detail = el.findElement(By.xpath(".//*[@aria-label='detail']")).text,
                     status = el.findElement(By.xpath(".//*[@aria-label='status']")).text
             )
 

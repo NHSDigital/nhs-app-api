@@ -7,7 +7,7 @@ import java.util.*
 
 object PrescriptionsData {
 
-    fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?): PrescriptionRequestsGetResponse {
+    fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?, showDosage: Boolean = true, showQuantity: Boolean = true): PrescriptionRequestsGetResponse {
 
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
@@ -18,7 +18,10 @@ object PrescriptionsData {
             medicationCourses = CoursesData.getCourseData(
                     noCourses,
                     if (noRepeats == null) noPrescriptions else noRepeats,
-                    if (noRepeats == null) noPrescriptions else noRepeats, medicationCourses)
+                    if (noRepeats == null) noPrescriptions else noRepeats,
+                    medicationCourses,
+                    showDosage,
+                    showQuantity)
 
             var maxPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false

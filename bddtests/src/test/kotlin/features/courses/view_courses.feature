@@ -57,7 +57,7 @@ Feature: View courses
   @smoketest
   @NHSO-502
   Scenario: The User has selected repeat prescriptions to order
-    And I select 5 repeatable prescriptions out of 5 available
+    Given I select 5 repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
@@ -112,3 +112,45 @@ Feature: View courses
     Given prescriptions is disabled at a GP Practice level
     When I browse to the page at /prescriptions/confirm-prescription-details
     Then I see a message informing me that I don't currently have access to this service
+
+  @NHSO-1509
+  Scenario: The user has 1 repeatable prescription with missing quantity info
+    Given I have 1 assigned prescriptions which have only dosage info
+    And 1 of my prescriptions are of type repeat
+    And 1 of my prescriptions can be requested
+    When I click 'Order a repeat prescription'
+    Then I see the available repeatable prescriptions
+
+  @NHSO-1509
+  Scenario: The user has 1 repeatable prescription with missing dosage info
+    Given I have 1 assigned prescriptions which have only quantity info
+    And 1 of my prescriptions are of type repeat
+    And 1 of my prescriptions can be requested
+    When I click 'Order a repeat prescription'
+    Then I see the available repeatable prescriptions
+
+  @NHSO-1509
+  Scenario: The user has 1 repeatable prescription with missing dosage and quantity info
+    Given I have 1 assigned prescriptions which have no info
+    And 1 of my prescriptions are of type repeat
+    And 1 of my prescriptions can be requested
+    When I click 'Order a repeat prescription'
+    Then I see the available repeatable prescriptions
+
+  @NHSO-1509
+  Scenario: The User has selected repeat prescriptions to order with missing quantity info
+    Given I select 1 repeatable prescriptions out of 1 available which have only dosage info
+    When I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
+
+  @NHSO-1509
+  Scenario: The User has selected repeat prescriptions to order with missing dosage info
+    Given I select 1 repeatable prescriptions out of 1 available which have only quantity info
+    When I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
+
+  @NHSO-1509
+  Scenario: The User has selected repeat prescriptions to order with missing dosage and quantity info
+    Given I select 1 repeatable prescriptions out of 1 available which have no info
+    When I click Continue on the Order a repeat prescription page
+    Then I see the previously selected prescriptions on the Confirm repeat prescription page
