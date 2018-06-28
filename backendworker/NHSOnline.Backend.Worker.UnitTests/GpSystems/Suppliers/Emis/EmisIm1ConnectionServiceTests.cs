@@ -275,6 +275,24 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
         }
+        
+        [TestMethod]
+        public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest()
+        {
+            // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+                        .BadRequest)));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+        }
 
         private static PatientIdentifier CreatePatientIdentifier(
             string identifierValue = DefaultIdentifierValue,

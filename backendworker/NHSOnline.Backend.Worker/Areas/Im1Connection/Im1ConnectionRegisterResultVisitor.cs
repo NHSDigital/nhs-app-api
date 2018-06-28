@@ -18,6 +18,11 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         {
             return new CreatedResult(Request.GetDisplayUrl(), result.Response);
         }
+        
+        public IActionResult Visit(Im1ConnectionRegisterResult.BadRequest result)
+        {
+            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+        }
 
         public IActionResult Visit(Im1ConnectionRegisterResult.InsufficientPermissions result)
         {

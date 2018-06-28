@@ -56,5 +56,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Im1Connection
                 return visitor.Visit(this);
             }
         }
+        
+        public class BadRequest : Im1ConnectionRegisterResult
+        {
+            public override T Accept<T>(IIm1ConnectionRegisterResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

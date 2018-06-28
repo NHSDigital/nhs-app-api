@@ -102,6 +102,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                     return new Im1ConnectionRegisterResult.AccountAlreadyExists();
                 }
 
+                if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    return new Im1ConnectionRegisterResult.BadRequest();
+                }
+
                 if (!meApplicationsResponse.HasSuccessStatusCode)
                 {
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
