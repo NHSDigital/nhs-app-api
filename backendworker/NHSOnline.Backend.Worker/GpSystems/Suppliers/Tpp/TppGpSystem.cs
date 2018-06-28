@@ -37,12 +37,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         
         public IDemographicsService GetDemographicsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppDemographicsService>();
         }
         
         public IPatientRecordService GetPatientRecordService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppPatientRecordService>();
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()

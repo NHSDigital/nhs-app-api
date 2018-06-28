@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
@@ -14,23 +15,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             {
                 throw new ArgumentNullException(nameof(demographicsGetResponse));
             }
-            
+ 
             return new DemographicsResponse
             {
-                FirstName = demographicsGetResponse.FirstName,
-                Surname = demographicsGetResponse.Surname,
+                PatientName = String.Format("{0} {1}", demographicsGetResponse.FirstName, demographicsGetResponse.Surname),
                 DateOfBirth = demographicsGetResponse.DateOfBirth,
                 Sex = demographicsGetResponse.Sex,
                 NhsNumber = demographicsGetResponse.ExtractNhsNumbers().Any() ? demographicsGetResponse.ExtractNhsNumbers().First().NhsNumber : null,
-                Address = new Address
-                {
-                    Line1 = demographicsGetResponse.Address?.HouseNameFlatNumber,
-                    Line2 = demographicsGetResponse.Address?.NumberStreet,
-                    Line3 = demographicsGetResponse.Address?.Village,
-                    Town = demographicsGetResponse.Address?.Town,
-                    County = demographicsGetResponse.Address?.County,
-                    Postcode = demographicsGetResponse.Address?.Postcode
-                }
+                Address = demographicsGetResponse.Address?.ToString()
             };
         }
     }

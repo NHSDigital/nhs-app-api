@@ -17,6 +17,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
     {   
         public const string RequestTypeHeader = "type";
         public const string ResponseSuidHeader = "suid";
+        private const string RequestSuidHeader = "suid";       
         private static readonly Regex ErrorRegex = new Regex("errorCode\\s?=");
 
         private readonly HttpClient _httpClient;
@@ -50,13 +51,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             
             return response;
         }
-
-        private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model) where TRequest : ITppRequest
+        
+        public async Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession)
+        {           
+            var patientSelected = new PatientSelected
+            {
+                OnlineUserId = tppUserSession.OnlineUserId,
+                PatientId =  tppUserSession.PatientId,
+                UnitId = tppUserSession.UnitId,                  
+            };
+           
+            return await Post<PatientSelected, PatientSelectedReply>(patientSelected, tppUserSession.Suid);          
+        }
+        
+        private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
             model.ApplyConfig(_tppConfig);  
             var authenticateXml = model.SerializeXml();
             var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, MediaType);
-            var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent);
+            var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
 
             var response = await SendRequestAndParseResponse<TResponse>(request);
             
@@ -100,8 +113,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             
             return response;
         }
-
-        private static HttpRequestMessage BuildTppRequest(HttpMethod method, string requestType, StringContent stringContent)
+        
+        private static HttpRequestMessage BuildTppRequest(HttpMethod method, string requestType, StringContent stringContent, string suid = null)
         {
             if (stringContent == null)
             {
@@ -113,7 +126,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 Method = method,
                 Content = stringContent
             };
-                
+            
+            if (!string.IsNullOrEmpty(suid))
+            {
+                requestMessage.Headers.Add(RequestSuidHeader, new[] { suid });
+            }
+            
             requestMessage.Headers.Add(RequestTypeHeader, requestType);
 
             return requestMessage;
@@ -129,6 +147,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             public Error ErrorResponse { get; set; }
             public HttpStatusCode StatusCode { get; set; }
             public bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
+            
+            // User does not have access, Sean to confirm with TPP re using error codes
+            public bool HasForbiddenResponse => ErrorResponse != null && ErrorResponse.ErrorCode == "6";
         }
 
         public class TppApiObjectResponse<TBody> : TppApiResponse

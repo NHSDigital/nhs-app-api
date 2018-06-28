@@ -1,12 +1,11 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
@@ -18,7 +17,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private ITppClient _tppClient;
         private Mock<IServiceProvider> _mockServiceProvider;
         private TppGpSystem _systemUnderTest;
-
+        private ILoggerFactory _loggerFactory;
+        private ITppDemographicsMapper _tppDemographicsMapper;
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -26,7 +27,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _options = new Mock<IOptions<ConfigurationSettings>>().Object;
             _serviceProvider = _mockServiceProvider.Object;
             _tppClient = new Mock<ITppClient>().Object;
-            _systemUnderTest = new TppGpSystem(_serviceProvider);    
+            _systemUnderTest = new TppGpSystem(_serviceProvider);
+            _loggerFactory = new Mock<ILoggerFactory>().Object;
+            _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
         }
 
         [TestMethod]
@@ -60,19 +63,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         }
         
         [TestMethod]
-        public void GetDemographicsService_WhenCalled_ThrowsNotImplementedException()
+        public void GetDemographicsService_WhenCalled_ReturnsTppDemographicsService()
         {
-            (new Action(() => _systemUnderTest.GetDemographicsService()))
-                .Should()
-                .Throw<NotImplementedException>();
+            var service = new TppDemographicsService(_loggerFactory, _tppClient, _tppDemographicsMapper);
+            _mockServiceProvider
+                .Setup(x => x.GetService(typeof(TppDemographicsService)))
+                .Returns(service);
+
+            _systemUnderTest.GetDemographicsService().Should().Be(service);
         }
 
         [TestMethod]
         public void GetPatientRecordService_WhenCalled_ThrowsNotImplementedException()
         {
-            (new Action(() => _systemUnderTest.GetPatientRecordService()))
-                .Should()
-                .Throw<NotImplementedException>();
+            var service = new TppPatientRecordService();
+            _mockServiceProvider
+                .Setup(x => x.GetService(typeof(TppPatientRecordService)))
+                .Returns(service);
+
+            _systemUnderTest.GetPatientRecordService().Should().Be(service);
         }
 
         [TestMethod]

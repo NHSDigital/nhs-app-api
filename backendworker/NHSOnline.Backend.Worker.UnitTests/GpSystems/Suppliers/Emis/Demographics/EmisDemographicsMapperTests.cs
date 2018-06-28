@@ -45,7 +45,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographi
 
             // Assert
             result.Should().NotBeNull();
-            result.Address.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -83,20 +82,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Demographi
             // Assert
             var expectedResult = new DemographicsResponse
             {
-                FirstName = item.FirstName,
-                Surname = item.Surname,
+                PatientName = $"{item.FirstName} {item.Surname}",
                 DateOfBirth = item.DateOfBirth,
                 Sex = item.Sex,
                 NhsNumber = "123 456 7890",
-                Address = new Address
-                {
-                    Line1 = item.Address.HouseNameFlatNumber,
-                    Line2 = item.Address.NumberStreet,
-                    Line3 = item.Address.Village,
-                    Town = item.Address.Town,
-                    County = item.Address.County,
-                    Postcode = item.Address.Postcode
-                }
+                Address = $"{item.Address.HouseNameFlatNumber}, {item.Address.NumberStreet}, {item.Address.Village}, " +
+                          $"{item.Address.Town}, {item.Address.County}, {item.Address.Postcode}",
             };
 
             result.Should().BeEquivalentTo(expectedResult);

@@ -17,5 +17,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
         public NationalId NationalId { get; set; }
 
         public PersonName PersonName { get; set; }
+        
+        public TppAddress Address { get; set; }
     }
 }

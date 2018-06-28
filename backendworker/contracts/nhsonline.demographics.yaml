@@ -37,12 +37,9 @@ definitions:
       nhsNumber:
         type: string
         description: The persons NHS number.
-      firstName:
+      patientName:
         type: string
-        description: The persons first name.
-      surname:
-        type: string
-        description: The persons surname.
+        description: The patients name.
       dateOfBirth:
         type: string
         format: date-time
@@ -51,27 +48,5 @@ definitions:
         type: string
         description: The persons sex.
       address:
-        $ref: '#/definitions/Address'
-
-  Address:
-    type: object
-    properties:
-      line1:
         type: string
-        description: Line 1 of the address.
-      line2:
-        type: string
-        description: Line 2 of the address.
-      line3:
-        type: string
-        description: Line 3 of the address.
-      town:
-        type: string
-        description: The name of the town.
-      county:
-        type: string
-        description: The name of the county.
-      postCode:
-        type: string
-        description: The postcode.
-
+        description: The patients address.

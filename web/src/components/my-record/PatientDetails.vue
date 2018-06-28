@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
     <label>{{ $t('myRecord.patientInfo.fieldLabelName') }}</label>
-    <p v-if="patientDetails">{{ patientDetails.firstName }} {{ patientDetails.surname }}</p>
+    <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelDOB') }}</label>
     <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
@@ -11,7 +11,7 @@
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelAddress') }}</label>
     <p v-if="patientDetails && patientDetails.address">
-      {{ formatAddress(patientDetails.address) }}</p>
+      {{ patientDetails.address }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelNHS') }}</label>
     <p v-if="patientDetails">{{ patientDetails.nhsNumber }}</p>
@@ -40,14 +40,6 @@ export default {
     ...mapGetters({
       patientInfo: 'myRecord/patientDemographics',
     }),
-  },
-  methods: {
-    formatAddress(address) {
-      const addressParts = [address.line1, address.line2, address.line3, address.town,
-        address.county, address.postcode];
-
-      return addressParts.filter(part => part).join(', ');
-    },
   },
 };
 
