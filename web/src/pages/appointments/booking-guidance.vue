@@ -69,10 +69,10 @@ export default {
     }
     ol {
       li {
-        margin-left: 16px;
         font-weight: bold;
+        list-style-type: decimal;
+        list-style-position: inside;
         p {
-          margin-left: -16px;
           font-weight: normal;
         }
       }
