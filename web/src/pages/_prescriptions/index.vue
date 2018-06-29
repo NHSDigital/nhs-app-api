@@ -20,7 +20,7 @@
           v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
           :key="key"
           :class="$style['prescription-course']">
-          <div v-if="getMedicationCourseStatus(key) != null" class="panel-title">
+          <div v-if="getMedicationCourseStatus(key) != null" :class="$style['panel-title']">
             <h2>{{ getMedicationCourseStatus(key) }}</h2>
           </div>
           <ul>
