@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.Settings;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session

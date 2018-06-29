@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Support.Logging;
-using System;
 using System.IO;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
@@ -53,7 +52,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
         public void LogRange()
         {
             // Generate the log messages for a level range.
-            var streamReader = Log(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Information, "Debug", LogLevel.Critical, "Error"));
+            var streamReader = Log(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Debug, LogLevel.Error));
 
             // Check messages...
             streamReader.ReadLine().Should().Contain(string.Format(LoggedMessageFormat, LogLevel.Debug));
@@ -61,20 +60,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             streamReader.ReadLine().Should().Contain(string.Format(LoggedMessageFormat, LogLevel.Warning));
             // End of generated log messages.
             streamReader.ReadLine().Should().BeNull();
-        }
-
-        [TestMethod, ExpectedException(typeof(Exception))]
-        public void InvalidMinLogLevel()
-        {
-            // Try and set an invalid log level, to throw exception
-            var provider = new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Debug, "dsfdsa", LogLevel.Error, null);
-        }
-
-        [TestMethod, ExpectedException(typeof(Exception))]
-        public void InvalidMaxLogLevelLimit()
-        {
-            // Try and set an invalid log level, to throw exception
-            var provider = new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Debug, null, LogLevel.Error, "dgdfs");
         }
 
         [TestMethod]

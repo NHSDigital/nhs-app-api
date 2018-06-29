@@ -172,7 +172,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             };
 
             _stream = new MemoryStream();
-            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical, null, LogLevel.None, null, filters));
+            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical, LogLevel.None, filters));
         }
 
         [TestCleanup]

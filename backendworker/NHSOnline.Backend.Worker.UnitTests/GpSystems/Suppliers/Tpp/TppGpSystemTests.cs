@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;

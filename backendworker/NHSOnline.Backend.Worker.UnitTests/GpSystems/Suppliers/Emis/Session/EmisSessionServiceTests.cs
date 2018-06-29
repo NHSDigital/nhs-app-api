@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 

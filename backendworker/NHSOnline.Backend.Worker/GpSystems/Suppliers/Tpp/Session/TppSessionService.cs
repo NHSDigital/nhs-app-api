@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
@@ -19,7 +20,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _client = client;
             _logger = logger;
         }
-        
+
         public async Task<SessionCreateResult> Create(string im1ConnectionToken, string odsCode)
         {
             try

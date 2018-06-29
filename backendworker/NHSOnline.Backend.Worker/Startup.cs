@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -19,6 +18,9 @@ using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
+using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Cipher;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -46,9 +48,8 @@ namespace NHSOnline.Backend.Worker
         // Note that some service registration has now been moved into Module classes within the namespaces containing the services that they register, to avoid namespace dependency cycles.
         public void ConfigureServices(IServiceCollection services)
         {
-            var configurationSettings = Configuration.GetSection("ConfigurationSettings").Get<ConfigurationSettings>();
-            EnsureConfigurationSettingsPopulated(configurationSettings);
-            services.Configure<ConfigurationSettings>(Configuration.GetSection("ConfigurationSettings"));
+            var configurationSettings = ConfigurationSettings.GetSettings(Configuration);
+            services.Configure<ConfigurationSettings>(Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -74,6 +75,10 @@ namespace NHSOnline.Backend.Worker
             services.AddTransient<ICertificateService, CertificateService>();
 
             services.AddCors();
+
+            services.AddSingleton<CipherConfiguration>();
+            services.AddSingleton<ICipherService, CipherService>();
+
             services
                 .AddMvc(
                     options =>
@@ -95,15 +100,12 @@ namespace NHSOnline.Backend.Worker
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
             }); 
-
-            services.AddDataProtection();
             
             services.AddSingleton(Configuration);
             services.AddSingleton<IAuditorFactory>(new AuditorFactory(new StreamAuditSink(new System.IO.FileStream(Configuration["Audit:AuditFile"], System.IO.FileMode.Append))));
             services.AddTransient(AuditorFactory.BuildAuditor);
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
-            services.AddSingleton<ICipherService, CipherService>();
             services.AddSingleton<IJsonResponseParser, JsonResponseParser>();
             services.AddSingleton<IXmlResponseParser, XmlResponseParser>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
@@ -132,10 +134,10 @@ namespace NHSOnline.Backend.Worker
         {
             app.UseAuthentication();
 
-            var censorFilters = Configuration.GetSection("Logging:Application:CensorFilters").Get<List<LogCensorFilter>>();
             // Read in optional log configuration...
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, LogLevel.Information, Configuration["Logging:Application:StandardLevel"], LogLevel.Error, Configuration["Logging:Application:ErrorLevel"], censorFilters));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, LogLevel.Error, Configuration["Logging:Application:ErrorLevel"], LogLevel.None, null, censorFilters));
+            var logSettings = LoggingSettings.GetSettings(Configuration);
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, logSettings.StandardLevel, logSettings.ErrorLevel, logSettings.CensorFilters));
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, logSettings.ErrorLevel, LogLevel.None, logSettings.CensorFilters));
 
             if (env.IsDevelopment())
             {
@@ -178,34 +180,6 @@ namespace NHSOnline.Backend.Worker
                 
                 await next();
             });
-        }
-
-        private void EnsureConfigurationSettingsPopulated(ConfigurationSettings config)
-        {
-            if (config.PrescriptionsDefaultLastNumberMonthsToDisplay == null)
-            {
-                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.PrescriptionsDefaultLastNumberMonthsToDisplay)));
-            }
-
-            if (config.PrescriptionsMaxCoursesSoftLimit == null)
-            {
-                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.PrescriptionsMaxCoursesSoftLimit)));
-            }
-
-            if (config.CoursesMaxCoursesLimit == null)
-            {
-                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.CoursesMaxCoursesLimit)));
-            }
-            
-            if (config.DefaultSessionExpiryMinutes == default(int))
-            {
-                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.DefaultSessionExpiryMinutes)));
-            }
-
-            if (config.DefaultHttpTimeoutSeconds == default(int))
-            {
-                throw new Exception(string.Format(ExceptionMessages.ConfigurationValueNotFound, nameof(config.DefaultHttpTimeoutSeconds)));
-            }
         }
     }
 }

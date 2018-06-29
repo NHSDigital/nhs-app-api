@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 {

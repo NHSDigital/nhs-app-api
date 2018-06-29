@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
 {

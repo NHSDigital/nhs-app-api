@@ -17,6 +17,7 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session

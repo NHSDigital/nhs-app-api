@@ -13,6 +13,7 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using TppUserSession = NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppUserSession;
 
@@ -284,6 +285,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();
-        }
+    }
     }
 }

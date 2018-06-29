@@ -15,6 +15,7 @@ using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
+using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptions
 {

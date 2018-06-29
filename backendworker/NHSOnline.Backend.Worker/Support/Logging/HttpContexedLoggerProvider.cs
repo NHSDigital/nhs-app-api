@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace NHSOnline.Backend.Worker.Support.Logging
 {
@@ -19,33 +18,16 @@ namespace NHSOnline.Backend.Worker.Support.Logging
         public HttpContexedLoggerProvider
         (
             TextWriter logwriter, 
-            LogLevel defualtMinLogLevel, 
-            string configuredMinLogLevel = null,
-            LogLevel defualtMaxLogLevelLimit = LogLevel.None,
-            string configuredMaxLogLimit = null,
+            LogLevel minLogLevel,
+            LogLevel maxLogLevelLimit = LogLevel.None,
             IEnumerable<LogCensorFilter> regexFilterList = null
         )
         {
             _logwriter = logwriter;
-            _minLogLevel = ParsedLogLevel(configuredMinLogLevel, defualtMinLogLevel);
-            _maxLogLevelLimit = ParsedLogLevel(configuredMaxLogLimit, defualtMaxLogLevelLimit);
+            _minLogLevel = minLogLevel;
+            _maxLogLevelLimit = maxLogLevelLimit;
             _scopeProvider = new LoggerExternalScopeProvider();
             _regexFilterList = regexFilterList;
-        }
-
-        private static LogLevel ParsedLogLevel(string configuredLogLevel, LogLevel defualtLogLevel)
-        {
-            LogLevel logLevel = defualtLogLevel;
-            if (string.IsNullOrEmpty(configuredLogLevel) == false)
-            {
-                if (Enum.TryParse(configuredLogLevel, out logLevel) == false)
-                {
-                    throw new Exception(string.Format(ExceptionMessages.InvalidLogLevel, configuredLogLevel));
-                }
-            }
-
-            return logLevel;
-
         }
 
         public void Dispose() { }

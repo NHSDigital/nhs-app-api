@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
