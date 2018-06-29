@@ -66,6 +66,7 @@ class AuthorizationService {
       code_challenge_method: 'S256',
       prompt: 'login',
       baseUrl: process.env.CID_AUTH_ENDPOINT,
+      registerUrl: process.env.CID_REGISTER_ENDPOINT,
     };
     return request;
   }

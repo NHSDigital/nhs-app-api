@@ -1,9 +1,9 @@
 <template>
-  <form :action="redirectUrl" method="get">
-    <content>
-      <home-header />
-      <SessionExpiredBanner />
-      <main class="login-or-register">
+  <content>
+    <home-header />
+    <SessionExpiredBanner />
+    <main class="login-or-register">
+      <form :action="redirectUrl" method="get">
         <input :value="clientId" type="hidden" name="client_id" >
         <input :value="codeChallenge" type="hidden" name="code_challenge">
         <input :value ="codeMethod" type="hidden" name="code_challenge_method" >
@@ -12,13 +12,19 @@
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <LoginButton />
-
-        <hr :data-content="$t('common.or')" class="hr-text">
-
+      </form>
+      <hr :data-content="$t('common.or')" class="hr-text">
+      <form :action="registerUrl" method="get">
+        <input :value="redirectUri" type="hidden" name="redirect_uri">
+        <input :value="clientId" type="hidden" name="client_id" >
+        <input :value="codeChallenge" type="hidden" name="code_challenge">
+        <input :value ="codeMethod" type="hidden" name="code_challenge_method" >
+        <input :value="responseType" type="hidden" name="response_type">
+        <input :value="state" type="hidden" name="state">
         <RegistrationButton />
-      </main>
-    </content>
-  </form>
+      </form>
+    </main>
+  </content>
 </template>
 <script>
 /* eslint-disable import/extensions */
@@ -43,6 +49,9 @@ export default {
   computed: {
     redirectUrl() {
       return this.$store.state.auth.config.baseUrl;
+    },
+    registerUrl() {
+      return this.$store.state.auth.config.registerUrl;
     },
     clientId() {
       return this.$store.state.auth.config.client_id;
