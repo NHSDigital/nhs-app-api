@@ -11,6 +11,7 @@
     </ul>
 
     <floating-button-bottom
+      v-if="showBookAppointmentButton"
       :button-classes="['green']"
       :clickable="hasASlotSelected"
       @on-click="onBookButtonClicked"
@@ -47,6 +48,11 @@ export default {
       return (
         this.$store.state.appointmentSlots.hasLoaded &&
         this.$store.state.appointmentSlots.slots.length > 0
+      );
+    },
+    showBookAppointmentButton() {
+      return (
+        this.$store.state.appointmentSlots.hasLoaded
       );
     },
     hasASlotSelected() {
