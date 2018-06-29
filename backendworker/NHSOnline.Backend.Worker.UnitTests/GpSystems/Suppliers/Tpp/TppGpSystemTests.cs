@@ -7,6 +7,7 @@ using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
@@ -20,6 +21,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private TppGpSystem _systemUnderTest;
         private ILoggerFactory _loggerFactory;
         private ITppDemographicsMapper _tppDemographicsMapper;
+        private ITppMyRecordMapper _tppMyRecordMapper;
+
         
         [TestInitialize]
         public void TestInitialize()
@@ -31,6 +34,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _systemUnderTest = new TppGpSystem(_serviceProvider);
             _loggerFactory = new Mock<ILoggerFactory>().Object;
             _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
+            _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
+
         }
 
         [TestMethod]
@@ -75,9 +80,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         }
 
         [TestMethod]
-        public void GetPatientRecordService_WhenCalled_ThrowsNotImplementedException()
+        public void GetPatientRecordService_WhenCalled_ReturnsTppPatientRecordService()
         {
-            var service = new TppPatientRecordService();
+            var service = new TppPatientRecordService(_loggerFactory, _tppClient, _tppMyRecordMapper);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppPatientRecordService)))
                 .Returns(service);

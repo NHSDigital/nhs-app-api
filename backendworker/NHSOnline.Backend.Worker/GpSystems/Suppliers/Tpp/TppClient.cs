@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.ResponseParsers;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
@@ -63,8 +64,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             };
            
             return await Post<PatientSelected, PatientSelectedReply>(patientSelected, tppUserSession.Suid);          
-        }
+        }      
         
+        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(ViewPatientOverview model, string suid)
+        {
+            return await Post<ViewPatientOverview, ViewPatientOverviewReply>(model, suid);
+        }
+     
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
             model.ApplyConfig(_tppConfig);
@@ -177,6 +183,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             public Error ErrorResponse { get; set; }
             public HttpStatusCode StatusCode { get; set; }
             public bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
+
+            public bool HasErrorWithMessage(string message)
+            {
+                return ErrorResponse?.TechnicalMessage == message;
+            }
             
             // User does not have access, Sean to confirm with TPP re using error codes
             public bool HasForbiddenResponse => ErrorResponse != null && ErrorResponse.ErrorCode == "6";
