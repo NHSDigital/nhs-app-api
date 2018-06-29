@@ -101,6 +101,7 @@ export default {
         color: $dark_grey;
         margin-bottom: 16px;
       }
+      margin-bottom: 70px;
     }
 
     a:link, a:visited {
