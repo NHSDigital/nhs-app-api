@@ -20,7 +20,7 @@
 
     <upcoming-appointments v-if="showUpcomingAppointments" :appointments = "upcomingAppointments" />
 
-    <floating-button-bottom @on-click="onBookButtonClicked">
+    <floating-button-bottom v-if="showBookAppointmentButton" @on-click="onBookButtonClicked">
       {{ $t('appointments.index.bookButtonText') }}
     </floating-button-bottom>
   </main>
@@ -56,6 +56,11 @@ export default {
       return (
         this.$store.state.myAppointments.hasLoaded &&
         this.$store.state.myAppointments.appointments.length > 0
+      );
+    },
+    showBookAppointmentButton() {
+      return (
+        this.$store.state.myAppointments.hasLoaded
       );
     },
     upcomingAppointments() {
