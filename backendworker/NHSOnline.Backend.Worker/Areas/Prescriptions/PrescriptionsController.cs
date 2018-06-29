@@ -47,7 +47,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 .CreateGpSystem(userSession.Supplier)
                 .GetPrescriptionService();
 
-            var result = await prescriptionService.Get(userSession, fromDate, DateTimeOffset.Now);
+            var result = await prescriptionService.GetPrescriptions(userSession, fromDate, DateTimeOffset.Now);
+
             return result.Accept(new PrescriptionResultVisitor());
         }
 
@@ -69,7 +70,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                     .CreateGpSystem(userSession.Supplier)
                     .GetPrescriptionService();
 
-                result = await prescriptionService.Post(userSession, repeatPrescriptionRequest);
+                result = await prescriptionService.OrderPrescription(userSession, repeatPrescriptionRequest);      
             }
 
             return result.Accept(new PrescriptionResultVisitor());

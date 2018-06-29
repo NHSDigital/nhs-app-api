@@ -216,9 +216,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",
             string onlineUserId = "123", string patiendId = "234")
         {
-            var response = new TppClient.TppApiObjectResponse<AuthenticateReply>();
+            var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK);
 
-            response.StatusCode = HttpStatusCode.OK;
             response.Body = new AuthenticateReply
             {
                 OnlineUserId = onlineUserId,

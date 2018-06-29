@@ -4,14 +4,12 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Query.ExpressionTranslators.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
-using NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
@@ -21,14 +19,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private const string DefaultConnectionToken = "{\"accountid\":\"account_id\",\"passphrase\":\"passphrase\"}";
         private const string DefaultOdsCode = "token";
 
-        
+
         private IFixture _fixture;
         private Mock<ITppClient> _mockTppClient;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture().Customize(new AutoMoqCustomization());            
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
         }
 
@@ -36,23 +34,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         public async Task Verify_ReturnsAConnection_WhenRequested()
         {
             var authenticateReply = _fixture.Create<AuthenticateReply>();
-            
+
             var expectedNhsNumbers = new List<PatientNhsNumber>
             {
                 new PatientNhsNumber
                 {
                     NhsNumber = authenticateReply.User?.Person?.NationalId?.Value
                 }
-            };            
-            
+            };
+
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>
+                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
-                        StatusCode = HttpStatusCode.OK,
                         Body = authenticateReply,
                     }));
-            
+
             var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
@@ -62,20 +59,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
-            successResult.Response.NhsNumbers.Should().BeEquivalentTo(expectedNhsNumbers);   
+            successResult.Response.NhsNumbers.Should().BeEquivalentTo(expectedNhsNumbers);
         }
-        
+
         [TestMethod]
         public async Task Verify_ReturnsAEmptyNhsNumbers_WhenTppRespondsWithEmptyNhsNumber()
         {
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>
+                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
-                        StatusCode = HttpStatusCode.OK,
                         Body = null
                     }));
-            
+
             var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
@@ -85,7 +81,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
-            successResult.Response.NhsNumbers.Should().BeEmpty();   
+            successResult.Response.NhsNumbers.Should().BeEmpty();
         }
 
         [TestMethod]
@@ -93,7 +89,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>
+                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
                     {
                         ErrorResponse = _fixture.Create<Error>()
                     }));
@@ -110,9 +106,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
                 Task.FromResult(
-                    new TppClient.TppApiObjectResponse<AuthenticateReply>
+                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.BadGateway)
                     {
-                        StatusCode = HttpStatusCode.BadGateway,
                         ErrorResponse = null
                     }));
 

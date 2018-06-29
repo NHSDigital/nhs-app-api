@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             _logger = loggerFactory.CreateLogger<EmisPrescriptionService>();
         }
 
-        public async Task<PrescriptionResult> Get(UserSession userSession, DateTimeOffset? fromDate,
+        public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
             var emisUserSession = (EmisUserSession) userSession;
@@ -117,7 +117,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return prescriptionListResponseFiltered;
         }
 
-        public async Task<PrescriptionResult> Post(UserSession userSession, RepeatPrescriptionRequest request)
+        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest request)
         {
             var emisUserSession = (EmisUserSession) userSession;
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -14,20 +14,21 @@ using NHSOnline.Backend.Worker.ResponseParsers;
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public class TppClient : ITppClient
-    {   
+    {
         public const string RequestTypeHeader = "type";
         public const string ResponseSuidHeader = "suid";
-        private const string RequestSuidHeader = "suid";       
+        public const string RequestSuidHeader = "suid";
         private static readonly Regex ErrorRegex = new Regex("errorCode\\s?=");
 
         private readonly HttpClient _httpClient;
         private readonly ITppConfig _tppConfig;
         private readonly IXmlResponseParser _responseParser;
         private readonly ILogger<TppClient> _logger;
-        
+
         private const string MediaType = "text/xml";
-        
-        public TppClient(IHttpClientFactory httpClientFactory, ITppConfig tppConfig, IXmlResponseParser responseParser, ILoggerFactory loggerFactory)
+
+        public TppClient(IHttpClientFactory httpClientFactory, ITppConfig tppConfig, IXmlResponseParser responseParser,
+            ILoggerFactory loggerFactory)
         {
             _httpClient = httpClientFactory.GetClient(HttpClientName.TppApiClient);
             _tppConfig = tppConfig;
@@ -36,7 +37,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
             _logger = loggerFactory.CreateLogger<TppClient>();
         }
-        
+
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticateModel)
         {
             authenticateModel.Application = new Application
@@ -46,9 +47,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 ProviderId = _tppConfig.ApplicationProviderId,
                 DeviceType = _tppConfig.ApplicationDeviceType
             };
-            
+
             var response = await Post<Authenticate, AuthenticateReply>(authenticateModel);
-            
+
             return response;
         }
         
@@ -66,42 +67,50 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
-            model.ApplyConfig(_tppConfig);  
+            model.ApplyConfig(_tppConfig);
             var authenticateXml = model.SerializeXml();
             var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, MediaType);
             var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
 
             var response = await SendRequestAndParseResponse<TResponse>(request);
-            
+
             return response;
         }
 
-        private async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(HttpRequestMessage request)
+        private async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
+            HttpRequestMessage request)
         {
             var responseMessage = await _httpClient.SendAsync(request);
-            var response = new TppApiObjectResponse<TResponse>();
-
-            response.StatusCode = responseMessage.StatusCode;
+            var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             if (!response.HasSuccessResponse) return response;
-            
+
             var stringResponse = responseMessage.Content != null
                 ? await responseMessage.Content.ReadAsStringAsync()
                 : null;
 
             if (string.IsNullOrEmpty(stringResponse)) return response;
 
-
-            if (IsErrorResponse(stringResponse))
+            try
             {
-                response.ErrorResponse = _responseParser.ParseBody<Error>(stringResponse, responseMessage);
-                
-                _logger.LogError($"Server returned with error. { response.ErrorResponse?.UserFriendlyMessage }. { response.ErrorResponse?.TechnicalMessage }");
+                if (IsErrorResponse(stringResponse))
+                {
+                    response.ErrorResponse = _responseParser.ParseBody<Error>(stringResponse, responseMessage);
 
-                return response;
+                    _logger.LogError(
+                        $"Server returned with error. {response.ErrorResponse?.UserFriendlyMessage}. {response.ErrorResponse?.TechnicalMessage}");
+
+                    return response;
+                }
+
+                response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
             }
-
-            response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
+            catch (FormatException e)
+            {
+                _logger
+                    .LogError(e, "An error occured while parsing the response");
+                return new TppApiObjectResponse<TResponse>(HttpStatusCode.InternalServerError);
+            }
 
             if (responseMessage.Headers.TryGetValues(ResponseSuidHeader, out var values))
             {
@@ -110,7 +119,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                     { ResponseSuidHeader, values.First() }
                 };
             }
-            
+
+            return response;
+        }
+
+        public async Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(
+            TppUserSession tppUserSession)
+        {
+            var listRepeatMedication = new ListRepeatMedication
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.UnitId,
+            };
+
+            var response =
+                await Post<ListRepeatMedication, ListRepeatMedicationReply>(listRepeatMedication, tppUserSession.Suid);
+
             return response;
         }
         
@@ -118,32 +143,37 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             if (stringContent == null)
             {
-                throw new ArgumentNullException(nameof(stringContent));                
+                throw new ArgumentNullException(nameof(stringContent));
             }
-            
+
             var requestMessage = new HttpRequestMessage
             {
                 Method = method,
                 Content = stringContent
             };
-            
-            if (!string.IsNullOrEmpty(suid))
-            {
-                requestMessage.Headers.Add(RequestSuidHeader, new[] { suid });
-            }
-            
+
             requestMessage.Headers.Add(RequestTypeHeader, requestType);
+
+            if (!String.IsNullOrEmpty(suid))
+            {
+                requestMessage.Headers.Add(RequestSuidHeader, suid);
+            }
 
             return requestMessage;
         }
-        
+
         private bool IsErrorResponse(string responseString)
         {
             return ErrorRegex.IsMatch(responseString);
         }
-        
+
         public class TppApiResponse
         {
+            public TppApiResponse(HttpStatusCode status)
+            {
+                StatusCode = status;
+            }
+
             public Error ErrorResponse { get; set; }
             public HttpStatusCode StatusCode { get; set; }
             public bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
@@ -154,8 +184,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public class TppApiObjectResponse<TBody> : TppApiResponse
         {
+            public TppApiObjectResponse(HttpStatusCode statusCode) : base(statusCode)
+            {
+            }
+
             public TBody Body { get; set; }
             public Dictionary<string, string> Headers { get; set; }
         }
-    }   
+    }
 }

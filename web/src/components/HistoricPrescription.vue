@@ -1,23 +1,23 @@
 <template>
   <div :class="$style.container">
-    <div>
+    <div v-if="prescriptionCourse.orderDate != null">
       <b>
         {{ $t('rp02.orderDate') }}
       </b>
-      : <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
-    </div>
-    <hr>
-    <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
-    <div
-      aria-label="dosage">
-      {{ prescriptionCourse.details }}
-    </div>
-    <div :class="getStatusStyle()">
+      :
+      <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
       <hr>
-      <component :is="getIcon()"/>
-      <b :class="$style.statusText" aria-label="status">{{ getStatusText() }}</b>
-      <div>
-        <p area-label="status">{{ getStatusDescription() }}</p>
+    </div>
+    <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
+    <div :class="$style.dosage" aria-label="dosage">{{ prescriptionCourse.details }}</div>
+    <div v-if="prescriptionCourse.status != null">
+      <div :class="getStatusStyle()">
+        <hr>
+        <component :is="getIcon()" />
+        <b :class="$style.statusText" aria-label="status">{{ getStatusText() }}</b>
+        <div>
+          <p area-label="status">{{ getStatusDescription() }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -25,7 +25,8 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { MedicationCourseStatus } from '@/lib/medication-course-status';
+import
+{ MedicationCourseStatus } from '@/lib/medication-course-status';
 import ClockIcon from '@/components/icons/ClockIcon';
 import ReadyIcon from '@/components/icons/ReadyIcon';
 import InfoIcon from '@/components/icons/InfoIcon';
@@ -80,45 +81,51 @@ export default {
     },
   },
 };
+
 </script>
 
 <style module lang="scss">
-  @import "../style/html";
-  @import "../style/elements";
-  @import "../style/buttons";
-  @import "../style/fonts";
-  @import "../style/spacings";
-  @import "../style/colours";
+@import "../style/html";
+@import "../style/elements";
+@import "../style/buttons";
+@import "../style/fonts";
+@import "../style/spacings";
+@import "../style/colours";
 
-  .container {
-    border: solid 1px $mid_grey;
-    border-radius: 5px;
-    background: $white;
-    @include space(padding, all, $three);
-    transition: all ease 0.5s;
-    hr {
-      height: 1px;
-      border: none;
-      background-color: $dark_grey;
-      opacity: 0.2;
-      @include space(margin, top, $two);
-      @include space(margin, bottom, $two);
-    }
+.container {
+  border: solid 1px $mid_grey;
+  border-radius: 5px;
+  background: $white;
+  @include space(padding, all, $three);
+  transition: all ease 0.5s;
+  hr {
+    height: 1px;
+    border: none;
+    background-color: $dark_grey;
+    opacity: 0.2;
+    @include space(margin, top, $two);
+    @include space(margin, bottom, $two);
   }
+}
 
-  .medication-status-rejected {
-     color: $medication_status_rejected;
-  }
+.medication-status-rejected {
+  color: $medication_status_rejected;
+}
 
-  .medication-status-requested {
-    color: $medication_status_requested;
-  }
+.medication-status-requested {
+  color: $medication_status_requested;
+}
 
-  .medication-status-approved {
-    color: $medication_status_approved;
-  }
+.medication-status-approved {
+  color: $medication_status_approved;
+}
 
-  .statusText {
-    margin-left: 10px;
-  }
+.statusText {
+  margin-left: 10px;
+}
+
+.dosage {
+  white-space: pre-wrap;
+}
+
 </style>

@@ -6,8 +6,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Prescriptions
 {
     public interface IPrescriptionService
     {
-        Task<PrescriptionResult> Get(UserSession userSession, DateTimeOffset? fromDate, DateTimeOffset? toDate);
+        Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate = null, DateTimeOffset? toDate = null);
         
-        Task<PrescriptionResult> Post(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest);
+        Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest);
     }
 }

@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public IPrescriptionService GetPrescriptionService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppPrescriptionService>();
         }
 
         public ISessionService GetSessionService()

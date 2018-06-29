@@ -1,10 +1,11 @@
 ﻿using System;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
-using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
@@ -96,11 +97,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         }
         
         [TestMethod]
-        public void GetPrescriptionService_WhenCalled_ThrowsNotImplementedException()
+        public void GetPrescriptionService_WhenCalled_ReturnsTppPrescriptionService()
         {
-            (new Action(() => _systemUnderTest.GetPrescriptionService()))
-                .Should()
-                .Throw<NotImplementedException>();
+            var mapper = Mock.Of<TppPrescriptionMapper>();
+            var service = new TppPrescriptionService(_loggerFactory, _options, _tppClient, mapper);
+            _mockServiceProvider
+                .Setup(x => x.GetService(typeof(TppPrescriptionService)))
+                .Returns(service);
+
+            _systemUnderTest.GetPrescriptionService().Should().Be(service);
         }
         
         [TestMethod]

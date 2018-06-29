@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                     }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -164,7 +164,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Callback<PrescriptionRequestsGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -269,7 +269,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Callback<PrescriptionRequestsGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -354,7 +354,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Callback<PrescriptionRequestsGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -386,7 +386,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
@@ -408,7 +408,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
@@ -433,7 +433,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                     }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.InternalServerError>();
@@ -458,7 +458,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession, date, toDate);
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, date, toDate);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
@@ -478,7 +478,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                     new EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>(HttpStatusCode.OK)));
 
             // Act
-            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
 
             // Assert
             _emisClient.Verify(x => x.PrescriptionsPost(_userSession.SessionId,
@@ -502,7 +502,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.CannotReorderPrescription>();
@@ -523,7 +523,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
@@ -547,7 +547,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponseBadRequest = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.BadRequest>();
@@ -569,7 +569,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Post(_userSession, _repeatPrescriptionRequest);
+            var result = await _systemUnderTest.OrderPrescription(_userSession, _repeatPrescriptionRequest);
 
             // Assert
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
