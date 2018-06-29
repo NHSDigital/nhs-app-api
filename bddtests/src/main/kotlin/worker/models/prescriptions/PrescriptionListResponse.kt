@@ -1,3 +1,6 @@
 package worker.models.prescriptions
 
-data class PrescriptionListResponse(val response: PrescriptionsResponseData)
+import worker.models.courses.Course
+
+data class PrescriptionsListResponse(val prescriptions: List<PrescriptionItem>,
+                                     val courses: List<Course>)

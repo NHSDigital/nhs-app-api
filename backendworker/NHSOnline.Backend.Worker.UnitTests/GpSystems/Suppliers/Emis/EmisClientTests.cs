@@ -18,6 +18,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Linkage;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 {
@@ -357,6 +358,56 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
+        }
+
+        [TestMethod]
+        public async Task LinkageGet_ReturnsLinkageDetails_WhenValidRequest()
+        {
+            // Arrange
+            const string nhsNumber = "nhsNumber123";
+            const string odsCode = "odsCode";
+
+            var expectedResponse = _fixture.Create<LinkageDetailsResponse>();
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderNhsNumber, nhsNumber),
+                new KeyValuePair<string, string>(EmisClient.HeaderOdsCode, odsCode),
+            };
+
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Get, "patient/linkage")
+                .WithEmisHeaders(additionalHeaders)
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _sut.LinkageGet(nhsNumber, odsCode);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
+        }
+
+        [TestMethod]
+        public async Task LinkagePost_ReturnsLinkageDetails_WhenValidRequest()
+        {
+            // Arrange
+            var requestBody = _fixture.Create<LinkagePostRequest>();
+            var expectedResponse = _fixture.Create<LinkageDetailsResponse>();
+            
+            _mockHttpHandler
+                .WhenEmis(HttpMethod.Post, "patient/linkage")
+                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _sut.LinkagePost(requestBody);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            response.StatusCode.Should().Be(200);
+            response.ErrorResponse.Should().Be(null);
         }
     }
 }

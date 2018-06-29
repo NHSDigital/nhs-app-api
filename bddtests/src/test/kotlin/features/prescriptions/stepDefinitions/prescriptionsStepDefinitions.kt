@@ -31,7 +31,7 @@ import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.prescriptions.PrescriptionsResponseData
+import worker.models.prescriptions.PrescriptionsListResponse
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
@@ -61,7 +61,7 @@ open class PrescriptionsStepDefinitions {
     private val EMIS = "EMIS"
     private val TPP = "TPP"
 
-    lateinit var prescriptionsResponseData: PrescriptionsResponseData
+    lateinit var PrescriptionsListResponse: PrescriptionsListResponse
 
     lateinit var emisPrescriptionsMock: PrescriptionRequestsGetResponse
     lateinit var tppMedicationDataMock: ListRepeatMedicationReply
@@ -130,7 +130,7 @@ open class PrescriptionsStepDefinitions {
 
         try {
             var sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            prescriptionsResponseData = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
+            PrescriptionsListResponse = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -140,11 +140,11 @@ open class PrescriptionsStepDefinitions {
     fun thenIReceiveAListOfTenPrescriptions(count: Int) {
         println(currentGPSystem)
 
-        Assert.assertNotNull(prescriptionsResponseData)
+        Assert.assertNotNull(PrescriptionsListResponse)
 
         if(currentGPSystem == EMIS){
-            Assert.assertEquals(count, prescriptionsResponseData.prescriptions.count())
-            var prescriptions = prescriptionsResponseData.prescriptions
+            Assert.assertEquals(count, PrescriptionsListResponse.prescriptions.count())
+            var prescriptions = PrescriptionsListResponse.prescriptions
 
             // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
             for (int in 0 until prescriptions.count() - 2) {
@@ -152,7 +152,7 @@ open class PrescriptionsStepDefinitions {
             }
         }
         else if(currentGPSystem == TPP) {
-            Assert.assertEquals(count, prescriptionsResponseData.courses.count())
+            Assert.assertEquals(count, PrescriptionsListResponse.courses.count())
         }
         else{
             throw Exception("Invalid GP System")
@@ -236,7 +236,7 @@ open class PrescriptionsStepDefinitions {
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
-            prescriptionsResponseData = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, null)
+            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, null)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -245,7 +245,7 @@ open class PrescriptionsStepDefinitions {
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
         try {
-            prescriptionsResponseData = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -253,9 +253,9 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I get a response with a list of prescriptions for the last 6 months$")
     fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
-        Assert.assertNotNull(prescriptionsResponseData)
-        Assert.assertTrue(prescriptionsResponseData.prescriptions.isNotEmpty())
-        Assert.assertTrue(prescriptionsResponseData.courses.isNotEmpty())
+        Assert.assertNotNull(PrescriptionsListResponse)
+        Assert.assertTrue(PrescriptionsListResponse.prescriptions.isNotEmpty())
+        Assert.assertTrue(PrescriptionsListResponse.courses.isNotEmpty())
     }
 
     @But("^a fromDate in an unexpected format$")

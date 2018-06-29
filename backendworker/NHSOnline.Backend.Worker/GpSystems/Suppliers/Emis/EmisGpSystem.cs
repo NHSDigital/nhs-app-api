@@ -6,6 +6,7 @@ using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -63,6 +64,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         public ITokenValidationService GetTokenValidationService()
         {
             return _serviceProvider.GetService<EmisTokenValidationService>();
+        }
+
+        public ILinkageService GetLinkageService()
+        {
+            return _serviceProvider.GetService<EmisLinkageService>();
         }
     }
 }

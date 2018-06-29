@@ -23,6 +23,9 @@ import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotRequest
 import mocking.emis.appointments.CancelAppointmentRequest
 import mocking.emis.problems.EmisProblemsBuilder
+import mocking.emis.linkage.EmisLinkageGETBuilder
+import mocking.emis.linkage.EmisLinkagePOSTBuilder
+import worker.models.linkage.CreateLinkageRequest
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
 
@@ -30,17 +33,21 @@ const val HEADER_API_APPLICATION_ID = "X-API-ApplicationId"
 const val HEADER_API_END_USER_SESSION_ID = "X-API-EndUserSessionId"
 const val HEADER_API_SESSION_ID = "X-API-SessionId"
 const val HEADER_API_VERSION = "X-API-Version"
+const val HEADER_NHS_NUMBER = "nhsNumber"
+const val HEADER_ODS_CODE = "odsCode"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
-open class EmisMappingBuilder(private val configuration: EmisConfiguration, private val method: String, relativePath: String) : MappingBuilder(method, "/emis$relativePath") {
+open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String) : MappingBuilder(method, "/emis$relativePath") {
     init {
-        requestBuilder
-                .andHeader(HEADER_API_APPLICATION_ID, configuration.applicationId)
-                .andHeader(HEADER_API_VERSION, configuration.version)
+        if(configuration != null) {
+            requestBuilder
+                    .andHeader(HEADER_API_APPLICATION_ID, configuration!!.applicationId)
+                    .andHeader(HEADER_API_VERSION, configuration!!.version)
+        }
     }
 
     fun appointmentGetRequest(patient: Patient, fetchPreviousAppointments: Boolean = false) = EmisGetAppointmentBuilder(
-            configuration,
+            configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
             patient.userPatientLinkToken,
@@ -48,7 +55,7 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
 
 
     fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? = null, toDateTime: String? = null) = EmisAppointmentSlotsBuilder(
-            configuration,
+            configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
             fromDateTime,
@@ -56,39 +63,39 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             patient.userPatientLinkToken)
 
     fun appointmentSlotsMetaRequest(patient: Patient, sessionStartDate: String? = null, sessionEndDate: String? = null) = EmisAppointmentSlotsMetaBuilder(
-            configuration,
+            configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
             sessionStartDate,
             sessionEndDate,
             patient.userPatientLinkToken)
 
-    fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration, patient.endUserSessionId, patient.sessionId, request)
+    fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration!!, patient.endUserSessionId, patient.sessionId, request)
 
-    fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentRequest) = EmisDeleteAppointmentsBuilder(configuration, patient, request)
+    fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentRequest) = EmisDeleteAppointmentsBuilder(configuration!!, patient, request)
 
-    fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
-    fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
-    fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
-    fun problemsRequest(patient: Patient) = EmisProblemsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun problemsRequest(patient: Patient) = EmisProblemsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
-    fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
-    fun testResultsRequest(patient: Patient) = EmisTestResultsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun testResultsRequest(patient: Patient) = EmisTestResultsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
-    fun meRequest(patient: Patient) = EmisMeBuilder(configuration, method, patient)
+    fun meRequest(patient: Patient) = EmisMeBuilder(configuration!!, method, patient)
 
-    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(configuration, patient.endUserSessionId, model)
+    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(configuration!!, patient.endUserSessionId, model)
 
-    fun endUserSessionRequest() = EmisEndUserSessionBuilder(configuration)
+    fun endUserSessionRequest() = EmisEndUserSessionBuilder(configuration!!)
 
-    fun sessionRequest(patient: Patient) = EmisSessionBuilder(configuration, patient)
+    fun sessionRequest(patient: Patient) = EmisSessionBuilder(configuration!!, patient)
 
     fun prescriptionsRequest(patient: Patient, fromDate: OffsetDateTime? = null, toDate: OffsetDateTime? = null) = EmisPrescriptionsBuilder(
-            configuration,
+            configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
             patient.userPatientLinkToken,
@@ -96,13 +103,13 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             toDate)
 
     fun coursesRequest(patient: Patient) = EmisCoursesBuilder(
-            configuration,
+            configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
             patient.userPatientLinkToken)
 
     fun repeatPrescriptionSubmissionRequest(patient: Patient, prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null) = EmisPrescriptionsSubmissionBuilder(
-            configuration,
+            configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
             patient.userPatientLinkToken,
@@ -110,14 +117,18 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
 
     fun respondWithBadRequest(message: String, fieldName: String): Mapping {
         val responseBody = BadRequestResponse(message, fieldName)
-
         return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andJsonBody(responseBody)
                     .build()
         }
     }
 
+    fun linkageKeyGetRequest(nhsNumber: String, odsCode: String) = EmisLinkageGETBuilder(nhsNumber, odsCode)
+
+    fun linkageKeyPOSTRequest(request: CreateLinkageRequest) = EmisLinkagePOSTBuilder(request)
+
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
+
         val responseBody = ExceptionResponse(internalResponseCode.toLong(), message)
 
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {

@@ -1,5 +1,3 @@
 package worker.models.courses
 
-import worker.models.prescriptions.PrescriptionsResponseData
-
-data class CourseListResponse (val response: CoursesResponseData)
+data class CoursesResponse (val courses: List<Course>)

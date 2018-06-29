@@ -87,7 +87,8 @@ class CommonSteps : AbstractSteps() {
             "conflict" to HttpStatus.SC_CONFLICT,
             "forbidden" to HttpStatus.SC_FORBIDDEN,
             "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE,
-            "unauthorized" to HttpStatus.SC_UNAUTHORIZED
+            "unauthorized" to HttpStatus.SC_UNAUTHORIZED,
+            "not implemented" to HttpStatus.SC_NOT_IMPLEMENTED
     )
 
     fun httpStatusCodeTransform(statusName: String): Int? {

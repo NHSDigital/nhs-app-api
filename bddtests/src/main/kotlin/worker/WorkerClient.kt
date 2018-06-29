@@ -22,12 +22,12 @@ import org.apache.http.protocol.HttpContext
 import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.CancelAppointmentRequest
 import worker.models.appointments.MyAppointmentsResponse
-import worker.models.courses.CourseListResponse
-import worker.models.courses.CoursesResponseData
+import worker.models.courses.CoursesResponse
 import worker.models.demographics.Demographics
+import worker.models.linkage.CreateLinkageRequest
+import worker.models.linkage.LinkageResponse
 import worker.models.myrecord.MyRecordResponse
-import worker.models.prescriptions.PrescriptionListResponse
-import worker.models.prescriptions.PrescriptionsResponseData
+import worker.models.prescriptions.PrescriptionsListResponse
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
@@ -130,7 +130,7 @@ class WorkerClient {
         return gson.fromJson<AppointmentSlotsResponse>(result, AppointmentSlotsResponse::class.java)
     }
 
-    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionsResponseData {
+    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionsListResponse {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
@@ -139,7 +139,7 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<PrescriptionsResponseData>(result, PrescriptionsResponseData::class.java)
+        return gson.fromJson<PrescriptionsListResponse>(result, PrescriptionsListResponse::class.java)
     }
 
     fun deleteAppointment(requestBody: CancelAppointmentRequest, context: HttpContext?): HttpResponse {
@@ -164,7 +164,7 @@ class WorkerClient {
         return response
     }
 
-    fun getCoursesConnection(context: HttpContext?): CoursesResponseData {
+    fun getCoursesConnection(context: HttpContext?): CoursesResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
 
         val response = sendAsync(httpGet, context)
@@ -172,7 +172,7 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<CoursesResponseData>(result, CoursesResponseData::class.java)
+        return gson.fromJson<CoursesResponse>(result, CoursesResponse::class.java)
     }
 
     fun getDemographics(context: HttpContext?): Demographics {
@@ -195,6 +195,34 @@ class WorkerClient {
 
         return json
     }
+
+    fun getLinkageKey(nhsNumber: String?, odsCode: String?): LinkageResponse {
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.LinkageKey)
+        httpGet.setHeader(WorkerHeaders.NhsNumber, nhsNumber)
+        httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
+
+        val response = sendAsync(httpGet)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+
+        return gson.fromJson(result, LinkageResponse::class.java)
+    }
+
+    fun postLinkageKey(requestBody: CreateLinkageRequest): LinkageResponse {
+        val httpPost = HttpPost(config.backendUrl + WorkerPaths.LinkageKey)
+        val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
+        entity.setContentType("application/json")
+        httpPost.entity = entity
+
+        val response = sendAsync(httpPost)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpPost.releaseConnection()
+        println(result)
+        return gson.fromJson<LinkageResponse>(result, LinkageResponse::class.java)
+    }
+
 
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {
         val uriBuilder = URIBuilder(config.backendUrl + WorkerPaths.appointmentSlots)

@@ -80,6 +80,76 @@ paths:
           description: The GP system is currently unavailable.
         504:
           description: The GP system did not respond in a timely fashion.
+
+  /v1/patient/linkage:
+    get:
+      summary: Retrieves a patient's Linkage details using their NHS Number
+      description: "This call finds a user, given their NHS Number and returns the fields required to link the user."
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: NHSO-ODS-Code
+          type: string
+          description: ODS Code
+          required: True
+        - in: header
+          name: NHSO-Nhs-Number
+          type: string
+          description: Patient's NHS Number ID.
+          required: True
+      responses:
+        200:
+          description: Successful operation. User linked Successfully.
+          schema:
+            $ref: "#/definitions/LinkageResponse"
+        400:
+          description: ODS Code or NHS Number was invalid.
+        403:
+          description: The linkage key has been revoked.
+        404:
+          description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
+        500:
+          description: An unexpected error occurred processing the request.
+        501:
+          description: No GP system was found for ODS Code.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+    post:
+      summary: "For a given nhs number and ods code, will find a user and create a ROSU account"
+      description: Will return a linkage key object for a given nhs number
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: CreateLinkageRequest
+          required: true
+          description: Patient account details for the connection to be created.
+          schema:
+            $ref: "#/definitions/CreateLinkageRequest"
+      responses:
+        200:
+          description: Successful operation. User linked Successfully.
+          schema:
+            $ref: "#/definitions/LinkageResponse"
+        400:
+          description: ODS Code or NHS Number was invalid.
+        404:
+          description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
+        409:
+          description: Linkage key already exists for NHS Number.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
 definitions:
   PatientIm1ConnectionRequest:
     type: object
@@ -125,3 +195,24 @@ definitions:
         nhsNumber:
          type: string
          description: Patient's NHS number.
+  LinkageResponse:
+    type: object
+    properties:
+      accountId:
+        type: string
+        description: The user's ROSU Account id.
+      odsCode:
+        type: string
+        description: The ODS code for the Patient's GP.
+      linkageKey:
+        type: string
+        description: The user's linkage passphrase.
+  CreateLinkageRequest:
+    type: object
+    properties:
+      odsCode:
+        type: string
+        description: User's ODS Code
+      nhsNumber:
+        type: string
+        description: NHS Number

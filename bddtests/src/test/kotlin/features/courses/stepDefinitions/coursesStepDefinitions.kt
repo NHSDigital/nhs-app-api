@@ -17,7 +17,7 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.courses.CoursesResponseData
+import worker.models.courses.CoursesResponse
 
 
 open class coursesStepDefinitions {
@@ -85,7 +85,7 @@ open class coursesStepDefinitions {
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .getCoursesConnection(null)
 
-            Serenity.setSessionVariable(CoursesResponseData::class).to(result)
+            Serenity.setSessionVariable(CoursesResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -93,7 +93,7 @@ open class coursesStepDefinitions {
 
     @Then("^I receive a list of (\\d+) repeating prescriptions that can be requested$")
     fun thenIReceiveAListOfXRepeatingPrescriptionsDateDescending(expectedNumberOfRepeatingPrescriptions: Int) {
-        val result = Serenity.sessionVariableCalled<CoursesResponseData>(CoursesResponseData::class)
+        val result = Serenity.sessionVariableCalled<CoursesResponse>(CoursesResponse::class)
         Assert.assertNotNull("No courses in session", result)
 
         var actualNumberOfRepeatPrescriptions = result.courses.count()

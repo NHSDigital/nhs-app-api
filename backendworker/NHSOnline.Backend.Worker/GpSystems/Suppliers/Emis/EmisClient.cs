@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.ResponseParsers;
@@ -24,7 +25,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public const string HeaderEndUserSessionId = "X-API-EndUserSessionId";
         public const string HeaderSessionId = "X-API-SessionId";
-
+        public const string HeaderNhsNumber = "NhsNumber";
+        public const string HeaderOdsCode = "OdsCode";
 
         private const string MeApplicationsPath = "me/applications";
         private const string SessionsEndUserSessionPath = "sessions/endusersession";
@@ -44,6 +46,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string AppointmentsPath = "appointments";
 
         private readonly EmisHttpClient _httpClient;
+        private const string LinkagePath = "patient/linkage";
+        
         private readonly ILogger<EmisClient> _logger;
         private readonly IJsonResponseParser _responseParser;
 
@@ -204,6 +208,32 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         {
             return await Delete<CancelAppointmentDeleteRequest, CancelAppointmentDeleteResponse>(
                 deleteRequest, AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
+        }
+
+        public async Task<EmisApiObjectResponse<LinkageDetailsResponse>> LinkageGet(string nhsNumber, string odsCode)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, LinkagePath);
+
+            if (!string.IsNullOrEmpty(nhsNumber))
+            {
+                request.Headers.Add(HeaderNhsNumber, new[] { nhsNumber });
+            }
+
+            if (!string.IsNullOrEmpty(odsCode))
+            {
+                request.Headers.Add(HeaderOdsCode, new[] { odsCode });
+            }
+
+            var response = await SendRequestAndParseResponse<LinkageDetailsResponse>(request);
+            return response;
+        }
+
+        public async Task<EmisApiObjectResponse<LinkageDetailsResponse>> LinkagePost(LinkagePostRequest linkagePostRequest)
+        {
+            var path = LinkagePath;
+
+            var response = await Post<LinkagePostRequest, LinkageDetailsResponse>(linkagePostRequest, path);
+            return response;
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,

@@ -11,36 +11,75 @@ schemes:
 paths:
   /patient/linkage:
     get:
-      summary: Retrieves a patient's Linkage details using their NHS Number
-      description: This call finds a user, given their NHS Number and returns the fields required to link the user.
+      summary: "Retrieves a patient's Linkage details using their NHS Number"
+      description: "This call finds a user, given their NHS Number and returns the fields required to link the user."
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: query
-          name: nhsNumber
+        - in: header
+          name: NhsNumber
           type: string
           description: Patient's NHS Number ID.
+          required: True
+        - in: header
+          name: OdsCode
+          type: string
+          description: The ODS code for the Patient's GP.
           required: True
       responses:
         200:
           description: Successful operation. User linked Successfully.
           schema:
-            $ref: "#/definitions/GetLinkageResponse"
+            $ref: "#/definitions/LinkageResponse"
+        403:
+          description: Linkage key has been revoked.
         404:
-          description: NHS Number not found.
+          description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
+    post:
+      summary: "For a given nhs number and ods code, will find a user and create a ROSU account"
+      description: Will return a linkage key object for a given nhs number
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: linkageDetailsRequest
+          required: true
+          description: Patient account details for the connection to be created.
+          schema:
+            $ref: "#/definitions/CreateLinkageRequest"
+      responses:
+        200:
+          description: Successful operation. User linked Successfully.
+          schema:
+            $ref: "#/definitions/LinkageResponse"
+        404:
+          description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
+        409:
+          description: Linkage key already exists for NHS Number.
 
 definitions:
-  GetLinkageResponse:
+  LinkageResponse:
     type: object
     properties:
       accountId:
         type: string
         description: The user's ROSU Account id.
-      organisationCode:
+      odsCode:
         type: string
         description: The ODS code for the Patient's GP.
-      linkagePassphrase:
+      linkageKey:
         type: string
         description: The user's linkage passphrase.
+  CreateLinkageRequest:
+    type: object
+    properties:
+      odsCode:
+        type: string
+        description: User's ODS Code
+      nhsNumber:
+        type: string
+        description: NHS Number

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
                 // If no GP system is returned it is because the supplier could not be determined from the ODS
                 // code.  This, in turn, is because the ODS code is not found so a "Not Found" response is returned.
-                return NotFound();
+                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
             }
 
             var gpSystem = gpSystemOption.ValueOrFailure();

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
@@ -63,6 +64,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public ITokenValidationService GetTokenValidationService()
         {
             return _serviceProvider.GetService<TppTokenValidationService>();
+        }
+
+        public ILinkageService GetLinkageService()
+        {
+            throw new NotImplementedException();
         }
     }
 }

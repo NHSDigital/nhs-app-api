@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -124,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         }
 
         [TestMethod]
-        public async Task Get_UnknownOdsCode_ReturnsNotFound()
+        public async Task Get_UnknownOdsCode_Returns501NotImplemented()
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
@@ -134,7 +135,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<NotFoundResult>();
+            var resultAsStatusCodeResult = result as StatusCodeResult;
+            resultAsStatusCodeResult.Should().NotBeNull();
+            resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
         }
 
 

@@ -17,6 +17,7 @@
             public const string NhsoPrefix = "NHSO-";
             public const string ConnectionToken = NhsoPrefix + "Connection-Token";
             public const string OdsCode = NhsoPrefix + "ODS-Code";
+            public const string NhsNumber = NhsoPrefix + "Nhs-Number";
         }
 
         public class HttpContextItems

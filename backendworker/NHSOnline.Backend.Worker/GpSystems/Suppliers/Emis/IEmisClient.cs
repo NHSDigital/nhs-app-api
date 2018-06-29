@@ -5,6 +5,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -73,5 +74,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         Task<EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
             EmisHeaderParameters headerParameters,
             CancelAppointmentDeleteRequest deleteRequest);
+
+        // Linkage
+        Task<EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>> LinkageGet(string nhsNumber, string odsCode);
+
+        Task<EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>> LinkagePost(LinkagePostRequest linkagePostRequest);
     }
 }

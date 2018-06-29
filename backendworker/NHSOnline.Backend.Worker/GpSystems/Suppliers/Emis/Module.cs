@@ -20,6 +20,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             services.AddTransient<EmisTokenValidationService>();
             services.AddTransient<EmisDemographicsService>();
             services.AddTransient<EmisPatientRecordService>();
+            services.AddTransient<EmisLinkageService>();
 
             base.ConfigureServices(services, configuration);
         }
