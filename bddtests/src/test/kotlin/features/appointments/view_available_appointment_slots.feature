@@ -9,94 +9,55 @@ Feature: View available appointment slots
     Given I am on the appointments booking page
     Then the appointments menu button is highlighted
 
-  @pending
-  @native
-  @mobile
+  @NHSO-71
+  @pending    @NHSO-71
   @smoketest
   Scenario: A user sees available appointment slots
     Given I am on the appointments booking page
     And there are available appointment slots
     Then the appointment slots are ordered ascending start date and time then first clinician name
 
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots with the location length greater than 24 characters is truncated
-    Given I am on the appointments booking page
-    And there are available appointment slots with long location name
-    Then I see available slots with the location length greater than 24 characters is truncated
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots with the location length less or equal than 24 characters is shown in full
-    Given I am on the appointments booking page
-    And there are available appointment slots with location name length less or equal 24 characters
-    Then I see available slots with the location length less or equal than 24 characters is shown in full
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots with the Clinician Name length greater than 24 characters is truncated
-    Given I am on the appointments booking page
-    And there are available appointment slots with long clinician name
-    Then I see available slots with the Clinician Name length greater than 24 characters is truncated
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots with the Clinician Name length less or equal than 24 characters is shown in full
-    Given I am on the appointments booking page
-    And there are available appointment slots with the Clinician Name length less or equal than 24 characters
-    Then I see available slots with the Clinician Name length less or equal than 24 characters is shown in full
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots with the Session Name length greater than 24 characters is truncated
-    Given I am on the appointments booking page
-    And there are available appointment slots with long session name
-    Then I see available slots with the Session Name length greater than 24 characters is truncated
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots with the Session Name length less or equal 24 characters is shown in full
-    Given I am on the appointments booking page
-    And there are available appointment slots with the Session Name length less or equal than 24 characters
-    Then I see available slots with the Session Name length less or equal 24 characters is shown in full
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots display date in correct format (day-of-the-week day month year)
-    Given I am on the appointments booking page
-    And there are available appointment slots
-    Then I see available slots display date in correct format
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots display start time in correct format includes AM or PM
-    Given I am on the appointments booking page
-    And there are available appointment slots with some in BST and some in GMT
-    Then each slot displays the start time in the timezone effective on that date
-
-  @pending
-  @native
-  @mobile
-  Scenario: Available slots display start time in timezone effective on that date
-    Given I am on the appointments booking page
-    And there are available appointment slots with some in BST and some in GMT
-    Then each slot displays the start time in the timezone effective on that date
-
-  @pending
-  @native
-  @mobile
+  @NHSO-71
+  @pending    @NHSO-71
   Scenario: A user sees appropriate information message when no slots are available
     Given I am on the appointments booking page
     And there are no available slots
     Then I see appropriate information message when no slots are available
+
+  @NHSO-71
+  @pending    @NHSO-71
+  Scenario: A user sees 'Book this appointment' button position unchanged when scrolling.
+    Given I am logged in
+    When I click appointments button in menu
+    Then I see Book this appointment button position unchanged when scrolling
+
+  @NHSO-71
+  @pending    @NHSO-71
+  Scenario: A user selects a second appointment slot and the first selected slot gets deselected.
+    Given I am logged in
+    And there are available appointment slots
+    When I click appointments button in menu
+    And I selected appointment slot and changed to another slot
+    Then I see first selected slot gets deselected
+
+  @NHSO-71
+  @pending    @NHSO-71
+  @smoketest
+  Scenario: A user is navigated to 'Appointments Confirmation' screen when the user selects a slot and  clicks on 'Book this appointment' button.
+    Given I am logged in
+    And there are available appointment slots
+    When I click appointments button in menu
+    And I select appointment slot and click Book this appointment button
+    Then I see the Appointment Confirmation screen
+
+  @NHSO-71
+  @pending    @NHSO-71
+  Scenario: A user select the same appointment twice and the selected appointment stay selected.
+    Given I am logged in
+    And there are available appointment slots
+    When I click appointments button in menu
+    And I select same appointment twice
+    Then I see selected appointment stay selected
 
   @NHSO-616
   Scenario: A user sees appropriate information message when there is a timeout

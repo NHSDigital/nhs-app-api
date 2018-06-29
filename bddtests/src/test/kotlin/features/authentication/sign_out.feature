@@ -51,7 +51,7 @@ Feature: Sign out of mobile web
     Then I do not see the menu bar
 
   @NHSO-186
-  @tech-debt @NHSO-1040
+  @tech-debt @NHSO-1384
   Scenario: The nsho cookie should be clear of session and user information if the user is not signed in
     Given I am logged in
     When I sign out
