@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             if (!string.IsNullOrEmpty(path) && File.Exists(path) && !string.IsNullOrEmpty(password))
             {
-                ClientCertificates.Add(new X509Certificate2(path, password));                
+                try
+                {
+                    ClientCertificates.Add(new X509Certificate2(path, password));
+                }
+                catch (CryptographicException e)
+                {
+                    logger.LogError(e.Message);
+                }        
             }
             else
             {

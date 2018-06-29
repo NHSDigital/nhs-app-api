@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier);
             if (!tokenResponse.HasSuccessStatusCode)
             {
-                _logger.LogError("Failed to exchange auth token");
+                _logger.LogError($"Failed to exchange auth token. {tokenResponse.ErrorResponse.SerializeJson()}");
                 return Option.None<UserProfile>();
             }
 
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             var userInfo = await _citizenIdClient.GetUserInfo(tokenResponse.Body.AccessToken);
             if (!userInfo.HasSuccessStatusCode)
             {
-                _logger.LogError("Failed to get user information from Citizen Id.");
+                _logger.LogError($"Failed to get user information from Citizen Id. {userInfo.ErrorResponse.SerializeJson()}");
                 return Option.None<UserProfile>();
             }
 
