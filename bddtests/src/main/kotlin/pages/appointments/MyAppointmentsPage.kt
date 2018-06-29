@@ -41,4 +41,8 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     fun clickFirstCancelAppointmentLink() {
         cancelAppointmentLink.click()
     }
+
+    fun getNumberOfCancelLinks(): Int {
+        return findAllByXpath("//a[contains(text(),'Cancel appointment')]").size
+    }
 }

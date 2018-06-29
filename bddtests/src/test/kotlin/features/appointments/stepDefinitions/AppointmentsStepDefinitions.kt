@@ -23,11 +23,21 @@ class AppointmentsStepDefinitions {
         appointmentsSteps.checkBookingSuccessMessage()
     }
 
-    @Then("^I will be on the My appointments screen$")
+    @Then("^I can book an appointment$")
     @Throws(Exception::class)
-    fun i_will_be_on_the_my_appointments_screen() {
-        appointmentsSteps.checkHeaderTextIsCorrect()
+    fun iCanBookAnAppointment() {
         appointmentsSteps.checkIfBookAnAppointmentButtonExistAndEnabled()
+    }
+
+    @Then("^the page title is \"My appointments\"$")
+    fun thePageTitleIsMyAppointments() {
+        appointmentsSteps.checkHeaderTextIsCorrect()
+    }
+
+    @Then("^I will be on the My appointments screen$")
+    fun iWillBeOnTheMyAppointmentsScreen() {
+        iCanBookAnAppointment()
+        thePageTitleIsMyAppointments()
     }
 
     @Then("^I am informed I have no booked appointments$")
@@ -40,12 +50,6 @@ class AppointmentsStepDefinitions {
     @Throws(Exception::class)
     fun i_have_no_upcoming_appointments() {
         appointmentsSteps.mockEMISMyAppointmentResponse(true)
-    }
-
-    @Then("^I can book an appointment$")
-    @Throws(Exception::class)
-    fun i_can_book_an_appointment() {
-        appointmentsSteps.checkIfBookAnAppointmentButtonExistAndEnabled()
     }
 
     @Given("^I have upcoming appointments$")
@@ -70,6 +74,11 @@ class AppointmentsStepDefinitions {
     @Throws(Exception::class)
     fun appointments_are_in_chronological_order() {
         appointmentsSteps.checkIfSlotsAreInCorrectOrder()
+    }
+
+    @Then("^each appointment can be cancelled$")
+    fun eachAppointmentCanBeCancelled() {
+        appointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
     @When("^the API retrieves upcoming appointments from \"([^\"]*)\"$")

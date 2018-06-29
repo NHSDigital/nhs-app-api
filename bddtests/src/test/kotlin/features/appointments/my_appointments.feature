@@ -24,14 +24,13 @@ Feature: My appointments
 
   @NHSO-196
   @NHSO-663
-  @pending  @NHSO-196   @NHSO-663
   @bug  @NHSO-1591
   @smoketest
   Scenario: A user has upcoming appointments
     Given I have upcoming appointments
     When I am on the appointments page
-    Then I will be on the "My appointments" screen
+    Then the page title is "My appointments"
     And I am given the list of upcoming appointments
     And appointments are in chronological order
-#    And each appointment can be cancelled
+    And each appointment can be cancelled
     And I can book an appointment

@@ -179,4 +179,8 @@ open class AppointmentsSteps {
         val message = myAppointmentsPage.getSuccessMessage()
         assertEquals(cancellationSuccessMessage, message)
     }
+
+    fun verifyThatThereIsACancelLinkForEachUpcomingAppointment() {
+        assertEquals("Missing at least one cancel link. ", myAppointmentsPage.getAllSlots().size, myAppointmentsPage.getNumberOfCancelLinks())
+    }
 }

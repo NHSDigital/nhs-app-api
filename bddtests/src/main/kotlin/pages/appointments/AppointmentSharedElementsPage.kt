@@ -101,16 +101,13 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     }
 
     private fun retrieveDateTimeFromSlotElement(slotElement: WebElementFacade): String {
-        val time = findByXpath(slotElement, appointmentTimeXpath).text
-        val date = findByXpath(slotElement, appointmentDateXpath).text
+        val time = findByXpath(slotElement, xPathRoot + appointmentTimeXpath).text
+        val date = findByXpath(slotElement, xPathRoot + appointmentDateXpath).text
         return "$time $date"
     }
 
     private fun retrieveAppointmentSlotDivs(containerDivXpath: String): List<WebElementFacade> {
-        val slotDivs = findAllByXpath("$containerDivXpath/div")
-        return if (slotDivs.size > 1) {
-            slotDivs.subList(1, slotDivs.size)
-        } else slotDivs
+        return findAllByXpath("$containerDivXpath/div")
     }
 
     private fun retrieveAppointmentSlotDivAtPosition(containerDivXpath: String, index: Int): WebElementFacade {
