@@ -18,7 +18,13 @@ const removeProperty = (obj, path) => {
 
 const removeExcluded = obj => excludedProperties.forEach(x => removeProperty(obj, x));
 
-export default ({ store, req, isDev }) => {
+export default ({
+  store,
+  req,
+  isDev,
+  isServer,
+  app,
+}) => {
   createPersistedState({
     key: 'nhso',
     storage: {
@@ -29,11 +35,13 @@ export default ({ store, req, isDev }) => {
       setItem: (key, value) => {
         const state = JSON.parse(value);
         removeExcluded(state);
+        const stringified = JSON.stringify(state);
 
-        Cookies.set(
-          key, JSON.stringify(state),
-          { secure: !isDev },
-        );
+        if (isServer) {
+          return app.$cookies.set(key, stringified, { secure: !isDev });
+        }
+
+        return Cookies.set(key, stringified, { secure: !isDev });
       },
       removeItem: key => Cookies.remove(key),
     },

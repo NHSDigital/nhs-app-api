@@ -4,8 +4,8 @@ export default {
   [AUTH_RESPONSE](state, user) {
     state.loggedIn = true;
     state.authorised = true;
-    state.user = Object.assign({}, state.user, user);
-    if (window !== undefined && typeof window.nativeApp !== 'undefined') {
+    state.user = user;
+    if (typeof window !== 'undefined' && typeof window.nativeApp !== 'undefined') {
       window.nativeApp.onLogin();
     }
   },

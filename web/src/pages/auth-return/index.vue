@@ -2,13 +2,9 @@
 <script>
 export default {
   name: '',
-  mounted() {
-    this.$nextTick(() => {
-      this.$store.dispatch('auth/handleAuthResponse', {
-        API_HOST: process.env.API_HOST,
-        code: this.$route.query.code,
-      });
-    });
+  middleware: ['authResponse'],
+  fetch({ redirect }) {
+    redirect('/');
   },
   render() {
     return null;

@@ -56,6 +56,7 @@ describe('actions', () => {
 
   describe('validation checking', () => {
     beforeEach(() => {
+      process.client = true;
       mutation.state = { };
       mutation.rootState = {
         auth: { loggedIn: true },
@@ -77,6 +78,16 @@ describe('actions', () => {
         'will not call commit for the START_VALIDATION_CHECKING there is a validationInterval',
         () => {
           mutation.state.validationInterval = 1;
+          startValidationChecking(mutation);
+          expect(mutation.commit.mock.calls[0]).toBeUndefined();
+        },
+      );
+
+      it(
+        'will not call commit for the START_VALIDATION_CHECKING when not running on the client',
+        () => {
+          mutation.state.validationInterval = 1;
+          process.client = false;
           startValidationChecking(mutation);
           expect(mutation.commit.mock.calls[0]).toBeUndefined();
         },

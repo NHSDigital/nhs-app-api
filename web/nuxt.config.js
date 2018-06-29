@@ -26,6 +26,7 @@ module.exports = {
   env: {
     NODE_ENV: process.env.NODE_ENV || 'development',
     API_HOST: process.env.API_HOST || 'http://localhost:8082',
+    API_HOST_SERVER: process.env.API_HOST_SERVER || process.env.API_HOST || 'http://localhost:8082',
     ORGAN_DONATION_URL:
       process.env.ORGAN_DONATION_URL || 'https://www.organdonation.nhs.uk',
     DATA_SHARING_URL:
