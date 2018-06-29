@@ -26,6 +26,9 @@ module.exports = {
   serverMiddleware: [
     './handler.js',
   ],
+  router: {
+    middleware: ['analytics'],
+  },
   env: {
     NODE_ENV: process.env.NODE_ENV || 'development',
     API_HOST: process.env.API_HOST || 'http://localhost:8082',
