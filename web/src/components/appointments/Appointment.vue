@@ -4,7 +4,7 @@
     <h4 aria-label="start time">{{ formatTime(appointment.startTime) }}</h4>
     <hr aria-hidden="true">
     <p aria-label="session name">
-      {{ displayName(appointment.appointmentSession) | truncate(24) }}
+      {{ displaySession(appointment) | truncate(24) }}
     </p>
     <hr aria-hidden="true">
 
@@ -59,6 +59,10 @@ export default {
     formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
     displayName(property) {
       return (property) ? property.displayName : '';
+    },
+    displaySession(appointment) {
+      const slotType = (appointment.slotType) ? ` - ${appointment.slotType}` : '';
+      return this.displayName(appointment.appointmentSession) + slotType;
     },
     select() {
       if (this.showCancellationLink) {
