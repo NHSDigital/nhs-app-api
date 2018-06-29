@@ -87,7 +87,7 @@ export default {
   },
   appointments: {
     index: {
-      successText: 'Appointment Booked',
+      successText: 'Your appointment has been booked. You can view details or cancel it here.',
       bookButtonText: 'Book an appointment',
       cancelButtonText: 'Cancel appointment',
       empty: {
