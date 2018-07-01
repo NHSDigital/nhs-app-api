@@ -8,6 +8,7 @@ class WebViewController: UIViewController {
     
     func setWebViewDelegate(delegate: WebViewDelegate) {
         webView.navigationDelegate = delegate
+        webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
         webViewDelegate = delegate
         webView.configuration.userContentController.add(delegate, name: "updateHeaderText")

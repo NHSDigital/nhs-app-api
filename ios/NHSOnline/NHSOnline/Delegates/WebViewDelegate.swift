@@ -3,7 +3,7 @@ import SafariServices
 import WebKit
 import os.log
 
-class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
+class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
     let knownServices: KnownServices
     let viewController: HomeViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
@@ -94,6 +94,16 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
         }
     }
     
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        
+        if navigationAction.targetFrame == nil {
+            webView.load(navigationAction.request)
+            selectNavigationMenuFor(url: navigationAction.request.url)
+        }
+        
+        return nil
+    }
+    
     func shouldOpenInSafari(url: URL) -> Bool {
         let currentHost = url.host
         let knownHosts = self.knownServices.getAllKnownHosts()
@@ -154,6 +164,22 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKScriptMessageHandler {
                 self.showNativeViewContainer(errorMessage: knownService.serviceErrorMessage)
             } else {
                 self.showNativeViewContainer(errorMessage: knownServices.getServiceUnavailableErrorMessage())
+            }
+        }
+    }
+    
+    private func selectNavigationMenuFor(url: URL? ) {
+        if let host = url?.host, let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: host),
+            let tabBarDelegate = self.viewController.tabBarDelegate {
+            
+            switch knownService.service {
+            case .NHS_111:
+                tabBarDelegate.selectMenu(menu: .Symptoms)
+                break
+            case .ORGAN_DONATION:
+                tabBarDelegate.selectMenu(menu: .More)
+                break
+            default : break
             }
         }
     }

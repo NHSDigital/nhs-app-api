@@ -15,6 +15,12 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         viewController = controller
     }
     
+    func selectMenu(menu: Menu) {
+        if let tabBar = viewController.tabBar, let items = tabBar.items {
+            tabBar.selectedItem = items[menu.rawValue] as UITabBarItem
+        }
+    }
+    
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
         let selectedItem = Menu(rawValue: didSelect.tag)!
         switch selectedItem {

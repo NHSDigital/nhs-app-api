@@ -17,9 +17,9 @@ class KnownServices {
     }
     
    func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, serviceErrorMessage: ErrorMessage(title: nhs111UnavailableErrorMessage), shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, serviceErrorMessage: ErrorMessage(title: organDonationUnavailableErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+    serviceList.append(KnownService(urlStrings: [config.HomeUrl],service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+    serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhs111UnavailableErrorMessage), shouldValidateSession:false))
+    serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: organDonationUnavailableErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func getAllKnownHosts() -> [String?] {
@@ -60,5 +60,9 @@ class KnownServices {
             return knownService.shouldValidateSession
         }
         return true
+    }
+    
+    enum Service {
+        case NHS_111, NHS_ONLINE, ORGAN_DONATION, OTHERS;
     }
 }
