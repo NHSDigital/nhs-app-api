@@ -15,7 +15,7 @@ import pages.navigation.Header
 
 @DefaultUrl("http://localhost:3000/prescriptions/confirm-prescription-details")
 open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVIEW_APP) {
-    var headerText: String = "Confirm Prescription"
+    var headerText: String = "Confirm prescription"
     lateinit var headerBar: Header
 
     @FindBy(how = How.ID, using = "specialRequestText")

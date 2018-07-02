@@ -42,7 +42,6 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see expected prescriptions
 
-  @pending
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
     Given I have 6 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats

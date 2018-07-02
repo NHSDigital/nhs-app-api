@@ -30,7 +30,7 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
 @DefaultUrl("http://localhost:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
-    var headerText: String = "Confirm Prescription"
+    var headerText: String = "Select medication"
     lateinit var headerBar: Header
 
     @FindBy(how = How.ID, using = "specialRequest")

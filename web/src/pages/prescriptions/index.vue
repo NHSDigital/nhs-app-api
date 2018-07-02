@@ -12,7 +12,10 @@
       <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
         <h3>{{ $t('rp01.empty.subHeader') }}</h3>
         <p>
-          {{ $t('rp01.empty.body') }}
+          {{ $t('rp01.empty.line1') }}
+        </p>
+        <p>
+          {{ $t('rp01.empty.line2') }}
         </p>
       </div>
       <ul v-if="showPrescriptions" data-purpose="prescriptions">

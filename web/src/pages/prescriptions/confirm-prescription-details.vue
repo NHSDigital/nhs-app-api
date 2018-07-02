@@ -26,7 +26,7 @@
           <hr>
           <div>
             <span :class="$style.formLabel">
-              {{ $t('rp03.specialRequestsLabel') }}
+              {{ $t('rp04.specialRequestsLabel') }}
             </span>
             <p v-if="specialRequest"
                id="specialRequestText"
@@ -59,6 +59,7 @@ export default {
   components: {
     Spinner,
   },
+  middleware: ['meta', 'auth'],
   data() {
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],

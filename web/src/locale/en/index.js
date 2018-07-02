@@ -14,18 +14,15 @@ export default {
   },
   rp01: {
     pageTitle: 'TBC',
-    pageHeader: 'My repeat prescriptions',
     empty: {
       subHeader: 'You don\'t currently have any repeat prescriptions ordered',
-      body: 'Once you’ve placed an order here, you\'ll be able to view your repeat prescription status and history.\n' +
-            '\n' +
-            'If you have an existing order that isn’t shown here, contact your GP surgery or pharmacy for more information.',
+      line1: 'Once you’ve placed an order here, you\'ll be able to view your repeat prescription status and history.',
+      line2: 'If you have an existing order that isn’t shown here, contact your GP surgery or pharmacy for more information.',
     },
     orderPrescriptionButton: 'Order a repeat prescription',
   },
   rp02: {
     pageTitle: 'TBC',
-    pageHeader: 'My repeat prescriptions',
     orderDate: 'Order date',
     status: 'Status',
     statusRejected: {
@@ -43,7 +40,6 @@ export default {
   },
   rp06: {
     pageTitle: 'TBC',
-    pageHeader: 'Select medication',
     empty: {
       subHeader: 'You don\'t have any medication available to order right now',
       body: 'If you have medications available on repeat prescription that aren\'t shown here, contact your GP surgery for more information.',
@@ -52,10 +48,9 @@ export default {
   },
   rp03: {
     pageTitle: 'TBC',
-    pageHeader: 'Select medication',
     subHeader: 'Medication currently available to order',
     noMedicinesSelected: 'Select at least one medicine',
-    specialRequestsLabel: 'Special requests relating to this order',
+    specialRequestsLabel: 'Special requests relating to this order (optional)',
     maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words)',
     changePharmacyText: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
     noSpecialRequestDefaultText: 'None',
@@ -64,8 +59,8 @@ export default {
   },
   rp04: {
     pageTitle: 'TBC',
-    pageHeader: 'Confirm prescription',
     subHeader: 'Check your prescription details before ordering',
+    specialRequestsLabel: 'Special requests relating to this order',
     confirmButton: 'Confirm and order prescription',
     backButton: 'Change this prescription',
   },
@@ -346,7 +341,7 @@ export default {
   pageHeaderTitles: {
     home: 'Home',
     prescriptions: 'My repeat prescriptions',
-    repeatPrescriptionCourses: 'Confirm Prescription',
+    repeatPrescriptionCourses: 'Select medication',
     confirmPrescription: 'Confirm prescription',
     account: 'My account',
     appointments: 'My appointments',

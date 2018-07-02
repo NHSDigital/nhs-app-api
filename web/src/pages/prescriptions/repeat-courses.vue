@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
     <spinner />
-    <main class="content">
+    <main :class="$style.content">
 
       <error-warning-dialog v-if="error" error-or-warning="error">
         <p>
@@ -86,7 +86,7 @@ export default {
     RepeatPrescription,
     ErrorWarningDialog,
   },
-  middleware: ['auth', 'meta'],
+  middleware: ['meta', 'auth'],
   data() {
     return {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
@@ -138,7 +138,7 @@ export default {
           specialRequest,
         };
         this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
-        this.$router.push('../prescriptions/confirm-prescription-details');
+        this.$router.push('/prescriptions/confirm-prescription-details');
       } else {
         const validationObj = {
           isValid: selectedCourses.length > 0,
