@@ -12,8 +12,7 @@ import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
 import mocking.emis.models.AssociationType
 import models.Patient
-import net.serenitybdd.core.Serenity.sessionVariableCalled
-import net.serenitybdd.core.Serenity.setSessionVariable
+import net.serenitybdd.core.Serenity.*
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
@@ -26,6 +25,8 @@ import java.util.concurrent.TimeUnit
 class CommonSteps : AbstractSteps() {
     @Before
     fun beforeEachScenario() {
+        getCurrentSession().clear()
+
         mockingClient = MockingClient.instance
         workerClient = WorkerClient()
         mockingClient.clearWiremock()

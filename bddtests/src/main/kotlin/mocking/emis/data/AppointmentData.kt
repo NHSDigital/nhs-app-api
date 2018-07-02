@@ -167,7 +167,7 @@ class AppointmentData private constructor() {
             val time = slotTimeFormat.format(startDate).toLowerCase()
             val location = locations[sessions[appointment.sessionId - 1].locationId!! - 1]
             val cliniciansNames: ArrayList<String> = ArrayList()
-            val clinicianIds = sessions[appointment.sessionId - 1].clinicianIds!!
+            val clinicianIds = sessions[appointment.sessionId - 1].clinicianIds
             clinicianIds.forEach { clinicianId ->
                 cliniciansNames.add(sessionHolders[clinicianId - 1].displayName!!)
             }

@@ -40,9 +40,9 @@ Feature: Registration
     When I register an EMIS user's IM1 credentials
     Then I receive a "Not found" error
 
-
-  @pending
   @backend
+  @NHSO-222
+  @NHSO-1626
   Scenario: User's account has already been associated with the application
     Given I have data for a patient that has already been associated with the application in the GP system
     When I register an EMIS user's IM1 credentials

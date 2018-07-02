@@ -22,6 +22,8 @@ import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
+import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
@@ -375,32 +377,70 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 DateOfBirth = patient.dateOfBirth)
     }
 
+    @Given("^I have data for a patient that has already been associated with the application in the GP system$")
+    fun iHaveDataForAPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
+        val patient = Patient(
+                surname = "AlreadyLinked",
+                dateOfBirth = "1919-12-24T14:03:15Z",
+                accountId = "1195029928",
+                odsCode = odsCode,
+                linkageKey = "KjwzyFSEUAGj4",
+                endUserSessionId = "zVfHuYArbENW4aoAUeQPyS"
+        )
+
+
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis {
+            meApplicationsRequest(
+                    patient,
+                    LinkApplicationRequestModel(
+                            surname = patient.surname,
+                            dateOfBirth = patient.dateOfBirth,
+                            linkageDetails = LinkageDetailsModel(
+                                    accountId = patient.accountId,
+                                    linkageKey = patient.linkageKey,
+                                    nationalPracticeCode = patient.odsCode
+                            )
+                    )
+            ).respondWithAlreadyLinked()
+        }
+
+        this.im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+        setSessionVariable(Im1ConnectionRequest::class).to(this.im1ConnectionRequest!!)
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
     @When("^I create a user session$")
     fun iCreateUserSession() {
         try {
             this.userSessionResponse = WorkerClient().postSessionConnection(UserSessionRequest(authCode = this.authCode, codeVerifier = this.codeVerifier!!))
         }
         catch (httpException: NhsoHttpException) {
-            this.errorResponse = httpException
+            setErrorResponse(httpException)
         }
     }
 
     @When("^I register an EMIS user's IM1 credentials$")
     fun iRegisterAnEMISUsersIMCredentials() {
         try {
-            this.workerClient.postIm1Connection(this.im1ConnectionRequest!!).also {
-                this.im1ConnectionResponse = it
-            }
+            this
+                    .workerClient
+                    .postIm1Connection(this.im1ConnectionRequest!!)
+                    .also { this.im1ConnectionResponse = it }
         } catch (httpException: NhsoHttpException) {
-            this.errorResponse = httpException
-            setSessionVariable("HttpException").to(this.errorResponse)
+            setErrorResponse(httpException)
         }
     }
 
     @Then("^I receive a response$")
     fun iReceiveAResponse() {
         val responses = arrayListOf(this.userSessionResponse, this.im1ConnectionResponse).filter { it != null }
-        Assert.assertTrue(responses!!.size == 1)
+        Assert.assertTrue(responses.size == 1)
         Assert.assertTrue(this.errorResponse == null)
     }
 
@@ -434,22 +474,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         val cookieParams = retrieveCookie(this.userSessionResponse!!)
         Assert.assertFalse("NHSO-Session-Id is empty or null", cookieParams["NHSO-Session-Id"].isNullOrEmpty())
         Assert.assertTrue(cookieParams.toString(), !cookieParams["httponly"].isNullOrEmpty() && cookieParams["httponly"]!!.toBoolean())
-    }
-
-    private fun retrieveCookie(result: UserSessionResponse): HashMap<String, String> {
-        checkNotNull(result.userSessionResponseCookie.cookie)
-        Assert.assertFalse("Cookie value is empty or null", result.userSessionResponseCookie.cookie.value.isNullOrEmpty())
-        val cookieContents = StringUtils.split(result.userSessionResponseCookie.cookie.value, "; ")
-        val cookieParams = HashMap<String, String>()
-        for (c in cookieContents) {
-            if (c.contains('=')) {
-                val pair = StringUtils.split(c, "=")
-                cookieParams[pair[0]] = pair[1]
-            } else {
-                cookieParams[c] = "true"
-            }
-        }
-        return cookieParams
     }
 
     @Then("^I get (?:a|an) \"(.*)\" error")
@@ -617,6 +641,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         )
     }
 
+
+    private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
+    }
+
     private fun createCidStubs(
             authCode:String? = this.authCode!!,
             codeVerifier: String = this.codeVerifier!!,
@@ -633,11 +663,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
     }
 
-    private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
-    }
-
     private val _errorMapping: HashMap<String, Int> = hashMapOf(
             "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
             "bad request" to HttpStatus.SC_BAD_REQUEST,
@@ -649,8 +674,29 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE
     )
 
-    fun httpStatusCodeTransform(errorName: String): Int? {
+    private fun httpStatusCodeTransform(errorName: String): Int? {
         return _errorMapping[errorName.toLowerCase()]
                 ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
+    }
+
+    private fun retrieveCookie(result: UserSessionResponse): HashMap<String, String> {
+        checkNotNull(result.userSessionResponseCookie.cookie)
+        Assert.assertFalse("Cookie value is empty or null", result.userSessionResponseCookie.cookie.value.isNullOrEmpty())
+        val cookieContents = StringUtils.split(result.userSessionResponseCookie.cookie.value, "; ")
+        val cookieParams = HashMap<String, String>()
+        for (c in cookieContents) {
+            if (c.contains('=')) {
+                val pair = StringUtils.split(c, "=")
+                cookieParams[pair[0]] = pair[1]
+            } else {
+                cookieParams[c] = "true"
+            }
+        }
+        return cookieParams
+    }
+
+    private fun setErrorResponse(errorResponse: NhsoHttpException) {
+        this.errorResponse = errorResponse
+        setSessionVariable("HttpException").to(errorResponse)
     }
 }

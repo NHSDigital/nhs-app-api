@@ -2,6 +2,7 @@ package mocking
 
 import com.google.gson.Gson
 import config.Config
+import io.restassured.response.Response
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.defaults.MockDefaults
 import mocking.emis.EmisMappingBuilder
@@ -50,16 +51,14 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun favicon() = this.postMapping(FaviconMappingBuilder().respondWithNotFound())
 
-    private fun postMapping(mapping: Mapping): String {
-        val response = SerenityRest.given()
+    private fun postMapping(mapping: Mapping): Response {
+        return SerenityRest.given()
                 .header("Content-Type", "application/json; charset=UTF-8")
                 .and()
                 .body(gson.toJson(mapping))
                 .expect().statusCode(HttpStatus.SC_CREATED)
                 .`when`()
                 .post("${configuration.wiremockAdminUrl}/mappings")
-
-        return response.body.prettyPrint()
     }
 
     fun getRequests(): String {

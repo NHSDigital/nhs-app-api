@@ -4,12 +4,13 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.emis.demographics.PatientIdentifier
+import mocking.emis.me.LinkApplicationRequestModel
+import mocking.emis.me.LinkageDetailsModel
 
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import models.Patient
-import net.serenitybdd.core.Serenity.sessionVariableCalled
-import net.serenitybdd.core.Serenity.setSessionVariable
+import net.serenitybdd.core.Serenity.*
 
 import org.junit.Assert
 
@@ -66,30 +67,5 @@ class PatientRegistrationSteps : AbstractSteps() {
         Assert.assertNotNull("Exception thrown during IM1 connection post. Exception: ${sessionVariableCalled<NhsoHttpException>("HttpException")}", result)
         Assert.assertEquals(result.connectionToken, connectionToken)
         Assert.assertArrayEquals(result.nhsNumbers, emptyArray<PatientNhsNumber>())
-    }
-
-    @Given("^I have data for a patient that has already been associated with the application in the GP system$")
-    fun iHaveDataForAPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
-        val patient = Patient(
-                surname = "AlreadyLinked",
-                dateOfBirth = "1919-12-24T14:03:15Z",
-                accountId = "1195029928",
-                odsCode = odsCode,
-                linkageKey = "KjwzyFSEUAGj4",
-                endUserSessionId = "zVfHuYArbENW4aoAUeQPyS"
-        )
-
-
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { meRequest(patient).respondWithUserAlreadyLinked() }
-
-        val connectionRequest = Im1ConnectionRequest(
-                AccountId = patient.accountId,
-                LinkageKey = patient.linkageKey,
-                OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth)
-        setSessionVariable(Im1ConnectionRequest::class).to(connectionRequest)
-        setSessionVariable("HttpExceptionExpected").to(true)
     }
 }

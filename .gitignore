@@ -1,2 +1,4 @@
 # User-specific stuff:
 .idea/
+.user/
+.gradle/
