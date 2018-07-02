@@ -22,7 +22,7 @@ Feature: View available appointment slots backend
     Given I have logged in and have a valid session cookie
     But the practice does not offer online booking to my patient
     When the available appointment slots are retrieved for explicit date-time range
-    Then I get a response with an empty set of slots
+    Then I receive a "Forbidden" error
 
   @NHSO-470
   @backend
