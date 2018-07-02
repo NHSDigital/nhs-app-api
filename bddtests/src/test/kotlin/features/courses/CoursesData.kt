@@ -1,6 +1,6 @@
 package features.courses
 
-import features.prescriptions.PrescriptionsData
+import features.prescriptions.loaders.EmisPrescriptionLoader
 import mocking.emis.models.MedicationCourse
 import mocking.emis.models.PrescriptionType
 import java.util.*
@@ -20,15 +20,15 @@ object CoursesData {
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {
             val constituents = mutableListOf<String>()
-            for (constituentNo in 1..PrescriptionsData.getRandomNumber(5)) {
+            for (constituentNo in 1..EmisPrescriptionLoader.getRandomNumber(5)) {
                 constituents.add("Constituent" + constituentNo)
             }
 
             // Create a default course
             val createdCourse = MedicationCourse(UUID.randomUUID().toString(),
-                    PrescriptionsData.getCourseName(),
-                    if (includeDosage) PrescriptionsData.getDosage() else null,
-                    if (includeQuantity) PrescriptionsData.getQuantity() else null,
+                    EmisPrescriptionLoader.getCourseName(),
+                    if (includeDosage) EmisPrescriptionLoader.getDosage() else null,
+                    if (includeQuantity) EmisPrescriptionLoader.getQuantity() else null,
                     PrescriptionType.Acute,
                     constituents,
                     false)

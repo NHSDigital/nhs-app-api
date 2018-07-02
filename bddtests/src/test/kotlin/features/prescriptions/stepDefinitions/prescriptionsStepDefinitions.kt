@@ -3,17 +3,27 @@ package features.prescriptions.stepDefinitions
 import cucumber.api.DataTable
 import cucumber.api.java.en.*
 import features.authentication.steps.LoginSteps
-import features.prescriptions.PrescriptionsData
+import features.prescriptions.loaders.EmisPrescriptionLoader
+import features.prescriptions.loaders.TppPrescriptionLoader
+import features.prescriptions.mappers.EmisPrescriptionMapper
+import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.emis.models.*
+import mocking.defaults.MockDefaults.Companion.patient
+import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsData
+import mocking.emis.models.MedicationCourse
+import mocking.emis.models.PrescriptionRequestsGetResponse
+import mocking.emis.models.PrescriptionType
+import mocking.emis.models.RequestedMedicationCourseStatus
+import mocking.tpp.models.ListRepeatMedicationReply
 import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.apache.http.HttpStatus
 import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Assert.assertEquals
@@ -33,7 +43,10 @@ open class PrescriptionsStepDefinitions {
     lateinit var prescriptions: PrescriptionsSteps
 
     val mockingClient = MockingClient.instance
-    val patient = Patient.montelFrye
+
+    val emisPatient = Patient.montelFrye
+    val tppPatient = Patient.kevinBarry
+
     val FROM_DATE = "FromDate"
     val TO_DATE = OffsetDateTime.now()
     val HTTP_EXCEPTION = "HttpException"
@@ -41,13 +54,17 @@ open class PrescriptionsStepDefinitions {
     var numberOfPrescriptions: Int = 0
     var numOfCourses: Int = 0
     var numOfRepeats: Int = 0
-    lateinit var currentPatient: Patient
     var fromDate: String? = null
-    val historicPrescriptionOrderPriority = hashMapOf( "Rejected" to 1, "Requested" to 2, "Approved" to 3)
+    lateinit var currentGPSystem: String
+    lateinit var currentPatient: Patient
+
+    private val EMIS = "EMIS"
+    private val TPP = "TPP"
 
     lateinit var prescriptionsResponseData: PrescriptionsResponseData
 
-    lateinit var prescriptionsMock: PrescriptionRequestsGetResponse
+    lateinit var emisPrescriptionsMock: PrescriptionRequestsGetResponse
+    lateinit var tppMedicationDataMock: ListRepeatMedicationReply
 
     lateinit var prescriptionsPage: PrescriptionsPage
     lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
@@ -87,62 +104,24 @@ open class PrescriptionsStepDefinitions {
         this.numOfCourses = numOfCourses
         this.numOfRepeats = numOfRepeats
 
-        prescriptionsMock = PrescriptionsData.loadPrescriptionsData(numberOfPrescriptions, numOfCourses * numberOfPrescriptions, numOfRepeats * numberOfPrescriptions)
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsMock)
-                }
+        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE,
+                numberOfPrescriptions,
+                numOfCourses * numberOfPrescriptions,
+                numOfRepeats * numberOfPrescriptions )
     }
 
     @And("^each repeat prescription shares the same course")
     fun givenEachRepeatPrescriptionSharesTheSameCourse() {
         val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        prescriptionsMock = PrescriptionsData.loadPrescriptionsData(numberOfPrescriptions, 1, 1)
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsMock)
-                }
-    }
-
-    @And("^courses have status$")
-    fun givenCoursesHaveStatus(statuses: DataTable) {
-
-        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
-
-        var statusIndex = 0
-        val data = statuses.raw()
-
-        for (prescription in prescriptionsMock.prescriptionRequests) {
-            for (course in prescription.requestedMedicationCourses) {
-                val status = data.get(statusIndex).get(0)
-                course.requestedMedicationCourseStatus = RequestedMedicationCourseStatus.valueOf(status)
-                statusIndex++
-            }
-        }
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsMock)
-                }
+        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE, numberOfPrescriptions, 1, 1)
     }
 
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
         var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        var prescriptionsData: PrescriptionRequestsGetResponse = PrescriptionsData.loadPrescriptionsData(10, 10, 10)
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsData)
-                }
+        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE, 10, 10, 10)
     }
 
     @When("I get the users prescriptions with a valid cookie")
@@ -150,21 +129,47 @@ open class PrescriptionsStepDefinitions {
         var formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
 
         try {
-            prescriptionsResponseData = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
+            var sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            prescriptionsResponseData = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
     }
 
-    @Then("I receive a list of 10 prescriptions")
-    fun thenIReceiveAListOfTenPrescriptions() {
-        Assert.assertNotNull(prescriptionsResponseData)
-        Assert.assertEquals(10, prescriptionsResponseData.prescriptions.count())
-        var prescriptions = prescriptionsResponseData.prescriptions
+    @Then("I receive a list of (\\d+) prescriptions")
+    fun thenIReceiveAListOfTenPrescriptions(count: Int) {
+        println(currentGPSystem)
 
-        // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
-        for (int in 0 until prescriptions.count() - 2) {
-            Assert.assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >= ZonedDateTime.parse(prescriptions[int + 1].orderDate))
+        Assert.assertNotNull(prescriptionsResponseData)
+
+        if(currentGPSystem == EMIS){
+            Assert.assertEquals(count, prescriptionsResponseData.prescriptions.count())
+            var prescriptions = prescriptionsResponseData.prescriptions
+
+            // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
+            for (int in 0 until prescriptions.count() - 2) {
+                Assert.assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >= ZonedDateTime.parse(prescriptions[int + 1].orderDate))
+            }
+        }
+        else if(currentGPSystem == TPP) {
+            Assert.assertEquals(count, prescriptionsResponseData.courses.count())
+        }
+        else{
+            throw Exception("Invalid GP System")
+        }
+    }
+
+    @Given("^I am using (.*) GP System$")
+    fun givenIHaveXPastRepeatPrescriptions(gpSystem: String) {
+        currentGPSystem = gpSystem
+
+        when (currentGPSystem) {
+            EMIS -> {
+                currentPatient = emisPatient
+            }
+            TPP -> {
+                currentPatient = tppPatient
+            }
         }
     }
 
@@ -175,14 +180,37 @@ open class PrescriptionsStepDefinitions {
 
     @Then("^I see expected prescriptions$")
     fun thenISeeXPrescriptions() {
-        val expectedPrescriptions = mapEmisResponseToExpectedPrescriptionFormat(prescriptionsMock)
+        val expectedPrescriptions
+                = getResponseToExpectedPrescriptionFormat()
 
-        prescriptions.assertPrescriptionsMatch(expectedPrescriptions)
+        prescriptions.assertPrescriptionsMatch(expectedPrescriptions, expectedPrescriptions.size, true)
+    }
+
+    @Then("^I see (\\d+) prescriptions$")
+    fun thenISeeXPrescriptions(numPrescriptions: Int) {
+
+        var isEmis = (currentGPSystem == EMIS)
+
+        prescriptions
+                .assertPrescriptionsMatch(
+                        getResponseToExpectedPrescriptionFormat(),
+                        numPrescriptions,
+                        isEmis)
     }
 
     @And("^I have a patient$")
     fun iHaveAPatient() {
-        currentPatient = patient
+
+        currentGPSystem = Serenity.getCurrentSession().get("GP_SYSTEM").toString()
+
+        when (currentGPSystem) {
+            EMIS -> {
+                currentPatient = emisPatient
+            }
+            TPP -> {
+                currentPatient = tppPatient
+            }
+        }
     }
 
     @And("^the patient has no prescriptions in the last 6 months")
@@ -190,13 +218,7 @@ open class PrescriptionsStepDefinitions {
 
         val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        prescriptionsMock = PrescriptionsData.loadPrescriptionsData(0, 0, 0)
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(currentPatient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsMock)
-                }
+        setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE,0,0,0)
     }
 
     @But("^I do not request a fromDate$")
@@ -208,13 +230,7 @@ open class PrescriptionsStepDefinitions {
     fun butTheGPSystemIsTooSlow() {
         val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        prescriptionsMock = PrescriptionsData.loadPrescriptionsData(1, 1, 1)
-
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(currentPatient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsMock).delayedBy(Duration.ofSeconds(31))
-                }
+        setupWiremockAndDataWithDelay(EXPECTED_DEFAULT_FROM_DATE,1,1,1)
     }
 
     @When("^I request prescriptions for the last 6 months$")
@@ -272,92 +288,40 @@ open class PrescriptionsStepDefinitions {
     fun theGPSystemHasDisabledPrescriptions() {
         val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(currentPatient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithPrescriptionsNotEnabled()
-                }
+        when (currentGPSystem) {
+            EMIS -> {
+                mockingClient
+                        .forEmis {
+                            prescriptionsRequest(currentPatient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                                    .respondWithPrescriptionsNotEnabled()
+                        }
+            }
+            TPP -> {
+                mockingClient
+                        .forTpp {
+                            listRepeatMedication(currentPatient)
+                                    .respondWith(403, 0, resolve = {})
+                        }
+            }
+        }
+
+
     }
 
     fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
-    fun mapEmisResponseToExpectedPrescriptionFormat(data: PrescriptionRequestsGetResponse): List<HistoricPrescription>{
-
-        val displayedEmisMedicationCourseStatuses = listOf(
-                RequestedMedicationCourseStatus.Rejected,
-                RequestedMedicationCourseStatus.Requested,
-                RequestedMedicationCourseStatus.ForwardedForSigning,
-                RequestedMedicationCourseStatus.Issued)
-
-        val emisMedicationCourseStatusToDisplayedStatus = mapOf(
-                RequestedMedicationCourseStatus.Rejected to "Rejected",
-                RequestedMedicationCourseStatus.Requested to "Requested",
-                RequestedMedicationCourseStatus.ForwardedForSigning to "Requested",
-                RequestedMedicationCourseStatus.Issued to "Approved")
-
-        var totalCoursesRunningTotal = 0
-
-        var repeatCourses = data.medicationCourses.filter { it.prescriptionType == PrescriptionType.Repeat }
-
-        var repeatCourseguids = getCourseGuids(repeatCourses)
-
-        var historicPrescriptions = ArrayList<HistoricPrescription>()
-
-        for (prescription in data.prescriptionRequests.toList().sortedByDescending { it.dateRequested }){
-
-            if (totalCoursesRunningTotal >= 100) {
-                break
-            }
-
-            var datetime = DateTime.parse(prescription.dateRequested).toString("d MMM yyyy")
-
-            var filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
-                it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)
-                    && it.requestedMedicationCourseStatus in displayedEmisMedicationCourseStatuses
-            }
-
-            for (courseEntry in filteredCoursesInPrescription) {
-
-                var course = repeatCourses.toList().filter { it.medicationCourseGuid == courseEntry.requestedMedicationCourseGuid }.single()
-
-                var historicPrescription = HistoricPrescription(
-                        orderDate = datetime,
-                        name = course.name,
-                        detail = pages.prescription.resolveDetailsField(course.dosage, course.quantityRepresentation),
-                        status = emisMedicationCourseStatusToDisplayedStatus[courseEntry.requestedMedicationCourseStatus]
-                )
-
-                historicPrescriptions.add(historicPrescription)
-            }
-
-            totalCoursesRunningTotal += filteredCoursesInPrescription.size
-        }
-
-        val historicPrescriptionsOrderedByStatusOnScreen = historicPrescriptions.sortedWith(compareBy({ historicPrescriptionOrderPriority[it.status] }))
-
-        return historicPrescriptionsOrderedByStatusOnScreen
-    }
-
-    private fun getCourseGuids(repeatCourses: List<MedicationCourse>): ArrayList<String> {
-        var courseGuids = ArrayList<String>()
-
-        repeatCourses.forEach { it -> courseGuids.add(it.medicationCourseGuid) }
-
-        return courseGuids
-    }
-
     @Given ("prescriptions is disabled at a GP Practice level")
     fun prescriptionsIsDisabledAtAGPLevel() {
         mockingClient
             .forEmis {
-                prescriptionsRequest(patient).respondWithPrescriptionsNotEnabled()
+                prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
             }
 
         mockingClient
             .forEmis {
-                coursesRequest(patient).respondWithPrescriptionsNotEnabled()
+                coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
             }
     }
 
@@ -375,7 +339,7 @@ open class PrescriptionsStepDefinitions {
     fun butThePrescriptionsEndpointIsTimingOut(){
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(patient)
+                    prescriptionsRequest(currentPatient)
                             .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                 }
     }
@@ -385,21 +349,21 @@ open class PrescriptionsStepDefinitions {
     fun butThePrescriptionsEndpointIsThrowingAServerError(){
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(patient)
+                    prescriptionsRequest(currentPatient)
                             .respondWith(500, resolve = {})
                 }
     }
 
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
-        mockingClient.forEmis { coursesRequest(patient)
+        mockingClient.forEmis { coursesRequest(currentPatient)
                 .respondWith(504, resolve = {}, milliSecondDelay = 15000)
         }
     }
 
     @But("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
-        mockingClient.forEmis { coursesRequest(patient)
+        mockingClient.forEmis { coursesRequest(currentPatient)
                 .respondWith(500, resolve = {}) }
     }
 
@@ -474,18 +438,125 @@ open class PrescriptionsStepDefinitions {
 
         val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
-        prescriptionsMock = PrescriptionsData.loadPrescriptionsData(
-                numberOfPrescriptions,
-                numOfCourses * numberOfPrescriptions,
-                numOfRepeats * numberOfPrescriptions,
-                showDosage, showQuantity)
+        when(currentGPSystem) {
+            EMIS -> {
+                emisPrescriptionsMock = EmisPrescriptionLoader.loadPrescriptionsData(
+                        numberOfPrescriptions,
+                        numOfCourses * numberOfPrescriptions,
+                        numOfRepeats * numberOfPrescriptions,
+                        showDosage, showQuantity)
+
+                mockingClient
+                        .forEmis {
+                            prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                                    .respondWithSuccess(emisPrescriptionsMock)
+                        }
+            }
+            TPP -> {
+                tppMedicationDataMock = TppPrescriptionLoader.loadRepeatMedicationData(
+                        numberOfPrescriptions,
+                        numOfRepeats,
+                        numOfRepeats,
+                        showDosage, showQuantity)
+
+                mockingClient
+                        .forTpp {
+                            listRepeatMedication(currentPatient)
+                                    .respondWithSuccess(tppMedicationDataMock)
+                        }
+            }
+        }
+
+
+    }
+
+    private fun setupWiremockAndData(fromdate: OffsetDateTime, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
+
+        //todo: John TPP
+        when (currentGPSystem) {
+            EMIS -> {
+                emisPrescriptionsMock = EmisPrescriptionLoader.loadPrescriptionsData(numPrescriptions, numOfCourses, numOfRepeats)
+
+                mockingClient
+                        .forEmis {
+                            prescriptionsRequest(currentPatient, fromdate, TO_DATE)
+                                    .respondWithSuccess(emisPrescriptionsMock)
+                        }
+            }
+            TPP -> {
+                tppMedicationDataMock = TppPrescriptionLoader.loadRepeatMedicationData(numPrescriptions, numOfRepeats, numOfRepeats)
+
+                mockingClient
+                        .forTpp {
+                            listRepeatMedication(currentPatient)
+                                    .respondWithSuccess(tppMedicationDataMock)
+                        }
+
+            }
+        }
+    }
+
+    private fun getResponseToExpectedPrescriptionFormat() : List<HistoricPrescription> {
+
+        //todo: John TPP
+        when (currentGPSystem) {
+            EMIS -> {
+               return EmisPrescriptionMapper.Map(emisPrescriptionsMock)
+            }
+            TPP -> {
+                return TppPrescriptionMapper.Map(tppMedicationDataMock)
+            }
+        }
+        return ArrayList<HistoricPrescription>()
+    }
+
+    private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
+
+        val delay: Long = 31
+
+        //todo: John TPP
+        when (currentGPSystem) {
+            EMIS -> {
+                emisPrescriptionsMock = EmisPrescriptionLoader.loadPrescriptionsData(numPrescriptions, numOfCourses, numOfRepeats)
+
+                mockingClient
+                        .forEmis {
+                            prescriptionsRequest(emisPatient, fromdate, TO_DATE)
+                                    .respondWithSuccess(emisPrescriptionsMock).delayedBy(Duration.ofSeconds(delay))
+                        }
+            }
+            TPP -> {
+                tppMedicationDataMock = TppPrescriptionLoader.loadRepeatMedicationData(numPrescriptions, numPrescriptions, numOfRepeats)
+
+                mockingClient
+                        .forTpp {
+                            listRepeatMedication(currentPatient)
+                                    .respondWithSuccess(tppMedicationDataMock).delayedBy(Duration.ofSeconds(delay))
+                        }
+            }
+        }
+    }
+
+    @And("^courses have status$")
+    fun givenCoursesHaveStatus(statuses: DataTable) {
+
+        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+
+        var statusIndex = 0
+        val data = statuses.raw()
+
+        for (prescription in emisPrescriptionsMock.prescriptionRequests) {
+            for (course in prescription.requestedMedicationCourses) {
+                val status = data.get(statusIndex).get(0)
+                course.requestedMedicationCourseStatus = RequestedMedicationCourseStatus.valueOf(status)
+                statusIndex++
+            }
+        }
 
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                            .respondWithSuccess(prescriptionsMock)
+                    prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            .respondWithSuccess(emisPrescriptionsMock)
                 }
-
-
     }
 }

@@ -31,14 +31,14 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @Given("^the Emis is available to cancel an appointment$")
     fun theEmisIsAvailableToCancelAnAppointment() {
-        commonSteps.givenIHaveLoggedInAndHaveAValidSessionCookie()
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
         retrieveCancellationReasons()
         mockCancellationRequestStubForReason(cancellationReasons.first().displayName)
     }
 
     @Given("^the Emis is available to cancel an appointment for (.*)$")
     fun theEmisIsAvailableToCancelAnAppointmentForReason(reason: String) {
-        commonSteps.givenIHaveLoggedInAndHaveAValidSessionCookie()
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
         mockCancellationRequestStubForReason(reason)
     }
 

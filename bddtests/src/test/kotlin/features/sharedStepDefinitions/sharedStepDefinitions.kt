@@ -8,16 +8,20 @@ import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import mocking.defaults.MockDataPopulate
+import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.models.AssociationType
+import mocking.tpp.models.AuthenticateReply
+import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import java.net.URL
+import java.util.*
 
 open class SharedStepDefinitions {
 
@@ -35,10 +39,44 @@ open class SharedStepDefinitions {
         MockingClient.instance.clearWiremock()
     }
 
-    @Given("^wiremock is initialised")
+    @Given("(.*) is initialised")
+    fun system(system: String) {
+
+        if(system == "wiremock"){
+            initialiseWiremock()
+        }
+        if(system == "EMIS"){
+            initialiseEmis()
+        }
+        if(system == "TPP"){
+            initialiseTpp()
+        }
+    }
+
     fun initialiseWiremock() {
         MockDataPopulate(mockingClient).populate()
         mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
+    }
+
+    fun initialiseEmis() {
+        MockDataPopulate(mockingClient).populate()
+        mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
+    }
+
+    fun initialiseTpp() {
+        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
+
+        mockingClient.forTpp {
+
+            var authReply = AuthenticateReply()
+            authReply.uuid = UUID.randomUUID().toString()
+            authReply.user.person.dateOfBirth = "1989-01-25"
+
+            authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(authReply)
+        }
+
+        val tppFactory = TppSessionCreateJourneyFactory(mockingClient)
+        tppFactory.createFor(Patient.kevinBarry)
     }
 
     @Given("^I am logged in$")

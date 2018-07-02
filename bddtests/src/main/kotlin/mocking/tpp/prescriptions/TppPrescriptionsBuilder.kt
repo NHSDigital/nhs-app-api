@@ -1,0 +1,43 @@
+package mocking.tpp.prescriptions
+
+import mocking.models.Mapping
+import mocking.tpp.TppMappingBuilder
+import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.ListRepeatMedication
+import mocking.tpp.models.ListRepeatMedicationReply
+import models.Patient
+import org.apache.http.HttpStatus
+import java.io.StringWriter
+import java.util.*
+import javax.xml.bind.JAXBContext
+import javax.xml.bind.Marshaller
+
+class TppPrescriptionsBuilder(patient: Patient)
+    : TppMappingBuilder("POST", "/tpp/") {
+
+    private var Suid: String = ""
+
+    init {
+        requestBuilder.andHeader(HEADER_TYPE, "ListRepeatMedication")
+        requestBuilder.andBodyMatchingXpath("//ListRepeatMedication[" +
+                "@patientId='${patient.patientId}']")
+    }
+
+    fun respondWithSuccess(listRepeatMedicationReply: ListRepeatMedicationReply): Mapping {
+
+        val jaxbContext = JAXBContext.newInstance(ListRepeatMedicationReply::class.java)
+        val marshaller = jaxbContext.createMarshaller()
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
+
+        val stringWriter = StringWriter()
+        stringWriter.use {
+            marshaller.marshal(listRepeatMedicationReply, stringWriter)
+        }
+
+        return respondWith(HttpStatus.SC_OK) {
+            andXmlBody(stringWriter.toString())
+                    .andHeader(HEADER_SUID, Suid)
+                    .build()
+        }
+    }
+}

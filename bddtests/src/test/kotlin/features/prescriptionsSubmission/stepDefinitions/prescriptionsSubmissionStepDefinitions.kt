@@ -7,7 +7,8 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.courses.stepDefinitions.coursesStepDefinitions
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
-import features.prescriptions.PrescriptionsData
+import features.prescriptions.loaders.EmisPrescriptionLoader
+import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.backend.CommonSteps
@@ -60,7 +61,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest()
     {
-        commonSteps.givenIHaveLoggedInAndHaveAValidSessionCookie()
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
 
         prescriptionSubmissionRequest = null
     }
@@ -68,7 +69,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Given("^I have a repeat prescription request with (\\d+) courses")
     fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int)
     {
-        commonSteps.givenIHaveLoggedInAndHaveAValidSessionCookie()
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
 
         var uuids: MutableList<String> = mutableListOf()
 
@@ -158,7 +159,7 @@ open class PrescriptionsSubmissionStepDefinitions {
         }
         val oldPrescriptions = prescriptionMap[Scenario.STARTED]
         val prs = mutableListOf<PrescriptionRequest>()
-        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr))
+        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr, RequestedMedicationCourseStatus.Requested.toString()))
 
         oldPrescriptions!!.prescriptionRequests.forEach {
             pr -> prs.add(pr)
@@ -191,7 +192,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @And("^I have (\\d+) historic prescriptions in this scenario$")
     fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
-        val pr = PrescriptionsData.loadPrescriptionsData(amount, amount, amount)
+        val pr = EmisPrescriptionLoader.loadPrescriptionsData(amount, amount, amount)
         mockingClient.forEmis {
             prescriptionsRequest(patient)
                     .respondWithSuccess(pr)
@@ -205,17 +206,19 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @When("I click Confirm and order repeat prescription")
     fun iClickConfirmAndOrderRepeatPrescription() {
+
         confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.clickConfirmAndOrderRepeatPrescriptionButton()
+
     }
 
 
-    @Then("I see a order successful message on the Repeat prescription page with the correct prescriptions")
-    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions() {
+    @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
+    fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
 
         Assert.assertTrue(prescriptionPage.isOrderSuccessfullTextVisible())
 
-        prescriptionSteps.assertPrescriptionsMatch(prescriptionStepDefinitions.mapEmisResponseToExpectedPrescriptionFormat(
-                prescriptionMap[currentScenarioState]!!))
+        prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.Map(
+                prescriptionMap[currentScenarioState]!!), amount)
     }
 
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String){

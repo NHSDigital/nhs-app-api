@@ -17,5 +17,7 @@ class SessionJournies(private val client: MockingClient) {
         emisFactory.createFor(Patient.paulSmith)
         cidFactory.createFor(Patient.montelFrye)
         emisFactory.createFor(Patient.montelFrye)
+
+        tppFactory.createFor(Patient.kevinBarry)
     }
 }

@@ -3,6 +3,7 @@ package pages.prescription
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
+import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
@@ -43,29 +44,40 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         return findByXpath("//div[@id='success-dialog']//p[contains(.,'$successText')]").isVisible
     }
 
-    fun getAllPrescriptions(): List<HistoricPrescription> {
+    fun getAllPrescriptions(allFieldsProvided: Boolean): List<HistoricPrescription> {
         val historicPrescriptions = ArrayList<HistoricPrescription>()
 
         val prescriptions = findAllByXpath("//li[@aria-label='historic-prescription']")
 
+        var orderDateXpath = ".//*[@aria-label='order-date']"
+        var courseNameXpath = ".//*[@aria-label='course-name']"
+        var dosageXpath = ".//*[@aria-label='detail']"
+        var statusXpath = ".//*[@aria-label='status']"
+
+        var count = 0
+
         prescriptions.forEach( { el ->
-            var p = HistoricPrescription(
-                    orderDate = el.findElement(By.xpath(".//*[@aria-label='order-date']")).text,
-                    name = el.findElement(By.xpath(".//*[@aria-label='course-name']")).text,
-                    detail = el.findElement(By.xpath(".//*[@aria-label='detail']")).text,
-                    status = el.findElement(By.xpath(".//*[@aria-label='status']")).text
-            )
+
+            var p: HistoricPrescription
+
+            if(allFieldsProvided) {
+                p = HistoricPrescription(
+                        name = el.findElement(By.xpath(courseNameXpath)).text,
+                        dosage = el.findElement(By.xpath(dosageXpath)).text)
+
+                p.orderDate = el.findElement(By.xpath(orderDateXpath)).text
+                p.status = el.findElement(By.xpath(statusXpath)).text
+            }
+            else {
+                p = HistoricPrescription(
+                        name = el.findElement(By.xpath(courseNameXpath)).text,
+                        dosage = el.findElement(By.xpath(dosageXpath)).text)
+            }
 
             historicPrescriptions.add(p)
         })
 
         return historicPrescriptions
-    }
-
-    fun doesOrderARepeatPrescriptionButtonExist () : Boolean {
-
-        val orderARepeatPrescriptionButton = findByXpath(orderARepeatPrescriptionButtonLocator)
-        return orderARepeatPrescriptionButton.isPresent
     }
 
     fun clickOrderARepeatPrescriptionButton ()

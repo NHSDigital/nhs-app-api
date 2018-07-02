@@ -30,3 +30,5 @@ resources/*
 target/*
 browserstack.err
 *.override.yml
+
+.gradle/

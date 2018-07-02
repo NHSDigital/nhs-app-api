@@ -1,11 +1,11 @@
-package features.prescriptions
+package features.prescriptions.loaders
 
 import features.courses.CoursesData
 import mocking.emis.models.*
 import java.time.OffsetDateTime
 import java.util.*
 
-object PrescriptionsData {
+object EmisPrescriptionLoader {
 
     fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?, showDosage: Boolean = true, showQuantity: Boolean = true): PrescriptionRequestsGetResponse {
 
@@ -34,13 +34,14 @@ object PrescriptionsData {
 
                 time = time.minusDays(prescriptionNum.toLong())
 
-                requestedMedicationCourses.add(RequestedMedicationCourse(
-                        medicationCourses.get(courseNum).medicationCourseGuid,
-                        RequestedMedicationCourseStatus.Requested))
-
                 if (!isSecondIteration) {
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses))
+                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
+                            RequestedMedicationCourseStatus.Requested))
+                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
                 } else {
+                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
+                            RequestedMedicationCourseStatus.Requested))
+
                     prescriptionRequests.get(prescriptionNum).requestedMedicationCourses.addAll(requestedMedicationCourses)
                 }
 

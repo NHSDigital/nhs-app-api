@@ -1,3 +1,6 @@
 package models.prescriptions
 
-data class HistoricPrescription(val orderDate:String, val name:String, val detail:String, val status:String?)
+data class HistoricPrescription(val name:String, val dosage:String){
+    var orderDate: String? = null
+    var status: String? = null
+}

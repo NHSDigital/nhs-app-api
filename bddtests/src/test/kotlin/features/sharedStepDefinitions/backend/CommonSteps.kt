@@ -5,24 +5,35 @@ import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
+import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
 import mocking.defaults.MockDefaults.Companion.patient
 
 import mocking.MockingClient
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.emis.models.AssociationType
+import mocking.tpp.models.AuthenticateReply
 import models.Patient
 import net.serenitybdd.core.Serenity.*
+import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import worker.NhsoHttpException
 import worker.WorkerClient
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 class CommonSteps : AbstractSteps() {
+    var GP_SYSTEM : String = "GP_SYSTEM"
+    private val EMIS = "EMIS"
+    private val TPP = "TPP"
+
     @Before
     fun beforeEachScenario() {
         getCurrentSession().clear()
@@ -84,37 +95,56 @@ class CommonSteps : AbstractSteps() {
                 ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $statusName")
     }
 
-    @Given("^I have logged in and have a valid session cookie$")
-    fun givenIHaveLoggedInAndHaveAValidSessionCookie() {
+    @Given("^I have logged into (.*) and have a valid session cookie$")
+    fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
 
-        val accessToken = "access_token"
+        when (gpSystem) {
+            EMIS -> {
+                val accessToken = "access_token"
 
-        mockingClient.forCitizenId {
-            tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
-                    .respondWithSuccess(
-                            accessToken,
-                            "30",
-                            "30",
-                            "refresh_token",
-                            "token_type")
-        }
+                mockingClient.forCitizenId {
+                    tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
+                            .respondWithSuccess(
+                                    accessToken,
+                                    "30",
+                                    "30",
+                                    "refresh_token",
+                                    "token_type")
+                }
 
-        mockingClient.forCitizenId {
-            userInfoRequest("Bearer ".plus(accessToken))
-                    .respondWithSuccess(Patient.getDefault("EMIS"))
-        }
+                mockingClient.forCitizenId {
+                    userInfoRequest("Bearer ".plus(accessToken))
+                            .respondWithSuccess(Patient.getDefault("EMIS"))
+                }
 
-        mockingClient.forEmis {
-            endUserSessionRequest()
-                    .respondWithSuccess(DEFAULT_END_USER_SESSION_ID)
-        }
+                mockingClient.forEmis {
+                    endUserSessionRequest()
+                            .respondWithSuccess(DEFAULT_END_USER_SESSION_ID)
+                }
 
-        mockingClient.forEmis {
-            sessionRequest(patient)
-                    .respondWithSuccess(patient, AssociationType.Self)
+                mockingClient.forEmis {
+                    sessionRequest(patient)
+                            .respondWithSuccess(patient, AssociationType.Self)
+                }
+
+            }
+            TPP -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
+
+                mockingClient.forTpp {
+
+                    var authReply = AuthenticateReply()
+                    authReply.uuid = UUID.randomUUID().toString()
+                    authReply.user.person.dateOfBirth = MockDefaults.patientTpp.dateOfBirth
+                    authReply.patientId = MockDefaults.patientTpp.patientId
+
+                    authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(authReply)
+                }
+            }
         }
 
         sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
+        Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
     }
 
     @And("I allow my session to expire")

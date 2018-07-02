@@ -37,7 +37,7 @@ object PrescriptionsData {
                 if (!isSecondIteration) {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses))
+                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, RequestedMedicationCourseStatus.Requested.toString()))
                 } else {
                     requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
