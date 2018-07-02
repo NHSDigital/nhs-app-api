@@ -13,9 +13,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             services.AddTransient<IAppointmentSlotsMapper, AppointmentSlotsMapper>();
             services.AddTransient<IAppointmentsResponseMapper, AppointmentsResponseMapper>();
             services.AddTransient<IAppointmentsMapper, AppointmentsMapper>();
-            services.AddTransient<IMapper<SessionHolder, Clinician>, AppointmentClinicianMapper>();
-            services.AddTransient<IMapper<Models.Location, Areas.Appointments.Models.Location>, AppointmentLocationMapper>();
-            services.AddTransient<IMapper<Models.Session, AppointmentSession>, AppointmentSessionMapper>();
             base.ConfigureServices(services, configuration);
         }
     }

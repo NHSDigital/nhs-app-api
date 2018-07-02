@@ -179,21 +179,6 @@ definitions:
         description: Array of booked Appointments.
         items:
           $ref: '#/definitions/Appointment'
-      clinicians:
-        type: array
-        description: Array of attending Clinicians.
-        items:
-          $ref: '#/definitions/Clinician'
-      appointmentSessions:
-        type: array
-        description: Array of Appointment Sessions.
-        items:
-          $ref: '#/definitions/AppointmentSession'
-      locations:
-        type: array
-        description: Array of Locations.
-        items:
-          $ref: '#/definitions/Location'
       cancellationReasons:
         type: array
         description: Array of Cancellation Reasons.
@@ -202,21 +187,6 @@ definitions:
   AppointmentSlotsResponse:
     type: object
     properties:
-      clinicians:
-        type: array
-        description: Array of attending Clinicians.
-        items:
-         $ref: '#/definitions/Clinician'
-      appointmentSessions:
-        type: array
-        description: Array of Appointment Sessions.
-        items:
-          $ref: '#/definitions/AppointmentSession'
-      locations:
-        type: array
-        description: Array of Locations.
-        items:
-          $ref: '#/definitions/Location'
       slots:
         type: array
         description: Available Appointment Slots.
@@ -228,7 +198,7 @@ definitions:
       id:
         type: string
         description: Appointment Identifier.
-      slotType: 
+      type: 
         type: string
         description: Type of appointment slot, e.g. "Baby immunisations".
       startTime:
@@ -239,13 +209,10 @@ definitions:
         type: string
         format: date-time
         description: Appointment End Date Time.
-      locationId:
+      location:
         type: string
-        description: Location Identifier
-      appointmentSessionId:
-        type: string
-        description: GP system appointment session Identifier.
-      clinicianIds:
+        description: Physical location of the appointment.
+      clinicians:
         type: array
         description: Array of Clinicians, accounts for joint sessions.
         items:
@@ -303,13 +270,10 @@ definitions:
         type: string
         format: date-time
         description: Appointment Slot End Date Time.
-      locationId:
+      location:
         type: string
-        description: Location Identifier
-      appointmentSessionId:
-        type: string
-        description: GP system appointment session Identifier.
-      clinicianIds:
+        description: Location of the appointment slot
+      clinicians:
         type: array
         description: Array of Clinicians, accounts for joint sessions.
         items:

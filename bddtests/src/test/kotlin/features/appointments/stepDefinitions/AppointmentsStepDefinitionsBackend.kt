@@ -308,39 +308,27 @@ class AppointmentsStepDefinitionsBackend {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         AssertAppointmentSlotsResponseNotNull(result)
         Assert.assertEquals("result.slots", 0, result.slots.size)
-        Assert.assertEquals("result.locations.size", 0, result.locations.size)
-        Assert.assertEquals("result.clinicians.size", 0, result.clinicians.size)
-        Assert.assertEquals("result.appointmentSessions.size", 0, result.appointmentSessions.size)
     }
 
     //This step needs to assert the date, and also have a reason for asserting the number '2'
-    @Then("^available slots, locations, clinicians and appointment sessions are returned for the two weeks following the from date$")
+    @Then("^available slots are returned for the two weeks following the from date$")
     fun availableSlotsLocationsCliniciansAndAppointmentSessionsForTwoWeeksFollowingFromDate() {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         AssertAppointmentSlotsResponseNotNull(result)
         Assert.assertEquals("result.slots", 2, result.slots.size)
-        Assert.assertEquals("result.locations.size", 2, result.locations.size)
-        Assert.assertEquals("result.clinicians.size", 2, result.clinicians.size)
-        Assert.assertEquals("result.appointmentSessions.size", 2, result.appointmentSessions.size)
     }
 
     //This step needs to assert the date, and also have a reason for asserting the number '2'
-    @Then("^available slots, locations, clinicians and appointment sessions are returned for the two weeks preceding the to date$")
+    @Then("^available slots are returned for the two weeks preceding the to date$")
     fun availableSlotsLocationsCliniciansAndAppointmentSessionsForTwoWeeksPrecedingToDate() {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         AssertAppointmentSlotsResponseNotNull(result)
         Assert.assertEquals("result.slots", 2, result.slots.size)
-        Assert.assertEquals("result.locations.size", 2, result.locations.size)
-        Assert.assertEquals("result.clinicians.size", 2, result.clinicians.size)
-        Assert.assertEquals("result.appointmentSessions.size", 2, result.appointmentSessions.size)
     }
 
     private fun AssertAppointmentSlotsResponseNotNull(result: AppointmentSlotsResponse) {
         Assert.assertNotNull("result", result)
         Assert.assertNotNull("result.slots", result.slots)
-        Assert.assertNotNull("result.locations", result.locations)
-        Assert.assertNotNull("result.clinicians", result.clinicians)
-        Assert.assertNotNull("result.appointmentSessions", result.appointmentSessions)
     }
 
     //This last line is based on breaking down the request and asserting details from that. This seems incorrect

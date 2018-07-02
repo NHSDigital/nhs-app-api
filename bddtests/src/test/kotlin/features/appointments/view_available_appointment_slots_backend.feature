@@ -6,15 +6,12 @@ Feature: View available appointment slots backend
   @NHSO-470
   @NHSO-1552
   @backend
-  Scenario: Requesting available appointment slots with correct data returns lists of available slots, locations, clinicians, and appointment sessions
+  Scenario: Requesting available appointment slots with correct data returns lists of available slots
     Given I have logged in and have a valid session cookie for EMIS
     And there are available appointment slots for an explicit date-time range
     When the available appointment slots are retrieved for explicit date-time range
-    Then available slots, locations, clinicians and appointment sessions are returned for the given date-time range
-    And available slots are returned containing id, start date and time, end date and time, location identifier, appointment session identifier, clinician identifiers
-    And available locations are returned containing an id and display name
-    And available clinicians are returned containing an id and display name
-    And available appointment session are returned containing an id and display name
+    Then available slots are returned for the given date-time range
+    And available slots are returned containing id, start date and time, end date and time, location, clinicians, type
 
   @NHSO-470
   @backend
@@ -54,7 +51,7 @@ Feature: View available appointment slots backend
     And I have logged in and have a valid session cookie for EMIS
     When the available appointment slots are retrieved without a given date-time range
     #This last line is based on breaking down the request and asserting details from that. This seems incorrect
-    Then available slots, locations, clinicians and appointment sessions are returned for the next two weeks
+    Then available slots are returned for the next two weeks
 
   @NHSO-470
   @backend
@@ -62,7 +59,7 @@ Feature: View available appointment slots backend
     Given there are available appointment slots two weeks from a specific from date
     And I have logged in and have a valid session cookie for EMIS
     When the available appointment slots are retrieved with just a from date
-    Then available slots, locations, clinicians and appointment sessions are returned for the two weeks following the from date
+    Then available slots are returned for the two weeks following the from date
 
   @NHSO-470
   @backend
@@ -70,7 +67,7 @@ Feature: View available appointment slots backend
     Given there are available appointment slots two weeks preceding a specific to date
     And I have logged in and have a valid session cookie for EMIS
     When the available appointment slots are retrieved with just a to date
-    Then available slots, locations, clinicians and appointment sessions are returned for the two weeks preceding the to date
+    Then available slots are returned for the two weeks preceding the to date
 
   @NHSO-470
   @backend

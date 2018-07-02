@@ -7,9 +7,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public string Id { get; set; }
         public DateTimeOffset StartTime { get; set; } 
         public DateTimeOffset? EndTime { get; set; }
-        public string LocationId { get; set; }
-        public string AppointmentSessionId { get; set; }
-        public string[] ClinicianIds { get; set; }
+        public string Location { get; set; }
+        public string[] Clinicians { get; set; }
         public string Type { get; set; }
     }
 }

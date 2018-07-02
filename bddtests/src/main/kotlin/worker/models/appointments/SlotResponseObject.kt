@@ -6,7 +6,6 @@ data class SlotResponseObject(
         var type: String,
         var startTime: String,
         var endTime: String,
-        var locationId: String,
-        var appointmentSessionId: String,
-        var clinicianIds: Array<String>
+        var location: String,
+        var clinicians: Array<String?>
 )

@@ -23,9 +23,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _timeZoneInfoProvider = new TimeZoneInfoProvider();
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _sut = new AppointmentSlotsResponseMapper(
-                new AppointmentClinicianMapper(), 
-                new AppointmentSessionMapper(), 
-                new AppointmentLocationMapper(), 
                 new AppointmentSlotsMapper(_dateTimeOffsetProvider));
         }
         
@@ -43,17 +40,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Sessions = new[] { session }
             };
 
-            var expectedAppointmentSession = new AppointmentSession
-            {
-                DisplayName = "General Appointment Session",
-                Id ="1"
-            };
-            
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Clinicians = new Clinician[0],
-                AppointmentSessions = new[] { expectedAppointmentSession },
-                Locations = new Worker.Areas.Appointments.Models.Location[0],
                 Slots = new Slot[0]
             };
 
@@ -81,17 +69,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Sessions = new[] { session }
             };
 
-            var expectedAppointmentSession = new AppointmentSession
-            {
-                DisplayName = "General Appointment Session",
-                Id = Convert.ToString(session.SessionId)
-            };
-            
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Clinicians = new Clinician[0],
-                AppointmentSessions = new[] { expectedAppointmentSession },
-                Locations = new Worker.Areas.Appointments.Models.Location[0],
                 Slots = new Slot[0]
             };
 
@@ -124,22 +103,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var expectedClinician = new Clinician
-            {
-                Id = "34",
-                DisplayName = "Dr Who"
-            };
-            var expectedLocation = new Worker.Areas.Appointments.Models.Location
-            {
-                Id = "14",
-                DisplayName = "Leeds"
-            };
-            
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Clinicians = new[] { expectedClinician },
-                AppointmentSessions = new AppointmentSession[0],
-                Locations = new[] { expectedLocation },
                 Slots = new Slot[0]
             };
             // Act
@@ -172,23 +137,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var expectedClinician = new Clinician
-            {
-                Id = "34",
-                DisplayName = "Dr Who"
-            };
-            
-            var expectedLocation = new Worker.Areas.Appointments.Models.Location
-            {
-                Id = "14",
-                DisplayName = "Leeds"
-            };
-            
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Clinicians = new[] { expectedClinician },
-                AppointmentSessions = new AppointmentSession[0],
-                Locations = new[] { expectedLocation },
                 Slots = new Slot[0]
             };
 
@@ -219,41 +169,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var expectedClinician = new Clinician
-            {
-                Id = "34",
-                DisplayName = "Dr Who"
-            };
-
-            var exoectedAppointmentSession = new AppointmentSession
-            {
-                Id = "77",
-                DisplayName = "General Session Appointment",
-            };
-            
             var expectedSlot = new Slot
             {
                 Id = "1",
-                AppointmentSessionId = "2",
-                ClinicianIds = new string[0],
-                LocationId = "",
+                Clinicians = new string[0],
+                Location = "",
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
-                Type = "Emergency"
+                Type = "General Session Appointment - Emergency"
             };
             
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Clinicians = new[] { expectedClinician },
-                AppointmentSessions = new[] { exoectedAppointmentSession },
-                Locations = new Worker.Areas.Appointments.Models.Location[0],
                 Slots = new[] { expectedSlot }
             };
 
@@ -284,42 +218,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
 
             var appointmentSlotSession =
-                CreateAppointmentsSlotSession(1, 2, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
+                CreateAppointmentsSlotSession(1, 77, "2018-05-09T10:59:19", "2018-05-09T10:59:19", "Emergency");
 
             var slotsResponse = new AppointmentSlotsGetResponse
             {
                 Sessions = new[] { appointmentSlotSession }
             };
 
-            var exoectedAppointmentSession = new AppointmentSession
-            {
-                Id = "77",
-                DisplayName = "General Session Appointment"
-            };
-
-            var expectedLocation = new Worker.Areas.Appointments.Models.Location
-            {
-                Id = "365",
-                DisplayName = "Leeds"
-            };
-            
             var expectedSlot = new Slot
             {
                 Id = "1",
-                AppointmentSessionId = "2",
-                ClinicianIds = new string[0],
-                LocationId = "",
+                Clinicians = new string[0],
+                Location = "",
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
-                Type = "Emergency"
-                
+                Type = "General Session Appointment - Emergency"
             };
             
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Clinicians = new Clinician[0],
-                AppointmentSessions = new[] { exoectedAppointmentSession },
-                Locations = new[] { expectedLocation },
                 Slots = new[] { expectedSlot }
             };
 

@@ -17,19 +17,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentsResponseMapper : IAppointmentsResponseMapper
     {
         private readonly IAppointmentsMapper _appointmentsMapper;
-        private readonly IMapper<SessionHolder, Clinician> _clinicianMapper;
-        private readonly IMapper<Location, Areas.Appointments.Models.Location> _locationMapper;
-        private readonly IMapper<Models.Session, AppointmentSession> _sessionMapper;
 
         public AppointmentsResponseMapper(
-            IMapper<SessionHolder, Clinician> clinicianMapper,
-            IMapper<Models.Session, AppointmentSession> sessionMapper,
-            IMapper<Location, Areas.Appointments.Models.Location> locationMapper,
             IAppointmentsMapper appointmentsMapper)
         {
-            _clinicianMapper = clinicianMapper;
-            _sessionMapper = sessionMapper;
-            _locationMapper = locationMapper;
             _appointmentsMapper = appointmentsMapper;
         }
 
@@ -41,16 +32,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 appointmentsResponse.SessionHolders,
                 appointmentsResponse.Sessions);
 
-            var locations = _locationMapper.Map(appointmentsResponse.Locations);
-            var clinicians = _clinicianMapper.Map(appointmentsResponse.SessionHolders);
-            var sessions = _sessionMapper.Map(appointmentsResponse.Sessions);
             var cancellationReasons = GetDefaultCancellationReasons();
 
             var response = new AppointmentsResponse
             {
-                Locations = locations,
-                Clinicians = clinicians,
-                AppointmentSessions = sessions,
                 Appointments = appointments,
                 CancellationReasons = cancellationReasons
             };

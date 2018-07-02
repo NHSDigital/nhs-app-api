@@ -8,20 +8,20 @@
     </h4>
     <hr aria-hidden="true">
     <p :class="$style.session" aria-label="session name">
-      {{ appointmentSession | truncate(24) }}
+      {{ theSlot.type | truncate(24) }}
     </p>
     <hr aria-hidden="true" >
     <p :class="$style.location" aria-label="location">
-    <location-icon/>&nbsp;{{ location | truncate(24) }}</p>
+    <location-icon/>&nbsp;{{ theSlot.location | truncate(24) }}</p>
     <ul
       v-for="clinician in theSlot.clinicians"
-      :key="clinician.id"
+      :key="clinician"
       :class="$style.clinicians"
       aria-label="clinicians"
     >
       <li>
         <p>
-        <clinician-icon/>&nbsp;{{ clinician.displayName | truncate(24) }}</p>
+        <clinician-icon/>&nbsp;{{ clinician | truncate(24) }}</p>
       </li>
     </ul>
   </div>
@@ -29,7 +29,6 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { get } from 'lodash/fp';
 import moment from 'moment';
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
@@ -50,16 +49,9 @@ export default {
     },
   },
   computed: {
-    appointmentSession() {
-      const slotType = (this.theSlot.type) ? ` - ${this.theSlot.type}` : '';
-      return get('appointmentSession.displayName')(this.theSlot) + slotType;
-    },
     getClass() {
       const isSelected = this.isSlotSelected() && !this.alwaysDeselect;
       return isSelected ? this.$style.selectedContainer : this.$style.container;
-    },
-    location() {
-      return get('location.displayName')(this.theSlot);
     },
     isSelected() {
       return this.theSlot ? false : this.isSlotSelected();

@@ -135,12 +135,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
             {
                 Id = "101",
-                AppointmentSessionId = "1",
-                ClinicianIds = new[] { "55" },
+                Clinicians = new[] { "Dr House" },
                 EndTime = null,
-                LocationId = "23",
+                Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
-                SlotType = "Emergency"
+                Type = "Emergency"
             };
             var expectedResponse = new[] { expectedAppointment };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -177,12 +176,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedAppointment = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
             {
                 Id = "901",
-                AppointmentSessionId = "9",
-                ClinicianIds = new[] { "55" },
+                Clinicians = new[] { "Dr House" },
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
-                LocationId = "23",
+                Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
-                SlotType = "Emergency"
+                Type = "Emergency"
             };
 
             var expectedResponse = new[] { expectedAppointment };
@@ -221,34 +219,31 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedAppointment1 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
             {
                 Id = "901",
-                AppointmentSessionId = "9",
-                ClinicianIds = new[]{ "55" },
+                Clinicians = new[]{ "Dr House" },
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
-                LocationId = "23",
+                Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
-                SlotType = "Emergency"
+                Type = "Emergency"
             };
             
             var expectedAppointment2 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
             {
                 Id = "101",
-                AppointmentSessionId = "1",
-                ClinicianIds = new[]{ "55" },
+                Clinicians = new[]{ "Dr House" },
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
-                LocationId = "23",
+                Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
-                SlotType = "Emergency"
+                Type = "Emergency"
             };
 
             var expectedAppointment3 = new NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment
             {
                 Id = "102",
-                AppointmentSessionId = "9",
-                ClinicianIds = new[] { "55" },
+                Clinicians = new[] { "Dr House" },
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
-                LocationId = "23",
+                Location = "Leeds",
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
-                SlotType = string.Empty
+                Type = string.Empty
             };
 
             var expectedResponse = new[]{ expectedAppointment1, expectedAppointment2, expectedAppointment3 };

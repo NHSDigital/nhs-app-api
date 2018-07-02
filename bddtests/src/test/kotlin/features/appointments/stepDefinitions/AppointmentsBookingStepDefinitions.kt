@@ -255,33 +255,26 @@ class AppointmentsBookingStepDefinitions {
         }
     }
 
-    @Then("^available slots, locations, clinicians and appointment sessions are returned for the given date-time range$")
+    @Then("^available slots are returned for the given date-time range$")
     fun availableSlotsLocationsCliniciansAndAppointmentSessionsAreReturned() {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         assertNotNull(result)
         assertNotNull(result.slots)
-        assertNotNull(result.locations)
-        assertNotNull(result.clinicians)
-        assertNotNull(result.appointmentSessions)
         assertEquals(2, result.slots.size)
-        assertEquals(2, result.locations.size)
-        assertEquals(2, result.clinicians.size)
-        assertEquals(2, result.appointmentSessions.size)
     }
 
-    @Then("^available slots are returned containing id, start date and time, end date and time, location identifier, appointment session identifier, clinician identifiers$")
+    @Then("^available slots are returned containing id, start date and time, end date and time, location, clinicians, type$")
     fun availableSlotsAreReturnedWithAppropriateFields() {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
         for (i in 0..1)
             unmatchedExpectedSlots[defaultEmisAppointmentSlots[i].slotId.toString()] = SlotResponseObject(
                     defaultEmisAppointmentSlots[i].slotId.toString(),
-                    defaultEmisAppointmentSlots[i].slotTypeName!!,
+                    defaultEmisMetaSlotSessions[i].sessionName + " - " + defaultEmisAppointmentSlots[i].slotTypeName,
                     defaultEmisAppointmentSlots[i].startTime!!,
                     defaultEmisAppointmentSlots[i].endTime!!,
-                    defaultEmisMetaSlotSessions[i].locationId.toString(),
-                    defaultEmisMetaSlotSessions[i].sessionId.toString(),
-                    defaultEmisMetaSlotSessions[i].clinicianIds.map { it.toString() }.toTypedArray()
+                    defaultEmisMetaSlotLocations[i].locationName.toString(),
+                    arrayOf(defaultEmisMetaSlotSessionHolders[i].displayName)
             )
         for (actualSlot in result.slots) {
             println(actualSlot.toString())
@@ -289,75 +282,18 @@ class AppointmentsBookingStepDefinitions {
             assertNotNull(actualSlot.type)
             assertNotNull(actualSlot.startTime)
             assertNotNull(actualSlot.endTime)
-            assertNotNull(actualSlot.locationId)
-            assertNotNull(actualSlot.appointmentSessionId)
-            assertNotNull(actualSlot.clinicianIds)
+            assertNotNull(actualSlot.location)
+            assertNotNull(actualSlot.clinicians)
             val expectedSlot = unmatchedExpectedSlots[actualSlot.id]!!
             assertNotNull("Expected slot not found. ", expectedSlot)
             assertEquals(expectedSlot.type, actualSlot.type)
             assertEquals(expectedSlot.startTime + "+00:00", actualSlot.startTime)
             assertEquals(expectedSlot.endTime + "+00:00", actualSlot.endTime)
-            assertEquals(expectedSlot.locationId, actualSlot.locationId)
-            assertEquals(expectedSlot.appointmentSessionId, actualSlot.appointmentSessionId)
-            assertEquals(expectedSlot.clinicianIds.toSet(), actualSlot.clinicianIds.toSet())
+            assertEquals(expectedSlot.location, actualSlot.location)
+            assertEquals(expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
             unmatchedExpectedSlots.remove(actualSlot.id)
         }
         assertTrue("Expected Slots missing. ", unmatchedExpectedSlots.isEmpty())
-    }
-
-
-    @Then("^available locations are returned containing an id and display name$")
-    fun availableLocationsAreReturnedWithAppropriateFields() {
-        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        val unmatchedExpectedLocations = HashMap<String, Location>()
-        for (location in defaultEmisMetaSlotLocations)
-            unmatchedExpectedLocations[location.locationId.toString()] = location
-        for (actualLocation in result.locations) {
-            println(actualLocation.toString())
-            assertNotNull(actualLocation.id)
-            assertNotNull(actualLocation.displayName)
-            val expectedLocation = unmatchedExpectedLocations[actualLocation.id]
-            assertNotNull(expectedLocation)
-            assertEquals(expectedLocation!!.locationName, actualLocation.displayName)
-            unmatchedExpectedLocations.remove(actualLocation.id)
-        }
-        assertTrue("Expected Locations missing. ", unmatchedExpectedLocations.isEmpty())
-    }
-
-    @Then("^available clinicians are returned containing an id and display name$")
-    fun availableCliniciansAreReturnedWithAppropriateFields() {
-        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        val unmatchedExpectedClinicians = HashMap<String, SessionHolder>()
-        for (clinician in defaultEmisMetaSlotSessionHolders)
-            unmatchedExpectedClinicians[clinician.clinicianId.toString()] = clinician
-        for (actualClinician in result.clinicians) {
-            println(actualClinician.toString())
-            assertNotNull(actualClinician.id)
-            assertNotNull(actualClinician.displayName)
-            val expectedClinician = unmatchedExpectedClinicians[actualClinician.id]
-            assertNotNull(expectedClinician)
-            assertEquals(expectedClinician!!.displayName, actualClinician.displayName)
-            unmatchedExpectedClinicians.remove(actualClinician.id)
-        }
-        assertTrue("Expected Clinicians missing. ", unmatchedExpectedClinicians.isEmpty())
-    }
-
-    @Then("^available appointment session are returned containing an id and display name$")
-    fun availableAppointmentSessionsAreReturnedWithAppropriateFields() {
-        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        val unmatchedExpectedSessions = HashMap<String, Session>()
-        for (session in defaultEmisMetaSlotSessions)
-            unmatchedExpectedSessions[session.sessionId.toString()] = session
-        for (actualAppointmentSession in result.appointmentSessions) {
-            println(actualAppointmentSession.toString())
-            assertNotNull(actualAppointmentSession.id)
-            assertNotNull(actualAppointmentSession.displayName)
-            val expectedSession = unmatchedExpectedSessions[actualAppointmentSession.id]
-            assertNotNull(expectedSession)
-            assertEquals(expectedSession!!.sessionName, actualAppointmentSession.displayName)
-            unmatchedExpectedSessions.remove(actualAppointmentSession.id)
-        }
-        assertTrue("Expected Appointment Session missing. ", unmatchedExpectedSessions.isEmpty())
     }
 
     private fun getSlotNameForSession(expectedSession: Session): String? {
@@ -378,13 +314,7 @@ class AppointmentsBookingStepDefinitions {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         assertNotNull(result)
         assertNotNull(result.slots)
-        assertNotNull(result.locations)
-        assertNotNull(result.clinicians)
-        assertNotNull(result.appointmentSessions)
         assertEquals(0, result.slots.size)
-        assertEquals(0, result.locations.size)
-        assertEquals(0, result.clinicians.size)
-        assertEquals(0, result.appointmentSessions.size)
     }
 
     @Then("^I see appropriate information message for time-outs$")

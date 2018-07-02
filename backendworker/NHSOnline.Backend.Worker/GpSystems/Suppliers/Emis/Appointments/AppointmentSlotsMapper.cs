@@ -16,6 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentSlotsMapper : IAppointmentSlotsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private const string SessionTypeSeperator = " - ";
 
         public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
@@ -69,12 +70,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     var slot = new Slot
                     {
                         Id = sourceSlot.SlotId.ToString(),
-                        AppointmentSessionId = sessionId.ToString(),
                         StartTime = startTime,
                         EndTime = endTime,
-                        ClinicianIds = FindClinicianIdsForSession(sessionId, sessions),
-                        LocationId = FindLocationIdForSession(sessionId, sessions),
-                        Type = sourceSlot.SlotTypeName ?? string.Empty
+                        Clinicians = FindCliniciansForSession(sessionId, sessions, sessionHolders),
+                        Location = FindLocationForSession(sessionId, sessions, locations),
+                        Type = CreateTypeFromSlotAndSession(sourceSlot,sessions.FirstOrDefault(x=>x.SessionId==sourceSlotSession.SessionId))
                     };
 
                     slots.Add(slot);
@@ -84,18 +84,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             return slots;
         }
 
-        private static string[] FindClinicianIdsForSession(int sessionId, IEnumerable<Models.Session> sessions)
+        private string CreateTypeFromSlotAndSession(AppointmentSlot sourceSlot, Models.Session session)
+        {
+            var hasOnlySlotTypeOrSessionName = string.IsNullOrEmpty(sourceSlot.SlotTypeName) || string.IsNullOrEmpty(session?.SessionName);
+            return $"{session?.SessionName}{(hasOnlySlotTypeOrSessionName ? string.Empty : SessionTypeSeperator)}{sourceSlot.SlotTypeName}";
+        }
+
+        private static string[] FindCliniciansForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<SessionHolder> sessionHolders)
         {
             var session = sessions.FirstOrDefault(x => x.SessionId == sessionId);
-
-            return session == null ? new string[] { } : session.ClinicianIds.Select(x => x.ToString()).ToArray();
+            return session?.ClinicianIds == null ? new string[] { } : session.ClinicianIds.Select(x => sessionHolders?.FirstOrDefault(s=>s.ClinicianId==x).DisplayName).ToArray();
         }
         
-        private static string FindLocationIdForSession(int sessionId, IEnumerable<Models.Session> sessions)
+        private static string FindLocationForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<Models.Location> locations)
         {
             var session = sessions.FirstOrDefault(x => x.SessionId == sessionId);
-
-            return session == null ? string.Empty : session.LocationId.ToString();
+            var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);
+            return location == null ? string.Empty : location.LocationName;
         }
     }
 }

@@ -4,20 +4,20 @@
     <h4 aria-label="start time">{{ formatTime(appointment.startTime) }}</h4>
     <hr aria-hidden="true">
     <p aria-label="session name">
-      {{ displaySession(appointment) | truncate(24) }}
+      {{ appointment.type | truncate(24) }}
     </p>
     <hr aria-hidden="true">
 
     <p :class="$style.location">
       <location-icon/>&nbsp;
-      <span aria-label="location">{{ displayName(appointment.location) | truncate(24) }}</span>
+      <span aria-label="location">{{ appointment.location | truncate(24) }}</span>
     </p>
 
-    <p v-for="(clinician, index) in appointment.clinicians" :key="clinician.id"
+    <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
        :class="$style.clinician">
       <clinician-icon/>&nbsp;
       <span :aria-label="'clinician ' + (index +1)">
-        {{ displayName(clinician) | truncate(24) }}
+        {{ clinician | truncate(24) }}
       </span>
     </p>
 
@@ -57,13 +57,6 @@ export default {
   methods: {
     formatTime: dateTime => moment(dateTime).format('h:mm a'),
     formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
-    displayName(property) {
-      return (property) ? property.displayName : '';
-    },
-    displaySession(appointment) {
-      const slotType = (appointment.slotType) ? ` - ${appointment.slotType}` : '';
-      return this.displayName(appointment.appointmentSession) + slotType;
-    },
     select() {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);
