@@ -51,11 +51,7 @@ docker-compose -f docker-compose_ci.yml config | grep image
 docker-compose -f docker-compose_ci.yml up -d --build || die "Docker compose failure"
 
 ##################### Runtime vars
-if [ -z $WEB_DOCKER_TAG ]; then
-  WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:latest)
-else
-  WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:$WEB_DOCKER_TAG)
-fi
+WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:$APP_DOCKER_TAG)
 NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
 
