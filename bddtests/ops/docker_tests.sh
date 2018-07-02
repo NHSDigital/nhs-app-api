@@ -31,7 +31,17 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 
-BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+case $CURRENT_BRANCH in
+  develop)
+    info "Develop Branch - Full BDD Test Run Configured"
+    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
+    ;;
+  *)
+    info "Non-Develop Branch - BDD Smoketest Run Configured"
+    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags @smoketest'
+    ;;
+esac
 
 # Pin versions of docker images
 sed -i "s/WEB_TAG=latest/WEB_TAG=${APP_DOCKER_TAG}/" .env
