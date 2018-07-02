@@ -277,6 +277,75 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
         
         [TestMethod]
+        public async Task Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsAccountIdNotFoundErrorMessage()
+        {
+            const string accountNotFoundErrorMessage = "No registered online user found for given linkage details";
+
+            // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = accountNotFoundErrorMessage;
+
+            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+                        .InternalServerError) {ErrorResponse = errorResponse}));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsLinkageKeyDoesNotMatchErrorMessage()
+        {
+            const string linkageKeyDoesNotMatchErrorMessage = "Invalid linkage details";
+
+            // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = linkageKeyDoesNotMatchErrorMessage;
+
+            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+                        .InternalServerError) {ErrorResponse = errorResponse}));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsNotFound_WhenEmisClientMeApplicationsReturnsIncorrectSurnameOrDateOfBirthErrorMessage()
+        {
+            const string incorrectSurnameOrDateOfBirthErrorMessage = "No match found for given demographics";
+
+            // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = incorrectSurnameOrDateOfBirthErrorMessage;
+
+            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+                        .InternalServerError) {ErrorResponse = errorResponse}));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+        }
+        
+        [TestMethod]
         public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest()
         {
             // Arrange

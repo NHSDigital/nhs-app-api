@@ -120,6 +120,15 @@
   <data name="MeApplicationsPost_AlreadyLinked" xml:space="preserve">
     <value>Registered online user is already linked</value>
   </data>
+  <data name="MeApplicationsPost_AccountIdNotFound" xml:space="preserve">
+    <value>No registered online user found for given linkage details</value>
+  </data>
+    <data name="MeApplicationsPost_LinkageKeyDoesNotMatch" xml:space="preserve">
+    <value>Invalid linkage details</value>
+  </data>
+  <data name="MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect" xml:space="preserve">
+    <value>No match found for given demographics</value>
+  </data>
   <data name="AppointmentsPost_NotFound" xml:space="preserve">
     <value>Appointment not found</value>
   </data>

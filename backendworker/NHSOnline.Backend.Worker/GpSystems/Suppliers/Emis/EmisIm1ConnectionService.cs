@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
@@ -92,14 +93,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                         LinkageKey = request.LinkageKey
                     }
                 };
+                
+                var meApplicationsResponse = await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
+                
+                var notFoundMessages = new[]
+                {
+                    EmisApiErrorMessages.MeApplicationsPost_AccountIdNotFound,
+                    EmisApiErrorMessages.MeApplicationsPost_LinkageKeyDoesNotMatch,
+                    EmisApiErrorMessages.MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect
+                };
 
-                var meApplicationsResponse =
-                    await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
                 if (meApplicationsResponse.StatusCode == HttpStatusCode.Conflict ||
                     meApplicationsResponse.HasExceptionWithMessage(
                         EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
                 {
                     return new Im1ConnectionRegisterResult.AccountAlreadyExists();
+                }
+
+                if (meApplicationsResponse.StatusCode == HttpStatusCode.InternalServerError && 
+                    meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
+                {
+                    return new Im1ConnectionRegisterResult.NotFound();
                 }
 
                 if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)

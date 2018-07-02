@@ -305,6 +305,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             {
                 return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message)) ?? false;
             }
+            
+            public bool HasExceptionWithAnyMessage(string[] messages)
+            {
+                return ErrorResponse?.Exceptions.Any(x => messages.Contains(x.Message)) ?? false;
+            }
 
             public bool HasForbiddenResponse()
             {
