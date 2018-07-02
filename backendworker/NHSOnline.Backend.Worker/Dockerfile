@@ -52,6 +52,10 @@ WORKDIR /app
 EXPOSE 8082
 COPY --from=publish /app .
 
+COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppCa.crt /usr/local/share/ca-certificates/TppCa.crt
+RUN chmod 644 /usr/local/share/ca-certificates/TppCa.crt; \
+    update-ca-certificates;
+
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
 CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- dotnet NHSOnline.Backend.Worker.dll
