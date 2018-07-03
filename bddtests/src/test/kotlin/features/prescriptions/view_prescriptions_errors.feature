@@ -47,10 +47,10 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription server error
 
   @NHSO-514
-  Scenario: A user tries to place an order for a repeat subscription, but the request times out
+  Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    And I have 10 assigned prescriptions
+    And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
     But The prescription submission endpoint is timing out
@@ -59,12 +59,15 @@ Feature: View prescriptions error cases
     And I select 1 prescription to order
     And I wait for 20 seconds
     Then I see the appropriate error message for a course request error
+    Examples:
+      | GP System |
+      | EMIS      |
 
   @NHSO-514
-  Scenario: A user tries to place an order for a repeat subscription, but the request throws a server error
+  Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
     Given I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    And I have 10 assigned prescriptions
+    And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
     But The prescription submission endpoint is throwing a server error
@@ -72,3 +75,6 @@ Feature: View prescriptions error cases
     And I click 'Order a repeat prescription'
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
+    Examples:
+      | GP System |
+      | EMIS      |
