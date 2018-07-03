@@ -15,11 +15,14 @@ import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistra
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
+import mocking.emis.me.LinkApplicationRequestModel
+import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
+import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
@@ -198,6 +201,69 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         )
     }
 
+    @Given("^I have data for a patient that does not exist$")
+    fun iHaveDataForAPatientThatDoesNotExist() {
+        this.patient = Patient.johnSmith.copy(nhsNumbers = arrayListOf("nonExistingNhsNumber"))
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
+
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithNoOnlineUserFound() }
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+
+        this. im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+    @Given("^I have data for a patient with incorrect linkage key$")
+    fun iHaveDataForAPatientWithIncorrectLinkageKey() {
+        this.patient = Patient.johnSmith.copy(linkageKey = "incorrectLinkageKey")
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
+
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithLinkageKeyDoesNotMatch() }
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+
+        this. im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have data for a patient with incorrect surname$")
+    fun iHaveDataForAPatientWithIncorrectSurname() {
+        this.patient = Patient.johnSmith.copy(surname = "incorrectSurname")
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
+
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithIncorrectSurnameOrDateOfBirth() }
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+
+        this. im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
+    @Given("^I have data for a patient with incorrect date of birth$")
+    fun iHaveDataForAPatientWithIncorrectDateOfBirth() {
+        this.patient = Patient.johnSmith.copy(dateOfBirth = "1918-12-24T14:03:15.892Z")
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
+
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithIncorrectSurnameOrDateOfBirth() }
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+
+        this. im1ConnectionRequest = Im1ConnectionRequest(
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth)
+    }
+
     @Given("^I have an EMIS user's IM1 credentials with an ODS Code not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnODSCodeNotInTheExpectedFormat() {
         this.patient = Patient.johnSmith.copy(odsCode = INVALID_VALUE)
@@ -212,46 +278,45 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have an EMIS user's IM1 credentials with a Surname not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithASurnameNotInTheExpectedFormat() {
         this.patient = Patient.johnSmith.copy(surname = INVALID_VALUE)
+
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
+
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithBadRequest("The request is invalid.", "Surname") }
+
         this. im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
                 Surname = patient.surname,
                 DateOfBirth = patient.dateOfBirth)
-
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis {
-            meRequest(patient)
-                    .respondWithBadRequest("The Surname value cannot exceed 100 characters.")
-        }
     }
 
     @Given("^I have an EMIS user's IM1 credentials with an Account ID not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnAccountIdNotInTheExpectedFormat() {
         this.patient = Patient.johnSmith.copy(accountId = INVALID_VALUE)
-        this.im1ConnectionRequest = Im1ConnectionRequest(
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
+
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithBadRequest("The request is invalid.", "LinkageDetails.AccountId") }
+
+        this. im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
                 Surname = patient.surname,
                 DateOfBirth = patient.dateOfBirth)
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis {
-            meRequest(patient)
-                    .respondWithBadRequest("AccountId length outside of valid range. Must be between 10 - 15 (inclusive) characters.")
-        }
     }
 
     @Given("^I have an EMIS user's IM1 credentials with a Linkage Key not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithALinkageKeyNotInTheExpectedFormat() {
         this.patient = Patient.johnSmith.copy(linkageKey = INVALID_VALUE)
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis {
-            meRequest(patient)
-                    .respondWithBadRequest("LinkageKey length outside of valid range. Must be between 6 - 15 (inclusive) characters.")
-        }
+        var linkApplicationRequestModel = createLinkApplicationRequestModel(this.patient)
 
-        this.im1ConnectionRequest = Im1ConnectionRequest(
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithBadRequest("The request is invalid.", "LinkageDetails.LinkageKey") }
+
+        this. im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -310,28 +375,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 DateOfBirth = patient.dateOfBirth)
     }
 
-
-    private fun createCidStubs(
-            authCode:String? = this.authCode!!,
-            codeVerifier: String = this.codeVerifier!!,
-            accessToken: String = this.accessToken,
-            bearerToken: String = this.bearerToken,
-            patient: Patient = MockDefaults.patient) {
-        mockingClient.forCitizenId {
-            tokenRequest(codeVerifier, authCode)
-                    .respondWithSuccess(accessToken)
-        }
-        mockingClient.forCitizenId {
-            userInfoRequest(bearerToken)
-                    .respondWithSuccess(patient)
-        }
-    }
-
-    private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
-    }
-
     @When("^I create a user session$")
     fun iCreateUserSession() {
         try {
@@ -345,9 +388,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @When("^I register an EMIS user's IM1 credentials$")
     fun iRegisterAnEMISUsersIMCredentials() {
         try {
-            this.workerClient.postIm1Connection(this.im1ConnectionRequest!!).also { this.im1ConnectionResponse = it }
+            this.workerClient.postIm1Connection(this.im1ConnectionRequest!!).also {
+                this.im1ConnectionResponse = it
+            }
         } catch (httpException: NhsoHttpException) {
             this.errorResponse = httpException
+            setSessionVariable("HttpException").to(this.errorResponse)
         }
     }
 
@@ -411,22 +457,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         val code = httpStatusCodeTransform(expectedStatusCode)
         checkNotNull(this.errorResponse)
         Assert.assertEquals(code, this.errorResponse?.StatusCode)
-    }
-
-    private val _errorMapping: HashMap<String, Int> = hashMapOf(
-            "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
-            "bad request" to HttpStatus.SC_BAD_REQUEST,
-            "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
-            "not found" to HttpStatus.SC_NOT_FOUND,
-            "internal server error" to HttpStatus.SC_INTERNAL_SERVER_ERROR,
-            "conflict" to HttpStatus.SC_CONFLICT,
-            "forbidden" to HttpStatus.SC_FORBIDDEN,
-            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE
-    )
-
-    fun httpStatusCodeTransform(errorName: String): Int? {
-        return _errorMapping[errorName.toLowerCase()]
-                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
     }
 
     @Given("^I have just logged out$")
@@ -575,4 +605,52 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         home.assertPageIsVisible();
     }
 
+    private fun createLinkApplicationRequestModel(patient: Patient) : LinkApplicationRequestModel {
+        return LinkApplicationRequestModel(
+                surname = patient.surname,
+                dateOfBirth = patient.dateOfBirth,
+                linkageDetails = LinkageDetailsModel(
+                        accountId = patient.accountId,
+                        nationalPracticeCode = patient.odsCode,
+                        linkageKey = patient.linkageKey
+                )
+        )
+    }
+
+    private fun createCidStubs(
+            authCode:String? = this.authCode!!,
+            codeVerifier: String = this.codeVerifier!!,
+            accessToken: String = this.accessToken,
+            bearerToken: String = this.bearerToken,
+            patient: Patient = MockDefaults.patient) {
+        mockingClient.forCitizenId {
+            tokenRequest(codeVerifier, authCode)
+                    .respondWithSuccess(accessToken)
+        }
+        mockingClient.forCitizenId {
+            userInfoRequest(bearerToken)
+                    .respondWithSuccess(patient)
+        }
+    }
+
+    private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
+    }
+
+    private val _errorMapping: HashMap<String, Int> = hashMapOf(
+            "bad gateway" to HttpStatus.SC_BAD_GATEWAY,
+            "bad request" to HttpStatus.SC_BAD_REQUEST,
+            "gateway timeout" to HttpStatus.SC_GATEWAY_TIMEOUT,
+            "not found" to HttpStatus.SC_NOT_FOUND,
+            "internal server error" to HttpStatus.SC_INTERNAL_SERVER_ERROR,
+            "conflict" to HttpStatus.SC_CONFLICT,
+            "forbidden" to HttpStatus.SC_FORBIDDEN,
+            "service unavailable" to HttpStatus.SC_SERVICE_UNAVAILABLE
+    )
+
+    fun httpStatusCodeTransform(errorName: String): Int? {
+        return _errorMapping[errorName.toLowerCase()]
+                ?: throw IllegalArgumentException("Could not identify an HTTP status code named: $errorName")
+    }
 }

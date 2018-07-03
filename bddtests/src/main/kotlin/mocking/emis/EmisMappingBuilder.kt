@@ -108,21 +108,19 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
             patient.userPatientLinkToken,
             prescriptionSubmissionRequest)
 
-    protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
+    fun respondWithBadRequest(message: String, fieldName: String): Mapping {
+        val responseBody = BadRequestResponse(message, fieldName)
 
-        val responseBody = ExceptionResponse(internalResponseCode.toLong(), message)
-
-        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+        return respondWith(HttpStatus.SC_BAD_REQUEST) {
             andJsonBody(responseBody)
                     .build()
         }
     }
 
-    protected fun respondWithBadRequest(message: String, fieldName: String): Mapping {
+    protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
+        val responseBody = ExceptionResponse(internalResponseCode.toLong(), message)
 
-        val responseBody = BadRequestResponse(message, fieldName)
-
-        return respondWith(HttpStatus.SC_BAD_REQUEST) {
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(responseBody)
                     .build()
         }

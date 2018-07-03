@@ -15,7 +15,6 @@ class EmisEndUserSessionBuilder(configuration: EmisConfiguration)
     }
 
     fun respondWithSuccess(endUserSessionId: String, milliSecondDelay: Int = 0): Mapping {
-
         val responseBody = EndUserSessionResponse(endUserSessionId)
         return respondWith(HttpStatus.SC_OK, milliSecondDelay) {
             andJsonBody(responseBody)

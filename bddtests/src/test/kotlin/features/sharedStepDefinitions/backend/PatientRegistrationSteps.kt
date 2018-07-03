@@ -22,34 +22,6 @@ import worker.models.patient.PatientNhsNumber
 
 class PatientRegistrationSteps : AbstractSteps() {
 
-    @Given("^I have data for a patient that does not exist$")
-    fun iHaveDataForAPatientThatDoesNotExist() {
-        val patient = Patient(
-                surname = "Smith",
-                dateOfBirth = "1919-12-24T14:03:15Z",
-                accountId = "1195029928",
-                odsCode = odsCode,
-                connectionToken = connectionToken,
-                endUserSessionId = "zVfHuYArbENW4aoAUeQPyS",
-                linkageKey = "KjwzyFSEUAGj4",
-                nhsNumbers = listOf("notExistingNhsNumber")
-        )
-
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { meRequest(patient).respondWithNoOnlineUserFound() }
-
-        val connectionRequest = Im1ConnectionRequest(
-                AccountId = patient.accountId,
-                LinkageKey = patient.linkageKey,
-                OdsCode = patient.odsCode,
-                Surname = patient.surname,
-                DateOfBirth = patient.dateOfBirth)
-
-        setSessionVariable(Im1ConnectionRequest::class).to(connectionRequest)
-        setSessionVariable("NHSNumbers").to(patient.nhsNumbers)
-        setSessionVariable("ConnectionToken").to(patient.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-    }
 
     @Given("^EMIS Demographics endpoint is disable$")
     fun emisDemographicsEndpointIsDisable() {

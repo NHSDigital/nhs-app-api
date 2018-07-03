@@ -16,42 +16,27 @@ Feature: Registration
     |"one"      |
     |"one","two"|
 
-  @bug
-  @NHSO-666
-  @pending
   @backend
   Scenario: Account ID doesn't match a user
     Given I have data for a patient that does not exist
     When I register an EMIS user's IM1 credentials
     Then I receive a "Not found" error
 
-  @bug
-  @NHSO-666
-  @pending
   @backend
   Scenario: Incorrect Linkage Key
-    Given I have data for a patient
-    But an incorrect linkage key
+    Given I have data for a patient with incorrect linkage key
     When I register an EMIS user's IM1 credentials
     Then I receive a "Not found" error
 
-  @bug
-  @NHSO-666
-  @pending
   @backend
   Scenario: Incorrect Surname
-    Given I have data for a patient
-    But an incorrect surname
+    Given I have data for a patient with incorrect surname
     When I register an EMIS user's IM1 credentials
     Then I receive a "Not found" error
 
-  @bug
-  @NHSO-666
-  @pending
   @backend
   Scenario: Incorrect Date of Birth
-    Given I have data for a patient
-    But an incorrect DoB
+    Given I have data for a patient with incorrect date of birth
     When I register an EMIS user's IM1 credentials
     Then I receive a "Not found" error
 
@@ -78,24 +63,18 @@ Feature: Registration
     When I register an EMIS user's IM1 credentials
     Then I get a "Bad Request" error
 
-
-  @bug @NHSO-661
   @backend
   Scenario: Surname not in the expected format
     Given I have an EMIS user's IM1 credentials with a Surname not in the expected format
     When I register an EMIS user's IM1 credentials
     Then I get a "Bad Request" error
 
-
-  @bug @NHSO-661
   @backend
   Scenario: Account ID not in the expected format
     Given I have an EMIS user's IM1 credentials with an Account ID not in the expected format
     When I register an EMIS user's IM1 credentials
     Then I receive a "Bad Request" error
 
-
-  @bug @NHSO-661
   @backend
   Scenario: Linkage Key not in the expected format
     Given I have an EMIS user's IM1 credentials with a Linkage Key not in the expected format

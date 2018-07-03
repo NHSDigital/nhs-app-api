@@ -34,6 +34,24 @@ class EmisMeApplicationsBuilder(configuration: EmisConfiguration,
         }
     }
 
+    fun respondWithLinkageKeyDoesNotMatch(): Mapping {
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+            andJsonBody(ExceptionResponse(
+                    internalResponseCode = -1002,
+                    exceptionMessage = "Invalid linkage details"
+            ), GsonFactory.asPascal)
+        }
+    }
+
+    fun respondWithIncorrectSurnameOrDateOfBirth(): Mapping {
+        return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
+            andJsonBody(ExceptionResponse(
+                    internalResponseCode = -1002,
+                    exceptionMessage = "No match found for given demographics"
+            ), GsonFactory.asPascal)
+        }
+    }
+
     fun respondWithNoOnlineUserFound(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(ExceptionResponse(
