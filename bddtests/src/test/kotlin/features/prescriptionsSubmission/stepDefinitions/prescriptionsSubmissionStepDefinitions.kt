@@ -55,6 +55,8 @@ open class PrescriptionsSubmissionStepDefinitions {
     @Steps
     lateinit var prescriptionStepDefinitions: PrescriptionsStepDefinitions
 
+    private val EMIS = "EMIS"
+
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest()
     {
@@ -139,37 +141,10 @@ open class PrescriptionsSubmissionStepDefinitions {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(patient, prescriptionSubmissionRequest).respondWithGenericInternalServerError() }
     }
 
-    @Given("I select (\\d+) repeatable prescriptions to order")
-    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int) {
-
-        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, amount)
-
-        //redefine mock for scenario value...
-        mockingClient.forEmis {
-            coursesRequest(patient)
-                    .respondWithSuccess(CourseRequestsGetResponse(coursesStepDefinitions.coursesData))
-                    .inScenario(scenarioTitle)
-                    .whenScenarioStateIs(currentScenarioState)
-        }
-        val submitted = "SUBMITTED"
-        mockingClient.forEmis {
-            repeatPrescriptionSubmissionRequest(patient)
-                    .respondWithCreated()
-                    .inScenario(scenarioTitle)
-                    .whenScenarioStateIs(currentScenarioState)
-                    .willSetStateTo(submitted)
-        }
-
-        currentScenarioState = submitted
-
-        buildNewPrescriptionData(coursesStepDefinitions.coursesData)
-
-        mockingClient.forEmis {
-            prescriptionsRequest(patient)
-                    .respondWithSuccess(prescriptionMap[currentScenarioState]!!)
-                    .inScenario(scenarioTitle)
-                    .whenScenarioStateIs(currentScenarioState)
-        }
+    @Given("I select (\\d+) (.*) repeatable prescriptions to order")
+    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int, gpSystem: String)
+    {
+        prescriptionSubmissionWireMockAndDataSetup(amount, gpSystem)
     }
 
     private fun buildNewPrescriptionData(orderedCourses: MutableList<MedicationCourse>) {
@@ -241,5 +216,40 @@ open class PrescriptionsSubmissionStepDefinitions {
 
         prescriptionSteps.assertPrescriptionsMatch(prescriptionStepDefinitions.mapEmisResponseToExpectedPrescriptionFormat(
                 prescriptionMap[currentScenarioState]!!))
+    }
+
+    private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String){
+
+        coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, gpSystem, amount)
+
+        when (gpSystem) {
+            EMIS -> {
+                mockingClient.forEmis {
+                    coursesRequest(patient)
+                            .respondWithSuccess(CourseRequestsGetResponse(coursesStepDefinitions.coursesData))
+                            .inScenario(scenarioTitle)
+                            .whenScenarioStateIs(currentScenarioState)
+                }
+                val submitted = "SUBMITTED"
+                mockingClient.forEmis {
+                    repeatPrescriptionSubmissionRequest(patient)
+                            .respondWithCreated()
+                            .inScenario(scenarioTitle)
+                            .whenScenarioStateIs(currentScenarioState)
+                            .willSetStateTo(submitted)
+                }
+
+                currentScenarioState = submitted
+
+                buildNewPrescriptionData(coursesStepDefinitions.coursesData)
+
+                mockingClient.forEmis {
+                    prescriptionsRequest(patient)
+                            .respondWithSuccess(prescriptionMap[currentScenarioState]!!)
+                            .inScenario(scenarioTitle)
+                            .whenScenarioStateIs(currentScenarioState)
+                }
+            }
+        }
     }
 }

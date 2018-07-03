@@ -11,16 +11,23 @@ Feature: Prescriptions submission
 
   @NHSO-860
   @smoketest
-  Scenario: The User orders a repeat prescription with 5 entries
-    Given I select 5 repeatable prescriptions to order
+  Scenario Outline: The User orders a repeat prescription with 5 entries
+    Given I select 5 <GP System> repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
     Then I see a order successful message on the Repeat prescription page with the correct prescriptions
+    Examples:
+    | GP System |
+    | EMIS      |
 
   @NHSO-860
-  Scenario: The User orders a repeat prescription with 1 entries
-    Given I select 1 repeatable prescriptions to order
+  Scenario Outline: The User orders a repeat prescription with 1 entries
+    Given I select 1 <GP System> repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
     Then I see a order successful message on the Repeat prescription page with the correct prescriptions
+    Examples:
+    | GP System |
+    | EMIS      |
+
 

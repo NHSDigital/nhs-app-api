@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             mockGpSystem.Setup(x => x.GetCourseService())
                 .Returns(courseService.Object);
 
-            courseService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
+            courseService.Setup(x => x.GetCourses(_userSession)).Returns(Task.FromResult((GetCoursesResult)getCoursesResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetCourseService());
-            courseService.Verify(x => x.Get(_userSession));
+            courseService.Verify(x => x.GetCourses(_userSession));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(coursesGetResponse);
         }

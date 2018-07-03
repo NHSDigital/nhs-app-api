@@ -42,7 +42,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             services.AddTransient<TppDemographicsService>();
             services.AddTransient<TppPatientRecordService>();   
             services.AddTransient<TppPrescriptionService>();
-
+            services.AddTransient<TppCourseService>();
+            
             base.ConfigureServices(services, configuration);
         }
     }

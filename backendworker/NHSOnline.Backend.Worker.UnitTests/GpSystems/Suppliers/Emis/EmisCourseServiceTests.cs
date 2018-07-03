@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                     }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -184,7 +184,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -252,7 +252,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Callback<CoursesGetResponse>((x) => { capturedItemToMap = x; });
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             _emisClient.Verify(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -285,7 +285,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -305,7 +305,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierSystemUnavailable>();
@@ -327,7 +327,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                     }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.InternalServerError>();
@@ -348,7 +348,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
                         { ErrorResponse = errorResponse }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetCourses(_userSession);
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();

@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 .CreateGpSystem(userSession.Supplier)
                 .GetCourseService();
 
-            var result = await courseService.Get(userSession);
+            var result = await courseService.GetCourses(userSession);
 
             return result.Accept(new CourseResultVisitor());
         }

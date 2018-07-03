@@ -17,7 +17,6 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.courses.CourseListResponse
 import worker.models.courses.CoursesResponseData
 
 
@@ -39,62 +38,43 @@ open class coursesStepDefinitions {
     val patient = MockDefaults.patient
 
     lateinit var coursesData: MutableList<MedicationCourse>
-
     lateinit var selectedCourses: List<MedicationCourse>
 
-    @Given("^I have (\\d+) assigned prescriptions$")
-    fun iHaveXAssignedPrescriptions(numberOfCourses: Int) {
-        coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf(), true, true)
-        mockingClient.forEmis {
-            coursesRequest(patient)
-                    .respondWithSuccess(CourseRequestsGetResponse(coursesData))
-        }
+    private val EMIS = "EMIS"
+    var currentGPSystem: String? = EMIS
+
+    var numOfCourses: Int = 0
+    var numOfRepeats: Int = 0
+    var numCanBeRequested: Int = 0
+    var showQuantity: Boolean = true
+    var showDosage: Boolean = true
+
+
+    @Given("I have (\\d+) (.*) assigned prescriptions")
+    fun iHaveXAssignedPrescriptions(numberOfCourses: Int, gpSystem: String) {
+        currentGPSystem = gpSystem
+        numOfCourses = numberOfCourses
     }
 
     @Given("I have (\\d+) assigned prescriptions which have (.*)")
     fun iHaveXAssignedPrescriptionsWhichHasX(numberOfCourses: Int, content: String) {
-        val showDosage = content.toLowerCase().contains("dosage")
-        val showQuantity = content.toLowerCase().contains("quantity")
-
-        coursesData = CoursesData.getCourseData(numberOfCourses,0,0, mutableListOf(), showDosage, showQuantity)
-        mockingClient.forEmis {
-            coursesRequest(patient)
-                    .respondWithSuccess(CourseRequestsGetResponse(coursesData))
-        }
+        numOfCourses = numberOfCourses
+        showDosage = content.toLowerCase().contains("dosage")
+        showQuantity = content.toLowerCase().contains("quantity")
+        setupWiremockandCreateData()
     }
 
     @And("(\\d+) of my prescriptions are of type repeat")
-    fun xOfMyPrescriptionsAreOfTypeRepeat(numOfRepeats: Int){
-        if(coursesData == null) {
-            throw Exception("No courses have been provisioned")
-        }
-
-        if(numOfRepeats > coursesData.count()){
-            throw Exception("Number of repeatable courses must be less than or equal to total number of courses")
-        }
-
-        for (course in 1..numOfRepeats) {
-            coursesData[course - 1].prescriptionType = PrescriptionType.Repeat
-        }
-
-        mockingClient.forEmis { coursesRequest(patient).respondWithSuccess(CourseRequestsGetResponse(coursesData)) }
+    fun xOfMyPrescriptionsAreOfTypeRepeat(numberOfRepeats: Int) {
+        numOfRepeats = numberOfRepeats
     }
 
     @And("(\\d+) of my prescriptions can be requested")
-    fun xOfMyPrescriptionCanBeRequested(numCanBeRequested: Int) {
-        if(coursesData == null) {
-            throw Exception("No courses have been provisioned")
-        }
+    fun xOfMyPrescriptionCanBeRequested(numberCanBeRequested: Int) {
+        numCanBeRequested = numberCanBeRequested
 
-        if(numCanBeRequested > coursesData.count()) {
-            throw Exception("Number of courses which can be requested must be less than or equal to total number of courses")
-        }
+        setupWiremockandCreateData()
 
-        for (course in 1..numCanBeRequested) {
-            coursesData[course - 1].canBeRequested = true
-        }
-
-        mockingClient.forEmis { coursesRequest(patient).respondWithSuccess(CourseRequestsGetResponse(coursesData)) }
         Serenity.setSessionVariable(EXPECTED_COURSE_DATA_SIZE).to(numCanBeRequested)
     }
 
@@ -122,23 +102,18 @@ open class coursesStepDefinitions {
                 "Unexpected number of repeat prescriptions. Expected: "
                         + expectedNumberOfRepeatingPrescriptions
                         + ". Actual: "
-                        +  actualNumberOfRepeatPrescriptions,
+                        + actualNumberOfRepeatPrescriptions,
                 expectedNumberOfRepeatingPrescriptions,
                 result.courses.count())
     }
 
     @Given("^I have historic prescriptions$")
     fun iHaveHistoricPrescriptions() {
-
-        val medicationCourses = mutableListOf<MedicationCourse>()
-        val prescriptions = mutableListOf<PrescriptionRequest>()
-
-        mockingClient.forEmis { prescriptionsRequest(patient)
-                .respondWithSuccess(PrescriptionRequestsGetResponse(prescriptions, medicationCourses)) }
+        setupWiremockandCreateData()
     }
 
     @When("I click 'Order a repeat prescription'")
-    fun iClickOrderARepeatPrescription () {
+    fun iClickOrderARepeatPrescription() {
         prescriptionsSteps.prescriptions.clickOrderARepeatPrescriptionButton()
     }
 
@@ -149,9 +124,9 @@ open class coursesStepDefinitions {
         courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
     }
 
-    @Given("^I select (\\d+) repeatable prescriptions out of (\\d+) available$")
-    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int, numberOfPrescriptionsToCreate: Int) {
-        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate)
+    @Given("I select (\\d+) (.*) repeatable prescriptions out of (\\d+) available")
+    fun iSelectXRepeatablePrescriptions(numberOfPrescriptionsToSelect: Int, gpSystem: String, numberOfPrescriptionsToCreate: Int) {
+        iHaveXAssignedPrescriptions(numberOfPrescriptionsToCreate, gpSystem)
         xOfMyPrescriptionsAreOfTypeRepeat(numberOfPrescriptionsToCreate)
         xOfMyPrescriptionCanBeRequested(numberOfPrescriptionsToCreate)
         iClickOrderARepeatPrescription()
@@ -221,12 +196,25 @@ open class coursesStepDefinitions {
         selectedCourses = selectedCourses.plus(coursesToSelect)
     }
 
-    private fun getAvailableCoursesFilteredSortedOrdered() : List<MedicationCourse> {
+    private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
         var coursesDataFiltered = coursesData.filter { medicationCourse -> medicationCourse.canBeRequested }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.take(100).toMutableList()
 
         return coursesDataFiltered
+    }
+
+    private fun setupWiremockandCreateData() {
+
+        when (currentGPSystem) {
+            EMIS -> {
+                coursesData = CoursesData.getCourseData(numOfCourses, numOfRepeats, numCanBeRequested, mutableListOf(), showDosage, showQuantity)
+                mockingClient.forEmis {
+                    coursesRequest(patient)
+                            .respondWithSuccess(CourseRequestsGetResponse(coursesData))
+                }
+            }
+        }
     }
 }

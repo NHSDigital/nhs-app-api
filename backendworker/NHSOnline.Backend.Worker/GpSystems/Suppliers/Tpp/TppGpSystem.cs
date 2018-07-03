@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public ICourseService GetCourseService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppCourseService>();
         }
         
         public IDemographicsService GetDemographicsService()

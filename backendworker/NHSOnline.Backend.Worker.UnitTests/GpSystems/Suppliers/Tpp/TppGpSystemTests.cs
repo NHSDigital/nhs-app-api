@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
@@ -61,11 +62,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         }
         
         [TestMethod]
-        public void GetCourseService_WhenCalled_ThrowsNotImplementedException()
+        public void GetCourseService_WhenCalled_ReturnsTppCourseService()
         {
-            (new Action(() => _systemUnderTest.GetCourseService()))
-                .Should()
-                .Throw<NotImplementedException>();
+            var mapper = Mock.Of<TppCourseMapper>();
+            var service = new TppCourseService(_loggerFactory, _options, _tppClient, mapper);
+            _mockServiceProvider
+                .Setup(x => x.GetService(typeof(TppCourseService)))
+                .Returns(service);
+
+            _systemUnderTest.GetCourseService().Should().Be(service);
         }
         
         [TestMethod]
