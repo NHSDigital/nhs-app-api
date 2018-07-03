@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate">
     <spinner />
-    <main class="content">
+    <main :class="$style.content">
       <div :class="$style.panel">
         <div :class="$style.panelContent">
           <b><h5 :class="$style.panelHeader">
