@@ -14,7 +14,6 @@
 import PatientDetailsIcon from '@/components/icons/PatientDetailsIcon';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     PatientDetailsIcon,
   },

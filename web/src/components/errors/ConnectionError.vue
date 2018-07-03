@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     isVisible() {
-      return this.$store.state.http.hasConnectionProblem;
+      return this.$store.state.errors.hasConnectionProblem;
     },
     header() {
       return this.getMessage('header');

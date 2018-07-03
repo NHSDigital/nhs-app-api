@@ -105,7 +105,6 @@ const TESTRESULTS = 'testresults';
 const PROBLEMS = 'problems';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     ErrorWarningDialog,
     PatientDetails,

@@ -8,7 +8,6 @@
 
 <script>
 export default {
-  middleware: ['auth', 'meta'],
   methods: {
     signout() {
       this.$store.dispatch('auth/logout', '/login');

@@ -28,7 +28,6 @@ import AppointmentSlot from '@/components/appointments/AppointmentSlot';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     AppointmentSlot,
     FloatingButtonBottom,

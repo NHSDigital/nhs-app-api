@@ -56,7 +56,6 @@ import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     Appointment,
     ErrorWarningDialog,
@@ -80,8 +79,6 @@ export default {
     if (!this.appointment) {
       this.$router.push('/appointments');
     }
-
-    this.$store.dispatch('errors/setApiErrorButtonPath', '/appointments');
   },
   beforeDestroy() {
     this.$store.dispatch('myAppointments/clearSelectedAppointment');

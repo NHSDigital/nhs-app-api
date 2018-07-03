@@ -2,36 +2,24 @@ import AppointmentsIndex from './testData/appointments/index';
 import AppointmentsBooking from './testData/appointments/booking';
 import AppointmentsConfirmation from './testData/appointments/confirmation';
 import AppointmentsCancel from './testData/appointments/cancel';
+import PrescriptionsConfirmDetails from './testData/prescriptions/confirm-prescription-details';
+import Prescriptions from './testData/prescriptions/index';
+import PrescriptionsRepeatCourses from './testData/prescriptions/repeat-courses';
 
-export default {
-  403: [
-    [...AppointmentsIndex[403]],
-    [...AppointmentsBooking[403]],
-    [...AppointmentsConfirmation[403]],
-    [...AppointmentsCancel[403]],
-  ],
-  409: [
-    [...AppointmentsIndex[409]],
-    [...AppointmentsBooking[409]],
-    [...AppointmentsConfirmation[409]],
-    [...AppointmentsCancel[409]],
-  ],
-  500: [
-    [...AppointmentsIndex[500]],
-    [...AppointmentsBooking[500]],
-    [...AppointmentsConfirmation[500]],
-    [...AppointmentsCancel[500]],
-  ],
-  502: [
-    [...AppointmentsIndex[502]],
-    [...AppointmentsBooking[502]],
-    [...AppointmentsConfirmation[502]],
-    [...AppointmentsCancel[502]],
-  ],
-  504: [
-    [...AppointmentsIndex[504]],
-    [...AppointmentsBooking[504]],
-    [...AppointmentsConfirmation[504]],
-    [...AppointmentsCancel[504]],
-  ],
-};
+const status = [403, 409, 500, 502, 504];
+const testData = {};
+
+for (let i = 0, max = status.length; i < max; i += 1) {
+  const code = status[i];
+  testData[code] = [
+    [...AppointmentsIndex[code]],
+    [...AppointmentsBooking[code]],
+    [...AppointmentsConfirmation[code]],
+    [...AppointmentsCancel[code]],
+    [...PrescriptionsConfirmDetails[code]],
+    [...Prescriptions[code]],
+    [...PrescriptionsRepeatCourses[code]],
+  ];
+}
+
+export default testData;

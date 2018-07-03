@@ -53,18 +53,21 @@ export default {
       return this.$store.getters['errors/showApiError'];
     },
     onRetryButtonClicked() {
-      const path = this.$store.state.errors.apiErrorButtonPath;
-      if (path === '') {
+      const url = this.getRedirectUrl();
+      if (url === '') {
         this.$router.go();
       } else {
-        this.$router.push(path);
+        this.$router.push(url);
       }
+    },
+    getRedirectUrl() {
+      return this.$store.state.errors.pageSettings.redirectUrl;
     },
     getApiErrorResponse() {
       return this.$store.state.errors.apiErrors[0];
     },
     getRoutePath() {
-      return this.$route.path.substring(1).replace(/\//g, '.').replace(/-/g, '_');
+      return this.$store.state.errors.routePath.substring(1).replace(/\//g, '.').replace(/-/g, '_');
     },
     getComponentErrorCodeKey(type) {
       if (!this.showError()) {

@@ -1,6 +1,6 @@
 import {
   ADD_API_ERROR,
-  SET_API_ERROR_BUTTON_PATH,
+  SET_ROUTE_PATH,
   DISABLE_API_ERROR,
   CLEAR_ALL_API_ERRORS,
   SET_CONNECTION_PROBLEM,
@@ -10,8 +10,9 @@ export default {
   addApiError({ commit }, error) {
     commit(ADD_API_ERROR, error);
   },
-  setApiErrorButtonPath({ commit }, path) {
-    commit(SET_API_ERROR_BUTTON_PATH, path);
+  setRoutePath({ commit }, route) {
+    commit(CLEAR_ALL_API_ERRORS);
+    commit(SET_ROUTE_PATH, route);
   },
   disableApiError({ commit }) {
     commit(DISABLE_API_ERROR);

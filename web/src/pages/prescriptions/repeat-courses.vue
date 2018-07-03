@@ -86,7 +86,6 @@ export default {
     RepeatPrescription,
     ErrorWarningDialog,
   },
-  middleware: ['meta', 'auth'],
   data() {
     return {
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,

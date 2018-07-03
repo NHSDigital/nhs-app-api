@@ -1,3 +1,6 @@
+/* eslint-disable import/extensions */
+import Routes from '@/routes';
+
 const PATH = '/appointments/confirmation';
 
 export default {
@@ -10,6 +13,7 @@ export default {
       message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
     },
   ],
   409: [
@@ -21,6 +25,7 @@ export default {
       message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
     },
   ],
   500: [
@@ -32,6 +37,7 @@ export default {
       message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
     },
   ],
   502: [
@@ -43,6 +49,7 @@ export default {
       message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
     },
   ],
   504: [
@@ -54,6 +61,7 @@ export default {
       message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
     },
   ],
 };

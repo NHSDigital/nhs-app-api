@@ -45,7 +45,6 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     ErrorWarningDialog,
     AppointmentSlot,
@@ -78,8 +77,6 @@ export default {
     if (!this.slot) {
       this.$router.push('/appointments/booking');
     }
-
-    this.$store.dispatch('errors/setApiErrorButtonPath', '/appointments');
   },
   beforeDestroy() {
     this.$store.dispatch('appointment/reset');

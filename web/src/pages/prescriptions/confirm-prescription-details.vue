@@ -59,7 +59,6 @@ export default {
   components: {
     Spinner,
   },
-  middleware: ['meta', 'auth'],
   data() {
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
@@ -70,9 +69,6 @@ export default {
     if (this.selectedPrescriptions === null || this.selectedPrescriptions.length === 0) {
       this.$router.push('/prescriptions');
     }
-  },
-  mounted() {
-    this.$store.dispatch('errors/setApiErrorButtonPath', '/prescriptions');
   },
   methods: {
     onConfirmButtonClicked() {

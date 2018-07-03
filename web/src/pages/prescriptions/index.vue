@@ -54,7 +54,6 @@ import { MedicationCourseStatus } from '@/lib/medication-course-status';
 import _ from 'lodash';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     FloatingButtonBottom,
     SuccessDialog,
@@ -110,8 +109,6 @@ export default {
     this.justOrderedARepeatPrescription =
       this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
     this.$store.dispatch('prescriptions/load', this.$config);
-
-    this.$store.dispatch('errors/setApiErrorButtonPath', '');
   },
   methods: {
     onRepeatPrescriptionButtonClicked() {

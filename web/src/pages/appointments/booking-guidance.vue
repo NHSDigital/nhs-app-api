@@ -31,7 +31,6 @@
 
 <script>
 export default {
-  middleware: ['auth', 'meta'],
   data() {
     return {
       symptomsCheckerUrl: process.env.SYMPTOM_CHECKER_URL,

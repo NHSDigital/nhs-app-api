@@ -1,6 +1,6 @@
 export default {
   showApiError(state) {
-    if (!state.showApiError || state.apiErrors.length === 0) {
+    if (!state.showApiError || !state.pageSettings.showApiError || state.apiErrors.length === 0) {
       return false;
     }
 
@@ -9,7 +9,9 @@ export default {
 
     const isServerErrorStatus = error.status >= 500;
     const isExpectedStatus = errorsStatusCollection.indexOf(error.status) !== -1;
+    const ignorePageError = state.pageSettings.ignoredErrors.indexOf(error.status) !== -1;
 
-    return !state.hasConnectionProblem && (isServerErrorStatus || isExpectedStatus);
+    return !state.hasConnectionProblem
+      && (isServerErrorStatus || (isExpectedStatus && !ignorePageError));
   },
 };

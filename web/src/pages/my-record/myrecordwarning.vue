@@ -37,7 +37,6 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     ErrorWarningDialog,
     FloatingButtonBottom,

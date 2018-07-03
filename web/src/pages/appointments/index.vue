@@ -33,7 +33,6 @@ import SuccessDialog from '@/components/widgets/SuccessDialog';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 
 export default {
-  middleware: ['auth', 'meta'],
   components: {
     SuccessDialog,
     FloatingButtonBottom,

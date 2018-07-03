@@ -10,6 +10,7 @@ export default {
       message: 'Contact your GP surgery for more information.',
       hasRetryButton: false,
       retryButtonText: '',
+      redirectUrl: '',
     },
   ],
   409: [
@@ -21,6 +22,7 @@ export default {
       message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
       hasRetryButton: false,
       retryButtonText: '',
+      redirectUrl: '',
     },
   ],
   500: [
@@ -32,6 +34,7 @@ export default {
       message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
       hasRetryButton: false,
       retryButtonText: '',
+      redirectUrl: '',
     },
   ],
   502: [
@@ -43,6 +46,7 @@ export default {
       message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
       hasRetryButton: false,
       retryButtonText: '',
+      redirectUrl: '',
     },
   ],
   504: [
@@ -54,6 +58,7 @@ export default {
       message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Try again',
+      redirectUrl: '',
     },
   ],
 };

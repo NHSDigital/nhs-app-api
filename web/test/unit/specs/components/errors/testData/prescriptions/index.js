@@ -1,4 +1,4 @@
-const PATH = '/appointments/booking';
+const PATH = '/prescriptions';
 
 export default {
   403: [
@@ -17,9 +17,9 @@ export default {
     PATH,
     {
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem loading this page',
-      subheader: '',
-      message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+      header: 'Sorry, there\'s been a problem getting your prescription information',
+      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: '',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -29,9 +29,9 @@ export default {
     PATH,
     {
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem loading this page',
-      subheader: '',
-      message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+      header: 'Sorry, there\'s been a problem getting your prescription information',
+      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: '',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -41,9 +41,9 @@ export default {
     PATH,
     {
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem loading this page',
-      subheader: '',
-      message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+      header: 'Sorry, there\'s been a problem getting your prescription information',
+      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: '',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -53,9 +53,9 @@ export default {
     PATH,
     {
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem loading this page',
+      header: 'Sorry, there\'s been a problem getting your prescription information',
       subheader: 'Please try again',
-      message: 'If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+      message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
       hasRetryButton: true,
       retryButtonText: 'Try again',
       redirectUrl: '',

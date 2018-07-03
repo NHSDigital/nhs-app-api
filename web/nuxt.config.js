@@ -21,7 +21,7 @@ module.exports = {
     './handler.js',
   ],
   router: {
-    middleware: ['analytics'],
+    middleware: ['auth', 'meta', 'analytics'],
   },
   env: {
     NODE_ENV: process.env.NODE_ENV || 'development',

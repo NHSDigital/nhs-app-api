@@ -34,7 +34,7 @@ import RegistrationButton from '@/components/RegistrationButton';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 
 export default {
-  middleware: ['meta', 'buildAuth'],
+  middleware: ['buildAuth'],
   head() {
     return {
       title: 'Login Screen',
