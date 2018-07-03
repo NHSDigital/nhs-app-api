@@ -22,6 +22,11 @@ open class MoreSteps {
     }
 
     @Step
+    fun setDataSharingPreferences() {
+        more.clickDataSharing()
+    }
+
+    @Step
     fun organDonationHeaderVisible(): Boolean {
         return more.isDonationHeaderVisible()
     }

@@ -18,38 +18,60 @@ open class MyRecordImmunisationStepDefinitions {
     val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
 
-    @Given("the GP Practice has enabled immunisations functionality and multiple immunisation records exist")
-    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExist() {
+    @Given("the GP Practice has enabled immunisations functionality and multiple immunisation records exist for (.*)")
+    fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExistfor(getService:String) {
+        when(getService){
+            "EMIS"->{
+                mockingClient.forEmis {
+                    immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getImmunisationsData())
+                }
+            }
+            "TPP"->{
 
-        mockingClient.forEmis {
-            immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getImmunisationsData())
-        }
-
-    }
-
-    @Given("no immunisation records exist for the patient")
-    fun givenNoImmunisationRecordsExistForThePatient() {
-
-        mockingClient.forEmis {
-            immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+            }
         }
     }
 
-    @Given("the user does not have access to view immunisations")
-    fun givenUserDoesNotHaveAccessToViewImmunisations() {
+    @Given("no immunisation records exist for the patient for (.*)")
+    fun givenNoImmunisationRecordsExistForThePatientfor(getService: String) {
+        when(getService){
+            "EMIS"->{
+                mockingClient.forEmis {
+                    immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                }
+            }
+            "TPP"->{
 
-        mockingClient.forEmis {
-            immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
+            }
         }
     }
 
-    @Given("there is an error retrieving immunisations data")
-    fun givenThereIsAnErrorRetrievingImmunisationsData() {
+    @Given("the user does not have access to view immunisations for (.*)")
+    fun givenUserDoesNotHaveAccessToViewImmunisationsfor(getService: String) {
+        when(getService){
+            "EMIS"->{
+                mockingClient.forEmis {
+                    immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
+                }
+            }
+            "TPP"->{
 
-        mockingClient.forEmis {
-            immunisationsRequest(patient).respondWithNonDataAccessException()
+            }
         }
+    }
 
+    @Given("there is an error retrieving immunisations data for (.*)")
+    fun givenThereIsAnErrorRetrievingImmunisationsDatafor(getService: String) {
+        when(getService){
+            "EMIS"->{
+                mockingClient.forEmis {
+                    immunisationsRequest(patient).respondWithNonDataAccessException()
+                }
+            }
+            "TPP"->{
+
+            }
+        }
     }
     
     @When("I get the users immunisations")

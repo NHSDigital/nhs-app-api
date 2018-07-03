@@ -357,6 +357,9 @@ export default {
     organDonationLabel: 'Organ donation preferences',
     organDonationDesc: 'Help us save thousands of lives in the UK every year by signing up to become an organ donor. Register your decision and choose what you want to donate on the NHS Organ Donor Register.',
     organDonationButtonText: 'Set organ donation preferences',
+    dataSharingHeaderText: 'Sharing health data',
+    dataSharingInfoText: 'The NHS uses identifiable health and care information (like your name or NHS number) for your individual care. This data can also be used in research to find cures for life-threatening diseases, and to plan health services and make them safer.',
+    dataSharingButtonText: 'Set health data sharing preferences',
   },
   navigationMenu: {
     appointmentsLabel: 'Appointments',

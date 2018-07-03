@@ -17,81 +17,143 @@ open class MyRecordTestResultsStepDefinitions {
     val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
 
-    @Given("the GP Practice has multiple test results")
-    fun givenTheGpPracticeHasMultipleTestResults() {
+    @Given("the GP Practice has multiple test results for (.*)")
+    fun givenTheGpPracticeHasMultipleTestResultsFor(getService:String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+            }
         }
     }
 
-    @Given("the GP Practice has a single test result with multiple child values with no ranges")
-    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRanges() {
+    @Given("the GP Practice has a single test result with multiple child values with no ranges for (.*)")
+    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithNoRanges())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithNoRanges())
+            }
         }
     }
 
-    @Given("the GP Practice has a single test result with single child values with no ranges")
-    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRanges() {
+    @Given("the GP Practice has a single test result with single child values with no ranges for (.*)")
+    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+            }
         }
     }
 
-    @Given("the GP Practice has a single test result with multiple child values with ranges")
-    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRanges() {
+    @Given("the GP Practice has a single test result with multiple child values with ranges for (.*)")
+    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
+            }
         }
     }
 
-    @Given("the GP Practice has a single test result with single child value with A range")
-    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithaRanges() {
+    @Given("the GP Practice has a single test result with single child value with A range for (.*)")
+    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
+            }
         }
     }
 
-    @Given("the GP Practice has test results enabled and a single test result exists with no child values or range")
-    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRange() {
+    @Given("the GP Practice has test results enabled and a single test result exists with no child values or range for (.*)")
+    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
+            }
         }
     }
 
-    @Given("the GP Practice has test results enabled and a single test result exists with no child values and a range")
-    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARange() {
+    @Given("the GP Practice has a single test result with no child values and range for (.*)")
+    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
+            }
         }
     }
 
-    @Given("I do not have access to test results")
-    fun givenIDoNotHaveAccessToTestResults() {
+    @Given("I do not have access to test results for (.*)")
+    fun givenIDoNotHaveAccessToTestResultsFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                }
+            }
+            "TPP" -> {
 
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+            }
         }
     }
 
-    @Given("I have no test results")
-    fun givenIHaveNoTestResults() {
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+    @Given("I have no test results for (.*)")
+    fun givenIHaveNoTestResultsFor(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                }
+            }
+            "TPP" -> {
+
+            }
         }
     }
 
-    @Given("an error occurred retrieving the test results from EMIS")
-    fun givenAnErrorOccurredRetrievingTestResultsFromEMIS() {
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+    @Given("an error occurred retrieving the test results from (.*)")
+    fun givenAnErrorOccurredRetrievingTestResultsFrom(getService: String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+                }
+            }
+            "TPP" -> {
+
+            }
         }
     }
 

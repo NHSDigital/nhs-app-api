@@ -6,6 +6,7 @@ import mocking.MockingConfiguration
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.tpp.models.*
 import models.Patient
+import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
 
 class MockDefaults(val config: Config, val mockingClient: MockingClient = MockingClient.instance) {
@@ -63,10 +64,34 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 )
         )
 
+        val tppAuthenticateReplyResponse = AuthenticateReply(
+                patientId = patientTpp.patientId,
+                onlineUserId = patientTpp.onlineUserId,
+                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
+                user = User(
+                        person = Person(
+                                patientId = patientTpp.patientId,
+                                dateOfBirth = patientTpp.dateOfBirth,
+                                gender = patientTpp.sex.name,
+                                nationalId = NationalId(
+                                        type = "NHS",
+                                        value = patientTpp.nhsNumbers.first()
+                                ),
+                                personName = PersonName(
+                                        name = "${patientTpp.title} ${patientTpp.firstName} ${patientTpp.surname}"
+                                )
+                        )
+                )
+        )
+
         val tppNonExistingAccountIdErrorResponse = Error(
                 errorCode = "9",
                 userFriendlyMessage = "There was a problem logging on",
                 uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
         )
+
+        val tppUserSession =  TppUserSession("ZT8wLjK6beFOdXoiNIHbD+TbPrl0Y3KmVXy4GYM253hQlxwp2qMKW7zgbjgTWJzCvTcZxb2BZNW5IdGtaWtahGkv" +
+            "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
+            "84df400000000000", "KGPD", "84df400000000000")
     }
 }

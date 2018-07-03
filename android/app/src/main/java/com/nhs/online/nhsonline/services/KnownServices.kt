@@ -31,6 +31,12 @@ class KnownServices(private val context: Context) {
             organDonationError,
             nativeHeader = context.resources.getString(R.string.organ_donation_register_header),
             shouldValidateSession = false))
+        val dataSharingError = ErrorMessage(context.resources.getString(R.string.data_sharing_connection_error))
+        serviceList.add(KnownService(arrayOf(context.resources.getString(
+                R.string.dataSharing)),
+                dataSharingError,
+                nativeHeader = context.resources.getString(R.string.data_sharing_header),
+                shouldValidateSession = false))
         val nhs111Error = ErrorMessage(context.resources.getString(R.string.nhs111_connection_error))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
             R.string.nhs111), context.resources.getString(

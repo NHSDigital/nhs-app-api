@@ -12,18 +12,21 @@
     <string name="nhs111">https://111.nhs.uk</string>
     <string name="nhs111Location">https://111.service.nhs.uk/</string>
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
+    <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=mobile</string>
 
     <string-array name="serviceUrls">
         <item>@string/nhs111</item>
         <item>@string/organDonation</item>
+        <item>@string/dataSharing</item>
     </string-array>
 
     <string-array name="nativeAppHosts">
         <item>@string/nhs111</item>
         <item>@string/nhs111Location</item>
         <item>@string/organDonation</item>
+        <item>@string/dataSharing</item>
         <item>@string/baseURL</item>
     </string-array>
 

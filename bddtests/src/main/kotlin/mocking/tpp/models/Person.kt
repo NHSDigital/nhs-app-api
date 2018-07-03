@@ -13,5 +13,8 @@ data class Person(
         ),
         @field:XmlElement(name = "PersonName") var personName: PersonName = PersonName(
                 "default name"
-        )
+        ),
+        @field:XmlElement(name = "Address") var address: TppAddress = TppAddress(
+        "default address"
+)
 )

@@ -4,16 +4,15 @@ import mocking.emis.allergies.AllergyMedicalRecord
 import mocking.emis.allergies.AllergyResponse
 import mocking.emis.allergies.AllergyResponseModel
 import mocking.emis.allergies.EffectiveDate
-import mocking.emis.models.MedicationItem
-import mocking.emis.models.MedicationMedicalRecord
-import mocking.emis.models.MedicationsResponse
+import mocking.tpp.models.Item
+import mocking.tpp.models.ViewPatientOverviewReply
 
 object AllergiesData {
 
     val TERM = "Hay Fever"
     val DATE = "2018-05-15T09:52:44.927"
 
-    fun getAllergiesData(count: Int): AllergyResponseModel {
+    fun getEmisAllergiesData(count: Int): AllergyResponseModel {
 
         val allergies = mutableListOf<AllergyResponse>()
 
@@ -28,7 +27,7 @@ object AllergiesData {
         )
     }
 
-    fun getAllergyRecordsWithDifferentDateParts(): AllergyResponseModel {
+    fun getEmisAllergyRecordsWithDifferentDateParts(): AllergyResponseModel {
 
         val allergies = mutableListOf<AllergyResponse>()
 
@@ -45,11 +44,35 @@ object AllergiesData {
         )
     }
 
-    fun getDefaultAllergyModel(): AllergyResponseModel {
+
+    fun getEmisDefaultAllergyModel(): AllergyResponseModel {
         return AllergyResponseModel(
                 medicalRecord = AllergyMedicalRecord(
                         allergies = mutableListOf()
                 )
         )
+    }
+
+    fun getTppAllergiesData(count: Int): ViewPatientOverviewReply {
+
+        val allergies = mutableListOf<Item>()
+        val drugSensitivities = mutableListOf<Item>()
+
+        for (i in 1..count) {
+            allergies.add(Item(id = i.toString(), description = "Allergies", date="2018-05-15T09:52:44.927", value="Hay Fever"))
+        }
+
+        val result= ViewPatientOverviewReply(
+                drugSensitivities = drugSensitivities,
+                allergies = allergies
+        );
+        return result;
+    }
+
+    fun getTppDefaultAllergyModel(): ViewPatientOverviewReply {
+        return ViewPatientOverviewReply(
+                allergies = mutableListOf<Item>(),
+                drugSensitivities = mutableListOf<Item>()
+        );
     }
 }

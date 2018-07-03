@@ -7,6 +7,7 @@ import cucumber.api.java.en.Then
 import features.myrecord.MedicationsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
+import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -27,32 +28,69 @@ open class MyRecordMedicationsStepDefinitions {
         Assert.assertNotNull(result.response.medications.data)
     }
 
-    @Given("the GP Practice has enabled medications functionality")
-    fun givenTheGPPracticeHasEnabledMedicationsFunctionality() {
-        mockingClient.forEmis {
-            medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getMedicationData())
-        }
-    }
-
-    @Given("the GP Practice has enabled medication functionality and the patient has no medications")
-    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityandpatienthasnomedications() {
-        try {
-            mockingClient.forEmis {
-                medicationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+    @Given("the GP Practice has enabled medications functionality for (.*)")
+    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
+        when(getService){
+            "EMIS"->{
+                mockingClient.forEmis {
+                    medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
+                }
             }
-
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
-
-            Serenity.setSessionVariable(MyRecordResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            "TPP"->{
+                mockingClient.forTpp {
+                    viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithSuccess(MedicationsData.getTppMedicationData())
+                }
+            }
         }
     }
 
-    @But("the GP Practice has disabled medications functionality")
-    fun butTheGPPracticeHasDisabledMedicationsFunctionality() {
-        mockingClient.forEmis {
-            medicationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+    @Given("the GP Practice has enabled medication functionality and the patient has no medications for (.*)")
+    fun givenTheGPPracticeHasEnabledMedicationsFunctionalityandpatienthasnomedicationsfor(getService: String) {
+        when (getService) {
+            "EMIS" -> {
+                try {
+                    mockingClient.forEmis {
+                        medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                    }
+
+                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
+
+                    Serenity.setSessionVariable(MyRecordResponse::class).to(result)
+                } catch (httpException: NhsoHttpException) {
+                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+                }
+            }
+            "TPP" -> {
+                try {
+                    mockingClient.forTpp {
+                        viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
+                }
+
+                val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
+
+                Serenity.setSessionVariable(MyRecordResponse::class).to(result)
+
+                }
+                catch(httpException: NhsoHttpException) {
+                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+                }
+            }
+        }
+    }
+
+    @But("the GP Practice has disabled medications functionality for (.*)")
+    fun butTheGPPracticeHasDisabledMedicationsFunctionalityFor(getService: String) {
+        when (getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    medicationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                }
+            }
+            "TPP" -> {
+                mockingClient.forTpp {
+                    viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
         }
     }
 

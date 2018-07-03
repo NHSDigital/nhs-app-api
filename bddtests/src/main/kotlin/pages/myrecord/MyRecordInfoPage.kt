@@ -70,6 +70,11 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "//h5[contains(text(),'Immunisations')]/following-sibling::div[1]")
     lateinit var immunisations: WebElementFacade
 
+    @FindBy(xpath = "//h5[contains(text(),'Problems')]")
+    lateinit var problemsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Problems')]/following-sibling::div[1]")
+    lateinit var problems: WebElementFacade
 
     fun isNameVisible(): Boolean {
         waitABit(2000)
@@ -246,6 +251,24 @@ class MyRecordInfoPage : PageObject() {
     fun isTestResultsTextMsgVisible(): Boolean {
         waitABit(2000)
         return txttestResultsMsg.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+    }
+
+    fun getProblemsHeaderText(): String {
+        return problemsHeading.text
+    }
+
+    fun getProblemsRecordCount(): Int {
+        return problems.thenFindAll(By.cssSelector("label")).count()
+    }
+
+    fun clickProblems() {
+        waitABit(2000)
+        evaluateJavascript("arguments[0].scrollIntoView(true);", problems)
+        problemsHeading.click()
+    }
+
+    fun getProblemsMessage(): String {
+        return problems.then<WebElementFacade>(By.cssSelector("p")).text;
     }
 
     fun getSummaryCareNoAccessMessage(): String {

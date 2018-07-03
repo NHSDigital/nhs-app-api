@@ -11,6 +11,16 @@
         {{ $t('more.organDonationButtonText') }}
       </a>
       <hr>
+      <br>
+      <div id="dataSharing" :class="$style['panel-title']">
+        <h2>{{ $t('more.dataSharingHeaderText') }}</h2>
+        <p>
+          {{ $t('more.dataSharingInfoText') }}
+        </p>
+      </div>
+      <a id="btn_datasharing" :href="dataSharingUrl" :class="$style.button" target="_blank">
+        {{ $t('more.dataSharingButtonText') }}
+      </a>
     </main>
   </div>
 </template>
@@ -21,6 +31,7 @@ export default {
   data() {
     return {
       organDonationUrl: process.env.ORGAN_DONATION_URL,
+      dataSharingUrl: process.env.DATA_SHARING_URL,
     };
   },
 };

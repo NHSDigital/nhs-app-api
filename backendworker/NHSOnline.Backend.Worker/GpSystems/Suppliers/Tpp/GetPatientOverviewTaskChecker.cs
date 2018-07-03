@@ -34,15 +34,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             if (!taskResponse.HasSuccessResponse)
             {
                 // User does not have access
-                if (taskResponse.HasErrorWithMessage("Services Access violation") ||
-                    taskResponse.HasErrorWithMessage("Requested record access is disabled by the practice"))
+                if (taskResponse.HasForbiddenResponse)
                 {
-                    _logger.LogWarning("User does not have access to their patient record");
+                    _logger.LogWarning("User does not have access to their patient record for Tpp");
                     hasAccess = false;
                 }
                 else
                 {
-                    _logger.LogError($"Unsuccessful request retrieving patient overviewfor patient. Status code: {(int) taskResponse.StatusCode}");
+                    _logger.LogError($"Unsuccessful request retrieving patient selected information for Tpp. Status code: {(int)taskResponse.StatusCode}");
                     hasErrored = true;
                 }
             }

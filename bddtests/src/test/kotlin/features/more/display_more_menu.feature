@@ -11,6 +11,9 @@ Feature: Display More Menu
   Scenario: When a logged in user to the mobile web looks at the more screen, they see a button with the text 'Set organ donation preferences'
 
   @pending
+  Scenario: When a logged in user to the mobile web looks at the more screen, they see a button with the text 'Set health data sharing preferences'
+
+  @pending
   Scenario: When a logged in user to the mobile web looks at the more screen, they see a toolbar at the bottom with the "More" option highlighted
 
   @pending

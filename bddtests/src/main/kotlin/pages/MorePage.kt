@@ -20,6 +20,10 @@ open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         findByXpath("//*[@id='btn_organdonation']").click()
     }
 
+    fun clickDataSharing() {
+        findByXpath("//*[@id='btn_datasharing']").click()
+    }
+
     fun isDonationHeaderVisible(): Boolean {
         return donationHeading.isCurrentlyEnabled
     }

@@ -6,7 +6,8 @@ data class MyRecordResponseData(
         val allergies: Allergies,
         var medications: Medications,
         var immunisations: Immunisations,
-        var testResults: TestResults
+        var testResults: TestResults,
+        var problems: Problems
 )
 
 data class Medications(

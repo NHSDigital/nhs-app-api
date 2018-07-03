@@ -8,6 +8,7 @@
 
     <string name="my_account_header">My account</string>
     <string name="organ_donation_register_header">Organ donation register</string>
+    <string name="data_sharing_header">Sharing health data preferences</string>
     <string name="nhs_111_header">Check your symptoms</string>
     <string name="my_record_header">My medical record</string>
     <string name="appointments_header">My appointments</string>
@@ -16,6 +17,7 @@
 
     <string name="nhs111_connection_error">NHS 111 unavailable</string>
     <string name="organ_donation_connection_error">Organ donation unavailable</string>
+    <string name="data_sharing_connection_error">Sharing health data unavailable</string>
     <string name="connection_error_title">There\'s an issue with your internet connection</string>
     <string name="connection_error_message">
         Please check your connection and try again.

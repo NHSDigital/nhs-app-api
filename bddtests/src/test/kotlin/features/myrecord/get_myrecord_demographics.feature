@@ -2,40 +2,60 @@ Feature: Get demographic data
 
   A user can get their demographic information
 
-  Background:
-    Given wiremock is initialised
-    And the my record wiremocks are initialised
-
   @NHSO-691
   @backend
-  Scenario: Requesting demographics returns demographic data
-    Given I have logged in and have a valid session cookie
-    Given the GP Practice has enabled demographics functionality
+  Scenario Outline: Requesting demographics returns demographic data for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has enabled demographics functionality for <Service>
     When I get the users demographic data
     Then I receive the demographic object
 
+    Examples:
+      | Service |
+      | EMIS    |
+      | TPP     |
+
   @NHSO-691
   @backend
-  Scenario: GP practice has disabled demographics functionality
-    Given I have logged in and have a valid session cookie
-    But the GP Practice has disabled demographics functionality
+  Scenario Outline: GP practice has disabled demographics functionality for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has disabled demographics functionality for <Service>
     When I get the users demographic data
     Then I receive a "Forbidden" error
 
-  @NHSO-691
-  @pending
-  @backend
-  Scenario: GP System Unavailable
-    Given I have logged in and have a valid session cookie
-    But the GP System is unavailable
-    When I communicate with EMIS
-    Then I get a "Bad gateway" error
+    Examples:
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @NHSO-691
   @pending
   @backend
-  Scenario: GP System Times Out
-    Given I have logged in and have a valid session cookie
-    But the GP System times out
-    When I communicate with EMIS
+  Scenario Outline: GP System Unavailable for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP System is unavailable
+    When I communicate with <Service>
+    Then I get a "Bad gateway" error
+
+    Examples:
+      | Service |
+      | EMIS    |
+      | TPP     |
+
+  @NHSO-691
+  @pending
+  @backend
+  Scenario Outline: GP System Times Out for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    But the GP System times out for <Service>
+    When I communicate with <Service>
     Then I get a "Gateway timeout" error
+
+    Examples:
+      | Service |
+      | EMIS    |
+      | TPP     |

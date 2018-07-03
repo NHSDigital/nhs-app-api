@@ -20,6 +20,11 @@ class MoreStepDefinitions {
         more.setOrganDonationPreferences()
     }
 
+    @When("^I choose to set my data sharing preferences")
+    fun setDataSharingPreferences() {
+        more.setDataSharingPreferences()
+    }
+
     @And("^the app remains on the More Page$")
     fun appRemainsOnMorePage() {
         browser.changeTabToApp()

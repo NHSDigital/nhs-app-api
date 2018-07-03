@@ -4,13 +4,14 @@ import cucumber.api.java.en.*
 import features.myrecord.DemographicsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
+import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
-import worker.models.demographics.DemographicsResponse
+import worker.models.demographics.TppUserSession
 
 open class DemographicsStepDefinitions {
 
@@ -20,7 +21,7 @@ open class DemographicsStepDefinitions {
     val HTTP_EXCEPTION = "HttpException"
 
     @When("I get the users demographic data")
-    fun whenIGetTheUsersDemographicsData() {
+    fun whenIGetTheUsersDemographicsDataFor() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographics(null)
 
@@ -30,25 +31,43 @@ open class DemographicsStepDefinitions {
         }
     }
 
-    @Given("the GP Practice has enabled demographics functionality")
-    fun givenTheGPPracticeHasEnabledDemographicsFunctionality() {
-        mockingClient.forEmis {
-            demographicsRequest(MockDefaults.patient).respondWithSuccess(DemographicsData.getEmisDemographicData())
+    @Given("the GP Practice has enabled demographics functionality for (.*)$")
+    fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor(getService: String) {
+        when(getService){
+            "EMIS"->{
+                mockingClient.forEmis {
+                    demographicsRequest(MockDefaults.patient).respondWithSuccess(DemographicsData.getEmisDemographicData())
+                }
+            }
+            "TPP"->{
+                mockingClient.forTpp {
+                    patientSelectedPost(MockDefaults.tppUserSession).respondWithSuccess(DemographicsData.getTppDemographicsData())
+                }
+            }
         }
     }
 
-    @But("the GP Practice has disabled demographics functionality")
-    fun butTheGPPracticeHasDisabledDemographicsFunctionality() {
-        try {
-            mockingClient.forEmis {
-                demographicsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+    @Given("the GP Practice has disabled demographics functionality for (.*)")
+    fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor(getService: String) {
+        when(getService){
+            "EMIS"->{
+                try {
+                    mockingClient.forEmis {
+                        demographicsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    }
+                } catch (httpException: NhsoHttpException) {
+                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+                }
             }
-
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographics(null)
-
-            Serenity.setSessionVariable(DemographicsResponse::class).to(result)
-        } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+            "TPP"->{
+                try {
+                    mockingClient.forTpp {
+                        patientSelectedPost(MockDefaults.tppUserSession).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    }
+                } catch (httpException: NhsoHttpException) {
+                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+                }
+            }
         }
     }
 

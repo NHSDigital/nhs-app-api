@@ -5,21 +5,23 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myrecord.AllergiesData
-import features.myrecord.ImmunisationsData
-import features.myrecord.MedicationsData
-import features.myrecord.TestResultsData
+import features.myrecord.*
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
+import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
+import mocking.emis.models.AssociationType
+import mocking.tpp.models.Error
+import models.Patient
 
 open class MyRecordStepDefinitions {
 
@@ -38,22 +40,92 @@ open class MyRecordStepDefinitions {
     val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
 
-    @Given("the my record wiremocks are initialised")
-    fun givenMyRecordWiremocksAreInitialised() {
-        mockingClient.forEmis {
-            testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+    @Given("^the my record wiremocks are initialised for (.*)$")
+    fun givenMyRecordWiremocksAreInitialisedfor(getService: String) {
+        when(getService){
+            "EMIS" -> {
+                MockDataPopulate(mockingClient).populate()
+                mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
+
+                mockingClient.forEmis {
+                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                }
+
+                mockingClient.forEmis {
+                    immunisationsRequest(MockDefaults.patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                }
+
+                mockingClient.forEmis {
+                    allergiesRequest(MockDefaults.patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
+                }
+
+                mockingClient.forEmis {
+                    medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                }
+
+                mockingClient.forEmis {
+                    problemsRequest(MockDefaults.patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
+                }
+
+            }
+            "TPP" -> {
+                MockDataPopulate(mockingClient).populate()
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
+                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(MockDefaults.tppAuthenticateReplyResponse) }
+
+                mockingClient.forTpp {
+                    viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
+                }
+            }
+        }
+    }
+
+    @Given("^I have logged in and have a valid session cookie for (.*)$")
+    fun givenIHaveLoggedInAndHaveAValidSessionCookieFor(getService: String) {
+
+        val accessToken = "access_token"
+
+        mockingClient.forCitizenId {
+            tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
+                    .respondWithSuccess(
+                            accessToken,
+                            "30",
+                            "30",
+                            "refresh_token",
+                            "token_type")
         }
 
-        mockingClient.forEmis {
-            immunisationsRequest(MockDefaults.patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
-        }
+        when(getService) {
+            "EMIS" -> {
 
-        mockingClient.forEmis {
-            allergiesRequest(MockDefaults.patient).respondWithSuccess(AllergiesData.getDefaultAllergyModel())
-        }
+                mockingClient.forCitizenId {
+                    userInfoRequest("Bearer ".plus(accessToken))
+                            .respondWithSuccess(Patient.getDefault("EMIS"))
+                }
 
-        mockingClient.forEmis {
-            medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getDefaultMedicationsModel())
+                mockingClient.forEmis {
+                    endUserSessionRequest()
+                            .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
+                }
+
+                mockingClient.forEmis {
+                    sessionRequest(MockDefaults.patient)
+                            .respondWithSuccess(MockDefaults.patient, AssociationType.Self)
+                }
+
+                Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
+
+            }
+            "TPP" -> {
+                mockingClient.forCitizenId {
+                    userInfoRequest("Bearer ".plus(accessToken))
+                            .respondWithSuccess(Patient.getDefault("TPP"))
+                }
+
+                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(MockDefaults.tppAuthenticateReplyResponse) }
+
+                Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
+            }
         }
     }
 
@@ -62,10 +134,20 @@ open class MyRecordStepDefinitions {
 
     }
 
-    @Given("the GP Practice has disabled summary care record functionality")
-    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionality() {
-        mockingClient.forEmis {
-            allergiesRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+    @Given("the GP Practice has disabled summary care record functionality for (.*)")
+    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityfor(getService:String) {
+        when(getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    allergiesRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                }
+            }
+            "TPP" -> {
+                mockingClient.forTpp {
+                    viewPatientOverviewPost(MockDefaults.tppUserSession)
+                            .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
         }
     }
 
@@ -429,6 +511,43 @@ open class MyRecordStepDefinitions {
     fun i_see_immunisation_records_displayed() {
         Assert.assertEquals(2, recordSteps.getImmunisationRecordCount())
     }
+
+    @When("^I click the Problems section$")
+    @Throws(Exception::class)
+    fun i_click_the_Problems_section () {
+        recordSteps.clickProblems()
+    }
+
+    @Then("^I see heading Problems$")
+    @Throws(Exception::class)
+    fun i_see_heading_Problems() {
+        Assert.assertEquals("Problems", recordSteps.getProblemsHeaderText())
+    }
+
+    @Then("^I see Problems records displayed$")
+    @Throws(Exception::class)
+    fun i_see_Problems_records_displayed() {
+        Assert.assertEquals(3, recordSteps.getProblemsRecordCount())
+    }
+
+    @Then("^I see a message indicating that I have no access to view problems$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_problems() {
+        Assert.assertEquals("You do not have access to this section", recordSteps.getProblemsMessage())
+    }
+
+    @Then("^I see a message indicating that I have no information recorded for problems$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_problems() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getProblemsMessage())
+    }
+
+    @Then("^I see an error occured message with problems$")
+    @Throws(Exception::class)
+    fun i_see_an_error_occured_message_for_problems() {
+        Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getProblemsMessage())
+    }
+
 
     @Then("^I see message No information recorded for this section$")
     @Throws(Exception::class)

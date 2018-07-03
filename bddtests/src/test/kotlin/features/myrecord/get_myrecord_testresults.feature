@@ -2,46 +2,67 @@ Feature: Get Immunisations Data
 
   A user can get their immunisation information
 
-  Background:
-    Given wiremock is initialised
-    And the my record wiremocks are initialised
-
   @backend
-  Scenario: Requesting multiple test results returns multiple test results data
-    Given I have logged in and have a valid session cookie
-    And the GP Practice has multiple test results
+  Scenario Outline: Requesting multiple test results returns multiple test results data for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has multiple test results for <Service>
     When I get the users test results
     Then I receive "2" test results as part of the my record object
 
+    Examples:
+      |Service|
+      |EMIS|
+
   @backend
-  Scenario: Requesting single test result with child values with no ranges
-    Given I have logged in and have a valid session cookie
-    And the GP Practice has a single test result with multiple child values with no ranges
+  Scenario Outline: Requesting single test result with child values with no ranges for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has a single test result with multiple child values with no ranges for <Service>
     When I get the users test results
     Then I receive the test result with term set correctly to Term
     And I receive line items for each child value
     And the line item value is set correctly
 
+    Examples:
+      |Service|
+      |EMIS|
+
   @backend
-  Scenario: Requesting single test result with child values with ranges
-    Given I have logged in and have a valid session cookie
-    And the GP Practice has a single test result with multiple child values with ranges
+  Scenario Outline: Requesting single test result with child values with ranges for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has a single test result with multiple child values with ranges for <Service>
     When I get the users test results
     Then I receive the test result with term set correctly to Term
     And I receive line items for each child value
     And the line item displays text value and range
 
+    Examples:
+      |Service|
+      |EMIS|
+
   @backend
-  Scenario: Requesting single test result with no child items or range
-    Given I have logged in and have a valid session cookie
-    And the GP Practice has test results enabled and a single test result exists with no child values or range
+  Scenario Outline: Requesting single test result with no child items or range for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has test results enabled and a single test result exists with no child values or range for <Service>
     When I get the users test results
     Then I receive a single test result with the term set correctly to Term TextValue NumericUnits
 
+    Examples:
+      |Service|
+      |EMIS|
+
   @backend
-  Scenario: Requesting single test result with no child items and a range
-    Given I have logged in and have a valid session cookie
-    And the GP Practice has test results enabled and a single test result exists with no child values and a range
+  Scenario Outline: Requesting single test result with no child items and a range for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has a single test result with no child values and range for <Service>
     When I get the users test results
     Then I receive the term set correctly to Term TextValue NumericUnits Range
+
+    Examples:
+      |Service|
+      |EMIS|
 

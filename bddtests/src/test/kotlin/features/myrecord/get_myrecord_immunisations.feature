@@ -2,21 +2,27 @@ Feature: Get Immunisations Data
 
   A user can get their immunisation information
 
-  Background:
-    Given wiremock is initialised
-    And the my record wiremocks are initialised
-
   @backend
-  Scenario: Requesting immunisations returns immunisations data
-    Given I have logged in and have a valid session cookie
-    Given the GP Practice has enabled immunisations functionality and multiple immunisation records exist
+  Scenario Outline: Requesting immunisations returns immunisations data for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And the GP Practice has enabled immunisations functionality and multiple immunisation records exist for <Service>
     When I get the users immunisations
     Then I receive "2" immunisations as part of the my record object
 
+  Examples:
+  |Service|
+  |EMIS|
+
   @backend
-  Scenario: Requesting immunisations returns immunisations data
-    Given I have logged in and have a valid session cookie
-    And no immunisation records exist for the patient
+  Scenario Outline: Requesting immunisations returns immunisations data for <Service>
+    Given the my record wiremocks are initialised for <Service>
+    And I have logged in and have a valid session cookie for <Service>
+    And no immunisation records exist for the patient for <Service>
     When I get the users immunisations
     Then I receive "0" immunisations as part of the my record object
+
+  Examples:
+  |Service|
+  |EMIS|
 

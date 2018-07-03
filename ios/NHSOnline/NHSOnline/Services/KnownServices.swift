@@ -6,9 +6,11 @@ class KnownServices {
     private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
     private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
+    private let dataSharingTitle = NSLocalizedString("DataSharingTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let nhs111UnavailableErrorMessage = NSLocalizedString("Nhs111UnavailableErrorMessage", comment: "")
     private let organDonationUnavailableErrorMessage = NSLocalizedString("OrganDonationUnavailableErrorMessage", comment: "")
+    private let dataSharingUnavailableErrorMessage = NSLocalizedString("DataSharingUnavailableErrorMessage", comment: "")
     private var serviceList = Array<KnownService>()
     
     init(config:Config) {
@@ -20,6 +22,7 @@ class KnownServices {
     serviceList.append(KnownService(urlStrings: [config.HomeUrl],service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
     serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhs111UnavailableErrorMessage), shouldValidateSession:false))
     serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: organDonationUnavailableErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+    serviceList.append(KnownService(urlStrings: [config.DataSharingUrl], serviceTitle: dataSharingTitle, service: .DATA_SHARING, serviceErrorMessage: ErrorMessage(title: dataSharingUnavailableErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func getAllKnownHosts() -> [String?] {
@@ -63,6 +66,6 @@ class KnownServices {
     }
     
     enum Service {
-        case NHS_111, NHS_ONLINE, ORGAN_DONATION, OTHERS;
+        case NHS_111, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, OTHERS;
     }
 }

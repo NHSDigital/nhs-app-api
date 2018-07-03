@@ -225,6 +225,7 @@ open class MyRecordSteps {
         return myRecordInfoPage.getTestResultChildCount()
     }
 
+    @Step
     fun clickImmunisations() {
         myRecordInfoPage.clickImmunisations()
     }
@@ -243,5 +244,26 @@ open class MyRecordSteps {
     fun getImmunisationsMessage(): String {
         return myRecordInfoPage.getImmunisationsMessage()
     }
+
+    @Step
+    fun clickProblems() {
+        myRecordInfoPage.clickProblems()
+    }
+
+    @Step
+    fun getProblemsHeaderText(): String {
+        return myRecordInfoPage.getProblemsHeaderText()
+    }
+
+    @Step
+    fun getProblemsRecordCount(): Int {
+        return myRecordInfoPage.getProblemsRecordCount()
+    }
+
+    @Step
+    fun getProblemsMessage(): String {
+        return myRecordInfoPage.getProblemsMessage()
+    }
+
 }
 

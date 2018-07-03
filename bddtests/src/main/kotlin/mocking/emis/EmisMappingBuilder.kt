@@ -22,6 +22,7 @@ import models.Patient
 import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotRequest
 import mocking.emis.appointments.CancelAppointmentRequest
+import mocking.emis.problems.EmisProblemsBuilder
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
 
@@ -71,6 +72,8 @@ open class EmisMappingBuilder(private val configuration: EmisConfiguration, priv
     fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+
+    fun problemsRequest(patient: Patient) = EmisProblemsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 

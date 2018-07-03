@@ -191,8 +191,9 @@ class WorkerClient {
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
+        val json = gson.fromJson<MyRecordResponse>(result, MyRecordResponse::class.java)
 
-        return gson.fromJson<MyRecordResponse>(result, MyRecordResponse::class.java)
+        return json
     }
 
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {

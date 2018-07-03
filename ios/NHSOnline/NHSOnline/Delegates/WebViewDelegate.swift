@@ -176,7 +176,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             case .NHS_111:
                 tabBarDelegate.selectMenu(menu: .Symptoms)
                 break
-            case .ORGAN_DONATION:
+            case .ORGAN_DONATION, .DATA_SHARING:
                 tabBarDelegate.selectMenu(menu: .More)
                 break
             default : break
