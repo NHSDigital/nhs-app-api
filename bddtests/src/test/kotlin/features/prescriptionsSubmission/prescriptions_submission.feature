@@ -15,7 +15,7 @@ Feature: Prescriptions submission
     Given I select 5 <GP System> repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
-    Then I see a order successful message on the Repeat prescription page with the correct prescriptions
+    Then I see a order successful message on the Repeat prescription page with 6 prescriptions
     Examples:
     | GP System |
     | EMIS      |
@@ -25,7 +25,7 @@ Feature: Prescriptions submission
     Given I select 1 <GP System> repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
     When I click Confirm and order repeat prescription
-    Then I see a order successful message on the Repeat prescription page with the correct prescriptions
+    Then I see a order successful message on the Repeat prescription page with 2 prescriptions
     Examples:
     | GP System |
     | EMIS      |

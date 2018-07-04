@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import models.prescriptions.HistoricPrescription
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
 
@@ -27,7 +28,7 @@ open class PrescriptionsSteps {
         var actualJson = gson.toJson(list).toString()
 
         Assert.assertTrue(expectedJson.equals(actualJson))
-        Assert.assertTrue(p.count() == expectedPrescriptions)
+        assertEquals(expectedPrescriptions, p.count())
     }
 
     @Step

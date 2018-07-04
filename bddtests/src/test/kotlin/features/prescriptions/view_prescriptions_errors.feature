@@ -42,7 +42,8 @@ Feature: View prescriptions error cases
 
   @NHSO-513
   Scenario: A user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
-    Given I have 10 EMIS past repeat prescriptions
+    Given I am using EMIS GP System
+    And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     But The courses endpoint is throwing a server error
     When I navigate to prescriptions
@@ -51,7 +52,8 @@ Feature: View prescriptions error cases
 
   @NHSO-514
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
-    Given I have 10 <GP System> past repeat prescriptions
+    Given I am using <GP System> GP System
+    And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
@@ -68,7 +70,8 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
-    Given I have 10 <GP System> past repeat prescriptions
+    Given I am using <GP System> GP System
+    And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat

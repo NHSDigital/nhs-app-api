@@ -10,7 +10,7 @@ Feature: My appointments
   @backend
   Scenario: API appropriately filters for upcoming appointments
     Given I have upcoming appointments
-    And I have logged in and have a valid session cookie
+    And I have logged in and have a valid session cookie for EMIS
     When the API retrieves upcoming appointments from "Emis"
     Then I will only receive upcoming appointments
     And a list of cancellation reasons
