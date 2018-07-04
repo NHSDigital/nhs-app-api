@@ -100,8 +100,7 @@ Feature: Book an available appointment slot
   @pending  @NHSO-71
   @smoketest
   Scenario: A user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
-    Given I am logged in
-    And there are available appointment slots
-    When I click appointments button in menu
-    And I select appointment slot and click Book this appointment button
-    Then I see Book this appointment screen when Change this appointment button is clicked
+    Given I am on the appointments booking page
+    And I have selected an appointment slot to book
+    When I choose to change the appointment slot
+    Then available slots are displayed that meet the default criteria
