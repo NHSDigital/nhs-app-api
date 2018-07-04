@@ -144,13 +144,15 @@ Feature: View courses
 
   @NHSO-556
   Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
-    Given prescriptions is disabled at a GP Practice level
+    Given I am using EMIS GP System
+    And prescriptions is disabled at a GP Practice level
     When I browse to the page at /prescriptions/repeat-courses
     Then I see a message informing me that I don't currently have access to this service
 
   @NHSO-556
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
-    Given prescriptions is disabled at a GP Practice level
+    Given I am using EMIS GP System
+    And prescriptions is disabled at a GP Practice level
     When I browse to the page at /prescriptions/confirm-prescription-details
     Then I see a message informing me that I don't currently have access to this service
 
