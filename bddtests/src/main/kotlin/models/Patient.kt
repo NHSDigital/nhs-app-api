@@ -4,6 +4,7 @@ import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
+import worker.models.session.UserSessionRequest
 
 data class Patient(
         val title:String = "",
@@ -24,9 +25,15 @@ data class Patient(
         val nhsNumbers: List<String> = emptyList(),
         val patientId: String = "",
         val passphrase: String = "",
-        val onlineUserId: String = ""
+        val onlineUserId: String = "",
+        val cidUserSession: UserSessionRequest= UserSessionRequest(
+                authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
+                codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
+        ),
+        val accessToken: String ="access_token"
 ) {
     companion object {
+
         private val defaultAddress = Address(
                 houseNameFlatNumber = "99",
                 numberStreet = "Fake Street",

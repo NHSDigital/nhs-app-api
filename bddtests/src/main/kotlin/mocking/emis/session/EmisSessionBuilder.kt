@@ -18,7 +18,6 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
         val bodyProperties = CreateSessionRequestModel(patient.connectionToken, patient.odsCode)
 
         requestBuilder
-                .andHeader(HEADER_API_END_USER_SESSION_ID, patient.endUserSessionId)
                 .andHeader("Content-Type", CONTENT_TYPE_APPLICATION_JSON)
                 .andJsonBody(bodyProperties)
     }

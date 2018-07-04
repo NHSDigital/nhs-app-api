@@ -62,6 +62,9 @@ task mock(type: JavaExec) {
     systemProperty "url", System.getProperty("url")
     systemProperty "wiremockUrl", System.getProperty("wiremockUrl")
     main = "mocking.defaults.MockDataPopulate"
+    if (System.getProperty("mockArgs") != null){
+        args Eval.me(System.getProperty("mockArgs"))
+    }
 }
 
 test {

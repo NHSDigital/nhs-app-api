@@ -1,14 +1,16 @@
 package mocking.emis.session
 
 import mocking.GsonFactory
+import mocking.defaults.MockDefaults
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.EndUserSessionResponse
 import mocking.models.Mapping
+import models.Patient
 import org.apache.http.HttpStatus
 
 
-class EmisEndUserSessionBuilder(configuration: EmisConfiguration)
+class EmisEndUserSessionBuilder(configuration: EmisConfiguration, patient: Patient = MockDefaults.patient)
     : EmisMappingBuilder(configuration, "POST", "/sessions/endusersession") {
     init {
         // no extra params required

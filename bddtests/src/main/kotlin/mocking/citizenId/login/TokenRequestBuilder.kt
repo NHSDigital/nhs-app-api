@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.login.token.SucceededResponse
+import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import java.io.UnsupportedEncodingException
@@ -56,7 +57,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
     }
 
     fun respondWithSuccess(
-            accessToken: String = "access_token",
+            accessToken: String = MockDefaults.patient.accessToken,
             expiresIn: String = "30",
             refreshExpiresIn: String = "30",
             refreshToken: String = "refresh_token",

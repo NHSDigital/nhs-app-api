@@ -14,22 +14,22 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId {
-            createAccountRequest()
+            createAccountRequest(patient = patient)
                     .respondWithLoginPage()
         }
 
         mockingClient.forCitizenId {
-            completeLoginRequest()
-                    .respondWithRedirectResponse(MockDefaults.userSessionRequest.authCode!!)
+            completeLoginRequest(patient)
+                    .respondWithRedirectResponse()
         }
 
         mockingClient.forCitizenId {
-            tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
-                    .respondWithSuccess()
+            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
+                    .respondWithSuccess(accessToken = patient.accessToken)
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest("Bearer access_token")
+            userInfoRequest("Bearer ${patient.accessToken}")
                     .respondWithSuccess(patient)
         }
     }

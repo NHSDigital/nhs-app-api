@@ -34,6 +34,8 @@ open class SharedStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
+    lateinit var patient: Patient
+
     @Before
     fun resetWiremock() {
         MockingClient.instance.clearWiremock()
@@ -43,7 +45,7 @@ open class SharedStepDefinitions {
     fun system(system: String) {
 
         if(system == "wiremock"){
-            initialiseWiremock()
+            initialiseEmis()
         }
         if(system == "EMIS"){
             initialiseEmis()
@@ -53,36 +55,22 @@ open class SharedStepDefinitions {
         }
     }
 
-    fun initialiseWiremock() {
+    private fun initialiseEmis() {
+        this.patient = MockDefaults.patient
         MockDataPopulate(mockingClient).populate()
-        mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
+        mockingClient.forEmis { sessionRequest(this@SharedStepDefinitions.patient).respondWithSuccess(this@SharedStepDefinitions.patient, AssociationType.Self) }
     }
 
-    fun initialiseEmis() {
-        MockDataPopulate(mockingClient).populate()
-        mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
-    }
-
-    fun initialiseTpp() {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
-
-        mockingClient.forTpp {
-
-            var authReply = AuthenticateReply()
-            authReply.uuid = UUID.randomUUID().toString()
-            authReply.user.person.dateOfBirth = "1989-01-25"
-
-            authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(authReply)
-        }
-
-        val tppFactory = TppSessionCreateJourneyFactory(mockingClient)
-        tppFactory.createFor(Patient.kevinBarry)
+    private fun initialiseTpp() {
+        this.patient = Patient.getDefault("TPP")
+        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+        TppSessionCreateJourneyFactory(mockingClient).createFor(this.patient)
     }
 
     @Given("^I am logged in$")
     open fun iAmLoggedIn() {
         browser.goToApp()
-        login.asDefault()
+        login.using(this.patient)
     }
 
     @Given("^I am not logged in$")

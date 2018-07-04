@@ -99,14 +99,14 @@ class CommonSteps : AbstractSteps() {
     @Given("^I have logged into (.*) and have a valid session cookie$")
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
 
+        val patient = Patient.getDefault(gpSystem)
+
         when (gpSystem) {
             EMIS -> {
-                val accessToken = "access_token"
-
                 mockingClient.forCitizenId {
-                    tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
+                    tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
                             .respondWithSuccess(
-                                    accessToken,
+                                    patient.accessToken,
                                     "30",
                                     "30",
                                     "refresh_token",
@@ -114,7 +114,7 @@ class CommonSteps : AbstractSteps() {
                 }
 
                 mockingClient.forCitizenId {
-                    userInfoRequest("Bearer ".plus(accessToken))
+                    userInfoRequest("Bearer ".plus(patient.accessToken))
                             .respondWithSuccess(Patient.getDefault("EMIS"))
                 }
 
@@ -144,7 +144,7 @@ class CommonSteps : AbstractSteps() {
             }
         }
 
-        sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
+        sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(patient.cidUserSession)
         Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
     }
 

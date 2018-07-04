@@ -37,6 +37,9 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import pages.prescription.RepeatPrescriptionsPage;
 
+const val EMIS = "EMIS"
+const val TPP = "TPP"
+
 open class PrescriptionsStepDefinitions {
 
     @Steps
@@ -44,8 +47,9 @@ open class PrescriptionsStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
-    val emisPatient = Patient.montelFrye
-    val tppPatient = Patient.kevinBarry
+    val emisPatient = Patient.getDefault(EMIS)
+    val tppPatient = Patient.getDefault(TPP)
+    lateinit var currentPatient: Patient
 
     val FROM_DATE = "FromDate"
     val TO_DATE = OffsetDateTime.now()
@@ -56,10 +60,6 @@ open class PrescriptionsStepDefinitions {
     var numOfRepeats: Int = 0
     var fromDate: String? = null
     lateinit var currentGPSystem: String
-    lateinit var currentPatient: Patient
-
-    private val EMIS = "EMIS"
-    private val TPP = "TPP"
 
     lateinit var PrescriptionsListResponse: PrescriptionsListResponse
 
@@ -94,7 +94,7 @@ open class PrescriptionsStepDefinitions {
     @When("^I am on the prescriptions page")
     fun whenIAmOnThePrescriptionsPage() {
         browser.goToApp()
-        login.asDefault()
+        login.using(currentPatient)
         navigation.select("Prescriptions")
     }
 

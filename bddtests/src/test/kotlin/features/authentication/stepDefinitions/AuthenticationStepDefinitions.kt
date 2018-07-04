@@ -56,8 +56,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Steps
     lateinit var myAccount: MyAccountSteps
 
-    private var authCode: String? = MockDefaults.userSessionRequest.authCode
-    private var codeVerifier: String? = MockDefaults.userSessionRequest.codeVerifier
+    private var authCode: String? = MockDefaults.patient.cidUserSession.authCode
+    private var codeVerifier: String? = MockDefaults.patient.cidUserSession.codeVerifier
     private val accessToken = MockDefaults.DEFAULT_ACCESS_TOKEN
     private val bearerToken = MockDefaults.DEFAULT_BEARER_TOKEN
     lateinit private var patient: Patient
@@ -75,7 +75,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis {
             endUserSessionRequest().respondWithSuccess(
                     endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID)
-                    .delayedBy(Duration.ofSeconds(2))
+                    .delayedBy(Duration.ofSeconds(10))
         }
     }
 
@@ -495,18 +495,19 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         this.patient = Patient.getDefault(gpSystem)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+
         when(gpSystem.toUpperCase()) {
             "EMIS" -> { EmisSessionCreateJourneyFactory(mockingClient).createFor(patient) }
             "TPP" -> { TppSessionCreateJourneyFactory(mockingClient).createFor(patient) }
         }
 
         browser.goToApp()
-        login.asDefault()
+        login.using(this.patient)
     }
 
     @When("^I log in$")
     fun logIn() {
-        login.asDefault(false)
+        login.asDefault(waitForSpinnerToDisappear = false)
     }
 
     @When("I am on the home page")
@@ -599,7 +600,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @And("^I complete the account registration$")
     fun iCompleteAccountRegistration() {
-        login.createAccount()
+        login.createAccount(this.patient)
     }
 
     @Then("^the spinner appears$")

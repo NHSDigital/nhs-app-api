@@ -31,11 +31,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         val patient = Patient.getDefault("EMIS")
         val patientTpp = Patient.getDefault("TPP")
 
-        val userSessionRequest = UserSessionRequest(
-                authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
-                codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
-        )
-
         val tppAuthenticateRequest = Authenticate(
                 apiVersion = "1",
                 accountId = patientTpp.accountId,

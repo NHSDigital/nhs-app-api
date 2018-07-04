@@ -1,5 +1,6 @@
 package pages
 
+import mocking.defaults.MockDefaults
 import models.Patient
 import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.annotations.findby.How
@@ -16,6 +17,9 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     @FindBy(how = How.XPATH, using = "//*[@id='btn_home_symptoms']")
     lateinit var symptomsButton: WebElementFacade
+
+    @FindBy(how = How.XPATH, using = "//input[@name='mock_patient']")
+    lateinit var patientInput: WebElementFacade
 
     @FindBy(how = How.XPATH, using = "//*[@data-id='login-button']")
     lateinit var loginButton: WebElementFacade
@@ -34,14 +38,15 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                 .click()
     }
 
-    fun signIn() {
+    fun signIn(patient: Patient = MockDefaults.patient) {
         loginButton.click()
 
         if (onMobile()) {
             switchToPage(CitizenIDPage::class.java).login("realmadmin@gmail.com", "Welcome123!")
         } else {
             // complete login until CID integration developed
-            findByXpath("//*[@id='complete_login']").click()
+            patientInput.sendKeys(patient.hashCode().toString())
+            findByXpath("//input[@type='submit']").click()
         }
     }
 
@@ -49,14 +54,14 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         waitFor({ !spinnerVisible() })
     }
 
-    fun createAccount() {
+    fun createAccount(patient: Patient) {
         clickCreateAccountButton()
 
         if (onMobile()) {
             switchToPage(CitizenIDPage::class.java).login("realmadmin@gmail.com", "Welcome123!")
         } else {
             // complete login until CID integration developed
-            accountCreationPage.completeAccountCreation()
+            accountCreationPage.completeAccountCreation(patient)
         }
     }
 

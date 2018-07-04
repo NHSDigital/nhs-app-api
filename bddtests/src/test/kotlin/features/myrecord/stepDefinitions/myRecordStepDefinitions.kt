@@ -84,26 +84,25 @@ open class MyRecordStepDefinitions {
     @Given("^I have logged in and have a valid session cookie for (.*)$")
     fun givenIHaveLoggedInAndHaveAValidSessionCookieFor(getService: String) {
 
-        val accessToken = "access_token"
+        val patient = Patient.getDefault(getService)
 
         mockingClient.forCitizenId {
-            tokenRequest(MockDefaults.userSessionRequest.codeVerifier, MockDefaults.userSessionRequest.authCode)
+            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
                     .respondWithSuccess(
-                            accessToken,
+                            patient.accessToken,
                             "30",
                             "30",
                             "refresh_token",
                             "token_type")
         }
 
+        mockingClient.forCitizenId {
+            userInfoRequest("Bearer ".plus(patient.accessToken))
+                    .respondWithSuccess(Patient.getDefault(getService))
+        }
+
         when(getService) {
             "EMIS" -> {
-
-                mockingClient.forCitizenId {
-                    userInfoRequest("Bearer ".plus(accessToken))
-                            .respondWithSuccess(Patient.getDefault("EMIS"))
-                }
-
                 mockingClient.forEmis {
                     endUserSessionRequest()
                             .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
@@ -113,21 +112,14 @@ open class MyRecordStepDefinitions {
                     sessionRequest(MockDefaults.patient)
                             .respondWithSuccess(MockDefaults.patient, AssociationType.Self)
                 }
-
-                Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
-
             }
             "TPP" -> {
-                mockingClient.forCitizenId {
-                    userInfoRequest("Bearer ".plus(accessToken))
-                            .respondWithSuccess(Patient.getDefault("TPP"))
-                }
-
                 mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(MockDefaults.tppAuthenticateReplyResponse) }
 
-                Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(MockDefaults.userSessionRequest)
             }
         }
+
+        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(patient.cidUserSession)
     }
 
     @Given("the GP Practice has enabled summary care record functionality")

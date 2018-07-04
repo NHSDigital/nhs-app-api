@@ -10,7 +10,6 @@ import org.openqa.selenium.WebDriver
 @CucumberOptions(
         features = ["src/test/kotlin/features/appointments"],
         glue = ["features"])
-
 class AppointmentsTestRunner {
 
     @Managed

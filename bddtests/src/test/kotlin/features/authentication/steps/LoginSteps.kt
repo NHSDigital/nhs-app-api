@@ -1,5 +1,7 @@
 package features.authentication.steps
 
+import mocking.defaults.MockDefaults
+import models.Patient
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.LoginPage
@@ -14,8 +16,14 @@ open class LoginSteps {
     }
 
     @Step
-    fun asDefault(waitForSpinnerToDisappear: Boolean = true) {
-        loginPage.signIn()
+    fun using(patient: Patient) {
+        loginPage.signIn(patient)
+    }
+
+    @Step
+    fun asDefault(patient: Patient = MockDefaults.patient,
+                  waitForSpinnerToDisappear: Boolean = true) {
+        using(patient)
         if (waitForSpinnerToDisappear) loginPage.waitForSpinnerToDisappear()
     }
 
@@ -28,12 +36,12 @@ open class LoginSteps {
     @Step
     fun clickCreateAccountButton()
     {
-        loginPage.clickCreateAccountButton();
+        loginPage.clickCreateAccountButton()
     }
 
     @Step
-    fun createAccount(){
-        loginPage.createAccount();
+    fun createAccount(patient: Patient){
+        loginPage.createAccount(patient)
     }
 
     @Step

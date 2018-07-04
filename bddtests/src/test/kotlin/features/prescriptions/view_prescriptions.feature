@@ -3,7 +3,7 @@ Feature: View prescriptions
   A user can view information about their prescriptions after logging in
 
   @NHSO-497
-  Scenario Outline: A user can see the prescriptions menu button
+  Scenario Outline: A <GP System> user can see the prescriptions menu button
     Given <GP System> is initialised
     And I am using <GP System> GP System
     And I am logged in

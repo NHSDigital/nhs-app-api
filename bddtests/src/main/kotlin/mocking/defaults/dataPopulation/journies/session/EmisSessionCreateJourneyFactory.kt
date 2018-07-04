@@ -15,11 +15,7 @@ class EmisSessionCreateJourneyFactory(val client: MockingClient) {
 
         client
                 .forEmis {
-                    sessionRequest(Patient(
-                            endUserSessionId = patient.endUserSessionId,
-                            connectionToken = patient.connectionToken,
-                            odsCode = patient.odsCode)
-                    )
+                    sessionRequest(patient)
                             .respondWithSuccess(patient, AssociationType.Self)
                 }
     }

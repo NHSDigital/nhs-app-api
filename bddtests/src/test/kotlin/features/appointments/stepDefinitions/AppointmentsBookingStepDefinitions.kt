@@ -267,7 +267,7 @@ class AppointmentsBookingStepDefinitions {
     fun availableSlotsAreReturnedWithAppropriateFields() {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
-        for (i in 0..1)
+        for (i in 0..result.slots.size-1)
             unmatchedExpectedSlots[defaultEmisAppointmentSlots[i].slotId.toString()] = SlotResponseObject(
                     defaultEmisAppointmentSlots[i].slotId.toString(),
                     defaultEmisMetaSlotSessions[i].sessionName + " - " + defaultEmisAppointmentSlots[i].slotTypeName,
@@ -278,12 +278,12 @@ class AppointmentsBookingStepDefinitions {
             )
         for (actualSlot in result.slots) {
             println(actualSlot.toString())
-            assertNotNull(actualSlot.id)
-            assertNotNull(actualSlot.type)
-            assertNotNull(actualSlot.startTime)
-            assertNotNull(actualSlot.endTime)
-            assertNotNull(actualSlot.location)
-            assertNotNull(actualSlot.clinicians)
+            assertNotNull("Null id", actualSlot.id)
+            assertNotNull("Null type", actualSlot.type)
+            assertNotNull("Null startTime", actualSlot.startTime)
+            assertNotNull("Null endTime", actualSlot.endTime)
+            assertNotNull("Null location", actualSlot.location)
+            assertNotNull("Null clinicians", actualSlot.clinicians)
             val expectedSlot = unmatchedExpectedSlots[actualSlot.id]!!
             assertNotNull("Expected slot not found. ", expectedSlot)
             assertEquals(expectedSlot.type, actualSlot.type)

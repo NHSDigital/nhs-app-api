@@ -1,11 +1,18 @@
 package mocking.citizenId.login
 
 import mocking.citizenId.CitizenIdMappingBuilder
+import mocking.defaults.MockDefaults
 import mocking.models.Mapping
+import models.Patient
 
-class CompleteLoginRequestBuilder : CitizenIdMappingBuilder("GET", "/cicauth/realms/NHS/protocol/openid-connect/complete-login") {
+class CompleteLoginRequestBuilder(val patient: Patient = MockDefaults.patient)
+    : CitizenIdMappingBuilder("GET", "/cicauth/realms/NHS/protocol/openid-connect/complete-login") {
 
-    fun respondWithRedirectResponse(code: String): Mapping {
-        return redirectTo("{{request.query.redirect_uri}}?state={{request.query.state}}&code=$code")
+    init {
+        requestBuilder.andQueryParameter("mock_patient", patient.hashCode().toString(), "equalTo")
+    }
+
+    fun respondWithRedirectResponse(): Mapping {
+        return redirectTo("{{request.query.redirect_uri}}?state={{request.query.state}}&code=${patient.cidUserSession.authCode!!}")
     }
 }
