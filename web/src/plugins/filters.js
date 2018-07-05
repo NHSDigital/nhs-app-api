@@ -20,19 +20,19 @@ Vue.filter('datePart',
       switch (datePart) {
         case "Unknown":
         case "YearMonthDay":
-          return value ? moment(value).format('D MMMM YYYY') : ''
+          return value ? moment.utc(value).format('D MMMM YYYY') : ''
           break;
         case "Year":
-          return value ? moment(value).format('YYYY') : ''
+          return value ? moment.utc(value).format('YYYY') : ''
           break;
         case "YearMonth":
-          return value ? moment(value).format('MMMM YYYY') : ''
+          return value ? moment.utc(value).format('MMMM YYYY') : ''
           break;
         case "YearMonthDayTime":
-          return value ? moment(value).utc().format("D MMMM YYYY hh:mm") : ''
+          return value ? moment.utc(value).format("D MMMM YYYY hh:mm") : ''
           break;
         default:
-          return value ? moment(value).format('D MMMM YYYY'): ''
+          return value ? moment.utc(value).format('D MMMM YYYY'): ''
           break;
       }
   }
