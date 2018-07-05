@@ -4,6 +4,7 @@ import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
+import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
 
 data class Patient(
@@ -30,7 +31,8 @@ data class Patient(
                 authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
         ),
-        val accessToken: String ="access_token"
+        val accessToken: String ="access_token",
+        val tppUserSession: TppUserSession? = null
 ) {
     companion object {
 
@@ -160,7 +162,10 @@ data class Patient(
                 onlineUserId = "84df400000000000",
                 passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=",
                 connectionToken =  "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
-                endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID
+                endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                tppUserSession = TppUserSession("ZT8wLjK6beFOdXoiNIHbD+TbPrl0Y3KmVXy4GYM253hQlxwp2qMKW7zgbjgTWJzCvTcZxb2BZNW5IdGtaWtahGkv" +
+                        "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
+                        "84df400000000000", "KGPD", "84df400000000000")
         )
     }
 }

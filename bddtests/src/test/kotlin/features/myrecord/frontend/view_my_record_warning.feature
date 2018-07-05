@@ -1,12 +1,11 @@
-Feature: View My Medical Record Warning
+Feature: View My Medical Record Information - Warning
 
   @smoketest
   @NHSO-359
   Scenario Outline: An EMIS user navigates to my record warning page
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
-    When I click my record button on menu bar
+    And I am on the record warning page
     Then I see record warning page opened
     And I see header text is My medical record
     And I see your record may contain sensitive information message
@@ -23,7 +22,6 @@ Feature: View My Medical Record Warning
   @NHSO-359
   Scenario Outline: An EMIS user navigates back to home
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on the record warning page
     When I click the back to home button
@@ -37,8 +35,8 @@ Feature: View My Medical Record Warning
    @NHSO-1613
    Scenario Outline: An EMIS user tries to navigate directly to my record through url
      Given the my record wiremocks are initialised for <Service>
-     And I am logged in
      And the GP Practice has enabled demographics functionality for <Service>
+     And I am on the record warning page
      When I enter url address for my record directly into the url
      Then I see record warning page opened
      And I see header text is My medical record

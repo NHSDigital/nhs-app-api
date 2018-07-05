@@ -1,10 +1,9 @@
-Feature: View My Medical Record Information
+Feature: View My Medical Record Information - Problems
 
   @smoketest
   @NHSO-1095
   Scenario Outline: An EMIS user has Problems on their record
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled problems functionality for <Service>
     And I am on my record information page
@@ -20,7 +19,6 @@ Feature: View My Medical Record Information
   @NHSO-1095
   Scenario Outline: An EMIS user has no Problems on their record
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And no Problems records exist for the patient for <Service>
     And I am on my record information page
@@ -35,7 +33,6 @@ Feature: View My Medical Record Information
   @NHSO-1095
   Scenario Outline: An EMIS user does not have access to Problems
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the user does not have access to view Problems for <Service>
     And I am on my record information page
@@ -50,7 +47,6 @@ Feature: View My Medical Record Information
   @NHSO-1095
   Scenario Outline: An Error occurs retrieving Problems data
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And there is an error retrieving Problems data for <Service>
     And I am on my record information page

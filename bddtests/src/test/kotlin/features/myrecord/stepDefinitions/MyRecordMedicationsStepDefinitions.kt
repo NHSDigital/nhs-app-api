@@ -15,12 +15,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class MyRecordMedicationsStepDefinitions {
-
-    @Steps
-    val mockingClient = MockingClient.instance
-
-    val HTTP_EXCEPTION = "HttpException"
+open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Then("I receive the medications object")
     fun thenIReceiveAMedicationsObject() {
@@ -30,15 +25,16 @@ open class MyRecordMedicationsStepDefinitions {
 
     @Given("the GP Practice has enabled medications functionality for (.*)")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
+                    medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
                 }
             }
             "TPP"->{
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithSuccess(MedicationsData.getTppMedicationData())
+                    viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppMedicationData())
                 }
             }
         }
@@ -46,11 +42,12 @@ open class MyRecordMedicationsStepDefinitions {
 
     @Given("the GP Practice has enabled medication functionality and the patient has no medications for (.*)")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityandpatienthasnomedicationsfor(getService: String) {
+        setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" -> {
                 try {
                     mockingClient.forEmis {
-                        medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                        medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
                     }
 
                     val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
@@ -63,7 +60,7 @@ open class MyRecordMedicationsStepDefinitions {
             "TPP" -> {
                 try {
                     mockingClient.forTpp {
-                        viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
+                        viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
                 }
 
                 val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
@@ -80,15 +77,16 @@ open class MyRecordMedicationsStepDefinitions {
 
     @But("the GP Practice has disabled medications functionality for (.*)")
     fun butTheGPPracticeHasDisabledMedicationsFunctionalityFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    medicationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
         }

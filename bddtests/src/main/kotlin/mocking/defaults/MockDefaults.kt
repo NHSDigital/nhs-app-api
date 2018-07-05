@@ -45,20 +45,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 )
         )
 
-        val tppAuthenticateErrorRequest = Authenticate(
-                apiVersion = "1",
-                accountId = "999999999",
-                passphrase = "nonexistingpassword",
-                unitId = DEFAULT_ODS_CODE_TPP,
-                uuid = DEFAULT_TPP_UUID,
-                application = Application(
-                        name = "NhsApp",
-                        version = "1.0",
-                        providerId = DEFAULT_TPP_PROVIDER_ID,
-                        deviceType = "NhsApp"
-                )
-        )
-
         val tppAuthenticateReplyResponse = AuthenticateReply(
                 patientId = patientTpp.patientId,
                 onlineUserId = patientTpp.onlineUserId,
@@ -84,9 +70,5 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 userFriendlyMessage = "There was a problem logging on",
                 uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
         )
-
-        val tppUserSession =  TppUserSession("ZT8wLjK6beFOdXoiNIHbD+TbPrl0Y3KmVXy4GYM253hQlxwp2qMKW7zgbjgTWJzCvTcZxb2BZNW5IdGtaWtahGkv" +
-            "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
-            "84df400000000000", "KGPD", "84df400000000000")
     }
 }

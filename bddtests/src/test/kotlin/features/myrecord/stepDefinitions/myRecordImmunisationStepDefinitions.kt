@@ -11,14 +11,11 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 
-open class MyRecordImmunisationStepDefinitions {
-
-    @Steps
-    val mockingClient = MockingClient.instance
-    val HTTP_EXCEPTION = "HttpException"
+open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Given("the GP Practice has enabled immunisations functionality and multiple immunisation records exist for (.*)")
     fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExistfor(getService:String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
@@ -33,6 +30,7 @@ open class MyRecordImmunisationStepDefinitions {
 
     @Given("no immunisation records exist for the patient for (.*)")
     fun givenNoImmunisationRecordsExistForThePatientfor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
@@ -47,6 +45,7 @@ open class MyRecordImmunisationStepDefinitions {
 
     @Given("the user does not have access to view immunisations for (.*)")
     fun givenUserDoesNotHaveAccessToViewImmunisationsfor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
@@ -61,6 +60,7 @@ open class MyRecordImmunisationStepDefinitions {
 
     @Given("there is an error retrieving immunisations data for (.*)")
     fun givenThereIsAnErrorRetrievingImmunisationsDatafor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {

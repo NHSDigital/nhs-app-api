@@ -11,25 +11,22 @@ import worker.models.myrecord.MyRecordResponse
 import worker.NhsoHttpException
 import worker.WorkerClient
 
-open class MyRecordProblemsStepDefinitions {
-
-    @Steps
-    val mockingClient = MockingClient.instance
-    val HTTP_EXCEPTION = "HttpException"
+open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Given("the GP Practice has enabled problems functionality and the patient has 3 problems")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityAndPatientHasSomeProblems(count: Int) {
         mockingClient.forEmis {
-            problemsRequest(MockDefaults.patient).respondWithSuccess(ProblemsData.getProblemsData())
+            problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemsData())
         }
     }
 
     @Given("the GP Practice has enabled problems functionality for (.*)")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(MockDefaults.patient).respondWithSuccess(ProblemsData.getProblemsData())
+                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemsData())
                 }
             }
             "TPP"->{
@@ -40,16 +37,17 @@ open class MyRecordProblemsStepDefinitions {
     @Given("the GP Practice has enabled problems functionality and has 3 different problems with different date formats")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityAndHasThreeDifferentProblemsWithDifferentDateFormats() {
         mockingClient.forEmis {
-            problemsRequest(MockDefaults.patient).respondWithSuccess(ProblemsData.getProblemRecordsWithDifferentDateParts())
+            problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemRecordsWithDifferentDateParts())
         }
     }
 
     @But("the GP Practice has disabled problems functionality for (.*)")
     fun butTheGPPracticeHasDisabledProblemsFunctionality(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP"->{
@@ -58,10 +56,11 @@ open class MyRecordProblemsStepDefinitions {
     }
     @Given("no Problems records exist for the patient for (.*)")
     fun givenNoProblemsRecordsExistForThePatient(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(MockDefaults.patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
+                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
                 }
             }
             "TPP"->{
@@ -71,10 +70,11 @@ open class MyRecordProblemsStepDefinitions {
 
     @Given("the user does not have access to view Problems for (.*)")
     fun givenUserDoesNotHaveAccessToViewProblems(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP"->{
@@ -84,10 +84,11 @@ open class MyRecordProblemsStepDefinitions {
 
     @Given("there is an error retrieving Problems data for (.*)")
     fun givenThereIsAnErrorRetrievingProblemsData(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithNonDataAccessException()
                 }
             }
             "TPP"->{

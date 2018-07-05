@@ -11,18 +11,15 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class MyRecordTestResultsStepDefinitions {
-
-    @Steps
-    val mockingClient = MockingClient.instance
-    val HTTP_EXCEPTION = "HttpException"
+open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Given("the GP Practice has multiple test results for (.*)")
     fun givenTheGpPracticeHasMultipleTestResultsFor(getService:String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
                 }
             }
             "TPP" -> {
@@ -33,10 +30,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("the GP Practice has a single test result with multiple child values with no ranges for (.*)")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithNoRangesFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithNoRanges())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithNoRanges())
                 }
             }
             "TPP" -> {
@@ -47,10 +45,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("the GP Practice has a single test result with single child values with no ranges for (.*)")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
                 }
             }
             "TPP" -> {
@@ -61,10 +60,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("the GP Practice has a single test result with multiple child values with ranges for (.*)")
     fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
                 }
             }
             "TPP" -> {
@@ -75,10 +75,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("the GP Practice has a single test result with single child value with A range for (.*)")
     fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
                 }
             }
             "TPP" -> {
@@ -89,10 +90,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("the GP Practice has test results enabled and a single test result exists with no child values or range for (.*)")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
                 }
             }
             "TPP" -> {
@@ -103,10 +105,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("the GP Practice has a single test result with no child values and range for (.*)")
     fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
                 }
             }
             "TPP" -> {
@@ -117,10 +120,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("I do not have access to test results for (.*)")
     fun givenIDoNotHaveAccessToTestResultsFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
@@ -131,10 +135,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("I have no test results for (.*)")
     fun givenIHaveNoTestResultsFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
                 }
             }
             "TPP" -> {
@@ -145,10 +150,11 @@ open class MyRecordTestResultsStepDefinitions {
 
     @Given("an error occurred retrieving the test results from (.*)")
     fun givenAnErrorOccurredRetrievingTestResultsFrom(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithNonDataAccessException()
                 }
             }
             "TPP" -> {

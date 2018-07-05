@@ -12,12 +12,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
 
-open class DemographicsStepDefinitions {
-
-    @Steps
-    val mockingClient = MockingClient.instance
-
-    val HTTP_EXCEPTION = "HttpException"
+open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @When("I get the users demographic data")
     fun whenIGetTheUsersDemographicsDataFor() {
@@ -32,15 +27,16 @@ open class DemographicsStepDefinitions {
 
     @Given("the GP Practice has enabled demographics functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    demographicsRequest(MockDefaults.patient).respondWithSuccess(DemographicsData.getEmisDemographicData())
+                    demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithSuccess(DemographicsData.getEmisDemographicData())
                 }
             }
             "TPP"->{
                 mockingClient.forTpp {
-                    patientSelectedPost(MockDefaults.tppUserSession).respondWithSuccess(DemographicsData.getTppDemographicsData())
+                    patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData())
                 }
             }
         }
@@ -48,6 +44,7 @@ open class DemographicsStepDefinitions {
 
     @Given("the GP Practice has disabled demographics functionality for (.*)")
     fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor(getService: String) {
+        setPatientToDefaultFor(getService)
         when(getService){
             "EMIS"->{
                 try {
@@ -61,7 +58,7 @@ open class DemographicsStepDefinitions {
             "TPP"->{
                 try {
                     mockingClient.forTpp {
-                        patientSelectedPost(MockDefaults.tppUserSession).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                        patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

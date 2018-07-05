@@ -1,9 +1,8 @@
-Feature: View My Medical Record Information
+Feature: View My Medical Record Information - Test Results
 
   @NHSO-686
   Scenario Outline: An EMIS user can view test result section
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
     Then I see the test result heading
@@ -17,7 +16,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user can view test result information
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has multiple test results for <Service>
     And I am on my record information page
@@ -31,7 +29,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user has no access to test result section
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And I do not have access to test results for <Service>
     And I am on my record information page
@@ -45,7 +42,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user has no test results
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And I have no test results for <Service>
     And I am on my record information page
@@ -59,7 +55,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An error occurs when trying to retrieve test result data from EMIS
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And an error occurred retrieving the test results from <Service>
     And I am on my record information page
@@ -73,7 +68,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user has one test result with one value
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has a single test result with single child values with no ranges for <Service>
     And I am on my record information page
@@ -87,7 +81,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user has one test result with one value and a range
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has a single test result with single child value with A range for <Service>
     And I am on my record information page
@@ -101,7 +94,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user has one test result with multiple child values
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has a single test result with multiple child values with no ranges for <Service>
     And I am on my record information page
@@ -115,7 +107,6 @@ Feature: View My Medical Record Information
   @NHSO-686
   Scenario Outline: An EMIS user has test results with multiple child values which have ranges
     Given the my record wiremocks are initialised for <Service>
-    And I am logged in
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has a single test result with multiple child values with ranges for <Service>
     And I am on my record information page

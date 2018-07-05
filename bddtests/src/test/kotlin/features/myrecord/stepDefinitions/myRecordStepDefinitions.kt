@@ -24,7 +24,7 @@ import mocking.emis.models.AssociationType
 import mocking.tpp.models.Error
 import models.Patient
 
-open class MyRecordStepDefinitions {
+open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var login: LoginSteps
@@ -37,45 +37,41 @@ open class MyRecordStepDefinitions {
     @Steps
     lateinit var homesteps: HomeSteps
 
-    @Steps
-    val mockingClient = MockingClient.instance
-    val HTTP_EXCEPTION = "HttpException"
-
     @Given("^the my record wiremocks are initialised for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedfor(getService: String) {
+        setPatientToDefaultFor(getService)
+
         when(getService){
             "EMIS" -> {
                 MockDataPopulate(mockingClient).populate()
-                mockingClient.forEmis { sessionRequest(MockDefaults.patient).respondWithSuccess(MockDefaults.patient, AssociationType.Self) }
 
                 mockingClient.forEmis {
-                    testResultsRequest(MockDefaults.patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                    testResultsRequest(patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
                 }
 
                 mockingClient.forEmis {
-                    immunisationsRequest(MockDefaults.patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                    immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
                 }
 
                 mockingClient.forEmis {
-                    allergiesRequest(MockDefaults.patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
+                    allergiesRequest(patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
                 }
 
                 mockingClient.forEmis {
-                    medicationsRequest(MockDefaults.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                    medicationsRequest(patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
                 }
 
                 mockingClient.forEmis {
-                    problemsRequest(MockDefaults.patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
+                    problemsRequest(patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
                 }
 
             }
             "TPP" -> {
                 MockDataPopulate(mockingClient).populate()
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
-                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(MockDefaults.tppAuthenticateReplyResponse) }
+                CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(MockDefaults.tppUserSession).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
+                    viewPatientOverviewPost(patient.tppUserSession!!).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
                 }
             }
         }
@@ -84,7 +80,7 @@ open class MyRecordStepDefinitions {
     @Given("^I have logged in and have a valid session cookie for (.*)$")
     fun givenIHaveLoggedInAndHaveAValidSessionCookieFor(getService: String) {
 
-        val patient = Patient.getDefault(getService)
+        setPatientToDefaultFor(getService)
 
         mockingClient.forCitizenId {
             tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
@@ -109,7 +105,7 @@ open class MyRecordStepDefinitions {
                 }
 
                 mockingClient.forEmis {
-                    sessionRequest(MockDefaults.patient)
+                    sessionRequest(patient)
                             .respondWithSuccess(MockDefaults.patient, AssociationType.Self)
                 }
             }
@@ -129,15 +125,16 @@ open class MyRecordStepDefinitions {
 
     @Given("the GP Practice has disabled summary care record functionality for (.*)")
     fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityfor(getService:String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    allergiesRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(MockDefaults.tppUserSession)
+                    viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
@@ -213,6 +210,8 @@ open class MyRecordStepDefinitions {
     @Given("^I am on the record warning page$")
     @Throws(Exception::class)
     fun i_am_on_the_record_warning_page() {
+        browser.goToApp()
+        login.using(this.patient)
         nav.select("MY_RECORD")
     }
 
@@ -270,7 +269,7 @@ open class MyRecordStepDefinitions {
     @Throws(Exception::class)
     fun i_am_on_my_record_information_page() {
         browser.goToApp()
-        login.asDefault()
+        login.using(this.patient)
         nav.select("MY_RECORD")
         recordSteps.clickAgreeandContinue()
         Assert.assertTrue(recordSteps.isOnMyRecordInfoPage())
