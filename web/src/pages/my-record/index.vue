@@ -59,7 +59,6 @@
         </h5>
         <problems :is-collapsed="isProblemsCollapsed"
                   :data="myRecord.problems"/>
-
       </div>
       <div v-else>
         <main :class="$style.content">
@@ -114,6 +113,13 @@ export default {
     TestResults,
     Problems,
   },
+  beforeRouteEnter(to, from, next) {
+    if (from.path === '/my-record/myrecordwarning') {
+      next();
+    } else {
+      next('/my-record/myrecordwarning');
+    }
+  },
   data() {
     return {
       PATIENTDETAILS,
@@ -137,18 +143,19 @@ export default {
       patientDetails: {},
     };
   },
-  created() {
-    this.$store.app.$http
-      .getV1PatientMyRecord({})
-      .then((data) => {
-        this.myRecord = data.response;
-        this.isPatientDetailsCollapsed = false;
-        this.hasLoaded = true;
-      });
+  mounted() {
     this.$store.app.$http
       .getV1PatientDemographics({})
       .then((data) => {
         this.patientDetails = data.response;
+        this.isPatientDetailsCollapsed = false;
+      }).then(() => {
+        this.$store.app.$http
+          .getV1PatientMyRecord({})
+          .then((data) => {
+            this.myRecord = data.response;
+            this.hasLoaded = true;
+          });
       });
   },
   methods: {

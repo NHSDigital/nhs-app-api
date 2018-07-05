@@ -109,7 +109,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
                     .respondWithSuccess(Patient.montelFrye)
         }
-        
         createEmisStubs()
     }
 

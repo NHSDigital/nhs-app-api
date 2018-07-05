@@ -3,8 +3,7 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.*
 import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
-import features.myrecord.*
-import mocking.defaults.MockDefaults
+import features.myrecord.mockData.ImmunisationsData
 import worker.models.myrecord.MyRecordResponse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -73,7 +72,7 @@ open class MyRecordImmunisationStepDefinitions {
             }
         }
     }
-    
+
     @When("I get the users immunisations")
     fun whenIGetTheUsersMyRecordData()
     {

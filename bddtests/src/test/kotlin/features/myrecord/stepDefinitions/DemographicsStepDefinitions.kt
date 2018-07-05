@@ -1,7 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.DemographicsData
+import features.myrecord.mockData.DemographicsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.tpp.models.Error
@@ -11,7 +11,6 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.demographics.Demographics
-import worker.models.demographics.TppUserSession
 
 open class DemographicsStepDefinitions {
 

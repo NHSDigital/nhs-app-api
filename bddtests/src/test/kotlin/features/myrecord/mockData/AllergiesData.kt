@@ -1,4 +1,4 @@
-package features.myrecord
+package features.myrecord.mockData
 
 import mocking.emis.allergies.AllergyMedicalRecord
 import mocking.emis.allergies.AllergyResponse

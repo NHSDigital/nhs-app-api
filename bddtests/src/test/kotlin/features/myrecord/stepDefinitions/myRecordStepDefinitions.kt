@@ -1,11 +1,12 @@
 package features.myrecord.stepDefinitions
 
+import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myrecord.*
+import features.myrecord.mockData.*
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -155,6 +156,13 @@ open class MyRecordStepDefinitions {
     @Throws(Exception::class)
     fun i_click_my_record_button_on_menu_bar() {
         nav.select("MY_RECORD")
+    }
+
+    @When("^I enter url address for my record directly into the url$")
+    @Throws(Exception::class)
+    fun i_enter_url_address_for_my_record_directly_into_the_url() {
+        val fullUrl = Config.instance.url+"/my-record"
+        browser.browseTo(fullUrl)
     }
 
     @Then("^I see record warning page opened$")

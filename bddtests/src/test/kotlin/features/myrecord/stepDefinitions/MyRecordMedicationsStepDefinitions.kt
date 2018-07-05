@@ -4,7 +4,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.myrecord.MedicationsData
+import features.myrecord.mockData.MedicationsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.tpp.models.Error

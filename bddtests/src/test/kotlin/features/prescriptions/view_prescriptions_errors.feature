@@ -64,7 +64,6 @@ Feature: View prescriptions error cases
     And I select 1 prescription to order
     And I wait for 20 seconds
     Then I see the appropriate error message for a course request error
-
     Examples:
       | GP System |
       | EMIS      |
@@ -81,7 +80,6 @@ Feature: View prescriptions error cases
     And I click 'Order a repeat prescription'
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
-
     Examples:
       | GP System |
       | EMIS      |

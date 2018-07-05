@@ -1,8 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.MedicationsData
-import features.myrecord.ProblemsData
+import features.myrecord.mockData.ProblemsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import net.serenitybdd.core.Serenity
@@ -11,7 +10,6 @@ import org.junit.Assert
 import worker.models.myrecord.MyRecordResponse
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.demographics.TppUserSession
 
 open class MyRecordProblemsStepDefinitions {
 

@@ -33,3 +33,22 @@ Feature: View My Medical Record Warning
     Examples:
       |Service|
       |EMIS|
+
+   @NHSO-1613
+   Scenario Outline: An EMIS user tries to navigate directly to my record through url
+     Given the my record wiremocks are initialised for <Service>
+     And I am logged in
+     And the GP Practice has enabled demographics functionality for <Service>
+     When I enter url address for my record directly into the url
+     Then I see record warning page opened
+     And I see header text is My medical record
+     And I see your record may contain sensitive information message
+     And I see sensitive information message highlighted yellow
+     And I see list of sensitive data information
+     And I see agree and continue button
+     And I see back to home button
+     And I see my record button on the nav bar is highlighted
+
+     Examples:
+       |Service|
+       |EMIS|

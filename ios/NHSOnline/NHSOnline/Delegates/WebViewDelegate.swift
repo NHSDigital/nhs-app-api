@@ -30,25 +30,25 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         shouldHandleErrors = false
         
         if let url = navigationAction.request.url {
-            if url.absoluteString != "about:blank" {
-                if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
-                    if matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
-                        let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
-                        decisionHandler(.cancel)
-                        webView.loadPage(url: urlString)
-                        
-                        return
-                    }
-                }
-              
-                if shouldOpenInSafari(url: url) {
+            guard navigationAction.targetFrame?.isMainFrame != false else {
+                decisionHandler(.allow)
+                return
+            }
+            if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
+                if matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
+                    let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
                     decisionHandler(.cancel)
-                    openInSafari(url: url)
+                    webView.loadPage(url: urlString)
                     
-                    return;
+                    return
                 }
             }
-            
+            if shouldOpenInSafari(url: url) {
+                decisionHandler(.cancel)
+                openInSafari(url: url)
+                
+                return;
+            }
         }
         
         self.callUpdateHeaderTextForURL(url: navigationAction.request.url!)

@@ -1,4 +1,4 @@
-package features.myrecord
+package features.myrecord.mockData
 
 import mocking.emis.immunisations.EffectiveDate
 import mocking.emis.immunisations.ImmunisationMedicalRecord
