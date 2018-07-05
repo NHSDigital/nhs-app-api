@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
@@ -19,7 +20,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         [TestInitialize]
         public void TestInitialize()
         {
-            _timeZoneInfoProvider = new TimeZoneInfoProvider();
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
         }

@@ -58,8 +58,8 @@ export default {
     },
   },
   methods: {
-    formatTime: dateTime => moment(dateTime).format('h:mm a'),
-    formatDate: dateTime => moment(dateTime).format('dddd D MMMM YYYY'),
+    formatTime: dateTime => moment.parseZone(dateTime).format('h:mm a'),
+    formatDate: dateTime => moment.parseZone(dateTime).format('dddd D MMMM YYYY'),
     select() {
       if (!this.alwaysDeselect) {
         this.$store.dispatch('appointmentSlots/select', this.theSlot);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -38,7 +40,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         [TestInitialize]
         public void TestInitialize()
         {
-            var timeZoneInfoProvider = new TimeZoneInfoProvider();
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
+            var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
             _fixture = new Fixture().Customize(new AutoMoqCustomization());

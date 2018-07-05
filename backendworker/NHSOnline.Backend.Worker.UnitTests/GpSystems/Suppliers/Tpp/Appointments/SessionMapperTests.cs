@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
@@ -21,7 +22,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         [TestInitialize]
         public void TestInitialize()
         {
-            _timeZoneInfoProvider = new TimeZoneInfoProvider();
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _systemUnderTest = new SessionMapper(_dateTimeOffsetProvider);
         }

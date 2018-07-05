@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
@@ -22,7 +23,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         [TestInitialize]
         public void TestInitialize()
         {
-            _timeZoneInfoProvider = new TimeZoneInfoProvider();
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _sut = new ListSlotsReplyMapper(
                 new SessionMapper(_dateTimeOffsetProvider));
@@ -77,8 +80,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Id = "101",
                 Clinicians = new string[0],
                 Location = "Leeds",
-                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
                 Type = "General Session Appointment - Emergency"
             };
 
@@ -113,8 +116,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Id = "101",
                 Clinicians = new[] { "Dr House" },
                 Location = "",
-                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19").ToUniversalTime(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
                 Type = "General Session Appointment - Emergency"
             };
 

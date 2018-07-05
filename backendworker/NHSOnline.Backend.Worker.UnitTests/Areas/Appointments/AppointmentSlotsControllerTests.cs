@@ -6,6 +6,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -42,8 +43,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
-            
-            var timeZoneInfoProvider = new TimeZoneInfoProvider();
+
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
+            var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
             _systemUnderTest = new AppointmentSlotsController(_gpSystemFactory.Object,

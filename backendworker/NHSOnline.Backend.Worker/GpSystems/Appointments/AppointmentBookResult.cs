@@ -39,5 +39,13 @@
                 return visitor.Visit(this);
             }
         }
+
+        public class BadRequest : AppointmentBookResult
+        {
+            public override T Accept<T>(IAppointmentBookResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

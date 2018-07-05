@@ -1,28 +1,22 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 
 namespace NHSOnline.Backend.Worker.Support.Date
 {
     public class TimeZoneInfoProvider
     {
-        private const string WindowsLondonTimeZone = "GMT Standard Time";
-        private const string IanaLondon = "Europe/London";
-        public TimeZoneInfo Create()
+        public TimeZoneInfo TimeZone { get; }
+
+        public TimeZoneInfoProvider(IConfiguration configuration)
+        {
+            TimeZone = Create(configuration);
+        }
+
+        private static TimeZoneInfo Create(IConfiguration configuration)
         {
             try
             {
-                return TimeZoneInfo.FindSystemTimeZoneById(WindowsLondonTimeZone);
-            }
-            catch (TimeZoneNotFoundException)
-            {
-                try
-                {
-                    return TimeZoneInfo.FindSystemTimeZoneById(IanaLondon);
-                }
-                catch (Exception)
-                {
-                    return TimeZoneInfo.Utc;
-                }
-                
+                return TimeZoneInfo.FindSystemTimeZoneById(configuration["TIMEZONE"]);
             }
             catch (Exception)
             {

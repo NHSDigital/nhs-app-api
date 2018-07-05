@@ -15,15 +15,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (fromDate == null && toDate == null)
             {
                 var nowdateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
-                FromDate = nowdateTimeOffset.ToUniversalTime();
-                ToDate = nowdateTimeOffset.AddDays(DayRange).SetTimeToMidnight().ToUniversalTime();
+                FromDate = nowdateTimeOffset;
+                ToDate = nowdateTimeOffset.AddDays(DayRange).SetTimeToMidnight();
             }
             else
             {
                 FromDate = fromDate ?? toDate.Value.SubDays(DayRange - 1).SetTimeToMidnight();
                 ToDate = toDate ?? fromDate.Value.AddDays(DayRange).SetTimeToMidnight();
-                FromDate = FromDate.ToUniversalTime();
-                ToDate = ToDate.ToUniversalTime();
+                FromDate = FromDate;
+                ToDate = ToDate;
             }    
         }
     }

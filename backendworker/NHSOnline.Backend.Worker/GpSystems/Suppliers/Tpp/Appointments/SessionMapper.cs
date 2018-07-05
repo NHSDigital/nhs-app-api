@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
                     try
                     {
-                        startDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.StartDate.TrimEnd('Z')).ToUniversalTime();
+                        startDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.StartDate.TrimEnd('Z'));
                     }
                     catch
                     {
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                     DateTimeOffset? endDate;
                     try
                     {
-                        endDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.EndDate.TrimEnd('Z')).ToUniversalTime();
+                        endDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.EndDate.TrimEnd('Z'));
                     }
                     catch (Exception)
                     {

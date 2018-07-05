@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
@@ -28,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public IAppointmentsService GetAppointmentsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppAppointmentsService>();
         }
 
         public IAppointmentSlotsService GetAppointmentSlotsService()

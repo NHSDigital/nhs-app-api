@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
@@ -15,7 +17,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         [TestInitialize]
         public void TestInitialize()
         {
-            _timeZoneInfoProvider = new TimeZoneInfoProvider();
+            IConfigurationBuilder configBuilder = new ConfigurationBuilder();
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
         }
         
         [TestMethod]
@@ -25,8 +29,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedFromDate = new DateTime(2018, 5, 12, 14, 15, 31);
             var expectedToDate = new DateTimeOffset(2018, 5, 27, 0, 0, 0, new TimeSpan(1, 0, 0));
 
-            var expectedFromUtc = new DateTimeOffset(2018, 5, 12, 14, 15, 31, new TimeSpan(1, 0, 0)).ToUniversalTime();
-            var expectedToUtc = expectedToDate.ToUniversalTime();
+            var expectedFrom = new DateTimeOffset(2018, 5, 12, 14, 15, 31, new TimeSpan(1, 0, 0));
+            var expectedTo = expectedToDate;
 
 
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
@@ -36,15 +40,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             
             var dateRange = new AppointmentSlotsDateRange(mockDateTimeOffsetProvider.Object, null, null);
 
-            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromUtc.Date);
-            dateRange.FromDate.Should().HaveHour(expectedFromUtc.Hour);
-            dateRange.FromDate.Should().HaveMinute(expectedFromUtc.Minute);
-            dateRange.FromDate.Should().HaveSecond(expectedFromUtc.Second);
+            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFrom.Date);
+            dateRange.FromDate.Should().HaveHour(expectedFrom.Hour);
+            dateRange.FromDate.Should().HaveMinute(expectedFrom.Minute);
+            dateRange.FromDate.Should().HaveSecond(expectedFrom.Second);
             
-            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToUtc.Date);
-            dateRange.ToDate.Should().HaveHour(expectedToUtc.Hour);
-            dateRange.ToDate.Should().HaveMinute(expectedToUtc.Minute);
-            dateRange.ToDate.Should().HaveSecond(expectedToUtc.Second);
+            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedTo.Date);
+            dateRange.ToDate.Should().HaveHour(expectedTo.Hour);
+            dateRange.ToDate.Should().HaveMinute(expectedTo.Minute);
+            dateRange.ToDate.Should().HaveSecond(expectedTo.Second);
         }
         
         [TestMethod]
@@ -60,18 +64,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             //Assert
             var expectedFromDate = new DateTimeOffset(2018, 5, 12, 14, 15, 31, new TimeSpan(1,0,0));
             var expectedToDate = new DateTimeOffset(2018, 5, 27, 0, 0, 0, new TimeSpan(1,0,0));
-            var expectedFromUtc = expectedFromDate.ToUniversalTime();
-            var expectedToUtc = expectedToDate.ToUniversalTime();
+            var expectedFrom = expectedFromDate;
+            var expectedTo = expectedToDate;
 
-            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFromUtc.Date);
-            dateRange.FromDate.Should().HaveHour(expectedFromUtc.Hour);
-            dateRange.FromDate.Should().HaveMinute(expectedFromUtc.Minute);
-            dateRange.FromDate.Should().HaveSecond(expectedFromUtc.Second);
+            dateRange.FromDate.DateTime.Should().BeSameDateAs(expectedFrom.Date);
+            dateRange.FromDate.Should().HaveHour(expectedFrom.Hour);
+            dateRange.FromDate.Should().HaveMinute(expectedFrom.Minute);
+            dateRange.FromDate.Should().HaveSecond(expectedFrom.Second);
             
-            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedToUtc.Date);
-            dateRange.ToDate.Should().HaveHour(expectedToUtc.Hour);
-            dateRange.ToDate.Should().HaveMinute(expectedToUtc.Minute);
-            dateRange.ToDate.Should().HaveSecond(expectedToUtc.Second);
+            dateRange.ToDate.DateTime.Should().BeSameDateAs(expectedTo.Date);
+            dateRange.ToDate.Should().HaveHour(expectedTo.Hour);
+            dateRange.ToDate.Should().HaveMinute(expectedTo.Minute);
+            dateRange.ToDate.Should().HaveSecond(expectedTo.Second);
         }
         
         [TestMethod]
@@ -80,8 +84,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var toDate = new DateTimeOffset(2018, 5, 27, 18, 45, 22, new TimeSpan(1,0,0));
             var toDateAtMidnight = new DateTime(2018, 5, 27, 0, 0, 0);
             var expectedFromDate = new DateTime(2018, 5, 13, 0, 0, 0);
-            var expectedFromDateOut = new DateTimeOffset(2018, 5, 13, 0, 0, 0, new TimeSpan(1, 0, 0)).ToUniversalTime();
-            var expectedToDateOut = new DateTimeOffset(2018, 5, 27, 18, 45, 22, new TimeSpan(1, 0, 0)).ToUniversalTime();
+            var expectedFromDateOut = new DateTimeOffset(2018, 5, 13, 0, 0, 0, new TimeSpan(1, 0, 0));
+            var expectedToDateOut = new DateTimeOffset(2018, 5, 27, 18, 45, 22, new TimeSpan(1, 0, 0));
 
 
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);

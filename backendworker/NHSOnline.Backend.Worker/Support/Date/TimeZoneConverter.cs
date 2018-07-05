@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker.Support.Date
 
         public TimeZoneConverter(TimeZoneInfoProvider localTimeZoneProvider)
         {
-            _localTimeZone = localTimeZoneProvider.Create();
+            _localTimeZone = localTimeZoneProvider.TimeZone;
         }
 
         public DateTime ToLocalTime(DateTime dateTime)
