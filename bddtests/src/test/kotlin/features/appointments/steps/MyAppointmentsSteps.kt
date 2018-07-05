@@ -1,6 +1,7 @@
 package features.appointments.steps
 
 import com.google.common.collect.Ordering
+import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.emis.data.AppointmentData
@@ -17,7 +18,7 @@ import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.util.*
 
-open class AppointmentsSteps {
+open class MyAppointmentsSteps {
     @Steps
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
@@ -30,7 +31,7 @@ open class AppointmentsSteps {
             "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
     val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
     val cancellationSuccessMessage = "Your appointment has been cancelled."
-    val bookAppotintmentButtonText = "Book an appointment"
+    val bookAppointmentButtonText = "Book an appointment"
 
     @Step
     fun checkBookingWasRequested() {
@@ -63,7 +64,7 @@ open class AppointmentsSteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
-        clickOnButtonByText(bookAppotintmentButtonText)
+        clickOnButtonByText(bookAppointmentButtonText)
     }
 
     @Step
@@ -81,7 +82,7 @@ open class AppointmentsSteps {
     fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated() {
         val slots = myAppointmentsPage.getAllSlots()
         val expectedSlots = AppointmentData.instance.generateExpectedMyAppointments("Europe/London")
-        assertEquals("Expected upcoming appointments size doesn't match with the actual size",
+        assertEquals("Expected upcoming myAppointments size doesn't match with the actual size",
                 expectedSlots.size, slots.size)
         assertEquals("Exact expected Appointments list not found. ", expectedSlots, slots)
     }
@@ -130,7 +131,7 @@ open class AppointmentsSteps {
 
     @Step
     fun createSerenityEmisMyAppointmentSessionVariable() {
-        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
         val result = Serenity
                 .sessionVariableCalled<WorkerClient>(WorkerClient::class)
@@ -140,7 +141,7 @@ open class AppointmentsSteps {
 
     @Step
     fun checkEmisMyAppointmentsAreAllUpcomingOnes() {
-        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val myAppointmentsResponse = Serenity.sessionVariableCalled<MyAppointmentsResponse>(MyAppointmentsResponse::class.java)
         val now = Date().time
         myAppointmentsResponse.appointments.forEach { appointment ->
@@ -180,6 +181,7 @@ open class AppointmentsSteps {
         assertEquals(cancellationSuccessMessage, message)
     }
 
+    @Step
     fun verifyThatThereIsACancelLinkForEachUpcomingAppointment() {
         assertEquals("Missing at least one cancel link. ", myAppointmentsPage.getAllSlots().size, myAppointmentsPage.getNumberOfCancelLinks())
     }

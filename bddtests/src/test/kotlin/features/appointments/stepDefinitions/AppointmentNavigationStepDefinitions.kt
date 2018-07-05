@@ -3,8 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
-import features.appointments.steps.AppointmentsBookingSteps
-import features.appointments.steps.AppointmentsSteps
+import features.appointments.steps.AvailableAppointmentsSteps
+import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
@@ -18,35 +18,34 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var navigation: NavigationSteps
     @Steps
-    lateinit var appointments: AppointmentsSteps
+    lateinit var myAppointments: MyAppointmentsSteps
     @Steps
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
-    lateinit var appointmentsBooking: AppointmentsBookingSteps
+    lateinit var availableAppointments: AvailableAppointmentsSteps
 
-    @Given("^I am on the appointments page$")
-    fun iAmOnTheAppointmentsPage() {
+    @Given("^I am on my appointments page$")
+    fun iAmOnMyAppointmentsPage() {
         browser.goToApp()
         login.asDefault()
-        navigation.select("appointments")
+        navigation.select("Appointments")
     }
 
     @Given("^I am on the guidance page$")
-    @Throws(Exception::class)
-    fun i_am_on_the_guidance_page() {
-        iAmOnTheAppointmentsPage()
-        appointments.clickOnBookAppointmentButton()
+    fun iAmOnTheGuidancePage() {
+        iAmOnMyAppointmentsPage()
+        myAppointments.clickOnBookAppointmentButton()
     }
 
-    @Given("^I am on the appointments booking page$")
-    fun iAmOnTheAppointmentsBookingPage() {
-        iTryToProgressToTheAppointmentsBookingPage()
-        appointmentsBooking.checkIfPageHeaderIsCorrect()
+    @Given("^I am on the available appointments page$")
+    fun iAmOnTheAvailableAppointmentsPage() {
+        iTryToProgressToTheAvailableAppointmentsPage()
+        availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
-    @When("^I try to progress to the appointments booking page$")
-    fun iTryToProgressToTheAppointmentsBookingPage() {
-        i_am_on_the_guidance_page()
+    @When("^I try to progress to the available appointments page$")
+    fun iTryToProgressToTheAvailableAppointmentsPage() {
+        iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
     }
 }

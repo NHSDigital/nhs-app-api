@@ -3,6 +3,10 @@ package mocking.emis.data
 import addDays
 import addHours
 import addMinutes
+import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithTimezone
+import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
+import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
+import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import mocking.emis.appointments.GetAppointmentsResponseModel
 import mocking.emis.models.*
 import models.Slot
@@ -22,7 +26,7 @@ private const val SESSION_ID_EYECLINIC = 2
 private const val SESSION_ID_EARCLINIC = 3
 
 class AppointmentData private constructor() {
-    private val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+    private val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
 
     private val expectedMyAppointment = Slot(session = SessionType.Timed.toString())
 
@@ -158,8 +162,8 @@ class AppointmentData private constructor() {
 
     fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot> {
         val expectedTempMyAppointments = arrayListOf<Slot>()
-        val slotDateFormat = SimpleDateFormat("EEEE dd MMMM yyyy")
-        val slotTimeFormat = SimpleDateFormat("h:mm a")
+        val slotDateFormat = SimpleDateFormat(frontendDateFormat)
+        val slotTimeFormat = SimpleDateFormat(frontendTimeFormat)
         appointments.forEach { appointment ->
             val frontendTime = convertToBrowserTimezone(appointment.startTime, timezone)
             val startDate = dateTimeFormat.parse(frontendTime)
@@ -192,7 +196,8 @@ class AppointmentData private constructor() {
 
     private fun copyCalendarDate(baseTime: Calendar, addDays: Int = 0, addHours: Int = 0, addMinutes: Int = 0): Calendar {
         val theStartTime = baseTime.clone() as Calendar
-        return theStartTime.addDays(addDays).addHours(addHours).addMinutes(addMinutes)
+        val numberOfMinutesToNextDivisibleByFive = 5 - (theStartTime.get(Calendar.MINUTE) % 5)
+        return theStartTime.addDays(addDays).addHours(addHours).addMinutes(addMinutes + numberOfMinutesToNextDivisibleByFive)
     }
 
     private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlot {
@@ -214,7 +219,7 @@ class AppointmentData private constructor() {
     }
 
     private fun convertToBrowserTimezone(time: String, timezone: String): String {
-        val dateFormatWithUtcTimeZone = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+        val dateFormatWithUtcTimeZone = SimpleDateFormat(backendDateTimeFormatWithTimezone)
         dateFormatWithUtcTimeZone.timeZone = TimeZone.getTimeZone(timezone)
         val browserDate = dateTimeFormat.parse(time)
         return dateFormatWithUtcTimeZone.format(browserDate)

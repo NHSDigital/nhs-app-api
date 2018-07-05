@@ -18,7 +18,8 @@
       </p>
     </error-warning-dialog>
 
-    <error-warning-dialog v-show="showValidationError" error-or-warning="error">
+    <error-warning-dialog v-show="showValidationError"
+                          error-or-warning="error" error-warning-id="validationErrors">
       <p> {{ $t('appointments.booking.validationErrors.problemFound') }} </p>
       <p v-if="!validationError.isTypeValid">
         - {{ $t('appointments.booking.validationErrors.type') }}
@@ -32,12 +33,13 @@
     <filters
       v-if="availableAppointments"
       v-model="selectedOptions"
+      :a-labelled-by="aLabelledBy"
       :options="filtersOptions"
       :selected-options="defaultSelectedOptions"
       :validation-error="validationError"
     />
 
-    <slot-list :available-slots="availableSlots" />
+    <slot-list :available-slots="availableSlots" :a-labelled-by="aLabelledBy"/>
 
     <button
       v-if="availableAppointments"
@@ -76,6 +78,7 @@ export default {
         isLocationValid: true,
       },
       filters: null,
+      aLabelledBy: undefined,
     };
   },
   computed: {
@@ -129,32 +132,25 @@ export default {
       this.$store.dispatch('availableAppointments/filter');
     },
     onConfirmButtonClicked() {
-      if (this.isValid()) {
+      this.validationError.isTypeValid = this.filters ? this.filters.type !== '' : false;
+      this.validationError.isLocationValid = this.filters ? this.filters.location !== '' : false;
+      this.showValidationError = !this.validationError.isTypeValid ||
+                                 !this.validationError.isLocationValid ||
+                                 this.$store.state.availableAppointments.selectedSlot === null;
+
+      this.aLabelledBy = this.showValidationError ? 'validationErrors' : undefined;
+
+      if (this.showValidationError) {
+        if (!this.validationError.isTypeValid) {
+          document.getElementById('type').focus();
+        } else if (!this.validationError.isLocationValid) {
+          document.getElementById('location').focus();
+        } else {
+          document.getElementById('slotList').focus();
+        }
+      } else {
         this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS);
       }
-    },
-    isValid() {
-      let isValid = true;
-      this.validationError.isTypeValid = true;
-      this.validationError.isLocationValid = true;
-
-      if (!this.filters || this.filters.type === '') {
-        this.validationError.isTypeValid = false;
-        isValid = false;
-      }
-
-      if (!this.filters || this.filters.location === '') {
-        this.validationError.isLocationValid = false;
-        isValid = false;
-      }
-
-      if (this.$store.state.availableAppointments.selectedSlot === null) {
-        isValid = false;
-      }
-
-      this.showValidationError = !isValid;
-
-      return isValid;
     },
     bottomStyle() {
       if (

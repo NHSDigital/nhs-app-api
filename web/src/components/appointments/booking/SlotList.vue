@@ -1,10 +1,12 @@
 <template>
   <form :class="$style.appointmentTime">
+    <div id="slotList" aria-labelledby="aLabelledBy" tabindex="-1" aria-hidden="true"/>
     <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
       <h5>{{ formatDate(daySlots[0]) }}</h5>
       <ul :class="$style.selector">
         <li v-for="(slot, index) in daySlots[1]"
             :class="[slot.isSelected?$style.selected:undefined]"
+            :aria-label="slot.isSelected?'selected-slot':undefined"
             :key="key(slot, index)"
             @click="selectSlot(slot, index)">
           {{ formatTime(slot.startTime) }}
@@ -24,6 +26,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    aLabelledBy: {
+      type: String,
+      default: undefined,
+    },
   },
   methods: {
     formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mm a'),
@@ -39,7 +45,8 @@ export default {
 };
 </script>
 
-<style module lang="scss">@import "../../../style/textstyles";
+<style module lang="scss">
+@import "../../../style/textstyles";
 @import "../../../style/colours";
 @import "../../../style/fonts";
 .appointmentTime {
@@ -51,7 +58,10 @@ export default {
     margin-bottom: 8px;
   }
   .selector {
+    display: flex;
+    flex-wrap: wrap;
     margin-left: -8px;
+    margin-bottom: 8px;
     li {
       @include default_text;
       width: 101px;

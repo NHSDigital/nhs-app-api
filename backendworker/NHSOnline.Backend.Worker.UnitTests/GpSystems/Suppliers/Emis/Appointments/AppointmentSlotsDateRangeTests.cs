@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             var todayDate = new DateTime(2018, 5, 12, 0, 0, 0, 0);
             var expectedFromDate = new DateTime(2018, 5, 12, 14, 15, 31);
-            var expectedToDate = new DateTimeOffset(2018, 5, 27, 0, 0, 0, new TimeSpan(1, 0, 0));
+            var expectedToDate = new DateTimeOffset(2018, 6, 10, 0, 0, 0, new TimeSpan(1, 0, 0));
 
             var expectedFrom = new DateTimeOffset(2018, 5, 12, 14, 15, 31, new TimeSpan(1, 0, 0));
             var expectedTo = expectedToDate;
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             //Assert
             var expectedFromDate = new DateTimeOffset(2018, 5, 12, 14, 15, 31, new TimeSpan(1,0,0));
-            var expectedToDate = new DateTimeOffset(2018, 5, 27, 0, 0, 0, new TimeSpan(1,0,0));
+            var expectedToDate = new DateTimeOffset(2018, 6, 10, 0, 0, 0, new TimeSpan(1,0,0));
             var expectedFrom = expectedFromDate;
             var expectedTo = expectedToDate;
 
@@ -83,8 +83,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             var toDate = new DateTimeOffset(2018, 5, 27, 18, 45, 22, new TimeSpan(1,0,0));
             var toDateAtMidnight = new DateTime(2018, 5, 27, 0, 0, 0);
-            var expectedFromDate = new DateTime(2018, 5, 13, 0, 0, 0);
-            var expectedFromDateOut = new DateTimeOffset(2018, 5, 13, 0, 0, 0, new TimeSpan(1, 0, 0));
+            var expectedFromDate = new DateTime(2018, 4, 29, 0, 0, 0);
+            var expectedFromDateOut = new DateTimeOffset(2018, 4, 29, 0, 0, 0, new TimeSpan(1, 0, 0));
             var expectedToDateOut = new DateTimeOffset(2018, 5, 27, 18, 45, 22, new TimeSpan(1, 0, 0));
 
 

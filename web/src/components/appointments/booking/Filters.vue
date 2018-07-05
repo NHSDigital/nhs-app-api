@@ -7,9 +7,9 @@
       </span>
     </error-message>
     <select-dropdown v-model="type" :error-border="!validationError.isTypeValid"
-                     select-id = "type" select-name="type">
+                     :a-labelled-by="aLabelledBy" select-id = "type" select-name="type">
       <option v-for="option in options.types" :key="option.value" :value="option.value"
-              :selected="type === option.value">
+              :selected="type === option.value" :disabled="option.value===''">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
@@ -21,9 +21,9 @@
       </span>
     </error-message>
     <select-dropdown v-model="location" :error-border="!validationError.isLocationValid"
-                     select-id = "location" select-name="location">
+                     :a-labelled-by="aLabelledBy" select-id = "location" select-name="location">
       <option v-for="option in options.locations" :key="option.value" :value="option.value"
-              :selected="location === option.value">
+              :selected="location === option.value" :disabled="option.value===''">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
@@ -84,6 +84,10 @@ export default {
         isLocationValid: true,
       }),
     },
+    aLabelledBy: {
+      type: String,
+      default: undefined,
+    },
   },
   computed: {
     type: {
@@ -114,6 +118,12 @@ export default {
         this.returnSelectedOptions();
       },
     },
+  },
+  mounted() {
+    if (this.options.locations && this.options.locations.length === 2) {
+      this.selectedOptions.location = this.options.locations[1].value;
+      this.returnSelectedOptions();
+    }
   },
   methods: {
     returnSelectedOptions() {

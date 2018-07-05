@@ -25,6 +25,12 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
             page = this
     )
 
+    val errorMessage = HybridPageElement(
+            browserLocator = "//div[@class='msg error']",
+            androidLocator = "",
+            page = this
+    )
+
     fun HybridPageElement.waitForSpinner(): HybridPageElement {
         try {
             if (spinner.element.isCurrentlyVisible) {
@@ -32,7 +38,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
                         .withTimeout(Duration.ofSeconds(5))
                         .pollingEvery(Duration.ofMillis(100))
                         .ignoring(AssertionError::class.java)
-                        .until{ it.element.expect("Spinner was visible for more than 5 seconds.").shouldNotBeVisible() }
+                        .until { it.element.expect("Spinner was visible for more than 5 seconds.").shouldNotBeVisible() }
             }
         } catch (e: NoSuchElementException) {
             // element no longer there - continue
@@ -42,6 +48,12 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
         return this
     }
+
+    private val warningMessage = HybridPageElement(
+            browserLocator = "//div[@class='msg warning']",
+            androidLocator = "",
+            page = this
+    )
 
     private val buttonXpath = "//button[contains(text(),'%s')]"
 
@@ -163,7 +175,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return element
     }
 
-    fun findAllByXpath(parent: WebElementFacade, xpath: String):List<WebElementFacade> {
+    fun findAllByXpath(parent: WebElementFacade, xpath: String): List<WebElementFacade> {
         if (onMobile()) switchView()
         return parent.thenFindAll(xpath)
     }
@@ -185,12 +197,20 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return try {
             switchToPage(ErrorPage::class.java)
                     .detail.element.text
-        } catch(e: NoSuchElementException) {
+        } catch (e: NoSuchElementException) {
             null
         }
     }
 
-    fun getRetryButtonText() : String {
+    fun getWarningText(): String? {
+        return try {
+            warningMessage.element.text
+        } catch (e: NoSuchElementException) {
+            null
+        }
+    }
+
+    fun getRetryButtonText(): String {
         val buttons = findAllByXpath("//div[@class='msg error']//button")
         Assert.assertEquals(1, buttons.size)
         return buttons[0].text
@@ -201,7 +221,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
                                      headerText: String,
                                      subHeaderText: String,
                                      messageText: String,
-                                     retryButtonText: String) : Boolean {
+                                     retryButtonText: String): Boolean {
 
         var pageHeadIsValid = true
         var headerIsValid = true
@@ -209,19 +229,19 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         var messageIsValid = true
         var retryButtonIsValid = true
 
-        if(!pageHeaderText.isNullOrEmpty()){
+        if (!pageHeaderText.isNullOrEmpty()) {
             pageHeadIsValid = isAnyXpathVisible("//h1[contains(text(), \"$pageHeaderText\")]")
         }
-        if(!headerText.isNullOrEmpty()){
+        if (!headerText.isNullOrEmpty()) {
             headerIsValid = isAnyXpathVisible("//p[contains(text(), \"$headerText\")]")
         }
-        if(!subHeaderText.isNullOrEmpty()){
+        if (!subHeaderText.isNullOrEmpty()) {
             subHeaderIsValid = isAnyXpathVisible("//p[contains(text(), \"$subHeaderText\")]")
         }
-        if(!messageText.isNullOrEmpty()){
+        if (!messageText.isNullOrEmpty()) {
             messageIsValid = isAnyXpathVisible("//p[contains(text(), \"$messageText\")]")
         }
-        if(!retryButtonText.isNullOrEmpty()){
+        if (!retryButtonText.isNullOrEmpty()) {
             retryButtonIsValid = isAnyXpathVisible("//button[contains(text(), \"$retryButtonText\")]")
         }
 
@@ -229,7 +249,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun waitForPageHeaderText(expectedHeaderText: String): Boolean {
-        return waitFor({ getPageHeaderText() == expectedHeaderText }) !=  null
+        return waitFor({ getPageHeaderText() == expectedHeaderText }) != null
     }
 
     fun getPageHeaderText(): String {
@@ -241,18 +261,19 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun clickOnButton(button: String) {
-        val element: WebElementFacade = findByXpath(String.format(buttonXpath, button))
-        element.click()
+        val button = HybridPageElement(String.format(buttonXpath, button), "", this)
+        button.waitForSpinner()
+        button.element.click()
     }
 
-    private fun isAnyXpathVisible(xpath:String) : Boolean {
+    private fun isAnyXpathVisible(xpath: String): Boolean {
 
         var allElements = findAllByXpath(xpath)
 
         var anyVisible = false
 
         allElements.forEach {
-            if(it.isVisible){
+            if (it.isVisible) {
                 anyVisible = true
             }
         }

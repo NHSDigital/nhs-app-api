@@ -40,7 +40,7 @@ Feature: Switching Apps on Mobile Devices
   @NHSO-893
   @manual
   Scenario: User switches back to app after session times out without an internet connection
-    Given I am on the appointments page
+    Given I am on my appointments page
     And I switch apps
     And I wait for 20 minutes
     And I lose connection

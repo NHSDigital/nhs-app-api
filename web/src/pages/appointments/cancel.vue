@@ -25,7 +25,8 @@
         {{ $t('appointments.cancel.noReasonError') }}
       </error-message>
 
-      <select-dropdown v-model="selectedReason" select-id = "txt_reason" select-name="reason">
+      <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
+                       select-id = "txt_reason" select-name="reason">
         <option disabled="" selected="" value="">
           {{ $t('appointments.cancel.dropdownDefaultOption') }}
         </option>
@@ -70,6 +71,7 @@ export default {
       showValidationError: false,
       isReasonRequired: true,
       selectedReason: '',
+      labelledBy: undefined,
     };
   },
   mounted() {
@@ -93,6 +95,7 @@ export default {
           appointmentId: this.appointment.id,
           cancellationReasonId: this.selectedReason,
         };
+        this.labelledBy = undefined;
 
         this.$store.dispatch('myAppointments/cancel', data)
           .then(() => {
@@ -101,7 +104,8 @@ export default {
           });
       } else {
         this.showValidationError = true;
-        this.$refs.reason.focus();
+        document.getElementById('txt_reason').focus();
+        this.labelledBy = 'errorLabel';
       }
     },
     onBackButtonClicked() {

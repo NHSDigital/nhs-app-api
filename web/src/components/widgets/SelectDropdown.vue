@@ -1,6 +1,7 @@
 <template>
   <div :class="['custom-dropdown', 'custom-dropdown--white', {selectError: errorBorder}]">
-    <select v-model="selectedValue" :id="selectId" :name="selectName" required=""
+    <select v-model="selectedValue" :id="selectId" :name="selectName"
+            :aria-labelledby="aLabelledBy" required="" tabindex="-1"
             class="custom-dropdown__select custom-dropdown__select--white">
       <slot/>
     </select>
@@ -24,6 +25,10 @@
     errorBorder: {
       type: Boolean,
       default: false,
+    },
+    aLabelledBy: {
+      type: String,
+      default: undefined,
     },
   },
   computed: {

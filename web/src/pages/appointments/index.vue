@@ -77,7 +77,7 @@ export default {
         display: block;
         margin-bottom: 16px;
       }
-      h3 {
+      h2 {
         @include h5;
         font-size: 13pt;
         color: $dark_grey;

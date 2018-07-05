@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestMethod]
         public void IsValid_ReturnsTrue_WhenToDateIsSpecifiedOnly()
         {
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
  
             _dateRangeValidator.IsValid(null, toDate).Should().BeTrue();
         }

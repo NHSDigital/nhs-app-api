@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
             var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
             var appointmentSlotsServicesGetResponse = new AppointmentSlotsResponse();
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Get_ReturnsBadRequest_WhenServiceReturnsBadRequest()
         {
             var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Get_ReturnsSupplierSystemUnavailable_WhenServiceReturnsBadRequest()
         {
             var fromDate = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(14);
+            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset().AddDays(28);
             var gpSystem = new Mock<IGpSystem>();
             var appointmentSlotsService = new Mock<IAppointmentSlotsService>();
 

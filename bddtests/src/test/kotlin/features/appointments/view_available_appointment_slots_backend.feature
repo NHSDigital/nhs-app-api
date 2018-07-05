@@ -52,30 +52,21 @@ Feature: View available appointment slots backend
   @NHSO-870
   @backend
   @tech-debt  @NHSO-1595
-  Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 2 weeks from now
-    Given there are available appointment slots within the next two weeks
+  Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 4 weeks from now
+    Given there are available appointment slots within the next four weeks
     And I have logged in and have a valid session cookie for EMIS
     When the available appointment slots are retrieved without a given date-time range
     #This last line is based on breaking down the request and asserting details from that. This seems incorrect
-    Then available slots are returned for the next two weeks
+    Then available slots are returned for the next four weeks
 
   @NHSO-470
   @NHSO-870
   @backend
-  Scenario: Requesting available appointment slots with only fromDate parameter returns set of appointment slots for 2 weeks from specified start date
-    Given there are available appointment slots two weeks from a specific from date
+  Scenario: Requesting available appointment slots with only fromDate parameter returns set of appointment slots for 4 weeks from specified start date
+    Given there are available appointment slots four weeks from a specific from date
     And I have logged in and have a valid session cookie for EMIS
     When the available appointment slots are retrieved with just a from date
     Then available slots are returned for the two weeks following the from date
-
-  @NHSO-470
-  @NHSO-870
-  @backend
-  Scenario: Requesting available appointment slots with only toDate parameter returns set of appointment slots for 2 weeks from start day 2 weeks before end date
-    Given there are available appointment slots two weeks preceding a specific to date
-    And I have logged in and have a valid session cookie for EMIS
-    When the available appointment slots are retrieved with just a to date
-    Then available slots are returned for the two weeks preceding the to date
 
   @NHSO-470
   @NHSO-870

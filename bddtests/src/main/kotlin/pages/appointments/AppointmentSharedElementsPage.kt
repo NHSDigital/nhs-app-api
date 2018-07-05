@@ -1,5 +1,7 @@
 package pages.appointments
 
+import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
+import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import models.Slot
 import net.serenitybdd.core.annotations.findby.By
 import net.serenitybdd.core.pages.WebElementFacade
@@ -54,7 +56,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     fun getDateTimestampsOfSlots(appointmentListParentXpath: String): List<Long> {
         val slotTimestamps = arrayListOf<Long>()
-        val dateTimeFormat = SimpleDateFormat("h:mm a EEEE dd MMMM yyyy")
+        val dateTimeFormat = SimpleDateFormat("$frontendTimeFormat $frontendDateFormat")
         val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentListParentXpath)
         appointmentSlotDivs.forEach { slotDiv ->
             val timestamp = retrieveDateTimeFromSlotElement(slotDiv)
@@ -123,8 +125,8 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return findByXpath("$containerDivXpath/div[$index]")
     }
 
-    private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointmentSlot: Boolean) {
-        if (isMyAppointmentSlot) {
+    private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointment: Boolean) {
+        if (isMyAppointment) {
             val clinicianElements = findAllByXpath(parentContainer, "$relativePath/*/span[starts-with(@aria-label, 'clinician')]")
             clinicianElements.forEach { clinicianElement ->
                 val clinicianDisplayName = getSlotChildElementDisplayingText(clinicianElement)

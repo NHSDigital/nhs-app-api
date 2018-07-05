@@ -1,8 +1,8 @@
 package mocking.emis.models
 
 data class Session(
-        var sessionName: String? = null,
-        var sessionId: Int? = null,
+        var sessionName: String,
+        var sessionId: Int,
         var locationId: Int? = null,
         var defaultDuration: Int? = null,
         var sessionType: SessionType? = null,

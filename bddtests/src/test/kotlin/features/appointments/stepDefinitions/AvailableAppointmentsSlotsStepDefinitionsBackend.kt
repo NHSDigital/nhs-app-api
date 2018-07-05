@@ -1,20 +1,22 @@
 package features.appointments.stepDefinitions
 
+import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithTimezone
+import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.defaults.MockDefaults
-import mocking.MockingClient
+import features.appointments.data.AppointmentsBookingData
+import features.appointments.steps.AvailableAppointmentsSteps
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
 import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
 import net.serenitybdd.core.Serenity
+import net.thucydides.core.annotations.Steps
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -22,116 +24,22 @@ import javax.servlet.http.Cookie
 import org.junit.Assert
 
 
-class AppointmentsStepDefinitionsBackend {
+class AvailableAppointmentsSlotsStepDefinitionsBackend: AppointmentsBookingData() {
 
-    val mockingClient = MockingClient.instance
-    val patient = MockDefaults.patient
-
-    //Should be moved to a shared area with other appointments mocking data
-    private val pastFromDate = "2017-12-24T14:00:00"
-    private val pastToDate = "2017-12-30T14:00:00"
-    private val explicitFromDate = "2018-12-24T14:00:00"
-    private val explicitToDate = "2018-12-30T14:00:00"
-    private val defaultFromDateIfExplicitToDate = "2018-12-16T00:00:00"
-    private val defaultToDateIfExplicitFromDate = "2019-01-08T00:00:00"
-    private val dateTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-    private val defaultSessionStartDate = explicitFromDate
-    private val defaultSessionEndDate = explicitToDate
+    @Steps
+    lateinit var availableAppointments: AvailableAppointmentsSteps
 
 
-    private val defaultEmisAppointmentSlots = arrayListOf(
-            AppointmentSlot(
-                    slotId = 301,
-                    startTime = "2018-12-27T14:30:00",
-                    endTime = "2018-12-27T15:00:00",
-                    slotTypeName = "Physio",
-                    slotTypeStatus = SlotTypeStatus.Visit
-            ),
-            AppointmentSlot(
-                    slotId = 302,
-                    startTime = "2018-12-28T09:00:00",
-                    endTime = "2018-12-28T09:30:00",
-                    slotTypeName = "Physio",
-                    slotTypeStatus = SlotTypeStatus.Practice
-            )
-    )
-
-    private val defaultEmisMetaSlotLocations = arrayListOf(
-            Location(
-                    1,
-                    "Sheffield"
-            ),
-            Location(
-                    2,
-                    "Leeds"
-            )
-    )
-
-    private val defaultEmisMetaSlotSessionHolders = arrayListOf(
-            SessionHolder(
-                    101,
-                    "Bob"
-            ),
-            SessionHolder(
-                    102,
-                    "Steve"
-            )
-    )
-
-    private val defaultEmisMetaSlotSessions = arrayListOf(
-            Session(
-                    "Bob 1",
-                    201,
-                    1,
-                    30,
-                    SessionType.Timed,
-                    1,
-                    arrayListOf(101),
-                    defaultEmisAppointmentSlots[0].startTime,
-                    defaultEmisAppointmentSlots[0].endTime
-            ),
-            Session(
-                    "Steve 2",
-                    202,
-                    2,
-                    30,
-                    SessionType.Timed,
-                    1,
-                    arrayListOf(102),
-                    defaultEmisAppointmentSlots[1].startTime,
-                    defaultEmisAppointmentSlots[1].endTime
-            )
-    )
-
-    private val defaultEmisAppointmentSessions = arrayListOf(
-            AppointmentSession(
-                    sessionDate = defaultEmisAppointmentSlots[0].startTime,
-                    sessionId = 201,
-                    slots = arrayListOf(defaultEmisAppointmentSlots[0])
-            ),
-            AppointmentSession(
-                    sessionDate = defaultEmisAppointmentSlots[1].startTime,
-                    sessionId = 202,
-                    slots = arrayListOf(defaultEmisAppointmentSlots[1])
-            )
-    )
-
-    @Given("^there are available appointment slots within the next two weeks$")
-    fun thereAreAvailableAppointmentSlotsWithinTheNextTwoWeeks() {
-        val getAppointmentSlotsMetaQueryParamsForNextTwoWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = defaultSessionStartDate, sessionEndDate = defaultSessionEndDate)
-        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextTwoWeeks)
+    @Given("^there are available appointment slots within the next four weeks$")
+    fun thereAreAvailableAppointmentSlotsWithinTheNextFourWeeks() {
+        val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = defaultSessionStartDate, sessionEndDate = defaultSessionEndDate)
+        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
     }
 
-    @Given("^there are available appointment slots two weeks from a specific from date$")
-    fun thereAreAvailableAppointmentSlotsTwoWeeksAfterFromDate() {
-        val getAppointmentSlotsMetaQueryParamsForNextTwoWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = explicitFromDate, sessionEndDate = defaultToDateIfExplicitFromDate)
-        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextTwoWeeks)
-    }
-
-    @Given("^there are available appointment slots two weeks preceding a specific to date$")
-    fun thereAreAvailableAppointmentSlotsTwoWeeksBeforeToDate() {
-        val getAppointmentSlotsMetaQueryParamsForNextTwoWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = defaultFromDateIfExplicitToDate, sessionEndDate = explicitToDate)
-        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextTwoWeeks)
+    @Given("^there are available appointment slots four weeks from a specific from date$")
+    fun thereAreAvailableAppointmentSlotsFourWeeksAfterFromDate() {
+        val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = explicitFromDate, sessionEndDate = defaultToDateIfExplicitFromDate)
+        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
     }
 
     private val getAppointmentSlotsMetaQueryParams = AppointmentSlotsParams(
@@ -172,30 +80,7 @@ class AppointmentsStepDefinitionsBackend {
 
     @Given("^the system will time out when trying to retrieve appointment slots$")
     fun appointmentSlotsTimesOut() {
-        val emisSlotLocations = defaultEmisMetaSlotLocations
-        val emisSlotSessionHolders = defaultEmisMetaSlotSessionHolders
-        val emisSlotSessions = defaultEmisMetaSlotSessions
-        val emisAppointmentSessions = defaultEmisAppointmentSessions
-
-        mockingClient.forEmis {
-            appointmentSlotsMetaRequest(getAppointmentSlotsMetaQueryParams.patient,
-                    getAppointmentSlotsMetaQueryParams.sessionStartDate,
-                    getAppointmentSlotsMetaQueryParams.sessionEndDate)
-                    .withDelay(Duration.ofSeconds(31))
-                    .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
-                            emisSlotLocations,
-                            emisSlotSessionHolders,
-                            emisSlotSessions
-                    ))
-        }
-
-        mockingClient.forEmis {
-            appointmentSlotsRequest(getAppointmentSlotsMetaQueryParams.patient,
-                    getAppointmentSlotsMetaQueryParams.sessionStartDate,
-                    getAppointmentSlotsMetaQueryParams.sessionEndDate)
-                    .withDelay(Duration.ofSeconds(31))
-                    .respondWithSuccess(GetAppointmentSlotsResponseModel(emisAppointmentSessions))
-        }
+        availableAppointments.appointmentSlotsTimesOut()
     }
 
     @Given("^online appointment booking is not available to the patient, when wanting to view appointment slots$")
@@ -251,12 +136,6 @@ class AppointmentsStepDefinitionsBackend {
     fun theAvailableAppointmentSlotsAreRetrievedWithJustFromDate() {
 
         retrieveAppointmentSlots(fromDate = toLocalTime(explicitFromDate), toDate = null)
-    }
-
-    @When("^the available appointment slots are retrieved with just a to date$")
-    fun theAvailableAppointmentSlotsAreRetrievedWithJustToDate() {
-
-        retrieveAppointmentSlots(fromDate=null, toDate = toLocalTime(explicitToDate))
     }
 
     @When("^I try to retrieve appointment slots with fromDate after the toDate$")
@@ -318,14 +197,6 @@ class AppointmentsStepDefinitionsBackend {
         Assert.assertEquals("result.slots", 2, result.slots.size)
     }
 
-    //This step needs to assert the date, and also have a reason for asserting the number '2'
-    @Then("^available slots are returned for the two weeks preceding the to date$")
-    fun availableSlotsLocationsCliniciansAndAppointmentSessionsForTwoWeeksPrecedingToDate() {
-        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        AssertAppointmentSlotsResponseNotNull(result)
-        Assert.assertEquals("result.slots", 2, result.slots.size)
-    }
-
     private fun AssertAppointmentSlotsResponseNotNull(result: AppointmentSlotsResponse) {
         Assert.assertNotNull("result", result)
         Assert.assertNotNull("result.slots", result.slots)
@@ -352,10 +223,10 @@ class AppointmentsStepDefinitionsBackend {
 
 
     private fun toLocalTime(date: String?): String {
-        val currentDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         currentDateFormat.timeZone = TimeZone.getDefault()
         val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+        val queryDateFormat = SimpleDateFormat(backendDateTimeFormatWithTimezone)
         return queryDateFormat.format(dateToPass)
     }
 }

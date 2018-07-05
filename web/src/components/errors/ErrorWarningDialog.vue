@@ -1,7 +1,7 @@
 <template>
   <div>
     <error-warning-icon :icon-type="errorOrWarning"/>
-    <div :class="[msgClass, errorOrWarning]">
+    <div :class="[msgClass, errorOrWarning]" :id="errorWarningId">
       <slot/>
     </div>
   </div>
@@ -17,8 +17,12 @@ export default {
   },
   props: {
     errorOrWarning: {
-      default: 'error',
       type: String,
+      default: 'error',
+    },
+    errorWarningId: {
+      type: String,
+      default: undefined,
     },
   },
   data() {

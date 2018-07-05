@@ -4,7 +4,7 @@
     <h4 aria-label="start time">{{ formatTime(appointment.startTime) }}</h4>
     <hr aria-hidden="true">
     <p aria-label="session name">
-      {{ appointment.type | truncate(24) }}
+      {{ appointment.type }}
     </p>
     <hr aria-hidden="true">
 

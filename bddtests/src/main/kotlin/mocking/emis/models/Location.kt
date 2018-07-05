@@ -1,8 +1,8 @@
 package mocking.emis.models
 
 data class Location(
-        var locationId: Int? = null,
-        var locationName: String? = null,
+        var locationId: Int,
+        var locationName: String,
         var houseNameFlatNumber: String? = null,
         var numberAndStreet: String? = null,
         var village: String? = null,

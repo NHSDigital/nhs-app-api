@@ -19,7 +19,7 @@ open class CancelAppointmentSteps {
     @Steps
     lateinit var navigation: NavigationSteps
     @Steps
-    lateinit var appointmentsSteps: AppointmentsSteps
+    lateinit var myAppointmentsSteps: MyAppointmentsSteps
 
     lateinit var cancelAppointmentPage: CancelAppointmentPage
 
@@ -49,11 +49,11 @@ open class CancelAppointmentSteps {
 
     @Step
     fun progressToAppointmentCancellationScreen() {
-        appointmentsSteps.mockEMISMyAppointmentResponse()
+        myAppointmentsSteps.mockEMISMyAppointmentResponse()
         browser.goToApp()
         login.asDefault()
-        navigation.select("appointments")
-        appointmentsSteps.clickFirstCancelLink()
+        navigation.select("Appointments")
+        myAppointmentsSteps.clickFirstCancelLink()
     }
 
     @Step

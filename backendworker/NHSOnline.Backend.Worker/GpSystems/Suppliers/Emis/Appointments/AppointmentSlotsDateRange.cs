@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
     public class AppointmentSlotsDateRange
     {
-        private const int DayRange = 15;
+        private const int DayRange = 29;
 
         public DateTimeOffset FromDate { get; }
         public DateTimeOffset ToDate { get; }
