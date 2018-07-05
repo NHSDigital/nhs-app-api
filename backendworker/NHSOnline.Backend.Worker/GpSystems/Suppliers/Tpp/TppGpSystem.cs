@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<TppAppointmentSlotsService>();
         }
 
         public ICourseService GetCourseService()

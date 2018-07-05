@@ -67,7 +67,8 @@ export default {
     },
     isSlotSelected() {
       return this.$store.state.appointmentSlots.selectedSlot !== null
-        && this.$store.state.appointmentSlots.selectedSlot.id === this.theSlot.id;
+        && this.$store.state.appointmentSlots.selectedSlot.id === this.theSlot.id
+        && this.$store.state.appointmentSlots.selectedSlot.startTime === this.theSlot.startTime;
     },
   },
 };

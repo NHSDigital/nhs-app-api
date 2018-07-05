@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentsMapper : IAppointmentsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private const string SessionTypeSeperator = " - ";
+        private const string SessionTypeSeparator = " - ";
 
         public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private string CreateTypeFromAppointmentAndSession(Models.Appointment appointment, Models.Session session)
         {
             var hasOnlyAppointmentSlotTypeOrSessionName = string.IsNullOrEmpty(appointment.SlotTypeName) || string.IsNullOrEmpty(session?.SessionName);
-            return $"{session?.SessionName}{(hasOnlyAppointmentSlotTypeOrSessionName ? string.Empty : SessionTypeSeperator)}{appointment.SlotTypeName}";
+            return $"{session?.SessionName}{(hasOnlyAppointmentSlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{appointment.SlotTypeName}";
         }
 
         private static string[] FindCliniciansForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<SessionHolder> sessionHolders)

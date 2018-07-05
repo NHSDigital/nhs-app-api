@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -34,9 +35,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             services.AddSingleton<IGpSystem, TppGpSystem>();
             services.AddSingleton<ITppClient, TppClient>();
             services.AddSingleton<ITppConfig, TppConfig>();
+            services.AddTransient<IListSlotsReplyMapper, ListSlotsReplyMapper>();
+            services.AddTransient<ISessionMapper, SessionMapper>();
+            services.AddSingleton<IAppointmentSlotResultBuilder, TppAppointmentSlotsResultBuilder>();
 
             services.AddTransient<TppTokenValidationService>();
-                        
+            services.AddTransient<TppDemographicsService>();
+            services.AddTransient<TppPatientRecordService>();   
+            services.AddTransient<TppPrescriptionService>();
+            services.AddTransient<TppCourseService>();
+            services.AddTransient<TppAppointmentSlotsService>();
+            services.AddTransient<TppAppointmentsService>();
+            
             base.ConfigureServices(services, configuration);
         }
     }

@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.ResponseParsers;
 
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             var stringResponse = responseMessage.Content != null
                 ? await responseMessage.Content.ReadAsStringAsync()
                 : null;
-
+            
             if (string.IsNullOrEmpty(stringResponse)) return response;
 
             try
@@ -167,6 +168,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         private bool IsErrorResponse(string responseString)
         {
             return ErrorRegex.IsMatch(responseString);
+        }
+
+        public async Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots model, string suid)
+        {
+            return await Post<ListSlots, ListSlotsReply>(model, suid);
         }
 
         public class TppApiResponse

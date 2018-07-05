@@ -10,6 +10,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
@@ -55,11 +56,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         }
         
         [TestMethod]
-        public void GetAppointmentSlotsService_WhenCalled_ThrowsNotImplementedException()
+        public void GetAppointmentSlotsService_WhenCalled_ReturnsTppAppointmentSlotsService()
         {
-            (new Action(() => _systemUnderTest.GetAppointmentSlotsService()))
-                .Should()
-                .Throw<NotImplementedException>();
+            var builder = Mock.Of<IAppointmentSlotResultBuilder>();
+            var logger = Mock.Of<ILogger<TppAppointmentSlotsService>>();
+            var service = new TppAppointmentSlotsService(_tppClient, logger, builder);
+
+            _mockServiceProvider.Setup(x => x.GetService(typeof(TppAppointmentSlotsService)))
+                .Returns(service);
+
+            _systemUnderTest.GetAppointmentSlotsService().Should().Be(service);
         }
         
         [TestMethod]

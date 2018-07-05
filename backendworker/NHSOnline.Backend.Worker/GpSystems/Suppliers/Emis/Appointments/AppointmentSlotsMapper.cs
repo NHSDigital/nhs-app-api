@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentSlotsMapper : IAppointmentSlotsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
-        private const string SessionTypeSeperator = " - ";
+        private const string SessionTypeSeparator = " - ";
 
         public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
@@ -29,16 +29,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             IEnumerable<SessionHolder> sessionHolders,
             IEnumerable<Models.Session> sessions)
         {
-            var slots = new List<Slot>();
-
             if (sessions == null || !sessions.Any())
             {
-                return slots;
+                yield break;
             }
             
             if (slotSessions==null || ! slotSessions.Any())
             {
-                return slots;
+                yield break;
             }
             
             foreach (var sourceSlotSession in slotSessions)
@@ -77,17 +75,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                         Type = CreateTypeFromSlotAndSession(sourceSlot,sessions.FirstOrDefault(x=>x.SessionId==sourceSlotSession.SessionId))
                     };
 
-                    slots.Add(slot);
+                    yield return slot;
                 }
             }
-
-            return slots;
         }
 
         private string CreateTypeFromSlotAndSession(AppointmentSlot sourceSlot, Models.Session session)
         {
             var hasOnlySlotTypeOrSessionName = string.IsNullOrEmpty(sourceSlot.SlotTypeName) || string.IsNullOrEmpty(session?.SessionName);
-            return $"{session?.SessionName}{(hasOnlySlotTypeOrSessionName ? string.Empty : SessionTypeSeperator)}{sourceSlot.SlotTypeName}";
+            return $"{session?.SessionName}{(hasOnlySlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{sourceSlot.SlotTypeName}";
         }
 
         private static string[] FindCliniciansForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<SessionHolder> sessionHolders)
