@@ -41,7 +41,7 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     lateinit var accountCreationPage : CIDAccountCreationPage
 
     val timeoutBanner = HybridPageElement(
-            browserLocator = "//div[contains(text(), 'Session expired. Please log in again.')]",
+            browserLocator = "//div[@class='alertContainer']/h3[contains(text(), 'Session Expired. Please sign in again.')]",
             androidLocator = null,
             page = this
     )
@@ -92,7 +92,7 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         Assert.assertFalse(findByXpath("//nav[@class='menu']").isVisible);
     }
 
-    fun timeoutBannerShouldBeVisible() {
-        Assert.assertTrue(timeoutBanner.element.isVisible)
+    fun assertTimeoutBannerIsVisible() {
+        Assert.assertTrue("Expected timeout banner to be visible" ,timeoutBanner.element.isVisible)
     }
 }

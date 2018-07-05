@@ -26,6 +26,8 @@ gradle clean test aggregate \
 
 View the serenity report by navigating to "<path to repo>/target/site/serenity"
   and opening the `index.html` file in a browser.
+  
+To run headless append -Dwebdriver.provided.type=chromeheadless onto the command
 
 #Understanding the Structure
 Docs in progress.
@@ -58,6 +60,9 @@ The `serenity.properties` file points to a certain type of driver using the
 To add another type of driver, add a class in the same package as the other web drivers
   , add the type onto the properties file list and point `webdriver.provided.type` to the
   new type.
+
+To run in firefox, download geckodriver, place it in the bdd folder, and use the parameter
+  ' -Dwebdriver.provided.type=firefox'.
 
 ###Config Properties
 Configuration is all defined in one file and each of the properties can be overriden by

@@ -4,12 +4,11 @@ import net.serenitybdd.core.SerenitySystemProperties
 import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.annotations.Step
-import net.thucydides.core.util.SystemEnvironmentVariables
 import org.junit.Assert
 import pages.LoginPage
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.NoSuchElementException
+import java.util.*
 
 open class BrowserSteps {
 
@@ -54,7 +53,9 @@ open class BrowserSteps {
 
     private fun assertCookieContains(errorMessage: String, cookieName: String, content: String) {
         if (cookieContains(cookieName, content) == false) {
-            Assert.assertEquals(errorMessage, content, fetchCookieContents(cookieName))
+            var actual = fetchCookieContents(cookieName)
+            var test = actual.contains(content)
+            Assert.assertTrue(errorMessage + "\nExpected to contain: '$content'\nActual: '$actual'", test)
         }
     }
 
@@ -69,9 +70,9 @@ open class BrowserSteps {
         Assert.assertTrue("No one is logged in", cookieContains(vuexCookieName, "'loggedIn':false"));
 
         // No remaining personal data left...
-        assertCookieContains("Appointments should be blank", vuexCookieName, "'appointmentSlots':{'appointmentSessions':[],'clinicians':[],'locations':[],'slots':[],'hasLoaded':false,'hasErrored':false}");
-        assertCookieContains("Prescriptions should be blank", vuexCookieName, "'prescriptions':{'prescriptionCourses':[],'hasLoaded':false,'hasErrored':false}");
-        assertCookieContains("Repeat prescriptions should be blank", vuexCookieName, "'repeatPrescriptionCourses':{'courses':[],'loaded':false,'errored':false,'repeatPrescriptionCourses':[],'hasLoaded':false,'hasErrored':false,'validated':false,'valid':false}");
+        assertCookieContains("Appointments should be blank", vuexCookieName, "'appointmentSlots':{'appointmentSessions':[],'clinicians':[],'locations':[],'slots':[],'hasLoaded':false,'hasErrored':false,'selectedSlot':null}");
+        assertCookieContains("Prescriptions should be blank", vuexCookieName, "'prescriptions':{'prescriptionCourses':null,'hasLoaded':false,'hasErrored':false}");
+        assertCookieContains("Repeat prescriptions should be blank", vuexCookieName, "'repeatPrescriptionCourses':{'courses':[],'repeatPrescriptionCourses':[],'specialRequest':null,'justOrderedARepeatPrescription':false,'hasLoaded':false,'hasErrored':false,'validated':false,'isValid':false}")
     }
 
     @Step
