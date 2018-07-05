@@ -5,6 +5,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - "TZ=Europe/London"
       - API_HOST=http://localhost:8082
       - CID_REDIRECT_URI=http://localhost:3000/auth-return
       - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
