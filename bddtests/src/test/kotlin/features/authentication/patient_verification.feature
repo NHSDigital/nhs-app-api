@@ -67,11 +67,10 @@ Feature: Patient Verification
     |TPP  |
 
   @backend
-    @this
   Scenario Outline: Non-existent ODS Code for <GP System>
     Given I have an <GP System> ODS Code that does not exists
     When I verify patient data
-    Then I receive a "Not Found" error
+    Then I receive a "Not Implemented" error
 
   Examples:
     |GP System |
