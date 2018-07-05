@@ -60,6 +60,8 @@ open class SharedStepDefinitions {
         if(system == "TPP"){
             initialiseTpp()
         }
+
+        Serenity.setSessionVariable(BaseStepDefinition.GLOBAL_PROVIDER_TYPE).to(system)
     }
 
     private fun initialiseEmis() {

@@ -71,6 +71,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
             return medications
                 .Where(x => x.Requestable?.ToLower() == IsRequestable)
+                .OrderBy(x => x.Drug)
                 .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
         }
     }

@@ -1,6 +1,6 @@
 package pages.prescription
 
-import mocking.emis.models.MedicationCourse
+import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WrongPageError
@@ -11,6 +11,7 @@ import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
 import pages.HybridPageElement
 import java.time.Duration
+
 
 fun resolveDetailsField(dosage: String?, quantity: String?): String {
 

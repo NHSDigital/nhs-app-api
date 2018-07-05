@@ -1,21 +1,25 @@
-package features.courses
+package mocking.data.prescriptions.courses
 
-import features.prescriptions.loaders.EmisPrescriptionLoader
-import mocking.emis.models.MedicationCourse
+import mocking.data.prescriptions.EmisPrescriptionLoader
+import models.prescriptions.MedicationCourse
 import mocking.emis.models.PrescriptionType
 import java.util.*
 
-object CoursesData {
+object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
 
-    fun getCourseData(maxCourses: Int,
+    override lateinit var data:MutableList<MedicationCourse>
+
+    override fun loadData(maxCourses: Int,
                       numOfRepeats: Int,
                       numCanBeRequested: Int,
-                      medicationCourses: MutableList<MedicationCourse>,
+                      //medicationCourses: MutableList<MedicationCourse>,
                       includeDosage: Boolean,
-                      includeQuantity: Boolean) : MutableList<MedicationCourse> {
+                      includeQuantity: Boolean) {
 
         var numberOfRepeats = numOfRepeats
-        var numberCanBerequested = numCanBeRequested
+        var numberCanBeRequested = numCanBeRequested
+
+        var medicationCourses = mutableListOf<MedicationCourse>()
 
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {
@@ -40,14 +44,23 @@ object CoursesData {
             }
 
             // Check if the course needs to be true for canBeRequested
-            if(numberCanBerequested != 0){
+            if(numberCanBeRequested != 0){
                 createdCourse.canBeRequested = true
-                numberCanBerequested--
+                numberCanBeRequested--
             }
 
             medicationCourses.add(createdCourse)
         }
 
-        return medicationCourses
+        this.data = medicationCourses
+    }
+
+    override fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
+        var coursesDataFiltered = data.filter { medicationCourse -> medicationCourse.canBeRequested!! }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.take(100).toMutableList()
+
+        return coursesDataFiltered
     }
 }

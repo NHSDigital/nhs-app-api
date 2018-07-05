@@ -102,18 +102,14 @@ Feature: View prescriptions
       | TPP       |
 
   @prescription
-  Scenario Outline: <GP System> patient who has acute prescriptions
-    Given <GP System> is initialised
-    And I am using <GP System> GP System
+  Scenario: EMIS patient who has acute prescriptions
+    Given EMIS is initialised
+    And I am using EMIS GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
     When I am on the prescriptions page
     Then I see 2 prescriptions
 
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
 
 
   @NHSO-556
@@ -192,8 +188,7 @@ Feature: View prescriptions
   @NHSO-599
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with correct data returns a list of prescriptions when a patient had repeat prescriptions in the last 6 months (Date 6 months ago provided)
-    Given I am using <GP System> GP System
-    And I have logged into <GP System> and have a valid session cookie
+    Given I have logged into <GP System> and have a valid session cookie
     And From date is 6 months ago and I have 10 prescriptions in the last 6 months
     When I get the users prescriptions with a valid cookie
     Then I receive a list of 10 prescriptions

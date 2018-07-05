@@ -48,13 +48,14 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         val prescriptions = findAllByXpath("//li[@aria-label='historic-prescription']")
 
-        val orderDateXpath = ".//*[@aria-label='order-date']"
-        val courseNameXpath = ".//*[@aria-label='course-name']"
-        val dosageXpath = ".//*[@aria-label='detail']"
-        val statusXpath = ".//*[@aria-label='status']"
+        var orderDateXpath = ".//*[@aria-label='order-date']"
+        var courseNameXpath = ".//*[@aria-label='course-name']"
+        var dosageXpath = ".//*[@aria-label='detail']"
+        var statusXpath = ".//*[@aria-label='status']"
 
-        prescriptions.forEach { el ->
-            val p: HistoricPrescription
+        prescriptions.forEach( { el ->
+
+            var p: HistoricPrescription
 
             if (allFieldsProvided) {
                 p = HistoricPrescription(
@@ -70,7 +71,7 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             }
 
             historicPrescriptions.add(p)
-        }
+        })
 
         return historicPrescriptions
     }

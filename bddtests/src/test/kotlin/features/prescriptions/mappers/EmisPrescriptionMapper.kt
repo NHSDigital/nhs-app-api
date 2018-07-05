@@ -1,6 +1,6 @@
 package features.prescriptions.mappers
 
-import mocking.emis.models.MedicationCourse
+import models.prescriptions.MedicationCourse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.PrescriptionType
 import mocking.emis.models.RequestedMedicationCourseStatus

@@ -5,15 +5,13 @@ Feature: View courses
   As a logged in user
   I want to see a list of repeat courses that I can order
 
-  Background:
-    Given wiremock is initialised
+  @smoketest
+  Scenario Outline: The <GP System> User has repeatable prescriptions
+    Given <GP System> is initialised
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
-
-  @smoketest
-  Scenario Outline: The <GP System> User has repeatable prescriptions
-    Given I have 10 <GP System> assigned prescriptions
+    And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -21,10 +19,15 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @prescription
   Scenario Outline: The <GP System> User has 0 repeatable prescriptions
-    Given I have 0 <GP System> assigned prescriptions
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 0 <GP System> assigned prescriptions
     And 0 of my prescriptions are of type repeat
     And 0 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -32,10 +35,15 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @prescription
   Scenario Outline: The <GP System> user has 1 repeatable prescription
-    Given I have 1 <GP System> assigned prescriptions
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 1 <GP System> assigned prescriptions
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -43,11 +51,16 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
 
   @prescription
   Scenario Outline: The user <GP System> should only see max 100 repeatable prescriptions
-    Given I have 101 <GP System> assigned prescriptions
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 101 <GP System> assigned prescriptions
     And 101 of my prescriptions are of type repeat
     And 101 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -55,10 +68,15 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @prescription
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
-    Given I have 100 <GP System> assigned prescriptions
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 100 <GP System> assigned prescriptions
     And 100 of my prescriptions are of type repeat
     And 100 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -66,10 +84,15 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @prescription
   Scenario Outline: The <GP System> user has over 5 repeat dispense prescriptions
-    Given I have 10 <GP System> assigned prescriptions
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 10 <GP System> assigned prescriptions
     And 5 of my prescriptions are of type repeat
     And 3 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -77,52 +100,77 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @smoketest
   @NHSO-502
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
     And I select 5 <GP System> repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
-    Given I select 1 <GP System> repeatable prescriptions out of 1 available
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 <GP System> repeatable prescriptions out of 1 available
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
-    Given I select 0 <GP System> repeatable prescriptions out of 5 available
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 0 <GP System> repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then A validation message is displayed indicating the user has not selected any repeat prescriptions
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
-    Given I select 5 <GP System> repeatable prescriptions out of 5 available
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 5 <GP System> repeatable prescriptions out of 5 available
     And I click Continue on the Order a repeat prescription page
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     Then I see my previously selected repeat prescriptions selected
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @smoketest
   @NHSO-502 @NHSO-655
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
-    Given I select 4 <GP System> repeatable prescriptions out of 5 available
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 4 <GP System> repeatable prescriptions out of 5 available
     And I enter text "Please call when prescription received." for special request
     And I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
@@ -136,21 +184,31 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-655
   @prescription
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
-    Given I select 1 <GP System> repeatable prescriptions out of 1 available
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 <GP System> repeatable prescriptions out of 1 available
     And I click Continue on the Order a repeat prescription page
     Then I see the special request text "None"
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-556
   @prescription
   Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
-    Given I am using EMIS GP System
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I am using EMIS GP System
     And prescriptions is disabled at a GP Practice level
     When I browse to the page at /prescriptions/repeat-courses
     Then I see a message informing me that I don't currently have access to this service
@@ -158,7 +216,11 @@ Feature: View courses
   @NHSO-556
   @prescription
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
-    Given I am using EMIS GP System
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I am using EMIS GP System
     And prescriptions is disabled at a GP Practice level
     When I browse to the page at /prescriptions/confirm-prescription-details
     Then I see a message informing me that I don't currently have access to this service
@@ -166,7 +228,11 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The user has 1 repeatable prescription with missing quantity info
-    Given I have 1 assigned prescriptions which have only dosage info
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 1 assigned prescriptions which have only dosage info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -175,7 +241,11 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The user has 1 repeatable prescription with missing dosage info
-    Given I have 1 assigned prescriptions which have only quantity info
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 1 assigned prescriptions which have only quantity info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -184,7 +254,11 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The user has 1 repeatable prescription with missing dosage and quantity info
-    Given I have 1 assigned prescriptions which have no info
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I have 1 assigned prescriptions which have no info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
     When I click 'Order a repeat prescription'
@@ -193,20 +267,32 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The User has selected repeat prescriptions to order with missing quantity info
-    Given I select 1 repeatable prescriptions out of 1 available which have only dosage info
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 1 available which have only dosage info
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
   @NHSO-1509
   @prescription
   Scenario: The User has selected repeat prescriptions to order with missing dosage info
-    Given I select 1 repeatable prescriptions out of 1 available which have only quantity info
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 1 available which have only quantity info
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
   @NHSO-1509
   @prescription
   Scenario: The User has selected repeat prescriptions to order with missing dosage and quantity info
-    Given I select 1 repeatable prescriptions out of 1 available which have no info
+    Given EMIS is initialised
+    And I have historic prescriptions
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 repeatable prescriptions out of 1 available which have no info
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page

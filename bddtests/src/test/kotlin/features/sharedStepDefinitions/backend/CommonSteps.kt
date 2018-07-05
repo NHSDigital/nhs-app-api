@@ -8,6 +8,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
+import features.sharedStepDefinitions.BaseStepDefinition
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
 import mocking.defaults.MockDefaults.Companion.patient
@@ -34,10 +35,14 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import java.util.*
 import java.util.concurrent.TimeUnit
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes;
 
 
 class CommonSteps : AbstractSteps() {
-    var GP_SYSTEM: String = "GP_SYSTEM"
+    companion object {
+        val GP_SYSTEM: String = "GP_SYSTEM"
+    }
+
     private val EMIS = "EMIS"
     private val TPP = "TPP"
     private val VISION = "VISION"
@@ -127,8 +132,8 @@ class CommonSteps : AbstractSteps() {
 
         val patient = Patient.getDefault(gpSystem)
 
-        when (gpSystem) {
-            EMIS -> {
+        when (ProviderTypes.valueOf(gpSystem)) {
+            ProviderTypes.EMIS -> {
                 mockingClient.forCitizenId {
                     tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
                             .respondWithSuccess(
@@ -163,7 +168,7 @@ class CommonSteps : AbstractSteps() {
                 }
 
             }
-            TPP -> {
+            ProviderTypes.TPP -> {
                 CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
 
                 mockingClient.forTpp {

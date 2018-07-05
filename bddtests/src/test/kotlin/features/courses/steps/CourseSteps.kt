@@ -1,6 +1,6 @@
 package features.courses.steps
 
-import mocking.emis.models.MedicationCourse
+import models.prescriptions.MedicationCourse
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.prescription.RepeatPrescriptionsPage

@@ -5,24 +5,28 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import features.courses.CoursesData
+import mocking.data.prescriptions.courses.EmisCoursesLoader
+import mocking.data.prescriptions.courses.ICoursesLoader
+import mocking.data.prescriptions.courses.TppCoursesLoader
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
 import features.prescriptions.steps.PrescriptionsSteps
+import features.sharedStepDefinitions.BaseStepDefinition
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import mocking.emis.models.*
+import mocking.tpp.models.ListRepeatMedicationReply
+import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesResponse
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 
 
-open class coursesStepDefinitions {
+open class CoursesStepDefinitions : BaseStepDefinition() {
 
-    val EXPECTED_COURSE_DATA_SIZE = "CourseDataSize"
     val HTTP_EXCEPTION = "HttpException"
 
     @Steps
@@ -35,13 +39,11 @@ open class coursesStepDefinitions {
     lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
 
     val mockingClient = MockingClient.instance
-    val patient = MockDefaults.patient
 
-    lateinit var coursesData: MutableList<MedicationCourse>
+
+    lateinit var coursesLoader: ICoursesLoader<*>
+
     lateinit var selectedCourses: List<MedicationCourse>
-
-    private val EMIS = "EMIS"
-    var currentGPSystem: String? = EMIS
 
     var numOfCourses: Int = 0
     var numOfRepeats: Int = 0
@@ -52,8 +54,8 @@ open class coursesStepDefinitions {
 
     @Given("I have (\\d+) (.*) assigned prescriptions")
     fun iHaveXAssignedPrescriptions(numberOfCourses: Int, gpSystem: String) {
-        currentGPSystem = gpSystem
         numOfCourses = numberOfCourses
+        initalize(gpSystem)
     }
 
     @Given("I have (\\d+) assigned prescriptions which have (.*)")
@@ -75,7 +77,6 @@ open class coursesStepDefinitions {
 
         setupWiremockandCreateData()
 
-        Serenity.setSessionVariable(EXPECTED_COURSE_DATA_SIZE).to(numCanBeRequested)
     }
 
     @When("I get the users courses with a valid cookie")
@@ -197,23 +198,50 @@ open class coursesStepDefinitions {
     }
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
-        var coursesDataFiltered = coursesData.filter { medicationCourse -> medicationCourse.canBeRequested }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.take(100).toMutableList()
-
-        return coursesDataFiltered
+        return coursesLoader.getAvailableCoursesFilteredSortedOrdered()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun setupWiremockandCreateData() {
 
-        when (currentGPSystem) {
-            EMIS -> {
-                coursesData = CoursesData.getCourseData(numOfCourses, numOfRepeats, numCanBeRequested, mutableListOf(), showDosage, showQuantity)
+        if (currentProvider == null)
+        {
+            initalize(Serenity.sessionVariableCalled<String>(BaseStepDefinition.GLOBAL_PROVIDER_TYPE))
+        }
+
+        when (currentProvider) {
+            ProviderTypes.EMIS -> {
+                coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
+                        showDosage, showQuantity)
+
                 mockingClient.forEmis {
-                    coursesRequest(patient)
-                            .respondWithSuccess(CourseRequestsGetResponse(coursesData))
+                    coursesRequest(currentPatient)
+                            .respondWithSuccess(CourseRequestsGetResponse(coursesLoader.data as List<MedicationCourse>))
                 }
+            }
+            ProviderTypes.TPP -> {
+                coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
+                         showDosage, showQuantity)
+
+                mockingClient.forTpp {
+                    listRepeatMedication(currentPatient)
+                            .respondWithSuccess(coursesLoader.data as ListRepeatMedicationReply)
+                }
+            }
+        }
+    }
+
+    private fun initalize(gpSystem:String) {
+        currentProvider = ProviderTypes.valueOf(gpSystem)
+
+        when(currentProvider) {
+            ProviderTypes.EMIS -> {
+                coursesLoader = EmisCoursesLoader
+                currentPatient = EMIS_PATIENT
+            }
+            ProviderTypes.TPP -> {
+                coursesLoader = TppCoursesLoader
+                currentPatient = TPP_PATIENT
             }
         }
     }

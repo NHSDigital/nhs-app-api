@@ -1,6 +1,6 @@
 package pages.prescription
 
-import mocking.emis.models.MedicationCourse
+import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WrongPageError

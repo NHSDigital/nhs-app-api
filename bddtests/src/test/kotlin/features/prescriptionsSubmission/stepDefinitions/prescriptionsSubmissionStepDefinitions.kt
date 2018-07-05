@@ -5,9 +5,9 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.courses.stepDefinitions.coursesStepDefinitions
+import features.courses.stepDefinitions.CoursesStepDefinitions
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
-import features.prescriptions.loaders.EmisPrescriptionLoader
+import mocking.data.prescriptions.EmisPrescriptionLoader
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
 import features.prescriptions.steps.PrescriptionsSteps
@@ -15,6 +15,7 @@ import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.defaults.MockDefaults.Companion.patient
 import mocking.MockingClient
 import mocking.emis.models.*
+import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -36,7 +37,7 @@ open class PrescriptionsSubmissionStepDefinitions {
     var prescriptionSubmissionRequest : PrescriptionSubmissionRequest? = null
 
     @Steps
-    lateinit var coursesStepDefinitions: coursesStepDefinitions
+    lateinit var coursesStepDefinitions: CoursesStepDefinitions
 
     @Steps
     lateinit var confirmRepeatPrescriptionOrderSteps: ConfirmRepeatPrescriptionOrderSteps
@@ -192,15 +193,15 @@ open class PrescriptionsSubmissionStepDefinitions {
 
     @And("^I have (\\d+) historic prescriptions in this scenario$")
     fun iHaveXHistoricPrescriptionsInThisScenario(amount: Int) {
-        val pr = EmisPrescriptionLoader.loadPrescriptionsData(amount, amount, amount)
+        EmisPrescriptionLoader.loadData(amount, amount, amount)
         mockingClient.forEmis {
             prescriptionsRequest(patient)
-                    .respondWithSuccess(pr)
+                    .respondWithSuccess(EmisPrescriptionLoader.data)
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(currentScenarioState)
         }
 
-        prescriptionMap[Scenario.STARTED] = pr
+        prescriptionMap[Scenario.STARTED] = EmisPrescriptionLoader.data
 
     }
 
@@ -221,6 +222,7 @@ open class PrescriptionsSubmissionStepDefinitions {
                 prescriptionMap[currentScenarioState]!!), amount)
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String){
 
         coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, gpSystem, amount)
@@ -229,7 +231,7 @@ open class PrescriptionsSubmissionStepDefinitions {
             EMIS -> {
                 mockingClient.forEmis {
                     coursesRequest(patient)
-                            .respondWithSuccess(CourseRequestsGetResponse(coursesStepDefinitions.coursesData))
+                            .respondWithSuccess(CourseRequestsGetResponse(coursesStepDefinitions.coursesLoader.data as List<MedicationCourse>))
                             .inScenario(scenarioTitle)
                             .whenScenarioStateIs(currentScenarioState)
                 }
@@ -244,7 +246,7 @@ open class PrescriptionsSubmissionStepDefinitions {
 
                 currentScenarioState = submitted
 
-                buildNewPrescriptionData(coursesStepDefinitions.coursesData)
+                buildNewPrescriptionData(coursesStepDefinitions.coursesLoader.data as MutableList<MedicationCourse>)
 
                 mockingClient.forEmis {
                     prescriptionsRequest(patient)

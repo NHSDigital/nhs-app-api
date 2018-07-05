@@ -2,6 +2,7 @@ package mocking.defaults.dataPopulation.journies.prescriptions
 
 import mocking.defaults.dataPopulation.journies.courses.CoursesData
 import mocking.emis.models.*
+import models.prescriptions.MedicationCourse
 import java.time.OffsetDateTime
 import java.util.*
 

@@ -4,14 +4,12 @@ Feature: View courses
   As a logged in user
   I want to see a list of repeat courses that I can order
 
-  Background:
-    Given wiremock is initialised
-    And I have historic prescriptions
-
   @backend
   Scenario Outline: Requesting courses with correct data returns a list of repeat courses that can be requested
-    Given I have logged in and have a valid session cookie for <GP System>
-    Given I have 10 <GP System> assigned prescriptions
+    Given <GP System> is initialised
+    And I have historic prescriptions
+    And I have logged in and have a valid session cookie for <GP System>
+    And I have 10 <GP System> assigned prescriptions
     And 5 of my prescriptions are of type repeat
     And 2 of my prescriptions can be requested
     When I get the users courses with a valid cookie
@@ -19,3 +17,4 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |

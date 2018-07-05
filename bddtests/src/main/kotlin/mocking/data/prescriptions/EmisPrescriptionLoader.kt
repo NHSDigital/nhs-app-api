@@ -1,13 +1,14 @@
-package features.prescriptions.loaders
+package mocking.data.prescriptions
 
-import features.courses.CoursesData
+import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.emis.models.*
+import models.prescriptions.MedicationCourse
 import java.time.OffsetDateTime
-import java.util.*
 
-object EmisPrescriptionLoader {
+object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetResponse> {
+    override lateinit var data:PrescriptionRequestsGetResponse
 
-    fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?, showDosage: Boolean = true, showQuantity: Boolean = true): PrescriptionRequestsGetResponse {
+    override fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean, showQuantity: Boolean) {
 
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
@@ -15,13 +16,14 @@ object EmisPrescriptionLoader {
         if(noPrescriptions != 0) {
 
             // Create courses first as these will be used in the prescriptions
-            medicationCourses = CoursesData.getCourseData(
+            EmisCoursesLoader.loadData(
                     noCourses,
-                    if (noRepeats == null) noPrescriptions else noRepeats,
-                    if (noRepeats == null) noPrescriptions else noRepeats,
-                    medicationCourses,
+                    noRepeats,
+                    noRepeats,
                     showDosage,
                     showQuantity)
+
+            medicationCourses = medicationCourses.union(EmisCoursesLoader.data).toMutableList()
 
             var maxPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false
@@ -61,66 +63,16 @@ object EmisPrescriptionLoader {
             }
         }
 
-        return PrescriptionRequestsGetResponse(prescriptionRequests, medicationCourses)
+        data = PrescriptionRequestsGetResponse(prescriptionRequests, medicationCourses)
     }
 
-    fun getCourseName(): String {
-        return getStringValue(getMedicationCourseNames())
-    }
 
-    fun getDosage(): String {
-        return getStringValue(getDosages())
-    }
 
-    fun getStringValue(list: List<String>): String {
-        return list.get(getRandomNumber(getMedicationCourseNames().size))
-    }
 
-    fun getMedicationCourseNames(): List<String> {
-        return listOf(
-                "Ranitidine 150mg effervescent tablets",
-                "Codine 200mg tablets",
-                "Choline salicylate 8.7% oromucosal gel sugar free",
-                "Paracetamol 150mg oral tablets",
-                "Penicillin 150mg oral tablets"
-        )
-    }
 
-    fun getDosages(): List<String> {
-        return listOf(
-                "One To Be Taken Twice A Day",
-                "One To Be Taken Three Times A Day",
-                "One To Be Taken Weekly",
-                "Two To Be Taken Four Times A Day",
-                "One To Be Take Every Evening"
-        )
-    }
-
-    fun getQuantity(): String {
-
-        val quantity = getRandomNumber(100)
-        val list = listOf(
-                "$quantity gram",
-                "$quantity tablet",
-                "$quantity ml")
-
-        return list.get(getRandomNumber(list.size))
-    }
-
-    fun getPrescriptionStatus(): RequestedMedicationCourseStatus {
+    private fun getPrescriptionStatus(): RequestedMedicationCourseStatus {
         return RequestedMedicationCourseStatus.values()[getRandomNumber(6)]
     }
 
-    fun getRandomNumber(maxNum: Int): Int {
-        val random = Random()
-        val minNum = 1
 
-        var localMaxNum = maxNum
-
-        if(localMaxNum == 1){
-            localMaxNum += 1
-        }
-
-        return random.nextInt(localMaxNum - minNum) + minNum
-    }
 }

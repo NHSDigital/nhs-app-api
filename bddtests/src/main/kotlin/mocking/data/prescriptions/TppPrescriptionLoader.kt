@@ -1,28 +1,31 @@
-package features.prescriptions.loaders
+package mocking.data.prescriptions
 
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.Medication
 import java.util.*
 
-object TppPrescriptionLoader {
-    fun loadRepeatMedicationData(noPrescriptions: Int, noRequestable: Int, noRepeats: Int, showDosage: Boolean = true, showQuantity: Boolean = true) : ListRepeatMedicationReply {
+object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
+    override lateinit var data:ListRepeatMedicationReply
+
+    override fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean, showQuantity: Boolean) {
         var medicationList = ListRepeatMedicationReply()
         medicationList.patientId = generateRandomId()
         medicationList.onlineUserId = generateRandomId()
         medicationList.uuid = UUID.randomUUID().toString()
 
         if(noPrescriptions == 0){
-            return medicationList
+            data = medicationList
+            return
         }
 
         var totalPrescriptions: Int = noPrescriptions
-        var totalRequestable: Int = noRequestable
+        var totalRequestable: Int = noCourses
         var totalRepeats: Int = noRepeats
 
         if(noPrescriptions > 100){
             totalPrescriptions = 100
         }
-        if(noRequestable > 100){
+        if(noCourses > 100){
             totalRequestable = 100
         }
         if(noRepeats > 100){
@@ -41,17 +44,17 @@ object TppPrescriptionLoader {
             var medication = Medication()
             medication.drugId = generateRandomId()
             medication.type = "Acute"
-            medication.drug = EmisPrescriptionLoader.getCourseName()
+            medication.drug = getCourseName()
 
             if(showDosage || showQuantity) {
                 if(showDosage && !showQuantity){
-                    medication.details = EmisPrescriptionLoader.getDosage()
+                    medication.details = getDosage()
                 }
                 if(showQuantity && !showDosage){
-                    medication.details = EmisPrescriptionLoader.getQuantity()
+                    medication.details = getQuantity()
                 }
                 if(showQuantity && showDosage){
-                    medication.details = EmisPrescriptionLoader.getDosage() + " - " + EmisPrescriptionLoader.getQuantity()
+                    medication.details = getDosage() + " - " + EmisPrescriptionLoader.getQuantity()
                 }
             }
 
@@ -66,10 +69,10 @@ object TppPrescriptionLoader {
             medicationList.Medication.elementAt(k-1).type = "Repeat"
         }
 
-        return medicationList
+        data = medicationList
     }
 
-    fun generateRandomId(): String {
+    private fun generateRandomId(): String {
         val random = Random()
         val minNum = 100000
         var maxNum = 999999
