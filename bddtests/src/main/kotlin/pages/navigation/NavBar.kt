@@ -22,6 +22,10 @@ open class NavBar : HybridPageObject(Companion.PageType.NATIVE) {
         return containsElements("${type.locator}/ancestor::li[@class='active']")
     }
 
+    fun hasAnActiveSelection() : Boolean {
+        return containsElements( "//nav[descendant::li[@class='active']]")
+    }
+
     fun isVisible(type: NavBarType): Boolean {
         return findBy<WebElementFacade>("${type.locator}").isVisible
     }

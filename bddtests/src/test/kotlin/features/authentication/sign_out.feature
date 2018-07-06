@@ -56,3 +56,4 @@ Feature: Sign out of mobile web
     Given I am logged in
     When I sign out
     Then the user login details are cleared from cookies
+

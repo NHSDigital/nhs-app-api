@@ -100,6 +100,12 @@ open class SharedStepDefinitions {
         Assert.assertTrue(navBar.hasSelectedTab(type))
     }
 
+    @Then("^none of the menu buttons are highlighted")
+    fun iDoNotSeeAHighlightedMenuButton() {
+        Assert.assertFalse("Nav bar has highlighted item, expected none",navBar.hasAnyTabSelected())
+    }
+
+
     @Then("^I am redirected to '(.*)'$")
     fun iAmRedirectedTo(url: String) {
         browser.shouldHaveUrl(url)

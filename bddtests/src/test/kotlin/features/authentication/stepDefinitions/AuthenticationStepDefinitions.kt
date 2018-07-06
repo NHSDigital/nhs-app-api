@@ -22,8 +22,6 @@ import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
-import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
@@ -558,13 +556,23 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
         nav.myAccount()
-        myAccount.signOut();
+        myAccount.signOut()
+    }
+
+    @When("^I click the head icon button$")
+    fun iClickTheHeadIconButton() {
+        nav.myAccount()
     }
 
     @Then("^I do not see the menu bar$")
     @Throws(Exception::class)
     fun iDoNotSeeMenuBar() {
         login.assertMenuIsNotVisible()
+    }
+
+    @Then("^I see the sign out button$")
+    fun iSeeTheSignOutButton() {
+        myAccount.assertSignoutButtonVisible()
     }
 
     @Then("^the user login details are cleared from cookies$")

@@ -16,6 +16,11 @@ open class NavigationSteps {
     }
 
     @Step
+    fun hasAnyTabSelected() : Boolean {
+        return navBar.hasAnActiveSelection()
+    }
+
+    @Step
     fun hasVisible(tab: String): Boolean {
         return hasVisible(NavBar.NavBarType.valueOf(tab.toUpperCase()))
     }

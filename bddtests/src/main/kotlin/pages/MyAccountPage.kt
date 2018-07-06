@@ -11,5 +11,7 @@ class MyAccountPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     @FindBy(how = How.XPATH, using = "//button[@id='signout-button']")
     lateinit var signOutButton: WebElementFacade
 
-
+    fun isSignOutButtonVisible() : Boolean {
+        return signOutButton.isVisible
+    }
 }
