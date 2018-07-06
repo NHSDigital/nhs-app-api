@@ -10,6 +10,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientRecord
 {

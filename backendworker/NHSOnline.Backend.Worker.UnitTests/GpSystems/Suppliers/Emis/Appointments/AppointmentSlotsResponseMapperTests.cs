@@ -123,7 +123,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
-                Sessions = new Session[0],
+                Sessions = new Worker.GpSystems.Suppliers.Emis.Models.Session[0],
                 Locations = new[] { location },
                 SessionHolders = new[] { sessionHolder }
                 
@@ -154,7 +154,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             // Arrange
             var sessionHolder = CreateSessionHolder(34, "Dr Who");
-            var session = new Session
+            var session = new Worker.GpSystems.Suppliers.Emis.Models.Session
             {
                 SessionId = 77,
                 SessionName = "General Session Appointment",
@@ -202,7 +202,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public void Map_WhenNoCliniciansAreAvailable_ReturnsEmptySetOfClinicians()
         {
             // Arrange
-            var session = new Session
+            var session = new Worker.GpSystems.Suppliers.Emis.Models.Session
             {
                 SessionId = 77,
                 SessionType = "Timed",
@@ -284,9 +284,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
         }
 
-        private static Session CreateSession(int locationId, int sessionId, string name, string sessionType)
+        private static Worker.GpSystems.Suppliers.Emis.Models.Session CreateSession(int locationId, int sessionId, string name, string sessionType)
         {
-            return new Session
+            return new Worker.GpSystems.Suppliers.Emis.Models.Session
             {
                 LocationId = locationId,
                 SessionId = sessionId,

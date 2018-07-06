@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Text;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {

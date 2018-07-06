@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<TppDemographicsService>();
+            
             services.AddTransient<ITppDemographicsMapper, TppDemographicsMapper>();
             base.ConfigureServices(services, configuration);
         }

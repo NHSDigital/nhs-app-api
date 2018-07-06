@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var appointments = new[] { appointment };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, new Session[]{});
+            var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, new Worker.GpSystems.Suppliers.Emis.Models.Session[]{});
 
             // Assert
             actualResponse.Should().BeEmpty();
@@ -283,9 +283,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
         }
 
-        private static Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType)
+        private static Worker.GpSystems.Suppliers.Emis.Models.Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType)
         {
-            return new Session
+            return new Worker.GpSystems.Suppliers.Emis.Models.Session
             {
                 ClinicianIds = clinicianIds,
                 LocationId = locationId,

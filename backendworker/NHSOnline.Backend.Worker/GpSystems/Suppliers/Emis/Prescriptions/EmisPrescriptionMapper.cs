@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions

@@ -328,14 +328,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             };
         }
 
-        private Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType)
+        private static Worker.GpSystems.Suppliers.Emis.Models.Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType)
         {
             return CreateSession(clinicianIds, locationId, sessionId, sessionType, string.Empty);
         }
 
-        private Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType, string sessionName)
+        private static Worker.GpSystems.Suppliers.Emis.Models.Session CreateSession(IEnumerable<int> clinicianIds, int locationId, int sessionId, string sessionType, string sessionName)
         {
-            return new Session
+            return new Worker.GpSystems.Suppliers.Emis.Models.Session
             {
                 ClinicianIds = clinicianIds,
                 LocationId = locationId,

@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
@@ -9,6 +7,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<EmisAppointmentsService>();
+            services.AddTransient<EmisAppointmentSlotsService>();
+            
             services.AddTransient<IAppointmentSlotsResponseMapper, AppointmentSlotsResponseMapper>();
             services.AddTransient<IAppointmentSlotsMapper, AppointmentSlotsMapper>();
             services.AddTransient<IAppointmentsResponseMapper, AppointmentsResponseMapper>();

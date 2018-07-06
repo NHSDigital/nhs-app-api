@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<TppPatientRecordService>();
+            
             services.AddTransient<ITppMyRecordMapper, TppMyRecordMapper>();
             base.ConfigureServices(services, configuration);
         }

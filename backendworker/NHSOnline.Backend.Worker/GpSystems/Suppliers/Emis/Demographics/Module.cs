@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<EmisDemographicsService>();
+            
             services.AddTransient<IEmisDemographicsMapper, EmisDemographicsMapper>();
             base.ConfigureServices(services, configuration);
         }

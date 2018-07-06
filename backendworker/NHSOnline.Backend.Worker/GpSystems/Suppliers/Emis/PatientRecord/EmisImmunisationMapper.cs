@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
-using MedicationRootObject = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model.MedicationRootObject;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using MedicationRootObject = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.MedicationRootObject;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {

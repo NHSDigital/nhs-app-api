@@ -35,7 +35,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private MockHttpMessageHandler _mockHttpHandler;
         private TppHttpClient _httpClient;
         private Mock<ITppConfig> _configMock;
-        private Mock<IHttpClientFactory> _httpClientFactory;
         private IFixture _fixture;
         
         [TestInitialize]

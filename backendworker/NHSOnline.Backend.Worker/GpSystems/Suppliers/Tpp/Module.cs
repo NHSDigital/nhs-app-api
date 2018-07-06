@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,14 +35,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             services.AddSingleton<ITppClient, TppClient>();
             services.AddSingleton<ITppConfig, TppConfig>();
 
-            services.AddTransient<TppIm1ConnectionService>();
-            services.AddTransient<TppSessionService>();
             services.AddTransient<TppTokenValidationService>();
-            services.AddTransient<TppDemographicsService>();
-            services.AddTransient<TppPatientRecordService>();   
-            services.AddTransient<TppPrescriptionService>();
-            services.AddTransient<TppCourseService>();
-            
+                        
             base.ConfigureServices(services, configuration);
         }
     }

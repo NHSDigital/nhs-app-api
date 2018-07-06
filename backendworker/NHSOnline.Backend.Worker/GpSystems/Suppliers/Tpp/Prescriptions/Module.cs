@@ -7,6 +7,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<TppCourseService>();
+            services.AddTransient<TppPrescriptionService>();
+            
+            services.AddTransient<ITppCourseMapper, TppCourseMapper>();
             services.AddTransient<ITppPrescriptionMapper, TppPrescriptionMapper>();
             base.ConfigureServices(services, configuration);
         }

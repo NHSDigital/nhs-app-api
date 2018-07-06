@@ -5,10 +5,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {

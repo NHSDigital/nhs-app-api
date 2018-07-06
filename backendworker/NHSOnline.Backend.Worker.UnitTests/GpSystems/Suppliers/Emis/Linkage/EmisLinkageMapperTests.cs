@@ -4,7 +4,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Linkage;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 {

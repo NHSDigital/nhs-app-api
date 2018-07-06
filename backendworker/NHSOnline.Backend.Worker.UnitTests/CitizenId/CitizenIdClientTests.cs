@@ -30,7 +30,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private CitizenIdClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private CitizenIdHttpClient _httpClient;
-        private Mock<IHttpClientFactory> _httpClientFactory;
 
         [TestInitialize]
         public void TestInitialize()

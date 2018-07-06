@@ -7,6 +7,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<EmisCourseService>();
+            services.AddTransient<EmisPrescriptionService>();
+            
             services.AddTransient<IEmisPrescriptionMapper, EmisPrescriptionMapper>();
             base.ConfigureServices(services, configuration);
         }

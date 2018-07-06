@@ -7,6 +7,11 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {

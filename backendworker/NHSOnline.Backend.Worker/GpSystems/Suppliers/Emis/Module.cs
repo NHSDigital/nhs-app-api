@@ -10,18 +10,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             services.AddSingleton<IGpSystem, EmisGpSystem>();
             services.AddSingleton<IEmisClient, EmisClient>();
             services.AddSingleton<IEmisConfig, EmisConfig>();
-
-            services.AddTransient<EmisAppointmentsService>();
-            services.AddTransient<EmisAppointmentSlotsService>();
-            services.AddTransient<EmisCourseService>();
-            services.AddTransient<EmisIm1ConnectionService>();
-            services.AddTransient<EmisPrescriptionService>();
-            services.AddTransient<EmisSessionService>();
+            
             services.AddTransient<EmisTokenValidationService>();
-            services.AddTransient<EmisDemographicsService>();
-            services.AddTransient<EmisPatientRecordService>();
-            services.AddTransient<EmisLinkageService>();
-
+            
             base.ConfigureServices(services, configuration);
         }
     }

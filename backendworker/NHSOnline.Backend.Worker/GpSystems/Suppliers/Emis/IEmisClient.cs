@@ -2,10 +2,8 @@ using System;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord.Model;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Linkage;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
