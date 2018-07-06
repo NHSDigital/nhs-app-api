@@ -49,6 +49,15 @@ class AvailableSlotsJourney(private val client: MockingClient) {
                 .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
                         .respondWithSuccess()
                 }
+
+        // first slot can be cancelled with reason "No longer required"
+        client.forEmis {
+            cancelAppointmentRequest(patient, CancelAppointmentRequest(
+                    CancellationReason = "No longer required",
+                    SlotId = 1,
+                    UserPatientLinkToken = patient.userPatientLinkToken))
+                        .respondWithSuccess(DeleteAppointmentResponseModel(true))
+        }
     }
 
     private fun createBookAppointmentRequest(appointmentSessions: ArrayList<AppointmentSession>, patient: Patient):

@@ -59,9 +59,7 @@ task mock(type: JavaExec) {
     classpath = jar.outputs.files
     classpath += sourceSets.main.runtimeClasspath
     classpath += sourceSets.test.runtimeClasspath
-    systemProperty "url", System.getProperty("url")
-    systemProperty "wiremockUrl", System.getProperty("wiremockUrl")
-    environment "CID_HOST", System.getProperty("CID_HOST")
+    systemProperties System.properties
     main = "mocking.defaults.MockDataPopulate"
     if (System.getProperty("mockArgs") != null){
         args Eval.me(System.getProperty("mockArgs"))

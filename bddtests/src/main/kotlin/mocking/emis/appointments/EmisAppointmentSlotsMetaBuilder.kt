@@ -7,6 +7,7 @@ import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
+import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
@@ -38,6 +39,12 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
 
     fun respondWithSuccess(model: GetAppointmentSlotsMetaResponseModel): Mapping {
         return respondWithBody(model)
+    }
+
+    fun respondWithSuccess(jsonBody: String): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andBody(jsonBody, contentType = "application/json")
+        }
     }
 
     fun respondWithExceptionWhenNotEnabled(): Mapping {

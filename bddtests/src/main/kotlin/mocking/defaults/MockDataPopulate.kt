@@ -1,5 +1,6 @@
 package mocking.defaults
 
+import kotlin.text.Charsets
 import mocking.MockingClient
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
 import mocking.dataPopulation.journies.prescriptions.PrescriptionsJournies
@@ -10,9 +11,13 @@ import mocking.defaults.dataPopulation.journies.linkage.LinkageJournies
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
+import mocking.emis.appointments.CancelAppointmentRequest
 import models.Patient
+import worker.models.appointments.BookAppointmentSlotRequest
 import worker.models.session.UserSessionRequest
+import java.io.File
 
+const val BASE_NFT_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/nft"
 const val CONNECTION_TOKEN_SUFFIX_LENGTH = 12
 
 open class MockDataPopulate(private val mockingClient: MockingClient) {
@@ -51,12 +56,12 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
         mockingClient.clearWiremock()
         mockingClient.favicon()
-
+        
         for (i in 1..numOfPatients) {
 
-            var index: String = i.toString()
+            val index: String = i.toString()
             val pad=index.padStart(CONNECTION_TOKEN_SUFFIX_LENGTH,'0')
-            var patient = Patient.montelFrye.copy(
+            val patient = Patient.montelFrye.copy(
                     firstName = "NFT.Patient",
 
                     surname = "Test$pad",
@@ -68,8 +73,80 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     endUserSessionId = "endUserSessionId$pad",
                     connectionToken = "00000000-0000-0000-0000-$pad"
             )
+
+            // Authentication
+
             CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
             EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
+
+
+            // Appointment Mocks
+
+            // GET /emis/appointments
+            //
+            val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json")
+            
+            mockingClient.forEmis {
+                appointmentGetRequest(patient = patient)
+                        .respondWithSuccess(appointmentsBody)
+            }
+
+            // GET /emis/appointmentslots/meta
+            //
+            val getAppointmentSlotsMetaBody =
+                    getFileContents("appointments/GetEmisAppointmentSlotsMeta.json")
+                            
+
+            mockingClient.forEmis {
+                appointmentSlotsMetaRequest(patient = patient)
+                        .respondWithSuccess(getAppointmentSlotsMetaBody)
+                
+            }
+                    
+
+            // GET /emis/appointmentslots
+            //
+            val getAppointmentSlotsBody =
+                    getFileContents("appointments/GetEmisAppointmentSlots.json")
+                            
+
+            mockingClient.forEmis {
+                appointmentSlotsRequest(patient = patient)
+                        .respondWithSuccess(getAppointmentSlotsBody)
+            }
+
+            // POST /emis/appointments
+            //
+            val postAppointmentRequestBody =
+                    getFileContents("appointments/PostEmisAppointment.json")
+                            
+
+            mockingClient.forEmis {
+                bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 1, "NFT Test Book Slot"))
+                        .respondWithSuccess(postAppointmentRequestBody)
+            }
+
+            // DELETE /emis/appointments
+            //
+            val deleteAppointmentRequestBody =
+                    getFileContents("appointments/DeleteEmisAppointment.json")
+                            
+
+            mockingClient.forEmis {
+                cancelAppointmentRequest(patient, CancelAppointmentRequest(patient.userPatientLinkToken, 1, "No longer required"))
+                        .respondWithSuccess(deleteAppointmentRequestBody)
+            }
         }
+    }
+    
+    private fun getFileContents(relativePath: String): String {
+        return File("$BASE_NFT_DATA_DIR/$relativePath")
+                .bufferedReader(
+                        charset = Charsets.UTF_8,
+                        bufferSize = DEFAULT_BUFFER_SIZE
+                )
+                .readText()
+                .replace("\t", "")
+                .replace("\n","")
     }
 }
