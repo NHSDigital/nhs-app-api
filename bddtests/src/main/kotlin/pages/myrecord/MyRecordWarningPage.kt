@@ -1,58 +1,67 @@
 package pages.myrecord
 
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.pages.PageObject
-import net.serenitybdd.core.pages.WebElementFacade
-import org.openqa.selenium.By
+import pages.HybridPageObject
+import pages.HybridPageElement
+import pages.navigation.Header
 
-class MyRecordWarningPage : PageObject() {
+class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    @FindBy(xpath = "//*[@id='app']/header/h1")
-    lateinit var lblHeader: WebElementFacade
+    val lblHeader = HybridPageElement(
+            browserLocator = "//*[@id='app']/header/h1",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//div[@class='msg warning']")
-    lateinit var txtWarning: WebElementFacade
+    val txtWarning = HybridPageElement(
+            browserLocator = "//div[@class='msg warning']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//button[contains(text(),'Agree and continue')]")
-    lateinit var btnAgree: WebElementFacade
+    val btnAgree = HybridPageElement(
+            browserLocator = "//button[contains(text(),'Agree and continue')]",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//button[contains(text(),'Back to home')]")
-    lateinit var btnBack2Home: WebElementFacade
+    val btnBack2Home = HybridPageElement(
+            browserLocator = "//button[contains(text(),'Back to home')]",
+            androidLocator = null,
+            page = this
+    )
 
 
     fun isBackToHomePresent(): Boolean {
-        return btnBack2Home.isCurrentlyVisible
+        return btnBack2Home.element.isVisible
     }
 
     fun isAgreePresent(): Boolean {
-        return btnAgree.isCurrentlyVisible
+        return btnAgree.element.isVisible
     }
 
     fun getHeaderText(): String {
-        return lblHeader.text
+        return switchToPage(Header::class.java).getPageHeaderText()
     }
 
     fun warningText(): String {
-        return txtWarning.text
+        return txtWarning.element.text
     }
 
     fun isWarningMsgHighlighted(): String {
-        return txtWarning.getCssValue("background-color")
+        return txtWarning.element.getCssValue("background-color")
     }
 
     fun clickAgreeandContinue() {
-        btnAgree.waitUntilVisible<WebElementFacade>()
-        btnAgree.click()
+        btnAgree.element.click()
     }
 
     fun clickBacktoHome() {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", btnBack2Home);
-        btnBack2Home.click()
+        btnBack2Home.element.click()
     }
 
     fun getSensitiveList(): ArrayList<String> {
         var list = ArrayList<String>()
-        val listSensitiveData = findAll(By.xpath("//div[@class='info']/ul/li"))
+        val listSensitiveData = findAllByXpath("//div[@class='info']/ul/li")
         listSensitiveData.forEach { el ->
             list.add(el.text)
         }

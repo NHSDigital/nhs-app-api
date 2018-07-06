@@ -1,20 +1,37 @@
 package pages.navigation
 
-import net.serenitybdd.core.pages.WebElementFacade
-import org.openqa.selenium.By
+import com.google.common.collect.MinMaxPriorityQueue
+import org.junit.Assert
 import pages.HybridPageObject
+import pages.HybridPageElement
 
 class Header: HybridPageObject(Companion.PageType.NATIVE) {
 
-    fun isVisible(title: String): Boolean {
-        val logoIsVisible = find<WebElementFacade>(By.id("nhs_logo")).isVisible
-        val accountIsVisible = find<WebElementFacade>(By.id("accountIcon")).isVisible
-        val headingIsVisible = findBy<WebElementFacade>("//header/h1[text()='$title']").isVisible
+    val homeIcon = HybridPageElement(
+            androidLocator = "//android.widget.ImageView[contains(@resource-id,'nhsOnlineLogoIcon')]",
+            browserLocator = "//*[@id='nhs_logo']",
+            page = this
+    )
+    val accountIcon = HybridPageElement(
+            androidLocator = "//android.widget.ImageView[contains(@resource-id,'myAccountIcon')]",
+            browserLocator = "//a[@href='/account']/*[name()='svg']",
+            page = this
+    )
+    val pageTitle = HybridPageElement(
+            androidLocator = "//*[contains(@resource-id, 'header_text_view')]",
+            browserLocator = "//header/h1",
+            page = this
+    )
 
-       return logoIsVisible && accountIsVisible && headingIsVisible
+    fun isVisible(title: String): Boolean {
+        val logoIsVisible = homeIcon.element.isVisible
+        val accountIsVisible = accountIcon.element.isVisible
+        val headingIsVisible = pageTitle.withText(title).element.isVisible
+
+        return logoIsVisible && accountIsVisible && headingIsVisible
     }
 
     fun clickMyAccount() {
-        findByXpath("//a[@href='/account']/*[name()='svg']").click()
+        accountIcon.element.click()
     }
 }

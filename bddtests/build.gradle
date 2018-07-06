@@ -61,13 +61,22 @@ task mock(type: JavaExec) {
     classpath += sourceSets.test.runtimeClasspath
     systemProperty "url", System.getProperty("url")
     systemProperty "wiremockUrl", System.getProperty("wiremockUrl")
+    environment "CID_HOST", System.getProperty("CID_HOST")
     main = "mocking.defaults.MockDataPopulate"
     if (System.getProperty("mockArgs") != null){
         args Eval.me(System.getProperty("mockArgs"))
     }
 }
 
+task frameworkUnitTests(type: Test) {
+    dependsOn compileTestKotlin
+    useJUnit {
+        includeCategories 'pages.PageObjectTests'
+    }
+}
+
 test {
+    dependsOn frameworkUnitTests
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.properties
 }

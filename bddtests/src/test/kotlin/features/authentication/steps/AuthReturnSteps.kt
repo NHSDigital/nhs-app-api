@@ -8,6 +8,6 @@ open class AuthReturnSteps {
     lateinit var authReturnPage: AuthReturnPage
 
     fun assertSpinnerVisible() {
-        Assert.assertTrue(authReturnPage.spinnerVisible())
+        Assert.assertTrue(authReturnPage.spinner.element.isVisible)
     }
 }

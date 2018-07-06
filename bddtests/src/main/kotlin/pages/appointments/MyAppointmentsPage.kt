@@ -1,30 +1,41 @@
 package pages.appointments
 
 import models.Slot
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageElement
 
 @DefaultUrl("http://localhost:3000/appointments")
 class MyAppointmentsPage : AppointmentSharedElementsPage() {
 
-    @FindBy(id = "btn_floating")
-    lateinit var bookButton: WebElementFacade
+    val bookButton = HybridPageElement(
+            browserLocator = "//*[@id='btn_floating']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//*[@id='success-dialog']/div/p")
-    private lateinit var successMessage: WebElementFacade
+    val successMessage = HybridPageElement(
+            browserLocator = "//*[@id='success-dialog']/div/p",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//h2/..")
-    private lateinit var actualNoUpcomingText: WebElementFacade
+    val actualNoUpcomingText = HybridPageElement(
+            browserLocator = "//h2/..",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//a[contains(text(),'Cancel appointment')]")
-    private lateinit var cancelAppointmentLink: WebElementFacade
+    val cancelAppointmentLink = HybridPageElement(
+            browserLocator = "//a[contains(text(),'Cancel appointment')]",
+            androidLocator = null,
+            page = this
+    )
 
     private val upcomingAppointmentParentXpath = "//div[@data-purpose='appointments']"
 
-    fun getSuccessMessage(): String = successMessage.text
+    fun getSuccessMessage(): String = successMessage.element.text
 
-    fun getNoUpcomingText(): String = actualNoUpcomingText.text
+    fun getNoUpcomingText(): String = actualNoUpcomingText.element.text
 
     fun getDateTimestampsOfSlots(): List<Long> {
         return getDateTimestampsOfSlots(upcomingAppointmentParentXpath)
@@ -39,7 +50,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun clickFirstCancelAppointmentLink() {
-        cancelAppointmentLink.click()
+        cancelAppointmentLink.element.click()
     }
 
     fun getNumberOfCancelLinks(): Int {

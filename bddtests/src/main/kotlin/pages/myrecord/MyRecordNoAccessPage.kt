@@ -1,26 +1,31 @@
 package pages.myrecord
 
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.pages.PageObject
-import net.serenitybdd.core.pages.WebElementFacade
+import pages.HybridPageObject
+import pages.HybridPageElement
 
-class MyRecordNoAccessPage : PageObject() {
+class MyRecordNoAccessPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    @FindBy(id = "")
-    lateinit var txtNoAccess: WebElementFacade
+    val txtNoAccess = HybridPageElement(
+            browserLocator = "",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(id = "")
-    lateinit var txtGPTxt: WebElementFacade
+    val txtGPTxt = HybridPageElement(
+            browserLocator = "",
+            androidLocator = null,
+            page = this
+    )
 
     fun isOnNoAccessPage(): Boolean {
-        return txtNoAccess.isCurrentlyVisible
+        return txtNoAccess.element.isCurrentlyVisible
     }
 
     fun getNoAccessText(): String {
-        return txtNoAccess.text
+        return txtNoAccess.element.text
     }
 
     fun getContactGPText(): String {
-        return txtGPTxt.text
+        return txtGPTxt.element.text
     }
 }

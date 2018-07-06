@@ -1,0 +1,11 @@
+version: "3.2"
+services:
+  nhsonline.web:
+    environment:
+      - API_HOST=http://bs-local.com:8082
+      - CID_REDIRECT_URI=http://bs-local.com:3000/auth-return
+      - CID_AUTH_ENDPOINT=http://bs-local.com:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
+      - CID_REGISTER_ENDPOINT=http://bs-local.com:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations
+  nhsonline.backend.worker:
+    environment:
+      - NHS_WEB_APP_BASE_URL=http://bs-local.com:3000

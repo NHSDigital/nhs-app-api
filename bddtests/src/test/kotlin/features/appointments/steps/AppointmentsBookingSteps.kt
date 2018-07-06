@@ -6,6 +6,7 @@ import org.hamcrest.Matcher
 import org.junit.Assert
 import org.junit.Assert.*
 import pages.appointments.AppointmentsBookingPage
+import pages.navigation.Header
 
 open class AppointmentsBookingSteps {
 
@@ -13,6 +14,7 @@ open class AppointmentsBookingSteps {
     private val bookThisButtonText by lazy { "Book this appointment" }
 
     lateinit var appointmentsBooking: AppointmentsBookingPage
+    lateinit var header: Header
 
     @Step
     fun slots(matches: Matcher<ArrayList<Slot>>) {
@@ -36,7 +38,7 @@ open class AppointmentsBookingSteps {
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
-        val actualHeader = appointmentsBooking.getPageHeaderText()
+        val actualHeader = header.getPageHeaderText()
         assertEquals("Expected Header text ${pageHeader} of the page is not found",
                 pageHeader, actualHeader)
     }

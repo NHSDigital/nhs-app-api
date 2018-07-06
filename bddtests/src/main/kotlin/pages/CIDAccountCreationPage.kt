@@ -1,23 +1,29 @@
 package pages
 
 import models.Patient
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.annotations.findby.How
-import net.serenitybdd.core.pages.WebElementFacade
 
 open class CIDAccountCreationPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
-    @FindBy(how = How.XPATH, using = "//input[@name='mock_patient']")
-    lateinit var mockPatientInput: WebElementFacade
+    val mockPatientInput = HybridPageElement(
+            browserLocator = "//input[@name='mock_patient']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(how = How.XPATH, using = "//input[@type='submit']")
-    lateinit var createAccountButton: WebElementFacade
+    val createAccountButton = HybridPageElement(
+            browserLocator = "//input[@type='submit']",
+            androidLocator = null,
+            page = this
+    )
 
     fun isVisible() : Boolean {
-        return createAccountButton.isVisible
+        return createAccountButton.element.isVisible
     }
 
     fun completeAccountCreation(patient: Patient) {
-        mockPatientInput.sendKeys(patient.hashCode().toString())
-        createAccountButton.click()
+        mockPatientInput.element.sendKeys(patient.hashCode().toString())
+        if (onMobile()) {
+            hideKeyboard()
+        }
+        createAccountButton.element.click()
     }
 }

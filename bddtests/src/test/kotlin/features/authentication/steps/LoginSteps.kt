@@ -21,10 +21,8 @@ open class LoginSteps {
     }
 
     @Step
-    fun asDefault(patient: Patient = MockDefaults.patient,
-                  waitForSpinnerToDisappear: Boolean = true) {
+    fun asDefault(patient: Patient = MockDefaults.patient) {
         using(patient)
-        if (waitForSpinnerToDisappear) loginPage.waitForSpinnerToDisappear()
     }
 
     @Step
@@ -47,11 +45,6 @@ open class LoginSteps {
     @Step
     fun assertPageIsDisplayed() {
         loginPage.shouldBeDisplayed()
-    }
-
-    @Step
-    fun assertTimeoutBannerIsShown() {
-        loginPage.timeoutBannerShouldBeVisible()
     }
 
     @Step

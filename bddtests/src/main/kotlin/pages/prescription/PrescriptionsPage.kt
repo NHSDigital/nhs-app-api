@@ -3,7 +3,6 @@ package pages.prescription
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
-import org.openqa.selenium.WebElement
 import pages.HybridPageObject
 import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
@@ -49,33 +48,29 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         val prescriptions = findAllByXpath("//li[@aria-label='historic-prescription']")
 
-        var orderDateXpath = ".//*[@aria-label='order-date']"
-        var courseNameXpath = ".//*[@aria-label='course-name']"
-        var dosageXpath = ".//*[@aria-label='detail']"
-        var statusXpath = ".//*[@aria-label='status']"
+        val orderDateXpath = ".//*[@aria-label='order-date']"
+        val courseNameXpath = ".//*[@aria-label='course-name']"
+        val dosageXpath = ".//*[@aria-label='detail']"
+        val statusXpath = ".//*[@aria-label='status']"
 
-        var count = 0
+        prescriptions.forEach { el ->
+            val p: HistoricPrescription
 
-        prescriptions.forEach( { el ->
-
-            var p: HistoricPrescription
-
-            if(allFieldsProvided) {
+            if (allFieldsProvided) {
                 p = HistoricPrescription(
                         name = el.findElement(By.xpath(courseNameXpath)).text,
                         dosage = el.findElement(By.xpath(dosageXpath)).text)
 
                 p.orderDate = el.findElement(By.xpath(orderDateXpath)).text
                 p.status = el.findElement(By.xpath(statusXpath)).text
-            }
-            else {
+            } else {
                 p = HistoricPrescription(
                         name = el.findElement(By.xpath(courseNameXpath)).text,
                         dosage = el.findElement(By.xpath(dosageXpath)).text)
             }
 
             historicPrescriptions.add(p)
-        })
+        }
 
         return historicPrescriptions
     }

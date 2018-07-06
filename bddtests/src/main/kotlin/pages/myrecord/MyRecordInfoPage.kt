@@ -1,172 +1,243 @@
 package pages.myrecord
 
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.pages.PageObject
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By
+import pages.HybridPageElement
+import pages.HybridPageObject
 
-class MyRecordInfoPage : PageObject() {
+class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    @FindBy(xpath = "//h5[contains(text(),'My details')]")
-    lateinit var secMyDetails: WebElementFacade
+    val secMyDetails = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'My details')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//*[@id='app']/header/h1")
-    lateinit var lblHeader: WebElementFacade
+    val nameLabel = 
+        HybridPageElement(
+            browserLocator = "//label[contains(text(),'Name')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//label[contains(text(),'Name')]")
-    lateinit var nameLabel: WebElementFacade
+    val txtName = 
+        HybridPageElement(
+            browserLocator = "//label[contains(text(),'Name')]/following-sibling::p[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//label[contains(text(),'Name')]/following-sibling::p[1]")
-    lateinit var txtName: WebElementFacade
+    val dobLabel = 
+        HybridPageElement(
+            browserLocator = "//label[contains(text(),'Date of birth')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//label[contains(text(),'Date of birth')]")
-    lateinit var dobLabel: WebElementFacade
+    val sexLabel = 
+        HybridPageElement(
+            browserLocator = "//label[contains(text(),'Sex')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//label[contains(text(),'Sex')]")
-    lateinit var sexLabel: WebElementFacade
+    val addressLabel = 
+        HybridPageElement(
+            browserLocator = "//label[contains(text(),'Address')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//label[contains(text(),'Address')]")
-    lateinit var addressLabel: WebElementFacade
+    val nhsNumberLabel = 
+        HybridPageElement(
+            browserLocator = "//label[contains(text(),'NHS number')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//label[contains(text(),'NHS number')]")
-    lateinit var nhsNumberLabel: WebElementFacade
+    val allergiesAndAdverseReactionsHeader = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Allergies and adverse reactions')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Allergies and adverse reactions')]")
-    lateinit var allergiesAndAdverseReactionsHeader: WebElementFacade
+    val txtAllergyMsg = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]")
-    lateinit var txtAllergyMsg: WebElementFacade
+    val noSummaryCareAccessMessage = 
+        HybridPageElement(
+            browserLocator = "//div[@id='mainDiv']//div[@id='mainDiv']//main//child::div[@class='msg error'][1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//div[@id='mainDiv']//div[@id='mainDiv']//main//child::div[@class='msg error'][1]")
-    lateinit var noSummaryCareAccessMessage: WebElementFacade
+    val acuteMedicationsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Acute medications')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Acute medications')]")
-    lateinit var acuteMedicationsHeading: WebElementFacade
+    val acuteMedications = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Acute medications')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Acute medications')]/following-sibling::div[1]")
-    lateinit var acuteMedications: WebElementFacade
+    val currentRepeatMedicationsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Current repeat medications')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Current repeat medications')]")
-    lateinit var currentRepeatMedicationsHeading: WebElementFacade
+    val txtcurrentRepeatMedications = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Current repeat medications')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Current repeat medications')]/following-sibling::div[1]")
-    lateinit var txtcurrentRepeatMedications: WebElementFacade
+    val discontinuedRepeatMedicationsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Discontinued repeat medications')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Discontinued repeat medications')]")
-    lateinit var discontinuedRepeatMedicationsHeading: WebElementFacade
+    val txtdiscontinuedRepeatMedications = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Discontinued repeat medications')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Discontinued repeat medications')]/following-sibling::div[1]")
-    lateinit var txtdiscontinuedRepeatMedications: WebElementFacade
+    val testResultsHeader = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Test results')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Test results')]")
-    lateinit var testResultsHeader: WebElementFacade
+    val txttestResultsMsg = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Test results')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Test results')]/following-sibling::div[1]")
-    lateinit var txttestResultsMsg: WebElementFacade
+    val immunisationsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Immunisations')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Immunisations')]")
-    lateinit var immunisationsHeading: WebElementFacade
+    val immunisations = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Immunisations')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Immunisations')]/following-sibling::div[1]")
-    lateinit var immunisations: WebElementFacade
+    val problemsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Problems')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Problems')]")
-    lateinit var problemsHeading: WebElementFacade
+    val problems = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Problems')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Problems')]/following-sibling::div[1]")
-    lateinit var problems: WebElementFacade
+    val consultationsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Consultations')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Consultations')]")
-    lateinit var consultationsHeading: WebElementFacade
+    val consultations = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Consultations')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Consultations')]/following-sibling::div[1]")
-    lateinit var consultations: WebElementFacade
+    val eventsHeading = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Events')]",
+            androidLocator = null,
+            page = this)
 
-    @FindBy(xpath = "//h5[contains(text(),'Events')]")
-    lateinit var eventsHeading: WebElementFacade
-
-    @FindBy(xpath = "//h5[contains(text(),'Events')]/following-sibling::div[1]")
-    lateinit var events: WebElementFacade
+    val events = 
+        HybridPageElement(
+            browserLocator = "//h5[contains(text(),'Events')]/following-sibling::div[1]",
+            androidLocator = null,
+            page = this)
 
     fun isNameVisible(): Boolean {
-        waitABit(2000)
-        return txtName.isCurrentlyVisible
+        return txtName.element.isCurrentlyVisible
     }
 
     fun isAllergiesTextMsgVisible(): Boolean {
-        waitABit(2000)
-        return txtAllergyMsg.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+        return txtAllergyMsg.element.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
     }
 
     fun isOnMyRecordInfoPage(): Boolean {
-        secMyDetails.waitUntilVisible<WebElementFacade>()
-        return secMyDetails.isPresent
+        return secMyDetails.element.isPresent
     }
 
     fun getMyDetailsLabelText(): String {
-        return secMyDetails.text
+        return secMyDetails.element.text
     }
 
     fun clickMyDetails() {
-        secMyDetails.click()
+        secMyDetails.element.click()
     }
 
     fun getNameLabelText(): String {
-        return nameLabel.text
+        return nameLabel.element.text
     }
 
     fun getDOBLabelText(): String {
-        return dobLabel.text
+        return dobLabel.element.text
     }
 
     fun getSexLabelText(): String {
-        return sexLabel.text
+        return sexLabel.element.text
     }
 
     fun getAddressLabelText(): String {
-        return addressLabel.text
+        return addressLabel.element.text
     }
 
     fun getNHSNumberLabelText(): String {
-        return nhsNumberLabel.text
+        return nhsNumberLabel.element.text
     }
 
     fun getAllergiesAndAdverseReactionsHeaderText(): String {
-        return allergiesAndAdverseReactionsHeader.text
+        return allergiesAndAdverseReactionsHeader.element.text
     }
 
     fun clickAllergiesAndAdverseReactionsSection() {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", allergiesAndAdverseReactionsHeader);
-        allergiesAndAdverseReactionsHeader.click()
+        allergiesAndAdverseReactionsHeader.element.click()
     }
 
     fun getAllergyMessage(): String {
-        return txtAllergyMsg.text
+        return txtAllergyMsg.element.text
     }
 
     fun getNoAllergyMessage(): String {
-        return txtAllergyMsg.findBy<WebElementFacade>(By.tagName("p")).text
+        return txtAllergyMsg.element.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun getNoAcuteMedicationMsg(): String {
-        return acuteMedications.findBy<WebElementFacade>(By.tagName("p")).text
+        return acuteMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun getNoCurrentRepeatMedicationMsg(): String {
-        return txtcurrentRepeatMedications.findBy<WebElementFacade>(By.tagName("p")).text
+        return txtcurrentRepeatMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun getNoDiscontinuedRepeatMedicationMsg(): String {
-        return txtdiscontinuedRepeatMedications.findBy<WebElementFacade>(By.tagName("p")).text
+        return txtdiscontinuedRepeatMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun getAllergyCount(): Int {
-        return txtAllergyMsg.thenFindAll(By.tagName("li")).size
+        return txtAllergyMsg.element.thenFindAll(By.tagName("li")).size
     }
 
     fun getAllergyMessages(): ArrayList<String> {
-        var msgs = ArrayList<String>()
-        var list = txtAllergyMsg.thenFindAll(By.tagName("p"))
+        val msgs = ArrayList<String>()
+        val list = txtAllergyMsg.element.thenFindAll(By.tagName("p"))
         for (item in list) {
             msgs.add(item.text)
         }
@@ -174,8 +245,8 @@ class MyRecordInfoPage : PageObject() {
     }
 
     fun getAllergyDates(): ArrayList<String> {
-        var msgs = ArrayList<String>()
-        var list = txtAllergyMsg.thenFindAll(By.tagName("label"))
+        val msgs = ArrayList<String>()
+        val list = txtAllergyMsg.element.thenFindAll(By.tagName("label"))
         for (item in list) {
             msgs.add(item.text)
         }
@@ -183,143 +254,126 @@ class MyRecordInfoPage : PageObject() {
     }
 
     fun getTestResultsMessage(): String {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", txttestResultsMsg);
-        return txttestResultsMsg.findBy<WebElementFacade>(By.tagName("p")).text
+        return txttestResultsMsg.element.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun clickAcuteMedications() {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", acuteMedicationsHeading);
-        acuteMedicationsHeading.click()
+        acuteMedicationsHeading.element.click()
     }
 
     fun clickCurrentRepeatMedications() {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", currentRepeatMedicationsHeading);
-        currentRepeatMedicationsHeading.click()
+        currentRepeatMedicationsHeading.element.click()
     }
 
     fun clickDiscontinuedRepeatMedications() {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", discontinuedRepeatMedicationsHeading);
-        discontinuedRepeatMedicationsHeading.click()
+        discontinuedRepeatMedicationsHeading.element.click()
     }
 
     fun getAcuteMedicationsHeaderText(): String {
-        return acuteMedicationsHeading.text
+        return acuteMedicationsHeading.element.text
     }
 
     fun getAcuteMedications(): String {
-        return acuteMedications.findBy<WebElementFacade>(By.tagName("p")).text
+        return acuteMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
     }
 
     fun isAcuteMedicationsAvailable(): Boolean {
-        waitABit(1000)
-        return acuteMedications.findBy<WebElementFacade>(By.tagName("li")).isPresent
+        return acuteMedications.element.findBy<WebElementFacade>(By.tagName("li")).isPresent
     }
 
     fun isRepeatMedicationsAvailable(): Boolean {
-        waitABit(1000)
-        return txtcurrentRepeatMedications.findBy<WebElementFacade>(By.tagName("li")).isPresent
+        return txtcurrentRepeatMedications.element.findBy<WebElementFacade>(By.tagName("li")).isPresent
     }
 
     fun isDiscontinuedMedicationsAvailable(): Boolean {
-        waitABit(1000)
-        return txtdiscontinuedRepeatMedications.findBy<WebElementFacade>(By.tagName("li")).isPresent
+        return txtdiscontinuedRepeatMedications.element.findBy<WebElementFacade>(By.tagName("li")).isPresent
     }
 
     fun clickTestResultsSection() {
-        waitABit(2000)
-        evaluateJavascript("arguments[0].scrollIntoView(true);", testResultsHeader);
-        testResultsHeader.click()
+        testResultsHeader.element.click()
     }
 
     fun getImmunistionsHeaderText(): String {
-        return immunisationsHeading.text
+        return immunisationsHeading.element.text
     }
 
     fun getImmunisationRecordCount(): Int {
-        return immunisations.thenFindAll(By.cssSelector("ul li")).count()
+        return immunisations.element.thenFindAll(By.cssSelector("ul li")).count()
     }
 
     fun clickImmunisations() {
-        evaluateJavascript("arguments[0].scrollIntoView(true);", immunisations)
-        immunisationsHeading.click()
+        immunisationsHeading.element.click()
     }
 
     fun getImmunisationsMessage(): String {
-        return immunisations.then<WebElementFacade>(By.cssSelector("p")).text;
+        return immunisations.element.then<WebElementFacade>(By.cssSelector("p")).text
     }
 
     fun getTestResultsHeaderText(): String {
-        return testResultsHeader.text
+        return testResultsHeader.element.text
     }
 
     fun getTestResultCount(): Int {
-        return txttestResultsMsg.thenFindAll(By.tagName("p")).size
+        return txttestResultsMsg.element.thenFindAll(By.tagName("p")).size
     }
 
     fun getTestResultChildCount(): Int {
-        return txttestResultsMsg.thenFindAll(By.tagName("p")).get(0).findBy<WebElementFacade>(By.xpath("..")).thenFindAll(By.tagName("li")).size
+        return txttestResultsMsg.element.thenFindAll(By.tagName("p")).get(0).findBy<WebElementFacade>(By.xpath("..")).thenFindAll(By.tagName("li")).size
     }
 
     fun isTestResultsTextMsgVisible(): Boolean {
-        waitABit(2000)
-        return txttestResultsMsg.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+        return txttestResultsMsg.element.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
     }
 
     fun getProblemsHeaderText(): String {
-        return problemsHeading.text
+        return problemsHeading.element.text
     }
 
     fun getProblemsRecordCount(): Int {
-        return problems.thenFindAll(By.cssSelector("label")).count()
+        return problems.element.thenFindAll(By.cssSelector("label")).count()
     }
 
     fun clickProblems() {
-        waitABit(2000)
-        evaluateJavascript("arguments[0].scrollIntoView(true);", problems)
-        problemsHeading.click()
+        problemsHeading.element.click()
     }
 
     fun getProblemsMessage(): String {
-        return problems.then<WebElementFacade>(By.cssSelector("p")).text;
+        return problems.element.then<WebElementFacade>(By.cssSelector("p")).text
     }
 
     fun getConsultationsHeaderText(): String {
-        return consultationsHeading.text
+        return consultationsHeading.element.text
     }
 
     fun getConsultationsRecordCount(): Int {
-        return consultations.thenFindAll(By.cssSelector("label")).count()
+        return consultations.element.thenFindAll(By.cssSelector("label")).count()
     }
 
     fun clickConsultations() {
-        waitABit(2000)
-        evaluateJavascript("arguments[0].scrollIntoView(true);", consultations)
-        consultationsHeading.click()
+        consultationsHeading.element.click()
     }
 
     fun getConsultationsMessage(): String {
-        return consultations.then<WebElementFacade>(By.cssSelector("p")).text;
+        return consultations.element.then<WebElementFacade>(By.cssSelector("p")).text
     }
 
     fun getEventsHeaderText(): String {
-        return eventsHeading.text
+        return eventsHeading.element.text
     }
 
     fun getEventsRecordCount(): Int {
-        return events.thenFindAll(By.cssSelector("label")).count()
+        return events.element.thenFindAll(By.cssSelector("label")).count()
     }
 
     fun clickEvents() {
-        waitABit(2000)
-        evaluateJavascript("arguments[0].scrollIntoView(true);", events)
-        eventsHeading.click()
+        eventsHeading.element.click()
     }
 
     fun getEventsMessage(): String {
-        return events.then<WebElementFacade>(By.cssSelector("p")).text;
+        return events.element.then<WebElementFacade>(By.cssSelector("p")).text
     }
 
     fun getSummaryCareNoAccessMessage(): String {
-        return noSummaryCareAccessMessage.text
+        return noSummaryCareAccessMessage.element.text
     }
 }

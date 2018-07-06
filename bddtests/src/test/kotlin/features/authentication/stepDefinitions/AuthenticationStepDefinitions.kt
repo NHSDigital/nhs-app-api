@@ -505,7 +505,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I log in$")
     fun logIn() {
-        login.asDefault(waitForSpinnerToDisappear = false)
+        login.asDefault()
     }
 
     @When("I am on the home page")

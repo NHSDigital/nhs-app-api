@@ -1,33 +1,42 @@
 package pages.appointments
 
-import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageElement
 
 @DefaultUrl("http://localhost:3000/appointments")
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
 
-    @FindBy(xpath = "//main/div/p")
-    private lateinit var checkDetailsText: WebElementFacade
+    val checkDetailsText = HybridPageElement(
+            browserLocator = "//main/div/p",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//label[@for='txt_reason']")
-    private lateinit var dropDownMenuLabel: WebElementFacade
+    val dropDownMenuLabel = HybridPageElement(
+            browserLocator = "//label[@for='txt_reason']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//select[@id='txt_reason']")
-    private lateinit var dropDownMenu: WebElementFacade
+    val dropDownMenu = HybridPageElement(
+            browserLocator = "//select[@id='txt_reason']",
+            androidLocator = null,
+            page = this
+    )
 
 
     fun getCheckDetailsText(): String {
-        return checkDetailsText.text
+        return checkDetailsText.element.text
     }
 
     fun getReasonDropDownLabelText(): String {
-        return dropDownMenuLabel.text
+        return dropDownMenuLabel.element.text
     }
 
     fun selectReason(reason: String): Boolean {
         return try {
-            dropDownMenu.selectByVisibleText<WebElementFacade>(reason)
+            dropDownMenu.element.selectByVisibleText<WebElementFacade>(reason)
             true
         } catch (e: NoSuchElementException) {
             false

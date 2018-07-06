@@ -10,7 +10,7 @@ open class MyAccountSteps {
 
     @Step
     fun signOut() {
-        myAccountPage.signOutButton.click()
+        myAccountPage.signOutButton.element.click()
     }
 
     @Step

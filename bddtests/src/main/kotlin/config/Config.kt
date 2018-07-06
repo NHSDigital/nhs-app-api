@@ -2,6 +2,7 @@ package config
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.net.URI
 
 
 class Config private constructor() {
@@ -30,8 +31,9 @@ class Config private constructor() {
 
     init {
         url = envOrDefault("url", "http://localhost:3000")
-        wiremockUrl = envOrDefault("wiremockUrl", "http://localhost:8080")
-        backendUrl = envOrDefault("backendUrl", "http://localhost:8082")
+        val uri = URI(url)
+        wiremockUrl = envOrDefault("wiremockUrl", "http://${uri.host}:8080")
+        backendUrl = envOrDefault("backendUrl", "http://${uri.host}:8082")
         nodeEnv = envOrDefault("NODE_ENV", "production")
         port = envOrDefault("PORT", "3000")
 
@@ -44,9 +46,10 @@ class Config private constructor() {
 
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online-poc")
-        cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://localhost:3000/auth-return")
-        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth")
-        cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations")
+        val cidHostname = envOrDefault("CID_HOST", "localhost")
+        cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://$cidHostname:3000/auth-return")
+        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth")
+        cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations")
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "D66BA979-60D2-49AA-BE82-AEC06356E41F")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS Online Browserstack</string>
+    <string name="baseScheme">http</string>
+    <string name="baseHost">bs-local.com</string>
+    <string name="baseURL">http://bs-local.com:3000/</string>
+</resources>

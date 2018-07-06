@@ -1,29 +1,29 @@
 package pages.appointments
 
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
+import pages.HybridPageElement
 
 @DefaultUrl("http://localhost:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    @FindBy(id = "btn_check_symptoms")
-    lateinit var checkSymptomsButtonElement: WebElementFacade
+    val checkSymptomsButton = HybridPageElement(
+        browserLocator = "//*[@id='btn_check_symptoms']",
+        androidLocator = null,
+        page = this
+    )
 
-    @FindBy(id = "btn_appointment")
-    lateinit var bookButtonElement: WebElementFacade
+    val bookButton = HybridPageElement(
+        browserLocator = "//*[@id='btn_appointment']",
+        androidLocator = null,
+        page = this
+    )
 
-    @FindBy(xpath = "//*[@id='mainDiv']/main/div/h2")
-    lateinit var contentHeaderElement: WebElementFacade
-
-    fun clickSymptomsCheckerButton() {
-        clickTheButton(checkSymptomsButtonElement)
-    }
-
-    fun clickBookButton() {
-        clickTheButton(bookButtonElement)
-    }
+    val contentHeader = HybridPageElement(
+        browserLocator = "//*[@id='mainDiv']/main/div/h2",
+        androidLocator = null,
+        page = this
+    )
 
     fun getListHeaders(): List<String> {
         val listHeaders = arrayListOf<String>()
@@ -33,12 +33,6 @@ class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP)
             listHeaders.add(listHeader)
         }
         return listHeaders
-    }
-
-    private fun clickTheButton(button: WebElementFacade) {
-        button.waitUntilClickable<WebElementFacade>()
-        scrollToTheElement(button)
-        button.click()
     }
 
 }

@@ -7,71 +7,68 @@ import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import org.openqa.selenium.support.ui.WebDriverWait
+import java.time.Duration
 
 
 @DefaultUrl("http://localhost:3000/login")
 class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    @FindBy(how = How.XPATH, using = "//header/h1[contains(text(), 'Home')]")
-    lateinit var heading: WebElementFacade
+    val heading = HybridPageElement(
+            browserLocator = "//header/h1[contains(text(), 'Home')]",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(how = How.XPATH, using = "//*[@id='btn_home_symptoms']")
-    lateinit var symptomsButton: WebElementFacade
+    val symptomsButton = HybridPageElement(
+            browserLocator = "//*[@id='btn_home_symptoms']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(how = How.XPATH, using = "//input[@name='mock_patient']")
-    lateinit var patientInput: WebElementFacade
+    val loginButton = HybridPageElement(
+            browserLocator = "//*[@data-id='login-button']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(how = How.XPATH, using = "//*[@data-id='login-button']")
-    lateinit var loginButton: WebElementFacade
-
-    @FindBy(how = How.XPATH, using = "//*[@data-id='create-account-button']")
-    lateinit var createAccountButton: WebElementFacade
+    val createAccountButton = HybridPageElement(
+            browserLocator = "//*[@data-id='create-account-button']",
+            androidLocator = null,
+            page = this
+    )
 
     lateinit var accountCreationPage : CIDAccountCreationPage
 
-    @FindBy(how = How.XPATH, using = "//div[contains(text(), 'Session expired. Please log in again.')]")
-    lateinit var timeoutBanner: WebElementFacade
+    val timeoutBanner = HybridPageElement(
+            browserLocator = "//div[contains(text(), 'Session expired. Please log in again.')]",
+            androidLocator = null,
+            page = this
+    )
 
     fun checkMySymptoms() {
-        symptomsButton
-                .waitUntilClickable<WebElementFacade>()
-                .click()
+        symptomsButton.element.click()
     }
 
     fun signIn(patient: Patient = MockDefaults.patient) {
-        loginButton.click()
+        loginButton.element.click()
 
-        if (onMobile()) {
-            switchToPage(CitizenIDPage::class.java).login("realmadmin@gmail.com", "Welcome123!")
-        } else {
-            // complete login until CID integration developed
-            patientInput.sendKeys(patient.hashCode().toString())
-            findByXpath("//input[@type='submit']").click()
-        }
-    }
-
-    fun waitForSpinnerToDisappear() {
-        waitFor({ !spinnerVisible() })
+        findByXpath("//input[@name='mock_patient']").sendKeys(patient.hashCode().toString())
+        findByXpath("//input[@type='submit']").click()
     }
 
     fun createAccount(patient: Patient) {
         clickCreateAccountButton()
-
-        if (onMobile()) {
-            switchToPage(CitizenIDPage::class.java).login("realmadmin@gmail.com", "Welcome123!")
-        } else {
-            // complete login until CID integration developed
-            accountCreationPage.completeAccountCreation(patient)
-        }
+        accountCreationPage.completeAccountCreation(patient)
     }
 
     fun isCreateAccountButtonVisible() : Boolean {
-        return createAccountButton.isVisible
+        return createAccountButton.element.isVisible
     }
 
     fun clickCreateAccountButton()
     {
-        createAccountButton.click()
+        createAccountButton.element.click()
     }
 
     override fun shouldBeDisplayed() {
@@ -82,13 +79,13 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     private fun buttonsAreDisplayed(): Boolean {
-        return symptomsButton.isDisplayed
-                && loginButton.isDisplayed
-                && createAccountButton.isDisplayed
+        return symptomsButton.element.isDisplayed
+                && loginButton.element.isDisplayed
+                && createAccountButton.element.isDisplayed
     }
 
     private fun headingIsDisplayed(): Boolean {
-        return heading.isDisplayed
+        return heading.element.isDisplayed
     }
     // Checks to see the menu item is not present on the page.
     fun assertMenuIsNotVisible() {
@@ -96,6 +93,6 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun timeoutBannerShouldBeVisible() {
-        Assert.assertTrue(timeoutBanner.isVisible)
+        Assert.assertTrue(timeoutBanner.element.isVisible)
     }
 }

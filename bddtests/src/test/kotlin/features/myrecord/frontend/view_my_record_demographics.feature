@@ -15,7 +15,7 @@ Feature: View My Medical Record Information - Demographics
 
   @smoketest
   @NHSO-361
-  Scenario Outline: A user navigates to patient information page
+  Scenario Outline: A <Service> user navigates to patient information page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on the record warning page

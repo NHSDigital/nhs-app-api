@@ -2,10 +2,10 @@ package pages.appointments
 
 import models.Slot
 import net.serenitybdd.core.annotations.findby.By
-import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
+import pages.HybridPageElement
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 
@@ -18,14 +18,23 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentLocationXpath = "[@aria-label='location']"
     private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
 
-    @FindBy(xpath = "//*[@id='errorLabel']/p/span[@data-purpose='error']")
-    private lateinit var inLineError: WebElementFacade
+    val inLineError = HybridPageElement(
+        browserLocator = "//*[@id='errorLabel']/p/span[@data-purpose='error']",
+        androidLocator = null,
+        page = this
+    )
 
-    @FindBy(xpath = "//*[@data-purpose='error-heading']")
-    private lateinit var errorSummaryHeading: WebElementFacade
+    val errorSummaryHeading = HybridPageElement(
+            browserLocator = "//*[@data-purpose='error-heading']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(xpath = "//*[@data-purpose='error']")
-    private lateinit var errorSummaryBody: WebElementFacade
+    val errorSummaryBody = HybridPageElement(
+            browserLocator = "//*[@data-purpose='error']",
+            androidLocator = null,
+            page = this
+    )
 
     fun getSelectedAppointmentDateText(): String {
         return findByXpath(xPathRoot + appointmentDateXpath).text
@@ -75,15 +84,15 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     }
 
     fun getInlineValidationError(): String {
-        return inLineError.text
+        return inLineError.element.text
     }
 
     fun getErrorSummaryHeading(): String {
-        return errorSummaryHeading.text
+        return errorSummaryHeading.element.text
     }
 
     fun getErrorSummaryBody(): String {
-        return errorSummaryBody.text
+        return errorSummaryBody.element.text
     }
 
     private fun convertToSlotObject(parentContainer: WebElementFacade, parentToSlotDivRelativePath: String = "", isMyAppointmentSlot: Boolean = false): Slot {

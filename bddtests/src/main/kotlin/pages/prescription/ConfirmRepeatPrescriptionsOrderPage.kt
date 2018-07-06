@@ -1,9 +1,6 @@
 package pages.prescription
 
 import mocking.emis.models.MedicationCourse
-import net.serenitybdd.core.annotations.findby.By
-import net.serenitybdd.core.annotations.findby.FindBy
-import net.serenitybdd.core.annotations.findby.How
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WrongPageError
@@ -11,6 +8,7 @@ import org.junit.Assert
 import org.openqa.selenium.Keys
 import pages.HybridPageObject
 import pages.HybridPageObject.Companion.PageType
+import pages.HybridPageElement
 import pages.navigation.Header
 
 @DefaultUrl("http://localhost:3000/prescriptions/confirm-prescription-details")
@@ -18,14 +16,23 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     var headerText: String = "Confirm prescription"
     lateinit var headerBar: Header
 
-    @FindBy(how = How.ID, using = "specialRequestText")
-    private lateinit var specialRequestText: WebElementFacade
+    val specialRequestText = HybridPageElement(
+            browserLocator = "//*[@id='specialRequestText']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(how = How.ID, using = "btn_confirm_and_order_prescription")
-    private lateinit var confirmAndOrderRepeatPrescriptionButton: WebElementFacade
+    val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
+            browserLocator = "//*[@id='btn_confirm_and_order_prescription']",
+            androidLocator = null,
+            page = this
+    )
 
-    @FindBy(how = How.XPATH, using = "//button[contains(text(), 'Change this prescription')]")
-    private lateinit var changeThisPrescriptionButton: WebElementFacade
+    val changeThisPrescriptionButton = HybridPageElement(
+            browserLocator = "//button[contains(text(), 'Change this prescription')]",
+            androidLocator = null,
+            page = this
+    )
 
     val serverErrorPageTitle = "Error Sending Prescription"
     val serverErrorPageHeader = "Error sending request"
@@ -48,11 +55,11 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
         Assert.assertEquals(selectedCourses.size, repeatPrescriptions.size)
 
         for (i in selectedCourses.indices) {
-            var expectedCourse = selectedCourses[i]
-            var currentCourseOnScreen = repeatPrescriptions[i]
+            val expectedCourse = selectedCourses[i]
+            val currentCourseOnScreen = repeatPrescriptions[i]
 
-            var nameOnScreen = currentCourseOnScreen.findElement(By.xpath( "./label[@data-purpose='prescription-name']"))
-            var instructionsOnScreen = currentCourseOnScreen.findElement(By.xpath("./p[@data-purpose='prescription-description']"))
+            val nameOnScreen = currentCourseOnScreen.findBy<WebElementFacade>( "./label[@data-purpose='prescription-name']")
+            val instructionsOnScreen = currentCourseOnScreen.findBy<WebElementFacade>("./p[@data-purpose='prescription-description']")
 
             Assert.assertEquals(expectedCourse.name, nameOnScreen.text)
             Assert.assertEquals(expectedCourse.getInstructionsText(), instructionsOnScreen.text)
@@ -60,14 +67,14 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     }
 
     fun getSpecialRequest(): String {
-        return specialRequestText.text
+        return specialRequestText.element.text
     }
 
     fun clickConfirmAndOrderRepeatPrescriptionButton() {
-        confirmAndOrderRepeatPrescriptionButton.sendKeys(Keys.ENTER)
+        confirmAndOrderRepeatPrescriptionButton.element.sendKeys(Keys.ENTER)
     }
 
     fun clickChangeThisPrescriptionButton() {
-        changeThisPrescriptionButton.sendKeys(Keys.ENTER)
+        changeThisPrescriptionButton.element.sendKeys(Keys.ENTER)
     }
 }

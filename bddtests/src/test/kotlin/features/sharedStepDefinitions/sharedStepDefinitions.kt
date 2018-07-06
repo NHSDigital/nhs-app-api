@@ -1,5 +1,6 @@
 package features.sharedStepDefinitions
 
+import cucumber.api.java.After
 import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
@@ -20,6 +21,7 @@ import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
 import java.util.*
 
@@ -39,6 +41,11 @@ open class SharedStepDefinitions {
     @Before
     fun resetWiremock() {
         MockingClient.instance.clearWiremock()
+    }
+
+    @After
+    fun stopBrowserstackIfRunning() {
+        BrowserstackLocalService.stop()
     }
 
     @Given("(.*) is initialised")

@@ -17,7 +17,9 @@ open class BrowserSteps {
 
     @Step
     open fun goToApp() {
-        loginPage.open()
+        if (!loginPage.onMobile()) {
+            loginPage.open()
+        }
     }
 
     @Step

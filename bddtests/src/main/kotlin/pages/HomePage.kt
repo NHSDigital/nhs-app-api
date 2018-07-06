@@ -15,4 +15,5 @@ open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     private fun welcomeMessageFor(name: String): String {
         return "Welcome, $name"
     }
+
 }

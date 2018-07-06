@@ -102,12 +102,12 @@ open class AppointmentsSteps {
     @Step
     fun checkIfBookAnAppointmentButtonExistAndEnabled() {
         try {
-            myAppointmentsPage.bookButton.isVisible
+            myAppointmentsPage.bookButton.element.isVisible
             assertTrue("Book an appointment is not displaying",
-                    myAppointmentsPage.bookButton.isDisplayed)
+                    myAppointmentsPage.bookButton.element.isDisplayed)
 
             assertTrue("Book an appointment is not enabled",
-                    myAppointmentsPage.bookButton.isCurrentlyEnabled)
+                    myAppointmentsPage.bookButton.element.isCurrentlyEnabled)
         } catch (e: Exception) {
             fail("Book an appointment is not found")
         }

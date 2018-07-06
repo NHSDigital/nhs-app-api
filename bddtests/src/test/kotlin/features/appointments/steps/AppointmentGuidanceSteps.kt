@@ -23,7 +23,7 @@ open class AppointmentGuidanceSteps {
 
     @Step
     fun checkTheContentHeaderIsCorrect() {
-        val actualContentHeader = appointmentGuidancePage.contentHeaderElement.text
+        val actualContentHeader = appointmentGuidancePage.contentHeader.element.text
         assertEquals("Appointment guidance content header $expectedContentHeader is not found",
                 expectedContentHeader,
                 actualContentHeader)
@@ -39,11 +39,11 @@ open class AppointmentGuidanceSteps {
 
     @Step
     fun clickBookAnAppointmentButton() {
-        appointmentGuidancePage.clickBookButton()
+        appointmentGuidancePage.bookButton.element.click()
     }
 
     @Step
     fun clickCheckSymptomsButton() {
-        appointmentGuidancePage.clickSymptomsCheckerButton()
+        appointmentGuidancePage.checkSymptomsButton.element.click()
     }
 }
