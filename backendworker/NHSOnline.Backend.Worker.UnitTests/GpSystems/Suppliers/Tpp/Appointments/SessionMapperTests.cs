@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void Map_ReturnsEmptyArray_WhenSessionsInListSlotsReplyIsEmpty()
         {
             // Act
-            var actualResponse = _systemUnderTest.Map(new Session[0]);
+            var actualResponse = _systemUnderTest.Map(new Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session[0]);
 
             // Assert
             actualResponse.Should().BeEmpty();
@@ -242,7 +242,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         }
 
 
-        private static Session CreateSession(string sessionId, string staffDetails, string location, string type) => new Session
+        private static Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session CreateSession(
+            string sessionId, 
+            string staffDetails, 
+            string location, 
+            string type) => new Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session
         {
             SessionId = sessionId,
             StaffDetails = staffDetails,

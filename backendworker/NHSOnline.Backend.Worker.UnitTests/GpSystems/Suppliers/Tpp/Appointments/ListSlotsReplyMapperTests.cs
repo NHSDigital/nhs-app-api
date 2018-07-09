@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var session = CreateSession("Leeds", "101", "Dr House", "Emergency");
             session.Slots = new List<Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot>();
 
-            var listSlotsReply = new ListSlotsReply { Sessions = new List<Session> { session } };
+            var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
 
             var expectedResponse = new AppointmentSlotsResponse { Slots = new Worker.Areas.Appointments.Models.Slot[0] };
 
@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             var session = CreateSession("Leeds", "101", "Dr House", "Emergency");
 
-            var listSlotsReply = new ListSlotsReply { Sessions = new List<Session> { session } };
+            var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
 
             var expectedResponse = new AppointmentSlotsResponse { Slots = new Worker.Areas.Appointments.Models.Slot[0] };
 
@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var listSlotsReply = new ListSlotsReply
             {
-                Sessions = new List<Session> { session }
+                Sessions = new [] { session }.ToList()
             };
 
             var expectedSlot = new Worker.Areas.Appointments.Models.Slot
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var listSlotsReply = new ListSlotsReply
             {
-                Sessions = new List<Session> { session }
+                Sessions = new List<Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session> { session }
             };
 
             var expectedSlot = new Worker.Areas.Appointments.Models.Slot
@@ -130,7 +130,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
-        private static Session CreateSession(string location, string id, string staff, string type) => new Session
+        private static Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session CreateSession(
+            string location, 
+            string id, 
+            string staff, 
+            string type) => new Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session
         {
             Location = location,
             SessionId = id,
@@ -138,7 +142,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             Type = type
         };
 
-        private static Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot CreateSlot(string startDate, string endDate, string type) => new Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot
+        private static Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot CreateSlot(
+            string startDate, 
+            string endDate, 
+            string type) => new Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Slot
         {
             StartDate = startDate,
             EndDate = endDate,

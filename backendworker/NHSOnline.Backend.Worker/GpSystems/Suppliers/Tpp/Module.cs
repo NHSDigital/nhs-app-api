@@ -3,6 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
