@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
 
         public void WriteAudit(DateTime timestamp, string nhsNumber, string operation, string details)
         {
-            _streamWriter.WriteLine($" | {timestamp:yyyy - MM - dd HH: mm:ss: fff} | {nhsNumber} | {operation} | {details} |");
+            _streamWriter.WriteLine($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {operation} | {details} |");
             _streamWriter.Flush();
         }
     }
