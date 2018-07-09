@@ -2,9 +2,8 @@
   <div :class="$style.container">
     <div v-if="prescriptionCourse.orderDate != null">
       <b>
-        {{ $t('rp02.orderDate') }}
+        {{ $t('rp02.orderDate') }}:
       </b>
-      :
       <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
       <hr>
     </div>
