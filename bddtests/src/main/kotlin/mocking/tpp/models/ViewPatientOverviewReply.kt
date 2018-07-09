@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.*
 data class ViewPatientOverviewReply(
         @XmlElementWrapper(name="DrugSensitivities")
         @field:XmlElement(name="Item")
-        var drugSensitivities: MutableList<Item> = arrayListOf(),
+        var drugSensitivities: MutableList<ViewPatientOverviewItem> = arrayListOf(),
         @XmlElementWrapper(name="Drugs")
         @field:XmlElement(name="Item")
-        var drugs: MutableList<Item> = arrayListOf(),
+        var drugs: MutableList<ViewPatientOverviewItem> = arrayListOf(),
         @XmlElementWrapper(name="PastRepeats")
         @field:XmlElement(name="Item")
-        var pastRepeats: MutableList<Item> = arrayListOf(),
+        var pastRepeats: MutableList<ViewPatientOverviewItem> = arrayListOf(),
         @XmlElementWrapper(name="CurrentRepeats")
         @field:XmlElement(name="Item")
-        var currentRepeats: MutableList<Item> = arrayListOf(),
+        var currentRepeats: MutableList<ViewPatientOverviewItem> = arrayListOf(),
         @XmlElementWrapper(name="Allergies")
         @field:XmlElement(name="Item")
-        var allergies: MutableList<Item> = arrayListOf()
+        var allergies: MutableList<ViewPatientOverviewItem> = arrayListOf()
 )

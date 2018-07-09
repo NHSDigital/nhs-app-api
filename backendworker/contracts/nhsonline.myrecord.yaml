@@ -38,6 +38,13 @@ definitions:
       hasDetailedRecordAccess:
         type: boolean
         description: Shows if the patient has access to their detailed record.
+      supplier:
+        type: string
+        description: supplier.
+        enum:
+          - UNKNOWN
+          - EMIS
+          - TPP
       allergies:
         type: object
         description: An object containing all allergy details.
@@ -55,9 +62,13 @@ definitions:
         description: An object containing all test result details.
         $ref: '#/definitions/TestResults'
       problems:
-              type: object
-              description: An object containing all problems details.
-              $ref: '#/definitions/Problems'
+        type: object
+        description: An object containing all problems details.
+        $ref: '#/definitions/Problems'
+      tppDcrEvents:
+        type: object
+        description: An object containing all tpp dcr event details.
+        $ref: '#/definitions/TppDcrEvents'
 
   Allergies:
     type: object
@@ -224,6 +235,40 @@ definitions:
         items:
           $ref: '#/definitions/LineItem'
   
+  TppDcrEvents:
+    type: object
+    properties:
+      hasAccess:
+        type: boolean
+        description: Does the patient have access to this data.
+      hasErrored:
+        type: boolean
+        description: Some error occurred when attempting to retrieve this error.
+      data:
+        type: object
+        properties: 
+           problems:
+            type: array
+            description: Array of problems
+            items:
+              $ref: '#/definitions/TppDcrEvent'
+    
+  TppDcrEvent:
+    type: object
+    properties:
+      effectiveDate:
+        type: string
+        format: date-time
+        description: date/time value.
+      eventLocationAndDoneBy:
+        type: string
+        description: Event location and done by
+      eventItems:
+        type: array
+        description: Array of event items
+        items:
+          type: string 
+            
   Date:
     type: object
     properties:

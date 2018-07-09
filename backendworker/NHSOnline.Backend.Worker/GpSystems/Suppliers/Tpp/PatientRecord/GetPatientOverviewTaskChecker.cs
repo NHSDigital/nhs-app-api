@@ -19,8 +19,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         public Tuple<Allergies, Medications> Check(Task<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>> task)
         {
             var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
-            bool hasErrored = false;
-            bool hasAccess = true;
+            var hasErrored = false;
+            var hasAccess = true;
             
             if (!task.IsCompletedSuccessfully)
             {

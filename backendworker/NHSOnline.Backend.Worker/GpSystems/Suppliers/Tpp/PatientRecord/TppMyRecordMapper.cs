@@ -4,18 +4,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public class TppMyRecordMapper : ITppMyRecordMapper
     {
-        public MyRecordResponse Map(Allergies allergies, Medications medications, Immunisations immunisations, TestResults testResults,
-            Problems problems)
+        public MyRecordResponse Map(Allergies allergies, Medications medications, TppDcrEvents dcrEvents)
         {
             return new MyRecordResponse
             {
                 Allergies = allergies,
                 Medications = medications,
-                Immunisations = immunisations,
-                TestResults = testResults,
-                Problems = problems,
+                TppDcrEvents = dcrEvents,
                 HasSummaryRecordAccess = allergies?.HasAccess ?? false,
-                HasDetailedRecordAccess = immunisations.HasAccess || testResults.HasAccess
+                HasDetailedRecordAccess = dcrEvents.HasAccess
             };
         }
     }

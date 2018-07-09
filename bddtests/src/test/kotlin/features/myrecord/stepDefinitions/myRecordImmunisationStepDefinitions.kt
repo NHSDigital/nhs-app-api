@@ -13,7 +13,7 @@ import worker.WorkerClient
 
 open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefinitions() {
 
-    @Given("the GP Practice has enabled immunisations functionality and multiple immunisation records exist for (.*)")
+    @Given("^the GP Practice has enabled immunisations functionality and multiple immunisation records exist for (.*)$")
     fun givenTheGPPracticeHasEnabledImmunisationsFunctionalityAndMultipleImmunisationRecordsExistfor(getService:String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -28,7 +28,7 @@ open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefiniti
         }
     }
 
-    @Given("no immunisation records exist for the patient for (.*)")
+    @Given("^no immunisation records exist for the patient for (.*)$")
     fun givenNoImmunisationRecordsExistForThePatientfor(getService: String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -43,7 +43,7 @@ open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefiniti
         }
     }
 
-    @Given("the user does not have access to view immunisations for (.*)")
+    @Given("^the user does not have access to view immunisations for (.*)$")
     fun givenUserDoesNotHaveAccessToViewImmunisationsfor(getService: String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -58,7 +58,7 @@ open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefiniti
         }
     }
 
-    @Given("there is an error retrieving immunisations data for (.*)")
+    @Given("^there is an error retrieving immunisations data for (.*)$")
     fun givenThereIsAnErrorRetrievingImmunisationsDatafor(getService: String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -73,7 +73,7 @@ open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefiniti
         }
     }
 
-    @When("I get the users immunisations")
+    @When("^I get the users immunisations$")
     fun whenIGetTheUsersMyRecordData()
     {
         try {
@@ -85,7 +85,7 @@ open class MyRecordImmunisationStepDefinitions: AbstractDemographicsStepDefiniti
         }
     }
 
-    @Then("I receive \"(.*)\" immunisations as part of the my record object")
+    @Then("^I receive \"(.*)\" immunisations as part of the my record object$")
     fun thenIReceiveAnImmunisationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(count, result.response.immunisations.data.count())

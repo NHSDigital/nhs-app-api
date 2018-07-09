@@ -49,6 +49,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 var problems = new GetProblemsTaskChecker(_logger).Check(problemsTask);
                 
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems);
+                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper();
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 

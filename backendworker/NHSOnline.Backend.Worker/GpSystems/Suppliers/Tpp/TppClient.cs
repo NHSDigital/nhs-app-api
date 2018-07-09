@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -63,11 +62,32 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return await Post<PatientSelected, PatientSelectedReply>(patientSelected, tppUserSession.Suid);          
         }      
         
-        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(ViewPatientOverview model, string suid)
+        public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession)
         {
-            return await Post<ViewPatientOverview, ViewPatientOverviewReply>(model, suid);
+            var request = new ViewPatientOverview
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.UnitId,
+            };
+            
+            return await Post<ViewPatientOverview, ViewPatientOverviewReply>(request, tppUserSession.Suid);
         }
-     
+        
+        public async Task<TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(
+            TppUserSession tppUserSession)
+
+        {
+            var request = new RequestPatientRecord
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.UnitId,
+            };  
+            
+            return await Post<RequestPatientRecord, RequestPatientRecordReply>(request, tppUserSession.Suid);
+        }
+        
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
             model.ApplyConfig(_tppConfig);

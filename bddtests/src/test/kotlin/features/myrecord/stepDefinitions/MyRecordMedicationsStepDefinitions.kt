@@ -17,13 +17,13 @@ import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
-    @Then("I receive the medications object")
+    @Then("^I receive the medications object$")
     fun thenIReceiveAMedicationsObject() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertNotNull(result.response.medications.data)
     }
 
-    @Given("the GP Practice has enabled medications functionality for (.*)")
+    @Given("^the GP Practice has enabled medications functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityfor(getService: String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -40,7 +40,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
         }
     }
 
-    @Given("the GP Practice has enabled medication functionality and the patient has no medications for (.*)")
+    @Given("^the GP Practice has enabled medication functionality and the patient has no medications for (.*)$")
     fun givenTheGPPracticeHasEnabledMedicationsFunctionalityandpatienthasnomedicationsfor(getService: String) {
         setPatientToDefaultFor(getService)
         when (getService) {
@@ -75,7 +75,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
         }
     }
 
-    @But("the GP Practice has disabled medications functionality for (.*)")
+    @But("^the GP Practice has disabled medications functionality for (.*)$")
     fun butTheGPPracticeHasDisabledMedicationsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
         when (getService) {
@@ -92,31 +92,31 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
         }
     }
 
-    @Then("I receive \"(.*)\" acute medications as part of the my record object")
+    @Then("^I receive \"(.*)\" acute medications as part of the my record object$")
     fun thenIReceiveAnAcuteMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(count, result.response.medications.data.acuteMedications.count())
     }
 
-    @Then("I receive \"(.*)\" current repeat medications as part of the my record object")
+    @Then("^I receive \"(.*)\" current repeat medications as part of the my record object$")
     fun thenIReceiveACurrentRepeatMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(count, result.response.medications.data.currentRepeatMedications.count())
     }
 
-    @Then("I receive \"(.*)\" discontinued repeat medications as part of the my record object")
+    @Then("^I receive \"(.*)\" discontinued repeat medications as part of the my record object$")
     fun thenIReceiveADiscontinuedRepeatMedicationsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(count, result.response.medications.data.discontinuedRepeatMedications.count())
     }
 
-    @And("the flag informing that the patient has access to the medications data is set to \"(.*)\"")
+    @And("^the flag informing that the patient has access to the medications data is set to \"(.*)\"$")
     fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(value, result.response.medications.hasAccess)
     }
 
-    @And("the flag informing that there was an error retrieving the medications data is set to \"(.*)\"")
+    @And("^the flag informing that there was an error retrieving the medications data is set to \"(.*)\"$")
     fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(value, result.response.medications.hasErrored)

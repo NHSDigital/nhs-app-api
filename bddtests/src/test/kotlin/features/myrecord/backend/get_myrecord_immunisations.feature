@@ -9,6 +9,7 @@ Feature: Get Immunisations Data
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist for <Service>
     When I get the users immunisations
     Then I receive "2" immunisations as part of the my record object
+    And the field indicating supplier is set to <Service>
 
   Examples:
   |Service|
@@ -21,6 +22,7 @@ Feature: Get Immunisations Data
     And no immunisation records exist for the patient for <Service>
     When I get the users immunisations
     Then I receive "0" immunisations as part of the my record object
+    And the field indicating supplier is set to <Service>
 
   Examples:
   |Service|

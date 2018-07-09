@@ -4,7 +4,7 @@ import mocking.emis.allergies.AllergyMedicalRecord
 import mocking.emis.allergies.AllergyResponse
 import mocking.emis.allergies.AllergyResponseModel
 import mocking.emis.allergies.EffectiveDate
-import mocking.tpp.models.Item
+import mocking.tpp.models.ViewPatientOverviewItem
 import mocking.tpp.models.ViewPatientOverviewReply
 
 object AllergiesData {
@@ -55,11 +55,11 @@ object AllergiesData {
 
     fun getTppAllergiesData(count: Int): ViewPatientOverviewReply {
 
-        val allergies = mutableListOf<Item>()
-        val drugSensitivities = mutableListOf<Item>()
+        val allergies = mutableListOf<ViewPatientOverviewItem>()
+        val drugSensitivities = mutableListOf<ViewPatientOverviewItem>()
 
         for (i in 1..count) {
-            allergies.add(Item(id = i.toString(), description = "Allergies", date="2018-05-15T09:52:44.927", value="Hay Fever"))
+            allergies.add(ViewPatientOverviewItem(id = i.toString(), description = "Allergies", date="2018-05-15T09:52:44.927", value="Hay Fever"))
         }
 
         val result= ViewPatientOverviewReply(
@@ -71,8 +71,8 @@ object AllergiesData {
 
     fun getTppDefaultAllergyModel(): ViewPatientOverviewReply {
         return ViewPatientOverviewReply(
-                allergies = mutableListOf<Item>(),
-                drugSensitivities = mutableListOf<Item>()
+                allergies = mutableListOf<ViewPatientOverviewItem>(),
+                drugSensitivities = mutableListOf<ViewPatientOverviewItem>()
         );
     }
 }

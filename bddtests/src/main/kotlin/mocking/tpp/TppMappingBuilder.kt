@@ -8,6 +8,7 @@ import mocking.tpp.viewPatientOverview.TppViewPatientOverviewBuilder
 import worker.models.demographics.TppUserSession
 import mocking.tpp.models.ListRepeatMedication
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
+import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
 import models.Patient
 
 
@@ -21,4 +22,5 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
     fun viewPatientOverviewPost(tppUserSession: TppUserSession) = TppViewPatientOverviewBuilder(tppUserSession)
     fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
     fun listRepeatMedication(patient: Patient) = TppPrescriptionsBuilder(patient)
+    fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
 }

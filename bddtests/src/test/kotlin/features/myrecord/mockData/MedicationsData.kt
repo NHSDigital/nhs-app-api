@@ -1,10 +1,7 @@
 package features.myrecord.mockData
 
 import mocking.emis.models.*
-import mocking.emis.testResults.TestResultMedicalRecord
-import mocking.emis.testResults.TestResultResponse
-import mocking.emis.testResults.TestResultResponseModel
-import mocking.tpp.models.Item
+import mocking.tpp.models.ViewPatientOverviewItem
 import mocking.tpp.models.ViewPatientOverviewReply
 import java.time.LocalDateTime
 
@@ -125,7 +122,7 @@ object MedicationsData {
         return ViewPatientOverviewReply(
                 drugs = mutableListOf
                 (
-                        Item
+                        ViewPatientOverviewItem
                         (
                                 date = tenMonthsAgo,
                                 value = "Penecillin"
@@ -133,17 +130,17 @@ object MedicationsData {
                 ),
                 currentRepeats  = mutableListOf
                 (
-                        Item
+                        ViewPatientOverviewItem
                         (
                                 date = tenMonthsAgo,
                                 value = "Ventolin"
                         ),
-                        Item
+                        ViewPatientOverviewItem
                         (
                                 date = tenMonthsAgo,
                                 value = "Salbutamol"
                         ),
-                        Item
+                        ViewPatientOverviewItem
                         (
                                 date = tenMonthsAgo,
                                 value = "Calpol"
@@ -151,12 +148,12 @@ object MedicationsData {
                 ),
                 pastRepeats  = mutableListOf
                 (
-                        Item
+                        ViewPatientOverviewItem
                         (
                                 date = twentyMonthsAgo,
                                 value = "Amoxycillin"
                         ),
-                        Item
+                        ViewPatientOverviewItem
                         (
                                 date = twentyMonthsAgo,
                                 value = "Ibuprofen"
@@ -167,9 +164,9 @@ object MedicationsData {
 
     fun getTppDefaultMedicationsModel(): ViewPatientOverviewReply {
         return ViewPatientOverviewReply(
-                drugs = mutableListOf<Item>(),
-                currentRepeats = mutableListOf<Item>(),
-                pastRepeats = mutableListOf<Item>()
+                drugs = mutableListOf<ViewPatientOverviewItem>(),
+                currentRepeats = mutableListOf<ViewPatientOverviewItem>(),
+                pastRepeats = mutableListOf<ViewPatientOverviewItem>()
         );
     }
 }

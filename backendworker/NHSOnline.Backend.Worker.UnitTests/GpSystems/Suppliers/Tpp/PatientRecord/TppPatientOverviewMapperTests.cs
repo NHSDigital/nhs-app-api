@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
 
             // Act
             var patientOverview = new TppPatientOverviewMapper().Map(item);
-            var result = _mapper.Map(patientOverview.Item1, patientOverview.Item2, new Immunisations(), new TestResults(), new Problems());
+            var result = _mapper.Map(patientOverview.Item1, patientOverview.Item2, new TppDcrEvents());
 
             // Assert
             result.Should().NotBeNull();
@@ -84,9 +84,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             mappedMedications.Data.DiscontinuedRepeatMedications.Should().BeEquivalentTo(expectedPastRepeatMedications);         
         }
 
-        private List<Item> CreateListPatientOverviewItem(int count)
+        private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {
-            var result = new List<Item>();
+            var result = new List<ViewPatientOverViewItem>();
             for (int i = 0; i < count; i++)
             {
                 result.Add(CreatePatientOverviewItem());
@@ -94,26 +94,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             return result;
         }
         
-        private Item CreatePatientOverviewItem()
+        private ViewPatientOverViewItem CreatePatientOverviewItem()
         {
-            return new Item
+            return new ViewPatientOverViewItem
             {
                 Date = _fixture.Create<DateTimeOffset>().ToString(),
                 Value = _fixture.Create<string>(),
             };
         }
 
-        private List<AllergyItem> CreateListAllergyItem(List<Item> items)
+        private List<AllergyItem> CreateListAllergyItem(List<ViewPatientOverViewItem> items)
         {
             return items.Select(x => CreateAllergyItem(x)).ToList();
         }
 
-        private List<MedicationItem> CreateListMedicationItem(List<Item> items)
+        private List<MedicationItem> CreateListMedicationItem(List<ViewPatientOverViewItem> items)
         {
             return items.Select(x => CreateMedicationItem(x)).ToList();
         }
 
-        private AllergyItem CreateAllergyItem(Item item)
+        private AllergyItem CreateAllergyItem(ViewPatientOverViewItem item)
         {
             return new AllergyItem
             {
@@ -125,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             };
         }
 
-        private MedicationItem CreateMedicationItem(Item item)
+        private MedicationItem CreateMedicationItem(ViewPatientOverViewItem item)
         {
             var result = new MedicationItem
             {

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
@@ -31,7 +32,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
                 .GetPatientRecordService();
 
             var result = await patientRecordService.Get(userSession);
-
+            
             return result.Accept(new MyRecordResultVisitor());
         }
     }

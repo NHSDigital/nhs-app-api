@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord
 {
-    public class Item
+    public class ViewPatientOverViewItem
     {
         [XmlAttribute("id")]
         public string Id { get; set; }

@@ -49,27 +49,43 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                 CurrentRepeats = tppCurrentRepeatMedications,
                 PastRepeats = tppPastRepeatMedications,
             };
+
+            var patientRecordResponse = new RequestPatientRecordReply
+            {
+                Events = new List<Event>
+                {
+                    CreateEvent()
+                }
+            };
             
-            _tppClient.Setup(x => x.PatientOverviewPost(It.IsAny<ViewPatientOverview>(), It.IsAny<string>()))
+            _tppClient.Setup(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()))
                 .Returns(Task.FromResult(
                     new TppClient.TppApiObjectResponse<ViewPatientOverviewReply>(HttpStatusCode.OK)
                     {
                         Body = patientOverviewResponse,
                         ErrorResponse = null,
-                    }));            
+                    }));   
+            
+            _tppClient.Setup(x => x.RequestPatientRecordPost(It.IsAny<TppUserSession>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestPatientRecordReply>(HttpStatusCode.OK)
+                    {
+                        Body = patientRecordResponse,
+                        ErrorResponse = null,
+                    }));   
 
             // Act
             var result = await _systemUnderTest.Get(_userSession);
 
             // Assert
-            _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<ViewPatientOverview>(), It.IsAny<string>()));
+            _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()));
             result.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
             ((GetMyRecordResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
         }
         
-        private List<Item> CreateListPatientOverviewItem(int count)
+        private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {
-            var result = new List<Item>();
+            var result = new List<ViewPatientOverViewItem>();
             for (int i = 0; i < count; i++)
             {
                 result.Add(CreatePatientOverviewItem());
@@ -77,12 +93,31 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             return result;
         }
         
-        private Item CreatePatientOverviewItem()
+        private ViewPatientOverViewItem CreatePatientOverviewItem()
         {
-            return new Item
+            return new ViewPatientOverViewItem
             {
                 Date = _fixture.Create<DateTimeOffset>().ToString(),
                 Value = _fixture.Create<string>(),
+            };
+        }
+        
+        private Event CreateEvent()
+        {
+            return new Event
+            {
+                DoneBy = _fixture.Create<string>(),
+                Location = _fixture.Create<string>(),
+                Date = _fixture.Create<DateTimeOffset>().ToString(),
+                Items = new List<RequestPatientRecordItem>
+                {            
+                    new RequestPatientRecordItem
+                    {
+                        Details =_fixture.Create<string>(),
+                        Type = _fixture.Create<string>()
+                    }
+                    
+                }
             };
         }
     }

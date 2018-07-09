@@ -13,8 +13,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         Task<TppClient.TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession session);
         
-        Task<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(ViewPatientOverview request, string suid);
-
         Task<TppClient.TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots request, string suid);
+        
+        Task<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession);
+
+        Task<TppClient.TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(TppUserSession tppUserSession);
     }
 }

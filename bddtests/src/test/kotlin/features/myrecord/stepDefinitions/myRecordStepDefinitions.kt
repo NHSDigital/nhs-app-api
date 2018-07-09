@@ -73,6 +73,10 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
                 mockingClient.forTpp {
                     viewPatientOverviewPost(patient.tppUserSession!!).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
                 }
+
+                mockingClient.forTpp {
+                    patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
+                }
             }
         }
     }
@@ -287,7 +291,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
         Assert.assertFalse(recordSteps.isNameVisible())
     }
 
-    @When("I get the users my record data")
+    @When("^I get the users my record data$")
     fun whenIGetTheUsersMyRecordData() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
@@ -564,5 +568,11 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Throws(Exception::class)
     fun i_see_an_error_has_occurred_trying_to_retrieve_this_data() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getImmunisationsMessage())
+    }
+
+    @Then("^the field indicating supplier is set to (.*)$")
+    fun thenTheFlagIndicatingSupplierIsSetTo(supplier: String) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        Assert.assertEquals(supplier, result.response.supplier)
     }
 }

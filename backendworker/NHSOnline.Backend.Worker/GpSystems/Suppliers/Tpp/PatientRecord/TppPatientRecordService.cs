@@ -27,23 +27,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
             try
             {
-                var request = new ViewPatientOverview
-                {
-                    PatientId = tppUserSession.PatientId,
-                    OnlineUserId = tppUserSession.OnlineUserId,
-                    UnitId = tppUserSession.UnitId,
-                };
                 
-                var patientOverviewTask = _tppClient.PatientOverviewPost(request, tppUserSession.Suid);
-                await Task.WhenAll(patientOverviewTask);
+                var patientOverviewTask = _tppClient.PatientOverviewPost(tppUserSession);                
+                var patientRecordTask = _tppClient.RequestPatientRecordPost(tppUserSession);
+                
+                await Task.WhenAll(patientOverviewTask, patientRecordTask);
                 
                 var patientOverviewItems = new GetPatientOverviewTaskChecker(_logger).Check(patientOverviewTask);
+                var dcrEvents = new GetPatientDcrEvents(_logger).Check(patientRecordTask);
+                
                 var allergies = patientOverviewItems.Item1;
                 var medications = patientOverviewItems.Item2;
-                var immunisations = new Immunisations();
-                var testResults = new TestResults();
-                var problems = new Problems();
-                var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems);
+                
+                var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents);
+                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper();
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 

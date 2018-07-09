@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             return new Tuple<Allergies, Medications>(allergies, medications);
         }
 
-        private AllergyItem MapAllergyResponse(Item item)
+        private AllergyItem MapAllergyResponse(ViewPatientOverViewItem item)
         {
             return new AllergyItem
             {
@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             };
         }
 
-        private MedicationItem MapMedicationResponse(Item item)
+        private MedicationItem MapMedicationResponse(ViewPatientOverViewItem item)
         {       
             var result = new MedicationItem
             {

@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.*
 
 @XmlRootElement(name = "Item")
 @XmlAccessorType(XmlAccessType.FIELD)
-data class Item(
+data class ViewPatientOverviewItem(
         @XmlAttribute var id: String = "default patientId",
         @XmlAttribute var description: String = "default description",
         @XmlAttribute var date: String = "default date",

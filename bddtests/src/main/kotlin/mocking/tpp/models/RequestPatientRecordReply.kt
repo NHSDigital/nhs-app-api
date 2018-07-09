@@ -1,0 +1,13 @@
+package mocking.tpp.models
+
+import javax.xml.bind.annotation.*
+
+@XmlRootElement(name = "RequestPatientRecordReply")
+@XmlAccessorType(XmlAccessType.FIELD)
+data class RequestPatientRecordReply(
+        @XmlAttribute var patientId: String = "default patientId",
+        @XmlAttribute var onlineUserId: String = "default onlineUserId",
+        @XmlAttribute var uuid: String = "default uuid",
+        @field:XmlElement(name="Event")
+        @XmlElement var event: MutableCollection<Event> = mutableListOf()
+)

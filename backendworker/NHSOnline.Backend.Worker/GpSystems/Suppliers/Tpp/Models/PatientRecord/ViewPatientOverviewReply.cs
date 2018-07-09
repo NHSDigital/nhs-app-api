@@ -7,23 +7,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord
     {
        
         [XmlArray("DrugSensitivities")]
-        [XmlArrayItem("Item", Type = typeof(Item))]
-        public List<Item> DrugSensitivities { get; set; }  
+        [XmlArrayItem("Item", Type = typeof(ViewPatientOverViewItem))]
+        public List<ViewPatientOverViewItem> DrugSensitivities { get; set; }  
         
         [XmlArray("Drugs")]
-        [XmlArrayItem("Item", Type = typeof(Item))]
-        public List<Item> Drugs { get; set; }  
+        [XmlArrayItem("Item", Type = typeof(ViewPatientOverViewItem))]
+        public List<ViewPatientOverViewItem> Drugs { get; set; }  
         
         [XmlArray("PastRepeats")]
-        [XmlArrayItem("Item", Type = typeof(Item))]
-        public List<Item> PastRepeats { get; set; }  
+        [XmlArrayItem("Item", Type = typeof(ViewPatientOverViewItem))]
+        public List<ViewPatientOverViewItem> PastRepeats { get; set; }  
         
         [XmlArray("CurrentRepeats")]
-        [XmlArrayItem("Item", Type = typeof(Item))]
-        public List<Item> CurrentRepeats { get; set; }  
+        [XmlArrayItem("Item", Type = typeof(ViewPatientOverViewItem))]
+        public List<ViewPatientOverViewItem> CurrentRepeats { get; set; }  
         
         [XmlArray("Allergies")]
-        [XmlArrayItem("Item", Type = typeof(Item))]
-        public List<Item> Allergies { get; set; }  
+        [XmlArrayItem("Item", Type = typeof(ViewPatientOverViewItem))]
+        public List<ViewPatientOverViewItem> Allergies { get; set; }  
     }
 }

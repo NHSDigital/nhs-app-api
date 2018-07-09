@@ -12,6 +12,7 @@ Feature: Get My Record data
     Then I receive "3" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "True"
     And the flag informing that there was an error retrieving the allergy data is set to "False"
+    And the field indicating supplier is set to <Service>
 
     Examples:
       |Service|
@@ -28,6 +29,7 @@ Feature: Get My Record data
     Then I receive "0" allergies as part of the my record object
     And the flag informing that the patient has access to the allergy data is set to "False"
     And the flag informing that there was an error retrieving the allergy data is set to "False"
+    And the field indicating supplier is set to <Service>
 
     Examples:
       |Service|

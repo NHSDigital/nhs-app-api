@@ -14,7 +14,7 @@ import worker.models.demographics.Demographics
 
 open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
-    @When("I get the users demographic data")
+    @When("^I get the users demographic data$")
     fun whenIGetTheUsersDemographicsDataFor() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getDemographics(null)
@@ -25,7 +25,7 @@ open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @Given("the GP Practice has enabled demographics functionality for (.*)$")
+    @Given("^the GP Practice has enabled demographics functionality for (.*)$")
     fun givenTheGPPracticeHasEnabledDemographicsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -42,7 +42,7 @@ open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @Given("the GP Practice has disabled demographics functionality for (.*)")
+    @Given("^the GP Practice has disabled demographics functionality for (.*)$")
     fun butTheGPPracticeHasDisabledDemographicsFunctionalityFor(getService: String) {
         setPatientToDefaultFor(getService)
         when(getService){
@@ -67,7 +67,7 @@ open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @Then("I receive the demographic object")
+    @Then("^I receive the demographic object$")
     fun thenIReceiveADemographicObject() {
         val result = Serenity.sessionVariableCalled<Demographics>(Demographics::class)
         Assert.assertNotNull(result)
