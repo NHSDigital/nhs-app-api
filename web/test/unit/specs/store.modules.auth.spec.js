@@ -38,6 +38,12 @@ describe('actions', () => {
       .then(() => {
         expect(actions.dispatch).toHaveBeenCalledWith('session/clear');
       }));
+
+    it('will dispatch the session/endValidationChecking event', () => actions
+      .logout({ commit })
+      .then(() => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
+      }));
   });
 
   describe('logoutWhenExpired', () => {

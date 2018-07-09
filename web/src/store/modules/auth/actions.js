@@ -19,6 +19,7 @@ export default {
         this.dispatch('session/setDurationSeconds', response.sessionTimeout);
         this.dispatch('session/hideExpiryMessage');
         commit(AUTH_RESPONSE, response);
+        this.dispatch('session/startValidationChecking');
         this.app.router.push({
           name: 'index',
         });
@@ -30,6 +31,7 @@ export default {
   },
   logout({ commit }) {
     this.dispatch('session/clear');
+    this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
 
     const final = () => {

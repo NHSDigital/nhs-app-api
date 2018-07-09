@@ -1,9 +1,11 @@
 import {
   CLEAR,
+  END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   SET_DURATION_SECONDS,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
+  START_VALIDATION_CHECKING,
 } from './mutation-types';
 
 export default {
@@ -17,8 +19,32 @@ export default {
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   updateLastCalledAt:
     ({ commit }, lastCalledAt) => commit(SET_LAST_CALLED_AT, lastCalledAt || new Date()),
+  startValidationChecking: ({
+    commit, dispatch, state, rootState,
+  }) => {
+    if (!rootState.auth.loggedIn) {
+      return;
+    }
+
+    if (state.validationInterval) {
+      return;
+    }
+
+    const intervalMs = state.durationSeconds ? ((state.durationSeconds / 2) * 1000) : 300000;
+
+    const interval = setInterval(() => {
+      dispatch('validate');
+    }, intervalMs);
+
+    commit(START_VALIDATION_CHECKING, interval);
+  },
+  endValidationChecking: ({ commit, state }) => {
+    clearInterval(state.validationInterval);
+    commit(END_VALIDATION_CHECKING);
+  },
   validate({ getters }) {
     if (getters.isValid()) return true;
+    this.dispatch('session/endValidationChecking');
     this.dispatch('auth/logoutWhenExpired');
     return false;
   },

@@ -52,6 +52,8 @@ export default {
     }
   },
   mounted() {
+    this.$store.dispatch('session/startValidationChecking');
+
     if (process.client && !window.validateSession) {
       window.validateSession = () => {
         this.$store.dispatch('session/validate');

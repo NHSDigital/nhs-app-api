@@ -8,6 +8,7 @@ export default {
     return {
       durationSeconds: undefined,
       lastCalledAt: undefined,
+      validationInterval: undefined,
     };
   },
   actions,
