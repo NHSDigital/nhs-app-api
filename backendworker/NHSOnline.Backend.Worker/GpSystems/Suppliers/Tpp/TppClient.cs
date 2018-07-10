@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
@@ -20,8 +19,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public const string RequestTypeHeader = "type";
         public const string ResponseSuidHeader = "suid";
         public const string RequestSuidHeader = "suid";
-        public const string TppDateTimeFormat = "yyy-MM-ddTHH:mm:ss+00:00";
-
         private static readonly Regex ErrorRegex = new Regex("errorCode\\s?=");
 
         private readonly TppHttpClient _httpClient;
@@ -90,12 +87,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             
             return await Post<RequestPatientRecord, RequestPatientRecordReply>(request, tppUserSession.Suid);
         }
-
-        public async Task<TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(BookAppointment bookAppointment, TppUserSession userSession)
-        {
-            return await Post<BookAppointment, BookAppointmentReply>(bookAppointment, userSession.Suid);
-        }
-
+        
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
             model.ApplyConfig(_tppConfig);
@@ -220,7 +212,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             }
             
             // User does not have access, Sean to confirm with TPP re using error codes
-            public bool HasForbiddenResponse => ErrorResponse != null && ErrorResponse.ErrorCode == TppApiErrorCodes.NoAccess;
+            public bool HasForbiddenResponse => ErrorResponse != null && ErrorResponse.ErrorCode == "6";
         }
 
         public class TppApiObjectResponse<TBody> : TppApiResponse

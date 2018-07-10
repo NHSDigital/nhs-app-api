@@ -25,10 +25,5 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
-
-        public IActionResult Visit(AppointmentBookResult.BadRequest badRequest)
-        {
-            return new BadRequestResult();
-        }
     }
 }

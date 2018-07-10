@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public class TppAppointmentSlotsService : IAppointmentSlotsService
     {

@@ -48,15 +48,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         }
 
         [TestMethod]
-        public void GetAppointmentsService_WhenCalled_ReturnsTppAppointmentService()
+        public void GetAppointmentsService_WhenCalled_ThrowsNotImplementedException()
         {
-            var logger = Mock.Of<ILogger<TppAppointmentsService>>();
-            var service = new TppAppointmentsService(_tppClient,  logger);
-
-            _mockServiceProvider.Setup(x => x.GetService(typeof(TppAppointmentsService)))
-                .Returns(service);
-
-            _systemUnderTest.GetAppointmentsService().Should().Be(service);
+            (new Action(() => _systemUnderTest.GetAppointmentsService()))
+                .Should()
+                .Throw<NotImplementedException>();
         }
         
         [TestMethod]

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
@@ -19,7 +18,5 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         Task<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession);
 
         Task<TppClient.TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(TppUserSession tppUserSession);
-
-        Task<TppClient.TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(BookAppointment bookAppointment, TppUserSession userSession);
     }
 }

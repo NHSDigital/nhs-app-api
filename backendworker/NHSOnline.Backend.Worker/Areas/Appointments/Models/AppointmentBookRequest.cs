@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
 {
@@ -12,7 +11,5 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         [MaxLength(150)]
         [MinLength(1)]
         public string BookingReason { get; set; }
-        public DateTimeOffset? StartTime { get; set; }
-        public DateTimeOffset? EndTime { get; set; }
     }
 }

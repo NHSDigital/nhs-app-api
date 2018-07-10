@@ -17,8 +17,6 @@ spec:
         env:
         - name: ASPNETCORE_ENVIRONMENT
           value: "Production"
-        - name: TZ
-          value: "Europe/London"
         - name: REDIS_ODSLOOKUP_CONFIG
           value: "redis:6379"
         - name: REDIS_SESSION_CONFIG

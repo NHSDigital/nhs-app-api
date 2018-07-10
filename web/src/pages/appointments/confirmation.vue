@@ -90,13 +90,11 @@ export default {
         return;
       }
       this.showValidationError = false;
-      this.confirmTheBook(this.slot.id, this.slot.startTime, this.slot.endTime, this.symptoms);
+      this.confirmTheBook(this.slot.id, this.symptoms);
     },
-    confirmTheBook(slotId, startTime, endTime, reason) {
+    confirmTheBook(slotId, reason) {
       const bookingData = {
         SlotId: slotId,
-        StartTime: startTime,
-        EndTime: endTime,
         BookingReason: reason,
       };
       this.$store.dispatch('appointment/bookAppointment', bookingData);

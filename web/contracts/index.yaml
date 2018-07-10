@@ -226,14 +226,6 @@
                   description: "Reason for booking appointment. e.g. symptoms being experienced by the patient."
                   minLength: 1
                   maxLength: 150
-                startTime: 
-                  type: "string"
-                  format: "date-time"
-                  description: "Appointment Start Date Time."
-                endTime: 
-                  type: "string"
-                  format: "date-time"
-                  description: "Appointment End Date Time."
         responses: 
           201: 
             description: "Appointment successfully created."

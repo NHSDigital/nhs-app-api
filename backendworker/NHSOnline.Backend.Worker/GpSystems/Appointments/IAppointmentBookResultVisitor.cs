@@ -6,6 +6,5 @@
         T Visit(AppointmentBookResult.InsufficientPermissions insufficientPermissions);
         T Visit(AppointmentBookResult.SlotNotAvailable slotNotAvailable);
         T Visit(AppointmentBookResult.SupplierSystemUnavailable supplierSystemUnavailable);
-        T Visit(AppointmentBookResult.BadRequest badRequest);
     }
 }
