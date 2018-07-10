@@ -213,7 +213,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData()
         {
             // Arrange
-            var sessionTimeoutInSeconds = _defaultSessionExpiryMinutes * 60;
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _settings.Object);
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode);
@@ -224,8 +223,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
 
             var expectedResult = new SessionCreateResult.SuccessfullyCreated(
                 $"{_sessionsResponse.FirstName} {_sessionsResponse.Surname}",
-                new EmisUserSession(),
-                sessionTimeoutInSeconds
+                new EmisUserSession()
             );
 
             (result as SessionCreateResult.SuccessfullyCreated).Should().BeEquivalentTo(expectedResult);

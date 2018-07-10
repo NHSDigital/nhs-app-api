@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
@@ -23,6 +24,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ISessionCacheService _sessionCacheService;
         private readonly IOdsCodeLookup _odsCodeLookup;
+        private readonly IOptions<ConfigurationSettings> _settings;
         private readonly ILogger<SessionController> _logger;
 
         public SessionController(
@@ -30,12 +32,14 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             IGpSystemFactory gpSystemFactory,
             ISessionCacheService sessionCacheService,
             IOdsCodeLookup odsCodeLookup,
+            IOptions<ConfigurationSettings> settings,
             ILogger<SessionController> logger)
         {
             _citizenIdService = citizenIdService;
             _gpSystemFactory = gpSystemFactory;
             _sessionCacheService = sessionCacheService;
             _odsCodeLookup = odsCodeLookup;
+            _settings = settings;
             _logger = logger;
         }
 
@@ -138,7 +142,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             var sessionService = gpSystem.GetSessionService();
             var sessionCreateResult = await sessionService.Create(cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode);
-            return sessionCreateResult.Accept(new SessionCreateResultVisitor());
+            return sessionCreateResult.Accept(new SessionCreateResultVisitor(_settings));
         }
 
         private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)

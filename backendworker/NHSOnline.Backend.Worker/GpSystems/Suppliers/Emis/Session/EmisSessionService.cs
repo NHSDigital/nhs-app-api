@@ -62,8 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                         SessionId = sessionResponseBody.SessionId,
                         EndUserSessionId = endUserSessionId,
                         UserPatientLinkToken = sessionResponseBody.ExtractUserPatientLinkToken()
-                    },
-                    sessionTimeoutInSeconds
+                    }
                 );
             }
             catch (HttpRequestException)

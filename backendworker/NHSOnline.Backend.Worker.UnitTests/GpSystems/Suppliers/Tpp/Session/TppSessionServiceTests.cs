@@ -23,25 +23,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         private Mock<IOptions<ConfigurationSettings>> _mockConfigurationSettings;
         private TppSessionService _systemUnderTest;
         private Authenticate _actual;
-        private ConfigurationSettings _configurationSettings;
+        private int _sessionTimeoutMinutes;
         private const string ResponseSuidHeader = "suid";
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _configurationSettings = new ConfigurationSettings
-            {
-                DefaultSessionExpiryMinutes = 20
-            };
-        
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
             _mockTppClient.Setup(x => x
                     .AuthenticatePost(It.IsAny<Authenticate>()))
                 .Callback<Authenticate>(x => _actual = x);
 
+            _sessionTimeoutMinutes = _fixture.Create<int>();
+
             _mockConfigurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
-            _mockConfigurationSettings.SetupGet(x => x.Value).Returns(_configurationSettings);
+            _mockConfigurationSettings
+                .Setup(x => x.Value)
+                .Returns(new ConfigurationSettings()
+                {
+                    DefaultSessionExpiryMinutes = _sessionTimeoutMinutes
+                });
         }
 
         [TestMethod]
@@ -116,27 +118,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             // Assert
             var created = (SessionCreateResult.SuccessfullyCreated) result;
             created.Name.Should().Be(expectedName);
-        }
-    
-        [TestMethod]
-        public async Task Create_WhenCalledSuccessfully_SetsTheSessionTimeout()
-        {
-            // Arrange
-            const int expectedTimeout = 20;
-            var reply = CreateReply();
-        
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
-                .ReturnsAsync(() => reply);
-        
-            _systemUnderTest = _fixture.Create<TppSessionService>();
-        
-            // Act
-            var result = await _systemUnderTest.Create(CreateConnectionTokenJson(), "1234");
-        
-            // Assert
-            var created = (SessionCreateResult.SuccessfullyCreated) result;
-            created.SessionTimeout.Should().Be(expectedTimeout);
         }
     
         [TestMethod]

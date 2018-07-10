@@ -7,6 +7,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
@@ -32,12 +33,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<ITokenValidationService> _mockTokenValidationService;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
+        private Mock<IOptions<ConfigurationSettings>> _configurationSettings;
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
         private string _apiSessionId;
         private string _name;
-        private int _sessionTimeout;
+        private int _sessionTimeoutMinutes;
+        private int _sessionTimeoutSeconds;
         private SessionCreateResult _sessionCreateResult;
 
         [TestInitialize]
@@ -51,12 +54,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _userProfile = _fixture.Freeze<UserProfile>();
 
             _name = _fixture.Create<string>();
-            _sessionTimeout = _fixture.Create<int>();
+            _sessionTimeoutMinutes = _fixture.Create<int>();
+            _sessionTimeoutSeconds = _sessionTimeoutMinutes * 60;
+
+            _configurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
+            _configurationSettings
+                .Setup(x => x.Value)
+                .Returns(new ConfigurationSettings()
+                    {
+                        DefaultSessionExpiryMinutes = _sessionTimeoutMinutes
+                    });
 
             _apiSessionId = _fixture.Create<string>();
 
             _sessionCreateResult =
-                new SessionCreateResult.SuccessfullyCreated(_name, new EmisUserSession(), _sessionTimeout);
+                new SessionCreateResult.SuccessfullyCreated(_name, new EmisUserSession());
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockCitizenIdService
@@ -228,7 +240,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var expectedUserSessionResponse = new UserSessionResponse
             {
                 Name = _name,
-                SessionTimeout = _sessionTimeout
+                SessionTimeout = _sessionTimeoutSeconds
             };
 
             actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);

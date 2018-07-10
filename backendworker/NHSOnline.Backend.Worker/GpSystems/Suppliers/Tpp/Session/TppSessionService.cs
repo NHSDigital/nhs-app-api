@@ -48,8 +48,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
 
                 return new SessionCreateResult.SuccessfullyCreated(
                     reply.Body.User?.Person?.PersonName?.Name,
-                    userSession,
-                    _settings.DefaultSessionExpiryMinutes);
+                    userSession);
             }
             catch (HttpRequestException)
             {

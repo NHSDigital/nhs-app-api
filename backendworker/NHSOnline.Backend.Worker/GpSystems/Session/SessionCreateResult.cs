@@ -12,16 +12,13 @@
         {
             public UserSession UserSession { get; }
             public string Name { get; }
-            public int SessionTimeout { get; }
 
             public SuccessfullyCreated(
                 string name, 
-                UserSession userSession,
-                int sessionTimeout)
+                UserSession userSession)
             {
                 Name = name;
                 UserSession = userSession;
-                SessionTimeout = sessionTimeout;
             }
 
             public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)

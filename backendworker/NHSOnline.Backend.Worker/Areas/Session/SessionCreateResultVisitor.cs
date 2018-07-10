@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
@@ -6,6 +7,12 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     public class
         SessionCreateResultVisitor : ISessionCreateResultVisitor<SessionCreateResultVisitorOutput>
     {
+        private readonly IOptions<ConfigurationSettings> _settings;
+
+        public SessionCreateResultVisitor(IOptions<ConfigurationSettings> settings)
+        {
+            _settings = settings;
+        }
         public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SuccessfullyCreated result)
         {
             return new SessionCreateResultVisitorOutput
@@ -13,7 +20,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 SessionWasCreated = true,
                 Name = result.Name,
                 UserSession = result.UserSession,
-                SessionTimeout = result.SessionTimeout
+                SessionTimeout = _settings.Value.DefaultSessionExpiryMinutes * 60
             };
         }
 
