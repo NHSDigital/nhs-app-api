@@ -90,6 +90,11 @@ namespace NHSOnline.Backend.Worker
                     options => options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver()
                 );
+            
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+            }); 
 
             services.AddDataProtection();
             
@@ -138,6 +143,8 @@ namespace NHSOnline.Backend.Worker
                 app.UseDeveloperExceptionPage();
             }
 
+            UseSecurityHeaders(app);
+
             app.UsePathBase(new PathString("/v1"));
 
             var corsAuthority = Configuration["CORS_AUTHORITY"];
@@ -154,6 +161,23 @@ namespace NHSOnline.Backend.Worker
             app.UseMvc();
 
             _modularStartup.Configure(app, env);
+        }
+
+        private void UseSecurityHeaders(IApplicationBuilder app)
+        {            
+            app.UseHttpsRedirection();
+
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");
+                context.Response.Headers.Add("X-Frame-Options", "DENY");
+                context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+                context.Response.Headers.Add("Referrer-Policy", "no-referrer");
+                context.Response.Headers.Add("Content-Security-Policy", "default-src https:");
+                context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+                
+                await next();
+            });
         }
 
         private void EnsureConfigurationSettingsPopulated(ConfigurationSettings config)
