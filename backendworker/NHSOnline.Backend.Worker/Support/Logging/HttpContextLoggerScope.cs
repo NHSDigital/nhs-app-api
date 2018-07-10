@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
 {
     public class HttpContextLoggerScope
     {
-        readonly HttpContext _httpContext;
+        HttpContext _httpContext;
 
         public HttpContextLoggerScope(HttpContext httpContext)
         {
@@ -14,8 +14,9 @@ namespace NHSOnline.Backend.Worker.Support.Logging
 
         public override string ToString()
         {
+            var httpContext = (_httpContext as HttpContext);
             return String.Format("SessionId:{0}",
-                _httpContext.Items.Keys.Contains("UserSession") ? ((UserSession)_httpContext.Items["UserSession"]).Key : "{No Session yet}");
+                httpContext.Items.Keys.Contains("UserSession") ? ((UserSession)httpContext.Items["UserSession"]).Key : "{No Session yet}");
         }
     }
 }

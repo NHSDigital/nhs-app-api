@@ -3,7 +3,8 @@ using NHSOnline.Backend.Worker.GpSystems.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {
-    public class SessionCreateResultVisitor : ISessionCreateResultVisitor<SessionCreateResultVisitorOutput>
+    public class
+        SessionCreateResultVisitor : ISessionCreateResultVisitor<SessionCreateResultVisitorOutput>
     {
         public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SuccessfullyCreated result)
         {

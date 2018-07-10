@@ -35,8 +35,7 @@ namespace NHSOnline.Backend.Worker
 
                 _logger.LogInformation($"User session found: '{userSession.GetType()}'");
 
-                context.HttpContext.SetUserSession(userSession);
-                _logger.LogDebug("Finish: Validate Principal");
+                context.HttpContext.Items.Add(Constants.HttpContextItems.UserSession, userSession);
             }
         }
 
