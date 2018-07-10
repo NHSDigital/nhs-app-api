@@ -8,6 +8,7 @@ Feature: View prescriptions error cases
 
   @NHSO-498
   @bug
+  @prescription
   Scenario: A user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
     Given The prescriptions endpoint is timing out
     When I navigate to prescriptions
@@ -16,6 +17,7 @@ Feature: View prescriptions error cases
 
   @NHSO-498
   @bug
+  @prescription
   Scenario: A user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
     Given The prescriptions endpoint is throwing a server error
     When I navigate to prescriptions
@@ -24,6 +26,7 @@ Feature: View prescriptions error cases
   # No yellow banner showing, this is a bug with NHSO-415, so this test will fail until this is resolved
   @NHSO-498
   @bug
+  @prescription
   Scenario: A user tries to navigate to the prescriptions page, but the session has timed out
     Given My session has expired
     When I navigate to prescriptions
@@ -31,6 +34,7 @@ Feature: View prescriptions error cases
 
   @NHSO-513
   @bug
+  @prescription
   Scenario: A user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order times out
     Given I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -41,6 +45,7 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription timeout
 
   @NHSO-513
+  @prescription
   Scenario: A user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
     Given I am using EMIS GP System
     And I have 10 past repeat prescriptions
@@ -51,6 +56,7 @@ Feature: View prescriptions error cases
     Then I see the appropriate error message for a prescription server error
 
   @NHSO-514
+  @prescription
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given I am using <GP System> GP System
     And I have 10 past repeat prescriptions
@@ -68,6 +74,7 @@ Feature: View prescriptions error cases
       | GP System |
       | EMIS      |
 
+  @prescription
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
     Given I am using <GP System> GP System
     And I have 10 past repeat prescriptions

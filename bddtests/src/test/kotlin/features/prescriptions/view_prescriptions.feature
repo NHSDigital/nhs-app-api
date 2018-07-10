@@ -3,6 +3,7 @@ Feature: View prescriptions
   A user can view information about their prescriptions after logging in
 
   @NHSO-497
+  @prescription
   Scenario Outline: A <GP System> user can see the prescriptions menu button
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -14,6 +15,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
+  @prescription
   Scenario Outline: <GP System> patient selects the prescriptions menu button
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -43,6 +45,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
+  @prescription
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -70,6 +73,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
+  @prescription
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -83,6 +87,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
+  @prescription
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -96,6 +101,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
+  @prescription
   Scenario Outline: <GP System> patient who has acute prescriptions
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -111,6 +117,7 @@ Feature: View prescriptions
 
 
   @NHSO-556
+  @prescription
   Scenario: The User clicks on the Prescriptions button and the service is disabled at a GP Practice level
     Given EMIS is initialised
     And I am using EMIS GP System
@@ -119,6 +126,7 @@ Feature: View prescriptions
     Then I see a message informing me that I don't currently have access to this service
 
   @NHSO-1509
+  @prescription
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -134,6 +142,7 @@ Feature: View prescriptions
       | TPP       |
 
   @NHSO-1509
+  @prescription
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -149,6 +158,7 @@ Feature: View prescriptions
       | TPP       |
 
   @NHSO-1509
+  @prescription
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -163,6 +173,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
+  @prescription
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
     Given EMIS is initialised
     And I am using EMIS GP System
@@ -279,7 +290,6 @@ Feature: View prescriptions
       | TPP       |
 
   @NHSO-858
-  @68b13026-108d-4036-8f24-e5d88c294c02
   @backend
   Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
     Given I have logged into <GP System> and have a valid session cookie

@@ -7,6 +7,7 @@ Feature: Book an available appointment slot
     Given there are available appointment slots
 
   @NHSO-72
+  @appointment
   Scenario: A user tries to book an appointment without describing symptoms
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
@@ -24,6 +25,7 @@ Feature: Book an available appointment slot
     And booking request is successfully made with valid details
 
   @NHSO-72
+  @appointment
   Scenario: A user tries to book an appointment describing symptoms no more 150 characters
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
@@ -33,6 +35,7 @@ Feature: Book an available appointment slot
     And booking request is successfully made with valid details
 
   @NHSO-72
+  @appointment
   Scenario: A user tries to enter symptoms with over 150 characters
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
@@ -48,6 +51,7 @@ Feature: Book an available appointment slot
     Then only the first 150 characters will be displayed
 
   @NHSO-72
+  @appointment
   Scenario: A user who books successfully, but only the first 150 characters of the symptoms are sent
     Given I am on the appointments booking page
     And I have selected an appointment slot to book
@@ -57,6 +61,7 @@ Feature: Book an available appointment slot
     And booking request is successfully made with valid details
 
   @NHSO-517
+  @appointment
   Scenario: A user sees appropriate information message when there is a timeout
     Given GP system doesn't respond a timely fashion when booking an appointment
     And I am on the appointments booking page
@@ -67,6 +72,7 @@ Feature: Book an available appointment slot
     And there should be a button to go back to my appointments
 
   @NHSO-517
+  @appointment
   Scenario: A user sees appropriate information message when GP system is unavailable
     Given GP system is unavailable when booking an appointment
     And I am on the appointments booking page
@@ -77,6 +83,7 @@ Feature: Book an available appointment slot
     And there should be a button to go back to my appointments
 
   @NHSO-517
+  @appointment
   Scenario: A user sees appropriate information message when appointment has already been booked
     Given the appointment slot has already been booked by somebody else
     And I am on the appointments booking page
@@ -87,6 +94,7 @@ Feature: Book an available appointment slot
     And there should be a button to go back to my appointments
 
   @NHSO-517
+  @appointment
   Scenario: A user can return directly back to their appointments after trying to book one already booked
     Given the appointment slot has already been booked by somebody else
     And I am on the appointments booking page

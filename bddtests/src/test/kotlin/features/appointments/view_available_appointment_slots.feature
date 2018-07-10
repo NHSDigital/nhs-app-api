@@ -28,6 +28,7 @@ Feature: View available appointment slots
   @NHSO-71
   @NHSO-870
   @pending    @NHSO-71
+  @appointment
   Scenario Outline: A user enters the appointments booking page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>
     When I am on the appointments booking page
@@ -43,6 +44,7 @@ Feature: View available appointment slots
   @NHSO-71
   @NHSO-870
   @pending    @NHSO-71
+  @appointment
   Scenario Outline: A user enters the appointments booking page, but only appointments only available at 1 location
     Given there are available appointment slot for <GP System> for 1 location
     When I am on the appointments booking page
@@ -54,6 +56,7 @@ Feature: View available appointment slots
   @NHSO-71
   @NHSO-870
   @pending    @NHSO-71
+  @appointment
   Scenario Outline: A user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
     When I am on the appointments booking page
@@ -65,6 +68,7 @@ Feature: View available appointment slots
   @NHSO-71
   @NHSO-870
   @pending    @NHSO-71
+  @appointment
   Scenario Outline: A user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
     When I am on the appointments booking page
@@ -77,6 +81,7 @@ Feature: View available appointment slots
   @NHSO-71
   @NHSO-870
   @pending    @NHSO-71
+  @appointment
   Scenario Outline: A user refines criteria to isolate ideal appointment slots
     Given there are available appointment slots with different criteria for <GP System>
     When I am on the appointments booking page
@@ -89,6 +94,7 @@ Feature: View available appointment slots
   @NHSO-71
   @NHSO-870
   @pending    @NHSO-71
+  @appointment
   Scenario Outline: A user refines criteria but no slots are available
     Given there are available appointment slots with different criteria for <GP System>
     When I am on the appointments booking page
@@ -100,6 +106,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user selects a second appointment slot and the first selected slot gets deselected.
     Given there are available appointment slots with different criteria for any GP System
     And I select the appointment I want
@@ -109,6 +116,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user select the same appointment twice and the selected appointment stay selected.
     Given there are available appointment slots with different criteria for any GP System
     And I select the appointment I want
@@ -117,6 +125,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user tries to progress without selecting an appointment type or location
     Given there are available appointment slots with different criteria for any GP System
     When I try to progress without selecting an appointment type or location
@@ -124,6 +133,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user tries to progress without selecting an appointment type
     Given there are available appointment slots with different criteria for any GP System
     When I try to progress without selecting an appointment type
@@ -131,6 +141,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user tries to progress without selecting a location
     Given there are available appointment slots with different criteria for any GP System
     When I try to progress without selecting a location
@@ -138,6 +149,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user tries to progress without selecting an appointment
     Given there are available appointment slots with different criteria for any GP System
     When I try to progress without selecting an appointment
@@ -145,6 +157,7 @@ Feature: View available appointment slots
 
   @NHSO-71
   @pending    @NHSO-71
+  @appointment
   Scenario: A user decides to go back even though there's available slots
     Given there are available appointment slots with different criteria for any GP System
     When I decide I don't want to select an appointment and go back
@@ -152,6 +165,7 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
+  @appointment
   Scenario: A user sees appropriate information message when there is a timeout
     Given GP system doesn't respond a timely fashion for available appointment slots
     When I try to progress to the appointments booking page
@@ -160,6 +174,7 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
+  @appointment
   Scenario: A user tries again after a timeout and it times-out again
     Given GP system doesn't respond a timely fashion for available appointment slots
     And I try to progress to the appointments booking page
@@ -169,6 +184,7 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
+  @appointment
   Scenario: A user tries again after a timeout and it is now successful
     Given GP system doesn't respond a timely fashion for available appointment slots
     And I try to progress to the appointments booking page
@@ -178,6 +194,7 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
+  @appointment
   Scenario: A user sees appropriate information message when GP system is unavailable
     Given GP system is unavailable for available appointment slots
     When I try to progress to the appointments booking page
@@ -186,6 +203,7 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
+  @appointment
   Scenario: A user sees appropriate information message when GP system returns corrupt data
     Given GP system returns corrupt data for appointment slots
     When I try to progress to the appointments booking page
@@ -195,6 +213,7 @@ Feature: View available appointment slots
   @NHSO-616
   @native
   @manual
+  @appointment
   Scenario: A user sees appropriate information message when internet connection has been lost
     Given I am on my appointments page
     And internet connection drops
@@ -203,6 +222,7 @@ Feature: View available appointment slots
     And there should be a button to try again
 
   @NHSO-1168
+  @appointment
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
     Given there are available appointment slots
     But there is a slight delay in retrieving them
@@ -212,6 +232,7 @@ Feature: View available appointment slots
     Then I don't see appointment slots
 
   @NHSO-1168
+  @appointment
   Scenario: A user has different problems with prescriptions and appointments and selects appointments and prescriptions in quick succession
     Given GP system doesn't respond a timely fashion for available appointment slots
     And I am on the appointments booking page

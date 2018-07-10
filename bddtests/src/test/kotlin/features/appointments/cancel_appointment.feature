@@ -6,6 +6,7 @@ Feature: Ability to cancel an appointment
     Given wiremock is initialised
 
   @NHSO-663
+  @appointment
   Scenario: A user is presented with the cancel appointment screen
     Given I have upcoming appointments
     And I am on the appointments page
@@ -15,6 +16,7 @@ Feature: Ability to cancel an appointment
     And there is a cancellation reasons drop-down
 
   @NHSO-663
+  @appointment
   Scenario: A user navigates back to the "My appointments" screen
     Given I am on the appointment cancellation screen
     When I select "Back" button
@@ -35,6 +37,7 @@ Feature: Ability to cancel an appointment
     Then I receive a "Bad request" error
 
   @NHSO-1026
+  @appointment
   Scenario Outline: User cancels appointment with selected reason
     Given I am on the appointment cancellation screen
     And the Emis is available to cancel an appointment for <Reason>
@@ -48,6 +51,7 @@ Feature: Ability to cancel an appointment
       | Unable to attend   |
 
   @NHSO-1026
+  @appointment
   Scenario: A validation message will be displayed if no reason is provided
     Given I am on the appointment cancellation screen
     When I select "Cancel appointment" button

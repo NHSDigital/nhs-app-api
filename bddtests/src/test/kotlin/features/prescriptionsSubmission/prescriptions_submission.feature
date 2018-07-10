@@ -21,6 +21,7 @@ Feature: Prescriptions submission
     | EMIS      |
 
   @NHSO-860
+  @prescription
   Scenario Outline: The User orders a repeat prescription with 1 entries
     Given I select 1 <GP System> repeatable prescriptions to order
     And I click Continue on the Order a repeat prescription page
