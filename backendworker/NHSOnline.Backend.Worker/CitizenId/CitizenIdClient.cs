@@ -83,9 +83,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private async Task<CitizenIdApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {   
-            _logger.LogHttpRequest(request);
             var responseMessage = await _httpClient.Client.SendAsync(request);
-            _logger.LogHttpResponse(request, responseMessage);
 
             var response = new CitizenIdApiObjectResponse<TResponse>(responseMessage.StatusCode);
 

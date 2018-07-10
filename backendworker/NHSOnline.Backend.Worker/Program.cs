@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -19,6 +20,8 @@ namespace NHSOnline.Backend.Worker
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .UseConfiguration(BuildConfiguration())
+                // Clear default loggin providers these will be added later in startup.
+                .ConfigureLogging((context, logBuilder) => logBuilder.ClearProviders())
                 .Build();
     }
 }

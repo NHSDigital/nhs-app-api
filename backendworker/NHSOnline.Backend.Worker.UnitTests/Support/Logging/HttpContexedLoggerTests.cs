@@ -23,8 +23,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
     [TestClass]
     public class HttpContexedLoggerTests
     {
-        const string sessionId = "sfd-bnfg-sdf-dsgd-gf";
+        const string SessionId = "sfd-bnfg-sdf-dsgd-gf";
         const string MethodLogPrefix = "Test log ";
+        private const string RegExt1 = "personalData=[^&]*";
+        private const string RegExt2 = "gobbledygook=[^&]*";
+        private const string RegExt3 = "hidden=[^&]*";
 
         private class NestedCallClass
         {
@@ -43,10 +46,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
 
             private Task<int> TaskedMethod()
             {
-                while(PauseNestedExecution)
+                while (PauseNestedExecution)
                 {
                     Thread.Sleep(10);
                 }
+
                 _logger.LogCritical(MethodLogPrefix + "TaskedMethod");
                 return Task.FromResult(1);
             }
@@ -58,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             private readonly ILogger _logger;
             private readonly NestedCallClass _nestedClass;
 
-             public DummyController(ILoggerFactory logProvider, NestedCallClass nestedClass)
+            public DummyController(ILoggerFactory logProvider, NestedCallClass nestedClass)
             {
                 _logger = logProvider.CreateLogger<DummyController>();
                 _nestedClass = nestedClass;
@@ -81,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
                     _logger.LogCritical("Message with rubbish scope");
                 }
             }
-            
+
             public void NonControllerMethod()
             {
                 using (_logger.BeginScope(HttpContext))
@@ -89,7 +93,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
                     _logger.LogCritical(MethodLogPrefix + "NonControllerMethod");
                 }
             }
-            
+
             public async Task NestedCallMethod()
             {
                 using (_logger.BeginScope("Rubbish"))
@@ -114,15 +118,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
                     _logger.LogCritical(exception, "Logging an exception.");
                 }
             }
+            public void ControllerLogSensorFilterMethod()
+            {
+                _logger.LogCritical("Filter?personalData=sensitive&otherStuff=ok");
+                using (_logger.BeginScope("Filter?otherStuff=ok&personalData=prohibited"))
+                {
+                    _logger.LogCritical("Filter?hidden=Asterix&otherStuff=ok");
+                }
+            }
         }
 
         private IFixture _fixture;
         private DummyController _systemUnderTest;
         private Stream _stream;
 
-        ActionExecutingContext actionExecutingContext;
-        ResultExecutedContext resultContext;
-        
+        ActionExecutingContext _actionExecutingContext;
+        ResultExecutedContext _resultContext;
+
         [TestInitialize]
         public void TestInitialise()
         {
@@ -140,37 +152,47 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             _systemUnderTest = _fixture.Create<DummyController>();
 
             // set up http contexts for both controller and calling attribute overloads..
-            var actionContext = new ActionContext(new DefaultHttpContext(), new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
-            actionContext.HttpContext.Items.Add("UserSession", new EmisUserSession() { Key = sessionId });
+            var actionContext = new ActionContext(new DefaultHttpContext(),
+                new Microsoft.AspNetCore.Routing.RouteData(), new ControllerActionDescriptor());
+            actionContext.HttpContext.Items.Add("UserSession", new EmisUserSession() { Key = SessionId });
             _systemUnderTest.ControllerContext = new ControllerContext(actionContext);
-            actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(), new Dictionary<String,object>(), _systemUnderTest);
-            resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
+            _actionExecutingContext = new ActionExecutingContext(actionContext, new List<IFilterMetadata>(),
+                new Dictionary<String, object>(), _systemUnderTest);
+            _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1),
+                _systemUnderTest);
         }
 
         private void ConfigureLogging(ILoggingBuilder logBuilder)
         {
+            var filters = new List<LogCensorFilter>
+            {
+                new LogCensorFilter { Match = RegExt1, Replacement = RegExt1.Replace("[^&]*", "*****") },
+                new LogCensorFilter { Match = RegExt2, Replacement = RegExt2.Replace("[^&]*", "*****") },
+                new LogCensorFilter { Match = RegExt3, Replacement = RegExt3.Replace("[^&]*", "*****") },
+            };
+
             _stream = new MemoryStream();
-            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical));
+            logBuilder.AddProvider(new HttpContexedLoggerProvider(new StreamWriter(_stream), LogLevel.Critical, null, LogLevel.None, null, filters));
         }
-        
+
         [TestCleanup]
         public void TestTeardown()
         {
             _stream.Close();
             _stream.Dispose();
         }
-        
+
         private string RunControllerMethod(Action controllerMethod)
-        {   
+        {
             var attribute = _fixture.Create<HttpContextLogActionFilterAttribute>();
-            attribute.OnActionExecuting(actionExecutingContext);
+            attribute.OnActionExecuting(_actionExecutingContext);
             controllerMethod();
-            attribute.OnActionExecuted(null);// Method should do nothing so can pass null in...
-            attribute.OnResultExecuting(null);// Method should do nothing so can pass null in...
-            attribute.OnResultExecuted(resultContext);
+            attribute.OnActionExecuted(null); // Method should do nothing so can pass null in...
+            attribute.OnResultExecuting(null); // Method should do nothing so can pass null in...
+            attribute.OnResultExecuted(_resultContext);
             return controllerMethod.Method.Name;
         }
-        
+
         [TestMethod]
         public void LogFromControllerMethod()
         {
@@ -179,10 +201,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             _stream.Position = 0;
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(sessionId);
+            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + methodName);
         }
-        
+
         [TestMethod]
         public void LogNestedControllerMethod()
         {
@@ -193,18 +215,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             var testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().NotContain("Rubbish Scope");
-            testString.Should().Contain(sessionId);
+            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "TaskedMethod");
 
             // Read 2nd log line
             testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain($"{sessionId}=>Rubbish Scope |");
+            testString.Should().Contain($"{SessionId}=>Rubbish Scope |");
             testString.Should().Contain("Message with rubbish scope");
 
             streamReader.ReadLine().Should().BeNull();
         }
-        
+
         [TestMethod]
         public void LogFromNonControllerMethod()
         {
@@ -213,10 +235,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             _stream.Position = 0;
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(sessionId);
+            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "NonControllerMethod");
         }
-        
+
         [TestMethod]
         public void LogInNestedCall()
         {
@@ -228,26 +250,44 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             // Read first log line
             var testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(sessionId);
+            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "TaskedMethod");
 
             // Read 2nd log line
             testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(sessionId);
+            testString.Should().Contain(SessionId);
             testString.Should().Contain(MethodLogPrefix + "NestedCallMethod");
         }
 
         [TestMethod]
         public void LogExceptionMethod()
         {
-            var methodName = RunControllerMethod(_systemUnderTest.ControllerCatchExceptionMethod);
+            RunControllerMethod(_systemUnderTest.ControllerCatchExceptionMethod);
 
             _stream.Position = 0;
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
-            testString.Should().Contain(sessionId);
+            testString.Should().Contain(SessionId);
             testString.Should().EndWith("| Logging an exception. [Exception, message: 'Something has gone wrong!'] |");
+        }
+
+        [TestMethod]
+        public void LogSensorFilterMethod()
+        {
+            RunControllerMethod(_systemUnderTest.ControllerLogSensorFilterMethod);
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().NotBeEmpty();
+            testString.Should().NotContain("sensitive");
+
+            testString = streamReader.ReadLine();
+            testString.Should().NotBeEmpty();
+            testString.Should().NotContain("Asterix");
+            testString.Should().NotContain("prohibited");
         }
     }
 }

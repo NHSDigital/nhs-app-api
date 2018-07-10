@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace NHSOnline.Backend.Worker.Support.Logging
 {
@@ -12,20 +14,23 @@ namespace NHSOnline.Backend.Worker.Support.Logging
         private readonly LogLevel _minLogLevel;
         private readonly LogLevel _maxLogLevelLimit;
         private readonly LoggerExternalScopeProvider _scopeProvider;
-        
+        private readonly IEnumerable<LogCensorFilter> _regexFilterList;
+
         public HttpContexedLoggerProvider
         (
             TextWriter logwriter, 
             LogLevel defualtMinLogLevel, 
             string configuredMinLogLevel = null,
             LogLevel defualtMaxLogLevelLimit = LogLevel.None,
-            string configuredMaxLogLimit = null
+            string configuredMaxLogLimit = null,
+            IEnumerable<LogCensorFilter> regexFilterList = null
         )
         {
             _logwriter = logwriter;
             _minLogLevel = ParsedLogLevel(configuredMinLogLevel, defualtMinLogLevel);
             _maxLogLevelLimit = ParsedLogLevel(configuredMaxLogLimit, defualtMaxLogLevelLimit);
             _scopeProvider = new LoggerExternalScopeProvider();
+            _regexFilterList = regexFilterList;
         }
 
         private static LogLevel ParsedLogLevel(string configuredLogLevel, LogLevel defualtLogLevel)
@@ -47,7 +52,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
 
         public ILogger CreateLogger(string categoryName)
         {
-            return new HttpContexedLogger(categoryName, _logwriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider);
+            return new HttpContexedLogger(categoryName, _logwriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
         }
      
         private class HttpContexedLogger : ILogger
@@ -57,14 +62,16 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             private readonly LogLevel _maxLogLevelLimit;
             private readonly LoggerExternalScopeProvider _scopeProvider;
             private readonly string _categoryName;
+            private readonly IEnumerable<LogCensorFilter> _regexFilterList;
 
-            public HttpContexedLogger(string categoryName, TextWriter logWriter, LogLevel minLogLevel, LogLevel maxLogLevelLimit, LoggerExternalScopeProvider scopeProvider)
+            public HttpContexedLogger(string categoryName, TextWriter logWriter, LogLevel minLogLevel, LogLevel maxLogLevelLimit, LoggerExternalScopeProvider scopeProvider, IEnumerable<LogCensorFilter> regexFilterList)
             {
                 _textWriter = logWriter;
                 _categoryName = categoryName;
                 _minLogLevel = minLogLevel;
                 _maxLogLevelLimit = maxLogLevelLimit;
                 _scopeProvider = scopeProvider;
+                _regexFilterList = regexFilterList;
             }
 
             public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
@@ -78,11 +85,25 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                         {
                             exceptionMessage = $"[Exception, message: '{exception.Message}'] ";
                         }
-                        _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {formatter(state, exception)} {exceptionMessage}|");
+
+                        _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {CensorLogMessage(formatter(state, exception))} {exceptionMessage}|");
                         _textWriter.Flush();
                     }
                 }
-            } 
+            }
+
+            string CensorLogMessage(string state)
+            {
+                if (_regexFilterList != null)
+                {
+                    foreach (var filter in _regexFilterList)
+                    {
+                        state = filter.CensorContent(state);
+                    }
+                }
+
+                return state;
+            }
 
             private string GetScope<TState>(TState state)
             {
@@ -96,7 +117,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                     scope.Append(s.ToString());
                 }, state);
                 
-                return scope.ToString();
+                return CensorLogMessage(scope.ToString());
             }
 
             public bool IsEnabled(LogLevel logLevel)

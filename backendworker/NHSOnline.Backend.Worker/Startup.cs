@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -125,9 +126,10 @@ namespace NHSOnline.Backend.Worker
         {
             app.UseAuthentication();
 
+            var censorFilters = Configuration.GetSection("Logging:Application:CensorFilters").Get<List<LogCensorFilter>>();
             // Read in optional log configuration...
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, LogLevel.Information, Configuration["Logging:Application:StandardLevel"], LogLevel.Error, Configuration["Logging:Application:ErrorLevel"]));
-            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, LogLevel.Error, Configuration["Logging:Application:ErrorLevel"]));
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Out, LogLevel.Information, Configuration["Logging:Application:StandardLevel"], LogLevel.Error, Configuration["Logging:Application:ErrorLevel"], censorFilters));
+            loggerFactory.AddProvider(new HttpContexedLoggerProvider(Console.Error, LogLevel.Error, Configuration["Logging:Application:ErrorLevel"], LogLevel.None, null, censorFilters));
 
             if (env.IsDevelopment())
             {

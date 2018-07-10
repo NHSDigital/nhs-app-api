@@ -292,9 +292,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private async Task<EmisApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
-            _logger.LogHttpRequest(request);
             var responseMessage = await _httpClient.Client.SendAsync(request);
-            _logger.LogHttpResponse(request, responseMessage);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
             var stringResponse = responseMessage.Content != null
