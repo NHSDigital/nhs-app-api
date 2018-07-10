@@ -317,6 +317,9 @@ export default {
     problems: {
       sectionHeader: 'Problems',
     },
+    events: {
+      sectionHeader: 'Events',
+    },
   },
   common: {
     or: 'OR',

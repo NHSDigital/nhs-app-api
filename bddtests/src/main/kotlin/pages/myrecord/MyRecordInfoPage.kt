@@ -76,6 +76,12 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "//h5[contains(text(),'Problems')]/following-sibling::div[1]")
     lateinit var problems: WebElementFacade
 
+    @FindBy(xpath = "//h5[contains(text(),'Events')]")
+    lateinit var eventsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Events')]/following-sibling::div[1]")
+    lateinit var events: WebElementFacade
+
     fun isNameVisible(): Boolean {
         waitABit(2000)
         return txtName.isCurrentlyVisible
@@ -270,6 +276,25 @@ class MyRecordInfoPage : PageObject() {
     fun getProblemsMessage(): String {
         return problems.then<WebElementFacade>(By.cssSelector("p")).text;
     }
+
+    fun getEventsHeaderText(): String {
+        return eventsHeading.text
+    }
+
+    fun getEventsRecordCount(): Int {
+        return events.thenFindAll(By.cssSelector("label")).count()
+    }
+
+    fun clickEvents() {
+        waitABit(2000)
+        evaluateJavascript("arguments[0].scrollIntoView(true);", events)
+        eventsHeading.click()
+    }
+
+    fun getEventsMessage(): String {
+        return events.then<WebElementFacade>(By.cssSelector("p")).text;
+    }
+
 
     fun getSummaryCareNoAccessMessage(): String {
         return noSummaryCareAccessMessage.text

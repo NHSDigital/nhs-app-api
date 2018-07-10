@@ -39,12 +39,31 @@
                    :has-error="myRecord.medications.hasErrored"/>
 
       <div v-if="myRecord.hasDetailedRecordAccess">
-        <h5 :class="[$style.recordTitle, getCollapseState(isImmunisationsCollapsed)]"
-            @click="myRecordSectionClick(IMMUNISATIONS)">
-          {{ $t('myRecord.immunisations.sectionHeader') }}
-        </h5>
-        <immunisations :is-collapsed="isImmunisationsCollapsed"
-                       :data="myRecord.immunisations"/>
+        <div v-if="myRecord.supplier === 'EMIS'">
+          <h5 :class="[$style.recordTitle, getCollapseState(isImmunisationsCollapsed)]"
+              @click="myRecordSectionClick(IMMUNISATIONS)">
+            {{ $t('myRecord.immunisations.sectionHeader') }}
+          </h5>
+          <immunisations :is-collapsed="isImmunisationsCollapsed"
+                         :data="myRecord.immunisations"/>
+
+          <h5 :class="[$style.recordTitle, getCollapseState(isProblemsCollapsed)]"
+              @click="myRecordSectionClick(PROBLEMS)">
+            {{ $t('myRecord.problems.sectionHeader') }}
+          </h5>
+          <problems :is-collapsed="isProblemsCollapsed"
+                    :data="myRecord.problems"/>
+
+        </div>
+
+        <div v-if="myRecord.supplier === 'TPP'">
+          <h5 :class="[$style.recordTitle, getCollapseState(isEventsCollapsed)]"
+              @click="myRecordSectionClick(EVENTS)">
+            {{ $t('myRecord.events.sectionHeader') }}
+          </h5>
+          <events :is-collapsed="isEventsCollapsed"
+                  :data="myRecord.tppDcrEvents"/>
+        </div>
 
         <h5 :class="[$style.recordTitle, getCollapseState(isTestResultsCollapsed)]"
             @click="myRecordSectionClick(TESTRESULTS)">
@@ -53,12 +72,6 @@
         <test-results :is-collapsed="isTestResultsCollapsed"
                       :data="myRecord.testResults"/>
 
-        <h5 :class="[$style.recordTitle, getCollapseState(isProblemsCollapsed)]"
-            @click="myRecordSectionClick(PROBLEMS)">
-          {{ $t('myRecord.problems.sectionHeader') }}
-        </h5>
-        <problems :is-collapsed="isProblemsCollapsed"
-                  :data="myRecord.problems"/>
       </div>
       <div v-else>
         <main :class="$style.content">
@@ -93,6 +106,7 @@ import Medications from '@/components/my-record/Medications';
 import Immunisations from '@/components/my-record/Immunisations';
 import TestResults from '@/components/my-record/TestResults';
 import Problems from '@/components/my-record/Problems';
+import Events from '@/components/my-record/Events';
 
 const PATIENTDETAILS = 'patientdetails';
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
@@ -102,6 +116,7 @@ const DISCONTINUEDREPEATMEDICATIONS = 'discontinuedrepeatmedications';
 const IMMUNISATIONS = 'immunisations';
 const TESTRESULTS = 'testresults';
 const PROBLEMS = 'problems';
+const EVENTS = 'events';
 
 export default {
   components: {
@@ -112,6 +127,7 @@ export default {
     Immunisations,
     TestResults,
     Problems,
+    Events,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === '/my-record/myrecordwarning') {
@@ -130,6 +146,7 @@ export default {
       IMMUNISATIONS,
       TESTRESULTS,
       PROBLEMS,
+      EVENTS,
       isPatientDetailsCollapsed: true,
       hasLoaded: false,
       isAllergiesAndAdverseReactionsCollapsed: true,
@@ -139,6 +156,7 @@ export default {
       isImmunisationsCollapsed: true,
       isTestResultsCollapsed: true,
       isProblemsCollapsed: true,
+      isEventsCollapsed: true,
       myRecord: {},
       patientDetails: {},
     };
@@ -194,6 +212,10 @@ export default {
         case PROBLEMS:
           this.isProblemsCollapsed =
             !this.isProblemsCollapsed;
+          break;
+        case EVENTS:
+          this.isEventsCollapsed =
+            !this.isEventsCollapsed;
           break;
         default:
           break;

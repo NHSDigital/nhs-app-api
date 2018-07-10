@@ -265,5 +265,25 @@ open class MyRecordSteps {
         return myRecordInfoPage.getProblemsMessage()
     }
 
+    @Step
+    fun clickEvents() {
+        myRecordInfoPage.clickEvents()
+    }
+
+    @Step
+    fun getEventsHeaderText(): String {
+        return myRecordInfoPage.getEventsHeaderText()
+    }
+
+    @Step
+    fun getEventsRecordCount(): Int {
+        return myRecordInfoPage.getEventsRecordCount()
+    }
+
+    @Step
+    fun getEventsMessage(): String {
+        return myRecordInfoPage.getEventsMessage()
+    }
+
 }
 

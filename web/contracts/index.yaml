@@ -311,6 +311,13 @@
                 hasDetailedRecordAccess: 
                   type: "boolean"
                   description: "Shows if the patient has access to their detailed record."
+                supplier: 
+                  type: "string"
+                  description: "supplier."
+                  enum: 
+                    - "UNKNOWN"
+                    - "EMIS"
+                    - "TPP"
                 allergies: 
                   type: "object"
                   description: "An object containing all allergy details."
@@ -363,6 +370,11 @@
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                        currentRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
                             type: "object"
                             properties: 
                               date: 
@@ -373,17 +385,21 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
-                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
-                        currentRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
+                                  type: "object"
+                                  properties: 
+                                    text: 
+                                      type: "string"
+                                      description: "When the record was entered."
+                                    lineItems: 
+                                      type: "array"
+                                      description: "An array of line items"
+                                      items: 
+                                        type: "string"
                         discontinuedRepeatMedications: 
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
                 immunisations: 
                   type: "object"
                   description: "An object containing all immunisation details."
@@ -462,16 +478,85 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
+                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items/properties/lineItems/items"
+                tppDcrEvents: 
+                  type: "object"
+                  description: "An object containing all tpp dcr event details."
+                  properties: 
+                    hasAccess: 
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored: 
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data: 
+                      type: "object"
+                      properties: 
+                        problems: 
+                          type: "array"
+                          description: "Array of problems"
+                          items: 
+                            type: "object"
+                            properties: 
+                              effectiveDate: 
+                                type: "string"
+                                format: "date-time"
+                                description: "date/time value."
+                              eventLocationAndDoneBy: 
+                                type: "string"
+                                description: "Event location and done by"
+                              eventItems: 
+                                type: "array"
+                                description: "Array of event items"
+                                items: 
+                                  type: "string"
+                consultations: 
+                  type: "object"
+                  description: "An object containing all consultation details."
+                  properties: 
+                    hasAccess: 
+                      type: "boolean"
+                      description: "Does the patient have access to this data."
+                    hasErrored: 
+                      type: "boolean"
+                      description: "Some error occurred when attempting to retrieve this error."
+                    data: 
+                      type: "object"
+                      properties: 
+                        problems: 
+                          type: "array"
+                          description: "Array of problems"
+                          items: 
+                            type: "object"
+                            properties: 
+                              effectiveDate: 
+                                $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
+                              consultantLocation: 
+                                type: "string"
+                                description: "Consultant Location and Name"
+                              consultationHeaders: 
+                                type: "array"
+                                description: "An array of consultationHeader."
+                                items: 
                                   type: "object"
                                   properties: 
-                                    text: 
+                                    header: 
                                       type: "string"
-                                      description: "When the record was entered."
-                                    lineItems: 
+                                      description: "Consultation Header"
+                                    observations: 
                                       type: "array"
-                                      description: "An array of line items"
+                                      description: "An array of observations."
                                       items: 
-                                        type: "string"
+                                        type: "object"
+                                        properties: 
+                                          term: 
+                                            type: "string"
+                                            description: "Observation Term"
+                                          associatedTexts: 
+                                            type: "array"
+                                            description: "An array of associated texts."
+                                            items: 
+                                              type: "string"
           401: 
             description: "User session has expired."
           500: 

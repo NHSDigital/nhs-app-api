@@ -554,6 +554,42 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getProblemsMessage())
     }
 
+    @When("^I click the Events section$")
+    @Throws(Exception::class)
+    fun i_click_the_Events_section () {
+        recordSteps.clickEvents()
+    }
+
+    @Then("^I see heading Events$")
+    @Throws(Exception::class)
+    fun i_see_heading_Events() {
+        Assert.assertEquals("Events", recordSteps.getEventsHeaderText())
+    }
+
+    @Then("^I see Events records displayed$")
+    @Throws(Exception::class)
+    fun i_see_Events_records_displayed() {
+        Assert.assertEquals(2, recordSteps.getEventsRecordCount())
+    }
+
+    @Then("^I see a message indicating that I have no access to view Events$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_Events() {
+        Assert.assertEquals("You do not have access to this section", recordSteps.getEventsMessage())
+    }
+
+    @Then("^I see a message indicating that I have no information recorded for Events$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_Events() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getEventsMessage())
+    }
+
+    @Then("^I see an error occured message with Events$")
+    @Throws(Exception::class)
+    fun i_see_an_error_occured_message_for_Events() {
+        Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getEventsMessage())
+    }
+
 
     @Then("^I see message No information recorded for this section$")
     @Throws(Exception::class)
