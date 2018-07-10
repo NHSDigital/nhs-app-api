@@ -65,6 +65,9 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
                     problemsRequest(patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
                 }
 
+                mockingClient.forEmis {
+                    consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
+                }
             }
             "TPP" -> {
                 MockDataPopulate(mockingClient).populate()

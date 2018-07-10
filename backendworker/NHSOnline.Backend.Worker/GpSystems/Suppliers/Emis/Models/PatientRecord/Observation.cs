@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord
         public string NumericUnits { get; set; }
         public string TextValue { get; set; }
         public Range Range { get; set; }
-        public bool Abnormal { get; set; }
+        public bool? Abnormal { get; set; }
         public string AbnormalReason { get; set; }
         public List<AssociatedText> AssociatedText { get; set; }
         public string EventGuid { get; set; }

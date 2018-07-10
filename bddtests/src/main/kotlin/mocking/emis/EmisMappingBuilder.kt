@@ -22,6 +22,7 @@ import models.Patient
 import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotRequest
 import mocking.emis.appointments.CancelAppointmentRequest
+import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
@@ -81,6 +82,8 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
     fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun problemsRequest(patient: Patient) = EmisProblemsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+
+    fun consultationsRequest(patient: Patient) = EmisConsultationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 
     fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 

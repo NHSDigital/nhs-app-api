@@ -40,6 +40,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             var immunisationsResponse = _fixture.Create<MedicationRootObject>();
             var testResultsResponse = _fixture.Create<MedicationRootObject>();
             var problemsResponse = _fixture.Create<MedicationRootObject>();
+            var consultationsResponse = _fixture.Create<MedicationRootObject>();
             
             _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Medication))
                 .Returns(Task.FromResult(
@@ -82,6 +83,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = problemsResponse,
+                        ErrorResponse = null,
+                        ErrorResponseBadRequest = null
+                    }));
+            
+            _emisClient.Setup(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Consultations))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
+                    {
+                        Body = consultationsResponse,
                         ErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));

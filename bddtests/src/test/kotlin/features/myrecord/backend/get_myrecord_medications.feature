@@ -4,7 +4,7 @@ Feature: Get medications data
 
   @NHSO-689
   @backend
-  Scenario Outline: Requesting medications returns medications data for <Service>
+  Scenario Outline: Requesting medications returns medications data
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has enabled medications functionality for <Service>
@@ -21,7 +21,7 @@ Feature: Get medications data
 
   @NHSO-689
   @backend
-  Scenario Outline: GP practice has disabled medications functionality for <Service>
+  Scenario Outline: GP practice has disabled medications functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     But the GP Practice has disabled medications functionality for <Service>

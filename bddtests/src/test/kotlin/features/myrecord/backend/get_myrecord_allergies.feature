@@ -4,7 +4,7 @@ Feature: Get My Record data
 
   @NHSO-690
   @backend
-  Scenario Outline: GP practice has enabled allergies functionality for <Service>
+  Scenario Outline: GP practice has enabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has enabled allergies functionality and the patient has "3" allergies for <Service>
@@ -21,7 +21,7 @@ Feature: Get My Record data
 
   @NHSO-690
   @backend
-  Scenario Outline: GP practice has disabled allergies functionality for <Service>
+  Scenario Outline: GP practice has disabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has disabled allergies functionality for <Service>

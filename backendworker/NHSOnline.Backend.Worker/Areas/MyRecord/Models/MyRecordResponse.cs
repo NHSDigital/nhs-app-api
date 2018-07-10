@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
             Medications = new Medications();
             Problems = new Problems();
             TppDcrEvents = new TppDcrEvents();
+            Consultations = new Consultations();
         }
         
         public bool HasSummaryRecordAccess { get; set; }
@@ -23,5 +24,6 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
         public TestResults TestResults { get; set; }
         public Problems Problems { get; set; }
         public TppDcrEvents TppDcrEvents { get; set; }
+        public Consultations Consultations { get; set; }
     }
 }

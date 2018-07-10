@@ -3,7 +3,7 @@ Feature: Get Immunisations Data
   A user can get their immunisation information
 
   @backend
-  Scenario Outline: Requesting immunisations returns immunisations data for <Service>
+  Scenario Outline: Requesting immunisations returns immunisations data
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist for <Service>
@@ -16,7 +16,7 @@ Feature: Get Immunisations Data
   |EMIS|
 
   @backend
-  Scenario Outline: Requesting immunisations returns immunisations data for <Service>
+  Scenario Outline: Requesting immunisations returns immunisations data
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And no immunisation records exist for the patient for <Service>

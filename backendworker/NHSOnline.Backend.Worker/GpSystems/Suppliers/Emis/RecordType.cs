@@ -5,6 +5,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         Immunisations,
         Medication,
         TestResults,
-        Problems
+        Problems,
+        Consultations
     }
 }

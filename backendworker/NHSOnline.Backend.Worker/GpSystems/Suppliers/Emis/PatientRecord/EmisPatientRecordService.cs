@@ -39,18 +39,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 
                 var problemsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Problems);
+
+                var consultationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Consultations);
                     
-                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask);
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask);
 
                 var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
                 var medications = new GetMedicationsTaskChecker(_logger).Check(medicationsTask);
                 var immunisations = new GetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
                 var testResults = new GetTestResultsTaskChecker(_logger).Check(testResultsTask);
                 var problems = new GetProblemsTaskChecker(_logger).Check(problemsTask);
+                var consultations = new GetConsultationsTaskChecker(_logger).Check(consultationsTask);
                 
-                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems);
+                var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);
+
                 myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper();
-                
+
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
                 return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);

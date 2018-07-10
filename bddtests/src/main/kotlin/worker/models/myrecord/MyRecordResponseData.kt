@@ -9,7 +9,8 @@ data class MyRecordResponseData(
         var immunisations: Immunisations,
         var testResults: TestResults,
         var problems: Problems,
-        var tppDcrEvents: TppDcrEvents
+        var tppDcrEvents: TppDcrEvents,
+        var consultations: Consultations
 )
 
 data class Medications(

@@ -31,7 +31,7 @@ Feature: Get Immunisations Data
       |EMIS|
 
   @backend
-  Scenario Outline: Requesting single test result with child values with ranges for <Service>
+  Scenario Outline: Requesting single test result with child values with ranges
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has a single test result with multiple child values with ranges for <Service>
@@ -46,7 +46,7 @@ Feature: Get Immunisations Data
       |EMIS|
 
   @backend
-  Scenario Outline: Requesting single test result with no child items or range for <Service>
+  Scenario Outline: Requesting single test result with no child items or range
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has test results enabled and a single test result exists with no child values or range for <Service>
@@ -59,7 +59,7 @@ Feature: Get Immunisations Data
       |EMIS|
 
   @backend
-  Scenario Outline: Requesting single test result with no child items and a range for <Service>
+  Scenario Outline: Requesting single test result with no child items and a range
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has a single test result with no child values and range for <Service>

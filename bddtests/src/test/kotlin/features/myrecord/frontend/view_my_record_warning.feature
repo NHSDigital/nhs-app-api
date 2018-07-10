@@ -2,7 +2,7 @@ Feature: View My Medical Record Information - Warning
 
   @smoketest
   @NHSO-359
-  Scenario Outline: An EMIS user navigates to my record warning page
+  Scenario Outline: A user navigates to my record warning page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on the record warning page
@@ -20,7 +20,7 @@ Feature: View My Medical Record Information - Warning
       |EMIS|
 
   @NHSO-359
-  Scenario Outline: An EMIS user navigates back to home
+  Scenario Outline: A user navigates back to home
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on the record warning page
@@ -33,7 +33,7 @@ Feature: View My Medical Record Information - Warning
       |EMIS|
 
    @NHSO-1613
-   Scenario Outline: An EMIS user tries to navigate directly to my record through url
+   Scenario Outline: A user tries to navigate directly to my record through url
      Given the my record wiremocks are initialised for <Service>
      And the GP Practice has enabled demographics functionality for <Service>
      And I am on the record warning page

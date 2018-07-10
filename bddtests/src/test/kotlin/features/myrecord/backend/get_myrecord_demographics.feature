@@ -4,7 +4,7 @@ Feature: Get demographic data
 
   @NHSO-691
   @backend
-  Scenario Outline: Requesting demographics returns demographic data for <Service>
+  Scenario Outline: Requesting demographics returns demographic data
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -18,7 +18,7 @@ Feature: Get demographic data
 
   @NHSO-691
   @backend
-  Scenario Outline: GP practice has disabled demographics functionality for <Service>
+  Scenario Outline: GP practice has disabled demographics functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has disabled demographics functionality for <Service>
@@ -33,7 +33,7 @@ Feature: Get demographic data
   @NHSO-691
   @pending
   @backend
-  Scenario Outline: GP System Unavailable for <Service>
+  Scenario Outline: GP System Unavailable
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP System is unavailable
@@ -48,7 +48,7 @@ Feature: Get demographic data
   @NHSO-691
   @pending
   @backend
-  Scenario Outline: GP System Times Out for <Service>
+  Scenario Outline: GP System Times Out
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     But the GP System times out for <Service>

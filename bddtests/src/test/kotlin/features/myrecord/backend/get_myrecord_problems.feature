@@ -3,7 +3,7 @@ Feature: Get patient problems data
   A user can get their patient problems information
 
   @backend
-  Scenario Outline: GP practice has enabled problems functionality for <Service>
+  Scenario Outline: GP practice has enabled problems functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has enabled problems functionality for <Service>
@@ -18,7 +18,7 @@ Feature: Get patient problems data
       |EMIS|
 
   @backend
-  Scenario Outline: GP practice has disabled problems functionality for <Service>
+  Scenario Outline: GP practice has disabled problems functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
     And the GP Practice has disabled problems functionality for <Service>

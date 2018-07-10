@@ -2,7 +2,7 @@ Feature: View My Medical Record Information - Medications
 
   @smoketest
   @NHSO-678
-  Scenario Outline: An EMIS user views acute medications
+  Scenario Outline: A user views acute medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medications functionality for <Service>
@@ -18,7 +18,7 @@ Feature: View My Medical Record Information - Medications
 
   @smoketest
   @NHSO-678
-  Scenario Outline: An EMIS user views current repeat medications
+  Scenario Outline: A user views current repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medications functionality for <Service>
@@ -32,7 +32,7 @@ Feature: View My Medical Record Information - Medications
       | TPP     |
 
   @NHSO-678
-  Scenario Outline: An EMIS user views discontinued repeat medications
+  Scenario Outline: A user views discontinued repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medications functionality for <Service>
@@ -46,7 +46,7 @@ Feature: View My Medical Record Information - Medications
       | TPP     |
 
   @NHSO-678
-  Scenario Outline: An EMIS user has no acute medications
+  Scenario Outline: A user has no acute medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medication functionality and the patient has no medications for <Service>
@@ -60,7 +60,7 @@ Feature: View My Medical Record Information - Medications
       | TPP     |
 
   @NHSO-678
-  Scenario Outline: An EMIS user has no current repeat medications
+  Scenario Outline: A user has no current repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medication functionality and the patient has no medications for <Service>
@@ -74,7 +74,7 @@ Feature: View My Medical Record Information - Medications
       | TPP     |
 
   @NHSO-678
-  Scenario Outline: An EMIS user has no discontinued repeat medications
+  Scenario Outline: A user has no discontinued repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medication functionality and the patient has no medications for <Service>
@@ -88,7 +88,7 @@ Feature: View My Medical Record Information - Medications
       | TPP     |
 
   @NHSO-678
-  Scenario Outline: An EMIS user has no access to view medications
+  Scenario Outline: A user has no access to view medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has disabled summary care record functionality for <Service>

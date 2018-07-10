@@ -1,7 +1,7 @@
 Feature: View My Medical Record Information - Test Results
 
   @NHSO-686
-  Scenario Outline: An EMIS user can view test result section
+  Scenario Outline: A user can view test result section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
@@ -14,7 +14,7 @@ Feature: View My Medical Record Information - Test Results
 
   @smoketest
   @NHSO-686
-  Scenario Outline: An EMIS user can view test result information
+  Scenario Outline: A user can view test result information
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has multiple test results for <Service>
@@ -27,7 +27,7 @@ Feature: View My Medical Record Information - Test Results
       |EMIS|
 
   @NHSO-686
-  Scenario Outline: An EMIS user has no access to test result section
+  Scenario Outline: A user has no access to test result section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I do not have access to test results for <Service>
@@ -40,7 +40,7 @@ Feature: View My Medical Record Information - Test Results
       |EMIS|
 
   @NHSO-686
-  Scenario Outline: An EMIS user has no test results
+  Scenario Outline: A user has no test results
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I have no test results for <Service>

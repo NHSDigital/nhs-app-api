@@ -69,6 +69,10 @@ definitions:
         type: object
         description: An object containing all tpp dcr event details.
         $ref: '#/definitions/TppDcrEvents'
+      consultations:
+        type: object
+        description: An object containing all consultation details.
+        $ref: '#/definitions/Consultations'
 
   Allergies:
     type: object
@@ -268,7 +272,63 @@ definitions:
         description: Array of event items
         items:
           type: string 
-            
+
+  Consultations:
+      type: object
+      properties:
+        hasAccess:
+          type: boolean
+          description: Does the patient have access to this data.
+        hasErrored:
+          type: boolean
+          description: Some error occurred when attempting to retrieve this error.
+        data:
+          type: object
+          properties: 
+             problems:
+              type: array
+              description: Array of problems
+              items:
+                $ref: '#/definitions/ConsultationItem'
+  
+  ConsultationItem:
+    type: object
+    properties:
+      effectiveDate:
+        $ref: '#/definitions/Date'
+      consultantLocation:
+        type: string
+        description: Consultant Location and Name
+      consultationHeaders:
+        type: array
+        description: An array of consultationHeader.
+        items:
+          $ref: '#/definitions/ConsultationHeaderItem'
+          
+  ConsultationHeaderItem:
+    type: object
+    properties:
+      header:
+        type: string
+        description: Consultation Header
+      observations:
+        type: array
+        description: An array of observations.
+        items:
+          $ref: '#/definitions/ObservationItem'
+  
+  ObservationItem:
+    type: object
+    properties:
+      term:
+        type: string
+        description: Observation Term
+      associatedTexts:
+        type: array
+        description: An array of associated texts.
+        items:
+          type: string
+                
   Date:
     type: object
     properties:
