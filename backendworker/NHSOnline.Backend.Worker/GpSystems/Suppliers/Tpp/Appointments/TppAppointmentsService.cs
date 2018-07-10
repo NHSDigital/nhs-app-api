@@ -14,6 +14,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
     public class TppAppointmentsService : IAppointmentsService
     {
         private readonly TppAppointmentsServiceBook _booker;
+        private readonly TppAppointmentsServiceCancel _canceller;
         private readonly ITppClient _tppClient;
         private readonly ILogger<TppAppointmentsService> _logger;
         private readonly IAppointmentsResultBuilder _appointmentResultBuilder;
@@ -25,6 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             IAppointmentsResultBuilder appointmentsResultBuilder)
         {
             _booker = new TppAppointmentsServiceBook(logger, tppClient, dateTimeOffsetProvider);
+            _canceller = new TppAppointmentsServiceCancel(logger, tppClient);
             _logger = logger;
             _tppClient = tppClient;
             _appointmentResultBuilder = appointmentsResultBuilder;
@@ -35,9 +37,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             return await _booker.Book((TppUserSession)userSession, request);
         }
 
-        public Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request)
+        public async Task<AppointmentCancelResult> Cancel(UserSession userSession, AppointmentCancelRequest request)
         {
-            throw new NotImplementedException();
+            return await _canceller.Cancel((TppUserSession) userSession, request);
         }
 
         public async Task<AppointmentsResult> GetAppointments(UserSession userSession, bool includePastAppointments, DateTimeOffset? pastAppointmentsFromDate)

@@ -223,7 +223,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return requestMessage;
         }
 
-        private bool IsErrorResponse(string responseString)
+        private static bool IsErrorResponse(string responseString)
         {
             return ErrorRegex.IsMatch(responseString);
         }
@@ -236,6 +236,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public async Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid)
         {
             return await Post<ViewAppointments, ViewAppointmentsReply>(request, suid);
+        }
+
+        public async Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model,
+            string suid)
+        {
+            return await Post<CancelAppointment, CancelAppointmentReply>(model, suid);
         }
 
         public class TppApiResponse

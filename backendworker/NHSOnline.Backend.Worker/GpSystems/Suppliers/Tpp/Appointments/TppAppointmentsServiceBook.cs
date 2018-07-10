@@ -63,6 +63,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                         _logger.LogError(response.ErrorResponse.UserFriendlyMessage);
                         return new AppointmentBookResult.SlotNotAvailable();
                     case TppApiErrorCodes.NoAccess:
+                        _logger.LogTppResponseAccessIsForbidden();
                         return new AppointmentBookResult.InsufficientPermissions();
                     default:
                         break;

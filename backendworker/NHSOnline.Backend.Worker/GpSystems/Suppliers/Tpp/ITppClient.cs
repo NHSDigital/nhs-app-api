@@ -27,5 +27,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid);
 
         Task<TppClient.TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
+        
+        Task<TppClient.TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model,
+                string suid);
     }
 }
