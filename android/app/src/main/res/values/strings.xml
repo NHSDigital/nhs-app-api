@@ -9,7 +9,7 @@
     <string name="my_account_header">My account</string>
     <string name="organ_donation_register_header">Organ donation register</string>
     <string name="data_sharing_header">Sharing health data preferences</string>
-    <string name="nhs_111_header">Check your symptoms</string>
+    <string name="nhs_111_header">111 Online</string>
     <string name="my_record_header">My medical record</string>
     <string name="appointments_header">My appointments</string>
     <string name="prescriptions_header">My repeat prescriptions</string>
