@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using static NHSOnline.Backend.Worker.Constants;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
@@ -89,6 +90,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            _mockAppointmentsService.Verify();
+        }
+
+        [TestMethod]
+        public async Task Post_AppointmentsServiceBookReturnsLimitReached_ReturnsLimitReachedStatus()
+        {
+            // Arrange
+            var serviceResult = new AppointmentBookResult.AppointmentLimitReached();
+            _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
+                .Returns(Task.FromResult((AppointmentBookResult)serviceResult));
+
+            // Act
+            var result = await _systemUnderTest.Post(_appointmentBookRequest);
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(CustomHttpStatusCodes.Status460LimitReached);
             _mockAppointmentsService.Verify();
         }
 

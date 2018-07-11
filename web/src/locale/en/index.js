@@ -189,6 +189,13 @@ export default {
         subheader: 'Please go back and try again.',
         message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
         retryButtonText: 'Back to my appointments',
+        460: {
+          pageHeader: 'Appointment limit reached',
+          header: 'You can\'t book anymore appointments right now',
+          subheader: 'Contact your GP surgery if you still need to book one.',
+          message: 'You can go back to see what you\'ve already booked and cancel any appointments that you may no longer need.\r\nIf it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+          retryButtonText: 'Back to my appointments',
+        },
       },
     },
   },

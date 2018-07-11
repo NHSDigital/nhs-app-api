@@ -30,10 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             }
             try
             {
-                var bookAppointment = new BookAppointment(userSession, request, _dateTimeOffsetProvider)
-                {
-                    
-                };
+                var bookAppointment = new BookAppointment(userSession, request, _dateTimeOffsetProvider);
 
                 var response = await _tppClient.BookAppointmentSlotPost(bookAppointment, userSession);
                 return InterpretAppointmentsPostResponse(response);
@@ -56,6 +53,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             {
                 switch (response.ErrorResponse.ErrorCode)
                 {
+                    case TppApiErrorCodes.AppointmentLimitReached:
+                        _logger.LogWarning(response.ErrorResponse.UserFriendlyMessage);
+                        return new AppointmentBookResult.AppointmentLimitReached();
                     case TppApiErrorCodes.StartDateInPast:
                     case TppApiErrorCodes.SlotNotFound:
                     case TppApiErrorCodes.SlotAlreadyBooked:

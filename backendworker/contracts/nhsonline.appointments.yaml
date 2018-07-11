@@ -137,6 +137,8 @@ paths:
           description: The patient does not have the necessary permissions within the GP system.
         409:
           description: Conflict. The chosen appointment slot is not available for booking.
+        460:
+          description: The patient has reached the limit of pending appointments that may be booked.
         500:
           description: An unexpected error occurred processing the request.
         502:

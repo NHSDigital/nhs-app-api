@@ -47,5 +47,13 @@
                 return visitor.Visit(this);
             }
         }
+
+        public class AppointmentLimitReached : AppointmentBookResult
+        {
+            public override T Accept<T>(IAppointmentBookResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

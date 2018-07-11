@@ -7,4 +7,5 @@ export const INIT_APPOINTMENT = 'INIT_APPOINTMENT';
 export const initialState = {
   tempSelectedSlot: undefined,
   justBookedAnAppointment: false,
+  hasErrored: false,
 };

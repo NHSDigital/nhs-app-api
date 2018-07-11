@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using static NHSOnline.Backend.Worker.Constants;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
@@ -29,6 +30,11 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         public IActionResult Visit(AppointmentBookResult.BadRequest badRequest)
         {
             return new BadRequestResult();
+        }
+
+        public IActionResult Visit(AppointmentBookResult.AppointmentLimitReached appointmentLimitReached)
+        {
+            return new StatusCodeResult(CustomHttpStatusCodes.Status460LimitReached);
         }
     }
 }

@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
-                ErrorResponse = new Error { ErrorCode = "1102" }
+                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.SlotNotFound }
             };
 
             MockTppClientAppointmentPostMethod(response);
@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
-                ErrorResponse = new Error { ErrorCode = "5" }
+                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.StartDateInPast }
             };
 
             MockTppClientAppointmentPostMethod(response);
@@ -128,13 +128,33 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         }
 
         [TestMethod]
+        public async Task Book_WhenAppointmentsLimitIsReached_ReturnsAppointmentLimitReached()
+        {
+            // Arrange
+            var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
+            {
+                Body = null,
+                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.AppointmentLimitReached }
+            };
+
+            MockTppClientAppointmentPostMethod(response);
+
+            // Act            
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockTppClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.AppointmentLimitReached>();
+        }
+
+        [TestMethod]
         public async Task Book_WhenAppointmentsHasBeenAlreadyBooked_ReturnsSlotNotAvailable()
         {
             // Arrange
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
-                ErrorResponse = new Error { ErrorCode = "1103" }
+                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.SlotAlreadyBooked }
             };
 
             MockTppClientAppointmentPostMethod(response);
@@ -154,7 +174,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode.OK)
             {
                 Body = null,
-                ErrorResponse = new Error { ErrorCode = "6" }
+                ErrorResponse = new Error { ErrorCode = TppApiErrorCodes.NoAccess }
             };
 
             MockTppClientAppointmentPostMethod(response);

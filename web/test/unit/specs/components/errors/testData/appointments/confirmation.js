@@ -28,6 +28,18 @@ export default {
       redirectUrl: Routes.APPOINTMENTS.path,
     },
   ],
+  460: [
+    PATH,
+    {
+      pageHeader: 'Appointment limit reached',
+      header: 'You can\'t book anymore appointments right now',
+      subheader: 'Contact your GP surgery if you still need to book one.',
+      message: 'You can go back to see what you\'ve already booked and cancel any appointments that you may no longer need.\r\nIf it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+      hasRetryButton: true,
+      retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
+    },
+  ],
   500: [
     PATH,
     {

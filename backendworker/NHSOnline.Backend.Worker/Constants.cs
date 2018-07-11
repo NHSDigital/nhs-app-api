@@ -12,6 +12,10 @@
             public const string SessionId = "NHSO-Session-Id";
         }
 
+        public class CustomHttpStatusCodes
+        {
+            public const int Status460LimitReached = 460;
+        }
         public class Headers
         {
             public const string NhsoPrefix = "NHSO-";
