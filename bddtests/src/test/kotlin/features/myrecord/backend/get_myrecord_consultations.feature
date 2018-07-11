@@ -1,4 +1,4 @@
-Feature: Get Immunisations Data
+Feature: Get Consultations Data
 
   A user can get their consultation information
 

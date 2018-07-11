@@ -54,6 +54,12 @@
           <problems :is-collapsed="isProblemsCollapsed"
                     :data="myRecord.problems"/>
 
+          <h5 :class="[$style.recordTitle, getCollapseState(isConsultationsCollapsed)]"
+              @click="myRecordSectionClick(CONSULTATIONS)">
+            {{ $t('myRecord.consultations.sectionHeader') }}
+          </h5>
+          <consultations :is-collapsed="isConsultationsCollapsed"
+                         :data="myRecord.consultations"/>
         </div>
 
         <div v-if="myRecord.supplier === 'TPP'">
@@ -106,6 +112,7 @@ import Medications from '@/components/my-record/Medications';
 import Immunisations from '@/components/my-record/Immunisations';
 import TestResults from '@/components/my-record/TestResults';
 import Problems from '@/components/my-record/Problems';
+import Consultations from '@/components/my-record/Consultations';
 import Events from '@/components/my-record/Events';
 
 const PATIENTDETAILS = 'patientdetails';
@@ -116,6 +123,7 @@ const DISCONTINUEDREPEATMEDICATIONS = 'discontinuedrepeatmedications';
 const IMMUNISATIONS = 'immunisations';
 const TESTRESULTS = 'testresults';
 const PROBLEMS = 'problems';
+const CONSULTATIONS = 'consultations';
 const EVENTS = 'events';
 
 export default {
@@ -127,6 +135,7 @@ export default {
     Immunisations,
     TestResults,
     Problems,
+    Consultations,
     Events,
   },
   beforeRouteEnter(to, from, next) {
@@ -146,6 +155,7 @@ export default {
       IMMUNISATIONS,
       TESTRESULTS,
       PROBLEMS,
+      CONSULTATIONS,
       EVENTS,
       isPatientDetailsCollapsed: true,
       hasLoaded: false,
@@ -156,6 +166,7 @@ export default {
       isImmunisationsCollapsed: true,
       isTestResultsCollapsed: true,
       isProblemsCollapsed: true,
+      isConsultationsCollapsed: true,
       isEventsCollapsed: true,
       myRecord: {},
       patientDetails: {},
@@ -212,6 +223,10 @@ export default {
         case PROBLEMS:
           this.isProblemsCollapsed =
             !this.isProblemsCollapsed;
+          break;
+        case CONSULTATIONS:
+          this.isConsultationsCollapsed =
+            !this.isConsultationsCollapsed;
           break;
         case EVENTS:
           this.isEventsCollapsed =

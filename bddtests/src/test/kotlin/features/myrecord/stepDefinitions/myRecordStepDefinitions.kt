@@ -72,7 +72,6 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
             "TPP" -> {
                 MockDataPopulate(mockingClient).populate()
                 CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-
                 mockingClient.forTpp {
                     viewPatientOverviewPost(patient.tppUserSession!!).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
                 }
@@ -554,6 +553,42 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getProblemsMessage())
     }
 
+    @When("^I click the Consultations section$")
+    @Throws(Exception::class)
+    fun i_click_the_consultations_section () {
+        recordSteps.clickConsultations()
+    }
+
+    @Then("^I see heading Consultations$")
+    @Throws(Exception::class)
+    fun i_see_heading_consultations() {
+        Assert.assertEquals("Consultations", recordSteps.getConsultationsHeaderText())
+    }
+
+    @Then("^I see Consultations records displayed$")
+    @Throws(Exception::class)
+    fun i_see_consultations_records_displayed() {
+        Assert.assertEquals(2, recordSteps.getConsultationsRecordCount())
+    }
+
+    @Then("^I see a message indicating that I have no access to view Consultations$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_consultations() {
+        Assert.assertEquals("You do not have access to this section", recordSteps.getConsultationsMessage())
+    }
+
+    @Then("^I see a message indicating that I have no information recorded for Consultations$")
+    @Throws(Exception::class)
+    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_consultations() {
+        Assert.assertEquals("No information recorded for this section", recordSteps.getConsultationsMessage())
+    }
+
+    @Then("^I see an error occured message with Consultations$")
+    @Throws(Exception::class)
+    fun i_see_an_error_occured_message_for_consultations() {
+        Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getConsultationsMessage())
+    }
+
     @When("^I click the Events section$")
     @Throws(Exception::class)
     fun i_click_the_Events_section () {
@@ -589,7 +624,6 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     fun i_see_an_error_occured_message_for_Events() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getEventsMessage())
     }
-
 
     @Then("^I see message No information recorded for this section$")
     @Throws(Exception::class)

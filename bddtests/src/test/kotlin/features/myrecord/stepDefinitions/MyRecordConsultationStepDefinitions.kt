@@ -2,7 +2,6 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import features.myrecord.mockData.ConsultationsData
-import features.myrecord.mockData.TestResultsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import net.serenitybdd.core.Serenity
@@ -92,14 +91,14 @@ open class MyRecordConsultationStepDefinitions {
         Assert.assertEquals(count, result.response.consultations.data.count())
     }
 
-    @Then("I receive consultations object with hasAccess flag set to (.*)")
-    fun thenIReceiveConsultationsWithHasAccessFlagSetTo(hasAccess: Boolean) {
+    @Then("I receive consultations object with hasAccess flag set to false")
+    fun thenIReceiveConsultationsWithHasAccessFlagSetTo() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(false, result.response.consultations.hasAccess)
     }
 
-    @Then("I receive consultations object with hasErrored flag set to (.*)")
-    fun thenIReceiveConsultationsWithErrorFlagSetTo(hasAccess: Boolean) {
+    @Then("I receive consultations object with hasErrored flag set to true")
+    fun thenIReceiveConsultationsWithErrorFlagSetTo() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(true, result.response.consultations.hasErrored)
     }

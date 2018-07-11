@@ -266,6 +266,26 @@ open class MyRecordSteps {
     }
 
     @Step
+    fun clickConsultations() {
+        myRecordInfoPage.clickConsultations()
+    }
+
+    @Step
+    fun getConsultationsHeaderText(): String {
+        return myRecordInfoPage.getConsultationsHeaderText()
+    }
+
+    @Step
+    fun getConsultationsRecordCount(): Int {
+        return myRecordInfoPage.getConsultationsRecordCount()
+    }
+
+    @Step
+    fun getConsultationsMessage(): String {
+        return myRecordInfoPage.getConsultationsMessage()
+    }
+
+    @Step
     fun clickEvents() {
         myRecordInfoPage.clickEvents()
     }

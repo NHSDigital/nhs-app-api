@@ -328,7 +328,7 @@ definitions:
         description: An array of associated texts.
         items:
           type: string
-                
+
   Date:
     type: object
     properties:

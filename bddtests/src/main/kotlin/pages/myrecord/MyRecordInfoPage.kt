@@ -76,6 +76,12 @@ class MyRecordInfoPage : PageObject() {
     @FindBy(xpath = "//h5[contains(text(),'Problems')]/following-sibling::div[1]")
     lateinit var problems: WebElementFacade
 
+    @FindBy(xpath = "//h5[contains(text(),'Consultations')]")
+    lateinit var consultationsHeading: WebElementFacade
+
+    @FindBy(xpath = "//h5[contains(text(),'Consultations')]/following-sibling::div[1]")
+    lateinit var consultations: WebElementFacade
+
     @FindBy(xpath = "//h5[contains(text(),'Events')]")
     lateinit var eventsHeading: WebElementFacade
 
@@ -277,6 +283,24 @@ class MyRecordInfoPage : PageObject() {
         return problems.then<WebElementFacade>(By.cssSelector("p")).text;
     }
 
+    fun getConsultationsHeaderText(): String {
+        return consultationsHeading.text
+    }
+
+    fun getConsultationsRecordCount(): Int {
+        return consultations.thenFindAll(By.cssSelector("label")).count()
+    }
+
+    fun clickConsultations() {
+        waitABit(2000)
+        evaluateJavascript("arguments[0].scrollIntoView(true);", consultations)
+        consultationsHeading.click()
+    }
+
+    fun getConsultationsMessage(): String {
+        return consultations.then<WebElementFacade>(By.cssSelector("p")).text;
+    }
+
     fun getEventsHeaderText(): String {
         return eventsHeading.text
     }
@@ -294,7 +318,6 @@ class MyRecordInfoPage : PageObject() {
     fun getEventsMessage(): String {
         return events.then<WebElementFacade>(By.cssSelector("p")).text;
     }
-
 
     fun getSummaryCareNoAccessMessage(): String {
         return noSummaryCareAccessMessage.text

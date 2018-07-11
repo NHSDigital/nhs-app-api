@@ -34,7 +34,7 @@ Feature: View My Medical Record Information - Problems
   Scenario Outline: A user does not have access to Problems
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
-    And the user does not have access to view Problems for <Service>
+    And the GP Practice has disabled problems functionality for <Service>
     And I am on my record information page
     And I see heading Problems
     When I click the Problems section

@@ -317,6 +317,9 @@ export default {
     problems: {
       sectionHeader: 'Problems',
     },
+    consultations: {
+      sectionHeader: 'Consultations',
+    },
     events: {
       sectionHeader: 'Events',
     },
