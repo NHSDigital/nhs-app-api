@@ -31,7 +31,7 @@ Feature: View My Medical Record Information - Events
       |TPP|
 
   @NHSO-1504
-  @Pending
+  @pending
   Scenario Outline: A TPP user does not have access to Events
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
