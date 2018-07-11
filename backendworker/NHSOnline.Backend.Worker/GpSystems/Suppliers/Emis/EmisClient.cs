@@ -51,7 +51,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private readonly IJsonResponseParser _responseParser;
 
         public EmisClient(EmisHttpClient httpClient,
-            IEmisConfig config,
             TimeZoneConverter localTimeZoneConverter,
             ILoggerFactory loggerFactory,
             IJsonResponseParser responseParser)

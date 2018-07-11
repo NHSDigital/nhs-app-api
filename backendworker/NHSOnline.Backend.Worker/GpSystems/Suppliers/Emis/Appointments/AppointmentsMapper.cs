@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
                 var sessionId = sourceAppointment.SessionId;
 
-                var appointment = new Areas.Appointments.Models.Appointment
+                var appointment = new Appointment
                 {
                     Id = sourceAppointment.SlotId.ToString(),
                     StartTime = startTime,
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             return session?.ClinicianIds == null ? new string[] { } : session.ClinicianIds.Select(x => sessionHolders?.FirstOrDefault(s => s.ClinicianId == x).DisplayName).ToArray();
         }
 
-        private static string FindLocationForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<Models.Location> locations)
+        private static string FindLocationForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<Location> locations)
         {
             var session = sessions.FirstOrDefault(x => x.SessionId == sessionId);
             var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);

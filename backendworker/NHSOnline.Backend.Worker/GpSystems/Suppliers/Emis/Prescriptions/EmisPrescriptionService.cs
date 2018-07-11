@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                         if (mappedPrescriptionList.Prescriptions != null)
                         {
                             var allowedStatuses = new List<Status> { Status.Approved, Status.Rejected, Status.Requested };
-                            mappedPrescriptionList.Prescriptions = mappedPrescriptionList?.Prescriptions
+                            mappedPrescriptionList.Prescriptions = mappedPrescriptionList.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
 

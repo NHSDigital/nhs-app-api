@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.CitizenId
@@ -40,7 +38,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
                     missing.Add("codeVerifier");
                 }   
                 
-                _logger.LogWarning($"Missing input parameters: {missing.Join(", ")}");
+                _logger.LogWarning($"Missing input parameters: {string.Join(", ", missing)}");
                 return Option.None<UserProfile>();
             }
 

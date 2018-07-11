@@ -9,17 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
-using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
 using System;
 using System.Linq;
-using System.Net.Http;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -106,13 +102,6 @@ namespace NHSOnline.Backend.Worker
                 ConnectionMultiplexerName.Session,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
             services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
-
-            services.AddHttpClient<EmisHttpClient>(client => 
-            {
-                client.Timeout = TimeSpan.FromSeconds(configurationSettings.DefaultHttpTimeoutSeconds);
-            });
-
-            services.AddHttpClient<CitizenIdHttpClient>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

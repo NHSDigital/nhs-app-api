@@ -7,6 +7,8 @@ namespace NHSOnline.Backend.Worker.CitizenId
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpClient<CitizenIdHttpClient>();
+            
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();
             services.AddSingleton<ICitizenIdConfig, CitizenIdConfig>();

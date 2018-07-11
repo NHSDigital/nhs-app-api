@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                     return new CreateLinkageResult.SuccessfullyRetrieved(result);
                 }
 
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     _logger.LogError("NHS number was not found");
                     return new CreateLinkageResult.NhsNumberNotFound();

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Session;
@@ -18,14 +17,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
     public class EmisSessionServiceTests
     {
         private IFixture _fixture;
-        private Mock<IOptions<ConfigurationSettings>> _settings;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisSessionService _systemUnderTest;
         private string _connectionToken;
         private string _odsCode;
         private SessionsEndUserSessionPostResponse _endUserSessionResponse;
         private SessionsPostResponse _sessionsResponse;
-        private int _defaultSessionExpiryMinutes;
         
         [TestInitialize]
         public void TestInitialize()
@@ -36,15 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
 
             _connectionToken = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
-            _defaultSessionExpiryMinutes = _fixture.Create<int>();
             _endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
-
-            _settings = new Mock<IOptions<ConfigurationSettings>>();
-            _settings.Setup(x => x.Value).Returns(
-                new ConfigurationSettings
-                {
-                    DefaultSessionExpiryMinutes = _defaultSessionExpiryMinutes
-                });
             
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
@@ -213,7 +202,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData()
         {
             // Arrange
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _settings.Object);
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object);
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode);
 

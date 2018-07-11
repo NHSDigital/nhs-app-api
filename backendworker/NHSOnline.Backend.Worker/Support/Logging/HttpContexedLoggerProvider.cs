@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             _scopeProvider = new LoggerExternalScopeProvider();
         }
 
-        private LogLevel ParsedLogLevel(string configuredLogLevel, LogLevel defualtLogLevel)
+        private static LogLevel ParsedLogLevel(string configuredLogLevel, LogLevel defualtLogLevel)
         {
             LogLevel logLevel = defualtLogLevel;
             if (string.IsNullOrEmpty(configuredLogLevel) == false)
@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                         var exceptionMessage = string.Empty;
                         if (exception != null)
                         {
-                            exceptionMessage = $"[Exception, message: '{exception?.Message}'] ";
+                            exceptionMessage = $"[Exception, message: '{exception.Message}'] ";
                         }
                         _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {formatter(state, exception)} {exceptionMessage}|");
                         _textWriter.Flush();

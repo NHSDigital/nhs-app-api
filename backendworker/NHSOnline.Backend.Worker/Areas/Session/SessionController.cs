@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             var userSession = HttpContext.GetUserSession();
             
-            var sessionDeleted = false;
+            bool sessionDeleted;
 
             try
             {

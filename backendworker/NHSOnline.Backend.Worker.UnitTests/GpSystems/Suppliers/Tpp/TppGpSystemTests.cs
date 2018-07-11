@@ -26,7 +26,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private ILoggerFactory _loggerFactory;
         private ITppDemographicsMapper _tppDemographicsMapper;
         private ITppMyRecordMapper _tppMyRecordMapper;
-
         
         [TestInitialize]
         public void TestInitialize()
@@ -39,7 +38,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _loggerFactory = new Mock<ILoggerFactory>().Object;
             _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
             _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
-
         }
 
         [TestMethod]
@@ -134,7 +132,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetSessionService_WhenCalled_ReturnsTppSessionService()
         {
-            var service = new TppSessionService(_tppClient, _options);
+            var service = new TppSessionService(_tppClient);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppSessionService)))
                 .Returns(service);

@@ -12,15 +12,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
     public class EmisSessionService : ISessionService
     {
         private readonly IEmisClient _emisClient;
-        private readonly ConfigurationSettings _settings;
 
         private static readonly HttpStatusCode[] InvalidTokenStatusCodes =
             { HttpStatusCode.Forbidden, HttpStatusCode.BadRequest };
 
-        public EmisSessionService(IEmisClient emisClient, IOptions<ConfigurationSettings> settings)
+        public EmisSessionService(IEmisClient emisClient)
         {
             _emisClient = emisClient;
-            _settings = settings.Value;
         }
 
         public async Task<SessionCreateResult> Create(string connectionToken, string odsCode)
@@ -50,8 +48,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 
                     return new SessionCreateResult.SupplierSystemUnavailable();
                 }
-
-                var sessionTimeoutInSeconds = _settings.DefaultSessionExpiryMinutes * 60;
 
                 var sessionResponseBody = sessionsResponse.Body;
 
