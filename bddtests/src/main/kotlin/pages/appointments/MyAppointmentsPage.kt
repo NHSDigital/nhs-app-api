@@ -14,7 +14,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     @FindBy(xpath = "//*[@id='success-dialog']/div/p")
     private lateinit var successMessage: WebElementFacade
 
-    @FindBy(xpath = "//h3/..")
+    @FindBy(xpath = "//h2/..")
     private lateinit var actualNoUpcomingText: WebElementFacade
 
     @FindBy(xpath = "//a[contains(text(),'Cancel appointment')]")

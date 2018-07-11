@@ -13,7 +13,7 @@
     </success-dialog>
 
     <div v-if="showNoUpcomingAppointments" :class="$style.info">
-      <h3>{{ $t('appointments.index.empty.header') }}</h3>
+      <h2>{{ $t('appointments.index.empty.header') }}</h2>
       <p>{{ $t('appointments.index.empty.text1') }}</p>
       <p>{{ $t('appointments.index.empty.text2') }} </p>
     </div>
