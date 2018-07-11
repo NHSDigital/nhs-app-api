@@ -7,8 +7,6 @@ namespace NHSOnline.Backend.Worker
     {
         public string Key { get; set; }
 
-        public string NhsNumber { get; set; }
-
         public abstract SupplierEnum Supplier { get; }
     }
 }

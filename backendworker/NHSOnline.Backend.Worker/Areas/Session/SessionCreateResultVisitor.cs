@@ -4,7 +4,8 @@ using NHSOnline.Backend.Worker.GpSystems.Session;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {
-    public class SessionCreateResultVisitor : ISessionCreateResultVisitor<SessionCreateResultVisitorOutput>
+    public class
+        SessionCreateResultVisitor : ISessionCreateResultVisitor<SessionCreateResultVisitorOutput>
     {
         private readonly IOptions<ConfigurationSettings> _settings;
 

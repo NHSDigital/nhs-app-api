@@ -16,9 +16,8 @@ using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Support.Logging;
 using System.Threading;
-using NHSOnline.Backend.Worker.UnitTests.Areas;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
+namespace NHSOnline.Backend.Worker.UnitTests.Areas.Logging
 {
     [TestClass]
     public class HttpContexedLoggerTests
@@ -33,7 +32,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
 
             public NestedCallClass(ILoggerFactory logProvider)
             {
-                _logger = logProvider.CreateLogger<NestedCallClass>();
+                _logger = logProvider.CreateLogger<DummyController>();
             }
 
             public async Task TaskAsyncMethod()

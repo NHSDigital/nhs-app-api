@@ -44,7 +44,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 return Option.None<UserProfile>();
             }
 
-            // Exchange authorisation code for bearer access token.
+            // Exchange authorization code for bearer access token.
             var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier);
             if (!tokenResponse.HasSuccessStatusCode)
             {
@@ -73,6 +73,6 @@ namespace NHSOnline.Backend.Worker.CitizenId
         {
             _logger.LogError($"{errorMessage} Error code: '{apiResponse.ErrorResponse?.Error}', Error message: '{apiResponse.ErrorResponse?.ErrorDescription}'");
 
-    }
+        }
     }
 }

@@ -128,12 +128,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             const string expectedOnlineUserId = "abcde";
             const string expectedPatientId = "12345";
             const string odsCode = "1234";
-            const string expectedNhsNumber = "65786857978978";
             var reply = CreateReply(
                 suid: expectedSessionId, 
                 onlineUserId: expectedOnlineUserId, 
-                patiendId: expectedPatientId,
-                nhsNumber: expectedNhsNumber);
+                patiendId: expectedPatientId);
         
             _mockTppClient.Setup(x => x
                     .AuthenticatePost(It.IsAny<Authenticate>()))
@@ -151,7 +149,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             ((TppUserSession)created.UserSession).OnlineUserId.Should().Be(expectedOnlineUserId);
             ((TppUserSession)created.UserSession).PatientId.Should().Be(expectedPatientId);
             ((TppUserSession)created.UserSession).UnitId.Should().Be(odsCode);
-            ((UserSession)created.UserSession).NhsNumber.Should().Be(expectedNhsNumber);
         }
 
         [TestMethod]
@@ -198,7 +195,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
         private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",
-            string onlineUserId = "123", string patiendId = "234", string nhsNumber = "123456789")
+            string onlineUserId = "123", string patiendId = "234")
         {
             var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK);
 
@@ -210,8 +207,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 {
                     Person = new Person
                     {
-                        PersonName = new PersonName { Name = name },
-                        NationalId = new NationalId { Type = "NHS", Value = nhsNumber }
+                        PersonName = new PersonName { Name = name }
                     }
                 }
             };

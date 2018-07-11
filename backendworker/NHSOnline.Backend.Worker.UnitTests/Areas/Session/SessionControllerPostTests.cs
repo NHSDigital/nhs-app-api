@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -125,7 +124,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             httpContextMock.SetupGet(h => h.Response).Returns(responseMock.Object);
             httpContextMock.SetupGet(h => h.RequestServices).Returns(serviceProviderMock.Object);
-            httpContextMock.SetupGet(h => h.Items).Returns(new Dictionary<object, object>());
 
             _systemUnderTest = _fixture.Create<SessionController>();
 
@@ -152,7 +150,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockCitizenIdService.Verify();
             result.Should().BeAssignableTo<BadRequestResult>();
         }
-     
+
         [TestMethod]
         public async Task Post_UnknownOdsCode_ReturnsForbidden()
         {

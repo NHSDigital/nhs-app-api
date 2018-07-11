@@ -43,8 +43,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     Suid = suidHeader?.Value,
                     OnlineUserId = reply?.Body.OnlineUserId,
                     PatientId = reply?.Body.PatientId,
-                    UnitId = odsCode,
-                    NhsNumber = reply?.Body?.User?.Person?.NationalId.Value
+                    UnitId = odsCode
                 };
 
                 return new SessionCreateResult.SuccessfullyCreated(

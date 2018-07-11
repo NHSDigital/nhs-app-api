@@ -97,15 +97,6 @@ namespace NHSOnline.Backend.Worker {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to NHS number not available, please set up audit scope..
-        /// </summary>
-        internal static string NoNhsNumberAvailable {
-            get {
-                return ResourceManager.GetString("NoNhsNumberAvailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to ODS Code &apos;{0}&apos; could not be found..
         /// </summary>
         internal static string OdsCodeLookupUnknownOdsCode {

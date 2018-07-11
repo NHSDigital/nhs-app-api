@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker
@@ -16,7 +14,7 @@ namespace NHSOnline.Backend.Worker
         Task<Option<UserSession>> GetUserSession(string sessionId);
         Task<bool> DeleteUserSession(string sessionId);
     }
-
+    
     public class SessionCacheService : ISessionCacheService
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
@@ -25,17 +23,15 @@ namespace NHSOnline.Backend.Worker
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionCacheService> _logger;
 
-        public SessionCacheService(
-            IConnectionMultiplexerFactory connectionMultiplexerFactory,
-            ICipherService cipherService, 
-            IOptions<ConfigurationSettings> settings,
+        public SessionCacheService(IConnectionMultiplexerFactory connectionMultiplexerFactory,
+            ICipherService cipherService, IOptions<ConfigurationSettings> settings,
             ILogger<SessionCacheService> logger)
         {
             _connectionMultiplexerFactory = connectionMultiplexerFactory ??
                                             throw new ArgumentNullException(nameof(connectionMultiplexerFactory));
             _settings = settings.Value;
             _cipherService = cipherService;
-
+            
             _serializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.All
