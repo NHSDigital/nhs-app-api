@@ -217,15 +217,6 @@ definitions:
         description: Array of Clinicians, accounts for joint sessions.
         items:
           type: string
-  AppointmentSession:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Appointment Session Identifier.
-      displayName:
-        type: string
-        description: Appointment Session Name, e.g. "Nurse Clinic".
   CancellationReason:
     type: object
     properties:
@@ -235,24 +226,6 @@ definitions:
       displayName:
         type: string
         description: Cancellation Reason Description.
-  Clinician:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Clinician Identifier.
-      displayName:
-        type: string
-        description: Clinician Name.
-  Location:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Location Identifier.
-      displayName:
-        type: string
-        description: Location Name.
   Slot:
     type: object
     properties:
