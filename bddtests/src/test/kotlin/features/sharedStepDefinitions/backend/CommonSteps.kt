@@ -12,7 +12,9 @@ import mocking.defaults.MockDefaults.Companion.patient
 
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
+import mocking.emis.models.IdentifierType
 import mocking.tpp.models.AuthenticateReply
 import models.Patient
 import net.serenitybdd.core.Serenity.*
@@ -126,6 +128,14 @@ class CommonSteps : AbstractSteps() {
                 mockingClient.forEmis {
                     sessionRequest(patient)
                             .respondWithSuccess(patient, AssociationType.Self)
+                }
+                mockingClient.forEmis {
+                    demographicsRequest(patient)
+                            .respondWithSuccess(patient,
+                                    patientIdentifiers = arrayOf(
+                                            PatientIdentifier(
+                                                    identifierType = IdentifierType.NhsNumber,
+                                                    identifierValue = patient.nhsNumbers[0])))
                 }
 
             }

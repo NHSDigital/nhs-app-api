@@ -13,6 +13,7 @@ import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.emis.demographics.PatientIdentifier
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -20,6 +21,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import mocking.emis.models.AssociationType
+import mocking.emis.models.IdentifierType
 import mocking.tpp.models.Error
 import models.Patient
 import worker.models.demographics.Demographics
@@ -121,6 +123,17 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
                 mockingClient.forEmis {
                     sessionRequest(patient)
                             .respondWithSuccess(MockDefaults.patient, AssociationType.Self)
+                }
+                mockingClient.forEmis {
+                    demographicsRequest(patient)
+                            .respondWithSuccess(patient,
+                                    patientIdentifiers = arrayOf(
+                                            PatientIdentifier(
+                                                    identifierType = IdentifierType.NhsNumber,
+                                                    identifierValue = patient.nhsNumbers[0]
+                                            )
+                                    )
+                            )
                 }
             }
             "TPP" -> {

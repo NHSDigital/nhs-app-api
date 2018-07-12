@@ -47,7 +47,7 @@ open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
             "EMIS"->{
                 try {
                     mockingClient.forEmis {
-                        demographicsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                        demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

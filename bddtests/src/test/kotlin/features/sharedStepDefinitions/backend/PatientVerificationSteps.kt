@@ -46,6 +46,13 @@ class PatientVerificationSteps : AbstractSteps() {
 
                 mockingClient.forEmis { sessionRequest(patient).respondWithUserNotRegistered() }
                 mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+                mockingClient.forEmis {
+                    demographicsRequest(patient).respondWithSuccess(patient,
+                            patientIdentifiers = arrayOf(
+                                    PatientIdentifier(
+                                            identifierType = IdentifierType.NhsNumber,
+                                            identifierValue = MockDefaults.patient.nhsNumbers[0])))
+                }
                 setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
             }

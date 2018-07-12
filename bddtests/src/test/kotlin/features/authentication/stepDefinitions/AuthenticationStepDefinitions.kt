@@ -15,9 +15,11 @@ import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistra
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
+import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
+import mocking.emis.models.IdentifierType
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
@@ -653,6 +655,16 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
+        mockingClient.forEmis {
+            demographicsRequest(patient).respondWithSuccess(patient,
+                    patientIdentifiers = arrayOf(
+                            PatientIdentifier(
+                                    identifierType = IdentifierType.NhsNumber,
+                                    identifierValue = patient.nhsNumbers[0]
+                            )
+                    )
+            )
+        }
     }
 
     private fun createCidStubs(
