@@ -65,103 +65,18 @@ WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:$APP_DOCKER_TAG)
 NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
 
-case $CURRENT_BRANCH in
-  develop)
-    info "Develop Branch - smoketest BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags @smoketest'
-    
-    docker run \
-    --rm \
-    --network $NETWORK \
-    --env-file vars_ci.env \
-    -v $(pwd)/../:/repo \
-    $DOCKER_IMAGE /bin/bash -c " \
-      cd /repo ; \
-      ./gradlew clean test aggregate \
-        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-        -Dwebdriver.provided.type=$BROWSER \
-        -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
-    ;"
-    
-    info "Develop Branch - backend BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags @backend'
-    
-    docker run \
-    --rm \
-    --network $NETWORK \
-    --env-file vars_ci.env \
-    -v $(pwd)/../:/repo \
-    $DOCKER_IMAGE /bin/bash -c " \
-      cd /repo ; \
-      ./gradlew clean test aggregate \
-        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-        -Dwebdriver.provided.type=$BROWSER \
-        -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
-    ;"
-    
-    info "Develop Branch - appointments BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags @appointment'
-    
-    docker run \
-    --rm \
-    --network $NETWORK \
-    --env-file vars_ci.env \
-    -v $(pwd)/../:/repo \
-    $DOCKER_IMAGE /bin/bash -c " \
-      cd /repo ; \
-      ./gradlew clean test aggregate \
-        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-        -Dwebdriver.provided.type=$BROWSER \
-        -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
-    ;"
-    
-    info "Develop Branch - prescription BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags @prescription'
-    
-    docker run \
-    --rm \
-    --network $NETWORK \
-    --env-file vars_ci.env \
-    -v $(pwd)/../:/repo \
-    $DOCKER_IMAGE /bin/bash -c " \
-      cd /repo ; \
-      ./gradlew clean test aggregate \
-        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-        -Dwebdriver.provided.type=$BROWSER \
-        -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
-    ;"
-    
-    info "Develop Branch - rest BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags ~@prescription --tags ~@appointment --tags ~@backend --tags ~@smoketest'
-    
-    docker run \
-    --rm \
-    --network $NETWORK \
-    --env-file vars_ci.env \
-    -v $(pwd)/../:/repo \
-    $DOCKER_IMAGE /bin/bash -c " \
-      cd /repo ; \
-      ./gradlew clean test aggregate \
-        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-        -Dwebdriver.provided.type=$BROWSER \
-        -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
-    ;"
-    ;;
-  *)
-    docker run \
-    --rm \
-    --network $NETWORK \
-    --env-file vars_ci.env \
-    -v $(pwd)/../:/repo \
-    $DOCKER_IMAGE /bin/bash -c " \
-      cd /repo ; \
-      ./gradlew clean test aggregate \
-        -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
-        -Dwebdriver.provided.type=$BROWSER \
-        -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
-    ;"
-    ;;
-esac
+docker run \
+--rm \
+--network $NETWORK \
+--env-file vars_ci.env \
+-v $(pwd)/../:/repo \
+$DOCKER_IMAGE /bin/bash -c " \
+  cd /repo ; \
+  ./gradlew clean test aggregate \
+    -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
+    -Dwebdriver.provided.type=$BROWSER \
+    -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \
+;"
 
 test_exit_code=$?
 
