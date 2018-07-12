@@ -1,6 +1,6 @@
-Feature: Get My Record data
+Feature: Get Allergies data
 
-  A user can get their patient data information
+  A user can get their patient allergy information
 
   @NHSO-690
   @backend

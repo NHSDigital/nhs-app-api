@@ -1,6 +1,8 @@
 package features.myrecord.mockData
 
 import mocking.emis.testResults.*
+import mocking.tpp.models.TestResultsViewReply
+import mocking.tpp.models.TestResultsViewReplyItem
 
 object TestResultsData {
 
@@ -172,5 +174,22 @@ object TestResultsData {
                 medicalRecord =  TestResultMedicalRecord(
                         testResults = mutableListOf()
                 ))
+    }
+
+    fun getMultipleTppTestResultsData(): TestResultsViewReply {
+
+        val testResults = mutableListOf<TestResultsViewReplyItem>()
+
+        testResults.add(TestResultsViewReplyItem(value = "Anticoag Control (Warfarin), Read", description = "Pathology",
+                date = "2001-06-28T00:00:00.0Z"))
+
+        testResults.add(TestResultsViewReplyItem(value = "Mic Cult Sens (Urine), Read", description = "Pathology",
+                date = "2001-07-13T00:00:00.0Z"))
+
+        return TestResultsViewReply(items = testResults)
+    }
+
+    fun getDefaultTppTestResultsData(): TestResultsViewReply {
+        return TestResultsViewReply(items = mutableListOf())
     }
 }

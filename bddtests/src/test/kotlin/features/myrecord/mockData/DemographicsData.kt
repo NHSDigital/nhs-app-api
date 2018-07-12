@@ -28,7 +28,7 @@ object DemographicsData {
 
     fun getTppDemographicsData(): PatientSelectedReply {
 
-        val result = PatientSelectedReply(
+        return PatientSelectedReply(
                 "84df400000000000",
                 "84df400000000000",
                 "1f907c07-9063-4d3a-81d7-ee8c98c54f4a",
@@ -38,6 +38,5 @@ object DemographicsData {
                         PersonName("Mr Kevin Barry"),
                         TppAddress("28 Central Path,  Troy Road, Horsforth, Leeds, West Yorkshire, LS18 5 TN"))
         )
-        return result;
     }
 }

@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             if (response.Value == null)
                 return testResultItem;
 
-            testResultItem.EffectiveDate =
+            testResultItem.Date =
                 new Date { Value = response.Value.EffectiveDate.Value, 
                            DatePart = response.Value.EffectiveDate.DatePart };
             
@@ -47,11 +47,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                             response.Value.Range.MaximumText));
                 }
 
-                testResultItem.Term = term.ToString();
+                testResultItem.Description = term.ToString();
             }
             else
             {
-                testResultItem.Term = response.Value.Term;
+                testResultItem.Description = response.Value.Term;
                 foreach (var lineitem in response.ChildValues)
                 {
                     var lineItem = new StringBuilder();

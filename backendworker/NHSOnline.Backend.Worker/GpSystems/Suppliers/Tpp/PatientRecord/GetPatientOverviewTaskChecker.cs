@@ -16,19 +16,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = logger;
         }
 
-        public Tuple<Allergies, Medications> Check(Task<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>> task)
+        public Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
         {
             var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
             var hasErrored = false;
             var hasAccess = true;
-            
-            if (!task.IsCompletedSuccessfully)
-            {
-                _logger.LogError("Retrieving patient overview task completed unsuccessfully");
-                hasErrored = true;
-            }
-            
-            var taskResponse = task.Result;
             
             if (!taskResponse.HasSuccessResponse)
             {

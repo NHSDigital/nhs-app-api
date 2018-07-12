@@ -4,7 +4,7 @@ using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class GetConsultationsTaskChecker
     {
@@ -28,13 +28,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 };
             }
             
-            var testResultsResponse = task.Result;
+            var consultationsResponse = task.Result;
             
-            if (!testResultsResponse.HasSuccessStatusCode)
+            if (!consultationsResponse.HasSuccessStatusCode)
             {
                 // User does not have access
-                if (testResultsResponse.HasExceptionWithMessageContaining("Services Access violation") ||
-                    testResultsResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
+                if (consultationsResponse.HasExceptionWithMessageContaining("Services Access violation") ||
+                    consultationsResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
                 {
                     _logger.LogWarning("User does not have access to their patient record");
                     consultations = new Consultations
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 else
                 {
                     _logger.LogError(
-                        $"Unsuccessful request retrieving consultations list for patient. Status code: {(int) testResultsResponse.StatusCode}");
+                        $"Unsuccessful request retrieving consultations list for patient. Status code: {(int) consultationsResponse.StatusCode}");
                     consultations = new Consultations
                     {
                         HasErrored = true
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 }
             }
             
-            return consultations ?? new EmisConsulationMapper().Map(testResultsResponse.Body);
+            return consultations ?? new EmisConsulationMapper().Map(consultationsResponse.Body);
         }
     }
 }

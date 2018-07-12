@@ -445,9 +445,9 @@
                           items: 
                             type: "object"
                             properties: 
-                              effectiveDate: 
+                              date: 
                                 $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
-                              term: 
+                              description: 
                                 type: "string"
                                 description: "The name of the test result."
                               testResultLineItems: 

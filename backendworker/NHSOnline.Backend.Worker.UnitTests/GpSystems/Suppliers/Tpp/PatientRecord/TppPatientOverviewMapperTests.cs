@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
 
             // Act
             var patientOverview = new TppPatientOverviewMapper().Map(item);
-            var result = _mapper.Map(patientOverview.Item1, patientOverview.Item2, new TppDcrEvents());
+            var result = _mapper.Map(patientOverview.Item1, patientOverview.Item2, new TppDcrEvents(), new TestResults());
 
             // Assert
             result.Should().NotBeNull();

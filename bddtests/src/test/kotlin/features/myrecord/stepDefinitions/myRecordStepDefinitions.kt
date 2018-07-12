@@ -10,7 +10,6 @@ import features.myrecord.mockData.*
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.MockingClient
 import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -23,6 +22,8 @@ import worker.models.myrecord.MyRecordResponse
 import mocking.emis.models.AssociationType
 import mocking.tpp.models.Error
 import models.Patient
+import worker.models.demographics.Demographics
+import java.time.OffsetDateTime
 
 open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
@@ -78,6 +79,10 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
                 mockingClient.forTpp {
                     patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
+                }
+
+                mockingClient.forTpp {
+                    testResultsViewRequest(patient.tppUserSession!!).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
             }
         }
@@ -645,7 +650,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Then("^the field indicating supplier is set to (.*)$")
     fun thenTheFlagIndicatingSupplierIsSetTo(supplier: String) {
-        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        var result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(supplier, result.response.supplier)
     }
 }

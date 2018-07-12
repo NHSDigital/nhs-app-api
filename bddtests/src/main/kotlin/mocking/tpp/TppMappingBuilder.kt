@@ -6,10 +6,11 @@ import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.session.TppSessionBuilder
 import mocking.tpp.viewPatientOverview.TppViewPatientOverviewBuilder
 import worker.models.demographics.TppUserSession
-import mocking.tpp.models.ListRepeatMedication
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
 import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
+import mocking.tpp.testResultsView.TppTestResultsViewBuilder
 import models.Patient
+import java.time.OffsetDateTime
 
 
 open class TppMappingBuilder(private val method: String, relativePath: String) : MappingBuilder(method, "$relativePath") {
@@ -23,4 +24,5 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
     fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
     fun listRepeatMedication(patient: Patient) = TppPrescriptionsBuilder(patient)
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
+    fun testResultsViewRequest(tppUserSession: TppUserSession) = TppTestResultsViewBuilder(tppUserSession)
 }

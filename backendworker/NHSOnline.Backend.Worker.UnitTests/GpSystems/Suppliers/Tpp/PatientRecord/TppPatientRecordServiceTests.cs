@@ -57,6 +57,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                     CreateEvent()
                 }
             };
+
+            var testResultsResponse = new TestResultsViewReply
+            {
+                Items = new List<TestResultsViewReplyItem>
+                {
+                    CreateTestResultsViewReplyItem()
+                }
+            };
             
             _tppClient.Setup(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()))
                 .Returns(Task.FromResult(
@@ -72,6 +80,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                     {
                         Body = patientRecordResponse,
                         ErrorResponse = null,
+                    }));  
+            
+            _tppClient.Setup(x => x.TestResultsView(It.IsAny<TppUserSession>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<TestResultsViewReply>(HttpStatusCode.OK)
+                    {
+                        Body = testResultsResponse,
+                        ErrorResponse = null,
                     }));   
 
             // Act
@@ -86,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         private List<ViewPatientOverViewItem> CreateListPatientOverviewItem(int count)
         {
             var result = new List<ViewPatientOverViewItem>();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 result.Add(CreatePatientOverviewItem());
             }
@@ -120,5 +136,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                 }
             };
         }
+        
+        private TestResultsViewReplyItem CreateTestResultsViewReplyItem()
+        {
+            return new TestResultsViewReplyItem
+            {
+                Date = _fixture.Create<DateTimeOffset>().ToString(),
+                Value = _fixture.Create<string>(),
+                Description = _fixture.Create<string>()
+            };
+        }
+        
     }
 }

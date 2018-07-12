@@ -2,14 +2,16 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import features.myrecord.mockData.TestResultsData
-import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.tpp.models.Error
+import mocking.tpp.models.TestResultsViewReply
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
+import java.time.LocalDateTime
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
@@ -23,7 +25,9 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(TestResultsData.getMultipleTppTestResultsData())
+                }
             }
         }
     }
@@ -38,83 +42,47 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-
             }
         }
     }
 
-    @Given("^the GP Practice has a single test result with single child values with no ranges for (.*)$")
-    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when(getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
-                }
-            }
-            "TPP" -> {
-
-            }
+    @Given("^the GP Practice has a single test result with single child values with no ranges for EMIS$")
+    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValuesWithNoRangesFor() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithNoRanges())
         }
     }
 
-    @Given("^the GP Practice has a single test result with multiple child values with ranges for (.*)$")
-    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when(getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
-                }
-            }
-            "TPP" -> {
-
-            }
+    @Given("^the GP Practice has a single test result with multiple child values with ranges for EMIS$")
+    fun givenTheGpPracticeHasASingleTestResultWithMultipleChildValuesWithRangesFor() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithMultipleChildValuesWithRanges())
         }
     }
 
-    @Given("^the GP Practice has a single test result with single child value with A range for (.*)$")
-    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when(getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
-                }
-            }
-            "TPP" -> {
-
-            }
+    @Given("^the GP Practice has a single test result with single child value with A range for EMIS$")
+    fun givenTheGpPracticeHasASingleTestResultWithSingleChildValueWithRangesFor() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithSingleChildValuesWithARange())
         }
     }
 
-    @Given("^the GP Practice has test results enabled and a single test result exists with no child values or range for (.*)$")
-    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when(getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
-                }
-            }
-            "TPP" -> {
-
-            }
+    @Given("^the GP Practice has test results enabled and a single test result exists with no child values or range for EMIS$")
+    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesOrRangeFor() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesOrRange())
         }
     }
 
-    @Given("^the GP Practice has a single test result with no child values and range for (.*)$")
-    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor(getService: String) {
-        setPatientToDefaultFor(getService)
-        when(getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
-                }
-            }
-            "TPP" -> {
-
-            }
+    @Given("^the GP Practice has a single test result with no child values and range for EMIS$")
+    fun givenTheGpPracticeHasASingleTestResultWithNoChildValuesAndARangeFor() {
+        setPatientToDefaultFor("EMIS")
+        mockingClient.forEmis {
+            testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getSingleTestResultWithNoChildValuesAndARange())
         }
     }
 
@@ -158,11 +126,31 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!).respondWithServiceNotAvailableException()
+                }
             }
         }
     }
 
+    @But("^the GP Practice has disabled test results functionality for (.*)$")
+    fun butTheGPPracticeHasDisabledTestResultsFunctionalityFor(getService: String) {
+        setPatientToDefaultFor(getService)
+        when (getService) {
+            "EMIS" -> {
+                mockingClient.forEmis {
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                }
+            }
+            "TPP" -> {
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!)
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!)
+                            .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
+        }
+    }
     @When("^I get the users test results$")
     fun whenIGetTheUsersMyRecordData()
     {
@@ -175,7 +163,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
         }
     }
 
-    @Then("^I receive \"(.*)\" test results as part of the my record object$")
+    @Then("^I receive (.*) test results as part of the my record object$")
     fun thenIReceiveATestResultsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(count, result.response.testResults.data.count())
@@ -184,7 +172,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("^I receive the test result with term set correctly to Term$")
     fun thenIReceiveATestResultWithTermSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count", result.response.testResults.data.first().term)
+        Assert.assertEquals("Neutrophil count", result.response.testResults.data.first().description)
     }
 
     @Then("^the line item displays text value and range$")
@@ -208,13 +196,25 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnits() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults.data.first().term)
+        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults.data.first().description)
     }
 
     @Then("^I receive the term set correctly to Term TextValue NumericUnits Range$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults.data.first().term)
+        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults.data.first().description)
+    }
+
+    @And("^the flag informing that the patient has access to the test results data is set to \"(.*)\"$")
+    fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        Assert.assertEquals(value, result.response.testResults.hasAccess)
+    }
+
+    @And("^the flag informing that there was an error retrieving the test results data is set to \"(.*)\"$")
+    fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
+        val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
+        Assert.assertEquals(value, result.response.testResults.hasErrored)
     }
 }
 

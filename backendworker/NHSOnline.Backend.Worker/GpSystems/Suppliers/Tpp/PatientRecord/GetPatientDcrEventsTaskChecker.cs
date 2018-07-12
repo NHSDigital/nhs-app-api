@@ -6,29 +6,18 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
-    public class GetPatientDcrEvents
+    public class GetPatientDcrEventsTaskChecker
     {
         private readonly ILogger _logger;
         
-        public GetPatientDcrEvents(ILogger logger)
+        public GetPatientDcrEventsTaskChecker(ILogger logger)
         {
             _logger = logger;
         }
 
-        public TppDcrEvents Check(Task<TppClient.TppApiObjectResponse<RequestPatientRecordReply>> task)
+        public TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse)
         {
             TppDcrEvents tppDcrEvents = null;
- 
-            if (!task.IsCompletedSuccessfully)
-            {
-                _logger.LogError("Retrieving patient record task completed unsuccessfully");
-                tppDcrEvents = new TppDcrEvents()
-                {
-                    HasErrored = true
-                };
-            }
-            
-            var taskResponse = task.Result;
 
             if (taskResponse.HasSuccessResponse) 
                 return tppDcrEvents ?? new TppDcrEventsMapper().Map(taskResponse.Body);

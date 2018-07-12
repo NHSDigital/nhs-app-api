@@ -9,10 +9,10 @@
           <ul >
             <li v-for="(testResult, testIndex) in orderedTestResults"
                 :key="`testResult-${testIndex}`" :class="$style.testResult">
-              <label v-if="testResult.effectiveDate.value">
-                {{ testResult.effectiveDate.value | datePart(testResult.effectiveDate.datePart) }}
+              <label v-if="testResult.date.value">
+                {{ testResult.date.value | datePart(testResult.date.datePart) }}
               </label>
-              <p :class="$style.testTerm">{{ testResult.term }}</p>
+              <p :class="$style.testTerm">{{ testResult.description }}</p>
               <ul>
                 <li v-for="(lineItem, lineItemIndex) in testResult.testResultLineItems"
                     :key="`line-${lineItemIndex}`" :class="$style.testResultLine">
@@ -54,7 +54,7 @@ export default {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedTestResults() {
-      return _.orderBy(this.data.data, [obj => obj.effectiveDate.value], ['desc']);
+      return _.orderBy(this.data.data, [obj => obj.date.value], ['desc']);
     },
   },
 };

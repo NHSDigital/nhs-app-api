@@ -91,16 +91,16 @@ open class MyRecordConsultationStepDefinitions {
         Assert.assertEquals(count, result.response.consultations.data.count())
     }
 
-    @Then("I receive consultations object with hasAccess flag set to false")
-    fun thenIReceiveConsultationsWithHasAccessFlagSetTo() {
+    @Then("^I receive consultations object with hasAccess flag set to \"(.*)\"$")
+    fun thenIReceiveConsultationsWithHasAccessFlagSetTo(hasAccess: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(false, result.response.consultations.hasAccess)
+        Assert.assertEquals(hasAccess, result.response.consultations.hasAccess)
     }
 
-    @Then("I receive consultations object with hasErrored flag set to true")
-    fun thenIReceiveConsultationsWithErrorFlagSetTo() {
+    @Then("^the consultations object with hasErrored flag set to \"(.*)\"$")
+    fun thenIReceiveConsultationsWithErrorFlagSetTo(hasError: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(true, result.response.consultations.hasErrored)
+        Assert.assertEquals(hasError, result.response.consultations.hasErrored)
     }
 }
 

@@ -21,5 +21,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         Task<TppClient.TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(TppUserSession tppUserSession);
 
         Task<TppClient.TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(BookAppointment bookAppointment, TppUserSession userSession);
+        
+        Task<TppClient.TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession, string startDate, string endDate);
+
     }
 }

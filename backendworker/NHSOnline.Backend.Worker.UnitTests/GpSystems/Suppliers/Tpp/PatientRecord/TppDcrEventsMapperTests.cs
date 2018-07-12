@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
 
             // Act
             var tppDcrEvents = new TppDcrEventsMapper().Map(item);
-            var result = _mapper.Map(new Allergies(), new Medications(), tppDcrEvents);
+            var result = _mapper.Map(new Allergies(), new Medications(), tppDcrEvents, new TestResults());
 
             // Assert
             result.Should().NotBeNull();
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                         Items = new List<RequestPatientRecordItem>
                         {
                             new RequestPatientRecordItem { 
-                                Details = "Benzoin tincture - 500 ml - use as directed\n", 
+                                Details = "Benzoin tincture - 500 ml\nuse as directed", 
                                 Type = "Medication template"                             
                             },
                         },
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             var result = new TppDcrEventsMapper().Map(requestPatientRecordReply);
 
             result.Should().NotBeNull();
-            result.Data[0].EventItems[0].Should().Be("Medication template - Benzoin tincture - 500 ml - use as directed");
+            result.Data[0].EventItems[0].Should().Be("Medication template - Benzoin tincture - 500 ml; use as directed");
         }
     }
 }

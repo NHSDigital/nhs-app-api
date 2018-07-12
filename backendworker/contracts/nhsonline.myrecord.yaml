@@ -199,9 +199,9 @@ definitions:
   TestResultItem:
     type: object
     properties:
-      effectiveDate:
+      date:
         $ref: '#/definitions/Date'
-      term:
+      description:
         type: string
         description: The name of the test result.
       testResultLineItems:

@@ -9,8 +9,9 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
         {
             TestResultLineItems = new List<string>();
         }
-        public Date EffectiveDate { get; set; }
-        public string Term { get; set; }
+        
+        public Date Date { get; set; }
+        public string Description { get; set; }
         public List<string> TestResultLineItems { get; set; }
-    }
+    } 
 }

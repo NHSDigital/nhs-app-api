@@ -2,11 +2,9 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import features.myrecord.mockData.DemographicsData
-import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient

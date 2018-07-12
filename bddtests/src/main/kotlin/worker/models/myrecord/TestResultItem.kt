@@ -1,7 +1,7 @@
 package worker.models.myrecord
 
 data class TestResultItem (
-        val effectiveDate: Date,
-        val term: String,
+        val date: Date,
+        val description: String,
         val testResultLineItems: MutableList<String>
 )
