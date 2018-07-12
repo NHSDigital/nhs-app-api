@@ -13,7 +13,7 @@
       <span aria-label="location">{{ appointment.location }}</span>
     </p>
 
-    <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
+    <p v-if="showClinicians" v-for="(clinician, index) in appointment.clinicians" :key="clinician"
        :class="$style.clinician">
       <clinician-icon/>&nbsp;
       <span :aria-label="'clinician ' + (index +1)">
@@ -57,6 +57,9 @@ export default {
   methods: {
     formatTime: dateTime => moment.parseZone(dateTime).format('h:mm a'),
     formatDate: dateTime => moment.parseZone(dateTime).format('dddd D MMMM YYYY'),
+    showClinicians() {
+      return appointment.clinicians != null;
+    },
     select() {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);

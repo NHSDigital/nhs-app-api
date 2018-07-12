@@ -218,6 +218,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return await Post<ListSlots, ListSlotsReply>(model, suid);
         }
 
+        public async Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid)
+        {
+            return await Post<ViewAppointments, ViewAppointmentsReply>(request, suid);
+        }
+
         public class TppApiResponse
         {
             public TppApiResponse(HttpStatusCode status)

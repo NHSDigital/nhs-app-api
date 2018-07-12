@@ -41,6 +41,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             services.AddTransient<IListSlotsReplyMapper, ListSlotsReplyMapper>();
             services.AddTransient<ISessionMapper, SessionMapper>();
             services.AddSingleton<IAppointmentSlotResultBuilder, TppAppointmentSlotsResultBuilder>();
+            services.AddTransient<IAppointmentsReplyMapper, AppointmentsReplyMapper>();
+            services.AddTransient<IAppointmentMapper, AppointmentMapper>();
+            services.AddSingleton<IAppointmentsResultBuilder, TppAppointmentsResultBuilder>();
 
             services.AddTransient<TppTokenValidationService>();
             services.AddTransient<TppDemographicsService>();
