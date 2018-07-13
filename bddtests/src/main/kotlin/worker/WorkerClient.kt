@@ -19,9 +19,7 @@ import org.apache.http.impl.client.BasicCookieStore
 import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
-import worker.models.appointments.AppointmentSlotsResponse
-import worker.models.appointments.CancelAppointmentRequest
-import worker.models.appointments.MyAppointmentsResponse
+import worker.models.appointments.*
 import worker.models.courses.CoursesResponse
 import worker.models.demographics.Demographics
 import worker.models.linkage.CreateLinkageRequest
@@ -119,6 +117,7 @@ class WorkerClient {
     fun getAppointmentSlots(fromDate: String? = null, toDate: String? = null, sessionCookie: Cookie? = null): AppointmentSlotsResponse {
         val uriBuilder = createUriBuilderForAppointmentSlots(fromDate, toDate)
         val httpGet = HttpGet(uriBuilder.build())
+
         if (sessionCookie != null) httpGet.addHeader("Cookie", sessionCookie.value.split(";")[0])
 
         val response = sendAsync(httpGet, null)
@@ -150,6 +149,19 @@ class WorkerClient {
 
         val response = sendAsync(httpDelete, context)
         httpDelete.releaseConnection()
+        return response
+    }
+
+    fun postAppointment(appointmentBookRequest: AppointmentBookRequest, sessionCookie: Cookie? = null): HttpResponse {
+        val httpPost = HttpPost(config.backendUrl + WorkerPaths.myAppointments)
+
+        if (sessionCookie != null) httpPost.addHeader("Cookie", sessionCookie.value.split(";")[0])
+        val entity = StringEntity(gson.toJson(appointmentBookRequest), "UTF-8")
+        entity.setContentType("application/json")
+        httpPost.entity = entity
+
+        val response = sendAsync(httpPost, null)
+        httpPost.releaseConnection()
         return response
     }
 
@@ -287,3 +299,4 @@ class WorkerClient {
         }
     }
 }
+

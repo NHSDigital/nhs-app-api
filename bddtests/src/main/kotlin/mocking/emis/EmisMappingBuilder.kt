@@ -1,5 +1,6 @@
 package mocking.emis
 
+import mocking.IAppointmentMappingBuilder
 import mocking.MappingBuilder
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
@@ -38,7 +39,8 @@ const val HEADER_NHS_NUMBER = "nhsNumber"
 const val HEADER_ODS_CODE = "odsCode"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
-open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String) : MappingBuilder(method, "/emis$relativePath") {
+open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String)
+    : MappingBuilder(method, "/emis$relativePath"), IAppointmentMappingBuilder {
     init {
         if(configuration != null) {
             requestBuilder
@@ -71,7 +73,7 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             sessionEndDate,
             patient.userPatientLinkToken)
 
-    fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration!!, patient.endUserSessionId, patient.sessionId, request)
+    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration!!, patient.endUserSessionId, patient.sessionId, request)
 
     fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentRequest) = EmisDeleteAppointmentsBuilder(configuration!!, patient, request)
 
