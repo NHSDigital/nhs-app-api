@@ -10,14 +10,14 @@
 
     <p :class="$style.location">
       <location-icon/>&nbsp;
-      <span aria-label="location">{{ appointment.location | truncate(24) }}</span>
+      <span aria-label="location">{{ appointment.location }}</span>
     </p>
 
     <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
        :class="$style.clinician">
       <clinician-icon/>&nbsp;
       <span :aria-label="'clinician ' + (index +1)">
-        {{ clinician | truncate(24) }}
+        {{ clinician }}
       </span>
     </p>
 

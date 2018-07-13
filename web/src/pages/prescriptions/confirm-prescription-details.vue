@@ -53,11 +53,11 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Spinner from '@/components/widgets/Spinner';
+import Routes from '../../Routes';
 
 export default {
   components: {
-    Spinner,
+    Routes,
   },
   data() {
     return {
@@ -76,7 +76,11 @@ export default {
         CourseIds: this.selectedPrescriptions.map(x => x.id),
         SpecialRequest: this.specialRequest,
       };
-      this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder);
+      this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder)
+        .then(() => {
+          this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
+          this.$router.push(Routes.PRESCRIPTIONS.path);
+        });
     },
   },
 };

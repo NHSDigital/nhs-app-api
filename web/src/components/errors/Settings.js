@@ -15,6 +15,7 @@ export default {
     {
       route: Routes.APPOINTMENT_CONFIRMATIONS.path,
       redirectUrl: Routes.APPOINTMENTS.path,
+      ignoredErrors: [409],
     },
     {
       route: Routes.PRESCRIPTION_CONFIRM_COURSES.path,

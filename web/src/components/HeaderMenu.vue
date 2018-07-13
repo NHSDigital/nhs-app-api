@@ -43,6 +43,7 @@ export default {
   left: 0px;
   right: 0px;
   height: 100px;
+  z-index: 1000;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
 }
 

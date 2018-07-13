@@ -1,8 +1,9 @@
+/* eslint-disable import/extensions */
 import {
-  SLOT_SELECTED,
-  SLOTS_LOADED,
-} from '../../../../../src/store/modules/appointmentSlots/mutation-types';
-import actions from '../../../../../src/store/modules/appointmentSlots/actions';
+  SELECT,
+  LOAD,
+} from '@/store/modules/availableAppointments/mutation-types';
+import actions from '@/store/modules/availableAppointments/actions';
 
 const API_HOST = 'http://unit.test';
 
@@ -39,17 +40,17 @@ describe('load', () => {
 
     return load
       .call(that, { commit }, { API_HOST })
-      .then(() => expect(commit).toBeCalledWith(SLOTS_LOADED, expected));
+      .then(() => expect(commit).toBeCalledWith(LOAD, expected));
   });
 });
 
 describe('select', () => {
-  it('will commit the received slot ID using the SLOT_SELECTED mutation type', () => {
+  it('will commit the received slot ID using the SELECT mutation type', () => {
     const slotId = '1234';
     const commit = jest.fn();
 
     select({ commit }, slotId);
 
-    expect(commit).toBeCalledWith(SLOT_SELECTED, slotId);
+    expect(commit).toBeCalledWith(SELECT, slotId);
   });
 });

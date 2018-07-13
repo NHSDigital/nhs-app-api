@@ -1,82 +1,172 @@
 <template>
   <main v-if="showTemplate" :class="bottomStyle()">
-    <div v-if="showNoAppointment" data-purpose="no-slots-error">
-      <p :class="$style.summary">{{ $t('appointments.noSlotErrorMessage.summary') }}</p>
-      <p :class="$style.info">{{ $t('appointments.noSlotErrorMessage.info') }}</p>
-    </div>
-    <ul v-if="showAppointments" data-purpose="slots">
-      <li v-for="(slot, index) in slots" :key="slot.id" :class="$style.slot">
-        <appointment-slot :the-slot = "slot" :aria-label="'slot ' + (index +1)"/>
-      </li>
-    </ul>
+    <error-warning-dialog v-if="noAvailableAppointments" error-or-warning="warning">
+      <p>
+        {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
+      </p>
+      <p>
+        {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
+      </p>
+    </error-warning-dialog>
 
-    <floating-button-bottom
-      v-if="showBookAppointmentButton"
-      :button-classes="['green']"
-      :clickable="hasASlotSelected"
-      @on-click="onBookButtonClicked"
-    >
+    <error-warning-dialog v-if="notMatchSearchCriteria" error-or-warning="warning">
+      <p>
+        {{ $t('appointments.booking.adjustSearch.line1') }}
+      </p>
+      <p>
+        {{ $t('appointments.booking.adjustSearch.line2') }}
+      </p>
+    </error-warning-dialog>
+
+    <error-warning-dialog v-show="showValidationError" error-or-warning="error">
+      <p> {{ $t('appointments.booking.validationErrors.problemFound') }} </p>
+      <p v-if="!validationError.isTypeValid">
+        - {{ $t('appointments.booking.validationErrors.type') }}
+      </p>
+      <p v-if="!validationError.isLocationValid">
+        - {{ $t('appointments.booking.validationErrors.location') }}
+      </p>
+      <p>- {{ $t('appointments.booking.validationErrors.slot') }}</p>
+    </error-warning-dialog>
+
+    <filters
+      v-if="availableAppointments"
+      v-model="selectedOptions"
+      :options="filtersOptions"
+      :selected-options="defaultSelectedOptions"
+      :validation-error="validationError"
+    />
+
+    <slot-list :available-slots="availableSlots" />
+
+    <button
+      v-if="availableAppointments"
+      :class="[$style.button, $style.green]"
+      @click="onConfirmButtonClicked">
       {{ $t('appointments.booking.bookButtonText') }}
-    </floating-button-bottom>
+    </button>
+    <nuxt-link :class="[$style.button, $style.grey]"
+               :to="backButtonPath" tag="button" >
+      {{ $t('appointments.booking.backButtonText') }}
+    </nuxt-link>
   </main>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import { mapGetters } from 'vuex';
-import AppointmentSlot from '@/components/appointments/AppointmentSlot';
+import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import Filters from '@/components/appointments/booking/Filters';
+import SlotList from '@/components/appointments/booking/SlotList';
+import Routes from '../../Routes';
 
 export default {
   components: {
-    AppointmentSlot,
+    ErrorWarningDialog,
     FloatingButtonBottom,
+    Filters,
+    SlotList,
+  },
+  data() {
+    return {
+      backButtonPath: Routes.APPOINTMENTS.path,
+      showValidationError: false,
+      validationError: {
+        isTypeValid: true,
+        isLocationValid: true,
+      },
+      filters: null,
+    };
   },
   computed: {
-    ...mapGetters({
-      slots: 'appointmentSlots/slots',
-      findById: 'appointmentSlots/findById',
-    }),
-    showNoAppointment() {
-      return (
-        this.$store.state.appointmentSlots.hasLoaded &&
-        this.$store.state.appointmentSlots.slots.length === 0
-      );
+    selectedOptions: {
+      get() { return this.filters; },
+      set(val) {
+        this.filters = val;
+        this.filterSlots();
+      },
     },
-    showAppointments() {
-      return (
-        this.$store.state.appointmentSlots.hasLoaded &&
-        this.$store.state.appointmentSlots.slots.length > 0
-      );
+    filtersOptions() {
+      return this.$store.state.availableAppointments.filtersOptions;
     },
-    showBookAppointmentButton() {
-      return (
-        this.$store.state.appointmentSlots.hasLoaded
-      );
+    defaultSelectedOptions() {
+      return this.$store.state.availableAppointments.selectedOptions;
     },
-    hasASlotSelected() {
-      return this.$store.state.appointmentSlots.selectedSlot !== null;
+    availableSlots() {
+      return this.$store.state.availableAppointments.filteredSlots;
+    },
+    noAvailableAppointments() {
+      const hasNoSlots = this.$store.state.availableAppointments.slots.size === 0;
+      return this.$store.state.availableAppointments.hasLoaded && hasNoSlots;
+    },
+    availableAppointments() {
+      const hasSlots = this.$store.state.availableAppointments.slots.size > 0;
+      return this.$store.state.availableAppointments.hasLoaded && hasSlots;
+    },
+    notMatchSearchCriteria() {
+      let notMatch = false;
+      if (this.$store.state.availableAppointments.filteredSlots.length === 0
+        && this.filters
+        && this.filters.type !== ''
+        && this.filters.location !== '') {
+        notMatch = true;
+      }
+
+      return notMatch;
     },
   },
   mounted() {
-    this.$store.dispatch('appointmentSlots/load');
+    this.$store.dispatch('availableAppointments/init');
+    this.$store.dispatch('availableAppointments/load');
   },
   beforeDestroy() {
-    this.$store.dispatch('appointmentSlots/reset');
+    this.$store.dispatch('availableAppointments/clear');
   },
   methods: {
+    filterSlots() {
+      this.$store.dispatch('availableAppointments/deselect');
+      this.$store.dispatch('availableAppointments/setSelectedFilters', this.filters);
+      this.$store.dispatch('availableAppointments/filter');
+    },
+    onConfirmButtonClicked() {
+      if (this.isValid()) {
+        this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS);
+      }
+    },
+    isValid() {
+      let isValid = true;
+      this.validationError.isTypeValid = true;
+      this.validationError.isLocationValid = true;
+
+      if (!this.filters || this.filters.type === '') {
+        this.validationError.isTypeValid = false;
+        isValid = false;
+      }
+
+      if (!this.filters || this.filters.location === '') {
+        this.validationError.isLocationValid = false;
+        isValid = false;
+      }
+
+      if (this.$store.state.availableAppointments.selectedSlot === null) {
+        isValid = false;
+      }
+
+      this.showValidationError = !isValid;
+
+      return isValid;
+    },
     bottomStyle() {
       if (
-        this.$store.state.appointmentSlots.hasLoaded &&
-        this.$store.state.appointmentSlots.slots.length !== 0
+        this.$store.state.availableAppointments.hasLoaded &&
+        this.$store.state.availableAppointments.slots.length !== 0
       ) {
         return this.$style.mainShowingSlots;
       }
       return this.$style.main;
     },
     onBookButtonClicked() {
-      this.$store.dispatch('appointment/save');
-      this.$router.push('/appointments/confirmation');
+      this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS.path);
     },
   },
 };
@@ -86,9 +176,34 @@ export default {
   @import "../../style/html";
   @import "../../style/fonts";
   @import "../../style/spacings";
+  @import "../../style/buttons";
+  @import "../../style/elements";
 
   .main {
     @include space(padding, all, $three);
+
+    &.error {
+      border: 3px $error solid;
+    }
+
+    .form {
+      margin-bottom: 24px;
+      label {
+        @include default_label;
+        padding-top: 16px;
+        padding-bottom: 8px;
+      }
+    }
+
+    .info p {
+      display: block;
+      font-weight: normal;
+      font-size: 1em;
+      line-height: 1.5em;
+      color: #4A4A4A;
+      font-size: 1em;
+      margin-bottom: 1em;
+    }
   }
 
   .mainShowingSlots {

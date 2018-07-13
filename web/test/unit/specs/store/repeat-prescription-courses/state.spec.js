@@ -8,10 +8,6 @@ describe('state', () => {
     expect(state().repeatPrescriptionCourses).toEqual([]);
   });
 
-  it('will set the justOrderedARepeatPrescription flag to false', () => {
-    expect(state().justOrderedARepeatPrescription).toEqual(false);
-  });
-
   it('will set specialRequest to null', () => {
     expect(state().specialRequest).toEqual(null);
   });

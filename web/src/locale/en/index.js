@@ -156,7 +156,47 @@ export default {
       },
     },
     booking: {
-      bookButtonText: 'Book this appointment',
+      bookButtonText: 'Continue',
+      backButtonText: 'Back to my appointments',
+      noAppointmentsAvailable: {
+        line1: 'There are currently no appointments available to book online in the next two weeks. If you need to book one now, call your GP surgery.',
+        line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+      },
+      adjustSearch: {
+        line1: 'Try selecting a different date and time, or without a preferred practice member selected. If you can\'t find the appointment you need, call your GP surgery.',
+        line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
+      },
+      validationErrors: {
+        problemFound: 'There\'s a problem',
+        type: 'Choose a type of appointment',
+        location: 'Choose a location',
+        slot: 'Select an appointment slot',
+      },
+      filters: {
+        type: {
+          label: 'Type of appointment',
+          default_option: 'Select type',
+        },
+        location: {
+          label: 'Location',
+          default_option: 'Select location',
+        },
+        clinician: {
+          label: 'Doctor/Nurse',
+          default_option: 'No preference',
+        },
+        date: {
+          label: 'Filter by date',
+          default_option: 'I have no preference',
+          options: {
+            today: 'Today',
+            tomorrow: 'Tomorrow',
+            this_week: 'This week',
+            next_week: 'Next week',
+            all: 'All',
+          },
+        },
+      },
       errors: {
         pageHeader: 'Error retrieving data',
         header: 'Sorry, there\'s been a problem loading this page',
@@ -183,6 +223,7 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'There\'s a problem',
       noReasonError: 'Enter a reason for this appointment',
+      conflictErrorMessage: 'Sorry, it seems that this slot was already taken. Please try to book another slot.',
       errors: {
         pageHeader: 'Error sending request',
         header: 'Sorry, there\'s been a problem sending your request',
@@ -359,9 +400,9 @@ export default {
     account: 'My account',
     appointments: 'My appointments',
     appointmentGuidance: 'Check before you book',
-    appointmentBooking: 'Book an appointment',
+    appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
-    appointmentConfirmation: 'Confirm appointment',
+    appointmentConfirmation: 'Check appointment details',
     myRecord: 'My medical record',
     more: 'More',
     login: 'Login',

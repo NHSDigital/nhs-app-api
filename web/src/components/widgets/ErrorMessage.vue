@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p :id="$style.errorMessage">
+    <p :class="$style.errorMessage">
       <error-marker-icon/>
       <span data-purpose="error">
         <slot/>

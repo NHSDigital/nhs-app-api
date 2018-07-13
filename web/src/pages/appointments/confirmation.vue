@@ -11,7 +11,7 @@
       </p>
     </error-warning-dialog>
 
-    <appointment-slot v-if="slot" :the-slot="slot" :always-deselect="true"
+    <appointment-slot v-if="slot" :appointment="slot" :show-cancellation-link="false"
                       aria-label="selected appointment" />
     <div :class="$style.form" role="form">
       <label for="reasonText">{{ $t('appointments.confirmation.headerLabel') }}</label>
@@ -40,9 +40,10 @@
 
 <script>
 /* eslint-disable import/extensions */
-import AppointmentSlot from '@/components/appointments/AppointmentSlot';
+import AppointmentSlot from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import Routes from '../../Routes';
 
 export default {
   components: {
@@ -73,13 +74,13 @@ export default {
     },
   },
   mounted() {
-    this.slot = this.$store.state.appointment.tempSelectedSlot;
+    this.slot = this.$store.state.availableAppointments.selectedSlot;
     if (!this.slot) {
-      this.$router.push('/appointments/booking');
+      this.$router.push(Routes.APPOINTMENT_BOOKING.path);
     }
   },
   beforeDestroy() {
-    this.$store.dispatch('appointment/reset');
+    this.$store.dispatch('availableAppointments/deselect');
   },
   methods: {
     onConfirmButtonClicked() {
@@ -90,19 +91,30 @@ export default {
         return;
       }
       this.showValidationError = false;
-      this.confirmTheBook(this.slot.id, this.slot.startTime, this.slot.endTime, this.symptoms);
+      this.confirmTheBook(this.slot, this.symptoms);
     },
-    confirmTheBook(slotId, startTime, endTime, reason) {
+    confirmTheBook(slot, reason) {
       const bookingData = {
-        SlotId: slotId,
-        StartTime: startTime,
-        EndTime: endTime,
+        SlotId: slot.id,
         BookingReason: reason,
+        StartTime: slot.startTime,
+        EndTime: slot.endTime,
       };
-      this.$store.dispatch('appointment/bookAppointment', bookingData);
+      this.$store.dispatch('availableAppointments/book', bookingData)
+        .then(() => {
+          this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.index.successText'));
+          this.$router.push(Routes.APPOINTMENTS.path);
+        })
+        .catch(() => {
+          const error = this.$store.state.errors.apiErrors[0];
+          if (error.status === 409) {
+            this.$store.dispatch('flashMessage/addWarning', this.$t('appointments.confirmation.conflictErrorMessage'));
+            this.$router.push(Routes.APPOINTMENT_BOOKING.path);
+          }
+        });
     },
     onCancelButtonClicked() {
-      this.$router.push('/appointments/booking');
+      this.$router.push(Routes.APPOINTMENT_BOOKING.path);
     },
   },
 };

@@ -36,7 +36,7 @@ export default {
 
     const final = () => {
       commit(LOGOUT, true);
-      this.dispatch('appointmentSlots/init');
+      this.dispatch('availableAppointments/init');
       this.dispatch('myAppointments/init');
       this.dispatch('auth/init');
       this.dispatch('device/init');
@@ -46,6 +46,7 @@ export default {
       this.dispatch('prescriptions/init');
       this.dispatch('repeatPrescriptionCourses/init');
       this.dispatch('errors/clearAllApiErrors');
+      this.dispatch('flashMessage/init');
       this.app.router.push('/login');
     };
 
@@ -80,7 +81,7 @@ export default {
   },
   unauthorised({ commit }) {
     commit(LOGOUT, true);
-    this.dispatch('appointmentSlots/init');
+    this.dispatch('availableAppointments/init');
     this.dispatch('auth/init');
     this.dispatch('device/init');
     this.dispatch('header/init');
@@ -88,6 +89,7 @@ export default {
     this.dispatch('navigation/init');
     this.dispatch('prescriptions/init');
     this.dispatch('repeatPrescriptionCourses/init');
+    this.dispatch('flashMessage/init');
     this.app.router.push('/login');
   },
 };

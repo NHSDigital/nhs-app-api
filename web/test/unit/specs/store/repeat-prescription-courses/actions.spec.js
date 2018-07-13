@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import actions from '../../../../../src/store/modules/repeatPrescriptionCourses/actions';
-import { REPEAT_PRESCRIPTION_COURSES_LOADED, REPEAT_PRESCRIPTION_ORDER_SUCCESS, REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
+import { REPEAT_PRESCRIPTION_COURSES_LOADED, REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO } from '../../../../../src/store/modules/repeatPrescriptionCourses/mutation-types';
 
 const { load, orderRepeatPrescription, updateAdditionalInfo } = actions;
 
@@ -74,8 +74,6 @@ describe('orderRepeatPrescription', () => {
       .call(that, { commit }, { repeatPrescriptionOrder })
       .then(() => {
         expect(that.app.$http.postV1PatientPrescriptions).toBeCalledWith(expectedRequest);
-        expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_ORDER_SUCCESS);
-        expect(that.app.router.push).toBeCalledWith('/prescriptions');
       });
   });
 });
@@ -108,8 +106,6 @@ describe('orderRepeatPrescription', () => {
       .call(that, { commit }, { repeatPrescriptionOrder })
       .then(() => {
         expect(that.app.$http.postV1PatientPrescriptions).toBeCalledWith(expectedRequest);
-        expect(commit).toBeCalledWith(REPEAT_PRESCRIPTION_ORDER_SUCCESS);
-        expect(that.app.router.push).toBeCalledWith('/prescriptions');
       });
   });
 });

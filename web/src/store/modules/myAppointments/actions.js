@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   CLEAR,
   LOADED,
@@ -5,7 +6,6 @@ import {
   SELECT,
   CLEAR_SELECTED_APPOINTMENT,
   CLEAR_APPOINTMENTS,
-  CANCEL_SUCCESS,
 } from './mutation-types';
 
 export default {
@@ -39,10 +39,6 @@ export default {
     };
 
     return this.app.$http
-      .deleteV1PatientAppointments(param)
-      .then(() => {
-        commit(CANCEL_SUCCESS);
-        this.app.router.push('/appointments');
-      });
+      .deleteV1PatientAppointments(param);
   },
 };

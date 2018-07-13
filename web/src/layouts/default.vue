@@ -5,6 +5,7 @@
       <spinner />
       <connection-error />
       <api-error />
+      <flash-message />
       <nuxt />
     </div>
     <navigation-menu v-if="showMenu"/>
@@ -18,6 +19,7 @@ import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
+import FlashMessage from '@/components/widgets/FlashMessage';
 
 export default {
   components: {
@@ -26,6 +28,7 @@ export default {
     Spinner,
     ApiError,
     ConnectionError,
+    FlashMessage,
   },
   head() {
     return {

@@ -2,13 +2,6 @@
   <main v-if="showTemplate" :class="$style.content">
 
     <div :class="$style['above-float-button']">
-
-      <success-dialog v-if="justOrderedARepeatPrescription">
-        <p>
-          {{ $t('rp05.confirmationMessage') }}
-        </p>
-      </success-dialog>
-
       <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
         <h3>{{ $t('rp01.empty.subHeader') }}</h3>
         <p>
@@ -61,7 +54,6 @@ export default {
   },
   data() {
     return {
-      justOrderedARepeatPrescription: false,
       statusDisplayPriority: {
         [MedicationCourseStatus.Rejected]: 1,
         [MedicationCourseStatus.Requested]: 2,
@@ -106,8 +98,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch('prescriptions/clear');
-    this.justOrderedARepeatPrescription =
-      this.$store.state.repeatPrescriptionCourses.justOrderedARepeatPrescription;
     this.$store.dispatch('prescriptions/load', this.$config);
   },
   methods: {

@@ -88,6 +88,7 @@
     "lodash": "^4.17.10",
     "minimist": "^1.2.0",
     "moment": "^2.22.1",
+    "moment-timezone": "^0.5.21",
     "node-sass": "^4.9.0",
     "nuxt": "^1.4.1",
     "sass-loader": "^7.0.1",

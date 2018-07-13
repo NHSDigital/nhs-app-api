@@ -6,7 +6,6 @@ import {
   SELECT,
   CLEAR_SELECTED_APPOINTMENT,
   CLEAR_APPOINTMENTS,
-  CANCEL_SUCCESS,
   initialState,
 } from './mutation-types';
 
@@ -65,7 +64,6 @@ export default {
   [CLEAR](state) {
     clearAppointments(state);
     clearSelectedAppointment(state);
-    state.justCancelledAnAppointment = false;
   },
   [SELECT](state, selected) {
     state.selectedAppointment = selected;
@@ -75,8 +73,5 @@ export default {
   },
   [CLEAR_APPOINTMENTS](state) {
     clearAppointments(state);
-  },
-  [CANCEL_SUCCESS](state) {
-    state.justCancelledAnAppointment = true;
   },
 };

@@ -73,6 +73,7 @@ export default function ({ route, store, app }) {
   }
 
   store.dispatch('http/cancelRequests');
+  store.dispatch('flashMessage/validate');
   store.dispatch('errors/setRoutePath', route.path);
 
   setPageTitle(route, store, app);

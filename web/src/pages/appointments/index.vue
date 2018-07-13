@@ -1,17 +1,5 @@
 <template>
   <main v-if="showTemplate" :class="$style.main">
-    <success-dialog v-if="justBookedAnAppointment">
-      <p>
-        {{ $t('appointments.index.successText') }}
-      </p>
-    </success-dialog>
-
-    <success-dialog v-if="justCancelledAnAppointment">
-      <p>
-        {{ $t('appointments.cancel.successText') }}
-      </p>
-    </success-dialog>
-
     <div v-if="showNoUpcomingAppointments" :class="$style.info">
       <h2>{{ $t('appointments.index.empty.header') }}</h2>
       <p>{{ $t('appointments.index.empty.text1') }}</p>
@@ -29,20 +17,13 @@
 <script>
 /* eslint-disable import/extensions */
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
-import SuccessDialog from '@/components/widgets/SuccessDialog';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import Routes from '../../Routes';
 
 export default {
   components: {
-    SuccessDialog,
     FloatingButtonBottom,
     UpcomingAppointments,
-  },
-  data() {
-    return {
-      justBookedAnAppointment: false,
-      justCancelledAnAppointment: false,
-    };
   },
   computed: {
     showNoUpcomingAppointments() {
@@ -67,9 +48,6 @@ export default {
     },
   },
   mounted() {
-    this.justBookedAnAppointment = this.$store.state.appointment.justBookedAnAppointment;
-    this.justCancelledAnAppointment = this.$store.state.myAppointments.justCancelledAnAppointment;
-    this.$store.dispatch('appointment/resetJustBooked');
     this.$store.dispatch('myAppointments/clear');
     this.$store.dispatch('myAppointments/load');
   },
@@ -78,7 +56,7 @@ export default {
   },
   methods: {
     onBookButtonClicked() {
-      this.$router.push('/appointments/booking-guidance');
+      this.$router.push(Routes.APPOINTMENT_BOOKING_GUIDANCE.path);
     },
   },
 };

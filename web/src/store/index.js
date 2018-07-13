@@ -1,8 +1,7 @@
 import Vuex from 'vuex';
 
 import header from './modules/header';
-import appointment from './modules/appointment';
-import appointmentSlots from './modules/appointmentSlots';
+import availableAppointments from './modules/availableAppointments';
 import auth from './modules/auth';
 import { UPDATE_CONFIG } from './modules/auth/mutation-types';
 import device from './modules/device';
@@ -13,12 +12,12 @@ import repeatPrescriptionCourses from './modules/repeatPrescriptionCourses';
 import session from './modules/session';
 import errors from './modules/errors';
 import myAppointments from './modules/myAppointments';
+import flashMessage from './modules/flashMessage';
 
 const createStore = () => new Vuex.Store({
   modules: {
     header,
-    appointment,
-    appointmentSlots,
+    availableAppointments,
     auth,
     device,
     http,
@@ -28,6 +27,7 @@ const createStore = () => new Vuex.Store({
     session,
     errors,
     myAppointments,
+    flashMessage,
   },
   actions: {
     nuxtServerInit({ state, commit }) {

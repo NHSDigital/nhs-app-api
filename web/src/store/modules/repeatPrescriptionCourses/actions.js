@@ -1,9 +1,9 @@
+/* eslint-disable no-unused-vars */
 import {
   REPEAT_PRESCRIPTION_COURSES_LOADED,
   INIT_REPEAT_PRESCRIPTIONS,
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
-  REPEAT_PRESCRIPTION_ORDER_SUCCESS,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
 } from './mutation-types';
 
@@ -27,11 +27,7 @@ export default {
       repeatPrescriptionRequest: repeatPrescriptionOrder,
     };
     return this.app.$http
-      .postV1PatientPrescriptions(param)
-      .then(() => {
-        commit(REPEAT_PRESCRIPTION_ORDER_SUCCESS);
-        this.app.router.push('/prescriptions');
-      });
+      .postV1PatientPrescriptions(param);
   },
   updateAdditionalInfo({ commit }, repeatPrescriptionAdditionalInfo) {
     commit(REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO, repeatPrescriptionAdditionalInfo);

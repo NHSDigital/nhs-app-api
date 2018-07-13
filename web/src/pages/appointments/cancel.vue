@@ -54,6 +54,7 @@ import Appointment from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
+import Routes from '../../Routes';
 
 export default {
   components: {
@@ -93,7 +94,11 @@ export default {
           cancellationReasonId: this.selectedReason,
         };
 
-        this.$store.dispatch('myAppointments/cancel', data);
+        this.$store.dispatch('myAppointments/cancel', data)
+          .then(() => {
+            this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancel.successText'));
+            this.$router.push(Routes.APPOINTMENTS.path);
+          });
       } else {
         this.showValidationError = true;
         this.$refs.reason.focus();

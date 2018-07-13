@@ -1,5 +1,5 @@
 <template>
-  <div class="custom-dropdown custom-dropdown--white">
+  <div :class="['custom-dropdown', 'custom-dropdown--white', {selectError: errorBorder}]">
     <select v-model="selectedValue" :id="selectId" :name="selectName" required=""
             class="custom-dropdown__select custom-dropdown__select--white">
       <slot/>
@@ -21,6 +21,10 @@
       type: String,
       default: undefined,
     },
+    errorBorder: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     selectedValue: {
@@ -37,5 +41,10 @@
 
 <style scoped lang="scss">
 @import "../../style/select";
-
+@import "../../style/colours";
+.custom-dropdown {
+  &.selectError {
+    border: 1px $error solid;
+  }
+}
 </style>
