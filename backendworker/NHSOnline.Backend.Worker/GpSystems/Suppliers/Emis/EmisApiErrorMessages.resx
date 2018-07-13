@@ -123,7 +123,7 @@
   <data name="MeApplicationsPost_AccountIdNotFound" xml:space="preserve">
     <value>No registered online user found for given linkage details</value>
   </data>
-    <data name="MeApplicationsPost_LinkageKeyDoesNotMatch" xml:space="preserve">
+  <data name="MeApplicationsPost_LinkageKeyDoesNotMatch" xml:space="preserve">
     <value>Invalid linkage details</value>
   </data>
   <data name="MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect" xml:space="preserve">
@@ -149,5 +149,8 @@
   </data>
   <data name="AppointmentsDelete_NotFound" xml:space="preserve">
     <value>Appointment not found</value>
+  </data>
+  <data name="EmisService_BookedAppointmentLimit" xml:space="preserve">
+    <value>Maximum booked appointments is limited</value>
   </data>
 </root>

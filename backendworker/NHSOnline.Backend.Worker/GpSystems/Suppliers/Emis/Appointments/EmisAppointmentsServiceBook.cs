@@ -53,6 +53,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 return new AppointmentBookResult.SlotNotAvailable();
             }
 
+            if(response.HasExceptionWithMessageContaining(
+                    EmisApiErrorMessages.EmisService_BookedAppointmentLimit))
+            {
+                return new AppointmentBookResult.AppointmentLimitReached();
+            }
+
             if (response.HasForbiddenResponse())
             {
                 _logger.LogEmisResponseIsForbidden();

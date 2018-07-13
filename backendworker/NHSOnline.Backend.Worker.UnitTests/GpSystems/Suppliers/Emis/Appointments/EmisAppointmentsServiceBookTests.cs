@@ -139,6 +139,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SlotNotAvailable>();
         }
+
+
         
         [TestMethod]
         public async Task Book_WhenEmisReturnsForbidden_ReturnsInsufficientPermissions()
@@ -156,25 +158,48 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
         }
-        
+
         [TestMethod]
         public async Task Book_WhenPatientDoesNotHaveNecessaryPermissions_ReturnsSlotNotAvailable()
         {
             var errorResponse = _fixture.Create<ErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
-            
+
+
             //Arrange
             var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
-                .InternalServerError) { ErrorResponse = errorResponse };
-            
+                .InternalServerError)
+            { ErrorResponse = errorResponse };
+
             MockEmisClientAppointmentPostMethod(response);
-            
+
             // Act            
             var result = await _systemUnderTest.Book(_userSession, _request);
 
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.InsufficientPermissions>();
+        }
+
+        [TestMethod]
+        public async Task Book_WhenPatientHasReachedAppointmentLimit_ReturnsAppointmentLimitReached()
+        {
+            var errorResponse = _fixture.Create<ErrorResponse>();
+            errorResponse.Exceptions.First().Message = $"{EmisApiErrorMessages.EmisService_BookedAppointmentLimit} to 35 by the practice";
+
+            //Arrange
+            var response = new EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>(HttpStatusCode
+                .InternalServerError)
+            { ErrorResponse = errorResponse };
+
+            MockEmisClientAppointmentPostMethod(response);
+
+            // Act            
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.AppointmentLimitReached>();
         }
 
         [TestMethod]
