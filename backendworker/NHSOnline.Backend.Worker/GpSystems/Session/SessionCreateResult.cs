@@ -42,5 +42,37 @@
                 return visitor.Visit(this);
             }
         }
+
+        public class InvalidRequest : SessionCreateResult
+        {
+            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class ErrorProcessingSecurityHeader : SessionCreateResult
+        {
+            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class InvalidUserCredentials : SessionCreateResult
+        {
+            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class UnknownError : SessionCreateResult
+        {
+            public override T Accept<T>(ISessionCreateResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

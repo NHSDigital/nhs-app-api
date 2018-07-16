@@ -16,6 +16,7 @@ services:
       - CORS_AUTHORITY=*
       - TPP_CERTIFICATE_PASSWORD
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
+      - VISION_CERT_PASSPHRASE
   nhsonline.stubs:
     image: rodolpheche/wiremock
     ports:

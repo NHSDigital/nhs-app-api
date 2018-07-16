@@ -8,6 +8,7 @@ class SessionJournies(private val client: MockingClient) {
         val cidFactory = CitizenIdSessionCreateJourney(client)
         val emisFactory = EmisSessionCreateJourneyFactory(client)
         val tppFactory = TppSessionCreateJourneyFactory(client)
+        val visionFactory = VisionSessionCreateJourneyFactory(client)
 
         cidFactory.createFor(Patient.alanCook)
         emisFactory.createFor(Patient.alanCook)
@@ -19,5 +20,7 @@ class SessionJournies(private val client: MockingClient) {
         emisFactory.createFor(Patient.montelFrye)
 
         tppFactory.createFor(Patient.kevinBarry)
+
+        visionFactory.createFor(Patient.aderynCanon)
     }
 }

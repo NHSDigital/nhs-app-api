@@ -36,5 +36,37 @@ namespace NHSOnline.Backend.Worker.GpSystems.PatientRecord
                 return visitor.Visit(this);
             }
         }
+
+        public class InvalidRequest : GetMyRecordResult
+        {
+            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class ErrorProcessingSecurityHeader : GetMyRecordResult
+        {
+            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class InvalidUserCredentials : GetMyRecordResult
+        {
+            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class UnknownError : GetMyRecordResult
+        {
+            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

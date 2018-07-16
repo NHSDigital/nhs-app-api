@@ -47,6 +47,10 @@ ENV TPP_APPLICATION_NAME NhsApp
 ENV TPP_APPLICATION_VERSION 1.0
 ENV TPP_APPLICATION_PROVIDER_ID b891fc3b51d5e7c1
 ENV TPP_APPLICATION_DEVICE_TYPE NhsApp
+ENV VISION_APPLICATION_PROVIDER_ID nhson001
+ENV VISION_URI https://52.214.53.197:8443/PatientFacingServices
+ENV VISION_CERT_PATH ./certs/vps_nhson001.pfx
+ENV VISION_USERNAME vps-nhson001
 ENV TIMEZONE Europe/London
 ENV EMIS_LINKAGE_USE_STUBBED_DATA true
 
@@ -56,6 +60,10 @@ COPY --from=publish /app .
 
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppCa.crt /usr/local/share/ca-certificates/TppCa.crt
 RUN chmod 644 /usr/local/share/ca-certificates/TppCa.crt; \
+    update-ca-certificates;
+
+COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/vps-test.cer /usr/local/share/ca-certificates/vps-test.cer
+RUN chmod 644 /usr/local/share/ca-certificates/vps-test.cer; \
     update-ca-certificates;
 
 RUN chown aspnetcore:aspnetcore -R /app

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <Action xmlns="http://www.w3.org/2005/08/addressing">urn:vision:Vision:VisionResponse</Action>
+    <MessageID xmlns="http://www.w3.org/2005/08/addressing">29DA6CD6-71C8-4B30-8D4D-30AA0D75DEA0</MessageID>
+    <To xmlns="http://www.w3.org/2005/08/addressing">http://www.w3.org/2005/08/addressing/anonymous</To>
+    <RelatesTo xmlns="http://www.w3.org/2005/08/addressing">uuid:4d0995d5-51f8-4716-b8b1-8f88282cad87</RelatesTo>
+  </soap:Header>
+  <soap:Body>
+    <soap:Fault xmlns:vision="urn:vision">
+      <faultcode>soap:Server</faultcode>
+      <faultstring>-90001</faultstring>
+      <detail>
+        <vision:visionFault>
+          <vision:serviceDefinition>
+            <vision:name>VOAPP.GetAvailableAppointments</vision:name>
+            <vision:version>2.0.0</vision:version>
+          </vision:serviceDefinition>
+          <vision:error>
+            <vision:category>INVALID_REQUEST</vision:category>
+            <vision:code>-90001</vision:code>
+            <vision:text>Request does not match expected format</vision:text>
+          </vision:error>
+        </vision:visionFault>
+      </detail>
+    </soap:Fault>
+  </soap:Body>
+</soap:Envelope>

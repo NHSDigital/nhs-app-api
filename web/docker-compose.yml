@@ -19,6 +19,8 @@ services:
       - CORS_AUTHORITY=*
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - TPP_CERTIFICATE_PASSWORD
+      - VISION_CERT_PATH=./certs/vps_nhson001.pfx
+      - VISION_CERT_PASSPHRASE
     depends_on:
       - nhsonline.redis.sds
     ports:

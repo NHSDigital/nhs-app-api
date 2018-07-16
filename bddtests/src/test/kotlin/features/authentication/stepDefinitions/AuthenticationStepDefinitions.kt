@@ -15,6 +15,7 @@ import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistra
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.VisionSessionCreateJourneyFactory
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
@@ -138,34 +139,55 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
     }
 
-    @Given("^I have valid OAuth details and (.*) is unavailable$")
+    @Given("^I have valid OAuth details and (.*) is not available$")
     fun iHaveValidOAuthDetailsAndGpSystemUnavailable(gpSystem: String) {
         createCidStubs()
-        when(gpSystem.toUpperCase()){
+        when (gpSystem.toUpperCase()) {
             "EMIS" -> {
                 mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
                 mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
             }
             "TPP" -> {
-                mockingClient.forTpp { authenticateRequest(Authenticate())
-                        // respond with error.  Unconfirmed format.
-                        .respondWithError(Error(errorCode = "0", userFriendlyMessage = "Service Unavailable")) }
+                mockingClient.forTpp {
+                    authenticateRequest(Authenticate())
+                            // respond with error.  Unconfirmed format.
+                            .respondWithError(Error(errorCode = "0", userFriendlyMessage = "Service Unavailable"))
+                }
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getConfigurationRequest(
+                            MockDefaults.visionUserSession,
+                            MockDefaults.visionGetConfiguration)
+                            .respondWithServiceUnavailable()
+                }
             }
         }
     }
 
+
     @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
     fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
         createCidStubs()
-        when(gpSystem.toUpperCase()){
+        when (gpSystem.toUpperCase()) {
             "EMIS" -> {
                 mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault(gpSystem).endUserSessionId) }
                 mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithForbidden() }
             }
             "TPP" -> {
-                mockingClient.forTpp { authenticateRequest(Authenticate())
-                        // respond with error.  Unconfirmed format.
-                        .respondWithError(Error(errorCode = "9", userFriendlyMessage = "There was a problem logging on")) }
+                mockingClient.forTpp {
+                    authenticateRequest(Authenticate())
+                            // respond with error.  Unconfirmed format.
+                            .respondWithError(Error(errorCode = "9", userFriendlyMessage = "There was a problem logging on"))
+                }
+            }
+            "VISION" -> {
+                createCidStubs(patient = MockDefaults.patientVision)
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
+                                    .respondWitInvalidUserCredentials()
+                        }
             }
         }
     }
@@ -173,7 +195,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have valid OAuth details and (.*) fails to respond in 30 seconds$")
     fun iHaveValidOAuthDetailsAndEmisFailsToRespondInThirtySeconds(gpSystem: String) {
 
-        when(gpSystem.toUpperCase()){
+        when (gpSystem.toUpperCase()) {
             "EMIS" -> {
                 createCidStubs()
                 mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
@@ -182,6 +204,14 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             "TPP" -> {
                 CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
                 mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(AuthenticateReply()).delayedBy(Duration.ofSeconds(31)) }
+            }
+            "VISION" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientVision)
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
+                                    .respondWithSuccess(MockDefaults.visionConfigurationResponse).delayedBy(Duration.ofSeconds(31))
+                        }
             }
         }
     }
@@ -194,11 +224,11 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         SuccessfulRegistrationJourney(mockingClient).create(this.patient)
 
         this.im1ConnectionRequest = Im1ConnectionRequest(
-             AccountId = patient.accountId,
-             LinkageKey = patient.linkageKey,
-             OdsCode = patient.odsCode,
-             Surname = patient.surname,
-             DateOfBirth = patient.dateOfBirth
+                AccountId = patient.accountId,
+                LinkageKey = patient.linkageKey,
+                OdsCode = patient.odsCode,
+                Surname = patient.surname,
+                DateOfBirth = patient.dateOfBirth
         )
     }
 
@@ -210,13 +240,14 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithNoOnlineUserFound() }
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
                 Surname = patient.surname,
                 DateOfBirth = patient.dateOfBirth)
     }
+
     @Given("^I have data for a patient with incorrect linkage key$")
     fun iHaveDataForAPatientWithIncorrectLinkageKey() {
         this.patient = Patient.johnSmith.copy(linkageKey = "incorrectLinkageKey")
@@ -225,7 +256,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithLinkageKeyDoesNotMatch() }
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -241,7 +272,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithIncorrectSurnameOrDateOfBirth() }
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -257,7 +288,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithIncorrectSurnameOrDateOfBirth() }
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -268,7 +299,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have an EMIS user's IM1 credentials with an ODS Code not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnODSCodeNotInTheExpectedFormat() {
         this.patient = Patient.johnSmith.copy(odsCode = INVALID_VALUE)
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -285,7 +316,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithBadRequest("The request is invalid.", "Surname") }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -301,7 +332,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithBadRequest("The request is invalid.", "LinkageDetails.AccountId") }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -317,7 +348,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { meApplicationsRequest(patient, linkApplicationRequestModel).respondWithBadRequest("The request is invalid.", "LinkageDetails.LinkageKey") }
 
-        this. im1ConnectionRequest = Im1ConnectionRequest(
+        this.im1ConnectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,
                 LinkageKey = patient.linkageKey,
                 OdsCode = patient.odsCode,
@@ -418,8 +449,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iCreateUserSession() {
         try {
             this.userSessionResponse = WorkerClient().postSessionConnection(UserSessionRequest(authCode = this.authCode, codeVerifier = this.codeVerifier!!))
-        }
-        catch (httpException: NhsoHttpException) {
+        } catch (httpException: NhsoHttpException) {
             setErrorResponse(httpException)
         }
     }
@@ -496,9 +526,16 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 
-        when(gpSystem.toUpperCase()) {
-            "EMIS" -> { EmisSessionCreateJourneyFactory(mockingClient).createFor(patient) }
-            "TPP" -> { TppSessionCreateJourneyFactory(mockingClient).createFor(patient) }
+        when (gpSystem.toUpperCase()) {
+            "EMIS" -> {
+                EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
+            }
+            "TPP" -> {
+                TppSessionCreateJourneyFactory(mockingClient).createFor(patient)
+            }
+            "VISION" -> {
+                VisionSessionCreateJourneyFactory(mockingClient).createFor(patient)
+            }
         }
 
         browser.goToApp()
@@ -511,14 +548,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     }
 
     @When("I am on the home page")
-    fun gotoHomePage()
-    {
+    fun gotoHomePage() {
         browser.changeTabToApp()
     }
 
     @When("^I browse to the page at (.*)$")
     fun iBrowseToPageAt(url: String) {
-        val fullUrl = Config.instance.url+url
+        val fullUrl = Config.instance.url + url
         browser.browseTo(fullUrl)
         this.currentUrl = fullUrl
     }
@@ -619,27 +655,25 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         authReturn.assertSpinnerVisible()
     }
 
-    @Then ("^I am redirected to the CID create an account page$")
+    @Then("^I am redirected to the CID create an account page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheCIDCreateAnAccountPage() {
         accountCreation.assertPageIsVisible()
     }
 
-    @Then ("^I am redirected to the signed in home page$")
+    @Then("^I am redirected to the signed in home page$")
     @Throws(Exception::class)
-    fun IAmRedirectedToTheSignedInHomePage()
-    {
+    fun IAmRedirectedToTheSignedInHomePage() {
         home.assertPageIsVisible();
     }
 
-    @Then ("^I am redirected to the app to the signed in home page$")
+    @Then("^I am redirected to the app to the signed in home page$")
     @Throws(Exception::class)
-    fun IAmRedirectedToTheAppToTheSignedInHomePage()
-    {
+    fun IAmRedirectedToTheAppToTheSignedInHomePage() {
         home.assertPageIsVisible();
     }
 
-    private fun createLinkApplicationRequestModel(patient: Patient) : LinkApplicationRequestModel {
+    private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
         return LinkApplicationRequestModel(
                 surname = patient.surname,
                 dateOfBirth = patient.dateOfBirth,
@@ -668,7 +702,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     }
 
     private fun createCidStubs(
-            authCode:String? = this.authCode!!,
+            authCode: String? = this.authCode!!,
             codeVerifier: String = this.codeVerifier!!,
             accessToken: String = this.accessToken,
             bearerToken: String = this.bearerToken,
@@ -720,3 +754,4 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setSessionVariable("HttpException").to(errorResponse)
     }
 }
+

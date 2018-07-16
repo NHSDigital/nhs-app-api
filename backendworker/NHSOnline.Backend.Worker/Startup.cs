@@ -1,8 +1,7 @@
 using System;
 using System.Linq;
-using System.Net.Http;
-using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +17,7 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -70,6 +70,7 @@ namespace NHSOnline.Backend.Worker
                 });
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
+            services.AddTransient<ICertificateService, CertificateService>();
 
             services.AddCors();
             services

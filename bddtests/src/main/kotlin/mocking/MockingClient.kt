@@ -9,6 +9,7 @@ import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
+import mocking.vision.VisionMappingBuilder
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.rest.SerenityRest
 import org.apache.http.HttpException
@@ -44,6 +45,13 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun forCitizenId(method: String = "GET", resolver: CitizenIdMappingBuilder.() -> Mapping) {
         val mappingBuilder = CitizenIdMappingBuilder(method, "/emis")
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forVision(method: String = "POST", resolver: VisionMappingBuilder.() -> Mapping) {
+        val mappingBuilder = VisionMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

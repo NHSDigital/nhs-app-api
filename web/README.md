@@ -8,6 +8,11 @@ Clone from the GitLab repo: https://git.nhschoices.net/nhsonline/nhsonline-web
 git clone https://git.nhschoices.net/nhsonline/nhsonline-web
 ```
 
+2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
+  - backendworker folder
+  - web folder
+  - bddtests folder
+
 ## Run
 **NOTE:**
 * Docker 17.05 or higher on the daemon and client is required (for example [docker4mac](https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac)).

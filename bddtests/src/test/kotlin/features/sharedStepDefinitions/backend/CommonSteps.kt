@@ -18,6 +18,9 @@ import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import mocking.tpp.models.AuthenticateReply
+import mocking.vision.VisionConstants
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
 import models.Patient
 import net.serenitybdd.core.Serenity.*
 import net.serenitybdd.core.Serenity
@@ -34,9 +37,10 @@ import java.util.concurrent.TimeUnit
 
 
 class CommonSteps : AbstractSteps() {
-    var GP_SYSTEM : String = "GP_SYSTEM"
+    var GP_SYSTEM: String = "GP_SYSTEM"
     private val EMIS = "EMIS"
     private val TPP = "TPP"
+    private val VISION = "VISION"
 
     @Before
     fun beforeEachScenario() {
@@ -50,24 +54,37 @@ class CommonSteps : AbstractSteps() {
         setSessionVariable(WorkerClient::class).to(workerClient)
     }
 
-    @After
-    fun after(scenario: Scenario) {
-        val x = "x"
-    }
+    @Given("^(.*) is unavailable$")
+    fun givenXIsUnavailable(gpSystem: String) {
+        when (gpSystem) {
+            EMIS -> {
+                val connectionToken = "f6ca8e0c-dd67-4863-ba9e-3d34bfe930d0"
+                val odsCode = "A29928"
 
-    @Given("EMIS is unavailable")
-    fun givenEmisIsUnavailable() {
-        val connectionToken = "f6ca8e0c-dd67-4863-ba9e-3d34bfe930d0"
-        val odsCode = "A29928"
+                setSessionVariable("ConnectionToken").to(connectionToken)
+                setSessionVariable("NationalPracticeCode").to(odsCode)
 
-        setSessionVariable("ConnectionToken").to(connectionToken)
-        setSessionVariable("NationalPracticeCode").to(odsCode)
+                mockingClient.forEmis {
+                    endUserSessionRequest()
+                            .respondWithServiceUnavailable()
+                }
+            }
+            VISION -> {
+                val patient = MockDefaults.patientVision
 
-        mockingClient.forEmis {
-            endUserSessionRequest()
-                    .respondWithServiceUnavailable()
+                setSessionVariable("ConnectionToken").to(patient.connectionToken)
+                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+
+                mockingClient.forVision {
+                    getConfigurationRequest(
+                            MockDefaults.visionUserSession,
+                            MockDefaults.visionGetConfiguration)
+                            .respondWithServiceUnavailable()
+                }
+            }
         }
     }
+
 
     @Then("^I receive (?:a|an) \"(.*)\" error")
     fun thenIReceiveAMessage(expectedStatusCode: String) {

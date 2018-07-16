@@ -208,7 +208,8 @@ ClientBin/
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
-*.pfx
+*.pfx #Exclude all pfx files
+!mycert.pfx #Except for mycert.pfx which is used for tests
 *.publishsettings
 node_modules/
 orleans.codegen.cs

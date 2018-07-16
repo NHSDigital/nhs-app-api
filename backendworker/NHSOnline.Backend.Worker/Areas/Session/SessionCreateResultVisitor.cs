@@ -12,6 +12,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         {
             _settings = settings;
         }
+
         public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SuccessfullyCreated result)
         {
             return new SessionCreateResultVisitorOutput
@@ -33,6 +34,42 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         }
 
         public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SupplierSystemUnavailable result)
+        {
+            return new SessionCreateResultVisitorOutput
+            {
+                SessionWasCreated = false,
+                StatusCode = StatusCodes.Status502BadGateway
+            };
+        }
+
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        {
+            return new SessionCreateResultVisitorOutput
+            {
+                SessionWasCreated = false,
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
+
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.InvalidUserCredentials invalidUserCredentials)
+        {
+            return new SessionCreateResultVisitorOutput
+            {
+                SessionWasCreated = false,
+                StatusCode = StatusCodes.Status403Forbidden
+            };
+        }
+
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.InvalidRequest invalidRequest)
+        {
+            return new SessionCreateResultVisitorOutput
+            {
+                SessionWasCreated = false,
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+        }
+
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.UnknownError unknownError)
         {
             return new SessionCreateResultVisitorOutput
             {

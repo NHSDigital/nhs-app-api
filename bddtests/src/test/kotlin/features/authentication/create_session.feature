@@ -70,23 +70,31 @@ Feature: Session Registration
     Then I get a "Bad Gateway" error
 
   @NHSO-63
+  @NHSO-992
   @backend
   Scenario Outline: <GP System> is unavailable
-    Given I have valid OAuth details and <GP System> is unavailable
+    Given I have valid OAuth details and <GP System> is not available
     When I create a user session
     Then I get a "Bad Gateway" error
 
     Examples:
-    |GP System|
-    |EMIS     |
-    |TPP      |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   @NHSO-63
+  @NHSO-992
   @backend
-  Scenario: CID connection token fails to authenticate with EMIS
-    Given I have invalid OAuth details and CID connection token fails to authenticate with EMIS
+  Scenario Outline: CID connection token fails to authenticate with <GP System>
+    Given I have invalid OAuth details and CID connection token fails to authenticate with <GP System>
     When I create a user session
     Then I get a "Forbidden" error
+
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
 
   @NHSO-63
   @backend
@@ -96,6 +104,7 @@ Feature: Session Registration
     Then I get a "Bad Gateway" error
 
   @NHSO-63
+  @NHSO-992
   @backend
   Scenario Outline: <GP System> fails to respond in 30 seconds
     Given I have valid OAuth details and <GP System> fails to respond in 30 seconds
@@ -103,12 +112,14 @@ Feature: Session Registration
     Then I get a "Gateway Timeout" error
 
     Examples:
-    |GP System|
-    |EMIS     |
-    |TPP      |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   @NHSO-63
   @manual @NHSO-449
+  @NHSO-992
   @backend
   Scenario Outline: <GP System> session fails to be saved in cache
     Given I have valid OAuth details and the <GP System> session fails to be saved in cache
@@ -116,6 +127,7 @@ Feature: Session Registration
     Then I get a "Server Error" error
 
     Examples:
-    |GP System|
-    |EMIS     |
-    |TPP      |
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |

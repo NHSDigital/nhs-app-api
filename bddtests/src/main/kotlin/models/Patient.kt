@@ -27,6 +27,8 @@ data class Patient(
         val patientId: String = "",
         val passphrase: String = "",
         val onlineUserId: String = "",
+        val rosuAccountId: String = "",
+        val apiKey: String = "",
         val cidUserSession: UserSessionRequest= UserSessionRequest(
                 authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
@@ -55,6 +57,7 @@ data class Patient(
             return when(gpSystem.toUpperCase()) {
                 "EMIS" -> montelFrye
                 "TPP" -> kevinBarry
+                "VISION" -> aderynCanon
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }
@@ -166,6 +169,29 @@ data class Patient(
                 tppUserSession = TppUserSession("ZT8wLjK6beFOdXoiNIHbD+TbPrl0Y3KmVXy4GYM253hQlxwp2qMKW7zgbjgTWJzCvTcZxb2BZNW5IdGtaWtahGkv" +
                         "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
                         "84df400000000000", "KGPD", "84df400000000000")
+        )
+
+        ////////// VISION PATIENTS /////////////
+        val aderynCanon = Patient(
+                title = "Mr",
+                firstName = "Aderyn",
+                surname = "Canon",
+                dateOfBirth = "1986-04-10T00:00:00.0Z",
+                sex = Sex.Male,
+                address = Address(
+                        houseNameFlatNumber = "28 Central Path",
+                        numberStreet = "Troy Avenue",
+                        village = "Horsforth",
+                        town = "Leeds",
+                        county = "West Yorkshire",
+                        postcode = "LS18 5TN"
+                ),
+                contactDetails = defaultContactDetails,
+                odsCode = MockDefaults.DEFAULT_ODS_CODE_VISION,
+                nhsNumbers = listOf("5785445875"),
+                connectionToken = "{\"rosuAccountId\": \"104969\", \"apiKey\":\"h4h9869kj3ytz6427y7rctkdy3zkpxcncnhvfph76g2h6p9gywjq484c9ghan8tt\"}",
+                rosuAccountId = "104969",
+                apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnhvfph76g2h6p9gywjq484c9ghan8tt"
         )
     }
 }

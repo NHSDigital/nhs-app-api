@@ -42,4 +42,31 @@
   <ItemGroup>
     <None Remove="Bridges\**" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />
+    <None Remove="GpSystems\Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\TestData\unknownErrorResponse.xml" />
+    <Content Include="GpSystems\Suppliers\Vision\Resources\mycert.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GpSystems\Suppliers\Vision\TestData\unknownErrorResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml" />
+    <Content Include="GpSystems\Suppliers\Vision\TestData\invalidUserCredentialsResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GpSystems\Suppliers\Vision\TestData\invalidSecurityHeaderResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

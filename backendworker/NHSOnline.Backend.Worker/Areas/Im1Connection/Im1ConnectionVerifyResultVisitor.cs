@@ -25,5 +25,25 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+
+        public IActionResult Visit(Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
+
+        public IActionResult Visit(Im1ConnectionVerifyResult.InvalidUserCredentials invalidUserCredentials)
+        {
+            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+        }
+
+        public IActionResult Visit(Im1ConnectionVerifyResult.InvalidRequest invalidRequest)
+        {
+            return new StatusCodeResult(StatusCodes.Status400BadRequest);
+        }
+
+        public IActionResult Visit(Im1ConnectionVerifyResult.UnknownError unknownError)
+        {
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+        }
     }
 }

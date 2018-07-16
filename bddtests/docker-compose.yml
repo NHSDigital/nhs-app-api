@@ -20,6 +20,8 @@ services:
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
       - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
       - TPP_BASE_URL=http://nhsonline.stubs:8080/tpp/
+      - VISION_URI=http://nhsonline.stubs:8080/vision
+      - VISION_CERT_PASSPHRASE
     depends_on:
       - nhsonline.redis.sds
     ports:

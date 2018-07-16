@@ -9,6 +9,8 @@ import mocking.emis.demographics.Sex
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import mocking.tpp.models.*
+import mocking.vision.VisionConstants
+import mocking.vision.models.*
 import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -25,6 +27,7 @@ class PatientVerificationSteps : AbstractSteps() {
     private val defaultConnectionToken = "bce74b97-4296-414a-a4f5-0f1bf5732ba6"
     private val EMIS = "EMIS"
     private val TPP = "TPP"
+    private val VISION = "VISION"
 
     @Given("I have an (.*) IM1 Connection Token that does not exist")
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {
@@ -56,6 +59,24 @@ class PatientVerificationSteps : AbstractSteps() {
                 setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
             }
+            VISION -> {
+                val patient = MockDefaults.patientVision
+                var nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
+
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(
+                                    visionUserSession = VisionUserSession(
+                                            "999999999",
+                                            "nonexistingapikey",
+                                            Patient.aderynCanon.odsCode),
+                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    .respondWitInvalidUserCredentials()
+                        }
+                setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
+                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+                setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
+            }
         }
     }
 
@@ -69,7 +90,58 @@ class PatientVerificationSteps : AbstractSteps() {
             EMIS -> {
                 setSessionVariable("NationalPracticeCode").to(defaultOdsCode)
             }
+            VISION -> {
+                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
+            }
         }
+    }
+
+    @Given("Vision responds with a security header error")
+    fun visionRespondsWithASecurityHeaderError() {
+        setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
+
+        mockingClient
+                .forVision {
+                    getConfigurationRequest(
+                            visionUserSession = VisionUserSession(
+                                    Patient.aderynCanon.rosuAccountId,
+                                    Patient.aderynCanon.apiKey,
+                                    Patient.aderynCanon.odsCode),
+                            serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                            .respondWithSecurityHeaderError()
+                }
+    }
+
+    @Given("Vision responds with an invalid request error")
+    fun visionRespondsWithAInvalidRequestError() {
+        setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
+
+        mockingClient
+                .forVision {
+                    getConfigurationRequest(
+                            visionUserSession = VisionUserSession(
+                                    Patient.aderynCanon.rosuAccountId,
+                                    Patient.aderynCanon.apiKey,
+                                    Patient.aderynCanon.odsCode),
+                            serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                            .respondWithInvalidRequest()
+                }
+    }
+
+    @Given("Vision responds with an unknown error")
+    fun visionRespondsWithAnUnknownError() {
+        setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(MockDefaults.patientVision.odsCode)
+
+        mockingClient
+                .forVision {
+                    getConfigurationRequest(
+                            MockDefaults.visionUserSession,
+                            MockDefaults.visionGetConfiguration)
+                            .respondWithUnknownError()
+                }
     }
 
     @Given("I have no IM1 Connection Token for (.*)")
@@ -81,6 +153,9 @@ class PatientVerificationSteps : AbstractSteps() {
             }
             EMIS -> {
                 setSessionVariable("NationalPracticeCode").to(defaultOdsCode)
+            }
+            VISION -> {
+                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
             }
         }
     }
@@ -95,6 +170,9 @@ class PatientVerificationSteps : AbstractSteps() {
             EMIS -> {
                 setSessionVariable("ConnectionToken").to(defaultConnectionToken)
             }
+            VISION -> {
+                setSessionVariable("NationalPracticeCode").to(MockDefaults.patientVision.connectionToken)
+            }
         }
     }
 
@@ -107,6 +185,9 @@ class PatientVerificationSteps : AbstractSteps() {
             }
             EMIS -> {
                 setSessionVariable("ConnectionToken").to(defaultConnectionToken)
+            }
+            VISION -> {
+                setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
             }
         }
     }
@@ -121,6 +202,9 @@ class PatientVerificationSteps : AbstractSteps() {
             EMIS -> {
                 setSessionVariable("ConnectionToken").to(defaultConnectionToken)
             }
+            VISION -> {
+                setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
+            }
         }
     }
 
@@ -129,18 +213,18 @@ class PatientVerificationSteps : AbstractSteps() {
         when (gpSystem) {
             TPP -> {
                 val patient = Patient(
-                        title =  "Mr",
-                        firstName =  "Kevin",
-                        surname =  "Barry",
-                        connectionToken =  "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
-                        odsCode =  MockDefaults.DEFAULT_ODS_CODE_TPP,
-                        endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                        nhsNumbers =  listOf("5785445875"),
-                        accountId =  "520993083",
+                        title = "Mr",
+                        firstName = "Kevin",
+                        surname = "Barry",
+                        connectionToken = "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                        odsCode = MockDefaults.DEFAULT_ODS_CODE_TPP,
+                        endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                        nhsNumbers = listOf("5785445875"),
+                        accountId = "520993083",
                         passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=",
                         patientId = "84df400000000000",
                         onlineUserId = "84df400000000000",
-                        dateOfBirth =  "1985-05-29T00:00:00.0Z",
+                        dateOfBirth = "1985-05-29T00:00:00.0Z",
                         sex = Sex.Male
                 )
 
@@ -206,6 +290,25 @@ class PatientVerificationSteps : AbstractSteps() {
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
                 setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
             }
+            VISION -> {
+                val patient = MockDefaults.patientVision
+
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(
+                                    visionUserSession = VisionUserSession(
+                                            Patient.aderynCanon.rosuAccountId,
+                                            Patient.aderynCanon.apiKey,
+                                            Patient.aderynCanon.odsCode),
+                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
+                                            patientNumber = listOf(PatientNumber(number = patient.nhsNumbers[0])), name= MockDefaults.getFullPatientName(patient))
+                                    ))
+                        }
+                setSessionVariable("ConnectionToken").to(patient.connectionToken)
+                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+                setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
+            }
         }
     }
 
@@ -234,6 +337,29 @@ class PatientVerificationSteps : AbstractSteps() {
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
                 setSessionVariable("NhsNumbers").to(nhsNumbers)
             }
+            VISION -> {
+                val patient = MockDefaults.patientVision
+
+                val nhsNumbers = arrayOf(PatientIdentifier(patient.nhsNumbers[0], identifierType = IdentifierType.NhsNumber), PatientIdentifier("5785445866", identifierType = IdentifierType.NhsNumber))
+
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(
+                                    visionUserSession = VisionUserSession(
+                                            Patient.aderynCanon.rosuAccountId,
+                                            Patient.aderynCanon.apiKey,
+                                            Patient.aderynCanon.odsCode),
+                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    .respondWithSuccess(configuration = Configuration(
+                                            account = Account(patient.patientId,
+                                            patientNumber = listOf(PatientNumber(number = patient.nhsNumbers[0]), PatientNumber(number = "5785445866")),
+                                            name = MockDefaults.getFullPatientName(patient)
+                                    )))
+                        }
+                setSessionVariable("ConnectionToken").to(patient.connectionToken)
+                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+                setSessionVariable("NhsNumbers").to(nhsNumbers)
+            }
         }
     }
 
@@ -258,6 +384,25 @@ class PatientVerificationSteps : AbstractSteps() {
 
                 setSessionVariable("ConnectionToken").to(patient.connectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+            }
+            VISION -> {
+                val patient = MockDefaults.patientVision
+
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(
+                                    visionUserSession = VisionUserSession(
+                                            Patient.aderynCanon.rosuAccountId,
+                                            Patient.aderynCanon.apiKey,
+                                            Patient.aderynCanon.odsCode),
+                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
+                                            patientNumber = null, name = MockDefaults.getFullPatientName(patient))
+                                    ))
+                        }
+                setSessionVariable("ConnectionToken").to(patient.connectionToken)
+                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+                setSessionVariable("NhsNumber").to("")
             }
         }
     }
@@ -304,7 +449,7 @@ class PatientVerificationSteps : AbstractSteps() {
         Assert.assertEquals(result.nhsNumbers!!.count(), 0)
     }
 
-    private fun formatNhsNumber(nhsNumber: String) : String {
+    private fun formatNhsNumber(nhsNumber: String): String {
         if (nhsNumber.isNullOrEmpty()) return ""
 
         if (nhsNumber.length != 10) return nhsNumber

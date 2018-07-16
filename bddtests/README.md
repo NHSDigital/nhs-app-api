@@ -9,6 +9,11 @@ This repo houses the BDD-style acceptance tests for the project.
 [Download the latest chromedriver](http://chromedriver.chromium.org/) for your machine and place it
   into the root of the repo (it will not be picked up by git).
 
+Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
+   - backendworker folder
+   - web folder
+   - bddtests folder
+
 Start the app
 
 ```
@@ -75,4 +80,6 @@ Common options are:
 
 Serenity properties **cannot** be passed as environment variables as Serenity only picks up
   system properties.
+
+
 

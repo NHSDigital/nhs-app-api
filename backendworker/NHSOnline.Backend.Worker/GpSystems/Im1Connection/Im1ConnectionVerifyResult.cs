@@ -48,5 +48,37 @@ namespace NHSOnline.Backend.Worker.GpSystems.Im1Connection
                 return visitor.Visit(this);
             }
         }
+
+        public class InvalidRequest : Im1ConnectionVerifyResult
+        {
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class ErrorProcessingSecurityHeader : Im1ConnectionVerifyResult
+        {
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class InvalidUserCredentials : Im1ConnectionVerifyResult
+        {
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
+        public class UnknownError : Im1ConnectionVerifyResult
+        {
+            public override T Accept<T>(IIm1ConnectionVerifyResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

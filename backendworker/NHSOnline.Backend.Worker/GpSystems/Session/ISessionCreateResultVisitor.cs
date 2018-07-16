@@ -3,7 +3,17 @@
     public interface ISessionCreateResultVisitor<out T>
     {
         T Visit(SessionCreateResult.SuccessfullyCreated successfullyCreated);
-        T Visit(SessionCreateResult.InvalidIm1ConnectionToken successfullyCreated);
-        T Visit(SessionCreateResult.SupplierSystemUnavailable successfullyCreated);
+
+        T Visit(SessionCreateResult.InvalidIm1ConnectionToken invalidIm1ConnectionToken);
+
+        T Visit(SessionCreateResult.SupplierSystemUnavailable supplierSystemUnavailable);
+
+        T Visit(SessionCreateResult.ErrorProcessingSecurityHeader errorProcessingSecurityHeader);
+
+        T Visit(SessionCreateResult.InvalidUserCredentials invalidUserCredentials);
+        
+        T Visit(SessionCreateResult.InvalidRequest invalidRequest);
+
+        T Visit(SessionCreateResult.UnknownError unknownError);
     }
 }

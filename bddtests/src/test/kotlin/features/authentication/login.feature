@@ -9,10 +9,12 @@ Feature: Login
     Then I am redirected to 'http://citizenidaddresshere'
 
     Examples:
-    | GPSS |
-    | EMIS |
-    | TPP  |
+      | GPSS   |
+      | EMIS   |
+      | TPP    |
+      | VISION |
 
+  @NHSO-125
   @smoketest
   Scenario Outline: <GPSS> User sees the home page
     Given I am logged in as a <GPSS> user
@@ -21,9 +23,10 @@ Feature: Login
     And I see the navigation menu
 
     Examples:
-    | GPSS |
-    | EMIS |
-    | TPP  |
+      | GPSS   |
+      | EMIS   |
+      | TPP    |
+      | VISION |
 
   @pending
   Scenario: User has been inactive for less than 20 minutes

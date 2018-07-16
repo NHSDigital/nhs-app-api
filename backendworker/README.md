@@ -6,15 +6,38 @@ Typically the backend worker is spun up in a Docker container from the web proje
 ### Adding TPP certificate locally
 In order to use TPP integration in your local docker environment you need to add TPP certificate manually and set its password in environment variables.
 
-The certificate and password can be found in keybase under path /team/nhsonline/gp practice details/
+The certificate and password can be found in keybase under path /team/nhsonline/gp practice details.
 
 Steps to follow:
-1. Copy TppNhsTest.pfx certificate to /nhsonline-backendworker/NHSOnline.Backend.Worker/certs
+--
+1. Copy /tpp_certificates/TppNhsTest.pfx certificate to /nhsonline-backendworker/NHSOnline.Backend.Worker/certs
 2. Copy docker-compose.override.yml (sets TPP_CERTIFICATE_PASSWORD env variable) from keybase root folder into:
-   - nhsonline-backendworker repository
-   - nhsonline-web repository
+   - backendworker folder
+   - web folder
+   - bddtests folder
 
 If you want to run backendworker from Visual Studio or Rider then TPP_CERTIFICATE_PATH and TPP_CERTIFICATE_PASSWORD needs to be set in launchSettings.json or in IDE environment variables depends on how you run it.
+
+### Adding Vision certificate locally
+In order to use Vision integration in your local docker environment, you need to add the Vision certificate manually and set its password in environment variables.
+
+The certificate and password can be found in keybase under path /team/nhsonline/gp practice details.
+
+Steps to follow:
+--
+1. Copy /vision_certs/vps_nhson001.pfx certificate to /nhsonline-backendworker/NHSOnline.Backend.Worker/certs
+2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
+   - backendworker folder
+   - web folder
+   - bddtests folder
+   
+If you want to run backendworker from Visual Studio or Rider then the following environmental variables need to be set:
+
+* VISION_APPLICATION_PROVIDER_ID: nhson001
+* VISION_CERT_PASSPHRASE: *from Keybase*
+* VISION_CERT_PATH: *path-to-backendworker*/NHSOnline.Backend/Worker/certs/vps_nhson001.pfx
+* VISION_URI: https://52.214.53.197:8443/PatientFacingServices
+* VISION_USERNAME: vps-nhson001
 
 ### Running the backend worker on its own
 There are circumstances, however, when you will want to spin up the backend worker on its
