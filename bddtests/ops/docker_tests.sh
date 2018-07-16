@@ -44,9 +44,9 @@ case $CURRENT_BRANCH in
 esac
 
 # Pin versions of docker images
-sed -i "s/WEB_TAG=latest/WEB_TAG=${APP_DOCKER_TAG}/" .env
-sed -i "s/BACKEND_TAG=latest/BACKEND_TAG=${APP_DOCKER_TAG}/" .env
-[ -z $REDIS_DATA_DOCKER_TAG ] || sed -i "s/REDIS_DATA_TAG=latest/REDIS_DATA_TAG=${REDIS_DATA_DOCKER_TAG}/" .env
+export WEB_TAG=$APP_DOCKER_TAG
+export BACKEND_TAG=$APP_DOCKER_TAG
+[ -z $REDIS_DATA_DOCKER_TAG ] || export REDIS_DATA_TAG=$REDIS_DATA_DOCKER_TAG
 
 # Pull images
 for s in $DOCKER_SERVICES; do
