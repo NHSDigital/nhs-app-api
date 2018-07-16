@@ -7,10 +7,10 @@ import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "Session")
 @XmlAccessorType(XmlAccessType.FIELD)
-data class Session {
+data class Session (
     @XmlAttribute var sessionId: String = "default sessionId",
     @XmlAttribute var type: String = "default type",
     @XmlAttribute var staffDetails: String = "default staffDetails",
     @XmlAttribute var location: String = "default location",
     @XmlElement var Slot: MutableCollection<Slot> = mutableListOf()
-}
+)
