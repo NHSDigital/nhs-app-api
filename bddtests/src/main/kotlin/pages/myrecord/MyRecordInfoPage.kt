@@ -5,6 +5,8 @@ import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
 
+const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
+
 class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val secMyDetails = 
@@ -180,7 +182,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickMyDetails() {
-        secMyDetails.element.click()
+        secMyDetails.element.click().also { waitForShrubAnimation() }
     }
 
     fun getNameLabelText(): String {
@@ -208,7 +210,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickAllergiesAndAdverseReactionsSection() {
-        allergiesAndAdverseReactionsHeader.element.click()
+        allergiesAndAdverseReactionsHeader.element.click().also { waitForShrubAnimation() }
     }
 
     fun getAllergyMessage(): String {
@@ -258,15 +260,15 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickAcuteMedications() {
-        acuteMedicationsHeading.element.click()
+        acuteMedicationsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun clickCurrentRepeatMedications() {
-        currentRepeatMedicationsHeading.element.click()
+        currentRepeatMedicationsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun clickDiscontinuedRepeatMedications() {
-        discontinuedRepeatMedicationsHeading.element.click()
+        discontinuedRepeatMedicationsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun getAcuteMedicationsHeaderText(): String {
@@ -290,7 +292,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickTestResultsSection() {
-        testResultsHeader.element.click()
+        testResultsHeader.element.click().also { waitForShrubAnimation() }
     }
 
     fun getImmunistionsHeaderText(): String {
@@ -302,7 +304,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickImmunisations() {
-        immunisationsHeading.element.click()
+        immunisationsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun getImmunisationsMessage(): String {
@@ -334,7 +336,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickProblems() {
-        problemsHeading.element.click()
+        problemsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun getProblemsMessage(): String {
@@ -350,7 +352,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickConsultations() {
-        consultationsHeading.element.click()
+        consultationsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun getConsultationsMessage(): String {
@@ -366,7 +368,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickEvents() {
-        eventsHeading.element.click()
+        eventsHeading.element.click().also { waitForShrubAnimation() }
     }
 
     fun getEventsMessage(): String {
@@ -375,5 +377,9 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun getSummaryCareNoAccessMessage(): String {
         return noSummaryCareAccessMessage.element.text
+    }
+
+    private fun waitForShrubAnimation() {
+        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 }

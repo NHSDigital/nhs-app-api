@@ -16,6 +16,7 @@ import pages.navigation.Header
 import java.lang.AssertionError
 import java.time.Duration
 
+const val DEFAULT_SPINNER_WAIT: Long = 5
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
@@ -25,14 +26,26 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
             page = this
     )
 
-    fun HybridPageElement.waitForSpinner(): HybridPageElement {
+    fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
+        spinner.shouldNotBeVisible(seconds)
+    }
+
+    fun HybridPageElement.waitForSpinner(seconds: Long = DEFAULT_SPINNER_WAIT): HybridPageElement {
+        spinner.shouldNotBeVisible(seconds)
+        return this
+    }
+
+    fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT): HybridPageElement {
         try {
-            if (spinner.element.isCurrentlyVisible) {
-                FluentWait<HybridPageElement>(spinner)
-                        .withTimeout(Duration.ofSeconds(5))
+            if (this.element.isCurrentlyVisible) {
+                FluentWait<HybridPageElement>(this)
+                        .withTimeout(Duration.ofSeconds(seconds))
                         .pollingEvery(Duration.ofMillis(100))
                         .ignoring(AssertionError::class.java)
-                        .until{ it.element.expect("Spinner was visible for more than 5 seconds.").shouldNotBeVisible() }
+                        .until{
+                            it.element.expect("$this was visible for more than $seconds seconds.").shouldNotBeVisible()
+                            false
+                        }
             }
         } catch (e: NoSuchElementException) {
             // element no longer there - continue
@@ -181,10 +194,10 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
     }
 
-    fun getErrorText(): String? {
+    fun getErrorDetailText(): String? {
         return try {
             switchToPage(ErrorPage::class.java)
-                    .detail.element.text
+                    .detailTwo.element.text
         } catch(e: NoSuchElementException) {
             null
         }

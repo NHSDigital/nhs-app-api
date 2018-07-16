@@ -13,20 +13,16 @@ import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.patient
-import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsData
-import mocking.emis.models.MedicationCourse
 import mocking.emis.models.PrescriptionRequestsGetResponse
-import mocking.emis.models.PrescriptionType
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.ListRepeatMedicationReply
 import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.apache.http.HttpStatus
-import org.joda.time.DateTime
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import pages.ErrorPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
@@ -35,7 +31,6 @@ import worker.models.prescriptions.PrescriptionsListResponse
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
-import pages.prescription.RepeatPrescriptionsPage;
 
 const val EMIS = "EMIS"
 const val TPP = "TPP"
@@ -68,6 +63,7 @@ open class PrescriptionsStepDefinitions {
 
     lateinit var prescriptionsPage: PrescriptionsPage
     lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
+    lateinit var errorPage: ErrorPage
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -327,12 +323,8 @@ open class PrescriptionsStepDefinitions {
 
     @Then("I see a message informing me that I don't currently have access to this service")
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
-        val em = prescriptions.prescriptions.getErrorText()
-
-        val errorTitle = "Sorry, you don't currently have access to this service"
-        val errorContent = "Contact your GP surgery for more information."
-
-        assertEquals("$errorTitle\n$errorContent", em)
+        Assert.assertEquals("Sorry, you don't currently have access to this service", errorPage.subHeading.element.text)
+        Assert.assertEquals("Contact your GP surgery for more information.", errorPage.detailTwo.element.text)
     }
 
     @But("The prescriptions endpoint is timing out")
