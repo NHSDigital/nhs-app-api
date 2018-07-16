@@ -36,6 +36,12 @@ export default {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.header.headerText} screen`,
+      script: [
+        {
+          src: process.env.ANALYTICS_SCRIPT_URL,
+          async: true,
+        },
+      ],
     };
   },
   computed: {

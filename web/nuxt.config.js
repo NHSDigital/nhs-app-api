@@ -33,16 +33,18 @@ module.exports = {
       process.env.DATA_SHARING_URL || 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
     PORT: process.env.PORT || '3000',
     SYMPTOM_CHECKER_URL:
-      process.env.SYMPTOM_CHECKER_URL ||
-      'https://111-int2.staging.111.service.nhs.uk​',
+      process.env.SYMPTOM_CHECKER_URL
+      || 'https://111-int2.staging.111.service.nhs.uk​',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online-poc',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',
     CID_AUTH_ENDPOINT:
-      process.env.CID_AUTH_ENDPOINT ||
-      'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/auth',
+      process.env.CID_AUTH_ENDPOINT
+      || 'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/auth',
     CID_REGISTER_ENDPOINT:
-      process.env.CID_REGISTER_ENDPOINT ||
-      'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/registrations',
+      process.env.CID_REGISTER_ENDPOINT
+      || 'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/registrations',
+    ANALYTICS_SCRIPT_URL:
+      process.env.ANALYTICS_SCRIPT_URL || '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
   },
 };

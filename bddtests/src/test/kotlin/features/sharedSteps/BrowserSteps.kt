@@ -5,9 +5,11 @@ import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
+import org.openqa.selenium.support.ui.WebDriverWait
 import pages.LoginPage
 import java.net.MalformedURLException
 import java.net.URL
+import java.time.Duration
 import java.util.*
 
 open class BrowserSteps {
@@ -33,7 +35,11 @@ open class BrowserSteps {
 
     @Step
     open fun shouldHaveUrl(url: String) {
-        Assert.assertEquals(url, loginPage.driver.currentUrl)
+        WebDriverWait(loginPage.driver, 1000)
+                .pollingEvery(Duration.ofMillis(100))
+                .until {
+                    it.currentUrl == url
+                }
     }
 
     private fun fetchCookieContents(cookieName: String): String {
