@@ -1,10 +1,10 @@
 version: "3.2"
 services:
-  nhsonline.web:
+  web.nhsonline.local:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
     env_file:
       - vars_ci.env
-  nhsonline.backend.worker:
+  worker.nhsonline.local:
     image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
     depends_on:
       - nhsonline.redis.sds

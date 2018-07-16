@@ -19,5 +19,7 @@ spec:
           value: "https://www-preview.nonliveeuw.bitraft.io/auth-return"
         - name: API_HOST
           value: "https://api-preview.nonliveeuw.bitraft.io"
+        - name: API_HOST_SERVER
+          value: "http://nhsonline.backend.worker:8082"
       imagePullSecrets:
        - name: azure-registry

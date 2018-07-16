@@ -6,6 +6,7 @@ export default ({ app, store, res }) => {
     domain: process.server ? process.env.API_HOST_SERVER : process.env.API_HOST,
     store,
     res,
+    app,
   });
 
   if(process.server) {

@@ -7,6 +7,7 @@ import {
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SET_CSRF_TOKEN,
+  SAVE_COOKIE,
 } from './mutation-types';
 
 export default {
@@ -22,6 +23,8 @@ export default {
     ({ commit }, lastCalledAt) => commit(SET_LAST_CALLED_AT, lastCalledAt || new Date()),
   setCsrfToken:
     ({ commit }, token) => commit(SET_CSRF_TOKEN, token),
+  saveCookie:
+    ({ commit }, cookie) => commit(SAVE_COOKIE, cookie),
   startValidationChecking: ({
     commit, dispatch, state, rootState,
   }) => {

@@ -32,6 +32,11 @@ export default {
     this.dispatch('session/setCsrfToken', '');
     this.dispatch('auth/logout');
   },
+
+  logoutNoJs() {
+    this.app.$cookies.removeAll();
+  },
+
   logout({ commit }) {
     this.dispatch('session/clear');
     this.dispatch('session/setCsrfToken', '');
@@ -50,8 +55,10 @@ export default {
       this.dispatch('prescriptions/init');
       this.dispatch('repeatPrescriptionCourses/init');
       this.dispatch('errors/clearAllApiErrors');
-      this.dispatch('flashMessage/init');
-      this.app.router.push('/login');
+
+      if (process.client) {
+        this.app.router.push('/login');
+      }
     };
 
     return this.app.$http.deleteV1Session().then(final).catch(final);

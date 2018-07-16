@@ -58,6 +58,11 @@ namespace NHSOnline.Backend.Worker
                     options.Cookie.Name = Constants.Cookies.SessionId;
                     options.Cookie.HttpOnly = true;
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
+                    
+                    if (!string.IsNullOrEmpty(configurationSettings.CookieDomain))
+                    {
+                        options.Cookie.Domain = configurationSettings.CookieDomain;
+                    }
 
                     if (_env.IsDevelopment())
                     {

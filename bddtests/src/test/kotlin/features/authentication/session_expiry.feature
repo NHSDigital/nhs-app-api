@@ -9,7 +9,6 @@ Feature: Session Expiry
     And I am on the home page
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification
-    And the user login details are cleared from cookies
 
   @manual
   @NHSO-1704

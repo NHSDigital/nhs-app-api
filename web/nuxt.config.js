@@ -9,11 +9,13 @@ module.exports = {
   modules: [
     // Simple usage
     'cookie-universal-nuxt',
+    '@nuxtjs/axios',
   ],
   plugins: [
     { src: '~/plugins/persistedState.js' },
     '~/plugins/i18n.js',
     '~/plugins/api.js',
+    '~/plugins/cookie.js',
     '~/plugins/filters.js',
     '~/plugins/mixins.js',
     '~/plugins/analytics.js',
