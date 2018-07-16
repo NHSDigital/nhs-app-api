@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run swagger && nuxt",
+    "dev1": "nuxt",
     "build": "npm run swagger && nuxt build",
     "start": "nuxt start",
     "swagger": "node build/swagger.js --contract_path contracts/index.yaml --output_path src/services/nhsonlineapi.js",
@@ -41,6 +42,7 @@
     }
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.3.1",
     "@types/jest": "^22.2.3",
     "@vue/test-utils": "^1.0.0-beta.16",
     "ajv": "^6.5.0",

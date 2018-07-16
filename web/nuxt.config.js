@@ -9,6 +9,7 @@ module.exports = {
   modules: [
     // Simple usage
     'cookie-universal-nuxt',
+    '@nuxtjs/axios',
   ],
   plugins: [
     { src: '~/plugins/persistedState.js' },

@@ -8,6 +8,7 @@ export default {
      * as more work needs to be done before logging in
      * for now we will just edit the state object.
      */
+    debugger;
     return this.app.$http
       .postV1Session({
         userSession: {
@@ -33,26 +34,32 @@ export default {
     this.dispatch('auth/logout');
   },
   logout({ commit }) {
+    debugger;
     this.dispatch('session/clear');
     this.dispatch('session/setCsrfToken', '');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
+    debugger;
 
     const final = () => {
       commit(LOGOUT, true);
-      this.dispatch('availableAppointments/init');
-      this.dispatch('myAppointments/init');
-      this.dispatch('auth/init');
-      this.dispatch('device/init');
-      this.dispatch('header/init');
-      this.dispatch('http/init');
-      this.dispatch('navigation/init');
-      this.dispatch('prescriptions/init');
-      this.dispatch('repeatPrescriptionCourses/init');
-      this.dispatch('errors/clearAllApiErrors');
-      this.dispatch('flashMessage/init');
+      if (process.client) {
+        this.dispatch('appointmentSlots/init');
+        this.dispatch('myAppointments/init');
+        this.dispatch('auth/init');
+        this.dispatch('device/init');
+        this.dispatch('header/init');
+        this.dispatch('http/init');
+        this.dispatch('navigation/init');
+        this.dispatch('prescriptions/init');
+        this.dispatch('repeatPrescriptionCourses/init');
+        this.dispatch('errors/clearAllApiErrors');
+      }
       this.app.router.push('/login');
+
     };
+
+    debugger;
 
     return this.app.$http.deleteV1Session().then(final).catch(final);
   },

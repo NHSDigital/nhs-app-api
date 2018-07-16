@@ -7,12 +7,15 @@ import {
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
   SET_CSRF_TOKEN,
+  SAVE_COOKIE,
 } from './mutation-types';
 
 export default {
   [CLEAR](state) {
+    debugger;
     state.lastCalledAt = undefined;
     state.durationSeconds = undefined;
+    state.cookie = undefined;
   },
   [END_VALIDATION_CHECKING](state) {
     state.validationInterval = undefined;
@@ -35,4 +38,7 @@ export default {
   [SET_CSRF_TOKEN](state, token) {
     state.token = token;
   },
+  [SAVE_COOKIE](state, cookie) {
+    state.cookie = cookie;
+  }
 };
