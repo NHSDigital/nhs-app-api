@@ -5,7 +5,6 @@ import net.thucydides.core.annotations.Step
 import org.hamcrest.Matcher
 import org.junit.Assert
 import org.junit.Assert.*
-import pages.ErrorPage
 import pages.appointments.AppointmentsBookingPage
 import pages.navigation.Header
 
@@ -16,7 +15,6 @@ open class AppointmentsBookingSteps {
 
     lateinit var appointmentsBooking: AppointmentsBookingPage
     lateinit var header: Header
-    lateinit var error: ErrorPage
 
     @Step
     fun slots(matches: Matcher<ArrayList<Slot>>) {
@@ -51,11 +49,19 @@ open class AppointmentsBookingSteps {
     }
 
     @Step
-    fun checkTimeoutErrorMessage() {
-        error.waitForSpinnerToDisappear(15)
-        assertEquals("Sorry, there's been a problem loading this page", error.subHeading.element.text)
-        assertEquals("Please try again", error.detailOne.element.text)
-        assertEquals("If the problem persists and you need to book an appointment now, contact your GP surgery directly.", error.detailTwo.element.text)
+    fun checkTimeoutErrorMessage(presence: Boolean = true) {
+        val expectedHeader = "Sorry, there's been a problem loading this page"
+        val expectedBody = "Please try again\n" +
+                "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+
+        val message: String? = appointmentsBooking.getErrorText()
+
+        if (presence && message != null) {
+            assertEquals("$expectedHeader\n$expectedBody", message)
+        } else {
+            assertNull(message)
+        }
+
     }
 
     @Step
@@ -77,9 +83,11 @@ open class AppointmentsBookingSteps {
 
     @Step
     fun checkUnavailableErrorMessage() {
-        error.waitForSpinnerToDisappear()
-        assertEquals("Sorry, there's been a problem loading this page", error.subHeading.element.text)
-        assertEquals("Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.", error.detailTwo.element.text)
+        val message = appointmentsBooking.getErrorText()
+        val expectedHeader = "Sorry, there's been a problem loading this page"
+        val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        assertNotNull("No error message displayed, expecting $expectedHeader\n$expectedBody", message)
+        assertTrue("Actual text: $message. Expected text: $expectedHeader\n$expectedBody", message!!.contains("$expectedHeader\n$expectedBody"))
     }
 
     @Step

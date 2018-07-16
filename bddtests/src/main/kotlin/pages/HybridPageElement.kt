@@ -3,6 +3,8 @@ package pages
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.UnsupportedDriverException
 import org.openqa.selenium.JavascriptExecutor
+import org.openqa.selenium.support.ui.WebDriverWait
+import java.time.Duration
 
 private const val LOCATOR_STRATEGY_ANDROID = "ANDROID"
 private const val LOCATOR_STRATEGY_WEBVIEW = "WEBVIEW"
@@ -20,10 +22,8 @@ class HybridPageElement (
             LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!)
             LOCATOR_STRATEGY_WEBVIEW,
             LOCATOR_STRATEGY_BROWSER -> page.findByXpath(browserLocator).also {
-                if (!it.isVisible) {
                     val jsExecutor = page.driver as JavascriptExecutor
                     jsExecutor.executeScript("arguments[0].scrollIntoView(true);", it)
-                }
             }
             else -> throw IllegalArgumentException("Unknown element locator strategy.")
         }
@@ -62,14 +62,5 @@ class HybridPageElement (
         this.androidLocator = this.androidLocator?.plus("[@text='$text']")
 
         return this
-    }
-
-    override fun toString(): String {
-        return StringBuilder(HybridPageElement::class.simpleName)
-                .append(" { ")
-                .append("browserLocator: $browserLocator, ")
-                .append("androidLocator: $androidLocator ")
-                .append("}")
-                .toString()
     }
 }

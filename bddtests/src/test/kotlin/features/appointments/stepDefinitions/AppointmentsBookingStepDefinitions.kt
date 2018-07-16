@@ -20,7 +20,6 @@ import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.*
 import org.junit.Assert.*
-import pages.ErrorPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -44,8 +43,6 @@ class AppointmentsBookingStepDefinitions {
     lateinit var appointmentsBooking: AppointmentsBookingSteps
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
-
-    lateinit var error: ErrorPage
 
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
@@ -322,8 +319,9 @@ class AppointmentsBookingStepDefinitions {
     }
 
     @Then("^I don't see a time-out error$")
+    @Throws(Exception::class)
     fun iDoNotSeeATimeOutError() {
-        error.shouldNotBeVisible()
+        appointmentsBooking.checkTimeoutErrorMessage(false)
     }
 
     @Then("^there should be a button to try again$")
