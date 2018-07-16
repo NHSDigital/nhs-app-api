@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection;
@@ -75,7 +76,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public ILinkageService GetLinkageService()
         {
-            return _serviceProvider.GetService<EmisLinkageService>();
+            bool
+                .TryParse(
+                    Environment.GetEnvironmentVariable("EMIS_LINKAGE_USE_STUBBED_DATA"), 
+                    out var useStubbedData);
+            
+            if (useStubbedData)
+            {
+                return _serviceProvider.GetService<CidLinkageService>();
+            }
+            else
+            {
+                return _serviceProvider.GetService<EmisLinkageService>();                                
+            }
         }
     }
 }
