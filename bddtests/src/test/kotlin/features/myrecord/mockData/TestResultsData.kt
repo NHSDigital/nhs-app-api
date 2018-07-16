@@ -6,23 +6,18 @@ import mocking.tpp.models.TestResultsViewReplyItem
 
 object TestResultsData {
 
-    fun getMultipleTestResultsData(): TestResultResponseModel {
+    fun getTestResultsForEmis(count: Int): TestResultResponseModel {
 
         val testResults = mutableListOf<TestResultResponse>()
 
-        testResults.add(TestResultResponse(value = TestResultValue(
-                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
-                term = "Neutrophil count", textValue = "5.58",
-                numericUnits = "x10^9/L",
-                range = TestResultRange(minimumText = "1.7", maximumText = "6")),
-                childValues = mutableListOf()))
-
-        testResults.add(TestResultResponse(value = TestResultValue(
-                effectiveDate = EffectiveDate("Unknown", "2014-03-15T11:12:55.632"),
-                term = "Basophil count", textValue = "0",
-                numericUnits = "x10^9/L",
-                range = TestResultRange(minimumText = "0.02", maximumText = "0.1")),
-                childValues = mutableListOf()))
+        for(testResultCount: Int in 1..count) {
+            testResults.add(TestResultResponse(value = TestResultValue(
+                    effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                    term = "Neutrophil count $testResultCount", textValue = "5.58",
+                    numericUnits = "x10^9/L",
+                    range = TestResultRange(minimumText = "1.7", maximumText = "6")),
+                    childValues = mutableListOf()))
+        }
 
         return TestResultResponseModel(
                 medicalRecord = TestResultMedicalRecord(
@@ -176,15 +171,14 @@ object TestResultsData {
                 ))
     }
 
-    fun getMultipleTppTestResultsData(): TestResultsViewReply {
+    fun getMultipleTestResultsForTpp(count: Int): TestResultsViewReply {
 
         val testResults = mutableListOf<TestResultsViewReplyItem>()
 
-        testResults.add(TestResultsViewReplyItem(value = "Anticoag Control (Warfarin), Read", description = "Pathology",
-                date = "2001-06-28T00:00:00.0Z"))
-
-        testResults.add(TestResultsViewReplyItem(value = "Mic Cult Sens (Urine), Read", description = "Pathology",
-                date = "2001-07-13T00:00:00.0Z"))
+        for (testCount: Int in 1..count) {
+            testResults.add(TestResultsViewReplyItem(value = "Anticoag Control (Warfarin), Read $testCount", description = "Pathology $testCount",
+                    date = "2001-06-28T00:00:00.0Z"))
+        }
 
         return TestResultsViewReply(items = testResults)
     }

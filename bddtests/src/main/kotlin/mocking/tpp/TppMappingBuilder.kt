@@ -24,5 +24,5 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
     fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
     fun listRepeatMedication(patient: Patient) = TppPrescriptionsBuilder(patient)
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
-    fun testResultsViewRequest(tppUserSession: TppUserSession) = TppTestResultsViewBuilder(tppUserSession)
+    fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
 }

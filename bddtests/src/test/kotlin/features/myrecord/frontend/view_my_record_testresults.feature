@@ -9,22 +9,24 @@ Feature: View My Medical Record Information - Test Results
     And I see the test result section collapsed
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @smoketest
   @NHSO-686
   Scenario Outline: A user can view test result information
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
-    And the GP Practice has multiple test results for <Service>
+    And the GP Practice has six test results for <Service>
     And I am on my record information page
     When I click the test result section
     Then I see test result information
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @NHSO-686
   Scenario Outline: A user has no access to test result section
@@ -36,8 +38,9 @@ Feature: View My Medical Record Information - Test Results
     Then I see a message indicating that I have no access to view test result
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @NHSO-686
   Scenario Outline: A user has no test results
@@ -49,8 +52,9 @@ Feature: View My Medical Record Information - Test Results
     Then I see a message indicating that I have no information recorded for this section
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @NHSO-686
   Scenario Outline: An error occurs when trying to retrieve test result data from EMIS
@@ -62,8 +66,9 @@ Feature: View My Medical Record Information - Test Results
     Then I see an error occured message
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @NHSO-686
   Scenario Outline: An EMIS user has one test result with one value
@@ -75,8 +80,8 @@ Feature: View My Medical Record Information - Test Results
     Then I see one test result with one value
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
 
   @NHSO-686
   Scenario Outline: An EMIS user has one test result with one value and a range
@@ -88,8 +93,8 @@ Feature: View My Medical Record Information - Test Results
     Then I see one test result with one value and a range
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
 
   @NHSO-686
   Scenario Outline: An EMIS user has one test result with multiple child values
@@ -101,8 +106,8 @@ Feature: View My Medical Record Information - Test Results
     Then I see one test result with multiple child values
 
     Examples:
-      |Service|
-      |EMIS|
+      | Service |
+      | EMIS    |
 
   @NHSO-686
   Scenario Outline: An EMIS user has test results with multiple child values which have ranges
@@ -114,5 +119,17 @@ Feature: View My Medical Record Information - Test Results
     Then I see test results with multiple child values some of which have ranges
 
     Examples:
-    |Service|
-    |EMIS|
+      | Service |
+      | EMIS    |
+
+  Scenario Outline: A user has multiple test results
+    Given the my record wiremocks are initialised for <Service>
+    And the GP Practice has enabled demographics functionality for <Service>
+    And the GP Practice has six test results for <Service>
+    And I am on my record information page
+    When I click the test result section
+    Then I see <Count> test results
+
+    Examples:
+      | Service | Count |
+      | TPP     | 6     |

@@ -13,7 +13,7 @@ import java.time.OffsetDateTime
 import javax.xml.bind.Marshaller
 
 
-class TppTestResultsViewBuilder(tppUserSession: TppUserSession) : TppMappingBuilder("POST", "/tpp/") {
+class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) : TppMappingBuilder("POST", "/tpp/") {
     init {
         val contentTypeHeader = "content-type"
         val contentTypeValue = "text/xml; charset=UTF-8"
@@ -28,7 +28,9 @@ class TppTestResultsViewBuilder(tppUserSession: TppUserSession) : TppMappingBuil
                         "@apiVersion='${apiVersion}' and " +
                         "@patientId='${tppUserSession.patientId}' and " +
                         "@onlineUserId='${tppUserSession.onlineUserId}' and " +
-                        "@unitId='${tppUserSession.unitId}']")
+                        "@unitId='${tppUserSession.unitId}' and " +
+                        "starts-with(@startDate, '${getDateFormattedString(startDate)}') and " +
+                        "starts-with(@endDate, '${getDateFormattedString(endDate)}')]")
     }
 
     fun respondWithSuccess(testResultsViewReply: TestResultsViewReply): Mapping {
@@ -89,5 +91,13 @@ class TppTestResultsViewBuilder(tppUserSession: TppUserSession) : TppMappingBuil
         return respondWith(statusCode) {
             andJsonBody(body, GsonFactory.asPascal)
         }
+    }
+
+    private fun getDateFormattedString(dateTime: OffsetDateTime): String{
+        return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
+    }
+
+    private fun formatDateToTwoDigits(daysOrMonths: Int): String{
+        return String.format("%02d", daysOrMonths)
     }
 }

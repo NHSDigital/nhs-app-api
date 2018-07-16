@@ -7,15 +7,15 @@ Feature: Get Test Results Data
   Scenario Outline: Requesting multiple test results returns multiple test results data for <Service>
     Given the my record wiremocks are initialised for <Service>
     And I have logged in and have a valid session cookie for <Service>
-    And the GP Practice has multiple test results for <Service>
+    And the GP Practice has six test results for <Service>
     When I get the users test results
-    Then I receive <Count> test results as part of the my record object
+    Then I receive 6 test results as part of the my record object
     And the field indicating supplier is set to <Service>
 
     Examples:
-      | Service | Count |
-      | EMIS    | 2     |
-      | TPP     | 6     |
+      | Service |
+      | EMIS    |
+      | TPP     |
 
   @backend
   Scenario Outline: Requesting single test result with child values with no ranges for EMIS

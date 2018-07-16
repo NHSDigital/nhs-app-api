@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public class TppPatientRecordService : IPatientRecordService
     {
-        private const string TestResultDateFormat = "yyyy-MM-ddTHH:mm:ssz'Z'";
+        private const string TestResultDateFormat = "yyyy-MM-ddTHH:mm:ss.f'Z'";
         private readonly ILogger _logger;
         private readonly ITppClient _tppClient;
         private readonly ITppMyRecordMapper _tppMyRecordMapper;

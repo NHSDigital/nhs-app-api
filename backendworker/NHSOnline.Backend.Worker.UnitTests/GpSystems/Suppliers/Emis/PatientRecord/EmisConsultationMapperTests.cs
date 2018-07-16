@@ -190,7 +190,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                     Observations  = new List<Observation> { 
                                     new Observation { 
                                         Term = "test observation term 1", 
-                                        AssociatedText = new List<AssociatedText> { new AssociatedText { Text = "Tired generally. Needs to have bloods etc\n\t" }}                                      
+                                        AssociatedText = new List<AssociatedText> { new AssociatedText { Text = "Tired generally\nNeeds to have\t bloods etc" }}                                      
                                         }  
                                     },
                                 },
@@ -206,7 +206,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
 
             // Assert
             result.Should().NotBeNull();
-            result.Data.ToList()[0].ConsultationHeaders[0].Observations[0].AssociatedTexts[0].Should().Be("Tired generally. Needs to have bloods etc");
+            result.Data.ToList()[0].ConsultationHeaders[0].Observations[0].AssociatedTexts[0].Should().Be("Tired generally; Needs to have bloods etc");
         }
     }
 }

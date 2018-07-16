@@ -41,7 +41,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                             {
                                 Term = obs.Term,
                                 AssociatedTexts = obs.AssociatedText != null ? (from associatedText in obs.AssociatedText
-                                    select new Regex("[\n\t]").Replace(associatedText.Text, string.Empty)).ToList().ToList() : new List<string>()
+                                    select associatedText.Text.Replace("\n", "; ").Replace("\t", string.Empty)).ToList() : new List<string>()
                             }).ToList() : new List<ObservationItem>()
                     }).ToList() : new List<ConsultationHeaderItem>()
             };

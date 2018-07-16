@@ -15,18 +15,36 @@ import java.time.format.DateTimeFormatter
 
 open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
-    @Given("^the GP Practice has multiple test results for (.*)$")
-    fun givenTheGpPracticeHasMultipleTestResultsFor(getService:String) {
+    @Given("^the GP Practice has six test results for (.*)$")
+    fun givenTheGpPracticeHasSixTestResultsFor(getService:String) {
         setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getMultipleTestResultsData())
+                    testResultsRequest(this@MyRecordTestResultsStepDefinitions.patient).respondWithSuccess(TestResultsData.getTestResultsForEmis(6))
                 }
             }
             "TPP" -> {
+                val today = OffsetDateTime.now()
+                var startDate = today.minusDays(180)
+                var endDate = startDate.plusDays(60)
+
                 mockingClient.forTpp {
-                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(TestResultsData.getMultipleTppTestResultsData())
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(1))
+                }
+
+                startDate = endDate
+                endDate = startDate.plusDays(60)
+
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(2))
+                }
+
+                startDate = endDate
+                endDate = today
+
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate ).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(3))
                 }
             }
         }
@@ -96,7 +114,15 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
+                val startDate = OffsetDateTime.now().minusDays(180)
+                val endDate = startDate.plusDays(60)
 
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
+                            .respondWithError(Error("6", "You don&apos;t have access to this online service. You can request access to " +
+                                    "this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
             }
         }
     }
@@ -111,7 +137,27 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
+                val today = OffsetDateTime.now()
+                var startDate = today.minusDays(180)
+                var endDate = startDate.plusDays(60)
 
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                }
+
+                startDate = endDate
+                endDate = startDate.plusDays(60)
+
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                }
+
+                startDate = endDate
+                endDate = today
+
+                mockingClient.forTpp {
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                }
             }
         }
     }
@@ -126,8 +172,11 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
+                val startDate = OffsetDateTime.now().minusDays(180)
+                val endDate = startDate.plusDays(60)
+
                 mockingClient.forTpp {
-                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!).respondWithServiceNotAvailableException()
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithServiceNotAvailableException()
                 }
             }
         }
@@ -143,9 +192,11 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
+                val startDate = OffsetDateTime.now().minusDays(180)
+                val endDate = startDate.plusDays(60)
+
                 mockingClient.forTpp {
-                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!)
-                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!)
+                    testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
                             .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }

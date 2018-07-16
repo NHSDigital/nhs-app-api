@@ -12,27 +12,3 @@ data class MyRecordResponseData(
         var tppDcrEvents: TppDcrEvents,
         var consultations: Consultations
 )
-
-data class Medications(
-    val hasAccess: Boolean,
-    val hasErrored: Boolean,
-    val data: MedicationsData
-)
-
-data class MedicationsData(
-        val acuteMedications: MutableList<MedicationItem>,
-        val currentRepeatMedications: MutableList<MedicationItem>,
-        val discontinuedRepeatMedications: MutableList<MedicationItem>
-)
-
-data class MedicationItem(
-       val date: String,
-       val lineItems: MutableList<MedicationLineItem>
-)
-
-data class MedicationLineItem(
-       val text: String,
-       val lineItems: MutableList<String>
-)
-
-

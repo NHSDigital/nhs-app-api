@@ -81,8 +81,11 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
                     patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
                 }
 
+                var startDate = OffsetDateTime.now()
+                var endDate = startDate.minusDays(60)
+
                 mockingClient.forTpp {
-                    testResultsViewRequest(patient.tppUserSession!!).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                    testResultsViewRequest(patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
             }
         }
@@ -652,5 +655,10 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     fun thenTheFlagIndicatingSupplierIsSetTo(supplier: String) {
         var result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(supplier, result.response.supplier)
+    }
+
+    @Then("^I see (.*) test results$")
+    fun thenISeeMultipleTestResults(count: Int) {
+        Assert.assertEquals(count, recordSteps.getTestResultCount())
     }
 }
