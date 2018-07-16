@@ -1,0 +1,514 @@
+{
+	"info": {
+		"_postman_id": "408b50ef-8b3f-4da2-86b1-a6cbf0510a55",
+		"name": "TPP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "(2) - Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// Extract the session id from the header and store it",
+							"pm.environment.set(\"Suid\", postman.getResponseHeader(\"suid\"));",
+							"",
+							"// Extract the patient id from the return body and store it",
+							"var jsonObject = xml2Json(responseBody);",
+							"pm.environment.set(\"PatientId\", jsonObject['AuthenticateReply']['$']['patientId']);",
+							"pm.environment.set(\"OnlineUserId\", jsonObject['AuthenticateReply']['$']['onlineUserId']);"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "Authenticate"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Authenticate apiVersion=\"{{ApiVersion}}\" accountId=\"{{AccountId}}\" passphrase=\"{{UserApiPassphrase}}\" unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\">\n\t<Application name=\"NhsApp\" version=\"1.0\" providerId=\"{{ProviderId}}\" deviceType=\"NhsApp\"></Application>\n</Authenticate>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(3) - PatientSelected",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "PatientSelected"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<PatientSelected apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\"  onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\"></PatientSelected>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(4) - ListSlots",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var moment = require('moment')",
+							"pm.globals.set(\"CurrentTimestamp\", moment().format(\"YYYY-MM-DDTHH:MM:SS.0Z\"))"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "ListSlots"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<ListSlots apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\"  onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" startDate=\"{{CurrentTimestamp}}\" numberOfDays=\"14\"></ListSlots>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(5) - BookAppointment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "BookAppointment"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<BookAppointment apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\"  onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" sessionId=\"957ac20000000000\" startDate=\"2018-06-07T13:00:00.0Z\" endDate=\"2018-06-07T13:10:00.0Z\" notes=\"Persistant cough\"></BookAppointment>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(6) - ViewAppointments",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "ViewAppointments"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<ViewAppointments apiVersion=\"1\" unitId=\"{{UnitId}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\" futureAppointments=\"Y\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(7) - CancelAppointments",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "CancelAppointment"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<CancelAppointment apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" apptId=\"efa2fc1000000000\"></CancelAppointment>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(8) - ListRepeatMedication",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "ListRepeatMedication"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<ListRepeatMedication apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\"></ListRepeatMedication>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(9) - RequestMedication",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "RequestMedication"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<RequestMedication apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" notes=\"I'll get them later?\">\n  <Medication drugId=\"e716200000000000\" type=\"Repeat\" notes=\"Stomach pain is getting worse\"/>\n</RequestMedication>\n"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(10) - GetPrescriptionRequests",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "GetPrescriptionRequests"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<GetPrescriptionRequests apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\"/>\n"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(11) - ViewPatientOverview",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "ViewPatientOverview"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<ViewPatientOverview apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\"/>\n"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - RequestPatientRecord",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "RequestPatientRecord"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<RequestPatientRecord apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(13) - TestResultsView",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "TestResultsView"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<TestResultsView apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" startDate=\"2018-05-13T00:00:00.0Z\" endDate=\"2018-06-13T00:00:00.0Z\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(14) - TestResultsView (Detailed)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "TestResultsView"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<TestResultsView apiVersion=\"{{ApiVersion}}\" patientId=\"{{PatientId}}\" onlineUserId=\"{{OnlineUserId}}\"  unitId=\"{{UnitId}}\" uuid=\"{{$guid}}\" startDate=\"2010-11-20T00:00:00.0Z\" endDate=\"2014-11-30T00:00:00.0Z\" testResultId=\"c435000000000000\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(15) - Logoff",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "Logoff"
+					},
+					{
+						"key": "suid",
+						"value": "{{Suid}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Logoff apiVersion=\"{{ApiVersion}}\" uuid=\"{{$guid}}\"/>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(1) - LinkAccount (will overwrite the user details)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// Extract the passphrase id from the return body and store it",
+							"var jsonObject = xml2Json(responseBody);",
+							"pm.environment.set(\"UserApiPassphrase\", jsonObject['LinkAccountReply']['$']['passphrase']);"
+						]
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml"
+					},
+					{
+						"key": "type",
+						"value": "LinkAccount"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<LinkAccount apiVersion=\"{{ApiVersion}}\" accountId=\"{{AccountId}}\" passphrase=\"{{LinkagePassphrase}}\" lastName=\"Barry\" dateOfBirth=\"1985-05-29T00:00:00.0Z\" organisationCode=\"{{UnitId}}\" uuid=\"{{$guid}}\">\n    <Application name=\"NHS App\" version=\"1.0\" providerId=\"{{ProviderId}}\" deviceType=\"NhsApp\"></Application>\n</LinkAccount>"
+				},
+				"url": {
+					"raw": "{{TppApiUrl}}",
+					"host": [
+						"{{TppApiUrl}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

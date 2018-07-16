@@ -1,0 +1,1553 @@
+{
+	"info": {
+		"name": "EMIS",
+		"_postman_id": "e374176a-463b-e4a5-8c38-7299e0768c32",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "(1) - MeApplications",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.environment.set(\"EndUserSessionId\", pm.response.json().EndUserSessionId);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"Surname\": \"Cook\",\n  \"DateOfBirth\": \"1935-02-23T00:00:00.000Z\",\n  \"LinkageDetails\": {\n    \"AccountId\": \"1236029928\",\n    \"LinkageKey\": \"AKBAPESEUATu1\",\n    \"NationalPracticeCode\": \"A29928\"\n   }\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/me/applications",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"me",
+						"applications"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(2) - UserSession",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.environment.set(\"SessionId\", pm.response.json().SessionId);",
+							"pm.environment.set(\"UserPatientLinkToken\", pm.response.json().UserPatientLinks[0].UserPatientLinkToken);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{AccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/sessions",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(4) - AppointmentSlots Meta",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/appointmentslots/meta?userPatientLinkToken={{UserPatientLinkToken}}&sessionStartDate=2018-03-23T09:00:00&sessionEndDate=2018-03-26T17:00:00",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"appointmentslots",
+						"meta"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "sessionStartDate",
+							"value": "2018-03-23T09:00:00",
+							"equals": true
+						},
+						{
+							"key": "sessionEndDate",
+							"value": "2018-03-26T17:00:00",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(8) - Courses",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/courses?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"courses"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(9) - Prescriptions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"prescriptionrequests"
+					],
+					"query": [
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(10) - Prescriptions",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"MedicationCourseGuids\": [\"029474e2-c160-4486-97d6-a8f85fc95c47\"],\n  \"RequestComment\": \"Need my meds\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"prescriptionrequests"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(11) - Prescriptions",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"prescriptionrequests"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Medication",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Medication",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Medication",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(13) - Practices Details",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Medication",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Medication",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Allergies",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Allergies",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Allergies",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Consultations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Consultations",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Consultations",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Medications",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Consultations",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Consultations",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Documents",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Documents",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Documents",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Immunisations",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Immunisations",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Immunisations",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Problems",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Problems",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "Problems",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(12) - Patient Record Test Results",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=TestResults",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"record"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "itemType",
+							"value": "TestResults",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(3) - PatientDemographics",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/demographics?UserPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"demographics"
+					],
+					"query": [
+						{
+							"key": "UserPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(1) - EndUserSession",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.environment.set(\"EndUserSessionId\", pm.response.json().EndUserSessionId);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/sessions/endusersession",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"sessions",
+						"endusersession"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(5) - AppointmentSlots",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/appointmentslots?userPatientLinkToken={{UserPatientLinkToken}}&fromDateTime=2018-03-15T09:00:00&toDateTime=2018-03-19T18:00:00",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"appointmentslots"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "fromDateTime",
+							"value": "2018-03-15T09:00:00",
+							"equals": true
+						},
+						{
+							"key": "toDateTime",
+							"value": "2018-03-19T18:00:00",
+							"equals": true
+						},
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(6) - BookAppointmentSlot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"SlotId\": 31011,\n  \"BookingReason\": \"30209\",\n  \"TelephoneNumber\": \"08838383838383\",\n  \"TelephoneContactType\": \"Home\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/appointments",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(7) - Appointments",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/appointments?userPatientLinkToken={{UserPatientLinkToken}}&FetchPreviousAppointments=true",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"appointments"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "FetchPreviousAppointments",
+							"value": "true",
+							"equals": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "(7) - Appointments",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "X-API-ApplicationId",
+						"value": "{{X-API-ApplicationId}}"
+					},
+					{
+						"key": "X-API-Version",
+						"value": "2.1.0.0"
+					},
+					{
+						"key": "X-API-EndUserSessionId",
+						"value": "{{EndUserSessionId}}"
+					},
+					{
+						"key": "X-API-SessionId",
+						"value": "{{SessionId}}"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
+				},
+				"url": {
+					"raw": "http://185.13.72.81/PFS/appointmentslots?userPatientLinkToken={{UserPatientLinkToken}}&fromDateTime=2018-03-15T09:00:00&toDateTime=2018-03-19T18:00:00",
+					"protocol": "http",
+					"host": [
+						"185",
+						"13",
+						"72",
+						"81"
+					],
+					"path": [
+						"PFS",
+						"appointmentslots"
+					],
+					"query": [
+						{
+							"key": "userPatientLinkToken",
+							"value": "{{UserPatientLinkToken}}",
+							"equals": true
+						},
+						{
+							"key": "fromDateTime",
+							"value": "2018-03-15T09:00:00",
+							"equals": true
+						},
+						{
+							"key": "toDateTime",
+							"value": "2018-03-19T18:00:00",
+							"equals": true
+						},
+						{
+							"key": "sessionId",
+							"value": "560",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "sessionType",
+							"value": "Timed",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "locationId",
+							"value": "4882",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianId",
+							"value": "2383",
+							"equals": true,
+							"disabled": true
+						},
+						{
+							"key": "clinicianSex",
+							"value": "NotKnown",
+							"equals": true,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
