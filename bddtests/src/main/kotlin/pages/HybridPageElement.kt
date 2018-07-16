@@ -3,12 +3,15 @@ package pages
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.UnsupportedDriverException
 import org.openqa.selenium.JavascriptExecutor
-import org.openqa.selenium.support.ui.WebDriverWait
-import java.time.Duration
+import org.openqa.selenium.NoSuchElementException
 
 private const val LOCATOR_STRATEGY_ANDROID = "ANDROID"
 private const val LOCATOR_STRATEGY_WEBVIEW = "WEBVIEW"
 private const val LOCATOR_STRATEGY_BROWSER = "BROWSER"
+
+private const val HEADER_HEIGHT_PX = 100
+private const val FLOATING_BUTTON_HEIGHT_PX = 78.5
+private const val NAVBAR_HEIGHT_PX = 70
 
 class HybridPageElement (
         private var browserLocator: String,
@@ -22,8 +25,14 @@ class HybridPageElement (
             LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!)
             LOCATOR_STRATEGY_WEBVIEW,
             LOCATOR_STRATEGY_BROWSER -> page.findByXpath(browserLocator).also {
+                if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
                     val jsExecutor = page.driver as JavascriptExecutor
-                    jsExecutor.executeScript("arguments[0].scrollIntoView(true);", it)
+                    try {
+                        jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", it)
+                    } catch (e: NoSuchElementException) {
+                        throw NoSuchElementException("Error scrolling to $it.  No such element existed on the page.  Page source:\n${page.driver.pageSource}\n")
+                    }
+                }
             }
             else -> throw IllegalArgumentException("Unknown element locator strategy.")
         }
@@ -62,5 +71,33 @@ class HybridPageElement (
         this.androidLocator = this.androidLocator?.plus("[@text='$text']")
 
         return this
+    }
+
+    fun containingText(text: String): HybridPageElement {
+        this.browserLocator = this.browserLocator.plus("[contains(text(),'$text')]")
+        this.androidLocator = this.androidLocator?.plus("[contains(@text,'$text')]")
+
+        return this
+    }
+
+    override fun toString(): String {
+        return StringBuilder(HybridPageElement::class.simpleName)
+                .append(" { ")
+                .append("browserLocator: $browserLocator, ")
+                .append("androidLocator: $androidLocator ")
+                .append("}")
+                .toString()
+    }
+
+    private fun WebElementFacade.isUnderneathFixedElements(): Boolean {
+        val element = this.wrappedElement
+
+        val highestPixel = element.location.y
+        val lowestPixel = highestPixel + element.size.height
+
+        val isBehindHeader = highestPixel < HEADER_HEIGHT_PX
+        val isBehindFooter = lowestPixel > page.driver.manage().window().size.height -(FLOATING_BUTTON_HEIGHT_PX + NAVBAR_HEIGHT_PX)
+
+        return isBehindHeader.or(isBehindFooter)
     }
 }

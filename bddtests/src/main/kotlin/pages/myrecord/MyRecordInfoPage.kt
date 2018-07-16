@@ -5,6 +5,8 @@ import org.openqa.selenium.By
 import pages.HybridPageElement
 import pages.HybridPageObject
 
+const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
+
 class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val secMyDetails = 
@@ -180,7 +182,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickMyDetails() {
-        secMyDetails.element.click()
+        toggleShrub(secMyDetails)
     }
 
     fun getNameLabelText(): String {
@@ -208,7 +210,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickAllergiesAndAdverseReactionsSection() {
-        allergiesAndAdverseReactionsHeader.element.click()
+        toggleShrub(allergiesAndAdverseReactionsHeader)
     }
 
     fun getAllergyMessage(): String {
@@ -258,15 +260,15 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickAcuteMedications() {
-        acuteMedicationsHeading.element.click()
+        toggleShrub(acuteMedicationsHeading)
     }
 
     fun clickCurrentRepeatMedications() {
-        currentRepeatMedicationsHeading.element.click()
+        toggleShrub(currentRepeatMedicationsHeading)
     }
 
     fun clickDiscontinuedRepeatMedications() {
-        discontinuedRepeatMedicationsHeading.element.click()
+        toggleShrub(discontinuedRepeatMedicationsHeading)
     }
 
     fun getAcuteMedicationsHeaderText(): String {
@@ -290,7 +292,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickTestResultsSection() {
-        testResultsHeader.element.click()
+        toggleShrub(testResultsHeader)
     }
 
     fun getImmunistionsHeaderText(): String {
@@ -302,7 +304,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickImmunisations() {
-        immunisationsHeading.element.click()
+        toggleShrub(immunisationsHeading)
     }
 
     fun getImmunisationsMessage(): String {
@@ -334,7 +336,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickProblems() {
-        problemsHeading.element.click()
+        toggleShrub(problemsHeading)
     }
 
     fun getProblemsMessage(): String {
@@ -350,7 +352,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickConsultations() {
-        consultationsHeading.element.click()
+        toggleShrub(consultationsHeading)
     }
 
     fun getConsultationsMessage(): String {
@@ -366,7 +368,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickEvents() {
-        eventsHeading.element.click()
+        toggleShrub(eventsHeading)
     }
 
     fun getEventsMessage(): String {
@@ -375,5 +377,10 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun getSummaryCareNoAccessMessage(): String {
         return noSummaryCareAccessMessage.element.text
+    }
+
+    private fun toggleShrub(shrub: HybridPageElement) {
+        shrub.element.click()
+        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 }

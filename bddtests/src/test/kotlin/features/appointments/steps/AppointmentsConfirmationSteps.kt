@@ -24,8 +24,8 @@ open class AppointmentsConfirmationSteps {
     }
 
     @Step
-    fun clickOnButton(button: String) {
-        appointmentsConfirmation.clickOnButton(button)
+    fun goBackToMyAppointments() {
+        appointmentsConfirmation.backToMyAppointmentsButton.element.click()
     }
 
     @Step

@@ -31,7 +31,6 @@ open class MyAppointmentsSteps {
             "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
     val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
     val cancellationSuccessMessage = "Your appointment has been cancelled."
-    val bookAppointmentButtonText = "Book an appointment"
 
     @Step
     fun checkBookingWasRequested() {
@@ -64,12 +63,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
-        clickOnButtonByText(bookAppointmentButtonText)
-    }
-
-    @Step
-    fun clickOnButtonByText(buttonText: String) {
-        myAppointmentsPage.clickOnButton(buttonText)
+        myAppointmentsPage.bookButton.element.click()
     }
 
     @Step

@@ -67,12 +67,12 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun clickOnBookAppointmentButton() {
-        availableAppointments.clickOnButton(bookThisButtonText)
+        availableAppointments.clickOnButtonContainingText(bookThisButtonText)
     }
 
     @Step
     fun clickOnBackButton() {
-        availableAppointments.clickOnButton(backButtonText)
+        availableAppointments.clickOnButtonContainingText(backButtonText)
     }
 
     @Step
@@ -81,7 +81,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val expectedBody = "Please try again\n" +
                 "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
 
-        val message: String? = availableAppointments.getErrorText()
+        val message: String? = availableAppointments.errorSummaryBody.element.text
 
         if (presence && message != null) {
             assertEquals("$expectedHeader\n$expectedBody", message)
@@ -104,12 +104,12 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun doesTryAgainButtonExist(): Boolean {
-        return availableAppointments.doesButtonExistBasedOnVisibleText("Try again")
+        return availableAppointments.tryAgainButton.elements.count() == 1
     }
 
     @Step
     fun checkUnavailableErrorMessage() {
-        val message = availableAppointments.getErrorText()
+        val message = availableAppointments.errorSummaryBody.element.text
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
         assertNotNull("No error message displayed, expecting $expectedHeader\n$expectedBody", message)
@@ -118,7 +118,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun clickOnTryAgainButton() {
-        availableAppointments.clickOnButton("Try again")
+        availableAppointments.clickOnButtonContainingText("Try again")
     }
 
     @Step

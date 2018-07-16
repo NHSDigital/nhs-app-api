@@ -3,7 +3,6 @@ package pages.appointments
 import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import models.Slot
-import net.serenitybdd.core.annotations.findby.By
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.WebElement
 import pages.HybridPageObject
@@ -103,9 +102,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         slot.time = findByXpath(parentContainer, relativePath + appointmentTimeXpath).text
         slot.session = findByXpath(parentContainer, relativePath + appointmentSessionNameXpath).text
         slot.date = findByXpath(parentContainer, relativePath + appointmentDateXpath).text
-
-        val locationElement = findByXpath(parentContainer, relativePath + appointmentLocationXpath)
-        slot.location = getSlotChildElementDisplayingText(locationElement)
+        slot.location = findByXpath(parentContainer, relativePath + appointmentLocationXpath).text
 
         retrieveClinicianAndAddToSlot(slot, parentContainer, relativePath + appointmentClinicianXPath, isMyAppointmentSlot)
         return slot
@@ -125,29 +122,14 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return findByXpath("$containerDivXpath/div[$index]")
     }
 
-    private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointment: Boolean) {
-        if (isMyAppointment) {
-            val clinicianElements = findAllByXpath(parentContainer, "$relativePath/*/span[starts-with(@aria-label, 'clinician')]")
-            clinicianElements.forEach { clinicianElement ->
-                val clinicianDisplayName = getSlotChildElementDisplayingText(clinicianElement)
-                slot.clinician.add(clinicianDisplayName)
-            }
-        } else {
-            val clinicians: List<WebElement> = findAllByXpath(parentContainer, relativePath + "ul/li")
-            clinicians.forEach { clinician ->
-                val clinicianDisplayName = getSlotChildElementDisplayingText(clinician)
-                slot.clinician.add(clinicianDisplayName)
-            }
+    private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointmentSlot: Boolean) {
+        val clinicians = when(isMyAppointmentSlot) {
+            true -> findAllByXpath(parentContainer, "$relativePath//span[starts-with(@aria-label, 'clinician')]")
+            false -> findAllByXpath(parentContainer, relativePath + "ul/li")
         }
-    }
 
-    private fun getSlotChildElementDisplayingText(childElement: WebElement): String {
-        val childElementText = childElement.text
-        return try {
-            val svg = childElement.findElement(By.tagName("svg"))
-            childElementText.replace(svg.text, "").trim()
-        } catch (e: Exception) {
-            childElementText.trim()
+        clinicians.forEach { clinician ->
+            slot.clinician.add(clinician.text)
         }
     }
 }

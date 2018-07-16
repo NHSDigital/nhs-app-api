@@ -23,7 +23,7 @@ import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import org.junit.Assert.assertEquals
+import pages.ErrorPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
@@ -60,6 +60,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     lateinit var prescriptionsPage: PrescriptionsPage
     lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
+    lateinit var errorPage: ErrorPage
 
     @Steps
     lateinit var browser: BrowserSteps
@@ -323,14 +324,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Then("I see a message informing me that I don't currently have access to this service")
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
-
-        val errorTitle = "Sorry, you don't currently have access to this service"
-        val errorContent = "Contact your GP surgery for more information."
-
-        val correctErrorTextIsVisible = prescriptions.prescriptions
-                .isErrorMessageContentCorrect("", "", "", errorTitle, errorContent, "")
-
-        assertEquals(true, correctErrorTextIsVisible)
+        Assert.assertEquals("Sorry, you don't currently have access to this service", errorPage.subHeading.element.text)
+        Assert.assertEquals("Contact your GP surgery for more information.", errorPage.detailTwo.element.text)
     }
 
     @But("The prescriptions endpoint is timing out")

@@ -72,7 +72,7 @@ docker run \
 -v $(pwd)/../:/repo \
 $DOCKER_IMAGE /bin/bash -c " \
   cd /repo ; \
-  ./gradlew clean test aggregate \
+  ./gradlew clean test aggregate --stacktrace\
     -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
     -Dwebdriver.provided.type=$BROWSER \
     -Dwebdriver.base.url=$(cat vars_ci.env | grep url | cut -f2 -d'=') \

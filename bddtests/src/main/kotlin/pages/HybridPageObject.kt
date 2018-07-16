@@ -16,6 +16,7 @@ import pages.navigation.Header
 import java.lang.AssertionError
 import java.time.Duration
 
+const val DEFAULT_SPINNER_WAIT: Long = 5
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
@@ -25,37 +26,35 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
             page = this
     )
 
-    val errorMessage = HybridPageElement(
-            browserLocator = "//div[@class='msg error']",
-            androidLocator = "",
-            page = this
-    )
-
-    fun HybridPageElement.waitForSpinner(): HybridPageElement {
-        try {
-            if (spinner.element.isCurrentlyVisible) {
-                FluentWait<HybridPageElement>(spinner)
-                        .withTimeout(Duration.ofSeconds(5))
-                        .pollingEvery(Duration.ofMillis(100))
-                        .ignoring(AssertionError::class.java)
-                        .until { it.element.expect("Spinner was visible for more than 5 seconds.").shouldNotBeVisible() }
-            }
-        } catch (e: NoSuchElementException) {
-            // element no longer there - continue
-        } catch (e: StaleElementReferenceException) {
-            // element no longer there - continue
-        }
-
-        return this
-    }
-
     private val warningMessage = HybridPageElement(
             browserLocator = "//div[@class='msg warning']",
-            androidLocator = "",
+            androidLocator = null,
             page = this
     )
 
-    private val buttonXpath = "//button[contains(text(),'%s')]"
+    fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
+        spinner.shouldNotBeVisible(seconds)
+    }
+
+    fun HybridPageElement.waitForSpinner(seconds: Long = DEFAULT_SPINNER_WAIT): WebElementFacade {
+        spinner.shouldNotBeVisible(seconds)
+        return this.element
+    }
+
+    fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
+        try {
+            FluentWait<WebElementFacade>(this.element)
+                    .withTimeout(Duration.ofSeconds(seconds))
+                    .pollingEvery(Duration.ofMillis(100))
+                    .until {
+                        !it.isCurrentlyVisible
+                    }
+        } catch (e: NoSuchElementException) {
+            // continue
+        } catch (e: StaleElementReferenceException) {
+            // continue
+        }
+    }
 
     override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
         val page = super.switchToPage(pageObjectClass)
@@ -193,10 +192,10 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
     }
 
-    fun getErrorText(): String? {
+    fun getErrorDetailText(): String? {
         return try {
             switchToPage(ErrorPage::class.java)
-                    .detail.element.text
+                    .detailTwo.element.text
         } catch (e: NoSuchElementException) {
             null
         }
@@ -256,13 +255,15 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return switchToPage(Header::class.java).pageTitle.element.text
     }
 
-    fun doesButtonExistBasedOnVisibleText(visibleText: String): Boolean {
-        return findByXpath(String.format(buttonXpath, visibleText)).isPresent
-    }
-
-    fun clickOnButton(button: String) {
-        val buttonElement = HybridPageElement(String.format(buttonXpath, button), "", this)
-        buttonElement.waitForSpinner().element.click()
+    fun clickOnButtonContainingText(text: String) {
+       HybridPageElement(
+            browserLocator = "//div[@id='app']//button",
+            androidLocator = null,
+            page = this
+       )
+       .containingText(text)
+       .element
+       .click()
     }
 
     private fun isAnyXpathVisible(xpath: String): Boolean {

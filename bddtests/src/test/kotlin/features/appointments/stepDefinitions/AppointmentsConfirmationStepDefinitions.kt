@@ -28,12 +28,12 @@ class AppointmentsConfirmationStepDefinitions {
 
     @When("^I choose to change the appointment slot$")
     fun iChooseToChangeTheAppointmentSlot() {
-        appointmentsConfirmationSteps.clickOnButton("Change this appointment")
+        appointmentsConfirmationSteps.appointmentsConfirmation.clickOnButtonContainingText("Change this appointment")
     }
 
     @When("^I click the button to go back to my appointments$")
     fun i_click_the_button_to_go_back_to_my_appointments() {
-        appointmentsConfirmationSteps.clickOnButton("Back to my appointments")
+        appointmentsConfirmationSteps.goBackToMyAppointments()
     }
 
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")

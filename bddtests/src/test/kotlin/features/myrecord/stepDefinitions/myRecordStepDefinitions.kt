@@ -311,7 +311,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Then("^I do not see patient information details$")
     @Throws(Exception::class)
     fun i_do_not_see_patient_information_details() {
-        Assert.assertFalse(recordSteps.isNameVisible())
+        Assert.assertFalse("Name field was visible.", recordSteps.isNameVisible())
     }
 
     @When("^I get the users my record data$")

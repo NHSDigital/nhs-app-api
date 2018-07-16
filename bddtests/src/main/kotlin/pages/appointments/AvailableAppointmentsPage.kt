@@ -2,6 +2,7 @@ package pages.appointments
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import pages.ErrorPage
 import pages.HybridPageElement
 
 @DefaultUrl("http://localhost:3000/appointments/booking")
@@ -57,6 +58,12 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             androidLocator = "",
             page = this
     )
+
+    val tryAgainButton = HybridPageElement(
+            browserLocator = "//button",
+            androidLocator = null,
+            page = this
+    ).withText("Try again")
 
     private val appointmentSlotDateXpath = "//form/span/h5[text() = '%s']"
     private val appointmentSlotTimeXpath = "$appointmentSlotDateXpath/../ul/li[contains(., '%s')]"
@@ -186,7 +193,13 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getErrorSummaryAtRow(rowNumber: Int): String {
-        return findByXpath(errorMessage.element, "//p[$rowNumber]").text
+        val error = switchToPage(ErrorPage::class.java)
+        return when(rowNumber) {
+            1 -> error.subHeading.element.text
+            2 -> error.detailOne.element.text
+            3 -> error.detailTwo.element.text
+            else -> throw IllegalArgumentException("$rowNumber not supported in error message")
+        }
     }
 
     private fun getTimeSlotElement(expectedDateHeading: String?, expectedTimeOnSlot: String?) =

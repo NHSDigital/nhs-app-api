@@ -54,7 +54,7 @@ class MyAppointmentsStepDefinitions {
 
     @When("^I select \"([^\"]*)\" button$")
     fun i_select_button(buttonText: String) {
-        myAppointmentsSteps.clickOnButtonByText(buttonText)
+        myAppointmentsSteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)
     }
 
     @Then("^I am given the list of upcoming appointments$")

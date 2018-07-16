@@ -22,6 +22,12 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
             page = this
     )
 
+    val backToMyAppointmentsButton = HybridPageElement(
+            browserLocator = "//div[@id='mainDiv']/button",
+            androidLocator = null,
+            page = this
+    )
+
     fun clickOnConfirmAndBookAppointmentButton() {
         confirmAndBookAppointmentButton.element.click()
     }
