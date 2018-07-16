@@ -33,12 +33,12 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  nhsonline.stubs.data:
-    image: nhsonline.stubs.data
-    environment:
-      - wiremockUrl=http://nhsonline.stubs:8080
-    depends_on:
-      - nhsonline.stubs
+  # nhsonline.stubs.data:
+  #  image: nhsonline.stubs.data
+  #  environment:
+  #    - wiremockUrl=http://nhsonline.stubs:8080
+  #  depends_on:
+  #    - nhsonline.stubs
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

@@ -6,6 +6,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.http.SslError
+import android.webkit.SslErrorHandler
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -40,6 +42,14 @@ class WebClientInterceptor(
             }
         }
         return false
+    }
+
+    override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
+        if ( SslError.SSL_UNTRUSTED == error?.primaryError ){
+            handler?.proceed()
+        } else {
+            super.onReceivedSslError(view, handler, error)
+        }
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
