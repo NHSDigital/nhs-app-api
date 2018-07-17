@@ -28,7 +28,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                                     ? (from item in dcrEvent.Items
                                         select string.Format("{0} - {1}", 
                                             item.Type, 
-                                            item.Details.Replace("\n", "; "))).ToList()
+                                            !string.IsNullOrEmpty(item.Details) ? 
+                                                item.Details.Trim(new [] {'\n'}).Replace("\n", "; ") : string.Empty)).ToList()
                                     : new List<string>(),
                             }
                         ).ToList() : new List<TppDcrEvent>()

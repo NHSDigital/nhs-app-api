@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                         Items = new List<RequestPatientRecordItem>
                         {
                             new RequestPatientRecordItem { 
-                                Details = "Benzoin tincture - 500 ml\nuse as directed", 
+                                Details = "\nBenzoin tincture - 500 ml\nuse as directed\n", 
                                 Type = "Medication template"                             
                             },
                         },

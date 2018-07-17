@@ -32,7 +32,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     DatePart = response.EffectiveDate.DatePart
                 },
                 ConsultantLocation = $"{response.Location}, {response.ConsultantName}",
-                ConsultationHeaders = response.Sections != null ? (from section in response.Sections
+                ConsultationHeaders = response.Sections != null ? (
+                    from section in response.Sections
+                    where section.Observations != null && 
+                          section.Observations.Any(
+                              obs => !string.IsNullOrEmpty(obs.Term) || 
+                                     (obs.AssociatedText != null && obs.AssociatedText.Any(at =>!string.IsNullOrEmpty(at.Text))))
                     select new ConsultationHeaderItem
                     {
                         Header = section.Header,
@@ -41,7 +46,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                             {
                                 Term = obs.Term,
                                 AssociatedTexts = obs.AssociatedText != null ? (from associatedText in obs.AssociatedText
-                                    select associatedText.Text.Replace("\n", "; ").Replace("\t", string.Empty)).ToList() : new List<string>()
+                                    where !string.IsNullOrEmpty(associatedText.Text)
+                                    select associatedText.Text
+                                        .Replace("\t", string.Empty)
+                                        .Trim(new [] {'\n'})
+                                        .Replace("\n", "; ")).ToList() : new List<string>()
                             }).ToList() : new List<ObservationItem>()
                     }).ToList() : new List<ConsultationHeaderItem>()
             };
