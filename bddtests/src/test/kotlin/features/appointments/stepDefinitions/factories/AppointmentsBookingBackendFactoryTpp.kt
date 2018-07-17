@@ -1,27 +1,17 @@
-package features.appointments.stepDefinitions
+package features.appointments.stepDefinitions.factories
 
-import mocking.IAppointmentMappingBuilder
-import mocking.models.Mapping
+import constants.AppointmentDateTimeFormat
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
-import worker.models.appointments.BookAppointmentSlotRequest
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class AppointmentsBookingFactoryTpp : AppointmentsBookingFactory() {
-
-    override fun getDefaultPatient(): Patient {
-        return Patient.getDefault("TPP")
-    }
-
-    override fun sendRequestViaMockingClient(resolver: IAppointmentMappingBuilder.() -> Mapping) {
-        mockingClient.forTpp { resolver() }
-    }
+class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("TPP") {
 
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,
                                            bookingReason: String?): BookAppointmentSlotFacade {
-        var dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+        var dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
 
         return BookAppointmentSlotFacade(
                 patient.patientId,

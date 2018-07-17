@@ -23,7 +23,7 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
     )
 
     val backToMyAppointmentsButton = HybridPageElement(
-            browserLocator = "//div[@id='mainDiv']/button",
+            browserLocator = "//div[@id='mainDiv']/main/button[contains(text(),'Back to my appointments')]",
             androidLocator = null,
             page = this
     )

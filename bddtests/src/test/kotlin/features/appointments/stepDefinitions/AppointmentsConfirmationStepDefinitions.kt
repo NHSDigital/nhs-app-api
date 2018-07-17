@@ -61,22 +61,6 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkSymptomsLength(length)
     }
 
-    @Given("^EMIS doesn't respond a timely fashion when booking an appointment$")
-    fun emis_doesn_t_respond_a_timely_fashion_when_booking_an_appointment() {
-        appointmentsConfirmationSteps.mockEmisSuccessResponseDelayedBy(30)
-    }
-
-    @Given("^EMIS is unavailable when booking an appointment$")
-    fun emis_is_unavailable_when_booking_an_appointment() {
-
-        appointmentsConfirmationSteps.mockEmisUnavailableResponse()
-    }
-
-    @Given("^the appointment slot has already been booked by somebody else$")
-    fun the_appointment_slot_has_already_been_booked_by_somebody_else() {
-        appointmentsConfirmationSteps.mockEmisConflictesponse()
-    }
-
     @Then("^I see appropriate information message when there is an error on appointment confirmation page$")
     fun i_see_appropriate_information_message_when_there_is_an_error_on_appointment_confirmation_page() {
         appointmentsConfirmationSteps.checkTimeoutErrorMessage()

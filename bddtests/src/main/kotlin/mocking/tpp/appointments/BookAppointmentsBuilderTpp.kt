@@ -1,7 +1,7 @@
 package mocking.tpp.appointments
 
 
-import mocking.IBookAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.data.TppConfig
@@ -9,10 +9,11 @@ import mocking.tpp.models.BookAppointmentReply
 import mocking.tpp.models.Error
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
+import org.apache.http.HttpStatus
 import java.time.Duration
 
 
-class TppBookAppointmentsBuilder (patient: Patient, request: BookAppointmentSlotFacade)
+class BookAppointmentsBuilderTpp (patient: Patient, request: BookAppointmentSlotFacade)
     : TppMappingBuilder()
         , IBookAppointmentsBuilder {
 
@@ -26,15 +27,15 @@ class TppBookAppointmentsBuilder (patient: Patient, request: BookAppointmentSlot
                 "@sessionId='${request.slotId}']")
     }
 
-    override fun withDelay(delayMilliseconds: Duration): TppBookAppointmentsBuilder {
+    override fun withDelay(delayMilliseconds: Duration): BookAppointmentsBuilderTpp {
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }
 
     override fun respondWithSuccess(): Mapping {
-
         return respondWith(
                 BookAppointmentReply(tppPatient.patientId,
+                        onlineUserId = tppPatient.patientId,
                         message = "Remember to bring your medication!",
                         uuid = TppConfig.uuid
                 ))
@@ -42,8 +43,9 @@ class TppBookAppointmentsBuilder (patient: Patient, request: BookAppointmentSlot
 
     override fun respondWithUnavailableException(): Mapping {
 
-        var error = Error("1103", errorText, TppConfig.uuid)
-        return respondWith(error)
+      return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE){
+          andXmlBody("").build()
+      }
     }
 
     override fun respondWithConflictException(): Mapping {

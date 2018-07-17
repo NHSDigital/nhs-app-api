@@ -1,6 +1,6 @@
 package mocking.emis
 
-import mocking.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.MappingBuilder
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
@@ -25,7 +25,7 @@ import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
-import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import worker.models.linkage.CreateLinkageRequest
@@ -51,7 +51,7 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
         }
     }
 
-    fun appointmentGetRequest(patient: Patient, fetchPreviousAppointments: Boolean = false) = EmisGetAppointmentBuilder(
+    fun appointmentGetRequest(patient: Patient, fetchPreviousAppointments: Boolean = false) = GetAppointmentBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -59,7 +59,7 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             fetchPreviousAppointments = fetchPreviousAppointments)
 
 
-    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? , toDateTime: String? ) = EmisAppointmentSlotsBuilder(
+    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? , toDateTime: String? ) = AppointmentSlotsBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -67,7 +67,7 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             toDateTime,
             patient.userPatientLinkToken)
 
-    fun appointmentSlotsMetaRequest(patient: Patient, sessionStartDate: String? = null, sessionEndDate: String? = null) = EmisAppointmentSlotsMetaBuilder(
+    fun appointmentSlotsMetaRequest(patient: Patient, sessionStartDate: String? = null, sessionEndDate: String? = null) = AppointmentSlotsMetaBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -75,12 +75,12 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             sessionEndDate,
             patient.userPatientLinkToken)
 
-    override fun viewAppointment(patient: Patient): IMyAppointmentsBuilder = EmisViewAppointmentBuilder(configuration, patient)
+    override fun viewAppointment(patient: Patient): IMyAppointmentsBuilder = ViewAppointmentBuilderEmis(configuration, patient)
 
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade) =
-            EmisBookAppointmentsBuilder(configuration!!, patient.endUserSessionId, patient.sessionId, request)
+            BookAppointmentsBuilderEmis(configuration!!, patient.endUserSessionId, patient.sessionId, request)
 
-    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade) = EmisDeleteAppointmentsBuilder(configuration!!, patient, request)
+    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade) = DeleteAppointmentsBuilderEmis(configuration!!, patient, request)
 
     fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
 

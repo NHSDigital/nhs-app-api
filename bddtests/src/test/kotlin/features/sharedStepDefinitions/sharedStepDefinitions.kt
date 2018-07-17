@@ -17,6 +17,7 @@ import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.models.AssociationType
 import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.Session
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable

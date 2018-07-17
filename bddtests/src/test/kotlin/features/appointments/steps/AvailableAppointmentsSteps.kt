@@ -5,11 +5,14 @@ import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithou
 import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import features.appointments.data.AppointmentsBookingData
+import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.models.*
+import mocking.emis.models.Location
+import mocking.emis.models.Session
+import mocking.emis.models.SessionHolder
+import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
@@ -127,18 +130,14 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun generateDefaultUserData(gpSystem: String = "EMIS") {
+        var patient = Patient.getDefault(gpSystem)
+        Serenity.setSessionVariable(Patient::class).to(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
-                Serenity.setSessionVariable(Patient::class).to(patient)
-                CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-                EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
                 myAppointments.mockGPServiceMyAppointmentResponse("EMIS", true)
-            }
-            "TPP" -> {
-                Serenity.setSessionVariable(Patient::class).to(tppPatient)
-                CitizenIdSessionCreateJourney(mockingClient).createFor(tppPatient)
-                TppSessionCreateJourneyFactory(mockingClient).createFor(tppPatient)
-                myAppointments.mockGPServiceMyAppointmentResponse("TPP", true)
             }
         }
     }
@@ -500,6 +499,17 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val actualAppointmentTypeOptions = availableAppointments.getAppointmentTypeFilterContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
+        var expected =
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentTypesKey)
+                        ?: getExpectedAppointmentTypesFromSession()
+        for (expectedAppointmentType in expected) {
+            assertOptionExists(expectedAppointmentType, actualAppointmentTypeOptions)
+        }
+
+        verifyThatNoAppointmentTypesIsSelected()
+    }
+
+    private fun getExpectedAppointmentTypesFromSession(): ArrayList<String> {
         val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
 
         val sessionsById = generateMapOfSessionsAgainstId(expectedAppointmentSessions)
@@ -513,26 +523,20 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 uniqueAppointmentTypes = uniqueAppointmentTypes.plus(expectedOption)
             }
         }
-        for (expectedAppointmentType in uniqueAppointmentTypes) {
-            assertOptionExists(
-                    expectedAppointmentType,
-                    actualAppointmentTypeOptions
-            )
-        }
-
-        verifyThatNoAppointmentTypesIsSelected()
+        var list = arrayListOf<String>()
+        uniqueAppointmentTypes.forEach{appointment->list.add(appointment)}
+        return list
     }
 
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val actualLocationOptions = availableAppointments.getLocationFilterContents()
-        assertOptionExists(locationDefaultOption, actualLocationOptions, "default")
-        for (expectedLocationData in defaultEmisMetaSlotLocations) {
-            val expectedLocation = expectedLocationData.locationName
-            assertOptionExists(
-                    expectedLocation,
-                    actualLocationOptions
-            )
+        var expectedLocations =
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentLocationsKey)
+                        ?: defaultEmisMetaSlotLocations.map { l -> l.locationName }
+
+        for (expectedLocation in expectedLocations) {
+            assertOptionExists(expectedLocation, actualLocationOptions)
         }
 
         assertEquals(
@@ -546,14 +550,15 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated() {
         val actualClinicianOptions = availableAppointments.getClinicianFilterContents()
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
-        for (expectedClinicianData in defaultEmisMetaSlotSessionHolders) {
-            val expectedClinician = expectedClinicianData.displayName
-            assertOptionExists(
-                    expectedClinician!!,
-                    actualClinicianOptions
-            )
-        }
 
+        var expectedClinicians =
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentCliniciansKey)
+                        ?: defaultEmisMetaSlotSessionHolders.map { l -> l.displayName }
+
+        for (expectedClinician in expectedClinicians) {
+            assertOptionExists(expectedClinician!!, actualClinicianOptions)
+
+        }
         verifyThatNoSpecificClinicianIsSelected()
     }
 
@@ -768,6 +773,14 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun selectFilterOptionsToRevealSlots() {
+        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsBookingFactory.ExpectedAppointmentFilterFacadeKey)
+                ?: getFilterValuesFromSession()
+        availableAppointments.selectAppointmentTypeByText(filterValues.type)
+        availableAppointments.selectLocationByText(filterValues.location)
+        availableAppointments.selectClinicianByText(filterValues.doctor ?: "")
+    }
+
+    private fun getFilterValuesFromSession(): AppointmentFilterFacade {
         val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
         val expectedAppointmentSession = expectedAppointmentSessions[0]
         val expectedSessionId = expectedAppointmentSession.sessionId
@@ -784,10 +797,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val sessionType = expectedSession!!.sessionType
         val appointmentSlotType = expectedAppointmentSession.slots[0].slotTypeName
         val expectedOption = "$sessionType - $appointmentSlotType"
+        return AppointmentFilterFacade(expectedOption, locationName,
+                defaultEmisMetaSlotSessionHolders[0].displayName!!)
 
-        availableAppointments.selectAppointmentTypeByText(expectedOption)
-        availableAppointments.selectLocationByText(locationName)
-        availableAppointments.selectClinicianByText(defaultEmisMetaSlotSessionHolders[0].displayName!!)
     }
 
     private fun generateMapOfSessionsAgainstId(expectedSessions: ArrayList<AppointmentSessionFacade>): Map<Int?, AppointmentSessionFacade> {
@@ -829,9 +841,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     companion object {
-        private const val EXPECTED_SESSIONS_KEY = "Expected Sessions"
+        const val EXPECTED_SESSIONS_KEY = "Expected Sessions"
         const val EXPECTED_APPOINTMENT_SESSIONS_KEY = "Expected Appointment Sessions"
-        private const val EXPECTED_APPOINTMENT_SLOTS_KEY = "Expected Appointment Slots"
+        const val EXPECTED_APPOINTMENT_SLOTS_KEY = "Expected Appointment Slots"
 
         private const val TODAY_KEY = "Today"
         private const val TOMORROW_KEY = "Tomorrow"

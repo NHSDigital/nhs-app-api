@@ -1,23 +1,20 @@
-package features.appointments.stepDefinitions
+package features.appointments.stepDefinitions.factories
 
-import mocking.MockingClient
-import mocking.IBookAppointmentsBuilder
-import mocking.IAppointmentMappingBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import models.Patient
 import net.serenitybdd.core.Serenity
+import org.junit.Assert.fail
 import worker.models.appointments.AppointmentBookRequest
-import org.junit.Assert.*
 
-abstract class AppointmentsBookingFactory {
-
-    val mockingClient = MockingClient.instance
+abstract class AppointmentsBookingBackendFactory(gpSupplier:String): AppointmentsFactory(gpSupplier) {
 
     fun defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        var patient = getDefaultPatient()
-        var request = defaultAppointmentRequest(patient)
-        sendRequestViaMockingClient { bookAppointmentsBuilder(bookAppointmentSlotRequest(patient, request)) }
+
+        val request = defaultAppointmentRequest(patient)
+        appointmentMapper.requestMapping { bookAppointmentsBuilder(bookAppointmentSlotRequest(patient, request)) }
         setAppointmentToBeBooked(request)
     }
 
@@ -25,18 +22,17 @@ abstract class AppointmentsBookingFactory {
                                            slotId: Int? = null,
                                            bookingReason: String? = null): BookAppointmentSlotFacade
 
-    abstract fun getDefaultPatient(): Patient
+
 
     fun setupRequestAndResponse(request: BookAppointmentSlotFacade,
                                 response: (IAppointmentMappingBuilder.() -> Mapping)? = null) {
 
         if (response != null) {
-            sendRequestViaMockingClient(response)
+            appointmentMapper.requestMapping { response()}
         }
         setAppointmentToBeBooked(request)
     }
 
-    protected abstract fun sendRequestViaMockingClient(resolver: IAppointmentMappingBuilder.() -> Mapping)
 
     private fun setAppointmentToBeBooked(toBeBooked: BookAppointmentSlotFacade) {
         Serenity.setSessionVariable("AppointmentToBook").to(getAppointmentBookRequest(toBeBooked))
@@ -53,17 +49,17 @@ abstract class AppointmentsBookingFactory {
 
     companion object {
 
-        private val map: HashMap<String, AppointmentsBookingFactory> =
-                hashMapOf(
-                        "EMIS" to AppointmentsBookingFactoryEmis(),
-                        "TPP" to AppointmentsBookingFactoryTpp())
+        private val map: HashMap<String, (()-> AppointmentsBookingBackendFactory)>
+               by lazy{ hashMapOf(
+                        "EMIS" to { AppointmentsBookingBackendFactoryEmis() },
+                        "TPP" to { AppointmentsBookingBackendFactoryTpp() })}
 
-        fun getForSupplier(gpSystem: String): AppointmentsBookingFactory {
+        fun getForSupplier(gpSystem: String): AppointmentsBookingBackendFactory {
             if(! map.containsKey(gpSystem))
             {
                 fail("GP system '$gpSystem' is not set up.")
             }
-            return map.getValue(gpSystem)
+            return map.getValue(gpSystem).invoke()
         }
 
         val defaultApptBookingReason = "I have a bad back."

@@ -1,12 +1,11 @@
-package mocking
+package mocking.gpServiceBuilderInterfaces.appointments
 
-import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 
 interface IAppointmentMappingBuilder {
-    fun viewAppointment(patient: Patient):IMyAppointmentsBuilder
+    fun viewAppointment(patient: Patient): IMyAppointmentsBuilder
 
     fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder
 

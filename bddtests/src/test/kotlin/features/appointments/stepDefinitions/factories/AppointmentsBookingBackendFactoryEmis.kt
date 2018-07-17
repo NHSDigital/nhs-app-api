@@ -1,20 +1,9 @@
-package features.appointments.stepDefinitions
+package features.appointments.stepDefinitions.factories
 
-import mocking.IAppointmentMappingBuilder
-import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
-import worker.models.appointments.BookAppointmentSlotRequest
 
-class AppointmentsBookingFactoryEmis : AppointmentsBookingFactory() {
-
-    override fun getDefaultPatient(): Patient {
-        return Patient.getDefault("EMIS")
-    }
-
-    override fun sendRequestViaMockingClient(resolver: IAppointmentMappingBuilder.() -> Mapping) {
-        mockingClient.forEmis { resolver() }
-    }
+class AppointmentsBookingBackendFactoryEmis : AppointmentsBookingBackendFactory("EMIS") {
 
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,

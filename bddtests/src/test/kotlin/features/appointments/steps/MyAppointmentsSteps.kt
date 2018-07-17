@@ -33,29 +33,6 @@ open class MyAppointmentsSteps {
     val cancellationSuccessMessage = "Your appointment has been cancelled."
 
     @Step
-    fun checkBookingWasRequested() {
-        val wiremockRequests = mockingClient.getRequests().split("\n")
-        var validBookingBody = false
-        val expectedBookRequestBody = "\\\"UserPatientLinkToken\\\":\\\"" +
-                patient.userPatientLinkToken +
-                "\\\",\\\"SlotId\\\":301,\\\"BookingReason\\\":\\\"" +
-                Serenity.sessionVariableCalled<String>("Symptoms").take(150) +
-                "\\\""
-        var bookingCreated = false
-        for (requestLine in wiremockRequests) {
-            if (requestLine.contains(expectedBookRequestBody)) {
-                validBookingBody = true
-            }
-            if (requestLine.contains("\\\"BookingCreated\\\":true")) {
-                bookingCreated = true
-                break
-            }
-        }
-        assertTrue("Incorrect booking was requested. ", validBookingBody)
-        assertTrue("No booking was created. ", bookingCreated)
-    }
-
-    @Step
     fun checkBookingSuccessMessage() {
         val message = myAppointmentsPage.getSuccessMessage()
         assertEquals(bookingSuccessMessage, message)

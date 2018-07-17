@@ -7,12 +7,11 @@ import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
-import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
 
-class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
+class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
                                       apiEndUserSessionId: String,
                                       apiSessionId: String,
                                       sessionStartDate: String? = null,
@@ -32,7 +31,7 @@ class EmisAppointmentSlotsMetaBuilder(configuration: EmisConfiguration,
         if (!userPatientLinkToken.isNullOrEmpty()) requestBuilder.andQueryParameter("userPatientLinkToken", userPatientLinkToken!!)
     }
 
-    fun withDelay(delayMilliseconds : Duration):EmisAppointmentSlotsMetaBuilder{
+    fun withDelay(delayMilliseconds : Duration):AppointmentSlotsMetaBuilderEmis{
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this;
     }

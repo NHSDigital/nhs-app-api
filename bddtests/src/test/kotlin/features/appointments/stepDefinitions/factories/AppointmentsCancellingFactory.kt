@@ -1,8 +1,7 @@
-package features.appointments.stepDefinitions
+package features.appointments.stepDefinitions.factories
 
-import mocking.IAppointmentMappingBuilder
-import mocking.ICancelAppointmentsBuilder
-import mocking.MockingClient
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
@@ -10,14 +9,11 @@ import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.models.appointments.CancelAppointmentRequest
 
-abstract class AppointmentsCancellingFactory() {
-
-    val mockingClient = MockingClient.instance
+abstract class AppointmentsCancellingFactory(gpSystem: String):AppointmentsFactory(gpSystem) {
 
     fun defaultAppointmentCancellingSetupWithResult(builder: (ICancelAppointmentsBuilder) -> Mapping) {
-        var patient = getDefaultPatient()
         var request = defaultRequest(patient)
-        sendRequestViaMockingClient { builder(cancelAppointmentRequest(patient, request)) }
+        appointmentMapper.requestMapping { builder(cancelAppointmentRequest(patient, request)) }
         setAppointmentToBeCancelled(request)
     }
 
@@ -25,18 +21,14 @@ abstract class AppointmentsCancellingFactory() {
                                 appointmentId: Int? = null,
                                 cancellationReason: String? = null): CancelAppointmentSlotFacade
 
-    abstract fun getDefaultPatient(): Patient
-
     fun setupRequestAndResponse(request: CancelAppointmentSlotFacade,
                                 response: (IAppointmentMappingBuilder.() -> Mapping)? = null) {
 
         if (response != null) {
-            sendRequestViaMockingClient(response)
+           appointmentMapper.requestMapping { response()}
         }
         setAppointmentToBeCancelled(request)
     }
-
-    protected abstract fun sendRequestViaMockingClient(resolver: IAppointmentMappingBuilder.() -> Mapping)
 
     private fun setAppointmentToBeCancelled(toBeCancelled: CancelAppointmentSlotFacade) {
         Serenity.setSessionVariable("AppointmentToCancel").to(getAppointmentCancelRequest(toBeCancelled))
@@ -51,10 +43,10 @@ abstract class AppointmentsCancellingFactory() {
 
     companion object {
 
-        val map: HashMap<String, AppointmentsCancellingFactory> =
+        private val map: HashMap<String, AppointmentsCancellingFactory> by lazy {
                 hashMapOf(
                         "EMIS" to AppointmentsCancellingFactoryEmis(),
-                        "TPP" to AppointmentsCancellingFactoryTpp())
+                        "TPP" to AppointmentsCancellingFactoryTpp())}
 
         fun getForSupplier(gpSystem: String): AppointmentsCancellingFactory {
             if(! map.containsKey(gpSystem))

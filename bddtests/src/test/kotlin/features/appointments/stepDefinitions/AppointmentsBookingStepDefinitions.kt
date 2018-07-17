@@ -1,0 +1,42 @@
+package features.appointments.stepDefinitions
+
+import cucumber.api.java.en.Given
+import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
+import java.time.Duration
+
+
+class AppointmentsBookingStepDefinitions {
+
+    @Given("^there are (.*) appointments available to book$")
+    fun thereAreAvailableAppointmentsToBook(gpSystem: String) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.createDefault()
+        factory.generateSuccessfulBookingResponse()
+    }
+
+    @Given("^there are (.*) appointments available to book, but GP system doesn't respond a timely fashion when booking$")
+    fun thereAreAvailableAppointmentsToBookBuySystemDoesntRespond(gpSystem: String) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.createDefault()
+        factory.generateBookingResponse{
+            bookRequest->bookRequest.withDelay(Duration.ofSeconds(10)).respondWithSuccess()}
+    }
+
+    @Given("^there are (.*) appointments available to book, but the GP system is unavailable$")
+    fun thereAreAvailableAppointmentsToBookButSystemIsUnavailable(gpSystem: String) {
+
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.createDefault()
+        factory.generateBookingResponse{
+            bookRequest->bookRequest.respondWithUnavailableException()}
+    }
+
+    @Given("^there are (.*) appointments available to book, but the appointment slot has already been booked by somebody else$")
+    fun thereAreAvailableAppointmentsToBookButBookingConflict(gpSystem: String) {
+
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.createDefault()
+        factory.generateBookingResponse{
+            bookRequest->bookRequest.respondWithConflictException()}
+    }
+}

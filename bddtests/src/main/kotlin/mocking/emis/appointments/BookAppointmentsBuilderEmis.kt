@@ -2,7 +2,7 @@ package mocking.emis.appointments
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import mocking.IBookAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
@@ -14,7 +14,7 @@ import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotResponse
 import java.time.Duration
 
-class EmisBookAppointmentsBuilder (configuration: EmisConfiguration,
+class BookAppointmentsBuilderEmis (configuration: EmisConfiguration,
                                    apiEndUserSessionId: String,
                                    apiSessionId: String,
                                    request: BookAppointmentSlotFacade)
@@ -30,7 +30,7 @@ class EmisBookAppointmentsBuilder (configuration: EmisConfiguration,
     }
     var delayMillisecs = 0
 
-    override fun  withDelay(delayMilliseconds : Duration):EmisBookAppointmentsBuilder{
+    override fun  withDelay(delayMilliseconds : Duration):BookAppointmentsBuilderEmis{
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }

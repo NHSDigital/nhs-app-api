@@ -1,6 +1,6 @@
 package mocking.tpp.appointments
 
-import mocking.ICancelAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.CancelAppointmentReply
@@ -8,7 +8,7 @@ import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 
 
-class TppCancelAppointmentsBuilder  (patient: Patient, request: CancelAppointmentSlotFacade)
+class CancelAppointmentsBuilderTpp  (patient: Patient, request: CancelAppointmentSlotFacade)
     : TppMappingBuilder(method = "POST", relativePath = "/tpp/")
         , ICancelAppointmentsBuilder {
 

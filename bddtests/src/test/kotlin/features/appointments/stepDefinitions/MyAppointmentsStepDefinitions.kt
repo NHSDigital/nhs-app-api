@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.MyAppointmentsSteps
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 
 class MyAppointmentsStepDefinitions {
@@ -11,10 +12,6 @@ class MyAppointmentsStepDefinitions {
     @Steps
     lateinit var myAppointmentsSteps: MyAppointmentsSteps
 
-    @Then("^booking request is successfully made with valid details$")
-    fun bookingRequestIsMade() {
-        myAppointmentsSteps.checkBookingWasRequested()
-    }
 
     @Then("^Appointment Booking confirmation screen is displayed$")
     fun appointmentBookingConfirmationScreenIsDisplayed() {

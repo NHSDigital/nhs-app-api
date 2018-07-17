@@ -3,7 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import mocking.IBookAppointmentsBuilder
+import features.appointments.stepDefinitions.factories.AppointmentsBookingBackendFactory
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import net.serenitybdd.core.Serenity
 import org.apache.http.HttpResponse
@@ -16,7 +17,7 @@ import java.time.Duration
 import javax.servlet.http.Cookie
 
 
-class AppointmentsBookingStepDefinitionsBackend {
+open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) can be successful$")
     fun anAppointmentBookingForCanBeSuccessful(gpSystem: String) {
@@ -26,21 +27,21 @@ class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) can be successful with slot identifier of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForSlotId(gpSystem: String, numberOfCharacters: Int) {
-        var dataController = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        var patient = dataController.getDefaultPatient()
+        var factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        var patient = factory.patient
         var slotId = "1".repeat(numberOfCharacters).toInt()
-        var request = dataController.defaultAppointmentRequest(patient, slotId = slotId)
-        dataController.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
+        var request = factory.defaultAppointmentRequest(patient, slotId = slotId)
+        factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
     }
 
 
     @Given("^an appointment booking for (.*) can be successful with booking reason of (\\d+) characters?$")
     fun anAppointmentBookingForCanBeSuccessfulWithANumberOfCharactersForBookingReason(gpSystem: String, numberOfCharacters: Int) {
-        var dataController = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        var patient = dataController.getDefaultPatient()
+        var factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        var patient = factory.patient
         var bookingReason = "a".repeat(numberOfCharacters)
-        var request = dataController.defaultAppointmentRequest(patient, bookingReason = bookingReason)
-        dataController.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
+        var request = factory.defaultAppointmentRequest(patient, bookingReason = bookingReason)
+        factory.setupRequestAndResponse(request) { bookAppointmentSlotRequest(patient, request).respondWithSuccess() }
     }
 
     @Given("^an appointment booking for (.*) generates an unknown exception$")
@@ -81,10 +82,10 @@ class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system is unavailable$")
     fun appointmentBookingUnavailable(gpSystem: String) {
-        var dataController = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        var patient = dataController.getDefaultPatient()
-        var request = dataController.defaultAppointmentRequest(patient)
-        dataController.setupRequestAndResponse(request)
+        var factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
+        var patient = factory.patient
+        var request = factory.defaultAppointmentRequest(patient)
+        factory.setupRequestAndResponse(request)
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system will time out$")
@@ -96,7 +97,7 @@ class AppointmentsBookingStepDefinitionsBackend {
     private fun defaultAppointmentBookingSetupWithResult(
             gpSystem: String,
             bookAppointmentsBuilder: (IBookAppointmentsBuilder) -> Mapping) {
-        AppointmentsBookingFactory.getForSupplier(gpSystem).defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
+        AppointmentsBookingBackendFactory.getForSupplier(gpSystem).defaultAppointmentBookingSetupWithResult(bookAppointmentsBuilder)
     }
 
     @When("^an appointment booking is submitted$")
@@ -110,7 +111,7 @@ class AppointmentsBookingStepDefinitionsBackend {
         val workerAppointmentRequest =
                 AppointmentBookRequest(
                         null,
-                       AppointmentsBookingFactory. defaultApptBookingReason)
+                       AppointmentsBookingBackendFactory. defaultApptBookingReason)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 
@@ -119,7 +120,7 @@ class AppointmentsBookingStepDefinitionsBackend {
         val slotIdOfSpecifiedLength = "1".repeat(numberOfCharacters)
         val workerAppointmentRequest = AppointmentBookRequest(
                 slotId = slotIdOfSpecifiedLength,
-                bookingReason = AppointmentsBookingFactory. defaultApptBookingReason)
+                bookingReason = AppointmentsBookingBackendFactory. defaultApptBookingReason)
         submitAppointmentRequest(workerAppointmentRequest)
     }
 
@@ -127,7 +128,7 @@ class AppointmentsBookingStepDefinitionsBackend {
     fun anAppointmentIsSubmittedWithNoBookingReason() {
         val workerAppointmentRequest =
                 AppointmentBookRequest(
-                        AppointmentsBookingFactory. defaultApptBookingSlotId.toString(),
+                        AppointmentsBookingBackendFactory. defaultApptBookingSlotId.toString(),
                         null)
         submitAppointmentRequest(workerAppointmentRequest)
     }
@@ -136,7 +137,7 @@ class AppointmentsBookingStepDefinitionsBackend {
     fun anAppointmentIsSubmittedWithANumberOfCharactersForBookingReason(numberOfCharacters: Int) {
         val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharacters)
         val workerAppointmentRequest = AppointmentBookRequest(
-                slotId = AppointmentsBookingFactory. defaultApptBookingSlotId.toString(),
+                slotId = AppointmentsBookingBackendFactory. defaultApptBookingSlotId.toString(),
                 bookingReason = bookingReasonOfSpecifiedLength)
         submitAppointmentRequest(workerAppointmentRequest)
     }

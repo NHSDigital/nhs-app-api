@@ -1,10 +1,10 @@
 package features.appointments.data
 
-import mocking.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.MockingClient
 import mocking.SERENITY_VARIABLE_GP_SERVICE_KEY
 import mocking.commonData.BaseAppointmentData
-import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -35,9 +35,10 @@ abstract class ViewAppointmentsFactory {
     protected abstract fun sendRequestViaMockingClient(resolver: IAppointmentMappingBuilder.() -> Mapping)
 
     companion object {
-        private val map: HashMap<String, ViewAppointmentsFactory> = hashMapOf(
+
+        private val map: HashMap<String, ViewAppointmentsFactory> by lazy{ hashMapOf(
                 "EMIS" to ViewAppointmentsFactoryEmis(),
-                "TPP" to ViewAppointmentsFactoryTpp())
+                "TPP" to ViewAppointmentsFactoryTpp())}
 
         fun getForSupplier(gpSystem: String): ViewAppointmentsFactory {
             if (!map.containsKey(gpSystem)) {
@@ -46,5 +47,4 @@ abstract class ViewAppointmentsFactory {
             return map.getValue(gpSystem)
         }
     }
-
 }

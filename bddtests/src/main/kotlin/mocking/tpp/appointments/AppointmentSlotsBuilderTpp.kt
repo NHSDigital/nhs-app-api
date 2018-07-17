@@ -1,6 +1,6 @@
 package mocking.tpp.appointments
 
-import mocking.IAppointmentSlotsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.data.TppConfig
@@ -16,7 +16,7 @@ import worker.models.demographics.TppUserSession
 import java.time.Duration
 import java.time.OffsetDateTime
 
-class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession) :
+class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
         TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 
     val tppUserSession: TppUserSession = tppUserSession

@@ -3,6 +3,7 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.stepDefinitions.factories.AppointmentsCancellingFactory
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -46,11 +47,11 @@ class AppointmentsCancellingStepDefinitionsBackend {
     }
 
     private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String) {
-        var dataController = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        var patient = dataController.getDefaultPatient()
-        var request = dataController.defaultRequest(patient, SLOT_ID, reason)
+        var factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
+        var patient = factory.patient
+        var request = factory.defaultRequest(patient, SLOT_ID, reason)
 
-        dataController.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
+        factory.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
     }
 
     @When("^I send a cancellation request to the API with a valid cancellation reason$")

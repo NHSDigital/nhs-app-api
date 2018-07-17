@@ -1,15 +1,15 @@
 package mocking.tpp
 
-import mocking.IAppointmentMappingBuilder
-import mocking.IBookAppointmentsBuilder
-import mocking.ICancelAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.MappingBuilder
-import mocking.tpp.appointments.TppAppointmentSlotsBuilder
-import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
+import mocking.tpp.appointments.AppointmentSlotsBuilderTpp
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
-import mocking.tpp.appointments.TppBookAppointmentsBuilder
-import mocking.tpp.appointments.TppMyAppointmentsBuilder
-import mocking.tpp.appointments.TppCancelAppointmentsBuilder
+import mocking.tpp.appointments.BookAppointmentsBuilderTpp
+import mocking.tpp.appointments.MyAppointmentsBuilderTpp
+import mocking.tpp.appointments.CancelAppointmentsBuilderTpp
 import mocking.tpp.models.Authenticate
 import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
@@ -48,15 +48,15 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
     fun prescriptionSubmission(patient: Patient, drugIds: List<String>?) = TppPrescriptionsSubmissionBuilder(patient, drugIds)
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
     fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
-    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = TppAppointmentSlotsBuilder(patient.tppUserSession!!)
+    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderTpp(patient.tppUserSession!!)
 
-    override fun viewAppointment(patient: Patient): IMyAppointmentsBuilder = TppMyAppointmentsBuilder(patient)
+    override fun viewAppointment(patient: Patient): IMyAppointmentsBuilder = MyAppointmentsBuilderTpp(patient)
 
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder =
-            TppBookAppointmentsBuilder(patient, request)
+            BookAppointmentsBuilderTpp(patient, request)
 
     override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade): ICancelAppointmentsBuilder =
-            TppCancelAppointmentsBuilder(patient, request)
+            CancelAppointmentsBuilderTpp(patient, request)
 
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 

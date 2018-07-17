@@ -1,7 +1,7 @@
 package mocking.emis.appointments
 
 import mocking.GsonFactory
-import mocking.ICancelAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
@@ -11,7 +11,7 @@ import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import org.apache.http.HttpStatus
 
-class EmisDeleteAppointmentsBuilder (configuration: EmisConfiguration, patient: Patient, request: CancelAppointmentSlotFacade) :
+class DeleteAppointmentsBuilderEmis (configuration: EmisConfiguration, patient: Patient, request: CancelAppointmentSlotFacade) :
         EmisMappingBuilder(configuration, "DELETE", "/appointments"), ICancelAppointmentsBuilder {
 
     init {

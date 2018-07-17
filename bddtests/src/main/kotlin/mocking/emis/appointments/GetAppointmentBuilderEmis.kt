@@ -8,7 +8,7 @@ import mocking.emis.HEADER_API_SESSION_ID
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class EmisGetAppointmentBuilder(
+class GetAppointmentBuilderEmis(
         configuration: EmisConfiguration,
         endUserSessionId: String,
         sessionId: String,

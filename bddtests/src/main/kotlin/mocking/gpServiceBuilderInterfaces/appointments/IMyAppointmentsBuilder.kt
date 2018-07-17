@@ -1,4 +1,4 @@
-package mocking.gpServiceBuilderInterfaces
+package mocking.gpServiceBuilderInterfaces.appointments
 
 import mocking.models.Mapping
 

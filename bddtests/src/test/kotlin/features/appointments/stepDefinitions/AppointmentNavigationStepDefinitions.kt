@@ -1,5 +1,6 @@
 package features.appointments.stepDefinitions
 
+import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
@@ -33,20 +34,26 @@ class AppointmentNavigationStepDefinitions {
 
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
 
+
+    //Please reconsider using as part of a navigation step, and instead use an explicit login step
+    private fun login(){
+    }
+
     @Given("^I am on my appointments page$")
     fun iAmOnMyAppointmentsPage() {
+        login()
         navigation.select("Appointments")
     }
 
     @Given("^I am on the guidance page$")
     fun iAmOnTheGuidancePage() {
-        iAmOnMyAppointmentsPage()
+        navigation.select("Appointments")
         myAppointments.clickOnBookAppointmentButton()
+        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
     }
 
     @Given("^I am on the available appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        // TODO remove if-else statement when TPP upcoming appointment stubs are created - NHSO-1672
         val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
         Assert.assertNotNull("Patient not initialised. ", patient)
         navigation.select("Appointments")
@@ -56,13 +63,15 @@ class AppointmentNavigationStepDefinitions {
             myAppointments.clickOnBookAppointmentButton()
             appointmentGuidanceSteps.clickBookAnAppointmentButton()
         }
-        availableAppointmentsPage.waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
     @When("^I try to progress to the available appointments page$")
     fun iTryToProgressToTheAvailableAppointmentsPage() {
-        iAmOnTheGuidancePage()
+        login()
+        navigation.select("Appointments")
+        myAppointments.clickOnBookAppointmentButton()
+        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
     }
 }

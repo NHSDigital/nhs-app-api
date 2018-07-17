@@ -7,9 +7,9 @@ import mocking.vision.VisionConstants
 import mocking.vision.models.*
 import models.Patient
 
-class VisionSessionCreateJourneyFactory(val client: MockingClient) {
+class VisionSessionCreateJourneyFactory(val client: MockingClient): SessionCreateJourneyFactory() {
 
-    fun createFor(patient: Patient) {
+    override fun createFor(patient: Patient) {
         client
                 .forVision {
                     getConfigurationRequest(

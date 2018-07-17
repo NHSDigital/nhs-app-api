@@ -44,23 +44,6 @@ open class AppointmentsConfirmationSteps {
                 }
     }
 
-    @Step
-    fun mockEmisUnavailableResponse() {
-        //accept all requests
-        mockingClient
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
-                        .respondWithUnavailableException()
-                }
-    }
-
-    @Step
-    fun mockEmisConflictesponse() {
-        //accept all requests
-        mockingClient
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
-                        .respondWithConflictException()
-                }
-    }
 
     @Step
     fun checkValidationErrorMessage() {

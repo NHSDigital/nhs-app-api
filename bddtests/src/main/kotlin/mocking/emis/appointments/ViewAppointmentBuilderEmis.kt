@@ -4,12 +4,12 @@ import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
-import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 
-class EmisViewAppointmentBuilder(configuration: EmisConfiguration?, patient: Patient)
+class ViewAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointments"), IMyAppointmentsBuilder {
     init {
         requestBuilder

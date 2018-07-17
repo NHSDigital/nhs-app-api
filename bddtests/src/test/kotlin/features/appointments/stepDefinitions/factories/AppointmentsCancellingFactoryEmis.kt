@@ -1,0 +1,19 @@
+package features.appointments.stepDefinitions.factories
+
+import mockingFacade.appointments.CancelAppointmentSlotFacade
+import models.Patient
+
+class AppointmentsCancellingFactoryEmis : AppointmentsCancellingFactory("EMIS") {
+
+
+    override fun defaultRequest(patient: Patient,
+                                appointmentId: Int?,
+                                cancellationReason: String?): CancelAppointmentSlotFacade {
+
+        return CancelAppointmentSlotFacade(
+                patient.userPatientLinkToken,
+                appointmentId ?: defaultApptCancellingSlotId,
+                cancellationReason ?: defaultApptCancellingReason
+        )
+    }
+}

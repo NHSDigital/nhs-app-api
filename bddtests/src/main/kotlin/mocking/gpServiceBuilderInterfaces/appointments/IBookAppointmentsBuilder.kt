@@ -1,4 +1,4 @@
-package mocking
+package mocking.gpServiceBuilderInterfaces.appointments
 
 import mocking.models.Mapping
 import java.time.Duration

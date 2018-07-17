@@ -1,6 +1,6 @@
 package features.appointments.data
 
-import mocking.IAppointmentMappingBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.JSonXmlConverter
 import mocking.commonData.BaseAppointmentData
 import mocking.emis.data.EmisAppointmentData

@@ -5,9 +5,9 @@ import mocking.defaults.MockDefaults
 import mocking.tpp.models.*
 import models.Patient
 
-class TppSessionCreateJourneyFactory(val client: MockingClient) {
+class TppSessionCreateJourneyFactory(val client: MockingClient) :SessionCreateJourneyFactory (){
 
-    fun createFor(patient: Patient) {
+    override fun createFor(patient: Patient) {
         client.forTpp {
             authenticateRequest(Authenticate(
                     apiVersion = "1",

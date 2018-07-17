@@ -12,10 +12,7 @@ import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.session.VisionSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.*
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
@@ -527,20 +524,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
         Serenity.setSessionVariable(Patient::class).to(this.patient)
-
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-
-        when (gpSystem.toUpperCase()) {
-            "EMIS" -> {
-                EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
-            }
-            "TPP" -> {
-                TppSessionCreateJourneyFactory(mockingClient).createFor(patient)
-            }
-            "VISION" -> {
-                VisionSessionCreateJourneyFactory(mockingClient).createFor(patient)
-            }
-        }
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
         browser.goToApp()
         login.using(this.patient)

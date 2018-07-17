@@ -1,7 +1,7 @@
 package mocking.emis.appointments
 
 import mocking.GsonFactory
-import mocking.IAppointmentSlotsBuilder
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.defaults.MockDefaults
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -13,12 +13,11 @@ import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
-import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
 
-class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
+class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                                   apiEndUserSessionId: String,
                                   apiSessionId: String,
                                   fromDateTime: String?,
@@ -61,7 +60,7 @@ class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
 
     private var delayMillisecs = 0
 
-    override fun withDelay(delayMilliseconds : Duration):EmisAppointmentSlotsBuilder{
+    override fun withDelay(delayMilliseconds : Duration):AppointmentSlotsBuilderEmis{
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }

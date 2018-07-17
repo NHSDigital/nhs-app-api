@@ -2,8 +2,6 @@ Feature: Guidance prior to booking an appointment
 
   Users are given guidance before booking a new appointment.
 
-  Background:
-    Given wiremock is initialised
 
   @NHSO-420
   @appointment
@@ -26,7 +24,8 @@ Feature: Guidance prior to booking an appointment
   @NHSO-420
   @appointment
   Scenario: A user proceeds to check their symptoms
-    Given I am logged in as a EMIS user
+    Given I have upcoming appointments for EMIS
+    And I am logged in as a EMIS user
     And I am on the guidance page
     When I select Appointment Guidance Page Check your symptoms button
     Then a new tab opens https://111.nhs.uk/
