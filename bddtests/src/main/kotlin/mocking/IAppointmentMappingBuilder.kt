@@ -1,10 +1,9 @@
 package mocking
 
-import mocking.IBookAppointmentsBuilder
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
-import worker.models.appointments.BookAppointmentSlotRequest
 
 interface IAppointmentMappingBuilder{
 
-    fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest): IBookAppointmentsBuilder
+    fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder
 }

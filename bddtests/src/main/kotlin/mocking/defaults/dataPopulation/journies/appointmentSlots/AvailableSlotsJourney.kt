@@ -2,12 +2,15 @@ package mocking.defaults.dataPopulation.journies.appointmentSlots
 
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.emis.appointments.*
+import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
+import mocking.emis.appointments.GetAppointmentSlotsResponseModel
+import mocking.emis.appointments.GetAppointmentsResponseModel
+import mocking.emis.appointments.PostAppointmentRequestModel
 import mocking.emis.data.AppointmentData
 import mocking.emis.models.AppointmentSession
 import mocking.emis.models.AppointmentSlot
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
-import worker.models.appointments.BookAppointmentSlotRequest
 
 class AvailableSlotsJourney(private val client: MockingClient) {
     private val appointmentData = AppointmentData.instance
@@ -46,7 +49,7 @@ class AvailableSlotsJourney(private val client: MockingClient) {
 
         //accept all requests
         client
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
+                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
                         .respondWithSuccess()
                 }
 

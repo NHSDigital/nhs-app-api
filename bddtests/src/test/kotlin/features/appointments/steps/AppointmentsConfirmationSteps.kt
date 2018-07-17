@@ -2,6 +2,7 @@ package features.appointments.steps
 
 import mocking.defaults.MockDefaults
 import mocking.MockingClient
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
@@ -37,7 +38,7 @@ open class AppointmentsConfirmationSteps {
     fun mockEmisSuccessResponseDelayedBy(delayedBy: Long) {
         //accept all requests
         mockingClient
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
+                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
                         .respondWithSuccess()
                         .delayedBy(Duration.ofSeconds(delayedBy))
                 }
@@ -47,7 +48,7 @@ open class AppointmentsConfirmationSteps {
     fun mockEmisUnavailableResponse() {
         //accept all requests
         mockingClient
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
+                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
                         .respondWithUnavailableException()
                 }
     }
@@ -56,7 +57,7 @@ open class AppointmentsConfirmationSteps {
     fun mockEmisConflictesponse() {
         //accept all requests
         mockingClient
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 123, "Reason"))
+                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
                         .respondWithConflictException()
                 }
     }

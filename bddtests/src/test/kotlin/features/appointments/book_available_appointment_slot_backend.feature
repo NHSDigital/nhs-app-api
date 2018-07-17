@@ -13,6 +13,7 @@ Feature: Book appointments
     Examples: 
     | GP System |
     | EMIS      |
+    | TPP       |
 
   @NHSO-736
   @backend
@@ -23,6 +24,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -34,6 +36,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -45,6 +48,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -55,6 +59,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -66,6 +71,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -77,6 +83,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -88,6 +95,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -99,6 +107,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -109,6 +118,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -119,6 +129,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -130,6 +141,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -141,6 +153,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -152,6 +165,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -163,6 +177,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -174,6 +189,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -185,6 +201,7 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-736
   @backend
@@ -196,3 +213,4 @@ Feature: Book appointments
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |

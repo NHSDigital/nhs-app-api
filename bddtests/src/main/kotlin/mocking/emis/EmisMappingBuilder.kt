@@ -27,6 +27,7 @@ import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
@@ -73,7 +74,8 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             sessionEndDate,
             patient.userPatientLinkToken)
 
-    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotRequest) = EmisBookAppointmentsBuilder(configuration!!, patient.endUserSessionId, patient.sessionId, request)
+    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade) =
+            EmisBookAppointmentsBuilder(configuration!!, patient.endUserSessionId, patient.sessionId, request)
 
     fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentRequest) = EmisDeleteAppointmentsBuilder(configuration!!, patient, request)
 

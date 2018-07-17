@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         {
             if (!request.StartTime.HasValue || !request.EndTime.HasValue)
             {
+                _logger.LogError("Appointment book request was missing dates", request);
                 return new AppointmentBookResult.BadRequest();
             }
             try

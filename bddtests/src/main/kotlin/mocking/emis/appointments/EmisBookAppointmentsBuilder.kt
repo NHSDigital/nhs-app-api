@@ -9,16 +9,15 @@ import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import org.apache.http.HttpStatus
-import worker.models.appointments.BookAppointmentSlotRequest
 import worker.models.appointments.BookAppointmentSlotResponse
 import java.time.Duration
-
 
 class EmisBookAppointmentsBuilder (configuration: EmisConfiguration,
                                    apiEndUserSessionId: String,
                                    apiSessionId: String,
-                                   request: BookAppointmentSlotRequest)
+                                   request: BookAppointmentSlotFacade)
     : EmisMappingBuilder(configuration, method = "POST", relativePath = "/appointments")
         , IBookAppointmentsBuilder {
 
