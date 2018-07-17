@@ -132,6 +132,6 @@ open class SharedStepDefinitions {
     @Given("My session has expired")
     fun givenMySessionHasExpired(){
         Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
-        iWaitForXSeconds(61)
+        iWaitForXSeconds(70)
     }
 }

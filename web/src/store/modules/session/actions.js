@@ -33,7 +33,7 @@ export default {
     if (process.client) {
       const interval = setInterval(() => {
         dispatch('validate');
-      }, 30000);
+      }, 10000);
 
       commit(START_VALIDATION_CHECKING, interval);
     }
