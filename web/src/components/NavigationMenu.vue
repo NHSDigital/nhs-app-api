@@ -1,25 +1,46 @@
 <template>
   <nav class="menu">
     <ul>
-      <li :class="getMenuitemState(0)" @click="setMenuitemState(0)">
-        <symptoms-icon/>
-        <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
+      <li :class="getMenuitemState(0)">
+        <a :href="symptomsCheckerUrl"
+           target="_blank"
+           data-sid="symptoms-menu-item"
+           @click="setMenuitemState($event)">
+          <symptoms-icon/>
+          <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
+        </a>
       </li>
-      <li :class="getMenuitemState(1)" @click="setMenuitemState(1)">
-        <appointments-icon/>
-        <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
+      <li :class="getMenuitemState(1)">
+        <a href="/appointments"
+           data-sid="appointments-menu-item"
+           @click="setMenuitemState($event)">
+          <appointments-icon/>
+          <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
+        </a>
       </li>
-      <li :class="getMenuitemState(2)" @click="setMenuitemState(2)">
-        <prescriptions-icon/>
-        <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
+      <li :class="getMenuitemState(2)">
+        <a href="/prescriptions"
+           data-sid="prescriptions-menu-item"
+           @click="setMenuitemState($event)">
+          <prescriptions-icon/>
+          <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
+        </a>
       </li>
-      <li :class="getMenuitemState(3)" @click="setMenuitemState(3)">
-        <record-icon/>
-        <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
+      <li :class="getMenuitemState(3)">
+        <a href="/my-record/myrecordwarning"
+           data-sid="myrecord-menu-item"
+           @click="setMenuitemState($event)">
+          <record-icon/>
+          <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
+        </a>
       </li>
-      <li :class="getMenuitemState(4)" @click="setMenuitemState(4)">
-        <more-icon/>
-        <span>{{ $t('navigationMenu.moreLabel') }}</span>
+      <li :class="getMenuitemState(4)">
+        <a href="/more"
+           data-sid="more-menu-item"
+           @click="setMenuitemState($event)">
+          <more-icon/>
+          <span>{{ $t('navigationMenu.moreLabel') }}</span>
+        </a>
       </li>
     </ul>
   </nav>
@@ -53,31 +74,134 @@ export default {
         active: this.$store.state.navigation.menuItemStatusAt[menuItemIndex],
       };
     },
-    setMenuitemState(menuItemIndex) {
-      switch (menuItemIndex) {
-        case 0:
-          window.open(this.symptomsCheckerUrl, '_blank');
-          break;
-        case 1:
-          this.$router.push('/appointments');
-          break;
-        case 2:
-          this.$router.push('/prescriptions');
-          break;
-        case 3:
-          this.$router.push('/my-record/myrecordwarning');
-          break;
-        case 4:
-          this.$router.push('/more');
-          break;
-        default:
-          this.$router.push('/');
+    setMenuitemState(event) {
+      const a = event.currentTarget;
+      if (a.target === '_blank') {
+        window.open(a.href, '_blank');
+      } else {
+        this.$router.push(a.pathname);
       }
+
+      event.preventDefault();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../style/menu";
+  @import '../style/colours';
+  @import '../style/fonts';
+  @import '../style/textstyles';
+
+  nav.menu {
+    background-color: $white;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    height: 70px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+    z-index: 1000;
+
+    ul {
+      width: 100%;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding-left: 6px;
+      padding-right: 6px;
+      margin: 0;
+
+
+      li {
+        flex-grow: 1;
+        text-align: center;
+        vertical-align: bottom;
+        list-style: none;
+        margin-top: 4px;
+        align-self: stretch;
+        justify-content: space-around;
+        display: flex;
+        flex-direction: column;
+
+        a {
+          text-decoration: none;
+          display: inline-block;
+          text-align: center;
+          flex-grow: 1;
+          justify-content: space-around;
+        }
+
+        svg {
+          display: block;
+          align-self: center;
+          flex-grow: 1;
+          height: 30px;
+          margin: 6px auto 3px;
+        }
+
+        span {
+          align-self: flex-end;
+          box-sizing: border-box;
+          color: $dark_grey;
+          display: inline-block;
+          font-family: $default;
+          font-weight: normal;
+          font-size: 10px;
+          margin-top: 6px;
+          text-align: center;
+          text-transform: uppercase;
+          line-height: 10px;
+          width: 100%;
+        }
+      }
+
+      li.active {
+        span {
+          font-family: $default;
+          font-weight: normal;
+          font-size: 10px;
+          text-transform: uppercase;
+          color: $nhs_blue;
+        }
+      }
+    }
+  }
+
+  header {
+    background: $nhs_blue;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 100px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
+
+    h1 {
+      @include screen_title;
+      text-align: center;
+    }
+
+    .nhs_logo {
+      margin: 16px;
+      height: 22px;
+      float: left;
+    }
+
+    .account {
+      margin: 16px;
+      float: right;
+      height: 22px;
+    }
+
+    hr {
+      margin: 54px 16px 9px 16px;
+      height: 1px;
+      border: none;
+      background-color: white;
+      opacity: 0.4;
+    }
+  }
+
 </style>

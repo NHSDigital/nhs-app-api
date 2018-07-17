@@ -7,19 +7,19 @@ import pages.HybridPageObject
 open class NavBar : HybridPageObject(Companion.PageType.NATIVE) {
     enum class NavBarType(val browserLocator: String, val androidLocator: String) {
         SYMPTOMS(
-                "//span[contains(text(),'Symptoms')]",
+                "//*[@data-sid='symptoms-menu-item']",
                 "//android.widget.LinearLayout[contains(@resource-id, 'symptoms')]"),
         APPOINTMENTS(
-                "//span[contains(text(),'Appointments')]",
+                "//*[@data-sid='appointments-menu-item']",
                 "//android.widget.LinearLayout[contains(@resource-id, 'appointments')]"),
         PRESCRIPTIONS(
-                "//span[contains(text(),'Prescriptions')]",
+                "//*[@data-sid='prescriptions-menu-item']",
                 "//android.widget.LinearLayout[contains(@resource-id, 'prescriptions')]"),
         MY_RECORD(
-                "//span[contains(text(),'My record')]",
+                "//*[@data-sid='myrecord-menu-item']",
                 "//android.widget.LinearLayout[contains(@resource-id, 'myRecord')]"),
         MORE(
-                "//span[contains(text(),'More')]",
+                "//*[@data-sid='more-menu-item']",
                 "//android.widget.LinearLayout[contains(@resource-id, 'more')]");
     }
 

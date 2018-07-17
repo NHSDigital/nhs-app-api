@@ -1,6 +1,8 @@
 package features.sharedStepDefinitions.backend
 
 import config.Config
+import cucumber.api.Scenario
+import cucumber.api.java.After
 import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
@@ -46,6 +48,11 @@ class CommonSteps : AbstractSteps() {
 
         setSessionVariable(MockingClient::class).to(mockingClient)
         setSessionVariable(WorkerClient::class).to(workerClient)
+    }
+
+    @After
+    fun after(scenario: Scenario) {
+        val x = "x"
     }
 
     @Given("EMIS is unavailable")
