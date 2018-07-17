@@ -34,6 +34,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private lateinit var knownServices: KnownServices
     private val apiVersion: Int = android.os.Build.VERSION.SDK_INT
     private var sessionValidator: ValidateSessionLifeCycleObserver? = null
+    private var reloadUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +51,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         configureWebView()
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
-        retryButton.setOnClickListener { webview.reload() }
+        retryButton.setOnClickListener { reloadRequest() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
 
@@ -83,6 +84,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         if (data != null) {
             loadPage(data.toString())
         }
+    }
+
+    override fun setReloadUrl(url: String?) {
+        reloadUrl = url
     }
 
     private fun configureWebView() {
@@ -166,6 +171,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
         loadPage(fullUrl)
         if (headerText != null) {
             setHeaderText(headerText)
+        }
+    }
+
+    private fun reloadRequest() {
+        if (reloadUrl != null) {
+            webview.loadUrl(reloadUrl)
+        } else {
+            webview.reload()
         }
     }
 

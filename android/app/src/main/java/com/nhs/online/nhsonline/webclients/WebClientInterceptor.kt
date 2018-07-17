@@ -88,12 +88,8 @@ class WebClientInterceptor(
         failingUrl: String?
     ) {
         if (shouldHandleUnavailability(failingUrl)) {
-            shouldShowErrorPage = true
             cancelTrackingWebRequestResponse()
-
-            val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
-            uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
-            logger.info("Failing Url: $failingUrl with error code: $errorCode")
+            handleUnavailability(failingUrl, errorCode)
         }
     }
 
@@ -141,10 +137,8 @@ class WebClientInterceptor(
     }
 
     private fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
-        val errorMessage = getUnavailabilityErrorMessageForService(view?.url)
-        uiInteractor.showUnavailabilityError(errorMessage)
+        handleUnavailability(view?.url)
         view?.stopLoading()
-        shouldShowErrorPage = true
     }
 
     private fun updateHeaderAndNavMenu(url: String?) {
@@ -165,14 +159,9 @@ class WebClientInterceptor(
         val showDialogFn = { uiInteractor.showProgressDialog() }
 
         val expireRequestFn = {
-            shouldShowErrorPage = true
             view?.stopLoading()
             uiInteractor.dismissProgressDialog()
-
-
-            val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(url)
-            uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
-            logger.info("Failing Url: $url")
+            handleUnavailability(url)
         }
 
         handler.postDelayed(showDialogFn,
@@ -184,6 +173,17 @@ class WebClientInterceptor(
     private fun cancelTrackingWebRequestResponse() {
         uiInteractor.dismissProgressDialog()
         handler.removeCallbacksAndMessages(null)
+    }
+
+    private fun handleUnavailability(failingUrl: String?, errorCode: Int? = null) {
+        uiInteractor.setReloadUrl(failingUrl)
+        shouldShowErrorPage = true
+
+        val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)
+
+        uiInteractor.showUnavailabilityError(unavailabilityErrorMessage)
+
+        logger.info("Failing Url: $failingUrl with error code: $errorCode")
     }
 
     private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {

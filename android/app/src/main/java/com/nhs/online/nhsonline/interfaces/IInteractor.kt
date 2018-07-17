@@ -26,4 +26,6 @@ interface IInteractor {
     fun hideHeader()
 
     fun hideMenuBar()
+
+    fun setReloadUrl(url: String?)
 }
