@@ -30,12 +30,10 @@ export default {
       return;
     }
 
-    const intervalMs = state.durationSeconds ? ((state.durationSeconds / 2) * 1000) : 300000;
-
     if (process.client) {
       const interval = setInterval(() => {
         dispatch('validate');
-      }, intervalMs);
+      }, 30000);
 
       commit(START_VALIDATION_CHECKING, interval);
     }
