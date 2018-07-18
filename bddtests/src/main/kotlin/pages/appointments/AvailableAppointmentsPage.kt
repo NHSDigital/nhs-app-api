@@ -1,54 +1,80 @@
 package pages.appointments
 
-import models.Slot
-import net.serenitybdd.core.annotations.findby.FindBy
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import pages.HybridPageElement
 
 @DefaultUrl("http://localhost:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
-    @FindBy(xpath = "//select[@id='type']")
-    private lateinit var appointmentTypeFilter: WebElementFacade
+    private val filterXpath = "//select[@id='%s']"
+    private val byIdWithinSpanXpath = "//span[@id='%s']"
 
-    @FindBy(xpath = "//select[@id='location']")
-    private lateinit var locationFilter: WebElementFacade
+    private val appointmentTypeFilter = HybridPageElement(
+            browserLocator = String.format(filterXpath, "type"),
+            androidLocator = "",
+            page = this
+    )
 
-    @FindBy(xpath = "//select[@id='clinician']")
-    private lateinit var clinicianFilter: WebElementFacade
+    private val locationFilter = HybridPageElement(
+            browserLocator = String.format(filterXpath, "location"),
+            androidLocator = "",
+            page = this
+    )
 
-    @FindBy(xpath = "//select[@id='time-period']")
-    private lateinit var timePeriodFilter: WebElementFacade
+    private val clinicianFilter = HybridPageElement(
+            browserLocator = String.format(filterXpath, "clinician"),
+            androidLocator = "",
+            page = this
+    )
 
-    @FindBy(xpath = "//*[@id = 'appointment-date']")
-    private lateinit var firstAppointmentDate: WebElementFacade
+    private val timePeriodFilter = HybridPageElement(
+            browserLocator = String.format(filterXpath, "time-period"),
+            androidLocator = "",
+            page = this
+    )
 
-    @FindBy(xpath = "//*[@id='error-type']")
-    private lateinit var typeInLineError: WebElementFacade
+    private val firstAppointmentDate = HybridPageElement(
+            browserLocator = "//form/span/*",
+            androidLocator = "",
+            page = this
+    )
 
-    @FindBy(xpath = "//*[@id='error-location']")
-    private lateinit var locationInLineError: WebElementFacade
+    private val typeInLineError = HybridPageElement(
+            browserLocator = String.format(byIdWithinSpanXpath, "error-type"),
+            androidLocator = "",
+            page = this
+    )
 
-    @FindBy(xpath = "//*[@id='error-slot']")
-    private lateinit var slotInLineError: WebElementFacade
+    private val locationInLineError = HybridPageElement(
+            browserLocator = String.format(byIdWithinSpanXpath, "error-location"),
+            androidLocator = "",
+            page = this
+    )
+
+    private val slotInLineError = HybridPageElement(
+            browserLocator = String.format(byIdWithinSpanXpath, "error-slot"),
+            androidLocator = "",
+            page = this
+    )
 
     private val appointmentSlotDateXpath = "//form/span/h5[text() = '%s']"
     private val appointmentSlotTimeXpath = "$appointmentSlotDateXpath/../ul/li[contains(., '%s')]"
 
     fun isTypeFilterPresent(): Boolean {
-        return appointmentTypeFilter.isPresent
+        return appointmentTypeFilter.elements.isNotEmpty()
     }
 
     fun isLocationsFilterPresent(): Boolean {
-        return locationFilter.isPresent
+        return locationFilter.elements.isNotEmpty()
     }
 
     fun isCliniciansFilterPresent(): Boolean {
-        return clinicianFilter.isPresent
+        return clinicianFilter.elements.isNotEmpty()
     }
 
     fun isTimePeriodFilterPresent(): Boolean {
-        return timePeriodFilter.isPresent
+        return timePeriodFilter.elements.isNotEmpty()
     }
 
     fun selectFirstSlot() {
@@ -64,7 +90,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getSelectedAppointmentType(): String {
-        return appointmentTypeFilter.selectedVisibleTextValue.trim()
+        return appointmentTypeFilter.element.selectedVisibleTextValue.trim()
     }
 
     fun getLocationFilterContents(): ArrayList<String>  {
@@ -72,7 +98,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getSelectedLocation(): String {
-        return locationFilter.selectedVisibleTextValue.trim()
+        return locationFilter.element.selectedVisibleTextValue.trim()
     }
 
     fun getClinicianFilterContents(): ArrayList<String>  {
@@ -80,7 +106,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getSelectedClinician(): String {
-        return clinicianFilter.selectedVisibleTextValue.trim()
+        return clinicianFilter.element.selectedVisibleTextValue.trim()
     }
 
     fun getTimePeriodFilterContents(): ArrayList<String>  {
@@ -88,35 +114,35 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getSelectedTimePeriod(): String {
-        return timePeriodFilter.selectedVisibleTextValue.trim()
+        return timePeriodFilter.element.selectedVisibleTextValue.trim()
     }
 
     fun areAnySlotsPresent(): Boolean {
-        return firstAppointmentDate.isPresent
+        return firstAppointmentDate.elements.isNotEmpty()
     }
 
     fun selectAnAppointmentType() {
-        appointmentTypeFilter.selectByIndex<WebElementFacade>(1)
+        appointmentTypeFilter.element.selectByIndex<WebElementFacade>(1)
     }
 
     fun selectAppointmentTypeByText(text: String) {
-        appointmentTypeFilter.selectByVisibleText<WebElementFacade>(text)
+        appointmentTypeFilter.element.selectByVisibleText<WebElementFacade>(text)
     }
 
     fun selectALocation() {
-        locationFilter.selectByIndex<WebElementFacade>(1)
+        locationFilter.element.selectByIndex<WebElementFacade>(1)
     }
 
     fun selectLocationByText(text: String) {
-        locationFilter.selectByVisibleText<WebElementFacade>(text)
+        locationFilter.element.selectByVisibleText<WebElementFacade>(text)
     }
 
     fun selectClinicianByText(text: String) {
-        clinicianFilter.selectByVisibleText<WebElementFacade>(text)
+        clinicianFilter.element.selectByVisibleText<WebElementFacade>(text)
     }
 
     fun selectTimePeriodByText(text: String) {
-        timePeriodFilter.selectByVisibleText<WebElementFacade>(text)
+        timePeriodFilter.element.selectByVisibleText<WebElementFacade>(text)
     }
 
     fun isDateHeadingPresent(expectedDateHeading: String?): Boolean {
@@ -148,15 +174,15 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getInlineTypeValidationError(): String {
-        return typeInLineError.text
+        return typeInLineError.element.text
     }
 
     fun getInlineLocationValidationError(): String {
-        return locationInLineError.text
+        return locationInLineError.element.text
     }
 
     fun getInlineSlotValidationError(): String {
-        return slotInLineError.text
+        return slotInLineError.element.text
     }
 
     fun getErrorSummaryAtRow(rowNumber: Int): String {
@@ -166,8 +192,8 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private fun getTimeSlotElement(expectedDateHeading: String?, expectedTimeOnSlot: String?) =
             findByXpath(String.format(appointmentSlotTimeXpath, expectedDateHeading, expectedTimeOnSlot!!.toLowerCase()))
 
-    private fun filterContentsAsStrings(filter: WebElementFacade): ArrayList<String> {
-        val optionElements = findAllByXpath(filter, "//option")
+    private fun filterContentsAsStrings(filter: HybridPageElement): ArrayList<String> {
+        val optionElements = findAllByXpath(filter.element, "//option")
         val optionsAsStrings = arrayListOf<String>()
         for (option in optionElements) {
             optionsAsStrings.add(option.text.trim())

@@ -345,6 +345,11 @@ class AvailableAppointmentsSlotsStepDefinitions {
         availableAppointments.verifyThatValidationErrorsForNoSelectedAppointmentIsDisplayed()
     }
 
+    @Then("^a message is displayed indicating that the slot has already been taken$")
+    fun aMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
+        availableAppointments.verifyThatSlotNoLongerAvailableMessageIsDisplayed()
+    }
+
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
         availableAppointments.verifyThatAppropriateDateHeadingIsDisplayed()

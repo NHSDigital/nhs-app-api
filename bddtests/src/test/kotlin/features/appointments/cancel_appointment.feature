@@ -7,7 +7,6 @@ Feature: Ability to cancel an appointment
 
   @NHSO-663
   @appointment
-  @pending  @NHSO-71
   Scenario: A user is presented with the cancel appointment screen
     Given I have upcoming appointments
     And I am on my appointments page
@@ -18,7 +17,6 @@ Feature: Ability to cancel an appointment
 
   @NHSO-663
   @appointment
-  @pending  @NHSO-71
   Scenario: A user navigates back to the "My appointments" screen
     Given I am on the appointment cancellation screen
     When I select "Back" button
@@ -40,7 +38,6 @@ Feature: Ability to cancel an appointment
 
   @NHSO-1026
   @appointment
-  @pending  @NHSO-71
   Scenario Outline: User cancels appointment with selected reason
     Given I am on the appointment cancellation screen
     And the Emis is available to cancel an appointment for <Reason>
@@ -55,7 +52,6 @@ Feature: Ability to cancel an appointment
 
   @NHSO-1026
   @appointment
-  @pending  @NHSO-71
   Scenario: A validation message will be displayed if no reason is provided
     Given I am on the appointment cancellation screen
     When I select "Cancel appointment" button

@@ -85,26 +85,14 @@ Feature: Book an available appointment slot
 
   @NHSO-517
   @appointment
-  @pending  @NHSO-71
   Scenario: A user sees appropriate information message when appointment has already been booked
     Given the appointment slot has already been booked by somebody else
     And I am on the available appointments page
     And I have selected an appointment slot to book
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I see appropriate information message when appointment has already been booked
-    And there should be a button to go back to my appointments
-
-  @NHSO-517
-  @appointment
-  Scenario: A user can return directly back to their appointments after trying to book one already booked
-    Given the appointment slot has already been booked by somebody else
-    And I am on the available appointments page
-    And I have selected an appointment slot to book
-    And I enter symptoms
-    And  I click the 'Confirm and book appointment' button
-    When I click the button to go back to my appointments
-    Then I will be on the My appointments screen
+    Then I am able to filter on available slots
+    And a message is displayed indicating that the slot has already been taken
 
   @NHSO-528
   @smoketest

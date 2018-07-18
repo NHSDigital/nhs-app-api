@@ -92,11 +92,6 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkErrorSendingMessage()
     }
 
-    @Then("^I see appropriate information message when appointment has already been booked$")
-    fun i_see_appropriate_information_message_when_appointment_has_already_been_booked() {
-        appointmentsConfirmationSteps.checkErrorSendingMessage()
-    }
-
     @Then("^there should be a button to go back to my appointments$")
     fun there_should_be_a_button_to_go_back_to_my_appointments() {
         appointmentsConfirmationSteps.checkIfButtonIsVisible("Back to my appointments")

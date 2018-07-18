@@ -261,9 +261,8 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun clickOnButton(button: String) {
-        val button = HybridPageElement(String.format(buttonXpath, button), "", this)
-        button.waitForSpinner()
-        button.element.click()
+        val buttonElement = HybridPageElement(String.format(buttonXpath, button), "", this)
+        buttonElement.waitForSpinner().element.click()
     }
 
     private fun isAnyXpathVisible(xpath: String): Boolean {

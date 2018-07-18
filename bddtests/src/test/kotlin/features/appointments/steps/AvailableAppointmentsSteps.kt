@@ -591,6 +591,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
+    fun verifyThatSlotNoLongerAvailableMessageIsDisplayed() {
+        assertEquals("This slot is no longer available. Please select a different time.", availableAppointments.getWarningText())
+    }
+
+    @Step
     fun verifyThatAppropriateDateHeadingIsDisplayed() {
         val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlot>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
         var expectedDateHeadings = setOf<String>()

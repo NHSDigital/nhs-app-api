@@ -13,19 +13,19 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    val successMessage = HybridPageElement(
+    private val successMessage = HybridPageElement(
             browserLocator = "//*[@id='success-dialog']/div/p",
             androidLocator = null,
             page = this
     )
 
-    val actualNoUpcomingText = HybridPageElement(
+    private val actualNoUpcomingText = HybridPageElement(
             browserLocator = "//h2/..",
             androidLocator = null,
             page = this
     )
 
-    val cancelAppointmentLink = HybridPageElement(
+    private val cancelAppointmentLink = HybridPageElement(
             browserLocator = "//a[contains(text(),'Cancel appointment')]",
             androidLocator = null,
             page = this
@@ -50,10 +50,10 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun clickFirstCancelAppointmentLink() {
-        cancelAppointmentLink.element.click()
+        cancelAppointmentLink.elements[0].click()
     }
 
     fun getNumberOfCancelLinks(): Int {
-        return findAllByXpath("//a[contains(text(),'Cancel appointment')]").size
+        return cancelAppointmentLink.elements.size
     }
 }

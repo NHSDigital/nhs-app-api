@@ -1,7 +1,5 @@
 package pages.navigation
 
-import com.google.common.collect.MinMaxPriorityQueue
-import org.junit.Assert
 import pages.HybridPageObject
 import pages.HybridPageElement
 
