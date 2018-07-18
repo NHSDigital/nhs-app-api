@@ -41,5 +41,5 @@ COPY --chown=nodejs:nodejs --from=build /opt/app/src/pages ./pages
 COPY --chown=nodejs:nodejs --from=build /opt/app/app_links ./app_links
 COPY --chown=nodejs:nodejs --from=build /opt/app/test ./test
 
-EXPOSE 3000
+EXPOSE $PORT
 CMD npm run dev

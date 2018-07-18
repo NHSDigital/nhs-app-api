@@ -27,6 +27,7 @@ RUN dotnet publish -c Release -o /app -r linux-x64
 COPY NHSOnline.Backend.Worker/certs/* /app/certs/
 
 FROM runtime AS final
+ENV PORT 8082
 ENV ASPNETCORE_ENVIRONMENT Production
 ENV ASPNETCORE_URLS http://*:8082
 ENV CITIZEN_ID_BASE_URL https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/
@@ -55,7 +56,7 @@ ENV TIMEZONE Europe/London
 ENV EMIS_LINKAGE_USE_STUBBED_DATA true
 
 WORKDIR /app
-EXPOSE 8082
+EXPOSE $PORT
 COPY --from=publish /app .
 
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppCa.crt /usr/local/share/ca-certificates/TppCa.crt
