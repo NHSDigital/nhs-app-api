@@ -10,6 +10,9 @@
       <p>
         {{ message }}
       </p>
+      <p v-if="hasAdditionalInfo">
+        {{ additionalInfo }}
+      </p>
     </error-warning-dialog>
     <button v-if="retryButtonText" :class="$style.button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
@@ -36,6 +39,12 @@ export default {
     },
     message() {
       return this.getMessage('message');
+    },
+    additionalInfo() {
+      return this.getMessage('additionalInfo');
+    },
+    hasAdditionalInfo() {
+      return this.getMessage('additionalInfo') !== '';
     },
     retryButtonText() {
       if (this.hasComponentErrorCodeKey('retryButtonText') || this.hasComponentKey('retryButtonText')) {
