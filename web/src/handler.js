@@ -1,7 +1,4 @@
-const { setRes } = require('./tmp');
-
 module.exports = (req, res, next) => {
-  setRes(res);
   if (req.url === '/apple-app-site-association') {
     res.setHeader('content-type', 'application/json');
     res.writeHead(200);
