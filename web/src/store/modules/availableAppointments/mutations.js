@@ -50,10 +50,10 @@ const mapToEndDate = (value) => {
   let rangeInDays;
   switch (value) {
     case 'today':
-      rangeInDays = 1;
+      rangeInDays = 0;
       break;
     case 'tomorrow':
-      rangeInDays = 2;
+      rangeInDays = 1;
       break;
     case 'next_week':
       rangeInDays = 14 - getDate().day();
@@ -205,8 +205,8 @@ export default {
         }
 
         if (state.selectedOptions.clinician !== ''
-          && Array.isArray(slots.clinicians)
-          && slots.clinicians.indexOf(state.selectedOptions.clinician) === -1) {
+          && Array.isArray(slot.clinicians)
+          && slot.clinicians.indexOf(state.selectedOptions.clinician) === -1) {
           return;
         }
 

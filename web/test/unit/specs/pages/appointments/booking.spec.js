@@ -51,6 +51,32 @@ describe('booking.vue', () => {
     expect(page.find('.warning p').text()).toContain('translate_appointments.booking.noAppointmentsAvailable');
   });
 
+  it('will show "mot match search criteria message"', () => {
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        availableAppointments: {
+          slots: new Map([['2018-04-12'], [{}]]),
+          filteredSlots: [],
+          hasLoaded: true,
+        },
+      },
+    };
+
+    const data = {
+      filters: {
+        type: 'Emergency',
+        location: 'Leeds',
+      },
+    };
+
+    const page = createBookingPage($store, data);
+
+    expect(page.find('.warning').exists()).toBeTruthy();
+    expect(page.findAll('.warning p').at(0).text()).toContain('appointments.booking.adjustSearch.line1');
+    expect(page.findAll('.warning p').at(1).text()).toContain('appointments.booking.adjustSearch.line2');
+  });
+
   it('will do not show validation error messages', () => {
     const $store = {
       dispatch: jest.fn(),
@@ -69,5 +95,121 @@ describe('booking.vue', () => {
     expect(page.vm.showValidationError).toBeFalsy();
     expect(page.vm.validationError.isTypeValid).toBeTruthy();
     expect(page.vm.validationError.isLocationValid).toBeTruthy();
+  });
+
+  it('will show validation errors', () => {
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        availableAppointments: {
+          slots: new Map([['2018-04-12'], [{}]]),
+          filteredSlots: [],
+          hasLoaded: true,
+        },
+      },
+    };
+
+    const data = {
+      showValidationError: true,
+      validationError: {
+        isTypeValid: true,
+        isLocationValid: true,
+      },
+    };
+
+    const page = createBookingPage($store, data);
+
+    expect(page.find('.error').exists()).toBeTruthy();
+    expect(page.findAll('.error p').length).toEqual(2);
+    expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
+    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.slot');
+  });
+
+  it('will show validation error when type is not selected', () => {
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        availableAppointments: {
+          slots: new Map([['2018-04-12'], [{}]]),
+          filteredSlots: [],
+          hasLoaded: true,
+        },
+      },
+    };
+
+    const data = {
+      showValidationError: true,
+      validationError: {
+        isTypeValid: false,
+        isLocationValid: true,
+      },
+    };
+
+    const page = createBookingPage($store, data);
+
+    expect(page.find('.error').exists()).toBeTruthy();
+    expect(page.findAll('.error p').length).toEqual(3);
+    expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
+    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.type');
+    expect(page.findAll('.error p').at(2).text()).toContain('appointments.booking.validationErrors.slot');
+  });
+
+  it('will show validation error when location is not selected', () => {
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        availableAppointments: {
+          slots: new Map([['2018-04-12'], [{}]]),
+          filteredSlots: [],
+          hasLoaded: true,
+        },
+      },
+    };
+
+    const data = {
+      showValidationError: true,
+      validationError: {
+        isTypeValid: true,
+        isLocationValid: false,
+      },
+    };
+
+    const page = createBookingPage($store, data);
+
+    expect(page.find('.error').exists()).toBeTruthy();
+    expect(page.findAll('.error p').length).toEqual(3);
+    expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
+    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.location');
+    expect(page.findAll('.error p').at(2).text()).toContain('appointments.booking.validationErrors.slot');
+  });
+
+  it('will show validation error when type and location are not selected', () => {
+    const $store = {
+      dispatch: jest.fn(),
+      state: {
+        availableAppointments: {
+          slots: new Map([['2018-04-12'], [{}]]),
+          filteredSlots: [],
+          hasLoaded: true,
+        },
+      },
+    };
+
+    const data = {
+      showValidationError: true,
+      validationError: {
+        isTypeValid: false,
+        isLocationValid: false,
+      },
+    };
+
+    const page = createBookingPage($store, data);
+
+    expect(page.find('.error').exists()).toBeTruthy();
+    expect(page.findAll('.error p').length).toEqual(4);
+    expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
+    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.type');
+    expect(page.findAll('.error p').at(2).text()).toContain('appointments.booking.validationErrors.location');
+    expect(page.findAll('.error p').at(3).text()).toContain('appointments.booking.validationErrors.slot');
   });
 });

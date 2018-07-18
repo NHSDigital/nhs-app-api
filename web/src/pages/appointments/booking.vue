@@ -132,11 +132,7 @@ export default {
       this.$store.dispatch('availableAppointments/filter');
     },
     onConfirmButtonClicked() {
-      this.validationError.isTypeValid = this.filters ? this.filters.type !== '' : false;
-      this.validationError.isLocationValid = this.filters ? this.filters.location !== '' : false;
-      this.showValidationError = !this.validationError.isTypeValid ||
-                                 !this.validationError.isLocationValid ||
-                                 this.$store.state.availableAppointments.selectedSlot === null;
+      this.validate();
 
       this.aLabelledBy = this.showValidationError ? 'validationErrors' : undefined;
 
@@ -151,6 +147,19 @@ export default {
       } else {
         this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS);
       }
+    },
+    validate() {
+      this.validationError.isTypeValid = this.filters ? this.filters.type !== '' : false;
+
+      this.validationError.isLocationValid = true;
+      if ((!this.filters && this.$store.state.availableAppointments.selectedOptions.location === '')
+        || (this.filters && this.filters.location === '')) {
+        this.validationError.isLocationValid = false;
+      }
+
+      this.showValidationError = !this.validationError.isTypeValid ||
+        !this.validationError.isLocationValid ||
+        this.$store.state.availableAppointments.selectedSlot === null;
     },
     bottomStyle() {
       if (

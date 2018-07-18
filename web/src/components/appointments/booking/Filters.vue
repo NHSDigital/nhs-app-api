@@ -119,12 +119,6 @@ export default {
       },
     },
   },
-  mounted() {
-    if (this.options.locations && this.options.locations.length === 2) {
-      this.selectedOptions.location = this.options.locations[1].value;
-      this.returnSelectedOptions();
-    }
-  },
   methods: {
     returnSelectedOptions() {
       this.$emit('input', this.selectedOptions);
