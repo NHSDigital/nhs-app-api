@@ -12,6 +12,7 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
 import mocking.emis.appointments.CancelAppointmentRequest
+import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import worker.models.appointments.BookAppointmentSlotRequest
 import worker.models.session.UserSessionRequest
@@ -122,7 +123,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                             
 
             mockingClient.forEmis {
-                bookAppointmentSlotRequest(patient, BookAppointmentSlotRequest(patient.userPatientLinkToken, 1, "NFT Test Book Slot"))
+                bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 1, "NFT Test Book Slot"))
                         .respondWithSuccess(postAppointmentRequestBody)
             }
 

@@ -2,10 +2,7 @@ package mocking.defaults.dataPopulation.journies.appointmentSlots
 
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.appointments.GetAppointmentSlotsResponseModel
-import mocking.emis.appointments.GetAppointmentsResponseModel
-import mocking.emis.appointments.PostAppointmentRequestModel
+import mocking.emis.appointments.*
 import mocking.emis.data.AppointmentData
 import mocking.emis.models.AppointmentSession
 import mocking.emis.models.AppointmentSlot
