@@ -35,11 +35,11 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 case $CURRENT_BRANCH in
   develop)
     info "Develop Branch - Full BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt'
+    BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt'"
     ;;
   *)
     info "Non-Develop Branch - BDD Smoketest Run Configured"
-    BDD_CUCUMBER_OPTIONS='--tags ~@bug --tags ~@pending --tags ~@manual --tags ~@native --tags ~@tech-debt --tags @smoketest'
+    BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and @smoketest'"
     ;;
 esac
 
