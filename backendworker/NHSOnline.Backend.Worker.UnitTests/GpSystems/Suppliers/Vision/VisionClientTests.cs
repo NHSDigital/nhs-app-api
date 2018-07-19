@@ -34,8 +34,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         private const string RequestUserName = "username";
 
         private const string ApiUrl = "http://vision_base_url/";
-        private const string Path = "/Test/Certificate";
-        private const string Passphrase = "passphrase";
+        private const string Path = "GpSystems/Suppliers/Vision/Resources/mycert.pfx";
+        private const string Passphrase = "password1";
         private const string VisionTestDataDirectory = "GpSystems/Suppliers/Vision/TestData";
 
         private Mock<ICertificateService> _mockCertificateService;
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             _mockEnvelopeService.Setup(x => x.BuildEnvelope(It.IsAny<X509Certificate2>(), It.IsAny<VisionRequest<Object>>(), It.IsAny<string>())).Returns("AnyString");
             
             _mockCertificateService.Setup(x => x.GetCertificate(It.IsAny<string>(), It.IsAny<string>())).Returns(
-                GetRandomCertificate());
+                new X509Certificate2(Path, Passphrase));
             
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new VisionHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
@@ -171,26 +171,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent.Payload);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
-        
-        static X509Certificate2 GetRandomCertificate()
-        {
-            X509Store st = new X509Store(StoreName.My, StoreLocation.LocalMachine);
-            st.Open(OpenFlags.ReadOnly);
-            try
-            {
-                var certCollection = st.Certificates;
-
-                if (certCollection.Count == 0)
-                {
-                    return null;
-                }
-                return certCollection[0];
-            }
-            finally
-            {
-                st.Close();
-            }
         }
     }
 }
