@@ -8,7 +8,14 @@ import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.defaults.MockDefaults
+import models.Patient
+import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
+import pages.HybridPageObject
+import pages.appointments.AvailableAppointmentsPage
+import java.net.URI
 
 class AppointmentNavigationStepDefinitions {
     @Steps
@@ -24,10 +31,13 @@ class AppointmentNavigationStepDefinitions {
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
 
+    lateinit var availableAppointmentsPage: AvailableAppointmentsPage
+
     @Given("^I am on my appointments page$")
     fun iAmOnMyAppointmentsPage() {
+        val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
         browser.goToApp()
-        login.asDefault()
+        login.asDefault(patient ?: MockDefaults.patient)
         navigation.select("Appointments")
     }
 
@@ -39,7 +49,16 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the available appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        iTryToProgressToTheAvailableAppointmentsPage()
+        // TODO remove if-else statement when TPP upcoming appointment stubs are created - NHSO-1672
+        val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
+        Assert.assertNotNull("Patient not initialised. ", patient)
+        navigation.select("Appointments")
+        if (patient.firstName == "Kevin" && patient.surname == "Barry") {
+            availableAppointmentsPage.driver.get(URI(availableAppointmentsPage.driver.currentUrl).resolve("appointments/booking").toString())
+        } else {
+            myAppointments.clickOnBookAppointmentButton()
+            appointmentGuidanceSteps.clickBookAnAppointmentButton()
+        }
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 

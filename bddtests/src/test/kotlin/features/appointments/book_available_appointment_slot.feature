@@ -6,6 +6,7 @@ Feature: Book an available appointment slot
   Background:
     Given I have no upcoming appointments
     And there are available appointment slots
+    And I am logged in
 
   @NHSO-72
   @appointment
