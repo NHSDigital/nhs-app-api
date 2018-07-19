@@ -5,17 +5,12 @@ import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithou
 import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import features.appointments.data.AppointmentsBookingData
+import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
 import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
-import mocking.tpp.models.ListSlotsReply
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
-import mockingFacade.appointments.AppointmentSlotsResponseFacade
-import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -53,8 +48,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         )
     }
 
-    @Steps
-    lateinit var myAppointments: MyAppointmentsSteps
     @Steps
     private lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
@@ -128,20 +121,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun generateDefaultUserData(gpSystem: String = "EMIS") {
-        when (gpSystem.toUpperCase()) {
-            "EMIS" -> {
-                Serenity.setSessionVariable(Patient::class).to(patient)
-                CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-                EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
-                myAppointments.mockEMISMyAppointmentResponse(true)
-            }
-            "TPP" -> {
-                Serenity.setSessionVariable(Patient::class).to(tppPatient)
-                CitizenIdSessionCreateJourney(mockingClient).createFor(tppPatient)
-                TppSessionCreateJourneyFactory(mockingClient).createFor(tppPatient)
-            }
-        }
+    fun generateDefaultUserData() {
+        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(MockDefaults.patient)
     }
 
     @Step
@@ -150,11 +132,10 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
             "EMIS" -> {
                 Serenity.setSessionVariable(EXPECTED_SESSIONS_KEY).to(generateEmisSessions(13))
 
-                val numberOfSessionTypes = 2 // "Walk-in" and "Clinic"
-                val numberOfSessionsPerDay = numberOfSessionTypes * defaultEmisMetaSlotLocations.size * (defaultEmisMetaSlotSessionHolders.size + 1)
-                val allAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
-                val arrayOfArrayOfAppointmentSlots = arrayListOf<ArrayList<AppointmentSlotFacade>>()
-                for (i in 1..13) {
+                val numberOfSessionsPerDay = defaultEmisMetaSlotLocations.size * (defaultEmisMetaSlotSessionHolders.size + 1)
+                val allAppointmentSlots = arrayListOf<AppointmentSlot>()
+                val arrayOfArrayOfAppointmentSlots = arrayListOf<ArrayList<AppointmentSlot>>()
+                for (i in 2..13) {
                     repeat(numberOfSessionsPerDay) {
                         arrayOfArrayOfAppointmentSlots.add(generateEmisAppointmentSlots(i))
                         allAppointmentSlots.addAll(arrayOfArrayOfAppointmentSlots.last())
@@ -165,17 +146,17 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
                 setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(
                         generateEmisAppointmentSessions(
-                                Serenity.sessionVariableCalled<ArrayList<mocking.emis.models.Session>>(EXPECTED_SESSIONS_KEY),
+                                Serenity.sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY),
                                 arrayOfArrayOfAppointmentSlots
                         )
                 )
 
-                generateEmisStubsForAppointmentSlotsForNextFourWeeks(
+                generateEmisStubsForAppointmentSlotsForNextTwoWeeks(
                         defaultEmisMetaSlotLocations,
                         defaultEmisMetaSlotSessionHolders,
-                        sessionVariableCalled<ArrayList<mocking.emis.models.Session>>(EXPECTED_SESSIONS_KEY),
-                        sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY),
-                        sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
+                        sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY),
+                        sessionVariableCalled<ArrayList<AppointmentSession>>(EXPECTED_APPOINTMENT_SESSIONS_KEY),
+                        sessionVariableCalled<ArrayList<AppointmentSlot>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
                 )
             }
         }
@@ -185,7 +166,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun generateNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
-                generateEmisStubsForAppointmentSlotsForNextFourWeeks(
+                generateEmisStubsForAppointmentSlotsForNextTwoWeeks(
                         arrayListOf(),
                         arrayListOf(),
                         arrayListOf(),
@@ -199,34 +180,28 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun generateAvailableOneAppointmentSlotForGPSystem(gpSystem: String) {
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
-                generateEmisStubsForAppointmentSlotsForNextFourWeeks(
+                generateEmisStubsForAppointmentSlotsForNextTwoWeeks(
                         arrayListOf(defaultEmisMetaSlotLocations[0]),
                         arrayListOf(defaultEmisMetaSlotSessionHolders[0]),
                         arrayListOf(defaultEmisMetaSlotSessions[0]),
                         arrayListOf(defaultEmisAppointmentSessions[0])
                 )
-                Serenity.setSessionVariable("Location").to(defaultEmisMetaSlotLocations[0].locationName)
-            }
-            "TPP" -> {
-                generateTppStubsForAppointmentSlotsForNextFourWeeks(defaultTppAppointmentSessions)
-                Serenity.setSessionVariable("Location").to(defaultTppAppointmentSessions[0].location)
             }
         }
     }
 
     @Step
     fun generateAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
+        val modifiedSlotSessions = ArrayList<Session>(defaultEmisMetaSlotSessions)
+        modifiedSlotSessions[1].locationId = modifiedSlotSessions[0].locationId
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
-                val modifiedSlotSessions = ArrayList<mocking.emis.models.Session>(defaultEmisMetaSlotSessions)
-                modifiedSlotSessions[1].locationId = modifiedSlotSessions[0].locationId
-                generateEmisStubsForAppointmentSlotsForNextFourWeeks(
+                generateEmisStubsForAppointmentSlotsForNextTwoWeeks(
                         arrayListOf(defaultEmisMetaSlotLocations[0]),
                         defaultEmisMetaSlotSessionHolders,
                         modifiedSlotSessions,
                         defaultEmisAppointmentSessions
                 )
-                Serenity.setSessionVariable("Location").to(defaultEmisMetaSlotLocations[0].locationName)
             }
         }
     }
@@ -246,7 +221,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 defaultSessionEndDate
         )
 
-        generateEmisStubForAppointmentSlotRequest(
+        generateStubForAppointmentSlotRequest(
                 defaultEmisAppointmentSessions,
                 0,
                 defaultSessionStartDate,
@@ -255,12 +230,12 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun generateEmisStubsForAppointmentSlotsForNextFourWeeks(
+    fun generateEmisStubsForAppointmentSlotsForNextTwoWeeks(
             emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
             emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
             emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
-            emisAppointmentSessions: ArrayList<AppointmentSessionFacade> = defaultEmisAppointmentSessions,
-            emisAppointmentSlots: ArrayList<AppointmentSlotFacade> = defaultEmisAppointmentSlots,
+            emisAppointmentSessions: ArrayList<AppointmentSession> = defaultEmisAppointmentSessions,
+            emisAppointmentSlots: ArrayList<AppointmentSlot> = defaultEmisAppointmentSlots,
             delayedInSeconds: Long = 0
     ) {
         Serenity.setSessionVariable(EXPECTED_SESSIONS_KEY).to(emisSlotSessions)
@@ -274,27 +249,10 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 delayedInSeconds
         )
 
-        generateEmisStubForAppointmentSlotRequest(emisAppointmentSessions, delayedInSeconds)
+        generateStubForAppointmentSlotRequest(emisAppointmentSessions, delayedInSeconds)
 
         appointmentsConfirmationSteps.mockEmisSuccessResponse()
     }
-
-    @Step
-    private fun generateTppStubsForAppointmentSlotsForNextFourWeeks(
-            tppSessions: ArrayList<AppointmentSessionFacade>
-    ) {
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(tppSessions)
-
-        val listSlotsReply = AppointmentSlotsResponseFacade(
-                defaultTppAppointmentSessions, "1"
-        )
-
-        mockingClient.forTpp {
-            appointmentSlotsRequest(tppPatient)
-                    .respondWithSuccess(listSlotsReply)
-        }
-    }
-
 
     @Step
     fun generateStubForMetaAppointmentSlotRequest(
@@ -318,13 +276,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun generateEmisStubForAppointmentSlotRequest(
-            emisAppointmentSessions: ArrayList<AppointmentSessionFacade>,
+    fun generateStubForAppointmentSlotRequest(
+            emisAppointmentSessions: ArrayList<AppointmentSession>,
             delayedInSeconds: Long,
             fromDate: String? = null,
             toDate: String? = null
     ) {
-        val getAppointmentSlotsResponseModel = AppointmentSlotsResponseFacade(emisAppointmentSessions)
+        val getAppointmentSlotsResponseModel = GetAppointmentSlotsResponseModel(emisAppointmentSessions)
         mockingClient.forEmis {
             appointmentSlotsRequest(patient, fromDate, toDate)
                     .respondWithSuccess(getAppointmentSlotsResponseModel)
@@ -388,7 +346,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                     defaultSessionEndDate
             )
                     .withDelay(Duration.ofSeconds(31))
-                    .respondWithSuccess(AppointmentSlotsResponseFacade(emisAppointmentSessions))
+                    .respondWithSuccess(GetAppointmentSlotsResponseModel(emisAppointmentSessions))
         }
     }
 
@@ -444,7 +402,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
         val expectedSessions = sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY)
-        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSession>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
 
         val sessionsById = generateMapOfSessionsAgainstId(expectedSessions)
         var uniqueAppointmentTypes = setOf<String>()
@@ -537,10 +495,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatLocationIsSelected() {
-        val location = Serenity.sessionVariableCalled<String>("Location")
         assertEquals(
                 "Incorrect location option currently selected. ",
-                location,
+                defaultEmisMetaSlotLocations[0].locationName,
                 availableAppointments.getSelectedLocation()
         )
     }
@@ -639,7 +596,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatAppropriateDateHeadingIsDisplayed() {
-        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
+        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlot>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
         var expectedDateHeadings = setOf<String>()
         for (expectedAppointmentSlot in expectedAppointmentSlots) {
             val expectedDateTime = backendDateTimeFormat.parse(expectedAppointmentSlot.startTime)
@@ -655,7 +612,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatAppropriateTimeSlotIsDisplayed() {
-        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
+        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlot>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
         // expectedTimes as set of pairs of dates and times
         var expectedTimes = setOf<Pair<String, String>>()
         for (expectedAppointmentSlot in expectedAppointmentSlots) {
@@ -693,7 +650,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getExpectedTimeOnSlot(slotNumber: Int): Pair<String, String> {
-        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
+        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlot>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
         val timeToSelect = backendDateTimeFormat.parse(expectedAppointmentSlots[slotNumber].startTime)
         val expectedDateHeading = generateExpectedDateHeading(timeToSelect)
         val expectedTimeOnSlot = generateExpectedTimeOnSlot(timeToSelect)
@@ -702,7 +659,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private fun getExpectedAppointmentTypeByIndexes(sessionIndex: Int, appointmentSlotIndex: Int): String {
         val sessionName = sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY)[sessionIndex].sessionName
-        val appointmentSlotType = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)[appointmentSlotIndex].slotTypeName
+        val appointmentSlotType = sessionVariableCalled<ArrayList<AppointmentSlot>>(EXPECTED_APPOINTMENT_SLOTS_KEY)[appointmentSlotIndex].slotTypeName
         return "$sessionName - $appointmentSlotType"
     }
 
@@ -714,7 +671,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun selectFilterOptionsToRevealSlots() {
-        val expectedAppointmentSession = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)[0]
+        val expectedAppointmentSession = sessionVariableCalled<ArrayList<AppointmentSession>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)[0]
         val expectedSessions = sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY)
         val expectedSessionId = expectedAppointmentSession.sessionId
         val expectedSession = generateMapOfSessionsAgainstId(expectedSessions)[expectedSessionId]

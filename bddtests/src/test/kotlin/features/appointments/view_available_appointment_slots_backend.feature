@@ -7,15 +7,12 @@ Feature: View available appointment slots backend
   @NHSO-1552
   @NHSO-870
   @backend
-  Scenario Outline: Requesting available appointment slots with correct data returns lists of available slots
-    Given I have logged in and have a valid session cookie for <GP System>
+  Scenario: Requesting available appointment slots with correct data returns lists of available slots
+    Given I have logged in and have a valid session cookie for EMIS
     And there are available appointment slots for an explicit date-time range
     When the available appointment slots are retrieved for explicit date-time range
     Then available slots are returned for the given date-time range
     And available slots are returned containing id, start date and time, end date and time, location, clinicians, type
-    Examples:
-      | GP System |
-      | EMIS      |
 
   @NHSO-470
   @NHSO-870

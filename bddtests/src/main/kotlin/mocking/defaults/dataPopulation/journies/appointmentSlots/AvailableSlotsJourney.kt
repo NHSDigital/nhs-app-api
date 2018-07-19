@@ -6,9 +6,6 @@ import mocking.emis.appointments.*
 import mocking.emis.data.AppointmentData
 import mocking.emis.models.AppointmentSession
 import mocking.emis.models.AppointmentSlot
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
-import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 
@@ -26,7 +23,7 @@ class AvailableSlotsJourney(private val client: MockingClient) {
     fun create(
             patient: Patient = SuccessfulRegistrationJourney.patient,
             appointmentSlotsMetaResponse: GetAppointmentSlotsMetaResponseModel = getAppointmentSlotsMetaResponseModel,
-            appointmentSlotsResponse: AppointmentSlotsResponseFacade = AppointmentSlotsResponseFacade(appointmentSessions),
+            appointmentSlotsResponse: GetAppointmentSlotsResponseModel = GetAppointmentSlotsResponseModel(appointmentSessions),
             appointmentBookingResponse: GetAppointmentsResponseModel = appointmentData.createGetAppointmentsResponse()) {
 
         client.forEmis {
@@ -63,14 +60,14 @@ class AvailableSlotsJourney(private val client: MockingClient) {
         }
     }
 
-    private fun createBookAppointmentRequest(appointmentSessions: ArrayList<AppointmentSessionFacade>, patient: Patient):
+    private fun createBookAppointmentRequest(appointmentSessions: ArrayList<AppointmentSession>, patient: Patient):
             ArrayList<PostAppointmentRequestModel> {
         val bookAppointmentRequests = arrayListOf<PostAppointmentRequestModel>()
         val appointmentSlots = getAppointmentSlotsFrom(appointmentSessions)
         appointmentSlots.forEach { slot ->
             val postAppointmentRequestModel = PostAppointmentRequestModel(
                     patient.userPatientLinkToken,
-                    slot.slotId!!,
+                    slot.slotId,
                     ".+"
             )
             bookAppointmentRequests.add(postAppointmentRequestModel)
@@ -78,8 +75,8 @@ class AvailableSlotsJourney(private val client: MockingClient) {
         return bookAppointmentRequests
     }
 
-    private fun getAppointmentSlotsFrom(appointmentSessions: ArrayList<AppointmentSessionFacade>): List<AppointmentSlotFacade> {
-        val slots = mutableListOf<AppointmentSlotFacade>()
+    private fun getAppointmentSlotsFrom(appointmentSessions: ArrayList<AppointmentSession>): List<AppointmentSlot> {
+        val slots = mutableListOf<AppointmentSlot>()
         appointmentSessions.forEach { slots.addAll(it.slots) }
         return slots
     }

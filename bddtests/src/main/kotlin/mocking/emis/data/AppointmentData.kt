@@ -9,8 +9,6 @@ import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import mocking.emis.appointments.GetAppointmentsResponseModel
 import mocking.emis.models.*
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
 import models.Slot
 import java.text.SimpleDateFormat
 import java.util.*
@@ -94,7 +92,7 @@ class AppointmentData private constructor() {
 
     private var appointments: ArrayList<Appointment> = arrayListOf()
 
-    fun createAppointmentSessions(): ArrayList<AppointmentSessionFacade> {
+    fun createAppointmentSessions(): ArrayList<AppointmentSession> {
         val baseTime = Calendar.getInstance()
 
         var startTime = copyCalendarDate(baseTime, 1)
@@ -102,7 +100,7 @@ class AppointmentData private constructor() {
         val slot1 = createAppointmentSlot(1, startTime, 15)
         startTime.addDays(1).addMinutes(15)
         val slot2 = createAppointmentSlot(2, startTime, 1)
-        val footClinicSession = AppointmentSessionFacade(
+        val footClinicSession = AppointmentSession(
                 sessionId = SESSION_ID_FOOTCLINIC,
                 sessionDate = sessionDate,
                 slots = arrayListOf(slot1, slot2)
@@ -113,7 +111,7 @@ class AppointmentData private constructor() {
         val slot3 = createAppointmentSlot(3, startTime, 15)
         startTime.addDays(1)
         val slot4 = createAppointmentSlot(4, startTime, 20)
-        val eyeClinicSession = AppointmentSessionFacade(
+        val eyeClinicSession = AppointmentSession(
                 sessionId = SESSION_ID_EYECLINIC,
                 sessionDate = sessionDate,
                 slots = arrayListOf(slot3, slot4)
@@ -122,7 +120,7 @@ class AppointmentData private constructor() {
         startTime = copyCalendarDate(baseTime, 4)
         sessionDate = dateTimeFormat.format(startTime.time)
         val slot5 = createAppointmentSlot(3, startTime, 15)
-        val earClinicSession = AppointmentSessionFacade(
+        val earClinicSession = AppointmentSession(
                 sessionId = SESSION_ID_EYECLINIC,
                 sessionDate = sessionDate,
                 slots = arrayListOf(slot5)
@@ -180,7 +178,7 @@ class AppointmentData private constructor() {
             expectedTempMyAppointments.add(expectedMyAppointment.copy(
                     date = date,
                     time = time,
-                    location = location.locationName,
+                    location = location.locationName!!,
                     clinician = cliniciansNames
             ))
         }
@@ -202,10 +200,10 @@ class AppointmentData private constructor() {
         return theStartTime.addDays(addDays).addHours(addHours).addMinutes(addMinutes + numberOfMinutesToNextDivisibleByFive)
     }
 
-    private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlotFacade {
+    private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlot {
         val startSession = dateTimeFormat.format(startTime.time)
         val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes).time)
-        return AppointmentSlotFacade(sessionId, startSession, endSession)
+        return AppointmentSlot(sessionId, startSession, endSession)
     }
 
     private class AppointmentDataHolder {

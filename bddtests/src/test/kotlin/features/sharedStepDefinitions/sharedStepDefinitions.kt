@@ -78,7 +78,6 @@ open class SharedStepDefinitions {
 
     @Given("^I am logged in$")
     open fun iAmLoggedIn() {
-        this.patient = Serenity.sessionVariableCalled<Patient>(Patient::class) ?: MockDefaults.patient
         browser.goToApp()
         login.using(this.patient)
     }

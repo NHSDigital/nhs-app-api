@@ -10,8 +10,6 @@ import features.appointments.steps.AvailableAppointmentsSteps
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
 import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import worker.NhsoHttpException
@@ -35,13 +33,13 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend: AppointmentsBookingData(
     @Given("^there are available appointment slots within the next four weeks$")
     fun thereAreAvailableAppointmentSlotsWithinTheNextFourWeeks() {
         val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = defaultSessionStartDate, sessionEndDate = defaultSessionEndDate)
-        generateAppropriateEmisStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
+        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
     }
 
     @Given("^there are available appointment slots four weeks from a specific from date$")
     fun thereAreAvailableAppointmentSlotsFourWeeksAfterFromDate() {
         val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = explicitFromDate, sessionEndDate = defaultToDateIfExplicitFromDate)
-        generateAppropriateEmisStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
+        generateAppropriateStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
     }
 
     private val getAppointmentSlotsMetaQueryParams = AppointmentSlotsParams(
@@ -50,12 +48,12 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend: AppointmentsBookingData(
             sessionEndDate = explicitToDate
     )
 
-    //should be combined with the analogous function in appointmentsStepDefinitions
-    private fun generateAppropriateEmisStubsForAppointmentSlots(emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
-                                                                emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
-                                                                emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
-                                                                emisAppointmentSessions: ArrayList<AppointmentSessionFacade> = defaultEmisAppointmentSessions,
-                                                                appointmentSlotsMetaQueryParams: AppointmentSlotsParams = getAppointmentSlotsMetaQueryParams) {
+    //should be combined with the analogous function in appointmentsStepDefintions
+    private fun generateAppropriateStubsForAppointmentSlots(emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
+                                                            emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
+                                                            emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
+                                                            emisAppointmentSessions: ArrayList<AppointmentSession> = defaultEmisAppointmentSessions,
+                                                            appointmentSlotsMetaQueryParams: AppointmentSlotsParams = getAppointmentSlotsMetaQueryParams) {
 
         mockingClient
                 .forEmis {
@@ -74,7 +72,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend: AppointmentsBookingData(
                     appointmentSlotsRequest(appointmentSlotsMetaQueryParams.patient,
                             appointmentSlotsMetaQueryParams.sessionStartDate,
                             appointmentSlotsMetaQueryParams.sessionEndDate)
-                            .respondWithSuccess(AppointmentSlotsResponseFacade(
+                            .respondWithSuccess(GetAppointmentSlotsResponseModel(
                                     emisAppointmentSessions
                             ))
                 }

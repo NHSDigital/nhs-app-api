@@ -58,7 +58,7 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             fetchPreviousAppointments = fetchPreviousAppointments)
 
 
-    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? , toDateTime: String? ) = EmisAppointmentSlotsBuilder(
+    fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? = null, toDateTime: String? = null) = EmisAppointmentSlotsBuilder(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,

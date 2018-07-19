@@ -25,7 +25,6 @@ import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
@@ -524,7 +523,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(this.patient)
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 

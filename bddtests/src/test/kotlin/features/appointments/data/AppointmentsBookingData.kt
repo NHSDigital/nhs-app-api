@@ -5,8 +5,6 @@ import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithou
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.emis.models.*
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -24,7 +22,6 @@ open class AppointmentsBookingData {
 
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
-    val tppPatient = MockDefaults.patientTpp
 
     val backendDateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
     val defaultSessionStartDate = tomorrowMidnight()
@@ -35,14 +32,14 @@ open class AppointmentsBookingData {
     private val maximumNumberOfSlotsInDay = numberOfMinutesInWorkingDay / defaultDuration
 
     val defaultEmisAppointmentSlots = arrayListOf(
-            AppointmentSlotFacade(
+            AppointmentSlot(
                     slotId = 301,
                     startTime = sometimeTomorrow(),
                     endTime = sometimeTomorrow(defaultDuration),
                     slotTypeName = "Immunisations",
                     slotTypeStatus = SlotTypeStatus.Visit
             ),
-            AppointmentSlotFacade(
+            AppointmentSlot(
                     slotId = 302,
                     startTime = sometimeDayAfterTomorrow(),
                     endTime = sometimeDayAfterTomorrow(defaultDuration),
@@ -99,42 +96,24 @@ open class AppointmentsBookingData {
     )
 
     val defaultEmisAppointmentSessions = arrayListOf(
-            AppointmentSessionFacade(
+            AppointmentSession(
                     sessionDate = defaultEmisAppointmentSlots[0].startTime,
                     sessionId = 201,
                     slots = arrayListOf(defaultEmisAppointmentSlots[0])
             ),
-            AppointmentSessionFacade(
+            AppointmentSession(
                     sessionDate = defaultEmisAppointmentSlots[1].startTime,
                     sessionId = 202,
                     slots = arrayListOf(defaultEmisAppointmentSlots[1])
             )
     )
 
-    val defaultTppAppointmentSlots = arrayListOf(
-            AppointmentSlotFacade(
-                    startTime = "2018-08-01T11:00:00.0Z",
-                  endTime =   "2018-08-01T11:10:00.0Z",
-                   slotTypeName =  "Slot"
-            )
-    )
-
-    val defaultTppAppointmentSessions = arrayListOf(
-            AppointmentSessionFacade(
-                    sessionId = 1,
-                  sessionType =   "Clinic",
-                staffDetails =     "Dr. Who",
-                location=    "Leeds",
-               slots =      defaultTppAppointmentSlots
-            )
-    )
-
-    fun generateEmisAppointmentSlots(numberOfDaysInFuture: Int = 1, startingId: Int = 303): ArrayList<AppointmentSlotFacade> {
-        val generatedAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
+    fun generateEmisAppointmentSlots(numberOfDaysInFuture: Int = 1, startingId: Int = 303): ArrayList<AppointmentSlot> {
+        val generatedAppointmentSlots = arrayListOf<AppointmentSlot>()
         for (slotsCreated in 0 until (2 * maximumNumberOfSlotsInDay) step 2) {
             val baseSlotId = (numberOfDaysInFuture * 1000) + startingId + slotsCreated
             generatedAppointmentSlots.add(
-                    AppointmentSlotFacade(
+                    AppointmentSlot(
                             slotId = baseSlotId,
                             startTime = sometimeDayInTheFuture(numberOfDaysInFuture, slotsCreated / 2 * 30),
                             endTime = sometimeDayInTheFuture(numberOfDaysInFuture, (slotsCreated / 2 * 30) + defaultDuration),
@@ -143,7 +122,7 @@ open class AppointmentsBookingData {
                     )
             )
             generatedAppointmentSlots.add(
-                    AppointmentSlotFacade(
+                    AppointmentSlot(
                             slotId = baseSlotId + 1,
                             startTime = sometimeDayInTheFuture(numberOfDaysInFuture, slotsCreated / 2 * 30),
                             endTime = sometimeDayInTheFuture(numberOfDaysInFuture, (slotsCreated / 2 * 30) + defaultDuration),
@@ -234,7 +213,7 @@ open class AppointmentsBookingData {
 
     fun generateEmisAppointmentSessions(
             sessions: ArrayList<Session> = generateEmisSessions(),
-            appointmentSlots: ArrayList<ArrayList<AppointmentSlotFacade>> = arrayListOf(
+            appointmentSlots: ArrayList<ArrayList<AppointmentSlot>> = arrayListOf(
                     generateEmisAppointmentSlots(startingId = 320),
                     generateEmisAppointmentSlots(startingId = 340),
                     generateEmisAppointmentSlots(startingId = 360),
@@ -242,13 +221,13 @@ open class AppointmentsBookingData {
                     generateEmisAppointmentSlots(startingId = 400),
                     generateEmisAppointmentSlots(startingId = 420)
             )
-    ): ArrayList<AppointmentSessionFacade> {
-        val generatedAppointmentSessions = arrayListOf<AppointmentSessionFacade>()
+    ): ArrayList<AppointmentSession> {
+        val generatedAppointmentSessions = arrayListOf<AppointmentSession>()
         var appointmentSlotIndex = 0
         for (session in sessions) {
             if (appointmentSlots.size == appointmentSlotIndex) break
             generatedAppointmentSessions.add(
-                    AppointmentSessionFacade(
+                    AppointmentSession(
                             sessionDate = session.startDate,
                             sessionId = session.sessionId,
                             slots = appointmentSlots[appointmentSlotIndex]

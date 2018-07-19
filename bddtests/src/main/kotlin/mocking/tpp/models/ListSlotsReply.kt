@@ -12,6 +12,6 @@ data class ListSlotsReply (
     @XmlAttribute var patientId: String = "default patientId",
     @XmlAttribute var onlineUserId: String = "default onlineUserId",
     @XmlAttribute var uuid: String = "default uuid",
-    @XmlAttribute var bookableDays: String = "default bookableDays",
+    @XmlAttribute var bookableDays: String = "defualt bookableDays",
     @XmlElement var Session: MutableCollection<Session> = mutableListOf()
 )
