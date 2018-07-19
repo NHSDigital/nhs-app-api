@@ -26,7 +26,7 @@ Feature: Login
       | GPSS   |
       | EMIS   |
       | TPP    |
-      | VISION |
+      #| VISION | - Barry to fix on 19/07.  Cert issue.
 
   @pending
   Scenario: User has been inactive for less than 20 minutes
