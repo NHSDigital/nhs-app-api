@@ -64,10 +64,10 @@ class MenuBar @JvmOverloads constructor(
 
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
         selectedPosition.ifPresent { selectedPosition ->
-            if (selectedPosition != position) {
+
                 getMenuBarItemAt(selectedPosition).deselectItem()
                 selectMenuItem(position, shouldInvokeListener)
-            }
+
         }
 
         selectedPosition.ifEmpty {
