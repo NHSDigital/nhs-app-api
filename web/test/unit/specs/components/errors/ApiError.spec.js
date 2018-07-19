@@ -63,9 +63,18 @@ describe('ApiError.vue', () => {
     assert(expectedData);
   });
 
-  each(testData[409]).it('page %s will show correct message when the specified appointment does not exist or is not in a suitable state to be cancelled', (path, expectedData) => {
+  each(testData[409]).it('page %s will show correct message when the API returns a 409 conflict response', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 409 }, message: 'Conflict' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[460]).it('page %s will show correct message when the API returns a 460 limit reached response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 460 }, message: 'Limit reached' };
 
     createApiErrorComponent(route, apiError);
 
