@@ -62,6 +62,7 @@ Feature: Authorisation occurs during each URL visit
   @smoketest
   Scenario Outline: User browses to <URL> when logged in
     Given I am logged in
+    And I see the home page
     When I browse to the page at <URL>
     Then I see the relevant page
 
