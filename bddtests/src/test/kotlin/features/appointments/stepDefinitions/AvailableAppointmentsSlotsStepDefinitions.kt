@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.AvailableAppointmentsSteps
+import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
@@ -41,7 +42,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^there are available appointment slots$")
     fun thereAreAvailableAppointmentSlots() {
         availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextTwoWeeks()
+        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks()
     }
 
     @Given("^there are available appointment slots with different criteria for (.*)$")
@@ -62,7 +63,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^there is 1 available appointment slot for (.*)$")
     fun thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem: String) {
-        availableAppointments.generateDefaultUserData()
+        availableAppointments.generateDefaultUserData(gpSystem)
         availableAppointments.generateAvailableOneAppointmentSlotForGPSystem(
                 if (gpSystem == "any GP System") "EMIS" else gpSystem
         )
@@ -78,16 +79,19 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^GP system doesn't respond a timely fashion for available appointment slots$")
     fun gp_system_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextTwoWeeks(delayedInSeconds = 30)
+        availableAppointments.generateDefaultUserData()
+        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 30)
     }
 
     @Given("^there is a slight delay in retrieving them$")
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextTwoWeeks(delayedInSeconds = 1)
+        availableAppointments.generateDefaultUserData()
+        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 1)
     }
 
     @When("^GP system responds a timely fashion for available appointment slots$")
     fun gp_system_responds_a_timely_fashion_for_available_appointment_slots() {
+        availableAppointments.generateDefaultUserData()
         thereAreAvailableAppointmentSlots()
     }
 

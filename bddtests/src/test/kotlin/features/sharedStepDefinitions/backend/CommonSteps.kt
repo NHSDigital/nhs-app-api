@@ -59,9 +59,8 @@ class CommonSteps : AbstractSteps() {
         setSessionVariable(WorkerClient::class).to(workerClient)
     }
 
-    @Given("^(.*) is not available$")
-    fun givenXIsNotAvailable(gpSystem: String) {
-        when (gpSystem) {
+    @Given("^(EMIS|VISION) is not available$")
+    fun givenXIsNotAvailable(gpSystem: String) {        when (gpSystem) {
             EMIS -> {
                 val connectionToken = "f6ca8e0c-dd67-4863-ba9e-3d34bfe930d0"
                 val odsCode = "A29928"

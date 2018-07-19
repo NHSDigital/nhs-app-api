@@ -2,12 +2,11 @@ Feature: View available appointment slots
 
   Users can view available appointments from the available appointments Page.
 
-  Background:
-    Given wiremock is initialised
-
   @appointment
   Scenario: A user who is signed in sees the appointments navigation button highlighted
-    Given I am on the available appointments page
+    Given there are available appointment slots with different criteria for EMIS
+    And I am logged in
+    And I am on the available appointments page
     Then the appointments menu button is highlighted
 
   @NHSO-71
@@ -15,6 +14,7 @@ Feature: View available appointment slots
   @smoketest
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>
+    And I am logged in
     When I am on the available appointments page
     Then there is a filter for the appointment types
     And there is a filter for the appointment locations
@@ -30,6 +30,7 @@ Feature: View available appointment slots
   @appointment
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>
+    And I am logged in
     When I am on the available appointments page
     Then appointment type is not selected
     And the only location is selected
@@ -39,12 +40,14 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-71
   @NHSO-870
   @appointment
   Scenario Outline: A <GP System> user enters the available appointments page, but appointments only available at 1 location
     Given there are available appointment slots for <GP System> for 1 location
+    And I am logged in
     When I am on the available appointments page
     Then the only location is selected
     Examples:
@@ -56,6 +59,7 @@ Feature: View available appointment slots
   @appointment
   Scenario Outline: A <GP System> user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
+    And I am logged in
     When I am on the available appointments page
     Then a message is displayed indicating there are no slots available
     Examples:
@@ -67,6 +71,7 @@ Feature: View available appointment slots
   @appointment
   Scenario Outline: A <GP System> user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
+    And I am logged in
     When I am on the available appointments page
     And I acknowledge that there are no appointments and go back to my appointments
     Then I will be on the My appointments screen
@@ -79,6 +84,7 @@ Feature: View available appointment slots
   @appointment
   Scenario Outline: A <GP System> user refines criteria but no slots are available
     Given there are available appointment slots with different criteria for <GP System>
+    And I am logged in
     When I am on the available appointments page
     And I select options from the filters that don't yield any results
     Then a message is displayed indicating there are no slots for selected criteria
@@ -90,6 +96,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user selects a second appointment slot and the first selected slot gets deselected.
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     And I filter to reveal multiple slots
     And I click on the 1st appointment
@@ -101,6 +108,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user select the same appointment twice and the selected appointment stay selected.
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     And I filter to reveal multiple slots
     And I click on the 1st appointment
@@ -111,6 +119,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user tries to progress without selecting an appointment type or location
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting an appointment type or location
     Then I see an appropriate message informing that I need to select an appointment type and location
@@ -119,6 +128,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user tries to progress without selecting an appointment type
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting an appointment type
     Then I see an appropriate message informing that I need to select an appointment type
@@ -127,6 +137,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user tries to progress without selecting a location
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting a location
     Then I see an appropriate message informing that I need to select a location
@@ -135,6 +146,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user tries to progress without selecting an appointment
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting an appointment
     Then I see an appropriate message informing that I need to select an appointment
@@ -143,6 +155,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user decides to go back even though there's available slots
     Given there are available appointment slots with different criteria for any GP System
+    And I am logged in
     And I am on the available appointments page
     When I decide I don't want to select an appointment and go back
     Then I will be on the My appointments screen
@@ -212,6 +225,7 @@ Feature: View available appointment slots
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
     Given there are available appointment slots
     But there is a slight delay in retrieving them
+    And I am logged in
     And I am on the available appointments page
     When I navigate to Prescriptions
     And I wait 5 seconds
@@ -220,7 +234,11 @@ Feature: View available appointment slots
   @NHSO-1168
   @appointment
   Scenario: A user has different problems with prescriptions and appointments and selects appointments and prescriptions in quick succession
-    Given GP system doesn't respond a timely fashion for available appointment slots
+    Given I am using EMIS GP System
+    And GP system doesn't respond a timely fashion for available appointment slots
+    But I have 0 past repeat prescriptions
+    And each repeat prescription contains 0 courses of which 0 are repeats
+    And I am logged in
     And I am on the available appointments page
     When I navigate to Prescriptions
     And I wait 11 seconds
