@@ -222,6 +222,52 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         }
 
         [TestMethod]
+        public async Task Register_SuccessfullyRegistered_WhenDataAreCorrect()
+        {
+            // Arrange
+            // emis client returns expected responses
+            var endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
+            _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
+                Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = endUserSessionResponse
+                    }));
+            
+            var meApplicationsResponse = _fixture.Create<MeApplicationsPostResponse>();
+            _mockEmisClient.Setup(x => x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = meApplicationsResponse
+                    }));
+
+            var sessionResponse = _fixture.Create<SessionsPostResponse>();
+            _mockEmisClient.Setup(x => x.SessionsPost(It.IsAny<string>(), It.IsAny<SessionsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
+                    {
+                        Body = sessionResponse
+                    }));
+            
+            var demographicsResponse = _fixture.Create<DemographicsGetResponse>();
+            _mockEmisClient.Setup(x => x.DemographicsGet(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
+                    {
+                        Body = demographicsResponse
+                    }));
+            
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+            
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+        }
+        
+        [TestMethod]
         public async Task Register_ReturnsSupplierSystemUnavailable_WhenEmisClientThrowsHttpRequestException()
         {
             // Arrange

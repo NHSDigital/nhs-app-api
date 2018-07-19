@@ -3,24 +3,26 @@ package worker
 import org.apache.http.HttpRequest
 import org.apache.http.HttpResponse
 
-class NhsoHttpException(request: HttpRequest, response: HttpResponse, var method: String? = null) : RuntimeException() {
+class NhsoHttpException(
+        val uri: String,
+        val statusCode: Int,
+        val body: String?,
+        val method: String? = null) : RuntimeException() {
 
-    val Body: String = response.toString()
-    val RequestUri: String = request.requestLine.uri
-    var StatusCode: Int = response.statusLine.statusCode
-
-    init {
-        method = request.requestLine.method
-    }
+    constructor(request: HttpRequest, response: HttpResponse) : this(
+            request.requestLine.uri,
+            response.statusLine.statusCode,
+            response.toString(),
+            request.requestLine.method
+    )
 
     override fun toString(): String {
         val builder = StringBuilder()
-        builder.append("Stubs threw an HTTP exception:" + "\r\n")
-        builder.append(String.format("  Status code: %1\$s", StatusCode) + "\r\n")
-        builder.append(String.format("  Request URI: %1\$s", RequestUri) + "\r\n")
-        builder.append(String.format("  Method:      %1\$s", method) + "\r\n")
-        builder.append("  Body:" + "\r\n")
-        builder.append(Body + "\r\n")
+        builder.append("HTTP exception:" + "\r\n")
+        builder.append("Request URI: $uri\r\n")
+        builder.append("Method:      $method\r\n")
+        builder.append("Status code: $statusCode\r\n")
+        builder.append("Body:        $body\r\n")
         return builder.toString()
     }
 }

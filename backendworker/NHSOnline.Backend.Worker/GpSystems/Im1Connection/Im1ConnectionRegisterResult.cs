@@ -1,4 +1,5 @@
-﻿using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+﻿using NHSOnline.Backend.Worker.Areas.Im1Connection;
+using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Im1Connection
 {

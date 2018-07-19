@@ -19,7 +19,7 @@ object VisionConstants {
 
 
         return "<soapenv:Envelope xmlns:urn=\"urn:vision\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                "    <soapenv:Body>\n" +
+                "    <soapenv:body>\n" +
                 "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "            <vision:serviceDefinition>\n" +
                 "                <vision:name>${serviceDefinition.name}</vision:name>\n" +
@@ -33,7 +33,7 @@ object VisionConstants {
                 "            <vision:serviceContent>\n" + response +
                 "            </vision:serviceContent>\n" +
                 "        </vision:visionResponse>\n" +
-                "    </soapenv:Body>\n" +
+                "    </soapenv:body>\n" +
                 "</soapenv:Envelope>"
     }
 
@@ -43,7 +43,7 @@ object VisionConstants {
         return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "   <soap:Header>\n" +
                 "   </soap:Header>\n" +
-                "   <soap:Body>\n" +
+                "   <soap:body>\n" +
                 "      <soap:Fault xmlns:vision=\"urn:vision\">\n" +
                 "         <faultcode>soap:Server</faultcode>\n" +
                 "         <faultstring>-90001</faultstring>\n" +
@@ -61,25 +61,25 @@ object VisionConstants {
                 "            </vision:visionFault>\n" +
                 "         </detail>\n" +
                 "      </soap:Fault>\n" +
-                "   </soap:Body>\n" +
+                "   </soap:body>\n" +
                 "</soap:Envelope>"
     }
 
     val securityHeaderErrorResponse =
             "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                    "   <soap:Body>\n" +
+                    "   <soap:body>\n" +
                     "      <soap:Fault>\n" +
                     "         <faultcode xmlns:ns1=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">ns1:InvalidSecurity</faultcode>\n" +
                     "         <faultstring>An error was discovered processing the &lt;wsse:Security> header</faultstring>\n" +
                     "      </soap:Fault>\n" +
-                    "   </soap:Body>\n" +
+                    "   </soap:body>\n" +
                     "</soap:Envelope>"
 
     fun getUnkownError(serviceDefinition: ServiceDefinition): String {
         return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "  <soap:Header>\n" +
                 "  </soap:Header>\n" +
-                "  <soap:Body>\n" +
+                "  <soap:body>\n" +
                 "     <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "        <vision:serviceDefinition>\n" +
                 "           <vision:name>${serviceDefinition.name}</vision:name>\n" +
@@ -95,7 +95,7 @@ object VisionConstants {
                 "           </vision:outcome>\n" +
                 "        </vision:serviceHeader>\n" +
                 "     </vision:visionResponse>\n" +
-                "  </soap:Body>\n" +
+                "  </soap:body>\n" +
                 "</soap:Envelope>"
     }
 
@@ -108,7 +108,7 @@ object VisionConstants {
                 "      <To xmlns=\"http://www.w3.org/2005/08/addressing\">http://www.w3.org/2005/08/addressing/anonymous</To>\n" +
                 "      <RelatesTo xmlns=\"http://www.w3.org/2005/08/addressing\">uuid:bd81e6a9-c971-4b48-9306-28b2d8cd9a50</RelatesTo>\n" +
                 "   </soap:Header>\n" +
-                "   <soap:Body>\n" +
+                "   <soap:body>\n" +
                 "      <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "         <vision:serviceDefinition>\n" +
                 "            <vision:name>${serviceDefinition.name}</vision:name>\n" +
@@ -124,7 +124,7 @@ object VisionConstants {
                 "            </vision:outcome>\n" +
                 "         </vision:serviceHeader>\n" +
                 "      </vision:visionResponse>\n" +
-                "   </soap:Body>\n" +
+                "   </soap:body>\n" +
                 "</soap:Envelope>"
     }
 

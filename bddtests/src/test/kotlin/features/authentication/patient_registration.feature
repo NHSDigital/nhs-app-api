@@ -1,144 +1,202 @@
+@this
 Feature: Registration
 
   A user can create a new NHS account from the login page, allowing them to access the app
 
   @backend
-  Scenario Outline: Patient registers for an EMIS account with NHS Numbers of <NHS Numbers>
-    Given I have a new patient with Nhs Numbers of <NHS Numbers>
-    When I register an EMIS user's IM1 credentials
+  Scenario Outline: Patient registers for a <GP System> account with NHS Numbers of <NHS Numbers>
+    Given I have a new <GP System> patient with Nhs Numbers of <NHS Numbers>
+    When I register the user's IM1 credentials
     Then I receive a response
     And the response has the expected connection token
     And the response has the expected NHS numbers
 
     Examples:
-    |NHS Numbers|
-    |           |
-    |"one"      |
-    |"one","two"|
+    |GP System |NHS Numbers |
+    |EMIS      |            |
+    |EMIS      |"one"       |
+    |EMIS      |"one","two" |
+    |TPP       |"one"       |
 
   @backend
-  Scenario: Account ID doesn't match a user
-    Given I have data for a patient that does not exist
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Not found" error
+  Scenario Outline: <GP System> Account ID doesn't match a user
+    Given I have data for a <GP System> patient that does not exist
+    When I register the user's IM1 credentials
+    Then I get a "Not found" error
+
+    Examples:
+    |GP System |
+    |EMIS      |
+    |TPP       |
 
   @backend
-  Scenario: Incorrect Linkage Key
-    Given I have data for a patient with incorrect linkage key
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Not found" error
+  Scenario Outline: Incorrect <GP System> Linkage Key
+    Given I have data for a <GP System> patient with incorrect linkage key
+    When I register the user's IM1 credentials
+    Then I get a "Not found" error
+
+    Examples:
+    |GP System |
+    |EMIS      |
+    |TPP       |
 
   @backend
-  Scenario: Incorrect Surname
-    Given I have data for a patient with incorrect surname
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Not found" error
+  Scenario Outline: <GP System> - Incorrect Surname
+    Given I have data for a <GP System> patient with incorrect surname
+    When I register the user's IM1 credentials
+    Then I get a "Not found" error
+
+    Examples:
+    |GP System |
+    |EMIS      |
+    |TPP       |
 
   @backend
-  Scenario: Incorrect Date of Birth
-    Given I have data for a patient with incorrect date of birth
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Not found" error
+  Scenario Outline: <GP System> - Incorrect Date of Birth
+    Given I have data for a <GP System> patient with incorrect date of birth
+    When I register the user's IM1 credentials
+    Then I get a "Not found" error
+
+    Examples:
+    |GP System |
+    |EMIS      |
+    |TPP       |
 
   @backend
   @NHSO-222
   @NHSO-1626
   Scenario: User's account has already been associated with the application
-    Given I have data for a patient that has already been associated with the application in the GP system
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Conflict" error
+    Given I have data for an EMIS patient that has already been associated with the application in the GP system
+    When I register the user's IM1 credentials
+    Then I get a "Conflict" error
 
   @pending
   @backend
   Scenario: EMIS Demographics endpoint is disabled
     Given I have valid patient data to register new account
     And EMIS Demographics endpoint is disable
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Forbidden" error
+    When I register the user's IM1 credentials
+    Then I get a "Forbidden" error
 
 
   @backend
   Scenario: ODS Code not in the expected format
-    Given I have an EMIS user's IM1 credentials with an ODS Code not in the expected format
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+    Given I have a user's IM1 credentials with an ODS Code not in the expected format
+    When I register the user's IM1 credentials
+    Then I get a "Not Implemented" error
+
 
   @backend
-  Scenario: Surname not in the expected format
-    Given I have an EMIS user's IM1 credentials with a Surname not in the expected format
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+  Scenario Outline: <GP System> - Surname not in the expected format
+    Given I have a <GP System> user's IM1 credentials with a Surname not in the expected format
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
+
+    Examples:
+    |GP System |Response    |
+    |EMIS      |Bad Request |
+    |TPP       |Not Found   |
 
   @backend
-  Scenario: Account ID not in the expected format
-    Given I have an EMIS user's IM1 credentials with an Account ID not in the expected format
-    When I register an EMIS user's IM1 credentials
-    Then I receive a "Bad Request" error
+  Scenario Outline: <GP System> - Account ID not in the expected format
+    Given I have a <GP System> user's IM1 credentials with an Account ID not in the expected format
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
+
+    Examples:
+      |GP System |Response    |
+      |EMIS      |Bad Request |
+      |TPP       |Not Found   |
 
   @backend
-  Scenario: Linkage Key not in the expected format
-    Given I have an EMIS user's IM1 credentials with a Linkage Key not in the expected format
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+  Scenario Outline: <GP System> - Linkage Key not in the expected format
+    Given I have a <GP System> user's IM1 credentials with a Linkage Key not in the expected format
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
+
+    Examples:
+    |GP System |Response    |
+    |EMIS      |Bad Request |
+    |TPP       |Not Found   |
 
   @backend
-  Scenario: Date Of Birth not in the expected format
-    Given I have an EMIS user's IM1 credentials with a Date Of Birth not in the expected format
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+  Scenario Outline: <GP System> - Date Of Birth not in the expected format
+    Given I have a <GP System> user's IM1 credentials with a Date Of Birth not in the expected format
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
+
+    Examples:
+    |GP System |Response    |
+    |EMIS      |Bad Request |
+    |TPP       |Bad Request |
 
   @backend
   Scenario: Missing ODS Code
-    Given I have an EMIS user's IM1 credentials with missing ODS Code
-    When I register an EMIS user's IM1 credentials
+    Given I have a user's IM1 credentials with missing ODS Code
+    When I register the user's IM1 credentials
     Then I get a "Bad Request" error
 
   @backend
-  Scenario: Missing Surname
-    Given I have an EMIS user's IM1 credentials with missing Surname
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+  Scenario Outline: <GP System> - Missing Surname
+    Given I have a <GP System> user's IM1 credentials with missing Surname
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
+
+    Examples:
+    |GP System |Response    |
+    |EMIS      |Bad Request |
+    |TPP       |Bad Request |
 
   @backend
-  Scenario: Missing Account ID
-    Given I have an EMIS user's IM1 credentials with missing Account ID
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+  Scenario Outline: <GP System> - Missing Account ID
+    Given I have a <GP System> user's IM1 credentials with missing Account ID
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
+
+    Examples:
+    |GP System |Response    |
+    |EMIS      |Bad Request |
+    |TPP       |Bad Request |
 
   @backend
-  Scenario: Missing Linkage Key
-    Given I have an EMIS user's IM1 credentials with missing Linkage Key
-    When I register an EMIS user's IM1 credentials
-    Then I get a "Bad Request" error
+  Scenario Outline: <GP System> - Missing Linkage Key
+    Given I have a <GP System> user's IM1 credentials with missing Linkage Key
+    When I register the user's IM1 credentials
+    Then I get a "<Response>" error
 
-  @NHSO-313 
-  Scenario: User launches the create account CitizenID journey
-    Given I want to register for an account
+    Examples:
+    |GP System |Response    |
+    |EMIS      |Bad Request |
+    |TPP       |Bad Request |
+
+  @NHSO-313
+  Scenario Outline: <GP System> User launches the create account CitizenID journey
+    Given I want to register for a <GP System> account
     When I select to create an account
     Then I am redirected to the CID create an account page
 
+    Examples:
+      |GP System |
+      |EMIS      |
+      |TPP       |
+
   @NHSO-313
   @smoketest
-  Scenario: User launches and completes account creation from web
-    Given I have completed account creation
+  Scenario Outline: <GP System> User launches and completes account creation from web
+    Given I have completed <GP System> account creation
     Then I am redirected to the signed in home page
     And I see a welcome message
     And I see the navigation menu
     And I see the header
 
-  @manual
-  @native
-  @NHSO-313
-  Scenario: User launches and completes account creation from native app
-    Given I have completed account creation
-    Then I am redirected to the app to the signed in home page
-    And I see a welcome message
-    And I see the navigation menu
-    And I see the header
+    Examples:
+    |GP System |
+    |EMIS      |
+    |TPP       |
 
   @NHSO-313
-  Scenario: While a new user who has creared an account waits to be logged in a spinner is shown
-    Given I want to register for an account
+  Scenario: While a new user who has created an account waits to be logged in a spinner is shown
+    Given I want to register for a EMIS account
     And sign in verification is slow
     When I complete the account registration
     Then the spinner appears

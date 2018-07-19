@@ -16,7 +16,7 @@ open class CIDAccountCreationPage : HybridPageObject(Companion.PageType.WEBVIEW_
     )
 
     fun isVisible() : Boolean {
-        return createAccountButton.element.isVisible
+        return createAccountButton.element.isVisible.and(mockPatientInput.element.isVisible)
     }
 
     fun completeAccountCreation(patient: Patient) {

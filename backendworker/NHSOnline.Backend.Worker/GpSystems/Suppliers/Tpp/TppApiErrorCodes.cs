@@ -13,5 +13,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public const string AppointmentWithinOneHour = "40";
         public const string SlotNotFound = "1102";
         public const string SlotAlreadyBooked = "1103";
+
+        public static class LinkAccount
+        {
+            public const string InvalidProviderId = "5";
+            public const string InvalidLinkageCredentials = "8";
+        }
     }
 }

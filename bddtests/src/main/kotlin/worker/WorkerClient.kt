@@ -4,6 +4,7 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import config.Config
+import net.serenitybdd.rest.SerenityRest
 
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.*
@@ -62,20 +63,6 @@ class WorkerClient {
         httpGet.releaseConnection()
 
         return gson.fromJson(result, Im1ConnectionResponse::class.java)
-    }
-
-    fun postIm1Connection(requestBody: Im1ConnectionRequest): Im1ConnectionResponse {
-        val httpPost = HttpPost(config.backendUrl + WorkerPaths.patientIm1Connection)
-        val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
-        entity.setContentType("application/json")
-        httpPost.entity = entity
-
-        val response = sendAsync(httpPost)
-        val rd = BufferedReader(InputStreamReader(response.entity.content))
-        val result = rd.use { it.readText() }
-        httpPost.releaseConnection()
-        println(result)
-        return gson.fromJson<Im1ConnectionResponse>(result, Im1ConnectionResponse::class.java)
     }
 
     fun postSessionConnection(requestBody: UserSessionRequest): UserSessionResponse {

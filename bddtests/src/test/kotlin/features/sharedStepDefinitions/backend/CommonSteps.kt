@@ -1,17 +1,12 @@
 package features.sharedStepDefinitions.backend
 
 import config.Config
-import cucumber.api.Scenario
-import cucumber.api.java.After
 import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
-import features.sharedStepDefinitions.BaseStepDefinition
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
-import mocking.defaults.MockDefaults.Companion.patient
 
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -19,9 +14,6 @@ import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import mocking.tpp.models.AuthenticateReply
-import mocking.vision.VisionConstants
-import mocking.vision.models.ServiceDefinition
-import mocking.vision.models.VisionUserSession
 import models.Patient
 import net.serenitybdd.core.Serenity.*
 import net.serenitybdd.core.Serenity
@@ -95,7 +87,7 @@ class CommonSteps : AbstractSteps() {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
         assertNotNull("An exception was expected but was not returned within the expected time limit.", exception)
-        assertEquals(converted, exception.StatusCode)
+        assertEquals(converted, exception.statusCode)
     }
 
     @Then("^I receive (?:a|an) \"(.*)\" success code")

@@ -8,7 +8,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public interface ITppClient
     {
+
         Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate model);
+
+        Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel);
         
         Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession);
 
@@ -28,8 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
         
-        Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model,
-                string suid);
+        Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model, string suid);
 
         Task<TppApiObjectResponse<RequestMedicationReply>> OrderPrescriptionsPost(TppUserSession tppUserSession, RequestMedication requestMedication);
     }

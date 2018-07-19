@@ -23,27 +23,24 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
     {
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
+        private ILogger<EmisSessionService> _logger;
         private EmisSessionService _systemUnderTest;
-        private string _connectionToken;
-        private string _odsCode;
         private SessionsEndUserSessionPostResponse _endUserSessionResponse;
         private SessionsPostResponse _sessionsResponse;
-        private ILogger<EmisSessionService> _logger;
-
         private DemographicsGetResponse _demographicsResponse;
+
+        private string _connectionToken;
+        private string _odsCode;
         
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-
             _logger = _fixture.Freeze<ILogger<EmisSessionService>>();
-
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
-
+            _endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
             _connectionToken = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
-            _endUserSessionResponse = _fixture.Create<SessionsEndUserSessionPostResponse>();
             
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(

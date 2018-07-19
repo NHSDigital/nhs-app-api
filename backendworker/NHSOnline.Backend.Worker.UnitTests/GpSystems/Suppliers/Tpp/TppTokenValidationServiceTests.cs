@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingPassphrase()
         {
-            _invalidConnectionToken = "{\"accountid\":\"account_id\"}";
+            _invalidConnectionToken = "{\"accountId\":\"account_id\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
         
@@ -57,21 +57,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenPassphraseIsEmpty()
         {
-            _invalidConnectionToken = "{\"accountid\":\"account_id\",\"passphrase\":\"\"}";
+            _invalidConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
         
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenAccountIdIsEmpty()
         {
-            _invalidConnectionToken = "{\"accountid\":\"\",\"passphrase\":\"\"}";
+            _invalidConnectionToken = "{\"accountId\":\"\",\"passphrase\":\"\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
 
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsTrue_WhenTokenIsInAJsonStringFormat()
         {
-            _validConnectionToken = "{\"accountid\":\"account_id\",\"passphrase\":\"passphrase\"}";
+            _validConnectionToken = "{\"accountId\":\"account_id\",\"passphrase\":\"passphrase\"}";
             _sut.IsValidConnectionTokenFormat(_validConnectionToken).Should().BeTrue();
         }
         

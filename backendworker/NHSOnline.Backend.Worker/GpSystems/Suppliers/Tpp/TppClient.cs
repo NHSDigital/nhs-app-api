@@ -38,6 +38,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _logger = loggerFactory.CreateLogger<TppClient>();
         }
         
+        public async Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel)
+        {   
+            var response = await Post<LinkAccount, LinkAccountReply>(linkAccountModel);
+
+            return response;
+        }
+        
         public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticateModel)
         {
             authenticateModel.Application = new Application
@@ -274,9 +281,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             public HttpStatusCode StatusCode { get; set; }
             public bool HasSuccessResponse => ErrorResponse == null && StatusCode.IsSuccessStatusCode();
 
-            public bool HasErrorWithMessage(string message)
+            public bool HasErrorWithCode(string errorCode)
             {
-                return ErrorResponse?.TechnicalMessage == message;
+                return ErrorResponse?.ErrorCode == errorCode;
             }
             
             // User does not have access, Sean to confirm with TPP re using error codes

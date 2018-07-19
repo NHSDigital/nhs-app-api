@@ -11,9 +11,11 @@ import mocking.tpp.appointments.BookAppointmentsBuilderTpp
 import mocking.tpp.appointments.MyAppointmentsBuilderTpp
 import mocking.tpp.appointments.CancelAppointmentsBuilderTpp
 import mocking.tpp.models.Authenticate
+import mocking.tpp.models.LinkAccount
 import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
 import mocking.tpp.prescriptionsSubmission.TppPrescriptionsSubmissionBuilder
+import mocking.tpp.registration.LinkAccountBuilder
 import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
 import mocking.tpp.session.TppSessionBuilder
 import mocking.tpp.testResultsView.TppTestResultsViewBuilder
@@ -45,6 +47,7 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
     fun viewPatientOverviewPost(tppUserSession: TppUserSession) = TppViewPatientOverviewBuilder(tppUserSession)
     fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
     fun listRepeatMedication(patient: Patient) = TppPrescriptionsBuilder(patient)
+    fun linkAccountRequest(patient: Patient) = LinkAccountBuilder(LinkAccount.forPatient(patient))
     fun prescriptionSubmission(patient: Patient, drugIds: List<String>?) = TppPrescriptionsSubmissionBuilder(patient, drugIds)
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
     fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)

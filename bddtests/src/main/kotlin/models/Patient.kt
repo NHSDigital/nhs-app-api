@@ -159,11 +159,12 @@ data class Patient(
                 contactDetails = defaultContactDetails,
                 odsCode =  MockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers =  listOf("5785445875"),
+                linkageKey = "?2sY3qyZp5gRB8*b",
                 accountId =  "520993083",
                 patientId = "84df400000000000",
                 onlineUserId = "84df400000000000",
                 passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=",
-                connectionToken =  "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                connectionToken =  "{\"accountId\":\"520993083\",\"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
                 endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 tppUserSession = TppUserSession("ZT8wLjK6beFOdXoiNIHbD+TbPrl0Y3KmVXy4GYM253hQlxwp2qMKW7zgbjgTWJzCvTcZxb2BZNW5IdGtaWtahGkv" +
                         "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -20,7 +21,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
     {
         private const string DefaultConnectionToken = "{\"accountid\":\"account_id\",\"passphrase\":\"passphrase\"}";
         private const string DefaultOdsCode = "token";
-
 
         private IFixture _fixture;
         private Mock<ITppClient> _mockTppClient;
@@ -120,6 +120,154 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Register_SuccessfullyRegistered_WhenDataAreCorrect()
+        {
+            var linkAccountReply = _fixture.Create<LinkAccountReply>();
+            _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    {
+                        Body = linkAccountReply,
+                    }));
+            
+            var authenticateReply = _fixture.Create<AuthenticateReply>();
+            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    {
+                        Body = authenticateReply,
+                    }));
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);         
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsSupplierSystemUnavailable_WhenTppClientLinkAccountReturnsInvalidProviderId()
+        {
+            var invalidProviderErrorResponse = _fixture.Build<Error>()
+                .With(x => x.ErrorCode, TppApiErrorCodes.LinkAccount.InvalidProviderId)
+                .Create();
+                
+            _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = invalidProviderErrorResponse
+                    }));
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);         
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsNotFound_WhenTppClientLinkAccountReturnsInvalidLinkageCredentials()
+        {
+            var invalidLinkageCredentialsErrorResponse = _fixture.Build<Error>()
+                .With(x => x.ErrorCode, TppApiErrorCodes.LinkAccount.InvalidLinkageCredentials)
+                .Create();
+                
+            _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = invalidLinkageCredentialsErrorResponse
+                    }));
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);         
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsSupplierSystemUnavailable_WhenTppClientLinkAccountReturnsErrorResponse()
+        {
+            var errorResponse = _fixture.Create<Error>();                
+            _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = errorResponse
+                    }));
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);         
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsSupplierSystemUnavailable_WhenTppClientAuthenticateReturnsErrorResponse()
+        {
+            var linkAccountReply = _fixture.Create<LinkAccountReply>();
+            _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    {
+                        Body = linkAccountReply,
+                    }));
+            
+            var errorResponse = _fixture.Create<Error>();                
+            _mockTppClient.Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = errorResponse
+                    }));
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);         
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientLinkAccountThrowsHttpRequestException()
+        {
+            _mockTppClient
+                .Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>()))
+                .Throws<HttpRequestException>();
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Verify_ReturnsSupplierSystemUnavailable_WhenTppClientAuthenticateThrowsHttpRequestException()
+        {
+            var linkAccountReply = _fixture.Create<LinkAccountReply>();
+            _mockTppClient.Setup(x => x.LinkAccountPost(It.IsAny<LinkAccount>())).Returns(
+                Task.FromResult(
+                    new TppClient.TppApiObjectResponse<LinkAccountReply>(HttpStatusCode.OK)
+                    {
+                        Body = linkAccountReply,
+                    }));
+            
+            _mockTppClient
+                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+                .Throws<HttpRequestException>();
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var result = await systemUnderTest.Register(request);
+
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
         }
     }
 }
