@@ -223,7 +223,7 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'There\'s a problem',
       noReasonError: 'Enter a reason for this appointment',
-      conflictErrorMessage: 'Sorry, it seems that this slot was already taken. Please try to book another slot.',
+      conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
       errors: {
         pageHeader: 'Error sending request',
         header: 'Sorry, there\'s been a problem sending your request',
