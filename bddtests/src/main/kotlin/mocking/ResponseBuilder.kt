@@ -18,6 +18,10 @@ class ResponseBuilder(private val statusCode: Int) {
         return andBody(json, "application/json")
     }
 
+    fun andJsonBody(jsonBody: String):ResponseBuilder{
+        return andBody(jsonBody, "application/json")
+    }
+
     fun andTemplatedHtmlBody(body: String): ResponseBuilder {
         return andTemplateTransformer()
                 .andHtmlBody(body)

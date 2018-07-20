@@ -8,10 +8,9 @@ import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.AppointmentBookRequest
-import worker.models.appointments.BookAppointmentSlotRequest
 import org.junit.Assert.*
 
-abstract class AppointmentsBookingFactory() {
+abstract class AppointmentsBookingFactory {
 
     val mockingClient = MockingClient.instance
 
@@ -54,7 +53,7 @@ abstract class AppointmentsBookingFactory() {
 
     companion object {
 
-        val map: HashMap<String, AppointmentsBookingFactory> =
+        private val map: HashMap<String, AppointmentsBookingFactory> =
                 hashMapOf(
                         "EMIS" to AppointmentsBookingFactoryEmis(),
                         "TPP" to AppointmentsBookingFactoryTpp())

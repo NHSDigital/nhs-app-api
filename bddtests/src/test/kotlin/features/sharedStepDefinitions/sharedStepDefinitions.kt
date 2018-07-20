@@ -49,17 +49,27 @@ open class SharedStepDefinitions {
         BrowserstackLocalService.stop()
     }
 
+    @Given("(.*) logged in session started$")
+    @Throws(Exception::class)
+    fun emis_logged_in_session_started(system: String) {
+        when (system) {
+            "TPP" -> initialiseTpp()
+            else -> initialiseEmisLoggedSession()
+        }
+    }
+
+    private fun initialiseEmisLoggedSession() {
+        this.patient = MockDefaults.patient
+        MockDataPopulate(mockingClient).populateForJustLoggedIn()
+        mockingClient.forEmis { sessionRequest(this@SharedStepDefinitions.patient).respondWithSuccess(this@SharedStepDefinitions.patient, AssociationType.Self) }
+    }
+
     @Given("(.*) is initialised")
     fun system(system: String) {
 
-        if(system == "wiremock"){
-            initialiseEmis()
-        }
-        if(system == "EMIS"){
-            initialiseEmis()
-        }
-        if(system == "TPP"){
-            initialiseTpp()
+        when (system) {
+            "TPP" -> initialiseTpp()
+            else -> initialiseEmis()
         }
 
         setSessionVariable(BaseStepDefinition.GLOBAL_PROVIDER_TYPE).to(system)
@@ -113,7 +123,7 @@ open class SharedStepDefinitions {
 
     @Then("^none of the menu buttons are highlighted")
     fun iDoNotSeeAHighlightedMenuButton() {
-        Assert.assertFalse("Nav bar has highlighted item, expected none",navBar.hasAnyTabSelected())
+        Assert.assertFalse("Nav bar has highlighted item, expected none", navBar.hasAnyTabSelected())
     }
 
 
@@ -134,7 +144,7 @@ open class SharedStepDefinitions {
     }
 
     @Given("My session has expired")
-    fun givenMySessionHasExpired(){
+    fun givenMySessionHasExpired() {
         Serenity.setSessionVariable("SESSION_EXPIRY_MINUTES").to(1)
         iWaitForXSeconds(70)
     }

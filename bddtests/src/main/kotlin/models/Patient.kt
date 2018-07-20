@@ -6,7 +6,6 @@ import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
 import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
-
 data class Patient(
         val title:String = "",
         val firstName:String = "",

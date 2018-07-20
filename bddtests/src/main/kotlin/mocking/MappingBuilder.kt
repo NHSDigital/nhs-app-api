@@ -5,10 +5,16 @@ import org.apache.http.HttpStatus
 
 private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
-
+const val SERENITY_VARIABLE_GP_SERVICE_KEY = "GP_SERVICE_KEY"
 abstract class MappingBuilder(method: String, url: String) {
 
     internal val requestBuilder = RequestBuilder(method, url)
+
+    fun respondWithBody(body: String, statusCode: Int = HttpStatus.SC_OK): Mapping {
+        return respondWith(statusCode) {
+            andJsonBody(body)
+        }
+    }
 
     fun respondWith(statusCode: Int, milliSecondDelay: Int = 0, resolve: ResponseBuilder.() -> Unit): Mapping {
         val responseBuilder = ResponseBuilder(statusCode)

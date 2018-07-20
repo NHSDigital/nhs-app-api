@@ -40,17 +40,22 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
     }
 
-    fun populate() {
+    fun populateForJustLoggedIn(){
         mockingClient.clearWiremock()
         mockingClient.favicon()
 
         Im1ConnectionJournies(mockingClient).create()
         SessionJournies(mockingClient).create()
+        LinkageJournies(mockingClient).create()
+    }
+
+    fun populate() {
+        populateForJustLoggedIn()
+
         AppointmentSlotsJournies(mockingClient).create()
         PrescriptionsJournies(mockingClient).create()
         CoursesJournies(mockingClient).create()
         MyRecordJournies(mockingClient).create()
-        LinkageJournies(mockingClient).create()
     }
 
     private fun populateNftStubs(numOfPatients: Int) {

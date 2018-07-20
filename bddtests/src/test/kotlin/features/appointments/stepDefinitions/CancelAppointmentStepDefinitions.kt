@@ -10,9 +10,9 @@ class CancelAppointmentStepDefinitions {
     @Steps
     lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
-    @Given("^I am on the appointment cancellation screen$")
-    fun iAmOnTheCancellationScreen() {
-        cancelAppointmentSteps.progressToAppointmentCancellationScreen()
+    @Given("^I am on the (.*) appointment cancellation screen$")
+    fun iAmOnTheCancellationScreen(gpService: String) {
+        cancelAppointmentSteps.progressToAppointmentCancellationScreen(gpService)
     }
 
     @Given("^I select a cancellation reason of (.*)$")

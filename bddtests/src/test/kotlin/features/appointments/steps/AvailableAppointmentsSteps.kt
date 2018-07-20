@@ -35,12 +35,12 @@ import kotlin.collections.ArrayList
 
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
-    private val pageHeader by lazy { "Book new appointment" }
-    private val bookThisButtonText by lazy { "Continue" }
-    private val backButtonText by lazy { "Back to my appointments" }
-    private val appointmentTypeDefaultOption by lazy { "Select type" }
-    private val locationDefaultOption by lazy { "Select location" }
-    private val clinicianDefaultOption by lazy { "No preference" }
+    private val pageHeader = "Book new appointment"
+    private val bookThisButtonText = "Continue"
+    private val backButtonText = "Back to my appointments"
+    private val appointmentTypeDefaultOption = "Select type"
+    private val locationDefaultOption = "Select location"
+    private val clinicianDefaultOption = "No preference"
 
     private val timePeriodOptions by lazy {
         mapOf(
@@ -132,7 +132,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 Serenity.setSessionVariable(Patient::class).to(patient)
                 CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
                 EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
-                myAppointments.mockEMISMyAppointmentResponse(true)
+                myAppointments.mockGPServiceMyAppointmentResponse("EMIS", true)
             }
             "TPP" -> {
                 Serenity.setSessionVariable(Patient::class).to(tppPatient)

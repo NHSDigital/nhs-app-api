@@ -5,8 +5,10 @@ import mocking.IAppointmentSlotsBuilder
 import mocking.IBookAppointmentsBuilder
 import mocking.MappingBuilder
 import mocking.tpp.appointments.TppAppointmentSlotsBuilder
+import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.appointments.TppBookAppointmentsBuilder
+import mocking.tpp.appointments.TppMyAppointmentsBuilder
 import mocking.tpp.models.Authenticate
 import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
@@ -24,14 +26,17 @@ import java.time.OffsetDateTime
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.Marshaller
 
+open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") : MappingBuilder(method, relativePath), IAppointmentMappingBuilder {
 
-open class TppMappingBuilder(private val method: String, relativePath: String) : MappingBuilder(method, relativePath)
-        , IAppointmentMappingBuilder {
-
-
+    private val HEADER_CONTENT_TYPE = "Content-Type"
     internal val HEADER_TYPE = "type"
     internal val HEADER_SUID = "suid"
+
     var delayMillisecs = 0
+
+    init {
+        requestBuilder.andHeader(HEADER_CONTENT_TYPE, "text/xml; charset=UTF-8")
+    }
 
     fun patientSelectedPost(tppUserSession: TppUserSession) = TppPatientSelectedBuilder(tppUserSession)
 
@@ -43,10 +48,12 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
     fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
     override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = TppAppointmentSlotsBuilder(patient.tppUserSession!!)
 
-    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder =
-        TppBookAppointmentsBuilder(patient, request)
+    override fun viewAppointment(patient: Patient): IMyAppointmentsBuilder = TppMyAppointmentsBuilder(patient)
 
-    protected inline fun <reified T : Any> respondWith(response : T):Mapping{
+    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder =
+            TppBookAppointmentsBuilder(patient, request)
+
+    protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 
         var xmlBody = serialsier(response)
 
@@ -58,7 +65,7 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
         }
     }
 
-    protected inline fun <reified T : Any> serialsier(response : T):String{
+    protected inline fun <reified T : Any> serialsier(response: T): String {
         val jaxbContext = JAXBContext.newInstance(T::class.java)
         val marshaller = jaxbContext.createMarshaller()
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
@@ -73,7 +80,7 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
 
     companion object {
 
-        const val uuid="3e3d8bef-4ce1-4925-a263-149c15ac7208"
+        const val uuid = "3e3d8bef-4ce1-4925-a263-149c15ac7208"
     }
 
 }

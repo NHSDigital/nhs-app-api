@@ -4,7 +4,7 @@ Feature: Book an available appointment slot
   I want to be able to select, confirm and book selected appointment
 
   Background:
-    Given I have no upcoming appointments
+    Given I have no upcoming appointments for EMIS
     And there are available appointment slots
     And I am logged in
 

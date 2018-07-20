@@ -15,14 +15,11 @@ import javax.xml.bind.Marshaller
 
 class TppPatientSelectedBuilder(tppUserSession: TppUserSession) : TppMappingBuilder("POST", "/tpp/") {
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
         val typeHeader = "type"
         val typeValue = "PatientSelected"
         val apiVersion = "1"
 
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//PatientSelected[" +
                         "@apiVersion='${apiVersion}' and " +

@@ -1,6 +1,7 @@
 package pages.appointments
 
 import models.Slot
+import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 
@@ -41,8 +42,12 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
         return getDateTimestampsOfSlots(upcomingAppointmentParentXpath)
     }
 
-    fun getAllSlots(): ArrayList<Slot> {
-        return getAllSlots(upcomingAppointmentParentXpath)
+    fun getAllSlots(areCliniciansExpected: Boolean = false): ArrayList<Slot> {
+        return getAllSlots(upcomingAppointmentParentXpath, areCliniciansExpected)
+    }
+
+    fun getWebAppointmentSlotDiv(): List<WebElementFacade> {
+        return findAllByXpath("$upcomingAppointmentParentXpath/div")
     }
 
     fun getSlotAtIndex(index: Int): Slot {

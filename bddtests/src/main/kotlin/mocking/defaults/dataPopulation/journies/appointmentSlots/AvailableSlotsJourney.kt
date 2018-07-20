@@ -3,9 +3,7 @@ package mocking.defaults.dataPopulation.journies.appointmentSlots
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.emis.appointments.*
-import mocking.emis.data.AppointmentData
-import mocking.emis.models.AppointmentSession
-import mocking.emis.models.AppointmentSlot
+import mocking.emis.data.EmisAppointmentData
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
@@ -13,7 +11,7 @@ import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 
 class AvailableSlotsJourney(private val client: MockingClient) {
-    private val appointmentData = AppointmentData.instance
+    private val appointmentData = EmisAppointmentData.instance
     private val locations = appointmentData.locations
     private val sessionHolders = appointmentData.sessionHolders
     private val sessions = appointmentData.sessions
@@ -48,10 +46,10 @@ class AvailableSlotsJourney(private val client: MockingClient) {
         }
 
         //accept all requests
-        client
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
-                        .respondWithSuccess()
-                }
+        client.forEmis {
+            bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
+                    .respondWithSuccess()
+        }
 
         // first slot can be cancelled with reason "No longer required"
         client.forEmis {
@@ -59,7 +57,7 @@ class AvailableSlotsJourney(private val client: MockingClient) {
                     CancellationReason = "No longer required",
                     SlotId = 1,
                     UserPatientLinkToken = patient.userPatientLinkToken))
-                        .respondWithSuccess(DeleteAppointmentResponseModel(true))
+                    .respondWithSuccess(DeleteAppointmentResponseModel(true))
         }
     }
 

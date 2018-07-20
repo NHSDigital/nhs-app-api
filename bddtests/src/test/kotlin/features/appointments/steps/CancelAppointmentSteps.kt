@@ -48,8 +48,8 @@ open class CancelAppointmentSteps {
     }
 
     @Step
-    fun progressToAppointmentCancellationScreen() {
-        myAppointmentsSteps.mockEMISMyAppointmentResponse()
+    fun progressToAppointmentCancellationScreen(gpService: String) {
+        myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService)
         browser.goToApp()
         login.asDefault()
         navigation.select("Appointments")

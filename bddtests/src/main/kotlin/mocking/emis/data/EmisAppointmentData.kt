@@ -1,16 +1,16 @@
 package mocking.emis.data
 
 import addDays
-import addHours
 import addMinutes
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithTimezone
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
+import mocking.commonData.BaseAppointmentData
 import mocking.emis.appointments.GetAppointmentsResponseModel
 import mocking.emis.models.*
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
+import models.Patient
 import models.Slot
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,8 +27,9 @@ private const val SESSION_ID_FOOTCLINIC = 1
 private const val SESSION_ID_EYECLINIC = 2
 private const val SESSION_ID_EARCLINIC = 3
 
-class AppointmentData private constructor() {
-    private val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+class EmisAppointmentData private constructor() : BaseAppointmentData() {
+    override val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+    override val defaultPatient = Patient.getDefault("EMIS")
 
     private val expectedMyAppointment = Slot(session = SessionType.Timed.toString())
 
@@ -62,37 +63,37 @@ class AppointmentData private constructor() {
     )
 
     val telephoneAppointmentDetails1 =
-        TelephoneAppointmentDetails(
-                telephoneNumber = "0987654321",
-                contactType = "Mobile")
+            TelephoneAppointmentDetails(
+                    telephoneNumber = "0987654321",
+                    contactType = "Mobile")
 
     val telephoneAppointmentDetails2 =
-        TelephoneAppointmentDetails(
-                telephoneNumber = "0012345678",
-                contactType = "Home")
+            TelephoneAppointmentDetails(
+                    telephoneNumber = "0012345678",
+                    contactType = "Home")
 
     val emisCancellationReason1 =
-        AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
+            AppointmentCancellationReason("R1_NoLongerRequired", "No longer required")
 
     val emisCancellationReason2 =
-        AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
+            AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
 
     private val unspecifiedTimeAppointment1 =
-        Appointment(slotId = 1,
-                sessionId = SESSION_ID_FOOTCLINIC,
-                bookingReason = "My back hurts")
+            Appointment(slotId = 1,
+                    sessionId = SESSION_ID_FOOTCLINIC,
+                    bookingReason = "My back hurts")
 
     private val unspecifiedTimeAppointment2 =
-        Appointment(slotId = 2,
-                sessionId = SESSION_ID_EARCLINIC,
-                bookingReason = "My stomach hurts")
+            Appointment(slotId = 2,
+                    sessionId = SESSION_ID_EARCLINIC,
+                    bookingReason = "My stomach hurts")
 
     private val unspecifiedTimeAppointment3 =
-        Appointment(slotId = 3,
-                sessionId = SESSION_ID_EYECLINIC,
-                bookingReason = "My leg hurts")
+            Appointment(slotId = 3,
+                    sessionId = SESSION_ID_EYECLINIC,
+                    bookingReason = "My leg hurts")
 
-    private var appointments: ArrayList<Appointment> = arrayListOf()
+    private val appointments: ArrayList<Appointment> = arrayListOf()
 
     fun createAppointmentSessions(): ArrayList<AppointmentSessionFacade> {
         val baseTime = Calendar.getInstance()
@@ -145,24 +146,23 @@ class AppointmentData private constructor() {
         val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(), bookingDate, 3, 15)
         appointment3.telephoneAppointmentDetails = telephoneAppointmentDetails1
 
-        appointments = arrayListOf(appointment1, appointment2, appointment3)
+        appointments.clear()
+        appointments.addAll(listOf(appointment1, appointment2, appointment3))
+
         val appointmentsFromDate = appointment1.startTime
 
         return GetAppointmentsResponseModel(appointmentsFromDate, appointments, locations, sessionHolders, sessions)
-    }
-
-    fun getEmisAppointmentCancellationReasons(): List<AppointmentCancellationReason> {
-        return arrayListOf(emisCancellationReason1, emisCancellationReason2)
     }
 
     fun createGetAppointmentsResponseForNoUpcomingAppointments(): GetAppointmentsResponseModel {
         val baseDate = Calendar.getInstance()
         val appointmentsFromDate = dateTimeFormat.format(baseDate.time)
 
+        appointments.clear()
         return GetAppointmentsResponseModel(appointmentsFromDate)
     }
 
-    fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot> {
+    override fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot> {
         val expectedTempMyAppointments = arrayListOf<Slot>()
         val slotDateFormat = SimpleDateFormat(frontendDateFormat)
         val slotTimeFormat = SimpleDateFormat(frontendTimeFormat)
@@ -171,21 +171,28 @@ class AppointmentData private constructor() {
             val startDate = dateTimeFormat.parse(frontendTime)
             val date = slotDateFormat.format(startDate)
             val time = slotTimeFormat.format(startDate).toLowerCase()
-            val location = locations[sessions[appointment.sessionId - 1].locationId!! - 1]
+            val session = sessions.find { appointment.sessionId == it.sessionId }!!
+            val location = locations.find { session.locationId == it.locationId }!!
+
             val cliniciansNames: ArrayList<String> = ArrayList()
-            val clinicianIds = sessions[appointment.sessionId - 1].clinicianIds
-            clinicianIds.forEach { clinicianId ->
+            session.clinicianIds.forEach { clinicianId ->
                 cliniciansNames.add(sessionHolders[clinicianId - 1].displayName!!)
             }
             expectedTempMyAppointments.add(expectedMyAppointment.copy(
                     date = date,
                     time = time,
+                    session = "${session.sessionName} - ${appointment.slotTypeName}",
                     location = location.locationName,
                     clinician = cliniciansNames
             ))
         }
 
         return expectedTempMyAppointments
+    }
+
+
+    override fun getAppointmentCancellationReasons(): List<AppointmentCancellationReason> {
+        return arrayListOf(emisCancellationReason1, emisCancellationReason2)
     }
 
     private fun addDateToAppointment(appointment: Appointment, bookingDate: Calendar, bookInDay: Int, durationInMinutes: Int): Appointment {
@@ -196,12 +203,6 @@ class AppointmentData private constructor() {
         return appointment
     }
 
-    private fun copyCalendarDate(baseTime: Calendar, addDays: Int = 0, addHours: Int = 0, addMinutes: Int = 0): Calendar {
-        val theStartTime = baseTime.clone() as Calendar
-        val numberOfMinutesToNextDivisibleByFive = 5 - (theStartTime.get(Calendar.MINUTE) % 5)
-        return theStartTime.addDays(addDays).addHours(addHours).addMinutes(addMinutes + numberOfMinutesToNextDivisibleByFive)
-    }
-
     private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlotFacade {
         val startSession = dateTimeFormat.format(startTime.time)
         val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes).time)
@@ -209,22 +210,15 @@ class AppointmentData private constructor() {
     }
 
     private class AppointmentDataHolder {
-        private var instance: AppointmentData? = null
+        private var instance: EmisAppointmentData? = null
 
-        fun getInstance(): AppointmentData {
+        fun getInstance(): EmisAppointmentData {
             if (instance == null) {
-                val newInstance = AppointmentData()
+                val newInstance = EmisAppointmentData()
                 instance = newInstance
             }
-            return instance as AppointmentData
+            return instance as EmisAppointmentData
         }
-    }
-
-    private fun convertToBrowserTimezone(time: String, timezone: String): String {
-        val dateFormatWithUtcTimeZone = SimpleDateFormat(backendDateTimeFormatWithTimezone)
-        dateFormatWithUtcTimeZone.timeZone = TimeZone.getTimeZone(timezone)
-        val browserDate = dateTimeFormat.parse(time)
-        return dateFormatWithUtcTimeZone.format(browserDate)
     }
 
     companion object {

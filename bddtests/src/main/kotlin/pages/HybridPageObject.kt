@@ -262,7 +262,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
             page = this
        )
        .containingText(text)
-       .element
+       .element.waitUntilClickable<WebElementFacade>()
        .click()
     }
 

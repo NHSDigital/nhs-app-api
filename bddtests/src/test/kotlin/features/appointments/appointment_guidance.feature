@@ -8,7 +8,7 @@ Feature: Guidance prior to booking an appointment
   @NHSO-420
   @appointment
   Scenario: A user with upcoming appointments is presented with guidance
-    Given I have upcoming appointments
+    Given I have upcoming appointments for EMIS
     And I am on my appointments page
     When I select "Book an appointment" button
     Then I am given guidance as to my options before booking an appointment
@@ -16,7 +16,7 @@ Feature: Guidance prior to booking an appointment
   @NHSO-420
   @appointment
   Scenario: A user with no upcoming appointments is presented with guidance
-    Given I have no upcoming appointments
+    Given I have upcoming appointments for EMIS
     And I am on my appointments page
     When I select "Book an appointment" button
     Then I am given guidance as to my options before booking an appointment

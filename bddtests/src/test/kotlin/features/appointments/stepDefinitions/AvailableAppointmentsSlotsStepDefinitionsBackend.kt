@@ -213,7 +213,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
     }
 
     private fun retrieveAppointmentSlots(fromDate: String? = null, toDate: String? = null, includeCookie: Boolean = true) {
-        var cookie: Cookie? = null;
+        var cookie: Cookie? = null
 
         if (includeCookie) {
             cookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)

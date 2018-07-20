@@ -42,14 +42,14 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
     }
 
-    @Given("^I have no upcoming appointments$")
-    fun i_have_no_upcoming_appointments() {
-        myAppointmentsSteps.mockEMISMyAppointmentResponse(true)
+    @Given("^I have no upcoming appointments for (.*)$")
+    fun i_have_no_upcoming_appointments(gpService: String) {
+        myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService, true)
     }
 
-    @Given("^I have upcoming appointments$")
-    fun i_have_upcoming_appointments() {
-        myAppointmentsSteps.mockEMISMyAppointmentResponse()
+    @Given("^I have upcoming appointments for (.*)$")
+    fun i_have_upcoming_appointments(gpService: String) {
+        myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService)
     }
 
     @When("^I select \"([^\"]*)\" button$")
@@ -72,21 +72,19 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
-    @When("^the API retrieves upcoming appointments from ([^\"]*)$")
-    fun the_API_retrieves_upcoming_appointments_from(provider: String) {
-        when (provider) { "EMIS" ->
-            myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()
-        }
+    @When("^the API retrieves upcoming appointments$")
+    fun the_API_retrieves_upcoming_appointments() {
+        myAppointmentsSteps.createSerenityMyAppointmentSessionVariable()
     }
 
     @Then("^I will only receive upcoming appointments$")
     fun i_will_only_receive_upcoming_appointments() {
-        myAppointmentsSteps.checkEmisMyAppointmentsAreAllUpcomingOnes()
+        myAppointmentsSteps.checkMyAppointmentsAreAllUpcomingOnes()
     }
 
-    @Then("^a list of cancellation reasons$")
+    @Then("^a list of cancellation reasons if the GP Service provides the list$")
     fun a_list_of_cancellation_reasons() {
-        myAppointmentsSteps.checkEmisCancellationReasonExist()
+        myAppointmentsSteps.checkCancellationReasonExistForApplicableGPService()
     }
 
     @When("^I select a \"Cancel appointment\" link$")

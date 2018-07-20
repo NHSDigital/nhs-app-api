@@ -3,6 +3,7 @@ package mocking.tpp.appointments
 import mocking.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
+import mocking.tpp.data.TppConfig
 import mocking.tpp.models.ListSlotsReply
 import mocking.tpp.models.Session
 import mocking.tpp.models.Slot
@@ -21,14 +22,11 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession) :
     val tppUserSession: TppUserSession = tppUserSession
 
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
         val typeHeader = "type"
         val typeValue = "ListSlots"
         val apiVersion = "1"
 
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//ListSlots[" +
                         "@apiVersion='$apiVersion' and " +
@@ -62,7 +60,7 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession) :
     private fun listSlotsReplyConverter(model: AppointmentSlotsResponseFacade): ListSlotsReply {
         return ListSlotsReply(patientId = tppUserSession.patientId,
                 onlineUserId = tppUserSession.onlineUserId,
-                uuid = uuid,
+                uuid = TppConfig.uuid,
                 bookableDays = model.bookableDays!!,
                 Session = sessionsConverter(model.sessions))
     }

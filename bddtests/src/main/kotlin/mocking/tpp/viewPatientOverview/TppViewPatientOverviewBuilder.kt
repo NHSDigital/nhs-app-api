@@ -15,14 +15,11 @@ import javax.xml.bind.Marshaller
 
 class TppViewPatientOverviewBuilder(tppUserSession: TppUserSession) : TppMappingBuilder("POST", "/tpp/") {
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
         val typeHeader = "type"
         val typeValue = "ViewPatientOverview"
         val apiVersion = "1"
 
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//ViewPatientOverview[" +
                         "@apiVersion='${apiVersion}' and " +

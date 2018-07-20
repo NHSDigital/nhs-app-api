@@ -13,13 +13,10 @@ import javax.xml.bind.Marshaller
 
 class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", "/tpp/") {
     init {
-        val contentTypeHeader = "content-type"
-        val contentTypeValue = "text/xml; charset=UTF-8"
         val typeHeader = "type"
         val typeValue = "Authenticate"
 
         requestBuilder
-                .andHeader(contentTypeHeader, contentTypeValue)
                 .andHeader(typeHeader, typeValue)
                 .andBodyMatchingXpath("//Authenticate[" +
                         "@apiVersion='${authenticate.apiVersion}' and " +

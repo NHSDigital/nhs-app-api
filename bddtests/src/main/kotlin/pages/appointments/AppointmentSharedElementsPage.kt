@@ -4,7 +4,7 @@ import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
-import org.openqa.selenium.WebElement
+import org.openqa.selenium.By
 import pages.HybridPageObject
 import pages.HybridPageElement
 import java.text.SimpleDateFormat
@@ -13,6 +13,7 @@ import java.util.ArrayList
 open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     private val xPathRoot = "//*"
+    private val relativeToParentXPath = ".//*"
     private val appointmentDateXpath = "[@aria-label='date']"
     private val appointmentTimeXpath = "[@aria-label='start time']"
     private val appointmentSessionNameXpath = "[@aria-label='session name']"
@@ -20,9 +21,9 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
 
     val inLineError = HybridPageElement(
-        browserLocator = "//*[@id='errorLabel']/p/span[@data-purpose='error']",
-        androidLocator = null,
-        page = this
+            browserLocator = "//*[@id='errorLabel']/p/span[@data-purpose='error']",
+            androidLocator = null,
+            page = this
     )
 
     val errorSummaryHeading = HybridPageElement(
@@ -64,12 +65,12 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return slotTimestamps
     }
 
-    fun getAllSlots(appointmentListParentXpath: String): ArrayList<Slot> {
+    fun getAllSlots(appointmentListParentXpath: String, areCliniciansExpected: Boolean): ArrayList<Slot> {
         val slotList = arrayListOf<Slot>()
         val appointmentSlotDivs = retrieveAppointmentSlotDivs(appointmentListParentXpath)
 
         appointmentSlotDivs.forEach { slotDiv ->
-            val slot = convertToSlotObject(slotDiv, isMyAppointmentSlot = true)
+            val slot = convertToSlotObject(slotDiv, areCliniciansExpected)
             slotList.add(slot)
         }
         return slotList
@@ -77,7 +78,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     fun getSlotAtIndex(appointmentListParentXpath: String, index: Int): Slot {
         val appointmentSlotDiv = retrieveAppointmentSlotDivAtPosition(appointmentListParentXpath, index + 1)
-        return convertToSlotObject(appointmentSlotDiv, isMyAppointmentSlot = true)
+        return convertToSlotObject(appointmentSlotDiv)
     }
 
     fun getSelectedAppointmentClinicianTextAtPosition(position: Int): String {
@@ -96,15 +97,16 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return errorSummaryBody.element.text
     }
 
-    private fun convertToSlotObject(parentContainer: WebElementFacade, parentToSlotDivRelativePath: String = "", isMyAppointmentSlot: Boolean = false): Slot {
+    private fun convertToSlotObject(parentContainer: WebElementFacade, areCliniciansExpected: Boolean = true, parentToSlotDivRelativePath: String = ""): Slot {
         val slot = Slot()
-        val relativePath = if (parentToSlotDivRelativePath.isEmpty()) xPathRoot else "$parentToSlotDivRelativePath/"
+        val relativePath = if (parentToSlotDivRelativePath.isEmpty()) relativeToParentXPath else "$parentToSlotDivRelativePath/"
         slot.time = findByXpath(parentContainer, relativePath + appointmentTimeXpath).text
         slot.session = findByXpath(parentContainer, relativePath + appointmentSessionNameXpath).text
         slot.date = findByXpath(parentContainer, relativePath + appointmentDateXpath).text
         slot.location = findByXpath(parentContainer, relativePath + appointmentLocationXpath).text
 
-        retrieveClinicianAndAddToSlot(slot, parentContainer, relativePath + appointmentClinicianXPath, isMyAppointmentSlot)
+        if (areCliniciansExpected)
+            retrieveClinicianAndAddToSlot(slot, parentContainer, relativePath)
         return slot
     }
 
@@ -122,11 +124,11 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return findByXpath("$containerDivXpath/div[$index]")
     }
 
-    private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String, isMyAppointmentSlot: Boolean) {
-        val clinicians = when(isMyAppointmentSlot) {
-            true -> findAllByXpath(parentContainer, "$relativePath//span[starts-with(@aria-label, 'clinician')]")
-            false -> findAllByXpath(parentContainer, relativePath + "ul/li")
-        }
+    private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String) {
+        val cliniciansPresent = driver.findElements(By.xpath("$xPathRoot//span[starts-with(@aria-label, 'clinician')]")).size > 0
+        if (!cliniciansPresent) return
+
+        val clinicians = findAllByXpath(parentContainer, "$relativePath//span[starts-with(@aria-label, 'clinician')]")
 
         clinicians.forEach { clinician ->
             slot.clinician.add(clinician.text)

@@ -2,13 +2,13 @@ package features.appointments.steps
 
 import com.google.common.collect.Ordering
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
+import features.appointments.data.ViewAppointmentsFactory
 import mocking.MockingClient
+import mocking.SERENITY_VARIABLE_GP_SERVICE_KEY
 import mocking.defaults.MockDefaults
-import mocking.emis.data.AppointmentData
 import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.*
@@ -39,7 +39,7 @@ open class MyAppointmentsSteps {
         val expectedBookRequestBody = "\\\"UserPatientLinkToken\\\":\\\"" +
                 patient.userPatientLinkToken +
                 "\\\",\\\"SlotId\\\":301,\\\"BookingReason\\\":\\\"" +
-                sessionVariableCalled<String>("Symptoms").take(150) +
+                Serenity.sessionVariableCalled<String>("Symptoms").take(150) +
                 "\\\""
         var bookingCreated = false
         for (requestLine in wiremockRequests) {
@@ -74,8 +74,10 @@ open class MyAppointmentsSteps {
 
     @Step
     fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated() {
-        val slots = myAppointmentsPage.getAllSlots()
-        val expectedSlots = AppointmentData.instance.generateExpectedMyAppointments("Europe/London")
+        val serviceFactory = getActiveAppointmentsFactory()
+        val expectedSlots = serviceFactory.getAppointmentData().generateExpectedMyAppointments("Europe/London")
+        val areCliniciansExpected = if (expectedSlots.isNotEmpty()) expectedSlots[0].clinician.isNotEmpty() else false
+        val slots = myAppointmentsPage.getAllSlots(areCliniciansExpected)
         assertEquals("Expected upcoming myAppointments size doesn't match with the actual size",
                 expectedSlots.size, slots.size)
         assertEquals("Exact expected Appointments list not found. ", expectedSlots, slots)
@@ -110,21 +112,22 @@ open class MyAppointmentsSteps {
 
 
     @Step
-    fun mockEMISMyAppointmentResponse(noUpcomingAppointments: Boolean = false) {
-        val appointmentData = AppointmentData.instance
-        val getResponse = when {
-            noUpcomingAppointments -> appointmentData.createGetAppointmentsResponseForNoUpcomingAppointments()
-            else -> appointmentData.createGetAppointmentsResponse()
-        }
+    fun mockGPServiceMyAppointmentResponse(gpService: String, noUpcomingAppointments: Boolean = false) {
+        val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(gpService)
+        val patient = viewAppointmentFactory.getAppointmentData().defaultPatient
+        Serenity.setSessionVariable(Patient::class).to(patient)
 
-        mockingClient.forEmis {
-            appointmentGetRequest(Patient.montelFrye)
-                    .respondWithSuccess(getResponse)
+        val getResponse = when {
+            noUpcomingAppointments -> viewAppointmentFactory.createEmptyUpcomingAppointmentResponse(patient)
+            else -> viewAppointmentFactory.createUpcomingAppointments(patient)
+        }
+        viewAppointmentFactory.setUpViewAppointmentsWithResult(gpService) { builder ->
+            builder.respondWithSuccess(getResponse)
         }
     }
 
     @Step
-    fun createSerenityEmisMyAppointmentSessionVariable() {
+    fun createSerenityMyAppointmentSessionVariable() {
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
         val result = Serenity
@@ -134,9 +137,9 @@ open class MyAppointmentsSteps {
     }
 
     @Step
-    fun checkEmisMyAppointmentsAreAllUpcomingOnes() {
+    fun checkMyAppointmentsAreAllUpcomingOnes() {
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
-        val myAppointmentsResponse = sessionVariableCalled<MyAppointmentsResponse>(MyAppointmentsResponse::class.java)
+        val myAppointmentsResponse = Serenity.sessionVariableCalled<MyAppointmentsResponse>(MyAppointmentsResponse::class.java)
         val now = Date().time
         myAppointmentsResponse.appointments.forEach { appointment ->
             val startTime = dateTimeFormat.parse(appointment.startTime).time
@@ -146,13 +149,14 @@ open class MyAppointmentsSteps {
     }
 
     @Step
-    fun checkEmisCancellationReasonExist() {
+    fun checkCancellationReasonExistForApplicableGPService() {
         val myAppointmentsResponse = Serenity.sessionVariableCalled<MyAppointmentsResponse>(MyAppointmentsResponse::class.java)
         val cancellationReasons = myAppointmentsResponse.cancellationReasons
-        val expectedCancellationReasons = AppointmentData.instance.getEmisAppointmentCancellationReasons()
+
+        val expectedCancellationReasons = getActiveAppointmentsFactory().getAppointmentData().getAppointmentCancellationReasons()
         assertTrue("EMIS cancellation options count doesn't match",
-                cancellationReasons.size == expectedCancellationReasons.size)
-        expectedCancellationReasons.forEach { expectedReason ->
+                cancellationReasons.size == expectedCancellationReasons?.size ?: 0)
+        expectedCancellationReasons?.forEach { expectedReason ->
             val actualReason = cancellationReasons.firstOrNull { expectedReason.displayName == it.displayName }
             assertNotNull("Expected reason ${expectedReason.displayName} not found",
                     actualReason)
@@ -177,6 +181,11 @@ open class MyAppointmentsSteps {
 
     @Step
     fun verifyThatThereIsACancelLinkForEachUpcomingAppointment() {
-        assertEquals("Missing at least one cancel link. ", myAppointmentsPage.getAllSlots().size, myAppointmentsPage.getNumberOfCancelLinks())
+        assertEquals("Missing at least one cancel link. ", myAppointmentsPage.getWebAppointmentSlotDiv().size, myAppointmentsPage.getNumberOfCancelLinks())
+    }
+
+    private fun getActiveAppointmentsFactory(gpService: String? = null): ViewAppointmentsFactory {
+        val thGpService = gpService ?: Serenity.sessionVariableCalled<String>(SERENITY_VARIABLE_GP_SERVICE_KEY)
+        return ViewAppointmentsFactory.getForSupplier(thGpService)
     }
 }

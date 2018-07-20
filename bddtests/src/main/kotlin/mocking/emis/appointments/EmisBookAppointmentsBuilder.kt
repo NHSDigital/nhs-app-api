@@ -28,11 +28,11 @@ class EmisBookAppointmentsBuilder (configuration: EmisConfiguration,
                 .andJsonBody(request, "")
 
     }
-    var delayMillisecs = 0;
+    var delayMillisecs = 0
 
     override fun  withDelay(delayMilliseconds : Duration):EmisBookAppointmentsBuilder{
         delayMillisecs = delayMilliseconds.toMillis().toInt()
-        return this;
+        return this
     }
 
     override fun respondWithSuccess(): Mapping {
