@@ -176,10 +176,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         }
     }
 
-    fun clickOnSlotByDateAndTime(expectedDateHeading: String?, expectedTimeOnSlot: String?) {
-        getTimeSlotElement(expectedDateHeading, expectedTimeOnSlot).click()
-    }
-
     fun getInlineTypeValidationError(): String {
         return typeInLineError.element.text
     }
@@ -188,18 +184,9 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return locationInLineError.element.text
     }
 
-    fun getInlineSlotValidationError(): String {
-        return slotInLineError.element.text
-    }
-
     fun getErrorSummaryAtRow(rowNumber: Int): String {
         val error = switchToPage(ErrorPage::class.java)
-        return when(rowNumber) {
-            1 -> error.subHeading.element.text
-            2 -> error.detailOne.element.text
-            3 -> error.detailTwo.element.text
-            else -> throw IllegalArgumentException("$rowNumber not supported in error message")
-        }
+        return error.paragraph(rowNumber).element.text
     }
 
     private fun getTimeSlotElement(expectedDateHeading: String?, expectedTimeOnSlot: String?) =

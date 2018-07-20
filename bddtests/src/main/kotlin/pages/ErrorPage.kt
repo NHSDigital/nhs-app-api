@@ -14,29 +14,25 @@ class ErrorPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             page = this
     )
 
-    val subHeading = HybridPageElement(
-            browserLocator = "//div[@class='msg error']/p[1]",
-            androidLocator = null,
-            page = this
-    )
+    val subHeading = paragraph(1)
 
-    val detailOne = HybridPageElement(
-            browserLocator = "//div[@class='msg error']/p[2]",
-            androidLocator = null,
-            page = this
-    )
+    val detailOne = paragraph(2)
 
-    val detailTwo = HybridPageElement(
-            browserLocator = "//div[@class='msg error']/p[3]",
-            androidLocator = null,
-            page = this
-    )
+    val detailTwo = paragraph(3)
 
     val button = HybridPageElement(
             browserLocator = "//button",
             androidLocator = null,
             page = this
     )
+
+    fun paragraph(int: Int): HybridPageElement {
+        return HybridPageElement(
+                browserLocator = "//div[@class='msg error']/p[$int]",
+                androidLocator = null,
+                page = this
+        )
+    }
 
 
     fun hasHeading(text: String): Boolean {

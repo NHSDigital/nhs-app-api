@@ -77,18 +77,17 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkTimeoutErrorMessage(presence: Boolean = true) {
-        val expectedHeader = "Sorry, there's been a problem loading this page"
-        val expectedBody = "Please try again\n" +
-                "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        val errorSummary = availableAppointments.errorSummaryBody
 
-        val message: String? = availableAppointments.errorSummaryBody.element.text
+        if (presence) {
+            val expectedHeader = "Sorry, there's been a problem loading this page"
+            val expectedBody = "Please try again\n" +
+                    "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
 
-        if (presence && message != null) {
-            assertEquals("$expectedHeader\n$expectedBody", message)
+            assertEquals("$expectedHeader\n$expectedBody", errorSummary.element.text)
         } else {
-            assertNull(message)
+            assertEquals("Expected no timeout error message elements, but there were ${errorSummary.elements.count()} elements matching $errorSummary.", 0, errorSummary.elements.count())
         }
-
     }
 
     @Step

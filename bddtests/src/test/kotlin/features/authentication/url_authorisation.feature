@@ -29,6 +29,7 @@ Feature: Authorisation occurs during each URL visit
   @NHSO-1012
   Scenario Outline: User has just logged out and attempts to navigate to <URL>
     Given I have just logged out
+    And I see the login page
     When I browse to the page at <URL>
     Then I see the login page
 
