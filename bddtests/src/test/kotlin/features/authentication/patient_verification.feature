@@ -125,8 +125,8 @@ Feature: Patient Verification
 
   @NHSO-125
   @backend
-  Scenario Outline: <GP System> is unavailable
-    Given <GP System> is unavailable
+  Scenario Outline: <GP System> is not available
+    Given <GP System> is not available
     When I verify patient data
     Then I receive an "Bad Gateway" error
 
