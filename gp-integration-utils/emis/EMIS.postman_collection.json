@@ -8,17 +8,6 @@
 	"item": [
 		{
 			"name": "(1) - MeApplications",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.environment.set(\"EndUserSessionId\", pm.response.json().EndUserSessionId);"
-						]
-					}
-				}
-			],
 			"request": {
 				"method": "POST",
 				"header": [
