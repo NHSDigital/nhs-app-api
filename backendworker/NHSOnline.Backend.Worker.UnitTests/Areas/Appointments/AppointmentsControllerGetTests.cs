@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
@@ -24,6 +25,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private EmisUserSession _userSession;
+        private Mock<IAuditor> _mockAuditor;
+
+        private const string RequestAuditType = "Appointments_ViewPast_Request";
+        private const string ResponseAuditType = "Appointments_ViewPast_Response";
 
         [TestInitialize]
         public void TestInitialize()
@@ -35,6 +40,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _userSession = _fixture.Create<EmisUserSession>();
 
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
+
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _appointmentsResponse = _fixture.Create<AppointmentsResponse>();
             var result = new AppointmentsResult.SuccessfullyRetrieved(_appointmentsResponse);
@@ -68,9 +75,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             // Arrange
             var appointmentsResponse = _fixture.Create<AppointmentsResponse>();
-            var successfulResult = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
+            var successResponse = new AppointmentsResult.SuccessfullyRetrieved(appointmentsResponse);
+
             _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
-                .Returns(Task.FromResult((AppointmentsResult)successfulResult));
+                .Returns(Task.FromResult((AppointmentsResult) successResponse));
 
             // Act
             var result = await _systemUnderTest.Get(false);
@@ -79,15 +87,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(appointmentsResponse);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Get_ReturnsBadGateway_WhenServiceReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            var badResult = new AppointmentsResult.SupplierSystemUnavailable();
             _mockAppointmentsService.Setup(x => x.GetAppointments(_userSession, false, null))
-                .Returns(Task.FromResult((AppointmentsResult)badResult));
+                .Returns(Task.FromResult((AppointmentsResult) new AppointmentsResult.SupplierSystemUnavailable()));
 
             // Act
             var result = await _systemUnderTest.Get(false);
@@ -96,6 +105,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -112,6 +123,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -129,6 +142,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -143,6 +158,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
             _mockAppointmentsService.VerifyAll();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using Microsoft.Extensions.Logging;
@@ -19,10 +20,9 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             _logger = logger;
         }
 
-        string NhsNumber()
+        private string NhsNumber()
         {
-            string nhsNumber = null;
-            nhsNumber = _scopeProvider.Value?.ToString();
+            var nhsNumber = _scopeProvider.Value?.UserContext()?.NhsNumber;
 
             if (string.IsNullOrEmpty(nhsNumber))
             {
@@ -32,13 +32,22 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             return nhsNumber;
         }
 
+        private string Supplier()
+        {
+            var supplierEnum = _scopeProvider.Value?.UserContext()?.Supplier ?? SupplierEnum.Unknown;
+            return supplierEnum.ToString();
+        }
+
+
         public void Audit(string operation, string details, params object[] parameters)
         {
             try
             {
                 var nhsNumber = NhsNumber();
+                var supplier = Supplier();
 
-                _auditSink.WriteAudit(DateTime.Now, AuditCryptographer.Hash(nhsNumber), operation, string.Format(details, parameters));
+                _auditSink.WriteAudit(DateTime.Now, AuditCryptographer.Hash(nhsNumber), supplier, operation,
+                    string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
             }
             catch (Exception exception)
             {

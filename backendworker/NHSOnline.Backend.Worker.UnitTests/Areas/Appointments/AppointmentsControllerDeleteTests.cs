@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
@@ -24,6 +25,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private AppointmentsController _systemUnderTest;
+        private Mock<IAuditor> _mockAuditor;
+
+        private const string RequestAuditType = "Appointments_Cancel_Request";
+        private const string ResponseAuditType = "Appointments_Cancel_Response";
 
         [TestInitialize]
         public void TestInitialize()
@@ -38,9 +43,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 
-            var result = new AppointmentCancelResult.SuccessfullyCancelled();
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult) result));
+                .Returns(Task.FromResult((AppointmentCancelResult) new AppointmentCancelResult.SuccessfullyCancelled()));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockGpSystem
@@ -90,15 +96,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Delete_AppointmentsServiceCancelReturnsAppointmentNotCancellable_ReturnsConflict()
         {
             // Arrange
-            var serviceResult = new AppointmentCancelResult.AppointmentNotCancellable();
+            var badResult = new AppointmentCancelResult.AppointmentNotCancellable();
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)serviceResult));
+                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
+
 
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
@@ -107,15 +116,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Delete_AppointmentsServiceCancelReturnsBadRequest_ReturnsBadRequest()
         {
             // Arrange
-            var serviceResult = new AppointmentCancelResult.BadRequest();
+            var badResult = new AppointmentCancelResult.BadRequest();
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)serviceResult));
+                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
@@ -123,15 +134,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Delete_AppointmentsServiceCancelReturnsSupplierSystemUnavailable_ReturnsBadGateway()
         {
             // Arrange
-            var serviceResult = new AppointmentCancelResult.SupplierSystemUnavailable();
+            var badResult = new AppointmentCancelResult.SupplierSystemUnavailable();
             _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
-                .Returns(Task.FromResult((AppointmentCancelResult)serviceResult));
+                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
 
             // Act
             var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
@@ -140,6 +153,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -154,6 +169,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
     }
 }

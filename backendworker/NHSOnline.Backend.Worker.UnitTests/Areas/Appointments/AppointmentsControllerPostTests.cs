@@ -11,6 +11,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using static NHSOnline.Backend.Worker.Constants;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
@@ -25,6 +26,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private Mock<IAppointmentsService> _mockAppointmentsService;
         private AppointmentBookRequest _appointmentBookRequest;
         private EmisUserSession _userSession;
+        private Mock<IAuditor> _mockAuditor;
+
+        private const string RequestAuditType = "Appointments_Book_Request";
+        private const string ResponseAuditType = "Appointments_Book_Response";
 
         [TestInitialize]
         public void TestInitialize()
@@ -39,9 +44,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             _mockAppointmentsService = _fixture.Freeze<Mock<IAppointmentsService>>();
 
-            var result = new AppointmentBookResult.SuccessfullyBooked();
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) result));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SuccessfullyBooked()));
 
             _mockGpSystem = _fixture.Freeze<Mock<IGpSystem>>();
             _mockGpSystem
@@ -80,9 +86,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         public async Task Post_AppointmentsServiceBookReturnsInsufficientPermissions_ReturnsForbidden()
         {
             // Arrange
-            var serviceResult = new AppointmentBookResult.InsufficientPermissions();
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult) serviceResult));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.InsufficientPermissions()));
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
@@ -91,15 +96,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Post_AppointmentsServiceBookReturnsLimitReached_ReturnsLimitReachedStatus()
         {
             // Arrange
-            var serviceResult = new AppointmentBookResult.AppointmentLimitReached();
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult)serviceResult));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.AppointmentLimitReached()));
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
@@ -108,15 +114,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(CustomHttpStatusCodes.Status460LimitReached);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Post_AppointmentsServiceBookReturnsSlotNotAvailable_ReturnsConflict()
         {
             // Arrange
-            var serviceResult = new AppointmentBookResult.SlotNotAvailable();
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult)serviceResult));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SlotNotAvailable()));
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
@@ -125,15 +132,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
         public async Task Post_AppointmentsServiceBookReturnsSupplierSystemUnavailable_ReturnsBadGateway()
         {
             // Arrange
-            var serviceResult = new AppointmentBookResult.SupplierSystemUnavailable();
             _mockAppointmentsService.Setup(x => x.Book(_userSession, _appointmentBookRequest))
-                .Returns(Task.FromResult((AppointmentBookResult)serviceResult));
+                .Returns(Task.FromResult((AppointmentBookResult) new AppointmentBookResult.SupplierSystemUnavailable()));
 
             // Act
             var result = await _systemUnderTest.Post(_appointmentBookRequest);
@@ -142,6 +150,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -156,6 +166,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
     }
 }

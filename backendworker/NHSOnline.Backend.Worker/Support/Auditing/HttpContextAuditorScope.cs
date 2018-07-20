@@ -12,14 +12,18 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             _httpContext = httpContext;
         }
 
-        public override string ToString()
+        public AuditUserContext UserContext()
         {
             if (_httpContext.Items.Keys.Contains(Constants.HttpContextItems.UserSession) == false)
             {
-                return String.Empty;
+                return new AuditUserContext(null, SupplierEnum.Unknown);
             }
 
-            return _httpContext.GetUserSession().NhsNumber;
+            var userSession = _httpContext.GetUserSession();
+
+            var auditUserContext = new AuditUserContext(userSession.NhsNumber, userSession.Supplier);
+
+            return auditUserContext;
         }
     }
 }

@@ -24,6 +24,18 @@
             public const string NhsNumber = NhsoPrefix + "Nhs-Number";
         }
 
+        public class AuditingTitles
+        {
+            public const string ViewAppointmentAuditTypeRequest = "Appointments_ViewPast_Request";
+            public const string ViewAppointmentAuditTypeResponse = "Appointments_ViewPast_Response";
+            public const string BookAppointmentAuditTypeRequest = "Appointments_Book_Request";
+            public const string BookAppointmentAuditTypeResponse = "Appointments_Book_Response";
+            public const string CancelAppointmentAuditTypeRequest = "Appointments_Cancel_Request";
+            public const string CancelAppointmentAuditTypeResponse = "Appointments_Cancel_Response";
+            public const string GetSlotsAuditTypeRequest = "Appointments_GetSlots_Request";
+            public const string GetSlotsAuditTypeResponse = "Appointments_GetSlots_Response";
+        }
+
         public class HttpContextItems
         {
             public const string UserSession = "UserSession";

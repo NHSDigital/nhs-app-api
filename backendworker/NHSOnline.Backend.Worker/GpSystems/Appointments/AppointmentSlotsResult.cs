@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Appointments
             {
                 Response = response;
             }
-            
+
             public override T Accept<T>(IAppointmentSlotsResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);

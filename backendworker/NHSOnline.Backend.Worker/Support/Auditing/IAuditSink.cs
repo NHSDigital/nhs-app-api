@@ -7,6 +7,6 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
 {
     public interface IAuditSink
     {
-        void WriteAudit(DateTime timestamp, string nhsNumber, string operation, string details);
+        void WriteAudit(DateTime timestamp, string nhsNumber, string supplier, string operation, string details);
     }
 }

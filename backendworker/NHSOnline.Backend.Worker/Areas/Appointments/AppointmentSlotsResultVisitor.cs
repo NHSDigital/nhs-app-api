@@ -4,7 +4,7 @@ using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    internal class AppointmentSlotsResultVisitor : IAppointmentSlotsResultVisitor<IActionResult>
+    public class AppointmentSlotsResultVisitor : IAppointmentSlotsResultVisitor<IActionResult>
     {
         public IActionResult Visit(AppointmentSlotsResult.SuccessfullyRetrieved result)
         {

@@ -11,9 +11,9 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             _streamWriter = new StreamWriter(stream);
         }
 
-        public void WriteAudit(DateTime timestamp, string nhsNumber, string operation, string details)
+        public void WriteAudit(DateTime timestamp, string nhsNumber, string supplier, string operation, string details)
         {
-            _streamWriter.WriteLine($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {operation} | {details} |");
+            _streamWriter.WriteLine($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {supplier} | {operation} | {details} |");
             _streamWriter.Flush();
         }
     }

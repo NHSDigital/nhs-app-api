@@ -6,6 +6,7 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
@@ -14,24 +15,32 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
     {
         private readonly ILogger<AppointmentsController> _logger;
         private readonly IGpSystemFactory _gpSystemFactory;
+        private readonly IAuditor _auditor;
 
         public AppointmentsController(
             ILogger<AppointmentsController> logger,
-            IGpSystemFactory gpSystemFactory
+            IGpSystemFactory gpSystemFactory,
+            IAuditor auditor
             )
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
+            _auditor = auditor;
         }
 
         [HttpDelete, TimeoutExceptionFilter]
         public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest model)
         {
+            _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
+                model.AppointmentId);
+
             var userSession = HttpContext.GetUserSession();
 
             var appointmentsService = GetAppointmentsService(userSession);
 
             var cancelResult = await appointmentsService.Cancel(userSession, model);
+
+            cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, model.AppointmentId));
             return cancelResult.Accept(new AppointmentCancelResultVisitor());
         }
 
@@ -40,6 +49,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             [FromQuery] bool includePastAppointments,
             [FromQuery] DateTimeOffset? pastAppointmentsFromDate = null)
         {
+            _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view past appointments");
+
             var userSession = HttpContext.GetUserSession();
 
             var appointmentsService = GetAppointmentsService(userSession);
@@ -48,6 +59,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 await appointmentsService.GetAppointments(userSession, includePastAppointments,
                     pastAppointmentsFromDate);
 
+            result.Accept(new AppointmentsAuditingVisitor(_auditor));
+
             return result.Accept(new AppointmentsResultVisitor());
         }
         
@@ -55,12 +68,16 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         [HttpPost, TimeoutExceptionFilter]
         public async Task<IActionResult> Post([FromBody]AppointmentBookRequest model)
         {
+            _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
+                "Attempting to book appointment with id: {0} and startTimeDate: {1:O}", model.SlotId, model.StartTime);
+
             var userSession = HttpContext.GetUserSession();
 
             var appointmentsService = GetAppointmentsService(userSession);
 
             var bookResult = await appointmentsService.Book(userSession, model);
 
+            bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, model.SlotId, model.StartTime));
             return bookResult.Accept(new AppointmentBookResultVisitor());
         }
 

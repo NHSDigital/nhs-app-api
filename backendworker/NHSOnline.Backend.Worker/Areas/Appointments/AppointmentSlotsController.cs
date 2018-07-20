@@ -5,6 +5,7 @@ using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
@@ -15,27 +16,35 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private readonly ILogger<AppointmentSlotsController> _logger;
+        private readonly IAuditor _auditor;
 
         public AppointmentSlotsController(
             IGpSystemFactory gpSystemFactory,
             IDateTimeOffsetProvider dateTimeOffsetProvider,
-            ILogger<AppointmentSlotsController> logger
+            ILogger<AppointmentSlotsController> logger,
+            IAuditor auditor
         )
         {
             _gpSystemFactory = gpSystemFactory;
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = logger;
+            _auditor = auditor;
         }
 
         [HttpGet, TimeoutExceptionFilter]
         public async Task<IActionResult> Get([FromQuery] PatientAppointmentSlotsQueryParameters queryParameters)
         {
+            _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
+
             if (!new DateRangeValidator(_dateTimeOffsetProvider).IsValid(queryParameters.FromDate,
                 queryParameters.ToDate))
             {
                 _logger.LogError(
                     $"Query parameters are invalid. From date: '{queryParameters.FromDate}', To date '{queryParameters.ToDate}'");
-                return new AppointmentSlotsResult.BadRequest().Accept(new AppointmentSlotsResultVisitor());
+                var badRequestResult = new AppointmentSlotsResult.BadRequest();
+                badRequestResult.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
+
+                return badRequestResult.Accept(new AppointmentSlotsResultVisitor());
             }
 
             var userSession = HttpContext.GetUserSession();
@@ -51,6 +60,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
             var result = await appointmentService.Get(userSession, dateRange.FromDate, dateRange.ToDate);
 
+            result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
             return result.Accept(new AppointmentSlotsResultVisitor());
         }
     }

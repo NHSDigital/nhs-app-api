@@ -2,15 +2,11 @@
 {
     public abstract class AppointmentCancelResult
     {
-        private AppointmentCancelResult()
-        {
-        }
-
         public abstract T Accept<T>(IAppointmentCancelResultVisitor<T> visitor);
 
         public class SuccessfullyCancelled : AppointmentCancelResult
         {
-            public override T Accept<T>(IAppointmentCancelResultVisitor<T> visitor)
+            public override T Accept<T>( IAppointmentCancelResultVisitor<T> visitor)
             {
                 return visitor.Visit(this);
             }

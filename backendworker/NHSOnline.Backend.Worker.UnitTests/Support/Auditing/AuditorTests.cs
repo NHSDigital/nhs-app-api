@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
     public class AuditorTests
     {
         private const string NhsNumber = "123-2321-21312";
+        private const SupplierEnum Supplier = SupplierEnum.Emis;
         private const string RubbishScope = "THIS IS A RUBBISH AUDIT";
 
         private IFixture _fixture;
@@ -150,6 +151,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             testString.Should().NotBeEmpty();
             testString.Should().Contain("woke up.");
             testString.Should().NotContain(NhsNumber);
+            testString.Should().Contain(Supplier.ToString());
         }
 
         [TestMethod]
@@ -162,6 +164,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             testString.Should().NotBeEmpty();
             testString.Should().Contain("Had breakfast of eggs and 5 sausages.");
             testString.Should().NotContain(NhsNumber);
+            testString.Should().Contain(Supplier.ToString());
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -182,19 +185,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             testString.Should().NotBeEmpty();
             var splitLog = testString.Split(new char[] { '[', ']' });
             splitLog[1].Should().Be(AuditCryptographer.Hash(RubbishScope).Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Testing | Message with rubbish scope 1 |");
+            splitLog[2].Should().Be(" | Emis | Testing | Message with rubbish scope 1 |");
 
             testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
             splitLog = testString.Split(new char[] { '[', ']' });
             splitLog[1].Should().Be(AuditCryptographer.Hash(NhsNumber).Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Testing | TaskedMethod |");
+            splitLog[2].Should().Be(" | Emis | Testing | TaskedMethod |");
 
             testString = streamReader.ReadLine();
             testString.Should().NotBeEmpty();
             splitLog = testString.Split(new char[] { '[', ']' });
             splitLog[1].Should().Be(AuditCryptographer.Hash(RubbishScope).Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Testing | Message with rubbish scope 2 |");
+            splitLog[2].Should().Be(" | Emis | Testing | Message with rubbish scope 2 |");
         }
     }
 }
