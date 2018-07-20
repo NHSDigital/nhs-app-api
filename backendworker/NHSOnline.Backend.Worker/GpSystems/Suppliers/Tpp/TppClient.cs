@@ -111,10 +111,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return await Post<TestResultsView, TestResultsViewReply>(request, tppUserSession.Suid);
         }
         
+        public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession,
+            string testResultId)
+        {
+            var request = new TestResultsViewDetailed
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.UnitId,
+                TestResultId = testResultId,
+            }; 
+    
+            return await Post<TestResultsViewDetailed, TestResultsViewReply>(request, tppUserSession.Suid);
+        }
+        
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
             model.ApplyConfig(_tppConfig);
             var authenticateXml = model.SerializeXml();
+
             var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
             var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
             

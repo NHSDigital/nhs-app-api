@@ -27,8 +27,46 @@ paths:
           description: The GP system is currently unavailable.
         504:
           description: The GP system did not respond in a timely fashion.
+  /test-result:
+      get:
+        tags:
+          - test result
+        summary: Returns a string which contains html from TPP for the selected test result.
+        produces:
+          - application/json
+        parameters:
+          - in: query
+            name: testResultId
+            type: string
+            required: true
+            description: id of selected test result
+        responses:
+          200:
+            description: Returns html for selected test result from TPP
+            schema:
+              $ref: "#/definitions/TestResultResponse"
+          400:
+            description: Bad request. A querystring parameter is not in the expected format.
+          401:
+            description: User session has expired.
+          500:
+            description: An unexpected error occurred processing the request.
+          502:
+            description: The GP system is currently unavailable.
+          504:
+            description: The GP system did not respond in a timely fashion.
  
 definitions:
+  TestResultResponse:
+    type: object
+    properties:
+      hasErrored:
+        type: boolean
+        description: Shows if error occurred getting test result from TPP
+      testResult:
+        type: string
+        description: html represenation of test result data
+        
   MyRecordResponse:
     type: object
     properties:
@@ -199,6 +237,9 @@ definitions:
   TestResultItem:
     type: object
     properties:
+      id:
+        type: String
+        description: Id of the test result
       date:
         $ref: '#/definitions/Date'
       description:

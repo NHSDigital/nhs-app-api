@@ -59,6 +59,30 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             }
         }
 
+        public async Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
+        {
+            var tppUserSession = (TppUserSession) userSession;
+
+            try
+            {               
+                var detailedTestResult = await _tppClient.TestResultsViewDetailed(tppUserSession, testResultId);
+
+                var tppTestResultResponse = new GetTppDetailedTestResultChecker(_logger).Check(detailedTestResult);
+
+                return new GetDetailedTestResult.SuccessfullyRetrieved(tppTestResultResponse);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Unsuccessful request retrieving test result");
+                return new GetDetailedTestResult.Unsuccessful();
+            }
+            catch (NullReferenceException e)
+            {
+                _logger.LogError(e, "Test Result retrieval return null body");
+                return new GetDetailedTestResult.SupplierBadData();
+            }
+        }
+        
         private async Task<TestResults> GetLast180DaysTestResults(TppUserSession tppUserSession)
         {           
             var today = DateTime.Now;

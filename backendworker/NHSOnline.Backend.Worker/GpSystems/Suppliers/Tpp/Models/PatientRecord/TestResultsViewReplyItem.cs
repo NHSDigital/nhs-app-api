@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord
         [XmlAttribute("date")]
         public string Date { get; set; }
         
-        [XmlText]
+        [XmlText]    
         public string Value { get; set; }
     }
 }

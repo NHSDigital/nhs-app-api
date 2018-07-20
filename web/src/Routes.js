@@ -51,6 +51,10 @@ export default {
     name: 'my-record-noaccess',
     path: '/my-record/noaccess',
   },
+  MYRECORDTESTRESULT: {
+    name: 'my-record-testresultdetail',
+    path: '/my-record/testresultdetail/:testResultId',
+  },
   PRESCRIPTIONS: {
     name: 'prescriptions',
     path: '/prescriptions',

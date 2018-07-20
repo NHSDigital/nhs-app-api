@@ -71,5 +71,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 return new GetMyRecordResult.SupplierBadData();
             }
         }
+
+        public Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

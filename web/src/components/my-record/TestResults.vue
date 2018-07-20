@@ -12,7 +12,13 @@
               <label v-if="testResult.date.value">
                 {{ testResult.date.value | datePart(testResult.date.datePart) }}
               </label>
-              <p :class="$style.testTerm">{{ testResult.description }}</p>
+              <p v-if="supplier === 'TPP'">
+                <nuxt-link :to="{
+                  name: 'my-record-testresultdetail',
+                  params: { testResultId: testResult.id }}">
+                  {{ testResult.description }}</nuxt-link></p>
+              <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
+                {{ testResult.description }}</p>
               <ul>
                 <li v-for="(lineItem, lineItemIndex) in testResult.testResultLineItems"
                     :key="`line-${lineItemIndex}`" :class="$style.testResultLine">
@@ -47,6 +53,10 @@ export default {
     data: {
       type: Object,
       default: () => {},
+    },
+    supplier: {
+      type: String,
+      default: '',
     },
   },
   computed: {

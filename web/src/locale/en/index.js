@@ -372,6 +372,10 @@ export default {
     events: {
       sectionHeader: 'Events',
     },
+    testResultDetail: {
+      backButton: 'Back',
+      testResultTitle: 'Test result',
+    },
   },
   common: {
     or: 'OR',

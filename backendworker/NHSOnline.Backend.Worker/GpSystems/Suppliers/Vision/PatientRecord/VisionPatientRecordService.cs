@@ -58,6 +58,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             }
         }
 
+        public Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
+        {
+            throw new NotImplementedException();
+        }
+
         private GetMyRecordResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)

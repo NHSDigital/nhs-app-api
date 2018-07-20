@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             return _serviceProvider.GetService<TppTokenValidationService>();
         }
-
+        
         public ILinkageService GetLinkageService()
         {
             throw new NotImplementedException();

@@ -76,7 +76,8 @@
           {{ $t('myRecord.testResults.sectionHeader') }}
         </h5>
         <test-results :is-collapsed="isTestResultsCollapsed"
-                      :data="myRecord.testResults"/>
+                      :data="myRecord.testResults"
+                      :supplier="myRecord.supplier"/>
 
       </div>
       <div v-else>
@@ -139,7 +140,7 @@ export default {
     Events,
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === '/my-record/myrecordwarning') {
+    if (from.path === '/my-record/myrecordwarning' || from.path === '/my-record/testresultdetail') {
       next();
     } else {
       next('/my-record/myrecordwarning');

@@ -60,6 +60,7 @@ export default function ({ route, store, app }) {
     case Routes.MYRECORD.name:
     case Routes.MYRECORDNOACCESS.name:
     case Routes.MYRECORDWARNING.name:
+    case Routes.MYRECORDTESTRESULT.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaderTitles.myRecord';
       break;
