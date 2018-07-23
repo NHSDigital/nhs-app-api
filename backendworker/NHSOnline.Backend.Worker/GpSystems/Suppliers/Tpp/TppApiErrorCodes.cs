@@ -7,6 +7,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public static class TppApiErrorCodes
     {
+        public const string NotAuthenticated = "3";
         public const string StartDateInPast = "5";
         public const string NoAccess = "6";
         public const string AppointmentLimitReached = "7";

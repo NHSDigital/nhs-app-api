@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -24,19 +25,29 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         private Mock<IOptions<ConfigurationSettings>> _mockConfigurationSettings;
         private TppSessionService _systemUnderTest;
         private Authenticate _actual;
+        private TppUserSession _userSession;
         private int _sessionTimeoutMinutes;
         private const string ResponseSuidHeader = "suid";
+        private TppClient.TppApiObjectResponse<AuthenticateReply> _authenticatePostResult;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _actual = null;
+            _authenticatePostResult = null;
+            
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
-                .Callback<Authenticate>(x => _actual = x);
+            _mockTppClient
+                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
+                .ReturnsAsync(() => _authenticatePostResult)
+                .Callback<Authenticate>(x =>
+                {
+                    _actual = x;
+                });
 
             _sessionTimeoutMinutes = _fixture.Create<int>();
+            _userSession = _fixture.Create<TppUserSession>();
 
             _mockConfigurationSettings = _fixture.Freeze<Mock<IOptions<ConfigurationSettings>>>();
             _mockConfigurationSettings
@@ -70,12 +81,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
 
 
         [TestMethod]
-        public async void Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()
-        {
+        public async void Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()        {
             // Arrange
             const string accountId = "boo";
             const string passphrase = "hoo";
             var tppConnectionToken = CreateConnectionTokenJson(accountId, passphrase);
+            _authenticatePostResult = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
+            {
+                Body = new AuthenticateReply()
+            };
+
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
@@ -92,7 +107,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             // Arrange
             const string expected = "bar";
             _systemUnderTest = _fixture.Create<TppSessionService>();
-        
+            _authenticatePostResult = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.Accepted)
+            {
+                Body = new AuthenticateReply()
+            };
+            
             // Act
             await _systemUnderTest.Create(CreateConnectionTokenJson(), expected);
 
@@ -107,8 +126,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             const string expectedName = "Montel";
             var reply = CreateReply(expectedName);
         
-            _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+            _mockTppClient
+                .Setup(x => x.AuthenticatePost(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
         
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -137,7 +156,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
                 nhsNumber: expectedNhsNumber);
         
             _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .AuthenticatePost(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
         
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -163,7 +182,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             reply.ErrorResponse = new Error();
 
             _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .AuthenticatePost(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -183,7 +202,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             reply.StatusCode = HttpStatusCode.BadGateway;
 
             _mockTppClient.Setup(x => x
-                    .AuthenticatePost(It.IsAny<Authenticate>()))
+                .AuthenticatePost(It.IsAny<Authenticate>()))
                 .ReturnsAsync(() => reply);
 
             _systemUnderTest = _fixture.Create<TppSessionService>();
@@ -195,34 +214,139 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
         }
 
+        [TestMethod]
+        public async Task Logoff_WhenCalledWithAValidUserSession_ReturnsSuccessfullyDeleted()
+        {
+            // Arrange
+            var reply = LogoffReply();
+        
+            _mockTppClient.Setup(x => x
+                .LogoffPost(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(() => reply);
+        
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+        
+            // Act
+            var result = await _systemUnderTest.Logoff(_userSession);
+        
+            // Assert
+            result.Should().BeOfType<SessionLogoffResult.SuccessfullyDeleted>();
+        }
+
+        [TestMethod]
+        public async Task Logoff_WhenCalledWithErrorResponse_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange 
+            var reply = LogoffReply();
+            reply.ErrorResponse = new Error();
+
+            _mockTppClient
+                .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
+                .ReturnsAsync(() => reply);
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act 
+            var result = await _systemUnderTest.Logoff(_userSession);
+            
+            // Assert 
+            result.Should().BeAssignableTo<SessionLogoffResult.SupplierSystemUnavailable>();
+        }
+
+        [TestMethod]
+        public async Task Logoff_WhenCalledWithHttpError_ReturnsSupplierSystemUnavailable()
+        {
+            // Arrange
+            var reply = LogoffReply();
+            reply.StatusCode = HttpStatusCode.BadGateway;
+
+            _mockTppClient
+                .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
+                .Throws<HttpRequestException>()
+                .Verifiable();
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act
+            var result = await _systemUnderTest.Logoff(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<SessionLogoffResult.SupplierSystemUnavailable>();
+        }
+
+        [TestMethod]
+        public async Task Logoff_WhenCalledWithInvalidSession_ReturnsNotAuthenticated()
+        {
+            // Arrange
+            var notAuthenticatedResponse = _fixture.Build<Error>()
+                .With(x => x.ErrorCode, TppApiErrorCodes.NotAuthenticated)
+                .Create();
+
+            _mockTppClient
+                .Setup(x => x.LogoffPost(It.IsAny<TppUserSession>()))
+                .Returns(
+                    Task.FromResult(
+                        new TppClient.TppApiObjectResponse<LogoffReply>(HttpStatusCode.OK)
+                        {
+                            ErrorResponse = notAuthenticatedResponse
+                        }
+                    )
+                );
+
+            _systemUnderTest = _fixture.Create<TppSessionService>();
+
+            // Act
+            var result = await _systemUnderTest.Logoff(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<SessionLogoffResult.NotAuthenticated>();
+        }
+        
         private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
         private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",
             string onlineUserId = "123", string patiendId = "234", string nhsNumber = "123456789")
         {
-            var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK);
-
-            response.Body = new AuthenticateReply
+            var response = new TppClient.TppApiObjectResponse<AuthenticateReply>(HttpStatusCode.OK)
             {
-                OnlineUserId = onlineUserId,
-                PatientId = patiendId,
-                User = new User
+                Body = new AuthenticateReply
                 {
-                    Person = new Person
+                    OnlineUserId = onlineUserId,
+                    PatientId = patiendId,
+                    User = new User
                     {
-                        PersonName = new PersonName { Name = name },
-                        NationalId = new NationalId { Type = "NHS", Value = nhsNumber }
+                        Person = new Person
+                        {
+                            PersonName = new PersonName { Name = name },
+                            NationalId = new NationalId { Type = "NHS", Value = nhsNumber }
+                        }
                     }
+                },
+                Headers = new Dictionary<string, string>
+                {
+                    { ResponseSuidHeader, suid }
                 }
             };
 
-            response.Headers = new Dictionary<string, string>
+            return response;
+        } 
+
+        private TppClient.TppApiObjectResponse<LogoffReply> LogoffReply()
+        {
+            var response = new TppClient.TppApiObjectResponse<LogoffReply>(HttpStatusCode.OK)
             {
-                { ResponseSuidHeader, suid }
+                Body = new LogoffReply
+                {
+                    Uuid = Guid.NewGuid()
+                },
+                Headers = new Dictionary<string, string>
+                {
+                    { ResponseSuidHeader, "dimsum" }
+                }
             };
 
             return response;
-        }   
+        }  
     }
 }

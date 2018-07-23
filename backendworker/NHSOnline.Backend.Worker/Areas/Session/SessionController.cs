@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
@@ -15,6 +16,7 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -121,10 +123,23 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             {
                 _logger.LogEnter(nameof(Delete));
                 
+                // Delete GP supplier session                
                 var userSession = HttpContext.GetUserSession();
-    
+                try 
+                {
+                    var supplierSessionDeletedResultVisited = await GetSessionLogoffResultVisitorOutput(userSession);
+                    if (!supplierSessionDeletedResultVisited.SessionWasDeleted) 
+                    {
+                        _logger.LogError($"Deleting the GP Supplier session failed with status code: '{supplierSessionDeletedResultVisited.StatusCode}'");
+                    } 
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError($"Failed with error: {e}");
+                }
+                
+                // Delete redis key and session
                 bool sessionDeleted;
-    
                 try
                 {
                     sessionDeleted = await _sessionCacheService.DeleteUserSession(userSession.Key);
@@ -185,6 +200,14 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             var sessionService = gpSystem.GetSessionService();
             var sessionCreateResult = await sessionService.Create(cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode);
             return sessionCreateResult.Accept(new SessionCreateResultVisitor(_settings));
+        }
+
+        private async Task<SessionLogoffResultVisitorOutput> GetSessionLogoffResultVisitorOutput(UserSession userSession)
+        {
+            var sessionService = _gpSystemFactory.CreateGpSystem(userSession.Supplier).GetSessionService();
+            var sessionLogoffResult = await sessionService.Logoff(userSession);
+            
+            return sessionLogoffResult.Accept(new SessionLogoffResultVisitor());
         }
 
         private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)

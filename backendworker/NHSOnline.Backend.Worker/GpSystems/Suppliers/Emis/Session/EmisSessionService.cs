@@ -125,5 +125,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 _logger.LogExit(nameof(Create));
             }
         }
+
+        // Emis does not have a logoff endpoint, returning successfully deleted
+        public Task<SessionLogoffResult> Logoff(UserSession userSession)
+        {
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
+        }
+
     }
 }

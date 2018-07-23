@@ -6,19 +6,33 @@ Feature: Sign out of mobile web
   Background:
     Given a patient from EMIS is defined
 
+  @NHSO-2038
   @NHSO-186
+  @NHSO-985
   @smoketest
-  Scenario: A user is shown the onboarding sign in screen after clicking the "Sign out" button
-    Given I am logged in
+  Scenario Outline: A <GP Supplier> user is shown the onboarding sign in screen after clicking the "Sign out" button
+    Given I am logged in as a <GP Supplier> user
     When I sign out
     Then I see the login page
+    Examples:
+    | GP Supplier |
+    | EMIS        |
+    | TPP         |
+  # | VISION      | - Blocked until Vision login implemented
 
   @NHSO-186
+  @NHSO-985
   @manual
-    Scenario: A spinner is shown if there is a delay in the action of the "Sign out" button
+    Scenario Outline: A spinner is shown if there is a delay in the action of the "Sign out" button for a <GP Supplier> user
     # Cannot slow the sign-out down enough to detect the spinner icon.
+  Examples:
+  | GP Supplier |
+  | EMIS        |
+  | TPP         |
+  | VISION      |
 
   @NHSO-186
+  @NHSO-985
   @manual
   Scenario: The nsho cookie should be clear of session and user information if server side sign out fails
     # Cannot enduce session signout failure.
@@ -27,33 +41,41 @@ Feature: Sign out of mobile web
     And session fails to clear
     Then the user login details are cleared from cookies
 
-  @NHSO-415
-  @pending
-  Scenario: "Service is unavailable" message and "Try again" button are displayed on connection lost
-    Given I am logged in
+  @NHSO-2038
+  @NHSO-186
+  @NHSO-985
+  Scenario Outline: A signed out <GP Supplier> user should not see the navigation bar or header on the onboarding sign in screen
+    Given I am logged in as a <GP Supplier> user
     When I sign out
-    And lose connection
-    Then a "Service is unavailable" message and "Try again" button are displayed
-
-  @NHSO-415
-  @pending
-  Scenario: The log out "Try again" button completes the sign out
-    Given I am logged in
-    When I sign out
-    And lose connection
-    And Press Try Again Button
     Then I see the login page
+    And I do not see the menu bar
+  Examples:
+  | GP Supplier |
+  | EMIS        |
+  | TPP         |
+  # | VISION      | - Blocked until Vision login implemented
 
+  @NHSO-2038
   @NHSO-186
-  Scenario: A signed out user should not see the navigation bar or header on the onboarding sign in screen
-    Given I am logged in
+  @NHSO-985
+  Scenario Outline: The nsho cookie should be clear of session and user information if the <GP Supplier> user is not signed in
+    Given I am logged in as a <GP Supplier> user
     When I sign out
-    Then I do not see the menu bar
+    Then I see the login page
+    And the user login details are cleared from cookies
+  Examples:
+  | GP Supplier |
+  | EMIS        |
+  | TPP         |
+  # | VISION      | - Blocked until Vision login implemented
 
-  @NHSO-186
-  @tech-debt @NHSO-1384
-  Scenario: The nsho cookie should be clear of session and user information if the user is not signed in
-    Given I am logged in
+  @NHSO-985
+  Scenario Outline: The nsho cookie should be clear of <GP Supplier> session and user information if server side sign out fails
+    # Only TPP has a sign out endpoint which can fail. Other suppliers tested manually
+    Given I am logged in as a <GP Supplier> user where the session will fail to clear on signout
     When I sign out
-    Then the user login details are cleared from cookies
-
+    Then I see the login page
+    And the user login details are cleared from cookies
+    Examples:
+      | GP Supplier |
+      | TPP         |

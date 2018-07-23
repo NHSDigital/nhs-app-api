@@ -98,4 +98,3 @@ open class BrowserSteps {
         loginPage.driver.navigate().refresh()
     }
 }
-

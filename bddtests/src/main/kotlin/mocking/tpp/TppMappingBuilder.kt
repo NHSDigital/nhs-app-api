@@ -19,6 +19,7 @@ import mocking.tpp.prescriptions.TppPrescriptionsBuilder
 import mocking.tpp.prescriptionsSubmission.TppPrescriptionsSubmissionBuilder
 import mocking.tpp.registration.LinkAccountBuilder
 import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
+import mocking.tpp.session.TppLogOffBuilder
 import mocking.tpp.session.TppSessionBuilder
 import mocking.tpp.testResultsView.TppTestResultsViewBuilder
 import mocking.tpp.viewPatientOverview.TppViewPatientOverviewBuilder
@@ -55,6 +56,8 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
 
+    fun logOffRequest()= TppLogOffBuilder()
+
     fun listRepeatMedication(patient: Patient) = TppPrescriptionsBuilder(patient)
 
     fun linkAccountRequest(patient: Patient) = LinkAccountBuilder(LinkAccount.forPatient(patient))
@@ -89,6 +92,7 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
     }
 
     companion object {
+        const val apiVersion = "1"
         const val uuid = "3e3d8bef-4ce1-4925-a263-149c15ac7208"
     }
 

@@ -131,6 +131,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
     
             return await Post<TestResultsViewDetailed, TestResultsViewReply>(request, tppUserSession.Suid);
         }
+
+        public async Task<TppApiObjectResponse<LogoffReply>> LogoffPost(TppUserSession tppUserSession)
+        {
+            var request = new Logoff();
+
+            var response = await Post<Logoff, LogoffReply>(request);
+
+            return response;
+        }
         
         private async Task<TppApiObjectResponse<TResponse>> Post<TRequest, TResponse>(TRequest model, string suid = null) where TRequest : ITppRequest
         {
@@ -290,6 +299,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             public bool HasForbiddenResponse => ErrorResponse != null &&
                                                 TppApiErrorCodes.NoAccess.Equals(ErrorResponse.ErrorCode,
                                                     StringComparison.Ordinal);
+
+            public bool NotAuthenticated => ErrorResponse != null &&
+                                            TppApiErrorCodes.NotAuthenticated.Equals(ErrorResponse.ErrorCode,
+                                                StringComparison.Ordinal);
             
             public bool HasErrorMessageContaining(string message)
             {

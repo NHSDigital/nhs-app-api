@@ -510,8 +510,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         myAccount.signOut()
     }
 
-
-
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
@@ -522,6 +520,23 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         browser.goToApp()
         login.using(this.patient)
         home.waitForLoginToComplete()
+    }
+
+    @Given("^I am logged in as a (.*) user where the session will fail to clear on signout$")
+    fun iAmLoggedInToWhereSessionFailsToClear(gpSystem: String) {
+        if (gpSystem.toUpperCase() != "TPP") {
+            Assert.fail("'$gpSystem' not set up for this step")
+        }
+        this.patient = Patient.getDefault(gpSystem)
+        Serenity.setSessionVariable(Patient::class).to(this.patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
+        //createAuthenticateRequest does not.
+        TppSessionCreateJourneyFactory(mockingClient).createAuthenticateRequest(patient)
+        mockingClient.forTpp { logOffRequest().respondWithError() }
+
+        browser.goToApp()
+        login.using(this.patient)
     }
 
     @When("^I log in$")

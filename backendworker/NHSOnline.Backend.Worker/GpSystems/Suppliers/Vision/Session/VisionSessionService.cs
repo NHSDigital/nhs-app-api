@@ -60,6 +60,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 return new SessionCreateResult.SupplierSystemUnavailable();
             }
         }
+        
+        // Vision does not have a logoff endpoint, returning successfully deleted
+        public Task<SessionLogoffResult> Logoff(UserSession userSession)
+        {
+            return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
+        }
 
         private static SessionCreateResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
         {

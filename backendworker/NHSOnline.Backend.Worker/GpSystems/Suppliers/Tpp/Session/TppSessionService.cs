@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
@@ -69,6 +70,42 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             {
                 _logger.LogExit(nameof(Create));
             }
+        }
+
+        public async Task<SessionLogoffResult> Logoff(UserSession userSession)
+        {
+            try
+            {
+                _logger.LogEnter(nameof(Logoff));
+            
+                var tppUserSession = (TppUserSession) userSession;
+                var logoffReply = await _client.LogoffPost(tppUserSession);
+
+                if (logoffReply.NotAuthenticated)
+                {
+                    _logger.LogWarning("User does not have a valid session");
+                    return new SessionLogoffResult.NotAuthenticated();
+                }
+
+                if (!logoffReply.HasSuccessResponse) 
+                {
+                    return new SessionLogoffResult.SupplierSystemUnavailable();
+                }
+
+                _logger.LogDebug($"TPP user session successfully deleted");
+                return new SessionLogoffResult.SuccessfullyDeleted(userSession);
+
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError(e, "Failed request to logoff TPP user session, HttpRequestException has been thrown.");
+                return new SessionLogoffResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Logoff));
+            }
+
         }
     }
 }
