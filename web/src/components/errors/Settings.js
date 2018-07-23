@@ -21,6 +21,10 @@ export default {
       route: Routes.PRESCRIPTION_CONFIRM_COURSES.path,
       redirectUrl: Routes.PRESCRIPTIONS.path,
     },
+    {
+      route: Routes.AUTH_RETURN.path,
+      redirectUrl: Routes.LOGIN.path,
+    },
   ],
   forPage(routePath) {
     let settings = assign({}, this.default);

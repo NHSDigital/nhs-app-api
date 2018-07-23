@@ -521,6 +521,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         myAccount.signOut()
     }
 
+
+
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)

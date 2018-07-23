@@ -12,6 +12,15 @@ export default {
       message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
     },
   },
+  auth_return: {
+    errors: {
+      pageHeader: 'Session error - NHS App',
+      header: 'Session Error',
+      subheader: 'Sorry, there\'s been a problem loading this page',
+      message: 'Please go back to the homescreen and sign in again.\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+      retryButtonText: 'Back to home',
+    },
+  },
   rp01: {
     pageTitle: 'TBC',
     empty: {

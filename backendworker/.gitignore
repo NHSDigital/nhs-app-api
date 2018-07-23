@@ -313,5 +313,7 @@ Temporary Items
 # Gradle:
 ./gradle/
 
+audit.txt
+
 
 # End of https://www.gitignore.io/api/osx,aspnetcore

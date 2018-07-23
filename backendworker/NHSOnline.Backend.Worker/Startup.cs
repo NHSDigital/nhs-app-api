@@ -92,6 +92,7 @@ namespace NHSOnline.Backend.Worker
                 );
 
             services.AddDataProtection();
+            
             services.AddSingleton(Configuration);
             services.AddSingleton<IAuditorFactory>(new AuditorFactory(new StreamAuditSink(new System.IO.FileStream(Configuration["Audit:AuditFile"], System.IO.FileMode.Append))));
             services.AddTransient(AuditorFactory.BuildAuditor);

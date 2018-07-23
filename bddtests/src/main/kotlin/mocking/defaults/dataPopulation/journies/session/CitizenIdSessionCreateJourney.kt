@@ -33,4 +33,16 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
                     .respondWithSuccess(patient)
         }
     }
+
+    fun createForInvalidData(patient: Patient) {
+        createFor(patient)
+
+
+        var nullPatient = Patient()
+
+        mockingClient.forCitizenId {
+            userInfoRequest("Bearer ${patient.accessToken}")
+                    .respondWithSuccess(nullPatient)
+        }
+    }
 }
