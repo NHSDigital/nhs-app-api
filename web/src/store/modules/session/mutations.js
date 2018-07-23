@@ -12,7 +12,6 @@ import {
 
 export default {
   [CLEAR](state) {
-    debugger;
     state.lastCalledAt = undefined;
     state.durationSeconds = undefined;
     state.cookie = undefined;
@@ -40,5 +39,5 @@ export default {
   },
   [SAVE_COOKIE](state, cookie) {
     state.cookie = cookie;
-  }
+  },
 };

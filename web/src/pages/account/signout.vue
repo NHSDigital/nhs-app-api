@@ -1,12 +1,21 @@
+<template>
+  <div />
+</template>
+
 <script>
 export default {
   name: '',
-  fetch(context) {
-    debugger;
-    context.store.dispatch('auth/logout', '/login');
+  head() {
+    return {
+      noscript: [
+        { innerHTML: '<meta http-equiv="refresh" content="0;URL=\'/\'">', body: false },
+      ],
+      title: `${this.$store.state.header.headerText} screen`,
+      __dangerouslyDisableSanitizers: ['noscript'],
+    };
   },
-  render() {
-    return null;
+  created() {
+    this.$store.dispatch('auth/logoutNoJs');
   },
 };
 </script>

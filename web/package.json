@@ -103,6 +103,7 @@
   },
   "devDependencies": {
     "avoriaz": "^6.3.0",
+    "moment-timezone": "^0.5.21",
     "vuex": "^3.0.1",
     "vuex-persist": "^1.2.2"
   }

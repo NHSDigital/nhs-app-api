@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import Routes from '../Routes';
 
+// eslint-disable-next-line object-curly-newline
 export default function ({ store, redirect, route, res }) {
   const excludedRoutes = [
     Routes.LOGIN.name,
@@ -8,19 +9,16 @@ export default function ({ store, redirect, route, res }) {
     Routes.CHECKYOURSYMPTOMS.name,
   ];
 
-  // debugger;
   const storeCookie = store.state.session.cookie;
-  debugger;
-  // // add it to axios headers
+  // add it to axios headers
   if (storeCookie && process.server) {
-    debugger;
-    res.setHeader('Set-Cookie', [storeCookie]);
+    res.setHeader('' +
+      'Set-Cookie', [storeCookie]);
   }
 
   const hasNotLoggedUserAccess = excludedRoutes.indexOf(route.name) !== -1;
 
   if (!hasNotLoggedUserAccess && !store.state.auth.loggedIn) {
-    debugger;
     redirect('/login');
   }
 }

@@ -21,8 +21,6 @@ module.exports = (req, res, next) => {
     };
     res.write(JSON.stringify(links));
     res.end();
-  } else if (req.url === '/signout') {
-
   } else {
     next();
   }

@@ -15,6 +15,7 @@ module.exports = {
     { src: '~/plugins/persistedState.js' },
     '~/plugins/i18n.js',
     '~/plugins/api.js',
+    '~/plugins/cookie.js',
     '~/plugins/filters.js',
     '~/plugins/mixins.js',
   ],

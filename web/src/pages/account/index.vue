@@ -1,7 +1,7 @@
 <template>
   <main v-if="showTemplate" class="content">
     <form action="account/signout" method="get">
-      <button id="signout-button" class="button grey" @click="signout($event)" type="submit">
+      <button id="signout-button" class="button grey" type="submit" @click="signout($event)">
         {{ $t('signOutButton.signOut') }}
       </button>
     </form>
