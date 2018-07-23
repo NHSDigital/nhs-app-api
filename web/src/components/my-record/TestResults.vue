@@ -83,6 +83,10 @@ export default {
   .testResult {
     border-bottom: 1px solid #e8edee;
     padding-bottom: 16px;
+
+     a:link, a:visited {
+      color: $anchor_blue;
+    }
   }
   .testTerm {
     padding-bottom: 0px !important;
@@ -91,4 +95,5 @@ export default {
     @include small_text;
     padding-left: 32px;
   }
+
 </style>
