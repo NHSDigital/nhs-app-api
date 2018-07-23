@@ -89,7 +89,7 @@
     "minimist": "^1.2.0",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.21",
-    "node-sass": "^4.9.0",
+    "node-sass": "^4.9.1",
     "nuxt": "^1.4.1",
     "sass-loader": "^7.0.1",
     "swagger-js-codegen": "^1.12.0",
