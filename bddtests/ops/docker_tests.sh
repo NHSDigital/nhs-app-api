@@ -31,17 +31,25 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 
-CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-case $CURRENT_BRANCH in
-  develop)
-    info "Develop Branch - Full BDD Test Run Configured"
-    BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt'"
-    ;;
-  *)
-    info "Non-Develop Branch - BDD Smoketest Run Configured"
-    BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and @smoketest'"
-    ;;
-esac
+if [ $RUN_SUBSET == 0 ]
+then
+    info "Test options overridden - User specified Run Configured"
+    BDD_CUCUMBER_OPTIONS="$SPECIFIC_TEST_TAGS"
+else
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    case $CURRENT_BRANCH in
+      develop)
+        info "Develop Branch - Full BDD Test Run Configured"
+        BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt $SPECIFIC_TEST_TAGS'"
+        ;;
+      *)
+        info "Non-Develop Branch - BDD Smoketest Run Configured"
+        BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and @smoketest $SPECIFIC_TEST_TAGS'"
+        ;;
+     esac
+fi
+
+info $BDD_CUCUMBER_OPTIONS
 
 # Pin versions of docker images
 export WEB_TAG=$APP_DOCKER_TAG
@@ -65,12 +73,23 @@ WEB_ID=$(docker ps -qf ancestor=$DOCKER_REGISTRY/nhsonline-web:$APP_DOCKER_TAG)
 NETWORK=$(docker inspect $WEB_ID --format '{{range .NetworkSettings.Networks}}{{.NetworkID}}{{end}}' | cut -c 1-12)
 #####################
 
+ENV=$(uname -s)
+
+if [[ $ENV =~ ^MING.* ]]
+then
+  workingDir=$(pwd -W)
+else
+  workingDir=$(pwd)
+fi
+
+info $workingDir
+
 docker run \
 --rm \
 --network $NETWORK \
 --env-file vars_ci.env \
--v $(pwd)/../:/repo \
-$DOCKER_IMAGE /bin/bash -c " \
+-v $workingDir/../:/repo \
+$DOCKER_IMAGE bash -c " \
   cd /repo ; \
   ./gradlew clean test aggregate --stacktrace\
     -Dcucumber.options=\"$BDD_CUCUMBER_OPTIONS\" \
