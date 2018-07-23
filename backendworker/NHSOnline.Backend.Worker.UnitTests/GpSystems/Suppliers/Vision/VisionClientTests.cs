@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             // Arrage
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
             
-            var xmlText = File.ReadAllText("GpSystems/Suppliers/Vision/TestData/requestWasInvalidResponse.xml");
+            var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/requestWasInvalidResponse.xml");
             var responseContent = new StringContent(xmlText);
             _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl).Respond(HttpStatusCode.OK, responseContent);
             

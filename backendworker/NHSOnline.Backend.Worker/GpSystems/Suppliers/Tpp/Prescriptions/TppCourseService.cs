@@ -67,10 +67,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
         private List<Medication> GetMaxRequestablePrescriptions(List<Medication> medications)
         {
-            const string IsRequestable = "y";
-
-            return medications
-                .Where(x => x.Requestable?.ToLower() == IsRequestable)
+            return medications.Where(x => x.Requestable?.ToLower() == TppApiConstants.MedicationRequestable.Yes
+                && x.Type?.ToLower() == TppApiConstants.MedicationType.Repeat.ToLower())
                 .OrderBy(x => x.Drug)
                 .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
         }

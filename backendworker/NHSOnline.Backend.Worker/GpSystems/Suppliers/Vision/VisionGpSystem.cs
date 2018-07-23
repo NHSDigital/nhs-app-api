@@ -7,7 +7,6 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
@@ -71,6 +70,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         }
 
         public ILinkageService GetLinkageService()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
         {
             throw new NotImplementedException();
         }

@@ -10,6 +10,7 @@ import mocking.tpp.appointments.TppBookAppointmentsBuilder
 import mocking.tpp.models.Authenticate
 import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
+import mocking.tpp.prescriptionsSubmission.TppPrescriptionsSubmissionBuilder
 import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
 import mocking.tpp.session.TppSessionBuilder
 import mocking.tpp.testResultsView.TppTestResultsViewBuilder
@@ -37,6 +38,7 @@ open class TppMappingBuilder(private val method: String, relativePath: String) :
     fun viewPatientOverviewPost(tppUserSession: TppUserSession) = TppViewPatientOverviewBuilder(tppUserSession)
     fun authenticateRequest(authenticate: Authenticate) = TppSessionBuilder(authenticate)
     fun listRepeatMedication(patient: Patient) = TppPrescriptionsBuilder(patient)
+    fun prescriptionSubmission(patient: Patient, drugIds: List<String>?) = TppPrescriptionsSubmissionBuilder(patient, drugIds)
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
     fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
     override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = TppAppointmentSlotsBuilder(patient.tppUserSession!!)

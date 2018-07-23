@@ -45,6 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _fixture.Inject(_options);
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _prescriptionRequestValidationService = _fixture.Freeze<Mock<IPrescriptionRequestValidationService>>();
+
             _userSession = _fixture.Create<UserSession>();
             var httpContextItems = new Dictionary<object, object>
             {
@@ -77,6 +78,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
+            mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
+                .Returns(_prescriptionRequestValidationService.Object);
+
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
@@ -100,7 +104,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         [TestMethod]
         public async Task Get_CallsServiceWithDateXMonthsAgoFromConfig_WhenFromDateNotValid()
         {
-            var mockEmisGpSystem = new Mock<IGpSystem>();
+            var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
             var prescriptionRequestsGetResponse = new PrescriptionListResponse();
@@ -109,9 +113,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
-                .Returns(mockEmisGpSystem.Object);
+                .Returns(mockGpSystem.Object);
 
-            mockEmisGpSystem.Setup(x => x.GetPrescriptionService())
+            mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
+                .Returns(_prescriptionRequestValidationService.Object);
+
+            mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
             DateTimeOffset? fromDateGenerated = null;
@@ -128,7 +135,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
-            mockEmisGpSystem.Verify(x => x.GetPrescriptionService());
+            mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.GetPrescriptions(_userSession, It.IsAny<DateTimeOffset>(), It.IsAny<DateTimeOffset>()));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
@@ -152,10 +159,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
                 .Returns(mockGpSystem.Object);
 
+            mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
+                .Returns(_prescriptionRequestValidationService.Object);
+
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);
 
-            prescriptionService.Setup(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>())).Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
+            prescriptionService.Setup(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>()))
+                .Returns(Task.FromResult((PrescriptionResult)postPrescriptionResult));
             
             _prescriptionRequestValidationService
                 .Setup(x => x.IsValidRepeatPrescriptionRequest(It.IsAny<RepeatPrescriptionRequest>()))
@@ -192,6 +203,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Arrange
             _mockGpSystemFactory.Setup(x => x.CreateGpSystem(_userSession.Supplier))
                 .Returns(mockGpSystem.Object);
+
+            mockGpSystem.Setup(x => x.GetPrescriptionRequestValidationService())
+                .Returns(_prescriptionRequestValidationService.Object);
 
             mockGpSystem.Setup(x => x.GetPrescriptionService())
                 .Returns(prescriptionService.Object);

@@ -2,20 +2,21 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NHSOnline.Backend.Worker.Areas.Prescriptions;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescriptions
 {
     [TestClass]
-    public class PrescriptionRequestValidationServiceTests
+    public class EmisPrescriptionRequestValidationServiceTests
     {
         private IPrescriptionRequestValidationService _prescriptionRequestValidationService;
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _prescriptionRequestValidationService = new PrescriptionRequestValidationService();
+            _prescriptionRequestValidationService = new EmisPrescriptionRequestValidationService();
         }
 
         [TestMethod]

@@ -171,5 +171,41 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
         }
+
+        [TestMethod]
+        public async Task OrderPrescriptionPostRequest_MakesHttpRequestToCorrectUrlWithCorrectHeaders_AndRespondsWithDeserializedXml()
+        {
+            var requestMedicationRequestModel = _fixture.Create<RequestMedication>();
+            requestMedicationRequestModel.UnitId = UnitId;
+            requestMedicationRequestModel.ApplyConfig(_configMock.Object);
+            var expectedMedicationResponse = _fixture.Create<RequestMedicationReply>();
+
+            var tppUserSession = _fixture.Create<TppUserSession>();
+
+            var requestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, requestMedicationRequestModel.RequestType)
+            };
+
+            var responseHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.ResponseSuidHeader, Suid)
+            };
+
+            var responseContent = new StringContent(expectedMedicationResponse.SerializeXml());
+
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(requestHeaders)
+                .WithContent(requestMedicationRequestModel.SerializeXml())
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
+
+            var response = await _sut.OrderPrescriptionsPost(tppUserSession, requestMedicationRequestModel);
+
+            response.Body.Should().BeEquivalentTo(expectedMedicationResponse);
+            response.Headers.Should().BeEquivalentTo(responseHeaders);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+        }
     }
 }

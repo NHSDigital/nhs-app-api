@@ -16,18 +16,15 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         private readonly ConfigurationSettings _settings;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<PrescriptionsController> _logger;
-        private readonly IPrescriptionRequestValidationService _prescriptionRequestValidationService;
 
         public PrescriptionsController(
             IOptions<ConfigurationSettings> settings,
             ILoggerFactory loggerFactory,
-            IGpSystemFactory gpSystemFactory,
-            IPrescriptionRequestValidationService prescriptionRequestValidationService)
+            IGpSystemFactory gpSystemFactory)
         {
             _settings = settings.Value;
             _logger = loggerFactory.CreateLogger<PrescriptionsController>();
             _gpSystemFactory = gpSystemFactory;
-            _prescriptionRequestValidationService = prescriptionRequestValidationService;
         }
 
         [HttpGet, TimeoutExceptionFilter]
@@ -35,19 +32,24 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             var defaultFromDate = GetDefaultFromDate();
 
-            if (!_prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate))
+            UserSession userSession = HttpContext.GetUserSession();
+
+            var gpSystem = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier);
+
+            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
+            var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
+
+            if (!prescriptionRequestValidationService.IsValidFromDate(fromDate, defaultFromDate))
             {
                 _logger.LogWarning($"Setting {nameof(fromDate)} to default {defaultFromDate:O} because value {fromDate:O} is earlier than allowed.");
                 fromDate = defaultFromDate;
             }
+            
+            _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
+            var prescriptionService = gpSystem.GetPrescriptionService();
 
-            UserSession userSession = HttpContext.GetUserSession();
-
-            _logger.LogInformation($"Fetching prescriptions interface for supplier {userSession.Supplier}");
-            var prescriptionService = _gpSystemFactory
-                .CreateGpSystem(userSession.Supplier)
-                .GetPrescriptionService();
-
+            _logger.LogInformation($"Calling prescription service to get prescriptions");
             var result = await prescriptionService.GetPrescriptions(userSession, fromDate, DateTimeOffset.Now);
 
             return result.Accept(new PrescriptionResultVisitor());
@@ -57,20 +59,25 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             PrescriptionResult result;
+            UserSession userSession = HttpContext.GetUserSession();
 
-            if (!_prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
+            var gpSystem = _gpSystemFactory
+                .CreateGpSystem(userSession.Supplier);
+            
+            _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
+            var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
+
+            if (!prescriptionRequestValidationService.IsValidRepeatPrescriptionRequest(repeatPrescriptionRequest))
             {
                 _logger.LogWarning($"Invalid model state for {nameof(repeatPrescriptionRequest)}");
                 result = new PrescriptionResult.BadRequest();
             }
             else
             {
-                UserSession userSession = HttpContext.GetUserSession();
+                _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
+                var prescriptionService = gpSystem.GetPrescriptionService();
 
-                var prescriptionService = _gpSystemFactory
-                    .CreateGpSystem(userSession.Supplier)
-                    .GetPrescriptionService();
-
+                _logger.LogInformation($"Calling prescription service to order prescriptions");
                 result = await prescriptionService.OrderPrescription(userSession, repeatPrescriptionRequest);      
             }
 

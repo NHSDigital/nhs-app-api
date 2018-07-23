@@ -24,6 +24,8 @@ namespace NHSOnline.Backend.Worker.GpSystems
 
         IPrescriptionService GetPrescriptionService();
 
+        IPrescriptionRequestValidationService GetPrescriptionRequestValidationService();
+
         ISessionService GetSessionService();
 
         ITokenValidationService GetTokenValidationService();

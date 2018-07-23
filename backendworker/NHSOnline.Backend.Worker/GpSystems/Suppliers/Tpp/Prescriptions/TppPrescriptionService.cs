@@ -67,15 +67,44 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             return new PrescriptionResult.SupplierSystemUnavailable();
         }
 
+        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest request)
+        {
+            var tppUserSession = (TppUserSession)userSession;
+
+            var postRequest = new RequestMedication
+            {
+                PatientId = tppUserSession.PatientId,
+                OnlineUserId = tppUserSession.OnlineUserId,
+                UnitId = tppUserSession.UnitId,
+                Notes = request.SpecialRequest,
+                Medications = request.CourseIds.Select(x => new MedicationRequest
+                {
+                    DrugId = x,
+                    Type = TppApiConstants.MedicationType.Repeat,
+                }).ToList(),
+            };
+
+            try
+            {
+                var response = await _tppClient.OrderPrescriptionsPost(tppUserSession, postRequest);
+
+                if (response.HasSuccessResponse)
+                {
+                    return new PrescriptionResult.SuccessfulPost();
+                }
+
+                return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError($"Repeat prescription order failed with message {e.Message}");
+                return new PrescriptionResult.SupplierSystemUnavailable();
+            }
+        }
+
         private List<Medication> GetMaxPrescriptions(List<Medication> medications)
         {
             return medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
-        }
-
-        public Task<PrescriptionResult> OrderPrescription(UserSession userSession,
-            RepeatPrescriptionRequest repeatPrescriptionRequest)
-        {
-            throw new NotImplementedException();
         }
     }
 }

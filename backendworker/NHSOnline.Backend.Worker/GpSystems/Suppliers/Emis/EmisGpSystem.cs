@@ -64,6 +64,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return _serviceProvider.GetService<EmisPrescriptionService>();
         }
 
+        public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
+        {
+            return _serviceProvider.GetService<EmisPrescriptionRequestValidationService>();
+        }
+
         public ISessionService GetSessionService()
         {
             return _serviceProvider.GetService<EmisSessionService>();

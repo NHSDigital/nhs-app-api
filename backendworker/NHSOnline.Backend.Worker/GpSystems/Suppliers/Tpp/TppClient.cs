@@ -199,7 +199,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             return response;
         }
-        
+
+        public async Task<TppApiObjectResponse<RequestMedicationReply>> OrderPrescriptionsPost(
+            TppUserSession tppUserSession,
+            RequestMedication requestMedication)
+        {
+            var response =
+                await Post<RequestMedication, RequestMedicationReply>(requestMedication, tppUserSession.Suid);
+
+            return response;
+        }
+
         private static HttpRequestMessage BuildTppRequest(HttpMethod method, string requestType, StringContent stringContent, string suid = null)
         {
             if (stringContent == null)

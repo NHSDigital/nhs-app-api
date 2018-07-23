@@ -7,8 +7,6 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddTransient<IPrescriptionRequestValidationService, PrescriptionRequestValidationService>();
-
             base.ConfigureServices(services, configuration);
         }
     }

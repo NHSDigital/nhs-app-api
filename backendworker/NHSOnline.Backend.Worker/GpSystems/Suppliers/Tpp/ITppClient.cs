@@ -1,34 +1,36 @@
 ﻿using System.Threading.Tasks;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
+using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public interface ITppClient
     {
-        Task<TppClient.TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate model);
+        Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate model);
         
-        Task<TppClient.TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession);
+        Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession);
 
-        Task<TppClient.TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession session);
+        Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession session);
         
-        Task<TppClient.TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots request, string suid);
+        Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots request, string suid);
         
-        Task<TppClient.TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession);
+        Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession);
 
-        Task<TppClient.TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(TppUserSession tppUserSession);
+        Task<TppApiObjectResponse<RequestPatientRecordReply>> RequestPatientRecordPost(TppUserSession tppUserSession);
 
-        Task<TppClient.TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(BookAppointment bookAppointment, TppUserSession userSession);
+        Task<TppApiObjectResponse<BookAppointmentReply>> BookAppointmentSlotPost(BookAppointment bookAppointment, TppUserSession userSession);
         
-        Task<TppClient.TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession, string startDate, string endDate);
+        Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession, string startDate, string endDate);
 
-        Task<TppClient.TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid);
+        Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid);
 
-        Task<TppClient.TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
+        Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
         
-        Task<TppClient.TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model,
+        Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model,
                 string suid);
+
+        Task<TppApiObjectResponse<RequestMedicationReply>> OrderPrescriptionsPost(TppUserSession tppUserSession, RequestMedication requestMedication);
     }
 }

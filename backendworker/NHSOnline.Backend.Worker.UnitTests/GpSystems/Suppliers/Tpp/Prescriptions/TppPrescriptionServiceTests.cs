@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -158,5 +159,67 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         }
 
         #endregion
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromTpp()
+        {
+            // Arrange
+            var request = new RepeatPrescriptionRequest
+            {
+                CourseIds = new List<string> { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() },
+                SpecialRequest = "Can I collect these before the weekend please?",
+            };
+
+            var prescriptionsResponse = _fixture.Create<RequestMedicationReply>();
+
+            RequestMedication capturedRequestMedication = null;
+
+            _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    {
+                        Body = prescriptionsResponse,
+                    }))
+                    .Callback<TppUserSession, RequestMedication>((tppUserSession, requestMedication) =>
+                    {
+                        capturedRequestMedication = requestMedication;
+                    });
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
+            capturedRequestMedication.RequestType.Should().Be("RequestMedication");
+            capturedRequestMedication.Medications.Should().HaveCount(request.CourseIds.Count());
+            capturedRequestMedication.Medications.ElementAt(0).DrugId.Should().Be(request.CourseIds.ElementAt(0));
+            capturedRequestMedication.Medications.ElementAt(1).DrugId.Should().Be(request.CourseIds.ElementAt(1));
+            capturedRequestMedication.Medications.ForEach(x => x.Type.Should().Be("Repeat"));
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsUnsuccessfulResponseForSadPath_WhenErrorResponseFromTpp()
+        {
+            // Arrange
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            var error = _fixture.Create<Error>();
+
+            _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = error,
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+        }
+
     }
 }
