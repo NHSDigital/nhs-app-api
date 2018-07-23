@@ -41,7 +41,7 @@ class HomeViewController : UIViewController {
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
         self.webViewController?.webView.loadPage(url: pageUrl)
         
-        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webView: webViewController!.webView)
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
     }
     
     func addSubview(subView:UIView, toView parentView:UIView) {
