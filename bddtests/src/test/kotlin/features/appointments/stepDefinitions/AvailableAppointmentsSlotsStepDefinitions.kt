@@ -4,20 +4,25 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.AvailableAppointmentsSteps
-import features.appointments.steps.MyAppointmentsSteps
+import features.appointments.steps.AvailableAppointmentsSteps.Companion.EXPECTED_APPOINTMENT_SESSIONS_KEY
 import features.authentication.steps.LoginSteps
+import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
+import mockingFacade.appointments.AppointmentSessionFacade
+import mockingFacade.appointments.AppointmentSlotFacade
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.*
 import org.junit.Assert.*
 import worker.models.appointments.AppointmentSlotsResponse
 import javax.servlet.http.Cookie
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 
 
-class AvailableAppointmentsSlotsStepDefinitions {
+class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Steps
     lateinit var login: LoginSteps
@@ -36,7 +41,15 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^there are available appointment slots for an explicit date-time range$")
     fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange() {
-        availableAppointments.generateStubsForAppointmentSlotsForSpecificDates()
+        currentProvider = ProviderTypes.valueOf(sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
+        when (currentProvider) {
+            ProviderTypes.EMIS -> {
+                availableAppointments.generateEmisStubsForAppointmentSlotsForSpecificDates()
+            }
+            ProviderTypes.TPP -> {
+                availableAppointments.generateTppStubsForAppointmentSlotsForSpecificDates()
+            }
+        }
     }
 
     @Given("^there are available appointment slots$")
@@ -48,33 +61,25 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @Given("^there are available appointment slots with different criteria for (.*)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
         availableAppointments.generateDefaultUserData()
-        availableAppointments.generateAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(
-                if (gpSystem == "any GP System") "EMIS" else gpSystem
-        )
+        availableAppointments.generateAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem)
     }
 
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
         availableAppointments.generateDefaultUserData()
-        availableAppointments.generateNoAvailableAppointmentSlotsForGPSystem(
-                if (gpSystem == "any GP System") "EMIS" else gpSystem
-        )
+        availableAppointments.generateNoAvailableAppointmentSlotsForGPSystem(gpSystem)
     }
 
     @Given("^there is 1 available appointment slot for (.*)$")
     fun thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem: String) {
         availableAppointments.generateDefaultUserData(gpSystem)
-        availableAppointments.generateAvailableOneAppointmentSlotForGPSystem(
-                if (gpSystem == "any GP System") "EMIS" else gpSystem
-        )
+        availableAppointments.generateAvailableOneAppointmentSlotForGPSystem(gpSystem)
     }
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
         availableAppointments.generateDefaultUserData()
-        availableAppointments.generateAvailableAppointmentSlotsForGPSystemForOneLocation(
-                if (gpSystem == "any GP System") "EMIS" else gpSystem
-        )
+        availableAppointments.generateAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem)
     }
 
     @Given("^GP system doesn't respond a timely fashion for available appointment slots$")
@@ -97,6 +102,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^GP system is unavailable for available appointment slots$")
     fun gp_system_is_unavailable_for_available_appointment_slots() {
+        availableAppointments.generateDefaultUserData()
         mockingClient
                 .forEmis {
                     appointmentSlotsMetaRequest(patient)
@@ -116,6 +122,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^GP system returns corrupt data for appointment slots$")
     fun gp_system_returns_corrupt_data_for_appointment_slots() {
+        availableAppointments.generateDefaultUserData()
         mockingClient
                 .forEmis {
                     appointmentSlotsMetaRequest(patient)
@@ -136,17 +143,20 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Given("^there are available appointment slots, but session has expired$")
     fun thereAreAvailableAppointmentSlotsButExpiredSession() {
+        availableAppointments.generateDefaultUserData()
         thereAreAvailableAppointmentSlots()
         Serenity.setSessionVariable(Cookie::class).to(expiredCookie)
     }
 
     @Given("^the practice does not offer online booking to my patient$")
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
+        availableAppointments.generateDefaultUserData()
         availableAppointments.generateEmisStubsForAvailableSlotsWhenUnavailableToPatient()
     }
 
     @Given("^an unknown exception will occur when wanting to view appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
+        availableAppointments.generateDefaultUserData()
         availableAppointments.generateEmisStubsForAvailableSlotsGivingUnknownException()
     }
 
@@ -191,7 +201,7 @@ class AvailableAppointmentsSlotsStepDefinitions {
     @When("^I filter to reveal multiple slots$")
     fun iFilterToReviewMultipleSlots() {
         iSelectAnOptionFromEachOfTheFilters()
-//        availableSlotsAreDisplayedThatMeetTheNewCriteria()
+        availableSlotsAreDisplayedThatMeetTheNewCriteria()
     }
 
     @When("^I select an option from each of the filters$")
@@ -206,10 +216,15 @@ class AvailableAppointmentsSlotsStepDefinitions {
 
     @Then("^available slots are returned for the given date-time range$")
     fun availableSlotsLocationsCliniciansAndAppointmentSessionsAreReturned() {
-        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        assertNotNull(result)
-        assertNotNull(result.slots)
-        assertEquals(2, result.slots.size)
+        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val expectedAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
+        for (appointmentSession in expectedAppointmentSessions) {
+            expectedAppointmentSlots.addAll(appointmentSession.slots)
+        }
+        val actualResult = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
+        assertNotNull(actualResult)
+        assertNotNull(actualResult.slots)
+        assertEquals("Incorrect number of slots. ", expectedAppointmentSlots.size, actualResult.slots.size)
     }
 
     @Then("^available slots are returned containing id, start date and time, end date and time, location, clinicians, type$")

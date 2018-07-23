@@ -61,7 +61,7 @@ data class Patient(
                 else -> throw IllegalArgumentException("$gpSystem not a valid supplier name.")
             }
         }
-        
+
         //////////// EMIS PATIENTS /////////////
 
         val paulSmith = Patient(
@@ -73,7 +73,7 @@ data class Patient(
                 sessionId = MockDefaults.DEFAULT_SESSION_ID,
                 connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID)
-        
+
         val jackJackson = Patient(
                 title = "Mr",
                 firstName = "Jack",
@@ -83,7 +83,7 @@ data class Patient(
                 connectionToken = "efa22020-9221-46a6-a0f0-6c0340b8f44d",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID
         )
-        
+
         val alanCook = Patient(
                 title = "Mr",
                 firstName = "Alan",
@@ -108,7 +108,7 @@ data class Patient(
                 linkageKey = "tTALtBP3rLR16",
                 userPatientLinkToken = "DbLYlUrwyGpgZ65Mlk6601"
         )
-        
+
         val montelFrye = Patient(
                 title =  "",
                 firstName =  "Montel",

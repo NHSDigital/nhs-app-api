@@ -156,8 +156,8 @@ class AppointmentsBookingStepDefinitionsBackend {
     @Then("^a successful response for appointment booking is returned$")
     fun aSuccessfulResponseIsReturned() {
 
-        var expectedResponse = HttpStatus.SC_CREATED;
-        var receivedResponse = Serenity.sessionVariableCalled<HttpResponse>("Http Status Code").statusLine.statusCode
+        val expectedResponse = HttpStatus.SC_CREATED;
+        val receivedResponse = Serenity.sessionVariableCalled<HttpResponse>("Http Status Code").statusLine.statusCode
 
         assertEquals("Expected response $expectedResponse, but was $receivedResponse",
                 HttpStatus.SC_CREATED,

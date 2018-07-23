@@ -36,23 +36,23 @@ class ErrorPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
 
     fun hasHeading(text: String): Boolean {
-        return heading.element.text.equals(text)
+        return heading.element.text == text
     }
 
     fun hasSubHeading(text: String): Boolean {
-        return subHeading.element.text.equals(text)
+        return subHeading.element.text == text
     }
 
     fun hasDetailParagraphOne(text: String): Boolean {
-        return detailOne.element.text.equals(text)
+        return detailOne.element.text == text
     }
 
     fun hasDetailParagraphTwo(text: String): Boolean {
-        return detailTwo.element.text.equals(text)
+        return detailTwo.element.text == text
     }
 
     fun hasButton(text: String): Boolean {
-        return button.element.text.equals(text)
+        return button.element.text == text
     }
 
     fun shouldNotBeVisible() {

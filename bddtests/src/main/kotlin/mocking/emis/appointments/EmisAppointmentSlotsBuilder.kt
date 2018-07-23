@@ -55,8 +55,7 @@ class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
         return AppointmentSlot(slotId = slot.slotId!!,
                 startTime = slot.startTime,
                 endTime = slot.endTime,
-                slotTypeName = slot.slotTypeName,
-                slotTypeStatus = slot.slotTypeStatus
+                slotTypeName = slot.slotTypeName
         )
     }
 

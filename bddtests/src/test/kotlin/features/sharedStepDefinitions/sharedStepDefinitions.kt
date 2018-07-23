@@ -19,6 +19,7 @@ import mocking.emis.models.AssociationType
 import mocking.tpp.models.AuthenticateReply
 import models.Patient
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import webdrivers.browserstack.BrowserstackLocalService
@@ -61,7 +62,7 @@ open class SharedStepDefinitions {
             initialiseTpp()
         }
 
-        Serenity.setSessionVariable(BaseStepDefinition.GLOBAL_PROVIDER_TYPE).to(system)
+        setSessionVariable(BaseStepDefinition.GLOBAL_PROVIDER_TYPE).to(system)
     }
 
     private fun initialiseEmis() {

@@ -15,10 +15,10 @@ import worker.models.demographics.TppUserSession
 import java.time.Duration
 import java.time.OffsetDateTime
 
-class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession):
-        TppMappingBuilder("POST", "/tpp/") ,IAppointmentSlotsBuilder{
+class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession) :
+        TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 
-    val tppUserSession:TppUserSession = tppUserSession
+    val tppUserSession: TppUserSession = tppUserSession
 
     init {
         val contentTypeHeader = "content-type"
@@ -43,7 +43,7 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession):
 
     private fun respondWithSuccess(listSlotsReply: ListSlotsReply): Mapping {
 
-        var xmlBody = serialsier(listSlotsReply)
+        val xmlBody = serialsier(listSlotsReply)
 
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(xmlBody)
@@ -59,42 +59,42 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession):
         return respondWithSuccess(listSlotsReplyConverter(model))
     }
 
-    private fun listSlotsReplyConverter(model: AppointmentSlotsResponseFacade) : ListSlotsReply{
-       return ListSlotsReply(patientId=tppUserSession.patientId,
-                onlineUserId=tppUserSession.onlineUserId,
-                uuid=uuid,
-               bookableDays = model.bookableDays!!,
+    private fun listSlotsReplyConverter(model: AppointmentSlotsResponseFacade): ListSlotsReply {
+        return ListSlotsReply(patientId = tppUserSession.patientId,
+                onlineUserId = tppUserSession.onlineUserId,
+                uuid = uuid,
+                bookableDays = model.bookableDays!!,
                 Session = sessionsConverter(model.sessions))
     }
 
     private fun sessionsConverter(sessions: ArrayList<AppointmentSessionFacade>): MutableCollection<Session> {
 
-        val sessionsList : MutableCollection<Session> = mutableListOf<Session>()
-        sessions.forEach{session->  sessionsList.add(sessionConverter(session))}
+        val sessionsList: MutableCollection<Session> = mutableListOf()
+        sessions.forEach { session -> sessionsList.add(sessionConverter(session)) }
         return sessionsList
     }
 
-    private fun sessionConverter(session : AppointmentSessionFacade): Session {
-        val slots : MutableCollection<Slot> = mutableListOf()
-        session.slots.forEach{slot->  slots.add(slotConverter(slot))}
+    private fun sessionConverter(session: AppointmentSessionFacade): Session {
+        val slots: MutableCollection<Slot> = mutableListOf()
+        session.slots.forEach { slot -> slots.add(slotConverter(slot)) }
         return Session(
                 sessionId = getValueOrTestSetupIncorrectly(session.sessionId, "sessionId"),
                 type = getValueOrTestSetupIncorrectly(session.sessionType, "sessionType"),
                 staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails, "staffDetails"),
                 location = getValueOrTestSetupIncorrectly(session.location!!, "location"),
-                Slot= slots
+                Slot = slots
         )
     }
 
-    private fun getValueOrTestSetupIncorrectly(value: Int? ,valueName: String ):String{
-        if(value == null){
+    private fun getValueOrTestSetupIncorrectly(value: Int?, valueName: String): String {
+        if (value == null) {
             fail("Test setup incorrectly, $valueName must be set")
         }
         return value!!.toString()
     }
 
-    private fun getValueOrTestSetupIncorrectly(value: String? ,valueName: String ):String{
-        if(value == null){
+    private fun getValueOrTestSetupIncorrectly(value: String?, valueName: String): String {
+        if (value == null) {
             fail("Test setup incorrectly, $valueName must be set")
         }
         return value!!
@@ -103,8 +103,8 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession):
 
     private fun slotConverter(slot: AppointmentSlotFacade): Slot {
         return Slot(
-                startDate = slot.startTime!!,
-                endDate = slot.endTime!!,
+                startDate = "${slot.startTime!!}.0Z",
+                endDate = "${slot.endTime!!}.0Z",
                 type = slot.slotTypeName!!)
     }
 
@@ -120,11 +120,11 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession):
         TODO("not implemented")
     }
 
-    private fun getDateFormattedString(dateTime: OffsetDateTime): String{
+    private fun getDateFormattedString(dateTime: OffsetDateTime): String {
         return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
     }
 
-    private fun formatDateToTwoDigits(daysOrMonths: Int): String{
+    private fun formatDateToTwoDigits(daysOrMonths: Int): String {
         return String.format("%02d", daysOrMonths)
     }
 }

@@ -136,7 +136,7 @@ open class MyAppointmentsSteps {
     @Step
     fun checkEmisMyAppointmentsAreAllUpcomingOnes() {
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
-        val myAppointmentsResponse = Serenity.sessionVariableCalled<MyAppointmentsResponse>(MyAppointmentsResponse::class.java)
+        val myAppointmentsResponse = sessionVariableCalled<MyAppointmentsResponse>(MyAppointmentsResponse::class.java)
         val now = Date().time
         myAppointmentsResponse.appointments.forEach { appointment ->
             val startTime = dateTimeFormat.parse(appointment.startTime).time

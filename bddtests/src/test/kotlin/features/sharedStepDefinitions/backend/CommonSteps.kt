@@ -94,7 +94,6 @@ class CommonSteps : AbstractSteps() {
     fun thenIReceiveAMessage(expectedStatusCode: String) {
         val converted = httpStatusCodeTransform(expectedStatusCode)
         val exception = sessionVariableCalled<NhsoHttpException>("HttpException")
-        println("$exception")
         assertNotNull("An exception was expected but was not returned within the expected time limit.", exception)
         assertEquals(converted, exception.StatusCode)
     }
@@ -172,7 +171,7 @@ class CommonSteps : AbstractSteps() {
 
                 mockingClient.forTpp {
 
-                    var authReply = AuthenticateReply()
+                    val authReply = AuthenticateReply()
                     authReply.uuid = UUID.randomUUID().toString()
                     authReply.user.person.dateOfBirth = MockDefaults.patientTpp.dateOfBirth
                     authReply.patientId = MockDefaults.patientTpp.patientId

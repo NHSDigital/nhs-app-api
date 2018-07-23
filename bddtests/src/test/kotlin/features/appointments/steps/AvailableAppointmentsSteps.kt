@@ -9,9 +9,7 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.appointments.GetAppointmentSlotsResponseModel
 import mocking.emis.models.*
-import mocking.tpp.models.ListSlotsReply
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
@@ -22,6 +20,7 @@ import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.*
+import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -59,6 +58,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     private lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
     private lateinit var availableAppointments: AvailableAppointmentsPage
+    private lateinit var errorPage: ErrorPage
 
     @Step
     fun selectSlot() {
@@ -84,17 +84,14 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkTimeoutErrorMessage(presence: Boolean = true) {
-        val errorSummary = availableAppointments.errorSummaryBody
-
-        if (presence) {
-            val expectedHeader = "Sorry, there's been a problem loading this page"
-            val expectedBody = "Please try again\n" +
-                    "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-
-            assertEquals("$expectedHeader\n$expectedBody", errorSummary.element.text)
-        } else {
-            assertEquals("Expected no timeout error message elements, but there were ${errorSummary.elements.count()} elements matching $errorSummary.", 0, errorSummary.elements.count())
-        }
+        val expectation = if (presence) "should be displayed but got" else "shouldn't be displayed but still got"
+        val expectedHeader = "Sorry, there's been a problem loading this page"
+        val expectedFirstBodyLine = "Please try again"
+        val expectedSecondBodyLine =  "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
+        assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(1).element.text}\"", presence, errorPage.hasSubHeading(expectedHeader))
+        assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(2).element.text}\"", presence, errorPage.hasDetailParagraphOne(expectedFirstBodyLine))
+        assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(3).element.text}\"", presence, errorPage.hasDetailParagraphTwo(expectedSecondBodyLine))
     }
 
     @Step
@@ -110,21 +107,22 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun doesTryAgainButtonExist(): Boolean {
-        return availableAppointments.tryAgainButton.elements.count() == 1
+        return errorPage.hasButton("Try again")
     }
 
     @Step
     fun checkUnavailableErrorMessage() {
-        val message = availableAppointments.errorSummaryBody.element.text
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-        assertNotNull("No error message displayed, expecting $expectedHeader\n$expectedBody", message)
-        assertTrue("Actual text: $message. Expected text: $expectedHeader\n$expectedBody", message!!.contains("$expectedHeader\n$expectedBody"))
+        errorPage.waitForSpinnerToDisappear()
+        assertTrue("$expectedHeader\n$expectedBody", errorPage.hasSubHeading(expectedHeader))
+        assertTrue("$expectedHeader\n$expectedBody", errorPage.hasDetailParagraphTwo(expectedBody))
     }
 
     @Step
     fun clickOnTryAgainButton() {
-        availableAppointments.clickOnButtonContainingText("Try again")
+        errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
+        errorPage.clickOnButtonContainingText("Try again")
     }
 
     @Step
@@ -208,8 +206,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 Serenity.setSessionVariable("Location").to(defaultEmisMetaSlotLocations[0].locationName)
             }
             "TPP" -> {
-                generateTppStubsForAppointmentSlotsForNextFourWeeks(defaultTppAppointmentSessions)
-                Serenity.setSessionVariable("Location").to(defaultTppAppointmentSessions[0].location)
+                generateTppStubsForAppointmentSlotsForNextFourWeeks(getDefaultTppAppointmentSessions())
+                Serenity.setSessionVariable("Location").to(getDefaultTppAppointmentSessions()[0].location)
             }
         }
     }
@@ -232,10 +230,10 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun generateStubsForAppointmentSlotsForSpecificDates() {
-        Serenity.setSessionVariable(EXPECTED_SESSIONS_KEY).to(defaultEmisMetaSlotSessions)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(defaultEmisAppointmentSessions)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(defaultEmisAppointmentSlots)
+    fun generateEmisStubsForAppointmentSlotsForSpecificDates() {
+        setSessionVariable(EXPECTED_SESSIONS_KEY).to(defaultEmisMetaSlotSessions)
+        setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(defaultEmisAppointmentSessions)
+        setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(getDefaultEmisAppointmentSlots())
 
         generateStubForMetaAppointmentSlotRequest(
                 defaultEmisMetaSlotLocations,
@@ -255,17 +253,29 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
+    fun generateTppStubsForAppointmentSlotsForSpecificDates() {
+        setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(getDefaultTppAppointmentSessions())
+
+        generateTppStubForAppointmentSlotRequest(
+                getDefaultTppAppointmentSessions(),
+                0,
+                defaultSessionStartDate,
+                defaultSessionEndDate
+        )
+    }
+
+    @Step
     fun generateEmisStubsForAppointmentSlotsForNextFourWeeks(
             emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
             emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
             emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
             emisAppointmentSessions: ArrayList<AppointmentSessionFacade> = defaultEmisAppointmentSessions,
-            emisAppointmentSlots: ArrayList<AppointmentSlotFacade> = defaultEmisAppointmentSlots,
+            emisAppointmentSlots: ArrayList<AppointmentSlotFacade> = getDefaultEmisAppointmentSlots(),
             delayedInSeconds: Long = 0
     ) {
-        Serenity.setSessionVariable(EXPECTED_SESSIONS_KEY).to(emisSlotSessions)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(emisAppointmentSessions)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(emisAppointmentSlots)
+        setSessionVariable(EXPECTED_SESSIONS_KEY).to(emisSlotSessions)
+        setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(emisAppointmentSessions)
+        setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(emisAppointmentSlots)
 
         generateStubForMetaAppointmentSlotRequest(
                 emisSlotLocations,
@@ -285,14 +295,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     ) {
         Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(tppSessions)
 
-        val listSlotsReply = AppointmentSlotsResponseFacade(
-                defaultTppAppointmentSessions, "1"
-        )
-
-        mockingClient.forTpp {
-            appointmentSlotsRequest(tppPatient)
-                    .respondWithSuccess(listSlotsReply)
-        }
+        generateTppStubForAppointmentSlotRequest(tppSessions)
     }
 
 
@@ -301,7 +304,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
             emisSlotLocations: java.util.ArrayList<Location>,
             emisSlotSessionHolders: java.util.ArrayList<SessionHolder>,
             emisSlotSessions: java.util.ArrayList<Session>,
-            delayedInSeconds: Long,
+            delayedInSeconds: Long = 0,
             fromDate: String? = null,
             toDate: String? = null
     ) {
@@ -320,13 +323,28 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun generateEmisStubForAppointmentSlotRequest(
             emisAppointmentSessions: ArrayList<AppointmentSessionFacade>,
-            delayedInSeconds: Long,
+            delayedInSeconds: Long = 0,
             fromDate: String? = null,
             toDate: String? = null
     ) {
         val getAppointmentSlotsResponseModel = AppointmentSlotsResponseFacade(emisAppointmentSessions)
         mockingClient.forEmis {
             appointmentSlotsRequest(patient, fromDate, toDate)
+                    .respondWithSuccess(getAppointmentSlotsResponseModel)
+                    .delayedBy(Duration.ofSeconds(delayedInSeconds))
+        }
+    }
+
+    @Step
+    fun generateTppStubForAppointmentSlotRequest(
+            tppAppointmentSessions: ArrayList<AppointmentSessionFacade>,
+            delayedInSeconds: Long = 0,
+            fromDate: String? = null,
+            toDate: String? = null
+    ) {
+        val getAppointmentSlotsResponseModel = AppointmentSlotsResponseFacade(tppAppointmentSessions, "1")
+        mockingClient.forTpp {
+            appointmentSlotsRequest(tppPatient, fromDate, toDate)
                     .respondWithSuccess(getAppointmentSlotsResponseModel)
                     .delayedBy(Duration.ofSeconds(delayedInSeconds))
         }
@@ -407,33 +425,46 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatAvailableSlotsAreReturnedWithAppropriateFields() {
-        val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
-        for (i in 0 until result.slots.size)
-            unmatchedExpectedSlots[defaultEmisAppointmentSlots[i].slotId.toString()] = SlotResponseObject(
-                    defaultEmisAppointmentSlots[i].slotId.toString(),
-                    getExpectedAppointmentTypeByIndexes(i, i),
-                    defaultEmisAppointmentSlots[i].startTime!!,
-                    defaultEmisAppointmentSlots[i].endTime!!,
-                    defaultEmisMetaSlotLocations[i].locationName.toString(),
-                    arrayOf(defaultEmisMetaSlotSessionHolders[i].displayName)
-            )
+        val result = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
+        val expectedSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val unmatchedExpectedSlots = HashMap<AppointmentSlotFacade, SlotResponseObject>()
+        for (session in expectedSessions) {
+            for (slot in session.slots) {
+                unmatchedExpectedSlots[slot] = SlotResponseObject(
+                        slot.slotId.toString(),
+                        getExpectedAppointmentTypeByIndexes(slot.sessionTypeName!!, slot.slotTypeName!!),
+                        slot.startTime!!,
+                        slot.endTime!!,
+                        session.location!!,
+                        arrayOf(session.staffDetails)
+                )
+            }
+        }
         for (actualSlot in result.slots) {
-            println(actualSlot.toString())
             assertNotNull("Null id", actualSlot.id)
             assertNotNull("Null type", actualSlot.type)
             assertNotNull("Null startTime", actualSlot.startTime)
             assertNotNull("Null endTime", actualSlot.endTime)
             assertNotNull("Null location", actualSlot.location)
             assertNotNull("Null clinicians", actualSlot.clinicians)
-            val expectedSlot = unmatchedExpectedSlots[actualSlot.id]!!
-            assertNotNull("Expected slot not found. ", expectedSlot)
+            val actualSlotTypeParts = actualSlot.type.split(Regex("( - )"))
+            val startTimeWithoutTimezone = timeWithoutTimezone(actualSlot.startTime)
+            val endTimeWithoutTimezone = timeWithoutTimezone(actualSlot.endTime)
+            val expectedSlotKey = AppointmentSlotFacade(
+                    actualSlot.id.toInt(),
+                    startTimeWithoutTimezone,
+                    endTimeWithoutTimezone,
+                    actualSlotTypeParts[0],
+                    actualSlotTypeParts[1]
+            )
+            assertTrue("Expected slot not found:\n$expectedSlotKey should be in\n$unmatchedExpectedSlots", unmatchedExpectedSlots.containsKey(expectedSlotKey))
+            val expectedSlot = unmatchedExpectedSlots[expectedSlotKey]!!
             assertEquals("Slot type does not match. ", expectedSlot.type, actualSlot.type)
             assertEquals("Slot start time does not match. ", toUTC(expectedSlot.startTime), toUTC(actualSlot.startTime))
             assertEquals("Slot end time does not match. ", toUTC(expectedSlot.endTime), toUTC(actualSlot.endTime))
             assertEquals("Slot location does not match. ", expectedSlot.location, actualSlot.location)
             assertEquals("Slot clinicians do not match. ", expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
-            unmatchedExpectedSlots.remove(actualSlot.id)
+            unmatchedExpectedSlots.remove(expectedSlotKey)
         }
         assertTrue("Expected Slots missing. ", unmatchedExpectedSlots.isEmpty())
     }
@@ -700,9 +731,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         return Pair(expectedDateHeading, expectedTimeOnSlot)
     }
 
-    private fun getExpectedAppointmentTypeByIndexes(sessionIndex: Int, appointmentSlotIndex: Int): String {
-        val sessionName = sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY)[sessionIndex].sessionName
-        val appointmentSlotType = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)[appointmentSlotIndex].slotTypeName
+    private fun getExpectedAppointmentTypeByIndexes(sessionName: String, appointmentSlotType: String): String {
         return "$sessionName - $appointmentSlotType"
     }
 
@@ -770,9 +799,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         return queryDateFormat.format(dateToPass).removeSuffix("00").plus(":00")
     }
 
+    private fun timeWithoutTimezone(date: String): String? {
+        return date.split(Regex("\\+"))[0]
+    }
+
     companion object {
         private const val EXPECTED_SESSIONS_KEY = "Expected Sessions"
-        private const val EXPECTED_APPOINTMENT_SESSIONS_KEY = "Expected Appointment Sessions"
+        const val EXPECTED_APPOINTMENT_SESSIONS_KEY = "Expected Appointment Sessions"
         private const val EXPECTED_APPOINTMENT_SLOTS_KEY = "Expected Appointment Slots"
 
         private const val TODAY_KEY = "Today"

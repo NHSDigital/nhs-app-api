@@ -83,8 +83,8 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
                     patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
                 }
 
-                var startDate = OffsetDateTime.now()
-                var endDate = startDate.minusDays(60)
+                val startDate = OffsetDateTime.now()
+                val endDate = startDate.minusDays(60)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())

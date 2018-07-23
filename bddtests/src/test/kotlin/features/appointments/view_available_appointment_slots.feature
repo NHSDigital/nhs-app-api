@@ -3,6 +3,7 @@ Feature: View available appointment slots
   Users can view available appointments from the available appointments Page.
 
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user who is signed in sees the appointments navigation button highlighted
     Given there are available appointment slots with different criteria for EMIS
     And I am logged in
@@ -94,8 +95,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user selects a second appointment slot and the first selected slot gets deselected.
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     And I filter to reveal multiple slots
@@ -106,8 +108,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user select the same appointment twice and the selected appointment stay selected.
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     And I filter to reveal multiple slots
@@ -117,8 +120,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting an appointment type or location
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting an appointment type or location
@@ -126,8 +130,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting an appointment type
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting an appointment type
@@ -135,8 +140,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting a location
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting a location
@@ -144,8 +150,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting an appointment
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     When I try to progress without selecting an appointment
@@ -153,8 +160,9 @@ Feature: View available appointment slots
 
   @NHSO-71
   @appointment
+    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
-    Given there are available appointment slots with different criteria for any GP System
+    Given there are available appointment slots with different criteria for EMIS
     And I am logged in
     And I am on the available appointments page
     When I decide I don't want to select an appointment and go back
@@ -165,6 +173,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user sees appropriate information message when there is a timeout
     Given GP system doesn't respond a timely fashion for available appointment slots
+    And I am logged in
     When I try to progress to the available appointments page
     Then I see appropriate information message for time-outs
     And there should be a button to try again
@@ -174,6 +183,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user tries again after a timeout and it times-out again
     Given GP system doesn't respond a timely fashion for available appointment slots
+    And I am logged in
     And I try to progress to the available appointments page
     When I click try again button on appointment page
     Then I see appropriate information message for time-outs
@@ -184,6 +194,7 @@ Feature: View available appointment slots
   @appointment
   Scenario: A user tries again after a timeout and it is now successful
     Given GP system doesn't respond a timely fashion for available appointment slots
+    And I am logged in
     And I try to progress to the available appointments page
     When GP system responds a timely fashion for available appointment slots
     And I click try again button on appointment page
@@ -192,9 +203,9 @@ Feature: View available appointment slots
   @NHSO-616
   @NHSO-870
   @appointment
-  @pending  @NHSO-71
   Scenario: A user sees appropriate information message when GP system is unavailable
     Given GP system is unavailable for available appointment slots
+    And I am logged in
     When I try to progress to the available appointments page
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
@@ -202,9 +213,9 @@ Feature: View available appointment slots
   @NHSO-616
   @NHSO-870
   @appointment
-  @pending  @NHSO-71
   Scenario: A user sees appropriate information message when GP system returns corrupt data
     Given GP system returns corrupt data for appointment slots
+    And I am logged in
     When I try to progress to the available appointments page
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again

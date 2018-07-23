@@ -2,10 +2,6 @@ Feature: View prescriptions error cases
 
   A user can view information about their prescriptions after logging in
 
-  #Background:
-  #  Given wiremock is initialised
-  #  And I am logged in
-
   @NHSO-498
   @prescription
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out

@@ -72,11 +72,12 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
-    @When("^the API retrieves upcoming appointments from \"([^\"]*)\"$")
+    @When("^the API retrieves upcoming appointments from ([^\"]*)$")
     fun the_API_retrieves_upcoming_appointments_from(provider: String) {
-        myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()
+        when (provider) { "EMIS" ->
+            myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()
+        }
     }
-
 
     @Then("^I will only receive upcoming appointments$")
     fun i_will_only_receive_upcoming_appointments() {

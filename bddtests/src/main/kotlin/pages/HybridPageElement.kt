@@ -41,28 +41,25 @@ class HybridPageElement (
     }
 
     private fun locatorStrategy(): String {
-        val strategy: String
 
-        if (page.isAndroid()) {
+        return if (page.isAndroid()) {
             if (androidLocator != null) {
-                strategy = LOCATOR_STRATEGY_ANDROID
+                LOCATOR_STRATEGY_ANDROID
             } else {
-                strategy = LOCATOR_STRATEGY_WEBVIEW
+                LOCATOR_STRATEGY_WEBVIEW
             }
         } else if (page.isIOS()) {
-                throw UnsupportedDriverException("iOS Driver not yet supported")
+            throw UnsupportedDriverException("iOS Driver not yet supported")
         } else {
-            strategy = LOCATOR_STRATEGY_BROWSER
+            LOCATOR_STRATEGY_BROWSER
         }
-
-        return strategy
     }
 
     val elements: List<WebElementFacade> get() {
-        if (page.onMobile()) {
-            return page.findAllByXpath(androidLocator!!)
+        return if (page.onMobile()) {
+            page.findAllByXpath(androidLocator!!)
         } else {
-            return page.findAllByXpath(browserLocator)
+            page.findAllByXpath(browserLocator)
         }
     }
 

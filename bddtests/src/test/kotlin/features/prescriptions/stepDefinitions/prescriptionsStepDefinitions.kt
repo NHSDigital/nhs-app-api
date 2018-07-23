@@ -15,7 +15,6 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.defaults.MockDefaults.Companion.patient
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.ListRepeatMedicationReply
@@ -34,6 +33,7 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import java.util.*
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import mocking.defaults.MockDefaults.Companion.patient
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
@@ -123,10 +123,10 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @When("I get the users prescriptions with a valid cookie")
     fun whenIGetTheUsersPrescriptionsWithAValidCookie() {
-        var formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
+        val formattedFromDate = Serenity.sessionVariableCalled<OffsetDateTime?>(FROM_DATE)
 
         try {
-            var sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+            val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
             PrescriptionsListResponse = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
@@ -141,7 +141,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         when(currentProvider) {
             ProviderTypes.EMIS -> {
                 Assert.assertEquals(count, PrescriptionsListResponse.prescriptions.count())
-                var prescriptions = PrescriptionsListResponse.prescriptions
+                val prescriptions = PrescriptionsListResponse.prescriptions
 
                 // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
                 for (int in 0 until prescriptions.count() - 2) {
@@ -373,12 +373,12 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Then("I see the appropriate error message for a prescription timeout")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
 
-        var pageTitle = prescriptionsPage.timeoutPageTitle
-        var pageHeader = prescriptionsPage.timeoutPageHeader
-        var header = prescriptionsPage.timeoutHeader
-        var subHeader = prescriptionsPage.timeoutSubHeader
-        var message = prescriptionsPage.timeoutMessage
-        var retryButtonText = prescriptionsPage.timeoutRetryButtonText
+        val pageTitle = prescriptionsPage.timeoutPageTitle
+        val pageHeader = prescriptionsPage.timeoutPageHeader
+        val header = prescriptionsPage.timeoutHeader
+        val subHeader = prescriptionsPage.timeoutSubHeader
+        val message = prescriptionsPage.timeoutMessage
+        val retryButtonText = prescriptionsPage.timeoutRetryButtonText
 
         prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
     }
@@ -386,12 +386,12 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Then("I see the appropriate error message for a prescription server error")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionServerError() {
 
-        var pageTitle = prescriptionsPage.serverErrorPageTitle
-        var pageHeader = prescriptionsPage.serverErrorPageHeader
-        var header = prescriptionsPage.serverErrorHeader
-        var subHeader = prescriptionsPage.serverErrorSubHeader
-        var message = prescriptionsPage.serverErrorMessage
-        var retryButtonText = prescriptionsPage.serverErrorretryButtonText
+        val pageTitle = prescriptionsPage.serverErrorPageTitle
+        val pageHeader = prescriptionsPage.serverErrorPageHeader
+        val header = prescriptionsPage.serverErrorHeader
+        val subHeader = prescriptionsPage.serverErrorSubHeader
+        val message = prescriptionsPage.serverErrorMessage
+        val retryButtonText = prescriptionsPage.serverErrorretryButtonText
 
         prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
     }
@@ -399,12 +399,12 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Then("I see the appropriate error message for a course request error")
     fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
 
-        var pageTitle = confirmRepeatPrescriptionsOrderPage.serverErrorPageTitle
-        var pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
-        var header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
-        var subHeader = confirmRepeatPrescriptionsOrderPage.serverErrorSubHeader
-        var message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
-        var retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
+        val pageTitle = confirmRepeatPrescriptionsOrderPage.serverErrorPageTitle
+        val pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
+        val header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
+        val subHeader = confirmRepeatPrescriptionsOrderPage.serverErrorSubHeader
+        val message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
+        val retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
 
         prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
     }
@@ -503,7 +503,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 return TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply)
             }
         }
-        return ArrayList<HistoricPrescription>()
+        return ArrayList()
     }
 
     private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime ) { //}, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
@@ -544,7 +544,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @And("^courses have status$")
     fun givenCoursesHaveStatus(statuses: DataTable) {
 
-        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
 
         var statusIndex = 0
         val data = statuses.raw()

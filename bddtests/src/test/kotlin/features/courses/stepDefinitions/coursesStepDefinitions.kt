@@ -97,7 +97,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         val result = Serenity.sessionVariableCalled<CoursesResponse>(CoursesResponse::class)
         Assert.assertNotNull("No courses in session", result)
 
-        var actualNumberOfRepeatPrescriptions = result.courses.count()
+        val actualNumberOfRepeatPrescriptions = result.courses.count()
 
         Assert.assertEquals(
                 "Unexpected number of repeat prescriptions. Expected: "
@@ -221,7 +221,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
             }
             ProviderTypes.TPP -> {
                 coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
-                         showDosage, showQuantity)
+                        showDosage, showQuantity)
 
                 mockingClient.forTpp {
                     listRepeatMedication(currentPatient)
@@ -231,10 +231,12 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    private fun initalize(gpSystem:String) {
-        currentProvider = ProviderTypes.valueOf(gpSystem)
+    private fun initalize(gpSystem: String) {
+        if (currentProvider == null) {
+            currentProvider = ProviderTypes.valueOf(gpSystem)
+        }
 
-        when(currentProvider) {
+        when (currentProvider) {
             ProviderTypes.EMIS -> {
                 coursesLoader = EmisCoursesLoader
                 currentPatient = EMIS_PATIENT

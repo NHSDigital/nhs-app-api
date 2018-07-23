@@ -268,7 +268,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     private fun isAnyXpathVisible(xpath: String): Boolean {
 
-        var allElements = findAllByXpath(xpath)
+        val allElements = findAllByXpath(xpath)
 
         var anyVisible = false
 
