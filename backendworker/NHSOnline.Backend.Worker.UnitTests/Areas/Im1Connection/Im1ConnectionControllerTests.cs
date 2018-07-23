@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
 
         [TestMethod]
-        public async Task Post_UnknownOdsCode_ReturnsNotFound()
+        public async Task Post_UnknownOdsCode_ReturnsNotImplemented()
         {
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
@@ -152,9 +152,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
-            var result = await _im1ConnectionController.Post(request);
+            var result = await _im1ConnectionController.Post(request) as StatusCodeResult;
 
-            result.Should().BeAssignableTo<NotFoundResult>();
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
         }
 
         private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null,

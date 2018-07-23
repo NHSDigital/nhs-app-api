@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -73,7 +74,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             {
                 _logger.LogDebug(
                     $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
-                return NotFound();
+                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
             }
 
             var gpSystem = gpSystemOption.ValueOrFailure();
