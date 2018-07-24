@@ -261,5 +261,29 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
             Assert.AreEqual(ExpectedNumberOfPrescriptions, capturedItemToMap.Count);
         }
+        
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenErrorReceivedNoAccessFromTpp()
+        {
+            var expectedError = _fixture.Create<Error>();
+
+            // Tpp forbidden error code 
+            expectedError.ErrorCode = TppApiErrorCodes.NoAccess;
+            
+            // Arrange
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+                .Returns(
+                    Task.FromResult(
+                        new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>
+                            (HttpStatusCode.InternalServerError)
+                            {
+                                ErrorResponse = expectedError
+                            }));
+            // Act
+            var result = await _systemUnderTest.GetCourses(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();
+        }
     }
 }

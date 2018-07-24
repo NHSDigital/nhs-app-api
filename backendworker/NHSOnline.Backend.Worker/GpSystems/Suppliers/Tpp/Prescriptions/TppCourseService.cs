@@ -55,14 +55,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
+                                                               
+                return GetCorrectErrorResult(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving repeat prescriptions");
                 return new GetCoursesResult.SupplierSystemUnavailable();
             }
-
-            return new GetCoursesResult.SupplierSystemUnavailable();
         }
 
         private List<Medication> GetMaxRequestablePrescriptions(List<Medication> medications)
@@ -71,6 +71,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                 && x.Type?.ToLower() == TppApiConstants.MedicationType.Repeat.ToLower())
                 .OrderBy(x => x.Drug)
                 .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
+        }
+
+        private GetCoursesResult GetCorrectErrorResult(
+            TppClient.TppApiResponse response)
+        {
+            if (response.HasForbiddenResponse)
+            {
+                _logger.LogError("The tpp prescriptions service is not enabled");
+
+                return new GetCoursesResult.SupplierNotEnabled();
+            }
+
+            _logger.LogError("Tpp system is currently unavailable");
+
+            return new GetCoursesResult.SupplierSystemUnavailable();
         }
     }
 }

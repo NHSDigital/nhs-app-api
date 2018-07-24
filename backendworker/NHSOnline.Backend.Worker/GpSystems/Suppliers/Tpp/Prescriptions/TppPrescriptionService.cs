@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
@@ -56,15 +58,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
                         return new PrescriptionResult.InternalServerError();
                     }
-                }
+                }               
+                                
+                return GetCorrectErrorResult(response);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }
-
-            return new PrescriptionResult.SupplierSystemUnavailable();
         }
 
         public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest request)
@@ -93,7 +95,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                     return new PrescriptionResult.SuccessfulPost();
                 }
 
-                return new PrescriptionResult.SupplierSystemUnavailable();
+                return GetCorrectErrorResult(response);
             }
             catch (HttpRequestException e)
             {
@@ -105,6 +107,60 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
         private List<Medication> GetMaxPrescriptions(List<Medication> medications)
         {
             return medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
+        }
+        
+        private PrescriptionResult GetCorrectErrorResult(
+            TppClient.TppApiResponse response)
+        {
+
+            if (response.HasForbiddenResponse)
+            {
+                _logger.LogError("The tpp prescriptions service is not enabled");
+                
+                return new PrescriptionResult.SupplierNotEnabled();
+            }
+
+            if (PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(response))
+            {
+                _logger.LogError("The tpp prescription has already been ordered or is not available");
+                
+                return new PrescriptionResult.CannotReorderPrescription();
+            }
+            
+            if (InvalidCourseId(response) || RequestNoteTooLarge(response) || MustViewMedications(response) )
+            {
+                _logger.LogError($"The tpp prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponse.TechnicalMessage)}");
+
+                return new PrescriptionResult.BadRequest();
+            }     
+            
+            _logger.LogError("Tpp system is currently unavailable");
+
+            return new PrescriptionResult.SupplierSystemUnavailable();
+        }
+        
+        private bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppClient.TppApiResponse response)
+        {
+            return response.HasErrorMessageContaining(
+                TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable);
+        }
+        
+        private bool InvalidCourseId(TppClient.TppApiResponse response)
+        {
+            return response.HasErrorMessageContaining(
+                TppApiErrorMessages.Prescriptions_InvalidCourseIds);
+        }
+        
+        private bool RequestNoteTooLarge(TppClient.TppApiResponse response)
+        {
+            return response.HasErrorMessageContaining(
+                TppApiErrorMessages.Prescriptions_RequestNoteTooLarge);
+        }
+        
+        private bool MustViewMedications(TppClient.TppApiResponse response)
+        {
+            return response.HasErrorMessageContaining(
+                TppApiErrorMessages.Prescriptions_MustViewMedicationsListFirst);
         }
     }
 }

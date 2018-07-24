@@ -272,6 +272,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             
             // User does not have access, Sean to confirm with TPP re using error codes
             public bool HasForbiddenResponse => ErrorResponse != null && ErrorResponse.ErrorCode == TppApiErrorCodes.NoAccess;
+            
+            public bool HasErrorMessageContaining(string message)
+            {
+                return ErrorResponse?.UserFriendlyMessage.Contains(message) ?? false;
+            }
         }
 
         public class TppApiObjectResponse<TBody> : TppApiResponse

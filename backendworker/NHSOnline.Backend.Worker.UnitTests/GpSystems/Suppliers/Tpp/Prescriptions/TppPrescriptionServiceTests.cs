@@ -157,7 +157,133 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
             _tppClient.Verify();
         }
+        
+        [TestMethod]
+        public async Task Get_ReturnsForbidden_WhenErrorReceivedNoAccessFromTpp()
+        {
+            var expectedError = _fixture.Create<Error>();
 
+            // Tpp forbidden error code 
+            expectedError.ErrorCode = TppApiErrorCodes.NoAccess;
+            
+            // Arrange
+            _tppClient.Setup(x => x.ListRepeatMedicationPost(_userSession))
+                .Returns(
+                    Task.FromResult(
+                        new TppClient.TppApiObjectResponse<ListRepeatMedicationReply>
+                            (HttpStatusCode.InternalServerError)
+                            {
+                                ErrorResponse = expectedError
+                            }));
+            // Act
+            var result = await _systemUnderTest.GetPrescriptions(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
+        }
+
+        #endregion
+        
+        #region Post Prescriptions
+        
+         [TestMethod]
+        public async Task Post_ReturnsConflict_WhenAlreadyOrdered_IsUnavailable_ErrorReceivedFromTpp()
+        {
+            // Arrange
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            var error = _fixture.Create<Error>();
+            error.UserFriendlyMessage = TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable;
+
+            _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = error,
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
+            result.Should().BeAssignableTo<PrescriptionResult.CannotReorderPrescription>();
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsForbidden_WhenNoAccess_ErrorReceivedFromTpp()
+        {
+            // Arrange
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            var error = _fixture.Create<Error>();
+            error.ErrorCode = TppApiErrorCodes.NoAccess;
+
+            _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = error,
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierNotEnabled>();
+        }
+
+        [DataTestMethod]
+        [DataRow("Prescriptions_RequestNoteTooLarge", "Tpp request note too large")]
+        [DataRow("Prescriptions_InvalidCourseIds", "Invalid tpp course id or ids")]
+        [DataRow("Prescriptions_MustViewMedicationsListFirst", "Tpp must view medications before requesting")]
+        public async Task Post_ReturnsBadRequest_WhenErrorReceivedFromTpp(string errorKey, string scenario)
+        {
+            // Arrange
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            var error = _fixture.Create<Error>();
+            error.UserFriendlyMessage = TppApiErrorMessages.ResourceManager.GetString(errorKey);
+
+            _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = error,
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
+            result.Should().BeAssignableTo<PrescriptionResult.BadRequest>();
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsBadGateway_WhenGeneralErrorReceivedFromTpp()
+        {
+            // Arrange
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            var error = _fixture.Create<Error>();
+            error.UserFriendlyMessage = "General error";
+
+            _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
+                .Returns(Task.FromResult(
+                    new TppClient.TppApiObjectResponse<RequestMedicationReply>(HttpStatusCode.OK)
+                    {
+                        ErrorResponse = error,
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+        }
         #endregion
 
         [TestMethod]
