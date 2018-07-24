@@ -6,14 +6,17 @@
           {{ $t('myRecord.myRecordWarning.warningText') }}
         </p>
       </error-warning-dialog>
-
+      
       <div class="info">
         <h4>{{ $t('myRecord.myRecordWarning.title') }}</h4>
         <ul>
           <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp1') }}</li>
           <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp2') }}</li>
-          <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp3') }}</li>
-          <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp4') }}</li>
+        </ul>
+        <h4>{{ $t('myRecord.myRecordWarning.extraTitle') }}</h4>
+        <ul>
+          <li>{{ $t('myRecord.myRecordWarning.extraBulletPoints.bp1') }}</li>
+          <li>{{ $t('myRecord.myRecordWarning.extraBulletPoints.bp2') }}</li>
         </ul>
         <br>
         <p>
@@ -73,4 +76,6 @@ export default {
   .info .h4 {
     color: $nhs_blue;
   }
+
 </style>
+

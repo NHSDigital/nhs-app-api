@@ -223,7 +223,7 @@ export default {
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'There\'s a problem',
       noReasonError: 'Enter a reason for this appointment',
-      conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
+      conflictErrorMessage: 'Sorry, it seems that this slot was already taken. Please try to book another slot.',
       errors: {
         pageHeader: 'Error sending request',
         header: 'Sorry, there\'s been a problem sending your request',
@@ -310,8 +310,8 @@ export default {
   },
   myRecord: {
     genericErrorMessage: 'An error has occurred trying to retrieve this data.',
-    genericNoDataMessage: 'No information recorded for this section',
-    genericNoAccessMessage: 'You do not have access to this section',
+    genericNoDataMessage: 'No information recorded',
+    genericNoAccessMessage: 'You don\'t currently have access to this section',
     name: 'Name',
     dateOfBirthday: 'Date of Birthday',
     sex: 'Sex',
@@ -320,15 +320,19 @@ export default {
     gpPractice: 'GP Practice',
     patient: 'Patient',
     myRecordWarning: {
-      warningText: 'Your record may contain sensitive information.',
-      title: 'Sensitive information may include:',
+      importantText: 'Important',
+      warningText: 'Your record may contain sensitive information',
+      title: 'Your record will display:',
       bulletPoints: {
-        bp1: 'Personal data, such as your details, allergies and care preferences',
-        bp2: 'Medical history, such as your conditions and medications',
-        bp3: 'Test results that you may not have discussed with your doctor',
-        bp4: 'Clinical terms that you may not be familiar with',
+        bp1: 'personal data, such as your details, allergies and medications',
+        bp2: 'clinical terms that you may not be familiar with',
       },
-      agreementText: 'By clicking continue, you agree to viewing sensitive information within your medical record.',
+      extraTitle: 'Depending on what your GP surgery has shared, you may also see:',
+      extraBulletPoints: {
+        bp1: 'your medical history, including problems and consultation notes',
+        bp2: 'test results that you may not have discussed with your doctor',
+      },
+      agreementText: 'By continuing, you agree to viewing sensitive information within your medical record.',
       agreeButtonText: 'Agree and continue',
       backButtonText: 'Back to home',
     },
@@ -349,13 +353,13 @@ export default {
       sectionHeader: 'Allergies and adverse reactions',
     },
     acuteMedications: {
-      sectionHeader: 'Acute medications',
+      sectionHeader: 'Acute (short-term) medications',
     },
     currentRepeatMedications: {
-      sectionHeader: 'Current repeat medications',
+      sectionHeader: 'Repeat medications: current',
     },
     discontinuedRepeatMedications: {
-      sectionHeader: 'Discontinued repeat medications',
+      sectionHeader: 'Repeat medications: discontinued',
     },
     immunisations: {
       sectionHeader: 'Immunisations',
@@ -370,11 +374,7 @@ export default {
       sectionHeader: 'Consultations',
     },
     events: {
-      sectionHeader: 'Events',
-    },
-    testResultDetail: {
-      backButton: 'Back',
-      testResultTitle: 'Test result',
+      sectionHeader: 'Consultations',
     },
   },
   common: {
@@ -473,3 +473,4 @@ export default {
     },
   },
 };
+
