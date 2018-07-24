@@ -2,13 +2,14 @@ import actions from '../../../src/store/modules/auth/actions';
 
 describe('actions', () => {
   const sessionTimeout = 1200;
+  const token = 'sdfdhgmbnrdstgjxjcbv';
   let commit;
   let state;
 
   beforeEach(() => {
     actions.app = {
       $http: {
-        postV1Session: jest.fn(() => Promise.resolve({ sessionTimeout })),
+        postV1Session: jest.fn(() => Promise.resolve({ sessionTimeout, token })),
         deleteV1Session: jest.fn(() => Promise.resolve()),
       },
       router: [],
@@ -30,6 +31,11 @@ describe('actions', () => {
       .then(() => {
         expect(actions.dispatch).toHaveBeenCalledWith('session/setDurationSeconds', sessionTimeout);
       }));
+    it('will set the csrfToken from the received token in the response.', () => actions
+      .handleAuthResponse({ commit, state }, { code: '200' })
+      .then(() => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/setCsrfToken', token);
+      }));
   });
 
   describe('logout', () => {
@@ -44,6 +50,11 @@ describe('actions', () => {
       .then(() => {
         expect(actions.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
       }));
+    it('will clear the csrf token by dispatching the session/setCsrfToken event', () => actions
+      .logout({ commit })
+      .then(() => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/setCsrfToken', '');
+      }));
   });
 
   describe('logoutWhenExpired', () => {
@@ -53,6 +64,12 @@ describe('actions', () => {
 
       expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
       expect(actions.dispatch).toHaveBeenCalledWith('auth/logout');
+    });
+    it('will clear the csrf token by dispatching the session/setCsrfToken event', () => {
+      actions
+        .logoutWhenExpired();
+
+      expect(actions.dispatch).toHaveBeenCalledWith('session/setCsrfToken', '');
     });
   });
 });

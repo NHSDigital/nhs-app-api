@@ -6,6 +6,7 @@ import {
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
+  SET_CSRF_TOKEN,
 } from './mutation-types';
 
 export default {
@@ -19,6 +20,8 @@ export default {
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   updateLastCalledAt:
     ({ commit }, lastCalledAt) => commit(SET_LAST_CALLED_AT, lastCalledAt || new Date()),
+  setCsrfToken:
+    ({ commit }, token) => commit(SET_CSRF_TOKEN, token),
   startValidationChecking: ({
     commit, dispatch, state, rootState,
   }) => {

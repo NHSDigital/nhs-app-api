@@ -4,8 +4,10 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.MyAppointmentsSteps
+import org.junit.Assert
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import worker.NhsoHttpException
 
 class MyAppointmentsStepDefinitions {
 
@@ -77,6 +79,18 @@ class MyAppointmentsStepDefinitions {
     @When("^the API retrieves upcoming appointments$")
     fun the_API_retrieves_upcoming_appointments() {
         myAppointmentsSteps.createSerenityMyAppointmentSessionVariable()
+    }
+
+    @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
+    fun the_API_call_failes_with_csrf_token_of(provider: String, csrfToken: String)
+    {
+        myAppointmentsSteps.setCsrfToken(csrfToken);
+        try
+        {
+            myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()
+            Assert.fail("The API did not fail with invalid token.")
+        }
+        catch (exception: NhsoHttpException){}
     }
 
     @Then("^I will only receive upcoming appointments$")

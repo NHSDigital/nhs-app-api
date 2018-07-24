@@ -3,7 +3,9 @@ package worker
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonParser
 import config.Config
+import groovy.json.internal.JsonStringDecoder
 import net.serenitybdd.rest.SerenityRest
 
 import org.apache.http.HttpResponse
@@ -45,11 +47,17 @@ class WorkerClient {
     private val gsonBuilder: GsonBuilder = GsonBuilder()
     private var gson: Gson
     private val config = Config.instance
+    private var csrfToken=""
 
     init {
         _client = HttpClients.createDefault()
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
         gson = gsonBuilder.create()
+    }
+
+    fun setCsrfToken(token:String)
+    {
+        csrfToken = token;
     }
 
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
@@ -76,6 +84,10 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpPost.releaseConnection()
         println(result)
+
+        // Extract csrfToken
+        var parsedResponse = JsonParser().parse(result);
+        csrfToken = parsedResponse.asJsonObject.get("token").asString;
 
         val userSessionResponseBody = gson.fromJson<UserSessionResponse.UserSessionResponseBody>(result,
                 UserSessionResponse.UserSessionResponseBody::class.java)
@@ -234,7 +246,14 @@ class WorkerClient {
         return uriBuilder
     }
 
-    private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse {
+    private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse
+    {
+        // If we have a token, use it
+        if(this.csrfToken.isNotEmpty())
+        {
+            request.addHeader("X-CSRF-TOKEN", csrfToken);
+        }
+
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)
 
         if (response.statusLine.statusCode != SC_OK && response.statusLine.statusCode != SC_CREATED && response.statusLine.statusCode != SC_NO_CONTENT) {

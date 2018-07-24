@@ -5,7 +5,9 @@
         public string Name { get; set; }
         
         public int SessionTimeout { get; set; }
-        
+
         public string OdsCode { get; set; }
+
+        public string Token { get; set; }
     }
 }

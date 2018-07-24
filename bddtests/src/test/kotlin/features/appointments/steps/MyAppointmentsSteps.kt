@@ -119,13 +119,30 @@ open class MyAppointmentsSteps {
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
         try {
-            val result = Serenity
-                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getMyAppointments(fromDate)
-            Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
+        val result = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .getMyAppointments(fromDate)
+        Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
-        }
+    }
+    }
+
+    @Step
+    fun createSerenityEmisMyAppointmentSessionVariable() {
+        val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+        val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
+        val result = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .getMyAppointments(fromDate)
+        Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
+    }
+
+    @Step
+    fun setCsrfToken(crsfToken : String) {
+        val result = Serenity
+                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                .setCsrfToken(crsfToken)
     }
 
     @Step

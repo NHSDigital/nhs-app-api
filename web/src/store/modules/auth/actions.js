@@ -18,6 +18,7 @@ export default {
       .then((response) => {
         this.dispatch('session/setDurationSeconds', response.sessionTimeout);
         this.dispatch('session/hideExpiryMessage');
+        this.dispatch('session/setCsrfToken', response.token);
         commit(AUTH_RESPONSE, response);
         this.dispatch('session/startValidationChecking');
         this.app.router.push({
@@ -27,10 +28,12 @@ export default {
   },
   logoutWhenExpired() {
     this.dispatch('session/showExpiryMessage');
+    this.dispatch('session/setCsrfToken', '');
     this.dispatch('auth/logout');
   },
   logout({ commit }) {
     this.dispatch('session/clear');
+    this.dispatch('session/setCsrfToken', '');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
 

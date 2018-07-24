@@ -6,6 +6,7 @@ import {
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
+  SET_CSRF_TOKEN,
 } from './mutation-types';
 
 export default {
@@ -30,5 +31,8 @@ export default {
   },
   [START_VALIDATION_CHECKING](state, validationInterval) {
     state.validationInterval = validationInterval;
+  },
+  [SET_CSRF_TOKEN](state, token) {
+    state.token = token;
   },
 };

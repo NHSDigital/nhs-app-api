@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private Mock<IAuthenticationService> _authenticationServiceMock;
         private Mock<IOptions<ConfigurationSettings>> _configurationSettings;
+        private Mock<IAntiforgery> _mockAntiforgery;
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
@@ -44,6 +46,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private int _sessionTimeoutMinutes;
         private int _sessionTimeoutSeconds;
         private SessionCreateResult _sessionCreateResult;
+        private const string CsrfRequestToken = "dskhfakserhhvjcgbfdsh";
 
         [TestInitialize]
         public void TestInitialize()
@@ -119,6 +122,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var serviceProviderMock = new Mock<IServiceProvider>();
             var httpContextMock = new Mock<HttpContext>();
             var responseMock = new Mock<HttpResponse>();
+
+
+            _mockAntiforgery = _fixture.Freeze<Mock<IAntiforgery>>();
+            _mockAntiforgery.Setup(x => x.GetTokens(httpContextMock.Object)).Returns(new AntiforgeryTokenSet(CsrfRequestToken, "", "", ""));
 
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAuthenticationService)))
@@ -249,6 +256,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
             actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
+            actualUserSessionResponse.Token.Should().Be(CsrfRequestToken);
             actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
         }
 
@@ -268,6 +276,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockOdsCodeLookup.VerifyAll();
             _mockSessionService.VerifyAll();
             _authenticationServiceMock.VerifyAll();
+            _mockAntiforgery.VerifyAll();
         }
     }
 }

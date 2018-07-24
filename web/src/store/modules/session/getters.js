@@ -10,4 +10,7 @@ export default {
       return now < expiryTime;
     };
   },
+  csrfToken(state) {
+    return () => state.token;
+  },
 };

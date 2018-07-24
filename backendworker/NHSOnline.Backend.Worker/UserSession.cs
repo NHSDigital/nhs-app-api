@@ -10,5 +10,7 @@ namespace NHSOnline.Backend.Worker
         public string NhsNumber { get; set; }
 
         public abstract SupplierEnum Supplier { get; }
+
+        public string CsrfToken { get; set; }
     }
 }
