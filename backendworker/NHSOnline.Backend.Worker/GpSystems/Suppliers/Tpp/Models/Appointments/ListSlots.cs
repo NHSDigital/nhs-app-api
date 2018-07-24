@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 {
+    [Serializable]
     public class ListSlots : AbstractTppRequestModel
     {
         [XmlAttribute("patientId")]

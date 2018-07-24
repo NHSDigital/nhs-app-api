@@ -6,9 +6,10 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 {
+    [Serializable]
     public class ViewAppointments : AbstractTppRequestModel
     {
-        public ViewAppointments() { }
+        private ViewAppointments() { }
 
         public ViewAppointments(TppUserSession tppUserSession)
         {

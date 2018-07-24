@@ -7,6 +7,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
     [Serializable]
     public class CancelAppointment : AbstractTppRequestModel
     {
+        private CancelAppointment()
+        {
+        }
+
         public CancelAppointment(TppUserSession userSession, AppointmentCancelRequest request)
         {
             PatientId = userSession.PatientId;

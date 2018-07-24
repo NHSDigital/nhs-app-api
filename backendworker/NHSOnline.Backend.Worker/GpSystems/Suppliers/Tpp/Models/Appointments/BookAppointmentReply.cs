@@ -1,7 +1,9 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 {
+    [Serializable]
     public class BookAppointmentReply
     {
         [XmlAttribute("patientId")]

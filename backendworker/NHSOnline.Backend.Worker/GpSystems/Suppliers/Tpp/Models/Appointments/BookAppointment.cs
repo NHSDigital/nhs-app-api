@@ -5,9 +5,13 @@ using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 {
+    [Serializable]
     public class BookAppointment : AbstractTppRequestModel
     {
-        public BookAppointment() { }
+        private BookAppointment()
+        {
+        }
+
         public BookAppointment(TppUserSession userSession, AppointmentBookRequest request, IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             PatientId = userSession.PatientId;
