@@ -4,8 +4,10 @@ import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.activities.MainActivity
 import com.nhs.online.nhsonline.services.KnownServices
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.View
 
-class ValidateSessionLifeCycleObserver(
+
+class LifeCycleObserver(
     private var context: MainActivity,
     private var appWebInterface: AppWebInterface,
     private var knownServices: KnownServices
@@ -20,5 +22,14 @@ class ValidateSessionLifeCycleObserver(
                 appWebInterface.validateSession()
             }
         }
+    }
+
+    fun onMoveToBackground() {
+        showBlankScreen()
+    }
+
+    private fun showBlankScreen() {
+        context.viewSwitcher.visibility = View.GONE
+        context.blankScreen.visibility = View.VISIBLE
     }
 }

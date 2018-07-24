@@ -3,12 +3,12 @@ package com.nhs.online.nhsonline.activities
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
 import android.view.View.*
+import android.view.WindowManager
 import android.webkit.CookieManager
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
@@ -17,7 +17,7 @@ import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.services.KnownServices
-import com.nhs.online.nhsonline.support.ValidateSessionLifeCycleObserver
+import com.nhs.online.nhsonline.support.LifeCycleObserver
 import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.LOCATION_REQUEST_CODE
@@ -32,18 +32,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private lateinit var chromeClient: ChromeClientLocationHandler
     private lateinit var knownServices: KnownServices
-    private val apiVersion: Int = android.os.Build.VERSION.SDK_INT
-    private var sessionValidator: ValidateSessionLifeCycleObserver? = null
+    private var lifeCycleObserver: LifeCycleObserver? = null
     private var reloadUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (apiVersion >= Build.VERSION_CODES.LOLLIPOP) {
-            CookieManager.getInstance().removeAllCookies(null)
-        } else {
-            CookieManager.getInstance().removeAllCookie()
-        }
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        CookieManager.getInstance().removeAllCookies(null)
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.header))
@@ -60,7 +56,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         if (urlPath == authRedirectPath) {
             loadPage(intent.data.toString())
-
         } else {
             loadWelcomePage()
         }
@@ -68,13 +63,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (sessionValidator == null) {
-            sessionValidator =
-                    ValidateSessionLifeCycleObserver(this,
-                        AppWebInterface(this), knownServices)
+        if (lifeCycleObserver == null) {
+            lifeCycleObserver = LifeCycleObserver(this,
+                        AppWebInterface(this),
+                        knownServices)
         }
 
-        sessionValidator?.onMoveToForeground()
+        lifeCycleObserver?.onMoveToForeground()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        lifeCycleObserver?.onMoveToBackground()
     }
 
     override fun onNewIntent(intent: Intent?) {

@@ -20,9 +20,18 @@
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
+            android:id="@+id/blankScreen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone">
+        <include layout="@layout/activity_blank_screen" />
+    </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/viewSwitcher"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/menuBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
