@@ -320,7 +320,6 @@ export default {
     gpPractice: 'GP Practice',
     patient: 'Patient',
     myRecordWarning: {
-      importantText: 'Important',
       warningText: 'Your record may contain sensitive information',
       title: 'Your record will display:',
       bulletPoints: {
@@ -337,7 +336,7 @@ export default {
       backButtonText: 'Back to home',
     },
     noRecordAccess: {
-      warningHeader: 'Sorry, you don\'t currently have access to this service',
+      warningHeader: 'You don\’t currently have online access to your medical record',
       warningBody: 'Please contact your GP surgery for more information.',
     },
     patientInfo: {
@@ -348,7 +347,7 @@ export default {
       fieldLabelNHS: 'NHS number',
       sectionHeader: 'My details',
     },
-    viewRestOfHealthRecordWarning: 'You cannot view the rest of your health record online. To see more, ask your GP practice for access to your ‘Detailed Coded Record’.',
+    viewRestOfHealthRecordWarning: 'This is summary of your medical record. To view more detailed information here, such as test results and immunisations, contact your GP surgery to request access.',
     allergiesAndAdverseReactions: {
       sectionHeader: 'Allergies and adverse reactions',
     },
