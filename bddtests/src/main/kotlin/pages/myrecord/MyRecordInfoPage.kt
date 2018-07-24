@@ -71,37 +71,37 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val acuteMedicationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Acute medications')]",
+            browserLocator = "//h5[contains(text(),'Acute (short-term) medications')]",
             androidLocator = null,
             page = this)
 
     val acuteMedications = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Acute medications')]/following-sibling::div[1]",
+            browserLocator = "//h5[contains(text(),'Acute (short-term) medications')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val currentRepeatMedicationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Current repeat medications')]",
+            browserLocator = "//h5[contains(text(),'Repeat medications: current')]",
             androidLocator = null,
             page = this)
 
     val txtcurrentRepeatMedications = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Current repeat medications')]/following-sibling::div[1]",
+            browserLocator = "//h5[contains(text(),'Repeat medications: current')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val discontinuedRepeatMedicationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Discontinued repeat medications')]",
+            browserLocator = "//h5[contains(text(),'Repeat medications: discontinued')]",
             androidLocator = null,
             page = this)
 
     val txtdiscontinuedRepeatMedications = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Discontinued repeat medications')]/following-sibling::div[1]",
+            browserLocator = "//h5[contains(text(),'Repeat medications: discontinued')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
@@ -155,13 +155,13 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val eventsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Events')]",
+            browserLocator = "//h5[contains(text(),'C')]",
             androidLocator = null,
             page = this)
 
     val events = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Events')]/following-sibling::div[1]",
+            browserLocator = "//h5[contains(text(),'Consultations')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
