@@ -1,7 +1,7 @@
 Feature: View My Account Page
 
   Background:
-    Given wiremock is initialised
+    Given a patient from EMIS is defined
 
   @NHSO-1004
   Scenario: A patient can navigate to My account page after visiting a secure page

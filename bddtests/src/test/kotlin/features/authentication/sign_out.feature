@@ -4,7 +4,7 @@ Feature: Sign out of mobile web
   I want to be able to sign out from my NHS account so personal data cannot be seen
 
   Background:
-    Given wiremock is initialised
+    Given a patient from EMIS is defined
 
   @NHSO-186
   @smoketest

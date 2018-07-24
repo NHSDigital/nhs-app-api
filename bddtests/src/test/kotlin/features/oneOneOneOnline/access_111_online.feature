@@ -3,7 +3,7 @@ Feature: Access 111 Online
   A user can navigate to the 111 service either before or after logging in.
 
   Background:
-    Given wiremock is initialised
+    Given EMIS is initialised
 
   @smoketest
   Scenario: The user is not logged in

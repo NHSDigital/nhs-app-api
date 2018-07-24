@@ -24,6 +24,8 @@ import worker.WorkerClient
 import worker.models.courses.CoursesResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
+import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
@@ -111,7 +113,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have historic prescriptions$")
     fun iHaveHistoricPrescriptions() {
-        setupWiremockandCreateData()
+        configureWireMockForHistoricPrescriptions()
     }
 
     @When("I click 'Order a repeat prescription'")
@@ -200,6 +202,19 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
         return coursesLoader.getAvailableCoursesFilteredSortedOrdered()
+    }
+
+    private fun configureWireMockForHistoricPrescriptions(){
+        if (currentProvider == null)
+        {
+            initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
+        }
+
+        when (currentProvider) {
+            ProviderTypes.EMIS -> {
+                PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+            }
+        }
     }
 
     @Suppress("UNCHECKED_CAST")

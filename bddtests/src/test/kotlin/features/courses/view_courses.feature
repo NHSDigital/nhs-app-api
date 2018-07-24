@@ -1,4 +1,5 @@
 @courses
+  @target
 Feature: View courses
 
   In order to view courses associated with a user
@@ -7,7 +8,7 @@ Feature: View courses
 
   @smoketest
   Scenario Outline: The <GP System> User has repeatable prescriptions
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -23,7 +24,7 @@ Feature: View courses
 
   @prescription
   Scenario Outline: The <GP System> User has 0 repeatable prescriptions
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -39,7 +40,7 @@ Feature: View courses
 
   @prescription
   Scenario Outline: The <GP System> user has 1 repeatable prescription
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -56,7 +57,7 @@ Feature: View courses
 
   @prescription
   Scenario Outline: The user <GP System> should only see max 100 repeatable prescriptions
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -72,7 +73,7 @@ Feature: View courses
 
   @prescription
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -88,7 +89,7 @@ Feature: View courses
 
   @prescription
   Scenario Outline: The <GP System> user has over 5 repeat dispense prescriptions
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -105,7 +106,7 @@ Feature: View courses
   @smoketest
   @NHSO-502
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -120,7 +121,7 @@ Feature: View courses
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -135,7 +136,7 @@ Feature: View courses
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -150,7 +151,7 @@ Feature: View courses
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -166,7 +167,7 @@ Feature: View courses
   @smoketest
   @NHSO-502 @NHSO-655
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -189,7 +190,7 @@ Feature: View courses
   @NHSO-655
   @prescription
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -204,7 +205,7 @@ Feature: View courses
   @NHSO-556
   @prescription
   Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -216,7 +217,7 @@ Feature: View courses
   @NHSO-556
   @prescription
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -228,7 +229,7 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The user has 1 repeatable prescription with missing quantity info
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -241,7 +242,7 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The user has 1 repeatable prescription with missing dosage info
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -254,7 +255,7 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The user has 1 repeatable prescription with missing dosage and quantity info
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -267,7 +268,7 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The User has selected repeat prescriptions to order with missing quantity info
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -278,7 +279,7 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The User has selected repeat prescriptions to order with missing dosage info
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
@@ -289,7 +290,7 @@ Feature: View courses
   @NHSO-1509
   @prescription
   Scenario: The User has selected repeat prescriptions to order with missing dosage and quantity info
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions

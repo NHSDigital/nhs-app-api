@@ -6,7 +6,7 @@ Feature: View courses
 
   @backend
   Scenario Outline: Requesting courses with correct data returns a list of repeat courses that can be requested
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I have historic prescriptions
     And I have logged into <GP System> and have a valid session cookie
     And I have 10 <GP System> assigned prescriptions

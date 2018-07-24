@@ -3,7 +3,6 @@ Feature: Guidance prior to booking an appointment
 
   Users are given guidance before booking a new appointment.
 
-
   @NHSO-420
   Scenario: A user with upcoming appointments is presented with guidance
     Given I have upcoming appointments for EMIS

@@ -3,7 +3,7 @@ Feature: Invoke Organ Donation and Data Sharing
   A user can access Organ Donation and Data Sharing preferences
 
   Background:
-    Given wiremock is initialised
+    Given a patient from EMIS is defined
     And I am logged in
     And I navigate to more
 

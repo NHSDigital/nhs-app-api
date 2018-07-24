@@ -5,7 +5,7 @@ Feature: View prescriptions
   @NHSO-497
   @prescription
   Scenario Outline: A <GP System> user can see the prescriptions menu button
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I am logged in
     Then I see the prescriptions menu button
@@ -17,7 +17,7 @@ Feature: View prescriptions
 
   @prescription
   Scenario Outline: <GP System> patient selects the prescriptions menu button
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -32,7 +32,7 @@ Feature: View prescriptions
 
   @smoketest
   Scenario Outline: <GP System> patient with no past repeat prescriptions
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 0 past repeat prescriptions
     And each repeat prescription contains 0 courses of which 0 are repeats
@@ -47,7 +47,7 @@ Feature: View prescriptions
 
   @prescription
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 110 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -61,7 +61,7 @@ Feature: View prescriptions
 
   @smoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -75,7 +75,7 @@ Feature: View prescriptions
 
   @prescription
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 3 past repeat prescriptions
     And each repeat prescription shares the same course
@@ -89,7 +89,7 @@ Feature: View prescriptions
 
   @prescription
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 3 are repeats
@@ -103,7 +103,7 @@ Feature: View prescriptions
 
   @prescription
   Scenario: EMIS patient who has acute prescriptions
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I am using EMIS GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 3 courses of which 2 are repeats
@@ -114,7 +114,7 @@ Feature: View prescriptions
   @NHSO-556
   @prescription
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     Given prescriptions is disabled at a GP Practice level
     When I am on the prescriptions page
@@ -128,7 +128,7 @@ Feature: View prescriptions
   @NHSO-1509
   @prescription
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -144,7 +144,7 @@ Feature: View prescriptions
   @NHSO-1509
   @prescription
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -160,7 +160,7 @@ Feature: View prescriptions
   @NHSO-1509
   @prescription
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
-    Given <GP System> is initialised
+    Given a patient from <GP System> is defined
     And I am using <GP System> GP System
     And I have 1 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
@@ -175,7 +175,7 @@ Feature: View prescriptions
 
   @prescription
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I am using EMIS GP System
     And I have 6 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats

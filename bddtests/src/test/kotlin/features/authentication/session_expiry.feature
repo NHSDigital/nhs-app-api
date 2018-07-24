@@ -1,7 +1,7 @@
 Feature: Session Expiry
 
   Background:
-    Given wiremock is initialised
+    Given EMIS is initialised
 
   @NHSO-1704
   Scenario: On session expiry, a user on a secure screen is automatically signed out

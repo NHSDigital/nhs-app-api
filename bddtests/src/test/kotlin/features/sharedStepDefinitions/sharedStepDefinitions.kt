@@ -14,6 +14,7 @@ import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.models.AssociationType
 import mocking.tpp.models.AuthenticateReply
@@ -63,6 +64,20 @@ open class SharedStepDefinitions {
         this.patient = MockDefaults.patient
         MockDataPopulate(mockingClient).populateForJustLoggedIn()
         mockingClient.forEmis { sessionRequest(this@SharedStepDefinitions.patient).respondWithSuccess(this@SharedStepDefinitions.patient, AssociationType.Self) }
+    }
+    
+    @Given("a patient from (.*) is defined")
+    fun systemPatient(gpSystem: String)
+    {
+        mockingClient.clearWiremock()
+        mockingClient.favicon()
+        this.patient = Patient.getDefault(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
+
+        setSessionVariable(Patient::class).to(this.patient)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
     }
 
     @Given("(.*) is initialised")

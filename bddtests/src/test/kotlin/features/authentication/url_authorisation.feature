@@ -5,7 +5,7 @@ Feature: Authorisation occurs during each URL visit
   Access to the secure area is only granted to authenticated users.  This feature ensures this occurs when directly navigating using URLs too.
 
   Background:
-    Given wiremock is initialised
+    Given a patient from EMIS is defined
 
   @NHSO-906
   @NHSO-1012
