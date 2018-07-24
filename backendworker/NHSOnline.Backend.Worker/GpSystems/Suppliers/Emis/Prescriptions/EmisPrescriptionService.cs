@@ -21,26 +21,30 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
-        public EmisPrescriptionService(ILoggerFactory loggerFactory,
+        public EmisPrescriptionService(ILogger<EmisPrescriptionService> logger,
             IOptions<ConfigurationSettings> settings,
             IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
+            _logger = logger;
             _emisClient = emisClient;
             _settings = settings.Value;
             _emisPrescriptionMapper = emisPrescriptionMapper;
-            _logger = loggerFactory.CreateLogger<EmisPrescriptionService>();
         }
 
         public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
             var emisUserSession = (EmisUserSession) userSession;
-
+            
             try
             {
+                _logger.LogDebug("Beginning Fetch Prescriptions For User");
+                
                 var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, fromDate, toDate);
 
+                _logger.LogDebug("Fetch Prescriptions For User Complete");
+                
                 if (prescriptionsResponse.HasSuccessStatusCode)
                 {
                     try
@@ -62,8 +66,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e, $"Something went wrong during building the response.");
-
+                        _logger.LogError(e, $"Something went wrong building the Prescription History response");
                         return new PrescriptionResult.InternalServerError();
                     }
                 }    
@@ -72,7 +75,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             }
             catch (HttpRequestException e)
             {
-                _logger.LogError(e, "Unsuccessful request retrieving prescriptions");
+                _logger.LogError(e, $"Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
             }                                     
         }
@@ -82,7 +85,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
         {
             int totalCoursesRunningTotal = 0;
             var repeatCourses =
-                prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat);
+                prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat).ToList();
             var repeatCourseGuids = repeatCourses.Select(x => x.MedicationCourseGuid);
 
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
@@ -94,9 +97,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                     break;
                 }
 
+                var thisPrescription = prescription;
+                var requestedMedicationCourses = thisPrescription.RequestedMedicationCourses.ToList();
+                
                 var repeatCoursesInPrescription =
-                    prescription.RequestedMedicationCourses.Where(x =>
-                        repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid));
+                    requestedMedicationCourses.Where(x =>
+                        repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid)).ToList();
 
                 if (repeatCoursesInPrescription.Any())
                 {
@@ -129,11 +135,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
             try
             {
+                _logger.LogInformation("Beginning Place Prescription Request");
+                
                 var response = await _emisClient.PrescriptionsPost(
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, postRequest);
 
                 if (response.HasSuccessStatusCode)
                 {
+                    _logger.LogDebug($"Prescription order placed successfully");
                     return new PrescriptionResult.SuccessfulPost();
                 }
 

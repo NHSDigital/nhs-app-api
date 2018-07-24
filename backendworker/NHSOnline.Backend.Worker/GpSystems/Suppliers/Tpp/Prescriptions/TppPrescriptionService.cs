@@ -21,13 +21,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
         private readonly ITppClient _tppClient;
         private readonly ITppPrescriptionMapper _tppPrescriptionMapper;
 
-        public TppPrescriptionService(ILoggerFactory loggerFactory,
+        public TppPrescriptionService(
+            ILogger<TppPrescriptionService> logger,
             IOptions<ConfigurationSettings> settings,
             ITppClient tppClient, ITppPrescriptionMapper tppPrescriptionMapper)
         {
             _tppClient = tppClient;
             _settings = settings.Value;
-            _logger = loggerFactory.CreateLogger<TppPrescriptionService>();
+            _logger = logger;
             _tppPrescriptionMapper = tppPrescriptionMapper;
         }
 
@@ -38,30 +39,29 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
             try
             {
+                _logger.LogDebug("Beginning Fetch Prescriptions For User");
                 var response = await _tppClient.ListRepeatMedicationPost(tppUserSession);
+                _logger.LogDebug("Fetch Prescriptions For User Complete");
 
-                if (response.HasSuccessResponse)
+                if (!response.HasSuccessResponse) return GetCorrectErrorResult(response);
+                
+                try
                 {
-                    try
-                    {
-                        var medicationListFiltered = GetMaxPrescriptions(response.Body.Medications.ToList());
+                    var medicationListFiltered = GetMaxPrescriptions(response.Body.Medications.ToList());
 
-                        _logger.LogDebug(
-                            $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
-                        var mapppedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
+                    _logger.LogDebug(
+                        $"Mapping response from {nameof(ListRepeatMedicationReply)} to {nameof(PrescriptionListResponse)}");
+                    var mapppedPrescriptionList = _tppPrescriptionMapper.Map(medicationListFiltered);
 
-                        return new PrescriptionResult.SuccessfulGet(mapppedPrescriptionList);
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogError(
-                            $"Something went wrong during building the response. Exception message: {e.Message}");
+                    return new PrescriptionResult.SuccessfulGet(mapppedPrescriptionList);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(
+                        $"Something went wrong during building the response. Exception message: {e.Message}");
 
-                        return new PrescriptionResult.InternalServerError();
-                    }
-                }               
-                                
-                return GetCorrectErrorResult(response);
+                    return new PrescriptionResult.InternalServerError();
+                }
             }
             catch (HttpRequestException e)
             {
@@ -89,14 +89,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
             try
             {
+                _logger.LogInformation("Beginning Place Prescription Request");
                 var response = await _tppClient.OrderPrescriptionsPost(tppUserSession, postRequest);
 
-                if (response.HasSuccessResponse)
-                {
-                    return new PrescriptionResult.SuccessfulPost();
-                }
+                if (!response.HasSuccessResponse) return GetCorrectErrorResult(response);
+                
+                _logger.LogDebug($"Prescription order placed successfully");
+                return new PrescriptionResult.SuccessfulPost();
 
-                return GetCorrectErrorResult(response);
             }
             catch (HttpRequestException e)
             {
@@ -107,7 +107,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 
         private List<Medication> GetMaxPrescriptions(List<Medication> medications)
         {
-            return medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
+            if (_settings.PrescriptionsMaxCoursesSoftLimit != null)
+            {
+                medications = medications.Take(_settings.PrescriptionsMaxCoursesSoftLimit.Value).ToList();
+            }
+
+            return medications;
         }
         
         private PrescriptionResult GetCorrectErrorResult(
@@ -140,25 +145,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             return new PrescriptionResult.SupplierSystemUnavailable();
         }
         
-        private bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppClient.TppApiResponse response)
+        private static bool PrescriptionHasAlreadyBeenOrderedOrIsUnavailable(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_CourseAlreadyOrdered_IsUnavailable);
         }
         
-        private bool InvalidCourseId(TppClient.TppApiResponse response)
+        private static bool InvalidCourseId(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_InvalidCourseIds);
         }
         
-        private bool RequestNoteTooLarge(TppClient.TppApiResponse response)
+        private static bool RequestNoteTooLarge(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_RequestNoteTooLarge);
         }
         
-        private bool MustViewMedications(TppClient.TppApiResponse response)
+        private static bool MustViewMedications(TppClient.TppApiResponse response)
         {
             return response.HasErrorMessageContaining(
                 TppApiErrorMessages.Prescriptions_MustViewMedicationsListFirst);

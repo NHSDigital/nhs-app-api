@@ -20,11 +20,11 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
         public PrescriptionsController(
             IOptions<ConfigurationSettings> settings,
-            ILoggerFactory loggerFactory,
+            ILogger<PrescriptionsController> logger,
             IGpSystemFactory gpSystemFactory)
         {
             _settings = settings.Value;
-            _logger = loggerFactory.CreateLogger<PrescriptionsController>();
+            _logger = logger;
             _gpSystemFactory = gpSystemFactory;
         }
 

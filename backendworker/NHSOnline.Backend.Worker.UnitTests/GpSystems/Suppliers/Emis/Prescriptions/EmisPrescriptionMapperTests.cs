@@ -4,7 +4,9 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions;
@@ -16,11 +18,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
     {
         private IFixture _fixture;
         private IEmisPrescriptionMapper _mapper;
-
+        private ILogger<EmisPrescriptionMapper> _logger;
+        
+        
         [TestInitialize]
         public void TestInitialize()
         {
-            _mapper = new EmisPrescriptionMapper();
+            _logger = Mock.Of<ILogger<EmisPrescriptionMapper>>();
+            _mapper = new EmisPrescriptionMapper(_logger);
 
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());

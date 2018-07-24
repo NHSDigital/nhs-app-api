@@ -29,6 +29,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private ITppMyRecordMapper _tppMyRecordMapper;
         private ITppDetailedTestResultMapper _tppDetailedTestResultMapper;
         
+        private ILogger<TppCourseService> _tppCourseLogger;
+        private ILogger<TppPrescriptionService> _tppPrescriptionLogger;
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -41,6 +44,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
             _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
             _tppDetailedTestResultMapper = new Mock<ITppDetailedTestResultMapper>().Object;
+            
+            _tppCourseLogger = Mock.Of<ILogger<TppCourseService>>();
+            _tppPrescriptionLogger = Mock.Of<ILogger<TppPrescriptionService>>();
         }
 
         [TestMethod]
@@ -79,8 +85,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetCourseService_WhenCalled_ReturnsTppCourseService()
         {
-            var mapper = Mock.Of<TppCourseMapper>();
-            var service = new TppCourseService(_loggerFactory, _options, _tppClient, mapper);
+            var logger = Mock.Of<ILogger<TppCourseMapper>>();
+            var mapper = new TppCourseMapper(logger);
+            
+            var service = new TppCourseService(_tppCourseLogger, _options, _tppClient, mapper);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppCourseService)))
                 .Returns(service);
@@ -125,8 +133,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetPrescriptionService_WhenCalled_ReturnsTppPrescriptionService()
         {
-            var mapper = Mock.Of<TppPrescriptionMapper>();
-            var service = new TppPrescriptionService(_loggerFactory, _options, _tppClient, mapper);
+            
+            var logger = Mock.Of<ILogger<TppPrescriptionMapper>>();
+            var mapper = new TppPrescriptionMapper(logger);
+            
+            var service = new TppPrescriptionService(_tppPrescriptionLogger, _options, _tppClient, mapper);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppPrescriptionService)))
                 .Returns(service);

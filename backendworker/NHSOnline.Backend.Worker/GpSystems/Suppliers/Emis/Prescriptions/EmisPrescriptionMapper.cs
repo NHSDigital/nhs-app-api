@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
@@ -9,15 +10,26 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 {
     public class EmisPrescriptionMapper : IEmisPrescriptionMapper
     {
+        private readonly ILogger _logger;
+
+        public EmisPrescriptionMapper(ILogger<EmisPrescriptionMapper> logger)
+        {
+            _logger = logger;
+        }
+
         public PrescriptionListResponse Map(PrescriptionRequestsGetResponse prescriptionGetResponse)
         {
             if (prescriptionGetResponse == null)
             {
+                _logger.LogCritical("Null prescription object provided to mapper");
                 throw new ArgumentNullException(nameof(prescriptionGetResponse));
             }
 
             var allPrescriptionsGrouped = new List<PrescriptionItem>();
 
+            _logger.LogInformation($"Mapping {prescriptionGetResponse.PrescriptionRequests?.Count()} prescriptions.");
+            _logger.LogInformation($"Mapping {prescriptionGetResponse.MedicationCourses?.Count()} courses.");
+            
             foreach (var prescription in prescriptionGetResponse.PrescriptionRequests ?? Enumerable.Empty<PrescriptionRequest>())
             {
                 foreach (var course in prescription.RequestedMedicationCourses ?? Enumerable.Empty<RequestedMedicationCourse>())
@@ -52,10 +64,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 Prescriptions = allPrescriptionsGrouped,
                 Courses =
-                    (prescriptionGetResponse.MedicationCourses ?? Enumerable.Empty<MedicationCourse>()).Select(x =>
-                        MapMedicationCourseToCourse(x)),
+                    (prescriptionGetResponse.MedicationCourses ?? Enumerable.Empty<MedicationCourse>()).Select(MapMedicationCourseToCourse),
             };
 
+            _logger.LogInformation($"{result.Prescriptions.Count()} prescriptions mapped");
+            _logger.LogInformation($"{result.Courses.Count()} courses mapped");
+            
             return result;
         }
 
@@ -68,14 +82,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
             var result = new CourseListResponse
             {
-                Courses = (coursesGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(x =>
-                    MapMedicationCourseToCourse(x)),
+                Courses = (coursesGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(MapMedicationCourseToCourse),
             };
 
             return result;
         }
 
-        private Course MapMedicationCourseToCourse(MedicationCourse course)
+        private static Course MapMedicationCourseToCourse(MedicationCourse course)
         {
             string details = null;
             

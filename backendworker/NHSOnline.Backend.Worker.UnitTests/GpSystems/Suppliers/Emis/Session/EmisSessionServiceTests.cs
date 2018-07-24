@@ -31,7 +31,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         private ILogger<EmisSessionService> _logger;
 
         private DemographicsGetResponse _demographicsResponse;
-        private int _defaultSessionExpiryMinutes;
         
         [TestInitialize]
         public void TestInitialize()

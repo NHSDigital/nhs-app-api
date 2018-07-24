@@ -18,9 +18,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
         private readonly IEmisClient _emisClient;
         private readonly IEmisPrescriptionMapper _emisPrescriptionMapper;
 
-        public EmisCourseService(ILoggerFactory loggerFactory, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
+        public EmisCourseService(ILogger<EmisCourseService> logger, IOptions<ConfigurationSettings> settings, IEmisClient emisClient, IEmisPrescriptionMapper emisPrescriptionMapper)
         {
-            _logger = loggerFactory.CreateLogger<EmisCourseService>();
+            _logger = logger;
             _settings = settings.Value;
             _emisClient = emisClient;
             _emisPrescriptionMapper = emisPrescriptionMapper;
@@ -29,20 +29,33 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
         public async Task<GetCoursesResult> GetCourses(UserSession userSession)
         {
             var emisUserSession = (EmisUserSession) userSession;
-
+            
             try
             {
+                _logger.LogDebug("Beginning Fetch Courses for user");
+                
                 var coursesResponse = await _emisClient.CoursesGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, emisUserSession.EndUserSessionId);
+                
+                _logger.LogDebug("Fetch Courses for user complete");
 
                 if (coursesResponse.HasSuccessStatusCode)
                 {
                     try
                     {
-                        _logger.LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");
-                        coursesResponse.Body.Courses = coursesResponse.Body.Courses
-                        .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
-                        .OrderBy(x => x.Name)
-                        .Take(_settings.CoursesMaxCoursesLimit.Value);
+                        _logger
+                            .LogDebug("Filtering courses from successful emis response so we are left with only repeat courses which can be requested");
+
+                        coursesResponse.Body.Courses = 
+                            coursesResponse.Body.Courses
+                            .Where(x => x.PrescriptionType == PrescriptionType.Repeat && x.CanBeRequested)
+                            .OrderBy(x => x.Name);
+                        
+                        if (_settings.CoursesMaxCoursesLimit != null)
+                        {
+                            coursesResponse.Body.Courses = 
+                                coursesResponse.Body.Courses
+                                    .Take(_settings.CoursesMaxCoursesLimit.Value);
+                        }
 
                         _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
 
@@ -52,12 +65,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e, $"Something went wrong while building the response.");
+                        _logger.LogError(e, $"Something went wrong while building the response");
 
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
-
+                
+                _logger.LogEmisUnknownError(coursesResponse);
                 return GetCorrectErrorResult(coursesResponse);
             }
             catch (HttpRequestException e)

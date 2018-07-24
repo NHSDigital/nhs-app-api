@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 
@@ -8,10 +9,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 {
     public class TppPrescriptionMapper : ITppPrescriptionMapper
     {
+        private readonly ILogger _logger;
+
+        public TppPrescriptionMapper(ILogger<TppPrescriptionMapper> logger)
+        {
+            _logger = logger;
+        }
+
         public PrescriptionListResponse Map(List<Medication> medications)
         {
             if (medications == null)
             {
+                _logger.LogError("No Prescriptions provided to mapper");
                 throw new ArgumentNullException(nameof(medications));
             }
 
@@ -43,6 +52,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                     Courses = new List<Course>()
                 };
             }
+            
+            _logger.LogDebug($"Mapped {medications.Count} TPP prescriptions to {result.Courses.Count()} NHS Online prescriptions.");
 
             return result;
         }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -28,6 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         private IOptions<ConfigurationSettings> _options;
         private EmisUserSession _userSession;
         private IFixture _fixture;
+        private ILogger<EmisCourseService> _logger;        
 
         private const int CoursesMaxCoursesLimit = 100;
 
@@ -35,6 +37,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
+            _logger = Mock.Of<ILogger<EmisCourseService>>();
 
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _userSession = _fixture.Freeze<EmisUserSession>();
@@ -44,6 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 CoursesMaxCoursesLimit = CoursesMaxCoursesLimit
             });
             _fixture.Inject(_options);
+            _fixture.Inject(_logger);
             _systemUnderTest = _fixture.Create<EmisCourseService>();
         }
 
