@@ -19,13 +19,15 @@ namespace NHSOnline.Backend.Worker.CitizenId
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
 
-        public CitizenIdConfig(IConfiguration configuration)
+        public CitizenIdConfig(IConfiguration configuration, ILogger<CitizenIdConfig> logger)
         {
-            var citizenIdBaseUrl = configuration["CITIZEN_ID_BASE_URL"];
+            var citizenIdBaseUrl = configuration.GetOrWarn("CITIZEN_ID_BASE_URL", logger);
             CitizenIdApiBaseUrl = new Uri(citizenIdBaseUrl);
-            NhsWebAppBaseUrl = new Uri(configuration["NHS_WEB_APP_BASE_URL"]);
-            ClientId = configuration["CITIZEN_ID_CLIENT_ID"];
-            ClientSecret = configuration["CITIZEN_ID_CLIENT_SECRET"];
+            
+            var nhsWebAppBaseUrl = configuration.GetOrWarn("NHS_WEB_APP_BASE_URL", logger);
+            NhsWebAppBaseUrl = new Uri(nhsWebAppBaseUrl);
+            ClientId = configuration.GetOrWarn("CITIZEN_ID_CLIENT_ID", logger);
+            ClientSecret = configuration.GetOrWarn("CITIZEN_ID_CLIENT_SECRET", logger);
         }
     }
 }

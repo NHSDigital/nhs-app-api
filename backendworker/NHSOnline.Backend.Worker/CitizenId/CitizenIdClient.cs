@@ -48,26 +48,34 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
         public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier)
         {
-            _logger.LogDebug($"Starting ExchangeAuthToken, with authCode '{authCode}', codeVerifier '{ codeVerifier}' ");
-            var dict = new Dictionary<string, string>
+            try
             {
-                { "grant_type", "authorization_code" },
-                { "code", authCode },
-                { "redirect_uri", _redirectUri.ToString() },
-                { "code_verifier", codeVerifier },
-                { "client_id", _clientId },
-                { "code_challenge_method", "S256" }
-            };
-
-            var request = new HttpRequestMessage(HttpMethod.Post, TokenPath)
+                _logger.LogEnter(nameof(ExchangeAuthToken));
+                
+                var dict = new Dictionary<string, string>
+                {
+                    { "grant_type", "authorization_code" },
+                    { "code", authCode },
+                    { "redirect_uri", _redirectUri.ToString() },
+                    { "code_verifier", codeVerifier },
+                    { "client_id", _clientId },
+                    { "code_challenge_method", "S256" }
+                };
+    
+                var request = new HttpRequestMessage(HttpMethod.Post, TokenPath)
+                {
+                    Content = new FormUrlEncodedContent(dict)
+                };
+    
+                request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _basicAuthCredentials);
+    
+                var response = await SendRequestAndParseResponse<Token>(request);
+                return response;
+            }
+            finally
             {
-                Content = new FormUrlEncodedContent(dict)
-            };
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("Basic", _basicAuthCredentials);
-
-            var response = await SendRequestAndParseResponse<Token>(request);
-            return response;
+                _logger.LogExit(nameof(ExchangeAuthToken));
+            }
         }
 
         public async Task<CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string bearerToken)

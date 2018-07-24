@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
@@ -29,12 +30,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisIm1ConnectionService _systemUnderTest;
+        private ILogger<EmisIm1ConnectionService> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
+            _logger = _fixture.Freeze<ILogger<EmisIm1ConnectionService>>();
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _mockEmisClient.Setup(x => x.SessionsEndUserSessionPost()).Returns(
                 Task.FromResult(
@@ -62,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                 patientIdentifiers: patientIdentifiers
             );
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -94,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                 userPatientLinkToken: "self"
             );
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -127,7 +130,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                 userPatientLinkModels: userPatientLinkModels
             );
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -142,7 +145,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         public async Task Verify_ReturnsEmptyNhsNumbersWhenEmisReturnsEmptyPatientIdentifiers()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
             var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
             var patientIdentifiers = new PatientIdentifier[0];
 
@@ -161,7 +164,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         public async Task Verify_ReturnsEmptyNhsNumbers_WhenEmisReturnsNullPatientIdentifiers()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
             var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
             var patientIdentifiers = (PatientIdentifier[]) null;
 
@@ -179,7 +182,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         public async Task Verify_ReturnsNotFound_WhenEmisReturnsEmptyUserLinkModels()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
             var userPatientLinkModels = new UserPatientLink[0];
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
@@ -193,7 +196,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         public async Task Verify_ReturnsNotFound_WhenEmisReturnsNullUserLinkModels()
         {
             var emisClientMock = new Mock<IEmisClient>();
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
             var userPatientLinkModels = (UserPatientLink[]) null;
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
@@ -211,7 +214,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                 .Setup(x => x.SessionsEndUserSessionPost())
                 .Throws<HttpRequestException>();
 
-            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object);
+            var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 

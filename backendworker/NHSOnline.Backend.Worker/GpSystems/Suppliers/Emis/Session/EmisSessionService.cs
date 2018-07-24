@@ -4,11 +4,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 {
@@ -95,15 +95,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         {
             try
             {
+                _logger.LogEnter(nameof(Create));
+
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
-                var sessionResponse = await SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
+                var sessionResponse =
+                    await SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
 
                 var demographicsResponse = await SendDemographicsGetRequest(
                     sessionResponse.ExtractUserPatientLinkToken(),
                     sessionResponse.SessionId,
                     endUserSessionResponse.EndUserSessionId);
 
+                _logger.LogDebug("Emis session successfully created");
                 return new SessionCreateResult.SuccessfullyCreated(
                     $"{sessionResponse.FirstName} {sessionResponse.Surname}",
                     new EmisUserSession
@@ -117,11 +121,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             }
             catch (EmisSessionResponseErrorException responseError)
             {
+                _logger.LogError(responseError,
+                    "Failed request to create Emis user session,EmisSessionResponseErrorException has been thrown");
                 return responseError.ErrorResult;
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException e)
             {
+                _logger.LogError(e, "Failed request to create Emis user session,HttpRequestException has been thrown.");
                 return new SessionCreateResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Create));
             }
         }
     }

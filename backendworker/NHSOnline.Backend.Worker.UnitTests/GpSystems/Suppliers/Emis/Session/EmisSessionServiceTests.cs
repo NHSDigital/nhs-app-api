@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Session;
@@ -26,6 +27,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         private string _odsCode;
         private SessionsEndUserSessionPostResponse _endUserSessionResponse;
         private SessionsPostResponse _sessionsResponse;
+        private ILogger<EmisSessionService> _logger;
+
         private DemographicsGetResponse _demographicsResponse;
         private int _defaultSessionExpiryMinutes;
         
@@ -33,6 +36,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+            _logger = _fixture.Freeze<ILogger<EmisSessionService>>();
 
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
@@ -50,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                     }));
 
             _sessionsResponse = _fixture.Create<SessionsPostResponse>();
-
+            
             _mockEmisClient
                 .Setup(x => x.SessionsPost(_endUserSessionResponse.EndUserSessionId,
                     It.Is<SessionsPostRequest>(y =>
@@ -288,7 +293,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
         {
             // Arrange
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, new EmisDemographicsMapper(),
-                _fixture.Freeze<Microsoft.Extensions.Logging.ILogger<EmisSessionService>>());
+                _logger);
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode);
 

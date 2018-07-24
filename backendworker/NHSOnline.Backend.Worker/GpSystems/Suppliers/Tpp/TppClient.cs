@@ -7,11 +7,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -129,7 +129,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         {
             model.ApplyConfig(_tppConfig);
             var authenticateXml = model.SerializeXml();
-
             var authenticateContent = new StringContent(authenticateXml, Encoding.UTF8, TppHttpClient.MediaType);
             var request = BuildTppRequest(HttpMethod.Post, model.RequestType, authenticateContent, suid);
             
@@ -141,16 +140,26 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         private async Task<TppApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
+            _logger.LogHttpRequest(request);
             var responseMessage = await _httpClient.Client.SendAsync(request);
+            _logger.LogHttpResponse(request,responseMessage);
             var response = new TppApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
-            if (!response.HasSuccessResponse) return response;
+            if (!response.HasSuccessResponse)
+            {
+                _logger.LogError($"Tpp request failed with status code {responseMessage.StatusCode}");
+                return response;
+            }
 
             var stringResponse = responseMessage.Content != null
                 ? await responseMessage.Content.ReadAsStringAsync()
                 : null;
             
-            if (string.IsNullOrEmpty(stringResponse)) return response;
+            if (string.IsNullOrEmpty(stringResponse))
+            {
+                _logger.LogError($"Tpp responded with status code {responseMessage.StatusCode} and no body");
+                return response;
+            }
 
             try
             {

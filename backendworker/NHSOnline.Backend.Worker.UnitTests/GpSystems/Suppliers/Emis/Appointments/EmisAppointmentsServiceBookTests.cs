@@ -238,7 +238,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 Task.FromResult(
                     response
                 )
-            ).Verifiable();;    
+            ).Verifiable();    
         }
     }
 }

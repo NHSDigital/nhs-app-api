@@ -113,7 +113,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetIm1ConnectionService_WhenCalled_ReturnsTppIm1ConnectionService()
         {
-            var service = new TppIm1ConnectionService(_tppClient);
+            var service = new TppIm1ConnectionService(_tppClient, _loggerFactory.CreateLogger<TppIm1ConnectionService>());
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppIm1ConnectionService)))
                 .Returns(service);
@@ -136,7 +136,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetSessionService_WhenCalled_ReturnsTppSessionService()
         {
-            var service = new TppSessionService(_tppClient);
+            var logger = Mock.Of<ILogger<TppSessionService>>();
+            var service = new TppSessionService(_tppClient,logger);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppSessionService)))
                 .Returns(service);
@@ -147,7 +148,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetTokenValidationService_WhenCalled_ReturnsTppTokenValidationService()
         {
-            var service = new TppTokenValidationService();
+            var logger = Mock.Of<ILogger<TppTokenValidationService>>();
+            var service = new TppTokenValidationService(logger);
             _mockServiceProvider
                 .Setup(x => x.GetService(typeof(TppTokenValidationService)))
                 .Returns(service);

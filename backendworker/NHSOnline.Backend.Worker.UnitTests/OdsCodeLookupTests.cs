@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using StackExchange.Redis;
@@ -10,10 +11,18 @@ namespace NHSOnline.Backend.Worker.UnitTests
     [TestClass]
     public class OdsCodeLookupTests
     {
+        private ILogger<OdsCodeLookup> _logger;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _logger = Mock.Of<ILogger<OdsCodeLookup>>();
+        }
+
         [TestMethod]
         public void Constructor_NullConnectionMultiplexerFactory_Throws()
         {
-            Action act = () => new OdsCodeLookup(null);
+            Action act = () => new OdsCodeLookup(null, _logger);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("connectionMultiplexerFactory");
         }
@@ -25,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
         public async Task LookupSupplier_NullOrEmptyOdsCode_ReturnsOptionNone(string odsCode)
         {
             var connectionMultiplexerFactory = new Mock<IConnectionMultiplexerFactory>();
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
             var result = await sut.LookupSupplier(odsCode);
 
             result.HasValue.Should().BeFalse();
@@ -47,7 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
             var result = await sut.LookupSupplier(odsCode);
             result.HasValue.Should().BeFalse();
@@ -69,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
             var result = await sut.LookupSupplier(odsCode);
             result.HasValue.Should().BeFalse();
@@ -93,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
             var actual = await sut.LookupSupplier(odsCode);
 
             actual.HasValue.Should().BeTrue();
@@ -119,7 +128,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
             connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup))
                 .Returns(connectionMultiplexer.Object);
 
-            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object);
+            var sut = new OdsCodeLookup(connectionMultiplexerFactory.Object, _logger);
 
             var actual = await sut.LookupSupplier(odsCode);
             actual.HasValue.Should().BeTrue();

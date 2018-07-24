@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 
@@ -11,11 +13,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private string _invalidConnectionToken = "";
         private string _validConnectionToken = "";
         private ITokenValidationService _sut;
-        
+        private ILogger<TppTokenValidationService> _logger;
+
         [TestInitialize]
         public void TestInitialize()
         {
-            _sut = new TppTokenValidationService();
+            _logger = Mock.Of<ILogger<TppTokenValidationService>>();
+            _sut = new TppTokenValidationService(_logger);
         }
         
         [TestMethod]
@@ -46,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void IsValidConnectionTokenFormat_ResultIsFalse_WhenTokenIsMissingAccountId()
         {
-            _invalidConnectionToken = "{\"passphrase\":\"passphrase\"}";;
+            _invalidConnectionToken = "{\"passphrase\":\"passphrase\"}";
             _sut.IsValidConnectionTokenFormat(_invalidConnectionToken).Should().BeFalse();
         }
         

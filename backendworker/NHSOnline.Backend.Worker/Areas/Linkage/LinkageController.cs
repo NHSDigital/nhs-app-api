@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             var gpSystemOption = await GetGpSystem(odsCode);
             if (!gpSystemOption.HasValue)
             {
-                _logger.LogDebug(
+                _logger.LogError(
                     $"No GP system was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
                 return new StatusCodeResult(StatusCodes.Status501NotImplemented);
             }
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
             if (!gpSystemOption.HasValue)
             {
-                _logger.LogDebug(
+                _logger.LogError(
                     $"No GP system was found for OdsCode {createLinkageRequest.OdsCode} provided in header {Constants.Headers.OdsCode}.");
                 return new StatusCodeResult(StatusCodes.Status501NotImplemented);
             }

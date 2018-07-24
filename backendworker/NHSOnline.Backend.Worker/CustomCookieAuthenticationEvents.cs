@@ -63,6 +63,7 @@ namespace NHSOnline.Backend.Worker
 
         public override Task RedirectToLogin(RedirectContext<CookieAuthenticationOptions> context)
         {
+            _logger.LogDebug("Unauthorized request");
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             return Task.CompletedTask;
         }

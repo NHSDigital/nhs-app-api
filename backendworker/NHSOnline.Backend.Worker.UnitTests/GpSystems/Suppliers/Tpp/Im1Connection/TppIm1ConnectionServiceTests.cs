@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
@@ -23,12 +24,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
 
         private IFixture _fixture;
         private Mock<ITppClient> _mockTppClient;
+        private ILogger<TppIm1ConnectionService> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockTppClient = _fixture.Freeze<Mock<ITppClient>>();
+            _logger = Mock.Of<ILogger<TppIm1ConnectionService>>();
         }
 
         [TestMethod]
@@ -51,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         Body = authenticateReply,
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -73,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         Body = null
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -95,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         ErrorResponse = _fixture.Create<Error>()
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
@@ -112,7 +115,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
                         ErrorResponse = null
                     }));
 
-            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object);
+            var systemUnderTest = new TppIm1ConnectionService(_mockTppClient.Object, _logger);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 

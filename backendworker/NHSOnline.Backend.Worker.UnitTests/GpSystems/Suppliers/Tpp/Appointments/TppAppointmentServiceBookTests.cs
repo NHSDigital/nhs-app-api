@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -192,8 +191,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             //Arrange
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode
-                    .InternalServerError)
-            {  };
+                .InternalServerError);
 
             MockTppClientAppointmentPostMethod(response);
 
@@ -243,7 +241,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 Task.FromResult(
                     response
                 )
-            ).Verifiable(); ;
+            ).Verifiable();
         }
     }
 }

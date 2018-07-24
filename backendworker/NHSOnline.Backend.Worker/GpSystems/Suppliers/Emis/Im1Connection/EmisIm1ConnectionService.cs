@@ -1,29 +1,37 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
 {
     public class EmisIm1ConnectionService : IIm1ConnectionService
     {
         private readonly IEmisClient _emisClient;
+        private readonly ILogger<EmisIm1ConnectionService> _logger;
 
-        public EmisIm1ConnectionService(IEmisClient emisClient)
+        public EmisIm1ConnectionService(IEmisClient emisClient, ILogger<EmisIm1ConnectionService> logger)
         {
             _emisClient = emisClient;
+            _logger = logger;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
         {
             try
             {
+                _logger.LogEnter(nameof(Verify));
+
                 var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
                 if (!endUserSessionResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError(
+                        $"Emis EndUserSessionPost returned with statuscode {endUserSessionResponse.StatusCode}");
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
@@ -37,12 +45,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 var sessionsResponse = await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
                 if (!sessionsResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError($"Emis EndSessionPost returned with statuscode {sessionsResponse.StatusCode}");
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
                 var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
+                    _logger.LogError("Emis userPatientLinkToken not found");
                     return new Im1ConnectionVerifyResult.NotFound();
                 }
 
@@ -51,6 +61,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                         endUserSessionId);
                 if (!demographicsResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError(
+                        $"Emis DemographicsGet returned with status code {demographicsResponse.StatusCode}");
                     return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
                 }
 
@@ -62,11 +74,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     NhsNumbers = nhsNumbers
                 };
 
+                _logger.LogDebug("Verify successfully completed");
                 return new Im1ConnectionVerifyResult.SuccessfullyVerified(response);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException e)
             {
+                _logger.LogError(e,
+                    "Failed request to verify Emis Im1ConnectionToken,HttpRequestException has been thrown.");
                 return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Verify));
             }
         }
 
@@ -74,9 +93,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
         {
             try
             {
+                _logger.LogEnter(nameof(Register));
+
                 var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
                 if (!endUserSessionResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError(
+                        $"Emis EndUserSessionPost returned with statuscode {endUserSessionResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
@@ -106,22 +129,30 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     meApplicationsResponse.HasExceptionWithMessage(
                         EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
                 {
+                    _logger.LogError(
+                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}, account already exists");
                     return new Im1ConnectionRegisterResult.AccountAlreadyExists();
                 }
 
                 if (meApplicationsResponse.StatusCode == HttpStatusCode.InternalServerError && 
                     meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
                 {
+                    _logger.LogError(
+                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}, account not found");
                     return new Im1ConnectionRegisterResult.NotFound();
                 }
 
                 if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)
                 {
+                    _logger.LogError(
+                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.BadRequest();
                 }
 
                 if (!meApplicationsResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError(
+                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
@@ -136,12 +167,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     await _emisClient.SessionsPost(endUserSessionId, sessionPostRequestModel);
                 if (!sessionsResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError(
+                        $"Emis SessionsPost returned with statuscode {endUserSessionResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
                 var userPatientLinkToken = sessionsResponse.Body.ExtractUserPatientLinkToken();
                 if (string.IsNullOrEmpty(userPatientLinkToken))
                 {
+                    _logger.LogError(
+                        $"Emis could not extract UserPatientLinkToken");
                     return new Im1ConnectionRegisterResult.NotFound();
                 }
 
@@ -150,6 +185,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                         endUserSessionId);
                 if (!demographicsResponse.HasSuccessStatusCode)
                 {
+                    _logger.LogError(
+                        $"Emis DemographicsGet returned with statuscode {endUserSessionResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
@@ -163,9 +200,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
 
                 return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
             }
-            catch (HttpRequestException)
+            catch (HttpRequestException e)
             {
+                _logger.LogError(e, "Failed request to register Emis Im1ConnectionToken,HttpRequestException has been thrown.");
                 return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Register));   
             }
         }
     }

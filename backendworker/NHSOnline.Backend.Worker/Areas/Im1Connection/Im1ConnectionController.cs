@@ -9,6 +9,7 @@ using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 {
@@ -37,51 +38,69 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode
         )
         {
-            if (!ArgumentsAreValid(connectionToken, odsCode))
+            try
             {
-                return BadRequest();
+                _logger.LogEnter(nameof(Get));
+    
+                if (!ArgumentsAreValid(connectionToken, odsCode))
+                {
+                    return BadRequest();
+                }
+    
+                var gpSystemOption = await GetGpSystem(odsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
+    
+                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                }
+    
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                var tokenValidationService = gpSystem.GetTokenValidationService();
+                if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
+                {
+                    _logger.LogError(
+                        $"ConnectionToken provided in header {Constants.Headers.ConnectionToken} is invalid.");
+                    return BadRequest();
+                }
+    
+                var im1ConnectionService = gpSystem.GetIm1ConnectionService();
+                var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
+    
+                _logger.LogDebug("Get Im1Connection completed");
+                return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
             }
-
-            var gpSystemOption = await GetGpSystem(odsCode);
-            if (!gpSystemOption.HasValue)
+            finally
             {
-                _logger.LogDebug(
-                    $"No GP system was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
-
-                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                _logger.LogExit(nameof(Get));
             }
-
-            var gpSystem = gpSystemOption.ValueOrFailure();
-            var tokenValidationService = gpSystem.GetTokenValidationService();
-            if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
-            {
-                _logger.LogError(
-                    $"ConnectionToken {connectionToken} provided in header {Constants.Headers.ConnectionToken} is not a Guid.");
-                return BadRequest();
-            }
-
-            var im1ConnectionService = gpSystem.GetIm1ConnectionService();
-            var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
-
-            return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
         }
 
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
-            var gpSystemOption = await GetGpSystem(model.OdsCode);
-            if (!gpSystemOption.HasValue)
+            try
             {
-                _logger.LogDebug(
-                    $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
-                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                _logger.LogEnter(nameof(Post));
+                var gpSystemOption = await GetGpSystem(model.OdsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
+                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                }
+
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                var im1ConnectionService = gpSystem.GetIm1ConnectionService();
+                var registerResult = await im1ConnectionService.Register(model);
+
+                return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
             }
-
-            var gpSystem = gpSystemOption.ValueOrFailure();
-            var im1ConnectionService = gpSystem.GetIm1ConnectionService();
-            var registerResult = await im1ConnectionService.Register(model);
-
-            return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
+            finally
+            {
+                _logger.LogExit(nameof(Post));
+            }
         }
 
         private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)
