@@ -242,11 +242,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var expectedUserSessionResponse = new UserSessionResponse
             {
                 Name = _name,
-                SessionTimeout = _sessionTimeoutSeconds
+                SessionTimeout = _sessionTimeoutSeconds,
+                OdsCode = _userProfile.OdsCode
             };
 
             actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
             actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
+            actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
         }
 
         [TestMethod]

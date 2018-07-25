@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     
                 _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
                 
-                return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited));
+                return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode));
             }
             finally
             {
@@ -147,12 +147,13 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             }
         }
 
-        private CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited)
+        private CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited, string odsCode)
         {
             var responseBody = new UserSessionResponse
             {
                 Name = sessionCreatedResultVisited.Name,
-                SessionTimeout = sessionCreatedResultVisited.SessionTimeout
+                SessionTimeout = sessionCreatedResultVisited.SessionTimeout,
+                OdsCode = odsCode,
             };
 
             return new CreatedResult(string.Empty, responseBody);
