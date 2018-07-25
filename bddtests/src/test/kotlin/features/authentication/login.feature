@@ -16,6 +16,7 @@ Feature: Login
 
   @NHSO-125
   @smoketest
+  @tech-debt @NHSO-1937
   Scenario Outline: <GPSS> User sees the home page
     Given I am logged in as a <GPSS> user
     Then I see a welcome message

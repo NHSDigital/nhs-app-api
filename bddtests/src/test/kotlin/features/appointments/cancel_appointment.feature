@@ -38,6 +38,7 @@ Feature: Ability to cancel an appointment
 
   @NHSO-1026
   @appointment
+  @tech-debt @NHSO-1937
   Scenario Outline: User cancels appointment with selected reason
     Given I am on the EMIS appointment cancellation screen
     And the Emis is available to cancel an appointment for <Reason>
@@ -52,6 +53,7 @@ Feature: Ability to cancel an appointment
 
   @NHSO-1026
   @appointment
+  @tech-debt @NHSO-1937
   Scenario: A validation message will be displayed if no reason is provided
     Given I am on the EMIS appointment cancellation screen
     When I select "Cancel appointment" button
