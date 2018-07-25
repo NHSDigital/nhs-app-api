@@ -18,28 +18,29 @@
       </p>
     </error-warning-dialog>
 
-    <error-warning-dialog v-show="showValidationError"
-                          error-or-warning="error" error-warning-id="validationErrors">
-      <p> {{ $t('appointments.booking.validationErrors.problemFound') }} </p>
-      <p v-if="!validationError.isTypeValid">
-        - {{ $t('appointments.booking.validationErrors.type') }}
-      </p>
-      <p v-if="!validationError.isLocationValid">
-        - {{ $t('appointments.booking.validationErrors.location') }}
-      </p>
-      <p>- {{ $t('appointments.booking.validationErrors.slot') }}</p>
-    </error-warning-dialog>
+    <div ref = "errors" tabindex="-1">
+      <error-warning-dialog v-show="showValidationError"
+                            error-or-warning="error" error-warning-id="validationErrors">
+        <p> {{ $t('appointments.booking.validationErrors.problemFound') }} </p>
+        <p v-if="!validationError.isTypeValid">
+          - {{ $t('appointments.booking.validationErrors.type') }}
+        </p>
+        <p v-if="!validationError.isLocationValid">
+          - {{ $t('appointments.booking.validationErrors.location') }}
+        </p>
+        <p>- {{ $t('appointments.booking.validationErrors.slot') }}</p>
+      </error-warning-dialog>
+    </div>
 
     <filters
       v-if="availableAppointments"
       v-model="selectedOptions"
-      :a-labelled-by="aLabelledBy"
       :options="filtersOptions"
       :selected-options="defaultSelectedOptions"
       :validation-error="validationError"
     />
 
-    <slot-list :available-slots="availableSlots" :a-labelled-by="aLabelledBy"/>
+    <slot-list :available-slots="availableSlots"/>
 
     <button
       v-if="availableAppointments"
@@ -78,7 +79,6 @@ export default {
         isLocationValid: true,
       },
       filters: null,
-      aLabelledBy: undefined,
     };
   },
   computed: {
@@ -134,16 +134,8 @@ export default {
     onConfirmButtonClicked() {
       this.validate();
 
-      this.aLabelledBy = this.showValidationError ? 'validationErrors' : undefined;
-
       if (this.showValidationError) {
-        if (!this.validationError.isTypeValid) {
-          document.getElementById('type').focus();
-        } else if (!this.validationError.isLocationValid) {
-          document.getElementById('location').focus();
-        } else {
-          document.getElementById('slotList').focus();
-        }
+        this.$refs.errors.focus();
       } else {
         this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS);
       }
@@ -209,6 +201,10 @@ export default {
       font-size: 1em;
       margin-bottom: 1em;
     }
+  }
+
+  div:focus {
+    outline: none !important;
   }
 
   .mainShowingSlots {

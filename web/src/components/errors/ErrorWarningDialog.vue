@@ -1,7 +1,7 @@
 <template>
   <div>
-    <error-warning-icon :icon-type="errorOrWarning"/>
-    <div :class="[msgClass, errorOrWarning]" :id="errorWarningId">
+    <error-warning-icon :icon-type="errorOrWarning" aria-hidden="true"/>
+    <div :class="[msgClass, errorOrWarning]" :id="errorWarningId" >
       <slot/>
     </div>
   </div>

@@ -1,6 +1,5 @@
 <template>
   <form :class="$style.appointmentTime">
-    <div id="slotList" aria-labelledby="aLabelledBy" tabindex="-1" aria-hidden="true"/>
     <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
       <h5>{{ formatDate(daySlots[0]) }}</h5>
       <ul :class="$style.selector">
@@ -25,10 +24,6 @@ export default {
     availableSlots: {
       type: Array,
       default: () => [],
-    },
-    aLabelledBy: {
-      type: String,
-      default: undefined,
     },
   },
   methods: {

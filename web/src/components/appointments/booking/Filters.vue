@@ -7,7 +7,7 @@
       </span>
     </error-message>
     <select-dropdown v-model="type" :error-border="!validationError.isTypeValid"
-                     :a-labelled-by="aLabelledBy" select-id = "type" select-name="type">
+                     select-id = "type" select-name="type">
       <option v-for="option in options.types" :key="option.value" :value="option.value"
               :selected="type === option.value" :disabled="option.value===''">
         {{ displayName(option) }}
@@ -21,7 +21,7 @@
       </span>
     </error-message>
     <select-dropdown v-model="location" :error-border="!validationError.isLocationValid"
-                     :a-labelled-by="aLabelledBy" select-id = "location" select-name="location">
+                     select-id = "location" select-name="location">
       <option v-for="option in options.locations" :key="option.value" :value="option.value"
               :selected="location === option.value" :disabled="option.value===''">
         {{ displayName(option) }}
@@ -83,10 +83,6 @@ export default {
         isTypeValid: true,
         isLocationValid: true,
       }),
-    },
-    aLabelledBy: {
-      type: String,
-      default: undefined,
     },
   },
   computed: {
