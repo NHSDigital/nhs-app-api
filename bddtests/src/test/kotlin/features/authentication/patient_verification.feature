@@ -13,7 +13,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+   #   | VISION    |
 
   @NHSO-125
   @backend
@@ -25,7 +25,7 @@ Feature: Patient Verification
     Examples:
       | GP System |
       | EMIS      |
-      | VISION    |
+   #   | VISION    |
 
   @NHSO-125
   @backend
@@ -37,7 +37,7 @@ Feature: Patient Verification
     Examples:
       | GP System |
       | EMIS      |
-      | VISION    |
+   #   | VISION    |
 
   @NHSO-125
   @backend
@@ -69,7 +69,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+   #   | VISION    |
 
   @NHSO-125
   @backend
@@ -82,7 +82,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+   #   | VISION    |
 
   @NHSO-125
   @backend
@@ -95,7 +95,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+   #   | VISION    |
 
   @NHSO-125
   @backend
@@ -108,7 +108,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+  #    | VISION    |
 
   @NHSO-125
   @backend
@@ -121,7 +121,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+  #    | VISION    |
 
   @NHSO-125
   @backend
@@ -133,7 +133,7 @@ Feature: Patient Verification
     Examples:
       | GP System |
       | EMIS      |
-      | VISION    |
+  #    | VISION    |
 
   @NHSO-125
   @backend

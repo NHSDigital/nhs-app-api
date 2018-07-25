@@ -21,9 +21,10 @@ open class LinkageStepDefinitions {
     lateinit var currentGPSystem: String
     lateinit var odsCode: String
     lateinit var nhsNumber: String
-    lateinit var accountId: String
+    private var accountId = "542343"
+
     private var gpSystemHttpStatusResponseCode: Int = HttpStatus.SC_OK
-    private var linkageKey: String = Patient.johnSmith.linkageKey
+    private var linkageKey = "tTALtBP3rLR16"
     private var linkageResponse: LinkageResponse? = null
 
     val mockingClient = MockingClient.instance
@@ -55,7 +56,7 @@ open class LinkageStepDefinitions {
     fun ihaveAnValidNhsNumber() {
         when (currentGPSystem) {
             EMIS -> {
-                nhsNumber = Patient.johnSmith.nhsNumbers.get(0)
+                nhsNumber = "3434234345"
             }
         }
     }
@@ -68,7 +69,7 @@ open class LinkageStepDefinitions {
     @And("^I have a not found NhsNumber$")
     fun iHaveANotFoundNhsNumber() {
         gpSystemHttpStatusResponseCode = HttpStatus.SC_NOT_FOUND
-        nhsNumber = "rtete345343"
+        nhsNumber = "4447770001"
     }
 
     @And("My linkage key has been revoked")
@@ -80,8 +81,6 @@ open class LinkageStepDefinitions {
     fun iCallTheLinkageGETEndpoint() {
         when (currentGPSystem) {
             EMIS -> {
-                linkageKey = Patient.johnSmith.linkageKey
-                accountId = Patient.johnSmith.accountId
                 when (gpSystemHttpStatusResponseCode) {
                     HttpStatus.SC_NOT_FOUND -> {
                         mockingClient.forEmis {
@@ -94,6 +93,7 @@ open class LinkageStepDefinitions {
                         }
                     }
                     HttpStatus.SC_FORBIDDEN -> {
+                        nhsNumber = "6423432552"
                         mockingClient.forEmis {
                             linkageKeyGetRequest(nhsNumber, odsCode).respondWithForbiddenException()
                         }
@@ -113,8 +113,6 @@ open class LinkageStepDefinitions {
     fun iCallTheLinkagePOSTEndpoint() {
         when (currentGPSystem) {
             EMIS -> {
-                linkageKey = Patient.johnSmith.linkageKey
-                accountId = Patient.johnSmith.accountId
                 when (gpSystemHttpStatusResponseCode) {
                     HttpStatus.SC_NOT_FOUND -> {
                         mockingClient.forEmis {
@@ -123,12 +121,16 @@ open class LinkageStepDefinitions {
                         }
                     }
                     HttpStatus.SC_OK -> {
+                        nhsNumber = "3336669990"
+                        linkageKey = "vVGO567gV6fvPb"
+                        accountId = "675234"
                         mockingClient.forEmis {
                             linkageKeyPOSTRequest(CreateLinkageRequest(odsCode, nhsNumber))
                                     .respondWithSuccess(GetLinkageResponse(odsCode, linkageKey, accountId))
                         }
                     }
                     HttpStatus.SC_CONFLICT -> {
+                        nhsNumber = "5558881112"
                         mockingClient.forEmis {
                             linkageKeyPOSTRequest(CreateLinkageRequest(odsCode, nhsNumber))
                                     .respondWithConflictException()

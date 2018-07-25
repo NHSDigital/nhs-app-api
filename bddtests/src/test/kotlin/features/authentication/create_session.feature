@@ -81,7 +81,7 @@ Feature: Session Registration
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+ #     | VISION    |
 
   @NHSO-63
   @NHSO-992
@@ -94,7 +94,7 @@ Feature: Session Registration
     Examples:
       | GP System |
       | EMIS      |
-      | VISION    |
+ #     | VISION    |
 
   @NHSO-63
   @backend
@@ -115,7 +115,7 @@ Feature: Session Registration
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+  #    | VISION    |
 
   @NHSO-63
   @manual @NHSO-449
@@ -130,4 +130,4 @@ Feature: Session Registration
       | GP System |
       | EMIS      |
       | TPP       |
-      | VISION    |
+ #     | VISION    |

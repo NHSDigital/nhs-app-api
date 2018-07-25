@@ -5,54 +5,77 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage
 {
     public class CreateLinkageData
     {
-        public static readonly Linkage ValidPatient = new Linkage()
+        public static Linkage ValidPatient
         {
-            NhsNumber = "3336669990",
-            LinkageResponse = new LinkageResponse
-            {
-                OdsCode = "A29928",
-                AccountId = "675234",
-                LinkageKey = "vVGO567gV6fvPb"
+            get {
+                return new Linkage() {
+                    NhsNumber = "3336669990",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928",
+                        AccountId = "675234",
+                        LinkageKey = "vVGO567gV6fvPb"
+                    }  
+                };
             }
-        };
-
-        public static readonly Linkage NotFoundPatient = new Linkage()
-        {
-            NhsNumber = "4447770001",
-            LinkageResponse = new LinkageResponse()
-            {
-                OdsCode = "A29928"
-            }
-        };
+        }
         
-        public static readonly Linkage ConflictPatient = new Linkage()
+        public static Linkage NotFoundPatient
         {
-            NhsNumber = "5558881112",
-            LinkageResponse =
-            {
-                OdsCode = "A29928"
+            get {
+                return new Linkage {
+                    NhsNumber = "4447770001",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928"
+                    }
+                };
             }
-        };
+        }
         
-        public static readonly Linkage BadGatewayPatient = new Linkage()
+        public static Linkage ConflictPatient 
         {
-            NhsNumber = "5634234345",
-            LinkageResponse =
-            {
-                OdsCode = "A29928"
+            get {
+                return new Linkage
+                {
+                    NhsNumber = "5558881112",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928"
+                    }
+                };
             }
-        };
+        }
         
-        public static readonly Linkage TimeoutPatient = new Linkage()
+        public static Linkage BadGatewayPatient 
         {
-            NhsNumber = "5634200045",
-            LinkageResponse =
-            {
-                OdsCode = "A29928",
-                AccountId = "542343",
-                LinkageKey = "tTALtBP3rLR16"
+            get {
+                return new Linkage
+                {
+                    NhsNumber = "5634234345",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928"
+                    }
+                };
             }
-        };
+        }
+        
+        public static Linkage TimeoutPatient 
+        {
+            get {
+                return new Linkage
+                {
+                    NhsNumber = "5634200045",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928",
+                        AccountId = "542343",
+                        LinkageKey = "tTALtBP3rLR16"
+                    }
+                };
+            }
+        }
     }
 
     public class GetLinkageData
