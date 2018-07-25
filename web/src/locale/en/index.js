@@ -336,7 +336,7 @@ export default {
       backButtonText: 'Back to home',
     },
     noRecordAccess: {
-      warningHeader: 'You don\’t currently have online access to your medical record',
+      warningHeader: 'You don’t currently have online access to your medical record',
       warningBody: 'Please contact your GP surgery for more information.',
     },
     patientInfo: {

@@ -6,7 +6,6 @@
           {{ $t('myRecord.myRecordWarning.warningText') }}
         </p>
       </error-warning-dialog>
-      
       <div class="info">
         <h4>{{ $t('myRecord.myRecordWarning.title') }}</h4>
         <ul>
