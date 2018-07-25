@@ -1,14 +1,18 @@
-export default function ({ route }) {
+export default function ({ store, route }) {
   if (process.client) {
     window.digitalData = {};
     window.digitalData = (() => {
       const routePath = route.fullPath;
       const clrpath = routePath.split('?');
       const fldrelmnt = clrpath[0].split('/');
+
       const pageUrl = window.location.hostname + clrpath[0];
       const { environment } = window;
       const referringUrl = document.referrer;
-      let primaryCategory = 'home';
+      const { domain } = document;
+      const urlParams = window.location.href;
+
+      const { userAgent } = navigator;
 
       function getCategory(index) {
         if (fldrelmnt[index] && fldrelmnt[index] !== ' ') {
@@ -16,7 +20,8 @@ export default function ({ route }) {
         }
         return '';
       }
-      primaryCategory = getCategory(1) || primaryCategory;
+
+      const primaryCategory = getCategory(1) || 'home';
       const subCategory1 = getCategory(2) || '';
       const subCategory2 = getCategory(3) || '';
       let pageName = 'bw:en';
@@ -26,22 +31,31 @@ export default function ({ route }) {
           pageName = `${pageName}:${pageNamePart}`;
         }
       }
+      if (pageName === 'bw:en') {
+        pageName = `${pageName}:home`;
+      }
 
-      return {
+      const dataObject = {
         page: {
           pageInfo: {
             pageName,
             destinationURL: pageUrl,
             pageInstanceID: environment,
             referringURL: referringUrl,
+            environment: domain,
+            urlParams,
           },
           category: {
             primaryCategory,
             subCategory1,
             subCategory2,
           },
+          userAgent,
         },
+        errors: store.state.errors.apiErrors,
       };
+
+      return dataObject;
     })();
   }
 }
