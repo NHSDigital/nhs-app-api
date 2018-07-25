@@ -27,8 +27,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private EmisUserSession _userSession;
         private Mock<IAuditor> _mockAuditor;
 
-        private const string RequestAuditType = "Appointments_ViewPast_Request";
-        private const string ResponseAuditType = "Appointments_ViewPast_Response";
+        private const string RequestAuditType = "Appointments_ViewBooked_Request";
+        private const string ResponseAuditType = "Appointments_ViewBooked_Response";
 
         [TestInitialize]
         public void TestInitialize()

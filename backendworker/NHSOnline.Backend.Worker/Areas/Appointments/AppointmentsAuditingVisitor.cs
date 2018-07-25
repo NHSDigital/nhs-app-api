@@ -16,35 +16,35 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
         public object Visit(AppointmentsResult.SuccessfullyRetrieved result)
         {
-            _auditor.Audit(AuditType, "Past appointments successfully viewed");
+            _auditor.Audit(AuditType, "Booked appointments successfully viewed");
 
             return null;
         }
 
         public object Visit(AppointmentsResult.BadRequest result)
         {
-            _auditor.Audit(AuditType, "Past appointments view unsuccessful due to bad request");
+            _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to bad request");
 
             return null;
         }
 
         public object Visit(AppointmentsResult.SupplierSystemUnavailable result)
         {
-            _auditor.Audit(AuditType, "Past appointments view unsuccessful due to supplier being unavailable");
+            _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to supplier being unavailable");
 
             return null;
         }
 
         public object Visit(AppointmentsResult.InternalServerError result)
         {
-            _auditor.Audit(AuditType, "Past appointments view unsuccessful due to internal server error");
+            _auditor.Audit(AuditType, "Booked appointments view unsuccessful due to internal server error");
 
             return null;
         }
 
         public object Visit(AppointmentsResult.CannotViewAppointments result)
         {
-            _auditor.Audit(AuditType, "Past appointments view unsuccessful");
+            _auditor.Audit(AuditType, "Booked appointments view unsuccessful");
 
             return null;
         }

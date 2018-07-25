@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             [FromQuery] bool includePastAppointments,
             [FromQuery] DateTimeOffset? pastAppointmentsFromDate = null)
         {
-            _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view past appointments");
+            _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
 
             var userSession = HttpContext.GetUserSession();
 
