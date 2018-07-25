@@ -5,7 +5,7 @@ export default {
     }
 
     const error = state.apiErrors[0];
-    const errorsStatusCollection = [409, 403, 460];
+    const errorsStatusCollection = [409, 403, 460, 400];
 
     const isServerErrorStatus = error.status >= 500;
     const isExpectedStatus = errorsStatusCollection.indexOf(error.status) !== -1;

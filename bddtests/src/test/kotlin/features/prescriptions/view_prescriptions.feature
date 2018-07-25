@@ -110,16 +110,20 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see 2 prescriptions
 
-
-
+  @NHSO-858
   @NHSO-556
   @prescription
-  Scenario: The User clicks on the Prescriptions button and the service is disabled at a GP Practice level
-    Given EMIS is initialised
-    And I am using EMIS GP System
+  Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
+    Given <GP System> is initialised
+    And I am using <GP System> GP System
     Given prescriptions is disabled at a GP Practice level
     When I am on the prescriptions page
     Then I see a message informing me that I don't currently have access to this service
+
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
 
   @NHSO-1509
   @prescription
@@ -176,12 +180,12 @@ Feature: View prescriptions
     And I have 6 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
     And courses have status
-      | Issued |
-      | Requested |
+      | Issued              |
+      | Requested           |
       | ForwardedForSigning |
-      | Rejected |
-      | Unknown |
-      | Cancelled |
+      | Rejected            |
+      | Unknown             |
+      | Cancelled           |
     When I am on the prescriptions page
     Then I see 4 prescriptions
 

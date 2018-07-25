@@ -1,6 +1,18 @@
 const PATH = '/appointments/booking';
 
 export default {
+  400: [
+    PATH,
+    {
+      pageHeader: 'Error retrieving data',
+      header: 'Sorry, there\'s been a problem loading this page',
+      subheader: '',
+      message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+      hasRetryButton: false,
+      retryButtonText: '',
+      redirectUrl: '',
+    },
+  ],
   403: [
     PATH,
     {

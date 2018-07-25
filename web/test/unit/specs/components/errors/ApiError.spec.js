@@ -54,6 +54,15 @@ const assert = (expectedData) => {
 };
 
 describe('ApiError.vue', () => {
+  each(testData[400]).it('page %s will show correct message when API returns a 400 bad request response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 400 }, message: 'Bad Request' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
   each(testData[403]).it('page %s will show correct message when patient does not have the necessary permissions within the GP system.', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 403 }, message: 'Forbidden' };

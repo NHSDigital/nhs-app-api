@@ -1,6 +1,18 @@
 const PATH = '/prescriptions/repeat-courses';
 
 export default {
+  400: [
+    PATH,
+    {
+      pageHeader: 'Error retrieving data',
+      header: 'Sorry, there\'s been a problem getting your prescription information',
+      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: '',
+      hasRetryButton: false,
+      retryButtonText: '',
+      redirectUrl: '',
+    },
+  ],
   403: [
     PATH,
     {

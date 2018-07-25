@@ -6,7 +6,7 @@ import PrescriptionsConfirmDetails from './testData/prescriptions/confirm-prescr
 import Prescriptions from './testData/prescriptions/index';
 import PrescriptionsRepeatCourses from './testData/prescriptions/repeat-courses';
 
-const status = [403, 409, 500, 502, 504];
+const status = [403, 409, 500, 502, 504, 400];
 const testData = {};
 
 for (let i = 0, max = status.length; i < max; i += 1) {

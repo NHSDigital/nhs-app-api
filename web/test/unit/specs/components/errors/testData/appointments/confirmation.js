@@ -4,6 +4,18 @@ import Routes from '@/routes';
 const PATH = '/appointments/confirmation';
 
 export default {
+  400: [
+    PATH,
+    {
+      pageHeader: 'Error sending request',
+      header: 'Sorry, there\'s been a problem sending your request',
+      subheader: 'Please go back and try again.',
+      message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
+      hasRetryButton: true,
+      retryButtonText: 'Back to my appointments',
+      redirectUrl: Routes.APPOINTMENTS.path,
+    },
+  ],
   403: [
     PATH,
     {

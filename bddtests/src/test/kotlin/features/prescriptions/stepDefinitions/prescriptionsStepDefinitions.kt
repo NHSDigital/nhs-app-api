@@ -33,6 +33,7 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import java.util.*
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import mocking.tpp.models.Error
 import mocking.defaults.MockDefaults.Companion.patient
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
@@ -52,14 +53,13 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     var fromDate: String? = null
 
 
-
     lateinit var prescriptionLoader: IPrescriptionLoader<*>
 
 
     lateinit var PrescriptionsListResponse: PrescriptionsListResponse
 
     lateinit var prescriptionsPage: PrescriptionsPage
-    lateinit var confirmRepeatPrescriptionsOrderPage : ConfirmRepeatPrescriptionsOrderPage
+    lateinit var confirmRepeatPrescriptionsOrderPage: ConfirmRepeatPrescriptionsOrderPage
     lateinit var errorPage: ErrorPage
 
     @Steps
@@ -99,7 +99,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         setupWiremockAndData(EXPECTED_DEFAULT_FROM_DATE,
                 numOfCourses * numberOfPrescriptions,
-                numOfRepeats * numberOfPrescriptions )
+                numOfRepeats * numberOfPrescriptions)
     }
 
     @And("^each repeat prescription shares the same course")
@@ -138,7 +138,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         Assert.assertNotNull(PrescriptionsListResponse)
 
-        when(currentProvider) {
+        when (currentProvider) {
             ProviderTypes.EMIS -> {
                 Assert.assertEquals(count, PrescriptionsListResponse.prescriptions.count())
                 val prescriptions = PrescriptionsListResponse.prescriptions
@@ -169,8 +169,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Then("^I see expected prescriptions$")
     fun thenISeeXPrescriptions() {
-        val expectedPrescriptions
-                = getResponseToExpectedPrescriptionFormat()
+        val expectedPrescriptions = getResponseToExpectedPrescriptionFormat()
 
         prescriptions.assertPrescriptionsMatch(expectedPrescriptions, expectedPrescriptions.size, true)
     }
@@ -309,17 +308,22 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         return dateNow.minusMonths(PRESCRIPTIONS_DEFAULT_LAST_NUMBER_MONTHS_TO_DISPLAY)
     }
 
-    @Given ("prescriptions is disabled at a GP Practice level")
+    @Given("prescriptions is disabled at a GP Practice level")
     fun prescriptionsIsDisabledAtAGPLevel() {
         mockingClient
-            .forEmis {
-                prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-            }
+                .forEmis {
+                    prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                }
 
         mockingClient
-            .forEmis {
-                coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-            }
+                .forEmis {
+                    coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                }
+
+        mockingClient
+                .forTpp {
+                    listRepeatMedication(currentPatient).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
     }
 
     @Then("I see a message informing me that I don't currently have access to this service")
@@ -329,7 +333,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     @But("The prescriptions endpoint is timing out")
-    fun butThePrescriptionsEndpointIsTimingOut(){
+    fun butThePrescriptionsEndpointIsTimingOut() {
         mockingClient
                 .forEmis {
                     prescriptionsRequest(currentPatient)
@@ -339,7 +343,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
 
     @But("The prescriptions endpoint is throwing a server error")
-    fun butThePrescriptionsEndpointIsThrowingAServerError(){
+    fun butThePrescriptionsEndpointIsThrowingAServerError() {
         mockingClient
                 .forEmis {
                     prescriptionsRequest(currentPatient)
@@ -349,26 +353,42 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
-        mockingClient.forEmis { coursesRequest(currentPatient)
-                .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+        mockingClient.forEmis {
+            coursesRequest(currentPatient)
+                    .respondWith(504, resolve = {}, milliSecondDelay = 15000)
         }
     }
 
     @But("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
-        mockingClient.forEmis { coursesRequest(currentPatient)
-                .respondWith(500, resolve = {}) }
+        mockingClient.forEmis {
+            coursesRequest(currentPatient)
+                    .respondWith(500, resolve = {})
+        }
     }
 
     @But("The prescription submission endpoint is timing out")
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
+
+        mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWith(200, resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")
     fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(500, resolve = {}) }
     }
+
+    @But("The prescription submission endpoint is throwing an already ordered exception")
+    fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
+        mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "One of the medications requested is no longer available", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+    }
+
+    @But("The prescription submission endpoint is throwing an invalid guid exception")
+    fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
+        mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+    }
+
 
     @Then("I see the appropriate error message for a prescription timeout")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
@@ -410,7 +430,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     }
 
     @Then("I select (\\d+) prescription to order")
-    fun iSelectXPrescriptionsToOrder(prescriptionToOrder: Int){
+    fun iSelectXPrescriptionsToOrder(prescriptionToOrder: Int) {
         prescriptions.selectSubscriptionsToOrder(prescriptionToOrder)
         prescriptions.clickContinue()
         prescriptions.clickConfirmAndOrderRepeat()
@@ -437,7 +457,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 numOfRepeats,
                 showDosage, showQuantity)
 
-        when(currentProvider) {
+        when (currentProvider) {
             ProviderTypes.EMIS -> {
 
                 mockingClient
@@ -493,11 +513,11 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    private fun getResponseToExpectedPrescriptionFormat() : List<HistoricPrescription> {
+    private fun getResponseToExpectedPrescriptionFormat(): List<HistoricPrescription> {
 
         when (currentProvider) {
             ProviderTypes.EMIS -> {
-               return EmisPrescriptionMapper.Map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
+                return EmisPrescriptionMapper.Map(prescriptionLoader.data as PrescriptionRequestsGetResponse)
             }
             ProviderTypes.TPP -> {
                 return TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply)
@@ -506,7 +526,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         return ArrayList()
     }
 
-    private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime ) { //}, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
+    private fun setupWiremockAndDataWithDelay(fromdate: OffsetDateTime) { //}, numPrescriptions: Int, numOfCourses: Int, numOfRepeats: Int) {
 
         val delay: Long = 31
 
