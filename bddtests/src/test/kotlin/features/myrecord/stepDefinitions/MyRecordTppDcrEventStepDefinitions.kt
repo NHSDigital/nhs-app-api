@@ -1,10 +1,9 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.mockData.TppDcrData
+import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import org.apache.xpath.operations.Bool
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient

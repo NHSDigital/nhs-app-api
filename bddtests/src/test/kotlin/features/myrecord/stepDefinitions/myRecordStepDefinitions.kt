@@ -6,10 +6,10 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myrecord.mockData.*
 import features.myrecord.steps.MyRecordSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.data.myrecord.*
 import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -24,7 +24,6 @@ import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import mocking.tpp.models.Error
 import models.Patient
-import worker.models.demographics.Demographics
 import java.time.OffsetDateTime
 
 open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {

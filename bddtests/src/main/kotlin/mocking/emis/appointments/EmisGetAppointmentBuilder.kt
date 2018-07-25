@@ -32,12 +32,6 @@ class EmisGetAppointmentBuilder(
         return respondWithBody(model)
     }
 
-    fun respondWithSuccess(jsonBody: String): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(jsonBody, contentType = "application/json")
-        }
-    }
-
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_OK): Mapping {
         return respondWith(statusCode) {
             andJsonBody(body, GsonFactory.asPascal)

@@ -1,4 +1,4 @@
-package features.myrecord.mockData
+package mocking.data.myrecord
 
 import mocking.emis.consultations.*
 

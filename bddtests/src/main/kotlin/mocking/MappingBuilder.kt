@@ -25,6 +25,12 @@ abstract class MappingBuilder(method: String, url: String) {
         return Mapping(requestBuilder.build(), responseBuilder.build())
     }
 
+    fun respondWithSuccessJson(jsonBody: String): Mapping {
+        return respondWith(200){
+            andBody(jsonBody, contentType = "application/json")
+        }
+    }
+
     fun redirectTo(url: String, milliSecondDelay: Int = 0): Mapping {
         val responseBuilder = ResponseBuilder(SC_FOUND)
         responseBuilder.andHeader("Location", url).andTemplateTransformer()

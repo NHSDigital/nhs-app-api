@@ -10,7 +10,6 @@ import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
-import features.prescriptions.stepDefinitions.PrescriptionsStepDefinitions
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.backend.CommonSteps
@@ -30,7 +29,6 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
-import java.time.OffsetDateTime
 import java.util.*
 
 open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
@@ -69,16 +67,14 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     val StatusSubmitted = "Submitted";
 
     @Given("^I have an empty repeat prescription request")
-    fun iHaveAnEmptyRepeatPrescriptionRequest()
-    {
+    fun iHaveAnEmptyRepeatPrescriptionRequest() {
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
 
         prescriptionSubmissionRequest = null
     }
 
     @Given("^I have a repeat prescription request with (\\d+) courses")
-    fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int)
-    {
+    fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int) {
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
 
         var uuids: MutableList<String> = mutableListOf()
@@ -91,8 +87,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     }
 
     @And("^(\\d+) invalid courses")
-    fun xInvalidCourses(numOfCourses: Int)
-    {
+    fun xInvalidCourses(numOfCourses: Int) {
         var uuids: MutableList<String> = mutableListOf()
 
         for (i in 0 until numOfCourses) {
@@ -103,32 +98,27 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     }
 
     @And("^EMIS responds with an error indicating an included course has already been ordered in the last 30 days when submitting the repeat prescription")
-    fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedInTheLastDaysWhenSubmittingRepeatPrescription()
-    {
+    fun emisRespondsWithErrorIndicatingAnIncludedCourseHasAlreadyBeenOrderedInTheLastDaysWhenSubmittingRepeatPrescription() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest).respondWithAlreadyAPendingRequestInTheLast30Days() }
     }
 
     @And("^Emis responds with an error indicating a course is invalid")
-    fun emisRespondsWithAnErrorIndicatingACourseIsInvalid()
-    {
+    fun emisRespondsWithAnErrorIndicatingACourseIsInvalid() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest).respondWithBadRequestErrorIndicatingACourseIsInvalid() }
     }
 
     @And("^EMIS responds with a Created success code when submitting the repeat prescription")
-    fun emisRespondsWithACreatedSuccessCodeWhenSubmittingRepeatPrescription()
-    {
+    fun emisRespondsWithACreatedSuccessCodeWhenSubmittingRepeatPrescription() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest).respondWithCreated() }
     }
 
     @And("^EMIS responds with an error indicating prescriptions is not enabled when submitting the repeat prescription")
-    fun emisRespondsWithAnErrorIndicatingPrescriptionsIsNotEnabled()
-    {
+    fun emisRespondsWithAnErrorIndicatingPrescriptionsIsNotEnabled() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest).respondWithPrescriptionsNotEnabled() }
     }
 
     @When("I submit the repeat prescription")
-    fun whenISubmitTheRepeatPrescription()
-    {
+    fun whenISubmitTheRepeatPrescription() {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
@@ -141,58 +131,18 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     }
 
     @And("^EMIS takes longer than 30 seconds to respond when a repeat prescription is submitted")
-    fun emisTakesTooLongToRespondWhenARepeatPrescriptionIsSubmitted()
-    {
+    fun emisTakesTooLongToRespondWhenARepeatPrescriptionIsSubmitted() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest).respondWithCreated().delayedBy(Duration.ofSeconds(31)) }
     }
 
     @And("EMIS responds with an unknown internal server error when a repeat prescription is submitted")
-    fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted()
-    {
+    fun emisRespondsWithAnUnknownInternalServerErrorWhenARepeatPrescriptionIsSubmitted() {
         mockingClient.forEmis { repeatPrescriptionSubmissionRequest(currentPatient, prescriptionSubmissionRequest).respondWithGenericInternalServerError() }
     }
 
     @Given("I select (\\d+) (.*) repeatable prescriptions to order")
-    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int, gpSystem: String)
-    {
+    fun iSelectXRepeatablePrescriptionsToOrder(amount: Int, gpSystem: String) {
         prescriptionSubmissionWireMockAndDataSetup(amount, gpSystem)
-    }
-
-    private fun buildNewPrescriptionData(orderedCourses: MutableList<MedicationCourse>) {
-
-        //1 create new prescription object and add ordered courses to it..
-        val cr = mutableListOf<RequestedMedicationCourse>()
-        orderedCourses.forEach {
-            c -> cr.add(
-                RequestedMedicationCourse(
-                        c.medicationCourseGuid, RequestedMedicationCourseStatus.Requested))
-        }
-        val oldPrescriptions = emisPrescriptionMap[Scenario.STARTED]
-        val prs = mutableListOf<PrescriptionRequest>()
-        prs.add(PrescriptionRequest(OffsetDateTime.now().toString(), cr, RequestedMedicationCourseStatus.Requested.toString()))
-
-        oldPrescriptions!!.prescriptionRequests.forEach {
-            pr -> prs.add(pr)
-        }
-
-        //2. update course list
-        val cs = mutableSetOf<MedicationCourse>()
-        oldPrescriptions.medicationCourses.forEach {
-            c -> cs.add(c)
-        }
-
-        orderedCourses.forEach {
-            c -> cs.add(MedicationCourse(
-                c.medicationCourseGuid,
-                c.name,
-                c.dosage,
-                c.quantityRepresentation,
-                c.prescriptionType,
-                c.constituents,
-                c.canBeRequested))
-        }
-
-        emisPrescriptionMap[currentScenarioState] = PrescriptionRequestsGetResponse(prs, cs.toList())
     }
 
     @And("^the scenario is (.*)$")
@@ -250,15 +200,12 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @When("I click Confirm and order repeat prescription")
     fun iClickConfirmAndOrderRepeatPrescription() {
-
         confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.clickConfirmAndOrderRepeatPrescriptionButton()
-
     }
 
 
     @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
-
         Assert.assertTrue(prescriptionPage.isOrderSuccessfullTextVisible())
 
         when (currentProvider) {
@@ -274,7 +221,6 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Suppress("UNCHECKED_CAST")
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
-
         coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, gpSystem, amount)
 
         when (gpSystem) {
@@ -295,6 +241,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                 }
 
             }
+            
             EMIS -> {
                 mockingClient.forEmis {
                     coursesRequest(currentPatient)
@@ -312,7 +259,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
                 currentScenarioState = StatusSubmitted
 
-                buildNewPrescriptionData(coursesStepDefinitions.coursesLoader.data as MutableList<MedicationCourse>)
+                emisPrescriptionMap[currentScenarioState] = EmisPrescriptionLoader.orderCourses(
+                        orderedCourses = coursesStepDefinitions.coursesLoader.data as MutableList<MedicationCourse>,
+                        oldPrescriptions = emisPrescriptionMap[Scenario.STARTED]!!)
 
                 mockingClient.forEmis {
                     prescriptionsRequest(currentPatient)

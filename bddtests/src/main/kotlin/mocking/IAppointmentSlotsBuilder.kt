@@ -15,8 +15,6 @@ interface IAppointmentSlotsBuilder {
 
     fun respondWithSuccess(model: AppointmentSlotsResponseFacade): Mapping
 
-    fun respondWithSuccess(body: String): Mapping
-
     fun respondWithExceptionWhenNotEnabled(): Mapping
 
     fun respondWithUnknownException(): Mapping

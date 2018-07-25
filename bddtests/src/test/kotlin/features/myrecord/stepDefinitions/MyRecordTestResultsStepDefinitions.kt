@@ -1,18 +1,14 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.mockData.TestResultsData
-import jnr.ffi.Struct
+import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
-import mocking.tpp.models.TestResultsViewReply
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
-import java.time.LocalDateTime
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
 

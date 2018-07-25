@@ -2,6 +2,8 @@ package mocking.defaults
 
 import kotlin.text.Charsets
 import mocking.MockingClient
+import mocking.data.prescriptions.EmisPrescriptionLoader
+import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
 import mocking.dataPopulation.journies.prescriptions.PrescriptionsJournies
 import mocking.defaults.dataPopulation.journies.appointmentSlots.AppointmentSlotsJournies
@@ -12,9 +14,10 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
 import mocking.emis.appointments.CancelAppointmentRequest
+import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
-import worker.models.appointments.BookAppointmentSlotRequest
+import models.prescriptions.MedicationCourse
 import worker.models.session.UserSessionRequest
 import java.io.File
 
@@ -69,7 +72,6 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             val pad=index.padStart(CONNECTION_TOKEN_SUFFIX_LENGTH,'0')
             val patient = Patient.montelFrye.copy(
                     firstName = "NFT.Patient",
-
                     surname = "Test$pad",
                     cidUserSession = UserSessionRequest(
                             authCode = "authCode$pad",
@@ -81,66 +83,131 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             )
 
             // Authentication
-
             CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
             EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
 
-
             // Appointment Mocks
-
             // GET /emis/appointments
-            //
             val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json")
             
             mockingClient.forEmis {
                 appointmentGetRequest(patient = patient)
-                        .respondWithSuccess(appointmentsBody)
+                        .respondWithSuccessJson(appointmentsBody)
             }
 
             // GET /emis/appointmentslots/meta
-            //
             val getAppointmentSlotsMetaBody =
                     getFileContents("appointments/GetEmisAppointmentSlotsMeta.json")
-                            
 
             mockingClient.forEmis {
                 appointmentSlotsMetaRequest(patient = patient)
-                        .respondWithSuccess(getAppointmentSlotsMetaBody)
-                
+                        .respondWithSuccessJson(getAppointmentSlotsMetaBody)
             }
-                    
 
             // GET /emis/appointmentslots
-            //
             val getAppointmentSlotsBody =
                     getFileContents("appointments/GetEmisAppointmentSlots.json")
-                            
 
             mockingClient.forEmis {
                 appointmentSlotsRequest(patient = patient)
-                        .respondWithSuccess(getAppointmentSlotsBody)
+                        .respondWithSuccessJson(getAppointmentSlotsBody)
             }
 
             // POST /emis/appointments
-            //
             val postAppointmentRequestBody =
                     getFileContents("appointments/PostEmisAppointment.json")
-                            
 
             mockingClient.forEmis {
                 bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 1, "NFT Test Book Slot"))
-                        .respondWithSuccess(postAppointmentRequestBody)
+                        .respondWithSuccessJson(postAppointmentRequestBody)
             }
 
             // DELETE /emis/appointments
-            //
             val deleteAppointmentRequestBody =
                     getFileContents("appointments/DeleteEmisAppointment.json")
-                            
 
             mockingClient.forEmis {
                 cancelAppointmentRequest(patient, CancelAppointmentRequest(patient.userPatientLinkToken, 1, "No longer required"))
-                        .respondWithSuccess(deleteAppointmentRequestBody)
+                        .respondWithSuccessJson(deleteAppointmentRequestBody)
+            }
+
+            // Prescriptions
+            // GET /emis/prescriptionrequests
+            val prescriptionsDataLoader = EmisPrescriptionLoader
+            prescriptionsDataLoader.loadData(
+                    numberOfPrescriptions = 5,
+                    numberOfCourses = 5,
+                    numberOfRepeatPrescriptions = 5,
+                    showDosage = true,
+                    showQuantity = true
+            )
+
+            mockingClient.forEmis {
+                prescriptionsRequest(patient)
+                        .respondWithSuccess(prescriptionsDataLoader.data)
+                        .inScenario(pad)
+                        .whenScenarioStateIs("Started")
+            }
+
+            // GET /emis/courses
+            val coursesLoader = EmisCoursesLoader
+            coursesLoader.loadData(
+                    maximumNumberOfCourses = 5,
+                    numberOfRepeatPrescriptions = 5,
+                    numberOfRepeatPrescriptionsThatCanBeRequested = 5,
+                    includeDosage = true,
+                    includeQuantity = true)
+
+            mockingClient.forEmis {
+                coursesRequest(patient)
+                        .respondWithSuccess(CourseRequestsGetResponse(coursesLoader.data as List<MedicationCourse>))
+            }
+
+            mockingClient.forEmis {
+                repeatPrescriptionSubmissionRequest(patient)
+                        .respondWithCreated()
+                        .inScenario(pad)
+                        .whenScenarioStateIs("Started")
+                        .willSetStateTo("SUBMITTED")
+            }
+
+            // After ordering, add the ordered courses to the prescriptions GET request
+            mockingClient.forEmis {
+                prescriptionsRequest(patient)
+                        .respondWithSuccess(prescriptionsDataLoader.orderCourses(coursesLoader.data))
+                        .inScenario(pad)
+                        .whenScenarioStateIs("SUBMITTED")
+            }
+
+            // My medical Record
+            // GET /emis/record (testResultsRequest)
+            mockingClient.forEmis {
+                testResultsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/TestResults.json"))
+            }
+
+            // GET /emis/record (immunisationsRequest)
+            mockingClient.forEmis {
+                immunisationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Immunisations.json"))
+            }
+
+            // GET /emis/record (allergiesRequest)
+            mockingClient.forEmis {
+                allergiesRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Allergies.json"))
+            }
+
+            // GET /emis/record (medicationsRequest)
+            mockingClient.forEmis {
+                medicationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Medications.json"))
+            }
+
+            // GET /emis/record (problemsRequest)
+            mockingClient.forEmis {
+                problemsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Problems.json"))
+            }
+
+            // GET /emis/record (consultationsRequest)
+            mockingClient.forEmis {
+                consultationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Consultations.json"))
             }
         }
     }

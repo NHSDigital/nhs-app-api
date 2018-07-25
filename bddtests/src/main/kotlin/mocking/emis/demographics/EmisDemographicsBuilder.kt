@@ -22,7 +22,7 @@ class EmisDemographicsBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithSuccess(patient: Patient, patientIdentifiers: Array<PatientIdentifier>): Mapping {
-        val responseBody = EmisDemographicsResponse(patient.title, patient.firstName, patient.surname, patientIdentifiers = patientIdentifiers.toMutableList())
+        val responseBody = EmisDemographicsResponse(patient, patientIdentifiers = patientIdentifiers)
 
         return respondWith(SC_OK) {
             andJsonBody(responseBody)

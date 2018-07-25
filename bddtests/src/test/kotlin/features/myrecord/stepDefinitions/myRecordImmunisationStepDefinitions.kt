@@ -1,12 +1,9 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import mocking.defaults.MockDefaults.Companion.patient
-import mocking.MockingClient
-import features.myrecord.mockData.ImmunisationsData
+import mocking.data.myrecord.ImmunisationsData
 import worker.models.myrecord.MyRecordResponse
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient

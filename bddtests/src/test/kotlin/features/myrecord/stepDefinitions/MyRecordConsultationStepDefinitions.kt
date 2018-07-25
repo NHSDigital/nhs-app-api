@@ -1,7 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import features.myrecord.mockData.ConsultationsData
+import mocking.data.myrecord.ConsultationsData
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import net.serenitybdd.core.Serenity

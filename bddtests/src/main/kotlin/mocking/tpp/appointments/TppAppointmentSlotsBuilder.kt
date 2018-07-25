@@ -106,10 +106,6 @@ class TppAppointmentSlotsBuilder(tppUserSession: TppUserSession) :
                 type = slot.slotTypeName!!)
     }
 
-    override fun respondWithSuccess(body: String): Mapping {
-        TODO("not implemented")
-    }
-
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         TODO("not implemented")
     }

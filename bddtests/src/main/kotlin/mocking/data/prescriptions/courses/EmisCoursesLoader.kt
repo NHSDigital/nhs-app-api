@@ -1,28 +1,27 @@
 package mocking.data.prescriptions.courses
 
 import mocking.data.prescriptions.EmisPrescriptionLoader
+import mocking.emis.models.*
 import models.prescriptions.MedicationCourse
-import mocking.emis.models.PrescriptionType
 import java.util.*
 
 object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
 
     override lateinit var data:MutableList<MedicationCourse>
 
-    override fun loadData(maxCourses: Int,
-                      numOfRepeats: Int,
-                      numCanBeRequested: Int,
-                      //medicationCourses: MutableList<MedicationCourse>,
-                      includeDosage: Boolean,
-                      includeQuantity: Boolean) {
+    override fun loadData(maximumNumberOfCourses: Int,
+                          numberOfRepeatPrescriptions: Int,
+                          numberOfRepeatPrescriptionsThatCanBeRequested: Int,
+                          includeDosage: Boolean,
+                          includeQuantity: Boolean) {
 
-        var numberOfRepeats = numOfRepeats
-        var numberCanBeRequested = numCanBeRequested
+        var numberOfRepeats = numberOfRepeatPrescriptions
+        var numberCanBeRequested = numberOfRepeatPrescriptionsThatCanBeRequested
 
         var medicationCourses = mutableListOf<MedicationCourse>()
 
         // Create courses first as these will be used in the prescriptions
-        for (course in 1..maxCourses) {
+        for (course in 1..maximumNumberOfCourses) {
             val constituents = mutableListOf<String>()
             for (constituentNo in 1..EmisPrescriptionLoader.getRandomNumber(5)) {
                 constituents.add("Constituent" + constituentNo)

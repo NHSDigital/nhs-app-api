@@ -39,12 +39,6 @@ class EmisBookAppointmentsBuilder (configuration: EmisConfiguration,
         return respondWithBody(BookAppointmentSlotResponse(true))
     }
 
-    fun respondWithSuccess(jsonBody: String): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(jsonBody, contentType = "application/json")
-        }
-    }
-
     override fun respondWithUnavailableException(): Mapping {
         val exceptionResponse = ExceptionResponse(-9999,
                 "Unavailable Exception")

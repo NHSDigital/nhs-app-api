@@ -70,12 +70,6 @@ class EmisAppointmentSlotsBuilder(configuration: EmisConfiguration,
         return respondWithBody(model)
     }
 
-    override fun respondWithSuccess(body: String): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(body, contentType = "application/json")
-        }
-    }
-
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         val exceptionResponse = ExceptionResponse(-1030,
                 "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation")

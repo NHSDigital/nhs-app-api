@@ -23,12 +23,6 @@ class EmisDeleteAppointmentsBuilder (configuration: EmisConfiguration, patient: 
         return respondWithSuccessAny(response)
     }
 
-    fun respondWithSuccess(jsonBody: String): Mapping {
-        return respondWith(HttpStatus.SC_OK) {
-            andBody(jsonBody, contentType = "application/json")
-        }
-    }
-
     private fun respondWithSuccessAny(body: Any): Mapping {
         return respondWith(HttpStatus.SC_NO_CONTENT) {
             andJsonBody(body, GsonFactory.asPascal)

@@ -4,14 +4,10 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.myrecord.mockData.AllergiesData
-import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.data.myrecord.AllergiesData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import worker.models.demographics.TppUserSession
 import worker.models.myrecord.MyRecordResponse
 
 open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions() {
