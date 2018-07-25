@@ -85,26 +85,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         
         private async Task<TestResults> GetLast180DaysTestResults(TppUserSession tppUserSession)
         {           
-            var today = DateTime.Now;
-            var tppTestResultDates = new List<TppTestResultDates>
-            {
-                new TppTestResultDates
-                {
-                    StartDate = today.AddDays(-180),
-                    EndDate = today.AddDays(-120)                  
-                },
-                new TppTestResultDates
-                {
-                    StartDate = today.AddDays(-120).AddMilliseconds(1),
-                    EndDate = today.AddDays(-60),
-                },
-                new TppTestResultDates
-                {
-                    StartDate = today.AddDays(-60).AddMilliseconds(1),
-                    EndDate = today
-                }
-            };
-
+            var tppTestResultDates = GetTestResultDateParams();
             var combinedTestResults = new List<TestResultItem>();
             
             foreach (var testResultDates in tppTestResultDates)
@@ -123,5 +104,30 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
             return new TestResults { Data = combinedTestResults };
         }
+
+        private List<TppTestResultDates> GetTestResultDateParams()
+        {
+            var today = DateTime.Now.Date;
+            
+            return new List<TppTestResultDates>
+            {
+                new TppTestResultDates
+                {
+                    StartDate = today.AddDays(-179),
+                    EndDate = today.AddDays(-120).AddHours(23).AddMinutes(59).AddSeconds(59)                 
+                },
+                new TppTestResultDates
+                {
+                    StartDate = today.AddDays(-119),
+                    EndDate = today.AddDays(-60).AddHours(23).AddMinutes(59).AddSeconds(59),
+                },
+                new TppTestResultDates
+                {
+                    StartDate = today.AddDays(-59),
+                    EndDate = today.AddHours(23).AddMinutes(59).AddSeconds(59),
+                }
+            };
+        }
+        
     }
 }

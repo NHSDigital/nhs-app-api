@@ -2,6 +2,7 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import features.myrecord.mockData.TestResultsData
+import jnr.ffi.Struct
 import mocking.tpp.models.Error
 import mocking.tpp.models.TestResultsViewReply
 import net.serenitybdd.core.Serenity
@@ -26,21 +27,21 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
             }
             "TPP" -> {
                 val today = OffsetDateTime.now()
-                var startDate = today.minusDays(180)
-                var endDate = startDate.plusDays(60)
+                var startDate = today.minusDays(179)
+                var endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(1))
                 }
 
-                startDate = endDate
-                endDate = startDate.plusDays(60)
+                startDate = today.minusDays(119)
+                endDate = today.minusDays(60)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(2))
                 }
 
-                startDate = endDate
+                startDate = today.minusDays(59)
                 endDate = today
 
                 mockingClient.forTpp {
@@ -114,8 +115,10 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-                val startDate = OffsetDateTime.now().minusDays(180)
-                val endDate = startDate.plusDays(60)
+                var today = OffsetDateTime.now()
+
+                val startDate = today.minusDays(179)
+                val endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
@@ -138,21 +141,22 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
             }
             "TPP" -> {
                 val today = OffsetDateTime.now()
-                var startDate = today.minusDays(180)
-                var endDate = startDate.plusDays(60)
+
+                var startDate = today.minusDays(179)
+                var endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
 
-                startDate = endDate
-                endDate = startDate.plusDays(60)
+                startDate = today.minusDays(119)
+                endDate = today.minusDays(60)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
 
-                startDate = endDate
+                startDate = today.minusDays(59)
                 endDate = today
 
                 mockingClient.forTpp {
@@ -172,8 +176,10 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-                val startDate = OffsetDateTime.now().minusDays(180)
-                val endDate = startDate.plusDays(60)
+                var today = OffsetDateTime.now()
+
+                val startDate = today.minusDays(179)
+                val endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate).respondWithServiceNotAvailableException()
@@ -192,8 +198,10 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-                val startDate = OffsetDateTime.now().minusDays(180)
-                val endDate = startDate.plusDays(60)
+                var today = OffsetDateTime.now()
+
+                val startDate = today.minusDays(179)
+                val endDate = today.minusDays(120)
 
                 mockingClient.forTpp {
                     testResultsViewRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, startDate, endDate)
