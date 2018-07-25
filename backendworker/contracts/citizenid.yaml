@@ -9,7 +9,7 @@ schemes:
   - https
 
 paths:
-  /v1/patient/im1connection:
+  /v1/patient/im1Connection:
     get:
       tags:
         - im1-connection
@@ -44,7 +44,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.
+          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.          
         502:
           description: The GP system is currently unavailable.
         504:
@@ -79,7 +79,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.  
+          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.          
         502:
           description: The GP system is currently unavailable.
         504:
@@ -118,7 +118,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: No GP system was found for ODS Code.
+          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.
         502:
           description: The GP system is currently unavailable.
         504:
@@ -151,7 +151,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: No GP system was found for ODS Code.
+          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.
         502:
           description: The GP system is currently unavailable.
         504:

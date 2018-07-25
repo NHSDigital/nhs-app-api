@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -97,12 +96,6 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
                 return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
             }
-            catch (UnknownSupplierException exception)
-            {
-                _logger.LogDebug(
-                    $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
-                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
-            }
             finally
             {
                 _logger.LogExit(nameof(Post));
@@ -112,14 +105,12 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         private async Task<Option<IGpSystem>> GetGpSystem(string odsCode)
         {
             var supplier = await _odsCodeLookup.LookupSupplier(odsCode);
-            if (!supplier.HasValue)
-            {
-                return Option.None<IGpSystem>();
-            }
 
             try
             {
-                return Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+                return supplier.HasValue 
+                    ? Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure())) 
+                    : Option.None<IGpSystem>();
             }
             catch (Exception exception)
             {
