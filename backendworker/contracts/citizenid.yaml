@@ -9,7 +9,7 @@ schemes:
   - https
 
 paths:
-  /v1/patient/im1Connection:
+  /v1/patient/im1connection:
     get:
       tags:
         - im1-connection
@@ -43,6 +43,8 @@ paths:
           description: Not found. No patient could be found matching the supplied headers.
         500:
           description: An unexpected error occurred processing the request.
+        501:
+          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.
         502:
           description: The GP system is currently unavailable.
         504:
@@ -76,6 +78,8 @@ paths:
           description: Conflict. Account has already been associated with the application in the GP system.
         500:
           description: An unexpected error occurred processing the request.
+        501:
+          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.  
         502:
           description: The GP system is currently unavailable.
         504:

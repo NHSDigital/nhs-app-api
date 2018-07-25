@@ -97,6 +97,12 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
                 return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
             }
+            catch (UnknownSupplierException exception)
+            {
+                _logger.LogDebug(
+                    $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
+                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+            }
             finally
             {
                 _logger.LogExit(nameof(Post));
@@ -111,7 +117,15 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 return Option.None<IGpSystem>();
             }
 
-            return Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+            try
+            {
+                return Option.Some(_gpSystemFactory.CreateGpSystem(supplier.ValueOrFailure()));
+            }
+            catch (Exception exception)
+            {
+                _logger.LogWarning(exception, $"Failed to create GP System for supplier: {supplier.ValueOrFailure()}.");
+                return Option.None<IGpSystem>();
+            }
         }
         
         private bool ArgumentsAreValid(string connectionToken, string odsCode)

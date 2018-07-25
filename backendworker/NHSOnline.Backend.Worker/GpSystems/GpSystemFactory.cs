@@ -21,9 +21,9 @@ namespace NHSOnline.Backend.Worker.GpSystems
             {
                 return gpSystems.Single(b => b.Supplier == supplier);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException exception)
             {
-                throw new UnknownSupplierException();
+                throw new UnknownSupplierException(supplier, exception);
             }
         }
     }
