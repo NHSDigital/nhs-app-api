@@ -31,6 +31,8 @@ spec:
           value: "https://www-preview.nonliveeuw.bitraft.io/"
         - name: CORS_AUTHORITY
           value: "https://www-preview.nonliveeuw.bitraft.io"
+        - name: ConfigurationSettings__CookieDomain
+          value: ".nonliveeuw.bitraft.io"
       imagePullSecrets:
        - name: azure-registry
 ---

@@ -6,7 +6,6 @@
   "main": "index.js",
   "scripts": {
     "dev": "npm run swagger && nuxt",
-    "dev1": "nuxt",
     "build": "npm run swagger && nuxt build",
     "start": "nuxt start",
     "swagger": "node build/swagger.js --contract_path contracts/index.yaml --output_path src/services/nhsonlineapi.js",
