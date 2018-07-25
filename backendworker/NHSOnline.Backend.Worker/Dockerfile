@@ -59,13 +59,12 @@ WORKDIR /app
 EXPOSE $PORT
 COPY --from=publish /app .
 
+# Setup trusts for self-signed certificates
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppCa.crt /usr/local/share/ca-certificates/TppCa.crt
-RUN chmod 644 /usr/local/share/ca-certificates/TppCa.crt; \
-    update-ca-certificates;
-
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/vps-test.cer /usr/local/share/ca-certificates/vps-test.cer
-RUN chmod 644 /usr/local/share/ca-certificates/vps-test.cer; \
-    update-ca-certificates;
+COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/visionproxy.crt /usr/local/share/ca-certificates/visionproxy.crt
+RUN chmod 644 /usr/local/share/ca-certificates/*
+RUN update-ca-certificates
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
