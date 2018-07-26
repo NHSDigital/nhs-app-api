@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Resources;
 using System.Threading.Tasks;
-using Microsoft.Data.OData;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -16,10 +15,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class EmisAppointmentsServiceCancel
     {
         private readonly IEmisClient _emisClient;
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisAppointmentsService> _logger;
 
         public EmisAppointmentsServiceCancel(
-            ILogger logger,
+            ILogger<EmisAppointmentsService> logger,
             IEmisClient emisClient)
         {
             _emisClient = emisClient;
@@ -29,17 +28,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         public async Task<AppointmentCancelResult> Cancel(EmisUserSession emisUserSession,
             AppointmentCancelRequest request)
         {
-            var deleteRequestOption = GetCancelAppointmentDeleteRequest(emisUserSession, request);
-            if (deleteRequestOption.IsEmpty)
-            {
-                return new AppointmentCancelResult.BadRequest();
-            }
-            var deleteRequest = deleteRequestOption.ValueOrFailure();
-
-            var emisHeaders = new EmisHeaderParameters(emisUserSession);
-
             try
             {
+                _logger.LogEnter(nameof(Cancel));
+            
+                var deleteRequestOption = GetCancelAppointmentDeleteRequest(emisUserSession, request);
+                if (deleteRequestOption.IsEmpty)
+                {
+                    return new AppointmentCancelResult.BadRequest();
+                }
+                
+                var deleteRequest = deleteRequestOption.ValueOrFailure();
+                var emisHeaders = new EmisHeaderParameters(emisUserSession);
+                
                 var response = await _emisClient.AppointmentsDelete(emisHeaders, deleteRequest);
                 return InterpretAppointmentsDeleteResponse(response);
             }
@@ -47,6 +48,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogError(exception, "Cancelling appointment failed");
                 return new AppointmentCancelResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Cancel));
             }
         }
 

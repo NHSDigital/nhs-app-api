@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -34,34 +35,44 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         [HttpGet, TimeoutExceptionFilter]
         public async Task<IActionResult> Get([FromQuery] PatientAppointmentSlotsQueryParameters queryParameters)
         {
-            _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
-
-            if (!new DateRangeValidator(_dateTimeOffsetProvider).IsValid(queryParameters.FromDate,
-                queryParameters.ToDate))
+            try
             {
-                _logger.LogError(
-                    $"Query parameters are invalid. From date: '{queryParameters.FromDate}', To date '{queryParameters.ToDate}'");
-                var badRequestResult = new AppointmentSlotsResult.BadRequest();
-                badRequestResult.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
+                _logger.LogEnter(nameof(Get));
+                
+                _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
-                return badRequestResult.Accept(new AppointmentSlotsResultVisitor());
+                if (!new DateRangeValidator(_dateTimeOffsetProvider).IsValid(queryParameters.FromDate,
+                    queryParameters.ToDate))
+                {
+                    _logger.LogError(
+                        $"Query parameters are invalid. From date: '{queryParameters.FromDate?.ToString("o")}', To date '{queryParameters.ToDate?.ToString("o")}'");
+                    var badRequestResult = new AppointmentSlotsResult.BadRequest();
+                    badRequestResult.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
+
+                    return badRequestResult.Accept(new AppointmentSlotsResultVisitor());
+                }
+
+                var userSession = HttpContext.GetUserSession();
+                _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.Supplier}'.");
+                var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.Supplier)
+                    .GetAppointmentSlotsService();
+
+                var dateRange = new AppointmentSlotsDateRange(
+                    _dateTimeOffsetProvider,
+                    queryParameters.FromDate,
+                    queryParameters.ToDate
+                );
+
+                var result = await appointmentService.Get(userSession, dateRange.FromDate, dateRange.ToDate);
+
+                result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
+                return result.Accept(new AppointmentSlotsResultVisitor());
             }
-
-            var userSession = HttpContext.GetUserSession();
-            _logger.LogDebug($"Fetch Appointment Slots Service for GP System: '{userSession.Supplier}'.");
-            var appointmentService = _gpSystemFactory.CreateGpSystem(userSession.Supplier)
-                .GetAppointmentSlotsService();
-
-            var dateRange = new AppointmentSlotsDateRange(
-                _dateTimeOffsetProvider,
-                queryParameters.FromDate,
-                queryParameters.ToDate
-            );
-
-            var result = await appointmentService.Get(userSession, dateRange.FromDate, dateRange.ToDate);
-
-            result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
-            return result.Accept(new AppointmentSlotsResultVisitor());
+            finally
+            {
+                _logger.LogExit(nameof(Get));
+            }
+            
         }
     }
 }

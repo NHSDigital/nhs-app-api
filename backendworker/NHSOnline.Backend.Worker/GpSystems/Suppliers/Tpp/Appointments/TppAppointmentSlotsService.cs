@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -26,10 +24,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         }
         public async Task<AppointmentSlotsResult> Get(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
         {
-            var tppUserSession = (TppUserSession)userSession;
-
             try
             {
+                _logger.LogEnter(nameof(Get));
+            
+                var tppUserSession = (TppUserSession)userSession;
                 var request = new ListSlots
                 {
                     StartDate = fromDate.DateTime,
@@ -51,6 +50,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             {
                 _logger.LogError(e, "HttpRequestException has been thrown.");
                 return new AppointmentSlotsResult.InternalServerError();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Get));
             }
         }
     }

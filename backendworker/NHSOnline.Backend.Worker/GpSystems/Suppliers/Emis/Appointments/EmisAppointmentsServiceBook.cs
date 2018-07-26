@@ -2,19 +2,19 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
     public class EmisAppointmentsServiceBook 
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisAppointmentsService> _logger;
         private readonly IEmisClient _emisClient;
 
-        public EmisAppointmentsServiceBook(ILogger logger, IEmisClient emisClient)
+        public EmisAppointmentsServiceBook(ILogger<EmisAppointmentsService> logger, IEmisClient emisClient)
         {
             _logger = logger;
             _emisClient = emisClient;
@@ -22,12 +22,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         public async Task<AppointmentBookResult> Book(EmisUserSession emisUserSession, AppointmentBookRequest request)
         {
-            var postRequest = new BookAppointmentSlotPostRequest(emisUserSession, request);
-
-            var emisHeaders = new EmisHeaderParameters(emisUserSession);
-
             try
             {
+                _logger.LogEnter(nameof(Book));
+            
+                var postRequest = new BookAppointmentSlotPostRequest(emisUserSession, request);
+                var emisHeaders = new EmisHeaderParameters(emisUserSession);
+                
                 var response = await _emisClient.AppointmentsPost(emisHeaders, postRequest);
                 return InterpretAppointmentsPostResponse(response);
             }
@@ -35,6 +36,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogError(exception, "Booking appointment slots failed.");
                 return new AppointmentBookResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Book));
             }
         }
         

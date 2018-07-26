@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support;
@@ -32,11 +33,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         internal Option<AppointmentSlotsResult> Build()
         {
-            return GetMetaTaskCompletedUnsuccessfulCase()
-                .IfNone(GetMetaResponseNoSuccessStatusCodeCase)
-                .IfNone(GetSlotsTaskCompletedUnsuccessfullyCase)
-                .IfNone(GetSlotsResponseHasNoSuccessStatusCodeCase)
-                .IfNone(BuildSuccessfulAppointmentSlotsResult);
+            try
+            {
+                _logger.LogEnter(nameof(Build));
+
+                return GetMetaTaskCompletedUnsuccessfulCase()
+                    .IfNone(GetMetaResponseNoSuccessStatusCodeCase)
+                    .IfNone(GetSlotsTaskCompletedUnsuccessfullyCase)
+                    .IfNone(GetSlotsResponseHasNoSuccessStatusCodeCase)
+                    .IfNone(BuildSuccessfulAppointmentSlotsResult);
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Build));
+            }
         }
 
         private Option<AppointmentSlotsResult> GetMetaTaskCompletedUnsuccessfulCase()

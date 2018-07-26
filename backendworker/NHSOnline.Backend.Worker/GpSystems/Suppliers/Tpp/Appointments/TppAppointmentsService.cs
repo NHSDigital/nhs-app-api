@@ -2,10 +2,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.Support.Date;
 
@@ -44,10 +43,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
         public async Task<AppointmentsResult> GetAppointments(UserSession userSession, bool includePastAppointments, DateTimeOffset? pastAppointmentsFromDate)
         {
-            var tppUserSession = (TppUserSession)userSession;
-
             try
             {
+                _logger.LogEnter(nameof(GetAppointments));
+                
+                var tppUserSession = (TppUserSession)userSession;
                 var request = new ViewAppointments(tppUserSession);
 
                 var viewAppointmentsTask = _tppClient.ViewAppointmentsPost(request, tppUserSession.Suid);
@@ -62,6 +62,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             {
                 _logger.LogError(e, "HttpRequestException has been thrown.");
                 return new AppointmentsResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(GetAppointments));
             }
         }
     }

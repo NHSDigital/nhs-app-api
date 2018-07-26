@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
@@ -31,17 +32,26 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         [HttpDelete, TimeoutExceptionFilter]
         public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest model)
         {
-            _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
-                model.AppointmentId);
+            try
+            {
+                _logger.LogEnter(nameof(Delete));
+                
+                _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
+                    model.AppointmentId);
 
-            var userSession = HttpContext.GetUserSession();
+                var userSession = HttpContext.GetUserSession();
 
-            var appointmentsService = GetAppointmentsService(userSession);
+                var appointmentsService = GetAppointmentsService(userSession);
 
-            var cancelResult = await appointmentsService.Cancel(userSession, model);
+                var cancelResult = await appointmentsService.Cancel(userSession, model);
 
-            cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, model.AppointmentId));
-            return cancelResult.Accept(new AppointmentCancelResultVisitor());
+                cancelResult.Accept(new AppointmentCancelAuditingVisitor(_auditor, model.AppointmentId));
+                return cancelResult.Accept(new AppointmentCancelResultVisitor());
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Delete));
+            }
         }
 
         [HttpGet, TimeoutExceptionFilter]
@@ -49,36 +59,54 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             [FromQuery] bool includePastAppointments,
             [FromQuery] DateTimeOffset? pastAppointmentsFromDate = null)
         {
-            _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
+            try
+            {
+                _logger.LogEnter(nameof(Get));
+                
+                _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
 
-            var userSession = HttpContext.GetUserSession();
+                var userSession = HttpContext.GetUserSession();
 
-            var appointmentsService = GetAppointmentsService(userSession);
+                var appointmentsService = GetAppointmentsService(userSession);
 
-            var result =
-                await appointmentsService.GetAppointments(userSession, includePastAppointments,
-                    pastAppointmentsFromDate);
+                var result =
+                    await appointmentsService.GetAppointments(userSession, includePastAppointments,
+                        pastAppointmentsFromDate);
 
-            result.Accept(new AppointmentsAuditingVisitor(_auditor));
+                result.Accept(new AppointmentsAuditingVisitor(_auditor));
 
-            return result.Accept(new AppointmentsResultVisitor());
+                return result.Accept(new AppointmentsResultVisitor());
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Get));
+            }
         }
         
 
         [HttpPost, TimeoutExceptionFilter]
         public async Task<IActionResult> Post([FromBody]AppointmentBookRequest model)
         {
-            _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
-                "Attempting to book appointment with id: {0} and startTimeDate: {1:O}", model.SlotId, model.StartTime);
+            try
+            {
+                _logger.LogEnter(nameof(Post));
+                
+                _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
+                    "Attempting to book appointment with id: {0} and startTimeDate: {1:O}", model.SlotId, model.StartTime);
 
-            var userSession = HttpContext.GetUserSession();
+                var userSession = HttpContext.GetUserSession();
 
-            var appointmentsService = GetAppointmentsService(userSession);
+                var appointmentsService = GetAppointmentsService(userSession);
 
-            var bookResult = await appointmentsService.Book(userSession, model);
+                var bookResult = await appointmentsService.Book(userSession, model);
 
-            bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, model.SlotId, model.StartTime));
-            return bookResult.Accept(new AppointmentBookResultVisitor());
+                bookResult.Accept(new AppointmentBookAuditingVisitor(_auditor, model.SlotId, model.StartTime));
+                return bookResult.Accept(new AppointmentBookResultVisitor());
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Post));
+            }
         }
 
         private IAppointmentsService GetAppointmentsService(UserSession userSession)

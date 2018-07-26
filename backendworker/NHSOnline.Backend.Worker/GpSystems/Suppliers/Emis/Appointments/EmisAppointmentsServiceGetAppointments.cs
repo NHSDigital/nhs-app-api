@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -13,10 +12,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     {
         private readonly IEmisClient _emisClient;
         private readonly IAppointmentsResponseMapper _responseMapper;
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisAppointmentsService> _logger;
 
         public EmisAppointmentsServiceGetAppointments(
-            ILogger logger, 
+            ILogger<EmisAppointmentsService> logger, 
             IEmisClient emisClient,
             IAppointmentsResponseMapper responseMapper
             )
@@ -31,15 +30,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             bool includePastAppointments,
             DateTimeOffset? pastAppointmentsFromDate)
         {
-            var emisUserSession = (EmisUserSession) userSession;
-
-            var emisHeaders = new EmisHeaderParameters(emisUserSession);
-
             try
             {
+                _logger.LogEnter(nameof(GetAppointments));
+            
+                var emisUserSession = (EmisUserSession) userSession;
+                var emisHeaders = new EmisHeaderParameters(emisUserSession);
+                
                 var response = await _emisClient.AppointmentsGet(emisHeaders,
                     emisUserSession.UserPatientLinkToken,
-                    includePastAppointments, 
+                    includePastAppointments,
                     pastAppointmentsFromDate);
                 return InterpretAppointmentsGetResponse(response);
             }
@@ -47,6 +47,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogError(exception, "Getting appointments failed.");
                 return new AppointmentsResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(GetAppointments));
             }
         }
 

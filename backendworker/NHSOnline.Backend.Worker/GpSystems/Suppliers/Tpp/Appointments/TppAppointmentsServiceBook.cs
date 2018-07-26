@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
@@ -11,11 +12,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
     public class TppAppointmentsServiceBook
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<TppAppointmentsService> _logger;
         private readonly ITppClient _tppClient;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
-        public TppAppointmentsServiceBook(ILogger logger, ITppClient tppClient, IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public TppAppointmentsServiceBook(ILogger<TppAppointmentsService> logger, ITppClient tppClient, IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             _logger = logger;
             _tppClient = tppClient;
@@ -24,13 +25,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
         public async Task<AppointmentBookResult> Book(TppUserSession userSession, AppointmentBookRequest request)
         {
-            if (!request.StartTime.HasValue || !request.EndTime.HasValue)
-            {
-                _logger.LogError("Appointment book request was missing dates", request);
-                return new AppointmentBookResult.BadRequest();
-            }
             try
             {
+                _logger.LogEnter(nameof(Book));
+            
+                if (!request.StartTime.HasValue || !request.EndTime.HasValue)
+                {
+                    _logger.LogError("Appointment book request was missing dates", request);
+                    return new AppointmentBookResult.BadRequest();
+                }
+                
                 var bookAppointment = new BookAppointment(userSession, request, _dateTimeOffsetProvider);
 
                 var response = await _tppClient.BookAppointmentSlotPost(bookAppointment, userSession);
@@ -40,6 +44,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             {
                 _logger.LogError(exception, "Booking appointment slots failed.");
                 return new AppointmentBookResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Book));
             }
         }
 

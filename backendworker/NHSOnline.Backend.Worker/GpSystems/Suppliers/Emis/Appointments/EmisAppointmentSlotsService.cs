@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
@@ -27,10 +28,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             DateTimeOffset fromDate,
             DateTimeOffset toDate)
         {
-            var emisUserSession = (EmisUserSession) userSession;
-
             try
             {
+                _logger.LogEnter(nameof(Get));
+            
+                var emisUserSession = (EmisUserSession) userSession;
                 var patientLinkToken = emisUserSession.UserPatientLinkToken;
                 var metaParams = new SlotsMetadataGetQueryParameters(fromDate, toDate, patientLinkToken);
                 var slotsParams = new SlotsGetQueryParameters(fromDate, toDate, patientLinkToken);
@@ -51,6 +53,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 _logger.LogError(e, "HttpRequestException has been thrown.");
                 return new AppointmentSlotsResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Get));
             }
         }
     }

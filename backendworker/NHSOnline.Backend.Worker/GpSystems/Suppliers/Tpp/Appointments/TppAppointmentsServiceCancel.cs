@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
@@ -21,10 +22,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
         public async Task<AppointmentCancelResult> Cancel(TppUserSession userSession, AppointmentCancelRequest request)
         {
-            var postRequest = new CancelAppointment(userSession, request);
-
             try
             {
+                _logger.LogEnter(nameof(Cancel));
+            
+                var postRequest = new CancelAppointment(userSession, request);
+                
                 var response = await _tppClient.CancelAppointmentPost(postRequest, userSession.Suid);
                 return InterpretCancelAppointmentReply(response);
             }
@@ -32,6 +35,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             {
                 _logger.LogError(exception, "Cancelling appointment failed.");
                 return new AppointmentCancelResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Cancel));
             }
         }
 

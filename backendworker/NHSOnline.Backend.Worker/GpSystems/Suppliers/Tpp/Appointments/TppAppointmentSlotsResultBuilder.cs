@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.Support;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
@@ -28,10 +26,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
         public Option<AppointmentSlotsResult> Build(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
         {
-            return GetSlotsTaskCompletedUnsuccessfullyCase(slotTask)
-                .IfNone(() => GetSlotsResponseHasNoSuccessStatusCodeCase(slotTask))
-                .IfNone(() => BuildSuccessfulAppointmentSlotsResult(slotTask));
+            try
+            {
+                _logger.LogEnter(nameof(Build));
+                
+                return GetSlotsTaskCompletedUnsuccessfullyCase(slotTask)
+                    .IfNone(() => GetSlotsResponseHasNoSuccessStatusCodeCase(slotTask))
+                    .IfNone(() => BuildSuccessfulAppointmentSlotsResult(slotTask));
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Build));
+            }
         }
+        
         private Option<AppointmentSlotsResult> BuildSuccessfulAppointmentSlotsResult(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)
         {
             try
