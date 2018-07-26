@@ -3,7 +3,6 @@ package features.authentication.steps
 import net.thucydides.core.annotations.Step
 import pageobjects.AuthReturnPage
 import org.junit.Assert
-import pages.prescription.PrescriptionsPage
 
 
 open class AuthReturnSteps {
@@ -28,6 +27,6 @@ open class AuthReturnSteps {
                 "sub-header text: $subHeaderText, " +
                 "message text: $messageText, " +
                 "retry button text: $retryButtonText } ",
-                authReturnPage.isErrorMessageContentCorrect(pageTitle, pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
+                authReturnPage.isErrorMessageContentCorrect(pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
     }
 }

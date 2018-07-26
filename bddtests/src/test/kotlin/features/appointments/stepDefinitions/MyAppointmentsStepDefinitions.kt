@@ -49,6 +49,11 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService)
     }
 
+    @Given("^the (.*) does not offer online booking to my patient$")
+    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider:String) {
+        myAppointmentsSteps.generateStubsForMyAppointmentsWhenUnavailableToPatient(provider)
+    }
+
     @When("^I select \"([^\"]*)\" button$")
     fun i_select_button(buttonText: String) {
         myAppointmentsSteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)

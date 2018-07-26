@@ -41,6 +41,7 @@ import java.util.*
 import javax.servlet.http.Cookie
 import org.junit.Assert
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.defaults.MockDefaults.Companion.patient
 
 

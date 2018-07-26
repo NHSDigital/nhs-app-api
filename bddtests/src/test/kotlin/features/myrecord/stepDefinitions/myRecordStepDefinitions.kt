@@ -26,7 +26,7 @@ import mocking.tpp.models.Error
 import models.Patient
 import java.time.OffsetDateTime
 
-open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
+open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var login: LoginSteps
@@ -43,7 +43,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     fun givenMyRecordWiremocksAreInitialisedfor(getService: String) {
         setPatientToDefaultFor(getService)
 
-        when(getService){
+        when (getService) {
             "EMIS" -> {
                 MockDataPopulate(mockingClient).populate()
 
@@ -92,67 +92,15 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
         }
     }
 
-    @Given("^I have logged in and have a valid session cookie for (.*)$")
-    fun givenIHaveLoggedInAndHaveAValidSessionCookieFor(getService: String) {
-
-        setPatientToDefaultFor(getService)
-
-        mockingClient.forCitizenId {
-            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
-                    .respondWithSuccess(
-                            patient.accessToken,
-                            "30",
-                            "30",
-                            "refresh_token",
-                            "token_type")
-        }
-
-        mockingClient.forCitizenId {
-            userInfoRequest("Bearer ".plus(patient.accessToken))
-                    .respondWithSuccess(Patient.getDefault(getService))
-        }
-
-        when(getService) {
-            "EMIS" -> {
-                mockingClient.forEmis {
-                    endUserSessionRequest()
-                            .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
-                }
-
-                mockingClient.forEmis {
-                    sessionRequest(patient)
-                            .respondWithSuccess(MockDefaults.patient, AssociationType.Self)
-                }
-                mockingClient.forEmis {
-                    demographicsRequest(patient)
-                            .respondWithSuccess(patient,
-                                    patientIdentifiers = arrayOf(
-                                            PatientIdentifier(
-                                                    identifierType = IdentifierType.NhsNumber,
-                                                    identifierValue = patient.nhsNumbers[0]
-                                            )
-                                    )
-                            )
-                }
-            }
-            "TPP" -> {
-                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(MockDefaults.tppAuthenticateReplyResponse) }
-
-            }
-        }
-
-        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(patient.cidUserSession)
-    }
-
     @Given("the GP Practice has enabled summary care record functionality")
     fun givenTheGPPracticeHasEnabledSummaryCareRecordFunctionality() {
 
     }
 
     @Given("the GP Practice has disabled summary care record functionality for (.*)")
-    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityfor(getService:String) {
+    fun givenTheGPPracticeHasDisabledSummaryCareRecordFunctionalityfor(getService: String) {
         setPatientToDefaultFor(getService)
-        when(getService) {
+        when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
                     allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
@@ -176,7 +124,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     @When("^I enter url address for my record directly into the url$")
     @Throws(Exception::class)
     fun i_enter_url_address_for_my_record_directly_into_the_url() {
-        val fullUrl = Config.instance.url+"/my-record"
+        val fullUrl = Config.instance.url + "/my-record"
         browser.browseTo(fullUrl)
     }
 
@@ -339,7 +287,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
     @Throws(Exception::class)
     fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
-        Assert.assertEquals("You don't currently have online access to your medical record\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
+        Assert.assertEquals("You don’t currently have online access to your medical record\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
     }
 
     @Then("^I see a message indicating I have no allergies$")
@@ -515,7 +463,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @When("^I click the Immunisations section$")
     @Throws(Exception::class)
-    fun i_click_the_Immunisaations_section () {
+    fun i_click_the_Immunisaations_section() {
         recordSteps.clickImmunisations()
     }
 
@@ -533,7 +481,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @When("^I click the Problems section$")
     @Throws(Exception::class)
-    fun i_click_the_Problems_section () {
+    fun i_click_the_Problems_section() {
         recordSteps.clickProblems()
     }
 
@@ -569,7 +517,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @When("^I click the Consultations section$")
     @Throws(Exception::class)
-    fun i_click_the_consultations_section () {
+    fun i_click_the_consultations_section() {
         recordSteps.clickConsultations()
     }
 
@@ -605,7 +553,7 @@ open class MyRecordStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @When("^I click the Events section$")
     @Throws(Exception::class)
-    fun i_click_the_Events_section () {
+    fun i_click_the_Events_section() {
         recordSteps.clickEvents()
     }
 

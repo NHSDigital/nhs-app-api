@@ -13,7 +13,6 @@ import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
 import org.openqa.selenium.support.ui.FluentWait
 import pages.navigation.Header
-import java.lang.AssertionError
 import java.time.Duration
 
 const val DEFAULT_SPINNER_WAIT: Long = 5
@@ -136,10 +135,10 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     private fun getAndroidDriver(): AndroidDriver<WebElementFacade> {
-        if (driver is WebDriverFacade) {
-            return ((driver as WebDriverFacade).proxiedDriver) as AndroidDriver<WebElementFacade>
+        return if (driver is WebDriverFacade) {
+            ((driver as WebDriverFacade).proxiedDriver) as AndroidDriver<WebElementFacade>
         } else {
-            return driver as AndroidDriver<WebElementFacade>
+            driver as AndroidDriver<WebElementFacade>
         }
     }
 
@@ -215,8 +214,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return buttons[0].text
     }
 
-    fun isErrorMessageContentCorrect(pageTitle: String,
-                                     pageHeaderText: String,
+    fun isErrorMessageContentCorrect(pageHeaderText: String,
                                      headerText: String,
                                      subHeaderText: String,
                                      messageText: String,
@@ -248,7 +246,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun waitForPageHeaderText(expectedHeaderText: String): Boolean {
-        return waitFor({ getPageHeaderText() == expectedHeaderText }) != null
+        return waitFor { getPageHeaderText() == expectedHeaderText } != null
     }
 
     fun getPageHeaderText(): String {

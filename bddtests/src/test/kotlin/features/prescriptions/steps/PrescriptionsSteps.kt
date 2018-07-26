@@ -50,7 +50,7 @@ open class PrescriptionsSteps {
                 "sub-header text: $subHeaderText, " +
                 "message text: $messageText, " +
                 "retry button text: $retryButtonText } ",
-                prescriptions.isErrorMessageContentCorrect(pageTitle, pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
+                prescriptions.isErrorMessageContentCorrect(pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
     }
 
     @Step

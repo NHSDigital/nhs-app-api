@@ -1,5 +1,6 @@
 package mocking.defaults.dataPopulation.journies.appointmentSlots
 
+import mocking.JSonXmlConverter
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.emis.appointments.*
@@ -41,8 +42,8 @@ class AvailableSlotsJourney(private val client: MockingClient) {
         val bookAppointmentRequests = createBookAppointmentRequest(appointmentSessions, patient)
         for (bookingRequest in bookAppointmentRequests) {
             client.forEmis {
-                appointmentGetRequest(patient)
-                        .respondWithSuccess(appointmentBookingResponse)
+                viewMyAppointmentsRequest(patient)
+                        .respondWithSuccess(JSonXmlConverter.toJsonWithUpperCamelCase(appointmentBookingResponse))
             }
         }
 

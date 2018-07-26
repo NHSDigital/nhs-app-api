@@ -21,4 +21,8 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
     override fun respondWithSuccess(body: String): Mapping {
         return respondWithBody(body)
     }
+
+    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+        return responseErrorWhenGPDisabledAppointmentsService()
+    }
 }

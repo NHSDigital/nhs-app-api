@@ -2,10 +2,9 @@ package mocking.citizenId.login
 
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.models.Mapping
-import models.Patient
 import org.apache.http.HttpStatus
 
-class AccountRegistrationRequestBuilder(redirectUri: String, clientId: String, patient: Patient)
+class AccountRegistrationRequestBuilder(redirectUri: String, clientId: String)
 : CitizenIdMappingBuilder("GET", "/cicauth/realms/NHS/protocol/openid-connect/registrations") {
 
     init {

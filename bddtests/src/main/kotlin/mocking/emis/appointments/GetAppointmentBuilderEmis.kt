@@ -1,42 +1,32 @@
 package mocking.emis.appointments
 
-import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
+import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
+import models.Patient
 import org.apache.http.HttpStatus
 
-class GetAppointmentBuilderEmis(
-        configuration: EmisConfiguration,
-        endUserSessionId: String,
-        sessionId: String,
-        userPatientLinkToken: String,
-        fetchPreviousAppointments: Boolean = false,
-        previousAppointmentsFromDate: String? = null)
-    : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointments") {
+class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient, fetchPreviousAppointments: Boolean = false)
+    : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointments"), IMyAppointmentsBuilder {
 
     init {
         requestBuilder
-                .andHeader(HEADER_API_END_USER_SESSION_ID, endUserSessionId)
-                .andHeader(HEADER_API_SESSION_ID, sessionId)
-        requestBuilder.andQueryParameter("userPatientLinkToken", userPatientLinkToken)
-        requestBuilder.andQueryParameter("fetchPreviousAppointments", fetchPreviousAppointments.toString())
-
-        if (!previousAppointmentsFromDate.isNullOrEmpty())
-            requestBuilder.andQueryParameter("previousAppointmentsFromDate", previousAppointmentsFromDate.toString())
+                .andHeader(HEADER_API_END_USER_SESSION_ID, patient.endUserSessionId)
+                .andHeader(HEADER_API_SESSION_ID, patient.sessionId)
+                .andQueryParameter("userPatientLinkToken", patient.userPatientLinkToken)
+                .andQueryParameter("fetchPreviousAppointments", fetchPreviousAppointments.toString())
     }
 
-    fun respondWithSuccess(model: GetAppointmentsResponseModel): Mapping {
-        return respondWithBody(model)
+    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+        return responseErrorWhenGPDisabledAppointmentsService()
     }
 
-    private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_OK): Mapping {
-        return respondWith(statusCode) {
-            andJsonBody(body, GsonFactory.asPascal)
+    override fun respondWithSuccess(body: String): Mapping {
+        return respondWith(HttpStatus.SC_OK) {
+            andBody(body, contentType = "application/json")
         }
-
     }
 }
-

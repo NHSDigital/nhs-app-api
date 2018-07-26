@@ -5,7 +5,6 @@ import org.apache.http.HttpStatus
 
 private const val SC_FOUND = HttpStatus.SC_MOVED_TEMPORARILY
 const val CONTENT_TYPE_APPLICATION_JSON = "application/json; charset=UTF-8"
-const val SERENITY_VARIABLE_GP_SERVICE_KEY = "GP_SERVICE_KEY"
 abstract class MappingBuilder(method: String, url: String) {
 
     internal val requestBuilder = RequestBuilder(method, url)

@@ -13,7 +13,6 @@ import mocking.defaults.dataPopulation.journies.linkage.LinkageJournies
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
-import mocking.emis.appointments.CancelAppointmentRequest
 import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -92,8 +91,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json")
             
             mockingClient.forEmis {
-                appointmentGetRequest(patient = patient)
-                        .respondWithSuccessJson(appointmentsBody)
+                viewMyAppointmentsRequest(patient = patient)
+                        .respondWithSuccess(appointmentsBody)
             }
 
             // GET /emis/appointmentslots/meta
@@ -136,9 +135,9 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             // GET /emis/prescriptionrequests
             val prescriptionsDataLoader = EmisPrescriptionLoader
             prescriptionsDataLoader.loadData(
-                    numberOfPrescriptions = 5,
-                    numberOfCourses = 5,
-                    numberOfRepeatPrescriptions = 5,
+                    noPrescriptions = 5,
+                    noCourses = 5,
+                    noRepeats = 5,
                     showDosage = true,
                     showQuantity = true
             )
@@ -153,9 +152,9 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             // GET /emis/courses
             val coursesLoader = EmisCoursesLoader
             coursesLoader.loadData(
-                    maximumNumberOfCourses = 5,
-                    numberOfRepeatPrescriptions = 5,
-                    numberOfRepeatPrescriptionsThatCanBeRequested = 5,
+                    maxCourses = 5,
+                    numOfRepeats = 5,
+                    numCanBeRequested = 5,
                     includeDosage = true,
                     includeQuantity = true)
 

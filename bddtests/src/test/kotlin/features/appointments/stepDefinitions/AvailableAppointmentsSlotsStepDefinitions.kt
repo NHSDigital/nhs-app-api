@@ -20,6 +20,7 @@ import org.junit.Assert.*
 import worker.models.appointments.AppointmentSlotsResponse
 import javax.servlet.http.Cookie
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 
 
 class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
@@ -103,41 +104,37 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Given("^GP system is unavailable for available appointment slots$")
     fun gp_system_is_unavailable_for_available_appointment_slots() {
         availableAppointments.generateDefaultUserData()
-        mockingClient
-                .forEmis {
-                    appointmentSlotsMetaRequest(patient)
-                            .respondWith(SC_INTERNAL_SERVER_ERROR, 0, {
-                                andHtmlBody("Internal server Error")
-                            })
-                }
+        mockingClient.forEmis {
+            appointmentSlotsMetaRequest(patient)
+                    .respondWith(SC_INTERNAL_SERVER_ERROR, 0) {
+                        andHtmlBody("Internal server Error")
+                    }
+        }
 
-        mockingClient
-                .forEmis {
-                    appointmentSlotsRequest(patient)
-                            .respondWith(SC_INTERNAL_SERVER_ERROR, 0, {
-                                andHtmlBody("Internal server Error")
-                            })
-                }
+        mockingClient.forEmis {
+            appointmentSlotsRequest(patient)
+                    .respondWith(SC_INTERNAL_SERVER_ERROR, 0) {
+                        andHtmlBody("Internal server Error")
+                    }
+        }
     }
 
     @Given("^EMIS returns corrupt data for appointment slots$")
     fun emis_returns_corrupt_data_for_appointment_slots() {
         availableAppointments.generateDefaultUserData()
-        mockingClient
-                .forEmis {
-                    appointmentSlotsMetaRequest(patient)
-                            .respondWith(SC_OK, 0, {
-                                andHtmlBody("appointment slots metadata")
-                            })
-                }
+        mockingClient.forEmis {
+            appointmentSlotsMetaRequest(patient)
+                    .respondWith(SC_OK, 0) {
+                        andHtmlBody("appointment slots metadata")
+                    }
+        }
 
-        mockingClient
-                .forEmis {
-                    appointmentSlotsRequest(patient)
-                            .respondWith(SC_OK, 0, {
-                                andHtmlBody("appointment slots")
-                            })
-                }
+        mockingClient.forEmis {
+            appointmentSlotsRequest(patient)
+                    .respondWith(SC_OK, 0) {
+                        andHtmlBody("appointment slots")
+                    }
+        }
     }
 
 
@@ -146,12 +143,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.generateDefaultUserData()
         thereAreAvailableAppointmentSlots()
         Serenity.setSessionVariable(Cookie::class).to(expiredCookie)
-    }
-
-    @Given("^the practice does not offer online booking to my patient$")
-    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
-        availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAvailableSlotsWhenUnavailableToPatient()
     }
 
     @Given("^an unknown exception will occur when wanting to view appointment slots$")

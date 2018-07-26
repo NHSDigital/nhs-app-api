@@ -23,6 +23,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.courses.CoursesResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
@@ -206,7 +207,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
         if (currentProvider == null)
         {
-            initalize(Serenity.sessionVariableCalled<String>(BaseStepDefinition.GLOBAL_PROVIDER_TYPE))
+            initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
         }
 
         when (currentProvider) {

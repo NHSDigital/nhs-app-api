@@ -100,7 +100,7 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
         val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(supplier)
         val getResponse = viewAppointmentFactory.createEmptyUpcomingAppointmentResponse(patient)
         appointmentMapper
-                .requestMapping{ viewAppointment(patient).respondWithSuccess(getResponse)}
+                .requestMapping{ viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse)}
     }
 
 

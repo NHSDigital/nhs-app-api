@@ -1,8 +1,8 @@
 package features.appointments.data
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
-import mocking.SERENITY_VARIABLE_GP_SERVICE_KEY
 import mocking.commonData.BaseAppointmentData
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
@@ -15,9 +15,9 @@ abstract class ViewAppointmentsFactory {
 
     fun setUpViewAppointmentsWithResult(gPService: String, myAppointmentBuilder: (IMyAppointmentsBuilder) -> Mapping) {
         var patient = getAppointmentData().defaultPatient
-        sendRequestViaMockingClient { myAppointmentBuilder(viewAppointment(patient)) }
+        sendRequestViaMockingClient { myAppointmentBuilder(viewMyAppointmentsRequest(patient)) }
 
-        Serenity.setSessionVariable(SERENITY_VARIABLE_GP_SERVICE_KEY).to(gPService)
+        Serenity.setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gPService)
     }
 
     fun setupViewAppointmentResponse(response: (IAppointmentMappingBuilder.() -> Mapping)? = null) {

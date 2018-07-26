@@ -6,11 +6,24 @@ Feature: My appointments
   @backend
   Scenario Outline: API appropriately filters for upcoming appointments
     Given I have upcoming appointments for <GP System>
-    And I have logged in and have a valid session cookie for <GP System>
+    And I have logged into <GP System> and have a valid session cookie
     When the API retrieves upcoming appointments
     Then I will only receive upcoming appointments
     And a list of cancellation reasons if the GP Service provides the list
 
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @NHSO-470
+  @NHSO-878
+  @backend
+  Scenario Outline: Online appointment booking is not available to a particular patient
+    Given I have logged into <GP System> and have a valid session cookie
+    But the <GP System> does not offer online booking to my patient
+    When the API retrieves upcoming appointments
+    Then I receive a "Forbidden" error
     Examples:
       | GP System |
       | EMIS      |

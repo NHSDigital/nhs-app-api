@@ -1,6 +1,6 @@
 package features.myrecord.stepDefinitions
 
-import features.sharedStepDefinitions.BaseStepDefinition
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -13,6 +13,6 @@ abstract class AbstractDemographicsStepDefinitions {
 
     fun setPatientToDefaultFor(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
-        setSessionVariable(BaseStepDefinition.GLOBAL_PROVIDER_TYPE).to(gpSystem)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
     }
 }

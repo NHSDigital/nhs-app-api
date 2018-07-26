@@ -5,7 +5,7 @@ import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 
 interface IAppointmentMappingBuilder {
-    fun viewAppointment(patient: Patient): IMyAppointmentsBuilder
+    fun viewMyAppointmentsRequest(patient: Patient):IMyAppointmentsBuilder
 
     fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder
 

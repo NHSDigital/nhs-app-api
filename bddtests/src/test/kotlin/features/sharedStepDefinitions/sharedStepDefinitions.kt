@@ -73,7 +73,7 @@ open class SharedStepDefinitions {
             else -> initialiseEmis()
         }
 
-        setSessionVariable(BaseStepDefinition.GLOBAL_PROVIDER_TYPE).to(system)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)
     }
 
     private fun initialiseEmis() {

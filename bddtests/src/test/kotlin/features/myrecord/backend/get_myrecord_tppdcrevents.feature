@@ -6,7 +6,7 @@ Feature: Get TPP Dcr Event Data
   @backend
   Scenario: Requesting multiple tpp dcr events returns multiple tpp dcr events data for TPP
     Given the my record wiremocks are initialised for TPP
-    And I have logged in and have a valid session cookie for TPP
+    And I have logged into TPP and have a valid session cookie
     And the GP Practice has multiple dcr events for TPP
     When I get the users dcr event data
     Then I receive "2" dcr events as part of the my record object
@@ -17,7 +17,7 @@ Feature: Get TPP Dcr Event Data
   @backend
   Scenario: GP practice has disabled tpp dcr events functionality for TPP
     Given the my record wiremocks are initialised for TPP
-    And I have logged in and have a valid session cookie for TPP
+    And I have logged into TPP and have a valid session cookie
     And the GP Practice has disabled dcr events functionality for TPP
     When I get the users dcr event data
     Then I receive "0" dcr events as part of the my record object
@@ -28,7 +28,7 @@ Feature: Get TPP Dcr Event Data
   @backend
   Scenario: Error occurs getting tpp dcr events for TPP
     Given the my record wiremocks are initialised for TPP
-    And I have logged in and have a valid session cookie for TPP
+    And I have logged into TPP and have a valid session cookie
     And an error occurred retrieving the dcr events from TPP
     When I get the users dcr event data
     Then I receive "0" dcr events as part of the my record object

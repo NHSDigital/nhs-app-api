@@ -1,6 +1,6 @@
 package pages
 
-class ErrorPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val parent = HybridPageElement(
             browserLocator = "//div[@class='msg error']",
@@ -52,11 +52,10 @@ class ErrorPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun hasButton(text: String): Boolean {
-        try {
-            return button.element.text == text
-        }
-        finally {
-            return false
+        return try {
+            button.element.text == text
+        } catch (e: Exception) {
+            false
         }
 
     }

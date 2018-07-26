@@ -90,7 +90,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val expectation = if (presence) "should be displayed but got" else "shouldn't be displayed but still got"
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedFirstBodyLine = "Please try again"
-        val expectedSecondBodyLine =  "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        val expectedSecondBodyLine = "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
         errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
         assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(1).element.text}\"", presence, errorPage.hasSubHeading(expectedHeader))
         assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(2).element.text}\"", presence, errorPage.hasDetailParagraphOne(expectedFirstBodyLine))
@@ -387,21 +387,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 .forEmis {
                     appointmentSlotsRequest(patient, defaultSessionStartDate, defaultSessionEndDate)
                             .respondWithUnknownException()
-                }
-    }
-
-    @Step
-    fun generateEmisStubsForAvailableSlotsWhenUnavailableToPatient() {
-        mockingClient
-                .forEmis {
-                    appointmentSlotsMetaRequest(patient, defaultSessionStartDate, defaultSessionEndDate)
-                            .respondWithExceptionWhenNotEnabled()
-                }
-
-        mockingClient
-                .forEmis {
-                    appointmentSlotsRequest(patient, defaultSessionStartDate, defaultSessionEndDate)
-                            .respondWithExceptionWhenNotEnabled()
                 }
     }
 

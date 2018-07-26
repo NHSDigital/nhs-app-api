@@ -6,7 +6,7 @@ repositories {
 }
 
 buildscript {
-    ext.kotlin_version = '1.2.40'
+    ext.kotlin_version = '1.2.51'
     ext.serenity_version = '1.9.12'
 
     repositories {

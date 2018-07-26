@@ -6,7 +6,7 @@ Feature: Get medications data
   @backend
   Scenario Outline: Requesting medications returns medications data
     Given the my record wiremocks are initialised for <Service>
-    And I have logged in and have a valid session cookie for <Service>
+    And I have logged into <Service> and have a valid session cookie
     And the GP Practice has enabled medications functionality for <Service>
     When I get the users my record data
     Then I receive "1" acute medications as part of the my record object
@@ -23,7 +23,7 @@ Feature: Get medications data
   @backend
   Scenario Outline: GP practice has disabled medications functionality
     Given the my record wiremocks are initialised for <Service>
-    And I have logged in and have a valid session cookie for <Service>
+    And I have logged into <Service> and have a valid session cookie
     But the GP Practice has disabled medications functionality for <Service>
     When I get the users my record data
     Then the flag informing that the patient has access to the medications data is set to "False"

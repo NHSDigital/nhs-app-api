@@ -19,8 +19,8 @@ open class CitizenIdMappingBuilder(method: String, relativePath: String)
 
     fun initialLoginRequest(redirectUri: String, clientId: String) = InitialLoginRequestBuilder(redirectUri, clientId)
 
-    fun createAccountRequest(redirectUri: String = Config.instance.cidRedirectUri, clientId: String = Config.instance.cidClientId, patient: Patient) =
-            AccountRegistrationRequestBuilder(redirectUri, clientId, patient)
+    fun createAccountRequest(redirectUri: String = Config.instance.cidRedirectUri, clientId: String = Config.instance.cidClientId) =
+            AccountRegistrationRequestBuilder(redirectUri, clientId)
 
     fun completeLoginRequest(patient: Patient = MockDefaults.patient) = CompleteLoginRequestBuilder(patient)
 

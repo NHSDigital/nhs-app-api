@@ -3,8 +3,8 @@ package features.appointments.steps
 import com.google.common.collect.Ordering
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.data.ViewAppointmentsFactory
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
-import mocking.SERENITY_VARIABLE_GP_SERVICE_KEY
 import mocking.defaults.MockDefaults
 import models.Patient
 import models.Slot
@@ -13,6 +13,7 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.*
 import pages.appointments.MyAppointmentsPage
+import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
@@ -104,13 +105,27 @@ open class MyAppointmentsSteps {
     }
 
     @Step
+    fun generateStubsForMyAppointmentsWhenUnavailableToPatient(provider: String) {
+        val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
+        val currentViewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.setupViewAppointmentResponse {
+            viewMyAppointmentsRequest(patient)
+                    .respondWithExceptionWhenNotEnabled()
+        }
+    }
+
+    @Step
     fun createSerenityMyAppointmentSessionVariable() {
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
-        val result = Serenity
-                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .getMyAppointments(fromDate)
-        Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
+        try {
+            val result = Serenity
+                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .getMyAppointments(fromDate)
+            Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
+        } catch (httpException: NhsoHttpException) {
+            Serenity.setSessionVariable("HttpException").to(httpException)
+        }
     }
 
     @Step
@@ -162,7 +177,7 @@ open class MyAppointmentsSteps {
     }
 
     private fun getActiveAppointmentsFactory(gpService: String? = null): ViewAppointmentsFactory {
-        val thGpService = gpService ?: Serenity.sessionVariableCalled<String>(SERENITY_VARIABLE_GP_SERVICE_KEY)
+        val thGpService = gpService ?: Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE)
         return ViewAppointmentsFactory.getForSupplier(thGpService)
     }
 }

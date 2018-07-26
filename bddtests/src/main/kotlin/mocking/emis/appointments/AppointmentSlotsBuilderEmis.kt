@@ -43,13 +43,13 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         return respondWithBody(model)
     }
 
-    private fun slotsConverter(slots: ArrayList<AppointmentSlotFacade>) : ArrayList<AppointmentSlot>{
-        var list : ArrayList<AppointmentSlot> =arrayListOf()
-        slots.forEach{slot->  list.add(slotConverter(slot))}
+    private fun slotsConverter(slots: ArrayList<AppointmentSlotFacade>): ArrayList<AppointmentSlot> {
+        var list: ArrayList<AppointmentSlot> = arrayListOf()
+        slots.forEach { slot -> list.add(slotConverter(slot)) }
         return list
     }
 
-    private fun slotConverter(slot : AppointmentSlotFacade): AppointmentSlot{
+    private fun slotConverter(slot: AppointmentSlotFacade): AppointmentSlot {
 
         return AppointmentSlot(slotId = slot.slotId!!,
                 startTime = slot.startTime,
@@ -70,9 +70,7 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val exceptionResponse = ExceptionResponse(-1030,
-                "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation")
-        return respondWithException(exceptionResponse)
+        return responseErrorWhenGPDisabledAppointmentsService()
     }
 
     override fun respondWithUnknownException(): Mapping {

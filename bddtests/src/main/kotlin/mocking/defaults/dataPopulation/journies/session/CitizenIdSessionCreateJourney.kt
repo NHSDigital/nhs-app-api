@@ -2,7 +2,6 @@ package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import models.Patient
 
 class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
@@ -14,7 +13,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId {
-            createAccountRequest(patient = patient)
+            createAccountRequest()
                     .respondWithLoginPage()
         }
 

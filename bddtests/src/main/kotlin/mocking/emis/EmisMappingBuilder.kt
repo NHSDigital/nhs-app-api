@@ -44,22 +44,16 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
     : MappingBuilder(method, "/emis$relativePath"), IAppointmentMappingBuilder {
 
     init {
-        if(configuration != null) {
+        if (configuration != null) {
             requestBuilder
                     .andHeader(HEADER_API_APPLICATION_ID, configuration!!.applicationId)
                     .andHeader(HEADER_API_VERSION, configuration!!.version)
         }
     }
 
-    fun appointmentGetRequest(patient: Patient, fetchPreviousAppointments: Boolean = false) = GetAppointmentBuilderEmis(
-            configuration!!,
-            patient.endUserSessionId,
-            patient.sessionId,
-            patient.userPatientLinkToken,
-            fetchPreviousAppointments = fetchPreviousAppointments)
+    override fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
 
-
-    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String? , toDateTime: String? ) = AppointmentSlotsBuilderEmis(
+    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -74,8 +68,6 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             sessionStartDate,
             sessionEndDate,
             patient.userPatientLinkToken)
-
-    override fun viewAppointment(patient: Patient): IMyAppointmentsBuilder = ViewAppointmentBuilderEmis(configuration, patient)
 
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade) =
             BookAppointmentsBuilderEmis(configuration!!, patient.endUserSessionId, patient.sessionId, request)
@@ -136,6 +128,11 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
     fun linkageKeyGetRequest(nhsNumber: String, odsCode: String) = EmisLinkageGETBuilder(nhsNumber, odsCode)
 
     fun linkageKeyPOSTRequest(request: CreateLinkageRequest) = EmisLinkagePOSTBuilder(request)
+
+    fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
+        val exceptionMessage = "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation"
+        return respondWithException(-1030, exceptionMessage)
+    }
 
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {
 

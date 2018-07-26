@@ -8,23 +8,23 @@ import java.time.OffsetDateTime
 object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetResponse> {
     override lateinit var data:PrescriptionRequestsGetResponse
 
-    override fun loadData(numberOfPrescriptions: Int, numberOfCourses: Int, numberOfRepeatPrescriptions: Int, showDosage: Boolean, showQuantity: Boolean) {
+    override fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean, showQuantity: Boolean) {
 
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
 
-        if(numberOfPrescriptions != 0) {
+        if(noPrescriptions != 0) {
             // Create courses first as these will be used in the prescriptions
             EmisCoursesLoader.loadData(
-                    maximumNumberOfCourses = numberOfCourses,
-                    numberOfRepeatPrescriptions = numberOfRepeatPrescriptions,
-                    numberOfRepeatPrescriptionsThatCanBeRequested = numberOfRepeatPrescriptions,
+                    maxCourses = noCourses,
+                    numOfRepeats = noRepeats,
+                    numCanBeRequested = noRepeats,
                     includeDosage = showDosage,
                     includeQuantity = showQuantity)
 
             medicationCourses = medicationCourses.union(EmisCoursesLoader.data).toMutableList()
 
-            var maxNumberOfPrescriptions = numberOfPrescriptions.minus(1)
+            var maxNumberOfPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false
             var prescriptionNumber = 0
             var courseNumber = medicationCourses.count().minus(1)
@@ -50,7 +50,7 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
 
                 if (prescriptionNumber == maxNumberOfPrescriptions && courseNumber >= 0) {
                     isSecondIteration = true
-                    maxNumberOfPrescriptions = numberOfPrescriptions.minus(1)
+                    maxNumberOfPrescriptions = noPrescriptions.minus(1)
                     prescriptionNumber = 0
                 } else if (prescriptionNumber < maxNumberOfPrescriptions && courseNumber == -1) {
                     prescriptionNumber++
@@ -89,12 +89,12 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
         }
 
         //3 update course list
-        val course_list = mutableSetOf<MedicationCourse>()
+        val courseList = mutableSetOf<MedicationCourse>()
         oldPrescriptions.medicationCourses.forEach {
-            c -> course_list.add(c)
+            c -> courseList.add(c)
         }
         orderedCourses.forEach {
-            c -> course_list.add(MedicationCourse(
+            c -> courseList.add(MedicationCourse(
                 c.medicationCourseGuid,
                 c.name,
                 c.dosage,
@@ -104,6 +104,6 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
                 c.canBeRequested))
         }
 
-        return PrescriptionRequestsGetResponse(prescriptionsList, course_list.toList())
+        return PrescriptionRequestsGetResponse(prescriptionsList, courseList.toList())
     }
 }

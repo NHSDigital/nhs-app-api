@@ -28,6 +28,7 @@ import worker.WorkerClient
 import java.util.*
 import java.util.concurrent.TimeUnit
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes;
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 
 
 class CommonSteps : AbstractSteps() {
@@ -52,7 +53,8 @@ class CommonSteps : AbstractSteps() {
     }
 
     @Given("^(EMIS|VISION) is not available$")
-    fun givenXIsNotAvailable(gpSystem: String) {        when (gpSystem) {
+    fun givenXIsNotAvailable(gpSystem: String) {
+        when (gpSystem) {
             EMIS -> {
                 val connectionToken = "f6ca8e0c-dd67-4863-ba9e-3d34bfe930d0"
                 val odsCode = "A29928"
@@ -119,8 +121,8 @@ class CommonSteps : AbstractSteps() {
 
     @Given("^I have logged into (.*) and have a valid session cookie$")
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
-
         val patient = Patient.getDefault(gpSystem)
+        setGPServiceAndPatientPatientSerenityVaraibles(gpSystem, patient)
 
         when (ProviderTypes.valueOf(gpSystem)) {
             ProviderTypes.EMIS -> {
@@ -166,6 +168,7 @@ class CommonSteps : AbstractSteps() {
                     val authReply = AuthenticateReply()
                     authReply.uuid = UUID.randomUUID().toString()
                     authReply.user.person.dateOfBirth = MockDefaults.patientTpp.dateOfBirth
+                    authReply.onlineUserId = MockDefaults.patientTpp.onlineUserId
                     authReply.patientId = MockDefaults.patientTpp.patientId
                     authReply.onlineUserId = MockDefaults.patientTpp.onlineUserId
 
@@ -182,5 +185,10 @@ class CommonSteps : AbstractSteps() {
     fun andIDelayMyRequestByTheDefaultTime() {
         var delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
         Thread.sleep(delayTime + 10)
+    }
+
+    private fun setGPServiceAndPatientPatientSerenityVaraibles(gpSystem: String, patient: Patient) {
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
+        setSessionVariable(Patient::class).to(patient)
     }
 }

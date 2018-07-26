@@ -9,19 +9,19 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
 
     override lateinit var data:MutableList<MedicationCourse>
 
-    override fun loadData(maximumNumberOfCourses: Int,
-                          numberOfRepeatPrescriptions: Int,
-                          numberOfRepeatPrescriptionsThatCanBeRequested: Int,
+    override fun loadData(maxCourses: Int,
+                          numOfRepeats: Int,
+                          numCanBeRequested: Int,
                           includeDosage: Boolean,
                           includeQuantity: Boolean) {
 
-        var numberOfRepeats = numberOfRepeatPrescriptions
-        var numberCanBeRequested = numberOfRepeatPrescriptionsThatCanBeRequested
+        var numberOfRepeats = numOfRepeats
+        var numberCanBeRequested = numCanBeRequested
 
         var medicationCourses = mutableListOf<MedicationCourse>()
 
         // Create courses first as these will be used in the prescriptions
-        for (course in 1..maximumNumberOfCourses) {
+        for (course in 1..maxCourses) {
             val constituents = mutableListOf<String>()
             for (constituentNo in 1..EmisPrescriptionLoader.getRandomNumber(5)) {
                 constituents.add("Constituent" + constituentNo)
