@@ -26,9 +26,6 @@ class KnownServicesTest {
             on { getString(R.string.connection_error_message) } doReturn "Please check your connection and try again." +
                     "\n\nIf the problem persists and you need to book an appointment or get a prescription now, " +
                     "contact your GP surgery directly. For immediate medical advice, call 111."
-            on { getString(R.string.nhs111_connection_error) } doReturn "NHS 111 unavailable"
-            on { getString(R.string.organ_donation_connection_error) } doReturn "Organ donation unavailable"
-            on { getString(R.string.data_sharing_connection_error) } doReturn "Sharing health data unavailable"
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=mobile"
         }

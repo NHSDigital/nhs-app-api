@@ -25,23 +25,20 @@ class KnownServices(private val context: Context) {
             queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
             unavailabilityErrorMessage = unavailabilityErrorMessage,
             shouldValidateSession = true))
-        val organDonationError = ErrorMessage(context.resources.getString(R.string.organ_donation_connection_error))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
             R.string.organDonation)),
-            organDonationError,
+            unavailabilityErrorMessage,
             nativeHeader = context.resources.getString(R.string.organ_donation_register_header),
             shouldValidateSession = false))
-        val dataSharingError = ErrorMessage(context.resources.getString(R.string.data_sharing_connection_error))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
                 R.string.dataSharing)),
-                dataSharingError,
+                unavailabilityErrorMessage,
                 nativeHeader = context.resources.getString(R.string.data_sharing_header),
                 shouldValidateSession = false))
-        val nhs111Error = ErrorMessage(context.resources.getString(R.string.nhs111_connection_error))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
             R.string.nhs111), context.resources.getString(
             R.string.nhs111Location)),
-            nhs111Error,
+            unavailabilityErrorMessage,
             nativeHeader = context.resources.getString(R.string.nhs_111_header),
             shouldValidateSession = false))
     }

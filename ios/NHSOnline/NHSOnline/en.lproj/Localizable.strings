@@ -11,9 +11,6 @@
 
 /*Error messages*/
 "ServiceUnavailableErrorMessage" = "Service unavailable";
-"OrganDonationUnavailableErrorMessage" = "Organ donation unavailable";
-"DataSharingUnavailableErrorMessage" = "Sharing health data unavailable";
-"Nhs111UnavailableErrorMessage" = "NHS 111 unavailable";
 "ConnectionErrorTitle" = "There's an issue with your internet connection";
 "ConnectionErrorMessage" = "Please check your connection and try again.\n\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.";
 
