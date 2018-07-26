@@ -22,9 +22,7 @@ export default {
     state.user = {};
   },
   [UPDATE_CONFIG](state, config) {
-    if (state.config === {} || !state.config.codeVerifier) {
-      state.config = config;
-    }
+    state.config = config;
   },
 };
 

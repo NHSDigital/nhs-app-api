@@ -79,6 +79,9 @@ export default {
   performRegistration({ state }) {
     new AuthorisationService().performRegistration(state.config.codeVerifier);
   },
+  updateConfig({ commit }, config) {
+    commit(UPDATE_CONFIG, config);
+  },
   unauthorised({ commit }) {
     commit(LOGOUT, true);
     this.dispatch('availableAppointments/init');

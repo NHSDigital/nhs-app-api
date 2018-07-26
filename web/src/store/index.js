@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import header from './modules/header';
 import availableAppointments from './modules/availableAppointments';
 import auth from './modules/auth';
-import { UPDATE_CONFIG } from './modules/auth/mutation-types';
 import device from './modules/device';
 import http from './modules/http';
 import navigation from './modules/navigation';
@@ -30,8 +29,8 @@ const createStore = () => new Vuex.Store({
     flashMessage,
   },
   actions: {
-    nuxtServerInit({ state, commit }) {
-      commit(UPDATE_CONFIG, state.auth.config);
+    nuxtServerInit({ state, dispatch }) {
+      dispatch('auth/updateConfig', state.auth.config);
     },
   },
 });
