@@ -356,7 +356,7 @@ export default {
       fieldLabelNHS: 'NHS number',
       sectionHeader: 'My details',
     },
-    viewRestOfHealthRecordWarning: 'This is summary of your medical record. To view more detailed information here, such as test results and immunisations, contact your GP surgery to request access.',
+    viewRestOfHealthRecordWarning: 'This is a summary of your medical record. To view more detailed information here, such as test results and immunisations, contact your GP surgery to request access.',
     allergiesAndAdverseReactions: {
       sectionHeader: 'Allergies and adverse reactions',
     },
