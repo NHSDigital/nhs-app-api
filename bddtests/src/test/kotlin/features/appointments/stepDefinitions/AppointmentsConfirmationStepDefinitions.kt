@@ -61,13 +61,13 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkSymptomsLength(length)
     }
 
-    @Given("^GP system doesn't respond a timely fashion when booking an appointment$")
-    fun gp_system_doesn_t_respond_a_timely_fashion_when_booking_an_appointment() {
+    @Given("^EMIS doesn't respond a timely fashion when booking an appointment$")
+    fun emis_doesn_t_respond_a_timely_fashion_when_booking_an_appointment() {
         appointmentsConfirmationSteps.mockEmisSuccessResponseDelayedBy(30)
     }
 
-    @Given("^GP system is unavailable when booking an appointment$")
-    fun gp_system_is_unavailable_when_booking_an_appointment() {
+    @Given("^EMIS is unavailable when booking an appointment$")
+    fun emis_is_unavailable_when_booking_an_appointment() {
 
         appointmentsConfirmationSteps.mockEmisUnavailableResponse()
     }

@@ -52,7 +52,13 @@ class ErrorPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun hasButton(text: String): Boolean {
-        return button.element.text == text
+        try {
+            return button.element.text == text
+        }
+        finally {
+            return false
+        }
+
     }
 
     fun shouldNotBeVisible() {

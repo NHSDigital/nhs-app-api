@@ -138,6 +138,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 Serenity.setSessionVariable(Patient::class).to(tppPatient)
                 CitizenIdSessionCreateJourney(mockingClient).createFor(tppPatient)
                 TppSessionCreateJourneyFactory(mockingClient).createFor(tppPatient)
+                myAppointments.mockGPServiceMyAppointmentResponse("TPP", true)
             }
         }
     }
@@ -145,6 +146,21 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun generateAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
         when (gpSystem.toUpperCase()) {
+            "TPP" -> {
+                var tppAppointmentSessions = generateTppSessions(13)
+
+                val numberOfSessionTypes = 2 // "Walk-in" and "Clinic"
+                val numberOfsessionsPerDay = numberOfSessionTypes * defaultTppLocations.size * defaultTppClinicians.size
+                for(i in 1..13) {
+                  val slots = generateTppAppointmentSlots(i)
+                    val sessionIndex = (i-1) * numberOfsessionsPerDay
+                    for(dailySessionIndex in 0 until numberOfsessionsPerDay) {
+                        tppAppointmentSessions[sessionIndex + dailySessionIndex].slots = slots
+                    }
+                }
+
+                generateTppStubsForAppointmentSlotsForNextFourWeeks(tppAppointmentSessions)
+            }
             "EMIS" -> {
                 Serenity.setSessionVariable(EXPECTED_SESSIONS_KEY).to(generateEmisSessions(13))
 
@@ -190,6 +206,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                         arrayListOf()
                 )
             }
+            "TPP" -> {
+                generateTppStubsForAppointmentSlotsForNextFourWeeks(
+                        arrayListOf()
+                )
+            }
         }
     }
 
@@ -225,6 +246,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                         defaultEmisAppointmentSessions
                 )
                 Serenity.setSessionVariable("Location").to(defaultEmisMetaSlotLocations[0].locationName)
+            }
+            "TPP" -> {
+                val tppAppointmentSessions = getDefaultTppAppointmentSessions()
+                generateTppStubsForAppointmentSlotsForNextFourWeeks(tppAppointmentSessions)
+                Serenity.setSessionVariable("Location").to(tppAppointmentSessions[0].location)
             }
         }
     }
@@ -474,17 +500,16 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val actualAppointmentTypeOptions = availableAppointments.getAppointmentTypeFilterContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
-        val expectedSessions = sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY)
         val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
 
-        val sessionsById = generateMapOfSessionsAgainstId(expectedSessions)
+        val sessionsById = generateMapOfSessionsAgainstId(expectedAppointmentSessions)
         var uniqueAppointmentTypes = setOf<String>()
 
         for (i in 0 until expectedAppointmentSessions.size) {
             for (j in 0 until expectedAppointmentSessions[i].slots.size) {
                 val session = sessionsById[expectedAppointmentSessions[i].sessionId]
                 val appointmentSlotType = expectedAppointmentSessions[i].slots[j].slotTypeName
-                val expectedOption = "${session!!.sessionName} - $appointmentSlotType"
+                val expectedOption = "${session!!.sessionType} - $appointmentSlotType"
                 uniqueAppointmentTypes = uniqueAppointmentTypes.plus(expectedOption)
             }
         }
@@ -743,30 +768,30 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun selectFilterOptionsToRevealSlots() {
-        val expectedAppointmentSession = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)[0]
-        val expectedSessions = sessionVariableCalled<ArrayList<Session>>(EXPECTED_SESSIONS_KEY)
+        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val expectedAppointmentSession = expectedAppointmentSessions[0]
         val expectedSessionId = expectedAppointmentSession.sessionId
-        val expectedSession = generateMapOfSessionsAgainstId(expectedSessions)[expectedSessionId]
+        val expectedSession = generateMapOfSessionsAgainstId(expectedAppointmentSessions)[expectedSessionId]
 
         var locationName = ""
         for (location in defaultEmisMetaSlotLocations) {
-            if (location.locationId == expectedSession!!.locationId) {
+            if (location.locationName == expectedSession!!.location) {
                 locationName = location.locationName
                 break
             }
         }
 
-        val sessionName = expectedSession!!.sessionName
+        val sessionType = expectedSession!!.sessionType
         val appointmentSlotType = expectedAppointmentSession.slots[0].slotTypeName
-        val expectedOption = "$sessionName - $appointmentSlotType"
+        val expectedOption = "$sessionType - $appointmentSlotType"
 
         availableAppointments.selectAppointmentTypeByText(expectedOption)
         availableAppointments.selectLocationByText(locationName)
         availableAppointments.selectClinicianByText(defaultEmisMetaSlotSessionHolders[0].displayName!!)
     }
 
-    private fun generateMapOfSessionsAgainstId(expectedSessions: ArrayList<Session>): Map<Int, Session> {
-        var sessionsById = mapOf<Int, Session>()
+    private fun generateMapOfSessionsAgainstId(expectedSessions: ArrayList<AppointmentSessionFacade>): Map<Int?, AppointmentSessionFacade> {
+        var sessionsById = mapOf<Int?, AppointmentSessionFacade>()
         for (session in expectedSessions) {
             sessionsById = sessionsById.plus(Pair(session.sessionId, session))
         }

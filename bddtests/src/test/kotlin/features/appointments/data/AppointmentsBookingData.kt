@@ -39,6 +39,8 @@ open class AppointmentsBookingData {
         private val numberOfMinutesInWorkingDay = 540
         private val maximumNumberOfSlotsInDay = numberOfMinutesInWorkingDay / defaultDuration
 
+        val defaultTppLocations = arrayListOf("Sheffield","Leeds")
+        val defaultTppClinicians = arrayListOf("Bob","Steve")
 
         val defaultEmisMetaSlotLocations = arrayListOf(
                 Location(
@@ -147,6 +149,45 @@ open class AppointmentsBookingData {
             return generatedAppointmentSlots
         }
 
+        fun generateTppSessions(
+                numberOfDaysSessionsToCreate: Int = 1,
+                startingId: Int = 203,
+                locations: ArrayList<String> = defaultTppLocations,
+                clinicians: ArrayList<String> = defaultTppClinicians
+        ): ArrayList<AppointmentSessionFacade> {
+            val generatedSessions = arrayListOf<AppointmentSessionFacade>()
+            var currentId = startingId
+
+            for (daysCreated in 0 until numberOfDaysSessionsToCreate) {
+                for (location in locations) {
+                    for(clinician in clinicians){
+                        generatedSessions.add(
+                                AppointmentSessionFacade(
+                                        sometimeDayInTheFuture(daysCreated + 1),
+                                        currentId,
+                                        "Clinic",
+                                        clinician,
+                                        location
+                                )
+                        )
+                        currentId++
+                        generatedSessions.add(
+                                AppointmentSessionFacade(
+                                        sometimeDayInTheFuture(daysCreated + 1),
+                                        currentId,
+                                        "Walk-in",
+                                        clinician,
+                                        location
+                                )
+                        )
+                        currentId++
+                    }
+                }
+            }
+
+            return generatedSessions
+        }
+
         fun generateEmisSessions(
                 numberOfDaysSessionsToCreate: Int = 1,
                 startingId: Int = 203,
@@ -243,6 +284,7 @@ open class AppointmentsBookingData {
                         AppointmentSessionFacade(
                                 sessionDate = session.startDate,
                                 sessionId = session.sessionId,
+                                sessionType = session.sessionName,
                                 slots = appointmentSlots[appointmentSlotIndex]
                         )
                 )
@@ -270,6 +312,29 @@ open class AppointmentsBookingData {
                         slotId = sessionId
                 )
         )
+
+        fun generateTppAppointmentSlots(sessionId: Int, numberOfDaysInFuture: Int = 1): ArrayList<AppointmentSlotFacade> {
+            val generatedAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
+            for (slotsCreated in 0 until (2 * maximumNumberOfSlotsInDay) step 2) {
+                generatedAppointmentSlots.add(
+                        AppointmentSlotFacade(
+                                slotId = sessionId,
+                                startTime = sometimeDayInTheFuture(numberOfDaysInFuture, slotsCreated / 2 * 30),
+                                endTime = sometimeDayInTheFuture(numberOfDaysInFuture, (slotsCreated / 2 * 30) + defaultDuration),
+                                slotTypeName = "Immunisations"
+                        )
+                )
+                generatedAppointmentSlots.add(
+                        AppointmentSlotFacade(
+                                slotId = sessionId,
+                                startTime = sometimeDayInTheFuture(numberOfDaysInFuture, slotsCreated / 2 * 30),
+                                endTime = sometimeDayInTheFuture(numberOfDaysInFuture, (slotsCreated / 2 * 30) + defaultDuration),
+                                slotTypeName = "Back"
+                        )
+                )
+            }
+            return generatedAppointmentSlots
+        }
 
         private fun tomorrowMidnight() = midnightDayInTheFuture(1)
 

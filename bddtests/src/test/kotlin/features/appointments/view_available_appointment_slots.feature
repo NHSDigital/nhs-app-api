@@ -25,6 +25,7 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-71
   @NHSO-870
@@ -54,6 +55,7 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-71
   @NHSO-870
@@ -66,6 +68,7 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-71
   @NHSO-870
@@ -79,6 +82,7 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-71
   @NHSO-870
@@ -93,6 +97,7 @@ Feature: View available appointment slots
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
 
   @NHSO-71
   @appointment
@@ -174,7 +179,7 @@ Feature: View available appointment slots
   @NHSO-870
   @appointment
   Scenario: A user sees appropriate information message when there is a timeout
-    Given GP system doesn't respond a timely fashion for available appointment slots
+    Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     When I try to progress to the available appointments page
     Then I see appropriate information message for time-outs
@@ -184,7 +189,7 @@ Feature: View available appointment slots
   @NHSO-870
   @appointment
   Scenario: A user tries again after a timeout and it times-out again
-    Given GP system doesn't respond a timely fashion for available appointment slots
+    Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     And I try to progress to the available appointments page
     When I click try again button on appointment page
@@ -195,7 +200,7 @@ Feature: View available appointment slots
   @NHSO-870
   @appointment
   Scenario: A user tries again after a timeout and it is now successful
-    Given GP system doesn't respond a timely fashion for available appointment slots
+    Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     And I try to progress to the available appointments page
     When GP system responds a timely fashion for available appointment slots
@@ -206,7 +211,7 @@ Feature: View available appointment slots
   @NHSO-870
   @appointment
   Scenario: A user sees appropriate information message when GP system is unavailable
-    Given GP system is unavailable for available appointment slots
+    Given EMIS is unavailable for available appointment slots
     And I am logged in
     When I try to progress to the available appointments page
     Then I see appropriate information message when there is a error retrieving data
@@ -215,8 +220,8 @@ Feature: View available appointment slots
   @NHSO-616
   @NHSO-870
   @appointment
-  Scenario: A user sees appropriate information message when GP system returns corrupt data
-    Given GP system returns corrupt data for appointment slots
+  Scenario: A user sees appropriate information message when EMIS returns corrupt data
+    Given EMIS returns corrupt data for appointment slots
     And I am logged in
     When I try to progress to the available appointments page
     Then I see appropriate information message when there is a error retrieving data

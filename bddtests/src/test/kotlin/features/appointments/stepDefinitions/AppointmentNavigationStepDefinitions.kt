@@ -59,6 +59,7 @@ class AppointmentNavigationStepDefinitions {
             myAppointments.clickOnBookAppointmentButton()
             appointmentGuidanceSteps.clickBookAnAppointmentButton()
         }
+        availableAppointmentsPage.waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 

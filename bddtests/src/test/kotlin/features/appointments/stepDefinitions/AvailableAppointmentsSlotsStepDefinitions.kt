@@ -60,13 +60,13 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^there are available appointment slots with different criteria for (.*)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
-        availableAppointments.generateDefaultUserData()
+        availableAppointments.generateDefaultUserData(gpSystem)
         availableAppointments.generateAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem)
     }
 
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
-        availableAppointments.generateDefaultUserData()
+        availableAppointments.generateDefaultUserData(gpSystem)
         availableAppointments.generateNoAvailableAppointmentSlotsForGPSystem(gpSystem)
     }
 
@@ -78,7 +78,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
-        availableAppointments.generateDefaultUserData()
+        availableAppointments.generateDefaultUserData(gpSystem)
         availableAppointments.generateAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem)
     }
 
@@ -120,8 +120,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
                 }
     }
 
-    @Given("^GP system returns corrupt data for appointment slots$")
-    fun gp_system_returns_corrupt_data_for_appointment_slots() {
+    @Given("^EMIS returns corrupt data for appointment slots$")
+    fun emis_returns_corrupt_data_for_appointment_slots() {
         availableAppointments.generateDefaultUserData()
         mockingClient
                 .forEmis {
