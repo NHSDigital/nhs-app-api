@@ -61,7 +61,7 @@ COPY --from=publish /app .
 
 # Setup trusts for self-signed certificates
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppCa.crt /usr/local/share/ca-certificates/TppCa.crt
-COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/vps-test.cer /usr/local/share/ca-certificates/vps-test.cer
+COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/visionproxy.crt /usr/local/share/ca-certificates/visionproxy.crt
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
