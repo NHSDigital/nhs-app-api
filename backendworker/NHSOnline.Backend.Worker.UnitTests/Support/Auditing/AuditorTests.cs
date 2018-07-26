@@ -99,6 +99,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
                     _auditor.Audit("Testing", "Message with rubbish scope 2");
                 }
             }
+
+            public void AuditWithScope(string nhsNumber, SupplierEnum supplier)
+            {
+                _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
+            }
         }
 
         [TestInitialize]
@@ -168,10 +173,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public void TestThrowsExceptionIfNhsNumberNotSet()
+        public void TestThrowsExceptionIfAuditScopeNotSetUp()
         {
             _systemUnderTest.BasicAudit();
         }
+
+        [TestMethod]
+        public void TestAuditWithScopeProvidedInAuditMethod()
+        {
+            _systemUnderTest.AuditWithScope("NHS_AppliedNumber", SupplierEnum.Tpp);
+
+            _stream.Position = 0;
+            var streamReader = new StreamReader(_stream);
+
+            var testString = streamReader.ReadLine();
+            testString.Should().NotBeEmpty();
+            var splitLog = testString.Split(new char[] { '[', ']' });
+            splitLog[1].Should().Be(AuditCryptographer.Hash("NHS_AppliedNumber").Trim(new char[] { '[', ']' }));
+            splitLog[2].Should().Be(" | Tpp | Test Audit | SomeDetails 'with parameters' |");
+        }
+
+
+        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        public void TestThrowsExceptionIfNhsNumberIsNull()
+        {
+            _systemUnderTest.AuditWithScope("", SupplierEnum.Vision);
+        }
+
+        [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
+        public void TestThrowsExceptionIfSupplierIsDefault()
+        {
+            _systemUnderTest.AuditWithScope("1684156", SupplierEnum.Unknown);
+        }
+
 
         [TestMethod]
         public void TestCrossThreadAudits()

@@ -26,6 +26,9 @@
 
         public class AuditingTitles
         {
+            public const string Im1ConnectionVerifyResponse = "Im1Connection_Verify_Response";
+            public const string Im1ConnectionRegisterResponse = "Im1Connection_Register_Response";
+            public const string SessionCreateResponse = "Session_Create_Response";
             public const string ViewAppointmentAuditTypeRequest = "Appointments_ViewBooked_Request";
             public const string ViewAppointmentAuditTypeResponse = "Appointments_ViewBooked_Response";
             public const string BookAppointmentAuditTypeRequest = "Appointments_Book_Request";

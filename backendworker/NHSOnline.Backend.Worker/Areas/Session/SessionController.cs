@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     return BadRequest();
                 }
                 var cidUserProfile = cidUserProfileOption.ValueOrFailure();
-        
+    
                 // Get a suitable GP system, based on the ODS code.
                 var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
                 if (!gpSystemOption.HasValue)
@@ -77,10 +77,10 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     _logger.LogError($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
                     return new StatusCodeResult(StatusCodes.Status403Forbidden);
                 }
-        
+    
                 var gpSystem = gpSystemOption.ValueOrFailure();
                 _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
-        
+    
                 // Validate the format of the IM1 connection token for this GP system.
                 var tokenValidationService = gpSystem.GetTokenValidationService();
                 if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
@@ -88,7 +88,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     _logger.LogError("Failed to validate Im1 connection");
                     return new StatusCodeResult(StatusCodes.Status403Forbidden);
                 }
-        
+    
                 // Create a session with the GP system, using the IM1 connection token.
                 var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, cidUserProfile);
                 if (!sessionCreatedResultVisited.SessionWasCreated)
@@ -96,16 +96,16 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     _logger.LogError($"Creating the session failed with status code: '{sessionCreatedResultVisited.StatusCode}'");
                     return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
                 }
-        
+    
                 // Build and save session token in our redis session cache
                 await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
-        
+    
                 // Audit that the use is logged on.
                 HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
-                _auditor.Audit("SessionCreation", "user session created");
-        
-                _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
+                _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
     
+                _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
+                
                 return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode));
             }
             finally
@@ -142,8 +142,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
     
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     
-                    _logger.LogDebug(
-                        $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
+                _logger.LogDebug(
+                    $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
                 return new StatusCodeResult(StatusCodes.Status204NoContent);
             }
             finally

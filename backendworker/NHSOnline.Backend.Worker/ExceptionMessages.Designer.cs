@@ -122,5 +122,14 @@ namespace NHSOnline.Backend.Worker {
                 return ResourceManager.GetString("OdsCodeLookupUnknownSupplierCode", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplier not specified, please set up audit scope..
+        /// </summary>
+        internal static string SupplierNotSpecified {
+            get {
+                return ResourceManager.GetString("SupplierNotSpecified", resourceCulture);
+            }
+        }
     }
 }

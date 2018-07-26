@@ -11,7 +11,6 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Cipher;
-using NHSOnline.Backend.Worker.Support.Auditing;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests

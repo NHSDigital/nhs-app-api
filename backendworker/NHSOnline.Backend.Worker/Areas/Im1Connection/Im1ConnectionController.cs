@@ -8,6 +8,7 @@ using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
@@ -18,22 +19,24 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
         private readonly IOdsCodeLookup _odsCodeLookup;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<Im1ConnectionController> _logger;
+        private readonly IAuditor _auditor;
 
         public Im1ConnectionController(
             IOdsCodeLookup odsCodeLookup, 
             IGpSystemFactory gpSystemFactory,
-            ILoggerFactory loggerFactory)
+            ILogger<Im1ConnectionController> logger,
+            IAuditor auditor)
         {
             _odsCodeLookup = odsCodeLookup ?? throw new ArgumentNullException(nameof(odsCodeLookup));
             _gpSystemFactory =
                 gpSystemFactory ?? throw new ArgumentNullException(nameof(gpSystemFactory));
-            _logger = loggerFactory.CreateLogger<Im1ConnectionController>();
+            _logger = logger;
+            _auditor = auditor;
         }
 
         [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Get(
-            [FromHeader(Name = Constants.Headers.ConnectionToken)]
-            string connectionToken,
+            [FromHeader(Name = Constants.Headers.ConnectionToken)] string connectionToken,
             [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode
         )
         {
@@ -63,11 +66,13 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                         $"ConnectionToken provided in header {Constants.Headers.ConnectionToken} is invalid.");
                     return BadRequest();
                 }
-    
+
                 var im1ConnectionService = gpSystem.GetIm1ConnectionService();
                 var verifyResult = await im1ConnectionService.Verify(connectionToken, odsCode);
-    
+                
                 _logger.LogDebug("Get Im1Connection completed");
+
+                verifyResult.Accept(new Im1ConnectionVerifyAuditingVisitor(_auditor, gpSystem.Supplier));
                 return verifyResult.Accept(new Im1ConnectionVerifyResultVisitor());
             }
             finally
@@ -94,6 +99,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 var im1ConnectionService = gpSystem.GetIm1ConnectionService();
                 var registerResult = await im1ConnectionService.Register(model);
 
+                registerResult.Accept(new Im1ConnectionRegisterAuditingVisitor(_auditor, gpSystem.Supplier));
                 return registerResult.Accept(new Im1ConnectionRegisterResultVisitor(Request));
             }
             finally

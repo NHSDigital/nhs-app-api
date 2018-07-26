@@ -20,6 +20,7 @@ using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {
@@ -38,6 +39,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IAuthenticationService> _authenticationServiceMock;
         private Mock<IOptions<ConfigurationSettings>> _configurationSettings;
         private Mock<IAntiforgery> _mockAntiforgery;
+        private Mock<IAuditor> _mockAuditor;
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
@@ -134,6 +136,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             httpContextMock.SetupGet(h => h.RequestServices).Returns(serviceProviderMock.Object);
             httpContextMock.SetupGet(h => h.Items).Returns(new Dictionary<object, object>());
 
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+
             _systemUnderTest = _fixture.Create<SessionController>();
 
             _systemUnderTest.ControllerContext = new ControllerContext
@@ -158,6 +162,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Assert
             _mockCitizenIdService.Verify();
             result.Should().BeAssignableTo<BadRequestResult>();
+            _mockAuditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -176,6 +181,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockOdsCodeLookup.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            _mockAuditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -194,6 +200,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockTokenValidationService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            _mockAuditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -213,6 +220,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            _mockAuditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -232,6 +240,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
+            _mockAuditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -263,6 +272,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Arrange
+            _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse, It.IsAny<string>(), It.IsAny<object[]>()));
 
             // Act
             await _systemUnderTest.Post(_userSessionRequest);

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Threading;
 using Microsoft.Extensions.Logging;
 
@@ -32,10 +31,10 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             return nhsNumber;
         }
 
-        private string Supplier()
+        private SupplierEnum Supplier()
         {
             var supplierEnum = _scopeProvider.Value?.UserContext()?.Supplier ?? SupplierEnum.Unknown;
-            return supplierEnum.ToString();
+            return supplierEnum;
         }
 
 
@@ -46,14 +45,48 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
                 var nhsNumber = NhsNumber();
                 var supplier = Supplier();
 
-                _auditSink.WriteAudit(DateTime.Now, AuditCryptographer.Hash(nhsNumber), supplier, operation,
-                    string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
+                AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
             }
             catch (Exception exception)
             {
                 _logger.LogError(exception, $"Failed to write audit '{operation}'");
                 throw;
             }
+        }
+
+        public void AuditWithExplicitNhsNumber(
+            string nhsNumber, 
+            SupplierEnum supplier, 
+            string operation,
+            string details, 
+            params object[] parameters
+        )
+        {
+            if (string.IsNullOrEmpty(nhsNumber))
+            {
+                throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
+            }
+            if (supplier == SupplierEnum.Unknown)
+            {
+                throw new NoAuditKeyException(ExceptionMessages.SupplierNotSpecified);
+            }
+
+            try
+            {
+                AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, $"Failed to write audit '{operation}'");
+                throw;
+            }
+        }
+
+        private void AuditWithNoTryCatch(string nhsNumber, SupplierEnum supplier, string operation, string details,
+            params object[] parameters)
+        {
+            _auditSink.WriteAudit(DateTime.Now, AuditCryptographer.Hash(nhsNumber), supplier, operation,
+                string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
         }
 
         public IDisposable BeginScope(HttpContext httpContext)

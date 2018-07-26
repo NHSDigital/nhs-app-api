@@ -4,6 +4,8 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -13,6 +15,7 @@ using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 {
@@ -26,6 +29,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
         private readonly ITokenValidationService _defaultTokenValidationService = new EmisTokenValidationService();
         private Im1ConnectionController _im1ConnectionController;
+        Mock<ILogger<Im1ConnectionController>> _logger;
+        Mock<IAuditor> _auditor;
 
         private IFixture _fixture;
 
@@ -33,6 +38,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         public void TestInitialize()
         {
             _fixture = new Fixture();
+
+            _logger = new Mock<ILogger<Im1ConnectionController>>();
+            _auditor = new Mock<IAuditor>();
 
             _im1ConnectionController = CreateIm1ConnectionController();
         }
@@ -42,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var gpSystemFactory = MockGpSystemFactory();
 
-            Action act = () => new Im1ConnectionController(null, gpSystemFactory.Object, new LoggerFactory());
+            Action act = () => new Im1ConnectionController(null, gpSystemFactory.Object, _logger.Object, _auditor.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("odsCodeLookup");
         }
@@ -52,7 +60,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var odsCodeLookup = MockOdsCodeLookup();
 
-            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, new LoggerFactory());
+            Action act = () => new Im1ConnectionController(odsCodeLookup.Object, null, _logger.Object, _auditor.Object);
 
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("gpSystemFactory");
         }
@@ -63,6 +71,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var result = await _im1ConnectionController.Get(null, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -71,6 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var result = await _im1ConnectionController.Get(string.Empty, DefaultOdsCode);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -79,6 +89,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, null);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -87,6 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, string.Empty);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+            _auditor.VerifyNoOtherCalls();
         }
 
         [TestMethod]
@@ -122,6 +134,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+
+            _auditor.Verify(x => x.AuditWithExplicitNhsNumber(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+                Constants.AuditingTitles.Im1ConnectionVerifyResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -138,11 +153,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             var resultAsStatusCodeResult = result as StatusCodeResult;
             resultAsStatusCodeResult.Should().NotBeNull();
             resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            _auditor.VerifyNoOtherCalls();
         }
 
 
         [TestMethod]
-        public async Task Post_UnknownOdsCode_ReturnsNotImplemented()
+        public async Task Post_UnknownOdsCode_Returns501NotImplemented()
         {
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
@@ -156,6 +172,46 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             result.Should().NotBeNull();
             result.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            _auditor.VerifyNoOtherCalls();
+        }
+
+        [TestMethod]
+        public async Task Post_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
+        {
+            const string odsCode = DefaultOdsCode;
+            const SupplierEnum supplier = DefaultSupplier;
+            const string patientIdentifier = DefaultConnectionToken;
+
+            var model = new PatientIm1ConnectionRequest { OdsCode = DefaultOdsCode };
+
+            var expectedNhsNumbers = new[]
+            {
+                new PatientNhsNumber { NhsNumber = "123ABC" },
+                new PatientNhsNumber { NhsNumber = "456DEF" }
+            };
+
+            var expectedResponse = new PatientIm1ConnectionResponse
+            {
+                ConnectionToken = DefaultConnectionToken,
+                NhsNumbers = expectedNhsNumbers
+            };
+
+            var im1ConnectionService = MockIm1ConnectionService(patientIdentifier, odsCode,
+                new Im1ConnectionVerifyResult.SuccessfullyVerified(expectedResponse));
+            var gpSystemMock = MockGpSystem(im1ConnectionService);
+            var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
+            im1ConnectionService.Setup(x => x.Register(model))
+                .ReturnsAsync(new Im1ConnectionRegisterResult.SuccessfullyRegistered(expectedResponse));
+            _im1ConnectionController = CreateIm1ConnectionController(gpSystemFactoryMock: gpSystemFactoryMock);
+
+            var result = await _im1ConnectionController.Post(model);
+
+            var resultValue = result.Should().BeAssignableTo<CreatedResult>().Subject.Value;
+            var actualResponse = resultValue.Should().BeAssignableTo<PatientIm1ConnectionResponse>().Subject;
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+
+            _auditor.Verify(x => x.AuditWithExplicitNhsNumber(expectedNhsNumbers[0].NhsNumber, gpSystemMock.Object.Supplier,
+                Constants.AuditingTitles.Im1ConnectionRegisterResponse, It.IsAny<string>(), It.IsAny<object[]>()));
         }
 
         private Im1ConnectionController CreateIm1ConnectionController(Mock<IOdsCodeLookup> odsCodeLookupMock = null,
@@ -164,7 +220,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
             odsCodeLookupMock = odsCodeLookupMock ?? MockOdsCodeLookup();
             gpSystemFactoryMock = gpSystemFactoryMock ?? MockGpSystemFactory();
 
-            return new Im1ConnectionController(odsCodeLookupMock.Object, gpSystemFactoryMock.Object, new LoggerFactory());
+            // Dummy context...
+            var dummyHttpContext = new DefaultHttpContext();
+            dummyHttpContext.Request.Host = new HostString("localhost");
+            dummyHttpContext.Request.PathBase = "/test/";
+            dummyHttpContext.Request.Path = "/test.html";
+            dummyHttpContext.Request.QueryString = new QueryString("?test=test");
+
+            var dummyControllerContext = new ControllerContext(new ActionContext(dummyHttpContext, new RouteData(),
+                new ControllerActionDescriptor()));
+
+            return new Im1ConnectionController(odsCodeLookupMock.Object,
+                gpSystemFactoryMock.Object, _logger.Object, _auditor.Object)
+            {
+                ControllerContext = dummyControllerContext
+            };
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode,

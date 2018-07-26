@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
-using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Cipher;
 using StackExchange.Redis;
 
@@ -59,6 +57,7 @@ namespace NHSOnline.Backend.Worker
 
             await database.StringSetAsync(sessionKey, sessionObject, sessionExpirationTime);
 
+            userSession.Key = sessionKey;
             return sessionKey;
         }
 

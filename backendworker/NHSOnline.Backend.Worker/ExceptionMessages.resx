@@ -132,6 +132,9 @@
   <data name="NoNhsNumberAvailable" xml:space="preserve">
     <value>NHS number not available, please set up audit scope.</value>
   </data>
+  <data name="SupplierNotSpecified" xml:space="preserve">
+    <value>Supplier not specified, please set up audit scope.</value>
+  </data>
   <data name="OdsCodeLookupUnknownOdsCode" xml:space="preserve">
     <value>ODS Code '{0}' could not be found.</value>
   </data>
