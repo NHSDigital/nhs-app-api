@@ -384,6 +384,10 @@ export default {
     events: {
       sectionHeader: 'Consultations',
     },
+    testResultDetail: {
+      backButton: 'Back',
+      testResultTitle: 'Test result',
+    },
   },
   common: {
     or: 'OR',
