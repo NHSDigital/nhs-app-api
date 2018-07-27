@@ -15,7 +15,8 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection.Models
         public string LinkageKey { get; set; }
 
         [Required]
-        [RegularExpression(Constants.OdsCodeFormats.GpPracticeEnglandWales)]
+//      TODO: Re-add when we get valid test data in TTP        
+//      [RegularExpression(Constants.OdsCodeFormats.GpPracticeEnglandWales)]
         public string OdsCode { get; set; }
 
         [Required]
