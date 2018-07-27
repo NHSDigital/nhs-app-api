@@ -1,15 +1,13 @@
-Feature: Ability to cancel an appointment
-
-  Users are given the ability to cancel an appointment.
+Feature: Ability to cancel an EMIS appointment
 
   Background:
-    Given wiremock is initialised
+    Given I have upcoming appointments for EMIS
+    And I am logged in as a EMIS user
 
   @NHSO-663
   @appointment
   Scenario: A user is presented with the cancel appointment screen
-    Given I have upcoming appointments for EMIS
-    And I am on my appointments page
+    Given I am on my appointments page
     When I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
     And I am presented with the appointment details
@@ -18,30 +16,18 @@ Feature: Ability to cancel an appointment
   @NHSO-663
   @appointment
   Scenario: A user navigates back to the "My appointments" screen
-    Given I am on the EMIS appointment cancellation screen
+    Given I am on my appointments page
+    And I select a "Cancel appointment" link
     When I select "Back" button
     Then I will be on the My appointments screen
-
-  @NHSO-1027
-  @backend
-  Scenario: API will cancel the appointment if valid reason is provided
-    Given the Emis is available to cancel an appointment
-    When I send a cancellation request to the API with a valid cancellation reason
-    Then I will receive a successful response
-
-  @NHSO-1027
-  @backend
-  Scenario: API will not cancel the appointment if reason an invalid reason is provided
-    Given the Emis is available to cancel an appointment
-    When I send a cancellation request to the API with an invalid cancellation reason
-    Then I receive a "Bad request" error
 
   @NHSO-1026
   @appointment
   @tech-debt @NHSO-1937
   Scenario Outline: User cancels appointment with selected reason
-    Given I am on the EMIS appointment cancellation screen
-    And the Emis is available to cancel an appointment for <Reason>
+    Given EMIS is available to cancel an appointment for <Reason>
+    And I am on my appointments page
+    And I select a "Cancel appointment" link
     And I select a cancellation reason of <Reason>
     When I select "Cancel appointment" button
     Then I will be on the My appointments screen
@@ -55,6 +41,7 @@ Feature: Ability to cancel an appointment
   @appointment
   @tech-debt @NHSO-1937
   Scenario: A validation message will be displayed if no reason is provided
-    Given I am on the EMIS appointment cancellation screen
+    Given I am on my appointments page
+    And I select a "Cancel appointment" link
     When I select "Cancel appointment" button
     Then I will receive a cancellation validation error

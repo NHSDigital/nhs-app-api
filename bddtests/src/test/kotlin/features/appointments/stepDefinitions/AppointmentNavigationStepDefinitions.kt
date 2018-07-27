@@ -35,9 +35,6 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on my appointments page$")
     fun iAmOnMyAppointmentsPage() {
-        val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
-        browser.goToApp()
-        login.asDefault(patient ?: MockDefaults.patient)
         navigation.select("Appointments")
     }
 

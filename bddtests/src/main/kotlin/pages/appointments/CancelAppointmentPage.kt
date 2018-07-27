@@ -34,6 +34,14 @@ class CancelAppointmentPage : AppointmentSharedElementsPage() {
         return dropDownMenuLabel.element.text
     }
 
+    fun containsDropDownMenu(): Boolean {
+        return try {
+            dropDownMenu.element.isPresent
+        } catch (e: org.openqa.selenium.NoSuchElementException) {
+            false
+        }
+    }
+
     fun selectReason(reason: String): Boolean {
         return try {
             dropDownMenu.element.selectByVisibleText<WebElementFacade>(reason)

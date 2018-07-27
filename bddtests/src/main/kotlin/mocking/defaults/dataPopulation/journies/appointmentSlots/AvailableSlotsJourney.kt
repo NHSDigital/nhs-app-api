@@ -8,6 +8,7 @@ import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import mockingFacade.appointments.BookAppointmentSlotFacade
+import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 
 class AvailableSlotsJourney(private val client: MockingClient) {
@@ -53,11 +54,11 @@ class AvailableSlotsJourney(private val client: MockingClient) {
 
         // first slot can be cancelled with reason "No longer required"
         client.forEmis {
-            cancelAppointmentRequest(patient, CancelAppointmentRequest(
-                    CancellationReason = "No longer required",
-                    SlotId = 1,
-                    UserPatientLinkToken = patient.userPatientLinkToken))
-                    .respondWithSuccess(DeleteAppointmentResponseModel(true))
+            cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(
+                    "No longer required",
+                    1,
+                    patient.userPatientLinkToken))
+                        .respondWithSuccess()
         }
     }
 

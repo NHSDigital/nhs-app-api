@@ -10,11 +10,6 @@ class CancelAppointmentStepDefinitions {
     @Steps
     lateinit var cancelAppointmentSteps: CancelAppointmentSteps
 
-    @Given("^I am on the (.*) appointment cancellation screen$")
-    fun iAmOnTheCancellationScreen(gpService: String) {
-        cancelAppointmentSteps.progressToAppointmentCancellationScreen(gpService)
-    }
-
     @Given("^I select a cancellation reason of (.*)$")
     fun iSelectACancellationReason(reason: String) {
         cancelAppointmentSteps.selectReason(reason)
@@ -34,6 +29,11 @@ class CancelAppointmentStepDefinitions {
     fun thereIsACancellationReasonsDropDownWithTheAppropriateReasons() {
         cancelAppointmentSteps.verifyTheDropDownMenuLabel()
         cancelAppointmentSteps.selectReason("Select reason")
+    }
+
+    @Then("^cancellation reasons drop-down is hidden$")
+    fun cancellationReasonsDropDownIsHidden() {
+        cancelAppointmentSteps.verifyTheDropDownMenuLabelIsNotVisible()
     }
 
     @Then("^I will receive a cancellation validation error$")

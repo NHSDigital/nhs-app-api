@@ -3,6 +3,8 @@ package features.appointments.steps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.defaults.MockDefaults
+import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
@@ -48,12 +50,8 @@ open class CancelAppointmentSteps {
     }
 
     @Step
-    fun progressToAppointmentCancellationScreen(gpService: String) {
-        myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService)
-        browser.goToApp()
-        login.asDefault()
-        navigation.select("Appointments")
-        myAppointmentsSteps.clickFirstCancelLink()
+    fun verifyTheDropDownMenuLabelIsNotVisible() {
+        assertFalse("Drop-Down menu is visible", cancelAppointmentPage.containsDropDownMenu())
     }
 
     @Step

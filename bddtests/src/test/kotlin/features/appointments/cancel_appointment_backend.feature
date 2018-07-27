@@ -1,0 +1,22 @@
+Feature: Ability to cancel an appointment via api
+
+  @NHSO-1027
+  @backend
+  Scenario Outline: API will cancel the appointment if valid reason is provided
+    Given I have upcoming appointments for <GP System>
+    And <GP System> is available to cancel an appointment
+    When I send a cancellation request to the API with a valid cancellation reason
+    Then I will receive a successful response
+    Examples:
+    | GP System |
+    | EMIS      |
+    | TPP       |
+
+  @NHSO-1027
+  @backend
+  Scenario: API will not cancel the appointment if reason an invalid reason is provided
+    Given I have upcoming appointments for EMIS
+    Given EMIS is available to cancel an appointment
+    When I send a cancellation request to the API with an invalid cancellation reason
+    Then I receive a "Bad request" error
+

@@ -1,16 +1,18 @@
 package mocking.emis.appointments
 
 import mocking.GsonFactory
+import mocking.ICancelAppointmentsBuilder
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.models.Mapping
+import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import org.apache.http.HttpStatus
 
-class EmisDeleteAppointmentsBuilder (configuration: EmisConfiguration, patient: Patient, request: CancelAppointmentRequest) :
-        EmisMappingBuilder(configuration, "DELETE", "/appointments") {
+class EmisDeleteAppointmentsBuilder (configuration: EmisConfiguration, patient: Patient, request: CancelAppointmentSlotFacade) :
+        EmisMappingBuilder(configuration, "DELETE", "/appointments"), ICancelAppointmentsBuilder {
 
     init {
         requestBuilder
@@ -19,8 +21,8 @@ class EmisDeleteAppointmentsBuilder (configuration: EmisConfiguration, patient: 
         requestBuilder.andJsonBody(request, gson = GsonFactory.asPascal)
     }
 
-    fun respondWithSuccess(response: DeleteAppointmentResponseModel): Mapping {
-        return respondWithSuccessAny(response)
+    override fun respondWithSuccess(): Mapping {
+        return respondWithSuccessAny(DeleteAppointmentResponseModel(true))
     }
 
     private fun respondWithSuccessAny(body: Any): Mapping {

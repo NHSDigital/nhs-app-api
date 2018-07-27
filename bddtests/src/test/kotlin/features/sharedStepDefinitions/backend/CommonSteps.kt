@@ -175,6 +175,7 @@ class CommonSteps : AbstractSteps() {
                     authReply.uuid = UUID.randomUUID().toString()
                     authReply.user.person.dateOfBirth = MockDefaults.patientTpp.dateOfBirth
                     authReply.patientId = MockDefaults.patientTpp.patientId
+                    authReply.onlineUserId = MockDefaults.patientTpp.onlineUserId
 
                     authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(authReply)
                 }

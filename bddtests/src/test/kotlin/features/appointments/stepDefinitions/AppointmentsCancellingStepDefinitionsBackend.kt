@@ -6,11 +6,9 @@ import cucumber.api.java.en.When
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.emis.appointments.DeleteAppointmentResponseModel
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 import worker.WorkerClient
-import mocking.emis.appointments.CancelAppointmentRequest
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.junit.Assert
@@ -29,30 +27,56 @@ class AppointmentsCancellingStepDefinitionsBackend {
     val HTTP_EXCEPTION = "HttpException"
     val HTTP_RESPONSE = "HttpResponse"
 
-    @Given("^the Emis is available to cancel an appointment$")
-    fun theEmisIsAvailableToCancelAnAppointment() {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
+    @Given("^(.*) is available to cancel an appointment$")
+    fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        var reason = ""
         retrieveCancellationReasons()
-        mockCancellationRequestStubForReason(cancellationReasons.first().displayName)
-    }
-
-    @Given("^the Emis is available to cancel an appointment for (.*)$")
-    fun theEmisIsAvailableToCancelAnAppointmentForReason(reason: String) {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
-        mockCancellationRequestStubForReason(reason)
-    }
-
-    private fun mockCancellationRequestStubForReason(reason: String) {
-        mockingClient.forEmis {
-            cancelAppointmentRequest(patient, CancelAppointmentRequest(patient.userPatientLinkToken, SLOT_ID, reason))
-                    .respondWithSuccess(DeleteAppointmentResponseModel(true))
+        if (cancellationReasons.size > 0) {
+            reason = cancellationReasons.first().displayName
         }
+
+        mockCancellationRequestStubForReason(reason, gpSystem)
+    }
+
+    @Given("^(.*) is available to cancel an appointment for (.*)$")
+    fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
+        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
+        mockCancellationRequestStubForReason(reason, gpSystem)
+    }
+
+    private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String) {
+        var dataController = AppointmentsCancellingFactory.getForSupplier(gpSystem)
+        var patient = dataController.getDefaultPatient()
+        var request = dataController.defaultRequest(patient, SLOT_ID, reason)
+
+        dataController.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
     }
 
     @When("^I send a cancellation request to the API with a valid cancellation reason$")
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_with_a_valid_cancellation_reason() {
-        val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), cancellationReasons.first().id)
+        var id = ""
+        if (cancellationReasons.size > 0) {
+            id = cancellationReasons.first().id
+        }
+        val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), id)
+
+        try {
+            val response = Serenity
+                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .deleteAppointment(body, null)
+
+            Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
+        } catch (httpException: NhsoHttpException) {
+            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+        }
+    }
+
+    @When("^I send a cancellation request to the API without a cancellation reason$")
+    @Throws(Exception::class)
+    fun i_send_a_cancellation_request_to_the_API_without_a_cancellation_reason() {
+        val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), "")
 
         try {
             val response = Serenity

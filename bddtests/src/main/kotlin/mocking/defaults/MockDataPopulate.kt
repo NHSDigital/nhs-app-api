@@ -16,6 +16,7 @@ import mocking.defaults.dataPopulation.journies.session.SessionJournies
 import mocking.emis.appointments.CancelAppointmentRequest
 import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
+import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import models.prescriptions.MedicationCourse
 import worker.models.session.UserSessionRequest
@@ -127,8 +128,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/DeleteEmisAppointment.json")
 
             mockingClient.forEmis {
-                cancelAppointmentRequest(patient, CancelAppointmentRequest(patient.userPatientLinkToken, 1, "No longer required"))
-                        .respondWithSuccessJson(deleteAppointmentRequestBody)
+                cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(patient.userPatientLinkToken, 1, "No longer required"))
+                        .respondWithSuccess()
             }
 
             // Prescriptions

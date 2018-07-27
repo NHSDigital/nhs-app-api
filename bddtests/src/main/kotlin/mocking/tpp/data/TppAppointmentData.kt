@@ -79,7 +79,7 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
                 appointmentTime.addDays(1).set(Calendar.HOUR_OF_DAY, 9)
             val startTime = dateTimeFormat.format(appointmentTime.time)
             val endTime = dateTimeFormat.format(appointmentTime.addMinutes(duration).time)
-            appointments.add(baseTppAppointment.copy(startDate = startTime, endDate = endTime))
+            appointments.add(baseTppAppointment.copy(startDate = startTime, endDate = endTime, apptId = counter.toString()))
         }
         return appointments
     }

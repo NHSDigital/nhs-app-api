@@ -21,6 +21,7 @@ Feature: My appointments
   Scenario Outline: A user has never booked an appointment
     Given <GP System> logged in session started
     And I have no upcoming appointments for <GP System>
+    And I am logged in as a <GP System> user
     When I am on my appointments page
     Then I am informed I have no booked appointments
     But I can book an appointment
@@ -36,6 +37,7 @@ Feature: My appointments
   Scenario Outline: A user has upcoming appointments
     Given <GP System> logged in session started
     And I have upcoming appointments for <GP System>
+    And I am logged in as a <GP System> user
     When I am on my appointments page
     Then the page title is "My appointments"
     And I am given the list of upcoming appointments

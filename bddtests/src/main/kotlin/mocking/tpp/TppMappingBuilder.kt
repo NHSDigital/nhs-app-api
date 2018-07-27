@@ -1,14 +1,15 @@
 package mocking.tpp
 
 import mocking.IAppointmentMappingBuilder
-import mocking.IAppointmentSlotsBuilder
 import mocking.IBookAppointmentsBuilder
+import mocking.ICancelAppointmentsBuilder
 import mocking.MappingBuilder
 import mocking.tpp.appointments.TppAppointmentSlotsBuilder
 import mocking.gpServiceBuilderInterfaces.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.appointments.TppBookAppointmentsBuilder
 import mocking.tpp.appointments.TppMyAppointmentsBuilder
+import mocking.tpp.appointments.TppCancelAppointmentsBuilder
 import mocking.tpp.models.Authenticate
 import mocking.tpp.patientSelected.TppPatientSelectedBuilder
 import mocking.tpp.prescriptions.TppPrescriptionsBuilder
@@ -18,6 +19,7 @@ import mocking.tpp.session.TppSessionBuilder
 import mocking.tpp.testResultsView.TppTestResultsViewBuilder
 import mocking.tpp.viewPatientOverview.TppViewPatientOverviewBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
+import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import org.apache.http.HttpStatus
 import worker.models.demographics.TppUserSession
@@ -52,6 +54,9 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder =
             TppBookAppointmentsBuilder(patient, request)
+
+    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade): ICancelAppointmentsBuilder =
+            TppCancelAppointmentsBuilder(patient, request)
 
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 
