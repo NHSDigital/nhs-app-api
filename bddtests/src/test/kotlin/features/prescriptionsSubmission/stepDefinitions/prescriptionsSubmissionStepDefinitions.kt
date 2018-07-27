@@ -20,6 +20,7 @@ import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.emis.models.*
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
+import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -76,6 +77,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     @Given("^I have a repeat prescription request with (\\d+) courses")
     fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int) {
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
+        currentPatient = Patient.getDefault("EMIS")
 
         var uuids: MutableList<String> = mutableListOf()
 
