@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     onBookButtonClicked() {
+      this.$store.app.$analytics.trackButtonClick(Routes.APPOINTMENT_BOOKING_GUIDANCE.path, true);
       this.$router.push(Routes.APPOINTMENT_BOOKING_GUIDANCE.path);
     },
   },

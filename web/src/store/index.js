@@ -12,6 +12,7 @@ import session from './modules/session';
 import errors from './modules/errors';
 import myAppointments from './modules/myAppointments';
 import flashMessage from './modules/flashMessage';
+import analytics from './modules/analytics';
 
 const createStore = () => new Vuex.Store({
   modules: {
@@ -27,6 +28,7 @@ const createStore = () => new Vuex.Store({
     errors,
     myAppointments,
     flashMessage,
+    analytics,
   },
   actions: {
     nuxtServerInit({ state, dispatch }) {

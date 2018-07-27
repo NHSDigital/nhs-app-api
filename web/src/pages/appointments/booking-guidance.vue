@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import Routes from '../../Routes';
+
 export default {
   data() {
     return {
@@ -41,7 +43,7 @@ export default {
       window.open(this.symptomsCheckerUrl, '_blank');
     },
     onBookButtonClicked() {
-      this.$router.push('/appointments/booking');
+      this.$router.push(Routes.APPOINTMENT_BOOKING.path);
     },
   },
 };

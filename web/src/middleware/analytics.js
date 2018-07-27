@@ -1,41 +1,30 @@
+import { isEmpty } from 'lodash/fp';
+
+const APP_ID = 'nhsapp';
+const ENGLISH_LANGUAGE = 'en';
+const pageNamePrefix = `${APP_ID}:${ENGLISH_LANGUAGE}`;
+
 export default function ({ store, route }) {
   if (process.client) {
     window.digitalData = {};
     window.digitalData = (() => {
       const routePath = route.fullPath;
-      const clrpath = routePath.split('?');
-      const fldrelmnt = clrpath[0].split('/');
-
-      const pageUrl = window.location.hostname + clrpath[0];
+      const [path] = routePath.split('?');
+      const fields = path.split('/').slice(1);
+      const pageUrl = window.location.hostname + path;
       const { environment } = window;
       const referringUrl = document.referrer;
       const { domain } = document;
       const urlParams = window.location.href;
-
       const { userAgent } = navigator;
+      const primaryCategory = fields[0] || 'home';
+      const subCategory1 = fields[1] || '';
+      const subCategory2 = fields[2] || '';
 
-      function getCategory(index) {
-        if (fldrelmnt[index] && fldrelmnt[index] !== ' ') {
-          return fldrelmnt[index];
-        }
-        return '';
-      }
+      if (isEmpty(fields)) fields.push('home');
+      const pageName = fields.reduce((combined, field) => `${combined}:${field}`, pageNamePrefix);
 
-      const primaryCategory = getCategory(1) || 'home';
-      const subCategory1 = getCategory(2) || '';
-      const subCategory2 = getCategory(3) || '';
-      let pageName = 'bw:en';
-      for (let i = 1; i < fldrelmnt.length; i += 1) {
-        const pageNamePart = getCategory(i);
-        if (pageNamePart) {
-          pageName = `${pageName}:${pageNamePart}`;
-        }
-      }
-      if (pageName === 'bw:en') {
-        pageName = `${pageName}:home`;
-      }
-
-      const dataObject = {
+      return {
         page: {
           pageInfo: {
             pageName,
@@ -53,9 +42,9 @@ export default function ({ store, route }) {
           userAgent,
         },
         errors: store.state.errors.apiErrors,
+        action: store.state.analytics.action,
+        timestamp: store.state.analytics.timestamp,
       };
-
-      return dataObject;
     })();
   }
 }

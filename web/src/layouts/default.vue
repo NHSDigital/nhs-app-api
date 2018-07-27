@@ -14,12 +14,15 @@
 
 <script>
 /* eslint-disable import/extensions */
+/* eslint-disable no-underscore-dangle */
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+
+const ANALYTICS_DIRECT_CALL_RULE = 'track_action';
 
 export default {
   components: {
@@ -59,6 +62,13 @@ export default {
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
+
+    /* eslint-disable-next-line no-unused-vars */
+    this.$router.afterEach((to, from) => {
+      if (process.client && window._satellite) {
+        window._satellite.track(ANALYTICS_DIRECT_CALL_RULE);
+      }
+    });
 
     this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
   },

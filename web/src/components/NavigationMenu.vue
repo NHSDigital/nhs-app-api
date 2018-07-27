@@ -70,6 +70,7 @@ export default {
     },
     setMenuitemState(event) {
       const a = event.currentTarget;
+      this.$store.app.$analytics.trackButtonClick(a.pathname);
       if (a.target === '_blank') {
         window.open(a.href, '_blank');
       } else {
