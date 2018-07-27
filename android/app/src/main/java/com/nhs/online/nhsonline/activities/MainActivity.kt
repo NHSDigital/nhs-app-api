@@ -273,4 +273,14 @@ class MainActivity : IInteractor, AppCompatActivity() {
             header.visibility = VISIBLE
         }
     }
+
+    fun showBlankScreen() {
+        viewSwitcher.visibility = View.GONE
+        blankScreen.visibility = View.VISIBLE
+    }
+
+    fun hideBlankScreen() {
+        viewSwitcher.visibility = View.VISIBLE
+        blankScreen.visibility = View.GONE
+    }
 }

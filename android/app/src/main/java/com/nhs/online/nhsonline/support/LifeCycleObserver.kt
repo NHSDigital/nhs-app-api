@@ -20,16 +20,13 @@ class LifeCycleObserver(
 
             if (knownService != null && knownService.shouldValidateSession) {
                 appWebInterface.validateSession()
+            } else {
+                context.hideBlankScreen()
             }
         }
     }
 
     fun onMoveToBackground() {
-        showBlankScreen()
-    }
-
-    private fun showBlankScreen() {
-        context.viewSwitcher.visibility = View.GONE
-        context.blankScreen.visibility = View.VISIBLE
+        context.showBlankScreen()
     }
 }

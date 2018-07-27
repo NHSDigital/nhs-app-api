@@ -11,12 +11,7 @@ class AppWebInterface(private val context: MainActivity) {
 
     fun validateSession() {
         context.webview.evaluateJavascript(validateSessionString) {
-            hideBlankScreen()
+            context.hideBlankScreen()
         }
-    }
-
-    private fun hideBlankScreen() {
-        context.viewSwitcher.visibility = View.VISIBLE
-        context.blankScreen.visibility = View.GONE
     }
 }
