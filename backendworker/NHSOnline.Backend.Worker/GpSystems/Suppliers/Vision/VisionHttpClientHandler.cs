@@ -34,7 +34,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             // Set up a http handler to deal with the client certificate.
             ClientCertificateOptions = ClientCertificateOption.Manual;
-            SslProtocols = SslProtocols.Tls;
 
             ClientCertificates.Add(certificate);
         }
