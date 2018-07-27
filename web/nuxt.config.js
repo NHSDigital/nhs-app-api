@@ -23,6 +23,13 @@ module.exports = {
   router: {
     middleware: ['auth', 'meta', 'analytics'],
   },
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: 'favicon.ico',
+    },
+  ],
   env: {
     NODE_ENV: process.env.NODE_ENV || 'development',
     API_HOST: process.env.API_HOST || 'http://localhost:8082',

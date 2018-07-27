@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/extensions */
 import moment from 'moment-timezone';
-import { assign, find, get, map, mapKeys, sortBy } from 'lodash/fp';
+import { sortBy } from 'lodash/fp';
 import {
   INIT,
   LOAD,
@@ -88,14 +88,9 @@ const mapToStartDate = (value) => {
 
 export default {
   [SELECT](state, slot) {
-    slot.isSelected = true;
     state.selectedSlot = slot;
   },
   [DESELECT](state) {
-    if (state.selectedSlot) {
-      state.selectedSlot.isSelected = false;
-    }
-
     state.selectedSlot = null;
   },
   [CLEAR](state) {
@@ -117,8 +112,9 @@ export default {
     const locations = [];
     const clinicians = [];
 
-    sortedSlots.forEach((slot) => {
-      slot.isSelected = false;
+    sortedSlots.forEach((slot, index) => {
+      slot.ref = `slot_${index}`;
+
       const startDate = createDate(slot.startTime).format('YYYY-MM-DD');
       if (slots.has(startDate)) {
         const slotCollection = slots.get(startDate);

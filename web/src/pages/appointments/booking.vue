@@ -40,7 +40,7 @@
       :validation-error="validationError"
     />
 
-    <slot-list :available-slots="availableSlots"/>
+    <slot-list ref="slot_list" :available-slots="availableSlots"/>
 
     <button
       v-if="availableAppointments"
@@ -127,7 +127,10 @@ export default {
   },
   methods: {
     filterSlots() {
-      this.$store.dispatch('availableAppointments/deselect');
+      if (this.$store.state.availableAppointments.selectedSlot) {
+        const childRefs = this.$refs.slot_list.$refs;
+        childRefs[this.$store.state.availableAppointments.selectedSlot.ref][0].deselect();
+      }
       this.$store.dispatch('availableAppointments/setSelectedFilters', this.filters);
       this.$store.dispatch('availableAppointments/filter');
     },

@@ -1,6 +1,5 @@
 /* eslint-disable import/extensions */
 import mutations from '@/store/modules/availableAppointments/mutations';
-import { assign } from 'lodash/fp';
 
 const {
   DESELECT,
@@ -16,27 +15,27 @@ describe('SELECT', () => {
     const state = {
       selectedSlot: null,
     };
-    SELECT(state, { id: 1, isSelected: false });
-    expect(state.selectedSlot).toEqual({ id: 1, isSelected: true });
+    SELECT(state, { id: 1 });
+    expect(state.selectedSlot).toEqual({ id: 1 });
   });
 });
 
 describe('DESELECT', () => {
   it('will deselect the selected slot', () => {
-    const slot = { id: 1, isSelected: true };
+    const slot = { id: 1 };
     const state = {
       selectedSlot: slot,
     };
 
     DESELECT(state, slot);
     expect(state.selectedSlot).toEqual(null);
-    expect(slot).toEqual({ id: 1, isSelected: false });
+    expect(slot).toEqual({ id: 1 });
   });
 });
 
 describe('CLEAR', () => {
   it('will set default values', () => {
-    const slot = { id: 1, isSelected: true };
+    const slot = { id: 1 };
     const slots = new Map();
     slots.set('2018-12-02', [slot]);
     const state = {
@@ -84,7 +83,7 @@ describe('CLEAR', () => {
   });
 
   it('will not deselect selected slot', () => {
-    const slot = { id: 1, isSelected: true };
+    const slot = { id: 1 };
     const state = {
       selectedSlot: slot,
     };
@@ -105,7 +104,7 @@ describe('CLEAR', () => {
 
 describe('INIT', () => {
   it('will set default values', () => {
-    const slot = { id: 1, isSelected: true };
+    const slot = { id: 1 };
     const slots = new Map();
     slots.set('2018-12-02', [slot]);
     const state = {
@@ -213,19 +212,10 @@ describe('LOAD', () => {
     const data = { slots };
     const state = {};
 
-    const slot1 = assign({}, slots[0]);
-    const slot2 = assign({}, slots[1]);
-    const slot3 = assign({}, slots[2]);
-    const slot4 = assign({}, slots[3]);
-    slot1.isSelected = false;
-    slot2.isSelected = false;
-    slot3.isSelected = false;
-    slot4.isSelected = false;
-
     const sortedSlots = new Map();
-    sortedSlots.set('2018-04-21', [slot1]);
-    sortedSlots.set('2018-04-22', [slot4, slot3]);
-    sortedSlots.set('2018-04-23', [slot2]);
+    sortedSlots.set('2018-04-21', [slots[0]]);
+    sortedSlots.set('2018-04-22', [slots[3], slots[2]]);
+    sortedSlots.set('2018-04-23', [slots[1]]);
 
     LOAD(state, data);
 

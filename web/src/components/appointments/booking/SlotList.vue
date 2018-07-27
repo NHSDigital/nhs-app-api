@@ -3,13 +3,8 @@
     <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
       <h5>{{ formatDate(daySlots[0]) }}</h5>
       <ul :class="$style.selector">
-        <li v-for="(slot, index) in daySlots[1]"
-            :class="[slot.isSelected?$style.selected:undefined]"
-            :aria-label="slot.isSelected?'selected-slot':undefined"
-            :key="key(slot, index)"
-            @click="selectSlot(slot, index)">
-          {{ formatTime(slot.startTime) }}
-        </li>
+        <time-slot v-for="slot in daySlots[1]" :key="slot.ref" :ref="slot.ref"
+                   :time-slot="slot" @click.native="select(slot.ref)" />
       </ul>
     </span>
   </form>
@@ -18,8 +13,12 @@
 <script>
 /* eslint-disable import/extensions */
 import moment from 'moment-timezone';
+import TimeSlot from '@/components/appointments/booking/TimeSlot';
 
 export default {
+  components: {
+    TimeSlot,
+  },
   props: {
     availableSlots: {
       type: Array,
@@ -27,14 +26,13 @@ export default {
     },
   },
   methods: {
-    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mm a'),
     formatDate: dateTime => moment.tz(dateTime, 'Europe/London').format('dddd D MMMM YYYY'),
-    key(slot, index) {
-      return `${slot.id}_${index}`;
-    },
-    selectSlot(slot) {
-      this.$store.dispatch('availableAppointments/deselect');
-      this.$store.dispatch('availableAppointments/select', slot);
+    select(ref) {
+      if (this.$store.state.availableAppointments.selectedSlot) {
+        this.$refs[this.$store.state.availableAppointments.selectedSlot.ref][0].deselect();
+      }
+
+      this.$refs[ref][0].select();
     },
   },
 };
@@ -57,32 +55,6 @@ export default {
     flex-wrap: wrap;
     margin-left: -8px;
     margin-bottom: 8px;
-    li {
-      @include default_text;
-      width: 101px;
-      box-sizing: border-box;
-      white-space: nowrap;
-      text-align: center;
-      background-color: $white;
-      border: 1px $light_grey solid;
-      box-sizing: border-box;
-      border-radius: 5px;
-      padding: 16px;
-      list-style: none;
-      margin: 8px;
-      transition: all ease 0.5s;
-      &:last-child {
-        margin-right: 0px;
-      }
-    }
-    .selected {
-      background-color: $nhs_blue;
-      border: 1px $nhs_blue solid;
-      color: $white;
-      label {
-        color: $white;
-      }
-    }
   }
 }
 
