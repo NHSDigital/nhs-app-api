@@ -27,11 +27,15 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc func didBecomeActive() {
-        validateSession(knownServices: self.knownServices, webView: self.webViewController.webView)
+        if knownServices.shouldValidateSession(host: webViewController.webView.url?.host) {
+            validateSession(knownServices: self.knownServices, webView: self.webViewController.webView)
+        } else {
+            hideWhiteScreen()
+        }   
     }
     
     @objc func didEnterBackground() {
-        showWhiteScreen();
+        showWhiteScreen()
     }
     
     private func removeCookies() {

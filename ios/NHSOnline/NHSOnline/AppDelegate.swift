@@ -6,6 +6,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var rootViewController: HomeViewController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        application.ignoreSnapshotOnNextApplicationLaunch()
         rootViewController = self.window?.rootViewController as? HomeViewController
 
         return true
