@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 
         public void ApplyConfig(ITppConfig tppConfig)
         {
+            Application = Application ?? new Application();
             Application.Name = tppConfig.ApplicationName;
             Application.Version = tppConfig.ApplicationVersion;
             Application.ProviderId = tppConfig.ApplicationProviderId;

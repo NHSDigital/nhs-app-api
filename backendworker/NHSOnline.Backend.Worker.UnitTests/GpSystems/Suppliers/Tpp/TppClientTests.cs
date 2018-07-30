@@ -207,5 +207,95 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
         }
+        
+        [TestMethod]
+        public async Task LinkAccountPostRequest_ReturnsLinkAccountReply_WhenValidlyRequested()
+        {
+            var linkRequestModel = _fixture.Create<LinkAccount>();
+            linkRequestModel.OrganisationCode = UnitId;
+            linkRequestModel.ApplyConfig(_configMock.Object);
+            
+            var expectedLinkAccountResponse = _fixture.Create<LinkAccountReply>();
+
+            var requestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, linkRequestModel.RequestType)
+            };
+
+            var responseHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.ResponseSuidHeader, Suid)
+            };
+            
+            var responseContent = new StringContent(expectedLinkAccountResponse.SerializeXml());
+            
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(requestHeaders)
+                .WithContent(linkRequestModel.SerializeXml())
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
+
+            var response = await _sut.LinkAccountPost(linkRequestModel);
+
+            response.Body.Should().BeEquivalentTo(expectedLinkAccountResponse);
+            response.Headers.Should().BeEquivalentTo(responseHeaders);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.ErrorResponse.Should().BeNull();
+        }
+        
+        [TestMethod]
+        public async Task LinkAccountPostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
+        {            
+            var linkAccountRequestModel = _fixture.Create<LinkAccount>();
+            linkAccountRequestModel.OrganisationCode = UnitId;
+            linkAccountRequestModel.ApplyConfig(_configMock.Object);
+            
+            var expectedErrorResponse = _fixture.Create<Error>();
+
+            var tppRequestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, linkAccountRequestModel.RequestType)
+            };
+            
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(tppRequestHeaders)
+                .WithContent(linkAccountRequestModel.SerializeXml())
+                .Respond(MediaType, expectedErrorResponse.SerializeXml());
+
+            var response = await _sut.LinkAccountPost(linkAccountRequestModel);
+
+            response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.Body.Should().BeNull();
+            response.Headers.Should().BeNull();
+        }
+
+        [TestMethod]
+        [DataRow(HttpStatusCode.BadGateway)]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.Unauthorized)]
+        [DataRow(HttpStatusCode.NotFound)]
+        public async Task LinkAccountPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(HttpStatusCode value)
+        {
+            var linkAccountRequestModel = _fixture.Create<LinkAccount>();
+            linkAccountRequestModel.OrganisationCode = UnitId;
+            linkAccountRequestModel.ApplyConfig(_configMock.Object);
+
+            var tppRequestHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(TppClient.RequestTypeHeader, linkAccountRequestModel.RequestType)
+            };
+
+            _mockHttpHandler
+                .WhenTpp(HttpMethod.Post, ApiUrl)
+                .WithTppHeaders(tppRequestHeaders)
+                .Respond(value);
+
+            var response = await _sut.LinkAccountPost(linkAccountRequestModel);
+            
+            response.StatusCode.Should().Be(value);
+            response.HasSuccessResponse.Should().BeFalse();
+        }
     }
 }
