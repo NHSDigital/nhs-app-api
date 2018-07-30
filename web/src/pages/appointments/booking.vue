@@ -9,15 +9,16 @@
       </p>
     </error-warning-dialog>
 
-    <error-warning-dialog v-if="notMatchSearchCriteria" error-or-warning="warning">
-      <p>
-        {{ $t('appointments.booking.adjustSearch.line1') }}
-      </p>
-      <p>
-        {{ $t('appointments.booking.adjustSearch.line2') }}
-      </p>
-    </error-warning-dialog>
-
+    <div ref="noMatching" tabindex="-1">
+      <error-warning-dialog v-if="showNoMatchingWarning" error-or-warning="warning">
+        <p>
+          {{ $t('appointments.booking.adjustSearch.line1') }}
+        </p>
+        <p>
+          {{ $t('appointments.booking.adjustSearch.line2') }}
+        </p>
+      </error-warning-dialog>
+    </div>
     <div ref = "errors" tabindex="-1">
       <error-warning-dialog v-show="showValidationError"
                             error-or-warning="error" error-warning-id="validationErrors">
@@ -74,6 +75,7 @@ export default {
     return {
       backButtonPath: Routes.APPOINTMENTS.path,
       showValidationError: false,
+      showNoMatchingWarning: false,
       validationError: {
         isTypeValid: true,
         isLocationValid: true,
@@ -106,17 +108,6 @@ export default {
       const hasSlots = this.$store.state.availableAppointments.slots.size > 0;
       return this.$store.state.availableAppointments.hasLoaded && hasSlots;
     },
-    notMatchSearchCriteria() {
-      let notMatch = false;
-      if (this.$store.state.availableAppointments.filteredSlots.length === 0
-        && this.filters
-        && this.filters.type !== ''
-        && this.filters.location !== '') {
-        notMatch = true;
-      }
-
-      return notMatch;
-    },
   },
   mounted() {
     this.$store.dispatch('availableAppointments/init');
@@ -133,15 +124,29 @@ export default {
       }
       this.$store.dispatch('availableAppointments/setSelectedFilters', this.filters);
       this.$store.dispatch('availableAppointments/filter');
+
+      this.showNoMatchingWarning = this.shouldShowNoMatchingWarning();
+      if (this.showNoMatchingWarning) {
+        this.showValidationError = false;
+        this.$refs.noMatching.focus();
+      }
     },
     onConfirmButtonClicked() {
       this.validate();
 
-      if (this.showValidationError) {
+      if (this.showNoMatchingWarning) {
+        this.$refs.noMatching.focus();
+      } else if (this.showValidationError) {
         this.$refs.errors.focus();
       } else {
         this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS);
       }
+    },
+
+    shouldShowNoMatchingWarning() {
+      const filterMatchingSlotsCount = this.$store.state.availableAppointments.filteredSlots.length;
+      return filterMatchingSlotsCount === 0 && this.filters
+             && this.filters.type !== '' && this.filters.location !== '';
     },
     validate() {
       this.validationError.isTypeValid = this.filters ? this.filters.type !== '' : false;
@@ -152,9 +157,10 @@ export default {
         this.validationError.isLocationValid = false;
       }
 
-      this.showValidationError = !this.validationError.isTypeValid ||
+      this.showValidationError = !this.showNoMatchingWarning &&
+        (!this.validationError.isTypeValid ||
         !this.validationError.isLocationValid ||
-        this.$store.state.availableAppointments.selectedSlot === null;
+        this.$store.state.availableAppointments.selectedSlot === null);
     },
     bottomStyle() {
       if (

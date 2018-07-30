@@ -71,6 +71,7 @@ describe('booking.vue', () => {
     };
 
     const page = createBookingPage($store, data);
+    page.vm.filterSlots();
 
     expect(page.find('.warning').exists()).toBeTruthy();
     expect(page.findAll('.warning p').at(0).text()).toContain('appointments.booking.adjustSearch.line1');

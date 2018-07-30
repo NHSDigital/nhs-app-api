@@ -232,6 +232,8 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
-    expect(page.vm.notMatchSearchCriteria).toBeTruthy();
+    page.vm.filterSlots();
+
+    expect(page.vm.showNoMatchingWarning).toBeTruthy();
   });
 });
