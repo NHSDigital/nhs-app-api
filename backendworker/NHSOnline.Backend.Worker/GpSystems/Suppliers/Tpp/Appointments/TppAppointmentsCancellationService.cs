@@ -9,12 +9,12 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentsServiceCancel
+    public class TppAppointmentsCancellationService
     {
-        private readonly ILogger<TppAppointmentsService> _logger;
+        private readonly ILogger<TppAppointmentsCancellationService> _logger;
         private readonly ITppClient _tppClient;
 
-        public TppAppointmentsServiceCancel(ILogger<TppAppointmentsService> logger, ITppClient tppClient)
+        public TppAppointmentsCancellationService(ILogger<TppAppointmentsCancellationService> logger, ITppClient tppClient)
         {
             _logger = logger;
             _tppClient = tppClient;

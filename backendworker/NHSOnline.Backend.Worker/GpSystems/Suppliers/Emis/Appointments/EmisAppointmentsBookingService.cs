@@ -9,12 +9,12 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
-    public class EmisAppointmentsServiceBook 
+    public class EmisAppointmentsBookingService
     {
-        private readonly ILogger<EmisAppointmentsService> _logger;
+        private readonly ILogger<EmisAppointmentsBookingService> _logger;
         private readonly IEmisClient _emisClient;
 
-        public EmisAppointmentsServiceBook(ILogger<EmisAppointmentsService> logger, IEmisClient emisClient)
+        public EmisAppointmentsBookingService(ILogger<EmisAppointmentsBookingService> logger, IEmisClient emisClient)
         {
             _logger = logger;
             _emisClient = emisClient;

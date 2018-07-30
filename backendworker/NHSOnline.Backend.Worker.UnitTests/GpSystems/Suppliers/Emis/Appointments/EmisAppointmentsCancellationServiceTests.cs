@@ -16,7 +16,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointments
 {
     [TestClass]
-    public class EmisAppointmentsServiceCancelTests
+    public class EmisAppointmentsCancellationServiceTests
     {
         private IFixture _fixture;
         private EmisUserSession _userSession;

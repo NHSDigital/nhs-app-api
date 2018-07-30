@@ -8,14 +8,14 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
-    public class EmisAppointmentsServiceGetAppointments 
+    public class EmisAppointmentsRetrievalService
     {
         private readonly IEmisClient _emisClient;
         private readonly IAppointmentsResponseMapper _responseMapper;
-        private readonly ILogger<EmisAppointmentsService> _logger;
+        private readonly ILogger<EmisAppointmentsRetrievalService> _logger;
 
-        public EmisAppointmentsServiceGetAppointments(
-            ILogger<EmisAppointmentsService> logger, 
+        public EmisAppointmentsRetrievalService(
+            ILogger<EmisAppointmentsRetrievalService> logger,
             IEmisClient emisClient,
             IAppointmentsResponseMapper responseMapper
             )

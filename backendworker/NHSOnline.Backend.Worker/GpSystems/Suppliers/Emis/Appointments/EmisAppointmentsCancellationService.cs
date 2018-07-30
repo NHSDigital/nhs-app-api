@@ -12,13 +12,13 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
-    public class EmisAppointmentsServiceCancel
+    public class EmisAppointmentsCancellationService
     {
         private readonly IEmisClient _emisClient;
-        private readonly ILogger<EmisAppointmentsService> _logger;
+        private readonly ILogger<EmisAppointmentsCancellationService> _logger;
 
-        public EmisAppointmentsServiceCancel(
-            ILogger<EmisAppointmentsService> logger,
+        public EmisAppointmentsCancellationService(
+            ILogger<EmisAppointmentsCancellationService> logger,
             IEmisClient emisClient)
         {
             _emisClient = emisClient;

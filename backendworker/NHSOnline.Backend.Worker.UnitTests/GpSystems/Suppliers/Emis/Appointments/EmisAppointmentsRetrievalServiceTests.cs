@@ -17,7 +17,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointments
 {
     [TestClass]
-    public class EmisAppointmentsServiceGetAppointmentsTests
+    public class EmisAppointmentsRetrievalServiceTests
     {
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;

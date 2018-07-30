@@ -16,7 +16,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
     [TestClass]
-    public class TppAppointmentServiceCancelTests
+    public class TppAppointmentsCancellationServiceTests
     {
         private IFixture _fixture;
         private TppUserSession _userSession;

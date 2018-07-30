@@ -8,18 +8,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
     public class EmisAppointmentsService : IAppointmentsService
     {
-        private readonly EmisAppointmentsServiceBook _booker;
-        private readonly EmisAppointmentsServiceCancel _canceller;
-        private readonly EmisAppointmentsServiceGetAppointments _getter;
+        private readonly EmisAppointmentsBookingService _booker;
+        private readonly EmisAppointmentsCancellationService _canceller;
+        private readonly EmisAppointmentsRetrievalService _getter;
 
         public EmisAppointmentsService(
-            IEmisClient emisClient, 
-            IAppointmentsResponseMapper responseMapper,
-            ILogger<EmisAppointmentsService> logger)
+            EmisAppointmentsRetrievalService getter,
+            EmisAppointmentsBookingService booker,
+            EmisAppointmentsCancellationService canceller)
         {
-            _getter = new EmisAppointmentsServiceGetAppointments(logger, emisClient, responseMapper);
-            _booker = new EmisAppointmentsServiceBook(logger, emisClient);
-            _canceller = new EmisAppointmentsServiceCancel(logger, emisClient);
+            _getter = getter;
+            _booker = booker;
+            _canceller = canceller;
         }
 
         public async Task<AppointmentBookResult> Book(UserSession userSession, AppointmentBookRequest request)

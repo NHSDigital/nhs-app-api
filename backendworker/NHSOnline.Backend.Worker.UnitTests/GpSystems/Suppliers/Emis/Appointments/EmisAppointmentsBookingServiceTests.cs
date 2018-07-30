@@ -17,7 +17,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointments
 {
     [TestClass]
-    public class EmisAppointmentsServiceBookTests
+    public class EmisAppointmentsBookingServiceTests
     {
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "2862517";

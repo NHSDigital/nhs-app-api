@@ -61,7 +61,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             var logger = Mock.Of<ILogger<TppAppointmentsService>>();
             var dateTimeOffsetProvider = Mock.Of<IDateTimeOffsetProvider>();
             var builder = Mock.Of<IAppointmentsResultBuilder>();
-            var service = new TppAppointmentsService(_tppClient,  logger, dateTimeOffsetProvider, builder);
+            var service = new TppAppointmentsService(
+                new TppAppointmentsRetrievalService(Mock.Of<ILogger<TppAppointmentsRetrievalService>>(), _tppClient, builder),
+                new TppAppointmentsBookingService(Mock.Of<ILogger<TppAppointmentsBookingService>>(), _tppClient, dateTimeOffsetProvider),
+                new TppAppointmentsCancellationService(Mock.Of<ILogger<TppAppointmentsCancellationService>>(), _tppClient));
 
             _mockServiceProvider.Setup(x => x.GetService(typeof(TppAppointmentsService)))
                 .Returns(service);

@@ -10,13 +10,13 @@ using NHSOnline.Backend.Worker.Support.Date;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 {
-    public class TppAppointmentsServiceBook
+    public class TppAppointmentsBookingService
     {
-        private readonly ILogger<TppAppointmentsService> _logger;
+        private readonly ILogger<TppAppointmentsBookingService> _logger;
         private readonly ITppClient _tppClient;
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
-        public TppAppointmentsServiceBook(ILogger<TppAppointmentsService> logger, ITppClient tppClient, IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public TppAppointmentsBookingService(ILogger<TppAppointmentsBookingService> logger, ITppClient tppClient, IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             _logger = logger;
             _tppClient = tppClient;

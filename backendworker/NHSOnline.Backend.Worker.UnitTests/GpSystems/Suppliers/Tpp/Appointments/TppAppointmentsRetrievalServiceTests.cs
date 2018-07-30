@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
     [TestClass]
-    public class TppAppointmentsServiceGetAppointmentsTests
+    public class TppAppointmentsRetrievalServiceTests
     {
         private IFixture _fixture;
         private TppAppointmentsService _systemUnderTest;
@@ -88,15 +88,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
 
-            _systemUnderTest = new TppAppointmentsService(
-                _mockTppClient.Object,
+            var builder = new TppAppointmentsResultBuilder(
                 _fixture.Create<ILogger<TppAppointmentsService>>(),
-                new DateTimeOffsetProvider(timeZoneInfoProvider),
-                new TppAppointmentsResultBuilder(
-                    _fixture.Create<ILogger<TppAppointmentsService>>(), 
-                    _mockResponseMapper.Object
-                )
+                _mockResponseMapper.Object
             );
+            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
+
+            _systemUnderTest = new TppAppointmentsService(
+                new TppAppointmentsRetrievalService(Mock.Of<ILogger<TppAppointmentsRetrievalService>>(),
+                    _mockTppClient.Object, builder),
+                new TppAppointmentsBookingService(Mock.Of<ILogger<TppAppointmentsBookingService>>(),
+                    _mockTppClient.Object, dateTimeOffsetProvider),
+                new TppAppointmentsCancellationService(Mock.Of<ILogger<TppAppointmentsCancellationService>>(),
+                    _mockTppClient.Object));
 
         }
 

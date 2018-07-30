@@ -9,6 +9,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
         {
             services.AddTransient<TppAppointmentsService>();
             services.AddTransient<TppAppointmentSlotsService>();
+
+            services.AddTransient<TppAppointmentsRetrievalService>();
+            services.AddTransient<TppAppointmentsBookingService>();
+            services.AddTransient<TppAppointmentsCancellationService>();
             
             base.ConfigureServices(services, configuration);
         }

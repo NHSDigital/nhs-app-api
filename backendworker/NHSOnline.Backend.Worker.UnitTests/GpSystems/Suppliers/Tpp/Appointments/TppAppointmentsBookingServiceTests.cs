@@ -17,7 +17,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
     [TestClass]
-    public class TppAppointmentsServiceBookTests
+    public class TppAppointmentsBookingServiceTests
     {
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "347ac20000000000";
