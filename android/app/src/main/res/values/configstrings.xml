@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="baseScheme">https</string>
+    <string name="appScheme">nhsapp</string>
     <string name="baseHost">www-preview.nonliveeuw.bitraft.io</string>
     <string name="authRedirectPath">/auth-return</string>
     <string name="baseURL">https://www-preview.nonliveeuw.bitraft.io/</string>
@@ -16,7 +17,7 @@
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
 
-    <string name="nhsOnlineRequiredQueries">\?source=mobile</string>
+    <string name="nhsOnlineRequiredQueries">\?source=android</string>
 
     <string-array name="serviceUrls">
         <item>@string/nhs111</item>

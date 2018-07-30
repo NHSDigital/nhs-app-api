@@ -1,5 +1,6 @@
 package mocking.defaults
 
+import config.Config
 import kotlin.text.Charsets
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
@@ -75,7 +76,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     surname = "Test$pad",
                     cidUserSession = UserSessionRequest(
                             authCode = "authCode$pad",
-                            codeVerifier = "codeVerifier$pad"
+                            codeVerifier = "codeVerifier$pad",
+                            redirectUrl = Config.instance.cidRedirectUri
                     ),
                     accessToken = "accessToken$pad",
                     endUserSessionId = "endUserSessionId$pad",

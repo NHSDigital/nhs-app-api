@@ -9,5 +9,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session.Models
 
         [Required]
         public string CodeVerifier { get; set; }
+
+        [Required]
+        public string RedirectUrl { get; set; }
     }
 }

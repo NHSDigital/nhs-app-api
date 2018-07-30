@@ -60,60 +60,59 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             try
             {
                 _logger.LogEnter(nameof(Post));
-    
-            // Call Citizen ID to get the IM1 connection token and ODS code.
-            var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier);
-            if (!cidUserProfileOption.HasValue)
-            {
-                _logger.LogError("No CID profile was found for received authcode and code verifier");
-                return BadRequest();
-            }
-            var cidUserProfile = cidUserProfileOption.ValueOrFailure();
-    
-            // Get a suitable GP system, based on the ODS code.
-            var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
-            if (!gpSystemOption.HasValue)
-            {
-                _logger.LogError($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
-                return new StatusCodeResult(StatusCodes.Status403Forbidden);
-            }
-    
-            var gpSystem = gpSystemOption.ValueOrFailure();
-            _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
-    
-            // Validate the format of the IM1 connection token for this GP system.
-            var tokenValidationService = gpSystem.GetTokenValidationService();
-            if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
-            {
-                _logger.LogError("Failed to validate Im1 connection");
-                return new StatusCodeResult(StatusCodes.Status403Forbidden);
-            }
-    
-            // Create a session with the GP system, using the IM1 connection token.
-            var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, cidUserProfile);
-            if (!sessionCreatedResultVisited.SessionWasCreated)
-            {
-                _logger.LogError($"Creating the session failed with status code: '{sessionCreatedResultVisited.StatusCode}'");
-                return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
-            }
-    
-            // Build and save session token in our redis session cache
-            await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
-    
-            // Audit that the use is logged on.
-            HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
-            _auditor.Audit("SessionCreation", "user session created");
-    
+
+                // Call Citizen ID to get the IM1 connection token and ODS code.
+                var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
+                if (!cidUserProfileOption.HasValue)
+                {
+                    _logger.LogError("No CID profile was found for received authcode and code verifier");
+                    return BadRequest();
+                }
+                var cidUserProfile = cidUserProfileOption.ValueOrFailure();
+        
+                // Get a suitable GP system, based on the ODS code.
+                var gpSystemOption = await GetGpSystem(cidUserProfile.OdsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
+                    return new StatusCodeResult(StatusCodes.Status403Forbidden);
+                }
+        
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                _logger.LogDebug($"Fetch GP System: '{gpSystem.Supplier}'.");
+        
+                // Validate the format of the IM1 connection token for this GP system.
+                var tokenValidationService = gpSystem.GetTokenValidationService();
+                if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
+                {
+                    _logger.LogError("Failed to validate Im1 connection");
+                    return new StatusCodeResult(StatusCodes.Status403Forbidden);
+                }
+        
+                // Create a session with the GP system, using the IM1 connection token.
+                var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, cidUserProfile);
+                if (!sessionCreatedResultVisited.SessionWasCreated)
+                {
+                    _logger.LogError($"Creating the session failed with status code: '{sessionCreatedResultVisited.StatusCode}'");
+                    return new StatusCodeResult(sessionCreatedResultVisited.StatusCode);
+                }
+        
+                // Build and save session token in our redis session cache
+                await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
+        
+                // Audit that the use is logged on.
+                HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
+                _auditor.Audit("SessionCreation", "user session created");
+        
                 _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
-                
+    
                 return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode));
-        }
+            }
             finally
             {
                 _logger.LogExit(nameof(Post));
             }
         }
-
 
         [HttpDelete]
         public async Task<IActionResult> Delete()
@@ -122,31 +121,31 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             {
                 _logger.LogEnter(nameof(Delete));
                 
-            var userSession = HttpContext.GetUserSession();
-
-            bool sessionDeleted;
-
-            try
-            {
-                sessionDeleted = await _sessionCacheService.DeleteUserSession(userSession.Key);
+                var userSession = HttpContext.GetUserSession();
+    
+                bool sessionDeleted;
+    
+                try
+                {
+                    sessionDeleted = await _sessionCacheService.DeleteUserSession(userSession.Key);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Delete session failed");
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+                }
+    
+                if (!sessionDeleted)
+                {
+                    _logger.LogError("No active session was found");
+                }
+    
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    
+                    _logger.LogDebug(
+                        $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
+                return new StatusCodeResult(StatusCodes.Status204NoContent);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Delete session failed");
-                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-            }
-
-            if (!sessionDeleted)
-            {
-                _logger.LogError("No active session was found");
-            }
-
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                _logger.LogDebug(
-                    $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
-            return new StatusCodeResult(StatusCodes.Status204NoContent);
-        }
             finally
             {
                 _logger.LogExit(nameof(Delete));

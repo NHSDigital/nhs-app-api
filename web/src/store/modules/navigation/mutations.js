@@ -1,7 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-import { CLEAR_SELECTED_MENUITEM, SET_NEWMENUITEM } from './mutation-types';
+import { CLEAR_SELECTED_MENUITEM, SET_NEWMENUITEM, INIT_NAVIGATION } from './mutation-types';
 
 /* eslint-disable no-shadow */
 function clearPreviousSelectedMenuItem(state) {
@@ -24,5 +24,8 @@ export default {
   [SET_NEWMENUITEM](state, menuItemIndex) {
     clearPreviousSelectedMenuItem(state);
     state.menuItemStatusAt[menuItemIndex] = true;
+  },
+  [INIT_NAVIGATION](state) {
+    state.menuItemStatusAt = [];
   },
 };

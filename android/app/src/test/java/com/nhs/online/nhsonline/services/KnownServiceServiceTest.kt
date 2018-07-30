@@ -13,7 +13,7 @@ class KnownServiceServiceTest {
     @Test
     fun hasMissingQueryString_returnsTrue_forMissingQueryString() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000")
 
@@ -23,21 +23,21 @@ class KnownServiceServiceTest {
     @Test
     fun hasMissingQueryString_returnsTrue_forMissingOneOfMany() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile&param2=param2Value")
+            queryString = "?source=android&param2=param2Value")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?param2=param2Value")
         Assert.assertTrue(result)
 
-        val result2 = testService.hasMissingQueryString("http://10.0.2.2:3000?source=mobile")
+        val result2 = testService.hasMissingQueryString("http://10.0.2.2:3000?source=android")
         Assert.assertTrue(result2)
     }
 
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryString() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
-        val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=mobile")
+        val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=android")
 
         Assert.assertFalse(result)
     }
@@ -45,9 +45,9 @@ class KnownServiceServiceTest {
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryStringDifferentCase() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
-        val result = testService.hasMissingQueryString("http://10.0.2.2:3000?SOURCE=MOBILE")
+        val result = testService.hasMissingQueryString("http://10.0.2.2:3000?SOURCE=ANDROID")
 
         Assert.assertFalse(result)
     }
@@ -55,7 +55,7 @@ class KnownServiceServiceTest {
     @Test
     fun hasMissingQueryString_returnsFalse_forValidQueryStringNoValue() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
         val result = testService.hasMissingQueryString("http://10.0.2.2:3000?source=")
 
@@ -65,7 +65,7 @@ class KnownServiceServiceTest {
     @Test
     fun hasMissingQueryString_returnsFalse_forEmptyUrl() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
         val result = testService.hasMissingQueryString("")
 
@@ -75,27 +75,27 @@ class KnownServiceServiceTest {
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forMissingQueryString() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000")
 
-        Assert.assertEquals("http://10.0.2.2:3000?source=mobile", result)
+        Assert.assertEquals("http://10.0.2.2:3000?source=android", result)
     }
 
     @Test
     fun addMissingQueryStrings_returnsFullUrl_forIncludedQueryString() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
-        val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?source=mobile")
+        val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?source=android")
 
-        Assert.assertEquals("http://10.0.2.2:3000?source=mobile", result)
+        Assert.assertEquals("http://10.0.2.2:3000?source=android", result)
     }
 
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forNonMatchingHost() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://www.google.com")
 
@@ -123,11 +123,11 @@ class KnownServiceServiceTest {
     @Test
     fun addMissingQueryStrings_returnsOriginalUrl_forQueryStringWithAdditionalInputQueryString() {
         val testService = KnownService(arrayOf("http://10.0.2.2:3000"), emptyErrorMessage,
-            queryString = "?source=mobile")
+            queryString = "?source=android")
 
         val result = testService.addMissingQueryStrings("http://10.0.2.2:3000?param1=param1Value")
 
-        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=mobile", result)
+        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=android", result)
     }
 
     @Test

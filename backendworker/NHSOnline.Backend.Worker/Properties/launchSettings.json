@@ -21,8 +21,8 @@
         "TPP_APPLICATION_VERSION": "1.0",
         "TPP_APPLICATION_PROVIDER_ID": "b891fc3b51d5e7c1",
         "TPP_APPLICATION_DEVICE_TYPE": "NhsApp",
-        "TPP_CERTIFICATE_PATH": "",
         "TPP_CERTIFICATE_PASSWORD": "",
+        "TPP_CERTIFICATE_PATH": "./certs/TppNhsTest.pfx",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "EMIS_BASE_URL": "http://127.0.0.1:8080/emis/",
         "REDIS_ODSLOOKUP_CONFIG": "127.0.0.1:6379",
@@ -30,7 +30,6 @@
         "CITIZEN_ID_BASE_URL": "https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/",
         "CITIZEN_ID_CLIENT_ID": "nhs-online-poc",
         "CITIZEN_ID_CLIENT_SECRET": "872b46c9-0afe-4037-8958-e7bbc209a379",
-        "NHS_WEB_APP_BASE_URL": "http://localhost:3000/",
         "SESSION_ENCRYPTION_KEY_FILE": "DevelopmentSessionEncryptionKey.txt"
       }
     },
@@ -56,7 +55,6 @@
         "CITIZEN_ID_BASE_URL": "https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/",
         "CITIZEN_ID_CLIENT_ID": "nhs-online-poc",
         "CITIZEN_ID_CLIENT_SECRET": "872b46c9-0afe-4037-8958-e7bbc209a379",
-        "NHS_WEB_APP_BASE_URL": "http://localhost:3000/",
         "SESSION_ENCRYPTION_KEY_FILE": "DevelopmentSessionEncryptionKey.txt"
       }
     }

@@ -772,6 +772,7 @@
               required: 
                 - "authCode"
                 - "codeVerifier"
+                - "redirectUrl"
               properties: 
                 authCode: 
                   type: "string"
@@ -779,6 +780,9 @@
                 codeVerifier: 
                   type: "string"
                   description: "PKCE code verifier."
+                redirectUrl: 
+                  type: "string"
+                  description: "Redirect url provided when signing in to Citizen Id"
         responses: 
           201: 
             description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests."

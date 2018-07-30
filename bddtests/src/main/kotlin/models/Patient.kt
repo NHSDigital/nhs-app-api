@@ -1,5 +1,6 @@
 package models
 
+import config.Config
 import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
@@ -30,8 +31,8 @@ data class Patient(
         val apiKey: String = "",
         val cidUserSession: UserSessionRequest= UserSessionRequest(
                 authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
-                codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU"
-        ),
+                codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
+                redirectUrl = Config.instance.cidRedirectUri),
         val accessToken: String ="access_token",
         val tppUserSession: TppUserSession? = null
 ) {

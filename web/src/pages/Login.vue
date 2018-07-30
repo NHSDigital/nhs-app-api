@@ -3,19 +3,19 @@
     <home-header />
     <SessionExpiredBanner />
     <main class="login-or-register">
-      <form :action="redirectUrl" method="get">
+      <form :action="loginUrl" method="get">
         <input :value="clientId" type="hidden" name="client_id" >
         <input :value="codeChallenge" type="hidden" name="code_challenge">
         <input :value ="codeMethod" type="hidden" name="code_challenge_method" >
         <input :value="prompt" type="hidden" name="prompt">
-        <input :value="redirectUri" type="hidden" name="redirect_uri">
+        <input :value="this.$store.state.auth.redirectUri" type="hidden" name="redirect_uri">
         <input :value="state" type="hidden" name="state">
         <input :value="responseType" type="hidden" name="response_type">
         <LoginButton />
       </form>
       <hr :data-content="$t('common.or')" class="hr-text">
       <form :action="registerUrl" method="get">
-        <input :value="redirectUri" type="hidden" name="redirect_uri">
+        <input :value="this.$store.state.auth.redirectUri" type="hidden" name="redirect_uri">
         <input :value="clientId" type="hidden" name="client_id" >
         <input :value="codeChallenge" type="hidden" name="code_challenge">
         <input :value ="codeMethod" type="hidden" name="code_challenge_method" >
@@ -47,7 +47,7 @@ export default {
     SessionExpiredBanner,
   },
   computed: {
-    redirectUrl() {
+    loginUrl() {
       return this.$store.state.auth.config.baseUrl;
     },
     registerUrl() {
@@ -68,12 +68,15 @@ export default {
     prompt() {
       return this.$store.state.auth.config.prompt;
     },
-    redirectUri() {
-      return this.$store.state.auth.config.redirect_uri;
-    },
     responseType() {
       return this.$store.state.auth.config.response_type;
     },
+  },
+  created() {
+    this.$store.dispatch('auth/setRedirectUri');
+  },
+  mounted() {
+    this.$store.dispatch('auth/buildLogin');
   },
 };
 </script>

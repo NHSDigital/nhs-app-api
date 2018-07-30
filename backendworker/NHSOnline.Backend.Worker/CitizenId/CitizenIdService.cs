@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 {
     public interface ICitizenIdService
     {
-        Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier);
+        Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier, string redirectUrl);
     }
 
     public class CitizenIdService : ICitizenIdService
@@ -22,14 +22,14 @@ namespace NHSOnline.Backend.Worker.CitizenId
             _logger = loggerFactory.CreateLogger<CitizenIdService>();
         }
 
-        public async Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier)
+        public async Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier, string redirectUrl)
         {
             try
             {
                 _logger.LogEnter(nameof(GetUserProfile));
                 
                 // Sanity-check input parameters - no point invoking CID endpoint if they are clearly invalid
-                if (string.IsNullOrWhiteSpace(authCode) || string.IsNullOrWhiteSpace(codeVerifier))
+                if (string.IsNullOrWhiteSpace(authCode) || string.IsNullOrWhiteSpace(codeVerifier) || string.IsNullOrWhiteSpace(redirectUrl))
                 {
                     var missing = new List<string>();
                     if (string.IsNullOrEmpty(authCode))
@@ -40,14 +40,19 @@ namespace NHSOnline.Backend.Worker.CitizenId
                     if (string.IsNullOrEmpty(codeVerifier))
                     {
                         missing.Add("codeVerifier");
-                    }   
+                    }
+                    
+                    if (string.IsNullOrEmpty(redirectUrl))
+                    {
+                        missing.Add("redirectUrl");
+                    }
                     
                     _logger.LogWarning($"Missing input parameters: {string.Join(", ", missing)}");
                     return Option.None<UserProfile>();
                 }
     
                 // Exchange authorisation code for bearer access token.
-                var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier);
+                var tokenResponse = await _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
                 if (!tokenResponse.HasSuccessStatusCode)
                 {
                     LogError(tokenResponse, "Failed to exchange auth token for access token.");
@@ -79,7 +84,6 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private void LogError<T>(CitizenIdClient.CitizenIdApiObjectResponse<T> apiResponse, string errorMessage)
         {
             _logger.LogError($"{errorMessage} Error code: '{apiResponse.ErrorResponse?.Error}', Error message: '{apiResponse.ErrorResponse?.ErrorDescription}'");
-
-    }
+        }
     }
 }
