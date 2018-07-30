@@ -18,15 +18,6 @@ class AuthorizationService {
     return base64URLEncode(crypto.randomBytes(32));
   }
 
-  static getRedirectUri(state) {
-    const device = state.device.source;
-    if (device === 'android') {
-      return process.env.ANDROID_CID_REDIRECT_URI;
-    }
-
-    return process.env.CID_REDIRECT_URI;
-  }
-
   /* eslint-disable class-methods-use-this */
   newState(randomGenerator) {
     return randomGenerator(10);
@@ -61,14 +52,14 @@ class AuthorizationService {
     return encoded.join('&');
   }
 
-  buildLoginObject(verifier, store) {
+  buildLoginObject(verifier) {
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
-    const redirectUri = AuthorizationService.getRedirectUri(store.state);
+    const redirectUri = process.env.CID_REDIRECT_URI;
     const clientId = process.env.CID_CLIENT_ID;
     const request = {
-      client_id: clientId,
       redirect_uri: redirectUri,
+      client_id: clientId,
       response_type: 'code',
       state: myState,
       code_challenge: challenge,
@@ -80,9 +71,10 @@ class AuthorizationService {
     return request;
   }
 
-  performLogin(verifier, redirectUri) {
+  performLogin(verifier) {
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
+    const redirectUri = process.env.CID_REDIRECT_URI;
     const clientId = process.env.CID_CLIENT_ID;
 
     const request = {
@@ -104,11 +96,11 @@ class AuthorizationService {
     }
   }
 
-  performRegistration(verifier, redirectUri) {
+  performRegistration(verifier) {
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
+    const redirectUri = process.env.CID_REDIRECT_URI;
     const clientId = process.env.CID_CLIENT_ID;
-
     const request = {
       redirect_uri: redirectUri,
       client_id: clientId,

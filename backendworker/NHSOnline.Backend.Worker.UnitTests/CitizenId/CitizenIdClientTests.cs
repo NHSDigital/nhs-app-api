@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private IFixture _fixture;
 
         private Uri _citizenIdApiBaseUrl;
+        private Uri _nhsWebAppBaseUrl;
         private string _clientId;
         private string _clientSecret;
         private Mock<ICitizenIdConfig> _mockConfig;
@@ -35,6 +37,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IJsonResponseParser>(() => new JsonResponseParser());
             _citizenIdApiBaseUrl = _fixture.Create<Uri>();
+            _nhsWebAppBaseUrl = _fixture.Create<Uri>();
             _clientId = _fixture.Create<string>();
             _clientSecret = _fixture.Create<string>();
 
@@ -42,6 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _mockConfig = _fixture.Freeze<Mock<ICitizenIdConfig>>();
 
             _mockConfig.SetupGet(x => x.CitizenIdApiBaseUrl).Returns(_citizenIdApiBaseUrl);
+            _mockConfig.SetupGet(x => x.NhsWebAppBaseUrl).Returns(_nhsWebAppBaseUrl);
             _mockConfig.SetupGet(x => x.ClientId).Returns(_clientId);
             _mockConfig.SetupGet(x => x.ClientSecret).Returns(_clientSecret);
 
@@ -57,14 +61,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             // Arrange
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
             var expectedTokenResponse = _fixture.Create<Token>();
 
             var dict = new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
                 { "code", authCode },
-                { "redirect_uri", redirectUrl },
+                { "redirect_uri", new Uri(_nhsWebAppBaseUrl, "auth-return").ToString() },
                 { "code_verifier", codeVerifier },
                 { "client_id", _clientId },
                 { "code_challenge_method", "S256" }
@@ -80,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 .Respond("application/json", JsonConvert.SerializeObject(expectedTokenResponse));
 
             // Act
-            var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
+            var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedTokenResponse);
@@ -95,14 +98,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             // Arrange
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
-            var redirectUrl = _fixture.Create<string>();
             var expectedErrorResponse = _fixture.Create<ErrorResponse>();
 
             var dict = new Dictionary<string, string>
             {
                 { "grant_type", "authorization_code" },
                 { "code", authCode },
-                { "redirect_uri", redirectUrl },
+                { "redirect_uri", new Uri(_nhsWebAppBaseUrl, "auth-return").ToString() },
                 { "code_verifier", codeVerifier },
                 { "client_id", _clientId },
                 { "code_challenge_method", "S256" }
@@ -119,7 +121,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                     JsonConvert.SerializeObject(expectedErrorResponse));
 
             // Act
-            var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
+            var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier);
 
             // Assert
             response.Body.Should().BeNull();

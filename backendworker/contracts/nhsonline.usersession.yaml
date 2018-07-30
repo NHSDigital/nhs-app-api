@@ -56,7 +56,6 @@ definitions:
     required:
      - authCode
      - codeVerifier
-     - redirectUrl
     properties:
       authCode:
         type: string
@@ -64,9 +63,6 @@ definitions:
       codeVerifier:
         type: string
         description: PKCE code verifier.
-      redirectUrl:
-        type: string
-        description: Redirect url provided when signing in to Citizen Id
   UserSessionResponse:
     type: object
     properties:

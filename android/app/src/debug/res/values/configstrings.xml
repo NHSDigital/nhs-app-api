@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NHS Online Dev</string>
-    <string name="baseScheme">https</string>
-    <string name="appScheme">nhsapp</string>
-    <string name="baseHost">android.local.bitraft.io</string>
-    <string name="baseURL">https://android.local.bitraft.io/</string>
+    <string name="baseScheme">http</string>
+    <string name="baseHost">10.0.2.2</string>
+    <string name="baseURL">http://10.0.2.2:3000/</string>
 </resources>

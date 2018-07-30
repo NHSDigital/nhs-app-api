@@ -54,13 +54,11 @@ export default {
     },
   },
   created() {
-    if (this.$route.query.source === 'android' || this.$route.query.source === 'ios') {
+    if (this.$route.query.source === 'mobile') {
       this.$store.dispatch('device/updateIsNativeApp', true);
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
-
-    this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
   },
   mounted() {
     this.$store.dispatch('session/startValidationChecking');

@@ -11,11 +11,11 @@ services:
       - API_HOST=http://localhost:8082
       - API_HOST_SERVER=http://nhsonline.backend.worker:8082
       - CID_REDIRECT_URI=http://localhost:3000/auth-return
-      - ANDROID_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
       - CORS_AUTHORITY=*
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
       - TPP_CERTIFICATE_PASSWORD
@@ -33,12 +33,12 @@ services:
     ports:
       - "8080:8080"
     tty: true
-  # nhsonline.stubs.data:
-  #  image: nhsonline.stubs.data
-  #  environment:
-  #    - wiremockUrl=http://nhsonline.stubs:8080
-  #  depends_on:
-  #    - nhsonline.stubs
+  nhsonline.stubs.data:
+    image: nhsonline.stubs.data
+    environment:
+      - wiremockUrl=http://nhsonline.stubs:8080
+    depends_on:
+      - nhsonline.stubs
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:
