@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 _logger.LogEnter(nameof(Post));
     
                 // Call Citizen ID to get the IM1 connection token and ODS code.
-                var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier);
+                var cidUserProfileOption = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
                 if (!cidUserProfileOption.HasValue)
                 {
                     _logger.LogError("No CID profile was found for received authcode and code verifier");

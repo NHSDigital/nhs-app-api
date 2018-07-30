@@ -45,6 +45,8 @@ module.exports = {
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online-poc',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',
+    ANDROID_CID_REDIRECT_URI:
+      process.env.ANDROID_CID_REDIRECT_URI || 'nhsapp://10.0.2.2:3000/auth-return',
     CID_AUTH_ENDPOINT:
       process.env.CID_AUTH_ENDPOINT
       || 'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/auth',

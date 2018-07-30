@@ -34,9 +34,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         {
             // Arrange
             var codeVerifier = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<string>();
 
             // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier);
+            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
             actualResult.HasValue.Should().BeFalse();
@@ -50,9 +51,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         {
             // Arrange
             var authCode = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<string>();
 
             // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier);
+            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
+
+            // Assert
+            actualResult.HasValue.Should().BeFalse();
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow(" ")]
+        public async Task GetUserProfile_RedirectUrlNullOrWhiteSpace_ReturnsNone(string redirectUrl)
+        {
+            // Arrange
+            var authCode = _fixture.Create<string>();
+            var codeVerifier = _fixture.Create<string>();
+
+            // Act
+            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
             actualResult.HasValue.Should().BeFalse();
@@ -70,13 +89,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<string>();
 
             _citizenIdClientMock
-                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier))
+                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
                 .ReturnsAsync(tokenResponse);
 
             // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier);
+            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
             _citizenIdClientMock.VerifyAll();
@@ -107,9 +127,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<string>();
 
             _citizenIdClientMock
-                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier))
+                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
                 .ReturnsAsync(tokenResponse);
 
             _citizenIdClientMock
@@ -117,7 +138,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 .ReturnsAsync(userProfileResponse);
 
             // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier);
+            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
             _citizenIdClientMock.VerifyAll();
@@ -144,9 +165,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 
             var authCode = _fixture.Create<string>();
             var codeVerifier = _fixture.Create<string>();
+            var redirectUrl = _fixture.Create<string>();
 
             _citizenIdClientMock
-                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier))
+                .Setup(x => x.ExchangeAuthToken(authCode, codeVerifier, redirectUrl))
                 .ReturnsAsync(tokenResponse);
 
             _citizenIdClientMock
@@ -154,7 +176,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
                 .ReturnsAsync(userInfoResponse);
 
             // Act
-            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier);
+            var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
             _citizenIdClientMock.VerifyAll();

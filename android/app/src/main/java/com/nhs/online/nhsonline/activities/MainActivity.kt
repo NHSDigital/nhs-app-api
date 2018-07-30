@@ -11,8 +11,8 @@ import android.view.View.*
 import android.view.WindowManager
 import android.webkit.CookieManager
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
+import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
@@ -81,8 +81,17 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onNewIntent(intent)
 
         val data = intent?.data
+
         if (data != null) {
-            loadPage(data.toString())
+            if(data.scheme == getString(R.string.appScheme))
+            {
+                var url = data.toString()
+                url = url.replace(getString(R.string.appScheme),getString(R.string.baseScheme))
+                loadPage(url)
+            }
+            else {
+                loadPage(data.toString())
+            }
         }
     }
 

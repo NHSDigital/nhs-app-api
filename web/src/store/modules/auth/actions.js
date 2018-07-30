@@ -1,5 +1,5 @@
 import AuthorisationService from '../../../services/authorization-service';
-import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
+import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, SET_REDIRECT_URI, UPDATE_CONFIG } from './mutation-types';
 
 export default {
   handleAuthResponse({ commit, state }, { code }) {
@@ -13,6 +13,7 @@ export default {
         userSession: {
           authCode: code,
           codeVerifier: state.config.codeVerifier,
+          redirectUrl: state.redirectUri,
         },
       })
       .then((response) => {
@@ -55,9 +56,12 @@ export default {
   init({ commit }) {
     commit(INIT_AUTH);
   },
+  setRedirectUri({ commit, rootState }) {
+    commit(SET_REDIRECT_URI, AuthorisationService.getRedirectUri(rootState));
+  },
   buildLogin({ commit }) {
     const codeVerifier = AuthorisationService.createVerifier();
-    const loginObj = new AuthorisationService().buildLoginObject(codeVerifier);
+    const loginObj = new AuthorisationService().buildLoginObject(codeVerifier, this);
     loginObj.codeVerifier = codeVerifier;
     commit(UPDATE_CONFIG, loginObj);
   },
@@ -68,7 +72,7 @@ export default {
     dispatch('performLogin');
   },
   performLogin({ state }) {
-    new AuthorisationService().performLogin(state.config.codeVerifier);
+    new AuthorisationService().performLogin(state.config.codeVerifier, state.redirectUri);
   },
   register({ dispatch, commit }, configObj) {
     const config = Object.assign({}, configObj);
@@ -77,7 +81,7 @@ export default {
     dispatch('performRegistration');
   },
   performRegistration({ state }) {
-    new AuthorisationService().performRegistration(state.config.codeVerifier);
+    new AuthorisationService().performRegistration(state.config.codeVerifier, state.redirectUri);
   },
   updateConfig({ commit }, config) {
     commit(UPDATE_CONFIG, config);

@@ -27,7 +27,7 @@ class KnownServicesTest {
                     "\n\nIf the problem persists and you need to book an appointment or get a prescription now, " +
                     "contact your GP surgery directly. For immediate medical advice, call 111."
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
-            on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=mobile"
+            on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=android"
         }
 
         return mock { on { resources } doReturn mockresource }
@@ -69,7 +69,7 @@ class KnownServicesTest {
         val testKnownServices = KnownServices(context)
 
         val result =
-            testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=mobile")
+            testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=android")
 
         Assert.assertEquals(URL("http://10.0.2.2:3000"), result?.urlList?.get(0))
     }
@@ -101,7 +101,7 @@ class KnownServicesTest {
 
         val result = testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000")
 
-        Assert.assertEquals("http://10.0.2.2:3000?source=mobile", result)
+        Assert.assertEquals("http://10.0.2.2:3000?source=android", result)
     }
 
     @Test
@@ -121,9 +121,9 @@ class KnownServicesTest {
         val testKnownServices = KnownServices(context)
 
         val result =
-            testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?source=mobile")
+            testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?source=android")
 
-        Assert.assertEquals("http://10.0.2.2:3000?source=mobile", result)
+        Assert.assertEquals("http://10.0.2.2:3000?source=android", result)
     }
 
     @Test
@@ -134,7 +134,7 @@ class KnownServicesTest {
         val result =
             testKnownServices.findKnownServiceAddMissingQueryFor("http://10.0.2.2:3000?param1=param1Value")
 
-        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=mobile", result)
+        Assert.assertEquals("http://10.0.2.2:3000?param1=param1Value&source=android", result)
     }
 
     @Test

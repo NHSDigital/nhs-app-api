@@ -12,7 +12,6 @@ services:
       - "8082:8082"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
       - CORS_AUTHORITY=*
       - TPP_CERTIFICATE_PASSWORD
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx

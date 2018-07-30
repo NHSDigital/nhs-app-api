@@ -54,7 +54,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
-
             _name = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             _sessionTimeoutSeconds = _sessionTimeoutMinutes * 60;
@@ -64,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Setup(x => x.Value)
                 .Returns(new ConfigurationSettings()
                     {
-                        DefaultSessionExpiryMinutes = _sessionTimeoutMinutes
+                        DefaultSessionExpiryMinutes = _sessionTimeoutMinutes,
                     });
 
             _apiSessionId = _fixture.Create<string>();
@@ -74,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockCitizenIdService
-                .Setup(x => x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier))
+                .Setup(x => x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(Option.Some(_userProfile)));
 
             _mockOdsCodeLookup = _fixture.Freeze<Mock<IOdsCodeLookup>>();
@@ -142,7 +141,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Arrange
             _mockCitizenIdService
                 .Setup(x =>
-                    x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier))
+                    x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(Option.None<UserProfile>()))
                 .Verifiable();
 
@@ -153,7 +152,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockCitizenIdService.Verify();
             result.Should().BeAssignableTo<BadRequestResult>();
         }
-     
+
         [TestMethod]
         public async Task Post_UnknownOdsCode_ReturnsForbidden()
         {

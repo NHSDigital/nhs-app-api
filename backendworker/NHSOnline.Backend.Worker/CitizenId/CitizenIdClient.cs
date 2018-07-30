@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 {
     public interface ICitizenIdClient
     {
-        Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier);
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl);
         Task<CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string bearerToken);
     }
 
@@ -24,7 +24,6 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private const string UserInfoPath = "userinfo";
 
         private readonly CitizenIdHttpClient _httpClient;
-        private readonly Uri _redirectUri;
         private readonly string _clientId;
         private readonly string _basicAuthCredentials;
         private readonly IJsonResponseParser _responseParser;
@@ -39,14 +38,12 @@ namespace NHSOnline.Backend.Worker.CitizenId
             _httpClient = httpClient;
             
             _responseParser = responseParser;
-
-            _redirectUri = new Uri(config.NhsWebAppBaseUrl, "auth-return");
             _clientId = config.ClientId;
             _basicAuthCredentials = Convert.ToBase64String(
                 System.Text.Encoding.ASCII.GetBytes($"{config.ClientId}:{config.ClientSecret}"));
         }
 
-        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier)
+        public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl)
         {
             try
             {
@@ -56,7 +53,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 {
                     { "grant_type", "authorization_code" },
                     { "code", authCode },
-                    { "redirect_uri", _redirectUri.ToString() },
+                    { "redirect_uri", redirectUrl },
                     { "code_verifier", codeVerifier },
                     { "client_id", _clientId },
                     { "code_challenge_method", "S256" }
@@ -129,3 +126,4 @@ namespace NHSOnline.Backend.Worker.CitizenId
         }
     }
 }
+            
