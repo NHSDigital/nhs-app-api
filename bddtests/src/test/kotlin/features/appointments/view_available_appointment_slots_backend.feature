@@ -7,6 +7,7 @@ Feature: View available appointment slots backend
   @NHSO-1552
   @NHSO-870
   @backend
+  @tech-debt @NHSO-1937
   Scenario Outline: Requesting available appointment slots with correct data returns lists of available slots
     Given I have logged in and have a valid session cookie for <GP System>
     And there are available appointment slots for an explicit date-time range
@@ -65,6 +66,7 @@ Feature: View available appointment slots backend
   @NHSO-470
   @NHSO-870
   @backend
+  @tech-debt @NHSO-1937
   Scenario Outline: Requesting available appointment slots with only fromDate parameter returns set of appointment slots for 4 weeks from specified start date
     And I have logged in and have a valid session cookie for <GP System>
     And there are available appointment slots four weeks from a specific from date
@@ -78,6 +80,7 @@ Feature: View available appointment slots backend
   @NHSO-470
   @NHSO-870
   @backend
+  @tech-debt @NHSO-1937
   Scenario Outline: Requesting available appointment slots with only toDate parameter returns set of appointment slots for 2 weeks from start day 2 weeks before end date
     Given I have logged in and have a valid session cookie for <GP System>
     And there are available appointment slots four weeks preceding a specific to date

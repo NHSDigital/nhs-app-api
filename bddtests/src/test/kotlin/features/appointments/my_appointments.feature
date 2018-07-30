@@ -34,6 +34,7 @@ Feature: My appointments
   @NHSO-196
   @NHSO-663
   @NHSO-1591
+  @tech-debt @NHSO-1937
   Scenario Outline: A user has upcoming appointments
     Given <GP System> logged in session started
     And I have upcoming appointments for <GP System>
