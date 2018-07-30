@@ -25,6 +25,10 @@ export default function ({ route, store, app }) {
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = 'pageHeaderTitles.account';
       break;
+    case Routes.SYMPTOMS.name:
+      store.dispatch('navigation/setNewMenuItem', 0);
+      route.meta.headerKey = 'pageHeaderTitles.symptoms';
+      break;
     case Routes.APPOINTMENTS.name:
       store.dispatch('navigation/setNewMenuItem', 1);
       route.meta.headerKey = 'pageHeaderTitles.appointments';

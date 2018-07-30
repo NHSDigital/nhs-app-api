@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`SymptonBanner.vue should display the correct header text 1`] = `
-"<div class=\\"symptom_banner\\"><h2>How are you feeling right now?</h2> <a id=\\"btn_home_symptoms\\" href=\\"https://111.nhs.uk\\" class=\\"button white\\">
-    Symptom checker
-  </a></div>"
-`;

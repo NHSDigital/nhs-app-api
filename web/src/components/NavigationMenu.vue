@@ -2,8 +2,7 @@
   <nav class="menu">
     <ul>
       <li :class="getMenuitemState(0)">
-        <a :href="symptomsCheckerUrl"
-           target="_blank"
+        <a href="/symptoms"
            data-sid="symptoms-menu-item"
            @click="setMenuitemState($event)">
           <symptoms-icon/>
@@ -61,11 +60,6 @@ export default {
     PrescriptionsIcon,
     RecordIcon,
     MoreIcon,
-  },
-  data() {
-    return {
-      symptomsCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
-    };
   },
   methods: {
     getMenuitemState(menuItemIndex) {

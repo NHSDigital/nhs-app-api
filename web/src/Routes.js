@@ -67,5 +67,13 @@ export default {
     name: 'prescriptions-confirm-prescription-details',
     path: '/prescriptions/confirm-prescription-details',
   },
+  SYMPTOMS: {
+    name: 'symptoms',
+    path: '/symptoms',
+  },
+  CHECKYOURSYMPTOMS: {
+    name: 'check-your-symptoms',
+    path: '/check-your-symptoms',
+  },
 };
 

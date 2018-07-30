@@ -5,6 +5,7 @@ export default function ({ store, redirect, route }) {
   const excludedRoutes = [
     Routes.LOGIN.name,
     Routes.AUTH_RETURN.name,
+    Routes.CHECKYOURSYMPTOMS.name,
   ];
 
   const hasNotLoggedUserAccess = excludedRoutes.indexOf(route.name) !== -1;

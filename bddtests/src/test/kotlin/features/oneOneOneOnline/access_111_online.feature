@@ -9,11 +9,10 @@ Feature: Access 111 Online
   Scenario: The user is not logged in
     Given I am not logged in
     When I Check My Symptoms
-    Then I am redirected to 'https://111.nhs.uk/'
+    And Check My symptoms page is displayed Logged Out
 
   @smoketest
   Scenario: The user is logged in
     Given I am logged in
     When I navigate to Symptoms
-    Then a new tab opens https://111.nhs.uk/
-    And Symptoms is unselected
+    And Check My symptoms page is displayed Logged In

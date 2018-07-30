@@ -1,23 +1,13 @@
 <template>
   <div class="symptom_banner">
     <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
-    <a id="btn_home_symptoms" :href="symptomCheckerUrl" class="button white">
+    <a id="btn_home_symptoms" href="/check-your-symptoms" class="button white">
       {{ $t('symptomBanner.checker') }}
     </a>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      symptomCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
-    };
-  },
-};
-</script>
-
-<style lang="scss"  scoped>
+<style lang="scss" scoped>
 @import "../style/textstyles";
 @import "../style/buttons";
 .symptom_banner {

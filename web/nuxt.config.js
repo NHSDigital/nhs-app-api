@@ -40,8 +40,11 @@ module.exports = {
       process.env.DATA_SHARING_URL || 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
     PORT: process.env.PORT || '3000',
     SYMPTOM_CHECKER_URL:
-      process.env.SYMPTOM_CHECKER_URL
-      || 'https://111-int2.staging.111.service.nhs.uk​',
+      process.env.SYMPTOM_CHECKER_URL ||
+      'https://111-int2.staging.111.service.nhs.uk​',
+    CONDITIONS_CHECKER_URL:
+      process.env.CONDITIONS_CHECKER_URL ||
+      'https://www.nhs.uk/conditions/',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online-poc',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',

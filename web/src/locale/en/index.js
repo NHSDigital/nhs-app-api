@@ -421,6 +421,7 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Check appointment details',
     myRecord: 'My medical record',
+    symptoms: 'Check my symptoms',
     more: 'More',
     login: 'Login',
   },
@@ -483,6 +484,13 @@ export default {
     symptomsIcon: {
       title: 'Symptoms Checker',
     },
+  },
+  symptoms: {
+    checkMySymptomsHeader: 'Check my symptoms',
+    healthAZHeader: 'Health A-Z',
+    healthAZText: 'Search trusted information on hundreds of conditions and treatments',
+    medicalHelpHeader: 'Check if I need medical help',
+    medicalHelpText: 'Answer online questions to get instant advice or medical help near you',
   },
 };
 
