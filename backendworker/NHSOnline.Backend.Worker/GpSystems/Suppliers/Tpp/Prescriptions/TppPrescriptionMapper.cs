@@ -24,6 +24,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                 throw new ArgumentNullException(nameof(medications));
             }
 
+            _logger.LogInformation($"Mapping {medications?.Count()} prescriptions.");
+
             PrescriptionListResponse result;
             
             if (medications.Any())
