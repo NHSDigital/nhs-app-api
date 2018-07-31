@@ -19,7 +19,8 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     )
 
     val btnAgree = HybridPageElement(
-            browserLocator = "//button[contains(text(),'Agree and continue')]",
+            browserLocator = "//main/div/button[contains(text(),'Agree and continue')]",
+            //*[@id="mainDiv"]/main/div[2]/button[1]
             androidLocator = null,
             page = this
     )

@@ -458,7 +458,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see a message indicating that I have no access to view my summary care record$")
     @Throws(Exception::class)
     fun i_see_a_message_indicating_that_I_have_no_access_to_view_my_record() {
-        Assert.assertEquals("You don't currently have online access to your medical record\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
+        Assert.assertEquals("You don’t currently have online access to your medical record\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
     }
 
     @When("^I click the Immunisations section$")
