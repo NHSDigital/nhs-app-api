@@ -28,6 +28,7 @@ class KnownServicesTest {
                     "contact your GP surgery directly. For immediate medical advice, call 111."
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=android"
+            on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
         }
 
         return mock { on { resources } doReturn mockresource }
