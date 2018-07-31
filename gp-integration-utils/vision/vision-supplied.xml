@@ -235,7 +235,7 @@
          </vision:serviceContent>
       </vision:visionRequest>
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" messageID="${=UUID.randomUUID().toString().toUpperCase()}" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call><con:call name="VONREP.GetHistory" useWsAddressing="true" outgoingWss="testwebim" id="ff3a7fa8-bcec-4028-805d-c25eaa4617bd" incomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" messageID="${=UUID.randomUUID().toString().toUpperCase()}" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call><con:call name="Prescriptions-GetHistory" useWsAddressing="true" outgoingWss="testwebim" id="ff3a7fa8-bcec-4028-805d-c25eaa4617bd" incomingWss=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">\r
    <soapenv:Header></soapenv:Header>\r
    <soapenv:Body>\r
       <vision:visionRequest xmlns:vision="urn:vision">\r
@@ -277,45 +277,45 @@
             <vision:id>${=java.util.UUID.randomUUID().toString().toUpperCase()}</vision:id>
             <vision:creationTime>${=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date())}</vision:creationTime>
             <vision:target>
-               <vision:nationalCode></vision:nationalCode>
+               <vision:nationalCode>${nationalCode}</vision:nationalCode>
             </vision:target>
             <vision:credentials>
-               <vision:rosuAccountId></vision:rosuAccountId>
-               <vision:apiKey></vision:apiKey>
+               <vision:rosuAccountId>${rosuAccountId}</vision:rosuAccountId>
+               <vision:apiKey>${apiKey}</vision:apiKey>
             </vision:credentials>
             <vision:opsReference>
-               <vision:provider></vision:provider>
-               <vision:accountId></vision:accountId>
+               <vision:provider>${providerToken}</vision:provider>
+               <vision:accountId>${providerToken}</vision:accountId>
             </vision:opsReference>
          </vision:serviceHeader>
          <vision:serviceContent>
             <vision:vos>
                <vision:sender>
                   <vision:name>
-                     <vision:UserName></vision:UserName>
-                     <vision:UserFullName></vision:UserFullName>
-                     <vision:UserIdentity></vision:UserIdentity>
-                     <vision:UserRole></vision:UserRole>
+                     <vision:UserName>Username123123asdas</vision:UserName>
+                     <vision:UserFullName>Name</vision:UserFullName>
+                     <vision:UserIdentity>65489761321654</vision:UserIdentity>
+                     <vision:UserRole>ROSU</vision:UserRole>
                   </vision:name>
                </vision:sender>
-               <vision:practiceIdentifier></vision:practiceIdentifier>
-               <vision:patientIdentifier></vision:patientIdentifier>
+               <vision:practiceIdentifier>${nationalCode}</vision:practiceIdentifier>
+               <vision:patientIdentifier>${patientId}</vision:patientIdentifier>
                <!--vision:view>VPS_ALLERGIES</vision:view-->
                <!--vision:view>VPS_MEDICATIONS</vision:view-->
                <!--vision:view>PROBLEMS</vision:view-->
                <!--vision:view>DIAGNOSIS</vision:view-->
-               <!--vision:view>MEDICATIONS</vision:view-->
+               <vision:view>MEDICATIONS</vision:view>
                <!--vision:view>RISKS AND WARNINGS</vision:view-->
                <!--vision:view>PROCEDURES</vision:view-->
-               <vision:view>TEST RESULTS</vision:view>
+               <!--vision:view>TEST RESULTS</vision:view-->
                <!--vision:view>EXAM FINDINGS</vision:view-->
                <!--vision:view>VPS_EVENT_HISTORY</vision:view-->
-               <vision:responseFormat>HTML</vision:responseFormat>
+               <vision:responseFormat>XML</vision:responseFormat>
             </vision:vos>
          </vision:serviceContent>
       </vision:visionRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" generateMessageId="true" messageID="${=new java.text.SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss&quot;).format(new Date())}"/><con:wsrmConfig version="1.2"/></con:call><con:call id="8043a820-dfb4-4786-918c-838ba19c18fa" name="User-GetConfiguration" outgoingWss="testwebim" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" generateMessageId="true" messageID="${=new java.text.SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ss&quot;).format(new Date())}"/><con:wsrmConfig version="1.2"/></con:call><con:call id="8043a820-dfb4-4786-918c-838ba19c18fa" name="User-GetConfiguration" outgoingWss="testwebim" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://vs002-test.inps.co.uk/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">
    <soapenv:Header/>
    <soapenv:Body>
       <vision:visionRequest xmlns:vision="urn:vision">
@@ -341,9 +341,8 @@
          <vision:serviceContent/>
       </vision:visionRequest>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" addDefaultAction="false" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call><con:call id="37405f02-737a-4e6c-8da2-46fd2d005ad9" name="User-LinkAccount" outgoingWss="testwebim" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">
-   <soapenv:Header />
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" addDefaultAction="false" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call><con:call id="37405f02-737a-4e6c-8da2-46fd2d005ad9" name="User-LinkAccount" outgoingWss="testwebim" useWsAddressing="true"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">
+   <soapenv:Header></soapenv:Header>
    <soapenv:Body>
       <vision:visionRequest xmlns:vision="urn:vision">
          <vision:serviceDefinition>
@@ -358,16 +357,16 @@
             </vision:target>
          </vision:serviceHeader>
          <vision:serviceContent>
-            <register xmlns="urn:vision">
-               <rosuAccountId>104969</rosuAccountId>
-               <rosuAccountLinkageKey>T8QwhtgYkGF6EbP</rosuAccountLinkageKey>
-               <surname>Canon</surname>
-               <dob>1964-02-19</dob>
-               <opsReference>
-                  <provider>${providerToken}</provider>
-                  <accountId>${providerToken}</accountId>
-               </opsReference>
-            </register>
+            <vision:register>
+               <vision:rosuAccountId>104974</vision:rosuAccountId>
+               <vision:rosuAccountLinkageKey>ekBx9fb6DBdJF6r</vision:rosuAccountLinkageKey>
+               <vision:surname>Crake</vision:surname>
+               <vision:dob>1970-09-21</vision:dob>
+               <vision:opsReference>
+                  <vision:provider>${providerToken}</vision:provider>
+                  <vision:accountId>${providerToken}</vision:accountId>
+               </vision:opsReference>
+            </vision:register>
          </vision:serviceContent>
       </vision:visionRequest>
    </soapenv:Body>
@@ -464,7 +463,71 @@
          </vision:serviceContent>\r
       </vision:visionRequest>\r
    </soapenv:Body>\r
-</soapenv:Envelope>]]></con:request><con:credentials><con:username/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="fe86403a-be83-4153-9da9-f1905459dfc4" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:properties/></con:testSuite><con:properties/><con:wssContainer><con:crypto><con:source>../../../Downloads/NHS Online/vps_nhson001.pfx</con:source><con:password>changeme</con:password><con:type>KEYSTORE</con:type></con:crypto><con:outgoing><con:name>testwebim</con:name><con:entry type="Username" username="vps-nhson001" password="vps-nhson01"><con:configuration><addCreated>true</addCreated><addNonce>true</addNonce><passwordType>PasswordText</passwordType></con:configuration></con:entry><con:entry type="Timestamp"><con:configuration><timeToLive>300</timeToLive><strictTimestamp>true</strictTimestamp></con:configuration></con:entry><con:entry type="Signature" username="vps-nhson001" password="${certificatePassword}"><con:configuration><crypto>vps_nhson001.pfx</crypto><keyIdentifierType>1</keyIdentifierType><signatureAlgorithm/><signatureCanonicalization/><useSingleCert>false</useSingleCert><digestAlgorithm>http://www.w3.org/2000/09/xmldsig#sha1</digestAlgorithm><customTokenValueType/><customTokenId/><signaturePart><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
+</soapenv:Envelope>]]></con:request><con:credentials><con:username/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision"/><con:wsrmConfig version="1.2"/></con:call><con:call id="460cf989-f1a2-4c9d-8414-56bc9e839b4c" name="Prescriptions-GetEligibleRepeats" useWsAddressing="true" outgoingWss="testwebim"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">\r
+   <soapenv:Header></soapenv:Header>\r
+   <soapenv:Body>\r
+      <vision:visionRequest xmlns:vision="urn:vision">\r
+         <vision:serviceDefinition>\r
+            <vision:name>VONREP.GetEligibleRepeats</vision:name>\r
+            <vision:version>2.0.0</vision:version>\r
+         </vision:serviceDefinition>\r
+         <vision:serviceHeader xmlns="urn:vision">
+            <vision:id>${=java.util.UUID.randomUUID().toString().toUpperCase()}</vision:id>
+            <vision:creationTime>${=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date())}</vision:creationTime>
+            <vision:target>
+               <vision:nationalCode>${nationalCode}</vision:nationalCode>
+            </vision:target>
+            <vision:credentials>
+               <vision:rosuAccountId>${rosuAccountId}</vision:rosuAccountId>
+               <vision:apiKey>${apiKey}</vision:apiKey>
+            </vision:credentials>
+            <vision:opsReference>
+               <vision:provider>${providerToken}</vision:provider>
+               <vision:accountId>${providerToken}</vision:accountId>
+            </vision:opsReference>
+         </vision:serviceHeader>
+         <vision:serviceContent>
+            <vision:register>
+               <vision:patientId>${patientId}</vision:patientId>
+            </vision:vos>\r
+         </vision:serviceContent>\r
+      </vision:visionRequest>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call><con:call id="c790d2a1-6ae5-4bc9-9492-4aeca287467b" name="Prescriptions-NewPrescription" useWsAddressing="true" outgoingWss="testwebim"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>https://52.214.53.197:8443/PatientFacingServices</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:vision">
+   <soapenv:Header></soapenv:Header>
+   <soapenv:Body>
+      <vision:visionRequest xmlns:vision="urn:vision">
+         <vision:serviceDefinition>
+            <vision:name>VONREP.NewPrescription</vision:name>
+            <vision:version>2.0.0</vision:version>
+         </vision:serviceDefinition>
+         <vision:serviceHeader xmlns="urn:vision">
+            <vision:id>${=java.util.UUID.randomUUID().toString().toUpperCase()}</vision:id>
+            <vision:creationTime>${=new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date())}</vision:creationTime>
+            <vision:target>
+               <vision:nationalCode>${nationalCode}</vision:nationalCode>
+            </vision:target>
+            <vision:credentials>
+               <vision:rosuAccountId>${rosuAccountId}</vision:rosuAccountId>
+               <vision:apiKey>${apiKey}</vision:apiKey>
+            </vision:credentials>
+            <vision:opsReference>
+               <vision:provider>${providerToken}</vision:provider>
+               <vision:accountId>${providerToken}</vision:accountId>
+            </vision:opsReference>
+         </vision:serviceHeader>
+         <vision:serviceContent xmlns:vision="urn:vision">
+           <vision:vos xmlns:vision="urn:vision">
+             <vision:patientId>${patientId}</vision:patientId>
+             <vision:repeat id="117"/>
+             <vision:repeat id="118"/>
+             <vision:message>1 free text - Please can I ..</vision:message>
+           </vision:vos>
+         </vision:serviceContent>
+      </vision:visionRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
+]]></con:request><con:credentials><con:username xsi:nil="true"/><con:password xsi:nil="true"/><con:domain xsi:nil="true"/><con:selectedAuthProfile>Basic</con:selectedAuthProfile><con:addedBasicAuthenticationTypes>Basic</con:addedBasicAuthenticationTypes><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="Vision" generateMessageId="true"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="fe86403a-be83-4153-9da9-f1905459dfc4" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:properties/></con:testSuite><con:properties/><con:wssContainer><con:crypto><con:source>../../vision/vision_certs/vps_nhson001.pfx</con:source><con:password>changeme</con:password><con:type>KEYSTORE</con:type></con:crypto><con:outgoing><con:name>testwebim</con:name><con:entry type="Username" username="vps-nhson001" password="vps-nhson01"><con:configuration><addCreated>true</addCreated><addNonce>true</addNonce><passwordType>PasswordText</passwordType></con:configuration></con:entry><con:entry type="Timestamp"><con:configuration><timeToLive>300</timeToLive><strictTimestamp>true</strictTimestamp></con:configuration></con:entry><con:entry type="Signature" username="vps-nhson001" password="${certificatePassword}"><con:configuration><crypto>vps_nhson001.pfx</crypto><keyIdentifierType>1</keyIdentifierType><signatureAlgorithm/><signatureCanonicalization/><useSingleCert>true</useSingleCert><digestAlgorithm>http://www.w3.org/2000/09/xmldsig#sha1</digestAlgorithm><customTokenValueType/><customTokenId/><signaturePart><![CDATA[<xml-fragment xmlns:con="http://eviware.com/soapui/config">
   <con:entry key="name" value="Timestamp"/>
   <con:entry key="namespace" value="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"/>
   <con:entry key="id" value=""/>
