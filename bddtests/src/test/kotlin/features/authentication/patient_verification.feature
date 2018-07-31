@@ -39,6 +39,7 @@ Feature: Patient Verification
       | EMIS      |
    #   | VISION    |
 
+  @pending
   @NHSO-125
   @backend
   Scenario Outline: Non-existent IM1 Connection Token for the <GP System>
