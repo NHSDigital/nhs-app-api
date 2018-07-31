@@ -26,6 +26,7 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaderTitles.account';
       break;
     case Routes.SYMPTOMS.name:
+    case Routes.CHECKYOURSYMPTOMS.name:
       store.dispatch('navigation/setNewMenuItem', 0);
       route.meta.headerKey = 'pageHeaderTitles.symptoms';
       break;

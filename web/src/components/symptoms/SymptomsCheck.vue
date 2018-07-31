@@ -4,13 +4,15 @@
       <div>
         <ul :class="$style['list-menu']">
           <li>
-            <a id="btn_choices" :href="conditionsCheckerUrl" style="text-decoration: none">
+            <a id="btn_choices" :href="conditionsCheckerUrl" style="text-decoration: none"
+               target="_blank">
               <h2>{{ $t('symptoms.healthAZHeader') }}</h2>
               <p>{{ $t('symptoms.healthAZText') }}</p>
             </a>
           </li>
           <li>
-            <a id="btn_111" :href="symptomsCheckerUrl" style="text-decoration: none">
+            <a id="btn_111" :href="symptomsCheckerUrl" style="text-decoration: none"
+               target="_blank">
               <h2>{{ $t('symptoms.medicalHelpHeader') }}</h2>
               <p>{{ $t('symptoms.medicalHelpText') }}</p>
             </a>

@@ -18,6 +18,8 @@
 	<string>/my-record/myrecordwarning</string>
 	<key>AppointmentsUrlPath</key>
 	<string>/appointments</string>
+	<key>SymptomsUrlPath</key>
+	<string>/symptoms</string>
 	<key>PrescriptionsUrlPath</key>
 	<string>/prescriptions</string>
 	<key>MyAccountUrlPath</key>

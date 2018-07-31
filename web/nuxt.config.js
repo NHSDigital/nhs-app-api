@@ -41,7 +41,7 @@ module.exports = {
     PORT: process.env.PORT || '3000',
     SYMPTOM_CHECKER_URL:
       process.env.SYMPTOM_CHECKER_URL ||
-      'https://111-int2.staging.111.service.nhs.uk​',
+      'https://111.nhs.uk',
     CONDITIONS_CHECKER_URL:
       process.env.CONDITIONS_CHECKER_URL ||
       'https://www.nhs.uk/conditions/',

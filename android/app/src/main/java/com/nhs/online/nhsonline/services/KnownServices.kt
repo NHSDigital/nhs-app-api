@@ -36,11 +36,15 @@ class KnownServices(private val context: Context) {
                 nativeHeader = context.resources.getString(R.string.data_sharing_header),
                 shouldValidateSession = false))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.nhs111), context.resources.getString(
-            R.string.nhs111Location)),
+            R.string.nhs111)),
             unavailabilityErrorMessage,
             nativeHeader = context.resources.getString(R.string.nhs_111_header),
             shouldValidateSession = false))
+        serviceList.add(KnownService(arrayOf(context.resources.getString(
+                R.string.conditions)),
+                unavailabilityErrorMessage,
+                nativeHeader = context.resources.getString(R.string.conditions_header),
+                shouldValidateSession = false))
     }
 
     fun findMatchingKnownService(urlString: String): KnownService? {

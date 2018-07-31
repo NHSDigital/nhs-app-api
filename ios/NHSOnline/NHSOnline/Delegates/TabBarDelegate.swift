@@ -25,7 +25,9 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
         let selectedItem = Menu(rawValue: didSelect.tag)!
         switch selectedItem {
         case .Symptoms:
-            selectPage(pageUrl: config().Nhs111Url)
+            let symptomsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
+            selectPage(pageUrl: symptomsUrl)
+            self.viewController.updateHeaderText(headerText: NSLocalizedString("SymptomsTitle", comment: ""))
             break
         case .Appointments:
             let appointmentsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)

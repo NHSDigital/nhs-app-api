@@ -120,10 +120,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
-    private fun onSymptomMenuSelected() {
-        loadPage(resources.getString(R.string.nhs111))
-        setHeaderText(resources.getString(R.string.nhs_111_header))
-    }
+    private fun onSymptomMenuSelected() =
+            loadSubPage(resources.getString(R.string.symptomsPath),
+                    resources.getString(R.string.symptoms_header))
 
     private fun onMyRecordMenuSelected() =
         loadSubPage(resources.getString(R.string.myRecordPath),

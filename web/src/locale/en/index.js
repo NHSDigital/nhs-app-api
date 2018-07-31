@@ -487,9 +487,9 @@ export default {
   },
   symptoms: {
     checkMySymptomsHeader: 'Check my symptoms',
-    healthAZHeader: 'Health A-Z',
-    healthAZText: 'Search trusted information on hundreds of conditions and treatments',
-    medicalHelpHeader: 'Check if I need medical help',
+    healthAZHeader: 'A-Z of conditions and treatments',
+    healthAZText: 'Search trusted information and advice on hundreds of conditions',
+    medicalHelpHeader: 'Check if I need urgent help',
     medicalHelpText: 'Answer online questions to get instant advice or medical help near you',
   },
 };
