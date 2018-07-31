@@ -15,7 +15,7 @@ class MyAppointmentsStepDefinitions {
     lateinit var myAppointmentsSteps: MyAppointmentsSteps
 
 
-    @Then("^Appointment Booking confirmation screen is displayed$")
+    @Then("^the Appointment Booking confirmation screen is displayed$")
     fun appointmentBookingConfirmationScreenIsDisplayed() {
         myAppointmentsSteps.checkBookingSuccessMessage()
     }

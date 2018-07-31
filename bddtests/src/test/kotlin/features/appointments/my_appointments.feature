@@ -1,3 +1,4 @@
+@appointment
 Feature: My appointments
 
   Users can view their upcoming and past appointments in the My Appointments screen.
@@ -30,7 +31,6 @@ Feature: My appointments
       | TPP       |
 
   @NHSO-524
-  @appointment
   Scenario Outline: A user has never booked an appointment
     Given <GP System> logged in session started
     And I have no upcoming appointments for <GP System>

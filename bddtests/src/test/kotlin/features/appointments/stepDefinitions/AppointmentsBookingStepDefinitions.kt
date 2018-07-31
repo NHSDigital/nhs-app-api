@@ -10,14 +10,14 @@ class AppointmentsBookingStepDefinitions {
     @Given("^there are (.*) appointments available to book$")
     fun thereAreAvailableAppointmentsToBook(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        factory.createDefault()
+        factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse()
     }
 
     @Given("^there are (.*) appointments available to book, but GP system doesn't respond a timely fashion when booking$")
     fun thereAreAvailableAppointmentsToBookBuySystemDoesntRespond(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        factory.createDefault()
+        factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateBookingResponse{
             bookRequest->bookRequest.withDelay(Duration.ofSeconds(10)).respondWithSuccess()}
     }
@@ -26,7 +26,7 @@ class AppointmentsBookingStepDefinitions {
     fun thereAreAvailableAppointmentsToBookButSystemIsUnavailable(gpSystem: String) {
 
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        factory.createDefault()
+        factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateBookingResponse{
             bookRequest->bookRequest.respondWithUnavailableException()}
     }
@@ -35,7 +35,7 @@ class AppointmentsBookingStepDefinitions {
     fun thereAreAvailableAppointmentsToBookButBookingConflict(gpSystem: String) {
 
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        factory.createDefault()
+        factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateBookingResponse{
             bookRequest->bookRequest.respondWithConflictException()}
     }

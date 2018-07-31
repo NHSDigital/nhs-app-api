@@ -3,10 +3,13 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.AvailableAppointmentsSteps.Companion.EXPECTED_APPOINTMENT_SESSIONS_KEY
 import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.BaseStepDefinition
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -15,12 +18,12 @@ import mockingFacade.appointments.AppointmentSlotFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
-import org.apache.http.HttpStatus.*
-import org.junit.Assert.*
+import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
+import org.apache.http.HttpStatus.SC_OK
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import worker.models.appointments.AppointmentSlotsResponse
 import javax.servlet.http.Cookie
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 
 
 class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
@@ -53,16 +56,10 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @Given("^there are available appointment slots$")
-    fun thereAreAvailableAppointmentSlots() {
-        availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks()
-    }
-
     @Given("^there are available appointment slots with different criteria for (.*)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
-        availableAppointments.generateDefaultUserData(gpSystem)
-        availableAppointments.generateAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem)
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.generateDefaultAvailableAppointmentSlotExample()
     }
 
     @Given("^there are no available appointment slots for (.*)$")
@@ -83,8 +80,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.generateAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem)
     }
 
-    @Given("^GP system doesn't respond a timely fashion for available appointment slots$")
-    fun gp_system_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
+    @Given("^EMIS doesn't respond a timely fashion for available appointment slots$")
+    fun emis_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
         availableAppointments.generateDefaultUserData()
         availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 30)
     }
@@ -95,14 +92,13 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 1)
     }
 
-    @When("^GP system responds a timely fashion for available appointment slots$")
-    fun gp_system_responds_a_timely_fashion_for_available_appointment_slots() {
-        availableAppointments.generateDefaultUserData()
-        thereAreAvailableAppointmentSlots()
+    @When("^EMIS responds a timely fashion for available appointment slots$")
+     fun emis_responds_a_timely_fashion_for_available_appointment_slots() {
+        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem("EMIS")
     }
 
-    @Given("^GP system is unavailable for available appointment slots$")
-    fun gp_system_is_unavailable_for_available_appointment_slots() {
+    @Given("^EMIS is unavailable for available appointment slots$")
+    fun emis_is_unavailable_for_available_appointment_slots() {
         availableAppointments.generateDefaultUserData()
         mockingClient.forEmis {
             appointmentSlotsMetaRequest(patient)
@@ -138,10 +134,9 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     }
 
 
-    @Given("^there are available appointment slots, but session has expired$")
+    @Given("^there are available EMIS appointment slots, but session has expired$")
     fun thereAreAvailableAppointmentSlotsButExpiredSession() {
-        availableAppointments.generateDefaultUserData()
-        thereAreAvailableAppointmentSlots()
+        thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem("EMIS")
         Serenity.setSessionVariable(Cookie::class).to(expiredCookie)
     }
 
@@ -234,11 +229,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Then("^I see appropriate information message for time-outs$")
     fun iSeeAppropriateInformationMessageAfterSecondsWhenItTimesOut() {
         availableAppointments.checkTimeoutErrorMessage()
-    }
-
-    @Then("^I don't see a time-out error$")
-    fun iDoNotSeeATimeOutError() {
-        availableAppointments.checkTimeoutErrorMessage(false)
     }
 
     @Then("^there should be a button to try again$")

@@ -17,23 +17,27 @@ import java.util.*
 
 abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSupplier) {
 
-    protected abstract fun generate()
     private var dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
 
-    protected var startDate = LocalDateTime.now().plusDays(1).format(dateFormatter)
-    protected var endDate = LocalDateTime.now().plusDays(1).plusMinutes(30).format(dateFormatter)
+    private var tomorrowDate = LocalDateTime.now().plusDays(1)
+
+    protected var startDateAppointment1 = tomorrowDate.withHour(14).withMinute(0).format(dateFormatter)
+    protected var endDateAppointment1 =  tomorrowDate.withHour(14).withMinute(10).format(dateFormatter)
+
+    protected var startDateAppointment2 =   tomorrowDate.withHour(15).withMinute(20).format(dateFormatter)
+    protected var endDateAppointment2 =  tomorrowDate.withHour(15).withMinute(30).format(dateFormatter)
 
     val defaultAppointmentSlots = arrayListOf(
             AppointmentSlotFacade(
                     slotId = 301,
-                    startTime = startDate,
-                    endTime = endDate,
+                    startTime = startDateAppointment1,
+                    endTime = endDateAppointment1,
                     slotTypeName = "Slot"
             ),
             AppointmentSlotFacade(
                     slotId = 302,
-                    startTime = startDate,
-                    endTime = endDate,
+                    startTime = startDateAppointment2,
+                    endTime = endDateAppointment2,
                     slotTypeName = "Slot"
             )
     )
@@ -63,13 +67,13 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
             )
 
 
-    fun createDefault() {
+    fun generateDefaultAvailableAppointmentSlotExample() {
         generateDefaultUserData()
-        generate()
+        generateDefaultAppointmentSlots()
         Serenity.setSessionVariable(ExpectedAppointmentFilterFacadeKey).to(defaultFilter)
     }
 
-    protected fun generateDefaultUserData() {
+    private fun generateDefaultUserData() {
 
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
@@ -77,8 +81,9 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
         Serenity.setSessionVariable(ExpectedAppointmentTypesKey).to(appointmentTypesList)
         Serenity.setSessionVariable(ExpectedAppointmentLocationsKey).to(locationsList)
         Serenity.setSessionVariable(ExpectedAppointmentCliniciansKey).to(cliniciansList)
-
     }
+
+    protected abstract fun generateDefaultAppointmentSlots()
 
     private var appointmentTypesList: ArrayList<String> =arrayListOf("Clinic - Slot")
     private var locationsList : ArrayList<String> =arrayListOf("Leeds", "Sheffield")
@@ -89,6 +94,13 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
     }
 
     fun generateBookingResponse(booker: (IBookAppointmentsBuilder) -> Mapping) {
+
+//Format like : Wednesday 1 August 2018
+       var formatter =  DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
+        var day = tomorrowDate.format(formatter)
+
+        Serenity.setSessionVariable(TargetAppointmentDateKey).to(day)
+        Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
       appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, 301, "Reason"))
@@ -102,7 +114,6 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
         appointmentMapper
                 .requestMapping{ viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse)}
     }
-
 
     protected fun generateAppointmentSlotResponse(patient: Patient,
                                                   appointmentSlots:AppointmentSlotsResponseFacade,
@@ -133,5 +144,9 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
         var ExpectedAppointmentLocationsKey = "ExpectedAppointmentLocationsKey"
         var ExpectedAppointmentCliniciansKey= "ExpectedAppointmentCliniciansKey"
         var ExpectedAppointmentFilterFacadeKey = "ExpectedAppointmentFilterFacadeKey"
+
+
+        var TargetAppointmentDateKey = "TargetAppointmentDateKey"
+        var TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
     }
 }

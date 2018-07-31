@@ -1,3 +1,4 @@
+@appointment
 Feature: Ability to cancel an EMIS appointment
 
   Background:
@@ -5,7 +6,6 @@ Feature: Ability to cancel an EMIS appointment
     And I am logged in as a EMIS user
 
   @NHSO-663
-  @appointment
   Scenario: A user is presented with the cancel appointment screen
     Given I am on my appointments page
     When I select a "Cancel appointment" link
@@ -14,7 +14,6 @@ Feature: Ability to cancel an EMIS appointment
     And there is a cancellation reasons drop-down
 
   @NHSO-663
-  @appointment
   Scenario: A user navigates back to the "My appointments" screen
     Given I am on my appointments page
     And I select a "Cancel appointment" link
@@ -22,7 +21,6 @@ Feature: Ability to cancel an EMIS appointment
     Then I will be on the My appointments screen
 
   @NHSO-1026
-  @appointment
   @tech-debt @NHSO-1937
   Scenario Outline: User cancels appointment with selected reason
     Given EMIS is available to cancel an appointment for <Reason>
@@ -38,7 +36,6 @@ Feature: Ability to cancel an EMIS appointment
       | Unable to attend   |
 
   @NHSO-1026
-  @appointment
   @tech-debt @NHSO-1937
   Scenario: A validation message will be displayed if no reason is provided
     Given I am on my appointments page

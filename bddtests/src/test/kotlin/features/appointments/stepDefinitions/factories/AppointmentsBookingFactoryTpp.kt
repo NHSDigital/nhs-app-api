@@ -7,7 +7,7 @@ import net.serenitybdd.core.Serenity
 
 class AppointmentsBookingFactoryTpp: AppointmentsBookingFactory("TPP"){
 
-    override fun generate() {
+    override fun generateDefaultAppointmentSlots() {
         Serenity.setSessionVariable(AvailableAppointmentsSteps.EXPECTED_APPOINTMENT_SESSIONS_KEY)
                 .to(defaultAppointmentSessions)
 

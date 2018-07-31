@@ -1,26 +1,20 @@
 package features.appointments.stepDefinitions
 
-import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.defaults.MockDefaults
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.HybridPageObject
 import pages.appointments.AvailableAppointmentsPage
 import java.net.URI
 
 class AppointmentNavigationStepDefinitions {
-    @Steps
-    lateinit var browser: BrowserSteps
     @Steps
     lateinit var login: LoginSteps
     @Steps
@@ -35,13 +29,8 @@ class AppointmentNavigationStepDefinitions {
     lateinit var availableAppointmentsPage: AvailableAppointmentsPage
 
 
-    //Please reconsider using as part of a navigation step, and instead use an explicit login step
-    private fun login(){
-    }
-
     @Given("^I am on my appointments page$")
     fun iAmOnMyAppointmentsPage() {
-        login()
         navigation.select("Appointments")
     }
 
@@ -68,7 +57,6 @@ class AppointmentNavigationStepDefinitions {
 
     @When("^I try to progress to the available appointments page$")
     fun iTryToProgressToTheAvailableAppointmentsPage() {
-        login()
         navigation.select("Appointments")
         myAppointments.clickOnBookAppointmentButton()
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()

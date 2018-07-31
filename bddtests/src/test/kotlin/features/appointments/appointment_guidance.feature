@@ -1,10 +1,10 @@
+@appointment
 Feature: Guidance prior to booking an appointment
 
   Users are given guidance before booking a new appointment.
 
 
   @NHSO-420
-  @appointment
   Scenario: A user with upcoming appointments is presented with guidance
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user
@@ -13,7 +13,6 @@ Feature: Guidance prior to booking an appointment
     Then I am given guidance as to my options before booking an appointment
 
   @NHSO-420
-  @appointment
   Scenario: A user with no upcoming appointments is presented with guidance
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user
@@ -22,7 +21,6 @@ Feature: Guidance prior to booking an appointment
     Then I am given guidance as to my options before booking an appointment
 
   @NHSO-420
-  @appointment
   Scenario: A user proceeds to check their symptoms
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user

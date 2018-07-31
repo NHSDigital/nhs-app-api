@@ -1,7 +1,8 @@
+@appointment
+@backend
 Feature: Ability to cancel an appointment via api
 
   @NHSO-1027
-  @backend
   Scenario Outline: API will cancel the appointment if valid reason is provided
     Given I have upcoming appointments for <GP System>
     And <GP System> is available to cancel an appointment
@@ -13,7 +14,6 @@ Feature: Ability to cancel an appointment via api
     | TPP       |
 
   @NHSO-1027
-  @backend
   Scenario: API will not cancel the appointment if reason an invalid reason is provided
     Given I have upcoming appointments for EMIS
     Given EMIS is available to cancel an appointment

@@ -63,10 +63,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     private lateinit var availableAppointments: AvailableAppointmentsPage
     private lateinit var errorPage: ErrorPage
 
-    @Step
-    fun selectSlot() {
-        availableAppointments.selectFirstSlot()
-    }
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
@@ -86,15 +82,15 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun checkTimeoutErrorMessage(presence: Boolean = true) {
-        val expectation = if (presence) "should be displayed but got" else "shouldn't be displayed but still got"
+    fun checkTimeoutErrorMessage() {
+        val expectation = "should be displayed but got"
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedFirstBodyLine = "Please try again"
         val expectedSecondBodyLine = "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
         errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
-        assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(1).element.text}\"", presence, errorPage.hasSubHeading(expectedHeader))
-        assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(2).element.text}\"", presence, errorPage.hasDetailParagraphOne(expectedFirstBodyLine))
-        assertEquals("\"$expectedHeader\" $expectation \"${errorPage.paragraph(3).element.text}\"", presence, errorPage.hasDetailParagraphTwo(expectedSecondBodyLine))
+        assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(1).element.text}\"",  errorPage.hasSubHeading(expectedHeader))
+        assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(2).element.text}\"",  errorPage.hasDetailParagraphOne(expectedFirstBodyLine))
+        assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(3).element.text}\"",  errorPage.hasDetailParagraphTwo(expectedSecondBodyLine))
     }
 
     @Step
@@ -134,64 +130,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         Serenity.setSessionVariable(Patient::class).to(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-
-        when (gpSystem.toUpperCase()) {
-            "EMIS" -> {
-                myAppointments.mockGPServiceMyAppointmentResponse("EMIS", true)
-            }
-        }
-    }
-
-    @Step
-    fun generateAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
-        when (gpSystem.toUpperCase()) {
-            "TPP" -> {
-                var tppAppointmentSessions = generateTppSessions(13)
-
-                val numberOfSessionTypes = 2 // "Walk-in" and "Clinic"
-                val numberOfsessionsPerDay = numberOfSessionTypes * defaultTppLocations.size * defaultTppClinicians.size
-                for(i in 1..13) {
-                  val slots = generateTppAppointmentSlots(i)
-                    val sessionIndex = (i-1) * numberOfsessionsPerDay
-                    for(dailySessionIndex in 0 until numberOfsessionsPerDay) {
-                        tppAppointmentSessions[sessionIndex + dailySessionIndex].slots = slots
-                    }
-                }
-
-                generateTppStubsForAppointmentSlotsForNextFourWeeks(tppAppointmentSessions)
-            }
-            "EMIS" -> {
-                Serenity.setSessionVariable(EXPECTED_SESSIONS_KEY).to(generateEmisSessions(13))
-
-                val numberOfSessionTypes = 2 // "Walk-in" and "Clinic"
-                val numberOfSessionsPerDay = numberOfSessionTypes * defaultEmisMetaSlotLocations.size * (defaultEmisMetaSlotSessionHolders.size + 1)
-                val allAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
-                val arrayOfArrayOfAppointmentSlots = arrayListOf<ArrayList<AppointmentSlotFacade>>()
-                for (i in 1..13) {
-                    repeat(numberOfSessionsPerDay) {
-                        arrayOfArrayOfAppointmentSlots.add(generateEmisAppointmentSlots(i))
-                        allAppointmentSlots.addAll(arrayOfArrayOfAppointmentSlots.last())
-                    }
-                }
-
-                setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(allAppointmentSlots)
-
-                setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(
-                        generateEmisAppointmentSessions(
-                                Serenity.sessionVariableCalled<ArrayList<mocking.emis.models.Session>>(EXPECTED_SESSIONS_KEY),
-                                arrayOfArrayOfAppointmentSlots
-                        )
-                )
-
-                generateEmisStubsForAppointmentSlotsForNextFourWeeks(
-                        defaultEmisMetaSlotLocations,
-                        defaultEmisMetaSlotSessionHolders,
-                        sessionVariableCalled<ArrayList<mocking.emis.models.Session>>(EXPECTED_SESSIONS_KEY),
-                        sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY),
-                        sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
-                )
-            }
-        }
+        myAppointments.mockGPServiceMyAppointmentResponse(gpSystem, true)
     }
 
     @Step

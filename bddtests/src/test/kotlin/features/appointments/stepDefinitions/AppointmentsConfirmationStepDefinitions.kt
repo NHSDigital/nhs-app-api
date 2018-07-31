@@ -3,9 +3,13 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AvailableAppointmentsSteps
+import net.serenitybdd.core.Serenity
+import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
+import pages.appointments.AvailableAppointmentsPage
 
 class AppointmentsConfirmationStepDefinitions {
 
@@ -14,10 +18,15 @@ class AppointmentsConfirmationStepDefinitions {
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
+    private lateinit var availableAppointmentsPage: AvailableAppointmentsPage
+
     @Given("^I have selected an appointment slot to book$")
     fun i_have_selected_an_appointment_slot_to_book() {
         availableAppointmentsSteps.selectOptionsToRevealSlots()
-        availableAppointmentsSteps.selectSlot()
+        var date = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
+        var time = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
+
+        availableAppointmentsPage.selectSlot(date, time)
         availableAppointmentsSteps.clickOnBookAppointmentButton()
     }
 
@@ -36,12 +45,7 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.goBackToMyAppointments()
     }
 
-    @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")
-    fun an_error_is_displayed_that_is_mandatory() {
-        appointmentsConfirmationSteps.checkValidationErrorMessage()
-    }
-
-    @Given("^I enter symptoms of (\\d+) characters$")
+    @When("^I enter symptoms of (\\d+) characters$")
     fun i_enter_symptoms_of_character(n: Int) {
         appointmentsConfirmationSteps.describeSymptoms("x".repeat(n))
     }
@@ -79,5 +83,10 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^there should be a button to go back to my appointments$")
     fun there_should_be_a_button_to_go_back_to_my_appointments() {
         appointmentsConfirmationSteps.checkIfButtonIsVisible("Back to my appointments")
+    }
+
+    @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")
+    fun an_error_is_displayed_that_is_mandatory() {
+        appointmentsConfirmationSteps.checkValidationErrorMessage()
     }
 }

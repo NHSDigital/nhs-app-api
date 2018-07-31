@@ -1,8 +1,8 @@
+@appointment
 Feature: View available appointment slots
 
   Users can view available appointments from the available appointments Page.
 
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user who is signed in sees the appointments navigation button highlighted
     Given there are available appointment slots with different criteria for EMIS
@@ -29,7 +29,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @appointment
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>
     And I am logged in
@@ -46,7 +45,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @appointment
   Scenario Outline: A <GP System> user enters the available appointments page, but appointments only available at 1 location
     Given there are available appointment slots for <GP System> for 1 location
     And I am logged in
@@ -59,7 +57,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @appointment
   Scenario Outline: A <GP System> user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
     And I am logged in
@@ -72,7 +69,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @appointment
   Scenario Outline: A <GP System> user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
     And I am logged in
@@ -86,7 +82,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @appointment
   @tech-debt @NHSO-1937
   Scenario Outline: A <GP System> user refines criteria but no slots are available
     Given there are available appointment slots with different criteria for <GP System>
@@ -100,7 +95,6 @@ Feature: View available appointment slots
       | TPP       |
 
   @NHSO-71
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user selects a second appointment slot and the first selected slot gets deselected.
     Given there are available appointment slots with different criteria for EMIS
@@ -113,7 +107,6 @@ Feature: View available appointment slots
     And the 1st slot is no longer highlighted
 
   @NHSO-71
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user select the same appointment twice and the selected appointment stay selected.
     Given there are available appointment slots with different criteria for EMIS
@@ -125,7 +118,6 @@ Feature: View available appointment slots
     Then the slot remains highlighted
 
   @NHSO-71
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting an appointment type or location
     Given there are available appointment slots with different criteria for EMIS
@@ -135,7 +127,6 @@ Feature: View available appointment slots
     Then I see an appropriate message informing that I need to select an appointment type and location
 
   @NHSO-71
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting an appointment type
     Given there are available appointment slots with different criteria for EMIS
@@ -145,7 +136,6 @@ Feature: View available appointment slots
     Then I see an appropriate message informing that I need to select an appointment type
 
   @NHSO-71
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting a location
     Given there are available appointment slots with different criteria for EMIS
@@ -155,7 +145,6 @@ Feature: View available appointment slots
     Then I see an appropriate message informing that I need to select a location
 
   @NHSO-71
-  @appointment
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user tries to progress without selecting an appointment
     Given there are available appointment slots with different criteria for EMIS
@@ -165,7 +154,6 @@ Feature: View available appointment slots
     Then I see an appropriate message informing that I need to select an appointment
 
   @NHSO-71
-  @appointment
   @tech-debt @NHSO-1937
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
@@ -177,8 +165,8 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
-  @appointment
   Scenario: A user sees appropriate information message when there is a timeout
+    #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     When I try to progress to the available appointments page
@@ -187,8 +175,8 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
-  @appointment
   Scenario: A user tries again after a timeout and it times-out again
+    #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     And I try to progress to the available appointments page
@@ -198,19 +186,19 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
-  @appointment
   Scenario: A user tries again after a timeout and it is now successful
+    #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     And I try to progress to the available appointments page
-    When GP system responds a timely fashion for available appointment slots
+    When EMIS responds a timely fashion for available appointment slots
     And I click try again button on appointment page
     Then I am able to filter on available slots
 
   @NHSO-616
   @NHSO-870
-  @appointment
   Scenario: A user sees appropriate information message when GP system is unavailable
+    #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS is unavailable for available appointment slots
     And I am logged in
     When I try to progress to the available appointments page
@@ -219,8 +207,8 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
-  @appointment
   Scenario: A user sees appropriate information message when EMIS returns corrupt data
+    #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS returns corrupt data for appointment slots
     And I am logged in
     When I try to progress to the available appointments page
@@ -230,8 +218,8 @@ Feature: View available appointment slots
   @NHSO-616
   @native
   @manual
-  @appointment
   Scenario: A user sees appropriate information message when internet connection has been lost
+    #    GP System agnostic scenario, so only need to test with EMIS
     Given I am on my appointments page
     And internet connection drops
     When I press the "Book this appointment" button
@@ -239,26 +227,12 @@ Feature: View available appointment slots
     And there should be a button to try again
 
   @NHSO-1168
-  @appointment
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
-    Given there are available appointment slots
+    #    GP System agnostic scenario, so only need to test with EMIS
+    Given there are available appointment slots with different criteria for EMIS
     But there is a slight delay in retrieving them
     And I am logged in
     And I am on the available appointments page
     When I navigate to Prescriptions
     And I wait 5 seconds
     Then I don't see filters for available slots
-
-  @NHSO-1168
-  @appointment
-  Scenario: A user has different problems with prescriptions and appointments and selects appointments and prescriptions in quick succession
-    Given I am using EMIS GP System
-    And GP system doesn't respond a timely fashion for available appointment slots
-    But I have 0 past repeat prescriptions
-    And each repeat prescription contains 0 courses of which 0 are repeats
-    And I am logged in
-    And I am on the available appointments page
-    When I navigate to Prescriptions
-    And I wait 11 seconds
-    Then I don't see a time-out error
-

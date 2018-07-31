@@ -92,6 +92,10 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return timeSlotAtPosition(position).click()
     }
 
+    fun selectSlot(date:String, time:String){
+        return timeSlot(date, time).click()
+    }
+
     fun getAppointmentTypeFilterContents(): ArrayList<String>  {
         return filterContentsAsStrings(appointmentTypeFilter)
     }
@@ -202,4 +206,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     private fun timeSlotAtPosition(position: Int) = findByXpath("//form//li[$position]")
+
+    private fun timeSlot(date:String, time: String) = findByXpath("//form/span[h5 = '$date']/ul/li['$time']")
 }

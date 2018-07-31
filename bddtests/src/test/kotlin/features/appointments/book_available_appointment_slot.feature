@@ -1,3 +1,4 @@
+@appointment
 Feature: Book an available appointment slot
   In order to complete a booking appointment
   As a logged in user
@@ -5,6 +6,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
+    @target
   Scenario Outline: A <GP System> user tries to book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
@@ -25,9 +27,9 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
-    And I enter symptoms of 1 characters
-    When I click the 'Confirm and book appointment' button
-    Then Appointment Booking confirmation screen is displayed
+    When I enter symptoms of 1 characters
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
     Examples:
       | GP System |
       | EMIS      |
@@ -40,9 +42,9 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
-    And I enter symptoms of 150 characters
-    When I click the 'Confirm and book appointment' button
-    Then Appointment Booking confirmation screen is displayed
+    When I enter symptoms of 150 characters
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
     Examples:
       | GP System |
       | EMIS      |
@@ -84,9 +86,9 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
-    And I enter symptoms of 151 characters
-    When I click the 'Confirm and book appointment' button
-    Then Appointment Booking confirmation screen is displayed
+    When I enter symptoms of 151 characters
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
     Examples:
       | GP System |
       | EMIS      |

@@ -36,8 +36,8 @@ class AppointmentsBookingFactoryEmis: AppointmentsBookingFactory("EMIS"){
                     SessionType.Timed,
                     1,
                     arrayListOf(101),
-                    startDate,
-                    endDate
+                    startDateAppointment1,
+                    endDateAppointment1
             ),
             Session(
             "Clinic",
@@ -47,11 +47,11 @@ class AppointmentsBookingFactoryEmis: AppointmentsBookingFactory("EMIS"){
             SessionType.Timed,
             1,
             arrayListOf(102),
-            startDate,
-            endDate
+            startDateAppointment2,
+            endDateAppointment2
             ))
 
-    override fun generate(){generateEmis()}
+    override fun generateDefaultAppointmentSlots(){generateEmis()}
 
     private fun generateEmis(
             emisSlotSessions: ArrayList<Session> = defaultMetaSlotSessions,
