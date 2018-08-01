@@ -38,10 +38,10 @@ export default ({
         const stringified = JSON.stringify(state);
 
         if (isServer) {
-          return app.$cookies.set(key, stringified, { secure: !isDev, SameSite: 'Lax' });
+          return app.$cookies.set(key, stringified, { secure: !isDev, sameSite: 'Lax', httpOnly :false });
         }
 
-        return Cookies.set(key, stringified, { secure: !isDev, SameSite: 'Lax' });
+        return Cookies.set(key, stringified, { secure: !isDev, sameSite: 'Lax', httpOnly :false });
       },
       removeItem: key => Cookies.remove(key),
     },
