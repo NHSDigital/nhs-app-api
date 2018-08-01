@@ -22,7 +22,8 @@
       </error-message>
       <textarea id="reasonText" ref="reason" v-model="symptoms"
                 :aria-labelledby="reasonBoxAriaLabelledBy"
-                :class="textareaClass" maxlength="150"/>
+                :class="textareaClass" maxlength="150" autocomplete="off"
+                autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <p id="maxReasonDesc">{{ $t('appointments.confirmation.maxReasonDesc') }}</p>
     </div>
 

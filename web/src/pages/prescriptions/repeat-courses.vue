@@ -39,7 +39,11 @@
               ref="specialRequest"
               :class="$style.textArea"
               v-model="specialRequest"
-              maxlength="1000"/>
+              maxlength="1000"
+              autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"/>
             <p id="maxSpecialRequest">{{ $t('rp03.maxSpecialRequest') }}</p>
           </div>
           <br>
