@@ -91,4 +91,5 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
     companion object {
         const val uuid = "3e3d8bef-4ce1-4925-a263-149c15ac7208"
     }
+
 }

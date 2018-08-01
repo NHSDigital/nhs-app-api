@@ -1,18 +1,15 @@
 <template>
   <main v-if="showTemplate" class="content">
-    <form action="account/signout" method="get">
-      <button id="signout-button" class="button grey" type="submit" @click="signout($event)">
-        {{ $t('signOutButton.signOut') }}
-      </button>
-    </form>
+    <button id="signout-button" class="button grey" @click="signout()">
+      {{ $t('signOutButton.signOut') }}
+    </button>
   </main>
 </template>
 
 <script>
 export default {
   methods: {
-    signout(evt) {
-      evt.preventDefault();
+    signout() {
       this.$store.dispatch('auth/logout', '/login');
     },
   },

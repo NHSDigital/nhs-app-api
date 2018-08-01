@@ -1,6 +1,6 @@
 <template>
   <main class="content">
-    <button id="signout-button" class="button grey" @click="signoutClicked($event)">
+    <button id="signout-button" class="button grey" @click="signoutClicked()">
       {{ $t('signOutButton.signOut') }}
     </button>
   </main>
@@ -8,8 +8,7 @@
 
 <script>
 
-function signoutClicked(evt) {
-  evt.preventDefault();
+function signoutClicked() {
   this.$store.dispatch('auth/logout');
 }
 

@@ -67,11 +67,6 @@ open class BrowserSteps {
 
     @Step()
     open fun checkLoginDetailsAreReset() {
-        // This function is inherently brittle as the order of cookie properties are not guaranteed
-        // and the cookie is highly likely to change.
-
-        return
-
         val vuexCookieName = "nhso";
 
         // No user details...

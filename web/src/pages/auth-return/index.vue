@@ -2,11 +2,10 @@
 <script>
 export default {
   name: '',
-  middleware: ['authResponse'],
-  fetch({ redirect }) {
-    if (process.server) {
-      redirect('/');
-    }
+  mounted() {
+    return this.$store.dispatch('auth/handleAuthResponse', {
+      code: this.$route.query.code,
+    });
   },
   render() {
     return null;
