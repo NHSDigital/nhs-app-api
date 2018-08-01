@@ -1,6 +1,6 @@
 package features.appointments.stepDefinitions
 
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithTimezone
+import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -280,7 +280,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
         val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         currentDateFormat.timeZone = TimeZone.getDefault()
         val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat(backendDateTimeFormatWithTimezone)
+        val queryDateFormat = SimpleDateFormat(backendDateTimeFormat)
         return queryDateFormat.format(dateToPass)
     }
 }

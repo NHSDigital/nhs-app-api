@@ -16,7 +16,8 @@ open class AppointmentsBookingData {
 
     companion object {
 
-        val backendDateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+        val timeZone = TimeZone.getTimeZone("Europe/London")
+        val backendDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
         val pastFromDate = "2017-12-24T14:00:00"
         val pastToDate = "2017-12-30T14:00:00"
         private val numberOfDaysOfSlotsToRetrieve = 28
@@ -107,6 +108,13 @@ open class AppointmentsBookingData {
                         staffDetails = defaultEmisMetaSlotSessionHolders[1].displayName
                 )
         )
+
+        private fun createBackendDateTimeFormatWithoutTimezone(): SimpleDateFormat {
+            val sdf = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+            sdf.timeZone = timeZone
+
+            return sdf
+        }
 
         fun getDefaultEmisAppointmentSlots() = arrayListOf(
                 AppointmentSlotFacade(
@@ -342,7 +350,7 @@ open class AppointmentsBookingData {
         private fun threeWeeksTomorrowMidnight() = midnightDayInTheFuture(22)
 
         private fun sometimeTomorrow(minutesToAdd: Int = 0): String {
-            val baseTime = Calendar.getInstance()
+            val baseTime = Calendar.getInstance(timeZone)
             val tomorrow = baseTime.addDays(1)
             return setAsTime(tomorrow, 14, minutesToAdd)
         }
@@ -352,13 +360,13 @@ open class AppointmentsBookingData {
         }
 
         private fun sometimeDayInTheFuture(daysToAdd: Int = 2, minutesToAdd: Int = 0): String {
-            val baseTime = Calendar.getInstance()
+            val baseTime = Calendar.getInstance(timeZone)
             val futureDay = baseTime.addDays(daysToAdd)
             return setAsTime(futureDay, 9, minutesToAdd)
         }
 
         private fun midnightDayInTheFuture(daysToAdd: Int): String {
-            val baseTime = Calendar.getInstance()
+            val baseTime = Calendar.getInstance(timeZone)
             val dayInTheFuture = baseTime.addDays(daysToAdd)
             return setAsTime(dayInTheFuture)
         }

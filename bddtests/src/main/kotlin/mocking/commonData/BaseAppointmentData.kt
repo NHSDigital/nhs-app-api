@@ -14,7 +14,7 @@ abstract class BaseAppointmentData {
     abstract val dateTimeFormat: SimpleDateFormat
     abstract val defaultPatient: Patient
 
-    abstract fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot>
+    abstract fun generateExpectedMyAppointments(): ArrayList<Slot>
 
     abstract fun getAppointmentCancellationReasons(): List<AppointmentCancellationReason>?
 
@@ -22,12 +22,5 @@ abstract class BaseAppointmentData {
         val theStartTime = baseTime.clone() as Calendar
         val numberOfMinutesToNextDivisibleByFive = 5 - (theStartTime.get(Calendar.MINUTE) % 5)
         return theStartTime.addDays(addDays).addHours(addHours).addMinutes(addMinutes + numberOfMinutesToNextDivisibleByFive)
-    }
-
-    protected fun convertToBrowserTimezone(time: String, timezone: String): String {
-        val dateFormatWithUtcTimeZone = SimpleDateFormat(AppointmentDateTimeFormat.backendDateTimeFormatWithTimezone)
-        dateFormatWithUtcTimeZone.timeZone = TimeZone.getTimeZone(timezone)
-        val browserDate = dateTimeFormat.parse(time)
-        return dateFormatWithUtcTimeZone.format(browserDate)
     }
 }

@@ -1,6 +1,6 @@
 package features.appointments.steps
 
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithTimezone
+import constants.AppointmentDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
@@ -809,14 +809,14 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         currentDateFormat.timeZone = TimeZone.getDefault()
         val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat(backendDateTimeFormatWithTimezone)
+        val queryDateFormat = SimpleDateFormat(AppointmentDateTimeFormat.backendDateTimeFormat)
         return queryDateFormat.format(dateToPass)
     }
 
     private fun toUTC(date: String?): String {
         val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat(backendDateTimeFormatWithTimezone)
+        val queryDateFormat = SimpleDateFormat(AppointmentDateTimeFormat.backendDateTimeFormat)
         queryDateFormat.timeZone = TimeZone.getTimeZone("UTC")
         return queryDateFormat.format(dateToPass).removeSuffix("00").plus(":00")
     }

@@ -28,7 +28,8 @@ private const val SESSION_ID_EYECLINIC = 2
 private const val SESSION_ID_EARCLINIC = 3
 
 class EmisAppointmentData private constructor() : BaseAppointmentData() {
-    override val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+    val timeZone = TimeZone.getTimeZone("Europe/London")
+    override val dateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     override val defaultPatient = Patient.getDefault("EMIS")
 
     private val expectedMyAppointment = Slot(session = SessionType.Timed.toString())
@@ -78,6 +79,13 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     val emisCancellationReason2 =
             AppointmentCancellationReason("R2_UnableToAttend", "Unable to attend")
 
+    private fun createBackendDateTimeFormatWithoutTimezone(): SimpleDateFormat {
+        val sdf = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+        sdf.timeZone = timeZone
+
+        return sdf
+    }
+
     private val unspecifiedTimeAppointment1 =
             Appointment(slotId = 1,
                     sessionId = SESSION_ID_FOOTCLINIC,
@@ -96,7 +104,7 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     private val appointments: ArrayList<Appointment> = arrayListOf()
 
     fun createAppointmentSessions(): ArrayList<AppointmentSessionFacade> {
-        val baseTime = Calendar.getInstance()
+        val baseTime = Calendar.getInstance(timeZone)
 
         var startTime = copyCalendarDate(baseTime, 1)
         var sessionDate = dateTimeFormat.format(startTime.time)
@@ -132,7 +140,7 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     }
 
     fun createGetAppointmentsResponse(): GetAppointmentsResponseModel {
-        val baseDate = Calendar.getInstance()
+        val baseDate = Calendar.getInstance(timeZone)
 
         var bookingDate = copyCalendarDate(baseDate)
         val appointment1 = addDateToAppointment(unspecifiedTimeAppointment1.copy(), bookingDate, 1, 30)
@@ -155,20 +163,21 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     }
 
     fun createGetAppointmentsResponseForNoUpcomingAppointments(): GetAppointmentsResponseModel {
-        val baseDate = Calendar.getInstance()
+        val baseDate = Calendar.getInstance(timeZone)
         val appointmentsFromDate = dateTimeFormat.format(baseDate.time)
 
         appointments.clear()
         return GetAppointmentsResponseModel(appointmentsFromDate)
     }
 
-    override fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot> {
+    override fun generateExpectedMyAppointments(): ArrayList<Slot> {
         val expectedTempMyAppointments = arrayListOf<Slot>()
         val slotDateFormat = SimpleDateFormat(frontendDateFormat)
+        slotDateFormat.timeZone = timeZone
         val slotTimeFormat = SimpleDateFormat(frontendTimeFormat)
+        slotTimeFormat.timeZone = timeZone
         appointments.forEach { appointment ->
-            val frontendTime = convertToBrowserTimezone(appointment.startTime, timezone)
-            val startDate = dateTimeFormat.parse(frontendTime)
+            val startDate = dateTimeFormat.parse(appointment.startTime)
             val date = slotDateFormat.format(startDate)
             val time = slotTimeFormat.format(startDate).toLowerCase()
             val session = sessions.find { appointment.sessionId == it.sessionId }!!

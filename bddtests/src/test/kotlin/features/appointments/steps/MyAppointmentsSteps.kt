@@ -53,7 +53,7 @@ open class MyAppointmentsSteps {
     @Step
     fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated() {
         val serviceFactory = getActiveAppointmentsFactory()
-        val expectedSlots = serviceFactory.getAppointmentData().generateExpectedMyAppointments("Europe/London")
+        val expectedSlots = serviceFactory.getAppointmentData().generateExpectedMyAppointments()
         val areCliniciansExpected = if (expectedSlots.isNotEmpty()) expectedSlots[0].clinician.isNotEmpty() else false
         val slots = myAppointmentsPage.getAllSlots(areCliniciansExpected)
         assertEquals("Expected upcoming myAppointments size doesn't match with the actual size",
@@ -116,7 +116,9 @@ open class MyAppointmentsSteps {
 
     @Step
     fun createSerenityMyAppointmentSessionVariable() {
+        val timeZone = TimeZone.getTimeZone("Europe/London")
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
+        dateTimeFormat.timeZone = timeZone
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
         try {
         val result = Serenity

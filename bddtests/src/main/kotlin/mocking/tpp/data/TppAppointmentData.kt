@@ -1,7 +1,6 @@
 package mocking.tpp.data
 
 import addDays
-import addHours
 import addMinutes
 import constants.AppointmentDateTimeFormat
 import mocking.commonData.BaseAppointmentData
@@ -18,7 +17,8 @@ import kotlin.collections.ArrayList
 
 class TppAppointmentData private constructor() : BaseAppointmentData() {
 
-    override val dateTimeFormat = SimpleDateFormat(AppointmentDateTimeFormat.tppDateTimeFormat)
+    val timeZone = TimeZone.getTimeZone("Europe/London")
+    override val dateTimeFormat = createTppDateTimeFormat()
     override val defaultPatient = Patient.getDefault("TPP")
 
     private val sessionTypes = arrayOf("Session A", "Session B")
@@ -49,8 +49,15 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
 
     val seanBaseTppAppointment = drJamesBaseTppAppointment.copy(details = appointmentDetailList[1])
 
+    private fun createTppDateTimeFormat(): SimpleDateFormat {
+        val sdf = SimpleDateFormat(AppointmentDateTimeFormat.tppDateTimeFormat)
+        sdf.timeZone = timeZone
+
+        return sdf
+    }
+
     fun createTppAppointmentsResponse(patient: Patient): ViewAppointmentsReply {
-        val baseTime = Calendar.getInstance()
+        val baseTime = Calendar.getInstance(timeZone)
         val appointmentsReply = createEmptyTppMyAppointmentResponse(patient)
 
         appointments.clear()
@@ -84,15 +91,18 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
         return appointments
     }
 
-    override fun generateExpectedMyAppointments(timezone: String): ArrayList<Slot> {
+    override fun generateExpectedMyAppointments(): ArrayList<Slot> {
         val webSlots = arrayListOf<Slot>()
         val webSlot = Slot(session = SessionType.Timed.toString())
+
         val slotDateFormat = SimpleDateFormat(AppointmentDateTimeFormat.frontendDateFormat)
+        slotDateFormat.timeZone = timeZone
         val slotTimeFormat = SimpleDateFormat(AppointmentDateTimeFormat.frontendTimeFormat)
-        val dateFormatWithTimeZone = SimpleDateFormat(AppointmentDateTimeFormat.backendDateTimeFormatWithTimezone)
+        slotTimeFormat.timeZone = timeZone
+        val dateFormatWithTimeZone = SimpleDateFormat(AppointmentDateTimeFormat.backendDateTimeFormat)
+        dateFormatWithTimeZone.timeZone = timeZone
         appointments.forEach { appointment ->
-            val frontendTime = convertToBrowserTimezone(appointment.startDate, timezone)
-            val startDate = dateFormatWithTimeZone.parse(frontendTime)
+            val startDate = dateFormatWithTimeZone.parse(appointment.startDate)
             val date = slotDateFormat.format(startDate)
             val time = slotTimeFormat.format(startDate).toLowerCase()
             val location = appointment.siteName

@@ -35,7 +35,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import moment from 'moment';
+import moment from 'moment-timezone';
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
 
@@ -55,8 +55,8 @@ export default {
     },
   },
   methods: {
-    formatTime: dateTime => moment.parseZone(dateTime).format('h:mm a'),
-    formatDate: dateTime => moment.parseZone(dateTime).format('dddd D MMMM YYYY'),
+    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mm a'),
+    formatDate: dateTime => moment.tz(dateTime, 'Europe/London').format('dddd D MMMM YYYY'),
     select() {
       if (this.showCancellationLink) {
         this.$store.dispatch('myAppointments/select', this.appointment);
