@@ -20,8 +20,10 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import pages.appointments.AvailableAppointmentsPage
 import worker.models.appointments.AppointmentSlotsResponse
 import javax.servlet.http.Cookie
 
@@ -352,8 +354,11 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
-        availableAppointments.verifyThatAppropriateDateHeadingIsDisplayed()
-        availableAppointments.verifyThatAppropriateTimeSlotIsDisplayed()
+
+        var expectedDateHeading = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
+        var expectedTimeSlot = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
+        availableAppointments.assertTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
+
     }
 
     @Then("^the 2nd slot is highlighted$")

@@ -7,9 +7,7 @@ import features.appointments.stepDefinitions.factories.AppointmentsBookingFactor
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AvailableAppointmentsSteps
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
-import pages.appointments.AvailableAppointmentsPage
 
 class AppointmentsConfirmationStepDefinitions {
 
@@ -18,15 +16,13 @@ class AppointmentsConfirmationStepDefinitions {
     @Steps
     lateinit var appointmentsConfirmationSteps: AppointmentsConfirmationSteps
 
-    private lateinit var availableAppointmentsPage: AvailableAppointmentsPage
-
     @Given("^I have selected an appointment slot to book$")
     fun i_have_selected_an_appointment_slot_to_book() {
         availableAppointmentsSteps.selectOptionsToRevealSlots()
         var date = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
         var time = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
 
-        availableAppointmentsPage.selectSlot(date, time)
+        availableAppointmentsSteps.selectSlot(date, time)
         availableAppointmentsSteps.clickOnBookAppointmentButton()
     }
 

@@ -84,19 +84,15 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return timePeriodFilter.elements.isNotEmpty()
     }
 
-    fun selectFirstSlot() {
-        return selectSlotByPositionNumber(1)
-    }
-
     fun selectSlotByPositionNumber(position: Int) {
         return timeSlotAtPosition(position).click()
     }
 
-    fun selectSlot(date:String, time:String){
+    fun selectSlot(date: String, time: String) {
         return timeSlot(date, time).click()
     }
 
-    fun getAppointmentTypeFilterContents(): ArrayList<String>  {
+    fun getAppointmentTypeFilterContents(): ArrayList<String> {
         return filterContentsAsStrings(appointmentTypeFilter)
     }
 
@@ -104,7 +100,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return appointmentTypeFilter.element.selectedVisibleTextValue.trim()
     }
 
-    fun getLocationFilterContents(): ArrayList<String>  {
+    fun getLocationFilterContents(): ArrayList<String> {
         return filterContentsAsStrings(locationFilter)
     }
 
@@ -112,7 +108,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return locationFilter.element.selectedVisibleTextValue.trim()
     }
 
-    fun getClinicianFilterContents(): ArrayList<String>  {
+    fun getClinicianFilterContents(): ArrayList<String> {
         return filterContentsAsStrings(clinicianFilter)
     }
 
@@ -120,7 +116,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return clinicianFilter.element.selectedVisibleTextValue.trim()
     }
 
-    fun getTimePeriodFilterContents(): ArrayList<String>  {
+    fun getTimePeriodFilterContents(): ArrayList<String> {
         return filterContentsAsStrings(timePeriodFilter)
     }
 
@@ -164,9 +160,9 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         }
     }
 
-    fun isTimeSlotPresent(expectedDateHeading: String?, expectedTimeOnSlot: String?): Boolean {
+    fun isTimeSlotPresent(expectedDateHeading: String, expectedTimeOnSlot: String): Boolean {
         return try {
-            getTimeSlotElement(expectedDateHeading, expectedTimeOnSlot).isPresent
+            timeSlot(expectedDateHeading, expectedTimeOnSlot).isPresent
         } catch (e: Exception) {
             false
         }
@@ -193,9 +189,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return error.paragraph(rowNumber).element.text
     }
 
-    private fun getTimeSlotElement(expectedDateHeading: String?, expectedTimeOnSlot: String?) =
-            findByXpath(String.format(appointmentSlotTimeXpath, expectedDateHeading, expectedTimeOnSlot!!.toLowerCase()))
-
     private fun filterContentsAsStrings(filter: HybridPageElement): ArrayList<String> {
         val optionElements = findAllByXpath(filter.element, "//option")
         val optionsAsStrings = arrayListOf<String>()
@@ -207,5 +200,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private fun timeSlotAtPosition(position: Int) = findByXpath("//form//li[$position]")
 
-    private fun timeSlot(date:String, time: String) = findByXpath("//form/span[h5 = '$date']/ul/li['$time']")
+    private fun timeSlot(date: String, time: String) = findByXpath("//form/span[h5 = '$date']/ul/li['$time']")
+
 }

@@ -6,7 +6,6 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
-    @target
   Scenario Outline: A <GP System> user tries to book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in

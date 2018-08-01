@@ -19,7 +19,7 @@ class AppointmentsBookingStepDefinitions {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateBookingResponse{
-            bookRequest->bookRequest.withDelay(Duration.ofSeconds(10)).respondWithSuccess()}
+            bookRequest->bookRequest.withDelay(Duration.ofSeconds(70)).respondWithSuccess()}
     }
 
     @Given("^there are (.*) appointments available to book, but the GP system is unavailable$")

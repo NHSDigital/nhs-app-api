@@ -66,11 +66,16 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
                     location = "Leeds"
             )
 
-
     fun generateDefaultAvailableAppointmentSlotExample() {
         generateDefaultUserData()
         generateDefaultAppointmentSlots()
         Serenity.setSessionVariable(ExpectedAppointmentFilterFacadeKey).to(defaultFilter)
+
+        //Format like : Wednesday 1 August 2018
+        var formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
+        var day = tomorrowDate.format(formatter)
+        Serenity.setSessionVariable(TargetAppointmentDateKey).to(day)
+        Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
     }
 
     private fun generateDefaultUserData() {
@@ -94,14 +99,7 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
     }
 
     fun generateBookingResponse(booker: (IBookAppointmentsBuilder) -> Mapping) {
-
-//Format like : Wednesday 1 August 2018
-       var formatter =  DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
-        var day = tomorrowDate.format(formatter)
-
-        Serenity.setSessionVariable(TargetAppointmentDateKey).to(day)
-        Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
-      appointmentMapper.requestMapping {
+        appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, 301, "Reason"))
             )

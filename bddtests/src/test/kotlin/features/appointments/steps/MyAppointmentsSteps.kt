@@ -35,6 +35,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun checkBookingSuccessMessage() {
+        myAppointmentsPage.waitForSpinnerToDisappear()
         val message = myAppointmentsPage.getSuccessMessage()
         assertEquals(bookingSuccessMessage, message)
     }

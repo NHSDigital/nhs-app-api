@@ -22,6 +22,8 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
+import org.apache.xpath.operations.Bool
+import org.junit.Assert
 import org.junit.Assert.*
 import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
@@ -32,9 +34,12 @@ import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.servlet.http.Cookie
 import kotlin.collections.ArrayList
+import kotlin.math.exp
 
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
@@ -70,6 +75,16 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals("Expected Header text $pageHeader of the page is not found",
                 pageHeader, actualHeader)
     }
+
+    @Step
+    fun assertTimeSlotPresent(expectedDateHeading:String, expectedTimeSlot:String) {
+        Assert.assertTrue("Appointment Slot Date heading not found: $expectedDateHeading",
+                availableAppointments.isDateHeadingPresent(expectedDateHeading))
+        Assert.assertTrue("Appointment Time Slot not found: $expectedTimeSlot for date: $expectedDateHeading",
+                availableAppointments.isTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
+        )
+    }
+
 
     @Step
     fun clickOnBookAppointmentButton() {
@@ -337,11 +352,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val emisAppointmentSessions = defaultEmisAppointmentSessions
 
         mockingClient.forEmis {
-            appointmentSlotsMetaRequest(patient,
-                    defaultSessionStartDate,
-                    defaultSessionEndDate
+            appointmentSlotsMetaRequest(patient
             )
-                    .withDelay(Duration.ofSeconds(31))
+                    .withDelay(Duration.ofSeconds(90))
                     .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
                             emisSlotLocations,
                             emisSlotSessionHolders,
@@ -350,11 +363,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         }
 
         mockingClient.forEmis {
-            appointmentSlotsRequest(patient,
-                    defaultSessionStartDate,
-                    defaultSessionEndDate
+            appointmentSlotsRequest(patient
             )
-                    .withDelay(Duration.ofSeconds(31))
+                    .withDelay(Duration.ofSeconds(90))
                     .respondWithSuccess(AppointmentSlotsResponseFacade(emisAppointmentSessions))
         }
     }
@@ -623,43 +634,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun verifyThatAppropriateDateHeadingIsDisplayed() {
-        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
-        var expectedDateHeadings = setOf<String>()
-        for (expectedAppointmentSlot in expectedAppointmentSlots) {
-            val expectedDateTime = backendDateTimeFormat.parse(expectedAppointmentSlot.startTime)
-            expectedDateHeadings = expectedDateHeadings.plus(generateExpectedDateHeading(expectedDateTime))
-        }
-        for (expectedDateHeading in expectedDateHeadings) {
-            assertTrue(
-                    "Appointment Slot Date heading not found: $expectedDateHeading",
-                    availableAppointments.isDateHeadingPresent(expectedDateHeading)
-            )
-        }
-    }
-
-    @Step
-    fun verifyThatAppropriateTimeSlotIsDisplayed() {
-        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
-        // expectedTimes as set of pairs of dates and times
-        var expectedTimes = setOf<Pair<String, String>>()
-        for (expectedAppointmentSlot in expectedAppointmentSlots) {
-            val expectedDateTime = backendDateTimeFormat.parse(expectedAppointmentSlot.startTime)
-            val expectedDateHeading = generateExpectedDateHeading(expectedDateTime)
-            val expectedTimeOnSlot = generateExpectedTimeOnSlot(expectedDateTime)
-            expectedTimes = expectedTimes.plus(Pair(expectedDateHeading, expectedTimeOnSlot))
-        }
-        for (expectedTime in expectedTimes) {
-            assertTrue(
-                    "Appointment Slot Time not found: ${expectedTime.second}",
-                    availableAppointments.isTimeSlotPresent(expectedTime.first, expectedTime.second)
-            )
-        }
-    }
-
-    @Step
     fun clickOnASlot(slotNumber: Int = 1) {
         availableAppointments.selectSlotByPositionNumber(slotNumber)
+    }
+
+    @Step
+    fun selectSlot(date: String, time: String) {
+        return availableAppointments.selectSlot(date, time)
     }
 
     @Step

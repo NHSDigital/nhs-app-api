@@ -37,20 +37,15 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
                         "@unitId='${tppUserSession.unitId}']")
     }
 
-    override fun respondWithSuccess(slots: ArrayList<AppointmentSlotFacade>, sessionId: Int?, sessionDate: String?): Mapping {
-        TODO("not implemented")
-    }
-
     override fun withDelay(delayMilliseconds: Duration): IAppointmentSlotsBuilder {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        delayMillisecs = delayMilliseconds.toMillis().toInt()
+        return this
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         val errorMsg = "You don't have access to this online service"
         val disabledTppError = Error(errorCode = "6", userFriendlyMessage = errorMsg, uuid = UUID.randomUUID().toString())
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(JSonXmlConverter.toXML(disabledTppError))
-        }
+        return respondWith(disabledTppError)
     }
 
     override fun respondWithUnknownException(): Mapping {
@@ -66,7 +61,7 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
         val xmlBody = JSonXmlConverter.toXML(listSlotsReply)
 
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(xmlBody)
+            andXmlBody(xmlBody).andDelay(delayMillisecs)
                     .build()
         }
     }
@@ -112,19 +107,10 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
         return value!!
     }
 
-
     private fun slotConverter(slot: AppointmentSlotFacade): Slot {
         return Slot(
                 startDate = "${slot.startTime!!}.0Z",
                 endDate = "${slot.endTime!!}.0Z",
                 type = slot.slotTypeName!!)
-    }
-
-    private fun getDateFormattedString(dateTime: OffsetDateTime): String {
-        return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
-    }
-
-    private fun formatDateToTwoDigits(daysOrMonths: Int): String {
-        return String.format("%02d", daysOrMonths)
     }
 }

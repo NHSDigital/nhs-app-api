@@ -3,8 +3,6 @@ package features.appointments.steps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.defaults.MockDefaults
-import models.Patient
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
@@ -15,13 +13,9 @@ import pages.appointments.CancelAppointmentPage
 open class CancelAppointmentSteps {
 
     @Steps
-    lateinit var browser: BrowserSteps
-    @Steps
     lateinit var login: LoginSteps
     @Steps
     lateinit var navigation: NavigationSteps
-    @Steps
-    lateinit var myAppointmentsSteps: MyAppointmentsSteps
 
     lateinit var cancelAppointmentPage: CancelAppointmentPage
 

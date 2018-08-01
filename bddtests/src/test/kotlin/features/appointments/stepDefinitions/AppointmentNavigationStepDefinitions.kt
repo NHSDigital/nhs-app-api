@@ -7,12 +7,7 @@ import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
-import models.Patient
-import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
-import pages.appointments.AvailableAppointmentsPage
-import java.net.URI
 
 class AppointmentNavigationStepDefinitions {
     @Steps
@@ -25,8 +20,6 @@ class AppointmentNavigationStepDefinitions {
     lateinit var appointmentGuidanceSteps: AppointmentGuidanceSteps
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
-
-    lateinit var availableAppointmentsPage: AvailableAppointmentsPage
 
 
     @Given("^I am on my appointments page$")
@@ -43,15 +36,10 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the available appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
-        Assert.assertNotNull("Patient not initialised. ", patient)
         navigation.select("Appointments")
-        if (patient.firstName == "Kevin" && patient.surname == "Barry") {
-            availableAppointmentsPage.driver.get(URI(availableAppointmentsPage.driver.currentUrl).resolve("appointments/booking").toString())
-        } else {
-            myAppointments.clickOnBookAppointmentButton()
-            appointmentGuidanceSteps.clickBookAnAppointmentButton()
-        }
+        myAppointments.clickOnBookAppointmentButton()
+        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+        appointmentGuidanceSteps.clickBookAnAppointmentButton()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
