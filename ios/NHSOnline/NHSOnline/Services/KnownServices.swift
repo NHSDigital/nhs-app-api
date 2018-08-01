@@ -6,6 +6,7 @@ class KnownServices {
     private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
     private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
+    private let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
     private let dataSharingTitle = NSLocalizedString("DataSharingTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private var serviceList = Array<KnownService>()
@@ -15,11 +16,12 @@ class KnownServices {
         self.buildKnownServices()
     }
     
-   func buildKnownServices() {
-    serviceList.append(KnownService(urlStrings: [config.HomeUrl],service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-    serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldValidateSession:false))
-    serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
-    serviceList.append(KnownService(urlStrings: [config.DataSharingUrl], serviceTitle: dataSharingTitle, service: .DATA_SHARING, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+    func buildKnownServices() {
+        serviceList.append(KnownService(urlStrings: [config.HomeUrl],service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldValidateSession:false))
+        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.DataSharingUrl], serviceTitle: dataSharingTitle, service: .DATA_SHARING, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
     }
     
     func getAllKnownHosts() -> [String?] {
@@ -48,6 +50,19 @@ class KnownServices {
         return nil
     }
     
+    func findMatchingKnownServiceForURL(url: URL?) -> KnownService? {
+        if url != nil {
+            for service in serviceList {
+                for knownUrl in service.urls {
+                    if (knownUrl.url?.host == url?.host && (knownUrl.url?.path == "" || knownUrl.url?.host == "/" || knownUrl.url?.path == url?.path)) {
+                        return service
+                    }
+                }
+            }
+        }
+        return nil
+    }
+    
     func shouldAllowNativeInteraction(host:String?) -> Bool {
         if let knownService = findMatchingKnownServiceForHostname(hostname: host){
             return knownService.shouldAllowNativeInteraction
@@ -63,6 +78,6 @@ class KnownServices {
     }
     
     enum Service {
-        case NHS_111, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, OTHERS;
+        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, OTHERS;
     }
 }

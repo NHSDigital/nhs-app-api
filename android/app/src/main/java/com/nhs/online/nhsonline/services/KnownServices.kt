@@ -55,8 +55,9 @@ class KnownServices(private val context: Context) {
         }
         serviceList.forEach { knownService ->
             knownService.urlList.forEach { knownUrl ->
-                if (knownUrl.host == url.host) {
-                    return knownService
+                if (knownUrl.host == url.host &&
+                        (knownUrl.path == "" || knownUrl.path == "/" || knownUrl.path == url.path )) {
+                return knownService
                 }
             }
         }

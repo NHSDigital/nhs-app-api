@@ -142,7 +142,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func callUpdateHeaderTextForURL(url: URL) {
-        let knownService = self.knownServices.findMatchingKnownServiceForHostname(hostname: url.host)
+        let knownService = self.knownServices.findMatchingKnownServiceForURL(url: url)
         if (knownService?.serviceTitle != "") {
             self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
         }

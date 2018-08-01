@@ -12,6 +12,8 @@
 	<string>https://www.organdonation.nhs.uk/</string>
 	<key>DataSharingUrl</key>
 	<string>https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
+	<key>ConditionsUrlPath</key>
+	<string>https://www.nhs.uk/conditions/</string>
 	<key>MoreUrlPath</key>
 	<string>/more</string>
 	<key>MyRecordUrlPath</key>
