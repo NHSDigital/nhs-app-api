@@ -15,6 +15,8 @@ class AndroidManifestContentTests {
     private val sourceDirPath = "../app/src"
     private val installLocationAttribute = "installLocation"
     private val expectedInstallLocation = "internalOnly"
+    private val allowBackupAttribute = "allowBackup"
+    private val expectedAllowBackupValue = "false"
 
     @Test
     fun appInstallsAndStoresOnlyOnInternalMemory() {
@@ -36,6 +38,35 @@ class AndroidManifestContentTests {
                     "manifest", tag)
                 Assert.assertEquals("Expected install location $expectedInstallLocation not found but found $installLocationValue in ${manifest.path}",
                     expectedInstallLocation, installLocationValue)
+            }
+        }
+    }
+
+    @Test
+    fun appDisallowsBackups() {
+        val sourceDir = File(sourceDirPath)
+        Assert.assertTrue("Specified directory $sourceDirPath doesn't exist", sourceDir.exists())
+
+        val manifestFiles = searchManifestFiles(sourceDir)
+        Assert.assertTrue("There are AndroidManifest.xml files",
+                manifestFiles.isNotEmpty())
+
+        manifestFiles.forEach { manifest ->
+            val allowBackupValues = findXmlTagAttributeInXmlFile(allowBackupAttribute, manifest)
+            Assert.assertFalse("More than 1 allowBackup attribute in ${manifest.path} tags: $allowBackupValues",
+                    allowBackupValues.size > 1)
+
+            if (allowBackupValues.isNotEmpty()) {
+                val (tag, allowBackup) = allowBackupValues[0]
+                Assert.assertEquals("Expected attribute is not defined in manifest tag",
+                        "application", tag)
+                Assert.assertEquals("Expected allowBackup value " +
+                        "$expectedAllowBackupValue not found but found $allowBackup in ${manifest.path}",
+                        expectedAllowBackupValue, allowBackup)
+            }
+            else {
+                Assert.fail("Expected to find an allowBackup attribute with the value " +
+                        "$expectedAllowBackupValue")
             }
         }
     }
