@@ -2,6 +2,7 @@ import actions from '../../../src/store/modules/auth/actions';
 
 describe('actions', () => {
   const sessionTimeout = 1200;
+  const odsCode = 'P123';
   const token = 'sdfdhgmbnrdstgjxjcbv';
   let commit;
   let state;
@@ -9,7 +10,7 @@ describe('actions', () => {
   beforeEach(() => {
     actions.app = {
       $http: {
-        postV1Session: jest.fn(() => Promise.resolve({ sessionTimeout, token })),
+        postV1Session: jest.fn(() => Promise.resolve({ sessionTimeout, odsCode, token })),
         deleteV1Session: jest.fn(() => Promise.resolve()),
       },
       router: [],
@@ -30,6 +31,11 @@ describe('actions', () => {
       .handleAuthResponse({ commit, state }, { code: '123' })
       .then(() => {
         expect(actions.dispatch).toHaveBeenCalledWith('session/setDurationSeconds', sessionTimeout);
+      }));
+    it('will set the gp ods code from the received code', () => actions
+      .handleAuthResponse({ commit, state }, { code: '123' })
+      .then(() => {
+        expect(actions.dispatch).toHaveBeenCalledWith('session/setGpOdsCode', odsCode);
       }));
     it('will set the csrfToken from the received token in the response.', () => actions
       .handleAuthResponse({ commit, state }, { code: '200' })

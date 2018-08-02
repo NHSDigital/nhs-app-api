@@ -3,6 +3,7 @@ import {
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   SET_DURATION_SECONDS,
+  SET_GP_ODS_CODE,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
@@ -16,6 +17,8 @@ export default {
     ({ commit }) => commit(HIDE_EXPIRY_MESSAGE),
   setDurationSeconds:
     ({ commit }, numberOfSeconds) => commit(SET_DURATION_SECONDS, numberOfSeconds),
+  setGpOdsCode:
+    ({ commit }, odsCode) => commit(SET_GP_ODS_CODE, odsCode),
   showExpiryMessage:
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   updateLastCalledAt:

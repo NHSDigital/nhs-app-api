@@ -7,6 +7,7 @@ export default {
   state() {
     return {
       durationSeconds: undefined,
+      gpOdsCode: undefined,
       lastCalledAt: undefined,
       validationInterval: undefined,
     };

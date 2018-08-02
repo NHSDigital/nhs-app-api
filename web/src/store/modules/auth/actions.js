@@ -18,6 +18,7 @@ export default {
       })
       .then((response) => {
         this.dispatch('session/setDurationSeconds', response.sessionTimeout);
+        this.dispatch('session/setGpOdsCode', response.odsCode);
         this.dispatch('session/hideExpiryMessage');
         this.dispatch('session/setCsrfToken', response.token);
         commit(AUTH_RESPONSE, response);
@@ -38,6 +39,7 @@ export default {
 
     const final = () => {
       commit(LOGOUT, true);
+      this.dispatch('analytics/init');
       this.dispatch('availableAppointments/init');
       this.dispatch('myAppointments/init');
       this.dispatch('auth/init');
@@ -48,6 +50,7 @@ export default {
       this.dispatch('prescriptions/init');
       this.dispatch('repeatPrescriptionCourses/init');
       this.dispatch('errors/clearAllApiErrors');
+      this.dispatch('session/setGpOdsCode', '');
       this.dispatch('session/setCsrfToken', '');
       this.dispatch('flashMessage/init');
       this.app.router.push('/login');
@@ -90,6 +93,7 @@ export default {
   },
   unauthorised({ commit }) {
     commit(LOGOUT, true);
+    this.dispatch('analytics/init');
     this.dispatch('availableAppointments/init');
     this.dispatch('auth/init');
     this.dispatch('device/init');

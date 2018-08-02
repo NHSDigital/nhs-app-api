@@ -5,6 +5,7 @@ import {
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
   SET_DURATION_SECONDS,
+  SET_GP_ODS_CODE,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
@@ -17,6 +18,7 @@ describe('actions', () => {
     endValidationChecking,
     hideExpiryMessage,
     setDurationSeconds,
+    setGpOdsCode,
     showExpiryMessage,
     startValidationChecking,
     updateLastCalledAt,
@@ -51,6 +53,18 @@ describe('actions', () => {
       setDurationSeconds(mutation, input);
 
       expect(mutation.commit).toHaveBeenCalledWith(SET_DURATION_SECONDS, input);
+    });
+  });
+
+  describe('set gp ods code', () => {
+    it('will have a setGpOdsCode function', () => {
+      expect(setGpOdsCode).toBeInstanceOf(Function);
+    });
+
+    it('will call commit for the SET_GP_ODS_CODE mutation passing the received gp ods code', () => {
+      const input = 'P12345';
+      setGpOdsCode(mutation, input);
+      expect(mutation.commit).toHaveBeenCalledWith(SET_GP_ODS_CODE, input);
     });
   });
 

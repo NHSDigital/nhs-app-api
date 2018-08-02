@@ -14,12 +14,20 @@ describe('state', () => {
       expect(state()).toHaveProperty('durationSeconds');
     });
 
+    it('will have a gpOdsCode property', () => {
+      expect(state()).toHaveProperty('gpOdsCode');
+    });
+
     it('will have lastCalledAt set to undefined', () => {
       expect(state().lastCalledAt).toEqual(undefined);
     });
 
     it('will have durationSeconds set to undefined', () => {
       expect(state().durationSeconds).toEqual(undefined);
+    });
+
+    it('will have gpOdsCode set to undefined', () => {
+      expect(state().gpOdsCode).toEqual(undefined);
     });
   });
 });
