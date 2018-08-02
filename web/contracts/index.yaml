@@ -795,6 +795,12 @@
                 sessionTimeout: 
                   type: "integer"
                   description: "User's session timeout period in seconds."
+                odsCode: 
+                  type: "string"
+                  description: "Unique code that identifies a user's GP practice"
+                token: 
+                  type: "string"
+                  description: "User's session CsrfToken"
           400: 
             description: "Bad request. Supplied OAuth details are incomplete or invalid"
           403: 
