@@ -1,3 +1,4 @@
+@authentication
 Feature: Session Expiry
 
   Background:

@@ -20,11 +20,8 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.patient.Im1ConnectionResponse
 
-
 class PatientVerificationSteps : AbstractSteps() {
 
-    private val defaultOdsCode = "E87649"
-    private val defaultConnectionToken = "bce74b97-4296-414a-a4f5-0f1bf5732ba6"
     private val EMIS = "EMIS"
     private val TPP = "TPP"
     private val VISION = "VISION"
@@ -43,7 +40,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 val nonExistingConnectionToken = "0d135b66-a8b0-46b2-b437-cfe75edc773d"
                 val patient = Patient(
                         connectionToken = nonExistingConnectionToken,
-                        odsCode = defaultOdsCode,
+                        odsCode = MockDefaults.DEFAULT_ODS_CODE,
                         endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D"
                 )
 
@@ -83,17 +80,7 @@ class PatientVerificationSteps : AbstractSteps() {
     @Given("I have an (.*) IM1 Connection Token that is in an invalid format")
     fun givenIHaveAnIm1ConnectionTokenThatIsInAnInvalidFormat(gpSystem: String) {
         setSessionVariable("ConnectionToken").to("token")
-        when (gpSystem) {
-            TPP -> {
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_TPP)
-            }
-            EMIS -> {
-                setSessionVariable("NationalPracticeCode").to(defaultOdsCode)
-            }
-            VISION -> {
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
-            }
-        }
+        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
     }
 
     @Given("Vision responds with a security header error")
@@ -134,7 +121,6 @@ class PatientVerificationSteps : AbstractSteps() {
     fun visionRespondsWithAnUnknownError() {
         setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
         setSessionVariable("NationalPracticeCode").to(MockDefaults.patientVision.odsCode)
-
         mockingClient
                 .forVision {
                     getConfigurationRequest(
@@ -147,12 +133,16 @@ class PatientVerificationSteps : AbstractSteps() {
     @Given("I have no IM1 Connection Token for (.*)")
     fun givenIHaveNoIm1ConnectionToken(gpSystem: String) {
         setSessionVariable("ConnectionToken").to(null)
+        setDefaultNationalPracticeCodeSessionVariable(gpSystem)
+    }
+
+    private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String){
         when (gpSystem) {
             TPP -> {
                 setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_TPP)
             }
             EMIS -> {
-                setSessionVariable("NationalPracticeCode").to(defaultOdsCode)
+                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE)
             }
             VISION -> {
                 setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
@@ -163,49 +153,19 @@ class PatientVerificationSteps : AbstractSteps() {
     @Given("I have an (.*) ODS Code not in expected format")
     fun givenIHaveAnOdsCodeNotInExpectedFormat(gpSystem: String) {
         setSessionVariable("NationalPracticeCode").to("£$*&")
-        when (gpSystem) {
-            TPP -> {
-                setSessionVariable("ConnectionToken").to(MockDefaults.patientTpp.connectionToken)
-            }
-            EMIS -> {
-                setSessionVariable("ConnectionToken").to(defaultConnectionToken)
-            }
-            VISION -> {
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.patientVision.connectionToken)
-            }
-        }
+        setSessionVariable("ConnectionToken").to(Patient.getDefault(gpSystem).connectionToken)
     }
 
     @Given("I have an (.*) ODS Code that does not exists")
     fun givenIHaveAnOdsCodeThatDoesNotExists(gpSystem: String) {
         setSessionVariable("NationalPracticeCode").to("E99999")
-        when (gpSystem) {
-            TPP -> {
-                setSessionVariable("ConnectionToken").to(MockDefaults.patientTpp.connectionToken)
-            }
-            EMIS -> {
-                setSessionVariable("ConnectionToken").to(defaultConnectionToken)
-            }
-            VISION -> {
-                setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
-            }
-        }
+        setSessionVariable("ConnectionToken").to(Patient.getDefault(gpSystem).connectionToken)
     }
 
     @Given("I have no (.*) ODS Code")
     fun givenIHaveNoOdsCode(gpSystem: String) {
         setSessionVariable("NationalPracticeCode").to(null)
-        when (gpSystem) {
-            TPP -> {
-                setSessionVariable("ConnectionToken").to(MockDefaults.patientTpp.connectionToken)
-            }
-            EMIS -> {
-                setSessionVariable("ConnectionToken").to(defaultConnectionToken)
-            }
-            VISION -> {
-                setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
-            }
-        }
+        setSessionVariable("ConnectionToken").to(Patient.getDefault(gpSystem).connectionToken)
     }
 
     @Given("I have valid credentials for a (.*) patient with one NHS Number")
@@ -266,48 +226,15 @@ class PatientVerificationSteps : AbstractSteps() {
 
                 setSessionVariable("ConnectionToken").to(patient.connectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-                setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
+                setSessionVariable("NhsNumbers").to(arrayOf(PatientIdentifier(patient.nhsNumbers[0],IdentifierType.NhsNumber)))
 
             }
             EMIS -> {
-                val patient = Patient(
-                        title = "Mr",
-                        firstName = "Eduardo",
-                        surname = "Crouch",
-                        connectionToken = defaultConnectionToken,
-                        odsCode = defaultOdsCode,
-                        endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D",
-                        sessionId = "h3pYG9By2tVTqcvPvpw3DL",
-                        userPatientLinkToken = "5d4p6ZExhi97mmerMrtD5p",
-                        nhsNumbers = listOf("NHS_number")
-                )
-
-                mockingClient.forEmis { demographicsRequest(patient).respondWithSuccess(patient, arrayOf(PatientIdentifier(patient.nhsNumbers[0], identifierType = IdentifierType.NhsNumber))) }
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-                mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
-
-                setSessionVariable("ConnectionToken").to(patient.connectionToken)
-                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-                setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
-            }
+                emisValidCredentialsWithNHSNumbers(listOf("NHS_number"))
+                }
             VISION -> {
                 val patient = MockDefaults.patientVision
-
-                mockingClient
-                        .forVision {
-                            getConfigurationRequest(
-                                    visionUserSession = VisionUserSession(
-                                            Patient.aderynCanon.rosuAccountId,
-                                            Patient.aderynCanon.apiKey,
-                                            Patient.aderynCanon.odsCode),
-                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
-                                    .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
-                                            patientNumber = listOf(PatientNumber(number = patient.nhsNumbers[0])), name= MockDefaults.getFullPatientName(patient))
-                                    ))
-                        }
-                setSessionVariable("ConnectionToken").to(patient.connectionToken)
-                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-                setSessionVariable("NhsNumber").to(patient.nhsNumbers[0])
+                visionValidCredentialsWithNHSNumbers(arrayOf(patient.nhsNumbers[0]))
             }
         }
     }
@@ -316,74 +243,67 @@ class PatientVerificationSteps : AbstractSteps() {
     fun givenIHaveValidCredentialsForAPatientWithMultipleNhsNumbers(gpSystem: String) {
         when (gpSystem) {
             EMIS -> {
-                val patient = Patient(
-                        title = "Miss",
-                        firstName = "Alexia",
-                        surname = "Scott",
-                        odsCode = defaultOdsCode,
-                        connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
-                        sessionId = "xkWiivK1WBAkxIN9CDrGyy",
-                        endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
-                        userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
-                        nhsNumbers = listOf("NHS_number1", "NHS_number2")
-                )
-                val nhsNumbers = arrayOf(PatientIdentifier(patient.nhsNumbers[0], identifierType = IdentifierType.NhsNumber), PatientIdentifier(patient.nhsNumbers[1], identifierType = IdentifierType.NhsNumber))
-
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-                mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
-                mockingClient.forEmis { demographicsRequest(patient).respondWithSuccess(patient, nhsNumbers) }
-
-                setSessionVariable("ConnectionToken").to(patient.connectionToken)
-                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-                setSessionVariable("NhsNumbers").to(nhsNumbers)
-            }
+                emisValidCredentialsWithNHSNumbers(listOf("NHS_number1", "NHS_number2"))
+             }
             VISION -> {
                 val patient = MockDefaults.patientVision
-
-                val nhsNumbers = arrayOf(PatientIdentifier(patient.nhsNumbers[0], identifierType = IdentifierType.NhsNumber), PatientIdentifier("5785445866", identifierType = IdentifierType.NhsNumber))
-
-                mockingClient
-                        .forVision {
-                            getConfigurationRequest(
-                                    visionUserSession = VisionUserSession(
-                                            Patient.aderynCanon.rosuAccountId,
-                                            Patient.aderynCanon.apiKey,
-                                            Patient.aderynCanon.odsCode),
-                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
-                                    .respondWithSuccess(configuration = Configuration(
-                                            account = Account(patient.patientId,
-                                            patientNumber = listOf(PatientNumber(number = patient.nhsNumbers[0]), PatientNumber(number = "5785445866")),
-                                            name = MockDefaults.getFullPatientName(patient)
-                                    )))
-                        }
-                setSessionVariable("ConnectionToken").to(patient.connectionToken)
-                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-                setSessionVariable("NhsNumbers").to(nhsNumbers)
+                val nhsNumbers =arrayOf( patient.nhsNumbers[0] , "5785445866")
+                visionValidCredentialsWithNHSNumbers(nhsNumbers)
             }
         }
+    }
+
+    private fun emisValidCredentialsWithNHSNumbers(numbers: List<String>) {
+        val patient = Patient(
+                title = "Miss",
+                firstName = "Alexia",
+                surname = "Scott",
+                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
+                sessionId = "xkWiivK1WBAkxIN9CDrGyy",
+                endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",
+                userPatientLinkToken = "KxLiDl5nRS60DzIlrKoFSl",
+                nhsNumbers = numbers,
+                dateOfBirth = "1985-05-29T00:00:00.0Z")
+
+        val nhsNumbers = numbers.map { number-> PatientIdentifier(number, identifierType = IdentifierType.NhsNumber)}.toTypedArray()
+
+        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
+        mockingClient.forEmis { demographicsRequest(patient).respondWithSuccess(patient, nhsNumbers) }
+
+        setSessionVariable("ConnectionToken").to(patient.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+        setSessionVariable("NhsNumbers").to(nhsNumbers)
+
+    }
+
+    private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>){
+        val patient = MockDefaults.patientVision
+        mockingClient
+                .forVision {
+                    getConfigurationRequest(
+                            visionUserSession = VisionUserSession(
+                                    Patient.aderynCanon.rosuAccountId,
+                                    Patient.aderynCanon.apiKey,
+                                    Patient.aderynCanon.odsCode),
+                            serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                            .respondWithSuccess(configuration = Configuration(
+                                    account = Account(patient.patientId,
+                                            patientNumber = nhsNumbers.map { number -> PatientNumber(number = number) },
+                                            name = MockDefaults.getFullPatientName(patient)
+                                    )))
+                }
+        setSessionVariable("ConnectionToken").to(patient.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+        setSessionVariable("NhsNumbers").to(nhsNumbers.map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) })
     }
 
     @Given("I have valid credentials for a (.*) patient with no NHS Number")
     fun givenIHaveValidCredentialsForAPatientWithNoNhsNumber(gpSystem: String) {
         when (gpSystem) {
             EMIS -> {
-                val patient = Patient(
-                        title = "Mr",
-                        firstName = "Rajan",
-                        surname = "Liu",
-                        odsCode = defaultOdsCode,
-                        connectionToken = "e69ddbd4-2d89-43b7-a252-06dba3558f9f",
-                        endUserSessionId = "igOhJWsZ6GOBjaZU5PdR37",
-                        sessionId = "ALtNiTSBVk7VwCe1s4L1mz",
-                        userPatientLinkToken = "vOXLnnw7QLQoghDyqTd1Sa"
-                )
-
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-                mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
-                mockingClient.forEmis { demographicsRequest(patient).respondWithSuccess(patient, arrayOf()) }
-
-                setSessionVariable("ConnectionToken").to(patient.connectionToken)
-                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+              emisValidCredentialsWithNHSNumbers(arrayListOf())
             }
             VISION -> {
                 val patient = MockDefaults.patientVision
@@ -420,32 +340,23 @@ class PatientVerificationSteps : AbstractSteps() {
         }
     }
 
-    @Then("I receive the expected NHS Number$")
+    @Then("I receive the expected NHS Numbers?$")
     fun thenIReceiveTheExpectedNhsNumber() {
-        val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
-        val nhsNumber = sessionVariableCalled<String>("NhsNumber")
-        val connectionToken = sessionVariableCalled<String>("ConnectionToken")
-
-        Assert.assertNotNull(result)
-        Assert.assertEquals(result.nhsNumbers!![0].nhsNumber, formatNhsNumber(nhsNumber))
-        Assert.assertEquals(result.connectionToken, connectionToken)
-    }
-
-    @Then("I receive the expected NHS Numbers")
-    fun thenIReceiveTheExpectedNhsNumbers() {
         val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
         val nhsNumbers = sessionVariableCalled<Array<PatientIdentifier>>("NhsNumbers")
         val connectionToken = sessionVariableCalled<String>("ConnectionToken")
         Assert.assertNotNull(result)
-        Assert.assertEquals(result.nhsNumbers!!.count(), nhsNumbers.count())
-        Assert.assertEquals(result.nhsNumbers!![0].nhsNumber, formatNhsNumber(nhsNumbers[0].identifierValue!!))
-        Assert.assertEquals(result.nhsNumbers!![1].nhsNumber, formatNhsNumber(nhsNumbers[1].identifierValue!!))
+        var resultNhsNumbers = result.nhsNumbers!!.map { number->number.nhsNumber }.toTypedArray()
+        var expectedNhsNumbers = nhsNumbers.map { number->formatNhsNumber(number.identifierValue!!) }.toTypedArray()
+        Assert.assertEquals(resultNhsNumbers.count(), nhsNumbers.count())
+        Assert.assertArrayEquals("Expected NHS Numbers", expectedNhsNumbers, resultNhsNumbers )
         Assert.assertEquals(result.connectionToken, connectionToken)
     }
 
     @Then("I receive no NHS Number")
     fun thenIReceiveNoNhsNumber() {
         val result = sessionVariableCalled<Im1ConnectionResponse>(Im1ConnectionResponse::class)
+        Assert.assertNotNull("IM1 connection response expected, but was null", result)
         Assert.assertEquals(result.nhsNumbers!!.count(), 0)
     }
 

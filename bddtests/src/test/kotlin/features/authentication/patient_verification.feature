@@ -1,3 +1,4 @@
+@authentication
 Feature: Patient Verification
 
   The system validates the patient data
@@ -39,7 +40,6 @@ Feature: Patient Verification
       | EMIS      |
    #   | VISION    |
 
-  @pending
   @NHSO-125
   @backend
   Scenario Outline: Non-existent IM1 Connection Token for the <GP System>
@@ -54,6 +54,7 @@ Feature: Patient Verification
 
   @NHSO-125
   @backend
+  @pending @NHSO-2059
   Scenario: Non-existent IM1 Connection Token for the Vision
     Given I have an VISION IM1 Connection Token that does not exist
     When I verify patient data

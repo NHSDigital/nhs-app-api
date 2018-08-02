@@ -85,7 +85,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Given("^EMIS doesn't respond a timely fashion for available appointment slots$")
     fun emis_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
         availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 30)
+        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 90)
     }
 
     @Given("^there is a slight delay in retrieving them$")

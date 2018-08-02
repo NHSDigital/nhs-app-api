@@ -1,4 +1,4 @@
-@this
+@authentication
 Feature: Registration
 
   A user can create a new NHS account from the login page, allowing them to access the app
