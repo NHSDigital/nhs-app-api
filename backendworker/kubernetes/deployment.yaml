@@ -28,9 +28,9 @@ spec:
         - name: EMIS_VERSION
           value: "2.1.0.0"
         - name: NHS_WEB_APP_BASE_URL
-          value: "https://www-preview.nonliveeuw.bitraft.io/"
+          value: "https://www-preview.devuks1.bitraft.io/"
         - name: CORS_AUTHORITY
-          value: "https://www-preview.nonliveeuw.bitraft.io"
+          value: "https://www-preview.devuks1.bitraft.io"
       imagePullSecrets:
        - name: azure-registry
 ---

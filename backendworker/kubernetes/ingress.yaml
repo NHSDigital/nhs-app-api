@@ -7,7 +7,7 @@ metadata:
   name: nhsonline-backendworker
 spec:
   rules:
-    - host: api-preview.nonliveeuw.bitraft.io
+    - host: api-preview.devuks1.bitraft.io
       http:
         paths:
           - backend:
@@ -16,5 +16,5 @@ spec:
             path: /
   tls:
     - hosts:
-      - "api-preview.nonliveeuw.bitraft.io"
-      secretName: api-preview-nonliveeuw-bitraft-io
+      - "api-preview.devuks1.bitraft.io"
+      secretName: api-preview-devuks1-bitraft-io
