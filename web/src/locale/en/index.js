@@ -65,6 +65,7 @@ export default {
     noSpecialRequestDefaultText: 'None',
     continueButton: 'Continue',
     backButton: 'Back',
+    disclaimer: 'This text may not be seen by your GP. For important requests, contact your GP surgery.',
   },
   rp04: {
     pageTitle: 'TBC',

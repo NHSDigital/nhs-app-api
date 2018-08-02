@@ -45,6 +45,7 @@
               autocapitalize="off"
               spellcheck="false"/>
             <p id="maxSpecialRequest">{{ $t('rp03.maxSpecialRequest') }}</p>
+            <p id="disclaimer" :class="$style.disclaimer">{{ $t('rp03.disclaimer') }}</p>
           </div>
           <br>
           <p :class="$style.prescription_not_shown">
@@ -192,6 +193,10 @@ export default {
 
   .textArea {
     @include text-area;
+  }
+
+  .disclaimer {
+    margin-top: 10px;
   }
 
   .prescription_not_shown {
