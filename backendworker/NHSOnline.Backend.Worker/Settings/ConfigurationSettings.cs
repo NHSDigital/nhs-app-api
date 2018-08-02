@@ -13,8 +13,6 @@ namespace NHSOnline.Backend.Worker.Settings
         public int DefaultSessionExpiryMinutes { get; set; }
 
         public int DefaultHttpTimeoutSeconds { get; set; }
-        
-        public string CookieDomain { get; set; }
 
         public const string ConfigurationSectionName = "ConfigurationSettings";
 
