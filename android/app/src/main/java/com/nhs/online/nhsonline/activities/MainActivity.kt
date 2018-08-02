@@ -27,6 +27,10 @@ import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
+import android.R.id.edit
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+
 
 class MainActivity : IInteractor, AppCompatActivity() {
 
@@ -46,18 +50,28 @@ class MainActivity : IInteractor, AppCompatActivity() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         configureWebView()
-        menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
-        retryButton.setOnClickListener { reloadRequest() }
-        nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
-        myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
 
-        val urlPath = intent?.data?.path
-        val authRedirectPath = resources.getString(R.string.authRedirectPath)
-
-        if (urlPath == authRedirectPath) {
-            loadPage(intent.data.toString())
+        val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        val isFirstTimeOpened = prefs.getBoolean(getString(R.string.isFirstTimeOpened), true)
+        if (isFirstTimeOpened) {
+            val edit = prefs.edit()
+            edit.putBoolean(getString(R.string.isFirstTimeOpened), java.lang.Boolean.FALSE)
+            edit.commit()
+            loadPage(getString(R.string.appIntroPath))
         } else {
-            loadWelcomePage()
+            menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
+            retryButton.setOnClickListener { reloadRequest() }
+            nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
+            myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
+
+            val urlPath = intent?.data?.path
+            val authRedirectPath = resources.getString(R.string.authRedirectPath)
+
+            if (urlPath == authRedirectPath) {
+                loadPage(intent.data.toString())
+            } else {
+                loadWelcomePage()
+            }
         }
     }
 
@@ -65,8 +79,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onStart()
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                        AppWebInterface(this),
-                        knownServices)
+                    AppWebInterface(this),
+                    knownServices)
         }
 
         lifeCycleObserver?.onMoveToForeground()
@@ -114,7 +128,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun createActivities(): List<ActivityInterface> {
         val openBrowserActivity =
-            OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
+                OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
         return listOf(openBrowserActivity)
     }
 
@@ -134,20 +148,20 @@ class MainActivity : IInteractor, AppCompatActivity() {
                     resources.getString(R.string.symptoms_header))
 
     private fun onMyRecordMenuSelected() =
-        loadSubPage(resources.getString(R.string.myRecordPath),
-            resources.getString(R.string.my_record_header))
+            loadSubPage(resources.getString(R.string.myRecordPath),
+                    resources.getString(R.string.my_record_header))
 
     private fun onMoreMenuSelected() =
-        loadSubPage(resources.getString(R.string.morePath), resources.getString(
-            R.string.more))
+            loadSubPage(resources.getString(R.string.morePath), resources.getString(
+                    R.string.more))
 
     private fun onAppointmentsMenuSelected() =
-        loadSubPage(resources.getString(R.string.appointmentsPath),
-            resources.getString(R.string.appointments_header))
+            loadSubPage(resources.getString(R.string.appointmentsPath),
+                    resources.getString(R.string.appointments_header))
 
     private fun onPrescriptionsMenuSelected() =
-        loadSubPage(resources.getString(R.string.prescriptionsPath),
-            resources.getString(R.string.prescriptions_header))
+            loadSubPage(resources.getString(R.string.prescriptionsPath),
+                    resources.getString(R.string.prescriptions_header))
 
     private fun onNhsOnlineLogoIconSelected() {
         loadWelcomePage()
@@ -157,7 +171,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun onMyAccountIconSelected() {
         loadSubPage(resources.getString(R.string.myAccountPath),
-            resources.getString(R.string.my_account_header))
+                resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
     }
 
@@ -165,16 +179,16 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
-            knownServices.findKnownServiceAddMissingQueryFor(url)
+                knownServices.findKnownServiceAddMissingQueryFor(url)
 
         webview.loadUrl(urlWithMissingQueryStrings)
     }
 
     private fun loadSubPage(pageEndPoint: String, headerText: String?) {
         val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-            .buildUpon()
-            .appendEncodedPath(pageEndPoint)
-            .build()
+                .buildUpon()
+                .appendEncodedPath(pageEndPoint)
+                .build()
         val fullUrl = builtUri.toString()
         loadPage(fullUrl)
         if (headerText != null) {
@@ -220,7 +234,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title,
-            unavailabilityErrorMessage.message)
+                unavailabilityErrorMessage.message)
         if (unavailabilityErrorMessage.message != null) {
             tryAgainTextView.visibility = GONE
         } else {
@@ -239,9 +253,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

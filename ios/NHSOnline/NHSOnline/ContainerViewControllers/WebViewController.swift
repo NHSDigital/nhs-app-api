@@ -16,6 +16,7 @@ class WebViewController: UIViewController {
         webView.configuration.userContentController.add(delegate, name: "onLogin")
         webView.configuration.userContentController.add(delegate, name: "onLogout")
         webView.configuration.userContentController.add(delegate, name: "checkSymptoms")
+        webView.configuration.userContentController.add(delegate, name: "completeAppIntro")
     }
     
     func reloadWebView() {

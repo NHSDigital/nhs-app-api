@@ -15,7 +15,9 @@ window.nativeApp.updateHeaderText = function(header) {
 window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
 };
-
 window.nativeApp.checkSymptoms = function(header) {
     window.webkit.messageHandlers.checkSymptoms.postMessage(null);
+};
+window.nativeApp.completeAppIntro = function() {
+    window.webkit.messageHandlers.completeAppIntro.postMessage(null);
 };

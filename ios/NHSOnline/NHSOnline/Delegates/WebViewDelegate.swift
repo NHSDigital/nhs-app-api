@@ -62,7 +62,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
-        if knownServices.shouldAllowNativeInteraction(host: webView.url?.host) {
+        
+        var isIntroPage = false
+        
+        let url = webView.url
+        if(url?.absoluteString.contains(config().CarouselFileName))! {
+            isIntroPage = true
+        }
+        
+        if knownServices.shouldAllowNativeInteraction(host: webView.url?.host) || isIntroPage {
             let fileReader = FileReader();
             let webEventsJSLocation = Bundle.main.path(forResource: "WebEvents", ofType: "js")!
             javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
@@ -108,6 +116,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         let currentHost = url.host
         let knownHosts = self.knownServices.getAllKnownHosts()
         
+        if(url.absoluteString.contains(config().CarouselFileName)) {
+            return false
+        }
+        
         for host in knownHosts {
             if (host == currentHost) {
                 return false
@@ -123,7 +135,15 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) {
+        
+        var shouldAllowNativeInteraction = false;
+        
+        let url = self.viewController.webViewController?.webView.url;
+        if(url?.absoluteString.contains("appintro"))!{
+            shouldAllowNativeInteraction = true
+        }
+        
+        if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             if (message.name == "onLogin") {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
             }
@@ -140,6 +160,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             if (message.name == "checkSymptoms") {
                 checkSymptoms()
+            }
+            if (message.name == "completeAppIntro") {
+                
+                let defaults = UserDefaults.standard
+                defaults.set(false, forKey: config().IsFirstTimeOpened)
+                
+                self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
             }
         }
     }

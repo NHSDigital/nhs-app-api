@@ -16,8 +16,10 @@
     <string name="nhs111Location">https://111.service.nhs.uk/</string>
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
+    <string name="appIntroPath">file:///android_asset/appintro.html</string>
+    <string name="isFirstTimeOpened">isFirstTimeOpened</string>
 
-    <string name="nhsOnlineRequiredQueries">\?source=android</string>
+    <string name="nhsOnlineRequiredQueries">\?source=mobile</string>
 
     <string-array name="serviceUrls">
         <item>@string/nhs111</item>

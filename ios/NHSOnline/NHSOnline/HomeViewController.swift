@@ -1,4 +1,5 @@
 import UIKit
+import os.log
 
 class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
@@ -42,7 +43,28 @@ class HomeViewController : UIViewController {
         
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
-        self.webViewController?.webView.loadPage(url: pageUrl)
+        
+        let defaults = UserDefaults.standard
+        let isFirstTimeOpened =  (defaults.object(forKey: config().IsFirstTimeOpened) == nil || defaults.bool(forKey: config().IsFirstTimeOpened))
+        
+        if(isFirstTimeOpened) {
+            
+            let filename = config().CarouselFileName
+            let type = config().CarouselContentType
+            let directory = config().CarouselDirectory
+            
+            let path = Bundle.main.url(forResource: filename, withExtension: type, subdirectory: directory)
+            
+            if path != nil {
+                self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
+            } else {
+                os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
+            }
+        } else {
+            self.webViewController?.webView.loadPage(url: pageUrl)
+        }
+        
+
         
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
     }

@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CarouselDirectory</key>
+	<string>assets</string>
+	<key>CarouselContentType</key>
+	<string>html</string>
+	<key>CarouselFileName</key>
+	<string>appintro</string>
+	<key>IsFirstTimeOpened</key>
+	<string>IsFirstTimeOpened</string>
 	<key>HomeUrl</key>
 	<string>https://www-preview.nonliveeuw.bitraft.io/</string>
 	<key>Nhs111Url</key>
