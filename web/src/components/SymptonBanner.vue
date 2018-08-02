@@ -1,12 +1,20 @@
 <template>
   <div class="symptom_banner">
     <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
-    <a id="btn_home_symptoms" href="/check-your-symptoms" class="button white">
+    <button id="btn_home_symptoms" class="button white" @click="checkSymptomsButtonClicked()">
       {{ $t('symptomBanner.checker') }}
-    </a>
+    </button>
   </div>
 </template>
-
+<script>
+export default {
+  methods: {
+    checkSymptomsButtonClicked() {
+      this.$store.dispatch('device/goToCheckSymptoms');
+    },
+  },
+};
+</script>
 <style lang="scss" scoped>
 @import "../style/textstyles";
 @import "../style/buttons";

@@ -10,6 +10,7 @@
 "MyRecordTitle" = "My medical record";
 "MoreTitle" = "More";
 "HomeTitle" = "Home";
+"CheckSymptomsTitle" = "Check my symptoms";
 
 /*Error messages*/
 "ServiceUnavailableErrorMessage" = "Service unavailable";

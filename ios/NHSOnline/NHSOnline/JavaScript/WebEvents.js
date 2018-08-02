@@ -11,6 +11,11 @@ window.nativeApp.onLogout = function() {
 window.nativeApp.updateHeaderText = function(header) {
     window.webkit.messageHandlers.updateHeaderText.postMessage(header);
 };
+
 window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
+};
+
+window.nativeApp.checkSymptoms = function(header) {
+    window.webkit.messageHandlers.checkSymptoms.postMessage(null);
 };

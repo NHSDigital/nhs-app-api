@@ -138,6 +138,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if (message.name == "clearMenuBarItem") {
                 clearMenuBarItem()
             }
+            if (message.name == "checkSymptoms") {
+                checkSymptoms()
+            }
         }
     }
     
@@ -154,7 +157,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
     }
-    
+    func checkSymptoms() {
+        self.viewController.callCheckSymptoms()
+    }
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)

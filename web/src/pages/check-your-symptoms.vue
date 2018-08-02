@@ -1,7 +1,7 @@
 <template>
   <main>
     <content>
-      <header :class="[$style.header]">
+      <header v-if="showHeader" :class="[$style.header]">
         <h1 :class="[$style.h1]"> {{ $t('symptoms.checkMySymptomsHeader') }}</h1>
         <span :class="[$style.slim]">
           <a href="/login">
@@ -42,6 +42,13 @@ import symptomsCheck from '@/components/symptoms/SymptomsCheck';
 export default {
   components: {
     symptomsCheck,
+  },
+  computed: {
+    showHeader() {
+      return (
+        !this.$store.state.device.isNativeApp
+      );
+    },
   },
 };
 </script>

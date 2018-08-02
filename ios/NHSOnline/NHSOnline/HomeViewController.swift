@@ -19,6 +19,9 @@ class HomeViewController : UIViewController {
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.navigationBar.isHidden = true
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setupNhsLogo()
@@ -58,6 +61,12 @@ class HomeViewController : UIViewController {
         if (headerText != nil) {
             self.headerBar.headerTitle.text = headerText
         }
+    }
+    func callCheckSymptoms() {
+        let tempVC = self.storyboard?.instantiateViewController(withIdentifier: "UnsecureWebViewController") as? UnsecureWebViewController
+        tempVC?.loadViewIfNeeded()
+        tempVC?.setWebViewDelegate(delegate: webViewDelegate!)
+        self.navigationController?.pushViewController(tempVC!, animated: false)
     }
     
     func setupNhsLogo() {

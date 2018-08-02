@@ -30,6 +30,8 @@
 	<string>/session</string>
 	<key>NhsOnlineRequiredQueryString</key>
 	<string>?source=ios</string>
+	<key>CheckSymptomsUrlPath</key>
+	<string>/check-your-symptoms</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
 </dict>

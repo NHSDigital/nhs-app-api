@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */; };
 		4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureWebViewController.swift; sourceTree = "<group>"; };
 		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		C20577FF2028B94800CDBDC5 /* NHSOnline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NHSOnline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C20578022028B94800CDBDC5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 			children = (
 				F0F2A8B2205138C700394B2F /* PageUnavailabilityViewController.swift */,
 				F026199A2050AFE100EDDFE0 /* WebViewController.swift */,
+				138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */,
 			);
 			path = ContainerViewControllers;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
+				138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
