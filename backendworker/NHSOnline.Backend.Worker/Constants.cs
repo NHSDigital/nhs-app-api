@@ -37,6 +37,8 @@
             public const string CancelAppointmentAuditTypeResponse = "Appointments_Cancel_Response";
             public const string GetSlotsAuditTypeRequest = "Appointments_GetSlots_Request";
             public const string GetSlotsAuditTypeResponse = "Appointments_GetSlots_Response";
+            public const string ViewPatientRecordAuditTypeRequest = "PatientRecord_View_Request";
+            public const string ViewPatientRecordAuditTypeResponse = "PatientRecord_View_Response";
         }
 
         public class HttpContextItems

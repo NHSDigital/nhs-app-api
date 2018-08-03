@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
@@ -11,13 +12,16 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
     {
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger _logger;
+        private readonly IAuditor _auditor;
         
         public MyRecordController(
             ILoggerFactory loggerFactory,
-            IGpSystemFactory gpSystemFactory)
+            IGpSystemFactory gpSystemFactory, 
+            IAuditor auditor)
         {
             _gpSystemFactory = gpSystemFactory;
             _logger = loggerFactory.CreateLogger<MyRecordController>();
+            _auditor = auditor;
         }
 
         [HttpGet]
@@ -29,13 +33,19 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             
             var userSession = HttpContext.GetUserSession();
             
-            _logger.LogInformation("Fetching PatientRecordService for supplier: {0}", userSession.Supplier.ToString());
+            // Audit attempt made to view patient record
+            _auditor.Audit(Constants.AuditingTitles.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
+ 
+            _logger.LogInformation("Fetching PatientRecordService for supplier: {0}", userSession.Supplier.ToString());           
             var patientRecordService = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier)
                 .GetPatientRecordService();
 
             _logger.LogInformation("Fetching patient record");
             var result = await patientRecordService.Get(userSession);
+            
+            // Audit result of attempt to view patient record    
+            result.Accept(new MyRecordAuditingVisitor(_auditor));
             
             _logger.LogDebug("Exiting: {0}", methodName);
             return result.Accept(new MyRecordResultVisitor());
