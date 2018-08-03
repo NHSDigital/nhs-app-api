@@ -17,6 +17,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         
         public Consultations Check(Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> task)
         {
+            var methodName = "Check";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             Consultations consultations = null;
             
             if (!task.IsCompletedSuccessfully)
@@ -53,6 +56,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 }
             }
             
+            _logger.LogDebug("Exiting: {0}", methodName);
             return consultations ?? new EmisConsulationMapper().Map(consultationsResponse.Body);
         }
     }

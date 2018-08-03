@@ -77,6 +77,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             string responseSessionId,
             string endUserSessionId)
         {
+            _logger.LogInformation("EMIS: Fetching patient demographics");
             var path = string.Format(DemographicsPath, userPatientLinkToken);
 
             return await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
@@ -86,6 +87,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             string responseSessionId, string endUserSessionId,
             RecordType recordType)
         {
+            _logger.LogInformation("EMIS: Fetching patient medical record - {0}", recordType.ToString());
             var path = string.Format(PatientRecordPath, userPatientLinkToken, recordType.ToString());
 
             return await Get<MedicationRootObject>(path, endUserSessionId, responseSessionId);
@@ -292,6 +294,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private async Task<EmisApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>(
             HttpRequestMessage request)
         {
+            var methodName = "SendRequestAndParseResponse";
+            _logger.LogDebug("Entered: {0}", methodName);
+
             var responseMessage = await _httpClient.Client.SendAsync(request);
             var response = new EmisApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
@@ -307,6 +312,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             response.ErrorResponse =
                 _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
 
+            _logger.LogDebug("Exiting: {0}", methodName);
             return response;
         }
 

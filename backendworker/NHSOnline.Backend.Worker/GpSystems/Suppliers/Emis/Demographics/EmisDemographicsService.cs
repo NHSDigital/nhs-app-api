@@ -23,6 +23,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
 
         public async Task<GetDemographicsResult> Get(UserSession userSession)
         {
+            var methodName = "Get";
+            _logger.LogDebug("Entered: {0}", methodName);
+
             var emisUserSession = (EmisUserSession) userSession;
 
             try
@@ -42,13 +45,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
                     return new GetDemographicsResult.Unsuccessful();
                 }
                 
+                _logger.LogInformation("Mapping EMIS responses to universal DemographicsResponse class instance");
                 var result = _emisDemographicsMapper.Map(demographicsResponse.Body);
 
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetDemographicsResult.SuccessfullyRetrieved(result);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving courses");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetDemographicsResult.Unsuccessful();
             }
         }

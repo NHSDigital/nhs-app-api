@@ -25,16 +25,19 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
         [TimeoutExceptionFilter]
         public async Task<IActionResult> Get()
         {
+            var methodName = "Get";
+            _logger.LogDebug("Entered: {0}", methodName);
             var userSession = HttpContext.GetUserSession();
 
+            _logger.LogInformation("Fetching DemographicsService for supplier: {0}", userSession.Supplier.ToString());
             var demographicsService = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier)
                 .GetDemographicsService();
 
             _logger.LogDebug("Fetching Demographics");
-
             var myRecordGetResult = await demographicsService.Get(userSession);
 
+            _logger.LogDebug("Exiting: {0}", methodName);
             return myRecordGetResult.Accept(new DemographicsResultVisitor());
         }
         

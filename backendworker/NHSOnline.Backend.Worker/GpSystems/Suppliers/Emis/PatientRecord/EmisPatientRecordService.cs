@@ -21,21 +21,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         
         public async Task<GetMyRecordResult> Get(UserSession userSession)
         {
+            var methodName = "Get";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var emisUserSession = (EmisUserSession) userSession;
 
             try
             {
                 var medicationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Medication);
-                
+                            
                 var allergiesTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Allergies);
-                   
+                  
                 var immunisationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Immunisations);
                 
                 var testResultsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);               
                 
                 var problemsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Problems);
@@ -45,29 +48,34 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     
                 await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask);
 
+                _logger.LogInformation("Checking status of all patient record tasks");
                 var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
                 var medications = new GetMedicationsTaskChecker(_logger).Check(medicationsTask);
                 var immunisations = new GetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
                 var testResults = new GetTestResultsTaskChecker(_logger).Check(testResultsTask);
                 var problems = new GetProblemsTaskChecker(_logger).Check(problemsTask);
-                var consultations = new GetConsultationsTaskChecker(_logger).Check(consultationsTask);
+                var consultations = new GetConsultationsTaskChecker(_logger).Check(consultationsTask);                
                 
+                _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);
 
                 myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper();
 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving my record");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.Unsuccessful();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "My record retrieval return null body");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.SupplierBadData();
             }
         }
