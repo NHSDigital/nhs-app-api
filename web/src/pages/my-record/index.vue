@@ -70,15 +70,14 @@
           <events :is-collapsed="isEventsCollapsed"
                   :data="myRecord.tppDcrEvents"/>
         </div>
-
-        <h5 :class="[$style.recordTitle, getCollapseState(isTestResultsCollapsed)]"
+        <h5 id="testResultsHeader"
+            :class="[$style.recordTitle, getCollapseState(isTestResultsCollapsed)]"
             @click="myRecordSectionClick(TESTRESULTS)">
           {{ $t('myRecord.testResults.sectionHeader') }}
         </h5>
         <test-results :is-collapsed="isTestResultsCollapsed"
                       :data="myRecord.testResults"
                       :supplier="myRecord.supplier"/>
-
       </div>
       <div v-else>
         <main :class="$style.content">
@@ -115,6 +114,7 @@ import TestResults from '@/components/my-record/TestResults';
 import Problems from '@/components/my-record/Problems';
 import Consultations from '@/components/my-record/Consultations';
 import Events from '@/components/my-record/Events';
+import VueScrollTo from 'vue-scrollto';
 
 const PATIENTDETAILS = 'patientdetails';
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
@@ -138,6 +138,7 @@ export default {
     Problems,
     Consultations,
     Events,
+    VueScrollTo,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === '/my-record/myrecordwarning' || from.path === '/my-record/testresultdetail') {
@@ -185,6 +186,13 @@ export default {
           .then((data) => {
             this.myRecord = data.response;
             this.hasLoaded = true;
+          }).then(() => {
+            if (this.$route.hash) {
+              setTimeout((route) => {
+                VueScrollTo.scrollTo(route.hash, 500, { easing: VueScrollTo['ease-in'] });
+              }, 500, this.$route);
+              this.isTestResultsCollapsed = false;
+            }
           });
       });
   },

@@ -245,12 +245,27 @@ definitions:
       description:
         type: string
         description: The name of the test result.
-      testResultLineItems:
+      associatedTexts:
         type: array
-        description: Array of test result line items.
+        description: Array of associated texts.
+        items: string
+      testResultChildItems:
+        type: array
+        description: Array of test result child line items.
         items:
+          $ref: '#/definitions/TestResultChildLineItem'
+  
+  TestResultChildLineItem:
+      type: object
+      properties:
+        description:
           type: string
-          
+          description: The name of the test result.
+        associatedTexts:
+          type: array
+          description: Array of associated texts.
+          items: string
+                   
   Problems:
       type: object
       properties:

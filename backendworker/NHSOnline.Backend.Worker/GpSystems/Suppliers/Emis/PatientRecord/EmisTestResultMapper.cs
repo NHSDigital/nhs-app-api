@@ -1,8 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
@@ -11,14 +13,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         public TestResults Map(MedicationRootObject testResultRequestsGetResponse)
         {
             var testResults = new TestResults();
-            
-            if (testResultRequestsGetResponse.MedicalRecord != null)
-            {
-                var medicalRecord = testResultRequestsGetResponse.MedicalRecord;
 
-                testResults.Data = (medicalRecord.TestResults ?? Enumerable.Empty<TestResult>())
-                    .Select(GetTestResultItem);
-            }
+            if (testResultRequestsGetResponse.MedicalRecord == null) return testResults;
+            
+            var medicalRecord = testResultRequestsGetResponse.MedicalRecord;
+
+            testResults.Data = (medicalRecord.TestResults ?? Enumerable.Empty<TestResult>())
+                .Select(GetTestResultItem);
 
             return testResults;
         }
@@ -48,24 +49,38 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 }
 
                 testResultItem.Description = term.ToString();
+                testResultItem.AssociatedTexts = response.Value.AssociatedText?.Any() == true
+                    ? (from at in response.Value.AssociatedText
+                        select at.Text.Replace("\t", string.Empty)
+                            .Trim(new[] { '\n' })
+                            .Replace("\n", "; ")).ToList()
+                    : new List<string>();
             }
             else
             {
                 testResultItem.Description = response.Value.Term;
-                foreach (var lineitem in response.ChildValues)
+                foreach (var childValue in response.ChildValues)
                 {
                     var lineItem = new StringBuilder();
                     
-                    lineItem.Append(string.Format("{0}: {1} {2}", lineitem.Term, lineitem.TextValue, lineitem.NumericUnits));
+                    lineItem.Append(string.Format("{0}: {1} {2}", childValue.Term, childValue.TextValue, childValue.NumericUnits));
                     
-                    if (lineitem.Range != null)
+                    if (childValue.Range != null)
                     {
                         lineItem.Append(
-                            string.Format(" (normal range: {0} - {1})", lineitem.Range.MinimumText,
-                                lineitem.Range.MaximumText));
+                            string.Format(" (normal range: {0} - {1})", childValue.Range.MinimumText,
+                                childValue.Range.MaximumText));
                     }
-                    
-                    testResultItem.TestResultLineItems.Add(lineItem.ToString());
+
+                    testResultItem.TestResultChildLineItems.Add(new TestResultChildLineItem
+                    {
+                        Description = lineItem.ToString(),
+                        AssociatedTexts = childValue.AssociatedText?.Any() == true ?
+                            (from at in childValue.AssociatedText
+                            select at.Text.Replace("\t", string.Empty)
+                                    .Trim(new[] { '\n' })
+                                    .Replace("\n", "; ")).ToList() : new List<string>()
+                    });                      
                 }
            }
 

@@ -68,7 +68,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 var detailedTestResult = await _tppClient.TestResultsViewDetailed(tppUserSession, testResultId);
 
                 var tppTestResultResponse = new GetTppDetailedTestResultChecker(_logger).Check(detailedTestResult);
-
+                
+                if (tppTestResultResponse.HasErrored)
+                    return new GetDetailedTestResult.Unsuccessful();
+                
                 return new GetDetailedTestResult.SuccessfullyRetrieved(tppTestResultResponse);
             }
             catch (HttpRequestException e)

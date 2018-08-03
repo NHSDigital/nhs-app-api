@@ -444,11 +444,23 @@
                               description: 
                                 type: "string"
                                 description: "The name of the test result."
-                              testResultLineItems: 
+                              associatedTexts: 
                                 type: "array"
-                                description: "Array of test result line items."
+                                description: "Array of associated texts."
+                                items: "string"
+                              testResultChildItems: 
+                                type: "array"
+                                description: "Array of test result child line items."
                                 items: 
-                                  type: "string"
+                                  type: "object"
+                                  properties: 
+                                    description: 
+                                      type: "string"
+                                      description: "The name of the test result."
+                                    associatedTexts: 
+                                      type: "array"
+                                      description: "Array of associated texts."
+                                      items: "string"
                 problems: 
                   type: "object"
                   description: "An object containing all problems details."

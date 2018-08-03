@@ -128,7 +128,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new ConsultationItem
                     {
                         EffectiveDate = new Date { Value = consultation1.EffectiveDate.Value, DatePart = consultation1.EffectiveDate.DatePart },
-                        ConsultantLocation = $"{consultation1.Location}, {consultation1.ConsultantName}",
+                        ConsultantLocation = $"{consultation1.Location} - {consultation1.ConsultantName}",
                         ConsultationHeaders = new List<ConsultationHeaderItem>
                         {
                             new ConsultationHeaderItem { Header = consultation1.Sections[0].Header, 
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new ConsultationItem
                     {
                         EffectiveDate = new Date { Value = consultation2.EffectiveDate.Value, DatePart = consultation2.EffectiveDate.DatePart },
-                        ConsultantLocation = $"{consultation2.Location}, {consultation2.ConsultantName}",
+                        ConsultantLocation = $"{consultation2.Location} - {consultation2.ConsultantName}",
                         ConsultationHeaders = new List<ConsultationHeaderItem>
                         {
                             new ConsultationHeaderItem { Header = consultation2.Sections[0].Header, 
@@ -156,7 +156,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new ConsultationItem
                     {
                         EffectiveDate = new Date { Value = consultation3.EffectiveDate.Value, DatePart = consultation3.EffectiveDate.DatePart },
-                        ConsultantLocation = $"{consultation3.Location}, {consultation3.ConsultantName}",
+                        ConsultantLocation = $"{consultation3.Location} - {consultation3.ConsultantName}",
                         ConsultationHeaders = new List<ConsultationHeaderItem>
                         {
                             new ConsultationHeaderItem { Header = consultation3.Sections[0].Header, 
@@ -279,6 +279,45 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
             // Assert
             result.Should().NotBeNull();
             result.Data.ToList()[0].ConsultationHeaders.Should().HaveCount(0);
+        }
+
+        [TestMethod]
+        public void MapConsultationRequestsGetResponseToConsultationListResponse_WithNoConsultantLocationAndConsultantName_ReturnsConsultantName()
+        {
+            // Arrange
+            var item = new MedicationRootObject {
+                MedicalRecord = new MedicalRecord
+                {
+                    Consultations = new List<Consultation>
+                    {
+                        new Consultation
+                        {
+                            EffectiveDate = new EffectiveDate { DatePart = "D MMMMM YYYY", Value = _fixture.Create<DateTime>() },
+                            ConsultantName = "Jean (Dr)",
+                            Location = "",
+                            Sections = new List<Section>
+                            {
+                                new Section { 
+                                    Header = "History 1", 
+                                    Observations  = new List<Observation> { 
+                                        new Observation { 
+                                            Term = "",
+                                            AssociatedText = new List<AssociatedText>()                               
+                                        }  
+                                    }, 
+                                },
+                            },
+                        },                     
+                    },  
+                },
+            };
+            
+            // Act
+            var result = new EmisConsulationMapper().Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.ToList()[0].ConsultantLocation.Should().Be(item.MedicalRecord.Consultations[0].ConsultantName);
         }
     }
 }

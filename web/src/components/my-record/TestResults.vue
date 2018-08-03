@@ -20,9 +20,24 @@
               <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
                 {{ testResult.description }}</p>
               <ul>
-                <li v-for="(lineItem, lineItemIndex) in testResult.testResultLineItems"
+                <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
+                    :key="`associatedText-${associatedTextItemIndex}`"
+                    :class="$style.testResultLine">
+                  {{ associatedText }}
+                </li>
+              </ul>
+              <ul>
+                <li v-for="(lineItem, lineItemIndex) in testResult.testResultChildLineItems"
                     :key="`line-${lineItemIndex}`" :class="$style.testResultLine">
-                  {{ lineItem }}
+                  {{ lineItem.description }}
+                  <ul>
+                    <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
+                        in lineItem.associatedTexts"
+                        :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`"
+                        :class="$style.testResultLineAssociatedText">
+                      {{ lineItemAssociatedText }}
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </li>
@@ -41,6 +56,7 @@
 </template>
 
 <script>
+
 
 import _ from 'lodash';
 
@@ -88,12 +104,20 @@ export default {
       color: $anchor_blue;
     }
   }
+
   .testTerm {
     padding-bottom: 0px !important;
   }
+
   .testResultLine {
-    @include small_text;
     padding-left: 32px;
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+
+  .testResultLineAssociatedText {
+    padding-left: 32px;
+    list-style-type:none;
   }
 
 </style>

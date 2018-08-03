@@ -388,6 +388,7 @@ export default {
     testResultDetail: {
       backButton: 'Back',
       testResultTitle: 'Test result',
+      noTestResultData: 'There is no detail to display for this test result.',
     },
   },
   common: {

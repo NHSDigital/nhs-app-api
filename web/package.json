@@ -96,6 +96,7 @@
     "vee-validate": "^2.0.9",
     "vue-i18n": "^7.6.0",
     "vue-jest": "^2.5.0",
+    "vue-scrollto": "^2.11.0",
     "vuelidate": "^0.7.4",
     "vuex-persistedstate": "^2.5.2"
   },

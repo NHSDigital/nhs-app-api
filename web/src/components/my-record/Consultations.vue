@@ -23,14 +23,12 @@
                     <li v-for="(consultationObservation, consultationObservationIndex)
                         in consultationHeader.observations"
                         :key="`line-${consultationObservationIndex}`"
-                        :class="$style.consultationLine">
-                      {{ consultationObservation.term }}
-                      <ul>
+                        :class="$style.consultationTerm">{{ consultationObservation.term }}
+                      <ul :class="$style.observationText">
                         <li v-for="(consultationObservationText, consultationObservationTextIndex)
                             in consultationObservation.associatedTexts"
                             :key="`line-${consultationObservationTextIndex}`"
-                            :class="$style.consultationLine">
-                          {{ consultationObservationText }}
+                            :class="$style.observationText">{{ consultationObservationText }}
                         </li>
                       </ul>
                     </li>
@@ -99,5 +97,16 @@ export default {
   .consultationLine {
     @include small_text;
     padding-left: 16px;
+  }
+  .consultationTerm {
+    list-style-type: disc;
+    list-style-position: inside;
+    .observationText {
+      padding-left: 16px;
+      list-style-type: none;
+      li:before {
+        content: '\2013';
+      }
+    }
   }
 </style>

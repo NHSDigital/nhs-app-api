@@ -7,12 +7,14 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
     {
         public TestResultItem()
         {
-            TestResultLineItems = new List<string>();
+            TestResultChildLineItems = new List<TestResultChildLineItem>();
+            AssociatedTexts = new List<string>();
         }
         
         public string Id { get; set; }
         public Date Date { get; set; }
         public string Description { get; set; }
-        public List<string> TestResultLineItems { get; set; }
+        public List<string> AssociatedTexts { get; set; }
+        public List<TestResultChildLineItem> TestResultChildLineItems { get; set; }
     } 
 }

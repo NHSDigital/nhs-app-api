@@ -5,8 +5,8 @@
         <h2>{{ $t('myRecord.testResultDetail.testResultTitle') }}</h2>
       </div>
       <div :class="$style['test-result-content']">
-        <div v-if="testResult.hasErrored">
-          <p> {{ $t('myRecord.genericErrorMessage') }} </p>
+        <div v-if="!testResult.testResult">
+          <p> {{ $t('myRecord.testResultDetail.noTestResultData') }} </p>
         </div>
         <div v-else>
           <p>
@@ -53,7 +53,7 @@ export default {
   },
   methods: {
     onBackButtonClicked() {
-      this.$router.push('/my-record');
+      this.$router.push('/my-record#testResultsHeader');
     },
   },
 };

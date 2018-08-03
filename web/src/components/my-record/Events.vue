@@ -6,12 +6,12 @@
     <div v-else>
       <div v-if="data.hasAccess">
         <div v-if="data.data.length > 0">
-          <ul >
+          <ul>
             <li v-for="(event, eventIndex) in orderedEvents"
                 :key="`event-${eventIndex}`" :class="$style.event">
               <label v-if="event.date"> {{ event.date | datePart }} </label>
               <p :class="$style.eventDetail"> {{ event.locationAndDoneBy }}</p>
-              <ul :class="$style.eventLine">
+              <ul>
                 <li v-for="(eventItem, eventItemIndex) in event.eventItems"
                     :key="`event-${eventItemIndex}`" :class="$style.eventLine">
                   {{ eventItem }}
@@ -76,7 +76,8 @@ export default {
     padding-bottom: 0px !important;
   }
   .eventLine {
-    @include small_text;
-    padding-left: 16px;
+    padding-left: 32px;
+    list-style-type: disc;
+    list-style-position: inside;
   }
 </style>

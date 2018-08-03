@@ -31,7 +31,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     Value = response.EffectiveDate.Value,
                     DatePart = response.EffectiveDate.DatePart
                 },
-                ConsultantLocation = $"{response.Location}, {response.ConsultantName}",
+                ConsultantLocation = 
+                    !string.IsNullOrEmpty(response.Location) ?
+                        $"{response.Location} - {response.ConsultantName}" :
+                        response.ConsultantName,
                 ConsultationHeaders = response.Sections != null ? (
                     from section in response.Sections
                     where section.Observations != null && 
