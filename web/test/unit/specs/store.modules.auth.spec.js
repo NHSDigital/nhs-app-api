@@ -65,11 +65,5 @@ describe('actions', () => {
       expect(actions.dispatch).toHaveBeenCalledWith('session/showExpiryMessage');
       expect(actions.dispatch).toHaveBeenCalledWith('auth/logout');
     });
-    it('will clear the csrf token by dispatching the session/setCsrfToken event', () => {
-      actions
-        .logoutWhenExpired();
-
-      expect(actions.dispatch).toHaveBeenCalledWith('session/setCsrfToken', '');
-    });
   });
 });

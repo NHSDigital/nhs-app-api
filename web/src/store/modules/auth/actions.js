@@ -29,12 +29,10 @@ export default {
   },
   logoutWhenExpired() {
     this.dispatch('session/showExpiryMessage');
-    this.dispatch('session/setCsrfToken', '');
     this.dispatch('auth/logout');
   },
   logout({ commit }) {
     this.dispatch('session/clear');
-    this.dispatch('session/setCsrfToken', '');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
 
@@ -50,6 +48,7 @@ export default {
       this.dispatch('prescriptions/init');
       this.dispatch('repeatPrescriptionCourses/init');
       this.dispatch('errors/clearAllApiErrors');
+      this.dispatch('session/setCsrfToken', '');
       this.dispatch('flashMessage/init');
       this.app.router.push('/login');
     };
