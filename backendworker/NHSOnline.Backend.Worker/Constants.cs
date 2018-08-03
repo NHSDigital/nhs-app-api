@@ -31,6 +31,8 @@
             public const string Im1ConnectionVerifyResponse = "Im1Connection_Verify_Response";
             public const string Im1ConnectionRegisterResponse = "Im1Connection_Register_Response";
             public const string SessionCreateResponse = "Session_Create_Response";
+            public const string SessionDeleteRequest = "Session_Delete_Request";
+            public const string SessionDeleteResponse = "Session_Delete_Response";
             public const string ViewAppointmentAuditTypeRequest = "Appointments_ViewBooked_Request";
             public const string ViewAppointmentAuditTypeResponse = "Appointments_ViewBooked_Response";
             public const string BookAppointmentAuditTypeRequest = "Appointments_Book_Request";
@@ -47,6 +49,11 @@
             public const string RepeatPrescriptionsViewRepeatMedicationsResponse = "RepeatPrescriptions_ViewRepeatMedications_Response";
             public const string RepeatPrescriptionsOrderRepeatMedicationsRequest = "RepeatPrescriptions_OrderRepeatMedications_Request";
             public const string RepeatPrescriptionsOrderRepeatMedicationsResponse = "RepeatPrescriptions_OrderRepeatMedications_Response";
+            public const string GetLinkageDetailsAuditTypeRequest = "Linkage_GetDetails_Request";
+            public const string GetLinkageDetailsAuditTypeResponse = "Linkage_GetDetails_Response";
+            public const string CreateLinkageKeyAuditTypeRequest = "Linkage_CreateKey_Request";
+            public const string CreateLinkageKeyAuditTypeResponse = "Linkage_CreateKey_Response";
+            //Retrieves a patient's Linkage details
         }
 
         public static class HttpContextItems

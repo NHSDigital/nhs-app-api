@@ -3,10 +3,8 @@ using System.Globalization;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.CodeAnalysis;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {

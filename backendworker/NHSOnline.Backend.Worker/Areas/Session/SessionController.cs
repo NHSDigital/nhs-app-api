@@ -122,9 +122,11 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             try
             {
                 _logger.LogEnter(nameof(Delete));
+                _auditor.Audit(Constants.AuditingTitles.SessionDeleteRequest, "Session delete called.");
                 
                 // Delete GP supplier session                
                 var userSession = HttpContext.GetUserSession();
+
                 try 
                 {
                     var supplierSessionDeletedResultVisited = await GetSessionLogoffResultVisitorOutput(userSession);
@@ -135,7 +137,11 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError($"Failed with error: {e}");
+                    _logger.LogError($"Deleting the GP supplier failed with error: { e.Message }");
+                    _auditor.AuditWithExplicitNhsNumber(userSession.NhsNumber, userSession.Supplier,
+                        Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
+                    
+                    return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
                 
                 // Delete redis key and session
@@ -146,7 +152,10 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError(e, "Delete session failed");
+                    _logger.LogError(e, $"Delete session failed with error: { e.Message }");
+                    _auditor.AuditWithExplicitNhsNumber(userSession.NhsNumber, userSession.Supplier,
+                        Constants.AuditingTitles.SessionDeleteResponse, "Delete session failed");
+                    
                     return new StatusCodeResult(StatusCodes.Status500InternalServerError);
                 }
     
@@ -158,7 +167,11 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     
                 _logger.LogDebug(
-                    $"Session successfully deleted. Finished with status code: {StatusCodes.Status204NoContent}");
+                    $"Session successfully deleted. Finished with status code: { StatusCodes.Status204NoContent }");
+                
+                _auditor.AuditWithExplicitNhsNumber(userSession.NhsNumber, userSession.Supplier,
+                    Constants.AuditingTitles.SessionDeleteResponse, "Session successfully deleted");
+                
                 return new StatusCodeResult(StatusCodes.Status204NoContent);
             }
             finally

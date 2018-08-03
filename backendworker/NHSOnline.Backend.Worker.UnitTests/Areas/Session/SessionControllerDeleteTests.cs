@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -41,6 +40,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private SessionController _systemUnderTest;
         private UserSession _tppUserSession;
         private Mock<HttpContext> _httpContextMock;
+        
+        private const string DeleteRequestAuditType = "Session_Delete_Request";
+        private const string DeleteResponseAuditType = "Session_Delete_Response";
 
         [TestInitialize]
         public void TestInitialize()
@@ -88,8 +90,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockGpSystem
                 .Setup(x => x.GetSessionService())
                 .Returns(_mockSessionService.Object);
-            
-            _systemUnderTest = _fixture.Create<SessionController>();
+
             _systemUnderTest = new SessionController(
                 _mockCitizenIdService.Object,
                 _mockGpSystemFactory.Object,
@@ -149,6 +150,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
             _mockSessionService.Verify(x => x.Logoff(_tppUserSession));
             _mockSessionCacheService.Verify(x => x.DeleteUserSession(_tppUserSession.Key));
+            _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -170,6 +173,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status204NoContent);
             _mockSessionService.Verify(x => x.Logoff(_tppUserSession));
+            _mockAuditor.Verify(x => x.Audit(DeleteRequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), DeleteResponseAuditType, It.IsAny<string>()));
         }
         
         public void Dispose()

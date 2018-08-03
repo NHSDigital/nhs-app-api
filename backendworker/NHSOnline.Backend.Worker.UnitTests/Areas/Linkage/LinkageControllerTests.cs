@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.Areas.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
 {
@@ -21,16 +22,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         private const string DefaultOdsCode = "AB1234";
         private const Supplier DefaultSupplier = Supplier.Emis;
         private const string DefaultNhsNumber = "XX00000A";
-
-        private LinkageController _linkageController;
-
+        private Mock<IAuditor> _mockAuditor;
         private IFixture _fixture;
+        private LinkageController _linkageController;
+        
+        private const string GetRequestAuditType = "Linkage_GetDetails_Request";
+        private const string GetResponseAuditType = "Linkage_GetDetails_Response";
+        private const string PostRequestAuditType = "Linkage_CreateKey_Request";
+        private const string PostResponseAuditType = "Linkage_CreateKey_Response";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture();
-
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
             _linkageController = CreateLinkageController();
         }
         
@@ -96,6 +101,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), GetRequestAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), GetResponseAuditType, It.IsAny<string>()));
         }
 
         [TestMethod]
@@ -195,6 +202,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), PostRequestAuditType, It.IsAny<string>()));
+            _mockAuditor.Verify(x => x.AuditWithExplicitNhsNumber(It.IsAny<string>(), It.IsAny<Supplier>(), PostResponseAuditType, It.IsAny<string>()));
         }
 
         private LinkageController CreateLinkageController(
@@ -205,7 +214,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             gpSystemFactoryMock = gpSystemFactoryMock ?? MockGpSystemFactory();
             var logger = new LoggerFactory();
 
-            return new LinkageController(logger, gpSystemFactoryMock.Object, odsCodeLookupMock.Object);
+            return new LinkageController(logger, gpSystemFactoryMock.Object, odsCodeLookupMock.Object, _mockAuditor.Object);
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(
