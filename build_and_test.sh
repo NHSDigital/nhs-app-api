@@ -1,7 +1,7 @@
 #!/bin/bash
 
 displayUsage () {
-  echo "Usage: ./build_and_test.sh [-A] [TAGLIST]
+  echo "Usage: ./build_and_test.sh [-A] [-D] [TAGLIST]
   
   Build and run the BDD test stack within docker to mimic the TeamCity process
   TAGLIST is a collection of tags from the BDD tests and should include the @ prefix
@@ -11,20 +11,26 @@ displayUsage () {
     -A     Run the specified tags against all available tests
                If this is specified then you MUST also supply at least one tag
                [Default is to run tags against a subset depending on branch]
+    -D     Force a branch build to run as if it was Develop and execute full BDD suite
+               [This option is ignored if -A is specified]
     -h     Display this help message
   "
   exit 1
 }
 
 RUN_SUBSET=1
+RUN_AS_DEVELOP=0
 PREFIX="and"
 
-while getopts "Ah" opt; do
+while getopts "ADh" opt; do
 
   case $opt in 
     A)
       PREFIX="--tags"
       RUN_SUBSET=0
+      ;;
+    D)
+      RUN_AS_DEVELOP=1
       ;;
     h)
       displayUsage
@@ -60,10 +66,13 @@ fi
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $ROOT_DIR
 
+CHROME_IMAGE=chrome:latest
 DOCKER_REGISTRY=nhsapp.azurecr.io
 WEB_NAME=nhsonline-web
 BACKEND_NAME=nhsonline-backendworker
 TAG=$(git rev-parse HEAD)
+
+docker pull $DOCKER_REGISTRY/$CHROME_IMAGE
 
 cd web
 docker build . -t $DOCKER_REGISTRY/$WEB_NAME:$TAG -f Dockerfile
@@ -74,4 +83,4 @@ docker build . -t $DOCKER_REGISTRY/$BACKEND_NAME:$TAG -f NHSOnline.Backend.Worke
 docker tag $DOCKER_REGISTRY/$BACKEND_NAME:$TAG $DOCKER_REGISTRY/$BACKEND_NAME:latest
 
 cd ../bddtests/ops
-RUN_SUBSET=$RUN_SUBSET SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ./docker_tests.sh
+RUN_AS_DEVELOP=$RUN_AS_DEVELOP RUN_SUBSET=$RUN_SUBSET SPECIFIC_TEST_TAGS=$SPECIFIC_TEST_TAGS APP_DOCKER_TAG=$TAG DOCKER_REGISTRY=$DOCKER_REGISTRY ./docker_tests.sh

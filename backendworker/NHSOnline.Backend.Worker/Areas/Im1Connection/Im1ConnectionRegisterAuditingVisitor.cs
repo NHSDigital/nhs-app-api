@@ -17,10 +17,12 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
         public object Visit(Im1ConnectionRegisterResult.SuccessfullyRegistered result)
         {
-            _auditor.AuditWithExplicitNhsNumber(
-                result.Response.NhsNumbers.First().NhsNumber, _supplier,
-                Constants.AuditingTitles.Im1ConnectionRegisterResponse, "IM1 connection successfully registered with GP system.");
-
+            if (!string.IsNullOrEmpty(result.Response.NhsNumbers?.FirstOrDefault()?.NhsNumber))
+            {
+                _auditor.AuditWithExplicitNhsNumber(
+                  result.Response.NhsNumbers.First().NhsNumber, _supplier,
+                  Constants.AuditingTitles.Im1ConnectionRegisterResponse, "IM1 connection successfully registered with GP system.");
+            }
             return null;
         }
 
