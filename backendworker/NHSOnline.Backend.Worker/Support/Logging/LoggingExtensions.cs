@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System;
 using Microsoft.Extensions.Logging;
 using System.Net.Http;
 
@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
         private static string RemoveQueryString(HttpRequestMessage requestMessage)
         {
             string uri = requestMessage.RequestUri?.ToString() ?? "";
-            int startOfQueryString = uri.IndexOf('?');
+            int startOfQueryString = uri.IndexOf('?', StringComparison.Ordinal);
             return startOfQueryString > 0 ? uri.Substring(0, startOfQueryString) + "?*****" : uri;
         }
 

@@ -21,7 +21,7 @@ using NHSOnline.Backend.Worker.UnitTests.Areas;
 namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
 {
     [TestClass]
-    public class HttpContexedLoggerTests
+    public sealed class HttpContexedLoggerTests : IDisposable
     {
         const string SessionId = "sfd-bnfg-sdf-dsgd-gf";
         const string MethodLogPrefix = "Test log ";
@@ -111,9 +111,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             {
                 try
                 {
-                    throw new Exception("Something has gone wrong!");
+                    throw new ArgumentException("Something has gone wrong!");
                 }
-                catch (Exception exception)
+                catch (ArgumentException exception)
                 {
                     _logger.LogCritical(exception, "Logging an exception.");
                 }
@@ -166,9 +166,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
         {
             var filters = new List<LogCensorFilter>
             {
-                new LogCensorFilter { Match = RegExt1, Replacement = RegExt1.Replace("[^&]*", "*****") },
-                new LogCensorFilter { Match = RegExt2, Replacement = RegExt2.Replace("[^&]*", "*****") },
-                new LogCensorFilter { Match = RegExt3, Replacement = RegExt3.Replace("[^&]*", "*****") },
+                new LogCensorFilter { Match = RegExt1, Replacement = RegExt1.Replace("[^&]*", "*****", StringComparison.Ordinal) },
+                new LogCensorFilter { Match = RegExt2, Replacement = RegExt2.Replace("[^&]*", "*****", StringComparison.Ordinal) },
+                new LogCensorFilter { Match = RegExt3, Replacement = RegExt3.Replace("[^&]*", "*****", StringComparison.Ordinal) },
             };
 
             _stream = new MemoryStream();
@@ -288,6 +288,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             testString.Should().NotBeEmpty();
             testString.Should().NotContain("Asterix");
             testString.Should().NotContain("prohibited");
+        }
+
+        public void Dispose()
+        {
+            _systemUnderTest.Dispose();
         }
     }
 }

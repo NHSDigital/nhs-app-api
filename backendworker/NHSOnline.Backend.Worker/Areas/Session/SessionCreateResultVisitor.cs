@@ -14,18 +14,18 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             _settings = settings;
         }
 
-        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SuccessfullyCreated result)
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SuccessfullyCreated successfullyCreated)
         {
             return new SessionCreateResultVisitorOutput
             {
                 SessionWasCreated = true,
-                Name = result.Name,
-                UserSession = result.UserSession,
+                Name = successfullyCreated.Name,
+                UserSession = successfullyCreated.UserSession,
                 SessionTimeout = _settings.Value.DefaultSessionExpiryMinutes * 60
             };
         }
 
-        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.InvalidIm1ConnectionToken result)
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.InvalidIm1ConnectionToken invalidIm1ConnectionToken)
         {
             return new SessionCreateResultVisitorOutput
             {
@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             };
         }
 
-        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SupplierSystemUnavailable result)
+        public SessionCreateResultVisitorOutput Visit(SessionCreateResult.SupplierSystemUnavailable supplierSystemUnavailable)
         {
             return new SessionCreateResultVisitorOutput
             {

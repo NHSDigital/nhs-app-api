@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -14,7 +15,7 @@ namespace NHSOnline.Backend.Worker
             // if not, jut return whatever it is
             if (filteredNhsNumber.Length != 10) return filteredNhsNumber;
             
-            return string.Format("{0} {1} {2}", 
+            return string.Format(CultureInfo.InvariantCulture, "{0} {1} {2}", 
                 filteredNhsNumber.Substring(0, 3),
                 filteredNhsNumber.Substring(3, 3),
                 filteredNhsNumber.Substring(6, 4));

@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
 {
     public interface ITppDemographicsMapper
     {
-        DemographicsResponse Map(PatientSelectedReply authenticateReply);
+        DemographicsResponse Map(PatientSelectedReply patientSelectedReply);
     }
 }

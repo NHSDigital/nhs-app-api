@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             _visionMyRecordMapper = visionMyRecordMapper;
         }
 
-        public async Task<GetMyRecordResult> Get(UserSession userSession)
+        public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
             var visionUserSession = (VisionUserSession) userSession;
 
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             throw new NotImplementedException();
         }
 
-        private GetMyRecordResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
+        private static GetMyRecordResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {

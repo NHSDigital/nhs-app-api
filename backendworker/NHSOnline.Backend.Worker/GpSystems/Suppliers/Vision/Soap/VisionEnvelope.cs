@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
@@ -82,8 +83,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Soap
                 {
                     // Need to create a timestamp with a 5 minute offset
                     var dt = DateTime.UtcNow;
-                    var timeNow = dt.ToString("o").Substring(0, 23) + "Z";
-                    var timePlus15 = dt.AddMinutes(15).ToString("o").Substring(0, 23) + "Z";
+                    var timeNow = dt.ToString("o", CultureInfo.InvariantCulture).Substring(0, 23) + "Z";
+                    var timePlus15 = dt.AddMinutes(15).ToString("o", CultureInfo.InvariantCulture).Substring(0, 23) + "Z";
 
                     // Start Envelope
                     writer.WriteStartDocument();
@@ -134,7 +135,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Soap
 
                     writer.WriteElementString("wsa", "Action", null, "Vision");
                     writer.WriteElementString("wsa", "MessageID", null,
-                        String.Format("uuid:{0}", Guid.NewGuid().ToString()));
+                        String.Format(CultureInfo.InvariantCulture, "uuid:{0}", Guid.NewGuid().ToString()));
 
                     writer.WriteEndElement();
                     // End Header
@@ -159,9 +160,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Soap
         private static void GenerateGuids(out string binarySecurityTokenId, out string timeStampGuid,
             out string usernameGuid)
         {
-            binarySecurityTokenId = string.Format("X509-{0}", Guid.NewGuid().ToString("N"));
-            timeStampGuid = string.Format("TS-{0}", Guid.NewGuid().ToString("N"));
-            usernameGuid = string.Format("UsernameToken-{0}", Guid.NewGuid().ToString("N"));
+            binarySecurityTokenId = string.Format(CultureInfo.InvariantCulture, "X509-{0}", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
+            timeStampGuid = string.Format(CultureInfo.InvariantCulture, "TS-{0}", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
+            usernameGuid = string.Format(CultureInfo.InvariantCulture, "UsernameToken-{0}", Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
         }
 
         public XmlDocument Envelope { get; set; }
@@ -180,7 +181,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Soap
             bodyNode.AppendChild(newObjectXml);
         }
 
-        public XmlDocument SerializeToXmlDocument(object input)
+        public static XmlDocument SerializeToXmlDocument(object input)
         {
             XmlSerializer ser = new XmlSerializer(input.GetType());
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces();

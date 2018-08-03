@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
         }
         
         public string Id { get; set; }
-        public Date Date { get; set; }
+        public MyRecordDate Date { get; set; }
         public string Description { get; set; }
         public List<string> AssociatedTexts { get; set; }
         public List<TestResultChildLineItem> TestResultChildLineItems { get; set; }

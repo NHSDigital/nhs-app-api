@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 using Appointment = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Appointment;
 using Location = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Location;
 
@@ -105,7 +106,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var appointments = new[] { appointment };
 
             // Act
-            var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, new Worker.GpSystems.Suppliers.Emis.Models.Session[]{});
+            var actualResponse = _systemUnderTest.Map(appointments, locations, sessionHolders, Array.Empty<Worker.GpSystems.Suppliers.Emis.Models.Session>());
 
             // Assert
             actualResponse.Should().BeEmpty();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -22,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _appointmentResultBuilder = appointmentResultBuilder;
         }
 
-        public async Task<AppointmentsResult> GetAppointments(UserSession userSession, bool includePastAppointments, DateTimeOffset? pastAppointmentsFromDate)
+        public async Task<AppointmentsResult> GetAppointments(UserSession userSession)
         {
             try
             {

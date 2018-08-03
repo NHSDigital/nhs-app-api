@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -16,7 +17,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     {
         private IFixture _fixture;
         private IEmisMyRecordMapper _mapper;
-        private const string DATE_FORMAT = "d MMMM yyyy";
+        private const string DateFormat = "d MMMM yyyy";
 
         [TestInitialize]
         public void TestInitialize()
@@ -126,7 +127,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                 {
                     new ProblemItem
                     {
-                        EffectiveDate = new Date { Value = problem1.Observation.EffectiveDate.Value, DatePart = problem1.Observation.EffectiveDate.DatePart },
+                        EffectiveDate = new MyRecordDate { Value = problem1.Observation.EffectiveDate.Value, DatePart = problem1.Observation.EffectiveDate.DatePart },
                         LineItems = new List<ProblemLineItem>
                         {
                             new ProblemLineItem
@@ -153,13 +154,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                             },
                             new ProblemLineItem
                             {
-                                Text = "Ended: " + problem1.ProblemEndDate.Value.ToString(DATE_FORMAT)
+                                Text = "Ended: " + problem1.ProblemEndDate.Value.ToString(DateFormat, CultureInfo.InvariantCulture)
                             },
                         }
                     },
                     new ProblemItem
                     {
-                        EffectiveDate = new Date { Value = problem2.Observation.EffectiveDate.Value, DatePart = problem2.Observation.EffectiveDate.DatePart },
+                        EffectiveDate = new MyRecordDate { Value = problem2.Observation.EffectiveDate.Value, DatePart = problem2.Observation.EffectiveDate.DatePart },
                         LineItems = new List<ProblemLineItem>
                         {
                             new ProblemLineItem
@@ -185,7 +186,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                             },
                             new ProblemLineItem
                             {
-                                Text = "Ended: " + problem2.ProblemEndDate.Value.ToString(DATE_FORMAT)
+                                Text = "Ended: " + problem2.ProblemEndDate.Value.ToString(DateFormat,
+                                           CultureInfo.InvariantCulture)
                             },
                         }
                     },

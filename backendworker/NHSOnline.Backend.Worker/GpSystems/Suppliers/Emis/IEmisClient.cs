@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         // Prescriptions
         Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
             string userPatientLinkToken, string responseSessionId, string endUserSessionId,
-            DateTimeOffset? fromDateTime, DateTimeOffset? toDate);
+            DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime);
 
         Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);

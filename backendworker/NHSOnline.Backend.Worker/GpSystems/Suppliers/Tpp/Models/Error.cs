@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1716", Justification = "Deliberately matching the name specified by the GPSS")]
     public class Error
     {
         [XmlAttribute("errorCode")]

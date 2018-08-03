@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.Backend.Worker.Areas.Session.Models
 {
+    [Serializable]
     public class UserSessionRequest
     {
         [Required]
@@ -11,6 +14,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session.Models
         public string CodeVerifier { get; set; }
 
         [Required]
+        [SuppressMessage("Microsoft.Design", "CA1056", Justification = "Uris are not serializable")]
         public string RedirectUrl { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -13,7 +14,9 @@ namespace NHSOnline.Backend.Worker.CitizenId
 {
     public interface ICitizenIdClient
     {
+        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl);
+        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         Task<CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string bearerToken);
     }
 
@@ -43,6 +46,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 System.Text.Encoding.ASCII.GetBytes($"{config.ClientId}:{config.ClientSecret}"));
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         public async Task<CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl)
         {
             try

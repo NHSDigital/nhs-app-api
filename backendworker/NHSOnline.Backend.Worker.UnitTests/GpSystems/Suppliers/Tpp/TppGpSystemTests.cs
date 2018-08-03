@@ -12,7 +12,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
@@ -52,7 +52,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void Supplier_ReturnsTppSupplier()
         {
-            _systemUnderTest.Supplier.Should().Be(SupplierEnum.Tpp);
+            _systemUnderTest.Supplier.Should().Be(Supplier.Tpp);
         }
 
         [TestMethod]

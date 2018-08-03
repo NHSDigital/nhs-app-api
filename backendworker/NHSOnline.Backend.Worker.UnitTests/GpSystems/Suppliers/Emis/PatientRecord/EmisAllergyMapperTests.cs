@@ -76,7 +76,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new AllergyItem
                     {
                         Name = item.MedicalRecord.Allergies.ElementAt(0).Term,
-                        Date = new Date { 
+                        Date = new MyRecordDate { 
                             Value = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.Value,
                             DatePart = item.MedicalRecord.Allergies.ElementAt(0).EffectiveDate.DatePart
                          }

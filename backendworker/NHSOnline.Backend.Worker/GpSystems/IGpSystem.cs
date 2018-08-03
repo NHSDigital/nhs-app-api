@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Worker.GpSystems
 {
     public interface IGpSystem
     {
-        SupplierEnum Supplier { get; }
+        Supplier Supplier { get; }
 
         IAppointmentsService GetAppointmentsService();
 

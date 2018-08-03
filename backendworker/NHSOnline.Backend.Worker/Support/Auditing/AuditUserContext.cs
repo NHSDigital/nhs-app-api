@@ -4,9 +4,9 @@
     {
         public string NhsNumber { get; }
 
-        public SupplierEnum Supplier { get; }
+        public Supplier Supplier { get; }
 
-        public AuditUserContext(string nhsNumber, SupplierEnum supplier)
+        public AuditUserContext(string nhsNumber, Supplier supplier)
         {
             NhsNumber = nhsNumber;
             Supplier = supplier;

@@ -4,7 +4,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public interface ITppConfig
     {
-        string ApiUrl { get; set; }
+        Uri ApiUrl { get; set; }
         string ApiVersion { get; set; }
         string ApplicationName { get; set; }
         string ApplicationVersion { get; set; }

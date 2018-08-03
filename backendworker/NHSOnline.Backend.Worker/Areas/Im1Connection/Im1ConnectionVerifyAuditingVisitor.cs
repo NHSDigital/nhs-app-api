@@ -7,9 +7,9 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
     public class Im1ConnectionVerifyAuditingVisitor : IIm1ConnectionVerifyResultVisitor<object>
     {
         private readonly IAuditor _auditor;
-        private readonly SupplierEnum _supplier;
+        private readonly Supplier _supplier;
 
-        public Im1ConnectionVerifyAuditingVisitor(IAuditor auditor, SupplierEnum supplier)
+        public Im1ConnectionVerifyAuditingVisitor(IAuditor auditor, Supplier supplier)
         {
             _auditor = auditor;
             _supplier = supplier;

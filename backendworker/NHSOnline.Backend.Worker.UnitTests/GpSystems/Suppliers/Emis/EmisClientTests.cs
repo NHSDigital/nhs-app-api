@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ using RichardSzalay.MockHttp;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 {
     [TestClass]
-    public class EmisClientTests
+    public sealed class EmisClientTests : IDisposable
     {
         public const string DefaultEmisVersion = "2.1.0.0";
         public static readonly string DefaultEmisApplicationId = Guid.NewGuid().ToString();
@@ -297,7 +298,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             };
 
             _mockHttpHandler
-                .WhenEmis(HttpMethod.Get, "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken + "&filterFromDate=" + HttpUtility.UrlEncode(fromDateTime.ToString("O")) + "&filterToDate=" + HttpUtility.UrlEncode(toDateTime.ToString("O")))
+                .WhenEmis(HttpMethod.Get,
+                    "prescriptionrequests?userPatientLinkToken=" + userPatientLinkToken+ "&filterFromDate="
+                    + HttpUtility.UrlEncode(fromDateTime.ToString("O", CultureInfo.InvariantCulture)) + "&filterToDate="
+                    + HttpUtility.UrlEncode(toDateTime.ToString("O",  CultureInfo.InvariantCulture)))
                 .WithEmisHeaders(additionalHeaders)
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
@@ -406,6 +410,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
             response.ErrorResponse.Should().Be(null);
+        }
+
+        public void Dispose()
+        {
+            _mockHttpHandler.Dispose();
         }
     }
 }

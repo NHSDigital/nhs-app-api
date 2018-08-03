@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
     public class LinkageControllerTests
     {
         private const string DefaultOdsCode = "AB1234";
-        private const SupplierEnum DefaultSupplier = SupplierEnum.Emis;
+        private const Supplier DefaultSupplier = Supplier.Emis;
         private const string DefaultNhsNumber = "XX00000A";
 
         private LinkageController _linkageController;
@@ -61,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             // Arrage
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
-                .Returns(Task.FromResult(Option.None<SupplierEnum>()));
+                .Returns(Task.FromResult(Option.None<Supplier>()));
 
             _linkageController = CreateLinkageController(mockOdsCodeLookup);
 
@@ -77,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         [TestMethod]
         public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
-            const SupplierEnum supplier = DefaultSupplier;
+            const Supplier supplier = DefaultSupplier;
 
             var expectedResponse = _fixture.Create<LinkageResponse>();
 
@@ -143,7 +144,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             // Arrage
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
-                .Returns(Task.FromResult(Option.None<SupplierEnum>()));
+                .Returns(Task.FromResult(Option.None<Supplier>()));
 
             _linkageController = CreateLinkageController(mockOdsCodeLookup);
 
@@ -161,7 +162,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         {
             const string nhsNumber = DefaultNhsNumber;
             const string odsCode = DefaultOdsCode;
-            const SupplierEnum supplier = DefaultSupplier;
+            const Supplier supplier = DefaultSupplier;
 
             var expectedResponse = _fixture.Create<LinkageResponse>();
 
@@ -169,7 +170,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
 
             var mockLinkageService = new Mock<ILinkageService>();
             mockLinkageService.Setup(x => x.CreateLinkageKey(
-                It.Is<CreateLinkageRequest>(req => req.NhsNumber == nhsNumber && req.OdsCode == odsCode))
+                It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
+                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal)))
             ).ReturnsAsync(mockResult);
 
             var gpSystemMock = MockGpSystem(mockLinkageService);
@@ -188,7 +190,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
 
             // Assert
             mockLinkageService.Verify(x => x.CreateLinkageKey(
-                It.Is<CreateLinkageRequest>(req => req.NhsNumber == nhsNumber && req.OdsCode == odsCode)), Times.Once);
+                It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
+                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal))), Times.Once);
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -207,7 +210,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(
             string odsCode = DefaultOdsCode,
-            SupplierEnum supplier = DefaultSupplier)
+            Supplier supplier = DefaultSupplier)
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(supplier)));
@@ -215,7 +218,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         }
 
         private Mock<IGpSystemFactory> MockGpSystemFactory(
-            SupplierEnum supplier = DefaultSupplier,
+            Supplier supplier = DefaultSupplier,
             Mock<IGpSystem> gpSystemMock = null)
         {
             gpSystemMock = gpSystemMock ?? MockGpSystem();
@@ -225,7 +228,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             return mockGpSystemFactory;
         }
 
-        private Mock<IGpSystem> MockGpSystem(
+        private static Mock<IGpSystem> MockGpSystem(
             Mock<ILinkageService> linkageService = null)
         {
             linkageService = linkageService ?? MockLinkageService();

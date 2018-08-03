@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -7,7 +8,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class EmisProblemMapper
     {
-        private const string DATE_FORMAT = "d MMMM yyyy";
+        private const string DateFormat = "d MMMM yyyy";
         
         public Problems Map(MedicationRootObject problemsGetResponse)
         {
@@ -23,17 +24,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     foreach (var problem in medicalRecord.Problems)
                     {
                         var problemItem = new ProblemItem();
+                        
                         problemItem.EffectiveDate = problem.Observation.EffectiveDate != null
-                            ? new Date
+                            ? new MyRecordDate
                             {
                                 Value = problem.Observation.EffectiveDate.Value,
                                 DatePart = problem.Observation.EffectiveDate.DatePart
                             }
                             : null;
-                        problemItem.LineItems = new List<ProblemLineItem>();
-                        problemItem.LineItems.Add(new ProblemLineItem {Text = problem.Observation.Term});
-                        problemItem.LineItems.Add(new ProblemLineItem {Text = "Significance: " + problem.Significance});
-                        problemItem.LineItems.Add(new ProblemLineItem {Text = "Status: " + problem.Status});
+                        
+                        problemItem.LineItems = new List<ProblemLineItem>
+                        {
+                            new ProblemLineItem { Text = problem.Observation.Term },
+                            new ProblemLineItem { Text = "Significance: " + problem.Significance },
+                            new ProblemLineItem { Text = "Status: " + problem.Status }
+                        };
 
                         if (problem.Observation.AssociatedText != null)
                         {
@@ -48,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                         {
                             problemItem.LineItems.Add(new ProblemLineItem
                             {
-                                Text = "Ended: " + problem.ProblemEndDate.Value.ToString(DATE_FORMAT)
+                                Text = "Ended: " + problem.ProblemEndDate.Value.ToString(DateFormat, CultureInfo.InvariantCulture)
                             });                           
                         }
 

@@ -4,11 +4,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
-using NHSOnline.Backend.Worker.Support.Date;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -177,7 +177,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void Map_ReturnsEmptyArray_WhenSessionsInListSlotsReplyIsEmpty()
         {
             // Act
-            var actualResponse = _systemUnderTest.Map(new Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session[0]);
+            var actualResponse = _systemUnderTest.Map(Array.Empty<Worker.GpSystems.Suppliers.Tpp.Models.Appointments.Session>());
 
             // Assert
             actualResponse.Should().BeEmpty();

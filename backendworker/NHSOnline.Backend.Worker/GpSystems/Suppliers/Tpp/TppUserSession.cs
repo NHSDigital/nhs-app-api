@@ -2,7 +2,7 @@
 {
     public class TppUserSession: UserSession
     {
-        public override SupplierEnum Supplier => SupplierEnum.Tpp;
+        public override Supplier Supplier => Supplier.Tpp;
         
         public string Suid { get; set; }
         public string PatientId { get; set; }

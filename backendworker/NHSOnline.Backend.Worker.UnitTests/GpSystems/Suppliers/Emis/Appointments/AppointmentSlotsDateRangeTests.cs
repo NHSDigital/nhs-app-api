@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointments
 {

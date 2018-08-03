@@ -2,7 +2,7 @@
 {
     public class VisionUserSession : UserSession
     {
-        public override SupplierEnum Supplier => SupplierEnum.Vision;
+        public override Supplier Supplier => Supplier.Vision;
 
         public string RosuAccountId { get; set; }
         public string OdsCode { get; set; }

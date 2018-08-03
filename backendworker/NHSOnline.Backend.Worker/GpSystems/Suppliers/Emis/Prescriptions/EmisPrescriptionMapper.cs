@@ -73,16 +73,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             return result;
         }
 
-        public CourseListResponse Map(CoursesGetResponse coursesGetResponse)
+        public CourseListResponse Map(CoursesGetResponse courseGetResponse)
         {
-            if (coursesGetResponse == null)
+            if (courseGetResponse == null)
             {
-                throw new ArgumentNullException(nameof(coursesGetResponse));
+                throw new ArgumentNullException(nameof(courseGetResponse));
             }
 
             var result = new CourseListResponse
             {
-                Courses = (coursesGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(MapMedicationCourseToCourse),
+                Courses = (courseGetResponse.Courses ?? Enumerable.Empty<MedicationCourse>()).Select(MapMedicationCourseToCourse),
             };
 
             return result;

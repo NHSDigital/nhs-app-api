@@ -21,9 +21,9 @@ namespace NHSOnline.Backend.Worker.Support.Cipher
             _aesKey = Encoding.UTF8.GetBytes(keyFileContents);
         }
 
-        public string Decrypt(string encryptedValueString)
+        public string Decrypt(string cipherText)
         {
-            var encryptedValue = EncryptedValue.Parse(encryptedValueString);
+            var encryptedValue = EncryptedValue.Parse(cipherText);
 
             using (var aes = Aes.Create())
             using (var decryptor = aes.CreateDecryptor(_aesKey, encryptedValue.InitialisationVector))

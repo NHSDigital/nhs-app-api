@@ -7,6 +7,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
     {
         PrescriptionListResponse Map(PrescriptionRequestsGetResponse prescriptionGetResponse);
 
-        CourseListResponse Map(CoursesGetResponse prescriptionGetResponse);
+        CourseListResponse Map(CoursesGetResponse courseGetResponse);
     }
 }

@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection.Models
 //        public void PatientIm1ConnectionValidation_OdsCode_InvalidFormats(string odsCode)
 //        {
 //            // Arrange
-//            _sut.OdsCode = "ABCDEFGHIJ";
+//            _sut.OdsCode = odsCode;
 //
 //            // Act
 //            var valid = Validator.TryValidateObject(_sut, _context, _validationResults, true);

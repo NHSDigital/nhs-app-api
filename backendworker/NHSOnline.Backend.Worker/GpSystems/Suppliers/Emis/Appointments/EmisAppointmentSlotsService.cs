@@ -23,14 +23,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             _appointmentSlotsResponseMapper = appointmentSlotsResponseMapper;
         }
 
-        public async Task<AppointmentSlotsResult> Get(
+        public async Task<AppointmentSlotsResult> GetSlots(
             UserSession userSession, 
             DateTimeOffset fromDate,
             DateTimeOffset toDate)
         {
             try
             {
-                _logger.LogEnter(nameof(Get));
+                _logger.LogEnter(nameof(GetSlots));
             
                 var emisUserSession = (EmisUserSession) userSession;
                 var patientLinkToken = emisUserSession.UserPatientLinkToken;
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit(nameof(GetSlots));
             }
         }
     }

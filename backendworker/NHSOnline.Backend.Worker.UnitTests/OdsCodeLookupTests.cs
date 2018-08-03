@@ -85,9 +85,9 @@ namespace NHSOnline.Backend.Worker.UnitTests
         }
 
         [DataTestMethod]
-        [DataRow(SupplierEnum.Emis)]
-        [DataRow(SupplierEnum.Tpp)]
-        public async Task LookupSupplier_RedisCacheReturnsValidSupplier_ReturnsValue(SupplierEnum supplier)
+        [DataRow(Supplier.Emis)]
+        [DataRow(Supplier.Tpp)]
+        public async Task LookupSupplier_RedisCacheReturnsValidSupplier_ReturnsValue(Supplier supplier)
         {
             const string odsCode = "ABC123";
             RedisValue redisValue = supplier.ToString();
@@ -110,10 +110,10 @@ namespace NHSOnline.Backend.Worker.UnitTests
         }
 
         [DataTestMethod]
-        [DataRow("EmIs", SupplierEnum.Emis)]
-        [DataRow("tPp", SupplierEnum.Tpp)]
+        [DataRow("EmIs", Supplier.Emis)]
+        [DataRow("tPp", Supplier.Tpp)]
         public async Task LookupSupplier_RedisCacheReturnsValidSupplierButWithUnusualCasing_ReturnsEnum(string redisString,
-            SupplierEnum supplier)
+            Supplier supplier)
         {
             const string odsCode = "ABC123";
             RedisValue redisValue = redisString;

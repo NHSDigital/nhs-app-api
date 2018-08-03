@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
 {
@@ -8,7 +9,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset? EndTime { get; set; }
         public string Location { get; set; }
-        public string[] Clinicians { get; set; }
+        public IEnumerable<string> Clinicians { get; set; }
         public string Type { get; set; }
     }
 }

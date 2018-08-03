@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using StackExchange.Redis;
 
@@ -23,7 +24,7 @@ namespace NHSOnline.Backend.Worker
         {
             if (!_multiplexers.TryGetValue(name, out var multiplexer))
                 throw new ArgumentOutOfRangeException(nameof(name),
-                    string.Format(ExceptionMessages.ConnectionMultiplexerFactoryUnknownMultiplexerName, name));
+                    string.Format(CultureInfo.InvariantCulture, ExceptionMessages.ConnectionMultiplexerFactoryUnknownMultiplexerName, name));
 
             return multiplexer;
         }

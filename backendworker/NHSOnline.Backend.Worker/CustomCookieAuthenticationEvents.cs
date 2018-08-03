@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -51,7 +52,8 @@ namespace NHSOnline.Backend.Worker
         {
             var userPrincipal = context.Principal;
 
-            var sessionId = userPrincipal.Claims.FirstOrDefault(x => x.Type == Constants.ClaimTypes.SessionId)?.Value;
+            var sessionId = userPrincipal.Claims
+                .FirstOrDefault(x => Constants.ClaimTypes.SessionId.Equals(x.Type, StringComparison.Ordinal))?.Value;
 
             if (string.IsNullOrEmpty(sessionId))
             {

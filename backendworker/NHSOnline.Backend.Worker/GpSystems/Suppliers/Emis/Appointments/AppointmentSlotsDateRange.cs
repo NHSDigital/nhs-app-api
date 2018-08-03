@@ -1,5 +1,5 @@
 ﻿using System;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {

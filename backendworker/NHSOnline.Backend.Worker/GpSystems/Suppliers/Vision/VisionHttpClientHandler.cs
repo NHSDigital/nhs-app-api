@@ -10,17 +10,13 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
-    public interface IVisionHttpClientHandler
-    {
-    }
-
-    public class VisionHttpClientHandler : HttpClientHandler, IVisionHttpClientHandler
+    public class VisionHttpClientHandler : HttpClientHandler
     {
         public VisionHttpClientHandler(IConfiguration configuration,
             ILogger<VisionHttpClientHandler>
                 logger, ICertificateService certificateService)
         {
-            if (configuration["ASPNETCORE_ENVIRONMENT"] != "Production")
+            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
             }

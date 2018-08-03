@@ -28,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems
         public void CreateGpSystem_ReturnsAnEmisGpSystem_WhenTheSupplierIsEmis()
         {
             _gpSystemFactory
-                .CreateGpSystem(SupplierEnum.Emis)
+                .CreateGpSystem(Supplier.Emis)
                 .Should()
                 .BeOfType<EmisGpSystem>();
         }
@@ -37,7 +37,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems
         public void CreateGpSystem_ReturnATppGpSystem_WhenTheSupplierIsTpp()
         {
             _gpSystemFactory
-                .CreateGpSystem(SupplierEnum.Tpp)
+                .CreateGpSystem(Supplier.Tpp)
                 .Should()
                 .BeOfType<TppGpSystem>();
         }
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems
         [TestMethod]
         public void CreateGpSystem_ThrowsAnUnknownSystemException_WhenTheSupplierNameIsUnknown()
         {
-            new Action(() => _gpSystemFactory.CreateGpSystem((SupplierEnum) (-1)))
+            new Action(() => _gpSystemFactory.CreateGpSystem((Supplier) (-1)))
                 .Should()
                 .Throw<UnknownSupplierException>();
         }

@@ -16,33 +16,33 @@ using RichardSzalay.MockHttp;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
     [TestClass]
-    public class TppClientTests
+    public sealed class TppClientTests : IDisposable
     {
         public static readonly string DefaultTypeHeaderValue = "DefaultTypeHeaderValue";
-        
+
         private const string ApplicationName = "appName";
         private const string ApplicationVersion = "13";
         private const string ApplicationProviderId = "providerId";
         private const string ApplicationDeviceType = "deviceType";
-        private const string ApiUrl = "http://tppapitest:60015/Test/";
+        private static readonly Uri ApiUrl = new Uri("http://tppapitest:60015/Test/");
         private const string ApiVersion = "12";
         private const string UnitId = "unitId";
-        
+
         private const string MediaType = "application/xml";
         private const string Suid = "session_id";
-        
+
         private ITppClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
         private TppHttpClient _httpClient;
         private Mock<ITppConfig> _configMock;
         private IFixture _fixture;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _fixture.Register<IXmlResponseParser>(() => new XmlResponseParser());
-            
+
             _configMock = new Mock<ITppConfig>();
             _configMock.SetupGet(x => x.ApplicationName).Returns(ApplicationName);
             _configMock.SetupGet(x => x.ApplicationVersion).Returns(ApplicationVersion);
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _configMock.SetupGet(x => x.ApiUrl).Returns(ApiUrl);
             _configMock.SetupGet(x => x.ApiVersion).Returns(ApiVersion);
             _configMock.Setup(x => x.CreateGuid()).Returns(new Guid("8a1c6b80-7bcb-49fd-9c6f-4801e12207d6"));
-            
+
             _mockHttpHandler = new MockHttpMessageHandler();
             _httpClient = new TppHttpClient(new HttpClient(_mockHttpHandler), _configMock.Object);
 
@@ -60,10 +60,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 
             _sut = _fixture.Create<TppClient>();
         }
-        
+
         [TestMethod]
         public async Task AuthenticatePostRequest_ReturnsAuthenticateReply_WhenValidlyRequested()
-        {            
+        {
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
             authenticateRequestModel.ApplyConfig(_configMock.Object);
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
                 ProviderId = _configMock.Object.ApplicationProviderId,
                 DeviceType = _configMock.Object.ApplicationDeviceType
             };
-            
+
             var expectedAuthenticateResponse = _fixture.Create<AuthenticateReply>();
 
             var requestHeaders = new List<KeyValuePair<string, string>>
@@ -86,14 +86,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             {
                 new KeyValuePair<string, string>(TppClient.ResponseSuidHeader, Suid)
             };
-            
+
             var responseContent = new StringContent(expectedAuthenticateResponse.SerializeXml());
-            
+
             _mockHttpHandler
                 .WhenTpp(HttpMethod.Post, ApiUrl)
                 .WithTppHeaders(requestHeaders)
                 .WithContent(authenticateRequestModel.SerializeXml())
-                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);    
+                .Respond(HttpStatusCode.OK, responseHeaders, responseContent);
 
             var response = await _sut.AuthenticatePost(authenticateRequestModel);
 
@@ -102,10 +102,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             response.ErrorResponse.Should().BeNull();
         }
-        
+
         [TestMethod]
         public async Task AuthenticatePostRequest_ReturnsErrorWithFalseSuccessCode_WhenResponseHasErrorInBody()
-        {            
+        {
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
             authenticateRequestModel.ApplyConfig(_configMock.Object);
@@ -116,14 +116,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
                 ProviderId = _configMock.Object.ApplicationProviderId,
                 DeviceType = _configMock.Object.ApplicationDeviceType
             };
-            
+
             var expectedErrorResponse = _fixture.Create<Error>();
 
             var tppRequestHeaders = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(TppClient.RequestTypeHeader, authenticateRequestModel.RequestType)
             };
-            
+
             _mockHttpHandler
                 .WhenTpp(HttpMethod.Post, ApiUrl)
                 .WithTppHeaders(tppRequestHeaders)
@@ -143,7 +143,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [DataRow(HttpStatusCode.BadRequest)]
         [DataRow(HttpStatusCode.Unauthorized)]
         [DataRow(HttpStatusCode.NotFound)]
-        public async Task AuthenticatePostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(HttpStatusCode value)
+        public async Task AuthenticatePostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
+            HttpStatusCode value)
         {
             var authenticateRequestModel = _fixture.Create<Authenticate>();
             authenticateRequestModel.UnitId = UnitId;
@@ -167,13 +168,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
                 .Respond(value);
 
             var response = await _sut.AuthenticatePost(authenticateRequestModel);
-            
+
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
         }
 
+
         [TestMethod]
-        public async Task OrderPrescriptionPostRequest_MakesHttpRequestToCorrectUrlWithCorrectHeaders_AndRespondsWithDeserializedXml()
+        public async Task
+            OrderPrescriptionPostRequest_MakesHttpRequestToCorrectUrlWithCorrectHeaders_AndRespondsWithDeserializedXml()
         {
             var requestMedicationRequestModel = _fixture.Create<RequestMedication>();
             requestMedicationRequestModel.UnitId = UnitId;
@@ -276,7 +279,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [DataRow(HttpStatusCode.BadRequest)]
         [DataRow(HttpStatusCode.Unauthorized)]
         [DataRow(HttpStatusCode.NotFound)]
-        public async Task LinkAccountPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(HttpStatusCode value)
+        public async Task LinkAccountPostRequest_ReturnsErrorWithSameStatusCode_WhenResponseIsHttpError(
+            HttpStatusCode value)
         {
             var linkAccountRequestModel = _fixture.Create<LinkAccount>();
             linkAccountRequestModel.OrganisationCode = UnitId;
@@ -293,9 +297,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
                 .Respond(value);
 
             var response = await _sut.LinkAccountPost(linkAccountRequestModel);
-            
+
             response.StatusCode.Should().Be(value);
             response.HasSuccessResponse.Should().BeFalse();
+        }
+
+        [TestCleanup]
+        public void Dispose()
+        {
+            _mockHttpHandler.Dispose();
         }
     }
 }

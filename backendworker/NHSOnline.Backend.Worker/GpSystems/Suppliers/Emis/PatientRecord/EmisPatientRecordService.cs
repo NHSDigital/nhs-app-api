@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             _logger = loggerFactory.CreateLogger<EmisPatientRecordService>();
         }
         
-        public async Task<GetMyRecordResult> Get(UserSession userSession)
+        public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
             var methodName = "Get";
             _logger.LogDebug("Entered: {0}", methodName);
@@ -59,7 +60,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);
 
-                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper();
+                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 

@@ -22,11 +22,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
             _slotResultBuilder = appointmentSlotResultBuilder;
         }
-        public async Task<AppointmentSlotsResult> Get(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
+        public async Task<AppointmentSlotsResult> GetSlots(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
         {
             try
             {
-                _logger.LogEnter(nameof(Get));
+                _logger.LogEnter(nameof(GetSlots));
             
                 var tppUserSession = (TppUserSession)userSession;
                 var request = new ListSlots
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             }
             finally
             {
-                _logger.LogExit(nameof(Get));
+                _logger.LogExit(nameof(GetSlots));
             }
         }
     }

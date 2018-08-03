@@ -1,13 +1,13 @@
 ﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
-    public class TppApiConstants
+    public static class TppApiConstants
     {
-        public class MedicationType
+        public static class MedicationType
         {
             public const string Repeat = "Repeat";
         }
 
-        public class MedicationRequestable
+        public static class MedicationRequestable
         {
             public const string Yes = "y";
         }

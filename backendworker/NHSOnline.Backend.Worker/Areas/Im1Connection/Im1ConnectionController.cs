@@ -36,8 +36,8 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
         [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Get(
-            [FromHeader(Name = Constants.Headers.ConnectionToken)] string connectionToken,
-            [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode
+            [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)] string connectionToken,
+            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode
         )
         {
             try
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 if (!gpSystemOption.HasValue)
                 {
                     _logger.LogError(
-                        $"No GP system was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
+                        $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
     
                     return new StatusCodeResult(StatusCodes.Status501NotImplemented);
                 }
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 if (!tokenValidationService.IsValidConnectionTokenFormat(connectionToken))
                 {
                     _logger.LogError(
-                        $"ConnectionToken provided in header {Constants.Headers.ConnectionToken} is invalid.");
+                        $"ConnectionToken provided in header {Constants.HttpHeaders.ConnectionToken} is invalid.");
                     return BadRequest();
                 }
 
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
                 if (!gpSystemOption.HasValue)
                 {
                     _logger.LogError(
-                        $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.Headers.OdsCode}.");
+                        $"No GP system was found for OdsCode {model.OdsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
                     return new StatusCodeResult(StatusCodes.Status501NotImplemented);
                 }
 
@@ -131,13 +131,13 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
             if (string.IsNullOrEmpty(connectionToken))
             {
-                _logger.LogError($"The header {Constants.Headers.ConnectionToken}, has not been supplied in the request"); 
+                _logger.LogError($"The header {Constants.HttpHeaders.ConnectionToken}, has not been supplied in the request"); 
                 argumentsAreValid = false;
             }
 
             if (string.IsNullOrEmpty(odsCode))
             {
-                _logger.LogError($"The header {Constants.Headers.OdsCode}, has not been supplied in the request.");
+                _logger.LogError($"The header {Constants.HttpHeaders.OdsCode}, has not been supplied in the request.");
                 argumentsAreValid = false;
             }
 

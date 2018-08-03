@@ -2,6 +2,6 @@
 {
     public interface IGpSystemFactory
     {
-        IGpSystem CreateGpSystem(SupplierEnum supplier);
+        IGpSystem CreateGpSystem(Supplier supplier);
     }
 }

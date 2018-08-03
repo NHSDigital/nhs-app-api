@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -14,6 +15,8 @@ namespace NHSOnline.Backend.Worker.Support.Logging
         private readonly LogLevel _maxLogLevelLimit;
         private readonly LoggerExternalScopeProvider _scopeProvider;
         private readonly IEnumerable<LogCensorFilter> _regexFilterList;
+
+        private bool _disposed;
 
         public HttpContexedLoggerProvider
         (
@@ -30,10 +33,39 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             _regexFilterList = regexFilterList;
         }
 
-        public void Dispose() { }
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~HttpContexedLoggerProvider()
+        {
+            Dispose(false);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _logwriter.Dispose();
+            }
+
+            _disposed = true;
+        }
 
         public ILogger CreateLogger(string categoryName)
         {
+            if (_disposed)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
+            
             return new HttpContexedLogger(categoryName, _logwriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
         }
      
@@ -45,6 +77,8 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             private readonly LoggerExternalScopeProvider _scopeProvider;
             private readonly string _categoryName;
             private readonly IEnumerable<LogCensorFilter> _regexFilterList;
+
+            private static readonly object Locker = new object();
 
             public HttpContexedLogger(string categoryName, TextWriter logWriter, LogLevel minLogLevel, LogLevel maxLogLevelLimit, LoggerExternalScopeProvider scopeProvider, IEnumerable<LogCensorFilter> regexFilterList)
             {
@@ -60,7 +94,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             {
                 if (IsEnabled(logLevel))
                 {
-                    lock (_textWriter)
+                    lock (Locker)
                     {
                         var exceptionMessage = string.Empty;
                         if (exception != null)
@@ -74,7 +108,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                 }
             }
 
-            string CensorLogMessage(string state)
+            private string CensorLogMessage(string state)
             {
                 if (_regexFilterList != null)
                 {

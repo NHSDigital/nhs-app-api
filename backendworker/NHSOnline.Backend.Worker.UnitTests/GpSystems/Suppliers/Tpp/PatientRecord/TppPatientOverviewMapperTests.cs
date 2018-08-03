@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -98,7 +99,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         {
             return new ViewPatientOverViewItem
             {
-                Date = _fixture.Create<DateTimeOffset>().ToString(),
+                Date = _fixture.Create<DateTimeOffset>().ToString(CultureInfo.InvariantCulture),
                 Value = _fixture.Create<string>(),
             };
         }
@@ -118,9 +119,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             return new AllergyItem
             {
                 Name = item.Value,
-                Date = new Date
+                Date = new MyRecordDate
                 {
-                    Value = DateTimeOffset.Parse(item.Date)
+                    Value = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture)
                 }
             };
         }
@@ -129,7 +130,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         {
             var result = new MedicationItem
             {
-                Date = DateTimeOffset.Parse(item.Date) 
+                Date = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture)
             };
             
             var medicationLineItems = new List<MedicationLineItem>();

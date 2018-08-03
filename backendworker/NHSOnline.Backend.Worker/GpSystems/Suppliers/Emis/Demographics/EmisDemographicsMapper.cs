@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Demographics.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
@@ -18,7 +19,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
  
             return new DemographicsResponse
             {
-                PatientName = String.Format("{0} {1}", demographicsGetResponse.FirstName, demographicsGetResponse.Surname),
+                PatientName = string.Format(CultureInfo.InvariantCulture, "{0} {1}", demographicsGetResponse.FirstName, demographicsGetResponse.Surname),
                 DateOfBirth = demographicsGetResponse.DateOfBirth,
                 Sex = demographicsGetResponse.Sex,
                 NhsNumber = demographicsGetResponse.ExtractNhsNumbers().Any() ? demographicsGetResponse.ExtractNhsNumbers().First().NhsNumber : null,

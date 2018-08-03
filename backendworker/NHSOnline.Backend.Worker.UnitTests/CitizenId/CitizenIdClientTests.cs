@@ -17,7 +17,7 @@ using RichardSzalay.MockHttp;
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 {
     [TestClass]
-    public class CitizenIdClientTests
+    public sealed class CitizenIdClientTests : IDisposable
     {
         private IFixture _fixture;
 
@@ -211,6 +211,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             response.Body.Should().BeNull();
             response.ErrorResponse.Should().BeNull();
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
+        }
+
+        public void Dispose()
+        {
+            _mockHttpHandler.Dispose();
         }
     }
 }

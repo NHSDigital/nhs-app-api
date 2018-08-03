@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -227,11 +228,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _mockEmisClient.Setup(x => x.AppointmentsPost(
                     It.Is<EmisHeaderParameters>(p =>
-                        p.EndUserSessionId == _userSession.EndUserSessionId && p.SessionId == _userSession.SessionId),
+                        p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
+                        && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
                     It.Is<BookAppointmentSlotPostRequest>(p =>
-                        p.BookingReason == BookingReason
-                        && p.SlotId == Convert.ToInt64(SlotId)
-                        && p.UserPatientLinkToken == _userSession.UserPatientLinkToken
+                        p.BookingReason.Equals(BookingReason, StringComparison.Ordinal)
+                        && p.SlotId == Convert.ToInt64(SlotId, CultureInfo.InvariantCulture)
+                        && p.UserPatientLinkToken.Equals(_userSession.UserPatientLinkToken, StringComparison.Ordinal)
                     )
                 )
             ).Returns(

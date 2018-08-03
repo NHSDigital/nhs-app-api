@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     {
                         Name = x.Term,
                         Date = x.EffectiveDate != null ? 
-                                        new Date { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart } :
+                                        new MyRecordDate { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart } :
                                         null,
                     });
             }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -132,8 +133,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify(x => x.LinkagePost(It.Is<LinkagePostRequest>(request =>
-                request.NhsNumber == linkageDetailsRequest.NhsNumber
-                && request.OdsCode == linkageDetailsRequest.OdsCode
+                request.NhsNumber.Equals(linkageDetailsRequest.NhsNumber, StringComparison.Ordinal)
+                && request.OdsCode.Equals(linkageDetailsRequest.OdsCode, StringComparison.Ordinal)
             )));
             _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse));
             result.Should().BeAssignableTo<CreateLinkageResult.SuccessfullyRetrieved>();
@@ -156,8 +157,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify(x => x.LinkagePost(It.Is<LinkagePostRequest>(request =>
-                request.NhsNumber == linkageDetailsRequest.NhsNumber
-                && request.OdsCode == linkageDetailsRequest.OdsCode
+                request.NhsNumber.Equals(linkageDetailsRequest.NhsNumber, StringComparison.Ordinal)
+                && request.OdsCode.Equals(linkageDetailsRequest.OdsCode, StringComparison.Ordinal)
             )));
             _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse), Times.Never);
             result.Should().BeAssignableTo<CreateLinkageResult.NhsNumberNotFound>();
@@ -179,8 +180,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 
             // Assert
             _emisClient.Verify(x => x.LinkagePost(It.Is<LinkagePostRequest>(request =>
-                request.NhsNumber == linkageDetailsRequest.NhsNumber
-                && request.OdsCode == linkageDetailsRequest.OdsCode
+                request.NhsNumber.Equals(linkageDetailsRequest.NhsNumber, StringComparison.Ordinal)
+                && request.OdsCode.Equals(linkageDetailsRequest.OdsCode, StringComparison.Ordinal)
             )));
             _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse), Times.Never);
             result.Should().BeAssignableTo<CreateLinkageResult.LinkageKeyAlreadyExists>();

@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             mockGpSystem.Setup(x => x.GetDemographicsService())
                 .Returns(demographicsService.Object);
 
-            demographicsService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetDemographicsResult) getDemographicsResult));
+            demographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((GetDemographicsResult) getDemographicsResult));
 
             // Act
             var result = await _systemUnderTest.Get();
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetDemographicsService());
-            demographicsService.Verify(x => x.Get(_userSession));
+            demographicsService.Verify(x => x.GetDemographics(_userSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value as GetDemographicsResult.SuccessfullyRetrieved;
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             mockGpSystem.Setup(x => x.GetDemographicsService())
                 .Returns(demographicsService.Object);
 
-            demographicsService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetDemographicsResult) response));
+            demographicsService.Setup(x => x.GetDemographics(_userSession)).Returns(Task.FromResult((GetDemographicsResult) response));
 
             // Act
             var result = await _systemUnderTest.Get();

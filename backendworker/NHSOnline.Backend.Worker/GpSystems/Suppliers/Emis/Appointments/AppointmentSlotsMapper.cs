@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 using Location = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Location;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
@@ -67,7 +68,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     var sessionId = sourceSlotSession.SessionId;
                     var slot = new Slot
                     {
-                        Id = sourceSlot.SlotId.ToString(),
+                        Id = sourceSlot.SlotId.ToString(CultureInfo.InvariantCulture),
                         StartTime = startTime,
                         EndTime = endTime,
                         Clinicians = FindCliniciansForSession(sessionId, sessions, sessionHolders),
@@ -80,7 +81,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             }
         }
 
-        private string CreateTypeFromSlotAndSession(AppointmentSlot sourceSlot, Models.Session session)
+        private static string CreateTypeFromSlotAndSession(AppointmentSlot sourceSlot, Models.Session session)
         {
             var hasOnlySlotTypeOrSessionName = string.IsNullOrEmpty(sourceSlot.SlotTypeName) || string.IsNullOrEmpty(session?.SessionName);
             return $"{session?.SessionName}{(hasOnlySlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{sourceSlot.SlotTypeName}";
@@ -89,7 +90,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private static string[] FindCliniciansForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<SessionHolder> sessionHolders)
         {
             var session = sessions.FirstOrDefault(x => x.SessionId == sessionId);
-            return session?.ClinicianIds == null ? new string[] { } : session.ClinicianIds.Select(x => sessionHolders?.FirstOrDefault(s=>s.ClinicianId==x).DisplayName).ToArray();
+            return session?.ClinicianIds == null ? Array.Empty<string>() : session.ClinicianIds.Select(x => sessionHolders?.FirstOrDefault(s=>s.ClinicianId==x).DisplayName).ToArray();
         }
         
         private static string FindLocationForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<Location> locations)

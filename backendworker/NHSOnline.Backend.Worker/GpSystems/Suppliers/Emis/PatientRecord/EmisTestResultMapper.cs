@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -32,28 +34,28 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 return testResultItem;
 
             testResultItem.Date =
-                new Date { Value = response.Value.EffectiveDate.Value, 
+                new MyRecordDate { Value = response.Value.EffectiveDate.Value, 
                            DatePart = response.Value.EffectiveDate.DatePart };
             
             if (response.ChildValues == null || !response.ChildValues.Any())
             {
                 var term = new StringBuilder();
-                term.Append(string.Format("{0}: {1} {2}",
+                term.Append(string.Format(CultureInfo.InvariantCulture, "{0}: {1} {2}",
                     response.Value.Term, response.Value.TextValue, response.Value.NumericUnits));
 
                 if (response.Value.Range != null)
                 {
                     term.Append(
-                        string.Format(" (normal range: {0} - {1})", response.Value.Range.MinimumText,
+                        string.Format(CultureInfo.InvariantCulture, " (normal range: {0} - {1})", response.Value.Range.MinimumText,
                             response.Value.Range.MaximumText));
                 }
 
                 testResultItem.Description = term.ToString();
                 testResultItem.AssociatedTexts = response.Value.AssociatedText?.Any() == true
                     ? (from at in response.Value.AssociatedText
-                        select at.Text.Replace("\t", string.Empty)
+                        select at.Text.Replace("\t", string.Empty, StringComparison.Ordinal)
                             .Trim(new[] { '\n' })
-                            .Replace("\n", "; ")).ToList()
+                            .Replace("\n", "; ", StringComparison.Ordinal)).ToList()
                     : new List<string>();
             }
             else
@@ -62,13 +64,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 foreach (var childValue in response.ChildValues)
                 {
                     var lineItem = new StringBuilder();
-                    
-                    lineItem.Append(string.Format("{0}: {1} {2}", childValue.Term, childValue.TextValue, childValue.NumericUnits));
+                    lineItem.Append(string.Format(CultureInfo.InvariantCulture, "{0}: {1} {2}", childValue.Term, childValue.TextValue, childValue.NumericUnits));
                     
                     if (childValue.Range != null)
                     {
                         lineItem.Append(
-                            string.Format(" (normal range: {0} - {1})", childValue.Range.MinimumText,
+                            string.Format(CultureInfo.InvariantCulture, " (normal range: {0} - {1})", childValue.Range.MinimumText,
                                 childValue.Range.MaximumText));
                     }
 
@@ -77,9 +78,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                         Description = lineItem.ToString(),
                         AssociatedTexts = childValue.AssociatedText?.Any() == true ?
                             (from at in childValue.AssociatedText
-                            select at.Text.Replace("\t", string.Empty)
+                            select at.Text.Replace("\t", string.Empty, StringComparison.Ordinal)
                                     .Trim(new[] { '\n' })
-                                    .Replace("\n", "; ")).ToList() : new List<string>()
+                                    .Replace("\n", "; ", StringComparison.Ordinal)).ToList() : new List<string>()
                     });                      
                 }
            }

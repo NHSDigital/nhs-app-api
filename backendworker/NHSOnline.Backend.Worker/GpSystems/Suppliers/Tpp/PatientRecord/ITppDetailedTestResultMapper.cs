@@ -5,6 +5,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 {
     public interface ITppDetailedTestResultMapper
     {       
-        TestResultResponse Map(TestResultsViewReply testResults);  
+        TestResultResponse Map(TestResultsViewReply testResultsViewReply);  
     }
 }

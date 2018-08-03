@@ -8,7 +8,7 @@ namespace NHSOnline.Backend.Worker
 {
     public interface IOdsCodeLookup
     {
-        Task<Option<SupplierEnum>> LookupSupplier(string odsCode);
+        Task<Option<Supplier>> LookupSupplier(string odsCode);
     }
 
     public class OdsCodeLookup : IOdsCodeLookup
@@ -23,19 +23,19 @@ namespace NHSOnline.Backend.Worker
             _logger = logger;
         }
 
-        public async Task<Option<SupplierEnum>> LookupSupplier(string odsCode)
+        public async Task<Option<Supplier>> LookupSupplier(string odsCode)
         {
             if (string.IsNullOrWhiteSpace(odsCode))
             {
-                return Option.None<SupplierEnum>();
+                return Option.None<Supplier>();
             }
 
             var supplierName = await GetSupplierNameFromRedis(odsCode);
 
-            if (!Enum.TryParse(supplierName, true, out SupplierEnum supplierEnum))
+            if (!Enum.TryParse(supplierName, true, out Supplier supplierEnum))
             {
                 _logger.LogError($"Ods code {odsCode} could not be matched to a supported GP System {supplierName}");
-                return Option.None<SupplierEnum>();
+                return Option.None<Supplier>();
             }
 
             return Option.Some(supplierEnum);

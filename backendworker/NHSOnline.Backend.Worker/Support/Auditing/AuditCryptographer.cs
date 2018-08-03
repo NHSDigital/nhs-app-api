@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NHSOnline.Backend.Worker.Support.Auditing
 {
-    public class AuditCryptographer
+    public static class AuditCryptographer
     {
         public static string Hash(string valueToEncrypt)
         {

@@ -21,13 +21,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         {
             headers = headers ?? new List<KeyValuePair<string, string>>();
 
-            if (headers.All(x => x.Key != EmisHttpClient.HeaderApplicationId))
+            if (headers.All(x => !x.Key.Equals(EmisHttpClient.HeaderApplicationId, StringComparison.Ordinal)))
             {
                 headers.Add(new KeyValuePair<string, string>(EmisHttpClient.HeaderApplicationId,
                     EmisClientTests.DefaultEmisApplicationId));
             }
 
-            if (headers.All(x => x.Key != EmisHttpClient.HeaderVersion))
+            if (headers.All(x => !x.Key.Equals(EmisHttpClient.HeaderVersion, StringComparison.Ordinal)))
             {
                 headers.Add(new KeyValuePair<string, string>(EmisHttpClient.HeaderVersion,
                     EmisClientTests.DefaultEmisVersion));

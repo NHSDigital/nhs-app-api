@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -56,7 +57,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient
                 .Setup(x => x.SessionsPost(_endUserSessionResponse.EndUserSessionId,
                     It.Is<SessionsPostRequest>(y =>
-                        y.AccessIdentityGuid == _connectionToken && y.NationalPracticeCode == _odsCode)))
+                        y.AccessIdentityGuid.Equals(_connectionToken, StringComparison.Ordinal)
+                        && y.NationalPracticeCode.Equals(_odsCode, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
                     {
@@ -153,7 +155,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient
                 .Setup(x => x.SessionsPost(_endUserSessionResponse.EndUserSessionId,
                     It.Is<SessionsPostRequest>(y =>
-                        y.AccessIdentityGuid == _connectionToken && y.NationalPracticeCode == _odsCode)))
+                        y.AccessIdentityGuid.Equals(_connectionToken, StringComparison.Ordinal)
+                        && y.NationalPracticeCode.Equals(_odsCode, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(forbiddenSession))
                 .Verifiable();
 
@@ -179,7 +182,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient
                 .Setup(x => x.SessionsPost(_endUserSessionResponse.EndUserSessionId,
                     It.Is<SessionsPostRequest>(y =>
-                        y.AccessIdentityGuid == _connectionToken && y.NationalPracticeCode == _odsCode)))
+                        y.AccessIdentityGuid.Equals(_connectionToken, StringComparison.Ordinal)
+                        && y.NationalPracticeCode.Equals(_odsCode, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(badRequestSession))
                 .Verifiable();
 
@@ -204,7 +208,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient
                 .Setup(x => x.SessionsPost(_endUserSessionResponse.EndUserSessionId,
                     It.Is<SessionsPostRequest>(y =>
-                        y.AccessIdentityGuid == _connectionToken && y.NationalPracticeCode == _odsCode)))
+                        y.AccessIdentityGuid.Equals(_connectionToken, StringComparison.Ordinal)
+                        && y.NationalPracticeCode.Equals(_odsCode, StringComparison.Ordinal))))
                 .Returns(Task.FromResult(forbiddenSession))
                 .Verifiable();
 
@@ -336,7 +341,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .UserSession
                 .Supplier
                 .Should()
-                .Be(SupplierEnum.Emis);
+                .Be(Supplier.Emis);
         }
         
         [TestMethod]

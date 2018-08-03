@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             _serviceProvider = serviceProvider;
         }
 
-        public SupplierEnum Supplier => SupplierEnum.Emis;
+        public Supplier Supplier => Supplier.Emis;
 
         public IAppointmentsService GetAppointmentsService()
         {
@@ -81,10 +81,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public ILinkageService GetLinkageService()
         {
-            bool
-                .TryParse(
-                    Environment.GetEnvironmentVariable("EMIS_LINKAGE_USE_STUBBED_DATA"), 
-                    out var useStubbedData);
+            if (!bool.TryParse(Environment.GetEnvironmentVariable("EMIS_LINKAGE_USE_STUBBED_DATA"), out var useStubbedData))
+            {
+                useStubbedData = false;
+            }
             
             if (useStubbedData)
             {

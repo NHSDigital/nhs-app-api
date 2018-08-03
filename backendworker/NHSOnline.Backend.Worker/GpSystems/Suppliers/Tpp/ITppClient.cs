@@ -8,16 +8,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public interface ITppClient
     {
-
-        Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate model);
+        Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate);
 
         Task<TppApiObjectResponse<LinkAccountReply>> LinkAccountPost(LinkAccount linkAccountModel);
         
         Task<TppApiObjectResponse<ListRepeatMedicationReply>> ListRepeatMedicationPost(TppUserSession tppUserSession);
 
-        Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession session);
+        Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession);
         
-        Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots request, string suid);
+        Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots listSlots, string suid);
         
         Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession);
 
@@ -27,11 +26,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         
         Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession, string startDate, string endDate);
 
-        Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid);
+        Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments viewAppointments, string suid);
 
         Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession, string testResultId);
         
-        Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model, string suid);
+        Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment cancelAppointment,
+                string suid);
 
         Task<TppApiObjectResponse<RequestMedicationReply>> OrderPrescriptionsPost(TppUserSession tppUserSession, RequestMedication requestMedication);
     }

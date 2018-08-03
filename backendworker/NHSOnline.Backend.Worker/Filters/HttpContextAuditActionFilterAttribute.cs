@@ -5,26 +5,29 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Filters
 {
-    public class HttpContextAuditActionFilterAttribute : Attribute, IActionFilter, IResultFilter
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+    public sealed class HttpContextAuditActionFilterAttribute : ActionFilterAttribute
     {
         private IDisposable _context;
         private readonly IAuditor _auditor;
-
+        
         public HttpContextAuditActionFilterAttribute(IAuditor auditor)
         {
             _auditor = auditor;
         }
+        
+        public IAuditor Auditor => _auditor;
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             _context = _auditor.BeginScope(context.HttpContext);
         }
 
-        public void OnActionExecuted(ActionExecutedContext context) { }
+        public override void OnActionExecuted(ActionExecutedContext context) { }
 
-        public void OnResultExecuting(ResultExecutingContext context) { }
+        public override void OnResultExecuting(ResultExecutingContext context) { }
 
-        public void OnResultExecuted(ResultExecutedContext context)
+        public override void OnResultExecuted(ResultExecutedContext context)
         {
             _context?.Dispose();
         }

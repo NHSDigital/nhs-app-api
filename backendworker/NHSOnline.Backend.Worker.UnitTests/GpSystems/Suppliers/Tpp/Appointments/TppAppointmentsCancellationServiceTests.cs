@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -149,7 +150,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             _mockTppClient
                 .Setup(
                     x => x.CancelAppointmentPost(
-                        It.Is<CancelAppointment>(p => p.ApptId == _request.AppointmentId), _userSession.Suid))
+                        It.Is<CancelAppointment>(p => p.ApptId.Equals(_request.AppointmentId, StringComparison.Ordinal)),
+                        _userSession.Suid))
                 .Returns(Task.FromResult(response))
                 .Verifiable();
         }

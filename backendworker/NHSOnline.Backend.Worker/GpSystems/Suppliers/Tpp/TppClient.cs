@@ -45,9 +45,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return response;
         }
         
-        public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticateModel)
+        public async Task<TppApiObjectResponse<AuthenticateReply>> AuthenticatePost(Authenticate authenticate)
         {
-            authenticateModel.Application = new Application
+            authenticate.Application = new Application
             {
                 Name = _tppConfig.ApplicationName,
                 Version = _tppConfig.ApplicationVersion,
@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 DeviceType = _tppConfig.ApplicationDeviceType
             };
             
-            var response = await Post<Authenticate, AuthenticateReply>(authenticateModel);
+            var response = await Post<Authenticate, AuthenticateReply>(authenticate);
 
             return response;
         }
@@ -254,20 +254,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return ErrorRegex.IsMatch(responseString);
         }
 
-        public async Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots model, string suid)
+        public async Task<TppApiObjectResponse<ListSlotsReply>> ListSlotsPost(ListSlots listSlots, string suid)
         {
-            return await Post<ListSlots, ListSlotsReply>(model, suid);
+            return await Post<ListSlots, ListSlotsReply>(listSlots, suid);
         }
 
-        public async Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments request, string suid)
+        public async Task<TppApiObjectResponse<ViewAppointmentsReply>> ViewAppointmentsPost(ViewAppointments viewAppointments, string suid)
         {
-            return await Post<ViewAppointments, ViewAppointmentsReply>(request, suid);
+            return await Post<ViewAppointments, ViewAppointmentsReply>(viewAppointments, suid);
         }
 
-        public async Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment model,
+        public async Task<TppApiObjectResponse<CancelAppointmentReply>> CancelAppointmentPost(CancelAppointment cancelAppointment,
             string suid)
         {
-            return await Post<CancelAppointment, CancelAppointmentReply>(model, suid);
+            return await Post<CancelAppointment, CancelAppointmentReply>(cancelAppointment, suid);
         }
 
         public class TppApiResponse
@@ -283,15 +283,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
             public bool HasErrorWithCode(string errorCode)
             {
-                return ErrorResponse?.ErrorCode == errorCode;
+                return string.Equals(ErrorResponse?.ErrorCode, errorCode, StringComparison.Ordinal);
             }
             
             // User does not have access, Sean to confirm with TPP re using error codes
-            public bool HasForbiddenResponse => ErrorResponse != null && ErrorResponse.ErrorCode == TppApiErrorCodes.NoAccess;
+            public bool HasForbiddenResponse => ErrorResponse != null &&
+                                                TppApiErrorCodes.NoAccess.Equals(ErrorResponse.ErrorCode,
+                                                    StringComparison.Ordinal);
             
             public bool HasErrorMessageContaining(string message)
             {
-                return ErrorResponse?.UserFriendlyMessage.Contains(message) ?? false;
+                return ErrorResponse?.UserFriendlyMessage.Contains(message, StringComparison.Ordinal) ?? false;
             }
         }
 

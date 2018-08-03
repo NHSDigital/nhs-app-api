@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -46,13 +47,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                 new TestResultItem
                 {
                     
-                    Date = new Date { Value = DateTimeOffset.Parse(testResultsViewReply.Items[0].Date) },
-                    Description = string.Format("{0} - {1}", testResultsViewReply.Items[0].Description, testResultsViewReply.Items[0].Value)
+                    Date = new MyRecordDate { Value = DateTimeOffset.Parse(testResultsViewReply.Items[0].Date, CultureInfo.InvariantCulture) },
+                    Description = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", testResultsViewReply.Items[0].Description, testResultsViewReply.Items[0].Value)
                 },
                 new TestResultItem
                 {
-                    Date = new Date { Value = DateTimeOffset.Parse(testResultsViewReply.Items[1].Date) },
-                    Description = string.Format("{0} - {1}", testResultsViewReply.Items[1].Description, testResultsViewReply.Items[1].Value)
+                    Date = new MyRecordDate { Value = DateTimeOffset.Parse(testResultsViewReply.Items[1].Date, CultureInfo.InvariantCulture) },
+                    Description = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", testResultsViewReply.Items[1].Description, testResultsViewReply.Items[1].Value)
                 }                
             };
             // Act

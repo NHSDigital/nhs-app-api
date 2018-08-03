@@ -16,7 +16,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
         {
             if (_httpContext.Items.Keys.Contains(Constants.HttpContextItems.UserSession) == false)
             {
-                return new AuditUserContext(null, SupplierEnum.Unknown);
+                return new AuditUserContext(null, Supplier.Unknown);
             }
 
             var userSession = _httpContext.GetUserSession();

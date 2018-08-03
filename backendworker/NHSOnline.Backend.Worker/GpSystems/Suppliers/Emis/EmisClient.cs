@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,8 +15,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.ResponseParsers;
-using NHSOnline.Backend.Worker.Support.Date;
-using NHSOnline.Backend.Worker.Support.Logging;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -78,7 +79,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             string endUserSessionId)
         {
             _logger.LogInformation("EMIS: Fetching patient demographics");
-            var path = string.Format(DemographicsPath, userPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, DemographicsPath, userPatientLinkToken);
 
             return await Get<DemographicsGetResponse>(path, endUserSessionId, responseSessionId);
         }
@@ -87,8 +88,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             string responseSessionId, string endUserSessionId,
             RecordType recordType)
         {
+
             _logger.LogInformation("EMIS: Fetching patient medical record - {0}", recordType.ToString());
-            var path = string.Format(PatientRecordPath, userPatientLinkToken, recordType.ToString());
+            var path = string.Format(CultureInfo.InvariantCulture, PatientRecordPath, userPatientLinkToken, recordType.ToString());
 
             return await Get<MedicationRootObject>(path, endUserSessionId, responseSessionId);
         }
@@ -104,7 +106,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             string userPatientLinkToken, string responseSessionId,
             string endUserSessionId, DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime)
         {
-            var path = string.Format(PrescriptionsPath, userPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, PrescriptionsPath, userPatientLinkToken);
 
             if (fromDateTime.HasValue)
             {
@@ -129,17 +131,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
-            EmisHeaderParameters headerParameters, SlotsGetQueryParameters getQueryParameters)
+            EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters)
         {
-            var dateStringFormatter = new DateStringFormatter();
+            var fromDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.FromDateTime).ToString("s", CultureInfo.InvariantCulture);
+            var toDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.ToDateTime).ToString("s", CultureInfo.InvariantCulture);
 
-            var fromDateTime =
-                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.FromDateTime));
-            var toDateTime =
-                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.ToDateTime));
-
-            var path = string.Format(AppointmentSlotsPath,
-                getQueryParameters.UserPatientLinkToken,
+            var path = string.Format(CultureInfo.InvariantCulture, 
+                AppointmentSlotsPath,
+                queryParameters.UserPatientLinkToken,
                 fromDateTime,
                 toDateTime);
 
@@ -148,16 +147,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
-            EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters getQueryParameters)
+            EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters)
         {
-            var dateStringFormatter = new DateStringFormatter();
-            var fromDateTime =
-                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionStartDate));
-            var toDateTime =
-                dateStringFormatter.Format(_localTimeZoneConverter.ToLocalTime(getQueryParameters.SessionEndDate));
+            var fromDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.SessionStartDate).ToString("s", CultureInfo.InvariantCulture);
+            var toDateTime = _localTimeZoneConverter.ToLocalTime(queryParameters.SessionEndDate).ToString("s", CultureInfo.InvariantCulture);
 
-            var path = string.Format(AppointmentSlotsMetaPath,
-                getQueryParameters.UserPatientLinkToken,
+            var path = string.Format(CultureInfo.InvariantCulture, 
+                AppointmentSlotsMetaPath,
+                queryParameters.UserPatientLinkToken,
                 fromDateTime,
                 toDateTime);
 
@@ -168,7 +165,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         public async Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
             string responseSessionId, string endUserSessionId)
         {
-            var path = string.Format(CoursesPath, userPatientLinkToken);
+            var path = string.Format(CultureInfo.InvariantCulture, CoursesPath, userPatientLinkToken);
 
             return await Get<CoursesGetResponse>(path, endUserSessionId, responseSessionId);
         }
@@ -181,14 +178,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
+        [SuppressMessage("Microsoft.Globalization", "CA1308", 
+            Justification = "We need the fetchPreviousAppointments parameter to be in lowercase to match EMIS API expectations.")]
         public async Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
             EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
             DateTimeOffset? previousAppointmentsFromDate)
         {
+
             var qb = new QueryBuilder
             {
                 { "userPatientLinkToken", userPatientLinkToken },
-                { "fetchPreviousAppointments", fetchPreviousAppointments.ToString().ToLowerInvariant() }
+                { "fetchPreviousAppointments", fetchPreviousAppointments.ToString(CultureInfo.InvariantCulture).ToLowerInvariant() }
             };
 
             if (fetchPreviousAppointments && previousAppointmentsFromDate.HasValue)
@@ -330,12 +330,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             public bool HasExceptionWithMessage(string message)
             {
-                return ErrorResponse?.Exceptions?.Any(x => x.Message == message) ?? false;
+                return ErrorResponse?.Exceptions?.Any(x => string.Equals(x.Message, message, StringComparison.Ordinal)) ?? false;
             }
 
             public bool HasExceptionWithMessageContaining(string message)
             {
-                return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message)) ?? false;
+                return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message, StringComparison.Ordinal)) ?? false;
             }
             
             public bool HasExceptionWithAnyMessage(string[] messages)
@@ -366,7 +366,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         private static string EncodeDateTimeOffsetToIso(DateTimeOffset dateTimeOffset)
         {
-            return HttpUtility.UrlEncode(dateTimeOffset.ToString("O"));
+            return HttpUtility.UrlEncode(dateTimeOffset.ToString("O", CultureInfo.InvariantCulture));
         }
     }
 }

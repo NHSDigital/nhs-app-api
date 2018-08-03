@@ -6,11 +6,12 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope.ServiceEvaluators;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
 {
     [TestClass]
-    public class EnvelopeServiceTests
+    public sealed class EnvelopeServiceTests : IDisposable
     {
         private IFixture _fixture;
 
@@ -88,6 +89,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
                 RequestUsername);
 
             result.Should().Contain(expectedServiceContent);
+        }
+
+        public void Dispose()
+        {
+            _certificate.Dispose();
         }
     }
 }

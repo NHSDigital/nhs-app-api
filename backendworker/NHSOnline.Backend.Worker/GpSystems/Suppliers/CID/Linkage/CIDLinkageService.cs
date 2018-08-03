@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage
 {
@@ -11,67 +10,70 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage
     {
         private const string OdsCode = "A29928";
 
-        public async Task<GetLinkageResult> GetLinkageKey(string nhsNumber, string odsCode)
+        public Task<GetLinkageResult> GetLinkageKey(string nhsNumber, string odsCode)
         {
-            if (OdsCode != odsCode)
+            if (!OdsCode.Equals(odsCode, StringComparison.Ordinal))
             {
-                return new GetLinkageResult.NhsNumberNotFound();
+                return Task.FromResult((GetLinkageResult)new GetLinkageResult.NhsNumberNotFound());
             }
 
             var existingPatientlinkage = GetLinkageData.ExistingPatientLinkage
-                .FirstOrDefault(x => x.NhsNumber == nhsNumber);
+                .FirstOrDefault(x => string.Equals(x.NhsNumber, nhsNumber, StringComparison.Ordinal));
 
             if (existingPatientlinkage != null)
             {
-                return new GetLinkageResult.SuccessfullyRetrieved(existingPatientlinkage.LinkageResponse);
+                return Task.FromResult(
+                    (GetLinkageResult) new GetLinkageResult.SuccessfullyRetrieved(
+                        existingPatientlinkage.LinkageResponse));
             }
             
             var expiredPatientLinkage = 
-                GetLinkageData.ExpiredPatientLinkage.FirstOrDefault(x => x.NhsNumber == nhsNumber);
+                GetLinkageData.ExpiredPatientLinkage.FirstOrDefault(x => string.Equals(x.NhsNumber, nhsNumber, StringComparison.Ordinal));
 
             if (expiredPatientLinkage != null)
             {
-                return new GetLinkageResult.LinkageKeyRevoked();
+                return Task.FromResult((GetLinkageResult) new GetLinkageResult.LinkageKeyRevoked());
             }
 
-            if (GetLinkageData.BadGatewayPatient.NhsNumber == nhsNumber || GetLinkageData.TimeOutPatient.NhsNumber == nhsNumber)
+            if (GetLinkageData.BadGatewayPatient.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) || 
+                GetLinkageData.TimeOutPatient.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal))
             {
-                return new GetLinkageResult.SupplierSystemUnavailable();
+                return Task.FromResult((GetLinkageResult) new GetLinkageResult.SupplierSystemUnavailable());
             }
             
-            return new GetLinkageResult.NhsNumberNotFound();
+            return Task.FromResult((GetLinkageResult)new GetLinkageResult.NhsNumberNotFound());
         }
 
-        public async Task<CreateLinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
+        public Task<CreateLinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest)
         {
-            if (OdsCode != createLinkageRequest.OdsCode)
+            if (!OdsCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))
             {
-                return new CreateLinkageResult.NhsNumberNotFound();
+                return Task.FromResult((CreateLinkageResult)new CreateLinkageResult.NhsNumberNotFound());
             }
 
-            if (createLinkageRequest.NhsNumber == CreateLinkageData.ValidPatient.NhsNumber)
+            if (CreateLinkageData.ValidPatient.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
             {
-                return new CreateLinkageResult.SuccessfullyRetrieved
-                    (CreateLinkageData.ValidPatient.LinkageResponse);
+                return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.SuccessfullyRetrieved
+                    (CreateLinkageData.ValidPatient.LinkageResponse));
             }
             
-            if (createLinkageRequest.NhsNumber == CreateLinkageData.NotFoundPatient.NhsNumber)
+            if (CreateLinkageData.NotFoundPatient.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
             {
-                return new CreateLinkageResult.NhsNumberNotFound();
+                return Task.FromResult((CreateLinkageResult)new CreateLinkageResult.NhsNumberNotFound());
             }
 
-            if (createLinkageRequest.NhsNumber == CreateLinkageData.ConflictPatient.NhsNumber)
+            if (CreateLinkageData.ConflictPatient.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
             {
-                return new CreateLinkageResult.LinkageKeyAlreadyExists();
+                return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.LinkageKeyAlreadyExists());
             }
 
-            if (createLinkageRequest.NhsNumber == CreateLinkageData.BadGatewayPatient.NhsNumber || 
-                createLinkageRequest.NhsNumber == CreateLinkageData.TimeoutPatient.NhsNumber)
+            if (CreateLinkageData.BadGatewayPatient.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal) ||
+                CreateLinkageData.TimeoutPatient.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
             {
-                return new CreateLinkageResult.SupplierSystemUnavailable();
+                return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.SupplierSystemUnavailable());
             }
 
-            return new CreateLinkageResult.NhsNumberNotFound();
+            return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.NhsNumberNotFound());
         }
     }   
 }

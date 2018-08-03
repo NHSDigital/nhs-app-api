@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.Cookie.Name = Constants.Cookies.SessionId;
+                    options.Cookie.Name = Constants.CookieNames.SessionId;
                     options.Cookie.HttpOnly = true;
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
 
@@ -165,7 +165,7 @@ namespace NHSOnline.Backend.Worker
             _modularStartup.Configure(app, env);
         }
 
-        private void UseSecurityHeaders(IApplicationBuilder app)
+        private static void UseSecurityHeaders(IApplicationBuilder app)
         {            
             app.UseHttpsRedirection();
 

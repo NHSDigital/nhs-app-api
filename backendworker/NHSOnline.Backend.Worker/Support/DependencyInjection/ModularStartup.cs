@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
 {
     public sealed class ModularStartup
     {
-        private readonly IEnumerable<IModule> _modules;
+        private readonly IEnumerable<IServiceConfigurationModule> _modules;
         private readonly IConfiguration _configuration;
         private readonly ILoggerFactory _loggerFactory;
 
@@ -40,11 +40,11 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
             }
         }
 
-        private IEnumerable<IModule> FindAllLoadedModules()
+        private IEnumerable<IServiceConfigurationModule> FindAllLoadedModules()
         {
             return AppDomain.CurrentDomain.GetAssemblies().ToList()
                 .SelectMany(x => x.GetTypes())
-                .Where(t => typeof(IModule).IsAssignableFrom(t))
+                .Where(t => typeof(IServiceConfigurationModule).IsAssignableFrom(t))
                 .Where(t => !t.IsAbstract)
                 .Where(t => t.IsClass)
                 .Select(t =>
@@ -54,10 +54,10 @@ namespace NHSOnline.Backend.Worker.Support.DependencyInjection
                         .SelectMany(c => c.GetParameters())
                         .Any(p => p.ParameterType == typeof(ILoggerFactory)))
                     {
-                        return (IModule) Activator.CreateInstance(t, _loggerFactory);    
+                        return (IServiceConfigurationModule) Activator.CreateInstance(t, _loggerFactory);    
                     }
                     
-                    return (IModule) Activator.CreateInstance(t);
+                    return (IServiceConfigurationModule) Activator.CreateInstance(t);
                 })
                 .ToList();
         }

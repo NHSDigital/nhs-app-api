@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Settings;
 
@@ -70,7 +69,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
             }
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest request)
+        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             var tppUserSession = (TppUserSession)userSession;
 
@@ -79,8 +78,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                 PatientId = tppUserSession.PatientId,
                 OnlineUserId = tppUserSession.OnlineUserId,
                 UnitId = tppUserSession.UnitId,
-                Notes = request.SpecialRequest,
-                Medications = request.CourseIds.Select(x => new MedicationRequest
+                Notes = repeatPrescriptionRequest.SpecialRequest,
+                Medications = repeatPrescriptionRequest.CourseIds.Select(x => new MedicationRequest
                 {
                     DrugId = x,
                     Type = TppApiConstants.MedicationType.Repeat,

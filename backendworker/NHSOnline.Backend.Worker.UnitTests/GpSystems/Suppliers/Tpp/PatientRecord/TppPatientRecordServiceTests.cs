@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -32,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         }
         
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromTpp()
+        public async Task GetMyRecord_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromTpp()
         {
             // Arrange
             var tppAllergies = CreateListPatientOverviewItem(1);
@@ -91,7 +92,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                     }));   
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetMyRecord(_userSession);
 
             // Assert
             _tppClient.Verify(x => x.PatientOverviewPost(It.IsAny<TppUserSession>()));
@@ -113,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         {
             return new ViewPatientOverViewItem
             {
-                Date = _fixture.Create<DateTimeOffset>().ToString(),
+                Date = _fixture.Create<DateTimeOffset>().ToString(CultureInfo.InvariantCulture),
                 Value = _fixture.Create<string>(),
             };
         }
@@ -124,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             {
                 DoneBy = _fixture.Create<string>(),
                 Location = _fixture.Create<string>(),
-                Date = _fixture.Create<DateTimeOffset>().ToString(),
+                Date = _fixture.Create<DateTimeOffset>().ToString(CultureInfo.InvariantCulture),
                 Items = new List<RequestPatientRecordItem>
                 {            
                     new RequestPatientRecordItem
@@ -141,7 +142,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
         {
             return new TestResultsViewReplyItem
             {
-                Date = _fixture.Create<DateTimeOffset>().ToString(),
+                Date = _fixture.Create<DateTimeOffset>().ToString(CultureInfo.InvariantCulture),
                 Value = _fixture.Create<string>(),
                 Description = _fixture.Create<string>()
             };

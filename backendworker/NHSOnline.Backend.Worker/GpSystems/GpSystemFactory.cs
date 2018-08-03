@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems
             _serviceProvider = serviceProvider;
         }
 
-        public IGpSystem CreateGpSystem(SupplierEnum supplier)
+        public IGpSystem CreateGpSystem(Supplier supplier)
         {
             var gpSystems = _serviceProvider.GetServices<IGpSystem>();
 

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 {
@@ -16,8 +17,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
         {
             PatientId = userSession.PatientId;
             SessionId = request.SlotId;
-            StartDate = dateTimeOffsetProvider.ConvertToLocalTime(request.StartTime.Value).ToString(TppClient.TppDateTimeFormat);
-            EndDate = dateTimeOffsetProvider.ConvertToLocalTime(request.EndTime.Value).ToString(TppClient.TppDateTimeFormat);
+            StartDate = dateTimeOffsetProvider.ConvertToLocalTime(request.StartTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
+            EndDate = dateTimeOffsetProvider.ConvertToLocalTime(request.EndTime.Value).ToString(TppClient.TppDateTimeFormat, CultureInfo.InvariantCulture);
             Notes = request.BookingReason;
             UnitId = userSession.UnitId;
             OnlineUserId = userSession.OnlineUserId;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
@@ -10,9 +11,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
     public static class TppHttpMockingExtensions
     {
         public static MockedRequest WhenTpp(this MockHttpMessageHandler handler, HttpMethod method,
-            string apiUrl)
+            Uri apiUrl)
         {
-            return handler.When(method, apiUrl);
+            return handler.When(method, apiUrl.ToString());
         }
 
         public static MockedRequest WithTppHeaders(this MockedRequest mockedRequest,
@@ -20,7 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         {
             headers = headers ?? new List<KeyValuePair<string, string>>();
 
-            if (headers.All(x => x.Key != TppClient.RequestTypeHeader))
+            if (headers.All(x => !x.Key.Equals(TppClient.RequestTypeHeader, StringComparison.Ordinal)))
             {
                 headers.Add(new KeyValuePair<string, string>(TppClient.RequestTypeHeader, TppClientTests.DefaultTypeHeaderValue));
             }

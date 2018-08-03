@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
@@ -22,17 +23,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                         (from dcrEvent in requestPatientRecordReply.Events
                             select new TppDcrEvent
                             {
-                                Date = DateTimeOffset.Parse(dcrEvent.Date),
-                                LocationAndDoneBy = string.Format("{0} - {1}", dcrEvent.Location, dcrEvent.DoneBy),
+                                Date = DateTimeOffset.Parse(dcrEvent.Date, CultureInfo.InvariantCulture),
+                                LocationAndDoneBy = string.Format(CultureInfo.InvariantCulture, "{0} - {1}", dcrEvent.Location, dcrEvent.DoneBy),
                                 EventItems = dcrEvent.Items != null
                                     ? (from item in dcrEvent.Items
-                                        select string.Format("{0} - {1}", 
+                                        select string.Format(CultureInfo.InvariantCulture, "{0} - {1}", 
                                             item.Type, 
                                             !string.IsNullOrEmpty(item.Details) ? 
                                                 item.Details
-                                                    .Replace("\t", string.Empty)
+                                                    .Replace("\t", string.Empty, StringComparison.Ordinal)
                                                     .Trim(new [] {'\n'})
-                                                    .Replace("\n", "; ") : string.Empty)).ToList()
+                                                    .Replace("\n", "; ", StringComparison.Ordinal) : string.Empty)).ToList()
                                     : new List<string>(),
                             }
                         ).ToList() : new List<TppDcrEvent>()

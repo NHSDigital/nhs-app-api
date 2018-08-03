@@ -1,12 +1,10 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1724", Justification = "Deliberately matching the name specified by the GPSS")]
     [XmlRoot(ElementName = "account", Namespace = "urn:vision")]
     public class Account
     {

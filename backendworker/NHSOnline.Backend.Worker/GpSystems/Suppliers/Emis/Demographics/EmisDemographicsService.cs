@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
             _emisDemographicsMapper = emisDemographicsMapper;
         }
 
-        public async Task<GetDemographicsResult> Get(UserSession userSession)
+        public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
         {
             var methodName = "Get";
             _logger.LogDebug("Entered: {0}", methodName);

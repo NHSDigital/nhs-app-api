@@ -1,8 +1,8 @@
 ﻿namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 {
-    public class VisionConstants
+    public static class VisionConstants
     {
-        public static string GetVisionRequestXml =
+        public const string GetVisionRequestXml =
             "<visionRequest />";
     }
 }

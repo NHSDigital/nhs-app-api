@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -7,7 +8,7 @@ using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
@@ -45,7 +46,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                     queryParameters.ToDate))
                 {
                     _logger.LogError(
-                        $"Query parameters are invalid. From date: '{queryParameters.FromDate?.ToString("o")}', To date '{queryParameters.ToDate?.ToString("o")}'");
+                        $"Query parameters are invalid. From date: '{queryParameters.FromDate?.ToString("o", CultureInfo.InvariantCulture)}', To date '{queryParameters.ToDate?.ToString("o", CultureInfo.InvariantCulture)}'");
                     var badRequestResult = new AppointmentSlotsResult.BadRequest();
                     badRequestResult.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
 
@@ -62,8 +63,8 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                     queryParameters.FromDate,
                     queryParameters.ToDate
                 );
-
-                var result = await appointmentService.Get(userSession, dateRange.FromDate, dateRange.ToDate);
+            
+                var result = await appointmentService.GetSlots(userSession, dateRange.FromDate, dateRange.ToDate);
 
                 result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
                 return result.Accept(new AppointmentSlotsResultVisitor());

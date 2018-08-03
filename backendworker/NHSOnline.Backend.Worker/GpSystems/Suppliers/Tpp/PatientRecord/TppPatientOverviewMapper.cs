@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
@@ -17,13 +18,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             if (viewPatientOverviewGetResponse.Allergies != null)
             {
                 var allergiesOverview = viewPatientOverviewGetResponse.Allergies;
-                allergiesData.AddRange(allergiesOverview.Select(x => MapAllergyResponse(x)));
+                allergiesData.AddRange(allergiesOverview.Select(MapAllergyResponse));
             }
             
             if (viewPatientOverviewGetResponse.DrugSensitivities != null)
             {
                 var drugSensitivitiesOverview = viewPatientOverviewGetResponse.DrugSensitivities;
-                allergiesData.AddRange(drugSensitivitiesOverview.Select(x => MapAllergyResponse(x)));
+                allergiesData.AddRange(drugSensitivitiesOverview.Select(MapAllergyResponse));
             }
 
             allergies.Data = allergiesData;
@@ -39,19 +40,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             if (viewPatientOverviewGetResponse.Drugs != null)
             {
                 var medicationsOverview = viewPatientOverviewGetResponse.Drugs;
-                acuteMedications.AddRange(medicationsOverview.Select(x => MapMedicationResponse(x)));
+                acuteMedications.AddRange(medicationsOverview.Select(MapMedicationResponse));
             }
             
             if (viewPatientOverviewGetResponse.CurrentRepeats != null)
             {
                 var medicationsOverview = viewPatientOverviewGetResponse.CurrentRepeats;
-                currentRepeatMedications.AddRange(medicationsOverview.Select(x => MapMedicationResponse(x)));
+                currentRepeatMedications.AddRange(medicationsOverview.Select(MapMedicationResponse));
             }
             
             if (viewPatientOverviewGetResponse.PastRepeats != null)
             {
                 var medicationsOverview = viewPatientOverviewGetResponse.PastRepeats;
-                pastRepeatMedications.AddRange(medicationsOverview.Select(x => MapMedicationResponse(x)));
+                pastRepeatMedications.AddRange(medicationsOverview.Select(MapMedicationResponse));
             }
 
             medications.Data.AcuteMedications = acuteMedications;
@@ -61,20 +62,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             return new Tuple<Allergies, Medications>(allergies, medications);
         }
 
-        private AllergyItem MapAllergyResponse(ViewPatientOverViewItem item)
+        private static AllergyItem MapAllergyResponse(ViewPatientOverViewItem item)
         {
             return new AllergyItem
             {
                 Name = item.Value,
-                Date = new Date { Value = DateTimeOffset.Parse(item.Date) }
+                Date = new MyRecordDate { Value = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture) }
             };
         }
 
-        private MedicationItem MapMedicationResponse(ViewPatientOverViewItem item)
+        private static MedicationItem MapMedicationResponse(ViewPatientOverViewItem item)
         {       
             var result = new MedicationItem
             {
-                Date = DateTimeOffset.Parse(item.Date) 
+                Date = DateTimeOffset.Parse(item.Date, CultureInfo.InvariantCulture) 
             };
             
             var medicationLineItems = new List<MedicationLineItem>();

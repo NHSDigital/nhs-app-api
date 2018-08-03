@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using Castle.Core.Internal;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
@@ -127,7 +125,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                 {
                     new ConsultationItem
                     {
-                        EffectiveDate = new Date { Value = consultation1.EffectiveDate.Value, DatePart = consultation1.EffectiveDate.DatePart },
+                        EffectiveDate = new MyRecordDate { Value = consultation1.EffectiveDate.Value, DatePart = consultation1.EffectiveDate.DatePart },
                         ConsultantLocation = $"{consultation1.Location} - {consultation1.ConsultantName}",
                         ConsultationHeaders = new List<ConsultationHeaderItem>
                         {
@@ -141,7 +139,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     },
                     new ConsultationItem
                     {
-                        EffectiveDate = new Date { Value = consultation2.EffectiveDate.Value, DatePart = consultation2.EffectiveDate.DatePart },
+                        EffectiveDate = new MyRecordDate { Value = consultation2.EffectiveDate.Value, DatePart = consultation2.EffectiveDate.DatePart },
                         ConsultantLocation = $"{consultation2.Location} - {consultation2.ConsultantName}",
                         ConsultationHeaders = new List<ConsultationHeaderItem>
                         {
@@ -155,7 +153,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     },   
                     new ConsultationItem
                     {
-                        EffectiveDate = new Date { Value = consultation3.EffectiveDate.Value, DatePart = consultation3.EffectiveDate.DatePart },
+                        EffectiveDate = new MyRecordDate { Value = consultation3.EffectiveDate.Value, DatePart = consultation3.EffectiveDate.DatePart },
                         ConsultantLocation = $"{consultation3.Location} - {consultation3.ConsultantName}",
                         ConsultationHeaders = new List<ConsultationHeaderItem>
                         {

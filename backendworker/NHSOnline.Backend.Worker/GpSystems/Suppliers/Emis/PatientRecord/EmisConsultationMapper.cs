@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
@@ -26,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         {
             var consultationItem = new ConsultationItem
             {
-                EffectiveDate = new Date
+                EffectiveDate = new MyRecordDate
                 {
                     Value = response.EffectiveDate.Value,
                     DatePart = response.EffectiveDate.DatePart
@@ -51,9 +52,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                                 AssociatedTexts = obs.AssociatedText != null ? (from associatedText in obs.AssociatedText
                                     where !string.IsNullOrEmpty(associatedText.Text)
                                     select associatedText.Text
-                                        .Replace("\t", string.Empty)
+                                        .Replace("\t", string.Empty, StringComparison.Ordinal)
                                         .Trim(new [] {'\n'})
-                                        .Replace("\n", "; ")).ToList() : new List<string>()
+                                        .Replace("\n", "; ", StringComparison.OrdinalIgnoreCase)).ToList() : new List<string>()
                             }).ToList() : new List<ObservationItem>()
                     }).ToList() : new List<ConsultationHeaderItem>()
             };

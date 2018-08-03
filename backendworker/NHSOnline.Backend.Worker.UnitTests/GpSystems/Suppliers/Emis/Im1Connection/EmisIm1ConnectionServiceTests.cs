@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -92,10 +93,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
 
             SetupEmisClientMock(
                 emisClientMock,
-                patientIdentifiers: patientIdentifiers,
-                userPatientLinkModels: userPatientLinkModels,
-                userPatientLinkToken: "self"
-            );
+                userPatientLinkToken: "self", userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
 
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
 
@@ -126,9 +124,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
 
             SetupEmisClientMock(
                 emisClientMock,
-                patientIdentifiers: patientIdentifiers,
-                userPatientLinkModels: userPatientLinkModels
-            );
+                userPatientLinkModels: userPatientLinkModels, patientIdentifiers: patientIdentifiers);
 
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
 
@@ -147,7 +143,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
             var userPatientLinkModels = new[] {CreateUserPatientLinkModel()};
-            var patientIdentifiers = new PatientIdentifier[0];
+            var patientIdentifiers = Array.Empty<PatientIdentifier>();
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels,
                 patientIdentifiers: patientIdentifiers);
@@ -183,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
         {
             var emisClientMock = new Mock<IEmisClient>();
             var systemUnderTest = new EmisIm1ConnectionService(emisClientMock.Object, _logger);
-            var userPatientLinkModels = new UserPatientLink[0];
+            var userPatientLinkModels = Array.Empty<UserPatientLink>();
 
             SetupEmisClientMock(emisClientMock, userPatientLinkModels: userPatientLinkModels);
 
@@ -437,16 +433,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             };
         }
 
-        private static void SetupEmisClientMock(
-            Mock<IEmisClient> emisClientMock,
+        private static void SetupEmisClientMock(Mock<IEmisClient> emisClientMock,
             string endUserSessionId = DefaultEndUserSessionId,
             string sessionId = DefaultSessionId,
-            string connectionToken = DefaultConnectionToken,
-            string odsCode = DefaultOdsCode,
             string userPatientLinkToken = null,
             IEnumerable<UserPatientLink> userPatientLinkModels = null,
-            IEnumerable<PatientIdentifier> patientIdentifiers = null
-        )
+            IEnumerable<PatientIdentifier> patientIdentifiers = null)
         {
             userPatientLinkToken =
                 userPatientLinkToken ?? userPatientLinkModels?.FirstOrDefault()?.UserPatientLinkToken;

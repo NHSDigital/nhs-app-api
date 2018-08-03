@@ -28,8 +28,8 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
 
         [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Get(
-            [FromHeader(Name = Constants.Headers.NhsNumber)] string nhsNumber,
-            [FromHeader(Name = Constants.Headers.OdsCode)] string odsCode)
+            [FromHeader(Name = Constants.HttpHeaders.NhsNumber)] string nhsNumber,
+            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode)
         {
             if (!GetArgumentsAreValid(nhsNumber, odsCode))
             {
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             if (!gpSystemOption.HasValue)
             {
                 _logger.LogError(
-                    $"No GP system was found for OdsCode {odsCode} provided in header {Constants.Headers.OdsCode}.");
+                    $"No GP system was found for OdsCode {odsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
                 return new StatusCodeResult(StatusCodes.Status501NotImplemented);
             }
 
@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             if (!gpSystemOption.HasValue)
             {
                 _logger.LogError(
-                    $"No GP system was found for OdsCode {createLinkageRequest.OdsCode} provided in header {Constants.Headers.OdsCode}.");
+                    $"No GP system was found for OdsCode {createLinkageRequest.OdsCode} provided in header {Constants.HttpHeaders.OdsCode}.");
                 return new StatusCodeResult(StatusCodes.Status501NotImplemented);
             }
 
@@ -82,13 +82,13 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
 
             if (string.IsNullOrWhiteSpace(nhsNumber))
             {
-                _logger.LogError($"The header {Constants.Headers.NhsNumber}, has not been supplied in the request.");
+                _logger.LogError($"The header {Constants.HttpHeaders.NhsNumber}, has not been supplied in the request.");
                 argumentsAreValid = false;
             }
 
             if (string.IsNullOrWhiteSpace(odsCode))
             {
-                _logger.LogError($"The header {Constants.Headers.OdsCode}, has not been supplied in the request.");
+                _logger.LogError($"The header {Constants.HttpHeaders.OdsCode}, has not been supplied in the request.");
                 argumentsAreValid = false;
             }
 

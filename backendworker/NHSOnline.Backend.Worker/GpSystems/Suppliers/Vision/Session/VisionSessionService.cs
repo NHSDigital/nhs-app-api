@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -22,17 +23,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             _settings = settings.Value;
         }
 
-        public async Task<SessionCreateResult> Create(string im1ConnectionToken, string odsCode)
+        [SuppressMessage("Microsoft.Usage", "CA2201", Justification = "Raised bug NHSO-2040 to fix inconsistent approaches when no NHS number")]
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode)
         {
             try
             {
-                var visionConnectionToken = im1ConnectionToken.DeserializeJson<VisionConnectionToken>();
+                var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
                 
                 var response = await _visionClient.GetConfiguration(visionConnectionToken, odsCode);
 
                 if (!response.HasErrorResponse)
                 {
-                    var nhsNumber = response.Body.Account.PatientNumbers.FirstOrDefault(x => x.NumberType == "NHS");
+                    var nhsNumber = response.Body.Account.PatientNumbers.FirstOrDefault(x => "NHS".Equals(x.NumberType, StringComparison.Ordinal));
 
                     if (nhsNumber == null)
                     {
@@ -59,7 +61,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             }
         }
 
-        private SessionCreateResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
+        private static SessionCreateResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.Backend.Worker.Support.Cipher
 {
@@ -6,7 +7,10 @@ namespace NHSOnline.Backend.Worker.Support.Cipher
     {
         private const char SerialisedPartSeparator = ';';
 
+        [SuppressMessage("Microsoft.Performance", "CA1819", Justification = "NHSO-2060")]
         public byte[] InitialisationVector { get; }
+        
+        [SuppressMessage("Microsoft.Performance", "CA1819", Justification = "NHSO-2060")]
         public byte[] EncryptedData { get; }
 
         public EncryptedValue(byte[] initialisationVector, byte[] encryptedData)

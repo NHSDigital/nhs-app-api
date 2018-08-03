@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
@@ -12,7 +13,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
     public class EmisMedicationMapperTests
     {
         private IEmisMedicationMapper _mapper;
-        private const string DATE_FORMAT = "d MMMM yyyy";
+        private const string DateFormat = "d MMMM yyyy";
 
         [TestInitialize]
         public void TestInitialize()
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         {
             Action act = () => _mapper.Map(null);
             
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("medicationGetResponse");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("medicationRootObject");
         }   
 
         [TestMethod]
@@ -187,7 +188,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "Ended: " + oneYearAgo.ToString(DATE_FORMAT),
+                                    Text = "Ended: " + oneYearAgo.ToString(DateFormat, CultureInfo.InvariantCulture),
                                 },
                             }
                         },
@@ -210,7 +211,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                 },
                                 new MedicationLineItem
                                 {
-                                    Text = "Ended: " + twoYearsAgo.ToString(DATE_FORMAT),
+                                    Text = "Ended: " + twoYearsAgo.ToString(DateFormat, CultureInfo.InvariantCulture),
                                 },
                             }
                         },

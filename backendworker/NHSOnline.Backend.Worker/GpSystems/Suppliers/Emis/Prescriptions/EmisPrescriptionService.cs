@@ -122,14 +122,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             return prescriptionListResponseFiltered;
         }
 
-        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest request)
+        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             var emisUserSession = (EmisUserSession) userSession;
 
-            var postRequest = new PrescriptionRequestsPost()
+            var postRequest = new PrescriptionRequestsPost
             {
-                MedicationCourseGuids = request.CourseIds,
-                RequestComment = request.SpecialRequest,
+                MedicationCourseGuids = repeatPrescriptionRequest.CourseIds,
+                RequestComment = repeatPrescriptionRequest.SpecialRequest,
                 UserPatientLinkToken = emisUserSession.UserPatientLinkToken
             };
 

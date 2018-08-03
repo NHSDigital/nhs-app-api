@@ -2,7 +2,7 @@
 {
     public class EmisUserSession: UserSession
     {
-        public override SupplierEnum Supplier => SupplierEnum.Emis;
+        public override Supplier Supplier => Supplier.Emis;
         public string SessionId { get; set; }
         public string EndUserSessionId { get; set; }
         public string UserPatientLinkToken { get; set; }

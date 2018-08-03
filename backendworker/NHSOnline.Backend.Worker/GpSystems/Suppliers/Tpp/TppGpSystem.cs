@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Demographics;
@@ -25,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             _serviceProvider = serviceProvider;
         }
 
-        public SupplierEnum Supplier => SupplierEnum.Tpp;
+        public Supplier Supplier => Supplier.Tpp;
 
         public IAppointmentsService GetAppointmentsService()
         {
@@ -77,6 +78,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             return _serviceProvider.GetService<TppTokenValidationService>();
         }
         
+        [SuppressMessage("Microsoft.Naming", "CA1024", 
+            Justification = "Remove this suppression when method has been implemented.")]
         public ILinkageService GetLinkageService()
         {
             throw new NotImplementedException();

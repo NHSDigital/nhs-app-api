@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
@@ -9,7 +10,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
        {
            UserPatientLinkToken = emisUserSession.UserPatientLinkToken;
            BookingReason = request.BookingReason;
-           SlotId = Convert.ToInt64(request.SlotId);
+           SlotId = Convert.ToInt64(request.SlotId, CultureInfo.InvariantCulture);
        }
 
         public string UserPatientLinkToken { get;  }

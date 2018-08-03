@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -7,7 +9,6 @@ using NHSOnline.Backend.Worker.HealthCheck;
 using NHSOnline.Backend.Worker.HealthCheck.Redis;
 using FluentAssertions;
 using Moq;
-using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests.HealthCheck
 {
@@ -33,9 +34,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.HealthCheck
             _redisHealthCheckFactory.SetupSequence(r => r
                     .Create(It.IsAny<ConnectionMultiplexerName>()).Execute())
                 .Returns(Task.FromResult(
-                    Worker.HealthCheck.HealthCheck.Result.Healthy(ConnectionMultiplexerName.OdsCodeLookup.ToString())))
+                    BaseHealthCheck.Result.Healthy(ConnectionMultiplexerName.OdsCodeLookup.ToString())))
                 .Returns(Task.FromResult(
-                    Worker.HealthCheck.HealthCheck.Result.Healthy(ConnectionMultiplexerName.Session.ToString())));
+                    BaseHealthCheck.Result.Healthy(ConnectionMultiplexerName.Session.ToString())));
             
             // Act
             var healthCheckResponse = await _healthCheckService.RunHealthChecks();
@@ -47,36 +48,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.HealthCheck
             healthCheckResponse.HealthChecks.Where(x => x.IsHealthy).Should().HaveCount(2);
         }
 
-        private Worker.HealthCheck.HealthCheck.Result GetHealthCheckResult(ConnectionMultiplexerName multiplexer)
-        {
-            if (multiplexer == ConnectionMultiplexerName.OdsCodeLookup)
-            {
-                return Worker.HealthCheck.HealthCheck.Result.Healthy(ConnectionMultiplexerName.OdsCodeLookup
-                    .ToString());
-            }
-            else
-            {
-                return Worker.HealthCheck.HealthCheck.Result.Healthy(ConnectionMultiplexerName.Session
-                    .ToString());
-            }  
-        }
-        
         [TestMethod]
         public async Task RunAllHealthChecks_WhenCalledAndOdsRedisHealthCheckFails_ReturnsOdsRedisHealthCheckWithIsHealthyFalse()
         {
             // Arrange
             const string healthCheckNameFormat = "Redis {0}";
             var odsHealthCheckName =
-                string.Format(healthCheckNameFormat, ConnectionMultiplexerName.OdsCodeLookup.ToString());
+                string.Format(CultureInfo.InvariantCulture, healthCheckNameFormat, ConnectionMultiplexerName.OdsCodeLookup.ToString());
             var sessionHealthCheckName =
-                string.Format(healthCheckNameFormat, ConnectionMultiplexerName.Session.ToString());
+                string.Format(CultureInfo.InvariantCulture, healthCheckNameFormat, ConnectionMultiplexerName.Session.ToString());
             
             _redisHealthCheckFactory.SetupSequence(r => r
                     .Create(It.IsAny<ConnectionMultiplexerName>()).Execute())
                 .Returns(Task.FromResult(
-                    Worker.HealthCheck.HealthCheck.Result.UnHealthy(odsHealthCheckName, "Error calling service")))
+                    BaseHealthCheck.Result.UnHealthy(odsHealthCheckName, "Error calling service")))
                 .Returns(Task.FromResult(
-                    Worker.HealthCheck.HealthCheck.Result.Healthy(sessionHealthCheckName)));
+                    BaseHealthCheck.Result.Healthy(sessionHealthCheckName)));
             
             // Act
             var healthCheckResponse = await _healthCheckService.RunHealthChecks();
@@ -87,10 +74,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.HealthCheck
             healthCheckResponse.Should().NotBeNull();
             healthCheckResponse.HealthChecks.Where(
                     x => !x.IsHealthy && 
-                    x.HealthCheckName == odsHealthCheckName)
+                    odsHealthCheckName.Equals(x.HealthCheckName, StringComparison.Ordinal))
                 .Should().HaveCount(1);
             healthCheckResponse.HealthChecks.Where(
-                    x => x.IsHealthy && x.HealthCheckName == sessionHealthCheckName)
+                    x => x.IsHealthy && sessionHealthCheckName.Equals(x.HealthCheckName, StringComparison.Ordinal))
                 .Should().HaveCount(1);
         }
     }

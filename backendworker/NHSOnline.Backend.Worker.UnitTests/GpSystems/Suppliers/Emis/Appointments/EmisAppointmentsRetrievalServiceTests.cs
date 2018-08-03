@@ -72,7 +72,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Arrange
             _mockEmisClient.Setup(x => x.AppointmentsGet(
                     It.Is<EmisHeaderParameters>(p =>
-                        p.EndUserSessionId == _userSession.EndUserSessionId && p.SessionId == _userSession.SessionId),
+                        p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
+                        && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
                     _userSession.UserPatientLinkToken,
                     It.IsAny<bool>(),
                     It.IsAny<DateTimeOffset?>()))
@@ -161,7 +162,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _mockEmisClient.Setup(x => x.AppointmentsGet(
                     It.Is<EmisHeaderParameters>(p =>
-                        p.EndUserSessionId == _userSession.EndUserSessionId && p.SessionId == _userSession.SessionId),
+                        p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
+                        && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
                     _userSession.UserPatientLinkToken,
                     It.IsAny<bool>(),
                     It.IsAny<DateTimeOffset?>()))

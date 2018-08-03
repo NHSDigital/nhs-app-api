@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1724", Justification = "Deliberately matching the name specified by the GPSS")]
     public class Session
     {
         public string SessionType { get; set; }

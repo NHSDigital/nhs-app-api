@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystemFactory
-                .Setup(x => x.CreateGpSystem(SupplierEnum.Emis))
+                .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
 
             var httpContextMock = new Mock<HttpContext>();

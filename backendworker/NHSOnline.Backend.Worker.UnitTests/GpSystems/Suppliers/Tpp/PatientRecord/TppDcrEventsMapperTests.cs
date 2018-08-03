@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -90,7 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             {
                 new TppDcrEvent
                 {
-                    Date = DateTimeOffset.Parse(requestPatientRecordReply.Events[0].Date),
+                    Date = DateTimeOffset.Parse(requestPatientRecordReply.Events[0].Date, CultureInfo.InvariantCulture),
                     LocationAndDoneBy = $"{requestPatientRecordReply.Events[0].Location} - {requestPatientRecordReply.Events[0].DoneBy}",
                     EventItems = new List<string> { 
                         $"{requestPatientRecordReply.Events[0].Items[0].Type} - { requestPatientRecordReply.Events[0].Items[0].Details}",
@@ -100,7 +101,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
                 },
                 new TppDcrEvent
                 {
-                    Date = DateTimeOffset.Parse(requestPatientRecordReply.Events[1].Date),
+                    Date = DateTimeOffset.Parse(requestPatientRecordReply.Events[1].Date, CultureInfo.InvariantCulture),
                     LocationAndDoneBy = $"{requestPatientRecordReply.Events[1].Location} - {requestPatientRecordReply.Events[1].DoneBy}",
                     EventItems = new List<string> { 
                         $"{requestPatientRecordReply.Events[1].Items[0].Type} - { requestPatientRecordReply.Events[1].Items[0].Details}",

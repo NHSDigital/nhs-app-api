@@ -270,7 +270,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         {
             Action act = () => _mapper.Map((CoursesGetResponse)null);
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("coursesGetResponse");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("courseGetResponse");
         }
 
         [TestMethod]

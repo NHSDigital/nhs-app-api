@@ -5,7 +5,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
     public class ProblemItem
     {
-        public Date EffectiveDate { get; set; }     
+        public MyRecordDate EffectiveDate { get; set; }     
         public List<ProblemLineItem> LineItems { get; set; }
         /*
         public string Term { get; set; }

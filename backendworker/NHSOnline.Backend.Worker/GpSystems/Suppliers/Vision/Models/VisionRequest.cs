@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
@@ -28,7 +29,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
             };
             ServiceHeader = new ServiceHeader
             {
-                CreationTime = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss"),
+                CreationTime = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss", CultureInfo.InvariantCulture),
                 Credentials = new Credentials
                 {
                     ApiKey = apiKey,

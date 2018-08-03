@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             mockGpSystem.Setup(x => x.GetPatientRecordService())
                 .Returns(patientRecordService.Object);
 
-            patientRecordService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetMyRecordResult)getAllergiesResponse));
+            patientRecordService.Setup(x => x.GetMyRecord(_userSession)).Returns(Task.FromResult((GetMyRecordResult)getAllergiesResponse));
 
             // Act
             var result = await _systemUnderTest.GetMyRecord();
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
-            patientRecordService.Verify(x => x.Get(_userSession));
+            patientRecordService.Verify(x => x.GetMyRecord(_userSession));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value as GetMyRecordResult.SuccessfullyRetrieved;
@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             mockGpSystem.Setup(x => x.GetPatientRecordService())
                 .Returns(patientRecordService.Object);
 
-            patientRecordService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetMyRecordResult)getMedicationsResponse));
+            patientRecordService.Setup(x => x.GetMyRecord(_userSession)).Returns(Task.FromResult((GetMyRecordResult)getMedicationsResponse));
 
             // Act
             var result = await _systemUnderTest.GetMyRecord();
@@ -102,7 +102,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
-            patientRecordService.Verify(x => x.Get(_userSession));
+            patientRecordService.Verify(x => x.GetMyRecord(_userSession));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value as GetMyRecordResult.SuccessfullyRetrieved;
@@ -124,7 +124,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             mockGpSystem.Setup(x => x.GetPatientRecordService())
                 .Returns(patientRecordService.Object);
 
-            patientRecordService.Setup(x => x.Get(_userSession)).Returns(Task.FromResult((GetMyRecordResult)getProblemsRequestResponse));
+            patientRecordService.Setup(x => x.GetMyRecord(_userSession)).Returns(Task.FromResult((GetMyRecordResult)getProblemsRequestResponse));
 
             // Act
             var result = await _systemUnderTest.GetMyRecord();
@@ -132,7 +132,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             // Assert
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
-            patientRecordService.Verify(x => x.Get(_userSession));
+            patientRecordService.Verify(x => x.GetMyRecord(_userSession));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value as GetMyRecordResult.SuccessfullyRetrieved;

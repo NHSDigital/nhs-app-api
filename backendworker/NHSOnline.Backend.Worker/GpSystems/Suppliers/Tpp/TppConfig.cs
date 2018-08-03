@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
     public class TppConfig : ITppConfig
     {   
-        public string ApiUrl { get; set; }
+        public Uri ApiUrl { get; set; }
         public string ApiVersion { get; set; }
         public string ApplicationName { get; set; }
         public string ApplicationVersion { get; set; }
@@ -15,7 +15,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public TppConfig(IConfiguration configuration, ILogger<TppConfig> logger)
         {           
-            ApiUrl = configuration.GetOrWarn("TPP_BASE_URL", logger);
+            var apiUriString = configuration.GetOrWarn("TPP_BASE_URL", logger);
+            if (!string.IsNullOrEmpty(apiUriString))
+            {
+                ApiUrl = new Uri(apiUriString, UriKind.Absolute);
+            }
+            
             ApiVersion = configuration.GetOrWarn("TPP_API_VERSION", logger);
             ApplicationName = configuration.GetOrWarn("TPP_APPLICATION_NAME", logger);
             ApplicationVersion = configuration.GetOrWarn("TPP_APPLICATION_VERSION", logger);

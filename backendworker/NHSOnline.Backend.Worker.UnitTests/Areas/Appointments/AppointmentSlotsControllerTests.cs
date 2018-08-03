@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -15,12 +16,12 @@ using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
     [TestClass]
-    public class AppointmentsSlotsControllerTests
+    public sealed class AppointmentsSlotsControllerTests : IDisposable
     {
         private AppointmentSlotsController _systemUnderTest;
         private IFixture _fixture;
@@ -88,7 +89,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var successResponse = new AppointmentSlotsResult.SuccessfullyRetrieved(appointmentSlotsServicesGetResponse);
 
             appointmentSlotsService
-                .Setup(x => x.Get(_userSession, fromDate, toDate))
+                .Setup(x => x.GetSlots(_userSession, fromDate, toDate))
                 .Returns(Task.FromResult((AppointmentSlotsResult)successResponse));
 
             // Act
@@ -102,7 +103,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
+            appointmentSlotsService.Verify(x => x.GetSlots(_userSession, fromDate, toDate));
             var okObjectResult = result as OkObjectResult;
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value;
@@ -147,7 +148,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
+            appointmentSlotsService.Setup(x => x.GetSlots(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
 
             // Act
             var queryParams = new PatientAppointmentSlotsQueryParameters
@@ -160,7 +161,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
+            appointmentSlotsService.Verify(x => x.GetSlots(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(BadRequestResult));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
@@ -183,7 +184,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             gpSystem.Setup(x => x.GetAppointmentSlotsService())
                 .Returns(appointmentSlotsService.Object);
 
-            appointmentSlotsService.Setup(x => x.Get(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
+            appointmentSlotsService.Setup(x => x.GetSlots(_userSession, fromDate, toDate)).Returns(Task.FromResult((AppointmentSlotsResult)getAppointmentSlotsServiceResult));
 
             // Act
             var queryParams = new PatientAppointmentSlotsQueryParameters
@@ -196,13 +197,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             _gpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
-            appointmentSlotsService.Verify(x => x.Get(_userSession, fromDate, toDate));
+            appointmentSlotsService.Verify(x => x.GetSlots(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 
             var statusCodeResult = (StatusCodeResult) result;
             statusCodeResult.StatusCode.Should().Equals(HttpStatusCode.InternalServerError);
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+        }
+
+        public void Dispose()
+        {
+            _systemUnderTest.Dispose();
         }
     }
 }

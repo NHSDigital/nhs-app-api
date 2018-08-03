@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using Castle.Core.Logging;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,13 +11,12 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
@@ -65,14 +63,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             };
             MockTppClientAppointmentsGetMethod(response);
 
-            _mappedResponse = new AppointmentsResponse()
+            _mappedResponse = new AppointmentsResponse
             {
                 Appointments = new[]
                 {
                     new Worker.Areas.Appointments.Models.Appointment
                     {
-                        StartTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:30:00")),
-                        EndTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:40:00")),
+                        StartTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:30:00", CultureInfo.InvariantCulture)),
+                        EndTime = new DateTimeOffset(DateTime.Parse("2018-12-12T09:40:00", CultureInfo.InvariantCulture)),
                         Id = "apptId",
                         Location = "TheSite",
                         Type = "Details"
@@ -126,8 +124,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             // Arrange
             _mockTppClient.Setup(x => x.ViewAppointmentsPost(
                     It.Is<ViewAppointments>(p =>
-                        p.PatientId == _userSession.PatientId 
-                        && p.OnlineUserId == _userSession.OnlineUserId),
+                        string.Equals(p.PatientId, _userSession.PatientId, StringComparison.Ordinal)
+                        && string.Equals(p.OnlineUserId, _userSession.OnlineUserId, StringComparison.Ordinal)),
                     It.IsAny<string>()))
                 .Throws<HttpRequestException>()
                 .Verifiable();
@@ -215,8 +213,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             _mockTppClient.Setup(x => x.ViewAppointmentsPost(
                      It.Is<ViewAppointments>(p =>
-                        p.PatientId == _userSession.PatientId
-                        && p.OnlineUserId == _userSession.OnlineUserId),
+                         string.Equals(p.PatientId, _userSession.PatientId, StringComparison.Ordinal)
+                         && string.Equals(p.OnlineUserId, _userSession.OnlineUserId, StringComparison.Ordinal)),
                     It.IsAny<string>()))
                 .ReturnsAsync(response);
         }

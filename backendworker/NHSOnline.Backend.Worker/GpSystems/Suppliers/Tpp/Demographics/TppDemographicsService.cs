@@ -21,7 +21,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics
             _tppDemographicsMapper = tppDemographicsMapper;
         }
 
-        public async Task<GetDemographicsResult> Get(UserSession userSession)
+        public async Task<GetDemographicsResult> GetDemographics(UserSession userSession)
         {
             var tppUserSession = (TppUserSession) userSession;
 

@@ -20,7 +20,7 @@ using RichardSzalay.MockHttp;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 {
     [TestClass]
-    public class VisionClientTests
+    public sealed class VisionClientTests : IDisposable
     {
         private IVisionClient _sut;
         private MockHttpMessageHandler _mockHttpHandler;
@@ -30,10 +30,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         private string _odsCode;
         private VisionHttpClient _httpClient;
         
-        private const string ApplicationName = "appName";
         private const string RequestUserName = "username";
 
-        private const string ApiUrl = "http://vision_base_url/";
+        private static readonly Uri ApiUrl = new Uri("http://vision_base_url/", UriKind.Absolute);
         private const string Path = "GpSystems/Suppliers/Vision/Resources/mycert.pfx";
         private const string Passphrase = "password1";
         private const string VisionTestDataDirectory = "GpSystems/Suppliers/Vision/TestData";
@@ -171,6 +170,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent.Payload);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        public void Dispose()
+        {
+            _mockHttpHandler.Dispose();
         }
     }
 }

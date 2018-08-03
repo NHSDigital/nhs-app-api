@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -44,8 +45,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             {
                 BookingReason = BookingReason,
                 SlotId = SlotId,
-                StartTime = DateTimeOffset.Parse(StartTime),
-                EndTime = DateTimeOffset.Parse(EndTime)
+                StartTime = DateTimeOffset.Parse(StartTime, CultureInfo.InvariantCulture),
+                EndTime = DateTimeOffset.Parse(EndTime, CultureInfo.InvariantCulture)
             };
         }
 
@@ -191,7 +192,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             //Arrange
             var response = new TppClient.TppApiObjectResponse<BookAppointmentReply>(HttpStatusCode
-                .InternalServerError);
+                    .InternalServerError);
 
             MockTppClientAppointmentPostMethod(response);
 
@@ -233,8 +234,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             _mockTppClient.Setup(x => x.BookAppointmentSlotPost(
                 It.Is<BookAppointment>(p=>
-                    p.Notes == BookingReason
-                    && p.SessionId == SlotId),
+                    p.Notes.Equals(BookingReason, StringComparison.Ordinal)
+                    && p.SessionId.Equals(SlotId, StringComparison.Ordinal)),
                 It.IsAny<TppUserSession>()
                 )
             ).Returns(

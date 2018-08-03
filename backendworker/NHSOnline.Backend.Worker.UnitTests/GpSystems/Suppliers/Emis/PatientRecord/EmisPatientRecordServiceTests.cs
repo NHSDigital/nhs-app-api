@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         }
         
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        public async Task GetMyRecord_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
         {
             var allergiesResponse = _fixture.Create<MedicationRootObject>();
             var medicationsResponse = _fixture.Create<MedicationRootObject>();
@@ -97,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     }));
 
             // Act
-            var result = await _systemUnderTest.Get(_userSession);
+            var result = await _systemUnderTest.GetMyRecord(_userSession);
 
             // Assert
             _emisClient.Verify(x => x.MedicalRecordGet(_userSession.UserPatientLinkToken, _userSession.SessionId, _userSession.EndUserSessionId, RecordType.Allergies));

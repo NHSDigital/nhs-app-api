@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
@@ -61,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Models
         [TestMethod]
         public void Serialization_DateOfBirth_SerializesAsAttribute()
         {
-            var dateStringValue = String.Format("{0:s}", _dateOfBirth);
+            var dateStringValue = String.Format(CultureInfo.InvariantCulture, "{0:s}", _dateOfBirth);
             Element.Attribute("dateOfBirth").Should().HaveValue(dateStringValue);
         }
 

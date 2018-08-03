@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,14 +22,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
 
-        public async Task<SessionCreateResult> Create(string im1ConnectionToken, string odsCode)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode)
         {
             try
             {
                 _logger.LogEnter(nameof(Create));
                 _logger.LogDebug($"Creating using ODS code: {odsCode}");
 
-                var tppToken = im1ConnectionToken.DeserializeJson<TppConnectionToken>();
+                var tppToken = connectionToken.DeserializeJson<TppConnectionToken>();
                 var authenticate = new Authenticate
                 {
                     AccountId = tppToken.AccountId,
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     return new SessionCreateResult.SupplierSystemUnavailable();
                 }
 
-                var suidHeader = reply.Headers?.FirstOrDefault(h => h.Key == "suid");
+                var suidHeader = reply.Headers?.FirstOrDefault(h => "suid".Equals(h.Key, StringComparison.Ordinal));
                 var userSession = new TppUserSession
                 {
                     Suid = suidHeader?.Value,

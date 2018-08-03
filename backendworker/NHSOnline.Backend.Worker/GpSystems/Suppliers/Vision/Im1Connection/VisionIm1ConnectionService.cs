@@ -66,33 +66,33 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
         {
             if (response.IsInvalidRequestError)
             {
-                LogError("Invalid Request", response);
+                LogError<T>("Invalid Request");
                 return new Im1ConnectionVerifyResult.InvalidRequest();
             }
 
             if (response.IsInvalidUserCredentialsError)
             {
-                LogError("Invalid User Credentials", response);
+                LogError<T>("Invalid User Credentials");
                 return new Im1ConnectionVerifyResult.InvalidUserCredentials();
             }
 
             if (response.IsInvalidSecurtyHeaderError)
             {
-                LogError("Invalid Security Error", response);
+                LogError<T>("Invalid Security Error");
                 return new Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader();
             }
 
             if (response.IsUnknownError)
             {
-                LogError("Unknown Error", response);
+                LogError<T>("Unknown Error");
                 return new Im1ConnectionVerifyResult.UnknownError();
             }
             
-            LogError("Other Error", response);
+            LogError<T>("Other Error");
             return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
         }
 
-        private void LogError<T>(string errorType, VisionApiObjectResponse<T> response)
+        private void LogError<T>(string errorType)
         {
             _logger.LogError($"Vision IM1 Login - {errorType}");
         }

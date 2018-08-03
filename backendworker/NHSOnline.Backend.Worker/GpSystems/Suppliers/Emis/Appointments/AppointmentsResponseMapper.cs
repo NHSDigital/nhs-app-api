@@ -11,7 +11,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {
     public interface IAppointmentsResponseMapper
     {
-        AppointmentsResponse Map(AppointmentsGetResponse appointmentsGetResponse);
+        AppointmentsResponse Map(AppointmentsGetResponse sourceAppointments);
     }
 
     public class AppointmentsResponseMapper : IAppointmentsResponseMapper
@@ -24,13 +24,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             _appointmentsMapper = appointmentsMapper;
         }
 
-        public AppointmentsResponse Map(AppointmentsGetResponse appointmentsResponse)
+        public AppointmentsResponse Map(AppointmentsGetResponse sourceAppointments)
         {
             var appointments = _appointmentsMapper.Map(
-                appointmentsResponse.Appointments,
-                appointmentsResponse.Locations,
-                appointmentsResponse.SessionHolders,
-                appointmentsResponse.Sessions);
+                sourceAppointments.Appointments,
+                sourceAppointments.Locations,
+                sourceAppointments.SessionHolders,
+                sourceAppointments.Sessions);
 
             var cancellationReasons = GetDefaultCancellationReasons();
 

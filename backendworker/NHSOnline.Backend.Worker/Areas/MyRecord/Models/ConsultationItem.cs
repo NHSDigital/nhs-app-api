@@ -10,7 +10,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
             ConsultationHeaders = new List<ConsultationHeaderItem>();
         }
         
-        public Date EffectiveDate { get; set; }
+        public MyRecordDate EffectiveDate { get; set; }
         public string ConsultantLocation { get; set; }
         public List<ConsultationHeaderItem> ConsultationHeaders { get; set; }
     }

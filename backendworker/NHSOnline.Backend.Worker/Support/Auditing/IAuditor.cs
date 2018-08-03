@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
     {
         void Audit(string operation, string details, params object[] parameters);
 
-        void AuditWithExplicitNhsNumber(string nhsnumber, SupplierEnum supplier, string operation, string details, params object[] parameters);
+        void AuditWithExplicitNhsNumber(string nhsNumber, Supplier supplier, string operation, string details, params object[] parameters);
 
         IDisposable BeginScope(HttpContext httpContext);
     }

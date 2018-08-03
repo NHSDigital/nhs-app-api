@@ -11,7 +11,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {
     [TestClass]
-    public class TppHttpClientHandlerTests
+    public sealed class TppHttpClientHandlerTests : IDisposable
     {
         private TppHttpClientHandler _systemUnderTest;
         private Mock<IConfiguration> _mockConfiguration;
@@ -56,10 +56,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _systemUnderTest.ClientCertificates.Should().BeEmpty();
             _mockLogger.Verify(x => x.Log(
                 LogLevel.Warning, (EventId) 0,
-                It.Is<FormattedLogValues>(values => values.ToString() == "Could not add TPP client certificate due to missing certificate path or password."),
+                It.Is<FormattedLogValues>(values => values.ToString()
+                    .Equals("Could not add TPP client certificate due to missing certificate path or password.",
+                        StringComparison.Ordinal)),
                 null,
                 It.IsAny<Func<object, Exception, string>>()
             ));
+        }
+
+        public void Dispose()
+        {
+            _systemUnderTest.Dispose();
         }
     }
 }

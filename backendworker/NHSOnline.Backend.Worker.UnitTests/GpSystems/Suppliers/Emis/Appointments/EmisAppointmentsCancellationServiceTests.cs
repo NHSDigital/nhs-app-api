@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -37,7 +39,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             _request = new AppointmentCancelRequest
             {
-                AppointmentId = _fixture.Create<int>().ToString(),
+                AppointmentId = _fixture.Create<int>().ToString(CultureInfo.InvariantCulture),
                 CancellationReasonId = "R1_NoLongerRequired"
             };
 
@@ -231,12 +233,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             _mockEmisClient.Setup(x => x.AppointmentsDelete(
                 It.Is<EmisHeaderParameters>(p =>
-                    p.EndUserSessionId == _userSession.EndUserSessionId && p.SessionId == _userSession.SessionId),
+                    p.EndUserSessionId.Equals(_userSession.EndUserSessionId, StringComparison.Ordinal)
+                    && p.SessionId.Equals(_userSession.SessionId, StringComparison.Ordinal)),
                 It.Is<CancelAppointmentDeleteRequest>(p =>
-                    p.CancellationReason == _cancellationReasonText
-                    && p.SlotId == long.Parse(_request.AppointmentId)
-                    && p.UserPatientLinkToken == _userSession.UserPatientLinkToken
-                    )
+                    p.CancellationReason.Equals(_cancellationReasonText, StringComparison.Ordinal)
+                    && p.SlotId == long.Parse(_request.AppointmentId, CultureInfo.InvariantCulture)
+                    && p.UserPatientLinkToken.Equals(_userSession.UserPatientLinkToken, StringComparison.Ordinal))
                 )
             ).Returns(Task.FromResult(response)).Verifiable();
         }

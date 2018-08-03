@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -137,7 +138,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                     {
                                         Outcome = new Outcome
                                         {
-                                            Successful = bool.FalseString.ToLower(),
+                                            Successful = bool.FalseString.ToLowerInvariant(),
                                             Error = new OutcomeError
                                             {
                                                 Code = "-30",
@@ -207,7 +208,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                     {
                                         Outcome = new Outcome
                                         {
-                                            Successful = bool.FalseString.ToLower(),
+                                            Successful = bool.FalseString.ToLowerInvariant(),
                                             Error = new OutcomeError
                                             {
                                                 Code = "-100",

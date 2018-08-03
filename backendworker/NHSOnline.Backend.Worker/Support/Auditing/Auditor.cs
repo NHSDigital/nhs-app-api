@@ -31,12 +31,11 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             return nhsNumber;
         }
 
-        private SupplierEnum Supplier()
+        private Supplier Supplier()
         {
-            var supplierEnum = _scopeProvider.Value?.UserContext()?.Supplier ?? SupplierEnum.Unknown;
-            return supplierEnum;
+            var supplier = _scopeProvider.Value?.UserContext()?.Supplier ?? Worker.Supplier.Unknown;
+            return supplier;
         }
-
 
         public void Audit(string operation, string details, params object[] parameters)
         {
@@ -56,7 +55,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
 
         public void AuditWithExplicitNhsNumber(
             string nhsNumber, 
-            SupplierEnum supplier, 
+            Supplier supplier, 
             string operation,
             string details, 
             params object[] parameters
@@ -66,7 +65,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             {
                 throw new NoAuditKeyException(ExceptionMessages.NoNhsNumberAvailable);
             }
-            if (supplier == SupplierEnum.Unknown)
+            if (supplier == Worker.Supplier.Unknown)
             {
                 throw new NoAuditKeyException(ExceptionMessages.SupplierNotSpecified);
             }
@@ -82,7 +81,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             }
         }
 
-        private void AuditWithNoTryCatch(string nhsNumber, SupplierEnum supplier, string operation, string details,
+        private void AuditWithNoTryCatch(string nhsNumber, Supplier supplier, string operation, string details,
             params object[] parameters)
         {
             _auditSink.WriteAudit(DateTime.Now, AuditCryptographer.Hash(nhsNumber), supplier, operation,

@@ -1,5 +1,8 @@
-﻿namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
 {
+    [SuppressMessage("Microsoft.Naming", "CA1717", Justification = "False Positive - 'Status' is not a plural")]
     public enum Status
     {
         Unknown = 0,

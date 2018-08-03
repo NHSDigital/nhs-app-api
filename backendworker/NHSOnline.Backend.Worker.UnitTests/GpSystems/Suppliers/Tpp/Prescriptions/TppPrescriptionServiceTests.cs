@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -245,7 +246,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             var request = _fixture.Create<RepeatPrescriptionRequest>();
 
             var error = _fixture.Create<Error>();
-            error.UserFriendlyMessage = TppApiErrorMessages.ResourceManager.GetString(errorKey);
+            error.UserFriendlyMessage = TppApiErrorMessages.ResourceManager
+                .GetString(errorKey, CultureInfo.InvariantCulture);
 
             _tppClient.Setup(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()))
                 .Returns(Task.FromResult(
@@ -259,7 +261,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
 
             // Assert
             _tppClient.Verify(x => x.OrderPrescriptionsPost(_userSession, It.IsAny<RequestMedication>()));
-            result.Should().BeAssignableTo<PrescriptionResult.BadRequest>();
+            result.Should().BeAssignableTo<PrescriptionResult.BadRequest>(scenario);
         }
 
         [TestMethod]

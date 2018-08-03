@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             return false;
         }
 
-        private string GetCancellationReason(string requestCancellationReasonId)
+        private static string GetCancellationReason(string requestCancellationReasonId)
         {
             if (string.IsNullOrWhiteSpace(requestCancellationReasonId))
             {

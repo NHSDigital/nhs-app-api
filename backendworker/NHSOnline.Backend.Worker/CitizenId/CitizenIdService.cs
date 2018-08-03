@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support;
@@ -8,6 +9,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
 {
     public interface ICitizenIdService
     {
+        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier, string redirectUrl);
     }
 
@@ -22,6 +24,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             _logger = loggerFactory.CreateLogger<CitizenIdService>();
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         public async Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier, string redirectUrl)
         {
             try

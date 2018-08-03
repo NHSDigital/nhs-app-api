@@ -22,14 +22,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
     public class VisionClient : IVisionClient
     {
         private readonly VisionHttpClient _httpClient;
-        private readonly string _targetUri;
+        private readonly Uri _targetUri;
         private readonly string _requestUsername;
         private readonly string _providerId;
         private readonly X509Certificate2 _certificate;
         private readonly ILogger<VisionClient> _logger;
-        private static ICertificateService _certificateService;
         private static IEnvelopeService _envelopeService;
-        private readonly IVisionConfig _visionConfig;
 
         private const string MediaType = "text/xml";
 
@@ -39,12 +37,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             _requestUsername = visionConfig.RequestUsername;
             _providerId = visionConfig.ApplicationProviderId;
             _logger = loggerFactory.CreateLogger<VisionClient>();
-            _certificateService = certificateService;
             _envelopeService = envelopeService;
             _httpClient = httpClient;
-            _visionConfig = visionConfig;
             _certificate =
-            _certificateService.GetCertificate(_visionConfig.CertificatePath, _visionConfig.CertificatePassphrase);
+            certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
         }
 
         public async Task<VisionApiObjectResponse<PatientConfiguration>> GetConfiguration(VisionConnectionToken token, string odsCode)
@@ -59,19 +55,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
         public async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
         {
-            var uri = new Uri(_targetUri);
-
             var envelope = _envelopeService.BuildEnvelope(_certificate, request, _requestUsername);
 
-            var response = await TransmitAsync<TResponse>(uri, envelope);
+            var response = await TransmitAsync<TResponse>(envelope);
 
             return response;
         }
 
-        private async Task<VisionApiObjectResponse<TResponse>> TransmitAsync<TResponse>(Uri uri, string envelope)
+        private async Task<VisionApiObjectResponse<TResponse>> TransmitAsync<TResponse>(string envelope)
         {
             var request =
-                new HttpRequestMessage(HttpMethod.Post, uri)
+                new HttpRequestMessage(HttpMethod.Post, _targetUri)
                 {
                     Content = new StringContent(envelope, Encoding.UTF8, MediaType)
                 };
@@ -117,20 +111,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             }
         }
 
-        private T Deserializer<T>(string request)
+        private static T Deserializer<T>(string request)
         {
-            T instance = default(T);
-            try
+            T instance;
+
+            var xmlSerializer = new XmlSerializer(typeof(T));
+            using (var stringreader = new StringReader(request))
             {
-                var xmlSerializer = new XmlSerializer(typeof(T));
-                using (var stringreader = new StringReader(request))
-                {
-                    instance = (T) xmlSerializer.Deserialize(stringreader);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                instance = (T) xmlSerializer.Deserialize(stringreader);
             }
 
             return instance;
@@ -138,7 +126,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         
         public class VisionApiResponse
         {
-            public VisionApiResponse(HttpStatusCode status)
+            protected VisionApiResponse(HttpStatusCode status)
             {
                 StatusCode = status;
             }
@@ -162,7 +150,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 {
                     return !StatusCodeIndicatesSuccess
                         || RawResponse?.Body?.Fault != null
-                        || RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Successful?.ToLower() == bool.FalseString.ToLower();
+                        || bool.FalseString.Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Successful, StringComparison.OrdinalIgnoreCase);
                 }
             }
 
@@ -170,13 +158,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             // We don't know whether Vision always populates certain properties when there is an error.
             // So there are a lot of null checks below using the null conditional operator.
 
-            public bool IsInvalidRequestError => (RawResponse?.Body?.Fault?.Detail?.VisionFault?.Error?.Category ?? "").Contains("INVALID_REQUEST");
+            public bool IsInvalidRequestError => (RawResponse?.Body?.Fault?.Detail?.VisionFault?.Error?.Category ?? "").Contains("INVALID_REQUEST", StringComparison.Ordinal);
 
-            public bool IsInvalidUserCredentialsError => RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code == "-30";
+            public bool IsInvalidUserCredentialsError => "-30".Equals(
+                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
 
-            public bool IsInvalidSecurtyHeaderError => (RawResponse?.Body?.Fault?.FaultCode ?? "").Contains("InvalidSecurity");
+            public bool IsInvalidSecurtyHeaderError => (RawResponse?.Body?.Fault?.FaultCode ?? "").Contains("InvalidSecurity", StringComparison.Ordinal);
 
-            public bool IsUnknownError => (RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code == "-100");
+            public bool IsUnknownError =>
+                "-100".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
+                    StringComparison.Ordinal);
 
             private bool StatusCodeIndicatesSuccess => StatusCode == HttpStatusCode.OK;
         }

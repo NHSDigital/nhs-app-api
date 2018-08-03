@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace NHSOnline.Backend.Worker.Filters
 {
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
     public sealed class TimeoutExceptionFilterAttribute : ExceptionFilterAttribute
     {
         public override void OnException(ExceptionContext context)

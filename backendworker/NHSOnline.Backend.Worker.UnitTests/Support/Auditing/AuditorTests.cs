@@ -21,10 +21,10 @@ using Moq;
 namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
 {
     [TestClass]
-    public class AuditorTests
+    public sealed class AuditorTests : IDisposable
     {
         private const string NhsNumber = "123-2321-21312";
-        private const SupplierEnum Supplier = SupplierEnum.Emis;
+        private const Supplier Supplier = Worker.Supplier.Emis;
         private const string RubbishScope = "THIS IS A RUBBISH AUDIT";
 
         private IFixture _fixture;
@@ -100,7 +100,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
                 }
             }
 
-            public void AuditWithScope(string nhsNumber, SupplierEnum supplier)
+            public void AuditWithScope(string nhsNumber, Supplier supplier)
             {
                 _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
             }
@@ -181,7 +181,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         [TestMethod]
         public void TestAuditWithScopeProvidedInAuditMethod()
         {
-            _systemUnderTest.AuditWithScope("NHS_AppliedNumber", SupplierEnum.Tpp);
+            _systemUnderTest.AuditWithScope("NHS_AppliedNumber", Supplier.Tpp);
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
@@ -197,13 +197,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
         public void TestThrowsExceptionIfNhsNumberIsNull()
         {
-            _systemUnderTest.AuditWithScope("", SupplierEnum.Vision);
+            _systemUnderTest.AuditWithScope("", Supplier.Vision);
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
         public void TestThrowsExceptionIfSupplierIsDefault()
         {
-            _systemUnderTest.AuditWithScope("1684156", SupplierEnum.Unknown);
+            _systemUnderTest.AuditWithScope("1684156", Supplier.Unknown);
         }
 
 
@@ -232,6 +232,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             splitLog = testString.Split(new char[] { '[', ']' });
             splitLog[1].Should().Be(AuditCryptographer.Hash(RubbishScope).Trim(new char[] { '[', ']' }));
             splitLog[2].Should().Be(" | Emis | Testing | Message with rubbish scope 2 |");
+        }
+
+        public void Dispose()
+        {
+            _stream.Dispose();
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using NHSOnline.Backend.Worker.Support.Date;
+using NHSOnline.Backend.Worker.Support.Temporal;
 using Location = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Location;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointments
@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Slots = new Slot[0]
+                Slots = Array.Empty<Slot>()
             };
 
             // Act
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Slots = new Slot[0]
+                Slots = Array.Empty<Slot>()
             };
 
             // Act
@@ -108,7 +108,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Slots = new Slot[0]
+                Slots = Array.Empty<Slot>()
             };
             // Act
             var actualResponse = _sut.Map(slotsResponse, slotsMetadataResponse);
@@ -126,7 +126,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
-                Sessions = new Worker.GpSystems.Suppliers.Emis.Models.Session[0],
+                Sessions =Array.Empty<Worker.GpSystems.Suppliers.Emis.Models.Session>(),
                 Locations = new[] { location },
                 SessionHolders = new[] { sessionHolder }
                 
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             var expectedResponse = new AppointmentSlotsResponse
             {
-                Slots = new Slot[0]
+                Slots = Array.Empty<Slot>()
             };
 
             // Act
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var slotsMetadataResponse = new AppointmentSlotsMetadataGetResponse
             {
                 Sessions = new[]{ session },
-                Locations = new Location[0],
+                Locations = Array.Empty<Location>(),
                 SessionHolders = new[] { sessionHolder }
             };
 
@@ -182,7 +182,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedSlot = new Slot
             {
                 Id = "1",
-                Clinicians = new string[0],
+                Clinicians = Array.Empty<string>(),
                 Location = "",
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
@@ -217,7 +217,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             {
                 Sessions = new[]{ session },
                 Locations = new[] { location },
-                SessionHolders = new SessionHolder[0],
+                SessionHolders = Array.Empty<SessionHolder>(),
             };
 
             var appointmentSlotSession =
@@ -231,7 +231,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var expectedSlot = new Slot
             {
                 Id = "1",
-                Clinicians = new string[0],
+                Clinicians = Array.Empty<string>(),
                 Location = "",
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),

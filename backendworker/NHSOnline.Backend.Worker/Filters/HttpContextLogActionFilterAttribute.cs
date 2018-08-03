@@ -4,26 +4,31 @@ using System;
 
 namespace NHSOnline.Backend.Worker.Filters
 {
-    public class HttpContextLogActionFilterAttribute : Attribute, IActionFilter, IResultFilter
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+    public sealed class HttpContextLogActionFilterAttribute : ActionFilterAttribute
     {
         private IDisposable _context;
         private readonly ILogger<HttpContextLogActionFilterAttribute> _logger;
+        private readonly ILoggerFactory _loggerFactory;
 
         public HttpContextLogActionFilterAttribute(ILoggerFactory loggerFactory)
         {
+            _loggerFactory = loggerFactory;
             _logger = loggerFactory.CreateLogger<HttpContextLogActionFilterAttribute>();
         }
+        
+        public ILoggerFactory LoggerFactory => _loggerFactory;
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             _context = _logger.BeginScope(context.HttpContext);
         }
 
-        public void OnActionExecuted(ActionExecutedContext context) { }
+        public override void OnActionExecuted(ActionExecutedContext context) { }
 
-        public void OnResultExecuting(ResultExecutingContext context) { }
+        public override void OnResultExecuting(ResultExecutingContext context) { }
 
-        public void OnResultExecuted(ResultExecutedContext context)
+        public override void OnResultExecuted(ResultExecutedContext context)
         {
             _context?.Dispose();
         }

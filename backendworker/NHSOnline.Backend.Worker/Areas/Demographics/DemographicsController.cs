@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
                 .GetDemographicsService();
 
             _logger.LogDebug("Fetching Demographics");
-            var myRecordGetResult = await demographicsService.Get(userSession);
+            var myRecordGetResult = await demographicsService.GetDemographics(userSession);
 
             _logger.LogDebug("Exiting: {0}", methodName);
             return myRecordGetResult.Accept(new DemographicsResultVisitor());
@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
 
             _logger.LogDebug("Fetching Demographics");
 
-            var myRecordGetResult = await demographicsService.Get(userSession);
+            var myRecordGetResult = await demographicsService.GetDemographics(userSession);
 
             return myRecordGetResult.Accept(new DemographicsResultVisitor());
         }

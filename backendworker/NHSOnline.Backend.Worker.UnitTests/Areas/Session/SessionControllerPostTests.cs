@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockOdsCodeLookup = _fixture.Freeze<Mock<IOdsCodeLookup>>();
             _mockOdsCodeLookup
                 .Setup(x => x.LookupSupplier(_userProfile.OdsCode))
-                .Returns(Task.FromResult(Option.Some(SupplierEnum.Emis)));
+                .Returns(Task.FromResult(Option.Some(Supplier.Emis)));
 
             _mockSessionService = _fixture.Freeze<Mock<ISessionService>>();
             _mockSessionService
@@ -107,7 +107,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockGpSystemFactory = _fixture.Freeze<Mock<IGpSystemFactory>>();
             _mockGpSystemFactory
-                .Setup(x => x.CreateGpSystem(SupplierEnum.Emis))
+                .Setup(x => x.CreateGpSystem(Supplier.Emis))
                 .Returns(_mockGpSystem.Object);
 
             _mockSessionCacheService = _fixture.Freeze<Mock<ISessionCacheService>>();
@@ -171,7 +171,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Arrange
             _mockOdsCodeLookup
                 .Setup(x => x.LookupSupplier(_userProfile.OdsCode))
-                .Returns(Task.FromResult(Option.None<SupplierEnum>()))
+                .Returns(Task.FromResult(Option.None<Supplier>()))
                 .Verifiable();
 
             // Act

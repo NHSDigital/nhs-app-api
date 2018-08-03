@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 new ImmunisationItem
                 {
                     Term = x.Term,
-                    EffectiveDate = new Date { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart }
+                    EffectiveDate = new MyRecordDate { Value = x.EffectiveDate.Value, DatePart = x.EffectiveDate.DatePart }
                 });
 
             return immunisations;

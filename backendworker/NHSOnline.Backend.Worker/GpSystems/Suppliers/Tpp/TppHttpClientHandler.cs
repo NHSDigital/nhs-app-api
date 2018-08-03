@@ -8,15 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
-    public interface ITppHttpClientHandler
-    {
-    }
-
-    public class TppHttpClientHandler : HttpClientHandler, ITppHttpClientHandler
+    public class TppHttpClientHandler : HttpClientHandler
     {
         public TppHttpClientHandler(IConfiguration configuration, ILogger<TppHttpClientHandler> logger)
         {
-            if (configuration["ASPNETCORE_ENVIRONMENT"] != "Production")
+            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
             {
                 ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
             }

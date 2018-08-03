@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
     public class Im1ConnectionControllerTests
     {
         private const string DefaultOdsCode = "AB1234";
-        private const SupplierEnum DefaultSupplier = SupplierEnum.Emis;
+        private const Supplier DefaultSupplier = Supplier.Emis;
         private const string DefaultPatientIdentifier = "XX00000A";
         private const string DefaultConnectionToken = "b2ed6831-cdd4-4ef7-a9b4-0880c2a35d78";
 
@@ -105,7 +105,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         public async Task Get_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
             const string odsCode = DefaultOdsCode;
-            const SupplierEnum supplier = DefaultSupplier;
+            const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
             var expectedNhsNumbers = new[]
@@ -144,7 +144,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
-                .Returns(Task.FromResult(Option.None<SupplierEnum>()));
+                .Returns(Task.FromResult(Option.None<Supplier>()));
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
@@ -164,7 +164,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(request.OdsCode))
-                .Returns(Task.FromResult(Option.None<SupplierEnum>()));
+                .Returns(Task.FromResult(Option.None<Supplier>()));
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         public async Task Post_ReturnsTheSuccessResponse_WhenServiceIsSuccessfullyCalled()
         {
             const string odsCode = DefaultOdsCode;
-            const SupplierEnum supplier = DefaultSupplier;
+            const Supplier supplier = DefaultSupplier;
             const string patientIdentifier = DefaultConnectionToken;
 
             var model = new PatientIm1ConnectionRequest { OdsCode = DefaultOdsCode };
@@ -238,7 +238,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         }
 
         private static Mock<IOdsCodeLookup> MockOdsCodeLookup(string odsCode = DefaultOdsCode,
-            SupplierEnum supplier = DefaultSupplier)
+            Supplier supplier = DefaultSupplier)
         {
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(odsCode)).Returns(Task.FromResult(Option.Some(supplier)));
@@ -246,7 +246,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         }
 
         private Mock<IGpSystemFactory> MockGpSystemFactory(
-            SupplierEnum supplier = DefaultSupplier,
+            Supplier supplier = DefaultSupplier,
             Mock<IGpSystem> gpSystemMock = null)
         {
             gpSystemMock = gpSystemMock ?? MockGpSystem();

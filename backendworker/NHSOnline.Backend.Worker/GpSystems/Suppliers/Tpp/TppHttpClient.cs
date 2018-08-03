@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -13,7 +9,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 
         public TppHttpClient(HttpClient client, ITppConfig config)
         {
-            client.BaseAddress = new Uri(config.ApiUrl);
+            client.BaseAddress = config.ApiUrl;
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaType));
             Client = client;
         }

@@ -1,12 +1,12 @@
-﻿
+﻿using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.HealthCheck.Redis
 {
-    public class RedisHealthCheck: HealthCheck
+    public class RedisHealthCheck: BaseHealthCheck
     {
-        protected override string HealthCheckName => string.Format("Redis {0}", _multiplexerName.ToString());
+        protected override string HealthCheckName => string.Format(CultureInfo.InvariantCulture, "Redis {0}", _multiplexerName.ToString());
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
         private readonly ConnectionMultiplexerName _multiplexerName;
         

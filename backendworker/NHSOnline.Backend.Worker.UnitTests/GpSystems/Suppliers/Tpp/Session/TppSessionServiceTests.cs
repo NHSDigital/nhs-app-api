@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
 
 
         [TestMethod]
-        public void Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()
+        public async void Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()
         {
             // Arrange
             const string accountId = "boo";
@@ -79,7 +79,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            _systemUnderTest.Create(tppConnectionToken, "bar");
+            await _systemUnderTest.Create(tppConnectionToken, "bar");
         
             // Assert
             _actual.AccountId.Should().Be(accountId);
@@ -87,14 +87,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         }
     
         [TestMethod]
-        public void Create_WhenCalledWithOdsCode_PassesItToTheTppClientAsUnitId()
+        public async void Create_WhenCalledWithOdsCode_PassesItToTheTppClientAsUnitId()
         {
             // Arrange
             const string expected = "bar";
             _systemUnderTest = _fixture.Create<TppSessionService>();
         
             // Act
-            _systemUnderTest.Create(CreateConnectionTokenJson(), expected);
+            await _systemUnderTest.Create(CreateConnectionTokenJson(), expected);
 
             //Assert
             _actual.UnitId.Should().Be(expected);
@@ -195,7 +195,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
             result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
         }
 
-        private string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
+        private static string CreateConnectionTokenJson(string accountId = "", string passphrase = "") =>
             $"{{ \"accountId\": \"{accountId}\", \"passphrase\": \"{passphrase}\" }}";
 
         private TppClient.TppApiObjectResponse<AuthenticateReply> CreateReply(string name = "Joanie", string suid = "dimsum",

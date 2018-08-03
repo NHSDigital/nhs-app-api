@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Globalization;
+using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -34,7 +35,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         }
 
         [TestMethod]
-        public async Task Get_InvalidRequest_ReturnsInvalidRequestResult()
+        public async Task GetMyRecord_InvalidRequest_ReturnsInvalidRequestResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -72,14 +73,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             };
             
             // Act
-            var result = await systemUnderTest.Get(visionUserSession);
+            var result = await systemUnderTest.GetMyRecord(visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.InvalidRequest>();
         }
         
         [TestMethod]
-        public async Task Get_InvalidUserCredentials_ReturnsInvalidUserCredentialsResult()
+        public async Task GetMyRecord_InvalidUserCredentials_ReturnsInvalidUserCredentialsResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -97,7 +98,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
                                     {
                                         Outcome = new Outcome
                                         {
-                                            Successful = bool.FalseString.ToLower(),
+                                            Successful = bool.FalseString.ToLowerInvariant(),
                                             Error = new OutcomeError
                                             {
                                                 Code = "-30",
@@ -118,14 +119,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             };
 
             // Act
-            var result = await systemUnderTest.Get(visionUserSession);
+            var result = await systemUnderTest.GetMyRecord(visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.InvalidUserCredentials>();
         }
 
         [TestMethod]
-        public async Task Get_InvalidSecurityHeader_ReturnsErrorProcessingSecurityHeaderResult()
+        public async Task GetMyRecord_InvalidSecurityHeader_ReturnsErrorProcessingSecurityHeaderResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -154,14 +155,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             };
 
             // Act
-            var result = await systemUnderTest.Get(visionUserSession);
+            var result = await systemUnderTest.GetMyRecord(visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.ErrorProcessingSecurityHeader>();
         }
 
         [TestMethod]
-        public async Task Get_UnknownError_ReturnsUnknownErrorResult()
+        public async Task GetMyRecord_UnknownError_ReturnsUnknownErrorResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -179,7 +180,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
                                     {
                                         Outcome = new Outcome
                                         {
-                                            Successful = bool.FalseString.ToLower(),
+                                            Successful = bool.FalseString.ToLowerInvariant(),
                                             Error = new OutcomeError
                                             {
                                                 Code = "-100",
@@ -200,14 +201,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             };
 
             // Act
-            var result = await systemUnderTest.Get(visionUserSession);
+            var result = await systemUnderTest.GetMyRecord(visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.UnknownError>();
         }
 
         [TestMethod]
-        public async Task Get_WhenNoMatchedError_ReturnsUnsuccessfulResult()
+        public async Task GetMyRecord_WhenNoMatchedError_ReturnsUnsuccessfulResult()
         {
             // Arrange
             _mockVisionClient.Setup(x =>
@@ -233,7 +234,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             };
 
             // Act
-            var result = await systemUnderTest.Get(visionUserSession);
+            var result = await systemUnderTest.GetMyRecord(visionUserSession);
 
             // Assert
             result.Should().BeAssignableTo<GetMyRecordResult.Unsuccessful>();

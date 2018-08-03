@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -23,7 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             _logger = loggerFactory.CreateLogger<TppPatientRecordService>();
         }
         
-        public async Task<GetMyRecordResult> Get(UserSession userSession)
+        public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
             var tppUserSession = (TppUserSession) userSession;
 
@@ -41,7 +42,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 var dcrEvents = new GetPatientDcrEventsTaskChecker(_logger).Check(patientRecord);
 
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
-                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper();
+                myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
@@ -94,8 +95,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             foreach (var testResultDates in tppTestResultDates)
             {               
                 var testResultsView = await _tppClient.TestResultsView(tppUserSession, 
-                    testResultDates.StartDate.ToString(TestResultDateFormat), 
-                    testResultDates.EndDate.ToString(TestResultDateFormat));
+                    testResultDates.StartDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture), 
+                    testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture));
                                 
                 var testResults = new GetPatientTestResultsTaskChecker(_logger).Check(testResultsView);
 

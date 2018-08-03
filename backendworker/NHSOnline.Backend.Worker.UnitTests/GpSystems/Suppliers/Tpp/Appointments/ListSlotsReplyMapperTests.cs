@@ -5,11 +5,11 @@ using NHSOnline.Backend.Worker;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
-using NHSOnline.Backend.Worker.Support.Date;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -38,7 +38,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
 
-            var expectedResponse = new AppointmentSlotsResponse { Slots = new Worker.Areas.Appointments.Models.Slot[0] };
+            var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.Areas.Appointments.Models.Slot>() };
 
             var actualResponse = _sut.Map(listSlotsReply);
 
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var listSlotsReply = new ListSlotsReply { Sessions = new [] { session }.ToList() };
 
-            var expectedResponse = new AppointmentSlotsResponse { Slots = new Worker.Areas.Appointments.Models.Slot[0] };
+            var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.Areas.Appointments.Models.Slot>() };
 
             var actualResponse = _sut.Map(listSlotsReply);
 
@@ -78,7 +78,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var expectedSlot = new Worker.Areas.Appointments.Models.Slot
             {
                 Id = "101",
-                Clinicians = new string[0],
+                Clinicians =  Array.Empty<string>(),
                 Location = "Leeds",
                 EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
                 StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
