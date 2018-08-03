@@ -23,7 +23,10 @@ DOCKER_IMAGE_CHROME=$DOCKER_REGISTRY/chrome:latest
 DOCKER_IMAGE_FIREFOX=$DOCKER_REGISTRY/firefox:latest
 
 #### 3. Change browser variable to one webdriver mentioned in ./serenity.properties
-BROWSER=chromeheadless
+if [ -z $BROWSER ]
+then
+  BROWSER=chromeheadless
+fi
 
 #### 4. Change an image to appropriate one (with proper browser inside, it needs to match your previous choice :D)
 DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
