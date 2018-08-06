@@ -1,8 +1,9 @@
+@my-record
 Feature: View My Medical Record Information - Immunisations
 
   @smoketest
   @NHSO-685
-  Scenario Outline: A user has immunisations on their record
+  Scenario Outline: A <Service> user has immunisations on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist for <Service>
@@ -16,7 +17,7 @@ Feature: View My Medical Record Information - Immunisations
   |EMIS|
 
   @NHSO-685
-  Scenario Outline: A user has no immunisations on their record
+  Scenario Outline: A <Service> user has no immunisations on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And no immunisation records exist for the patient for <Service>
@@ -30,7 +31,7 @@ Feature: View My Medical Record Information - Immunisations
   |EMIS|
 
   @NHSO-685
-  Scenario Outline: A user does not have access to immunisations
+  Scenario Outline: A <Service> user does not have access to immunisations
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the user does not have access to view immunisations for <Service>
@@ -44,7 +45,7 @@ Feature: View My Medical Record Information - Immunisations
   |EMIS|
 
   @NHSO-685
-  Scenario Outline: An Error occurs retrieving immunisations data
+  Scenario Outline: An Error occurs retrieving immunisations data for <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And there is an error retrieving immunisations data for <Service>

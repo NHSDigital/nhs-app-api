@@ -1,3 +1,4 @@
+@my-record
 Feature: View My Medical Record Information - Demographics
 
   @NHSO-361
@@ -31,7 +32,7 @@ Feature: View My Medical Record Information - Demographics
       | TPP     |
 
   @NHSO-361
-  Scenario Outline: A user collapses the patient details section
+  Scenario Outline: A <Service> user collapses the patient details section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page

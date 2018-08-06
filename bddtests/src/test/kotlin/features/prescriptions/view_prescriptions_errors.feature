@@ -1,9 +1,10 @@
+@prescription
 Feature: View prescriptions error cases
 
   A user can view information about their prescriptions after logging in
 
   @NHSO-498
-  @prescription
+  
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions times out
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -18,7 +19,7 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-498
-  @prescription
+  
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -32,7 +33,7 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-498
-  @prescription
+  
   Scenario: A user navigates to the prescriptions page and the session times out
     Given EMIS is initialised
     And I am using EMIS GP System
@@ -42,7 +43,7 @@ Feature: View prescriptions error cases
     Then I am kicked back to the login page
 
   @NHSO-513
-  @prescription
+  
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order times out
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -60,7 +61,7 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-513
-  @prescription
+  
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -78,7 +79,7 @@ Feature: View prescriptions error cases
 
   @NHSO-858
   @NHSO-514
-  @prescription
+  
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -100,7 +101,7 @@ Feature: View prescriptions error cases
       | TPP       |
 
   @NHSO-858
-  @prescription
+  
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -120,7 +121,7 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-858
-  @prescription
+  
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an already ordered response
     Given <GP System> is initialised
     And I am using <GP System> GP System
@@ -140,7 +141,7 @@ Feature: View prescriptions error cases
       | TPP       |
 
   @NHSO-858
-  @prescription
+  
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an invalid guid error
     Given <GP System> is initialised
     And I am using <GP System> GP System

@@ -1,3 +1,4 @@
+@my-record
 Feature: View My Medical Record Information - Warning
 
   @smoketest

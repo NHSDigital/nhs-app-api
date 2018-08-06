@@ -1,3 +1,4 @@
+@my-record
 Feature: View My Medical Record Information - Events
 
   @smoketest
@@ -15,7 +16,6 @@ Feature: View My Medical Record Information - Events
       |Service|
       |TPP|
 
-  @smoketest
   @NHSO-1504
   Scenario Outline: A TPP user has no Events on their record
     Given the my record wiremocks are initialised for <Service>
@@ -42,7 +42,7 @@ Feature: View My Medical Record Information - Events
     Then I see a message indicating that I have no access to view Events
 
   @NHSO-1504
-  Scenario Outline: An Error occurs retrieving Events data
+  Scenario Outline: An Error occurs retrieving Events data for <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And an error occurred retrieving the dcr events from <Service>

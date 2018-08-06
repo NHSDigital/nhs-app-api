@@ -1,3 +1,4 @@
+@prescription
 Feature: Prescriptions submission
 
   A user can submit a request for a repeat prescription
@@ -8,9 +9,7 @@ Feature: Prescriptions submission
   @NHSO-860
   @NHSO-855
   @smoketest
-  @prescription
-  Scenario Outline: The User orders a repeat prescription with 5 entries
-    Given <GP System> is initialised
+Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries    Given <GP System> is initialised
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
     And I am logged in
@@ -27,8 +26,8 @@ Feature: Prescriptions submission
 
   @NHSO-860
   @NHSO-855
-  @prescription
-  Scenario Outline: The User orders a repeat prescription with 1 entries
+  
+  Scenario Outline: The <GP System> user orders a repeat prescription with 1 entries
     Given <GP System> is initialised
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario

@@ -6,7 +6,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
-  Scenario Outline: A <GP System> user tries to book an appointment without describing symptoms
+  Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -19,9 +19,8 @@ Feature: Book an available appointment slot
       | TPP       |
 
   @NHSO-72
-  @smoketest
   @NHSO-872
-  Scenario Outline: A <GP System> user tries to book an appointment describing symptoms at least 1 character
+  Scenario Outline: A <GP System> user can book an appointment describing symptoms at least 1 character
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -36,7 +35,8 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
-  Scenario Outline: A <GP System> user tries to book an appointment describing symptoms no more 150 characters
+  @smoketest
+  Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -51,7 +51,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
-  Scenario Outline: A <GP System> user tries to enter symptoms with over 150 characters
+  Scenario Outline: A <GP System> user cannot enter symptoms with over 150 characters
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -64,9 +64,8 @@ Feature: Book an available appointment slot
       | TPP       |
 
   @NHSO-72
-  @smoketest
   @NHSO-872
-  Scenario Outline: A <GP System> user tries to paste symptoms with over 150 characters
+  Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -159,7 +158,6 @@ Feature: Book an available appointment slot
 
   @NHSO-528
   @NHSO-872
-  @smoketest
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
     Given there are <GP System> appointments available to book
     And I am logged in

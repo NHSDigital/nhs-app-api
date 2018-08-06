@@ -5,7 +5,6 @@ Feature: View courses
   As a logged in user
   I want to see a list of repeat courses that I can order
 
-  @smoketest
   Scenario Outline: The <GP System> User has repeatable prescriptions
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -103,7 +102,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @smoketest
   @NHSO-502
   @prescription
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order

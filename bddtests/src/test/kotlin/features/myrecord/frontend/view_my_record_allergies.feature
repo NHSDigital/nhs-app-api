@@ -1,10 +1,11 @@
+@my-record
 Feature: View My Medical Record Information - Allergies
 
 
   @NHSO-677
   @NHSO-1081
   @tech-debt @NHSO-1937
-  Scenario Outline: A user can view allergies and adverse reactions section
+  Scenario Outline: A <Service> user can view allergies and adverse reactions section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
@@ -20,7 +21,7 @@ Feature: View My Medical Record Information - Allergies
   @NHSO-677
   @NHSO-1081
   @tech-debt @NHSO-1937
-  Scenario Outline: A user does not have Summary Care Record access who is disabled at practice-level or patient level
+  Scenario Outline: A <Service> user does not have Summary Care Record access who is disabled at practice-level or patient level
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     But the GP Practice has disabled allergies functionality for <Service>
@@ -35,7 +36,7 @@ Feature: View My Medical Record Information - Allergies
   @NHSO-677
   @NHSO-1081
   @tech-debt @NHSO-1937
-  Scenario Outline: A user has no allergies on their record
+  Scenario Outline: A <Service> user has no allergies on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and the patient has "0" allergies for <Service>
@@ -50,7 +51,8 @@ Feature: View My Medical Record Information - Allergies
 
   @NHSO-677
   @NHSO-1081
-  Scenario Outline: A user has one or more allergy records
+  @smoketest
+  Scenario Outline: A <Service> user has one or more allergy records
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and the patient has "2" allergies for <Service>
@@ -65,7 +67,7 @@ Feature: View My Medical Record Information - Allergies
 
   @NHSO-677
   @NHSO-1081
-  Scenario Outline: A user has multiple allergies with different date display formats
+  Scenario Outline: A <Service> user has multiple allergies with different date display formats
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and has 5 different allergies with different date formats for <Service>

@@ -12,7 +12,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @smoketest
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>
     And I am logged in

@@ -1,3 +1,4 @@
+@my-record
 Feature: View My Medical Record Information
 
   @smoketest
@@ -15,7 +16,6 @@ Feature: View My Medical Record Information
       |Service|
       |EMIS|
 
-  @smoketest
   @NHSO-1096
   Scenario Outline: An EMIS user has no Consultations on their record
     Given the my record wiremocks are initialised for <Service>

@@ -1,9 +1,9 @@
+@prescription
 Feature: View prescriptions
 
   A user can view information about their prescriptions after logging in
 
   @NHSO-497
-  @prescription
   Scenario Outline: A <GP System> user can see the prescriptions menu button
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -15,7 +15,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @prescription
+  
   Scenario Outline: <GP System> patient selects the prescriptions menu button
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -30,7 +30,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @smoketest
   Scenario Outline: <GP System> patient with no past repeat prescriptions
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -45,7 +44,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @prescription
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -73,7 +71,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @prescription
+
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -87,7 +85,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @prescription
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -101,7 +98,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @prescription
+
   Scenario: EMIS patient who has acute prescriptions
     Given a patient from EMIS is defined
     And I am using EMIS GP System
@@ -112,7 +109,7 @@ Feature: View prescriptions
 
   @NHSO-858
   @NHSO-556
-  @prescription
+
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -126,7 +123,7 @@ Feature: View prescriptions
       | TPP       |
 
   @NHSO-1509
-  @prescription
+
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -142,7 +139,7 @@ Feature: View prescriptions
       | TPP       |
 
   @NHSO-1509
-  @prescription
+
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -158,7 +155,7 @@ Feature: View prescriptions
       | TPP       |
 
   @NHSO-1509
-  @prescription
+
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -173,7 +170,7 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @prescription
+
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
     Given a patient from EMIS is defined
     And I am using EMIS GP System

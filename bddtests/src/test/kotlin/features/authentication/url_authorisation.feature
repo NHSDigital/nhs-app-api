@@ -9,20 +9,22 @@ Feature: Authorisation occurs during each URL visit
 
   @NHSO-906
   @NHSO-1012
-  @smoketest
   Scenario Outline: User has never logged in and attempts to navigate to <URL>
     Given I am not logged in
     When I browse to the page at <URL>
     Then I see the login page
 
+  @smoketest
     Examples:
-    | URL                           |
-    | /                             |
-    | /appointments                 |
-    | /prescriptions                |
-    | /prescriptions/repeat-courses |
-    | /more                         |
-    | /account                      |
+      | URL                           |
+      | /prescriptions                |
+    Examples:
+      | URL                           |
+      | /                             |
+      | /appointments                 |
+      | /prescriptions/repeat-courses |
+      | /more                         |
+      | /account                      |
 
 
   @NHSO-906
@@ -60,18 +62,19 @@ Feature: Authorisation occurs during each URL visit
 
   @NHSO-906
   @NHSO-1012
-  @smoketest
   Scenario Outline: User browses to <URL> when logged in
     Given I am logged in
     And I see the home page
     When I browse to the page at <URL>
     Then I see the relevant page
-
+  @smoketest
+    Examples:
+    | URL                           |
+    | /prescriptions                |
     Examples:
     | URL                           |
     | /                             |
     | /appointments                 |
-    | /prescriptions                |
     | /prescriptions/repeat-courses |
     | /more                         |
     | /account                      |

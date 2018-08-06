@@ -47,7 +47,8 @@ Feature: My appointments
   @NHSO-196
   @NHSO-663
   @NHSO-1591
-  Scenario Outline: A user has upcoming appointments
+  @smoketest
+  Scenario Outline: A <GP System> user can see their upcoming appointments
     Given <GP System> logged in session started
     And I have upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
