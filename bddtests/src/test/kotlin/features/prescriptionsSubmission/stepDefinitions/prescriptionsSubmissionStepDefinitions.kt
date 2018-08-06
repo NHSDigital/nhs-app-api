@@ -69,14 +69,11 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest() {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
-
         prescriptionSubmissionRequest = null
     }
 
     @Given("^I have a repeat prescription request with (\\d+) courses")
     fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int) {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie("EMIS")
         currentPatient = Patient.getDefault("EMIS")
 
         var uuids: MutableList<String> = mutableListOf()

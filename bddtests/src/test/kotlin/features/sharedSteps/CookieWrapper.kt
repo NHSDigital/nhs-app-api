@@ -39,7 +39,7 @@ data class CookieWrapper private constructor(
         this.myAppointments.AssertEquals(expectedAppointments)
 
         var expectedPrescriptions = CookiePrescriptionsWrapper(
-                prescriptionCourses = null,
+                prescriptionCourses = arrayListOf(),
                 hasLoaded = false,
                 hasErrored = false)
 
@@ -123,7 +123,7 @@ data class CookieWrapper private constructor(
     )
 
     private data class CookiePrescriptionsWrapper(
-            val prescriptionCourses: CookieEmptyObjectWrapper?,
+            val prescriptionCourses: ArrayList<String>,
             val hasLoaded: Boolean,
             val hasErrored: Boolean) {
         fun AssertEquals(expected: CookiePrescriptionsWrapper) {
