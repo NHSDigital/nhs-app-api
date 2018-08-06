@@ -9,7 +9,7 @@
     <select-dropdown v-model="type" :error-border="!validationError.isTypeValid"
                      select-id = "type" select-name="type">
       <option v-for="option in options.types" :key="option.value" :value="option.value"
-              :selected="type === option.value" :disabled="option.value===''">
+              :disabled="option.value===''">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
@@ -23,23 +23,21 @@
     <select-dropdown v-model="location" :error-border="!validationError.isLocationValid"
                      select-id = "location" select-name="location">
       <option v-for="option in options.locations" :key="option.value" :value="option.value"
-              :selected="location === option.value" :disabled="option.value===''">
+              :disabled="option.value===''">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
 
     <label for="clinician">{{ $t('appointments.booking.filters.clinician.label') }}</label>
     <select-dropdown v-model="clinician" select-id = "clinician" select-name="clinician">
-      <option v-for="option in options.clinicians" :key="option. value" :value="option.value"
-              :selected="clinician === option.value">
+      <option v-for="option in options.clinicians" :key="option. value" :value="option.value">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
 
     <label for="time-period">{{ $t('appointments.booking.filters.date.label') }}</label>
     <select-dropdown v-model="date" select-id = "time-period" select-name="time-period">
-      <option v-for="option in options.dates" :key="option.value" :value="option.value"
-              :selected="date === option.value">
+      <option v-for="option in options.dates" :key="option.value" :value="option.value">
         {{ displayName(option) }}
       </option>
     </select-dropdown>

@@ -127,9 +127,12 @@ export default {
 
       this.showNoMatchingWarning = this.shouldShowNoMatchingWarning();
       if (this.showNoMatchingWarning) {
-        this.showValidationError = false;
         this.$refs.noMatching.focus();
       }
+
+      this.showValidationError = false;
+      this.validationError.isTypeValid = true;
+      this.validationError.isLocationValid = true;
     },
     onConfirmButtonClicked() {
       this.validate();
