@@ -1,4 +1,4 @@
-package features.appointments.stepDefinitions.factories
+package features.appointments.factories
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.models.Mapping

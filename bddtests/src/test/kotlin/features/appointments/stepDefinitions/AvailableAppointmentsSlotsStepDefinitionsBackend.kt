@@ -10,26 +10,25 @@ import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisA
 import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisMetaSlotLocations
 import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisMetaSlotSessionHolders
 import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisMetaSlotSessions
-import features.appointments.data.AppointmentsBookingData.Companion.defaultFromDateIfExplicitToDate
 import features.appointments.data.AppointmentsBookingData.Companion.defaultSessionEndDate
 import features.appointments.data.AppointmentsBookingData.Companion.defaultSessionStartDate
-import features.appointments.data.AppointmentsBookingData.Companion.defaultToDateIfExplicitFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.explicitFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.explicitToDate
-import features.appointments.data.AppointmentsBookingData.Companion.getDefaultTppAppointmentSessions
 import features.appointments.data.AppointmentsBookingData.Companion.mockingClient
 import features.appointments.data.AppointmentsBookingData.Companion.pastFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.pastToDate
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
+import mocking.defaults.MockDefaults.Companion.patient
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.models.*
+import mocking.emis.models.Location
+import mocking.emis.models.Session
+import mocking.emis.models.SessionHolder
 import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
-import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -39,11 +38,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.servlet.http.Cookie
-import org.junit.Assert
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import mocking.defaults.MockDefaults.Companion.patient
-
 
 class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
 
@@ -54,40 +48,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
     fun thereAreAvailableAppointmentSlotsWithinTheNextFourWeeks() {
         val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = defaultSessionStartDate, sessionEndDate = defaultSessionEndDate)
         generateAppropriateEmisStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
-    }
-
-    @Given("^there are available appointment slots four weeks from a specific from date$")
-    fun thereAreAvailableAppointmentSlotsFourWeeksAfterFromDate() {
-        val fromDate = explicitFromDate
-        val toDate = defaultToDateIfExplicitFromDate
-        generateAvailableSlotsStubsBasedOnDates(fromDate, toDate)
-    }
-
-    @Given("^there are available appointment slots four weeks preceding a specific to date$")
-    fun thereAreAvailableAppointmentSlotsFourWeeksBeforeToDate() {
-        val fromDate = defaultFromDateIfExplicitToDate
-        val toDate = explicitToDate
-        generateAvailableSlotsStubsBasedOnDates(fromDate, toDate)
-    }
-
-    private fun generateAvailableSlotsStubsBasedOnDates(fromDate: String, toDate: String) {
-        currentProvider = ProviderTypes.valueOf(sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = fromDate, sessionEndDate = toDate)
-                generateAppropriateEmisStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
-            }
-            ProviderTypes.TPP -> {
-                Serenity.setSessionVariable(AvailableAppointmentsSteps.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(getDefaultTppAppointmentSessions())
-
-                availableAppointments.generateTppStubForAppointmentSlotRequest(
-                        getDefaultTppAppointmentSessions(),
-                        0,
-                        fromDate,
-                        toDate
-                )
-            }
-        }
     }
 
     private val getAppointmentSlotsMetaQueryParams = AppointmentSlotsParams(
@@ -181,16 +141,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
         retrieveAppointmentSlots()
     }
 
-    @When("^the available appointment slots are retrieved with just a from date$")
-    fun theAvailableAppointmentSlotsAreRetrievedWithJustFromDate() {
-        retrieveAppointmentSlots(fromDate = toLocalTime(explicitFromDate), toDate = null)
-    }
-
-    @When("^the available appointment slots are retrieved with just a to date$")
-    fun theAvailableAppointmentSlotsAreRetrievedWithJustToDate() {
-        retrieveAppointmentSlots(fromDate = null, toDate = toLocalTime(explicitToDate))
-    }
-
     @When("^I try to retrieve appointment slots with fromDate after the toDate$")
     fun tryToRetrieveAppointmentSlotsWithFromDateAfterToDate() {
         retrieveAppointmentSlots(toLocalTime(defaultSessionEndDate), toLocalTime(defaultSessionStartDate))
@@ -236,19 +186,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
         val result = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         assertAppointmentSlotsResponseNotNull(result)
         Assert.assertEquals("result.slots", 0, result.slots.size)
-    }
-
-    @Then("^available slots are returned for four weeks based on the date provided$")
-    fun availableSlotsLocationsCliniciansAndAppointmentSessionsForFourWeeksFollowingFromDate() {
-        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(AvailableAppointmentsSteps.EXPECTED_APPOINTMENT_SESSIONS_KEY)
-        val expectedAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
-        for (appointmentSession in expectedAppointmentSessions) {
-            expectedAppointmentSlots.addAll(appointmentSession.slots)
-        }
-        val actualResult = Serenity.sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        Assert.assertNotNull(actualResult)
-        Assert.assertNotNull(actualResult.slots)
-        Assert.assertEquals("Incorrect number of slots. ", expectedAppointmentSlots.size, actualResult.slots.size)
     }
 
     private fun assertAppointmentSlotsResponseNotNull(result: AppointmentSlotsResponse) {

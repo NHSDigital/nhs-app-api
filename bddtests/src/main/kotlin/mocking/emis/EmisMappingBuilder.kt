@@ -43,6 +43,8 @@ const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String)
     : MappingBuilder(method, "/emis$relativePath"), IAppointmentMappingBuilder {
 
+    protected var delayMillisecs = 0;
+
     init {
         if (configuration != null) {
             requestBuilder

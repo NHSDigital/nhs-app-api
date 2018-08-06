@@ -1,7 +1,7 @@
 package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
-import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
+import features.appointments.factories.AppointmentsBookingFactory
 import java.time.Duration
 
 

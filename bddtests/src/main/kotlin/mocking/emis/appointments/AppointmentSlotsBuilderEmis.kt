@@ -33,8 +33,6 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         if (!linkToken.isNullOrEmpty()) requestBuilder.andQueryParameter(name = "userPatientLinkToken", value = linkToken!!)
     }
 
-    private var delayMillisecs = 0
-
     override fun withDelay(delayMilliseconds : Duration):AppointmentSlotsBuilderEmis{
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this

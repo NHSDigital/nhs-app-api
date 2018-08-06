@@ -44,7 +44,8 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
         requestBuilder.andHeader(HEADER_CONTENT_TYPE, "text/xml; charset=UTF-8")
     }
 
-    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderTpp(patient.tppUserSession!!)
+    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?)
+            = AppointmentSlotsBuilderTpp(patient.tppUserSession!!, fromDateTime, toDateTime)
 
     override fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder = MyAppointmentsBuilderTpp(patient)
 

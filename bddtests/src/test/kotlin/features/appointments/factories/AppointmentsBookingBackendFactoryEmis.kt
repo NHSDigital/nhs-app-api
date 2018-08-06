@@ -1,4 +1,4 @@
-package features.appointments.stepDefinitions.factories
+package features.appointments.factories
 
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient

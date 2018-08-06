@@ -6,7 +6,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
-  Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
+ Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -35,9 +35,8 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
-  @smoketest
-  Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
-    Given there are <GP System> appointments available to book
+ @smoketest
+  Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters    Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
@@ -58,6 +57,8 @@ Feature: Book an available appointment slot
     And I have selected an appointment slot to book
     When I enter symptoms of 151 characters
     Then only the first 150 characters will be displayed
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
     Examples:
       | GP System |
       | EMIS      |

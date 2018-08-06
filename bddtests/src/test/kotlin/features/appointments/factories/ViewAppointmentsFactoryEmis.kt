@@ -1,4 +1,4 @@
-package features.appointments.data
+package features.appointments.factories
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.JSonXmlConverter

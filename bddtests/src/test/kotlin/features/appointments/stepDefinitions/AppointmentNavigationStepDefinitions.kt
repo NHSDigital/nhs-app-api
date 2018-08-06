@@ -31,25 +31,23 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on the guidance page$")
     fun iAmOnTheGuidancePage() {
-        navigation.select("Appointments")
+        iAmOnMyAppointmentsPage()
         myAppointments.clickOnBookAppointmentButton()
+        myAppointments.waitForSpinnerToDisappear()
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
     }
 
     @Given("^I am on the available appointments page$")
     fun iAmOnTheAvailableAppointmentsPage() {
-        navigation.select("Appointments")
-        myAppointments.clickOnBookAppointmentButton()
-        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+        iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
+        myAppointments.waitForSpinnerToDisappear()
         availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
     @When("^I try to progress to the available appointments page$")
     fun iTryToProgressToTheAvailableAppointmentsPage() {
-        navigation.select("Appointments")
-        myAppointments.clickOnBookAppointmentButton()
-        appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
+        iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
     }
 

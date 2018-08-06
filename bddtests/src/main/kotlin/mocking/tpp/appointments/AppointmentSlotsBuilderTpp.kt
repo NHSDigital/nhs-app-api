@@ -1,7 +1,8 @@
 package mocking.tpp.appointments
 
-import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
+import constants.AppointmentDateTimeFormat
 import mocking.JSonXmlConverter
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.data.TppConfig
@@ -16,10 +17,12 @@ import org.apache.http.HttpStatus
 import org.junit.Assert.fail
 import worker.models.demographics.TppUserSession
 import java.time.Duration
-import java.time.OffsetDateTime
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 
-class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
+class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: String? = null, endDate: String? = null) :
         TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 
     val tppUserSession: TppUserSession = tppUserSession
@@ -29,12 +32,33 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
         val typeValue = "ListSlots"
         val apiVersion = "1"
 
+        val path = StringBuilder("//ListSlots[")
+
+        if (startDate != null) {
+            path.append("@startDate='$startDate' and ")
+            val numberOfDays = getNumberOfDays(startDate, endDate)
+            path.append("@numberOfDays='$numberOfDays' and ")
+        }
+
+        path.append("@apiVersion='$apiVersion' and " +
+                "@patientId='${tppUserSession.patientId}' and " +
+                "@onlineUserId='${tppUserSession.onlineUserId}' and " +
+                "@unitId='${tppUserSession.unitId}']")
+
         requestBuilder.andHeader(typeHeader, typeValue)
-                .andBodyMatchingXpath("//ListSlots[" +
-                        "@apiVersion='$apiVersion' and " +
-                        "@patientId='${tppUserSession.patientId}' and " +
-                        "@onlineUserId='${tppUserSession.onlineUserId}' and " +
-                        "@unitId='${tppUserSession.unitId}']")
+                .andBodyMatchingXpath(path.toString())
+    }
+
+    fun getNumberOfDays(startDate: String, endDate: String? = null): Long {
+
+        if (endDate != null) {
+            val format = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+            val firstDate = LocalDate.parse(startDate, format)
+            val secondDate = LocalDate.parse(endDate, format)
+
+            return ChronoUnit.DAYS.between(firstDate, secondDate)
+        }
+        return 1
     }
 
     override fun withDelay(delayMilliseconds: Duration): IAppointmentSlotsBuilder {
@@ -77,20 +101,25 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
     private fun sessionsConverter(sessions: ArrayList<AppointmentSessionFacade>): MutableCollection<Session> {
 
         val sessionsList: MutableCollection<Session> = mutableListOf()
-        sessions.forEach { session -> sessionsList.add(sessionConverter(session)) }
+        sessions.forEach { session -> sessionsList.addAll(sessionConverter(session)) }
         return sessionsList
     }
 
-    private fun sessionConverter(session: AppointmentSessionFacade): Session {
-        val slots: MutableCollection<Slot> = mutableListOf()
-        session.slots.forEach { slot -> slots.add(slotConverter(slot)) }
+    private fun sessionConverter(session: AppointmentSessionFacade): List<Session> {
+        return session.slots.map { slot -> slotConverter(session, slot) }
+    }
+
+    private fun slotConverter(session: AppointmentSessionFacade, slot: AppointmentSlotFacade): Session {
+
         return Session(
-                sessionId = getValueOrTestSetupIncorrectly(session.sessionId, "sessionId"),
+                sessionId = getValueOrTestSetupIncorrectly(slot.slotId, "sessionId"),
                 type = getValueOrTestSetupIncorrectly(session.sessionType, "sessionType"),
                 staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails, "staffDetails"),
                 location = getValueOrTestSetupIncorrectly(session.location!!, "location"),
-                Slot = slots
-        )
+                Slot = mutableListOf(Slot(
+                        startDate = "${slot.startTime!!}.0Z",
+                        endDate = "${slot.endTime!!}.0Z",
+                        type = slot.slotTypeName!!)))
     }
 
     private fun getValueOrTestSetupIncorrectly(value: Int?, valueName: String): String {
@@ -105,12 +134,5 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession) :
             fail("Test setup incorrectly, $valueName must be set")
         }
         return value!!
-    }
-
-    private fun slotConverter(slot: AppointmentSlotFacade): Slot {
-        return Slot(
-                startDate = "${slot.startTime!!}.0Z",
-                endDate = "${slot.endTime!!}.0Z",
-                type = slot.slotTypeName!!)
     }
 }

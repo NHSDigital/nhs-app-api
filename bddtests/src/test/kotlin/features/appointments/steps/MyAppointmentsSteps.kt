@@ -2,7 +2,7 @@ package features.appointments.steps
 
 import com.google.common.collect.Ordering
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
-import features.appointments.data.ViewAppointmentsFactory
+import features.appointments.factories.ViewAppointmentsFactory
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.MockingClient
 import mocking.defaults.MockDefaults

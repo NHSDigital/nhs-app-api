@@ -2,10 +2,8 @@ package features.appointments.steps
 
 import constants.AppointmentDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
-import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
-import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import features.appointments.data.AppointmentsBookingData
-import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
+import features.appointments.data.AppointmentsSlotsExample
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
@@ -14,7 +12,6 @@ import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -209,52 +206,14 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun generateEmisStubsForAppointmentSlotsForSpecificDates() {
-        setSessionVariable(EXPECTED_SESSIONS_KEY).to(defaultEmisMetaSlotSessions)
-        setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(defaultEmisAppointmentSessions)
-        setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(getDefaultEmisAppointmentSlots())
-
-        generateStubForMetaAppointmentSlotRequest(
-                defaultEmisMetaSlotLocations,
-                defaultEmisMetaSlotSessionHolders,
-                defaultEmisMetaSlotSessions,
-                0,
-                defaultSessionStartDate,
-                defaultSessionEndDate
-        )
-
-        generateEmisStubForAppointmentSlotRequest(
-                defaultEmisAppointmentSessions,
-                0,
-                defaultSessionStartDate,
-                defaultSessionEndDate
-        )
-    }
-
-    @Step
-    fun generateTppStubsForAppointmentSlotsForSpecificDates() {
-        setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(getDefaultTppAppointmentSessions())
-
-        generateTppStubForAppointmentSlotRequest(
-                getDefaultTppAppointmentSessions(),
-                0,
-                defaultSessionStartDate,
-                defaultSessionEndDate
-        )
-    }
-
-    @Step
     fun generateEmisStubsForAppointmentSlotsForNextFourWeeks(
             emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
             emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
             emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
             emisAppointmentSessions: ArrayList<AppointmentSessionFacade> = defaultEmisAppointmentSessions,
-            emisAppointmentSlots: ArrayList<AppointmentSlotFacade> = getDefaultEmisAppointmentSlots(),
             delayedInSeconds: Long = 0
     ) {
-        setSessionVariable(EXPECTED_SESSIONS_KEY).to(emisSlotSessions)
         setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(emisAppointmentSessions)
-        setSessionVariable(EXPECTED_APPOINTMENT_SLOTS_KEY).to(emisAppointmentSlots)
 
         generateStubForMetaAppointmentSlotRequest(
                 emisSlotLocations,
@@ -386,48 +345,52 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatAvailableSlotsAreReturnedWithAppropriateFields() {
         val result = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        val expectedSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
-        val unmatchedExpectedSlots = HashMap<AppointmentSlotFacade, SlotResponseObject>()
-        for (session in expectedSessions) {
-            for (slot in session.slots) {
-                unmatchedExpectedSlots[slot] = SlotResponseObject(
-                        slot.slotId.toString(),
-                        getExpectedAppointmentTypeByIndexes(slot.sessionTypeName!!, slot.slotTypeName!!),
-                        slot.startTime!!,
-                        slot.endTime!!,
-                        session.location!!,
-                        arrayOf(session.staffDetails)
-                )
-            }
+        val unmatchedExpectedSlots =getExpectedResponseSlots()
+
+        Assert.assertEquals("Number of response slots", unmatchedExpectedSlots.count(), result.slots.count())
+
+        for (resultSlot in result.slots) {
+            assertSlotIsNotNull(resultSlot)
+            var key = resultSlot.id
+            var keys = unmatchedExpectedSlots.keys
+            Assert.assertTrue(errorMessageForNotFindingResultSlot(key, keys),
+                    unmatchedExpectedSlots.containsKey(key))
+            var matchingExpectedSlot = unmatchedExpectedSlots[key]!!
+            assertSlotsAreEqual(matchingExpectedSlot, actualSlot = resultSlot)
+            unmatchedExpectedSlots.remove(key)
         }
-        for (actualSlot in result.slots) {
-            assertNotNull("Null id", actualSlot.id)
-            assertNotNull("Null type", actualSlot.type)
-            assertNotNull("Null startTime", actualSlot.startTime)
-            assertNotNull("Null endTime", actualSlot.endTime)
-            assertNotNull("Null location", actualSlot.location)
-            assertNotNull("Null clinicians", actualSlot.clinicians)
-            val actualSlotTypeParts = actualSlot.type.split(Regex("( - )"))
-            val startTimeWithoutTimezone = timeWithoutTimezone(actualSlot.startTime)
-            val endTimeWithoutTimezone = timeWithoutTimezone(actualSlot.endTime)
-            val expectedSlotKey = AppointmentSlotFacade(
-                    actualSlot.id.toInt(),
-                    startTimeWithoutTimezone,
-                    endTimeWithoutTimezone,
-                    actualSlotTypeParts[0],
-                    actualSlotTypeParts[1]
-            )
-            assertTrue("Expected slot not found:\n$expectedSlotKey should be in\n$unmatchedExpectedSlots", unmatchedExpectedSlots.containsKey(expectedSlotKey))
-            val expectedSlot = unmatchedExpectedSlots[expectedSlotKey]!!
-            assertEquals("Slot type does not match. ", expectedSlot.type, actualSlot.type)
-            assertEquals("Slot start time does not match. ", toUTC(expectedSlot.startTime), toUTC(actualSlot.startTime))
-            assertEquals("Slot end time does not match. ", toUTC(expectedSlot.endTime), toUTC(actualSlot.endTime))
-            assertEquals("Slot location does not match. ", expectedSlot.location, actualSlot.location)
-            assertEquals("Slot clinicians do not match. ", expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
-            unmatchedExpectedSlots.remove(expectedSlotKey)
-        }
-        assertTrue("Expected Slots missing. ", unmatchedExpectedSlots.isEmpty())
     }
+
+    private fun errorMessageForNotFindingResultSlot(targetKey:String, actualKeys: MutableSet<String>):String{
+
+        var keys = actualKeys.joinToString(", ")
+        return "Result Slot Id not Expected. Actual '${targetKey}', Expected '$keys'"
+    }
+
+    private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
+        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(AppointmentsSlotsExample.EXPECTED_RESPONSE_SLOTS_KEY)
+        val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
+        for (expectedSlot in expectedResponseSlots) {
+            unmatchedExpectedSlots[expectedSlot.id] = expectedSlot
+        }
+        return unmatchedExpectedSlots
+    }
+
+    private fun assertSlotsAreEqual(expectedSlot : SlotResponseObject, actualSlot: SlotResponseObject) {
+        assertEquals("Slot type", expectedSlot.type, actualSlot.type)
+        assertEquals("Slot start time", toUTC(expectedSlot.startTime), toUTC(actualSlot.startTime))
+        assertEquals("Slot end time", toUTC(expectedSlot.endTime), toUTC(actualSlot.endTime))
+        assertEquals("Slot location", expectedSlot.location, actualSlot.location)
+        assertEquals("Slot clinicians", expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
+    }
+
+    private fun assertSlotIsNotNull(actualSlot: SlotResponseObject) {
+        assertNotNull("Null id", actualSlot.id)
+        assertNotNull("Null type", actualSlot.type)
+        assertNotNull("Null startTime", actualSlot.startTime)
+        assertNotNull("Null endTime", actualSlot.endTime)
+        assertNotNull("Null location", actualSlot.location)
+        assertNotNull("Null clinicians", actualSlot.clinicians)}
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
@@ -435,7 +398,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
         var expected =
-                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentTypesKey)
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExample.EXPECTED_APPOINTMENT_TYPE_KEY)
                         ?: getExpectedAppointmentTypesFromSession()
         for (expectedAppointmentType in expected) {
             assertOptionExists(expectedAppointmentType, actualAppointmentTypeOptions)
@@ -467,7 +430,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val actualLocationOptions = availableAppointments.getLocationFilterContents()
         val expectedLocations =
-                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentLocationsKey)
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExample.EXPECTED_APPOINTMENT_LOCATIONS_KEY)
                         ?: defaultEmisMetaSlotLocations.map { l -> l.locationName }
 
         for (expectedLocation in expectedLocations) {
@@ -487,7 +450,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
-                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentCliniciansKey)
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExample.EXPECTED_APPOINTMENT_CLINICIANS_KEY)
                         ?: defaultEmisMetaSlotSessionHolders.map { l -> l.displayName }
 
         for (expectedClinician in expectedClinicians) {
@@ -657,18 +620,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertTrue("Time slot is no longer highlighted. ", availableAppointments.isTimeSlotAtPositionSelected(1))
     }
 
-    private fun getExpectedTimeOnSlot(slotNumber: Int): Pair<String, String> {
-        val expectedAppointmentSlots = sessionVariableCalled<ArrayList<AppointmentSlotFacade>>(EXPECTED_APPOINTMENT_SLOTS_KEY)
-        val timeToSelect = backendDateTimeFormat.parse(expectedAppointmentSlots[slotNumber].startTime)
-        val expectedDateHeading = generateExpectedDateHeading(timeToSelect)
-        val expectedTimeOnSlot = generateExpectedTimeOnSlot(timeToSelect)
-        return Pair(expectedDateHeading, expectedTimeOnSlot)
-    }
-
-    private fun getExpectedAppointmentTypeByIndexes(sessionName: String, appointmentSlotType: String): String {
-        return "$sessionName - $appointmentSlotType"
-    }
-
     private fun assertOptionExists(defaultOption: String, actualOptions: ArrayList<String>, optionType: String = "an") {
         assertTrue(
                 String.format("%s not present as %s option", defaultOption, optionType),
@@ -677,7 +628,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun selectFilterOptionsToRevealSlots() {
-        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsBookingFactory.ExpectedAppointmentFilterFacadeKey)
+        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExample.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
                 ?: getFilterValuesFromSession()
         availableAppointments.selectAppointmentTypeByText(filterValues.type)
         availableAppointments.selectLocationByText(filterValues.location)
@@ -714,16 +665,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         return sessionsById
     }
 
-    private fun generateExpectedDateHeading(expectedDate: Date?): String {
-        val expectedDateFormat = SimpleDateFormat(frontendDateFormat)
-        return expectedDateFormat.format(expectedDate)
-    }
-
-    private fun generateExpectedTimeOnSlot(expectedTime: Date?): String {
-        val expectedTimeFormat = SimpleDateFormat(frontendTimeFormat)
-        return expectedTimeFormat.format(expectedTime)
-    }
-
     private fun toLocalTime(date: String?): String {
         val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         currentDateFormat.timeZone = TimeZone.getDefault()
@@ -740,14 +681,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         return queryDateFormat.format(dateToPass).removeSuffix("00").plus(":00")
     }
 
-    private fun timeWithoutTimezone(date: String): String? {
-        return date.split(Regex("\\+"))[0]
-    }
-
     companion object {
-        const val EXPECTED_SESSIONS_KEY = "Expected Sessions"
         const val EXPECTED_APPOINTMENT_SESSIONS_KEY = "Expected Appointment Sessions"
-        const val EXPECTED_APPOINTMENT_SLOTS_KEY = "Expected Appointment Slots"
 
         private const val TODAY_KEY = "Today"
         private const val TOMORROW_KEY = "Tomorrow"

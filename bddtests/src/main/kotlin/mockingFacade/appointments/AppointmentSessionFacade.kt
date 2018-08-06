@@ -6,5 +6,7 @@ data class AppointmentSessionFacade(
         var sessionType: String? = null,
         var staffDetails: String? = null,
         var location: String? = null,
-        var slots: ArrayList<AppointmentSlotFacade> = ArrayList()
+        var slots: ArrayList<AppointmentSlotFacade> = ArrayList(),
+        var staffDetailsid: Int? = null,
+        var locationid: Int? = null
 )

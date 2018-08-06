@@ -3,13 +3,13 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.stepDefinitions.factories.AppointmentsBookingFactory
+import features.appointments.data.AppointmentsBookingData
+import features.appointments.factories.AppointmentsBookingFactory
+import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.AvailableAppointmentsSteps.Companion.EXPECTED_APPOINTMENT_SESSIONS_KEY
 import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.BaseStepDefinition
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -20,10 +20,8 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import pages.appointments.AvailableAppointmentsPage
 import worker.models.appointments.AppointmentSlotsResponse
 import javax.servlet.http.Cookie
 
@@ -45,17 +43,19 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
             "NHSO-Session-Id=CfDJ8E-ofjSQjqFFrq_TwyjSrr7YjXlzOKAjF2FCuRKQQd8XJLpr5jIZqua3RLYU0ItlMH7Df-uLnLiWc-mUSPveE-ElNNa-tsTVCxD_SomXW3aSvuGh3Dc9Dqe9jFyGLVu5SPrcqg9hafdTKTS7EqEaz2fwsQK8Br_flD7PpImRUjNNFEF0iFNsJTXJm5FZBVBeXvbPe8obyufPFt2Lpti8naW2xlbMb9wGq5g--UjOyDnQbxY1RxCR4tU-rHpdyz0JcbStgePRwhiM14wfoUsUFz4tnNeoYbaPLXaCiXVNm6NzG9SaQMheda0A6zxTv1y0nwu8AAXcUg7EFlSxIKLJV7B7aC0GCiUDAwkxMnzHP6sm; path=/; secure; samesite=lax; httponly"
     )
 
-    @Given("^there are available appointment slots for an explicit date-time range$")
-    fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange() {
-        currentProvider = ProviderTypes.valueOf(sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                availableAppointments.generateEmisStubsForAppointmentSlotsForSpecificDates()
-            }
-            ProviderTypes.TPP -> {
-                availableAppointments.generateTppStubsForAppointmentSlotsForSpecificDates()
-            }
+    @Given("^there are available (.*) appointment slots for an explicit date-time range$")
+    fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange(gpSystem : String) {
+        var startDate = AppointmentsBookingData.defaultSessionStartDateRaw
+        var endDate = AppointmentsBookingData.defaultSessionEndDateRaw
+
+        if(gpSystem=="EMIS"){
+            startDate = AppointmentsBookingData.adjustForTimeZone(startDate)
+            endDate = AppointmentsBookingData.adjustForTimeZone(endDate)
         }
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        factory.generateDefaultAvailableAppointmentSlotExample(
+                startDate.format(AppointmentsBookingData.dateTimeFormat),
+                endDate.format(AppointmentsBookingData.dateTimeFormat))
     }
 
     @Given("^there are available appointment slots with different criteria for (.*)$")

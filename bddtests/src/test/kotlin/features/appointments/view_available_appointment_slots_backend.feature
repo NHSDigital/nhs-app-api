@@ -8,17 +8,16 @@ Feature: View available appointment slots backend
   @NHSO-470
   @NHSO-1552
   @NHSO-870
-  @tech-debt @NHSO-1937
   Scenario Outline: Requesting available <GP System> appointment slots with correct data returns lists of available slots
-    Given I have logged into <GP System> and have a valid session cookie
-    And there are available appointment slots for an explicit date-time range
-    When the available appointment slots are retrieved for explicit date-time range
+    Given there are available <GP System> appointment slots for an explicit date-time range
+    And I have logged into <GP System> and have a valid session cookie    When the available appointment slots are retrieved for explicit date-time range
     Then available slots are returned for the given date-time range
     And available slots are returned containing id, start date and time, end date and time, location, clinicians, type
     Examples:
       | GP System |
       | EMIS      |
       | TPP       |
+
 
   @NHSO-470
     # GP System agnostic, depends on what status code we get back
@@ -50,32 +49,6 @@ Feature: View available appointment slots backend
     When the available appointment slots are retrieved without a given date-time range
     #This last line is based on breaking down the request and asserting details from that. This seems incorrect
     Then available slots are returned for the next four weeks
-
-  @NHSO-470
-  @NHSO-870
-  @tech-debt @NHSO-1937
-  Scenario Outline: Requesting available <GP System> appointment slots with only fromDate parameter returns set of appointment slots for 4 weeks from specified start date
-    And I have logged into <GP System> and have a valid session cookie
-    And there are available appointment slots four weeks from a specific from date
-    When the available appointment slots are retrieved with just a from date
-    Then available slots are returned for four weeks based on the date provided
-    Examples:
-      | GP System |
-      | EMIS      |
-      | TPP       |
-
-  @NHSO-470
-  @NHSO-870
-  @tech-debt @NHSO-1937
-  Scenario Outline: Requesting available appointment slots with only toDate parameter returns set of appointment slots for 2 weeks from start day 2 weeks before end date
-    Given I have logged into <GP System> and have a valid session cookie
-    And there are available appointment slots four weeks preceding a specific to date
-    When the available appointment slots are retrieved with just a to date
-    Then available slots are returned for four weeks based on the date provided
-  Examples:
-  | GP System |
-  | EMIS      |
-  | TPP       |
 
   @NHSO-470
     # GP System agnostic as GP System shouldn't be hit

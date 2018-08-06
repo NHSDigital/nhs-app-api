@@ -39,6 +39,13 @@ class RequestBuilder internal constructor(private val method: String, private va
         return this
     }
 
+    fun andQueryParameterIfNotNull(name: String, value: String?, condition: String = "equalTo"): RequestBuilder {
+        if (value != null) {
+            queryParameters[name] = mapOf(Pair(condition, value))
+        }
+        return this
+    }
+
     fun andHeader(name: String, value: String, condition: String = "equalTo"): RequestBuilder {
         headers[name] = mapOf(Pair(condition, value))
         return this
