@@ -51,6 +51,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         configureWebView()
 
+        menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
+        retryButton.setOnClickListener { reloadRequest() }
+        nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
+        myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
+
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         val isFirstTimeOpened = prefs.getBoolean(getString(R.string.isFirstTimeOpened), true)
         if (isFirstTimeOpened) {
@@ -59,11 +64,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
             edit.commit()
             loadPage(getString(R.string.appIntroPath))
         } else {
-            menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
-            retryButton.setOnClickListener { reloadRequest() }
-            nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
-            myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
-
             val urlPath = intent?.data?.path
             val authRedirectPath = resources.getString(R.string.authRedirectPath)
 
