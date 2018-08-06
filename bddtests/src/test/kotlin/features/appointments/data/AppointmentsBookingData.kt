@@ -1,6 +1,7 @@
 package features.appointments.data
 
 import addDays
+import constants.AppointmentDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
@@ -25,12 +26,7 @@ open class AppointmentsBookingData {
         val backendDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
         val pastFromDate = "2017-12-24T14:00:00"
         val pastToDate = "2017-12-30T14:00:00"
-        private val requestedFromDateDaysAfterToday = 14
-        val explicitFromDate = sometimeDayInTheFuture(requestedFromDateDaysAfterToday)
-        private val requestedToDateDaysAfterToday = 40
-        val explicitToDate = sometimeDayInTheFuture(requestedToDateDaysAfterToday)
         val dateTimeFormat = DateTimeFormatter.ofPattern(backendDateTimeFormatWithoutTimezone)!!
-
         val mockingClient = MockingClient.instance
         val patient = MockDefaults.patient
         val tppPatient = MockDefaults.patientTpp
@@ -118,7 +114,7 @@ open class AppointmentsBookingData {
             return sdf
         }
 
-        fun getDefaultEmisAppointmentSlots() = arrayListOf(
+        private fun getDefaultEmisAppointmentSlots() = arrayListOf(
                 AppointmentSlotFacade(
                         slotId = 301,
                         startTime = sometimeTomorrow(),
@@ -175,30 +171,21 @@ open class AppointmentsBookingData {
         }
 
         private fun midnightDayInTheFuture(daysToAdd: Int): LocalDateTime {
-            val baseTime = Calendar.getInstance(timeZone)
+            val baseTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
             val dayInTheFuture = baseTime.addDays(daysToAdd)
-            return toLocalDateTime(setAsTime(dayInTheFuture))
+            return toSpecificTimeZone(setAsTime(dayInTheFuture), timeZone)
         }
 
-        fun toLocalDateTime(calendar: Calendar): LocalDateTime {
-            val tz = calendar.timeZone
-            val zid = if (tz == null) ZoneId.systemDefault() else tz.toZoneId()
-            return LocalDateTime.ofInstant(calendar.toInstant(), zid)
+        private fun toSpecificTimeZone(calendar: Calendar, timeZone: TimeZone): LocalDateTime {
+            return LocalDateTime.ofInstant(calendar.toInstant(), timeZone.toZoneId())
         }
 
-        fun setAsTime(calendar: Calendar, hour: Int = 0, minute: Int = 0, second: Int = 0): Calendar {
+        private fun setAsTime(calendar: Calendar, hour: Int = 0, minute: Int = 0, second: Int = 0): Calendar {
             calendar.set(Calendar.HOUR_OF_DAY, hour)
             calendar.set(Calendar.MINUTE, minute)
             calendar.set(Calendar.SECOND, second)
 
             return calendar
-        }
-
-        fun adjustForTimeZone(localDateTime: LocalDateTime):LocalDateTime {
-
-            val ldtZoned = localDateTime.atZone(ZoneId.systemDefault())
-            val adjusted=localDateTime.plusSeconds(ldtZoned.offset!!.totalSeconds.toLong())
-            return adjusted
         }
     }
 }

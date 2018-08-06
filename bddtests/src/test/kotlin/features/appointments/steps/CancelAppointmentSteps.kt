@@ -50,8 +50,9 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheValidationErrorSummary() {
-        assertEquals("There's a problem", cancelAppointmentPage.getErrorSummaryHeading())
-        assertEquals("Select a reason for cancelling", cancelAppointmentPage.getErrorSummaryBody())
+
+        assertEquals("There's a problem", cancelAppointmentPage.errorBanner.subHeading)
+        assertEquals("Select a reason for cancelling", cancelAppointmentPage.errorBanner.bodyElements[0])
     }
 
     @Step

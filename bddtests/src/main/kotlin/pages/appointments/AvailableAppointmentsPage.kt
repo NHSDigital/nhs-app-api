@@ -9,7 +9,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val byIdXpath = "//*[@id='%s']"
     private val inlineErrorByIdXpath = "$byIdXpath//*[@data-purpose='error']"
-    private val validationErrorSummaryParentXpath = "//div[@id='validationErrors']"
 
     private val appointmentTypeFilter = HybridPageElement(
             browserLocator = String.format(byIdXpath, "type"),
@@ -41,18 +40,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
-    private val errorSummarySubHeading = HybridPageElement(
-            browserLocator = "$validationErrorSummaryParentXpath/p",
-            androidLocator = "",
-            page = this
-    )
-
-    override val errorSummaryBody = HybridPageElement(
-            browserLocator = "$validationErrorSummaryParentXpath/ul/li",
-            androidLocator = "",
-            page = this
-    )
-
     private val typeInLineError = HybridPageElement(
             browserLocator = String.format(inlineErrorByIdXpath, "error-type"),
             androidLocator = "",
@@ -67,12 +54,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val slotInLineError = HybridPageElement(
             browserLocator = String.format(inlineErrorByIdXpath, "error-slot"),
-            androidLocator = "",
-            page = this
-    )
-
-    private val info = HybridPageElement(
-            browserLocator = "//div[@data-purpose='info']",
             androidLocator = "",
             page = this
     )
@@ -212,15 +193,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun getErrorSummarySubHeading(): String {
-        return errorSummarySubHeading.element.text
+        return errorBanner.subHeading
     }
 
     fun getErrorSummaryBodyAtRow(rowNumber: Int): String {
-        return errorSummaryBody.elements[rowNumber - 1].text
-    }
-
-    fun getInfoText(): String? {
-        return info.element.text
+        return errorBanner.bodyElements[rowNumber - 1]
     }
 
     private fun filterContentsAsStrings(filter: HybridPageElement): ArrayList<String> {
@@ -232,3 +209,4 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return optionsAsStrings
     }
 }
+

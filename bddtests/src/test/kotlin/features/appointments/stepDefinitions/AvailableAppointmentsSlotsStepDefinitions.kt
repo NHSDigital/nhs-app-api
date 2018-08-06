@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.data.AppointmentsBookingData
+import features.appointments.data.AppointmentsSlotsExampleNoneAvailable
 import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
@@ -45,17 +46,16 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^there are available (.*) appointment slots for an explicit date-time range$")
     fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange(gpSystem : String) {
-        var startDate = AppointmentsBookingData.defaultSessionStartDateRaw
-        var endDate = AppointmentsBookingData.defaultSessionEndDateRaw
-
-        if(gpSystem=="EMIS"){
-            startDate = AppointmentsBookingData.adjustForTimeZone(startDate)
-            endDate = AppointmentsBookingData.adjustForTimeZone(endDate)
-        }
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(
-                startDate.format(AppointmentsBookingData.dateTimeFormat),
-                endDate.format(AppointmentsBookingData.dateTimeFormat))
+        AppointmentsBookingData.defaultSessionStartDateRaw,
+                AppointmentsBookingData.defaultSessionEndDateRaw)
+    }
+
+    @Given("^there are available (.*) appointment slots$")
+    fun thereAreAvailableAppointmentSlots(gpSystem : String) {
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        factory.generateDefaultAvailableAppointmentSlotExample()
     }
 
     @Given("^there are available appointment slots with different criteria for (.*)$")
@@ -66,8 +66,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
-        availableAppointments.generateDefaultUserData(gpSystem)
-        availableAppointments.generateNoAvailableAppointmentSlotsForGPSystem(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        factory.generateExample(AppointmentsSlotsExampleNoneAvailable().getExample())
     }
 
     @Given("^there is 1 available appointment slot for (.*)$")
@@ -159,6 +159,11 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         }
     }
 
+    @When("^the available appointment slots are retrieved$")
+    fun theAvailableAppointmentSlotsAreRetrieved() {
+        availableAppointments.theAvailableAppointmentSlotsAreRetrieved()
+    }
+
     @When("^the available appointment slots are retrieved for explicit date-time range$")
     fun theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange() {
         availableAppointments.theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange()
@@ -210,8 +215,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
             expectedAppointmentSlots.addAll(appointmentSession.slots)
         }
         val actualResult = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        assertNotNull(actualResult)
-        assertNotNull(actualResult.slots)
+        assertNotNull("Expected actualResult not null", actualResult)
+        assertNotNull("Expected actualResult.slots not null", actualResult.slots)
         assertEquals("Incorrect number of slots. ", expectedAppointmentSlots.size, actualResult.slots.size)
     }
 

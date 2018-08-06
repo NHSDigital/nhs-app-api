@@ -4,7 +4,6 @@ Feature: View My Medical Record Information - Allergies
 
   @NHSO-677
   @NHSO-1081
-  @tech-debt @NHSO-1937
   Scenario Outline: A <Service> user can view allergies and adverse reactions section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -20,7 +19,6 @@ Feature: View My Medical Record Information - Allergies
 
   @NHSO-677
   @NHSO-1081
-  @tech-debt @NHSO-1937
   Scenario Outline: A <Service> user does not have Summary Care Record access who is disabled at practice-level or patient level
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -35,7 +33,6 @@ Feature: View My Medical Record Information - Allergies
 
   @NHSO-677
   @NHSO-1081
-  @tech-debt @NHSO-1937
   Scenario Outline: A <Service> user has no allergies on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

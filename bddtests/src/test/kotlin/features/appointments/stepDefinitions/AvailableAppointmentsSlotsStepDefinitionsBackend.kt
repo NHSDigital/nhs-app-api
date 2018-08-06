@@ -6,26 +6,13 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.data.AppointmentsBookingData.Companion.dateTimeFormat
-import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisAppointmentSessions
-import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisMetaSlotLocations
-import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisMetaSlotSessionHolders
-import features.appointments.data.AppointmentsBookingData.Companion.defaultEmisMetaSlotSessions
 import features.appointments.data.AppointmentsBookingData.Companion.defaultSessionEndDate
 import features.appointments.data.AppointmentsBookingData.Companion.defaultSessionStartDate
-import features.appointments.data.AppointmentsBookingData.Companion.explicitFromDate
-import features.appointments.data.AppointmentsBookingData.Companion.explicitToDate
-import features.appointments.data.AppointmentsBookingData.Companion.mockingClient
 import features.appointments.data.AppointmentsBookingData.Companion.pastFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.pastToDate
+import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
-import mocking.defaults.MockDefaults.Companion.patient
-import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.models.Location
-import mocking.emis.models.Session
-import mocking.emis.models.SessionHolder
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -44,50 +31,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
     @Steps
     lateinit var availableAppointments: AvailableAppointmentsSteps
 
-    @Given("^there are available appointment slots within the next four weeks$")
-    fun thereAreAvailableAppointmentSlotsWithinTheNextFourWeeks() {
-        val getAppointmentSlotsMetaQueryParamsForNextFourWeeks = getAppointmentSlotsMetaQueryParams.copy(sessionStartDate = defaultSessionStartDate, sessionEndDate = defaultSessionEndDate)
-        generateAppropriateEmisStubsForAppointmentSlots(appointmentSlotsMetaQueryParams = getAppointmentSlotsMetaQueryParamsForNextFourWeeks)
-    }
-
-    private val getAppointmentSlotsMetaQueryParams = AppointmentSlotsParams(
-            patient = patient,
-            sessionStartDate = explicitFromDate,
-            sessionEndDate = explicitToDate
-    )
-
-    //should be combined with the analogous function in appointmentsStepDefinitions
-    private fun generateAppropriateEmisStubsForAppointmentSlots(emisSlotLocations: ArrayList<Location> = defaultEmisMetaSlotLocations,
-                                                                emisSlotSessionHolders: ArrayList<SessionHolder> = defaultEmisMetaSlotSessionHolders,
-                                                                emisSlotSessions: ArrayList<Session> = defaultEmisMetaSlotSessions,
-                                                                emisAppointmentSessions: ArrayList<AppointmentSessionFacade> = defaultEmisAppointmentSessions,
-                                                                appointmentSlotsMetaQueryParams: AppointmentSlotsParams = getAppointmentSlotsMetaQueryParams) {
-
-        Serenity.setSessionVariable(AvailableAppointmentsSteps.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(emisAppointmentSessions)
-
-        mockingClient
-                .forEmis {
-                    appointmentSlotsMetaRequest(appointmentSlotsMetaQueryParams.patient,
-                            appointmentSlotsMetaQueryParams.sessionStartDate,
-                            appointmentSlotsMetaQueryParams.sessionEndDate)
-                            .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
-                                    emisSlotLocations,
-                                    emisSlotSessionHolders,
-                                    emisSlotSessions
-                            ))
-                }
-
-        mockingClient
-                .forEmis {
-                    appointmentSlotsRequest(appointmentSlotsMetaQueryParams.patient,
-                            appointmentSlotsMetaQueryParams.sessionStartDate,
-                            appointmentSlotsMetaQueryParams.sessionEndDate)
-                            .respondWithSuccess(AppointmentSlotsResponseFacade(
-                                    emisAppointmentSessions
-                            ))
-                }
-    }
-
     @Given("^the system will time out when trying to retrieve appointment slots$")
     fun appointmentSlotsTimesOut() {
         availableAppointments.appointmentSlotsTimesOut()
@@ -95,50 +38,23 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
 
     @Given("^online appointment booking is not available to the patient, when wanting to view appointment slots$")
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
-        mockingClient.forEmis {
-            appointmentSlotsMetaRequest(getAppointmentSlotsMetaQueryParams.patient,
-                    getAppointmentSlotsMetaQueryParams.sessionStartDate,
-                    getAppointmentSlotsMetaQueryParams.sessionEndDate)
-                    .respondWithExceptionWhenNotEnabled()
-        }
 
-        mockingClient.forEmis {
-            appointmentSlotsRequest(getAppointmentSlotsMetaQueryParams.patient,
-                    getAppointmentSlotsMetaQueryParams.sessionStartDate,
-                    getAppointmentSlotsMetaQueryParams.sessionEndDate)
-                    .respondWithExceptionWhenNotEnabled()
-        }
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateAppointmentSlotResponse(null, null)
+        { respondWithExceptionWhenNotEnabled() }
     }
 
     @Given("^unknown exception will occur when wanting to view appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
 
-        mockingClient.forEmis {
-            appointmentSlotsMetaRequest(getAppointmentSlotsMetaQueryParams.patient,
-                    getAppointmentSlotsMetaQueryParams.sessionStartDate,
-                    getAppointmentSlotsMetaQueryParams.sessionEndDate)
-                    .respondWithUnknownException()
-        }
-
-        mockingClient.forEmis {
-            appointmentSlotsRequest(getAppointmentSlotsMetaQueryParams.patient,
-                    getAppointmentSlotsMetaQueryParams.sessionStartDate,
-                    getAppointmentSlotsMetaQueryParams.sessionEndDate)
-                    .respondWithUnknownException()
-        }
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateAppointmentSlotResponse(null, null)
+        { respondWithUnknownException() }
     }
 
-    @When("^the available appointment slots are retrieved for explicit date-time range without a cookie$")
+    @When("^the available appointment slots are retrieved without a cookie$")
     fun theAvailableAppointmentSlotsAreRetrievedWithoutACookie() {
-        retrieveAppointmentSlots(toLocalTime(defaultSessionStartDate),
-                toLocalTime(defaultSessionEndDate),
-                includeCookie = false)
-    }
-
-
-    @When("^the available appointment slots are retrieved without a given date-time range$")
-    fun theAvailableAppointmentSlotsAreRetrievedWithoutExplicitDateRange() {
-        retrieveAppointmentSlots()
+        retrieveAppointmentSlots(null, null, includeCookie = false)
     }
 
     @When("^I try to retrieve appointment slots with fromDate after the toDate$")
@@ -165,7 +81,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
 
     private fun retrieveAppointmentSlots(fromDate: String? = null, toDate: String? = null, includeCookie: Boolean = true) {
         var cookie: Cookie? = null
-
         if (includeCookie) {
             cookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
         }
@@ -192,26 +107,6 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
         Assert.assertNotNull("result", result)
         Assert.assertNotNull("result.slots", result.slots)
     }
-
-    //This last line is based on breaking down the request and asserting details from that. This seems incorrect
-    @Then("^available slots, locations, clinicians and appointment sessions are returned for the next two weeks$")
-    fun availableSlotsLocationsCliniciansAndAppointmentSessionsForNextTwoWeeksAreReturned() {
-        val wiremockRequests = mockingClient.getRequests().split("\n")
-        var fromDateLineIndex = 0
-        for (mappingline in wiremockRequests) {
-            if (mappingline.contains("\"key\" : \"fromDateTime\"")) {
-                fromDateLineIndex = wiremockRequests.indexOf(mappingline) + 1
-                break
-            }
-        }
-        val actualFromDate = LocalDateTime.parse(wiremockRequests[fromDateLineIndex].split("\"values\" : [ \"")[1].dropLast(3))
-        val expectedFromDate = LocalDateTime.parse(defaultSessionStartDate)
-        // Verify that the actual fromDate is within 10 minutes either side of the expected date to account for slight time difference on the server
-        Assert.assertTrue(String.format("Expected a time around %s, but actual was %s", expectedFromDate.toString(), actualFromDate.toString()),
-                actualFromDate.isAfter(expectedFromDate.minusMinutes(10))
-                        && actualFromDate.isBefore(expectedFromDate.plusMinutes(10)))
-    }
-
 
     private fun toLocalTime(date: String?): String {
         val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)

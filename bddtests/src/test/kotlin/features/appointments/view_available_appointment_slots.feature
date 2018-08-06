@@ -104,7 +104,6 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  @tech-debt @NHSO-1937
   Scenario Outline: A <GP System> user refines criteria but no slots are available
     Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
@@ -176,7 +175,6 @@ Feature: View available appointment slots
     Then I see an appropriate message informing that I need to select an appointment
 
   @NHSO-71
-  @tech-debt @NHSO-1937
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
     Given there are available appointment slots with different criteria for EMIS

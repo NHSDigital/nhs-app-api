@@ -24,22 +24,22 @@ class AppointmentSessionFacadeBuilder {
         return this
     }
 
-    fun staffDetails(value: String, id:Int): AppointmentSessionFacadeBuilder {
-        session.staffDetails = value
-        session.staffDetailsid = id
+    fun staffDetails(staff:IdValue): AppointmentSessionFacadeBuilder {
+        session.staffDetails = staff.value
+        session.staffDetailsid = staff.id
         return this
     }
 
-    fun location(value: String, id:Int): AppointmentSessionFacadeBuilder {
-        session.location = value
-        session.locationid = id
+    fun location(location: IdValue): AppointmentSessionFacadeBuilder {
+        session.location = location.value
+        session.locationid = location.id
         return this
     }
 
     fun slots(value: (AppointmentSlotFacadeArrayBuilder.()-> AppointmentSlotFacadeArrayBuilder)): AppointmentSessionFacadeBuilder {
 
-        val builder = AppointmentSlotFacadeArrayBuilder()
-        val thing = value.invoke(builder)
+        var builder = AppointmentSlotFacadeArrayBuilder()
+        var thing = value.invoke(builder)
         session.slots = thing.build()
         return this
     }
@@ -54,10 +54,10 @@ class AppointmentSlotFacadeArrayBuilder {
 
     var appointmentSlots: ArrayList<AppointmentSlotFacade> = arrayListOf()
 
-    fun addAppointment(appointment: AppointmentSlotFacadeBuilder.()->AppointmentSlotFacadeBuilder):AppointmentSlotFacadeArrayBuilder
+    fun addAppointment(appointment: AppointmentSlotFacadeBuilder.()-> AppointmentSlotFacadeBuilder): AppointmentSlotFacadeArrayBuilder
     {
-        val builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
-        val appointmentBuilder= appointment.invoke(builder)
+        var builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
+        var appointmentBuilder= appointment.invoke(builder)
         appointmentSlots.add(appointmentBuilder.build())
         return this
     }
@@ -103,3 +103,5 @@ class AppointmentSlotFacadeBuilder {
         )
     }
 }
+
+data class IdValue(val id : Int, val value: String)

@@ -20,20 +20,8 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentLocationXpath = "[@aria-label='location']"
     private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
 
-    val inLineError = HybridPageElement(
+    private val inLineError = HybridPageElement(
             browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
-            androidLocator = null,
-            page = this
-    )
-
-    val errorSummaryHeading = HybridPageElement(
-            browserLocator = "//*[@data-purpose='error-heading']",
-            androidLocator = null,
-            page = this
-    )
-
-    open val errorSummaryBody = HybridPageElement(
-            browserLocator = "//*[@data-purpose='error']",
             androidLocator = null,
             page = this
     )
@@ -87,14 +75,6 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     fun getInlineValidationError(): String {
         return inLineError.element.text
-    }
-
-    fun getErrorSummaryHeading(): String {
-        return errorSummaryHeading.element.text
-    }
-
-    fun getErrorSummaryBody(): String {
-        return errorSummaryBody.element.text
     }
 
     private fun convertToSlotObject(parentContainer: WebElementFacade, areCliniciansExpected: Boolean = true, parentToSlotDivRelativePath: String = ""): Slot {

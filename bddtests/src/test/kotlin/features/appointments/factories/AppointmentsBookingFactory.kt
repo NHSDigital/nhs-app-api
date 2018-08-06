@@ -20,8 +20,8 @@ class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSuppl
         factory.generateDefaultAvailableAppointmentSlotExample()
 
         //Format like : Wednesday 1 August 2018
-        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
-        val day = tomorrowDate.format(formatter)
+        var formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
+        var day = tomorrowDate.format(formatter)
         Serenity.setSessionVariable(TargetAppointmentDateKey).to(day)
         Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
     }
@@ -63,6 +63,5 @@ class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSuppl
 
         const val SymptomsToEnter = "SymptomsToEnter"
         const val TargetAppointmentDateKey = "TargetAppointmentDateKey"
-        const val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
-    }
+        const val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"    }
 }

@@ -23,33 +23,23 @@ Feature: View available appointment slots backend
   @NHSO-470
     # GP System agnostic, depends on what status code we get back
   Scenario: Requesting available appointment slots returns an unknown exception, returns a Bad Gateway error
-    Given I have logged into EMIS and have a valid session cookie
-    But an unknown exception will occur when wanting to view appointment slots
-    When the available appointment slots are retrieved for explicit date-time range
+    Given an unknown exception will occur when wanting to view appointment slots
+    And I have logged into EMIS and have a valid session cookie
+    When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error
 
   @NHSO-470
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots by patient whose session expired returns "Unauthorized" error
     Given there are available EMIS appointment slots, but session has expired
-    When the available appointment slots are retrieved for explicit date-time range
+    When the available appointment slots are retrieved
     Then I receive an "Unauthorized" error
 
   @NHSO-470
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots with a missing NHSO-Session-Id cookie returns "Unauthorized" error
-    When the available appointment slots are retrieved for explicit date-time range without a cookie
+    When the available appointment slots are retrieved without a cookie
     Then I receive an "Unauthorized" error
-
-  @NHSO-470
-  @NHSO-870
-  @tech-debt  @NHSO-1595
-  Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 4 weeks from now
-    Given I have logged into EMIS and have a valid session cookie
-    And there are available appointment slots within the next four weeks
-    When the available appointment slots are retrieved without a given date-time range
-    #This last line is based on breaking down the request and asserting details from that. This seems incorrect
-    Then available slots are returned for the next four weeks
 
   @NHSO-470
     # GP System agnostic as GP System shouldn't be hit
@@ -83,13 +73,20 @@ Feature: View available appointment slots backend
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots when GP system is unavailable returns "Bad gateway" error
     Given I have logged into EMIS and have a valid session cookie
-    When the available appointment slots are retrieved for explicit date-time range
+    When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error
 
   @NHSO-470
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots the GP system times out and returns "Gateway Timeout" error
-    Given the system will time out when trying to retrieve appointment slots
-    And I have logged into EMIS and have a valid session cookie
-    When the available appointment slots are retrieved for explicit date-time range
+    Given I have logged into EMIS and have a valid session cookie
+    And the system will time out when trying to retrieve appointment slots
+    When the available appointment slots are retrieved
     Then I receive a "Gateway Timeout" error
+
+  @NHSO-470
+  @NHSO-870
+  @manual
+  Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 4 weeks from now
+    # GP System agnostic as GP System shouldn't be hit
+    # This is covered by a unit test

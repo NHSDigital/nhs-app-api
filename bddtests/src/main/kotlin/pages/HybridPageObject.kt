@@ -19,6 +19,8 @@ const val DEFAULT_SPINNER_WAIT: Long = 30
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
+    val errorBanner by lazy{ ErrorBannerPageObject(this) }
+
     val spinner = HybridPageElement(
             browserLocator = "//*[@id='loading-spinner']",
             androidLocator = "//ProgressBar",

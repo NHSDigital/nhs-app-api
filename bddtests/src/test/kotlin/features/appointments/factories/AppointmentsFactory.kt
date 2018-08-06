@@ -1,5 +1,6 @@
 package features.appointments.factories
 
+import features.appointments.data.AppointmentsSlotsExampleBase
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -18,9 +19,7 @@ abstract class AppointmentsFactory(gpSupplier:String){
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }
 
-
     protected fun generateDefaultUserData() {
-
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
         createGetEmptyAppointmentList()
@@ -31,5 +30,10 @@ abstract class AppointmentsFactory(gpSupplier:String){
         val getResponse = viewAppointmentFactory.createEmptyUpcomingAppointmentResponse(patient)
         appointmentMapper
                 .requestMapping{ viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse)}
+    }
+
+    companion object {
+        const val AppointmentStartTimeKey = "AppointmentStartTimeKey"
+        const val AppointmentEndTimeKey = "AppointmentEndTimeKey"
     }
 }

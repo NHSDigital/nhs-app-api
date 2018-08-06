@@ -1,18 +1,15 @@
 package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
-import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.MyAppointmentsSteps
-import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 
 class AppointmentNavigationStepDefinitions {
-    @Steps
-    lateinit var login: LoginSteps
+
     @Steps
     lateinit var navigation: NavigationSteps
     @Steps
@@ -50,6 +47,4 @@ class AppointmentNavigationStepDefinitions {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
     }
-
-
 }

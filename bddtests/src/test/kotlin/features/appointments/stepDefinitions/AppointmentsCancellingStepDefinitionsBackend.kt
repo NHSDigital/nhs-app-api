@@ -42,7 +42,6 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     @Given("^(.*) is available to cancel an appointment for (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
-        commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
         mockCancellationRequestStubForReason(reason, gpSystem)
     }
 

@@ -1,20 +1,55 @@
 package features.appointments.factories
 
+import constants.AppointmentDateTimeFormat
+import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExample
+import features.appointments.data.AppointmentsSlotsExampleBase
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
+import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import net.serenitybdd.core.Serenity
 import org.junit.Assert
-import java.time.Duration
+import java.text.ParsePosition
+import java.text.SimpleDateFormat
+import java.time.*
 import java.util.*
 
 abstract class AppointmentsSlotsFactory(gpSupplier:String): AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample(startDate: String? = null, endDate: String? = null) {
+    fun generateDefaultAvailableAppointmentSlotExample(startDate: LocalDateTime? = null, endDate: LocalDateTime? = null) {
+
+        generateExample(AppointmentsSlotsExample().getExample(), startDate, endDate)
+    }
+
+    fun generateExample(
+            example: AppointmentSlotsResponseFacade,
+            startDate: LocalDateTime? = null,
+            endDate: LocalDateTime? = null) {
+        var startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
+        var endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
+
         generateDefaultUserData()
-        val appointmentSlotsResponseModel = AppointmentsSlotsExample.getExample()
-        generateAppointmentSlotResponse(startDate, endDate) {
-            respondWithSuccess(appointmentSlotsResponseModel)
+
+        generateAppointmentSlotResponse(startDateToUse, endDateToUse) {
+            respondWithSuccess(example)
+                    .delayedBy(Duration.ofSeconds(0))
         }
+    }
+
+    private fun getFormattedDate(date:LocalDateTime?, key:String):String? {
+        if (date != null) {
+            Serenity.setSessionVariable(key).to(getRequestDateTime(date))
+            return date.format(AppointmentsBookingData.dateTimeFormat)
+        }
+        return null
+    }
+
+    abstract val zoneOffset: ZoneOffset
+
+    private fun getRequestDateTime(date:LocalDateTime):String{
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK)
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        return sdf.format(Date.from(date.toInstant(zoneOffset)))
     }
 
     abstract fun generateAppointmentSlotResponse(startDate: String?,
