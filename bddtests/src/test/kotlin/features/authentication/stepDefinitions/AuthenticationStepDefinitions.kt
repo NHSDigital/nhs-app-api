@@ -521,6 +521,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         browser.goToApp()
         login.using(this.patient)
+        home.waitForLoginToComplete()
     }
 
     @When("^I log in$")

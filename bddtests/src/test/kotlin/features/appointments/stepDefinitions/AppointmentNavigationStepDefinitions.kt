@@ -25,6 +25,7 @@ class AppointmentNavigationStepDefinitions {
     @Given("^I am on my appointments page$")
     fun iAmOnMyAppointmentsPage() {
         navigation.select("Appointments")
+        myAppointments.waitForSpinnerToDisappear()
     }
 
     @Given("^I am on the guidance page$")

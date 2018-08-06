@@ -42,8 +42,15 @@ open class MyAppointmentsSteps {
 
     @Step
     fun clickOnBookAppointmentButton() {
+        myAppointmentsPage.waitForSpinnerToDisappear()
         myAppointmentsPage.bookButton.element.click()
     }
+
+    @Step
+    fun waitForSpinnerToDisappear() {
+        myAppointmentsPage.waitForSpinnerToDisappear()
+    }
+
 
     @Step
     fun checkHeaderTextIsCorrect() {

@@ -24,4 +24,9 @@ open class HomeSteps {
     fun assertHeaderVisible() {
         Assert.assertTrue(header.isVisible(homePage.headerText))
     }
+
+    @Step
+    fun waitForLoginToComplete() {
+        homePage.waitForSpinnerToDisappear()
+    }
 }

@@ -6,7 +6,7 @@ Feature: Ability to cancel an EMIS appointment
     And I am logged in as a EMIS user
 
   @NHSO-663
-  Scenario: A user is presented with the cancel appointment screen
+  Scenario: An EMIS user is presented with the cancel appointment screen
     Given I am on my appointments page
     When I select a "Cancel appointment" link
     Then I will be on the "Cancellation reason" screen
@@ -14,7 +14,7 @@ Feature: Ability to cancel an EMIS appointment
     And there is a cancellation reasons drop-down
 
   @NHSO-663
-  Scenario: A user navigates back to the "My appointments" screen
+  Scenario: An EMIS user navigates back to the "My appointments" screen
     Given I am on my appointments page
     And I select a "Cancel appointment" link
     When I select "Back" button
@@ -22,7 +22,7 @@ Feature: Ability to cancel an EMIS appointment
 
   @NHSO-1026
   @tech-debt @NHSO-1937
-  Scenario Outline: User cancels appointment with selected reason
+  Scenario Outline: An EMIS user cancels appointment with selected reason
     Given EMIS is available to cancel an appointment for <Reason>
     And I am on my appointments page
     And I select a "Cancel appointment" link
