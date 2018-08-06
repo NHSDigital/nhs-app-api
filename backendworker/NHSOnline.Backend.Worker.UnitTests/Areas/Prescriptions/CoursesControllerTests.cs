@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 {
@@ -22,7 +23,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         private IFixture _fixture;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
         private UserSession _userSession;
+        
+        private Mock<IAuditor> _mockAuditor;
 
+        private const string RequestAuditType = "RepeatPrescriptions_ViewRepeatMedications_Request";
+        private const string ResponseAuditType = "RepeatPrescriptions_ViewRepeatMedications_Response";
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -39,6 +45,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
+            
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             _systemUnderTest = _fixture.Create<CoursesController>();
 
@@ -76,6 +84,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             courseService.Verify(x => x.GetCourses(_userSession));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(coursesGetResponse);
+            
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, "Attempting to retrieve courses", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Courses successfully retrieved", It.IsAny<object[]>()));
         }
     }
 }

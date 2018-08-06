@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
@@ -8,6 +11,7 @@ using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
@@ -17,15 +21,18 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         private readonly ConfigurationSettings _settings;
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<PrescriptionsController> _logger;
-
+        private readonly IAuditor _auditor;
+        
         public PrescriptionsController(
             IOptions<ConfigurationSettings> settings,
             ILogger<PrescriptionsController> logger,
-            IGpSystemFactory gpSystemFactory)
+            IGpSystemFactory gpSystemFactory,
+            IAuditor auditor)
         {
             _settings = settings.Value;
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
+            _auditor = auditor;
         }
 
         [HttpGet, TimeoutExceptionFilter]
@@ -38,6 +45,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier);
 
+            _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
+            
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
 
@@ -52,7 +61,8 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             _logger.LogInformation($"Calling prescription service to get prescriptions");
             var result = await prescriptionService.GetPrescriptions(userSession, fromDate, DateTimeOffset.Now);
-
+            
+            result.Accept(new GetPrescriptionResultAuditingVisitor(_auditor));
             return result.Accept(new PrescriptionResultVisitor());
         }
 
@@ -64,6 +74,10 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             var gpSystem = _gpSystemFactory
                 .CreateGpSystem(userSession.Supplier);
+
+            var courseIds = FormatCourseIds(repeatPrescriptionRequest.CourseIds);
+            
+            _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
             
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();
@@ -82,12 +96,19 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
                 result = await prescriptionService.OrderPrescription(userSession, repeatPrescriptionRequest);      
             }
 
+            result.Accept(new CreatePrescriptionResultAuditingVisitor(_auditor, courseIds));
             return result.Accept(new PrescriptionResultVisitor());
         }
 
         private DateTimeOffset GetDefaultFromDate()
         {
             return DateTimeOffset.Now.AddMonths(-_settings.PrescriptionsDefaultLastNumberMonthsToDisplay.Value);
+        }
+
+        private static string FormatCourseIds(IEnumerable<string> courseIds)
+        {
+            var enumerable = courseIds.ToList();
+            return !EnumerableExtensions.Any(enumerable) ? "No course ID's provided" : string.Join(",", enumerable);
         }
     }
 }

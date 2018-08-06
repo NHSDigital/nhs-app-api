@@ -41,6 +41,12 @@
             public const string GetSlotsAuditTypeResponse = "Appointments_GetSlots_Response";
             public const string ViewPatientRecordAuditTypeRequest = "PatientRecord_View_Request";
             public const string ViewPatientRecordAuditTypeResponse = "PatientRecord_View_Response";
+            public const string RepeatPrescriptionsViewHistoryRequest = "RepeatPrescriptions_ViewHistory_Request";
+            public const string RepeatPrescriptionsViewHistoryResponse = "RepeatPrescriptions_ViewHistory_Response";
+            public const string RepeatPrescriptionsViewRepeatMedicationsRequest = "RepeatPrescriptions_ViewRepeatMedications_Request";
+            public const string RepeatPrescriptionsViewRepeatMedicationsResponse = "RepeatPrescriptions_ViewRepeatMedications_Response";
+            public const string RepeatPrescriptionsOrderRepeatMedicationsRequest = "RepeatPrescriptions_OrderRepeatMedications_Request";
+            public const string RepeatPrescriptionsOrderRepeatMedicationsResponse = "RepeatPrescriptions_OrderRepeatMedications_Response";
         }
 
         public static class HttpContextItems

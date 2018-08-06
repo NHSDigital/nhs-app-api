@@ -14,6 +14,7 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 {
@@ -27,8 +28,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
         private Mock<IPrescriptionRequestValidationService> _prescriptionRequestValidationService;
         private UserSession _userSession;
 
+        private Mock<IAuditor> _mockAuditor;
+        
         private int _prescriptionsDefaultLastNumberMonthsToDisplay;
 
+        private const string GetRequestAuditType = "RepeatPrescriptions_ViewHistory_Request";
+        private const string GetResponseAuditType = "RepeatPrescriptions_ViewHistory_Response";         
+        
+        private const string PostRequestAuditType = "RepeatPrescriptions_OrderRepeatMedications_Request";
+        private const string PostResponseAuditType = "RepeatPrescriptions_OrderRepeatMedications_Response";         
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -56,6 +65,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var httpContextMock = new Mock<HttpContext>();
             httpContextMock.SetupGet(x => x.Items).Returns(httpContextItems);
 
+            _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
+            
             _systemUnderTest = _fixture.Create<PrescriptionsController>();
 
             _systemUnderTest.ControllerContext = new ControllerContext
@@ -100,6 +111,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             prescriptionService.Verify(x => x.GetPrescriptions(_userSession, date, It.IsAny<DateTimeOffset>()));
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
+
+            _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved", It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -145,12 +159,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
 
             var xMonthsAgo = DateTimeOffset.Now.AddMonths(-_prescriptionsDefaultLastNumberMonthsToDisplay);
             Assert.AreEqual(xMonthsAgo.Date, fromDateGenerated.Value.Date);
+            
+            _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved", It.IsAny<object[]>()));
         }
         
         [TestMethod]
         public async Task Post_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {
+            var courseId = Guid.NewGuid().ToString();
+            
             var requestModel = new RepeatPrescriptionRequest();
+            requestModel.CourseIds = new List<string>()
+            {
+                courseId
+            };
+            
             var mockGpSystem = new Mock<IGpSystem>();
             var prescriptionService = new Mock<IPrescriptionService>();
 
@@ -182,17 +206,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             prescriptionService.Verify(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>()));
             var createdresult = result as CreatedResult;
             Assert.IsTrue(createdresult.StatusCode == 201);
+            
+            _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, "Attempting to create a prescription request with course ids: {0}", courseId));
+            _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Repeat prescription request successfully created with course ids: {0}", courseId));
         }
         
         [TestMethod]
         public async Task Post_ReturnsBadRequest_WhenModelValidationFails()
         {
+            var firstGuid = Guid.NewGuid().ToString();
+            var secondGuid = Guid.NewGuid().ToString();
+            
             var requestModel = new RepeatPrescriptionRequest()
             {
                 CourseIds = new List<string>
                 {
-                    "009211be-e36e-4833-8f74-0089637e7b7f",
-                    "6b1ad388-817b-4dc1-831a-e6ddea0f0ed2"
+                    firstGuid,
+                    secondGuid
                 }
             };
             
@@ -223,6 +253,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             // Assert
             var statusCodeResult = result as StatusCodeResult;
             Assert.IsTrue(statusCodeResult.StatusCode == 400);
+            
+            _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, "Attempting to create a prescription request with course ids: {0}", $"{firstGuid},{secondGuid}"));
+            _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Error creating prescription request: Bad Request with course ids: {0}", $"{firstGuid},{secondGuid}"));
         }
     }
 }

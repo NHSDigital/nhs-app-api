@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
+using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
@@ -12,19 +13,24 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         private readonly IGpSystemFactory _gpSystemFactory;
         private readonly ILogger<CoursesController> _logger;
 
+        private readonly IAuditor _auditor;
+        
         public CoursesController(
             ILogger<CoursesController> logger,
-            IGpSystemFactory gpSystemFactory)
+            IGpSystemFactory gpSystemFactory,
+            IAuditor auditor)
         {
             _logger = logger;
             _gpSystemFactory = gpSystemFactory;
+            _auditor = auditor;
         }
 
         [HttpGet, TimeoutExceptionFilter]
         public async Task<IActionResult> Get()
         {
-            UserSession userSession = HttpContext.GetUserSession();
+            var userSession = HttpContext.GetUserSession();
 
+            _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {userSession.Supplier}");
             
             var courseService = _gpSystemFactory
@@ -33,6 +39,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             var result = await courseService.GetCourses(userSession);
 
+            result.Accept(new CourseResultAuditingVisitor(_auditor));
             return result.Accept(new CourseResultVisitor());
         }
     }
