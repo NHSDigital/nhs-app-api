@@ -19,7 +19,7 @@
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
 
-    <string name="nhsOnlineRequiredQueries">\?source=mobile</string>
+    <string name="nhsOnlineRequiredQueries">\?source=android</string>
 
     <string-array name="serviceUrls">
         <item>@string/nhs111</item>

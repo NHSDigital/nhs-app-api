@@ -1,6 +1,5 @@
 <template>
   <div v-if="showTemplate" id="mainDiv">
-    <spinner />
     <main :class="$style.content">
 
       <error-warning-dialog v-if="error" error-or-warning="error">

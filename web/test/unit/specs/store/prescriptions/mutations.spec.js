@@ -27,17 +27,16 @@ describe('PRESCRIPTIONS_LOADED', () => {
       ],
     };
 
-    const expectedData = {
-      [MedicationCourseStatus.Approved]: [
-        {
-          courseId: '1e5483ce-2e5c-4e57-ad2e-235a08b4f7f8',
-          orderDate: '0001-01-01T00:00:00+00:00',
-          name: 'Co-codamol 8mg/500mg capsules',
-          details: '20 capsule - One To Be Taken Four Times A Day',
-          status: MedicationCourseStatus.Approved,
-        },
-      ],
-    };
+    const expectedData = [];
+    expectedData[MedicationCourseStatus.Approved] = [
+      {
+        courseId: '1e5483ce-2e5c-4e57-ad2e-235a08b4f7f8',
+        orderDate: '0001-01-01T00:00:00+00:00',
+        name: 'Co-codamol 8mg/500mg capsules',
+        details: '20 capsule - One To Be Taken Four Times A Day',
+        status: MedicationCourseStatus.Approved,
+      },
+    ];
 
     mutations[PRESCRIPTIONS_LOADED](state, receivedData);
 
