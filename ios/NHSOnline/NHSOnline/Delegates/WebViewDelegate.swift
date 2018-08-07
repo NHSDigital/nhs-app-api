@@ -56,6 +56,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
         
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
+        if timer != nil {
+            clearTimer()
+        }
+        
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
         self.activityIndicator.startAnimating()
@@ -81,6 +85,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
+        
+        if withError._code == NSURLErrorCancelled {
+            os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
+            return
+        }
+        
         if shouldHandleErrors {
             var errorMessage: ErrorMessage? = nil
             
@@ -217,14 +227,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     private func showWebViewContainer() {
-        self.timer.invalidate()
+        clearTimer()
         self.activityIndicator.stopAnimating()
         self.viewController.showWebViewContainer()
     }
     
     private func showNativeViewContainer(errorMessage: ErrorMessage) {
-        self.timer.invalidate()
+        clearTimer()
         self.activityIndicator.stopAnimating()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)
+    }
+    
+    private func clearTimer() {
+        self.timer.invalidate()
+        self.timer = nil
     }
 }

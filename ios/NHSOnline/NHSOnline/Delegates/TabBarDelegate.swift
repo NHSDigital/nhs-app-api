@@ -54,7 +54,19 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     }
     
     private func selectPage(pageUrl: String) {
-        viewController.pageUrl = pageUrl
-        viewController.webViewController?.webView.loadPage(url: pageUrl)
+        if let isLoading = viewController.webViewController?.webView.isLoading {
+            // Only load the requested url if it's not already loading.
+            if (isLoading) {
+                if (viewController.pageUrl != pageUrl) {
+                    viewController.webViewController?.webView.stopLoading()
+                    viewController.webViewController?.webView.loadPage(url: pageUrl)
+                }
+            }
+            else {
+                viewController.webViewController?.webView.loadPage(url: pageUrl)
+            }
+            
+            viewController.pageUrl = pageUrl
+        }
     }
 }
