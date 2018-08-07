@@ -1,6 +1,6 @@
 version: "3.2"
 services:
-  nhsonline.web:
+  web.local.bitraft.io:
     image: nhsonline.web
     build:
       context: .
@@ -8,11 +8,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - API_HOST=http://localhost:8082
-      - API_HOST_SERVER=http://nhsonline.backend.worker:8082
-      - CID_REDIRECT_URI=http://localhost:3000/auth-return
+      - API_HOST=http://api.local.bitraft.io:8082
+      - API_HOST_SERVER=http://api.local.bitraft.io:8082
+      - CID_REDIRECT_URI=http://web.local.bitraft.io:3000/auth-return
       - NATIVE_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
-  nhsonline.backend.worker:
+  api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -22,24 +22,11 @@ services:
       - VISION_CERT_PATH=./certs/vps_nhson001.pfx
       - VISION_CERT_PASSPHRASE
       - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io
     depends_on:
       - nhsonline.redis.sds
     ports:
       - "8082:8082"
-  nhsonline.stubs:
-    image: rodolpheche/wiremock
-    command: --local-response-templating
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "8080:8080"
-    tty: true
-  nhsonline.stubs.data:
-    image: nhsonline.stubs.data
-    environment:
-      - wiremockUrl=http://nhsonline.stubs:8080
-    depends_on:
-      - nhsonline.stubs
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

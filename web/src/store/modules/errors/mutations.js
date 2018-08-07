@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
-/* eslint-disable import/extensions */
 import ErrorSettings from '@/components/errors/Settings';
 import {
   ADD_API_ERROR,

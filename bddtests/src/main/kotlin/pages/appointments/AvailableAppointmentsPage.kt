@@ -6,7 +6,7 @@ import org.junit.Assert.assertTrue
 import pages.HybridPageElement
 
 @Suppress("TooManyFunctions")
-@DefaultUrl("http://localhost:3000/appointments/booking")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val byIdXpathFormat = "//*[@id='%s']"

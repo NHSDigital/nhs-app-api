@@ -64,11 +64,11 @@ curl -v \
   --header "X-API-ApplicationId: D66BA979-60D2-49AA-BE82-AEC06356E41F" \
   --header "X-API-Version: 2.1.0.0" \
   -d '' \
-  localhost:8800/emis/sessions/endusersession
+  stubs.local.bitraft.io:8800/emis/sessions/endusersession
 
 ### BACKEND WORKDER
 curl -v \
   --header "Content-Type: application/json" \
   --header "NHSO-Connection-Token: token" \
   --header "NHSO-ODS-Code: E87649" \
-  localhost:8080/patient/im1connection
+  stubs.local.bitraft.io:8080/patient/im1connection

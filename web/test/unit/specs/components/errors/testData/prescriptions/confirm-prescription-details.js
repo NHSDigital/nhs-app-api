@@ -1,4 +1,3 @@
-/* eslint-disable import/extensions */
 import Routes from '@/routes';
 
 const PATH = '/prescriptions/confirm-prescription-details';

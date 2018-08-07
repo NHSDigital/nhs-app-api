@@ -25,7 +25,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import
 { MedicationCourseStatus } from '@/lib/medication-course-status';
 import ClockIcon from '@/components/icons/ClockIcon';

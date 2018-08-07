@@ -14,14 +14,10 @@
 <style module lang="scss" scoped>
 @import "../../style/colours";
 .account {
-  margin: 0.8em 1em;
-  display: inline-block;
-  height: 1.575em;
-  position: fixed;
-  right: 0em;
-  top: 0em;
-  cursor: pointer;
-  width: auto;
+  margin: 0;
+  height: 3em;
+  position: relative;
+  top: -0.5em;
 
   .a {
     fill: #fff;

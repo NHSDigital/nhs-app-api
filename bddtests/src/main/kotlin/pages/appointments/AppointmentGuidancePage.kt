@@ -6,7 +6,7 @@ import org.openqa.selenium.StaleElementReferenceException
 import pages.HybridPageObject
 import pages.HybridPageElement
 
-@DefaultUrl("http://localhost:3000/appointments/booking-guidance")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val checkSymptomsButton = HybridPageElement(

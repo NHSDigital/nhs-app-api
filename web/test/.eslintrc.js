@@ -22,10 +22,7 @@ module.exports = {
   // add your custom rules here
   rules: {
     // don't require .vue extension when importing
-    'import/extensions': ['error', 'always', {
-      js: 'never',
-      vue: 'never'
-    }],
+    'import/extensions': ['error', 'never', ],
     'import/no-unresolved': 0,
     'func-names': 0,
     'no-undef': 0,

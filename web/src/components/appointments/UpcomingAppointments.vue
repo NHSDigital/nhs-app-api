@@ -11,7 +11,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
 import Appointment from '@/components/appointments/Appointment';

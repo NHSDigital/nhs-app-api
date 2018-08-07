@@ -9,9 +9,9 @@ import org.openqa.selenium.WebDriver
 @RunWith(CucumberWithSerenity::class)
 @CucumberOptions(
         features = ["src/test/kotlin/features/appointments"],
-        glue = ["features"])
+        glue = ["features"]
+)
 class AppointmentsTestRunner {
-
     @Managed
     lateinit var driver: WebDriver
 }

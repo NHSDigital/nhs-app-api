@@ -7,9 +7,8 @@ import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageElement
 import java.time.Duration
 
-@DefaultUrl("http://localhost:3000/appointments/confirmation")
-class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
-
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments/confirmation")
+open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
     private val confirmAndBookAppointmentButton = HybridPageElement(
         browserLocator = "//*[@id='btn_book_appointment']",
         androidLocator = null,

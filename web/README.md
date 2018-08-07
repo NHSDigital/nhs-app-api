@@ -12,6 +12,15 @@ git clone https://git.nhschoices.net/nhsonline/nhsonline-web
   - backendworker folder
   - web folder
   - bddtests folder
+  
+## Setup
+Before running the web locally, some entries need to be added to your machine's `hosts` file (`/etc/hosts` on Mac or `C:\windows\system32\drivers\etc\hosts` on Windows) to add the following entries:
+
+```
+127.0.0.1       web.local.bitraft.io
+127.0.0.1       api.local.bitraft.io
+127.0.0.1       stubs.local.bitraft.io
+```
 
 ## Run
 **NOTE:**

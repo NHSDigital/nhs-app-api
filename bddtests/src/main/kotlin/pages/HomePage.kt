@@ -5,7 +5,7 @@ import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 
-@DefaultUrl("http://localhost:3000/")
+@DefaultUrl("http://web.local.bitraft.io:3000/")
 open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val headerText: String = "Home"

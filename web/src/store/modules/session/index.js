@@ -1,17 +1,11 @@
 import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
+import { initialState } from './mutation-types';
 
 export default {
   namespaced: true,
-  state() {
-    return {
-      durationSeconds: undefined,
-      gpOdsCode: undefined,
-      lastCalledAt: undefined,
-      validationInterval: undefined,
-    };
-  },
+  state: initialState,
   actions,
   getters,
   mutations,

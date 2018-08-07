@@ -16,14 +16,17 @@ class IdTokenBuilder(issuer: String, audience: String) {
     private val usedIssuer: String = issuer
     private val usedAudience: String = audience
 
+    private fun createExpirationDate(): Date {
+         return Date(Date().time + DELAY_IN_SECONDS * EXPIRATION_TIME_MULTIPLIER)
+    }
+
     private fun getHeader(): JWSHeader {
         return JWSHeader.Builder(JWSAlgorithm.RS512)
                 .type(JOSEObjectType.JWT)
                 .customParam("sub","3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
                 .customParam("aud", usedAudience)
                 .customParam("iss", usedIssuer)
-                .customParam("exp", Date(Date().time +
-                                         DELAY_IN_SECONDS * EXPIRATION_TIME_MULTIPLIER).toInstant().epochSecond)
+                .customParam("exp", createExpirationDate().toInstant().epochSecond)
                 .customParam("iat", Date().toInstant().epochSecond)
                 .customParam("jti", "2581a97f-13ba-4bd5-89d4-099c70531db2")
                 .build()
@@ -36,8 +39,7 @@ class IdTokenBuilder(issuer: String, audience: String) {
                 .subject("3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
                 .issuer(usedIssuer)
                 .audience(usedAudience)
-                .expirationTime(Date(Date().time +
-                                     DELAY_IN_SECONDS * EXPIRATION_TIME_MULTIPLIER))
+                .expirationTime(createExpirationDate())
                 .issueTime(Date(Date().time))
                 .claim("auth_time", Date(Date().time -1 * EXPIRATION_TIME_MULTIPLIER))
                 .claim("ods_code", patient.odsCode)

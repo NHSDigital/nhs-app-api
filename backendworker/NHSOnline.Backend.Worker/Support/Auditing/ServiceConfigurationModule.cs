@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NHSOnline.Backend.Worker.Settings;
 
@@ -12,6 +13,11 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             services.AddSingleton<IAuditorFactory, AuditorFactory>();
 
             var sinkType = configuration["AUDIT_SINK_TYPE"];
+
+            if (sinkType == null)
+            {
+                throw new ConfigurationNotFoundException("AUDIT_SINK_TYPE");
+            }
             
             switch (sinkType.ToUpperInvariant())
             {

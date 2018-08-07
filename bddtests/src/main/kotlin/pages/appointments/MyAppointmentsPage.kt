@@ -5,11 +5,11 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 
-@DefaultUrl("http://localhost:3000/appointments")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class MyAppointmentsPage : AppointmentSharedElementsPage() {
 
     val bookButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_floating']",
+            browserLocator = "//*[@id='book-appointments-button']",
             androidLocator = null,
             page = this
     )

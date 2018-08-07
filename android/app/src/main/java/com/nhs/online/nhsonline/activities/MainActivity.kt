@@ -299,6 +299,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     fun loggedIn() {
         showMenuBar()
         showHeader()
+        setHeaderText(resources.getString(R.string.home_header))
         urlLoader.usingAbsoluteUri = false
         isLoggedIn = true
     }

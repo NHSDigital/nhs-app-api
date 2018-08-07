@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://127.0.0.1:8082/v1/",
+      "applicationUrl": "http://api.local.bitraft.io:8082/v1/",
       "sslPort": 0
     }
   },
@@ -44,7 +44,7 @@
     "NHSOnline.Backend.Worker": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://127.0.0.1:8082/",
+      "applicationUrl": "http://api.local.bitraft.io:8082/",
       "environmentVariables": {
         "EMIS_APPLICATION_ID": "D66BA979-60D2-49AA-BE82-AEC06356E41F",
         "EMIS_VERSION": "2.1.0.0",
@@ -59,11 +59,11 @@
         "NDOP_CERTIFICATE_PATH": "",
         "NDOP_CERTIFICATE_PASSWORD": "",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "EMIS_BASE_URL": "http://127.0.0.1:8080/emis/",
-        "REDIS_ODSLOOKUP_CONFIG": "127.0.0.1:6379",
-        "REDIS_SESSION_CONFIG": "127.0.0.1:6380",
-        "CITIZEN_ID_CLIENT_ID": "nhs-online",
+        "EMIS_BASE_URL": "http://stubs.local.bitraft.io:8080/emis/",
+        "REDIS_ODSLOOKUP_CONFIG": "api.local.bitraft.io:6379",
+        "REDIS_SESSION_CONFIG": "api.local.bitraft.io:6380",
         "CITIZEN_ID_BASE_URL": "https://auth.ext.signin.nhs.uk/",
+        "CITIZEN_ID_CLIENT_ID": "nhs-online",
         "CITIZEN_ID_CLIENT_SECRET": "secret",
         "SESSION_ENCRYPTION_KEY_FILE": "DevelopmentSessionEncryptionKey.txt",
         "GP_PROVIDER_ENABLED_EMIS": "true",

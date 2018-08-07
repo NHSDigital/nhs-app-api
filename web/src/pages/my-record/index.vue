@@ -147,7 +147,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import PatientDetails from '@/components/my-record/PatientDetails';
 import AllergiesAndAdverseReactions from '@/components/my-record/AllergiesAndAdverseReactions';
 import MessageDialog from '@/components/widgets/MessageDialog';

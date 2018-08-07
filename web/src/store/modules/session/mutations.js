@@ -2,12 +2,10 @@ import {
   CLEAR,
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
-  SET_DURATION_SECONDS,
-  SET_GP_ODS_CODE,
+  SET_INFO,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
-  SET_CSRF_TOKEN,
 } from './mutation-types';
 
 export default {
@@ -22,11 +20,20 @@ export default {
   [HIDE_EXPIRY_MESSAGE](state) {
     delete (state.showExpiryMessage);
   },
-  [SET_DURATION_SECONDS](state, numberOfSeconds) {
-    state.durationSeconds = numberOfSeconds;
-  },
-  [SET_GP_ODS_CODE](state, gpOdsCode) {
+  [SET_INFO](state, {
+    name,
+    durationSeconds,
+    gpOdsCode,
+    sessionTimeout,
+    token,
+    lastCalledAt = new Date(),
+  } = {}) {
+    state.user = name;
+    state.durationSeconds = durationSeconds;
     state.gpOdsCode = gpOdsCode;
+    state.sessionTimeout = sessionTimeout;
+    state.csrfToken = token;
+    state.lastCalledAt = lastCalledAt;
   },
   [SET_LAST_CALLED_AT](state, date) {
     state.lastCalledAt = date;
@@ -36,8 +43,5 @@ export default {
   },
   [START_VALIDATION_CHECKING](state, validationInterval) {
     state.validationInterval = validationInterval;
-  },
-  [SET_CSRF_TOKEN](state, token) {
-    state.token = token;
   },
 };

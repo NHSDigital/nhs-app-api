@@ -1,16 +1,17 @@
 package features.sharedSteps
 
+import junit.framework.TestCase.assertNull
 import net.serenitybdd.core.SerenitySystemProperties
 import net.serenitybdd.core.exceptions.SerenityManagedException
 import net.thucydides.core.ThucydidesSystemProperty
 import net.thucydides.core.annotations.Step
-import org.junit.Assert
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.LoginPage
 import java.net.MalformedURLException
 import java.net.URL
 import java.time.Duration
 import java.util.*
+import org.openqa.selenium.Cookie
 
 open class BrowserSteps {
 
@@ -30,13 +31,11 @@ open class BrowserSteps {
 
     @Step
     open fun waitUntilSignoutCompletes() {
-        val vuexCookieName = "nhso"
-
         WebDriverWait(loginPage.driver, 1000)
                 .pollingEvery(Duration.ofMillis(100))
                 .until {
                     it.currentUrl == loginPage.driver.currentUrl
-                    !cookieExists(vuexCookieName) || !CookieWrapper.fromJson(getCookieJson(vuexCookieName)).isLoggedIn()
+                    fetchCookie("nhso.session") == null
                 }
     }
 
@@ -51,27 +50,11 @@ open class BrowserSteps {
 
     @Step()
     fun checkLoginDetailsAreReset() {
-        val vuexCookieName = "nhso"
-        val cookieValue = getCookieJson(vuexCookieName)
-        val targetObject = CookieWrapper.fromJson(cookieValue)
-        targetObject.assertIsLoggedOut()
+        assertNull(fetchCookie("nhso.session"))
     }
 
-    @Step
-    private fun getCookieJson(cookieName: String): String {
-        val cookieValue = fetchCookieContents(cookieName)
-        val start = cookieValue.indexOf("{")
-        val cookieValueTrimmed = cookieValue.removeRange(0, start)
-        val end = cookieValueTrimmed.lastIndexOf("}")
-        return cookieValueTrimmed.removeRange(end + 1, cookieValueTrimmed.lastIndex + 1)
-    }
-
-    private fun fetchCookieContents(cookieName: String): String {
-        val driver = loginPage.driver
-        var cookieValue = driver.manage().cookies.first { x -> x.name == cookieName }.toString()
-        cookieValue = cookieValue.replace("%22", "'")
-        cookieValue = cookieValue.replace("%2C", ",")
-        return cookieValue
+    private fun fetchCookie(cookieName: String): Cookie? {
+        return loginPage.driver.manage().cookies.firstOrNull { x -> x.name == cookieName }
     }
 
     private fun cookieExists(cookieName: String): Boolean {

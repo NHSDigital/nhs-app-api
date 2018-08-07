@@ -5,6 +5,8 @@ namespace NHSOnline.Backend.Worker.Settings
 {
     public class ConfigurationSettings
     {
+        public string CookieDomain { get; set; }
+        
         public int? PrescriptionsDefaultLastNumberMonthsToDisplay { get; set; }
 
         public int? PrescriptionsMaxCoursesSoftLimit { get; set; }

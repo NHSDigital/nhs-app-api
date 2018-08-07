@@ -16,6 +16,7 @@ class Config private constructor() {
 
     var cidClientId: String
     var cidRedirectUri: String
+    var cidNativeRedirectUri: String
     var cidAuthEndpoint: String
     val cidRegisterEndpoint: String
     val cidJwtIssuer: String
@@ -32,7 +33,7 @@ class Config private constructor() {
     var sessionExpiryMinutes: Long
 
     init {
-        url = envOrDefault("url", "http://localhost:3000")
+        url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         val uri = URI(url)
         wiremockUrl = envOrDefault("wiremockUrl", "http://${uri.host}:8080")
         backendUrl = envOrDefault("backendUrl", "http://${uri.host}:8082")
@@ -49,8 +50,9 @@ class Config private constructor() {
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
         cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.ext.signin.nhs.uk")
-        val cidHostname = envOrDefault("CID_HOST", "localhost")
+        val cidHostname = envOrDefault("CID_HOST", "web.local.bitraft.io")
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://$cidHostname:3000/auth-return")
+        cidNativeRedirectUri = envOrDefault("CID_NATIVE_REDIRECT_URI", "nhsapp://$cidHostname:3000/auth-return")
         cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/authorize")
         cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/register")
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")

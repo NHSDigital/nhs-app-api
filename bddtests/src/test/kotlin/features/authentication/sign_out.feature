@@ -11,22 +11,24 @@ Feature: Sign out of mobile web
     Given I am logged in as a <GP Supplier> user
     When I sign out
     Then I see the login page
+
     Examples:
-    | GP Supplier |
-    | EMIS        |
-    | TPP         |
-  # | VISION      | - Blocked until Vision login implemented
+      | GP Supplier |
+      | EMIS        |
+      | TPP         |
+    # | VISION      | - Blocked until Vision login implemented
 
   @NHSO-186
   @NHSO-985
   @manual
-    Scenario Outline: A spinner is shown if there is a delay in the action of the "Sign out" button for a <GP Supplier> user
+  Scenario Outline: A spinner is shown if there is a delay in the action of the "Sign out" button for a <GP Supplier> user
     # Cannot slow the sign-out down enough to detect the spinner icon.
-  Examples:
-  | GP Supplier |
-  | EMIS        |
-  | TPP         |
-  | VISION      |
+
+    Examples:
+      | GP Supplier |
+      | EMIS        |
+      | TPP         |
+      | VISION      |
 
   @NHSO-186
   @NHSO-985
@@ -46,11 +48,12 @@ Feature: Sign out of mobile web
     When I sign out
     Then I see the login page
     And I do not see the menu bar
-  Examples:
-  | GP Supplier |
-  | EMIS        |
-  | TPP         |
-  # | VISION      | - Blocked until Vision login implemented
+
+    Examples:
+      | GP Supplier |
+      | EMIS        |
+      | TPP         |
+      # | VISION      | - Blocked until Vision login implemented
 
   @NHSO-2038
   @NHSO-186
@@ -60,11 +63,12 @@ Feature: Sign out of mobile web
     When I sign out
     Then I see the login page
     And the user login details are cleared from cookies
-  Examples:
-  | GP Supplier |
-  | EMIS        |
-  | TPP         |
-  # | VISION      | - Blocked until Vision login implemented
+
+    Examples:
+      | GP Supplier |
+      | EMIS        |
+      | TPP         |
+      # | VISION      | - Blocked until Vision login implemented
 
   @NHSO-985
   Scenario Outline: The nsho cookie should be clear of <GP Supplier> session and user information if server side sign out fails
@@ -73,6 +77,7 @@ Feature: Sign out of mobile web
     When I sign out
     Then I see the login page
     And the user login details are cleared from cookies
+    
     Examples:
       | GP Supplier |
       | TPP         |

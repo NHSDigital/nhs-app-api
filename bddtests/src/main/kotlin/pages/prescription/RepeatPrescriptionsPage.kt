@@ -27,7 +27,7 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
 }
 
 @Suppress("TooManyFunctions")
-@DefaultUrl("http://localhost:3000/prescriptions/repeat-courses")
+@DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
     lateinit var headerBar: Header

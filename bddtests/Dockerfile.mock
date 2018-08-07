@@ -1,6 +1,6 @@
 FROM java:8 AS base
 
-ENV wiremockUrl http://nhsonline.stubs:8080
+ENV wiremockUrl http://stubs.local.bitraft.io:8080
 ENV WAIT_FOR_TIMEOUT 60
 
 RUN apt-get update -y; apt-get install -y netcat; apt-get clean all

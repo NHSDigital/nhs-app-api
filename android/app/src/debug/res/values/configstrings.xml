@@ -2,4 +2,7 @@
 <resources>
     <string name="app_name">NHS App Dev</string>
     <string name="baseScheme">https</string>
+    <string name="appScheme">nhsapp</string>
+    <string name="baseHost">www-preview.devuks1.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk/</string>
 </resources>

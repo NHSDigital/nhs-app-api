@@ -1,9 +1,13 @@
 export const CLEAR = 'CLEAR';
 export const END_VALIDATION_CHECKING = 'END_VALIDATION_CHECKING';
 export const HIDE_EXPIRY_MESSAGE = 'HIDE_EXPIRY_MESSAGE';
-export const SET_DURATION_SECONDS = 'SET_DURATION_SECONDS';
-export const SET_GP_ODS_CODE = 'SET_GP_ODS_CODE';
+export const SET_INFO = 'SET_INFO';
 export const SET_LAST_CALLED_AT = 'SET_LAST_CALLED_AT';
 export const SHOW_EXPIRY_MESSAGE = 'SHOW_EXPIRY_MESSAGE';
 export const START_VALIDATION_CHECKING = 'START_VALIDATION_CHECKING';
-export const SET_CSRF_TOKEN = 'SET_CSRF_TOKEN';
+export const initialState = () => ({
+  durationSeconds: undefined,
+  gpOdsCode: undefined,
+  lastCalledAt: undefined,
+  validationInterval: undefined,
+});

@@ -8,22 +8,15 @@ import {
 
 export default {
   [AUTH_RESPONSE](state, user) {
-    state.loggedIn = true;
     state.authorised = true;
     state.user = user;
-    if (typeof window !== 'undefined' && typeof window.nativeApp !== 'undefined') {
-      window.nativeApp.onLogin();
-    }
   },
-  [LOGOUT](state) {
+  [LOGOUT]() {
     if (typeof window.nativeApp !== 'undefined') {
       window.nativeApp.onLogout();
     }
-
-    state.loggedIn = false;
   },
   [INIT_AUTH](state) {
-    state.loggedIn = false;
     state.config = {};
     state.user = {};
   },

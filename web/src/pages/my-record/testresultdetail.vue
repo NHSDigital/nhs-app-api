@@ -22,7 +22,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 
 export default {

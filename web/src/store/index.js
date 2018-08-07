@@ -33,8 +33,9 @@ const createStore = () => new Vuex.Store({
     analytics,
   },
   actions: {
-    nuxtServerInit({ state, dispatch }) {
-      dispatch('auth/updateConfig', state.auth.config);
+    async nuxtServerInit({ dispatch }) {
+      await dispatch('auth/updateConfig', this.$cookies.get('nhso.auth'));
+      await dispatch('session/setInfo', this.$cookies.get('nhso.session'));
     },
   },
 });

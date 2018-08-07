@@ -1,7 +1,7 @@
 <template>
   <div :class="stylingClass">
-    <button id="btn_floating" :class="buttonStylingClasses"
-            :disabled="isButtonDisabled" @click="$emit('on-click')">
+    <!--eslint-disable-next-line -->
+    <button :class="buttonStylingClasses" :id="this.id" :disabled="isButtonDisabled" @click="$emit('on-click')">
       <slot/>
     </button>
   </div>
@@ -18,6 +18,10 @@ export default {
     buttonClasses: {
       type: Array,
       default: () => [],
+    },
+    id: {
+      type: String,
+      default: '',
     },
   },
   data() {

@@ -1,6 +1,6 @@
 <template>
   <button :class="[$style.button, $style.green]"
-          data-id="login-button" @click="loginClicked($event)">
+          data-id="login-button">
     {{ $t('loginButton.login') }}
   </button>
 </template>
@@ -18,6 +18,5 @@ export default {
 };
 </script>
 <style module lang="scss" scoped>
-@import "../style/buttons";
-
+  @import "../style/buttons";
 </style>

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import symptomsCheck from '@/components/symptoms/SymptomsCheck';
 
 export default {

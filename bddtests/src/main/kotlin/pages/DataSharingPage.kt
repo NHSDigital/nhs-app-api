@@ -2,7 +2,7 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 
-@DefaultUrl("http://localhost:3000/data-sharing")
+@DefaultUrl("http://web.local.bitraft.io:3000/data-sharing")
 open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val linkContentOverview = HybridPageElement(

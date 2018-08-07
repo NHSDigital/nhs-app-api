@@ -61,11 +61,12 @@ class AuthorizationService {
     return encoded.join('&');
   }
 
-  buildLoginObject(verifier, store) {
+  buildLoginObject(verifier, state) {
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
-    const redirectUri = AuthorizationService.getRedirectUri(store.state);
+    const redirectUri = AuthorizationService.getRedirectUri(state);
     const clientId = process.env.CID_CLIENT_ID;
+
     const request = {
       scope: 'openid',
       client_id: clientId,
@@ -77,53 +78,8 @@ class AuthorizationService {
       baseUrl: process.env.CID_AUTH_ENDPOINT,
       registerUrl: process.env.CID_REGISTER_ENDPOINT,
     };
+
     return request;
-  }
-
-  performLogin(verifier, redirectUri) {
-    const challenge = createChallenge(verifier);
-    const myState = this.newState(this.cryptoGenerateRandom);
-    const clientId = process.env.CID_CLIENT_ID;
-
-    const request = {
-      scope: 'openid',
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      response_type: 'code',
-      code_challenge: challenge,
-      code_challenge_method: 'S256',
-      state: myState,
-    };
-
-    const baseUrl = process.env.CID_AUTH_ENDPOINT;
-
-    const query = this.stringify(request);
-    if (process.client) {
-      const url = `${baseUrl}?${query}`;
-      window.location = url;
-    }
-  }
-
-  performRegistration(verifier, redirectUri) {
-    const challenge = createChallenge(verifier);
-    const myState = this.newState(this.cryptoGenerateRandom);
-    const clientId = process.env.CID_CLIENT_ID;
-
-    const request = {
-      redirect_uri: redirectUri,
-      client_id: clientId,
-      response_type: 'code',
-      state: myState,
-      code_challenge: challenge,
-      code_challenge_method: 'S256',
-    };
-
-    const query = this.stringify(request);
-    const baseUrl = process.env.CID_REGISTER_ENDPOINT;
-    const url = `${baseUrl}?${query}`;
-    if (process.client) {
-      window.location = url;
-    }
   }
 }
 

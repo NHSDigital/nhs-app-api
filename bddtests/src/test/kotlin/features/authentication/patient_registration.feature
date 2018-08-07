@@ -184,9 +184,3 @@ Feature: Registration
     |GP System |
     |EMIS      |
     |TPP       |
-
-  @NHSO-313
-  Scenario: While a new user who has created an account waits to be logged in a spinner is shown
-    Given I want to register for a EMIS account and sign in verification is slow
-    When I complete the account registration
-    Then the spinner appears

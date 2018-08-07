@@ -32,5 +32,20 @@ namespace NHSOnline.Backend.Worker.Support.Logging
         {
             logger.LogDebug($"Exiting {methodName}");
         }
+
+        public static void LogFullException<T>(this ILogger<T> logger, Exception exception)
+        {
+            if (exception == null) return;
+            logger.LogError(exception, "Exception thrown");
+            logger.LogInnerException(exception);
+        }
+
+        private static void LogInnerException<T>(this ILogger<T> logger, Exception exception, int level = 0)
+        {
+            if (exception?.InnerException == null) return;
+            level++;
+            logger.LogError(exception.InnerException, $"Inner exception #{level}");
+            logger.LogInnerException(exception.InnerException, level);
+        }
     }
 }

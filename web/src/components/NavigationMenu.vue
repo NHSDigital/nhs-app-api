@@ -51,7 +51,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import SymptomsIcon from '@/components/icons/SymptomsIcon';
 import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import PrescriptionsIcon from '@/components/icons/PrescriptionsIcon';

@@ -2,47 +2,73 @@ import {
   CLEAR,
   END_VALIDATION_CHECKING,
   HIDE_EXPIRY_MESSAGE,
-  SET_DURATION_SECONDS,
-  SET_GP_ODS_CODE,
+  SET_INFO,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
   START_VALIDATION_CHECKING,
-  SET_CSRF_TOKEN,
 } from './mutation-types';
+
+const setCookie = ({ key, value, cookies }) => {
+  if (!cookies) return;
+
+  const cleaned = value === '' ? undefined : value;
+
+  if (cleaned) {
+    cookies.set(key, cleaned);
+  } else {
+    cookies.remove(key);
+  }
+};
 
 export default {
   clear:
     ({ commit }) => commit(CLEAR),
   hideExpiryMessage:
     ({ commit }) => commit(HIDE_EXPIRY_MESSAGE),
-  setDurationSeconds:
-    ({ commit }, numberOfSeconds) => commit(SET_DURATION_SECONDS, numberOfSeconds),
-  setGpOdsCode:
-    ({ commit }, odsCode) => commit(SET_GP_ODS_CODE, odsCode),
   showExpiryMessage:
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
-  updateLastCalledAt:
-    ({ commit }, lastCalledAt) => commit(SET_LAST_CALLED_AT, lastCalledAt || new Date()),
-  setCsrfToken:
-    ({ commit }, token) => commit(SET_CSRF_TOKEN, token),
-  startValidationChecking: ({
-    commit, dispatch, state, rootState,
-  }) => {
-    if (!rootState.auth.loggedIn) {
-      return;
+  updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
+    const session = this.app.$cookies.get('nhso.session');
+    if (session) {
+      session.lastCalledAt = lastCalledAt;
+      setCookie({
+        key: 'nhso.session',
+        value: session,
+        cookies: this.app.$cookies,
+      });
     }
 
-    if (state.validationInterval) {
-      return;
-    }
+    commit(SET_LAST_CALLED_AT, lastCalledAt);
+  },
+  setInfo({ commit }, info) {
+    const value = !info
+      ? undefined
+      : ({
+        name: info.name,
+        durationSeconds: info.durationSeconds,
+        gpOdsCode: info.gpOdsCode,
+        token: info.token,
+        lastCalledAt: info.lastCalledAt || new Date(),
+      });
 
-    if (process.client) {
-      const interval = setInterval(() => {
-        dispatch('validate');
-      }, 10000);
+    setCookie({
+      key: 'nhso.session',
+      value,
+      cookies: this.app.$cookies,
+    });
 
-      commit(START_VALIDATION_CHECKING, interval);
-    }
+    commit(SET_INFO, info);
+  },
+  startValidationChecking({ commit, dispatch, state }) {
+    if (process.server) return;
+    if (!state.csrfToken) return;
+    if (state.validationInterval) return;
+
+    const interval = setInterval(() => {
+      dispatch('validate');
+    }, 10000);
+
+    commit(START_VALIDATION_CHECKING, interval);
   },
   endValidationChecking: ({ commit, state }) => {
     clearInterval(state.validationInterval);

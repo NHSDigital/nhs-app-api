@@ -25,22 +25,6 @@ services:
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - STUB_TERMS_AND_CONDITIONS=true
-  nhsonline.stubs:
-    image: rodolpheche/wiremock
-    ports:
-      - "8080:8080"
-  nhsonline.stubs.data:
-    image: nhsonline.stubs.data
-    depends_on:
-      - nhsonline.stubs
-    environment:
-      - wiremockUrl=http://nhsonline.stubs:8080
-  nhsonline.redis-data.sds:
-    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
-    environment:
-      - REDIS_HOST=nhsonline.redis.sds
-    depends_on:
-      - nhsonline.redis.sds
   nhsonline.redis.sds:
     image: bitnami/redis:4.0.8-r7
     environment:
@@ -50,6 +34,12 @@ services:
       - "6379:6379"
     volumes:
       - 'redis_data:/bitnami/redis'
+  nhsonline.redis-data.sds:
+    image: nhsapp.azurecr.io/nhsonline-redis-data:latest
+    environment:
+      - REDIS_HOST=nhsonline.redis.sds
+    depends_on:
+      - nhsonline.redis.sds      
   nhsonline.redis.session:
     image: bitnami/redis:4.0.8-r7
     environment:

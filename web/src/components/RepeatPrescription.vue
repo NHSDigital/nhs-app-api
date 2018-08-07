@@ -24,7 +24,6 @@
   </div>
 </template>
 <script>
-/* eslint-disable import/extensions */
 import { mapGetters } from 'vuex';
 import CheckedIcon from '../components/icons/CheckedIcon';
 

@@ -4,9 +4,7 @@ import { initialState } from './mutation-types';
 
 export default {
   namespaced: true,
-  state() {
-    return initialState;
-  },
+  state: initialState,
   actions,
   mutations,
 };

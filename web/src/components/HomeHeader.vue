@@ -11,11 +11,9 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import SymptomBanner from '@/components/SymptonBanner';
 import NhsLogo from '@/components/icons/NhsLogo';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
-import Routes from '@/Routes';
 
 export default {
   components: {
@@ -25,8 +23,7 @@ export default {
   },
   computed: {
     showSessionExpiredBanner() {
-      const isLoginPage = this.$route.name === Routes.LOGIN.name;
-      return isLoginPage && this.$store.state.session.showExpiryMessage;
+      return this.$store.state.session.showExpiryMessage;
     },
   },
 };
@@ -34,5 +31,4 @@ export default {
 
 <style module lang="scss"  scoped>
 @import "../style/homeheader";
-
 </style>

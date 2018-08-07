@@ -15,6 +15,11 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
         }
 
         mockingClient.forCitizenId {
+            initialLoginRequest(Config.instance.cidNativeRedirectUri, Config.instance.cidClientId)
+                    .respondWithLoginPage()
+        }
+
+        mockingClient.forCitizenId {
             createAccountRequest()
                     .respondWithLoginPage()
         }

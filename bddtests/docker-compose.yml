@@ -1,27 +1,28 @@
 version: "3.2"
 services:
-  nhsonline.web:
+  web.local.bitraft.io:
     image: nhsonline.web
     ports:
       - "3000:3000"
     environment:
-      - API_HOST=http://localhost:8082
-      - API_HOST_SERVER=http://nhsonline.backend.worker:8082
-      - CID_REDIRECT_URI=http://localhost:3000/auth-return
+      - API_HOST=http://api.local.bitraft.io:8082
+      - API_HOST_SERVER=http://api.local.bitraft.io:8082
+      - CID_REDIRECT_URI=http://web.local.bitraft.io:3000/auth-return
       - NATIVE_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
-      - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/authorize
-      - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/register
-      - DATA_PREFERENCES_URL=http://localhost:8080/ndop/ndopapp-build1.thunderbird.service.nhs.uk/createsession
-  nhsonline.backend.worker:
+      - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
+      - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
+      - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/ndopapp-build1.thunderbird.service.nhs.uk/createsession
+      - COOKIE_DOMAIN=.bitraft.io
+  api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - CORS_AUTHORITY=*
-      - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/
+      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
-      - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
-      - TPP_BASE_URL=http://nhsonline.stubs:8080/tpp/
-      - VISION_URI=http://nhsonline.stubs:8080/vision
+      - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
+      - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
+      - VISION_URI=http://stubs.local.bitraft.io:8080/vision
       - VISION_CERT_PASSPHRASE
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
@@ -33,13 +34,14 @@ services:
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - EMIS_LINKAGE_USE_STUBBED_DATA=false
       - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io
     depends_on:
       - nhsonline.redis.sds
     ports:
       - "8082:8082"
     volumes:
       - ./src/main/kotlin/mocking/ndop:/app/bddcerts
-  nhsonline.stubs:
+  stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
     command: --local-response-templating
     environment:

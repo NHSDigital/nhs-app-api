@@ -77,7 +77,6 @@ class HybridPageElement(
     }
 
     private fun locatorStrategy(): String {
-
         return if (page.isAndroid()) {
             if (androidLocator != null) {
                 LOCATOR_STRATEGY_ANDROID

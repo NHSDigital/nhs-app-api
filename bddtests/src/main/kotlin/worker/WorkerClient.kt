@@ -299,7 +299,7 @@ class WorkerClient {
             if (includeBadCookie) {
                 val cookie = BasicClientCookie("NHSO-Session-Id", "ErrorCookieId")
                 cookie.path = "/"
-                cookie.domain = "localhost"
+                cookie.domain = ".bitraft.io"
                 cookie.setAttribute("httponly", "null")
                 cookie.setAttribute("path", "/")
                 cookie.setAttribute("samesite", "lax")

@@ -11,7 +11,6 @@ module.exports = {
     'cookie-universal-nuxt',
   ],
   plugins: [
-    { src: '~/plugins/persistedState.js' },
     '~/plugins/i18n.js',
     '~/plugins/api.js',
     '~/plugins/filters.js',
@@ -33,8 +32,9 @@ module.exports = {
   ],
   env: {
     NODE_ENV: process.env.NODE_ENV || 'development',
-    API_HOST: process.env.API_HOST || 'http://localhost:8082',
-    API_HOST_SERVER: process.env.API_HOST_SERVER || process.env.API_HOST || 'http://localhost:8082',
+    API_HOST: process.env.API_HOST || 'http://api.local.bitraft.io:8082',
+    API_HOST_SERVER: process.env.API_HOST_SERVER || process.env.API_HOST || 'http://api.local.bitraft.io:8082',
+    COOKIE_DOMAIN: process.env.COOKIE_DOMAIN || '.bitraft.io',
     PORT: process.env.PORT || '3000',
     ORGAN_DONATION_URL:
       process.env.ORGAN_DONATION_URL || 'https://www.organdonation.nhs.uk',

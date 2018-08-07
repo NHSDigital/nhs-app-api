@@ -5,14 +5,14 @@ import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 
 @Suppress("TooManyFunctions")
-@DefaultUrl("http://localhost:3000/account")
+@DefaultUrl("http://web.local.bitraft.io:3000/account")
 class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     private val aboutUsHeaderXpath = String.format("//div[h2$containsTextXpathSubstring]", "About us")
     private val linkPath = "$aboutUsHeaderXpath/ul/li/a"
 
     val signOutButton = HybridPageElement(
-            browserLocator = "//*[@id='btn_floating']",
+            browserLocator = "//*[@id='signout-button']",
             androidLocator = null,
             page = this
     )

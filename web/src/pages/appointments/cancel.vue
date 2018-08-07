@@ -19,7 +19,7 @@
         {{ $t('appointments.cancel.form_label') }}
       </label>
 
-      <error-message v-if="showValidationError" id="error-label" :class="$style.form">
+      <error-message v-if="showValidationError" id="errorLabel" :class="$style.form">
         {{ $t('appointments.cancel.noReasonError') }}
       </error-message>
 
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import Appointment from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';

@@ -8,6 +8,7 @@
 /*global fetch, btoa */
 import $q from 'q';
 import axios from 'axios'
+import { isEmpty } from 'lodash/fp'
 
 /**
  * {{&description}}
@@ -22,6 +23,7 @@ class {{&className}} {
   constructor(options){
     this.store = options.store;
     this.res = options.res
+    this.cookies = options.cookies;
     let domain = (typeof options === 'object') ? options.domain : options;
     this.domain = domain ? domain : '{{&domain}}';
     if(this.domain.length === 0) {
@@ -88,9 +90,24 @@ class {{&className}} {
 
     this.store.dispatch('http/isLoading');
 
+    if (this.store.state.session.csrfToken) {
+      headers['X-CSRF-TOKEN'] = this.store.state.session.csrfToken;
+    }
+
     if(this.cookie && this.cookie.length > 0) {
       headers['Cookie'] = this.cookie;
     }
+
+
+    const resolve = ({ store, deferred, result, cancel }) => {
+      deferred.resolve(result)
+      store.dispatch('http/addCancelRequestHandler', cancel);
+    };
+
+    const reject = ({ store, deferred, error, cancel }) => {
+      deferred.reject(error)
+      store.dispatch('http/addCancelRequestHandler', cancel);
+    };
 
     axios({
       cancelToken: new CancelToken(function executor(c) {
@@ -111,21 +128,25 @@ class {{&className}} {
       return response.data
     }).then((body) => {
       this.store.dispatch('http/loadingCompleted');
-      deferred.resolve(body);
+      resolve({ deferred, result: body, store: this.store });
     }).catch((error) => {
       this.store.dispatch('http/loadingCompleted');
-      if(!axios.isCancel(error)) {
+      if (!axios.isCancel(error)) {
         if (error.response !== undefined && 401 === error.response.status) {
-          this.store.dispatch('auth/unauthorised')
+          this.store.dispatch('auth/unauthorised');
         }
 
         this.store.dispatch('errors/addApiError', error);
+
+        if (process.server && !isEmpty(this.store.state.errors.apiErrors)) {
+          resolve({ deferred, store: this.store });
+        } else {
+          reject({ deferred, error, store: this.store });
+        }
       }
 
-      deferred.reject(error);
+      reject({ deferred, error });
     });
-
-    this.store.dispatch('http/addCancelRequestHandler', cancel);
   }
 
   {{#isSecure}}

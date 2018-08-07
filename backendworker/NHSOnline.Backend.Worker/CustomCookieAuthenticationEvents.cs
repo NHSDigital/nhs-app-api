@@ -34,7 +34,8 @@ namespace NHSOnline.Backend.Worker
                 }
                 var userSession = userSessionOption.ValueOrFailure();
 
-                if (context.Request.Headers["X-CSRF-TOKEN"] != userSession.CsrfToken)
+                var token = context.Request.Headers["X-CSRF-TOKEN"];
+                if (token != userSession.CsrfToken)
                 {
                     _logger.LogWarning("Invalid X-CSRF-Token. Signing out.");
                     await RejectPrincipalAndSignOut(context);

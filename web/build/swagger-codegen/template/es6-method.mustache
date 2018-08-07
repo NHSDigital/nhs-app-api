@@ -89,11 +89,6 @@
 
     {{/parameters}}
 
-    if(this.store.getters['session/csrfToken']() != null)
-    {
-        headers['X-CSRF-TOKEN'] = this.store.getters['session/csrfToken']();
-    }
-
     queryParameters = this.mergeQueryParams(parameters, queryParameters);
 
     this.request('{{method}}', domain + path, parameters, body, headers, queryParameters, form, deferred);

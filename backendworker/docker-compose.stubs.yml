@@ -1,16 +1,16 @@
 version: "3.2"
 services:
-  nhsonline.stubs:
+  stubs.local.bitraft.io:
     image: rodolpheche/wiremock
     command: --local-response-templating
     ports:
       - "8080:8080"
-  nhsonline.stubs.data:
+  data.stubs.local.bitraft.io:
     image: nhsonline.stubs.data
     depends_on:
-      - nhsonline.stubs
+      - stubs.local.bitraft.io
     environment:
-      - wiremockUrl=http://nhsonline.stubs:8080
+      - wiremockUrl=http://stubs.local.bitraft.io:8080
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

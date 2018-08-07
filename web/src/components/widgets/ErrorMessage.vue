@@ -9,7 +9,6 @@
 
 
 <script>
-/* eslint-disable import/extensions */
 import ErrorMarkerIcon from '@/components/icons/ErrorMarkerIcon';
 
 export default {

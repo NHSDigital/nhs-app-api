@@ -1,22 +1,22 @@
 version: "3.2"
 services:
-  nhsonline.web:
+  web.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-web:${WEB_TAG}
     ports:
       - "3000:3000"
     environment:
-      - API_HOST=http://localhost:8082
-      - CID_REDIRECT_URI=http://localhost:3000/auth-return
-      - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/authorize
-      - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/registrations
-  nhsonline.backend.worker:
+      - API_HOST=http://api.local.bitraft.io:8082
+      - CID_REDIRECT_URI=http://web.local.bitraft.io:3000/auth-return
+      - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
+      - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/registrations
+  api.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
     environment:
-      - NHS_WEB_APP_BASE_URL=http://localhost:3000/
+      - NHS_WEB_APP_BASE_URL=http://web.local.bitraft.io:3000/
       - CORS_AUTHORITY=*
-      - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/
-      - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
-      - TPP_BASE_URL=http://nhsonline.stubs:8080/tpp/
+      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
+      - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - ASPNETCORE_ENVIRONMENT=Development
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
@@ -28,7 +28,7 @@ services:
       - nhsonline.redis.sds
     ports:
       - "8082:8082"
-  nhsonline.stubs:
+  stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:${WIREMOCK_TAG}
     command: --local-response-templating
     environment:

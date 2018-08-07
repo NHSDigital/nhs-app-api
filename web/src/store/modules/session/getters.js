@@ -7,10 +7,8 @@ export default {
       if (!durationSeconds || !lastCalledAt) return false;
       const now = new Date();
       const expiryTime = moment(lastCalledAt).add(durationSeconds, 'seconds').toDate();
-      return now < expiryTime;
+      const result = now < expiryTime;
+      return result;
     };
-  },
-  csrfToken(state) {
-    return () => state.token;
   },
 };

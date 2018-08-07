@@ -6,7 +6,7 @@ export const REPEAT_PRESCRIPTION_VALIDATED = 'REPEAT_PRESCRIPTION_VALIDATED';
 export const REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO = 'REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO';
 
 
-export const initialState = {
+export const initialState = () => ({
   courses: [],
   repeatPrescriptionCourses: [],
   specialRequest: null,
@@ -14,4 +14,4 @@ export const initialState = {
   hasErrored: false,
   validated: false,
   isValid: false,
-};
+});

@@ -133,7 +133,12 @@ class WebClientInterceptor(
 
     private fun isConnectedToInternet(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return cm.activeNetworkInfo?.isConnectedOrConnecting == true
+        for (network in cm.allNetworks) {
+            val info = cm.getNetworkInfo(network)
+            if (info.isConnectedOrConnecting) return true
+        }
+
+        return false
     }
 
     private fun hasMissingQueryString(url: String?): Boolean {

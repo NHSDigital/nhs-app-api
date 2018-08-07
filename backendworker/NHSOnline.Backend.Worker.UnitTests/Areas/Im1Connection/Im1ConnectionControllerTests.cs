@@ -222,7 +222,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             // Dummy context...
             var dummyHttpContext = new DefaultHttpContext();
-            dummyHttpContext.Request.Host = new HostString("localhost");
+            dummyHttpContext.Request.Host = new HostString("some.host.name");
             dummyHttpContext.Request.PathBase = "/test/";
             dummyHttpContext.Request.Path = "/test.html";
             dummyHttpContext.Request.QueryString = new QueryString("?test=test");

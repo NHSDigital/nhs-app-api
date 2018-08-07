@@ -34,7 +34,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import moment from 'moment-timezone';
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';

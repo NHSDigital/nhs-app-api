@@ -51,7 +51,6 @@
 
 
 <script>
-/* eslint-disable import/extensions */
 import AppointmentSlot from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';

@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <home-header v-if="showLoginHeader" />
     <header-menu v-if="showMenu"/>
     <main :class="mainClass">
       <spinner />
@@ -15,7 +14,6 @@
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 /* eslint-disable no-underscore-dangle */
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
@@ -23,7 +21,6 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import HomeHeader from '@/components/HomeHeader';
 import SurveyBar from '@/components/SurveyBar';
 import Routes from '../Routes';
 
@@ -35,7 +32,6 @@ export default {
     ApiError,
     ConnectionError,
     FlashMessage,
-    HomeHeader,
     SurveyBar,
   },
   head() {
@@ -60,7 +56,7 @@ export default {
     showMenu() {
       return (
         !this.$store.state.device.isNativeApp &&
-        this.$store.state.auth.loggedIn &&
+        this.loggedIn &&
         this.$route.name !== 'Login'
       );
     },
@@ -77,8 +73,8 @@ export default {
       }
       return clazzes;
     },
-    showLoginHeader() {
-      return this.isLoginPage();
+    loggedIn() {
+      return !!this.$store.state.session.csrfToken;
     },
   },
   created() {
@@ -90,12 +86,14 @@ export default {
     this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
   },
   mounted() {
-    this.$store.dispatch('session/startValidationChecking');
+    if (process.client) {
+      if (this.loggedIn) {
+        this.$store.dispatch('session/startValidationChecking');
+        window.validateSession =
+          window.validateSession || (() => this.$store.dispatch('session/validate'));
 
-    if (process.client && !window.validateSession) {
-      window.validateSession = () => {
-        this.$store.dispatch('session/validate');
-      };
+        this.$store.dispatch('auth/nativeLogin');
+      }
     }
   },
   methods: {

@@ -46,6 +46,19 @@ Feature: Login
       | VISION |
 
 
-  Scenario: The spinner is shown while loading
-   Given I log in as an EMIS user and sign in verification is slow
-    Then the spinner appears
+  @NHSO-125
+  @smoketest
+  Scenario Outline: <GPSS> User sees the home page
+    Given I am logged in as a <GPSS> user
+    Then I see a welcome message
+    And I see the header
+    And I see the navigation menu
+
+    Examples:
+      | GPSS   |
+      | EMIS   |
+      | TPP    |
+      #| VISION | - Barry to fix on 19/07.  Cert issue.
+
+  @pending
+  Scenario: User has been inactive for less than 20 minutes

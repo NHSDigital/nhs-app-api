@@ -1,139 +1,150 @@
-import AuthorisationService from '../../../services/authorization-service';
-import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, SET_REDIRECT_URI, UPDATE_CONFIG } from './mutation-types';
+import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
+
+const MAX_TRIES = 10;
+
+const final = ({ self, commit, expired }) => {
+  commit(LOGOUT, true);
+  self.dispatch('analytics/init');
+  self.dispatch('availableAppointments/init');
+  self.dispatch('myAppointments/init');
+  self.dispatch('auth/init');
+  self.dispatch('device/init');
+  self.dispatch('header/init');
+  self.dispatch('http/init');
+  self.dispatch('navigation/init');
+  self.dispatch('prescriptions/init');
+  self.dispatch('repeatPrescriptionCourses/init');
+  self.dispatch('errors/clearAllApiErrors');
+  self.dispatch('session/setInfo');
+  self.dispatch('flashMessage/init');
+
+  if (expired) {
+    // When the session is expired, a `push` must be used to ensure the state and,
+    // by implication, the `showExpiryMessage` property is preserved.
+    self.app.router.push('login');
+  } else {
+    // When logout occurs through the button, `go` is used to reduce flickering.  This makes
+    // a server request which clears the state.
+    self.app.router.go('/login');
+  }
+};
 
 export default {
-  handleAuthResponse({ commit, state }, { code }) {
+  handleAuthResponse({ commit, state }, code) {
     /**
      * This needs to fire a proxy method
      * as more work needs to be done before logging in
      * for now we will just edit the state object.
      */
+
+    const { codeVerifier, redirectUri: redirectUrl } = state.config || {};
     return this.app.$http
       .postV1Session({
         userSession: {
           authCode: code,
-          codeVerifier: state.config.codeVerifier,
-          redirectUrl: state.redirectUri,
+          codeVerifier,
+          redirectUrl,
         },
       })
       .then((response) => {
-        this.dispatch('session/setDurationSeconds', response.sessionTimeout);
-        this.dispatch('session/setGpOdsCode', response.odsCode);
+        // eslint-disable-next-line object-curly-newline
+        const { name, odsCode, sessionTimeout, token } = (response || {});
         this.dispatch('session/hideExpiryMessage');
-        this.dispatch('session/setCsrfToken', response.token);
-        this.app.$http
-          .getV1PatientTermsAndConditionsConsent({})
-          .then((data) => {
-            if (data.response) {
-              if (data.response.consentGiven === true) {
-                commit(AUTH_RESPONSE, response);
-                this.dispatch('session/startValidationChecking');
-                this.app.router.push({
-                  name: 'index',
-                });
-              } else {
-                this.app.router.push({
-                  name: 'terms-and-conditions',
-                  params: { authResponse: response },
-                });
-              }
-            } else {
-              this.app.router.push({
-                name: 'terms-and-conditions',
-                params: { authResponse: response },
-              });
-            }
-          });
-      });
-  },
-  goHandleAuthResponse({ commit }, message) {
-    return this.app.$http
-      .postV1PatientTermsAndConditionsConsent(message.a)
-      .then(() => {
-        commit(AUTH_RESPONSE, message.b);
-        this.dispatch('session/startValidationChecking');
-        this.app.router.push({
-          name: 'index',
+
+        // TODO: Fix
+        // This will not work using the new authentication mechanisms.
+        // <<<<<<< HEAD
+        //         this.dispatch('session/setCsrfToken', response.token);
+        //         this.app.$http
+        //           .getV1PatientTermsAndConditionsConsent({})
+        //           .then((data) => {
+        //             if (data.response) {
+        //               if (data.response.consentGiven === true) {
+        //                 commit(AUTH_RESPONSE, response);
+        //                 this.dispatch('session/startValidationChecking');
+        //                 this.app.router.push({
+        //                   name: 'index',
+        //                 });
+        //               } else {
+        //                 this.app.router.push({
+        //                   name: 'terms-and-conditions',
+        //                   params: { authResponse: response },
+        //                 });
+        //               }
+        //             } else {
+        //               this.app.router.push({
+        //                 name: 'terms-and-conditions',
+        //                 params: { authResponse: response },
+        //               });
+        //             }
+        //           });
+        //       });
+        //   },
+        //   goHandleAuthResponse({ commit }, message) {
+        //     return this.app.$http
+        //       .postV1PatientTermsAndConditionsConsent(message.a)
+        //       .then(() => {
+        //         commit(AUTH_RESPONSE, message.b);
+        // =======
+        this.dispatch('session/setInfo', {
+          name,
+          durationSeconds: sessionTimeout,
+          gpOdsCode: odsCode,
+          token,
         });
+
+        commit(AUTH_RESPONSE, response);
+        this.dispatch('session/startValidationChecking');
+        this.app.$cookies.remove('nhso.auth');
       });
   },
 
   logoutWhenExpired() {
     this.dispatch('session/showExpiryMessage');
-    this.dispatch('auth/logout');
+    this.dispatch('auth/logout', { expired: true });
   },
-  logout({ commit }) {
+  logout({ commit }, { expired } = {}) {
     this.dispatch('session/clear');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
 
-    const final = () => {
-      commit(LOGOUT, true);
-      this.dispatch('analytics/init');
-      this.dispatch('availableAppointments/init');
-      this.dispatch('myAppointments/init');
-      this.dispatch('auth/init');
-      this.dispatch('device/init');
-      this.dispatch('header/init');
-      this.dispatch('http/init');
-      this.dispatch('navigation/init');
-      this.dispatch('prescriptions/init');
-      this.dispatch('repeatPrescriptionCourses/init');
-      this.dispatch('errors/clearAllApiErrors');
-      this.dispatch('session/setGpOdsCode', '');
-      this.dispatch('session/setCsrfToken', '');
-      this.dispatch('flashMessage/init');
-      this.app.router.go('/login');
-    };
-
-    return this.app.$http.deleteV1Session().then(final).catch(final);
+    return this
+      .app
+      .$http
+      .deleteV1Session()
+      .then(() => final({ self: this, commit, expired }))
+      .catch(() => final({ self: this, commit, expired }));
   },
   init({ commit }) {
     commit(INIT_AUTH);
   },
-  setRedirectUri({ commit, rootState }) {
-    commit(SET_REDIRECT_URI, AuthorisationService.getRedirectUri(rootState));
-  },
-  buildLogin({ commit }) {
-    const codeVerifier = AuthorisationService.createVerifier();
-    const loginObj = new AuthorisationService().buildLoginObject(codeVerifier, this);
-    loginObj.codeVerifier = codeVerifier;
-    commit(UPDATE_CONFIG, loginObj);
-  },
-  login({ dispatch, commit }, configObj) {
-    const config = Object.assign({}, configObj);
-    config.codeVerifier = AuthorisationService.createVerifier();
-    commit(UPDATE_CONFIG, config);
-    dispatch('performLogin');
-  },
-  performLogin({ state }) {
-    new AuthorisationService().performLogin(state.config.codeVerifier, state.redirectUri);
-  },
-  register({ dispatch, commit }, configObj) {
-    const config = Object.assign({}, configObj);
-    config.codeVerifier = AuthorisationService.createVerifier();
-    commit(UPDATE_CONFIG, config);
-    dispatch('performRegistration');
-  },
-  performRegistration({ state }) {
-    new AuthorisationService().performRegistration(state.config.codeVerifier, state.redirectUri);
+  nativeLogin() {
+    const login = () => {
+      if (window.nativeApp) {
+        window.nativeApp.onLogin();
+        return true;
+      }
+
+      return false;
+    };
+
+    if (process.server) return;
+
+    if (!login()) {
+      let tries = 0;
+      const interval = setInterval(() => {
+        tries += 1;
+        if (login() && tries <= MAX_TRIES) {
+          tries = 0;
+          clearInterval(interval);
+        }
+      }, 500);
+    }
   },
   updateConfig({ commit }, config) {
     commit(UPDATE_CONFIG, config);
   },
   unauthorised({ commit }) {
-    commit(LOGOUT, true);
-    this.dispatch('analytics/init');
-    this.dispatch('availableAppointments/init');
-    this.dispatch('myAppointments/init');
-    this.dispatch('auth/init');
-    this.dispatch('device/init');
-    this.dispatch('header/init');
-    this.dispatch('http/init');
-    this.dispatch('navigation/init');
-    this.dispatch('prescriptions/init');
-    this.dispatch('repeatPrescriptionCourses/init');
-    this.dispatch('flashMessage/init');
-    this.app.router.push('/login');
+    final({ self: this, commit });
   },
 };

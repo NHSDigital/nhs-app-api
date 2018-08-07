@@ -29,14 +29,16 @@
       </div>
     </div>
 
-    <floating-button-bottom v-if="hasLoaded" @on-click="onRepeatPrescriptionButtonClicked">
+    <floating-button-bottom
+      v-if="hasLoaded"
+      id="order-prescription-button"
+      @on-click="onRepeatPrescriptionButtonClicked">
       {{ $t('rp01.orderPrescriptionButton') }}
     </floating-button-bottom>
   </div>
 </template>
 
 <script>
-/* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import { MedicationCourseStatus } from '@/lib/medication-course-status';

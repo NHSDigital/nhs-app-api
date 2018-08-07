@@ -17,7 +17,7 @@ class Header: HybridPageObject(Companion.PageType.NATIVE) {
     )
     val accountIcon = HybridPageElement(
             androidLocator = "//android.widget.ImageView[contains(@resource-id,'myAccountIcon')]",
-            browserLocator = "//a[@href='/account']/*[name()='svg']",
+            browserLocator = "//a[@href='/account']",
             page = this
     )
     val pageTitle = HybridPageElement(

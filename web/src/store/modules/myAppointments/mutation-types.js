@@ -4,7 +4,7 @@ export const INIT = 'INIT';
 export const CLEAR_SELECTED_APPOINTMENT = 'CLEAR_SELECTED_APPOINTMENT';
 export const SELECT = 'SELECT';
 export const CLEAR_APPOINTMENTS = 'CLEAR_APPOINTMENTS';
-export const initialState = {
+export const initialState = () => ({
   appointmentSessions: [],
   clinicians: [],
   locations: [],
@@ -13,4 +13,4 @@ export const initialState = {
   selectedAppointment: null,
   hasLoaded: false,
   hasErrored: false,
-};
+});

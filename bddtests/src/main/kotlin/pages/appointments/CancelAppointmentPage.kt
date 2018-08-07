@@ -4,7 +4,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 
-@DefaultUrl("http://localhost:3000/appointments")
+@DefaultUrl("http://web.local.bitraft.io:3000/appointments")
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
 
     val checkDetailsText = HybridPageElement(

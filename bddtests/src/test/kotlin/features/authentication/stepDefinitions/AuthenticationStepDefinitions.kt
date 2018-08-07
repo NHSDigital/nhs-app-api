@@ -79,24 +79,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     lateinit var currentUrl: String
 
-    @Given("^I log in as an EMIS user and sign in verification is slow$")
-    fun iLogInAndSignInVerificationIsSlow() {
-        var patient = Patient.getDefault("EMIS")
-        browser.goToApp()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
-        emisSignInVerificationIsSlow()
-        login.asDefault(patient)
-    }
-
-    private fun emisSignInVerificationIsSlow() {
-        mockingClient.forEmis {
-            endUserSessionRequest().respondWithSuccess(
-                    endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID)
-                    .delayedBy(Duration.ofSeconds(10))
-        }
-    }
-
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
 
@@ -650,17 +632,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
 
-        browser.goToApp()
-    }
-
-
-
-    @Given("^I want to register for a (.+) account and sign in verification is slow$")
-    fun iWantToRegisterForAnAccountAndSignInIsSlow(gpSystem: String) {
-        this.patient = Patient.getDefault(gpSystem)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
-        emisSignInVerificationIsSlow()
         browser.goToApp()
     }
 

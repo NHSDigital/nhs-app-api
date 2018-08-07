@@ -7,7 +7,7 @@ import pages.HybridPageObject
 import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
 
-@DefaultUrl("http://localhost:3000/prescriptions")
+@DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     lateinit var headerBar: Header

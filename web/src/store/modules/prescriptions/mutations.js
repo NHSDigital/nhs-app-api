@@ -46,7 +46,7 @@ export default {
     state.hasLoaded = true;
   },
   [INIT_PRESCRIPTIONS](state) {
-    state = initialState;
+    state = initialState();
   },
   [PRESCRIPTIONS_CLEAR](state) {
     state.prescriptionCourses = [];

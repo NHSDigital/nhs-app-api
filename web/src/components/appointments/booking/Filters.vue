@@ -50,7 +50,6 @@
 
 
 <script>
-/* eslint-disable import/extensions */
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';

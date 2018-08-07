@@ -26,7 +26,7 @@ Run the tests locally
 ```
 gradle clean test aggregate \
 -Dcucumber.options="--tags 'not (@pending or @bug or @native or @manual or @tech-debt)'" \
--Dwebdriver.base.url="http://localhost:3000"
+-Dwebdriver.base.url="http://web.local.bitraft.io:3000"
 ```
 
 View the serenity report by navigating to "<path to repo>/target/site/serenity"
@@ -74,9 +74,9 @@ Configuration is all defined in one file and each of the properties can be overr
   passing in environment variables to the runner (either via the command line or in an IDE).
 
 Common options are:
-* url - defaults to localhost:3000
-* wiremockUrl - defaults to localhost:8080
-* backendUrl - defaults to localhost:8082
+* url - defaults to web.local.bitraft.io:3000
+* wiremockUrl - defaults to stubs.local.bitraft.io:8080
+* backendUrl - defaults to api.local.bitraft.io:8082
 
 Serenity properties **cannot** be passed as environment variables as Serenity only picks up
   system properties.

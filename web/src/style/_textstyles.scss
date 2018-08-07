@@ -34,7 +34,7 @@ $kernel: -0.063em;
 	color: $dark_grey;
 	@include kerneliOS;
 }
-@mixin h2Blue { //Removed in new textstyles 
+@mixin h2Blue { //Removed in new textstyles
   font-family: $frutiger-bold;
   font-weight: 700;
   font-size: 1.375em;
@@ -68,7 +68,7 @@ $kernel: -0.063em;
 	color: $white;
 	@include kerneliOS;
 }
-@mixin h5 { //Removed in new textstyles
+@mixin h5 { //Removed in new textstyless
   font-family: $frutiger-bold;
   font-weight: 700;
   font-size: 18px;
@@ -79,7 +79,7 @@ $kernel: -0.063em;
 	display: block;
 	font-family: $frutiger-light;
 	font-weight: normal;
-	font-size: 0.8em;
+	font-size: 0.03em;
 	line-height: 1.250em;
 	color: $white;
 	@include kerneliOS;

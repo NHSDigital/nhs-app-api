@@ -1,7 +1,6 @@
 package features.appointments.steps
 
 import features.authentication.steps.LoginSteps
-import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import models.Slot
 import net.serenitybdd.core.Serenity

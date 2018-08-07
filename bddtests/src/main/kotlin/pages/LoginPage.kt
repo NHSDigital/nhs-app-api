@@ -8,7 +8,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
 @Suppress("TooManyFunctions")
-@DefaultUrl("http://localhost:3000/login")
+@DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val symptomsButtonHeading = HybridPageElement(
@@ -50,7 +50,6 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun signIn(patient: Patient = MockDefaults.patient) {
         loginOrCreateAccountButton.element.click()
-
         findByXpath("//input[@name='mock_patient']").sendKeys(patient.hashCode().toString())
         findByXpath("//input[@type='submit']").click()
     }

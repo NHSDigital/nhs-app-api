@@ -1,14 +1,22 @@
+<template>
+  <div />
+</template>
 
 <script>
+import { isEmpty } from 'lodash/fp';
+
 export default {
   name: '',
-  mounted() {
-    return this.$store.dispatch('auth/handleAuthResponse', {
-      code: this.$route.query.code,
-    });
+  async fetch(context) {
+    if (process.server) {
+      await context.store.dispatch('auth/handleAuthResponse', context.route.query.code);
+      if (isEmpty(context.store.state.errors.apiErrors)) {
+        return context.redirect('/');
+      }
+    }
+    return undefined;
   },
-  render() {
-    return null;
+  created() {
   },
 };
 </script>
