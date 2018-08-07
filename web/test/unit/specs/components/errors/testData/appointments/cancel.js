@@ -46,7 +46,7 @@ export default {
       pageHeader: 'Cancel appointment',
       header: 'Contact your GP surgery to cancel',
       subheader: '',
-      message: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel',
+      message: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
       redirectUrl: Routes.APPOINTMENTS.path,
