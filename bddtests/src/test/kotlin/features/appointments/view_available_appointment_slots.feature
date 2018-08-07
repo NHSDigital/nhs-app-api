@@ -186,12 +186,13 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
-  @tech-debt @NHSO-1937
+    @target
   Scenario: A user tries again after a timeout and it is now successful
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
     And I am logged in
     And I try to progress to the available appointments page
+    Then I see a timeout on the appointment booking page
     When EMIS responds a timely fashion for available appointment slots
     And I click try again button on appointment page
     Then I am able to filter on available slots

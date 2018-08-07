@@ -85,6 +85,10 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         )
     }
 
+    @Step
+    fun waitForSpinnerToDisappearBecauseOfTimeout() {
+        availableAppointments.waitForSpinnerToDisappear(70)
+    }
 
     @Step
     fun clickOnBookAppointmentButton() {
@@ -102,7 +106,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedFirstBodyLine = "Please try again"
         val expectedSecondBodyLine = "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
-        errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
+        errorPage.waitForSpinnerToDisappear(70)
         assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(1).element.text}\"",  errorPage.hasSubHeading(expectedHeader))
         assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(2).element.text}\"",  errorPage.hasDetailParagraphOne(expectedFirstBodyLine))
         assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(3).element.text}\"",  errorPage.hasDetailParagraphTwo(expectedSecondBodyLine))

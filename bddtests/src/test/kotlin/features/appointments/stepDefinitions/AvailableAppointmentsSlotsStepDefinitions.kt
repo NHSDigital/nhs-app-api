@@ -375,4 +375,10 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     fun theSlotIsStillHighlighted() {
         availableAppointments.verifyThatSlotIsStillHighlighted()
     }
+
+    @Then("^I see a timeout on the appointment booking page$")
+    fun iSeeATimeOutOnTheAppointmentBookingPage(){
+        availableAppointments.waitForSpinnerToDisappearBecauseOfTimeout()
+        availableAppointments.checkIfTryAgainButtonDisplayed()
+    }
 }

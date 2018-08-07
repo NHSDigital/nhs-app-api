@@ -1,6 +1,7 @@
 package features.appointments.stepDefinitions
 
 import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.steps.AppointmentGuidanceSteps
 import features.appointments.steps.AvailableAppointmentsSteps
@@ -51,4 +52,6 @@ class AppointmentNavigationStepDefinitions {
         appointmentGuidanceSteps.checkThePageHeaderIsCorrect()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
     }
+
+
 }
