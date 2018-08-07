@@ -119,6 +119,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
         }
+        
+        [TestMethod]
+        public async Task Delete_AppointmentsServiceCancelReturnsTooLateToCancel_ReturnsTooLateStatus()
+        {
+            // Arrange
+            var badResult = new AppointmentCancelResult.TooLateToCancel();
+            _mockAppointmentsService.Setup(x => x.Cancel(_userSession, _appointmentCancelRequest))
+                .Returns(Task.FromResult((AppointmentCancelResult)badResult));
+
+            // Act
+            var result = await _systemUnderTest.Delete(_appointmentCancelRequest);
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status461TooLate);
+            _mockAppointmentsService.Verify();
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+        }
 
         [TestMethod]
         public async Task Delete_AppointmentsServiceCancelReturnsBadRequest_ReturnsBadRequest()

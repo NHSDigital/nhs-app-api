@@ -40,6 +40,14 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             return null;
         }
 
+        public object Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel)
+        {
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to it being too late to cancel with id: {0}",
+                _appointmentId);
+
+            return null;
+        }
+
         public object Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions)
         {
             _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficent permissions for appointment" +

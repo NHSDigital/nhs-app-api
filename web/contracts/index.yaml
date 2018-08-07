@@ -113,6 +113,8 @@
             description: "The patient does not have the necessary permissions within the GP system."
           409: 
             description: "The specified appointment does not exist or is not in a suitable state to be cancelled."
+          461: 
+            description: "It is too late to cancel this appointment."
           500: 
             description: "An unexpected error occurred during the processing of the request."
           502: 
@@ -372,6 +374,11 @@
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                        currentRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
                             type: "object"
                             properties: 
                               date: 
@@ -383,16 +390,11 @@
                                 description: "An array of line items."
                                 items: 
                                   $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
-                        currentRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
                         discontinuedRepeatMedications: 
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
                 immunisations: 
                   type: "object"
                   description: "An object containing all immunisation details."
@@ -713,7 +715,17 @@
                   type: "array"
                   description: "Array of prescription courses."
                   items: 
-                    $ref: "#/paths/~1v1~1patient~1courses/get/responses/200/schema/properties/courses/items"
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Course identifier."
+                      name: 
+                        type: "string"
+                        description: "Course name."
+                      details: 
+                        type: "string"
+                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
           400: 
             description: "Bad request. All headers must be provided."
           401: 
@@ -744,17 +756,7 @@
                   type: "array"
                   description: "An array of prescription courses"
                   items: 
-                    type: "object"
-                    properties: 
-                      id: 
-                        type: "string"
-                        description: "Course identifier."
-                      name: 
-                        type: "string"
-                        description: "Course name."
-                      details: 
-                        type: "string"
-                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
+                    $ref: "#/paths/~1v1~1patient~1prescriptions/get/responses/200/schema/properties/courses/items"
           401: 
             description: "User session missing or expired."
           403: 

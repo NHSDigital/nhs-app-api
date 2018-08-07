@@ -54,9 +54,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                 switch (response.ErrorResponse.ErrorCode)
                 {
                     case TppApiErrorCodes.StartDateInPast:
-                    case TppApiErrorCodes.AppointmentWithinOneHour:
                         _logger.LogError(response.ErrorResponse.UserFriendlyMessage);
                         return new AppointmentCancelResult.AppointmentNotCancellable();
+                    case TppApiErrorCodes.AppointmentWithinOneHour:
+                        _logger.LogError(response.ErrorResponse.UserFriendlyMessage);
+                        return new AppointmentCancelResult.TooLateToCancel();
                     case TppApiErrorCodes.NoAccess:
                         _logger.LogTppResponseAccessIsForbidden();
                         return new AppointmentCancelResult.InsufficientPermissions();

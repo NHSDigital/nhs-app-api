@@ -81,7 +81,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         
         [DataTestMethod]
         [DataRow(TppApiErrorCodes.StartDateInPast)]
-        [DataRow(TppApiErrorCodes.AppointmentWithinOneHour)]
         public async Task Cancel_TppClientReturnsNotCancellableErrorCode_ReturnsAppointmentNotCancellable(string tppErrorCode)
         {
             // Arrange
@@ -99,6 +98,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             // Assert
             _mockTppClient.Verify();
             result.Should().BeAssignableTo<AppointmentCancelResult.AppointmentNotCancellable>();
+        }
+        
+        [DataTestMethod]
+        [DataRow(TppApiErrorCodes.AppointmentWithinOneHour)]
+        public async Task Cancel_TppClientReturnsTooLateToCancelErrorCode_ReturnsTooLateToCancel(string tppErrorCode)
+        {
+            // Arrange
+            var response = new TppClient.TppApiObjectResponse<CancelAppointmentReply>(HttpStatusCode.OK)
+            {
+                Body = null,
+                ErrorResponse = new Error{ErrorCode = tppErrorCode}
+            };
+            
+            MockTppClientAppointmentCancelMethod(response);
+
+            // Act            
+            var result = await _systemUnderTest.Cancel(_userSession, _request);
+
+            // Assert
+            _mockTppClient.Verify();
+            result.Should().BeAssignableTo<AppointmentCancelResult.TooLateToCancel>();
         }
         
         [DataTestMethod]

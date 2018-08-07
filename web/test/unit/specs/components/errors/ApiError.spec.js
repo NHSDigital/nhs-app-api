@@ -90,6 +90,15 @@ describe('ApiError.vue', () => {
     assert(expectedData);
   });
 
+  each(testData[461]).it('page %s will show correct message when the API returns a 461 too late response', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 461 }, message: 'Too late' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
   each(testData[500]).it('page %s will show correct message when unexpected error occurred processing the request in api', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 500 }, message: 'Internal Server Error' };

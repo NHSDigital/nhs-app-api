@@ -36,6 +36,14 @@
             }
         }
 
+        public class TooLateToCancel : AppointmentCancelResult
+        {
+            public override T Accept<T>(IAppointmentCancelResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
+
         public class SupplierSystemUnavailable : AppointmentCancelResult
         {
             public override T Accept<T>(IAppointmentCancelResultVisitor<T> visitor)

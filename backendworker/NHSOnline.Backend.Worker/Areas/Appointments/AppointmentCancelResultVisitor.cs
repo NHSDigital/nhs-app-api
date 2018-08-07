@@ -21,6 +21,11 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             return new StatusCodeResult(StatusCodes.Status409Conflict);
         }
 
+        public IActionResult Visit(AppointmentCancelResult.TooLateToCancel tooLateToCancel)
+        {
+            return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status461TooLate);
+        }
+
         public IActionResult Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions)
         {
             return new StatusCodeResult(StatusCodes.Status403Forbidden);

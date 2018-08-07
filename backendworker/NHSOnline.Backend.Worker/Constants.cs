@@ -15,6 +15,7 @@
         public static class CustomHttpStatusCodes
         {
             public const int Status460LimitReached = 460;
+            public const int Status461TooLate = 461;
         }
         
         public static class HttpHeaders
