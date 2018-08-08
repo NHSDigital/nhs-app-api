@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.openqa.selenium.WebDriver
 
 @RunWith(CucumberWithSerenity::class)
-@CucumberOptions(features = ["src/test/kotlin/features/myrecord/frontend"], glue = ["features"])
+@CucumberOptions(features = ["src/test/kotlin/features/myrecord"], glue = ["features"])
 class MyRecordTestRunner {
 
     @Managed

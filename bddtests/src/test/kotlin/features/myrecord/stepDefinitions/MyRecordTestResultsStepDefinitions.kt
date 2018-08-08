@@ -245,19 +245,19 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("^the line item displays text value and range$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultLineItems.first())
+        Assert.assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^the line item value is set correctly$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultLineItems.first())
+        Assert.assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^I receive line items for each child value$")
     fun thenIReceiveATestResultWithLineItemsForEachChildValue() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(2, result.response.testResults.data.first().testResultLineItems.count())
+        Assert.assertEquals("Expected two ChildLineItems in TestResult",2, result.response.testResults.data.first().testResultChildLineItems.count())
     }
 
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")
