@@ -36,15 +36,15 @@ export default {
     status: 'Status',
     statusRejected: {
       subHeader: 'Rejected',
-      description: 'Rejected: contact your GP',
+      description: 'Contact your GP',
     },
     statusRequested: {
       subHeader: 'Requested',
-      description: 'Requested: waiting for GP approval',
+      description: 'Waiting for GP approval',
     },
     statusApproved: {
       subHeader: 'Approved',
-      description: 'Approved: contact your nominated pharmacy for collection information',
+      description: 'Order approved by GP',
     },
   },
   rp06: {
@@ -315,20 +315,6 @@ export default {
         subheader: 'Please go back and try again.',
         message: 'If the problem persists and you need to order a repeat prescription now, please contact your GP surgery directly.',
         retryButtonText: 'Back to my repeat prescriptions',
-      },
-    },
-    prescriptionStatus: {
-      rejected: {
-        text: 'Rejected',
-        description: 'Contact your GP',
-      },
-      requested: {
-        text: 'Requested',
-        description: 'Waiting for GP approval',
-      },
-      approved: {
-        text: 'Approved',
-        description: 'Contact your chosen pharmacy for collection information',
       },
     },
   },

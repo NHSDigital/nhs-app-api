@@ -47,20 +47,20 @@ export default {
     this.statusStyling = {
       [MedicationCourseStatus.Rejected]: {
         style: 'medication-status-rejected',
-        text: this.$t('prescriptions.prescriptionStatus.rejected.text'),
-        description: this.$t('prescriptions.prescriptionStatus.rejected.description'),
+        text: this.$t('rp02.statusRejected.subHeader'),
+        description: this.$t('rp02.statusRejected.description'),
         icon: 'InfoIcon',
       },
       [MedicationCourseStatus.Requested]: {
         style: 'medication-status-requested',
-        text: this.$t('prescriptions.prescriptionStatus.requested.text'),
-        description: this.$t('prescriptions.prescriptionStatus.requested.description'),
+        text: this.$t('rp02.statusRequested.subHeader'),
+        description: this.$t('rp02.statusRequested.description'),
         icon: 'ClockIcon',
       },
       [MedicationCourseStatus.Approved]: {
         style: 'medication-status-approved',
-        text: this.$t('prescriptions.prescriptionStatus.approved.text'),
-        description: this.$t('prescriptions.prescriptionStatus.approved.description'),
+        text: this.$t('rp02.statusApproved.subHeader'),
+        description: this.$t('rp02.statusApproved.description'),
         icon: 'ReadyIcon',
       },
     };
