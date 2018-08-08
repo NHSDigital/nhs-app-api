@@ -7,7 +7,7 @@ import pages.HybridPageElement
 
 open class CheckMySymtomsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     val checkSymptomsTitleLoggedOut = HybridPageElement(
-            browserLocator = "//*[@id=\"mainDiv\"]/main/content/header/h1",
+            browserLocator = "//*[@id=\"mainDiv\"]/content/header/h1",
             androidLocator = null,
             page = this
     )

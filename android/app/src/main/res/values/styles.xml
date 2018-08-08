@@ -28,4 +28,8 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">@dimen/errorTextSize</item>
     </style>
+
+    <style name="CustomSymptomsToolbar">
+        <item name="navigationIcon">@drawable/back_arrow</item>
+    </style>
 </resources>

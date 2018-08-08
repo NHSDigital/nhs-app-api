@@ -53,5 +53,12 @@
         </activity>
         <activity android:name=".activities.BlankScreenActivity">
         </activity>
+        <activity android:name=".activities.SymptomsActivity"
+            android:parentActivityName=".activities.MainActivity" >
+        <!-- The meta-data element is needed for versions lower than 4.1 -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.MainActivity" />
+        </activity>
     </application>
 </manifest>

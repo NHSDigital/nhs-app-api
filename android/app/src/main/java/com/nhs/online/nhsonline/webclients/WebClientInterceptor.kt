@@ -46,6 +46,7 @@ class WebClientInterceptor(
         cancelTrackingWebRequestResponse()
 
         if (!isConnectedToInternet()) {
+            updateHeaderAndNavMenu(url)
             stopLoadingWebviewAndShowNoConnectionError(view)
             noConnectionHandled = true
             return

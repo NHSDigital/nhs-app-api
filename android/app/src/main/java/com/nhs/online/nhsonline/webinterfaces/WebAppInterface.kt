@@ -33,6 +33,11 @@ class WebAppInterface(private val context: MainActivity) {
     }
 
     @JavascriptInterface
+    fun checkSymptoms() {
+        context.goToCheckSymptoms()
+    }
+
+    @JavascriptInterface
     fun completeAppIntro() {
         context.webview.post(Runnable {
             context.webview.loadUrl(context.resources.getString(

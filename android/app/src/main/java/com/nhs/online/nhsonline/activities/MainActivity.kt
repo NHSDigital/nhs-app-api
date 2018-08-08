@@ -126,7 +126,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.addJavascriptInterface(WebAppInterface(this), "nativeApp")
     }
 
-    private fun createActivities(): List<ActivityInterface> {
+    fun createActivities(): List<ActivityInterface> {
         val openBrowserActivity =
                 OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
         return listOf(openBrowserActivity)
@@ -252,6 +252,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         webview.visibility = View.VISIBLE
     }
 
+
+    override fun showSymptomsBanner() {
+        symptomsBanner.visibility = View.VISIBLE
+        webview.visibility = View.GONE
+    }
+
+
     override fun onRequestPermissionsResult(
             requestCode: Int,
             permissions: Array<out String>,
@@ -271,7 +278,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
             menuBar.deselectActiveItem()
         }
     }
-
+    override fun goToCheckSymptoms() {
+            val intent = Intent(this, SymptomsActivity::class.java)
+                startActivity(intent)
+    }
     override fun hideMenuBar() {
         runOnUiThread {
             menuBar.visibility = GONE

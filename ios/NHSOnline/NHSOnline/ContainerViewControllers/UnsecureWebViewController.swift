@@ -28,7 +28,10 @@ class UnsecureWebViewController: UIViewController {
         webView.navigationDelegate = delegate
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
+        delegate.unsecureViewController = self
         webViewDelegate = delegate
+        webView.configuration.userContentController.add(delegate, name: "updateHeaderText")
+
     }
     
     func configureNavBar() {

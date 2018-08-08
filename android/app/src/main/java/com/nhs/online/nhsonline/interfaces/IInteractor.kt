@@ -15,6 +15,10 @@ interface IInteractor {
 
     fun selectMoreMenuActive()
 
+    fun goToCheckSymptoms()
+
+    fun showSymptomsBanner()
+
     fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage)
 
     fun showWebviewScreen()

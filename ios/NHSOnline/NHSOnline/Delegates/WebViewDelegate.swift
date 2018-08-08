@@ -8,9 +8,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     let viewController: HomeViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let responseWaitingTime = config().ResponseWaitingTime
-    
     var failedUrl: URL? = nil
     var nativeViewController: PageUnavailabilityViewController?
+    var unsecureViewController: UnsecureWebViewController?
     var safariViewController: SFSafariViewController?
     var shouldHandleErrors = false
     var timer: Timer!
@@ -189,6 +189,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func callUpdateHeaderText(headerText: String?) {
+        if (unsecureViewController != nil) {
+            if (headerText != nil) {
+                unsecureViewController?.title = headerText
+            }
+        }
         viewController.updateHeaderText(headerText: headerText)
     }
     func clearMenuBarItem() {
