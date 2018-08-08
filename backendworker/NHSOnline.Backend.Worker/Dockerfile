@@ -54,7 +54,7 @@ ENV TPP_APPLICATION_VERSION 1.0
 ENV TPP_APPLICATION_PROVIDER_ID b891fc3b51d5e7c1
 ENV TPP_APPLICATION_DEVICE_TYPE NhsApp
 ENV VISION_APPLICATION_PROVIDER_ID nhson001
-ENV VISION_URI https://52.214.53.197:8443/PatientFacingServices
+ENV VISION_URI https://vs002-test.inps.co.uk/PatientFacingServices
 ENV VISION_CERT_PATH ./certs/vps_nhson001.pfx
 ENV VISION_USERNAME vps-nhson001
 ENV EMIS_CERTIFICATE_PATH=
@@ -87,7 +87,6 @@ COPY --from=publish /app .
 # Setup trusts for self-signed certificates
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Tpp/PublicKeys/TppCa.crt /usr/local/share/ca-certificates/TppCa.crt
 COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/vision-test-env.crt /usr/local/share/ca-certificates/vision-test-env.crt
-COPY NHSOnline.Backend.Worker/GpSystems/Suppliers/Vision/PublicKeys/visionproxy.crt /usr/local/share/ca-certificates/visionproxy.crt
 RUN chmod 644 /usr/local/share/ca-certificates/*
 RUN update-ca-certificates
 
