@@ -186,7 +186,6 @@ Feature: View available appointment slots
 
   @NHSO-616
   @NHSO-870
-    @target
   Scenario: A user tries again after a timeout and it is now successful
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
