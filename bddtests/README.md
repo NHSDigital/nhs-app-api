@@ -25,7 +25,7 @@ Run the tests locally
 
 ```
 gradle clean test aggregate \
--Dcucumber.options="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt'" \
+-Dcucumber.options="--tags 'not (@pending or @bug or @native or @manual or @tech-debt)'" \
 -Dwebdriver.base.url="http://localhost:3000"
 ```
 

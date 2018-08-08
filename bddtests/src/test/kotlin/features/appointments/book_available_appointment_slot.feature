@@ -158,7 +158,6 @@ Feature: Book an available appointment slot
       | TPP       |
 
   @NHSO-528
-  @pending  @NHSO-71
   @NHSO-872
   @smoketest
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
@@ -167,7 +166,11 @@ Feature: Book an available appointment slot
     And I am on the available appointments page
     And I have selected an appointment slot to book
     When I choose to change the appointment slot
-    Then available slots are displayed that meet the default criteria
+    Then there is a filter for the appointment types
+    And there is a filter for the appointment locations
+    And there is a filter for the appointment doctors/nurses
+    And there is a filter for the appointment time period
+    And no available slots are displayed
     Examples:
       | GP System |
       | EMIS      |
