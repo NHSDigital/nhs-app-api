@@ -16,7 +16,6 @@ ENV COOKIES_POLICY_URL http://beta.nhs.uk/
 ENV OPEN_SOURCE_LICENSES_URL http://beta.nhs.uk/
 ENV HELP_AND_SUPPORT_URL http://beta.nhs.uk/
 
-
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs
 
@@ -24,6 +23,7 @@ COPY --chown=nodejs:nodejs package.json .
 COPY --chown=nodejs:nodejs package-lock.json .
 COPY --chown=nodejs:nodejs nuxt.config.js .
 COPY --chown=nodejs:nodejs .babelrc .
+COPY --chown=nodejs:nodejs .npmrc .
 
 # Deps
 FROM base AS dependencies
