@@ -105,8 +105,9 @@ export default {
       padding-left: 16px;
       list-style-type: none;
       li:before {
-        content: '\2013';
+        content: '- ';
       }
+
     }
   }
 </style>

@@ -427,6 +427,13 @@ export default {
     more: 'More',
     login: 'Login',
   },
+  myAccount: {
+    termsAndConditions: 'Terms and conditions',
+    privacyPolicy: 'Privacy policy',
+    cookiesPolicy: 'Cookies policy',
+    openSourceLicenses: 'Open source licenses',
+    helpAndSupport: 'Help and support',
+  },
   more: {
     organDonationLabel: 'Organ donation preferences',
     organDonationDesc: 'Help us save thousands of lives in the UK every year by signing up to become an organ donor. Register your decision and choose what you want to donate on the NHS Organ Donor Register.',

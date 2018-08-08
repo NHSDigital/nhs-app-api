@@ -65,7 +65,7 @@ open class SharedStepDefinitions {
         MockDataPopulate(mockingClient).populateForJustLoggedIn()
         mockingClient.forEmis { sessionRequest(this@SharedStepDefinitions.patient).respondWithSuccess(this@SharedStepDefinitions.patient, AssociationType.Self) }
     }
-    
+
     @Given("a patient from (.*) is defined")
     fun systemPatient(gpSystem: String)
     {
@@ -120,6 +120,11 @@ open class SharedStepDefinitions {
     @When("^I navigate to (.*)$")
     open fun iNavigateTo(tab: String) {
         navBar.select(tab)
+    }
+
+    @When("^I go to the my account page$")
+    fun iGoToTheMyAccountPage() {
+        navBar.myAccount()
     }
 
     @When("^I wait (\\d*) seconds$")

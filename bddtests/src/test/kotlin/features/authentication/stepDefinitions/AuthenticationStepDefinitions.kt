@@ -594,11 +594,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         myAccount.signOut()
     }
 
-    @When("^I click the head icon button$")
-    fun iClickTheHeadIconButton() {
-        nav.myAccount()
-    }
-
     @Then("^I do not see the menu bar$")
     @Throws(Exception::class)
     fun iDoNotSeeMenuBar() {

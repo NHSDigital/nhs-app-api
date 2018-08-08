@@ -10,7 +10,7 @@
     <p v-if="patientDetails">{{ patientDetails.sex }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelAddress') }}</label>
-    <p v-if="patientDetails && patientDetails.address">
+    <p v-if="patientDetails">
       {{ patientDetails.address }}</p>
     <hr>
     <label>{{ $t('myRecord.patientInfo.fieldLabelNHS') }}</label>

@@ -40,7 +40,6 @@ Feature: View My Medical Record Information - Warning
      Then I see record warning page opened
      And I see header text is My medical record
      And I see your record may contain sensitive information message
-     And I see sensitive information message highlighted yellow
      And I see list of sensitive data information
      And I see agree and continue button
      And I see back to home button

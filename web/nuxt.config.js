@@ -35,17 +35,32 @@ module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     API_HOST: process.env.API_HOST || 'http://localhost:8082',
     API_HOST_SERVER: process.env.API_HOST_SERVER || process.env.API_HOST || 'http://localhost:8082',
+    PORT: process.env.PORT || '3000',
     ORGAN_DONATION_URL:
       process.env.ORGAN_DONATION_URL || 'https://www.organdonation.nhs.uk',
     DATA_SHARING_URL:
       process.env.DATA_SHARING_URL || 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
-    PORT: process.env.PORT || '3000',
     SYMPTOM_CHECKER_URL:
       process.env.SYMPTOM_CHECKER_URL ||
       'https://111.nhs.uk',
     CONDITIONS_CHECKER_URL:
       process.env.CONDITIONS_CHECKER_URL ||
       'https://www.nhs.uk/conditions/',
+    TERMS_AND_CONDITIONS_URL:
+      process.env.TERMS_AND_CONDITIONS_URL ||
+      'http://beta.nhs.uk/',
+    PRIVACY_POLICY_URL:
+      process.env.PRIVACY_POLICY_URL ||
+      'http://beta.nhs.uk/',
+    COOKIES_POLICY_URL:
+      process.env.COOKIES_POLICY_URL ||
+      'http://beta.nhs.uk/',
+    OPEN_SOURCE_LICENSES_URL:
+      process.env.OPEN_SOURCE_LICENSES_URL ||
+      'http://beta.nhs.uk/',
+    HELP_AND_SUPPORT_URL:
+      process.env.HELP_AND_SUPPORT_URL ||
+      'http://beta.nhs.uk/',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online-poc',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',

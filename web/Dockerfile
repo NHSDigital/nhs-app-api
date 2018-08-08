@@ -9,6 +9,12 @@ ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
 ENV ANALYTICS_SCRIPT_URL //assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js
 ENV ANALYTICS_ENVIRONMENT development
 ENV CONDITIONS_CHECKER_URL https://www.nhs.uk/conditions/
+ENV TEMPORARY_ACCOUNT_URL http://beta.nhs.uk/
+ENV TERMS_AND_CONDITIONS_URL http://beta.nhs.uk/
+ENV PRIVACY_POLICY_URL http://beta.nhs.uk/
+ENV COOKIES_POLICY_URL http://beta.nhs.uk/
+ENV OPEN_SOURCE_LICENSES_URL http://beta.nhs.uk/
+ENV HELP_AND_SUPPORT_URL http://beta.nhs.uk/
 
 
 RUN chown nodejs:nodejs -R /opt/app
