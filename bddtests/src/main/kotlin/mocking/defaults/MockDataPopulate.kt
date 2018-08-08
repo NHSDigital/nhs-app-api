@@ -130,7 +130,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
             mockingClient.forEmis {
                 cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(patient.userPatientLinkToken, 1, "No longer required"))
-                        .respondWithSuccess()
+                        .respondWithSuccessJson(deleteAppointmentRequestBody)
             }
 
             // Prescriptions
@@ -170,15 +170,6 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                         .respondWithCreated()
                         .inScenario(pad)
                         .whenScenarioStateIs("Started")
-                        .willSetStateTo("SUBMITTED")
-            }
-
-            // After ordering, add the ordered courses to the prescriptions GET request
-            mockingClient.forEmis {
-                prescriptionsRequest(patient)
-                        .respondWithSuccess(prescriptionsDataLoader.orderCourses(coursesLoader.data))
-                        .inScenario(pad)
-                        .whenScenarioStateIs("SUBMITTED")
             }
 
             // My medical Record
