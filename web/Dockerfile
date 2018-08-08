@@ -7,6 +7,7 @@ ENV ORGAN_DONATION_URL https://www.organdonation.nhs.uk/
 ENV DATA_SHARING_URL https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/
 ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
 ENV ANALYTICS_SCRIPT_URL //assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js
+ENV ANALYTICS_ENVIRONMENT development
 ENV CONDITIONS_CHECKER_URL https://www.nhs.uk/conditions/
 
 

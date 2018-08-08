@@ -59,5 +59,7 @@ module.exports = {
       || 'https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/registrations',
     ANALYTICS_SCRIPT_URL:
       process.env.ANALYTICS_SCRIPT_URL || '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
+    ANALYTICS_ENVIRONMENT:
+      process.env.ANALYTICS_ENVIRONMENT || 'development',
   },
 };
