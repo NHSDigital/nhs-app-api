@@ -58,8 +58,8 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
 
     fun respondWithSuccess(
             accessToken: String = MockDefaults.patient.accessToken,
-            expiresIn: String = "30",
-            refreshExpiresIn: String = "30",
+            expiresIn: String = "90",
+            refreshExpiresIn: String = "90",
             refreshToken: String = "refresh_token",
             refreshType: String = "token_type"): Mapping {
         return respondWith(HttpStatus.SC_OK) {

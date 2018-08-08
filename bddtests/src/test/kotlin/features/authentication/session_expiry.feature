@@ -5,6 +5,7 @@ Feature: Session Expiry
     Given EMIS is initialised
 
   @NHSO-1704
+  @long-running
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I am logged in
     And I am on the home page

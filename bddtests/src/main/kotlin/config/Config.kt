@@ -55,7 +55,7 @@ class Config private constructor() {
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
-        sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", 1)
+        sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", 3)
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

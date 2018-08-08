@@ -15,7 +15,7 @@ import org.openqa.selenium.support.ui.FluentWait
 import pages.navigation.Header
 import java.time.Duration
 
-const val DEFAULT_SPINNER_WAIT: Long = 5
+const val DEFAULT_SPINNER_WAIT: Long = 30
 
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 

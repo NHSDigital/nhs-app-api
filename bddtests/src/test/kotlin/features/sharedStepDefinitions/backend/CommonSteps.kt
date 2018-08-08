@@ -124,22 +124,10 @@ class CommonSteps : AbstractSteps() {
         val patient = Patient.getDefault(gpSystem)
         setGPServiceAndPatientPatientSerenityVaraibles(gpSystem, patient)
 
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+
         when (ProviderTypes.valueOf(gpSystem)) {
             ProviderTypes.EMIS -> {
-                mockingClient.forCitizenId {
-                    tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
-                            .respondWithSuccess(
-                                    patient.accessToken,
-                                    "30",
-                                    "30",
-                                    "refresh_token",
-                                    "token_type")
-                }
-
-                mockingClient.forCitizenId {
-                    userInfoRequest("Bearer ".plus(patient.accessToken))
-                            .respondWithSuccess(Patient.getDefault("EMIS"))
-                }
 
                 mockingClient.forEmis {
                     endUserSessionRequest()
@@ -161,7 +149,6 @@ class CommonSteps : AbstractSteps() {
 
             }
             ProviderTypes.TPP -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
 
                 mockingClient.forTpp {
 
