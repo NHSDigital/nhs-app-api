@@ -6,22 +6,24 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 
 open class CheckMySymtomsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
-    val checkSymptomsTitleLoggedOut = HybridPageElement(
-            browserLocator = "//*[@id=\"mainDiv\"]/content/header/h1",
+
+    val conditionsHeader = HybridPageElement(
+            browserLocator = "//h2[contains(text(),'A-Z of conditions and treatments')]",
             androidLocator = null,
             page = this
     )
 
-    val checkSymptomsTitleLoggedIn = HybridPageElement(
-            browserLocator = "//*[@id=\"app\"]/header/h1",
+    val nhs111Header = HybridPageElement(
+            browserLocator = "//h2[contains(text(),'Check if I need urgent help')]",
             androidLocator = null,
             page = this
     )
-    fun getCheckSymptomsTitleLoggedOut(): Boolean {
-        return checkSymptomsTitleLoggedOut.element.isVisible
+
+    fun isConditionsHeaderVisible(): Boolean {
+        return conditionsHeader.element.isVisible
     }
 
-    fun getCheckSymptomsTitleLoggedIn(): Boolean {
-        return checkSymptomsTitleLoggedIn.element.isVisible
+    fun isNhs111HeaderVisible(): Boolean {
+        return nhs111Header.element.isVisible
     }
 }

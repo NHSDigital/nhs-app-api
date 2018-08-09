@@ -27,13 +27,9 @@ open class OneOneOneStepDefinitions {
         Assert.assertFalse(navBar.hasSelectedTab("Symptoms"))
     }
 
-    @And("^Check My symptoms page is displayed Logged Out")
-    fun checkMySymptomsPageIsDisplayedLoggedOut() {
-        Assert.assertTrue(checkMySymptoms.isPageDisplayedLoggedOut())
-    }
-
-    @And("^Check My symptoms page is displayed Logged In")
-    fun checkMySymptomsPageIsDisplayedLoggedIn() {
-        Assert.assertTrue(checkMySymptoms.isPageDisplayedLoggedIn())
+    @And("^Check My symptoms page is displayed")
+    fun checkMySymptomsPageIsDisplayed() {
+        checkMySymptoms.assertConditionsHeaderVisbile()
+        checkMySymptoms.assertNhs111HeaderVisbile()
     }
 }

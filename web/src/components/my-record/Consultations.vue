@@ -19,16 +19,16 @@
                     in consultation.consultationHeaders"
                     :key="`line-${consultationHeaderIndex}`" :class="$style.consultationLine">
                   <strong> {{ consultationHeader.header }} </strong>
-                  <ul>
+                  <ul :class="$style.consultationTerm">
                     <li v-for="(consultationObservation, consultationObservationIndex)
                         in consultationHeader.observations"
-                        :key="`line-${consultationObservationIndex}`"
-                        :class="$style.consultationTerm">{{ consultationObservation.term }}
+                        :key="`line-${consultationObservationIndex}`">
+                      {{ consultationObservation.term }}
                       <ul :class="$style.observationText">
                         <li v-for="(consultationObservationText, consultationObservationTextIndex)
                             in consultationObservation.associatedTexts"
-                            :key="`line-${consultationObservationTextIndex}`"
-                            :class="$style.observationText">{{ consultationObservationText }}
+                            :key="`line-${consultationObservationTextIndex}`">
+                          {{ consultationObservationText }}
                         </li>
                       </ul>
                     </li>
@@ -101,13 +101,19 @@ export default {
   .consultationTerm {
     list-style-type: disc;
     list-style-position: inside;
+    padding-left:16px;
+    li::before {
+      content: '';
+      height:1px;
+    }
     .observationText {
-      padding-left: 16px;
-      list-style-type: none;
-      li:before {
+      li {
+        list-style-type: none;
+        padding-left:22px;
+      }
+      li::before{
         content: '- ';
       }
-
     }
   }
 </style>

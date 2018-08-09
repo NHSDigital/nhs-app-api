@@ -42,7 +42,7 @@
 <script>
 
 /* eslint-disable import/extensions */
-import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom.';
+import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 
 export default {
   components: {

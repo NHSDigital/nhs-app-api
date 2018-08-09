@@ -7,12 +7,12 @@
         </p>
       </error-warning-dialog>
       <div class="info">
-        <h4>{{ $t('myRecord.myRecordWarning.title') }}</h4>
+        <h2>{{ $t('myRecord.myRecordWarning.title') }}</h2>
         <ul>
           <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp1') }}</li>
           <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp2') }}</li>
         </ul>
-        <h4>{{ $t('myRecord.myRecordWarning.extraTitle') }}</h4>
+        <h2>{{ $t('myRecord.myRecordWarning.extraTitle') }}</h2>
         <ul>
           <li>{{ $t('myRecord.myRecordWarning.extraBulletPoints.bp1') }}</li>
           <li>{{ $t('myRecord.myRecordWarning.extraBulletPoints.bp2') }}</li>
@@ -72,9 +72,15 @@ export default {
     @include default_text;
   }
 
-  .info .h4 {
-    color: $nhs_blue;
+  .info h2, .list-menu li h2 {
+    display: block;
+    font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1.125em;
+    line-height: 1.125em;
+    letter-spacing: -0.063em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
   }
 
 </style>
-
