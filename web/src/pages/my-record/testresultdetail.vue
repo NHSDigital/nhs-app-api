@@ -1,12 +1,12 @@
 <template>
-  <main v-if="showTemplate" :class="$style.content">
+  <main v-if="showTemplate && hasLoaded" :class="$style.content">
     <div :class="$style['above-float-button']">
       <div :class="$style.info">
-        <h2>{{ $t('myRecord.testResultDetail.testResultTitle') }}</h2>
+        <h2>{{ $t('my_record.testresultdetail.testResultTitle') }}</h2>
       </div>
       <div :class="$style['test-result-content']">
         <div v-if="!testResult.testResult">
-          <p> {{ $t('myRecord.testResultDetail.noTestResultData') }} </p>
+          <p> {{ $t('my_record.testresultdetail.noTestResultData') }} </p>
         </div>
         <div v-else>
           <p>
@@ -15,7 +15,7 @@
         </div>
       </div>
       <floating-button-bottom @on-click="onBackButtonClicked">
-        {{ $t('myRecord.testResultDetail.backButton') }}
+        {{ $t('my_record.testresultdetail.backButton') }}
       </floating-button-bottom>
     </div>
   </main>
@@ -39,6 +39,7 @@ export default {
   data() {
     return {
       testResult: '',
+      hasLoaded: false,
     };
   },
   mounted() {
@@ -49,6 +50,7 @@ export default {
       .getV1PatientTestResult(param)
       .then((data) => {
         this.testResult = data.response;
+        this.hasLoaded = true;
       });
   },
   methods: {

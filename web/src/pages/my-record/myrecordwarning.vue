@@ -3,29 +3,29 @@
     <main class="content">
       <error-warning-dialog error-or-warning="warning">
         <p>
-          {{ $t('myRecord.myRecordWarning.warningText') }}
+          {{ $t('my_record.myRecordWarning.warningText') }}
         </p>
       </error-warning-dialog>
       <div class="info">
-        <h2>{{ $t('myRecord.myRecordWarning.title') }}</h2>
+        <h2>{{ $t('my_record.myRecordWarning.title') }}</h2>
         <ul>
-          <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp1') }}</li>
-          <li>{{ $t('myRecord.myRecordWarning.bulletPoints.bp2') }}</li>
+          <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp1') }}</li>
+          <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp2') }}</li>
         </ul>
-        <h2>{{ $t('myRecord.myRecordWarning.extraTitle') }}</h2>
+        <h2>{{ $t('my_record.myRecordWarning.extraTitle') }}</h2>
         <ul>
-          <li>{{ $t('myRecord.myRecordWarning.extraBulletPoints.bp1') }}</li>
-          <li>{{ $t('myRecord.myRecordWarning.extraBulletPoints.bp2') }}</li>
+          <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp1') }}</li>
+          <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp2') }}</li>
         </ul>
         <br>
         <p>
-          {{ $t('myRecord.myRecordWarning.agreementText') }}
+          {{ $t('my_record.myRecordWarning.agreementText') }}
         </p>
         <generic-button :button-classes="['green']" @on-click="onContinueButtonClicked()">
-          {{ $t('myRecord.myRecordWarning.agreeButtonText') }}
+          {{ $t('my_record.myRecordWarning.agreeButtonText') }}
         </generic-button>
         <generic-button :button-classes="['grey']" @on-click="onBackButtonClicked()">
-          {{ $t('myRecord.myRecordWarning.backButtonText') }}
+          {{ $t('my_record.myRecordWarning.backButtonText') }}
         </generic-button>
       </div>
     </main>

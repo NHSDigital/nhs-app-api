@@ -3,9 +3,9 @@
     <main class="content">
       <error-warning-dialog error-or-warning="warning">
         <p>
-          <b>{{ $t('myRecord.noRecordAccess.warningHeader') }}</b>
+          <b>{{ $t('my_record.noRecordAccess.warningHeader') }}</b>
           <br>
-          {{ $t('myRecord.noRecordAccess.warningBody') }}
+          {{ $t('my_record.noRecordAccess.warningBody') }}
         </p>
       </error-warning-dialog>
     </main>

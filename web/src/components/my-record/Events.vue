@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
     <div v-if="data.hasErrored">
-      <p> {{ $t('myRecord.genericErrorMessage') }} </p>
+      <p> {{ $t('my_record.genericErrorMessage') }} </p>
     </div>
     <div v-else>
       <div v-if="data.hasAccess">
@@ -21,11 +21,11 @@
           </ul>
         </div>
         <div v-else>
-          <p> {{ $t('myRecord.genericNoDataMessage') }} </p>
+          <p> {{ $t('my_record.genericNoDataMessage') }} </p>
         </div>
       </div>
       <div v-else>
-        <p> {{ $t('myRecord.genericNoAccessMessage') }} </p>
+        <p> {{ $t('my_record.genericNoAccessMessage') }} </p>
       </div>
     </div>
     <hr>

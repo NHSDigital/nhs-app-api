@@ -1,19 +1,19 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
-    <label>{{ $t('myRecord.patientInfo.fieldLabelName') }}</label>
+    <label>{{ $t('my_record.patientInfo.fieldLabelName') }}</label>
     <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
     <hr>
-    <label>{{ $t('myRecord.patientInfo.fieldLabelDOB') }}</label>
+    <label>{{ $t('my_record.patientInfo.fieldLabelDOB') }}</label>
     <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
     <hr>
-    <label>{{ $t('myRecord.patientInfo.fieldLabelSex') }}</label>
+    <label>{{ $t('my_record.patientInfo.fieldLabelSex') }}</label>
     <p v-if="patientDetails">{{ patientDetails.sex }}</p>
     <hr>
-    <label>{{ $t('myRecord.patientInfo.fieldLabelAddress') }}</label>
+    <label>{{ $t('my_record.patientInfo.fieldLabelAddress') }}</label>
     <p v-if="patientDetails">
       {{ patientDetails.address }}</p>
     <hr>
-    <label>{{ $t('myRecord.patientInfo.fieldLabelNHS') }}</label>
+    <label>{{ $t('my_record.patientInfo.fieldLabelNHS') }}</label>
     <p v-if="patientDetails">{{ patientDetails.nhsNumber }}</p>
     <hr>
   </div>

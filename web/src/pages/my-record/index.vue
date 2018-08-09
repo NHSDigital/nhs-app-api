@@ -2,21 +2,21 @@
   <div v-if="showTemplate" id="mainDiv">
     <h5 :class="[$style.recordTitle, getCollapseState(isPatientDetailsCollapsed)]"
         @click="myRecordSectionClick(PATIENTDETAILS)">
-      {{ $t('myRecord.patientInfo.sectionHeader') }}</h5>
+      {{ $t('my_record.patientInfo.sectionHeader') }}</h5>
     <patient-details :is-collapsed="isPatientDetailsCollapsed"
                      :patient-details="patientDetails"/>
 
     <div v-if="myRecord.hasSummaryRecordAccess">
       <h5 :class="[$style.recordTitle, getCollapseState(isAllergiesAndAdverseReactionsCollapsed)]"
           @click="myRecordSectionClick(ALLERGIESANDADVERSEREACTIONS)">
-        {{ $t('myRecord.allergiesAndAdverseReactions.sectionHeader') }}
+        {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
       </h5>
       <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
                                        :data="myRecord.allergies"/>
 
       <h5 :class="[$style.recordTitle, getCollapseState(isAcuteMedicationsCollapsed)]"
           @click="myRecordSectionClick(ACUTEMEDICATIONS)">
-        {{ $t('myRecord.acuteMedications.sectionHeader') }}
+        {{ $t('my_record.acuteMedications.sectionHeader') }}
       </h5>
       <medications :is-collapsed="isAcuteMedicationsCollapsed"
                    :data="myRecord.medications.data.acuteMedications"
@@ -24,7 +24,7 @@
 
       <h5 :class="[$style.recordTitle, getCollapseState(isCurrentRepeatMedicationsCollapsed)]"
           @click="myRecordSectionClick(CURRENTREPEATMEDICATIONS)">
-        {{ $t('myRecord.currentRepeatMedications.sectionHeader') }}
+        {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
       </h5>
       <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
                    :data="myRecord.medications.data.currentRepeatMedications"
@@ -32,7 +32,7 @@
 
       <h5 :class="[$style.recordTitle, getCollapseState(isDiscontinuedRepeatMedicationsCollapsed)]"
           @click="myRecordSectionClick(DISCONTINUEDREPEATMEDICATIONS)">
-        {{ $t('myRecord.discontinuedRepeatMedications.sectionHeader') }}
+        {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
       </h5>
       <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
                    :data="myRecord.medications.data.discontinuedRepeatMedications"
@@ -42,21 +42,21 @@
         <div v-if="myRecord.supplier === 'EMIS'">
           <h5 :class="[$style.recordTitle, getCollapseState(isImmunisationsCollapsed)]"
               @click="myRecordSectionClick(IMMUNISATIONS)">
-            {{ $t('myRecord.immunisations.sectionHeader') }}
+            {{ $t('my_record.immunisations.sectionHeader') }}
           </h5>
           <immunisations :is-collapsed="isImmunisationsCollapsed"
                          :data="myRecord.immunisations"/>
 
           <h5 :class="[$style.recordTitle, getCollapseState(isProblemsCollapsed)]"
               @click="myRecordSectionClick(PROBLEMS)">
-            {{ $t('myRecord.problems.sectionHeader') }}
+            {{ $t('my_record.problems.sectionHeader') }}
           </h5>
           <problems :is-collapsed="isProblemsCollapsed"
                     :data="myRecord.problems"/>
 
           <h5 :class="[$style.recordTitle, getCollapseState(isConsultationsCollapsed)]"
               @click="myRecordSectionClick(CONSULTATIONS)">
-            {{ $t('myRecord.consultations.sectionHeader') }}
+            {{ $t('my_record.consultations.sectionHeader') }}
           </h5>
           <consultations :is-collapsed="isConsultationsCollapsed"
                          :data="myRecord.consultations"/>
@@ -65,7 +65,7 @@
         <div v-if="myRecord.supplier === 'TPP'">
           <h5 :class="[$style.recordTitle, getCollapseState(isEventsCollapsed)]"
               @click="myRecordSectionClick(EVENTS)">
-            {{ $t('myRecord.events.sectionHeader') }}
+            {{ $t('my_record.events.sectionHeader') }}
           </h5>
           <events :is-collapsed="isEventsCollapsed"
                   :data="myRecord.tppDcrEvents"/>
@@ -73,7 +73,7 @@
         <h5 id="testResultsHeader"
             :class="[$style.recordTitle, getCollapseState(isTestResultsCollapsed)]"
             @click="myRecordSectionClick(TESTRESULTS)">
-          {{ $t('myRecord.testResults.sectionHeader') }}
+          {{ $t('my_record.testResults.sectionHeader') }}
         </h5>
         <test-results :is-collapsed="isTestResultsCollapsed"
                       :data="myRecord.testResults"
@@ -82,7 +82,7 @@
       <div v-else>
         <main :class="$style.content">
           <p>
-            {{ $t('myRecord.viewRestOfHealthRecordWarning') }}
+            {{ $t('my_record.viewRestOfHealthRecordWarning') }}
           </p>
         </main>
       </div>
@@ -92,9 +92,9 @@
         <main :class="$style.content">
           <error-warning-dialog error-or-warning="error">
             <p>
-              <b>{{ $t('myRecord.noRecordAccess.warningHeader') }}</b>
+              <b>{{ $t('my_record.noRecordAccess.warningHeader') }}</b>
               <br>
-              {{ $t('myRecord.noRecordAccess.warningBody') }}
+              {{ $t('my_record.noRecordAccess.warningBody') }}
             </p>
           </error-warning-dialog>
         </main>

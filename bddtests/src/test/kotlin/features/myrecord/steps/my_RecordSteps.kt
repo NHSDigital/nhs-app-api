@@ -305,5 +305,10 @@ open class MyRecordSteps {
         return myRecordInfoPage.getEventsMessage()
     }
 
+    @Step
+    fun clickTestResult() {
+        return myRecordInfoPage.clickTestResult()
+    }
+
 }
 

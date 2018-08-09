@@ -133,3 +133,17 @@ Feature: View My Medical Record Information - Test Results
     Examples:
       | Service | Count |
       | TPP     | 6     |
+
+  Scenario Outline: An exception occurs retrieving test result detail
+    Given the my record wiremocks are initialised for <Service>
+    And the GP Practice has enabled demographics functionality for <Service>
+    And the GP Practice has six test results for <Service>
+    And an error occurs retrieving the test result detail
+    And I am on my record information page
+    When I click the test result section
+    And I click a test result
+    Then I see the appropriate error message for retrieving test result detail
+
+    Examples:
+      | Service |
+      | TPP     |

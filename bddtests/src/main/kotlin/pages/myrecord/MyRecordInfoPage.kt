@@ -379,6 +379,15 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return noSummaryCareAccessMessage.element.text
     }
 
+    fun clickTestResult() {
+        val testResults = getTestResults()
+        testResults.first().click()
+    }
+
+    fun getTestResults(): List<WebElementFacade> {
+        return txttestResultsMsg.element.thenFindAll(By.tagName("a"));
+    }
+
     private fun toggleShrub(shrub: HybridPageElement) {
         shrub.element.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)

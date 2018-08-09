@@ -115,6 +115,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         }
     }
 
+    @When("I click a test result$")
+    @Throws(Exception::class)
+    fun i_click_a_test_result() {
+        recordSteps.clickTestResult()
+    }
+
     @When("^I click my record button on menu bar$")
     @Throws(Exception::class)
     fun i_click_my_record_button_on_menu_bar() {

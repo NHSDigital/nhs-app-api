@@ -25,6 +25,10 @@ export default {
       route: Routes.AUTH_RETURN.path,
       redirectUrl: Routes.LOGIN.path,
     },
+    {
+      route: Routes.MYRECORDTESTRESULT.path,
+      redirectUrl: Routes.MYRECORD.path,
+    },
   ],
   forPage(routePath) {
     let settings = assign({}, this.default);

@@ -318,7 +318,7 @@ export default {
       },
     },
   },
-  myRecord: {
+  my_record: {
     genericErrorMessage: 'An error has occurred trying to retrieve this data.',
     genericNoDataMessage: 'No information recorded',
     genericNoAccessMessage: 'You don\'t currently have access to this section',
@@ -385,10 +385,20 @@ export default {
     events: {
       sectionHeader: 'Consultations',
     },
-    testResultDetail: {
+    testresultdetail: {
       backButton: 'Back',
       testResultTitle: 'Test result',
       noTestResultData: 'There is no detail to display for this test result.',
+      errors: {
+        502: {
+          pageTitle: 'Test result details data error - NHS App',
+          pageHeader: 'Error retrieving data',
+          header: 'Sorry, there\'s been a problem getting details of your test results',
+          subheader: 'If the problem persists and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          message: '',
+          retryButtonText: '',
+        },
+      },
     },
   },
   common: {

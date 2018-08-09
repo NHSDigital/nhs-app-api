@@ -5,12 +5,24 @@ import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import java.time.OffsetDateTime
 
 open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
+
+    lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
+
+    @Given("^an error occurs retrieving the test result detail$")
+    fun givenAnErrorOccursGettingTestResultDetailForTpp() {
+        setPatientToDefaultFor("TPP")
+
+        mockingClient.forTpp {
+            testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, TestResultsData.mockTestResultId).respondWithServiceNotAvailableException()
+        }
+    }
 
     @Given("^the GP Practice has six test results for (.*)$")
     fun givenTheGpPracticeHasSixTestResultsFor(getService:String) {
@@ -270,6 +282,23 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         Assert.assertEquals(value, result.response.testResults.hasErrored)
+    }
+
+    @Then("I see the appropriate error message for retrieving test result detail")
+    fun thenISeeTheAppropriateErrorMessageForAMyRecordServerError() {
+
+        val pageTitle = myRecordDetailedTestResultPage.serverErrorPageTitle
+        val pageHeader = myRecordDetailedTestResultPage.serverErrorPageHeader
+        val header = myRecordDetailedTestResultPage.serverErrorHeader
+        val subHeader = myRecordDetailedTestResultPage.serverErrorSubHeader
+
+        Assert.assertTrue("Expected error message: { " +
+                "page title: $pageTitle, " +
+                "page header text: $pageHeader, " +
+                "header text: $header, " +
+                "sub-header text: $subHeader, ",
+                myRecordDetailedTestResultPage.isErrorMessageContentCorrect(pageHeader, header, subHeader, "", ""))
+
     }
 }
 

@@ -6,6 +6,8 @@ import mocking.tpp.models.TestResultsViewReplyItem
 
 object TestResultsData {
 
+    val mockTestResultId: String = "c435000000000000"
+
     fun getTestResultsForEmis(count: Int): TestResultResponseModel {
 
         val testResults = mutableListOf<TestResultResponse>()
@@ -176,7 +178,7 @@ object TestResultsData {
         val testResults = mutableListOf<TestResultsViewReplyItem>()
 
         for (testCount: Int in 1..count) {
-            testResults.add(TestResultsViewReplyItem(value = "Anticoag Control (Warfarin), Read $testCount", description = "Pathology $testCount",
+            testResults.add(TestResultsViewReplyItem(id = mockTestResultId, value = "Anticoag Control (Warfarin), Read $testCount", description = "Pathology $testCount",
                     date = "2001-06-28T00:00:00.0Z"))
         }
 

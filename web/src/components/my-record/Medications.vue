@@ -1,7 +1,7 @@
 <template>
   <div :class="[$style.recordContent, getCollapseState]">
     <div v-if="hasError">
-      <p>  {{ $t('myRecord.genericErrorMessage') }} </p>
+      <p>  {{ $t('my_record.genericErrorMessage') }} </p>
     </div>
     <div v-else>
       <div v-if="data != null && data.length > 0 ">
@@ -25,7 +25,7 @@
         </ul>
       </div>
       <div v-else>
-        <p> {{ $t('myRecord.genericNoDataMessage') }} </p>
+        <p> {{ $t('my_record.genericNoDataMessage') }} </p>
       </div>
     </div>
   </div>

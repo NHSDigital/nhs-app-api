@@ -21,6 +21,7 @@ import mocking.tpp.registration.LinkAccountBuilder
 import mocking.tpp.requestPatientRecord.TppRequestPatientRecordBuilder
 import mocking.tpp.session.TppLogOffBuilder
 import mocking.tpp.session.TppSessionBuilder
+import mocking.tpp.testResultDetail.TppTestResultDetailBuilder
 import mocking.tpp.testResultsView.TppTestResultsViewBuilder
 import mocking.tpp.viewPatientOverview.TppViewPatientOverviewBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
@@ -67,6 +68,8 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
 
     fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
+
+    fun testResultsDetailRequest(tppUserSession: TppUserSession, testResultId: String) = TppTestResultDetailBuilder(tppUserSession, testResultId)
 
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"
