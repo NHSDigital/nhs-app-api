@@ -1,8 +1,15 @@
 defaultTasks 'clean','test','aggregate'
 
 repositories {
-    mavenCentral()
-    jcenter()
+    maven {
+        url "https://www-nexus.devuks1.bitraft.io/repository/maven-public/"
+        credentials {
+            username "developer"
+            password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+        }
+    }
+    // mavenCentral()
+    // jcenter()
 }
 
 buildscript {
@@ -10,8 +17,15 @@ buildscript {
     ext.serenity_version = '1.9.12'
 
     repositories {
-        mavenCentral()
-        jcenter()
+        maven {
+            url "https://www-nexus.devuks1.bitraft.io/repository/maven-public/"
+            credentials {
+                username "developer"
+                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+            }
+        }
+        // mavenCentral()
+        // jcenter()
     }
     dependencies {
         classpath ("net.serenity-bdd:serenity-gradle-plugin:$serenity_version")

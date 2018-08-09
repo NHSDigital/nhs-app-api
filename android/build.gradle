@@ -3,10 +3,17 @@
 buildscript {
     ext.kotlin_version = '1.2.50'
     repositories {
-        google()
-        jcenter()
+        // google()
+        // jcenter()
+        // maven {
+        //     url "http://repo.maven.apache.org/maven2"
+        // }
         maven {
-            url "http://repo.maven.apache.org/maven2"
+            url "https://www-nexus.devuks1.bitraft.io/repository/maven-public/"
+            credentials {
+                username "developer"
+                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+            }
         }
     }
     dependencies {
@@ -20,8 +27,15 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        jcenter()
+        // google()
+        // jcenter()
+        maven {
+            url "https://www-nexus.devuks1.bitraft.io/repository/maven-public/"
+            credentials {
+                username "developer"
+                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+            }
+        }
     }
 }
 
