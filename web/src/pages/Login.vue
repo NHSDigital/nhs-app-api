@@ -38,12 +38,6 @@ export default {
   head() {
     return {
       title: 'Login Screen',
-      script: [
-        {
-          src: process.env.ANALYTICS_SCRIPT_URL,
-          async: true,
-        },
-      ],
     };
   },
   components: {
