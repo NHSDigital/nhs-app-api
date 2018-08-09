@@ -22,7 +22,7 @@ module.exports = {
     './handler.js',
   ],
   router: {
-    middleware: ['auth', 'meta', 'analytics'],
+    middleware: ['auth', 'meta'],
   },
   link: [
     {
