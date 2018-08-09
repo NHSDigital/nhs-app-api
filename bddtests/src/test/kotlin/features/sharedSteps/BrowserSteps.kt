@@ -29,6 +29,18 @@ open class BrowserSteps {
     }
 
     @Step
+    open fun waitUntilSignoutCompletes() {
+        val vuexCookieName = "nhso";
+
+        WebDriverWait(loginPage.driver, 1000)
+                .pollingEvery(Duration.ofMillis(100))
+                .until {
+                    it.currentUrl == loginPage.driver.currentUrl;
+                    CookieWrapper.fromJson(getCookieJson(vuexCookieName)).isLoggedIn() == false
+                }
+    }
+
+    @Step
     open fun shouldHaveUrl(url: String) {
         WebDriverWait(loginPage.driver, 1000)
                 .pollingEvery(Duration.ofMillis(100))
