@@ -25,8 +25,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             if (appointments == null)
                 yield break;
 
-            var now = _dateTimeOffsetProvider.CreateDateTimeOffset(DateTime.Now);
-
             foreach (var appointment in appointments)
             {
                 DateTimeOffset startTime;
@@ -41,9 +39,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                     continue;
                 }
 
-                if (now > startTime)
-                    continue;
-
                 try
                 {
                     endTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointment.EndDate.TrimEnd('Z'));
@@ -52,7 +47,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                 {
                     endTime=null;
                 }
-                
+
                 yield return new Appointment
                 {
                     Id = appointment.ApptId,

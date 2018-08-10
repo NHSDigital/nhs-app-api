@@ -55,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockAuditor = _fixture.Freeze<Mock<IAuditor>>();
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
@@ -71,7 +71,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             };
 
         }
-
+        
         [TestMethod]
         public async Task Get_ReturnsSuccessfulResult_WhenServiceReturnsSuccessfully()
         {

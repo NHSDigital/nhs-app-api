@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 .Returns(_mappedResponse);
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", "GMT Standard Time") });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
 
             var builder = new TppAppointmentsResultBuilder(
