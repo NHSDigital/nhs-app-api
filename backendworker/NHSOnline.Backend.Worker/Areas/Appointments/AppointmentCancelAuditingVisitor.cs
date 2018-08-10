@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
 
         public object Visit(AppointmentCancelResult.InsufficientPermissions insufficientPermissions)
         {
-            _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficent permissions for appointment" +
+            _auditor.Audit(AuditType, "Unable to cancel appointment due to insufficent permissions for appointment " +
                                       "with id: {0}", _appointmentId);
 
             return null;

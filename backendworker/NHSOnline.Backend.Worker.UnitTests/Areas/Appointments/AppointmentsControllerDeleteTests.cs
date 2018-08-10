@@ -30,6 +30,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Cancel_Request";
         private const string ResponseAuditType = "Appointments_Cancel_Response";
 
+        private const string RequestAuditMessage = "Attempting to cancel appointment with id: {0}";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -96,8 +98,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
+                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to cancel appointment due to insufficent permissions for appointment with id: {0}",
+                _appointmentCancelRequest.AppointmentId));
         }
 
         [TestMethod]
@@ -116,8 +121,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
+                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to cancel appointment due to it not being cancellable appointment with id: {0}",
+                _appointmentCancelRequest.AppointmentId));
         }
         
         [TestMethod]
@@ -135,8 +143,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status461TooLate);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
+                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to cancel appointment due to it being too late to cancel with id: {0}",
+                _appointmentCancelRequest.AppointmentId));
         }
 
         [TestMethod]
@@ -153,8 +164,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
+                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to cancel appointment due to a bad request for appointment with id: {0}",
+                _appointmentCancelRequest.AppointmentId));
         }
 
         [TestMethod]
@@ -172,8 +186,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
+                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to cancel appointment due to unavailable supplier for appointment with id: {0}",
+                _appointmentCancelRequest.AppointmentId));
         }
 
         [TestMethod]
@@ -188,8 +205,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage,
+                _appointmentCancelRequest.AppointmentId));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Appointment successfully cancelled for appointment with id: {0}",
+                _appointmentCancelRequest.AppointmentId));
         }
     }
 }
+

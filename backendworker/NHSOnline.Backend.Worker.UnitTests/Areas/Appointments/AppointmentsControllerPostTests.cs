@@ -31,6 +31,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_Book_Request";
         private const string ResponseAuditType = "Appointments_Book_Response";
 
+        private const string RequestAuditMessage =
+            "Attempting to book appointment with id: {0} and startTimeDate: {1:O}";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -96,8 +99,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
+                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to book appointment due to insufficent permissions for appointment with id: {0} and startDateTime: {1:O}",
+                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
         [TestMethod]
@@ -114,8 +120,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(CustomHttpStatusCodes.Status460LimitReached);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
+                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to book appointment due appointment limit reached for appointment with id: {0} and startDateTime: {1:O}",
+                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
         [TestMethod]
@@ -132,8 +141,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status409Conflict);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
+                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to book appointment due to appointment being unavailable for appointment with id: {0} and startDateTime: {1:O}",
+                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
         [TestMethod]
@@ -150,8 +162,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
+                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Unable to book appointment due to unavailable supplier for appointment with id: {0} and startDateTime: {1:O}",
+                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
 
         [TestMethod]
@@ -166,8 +181,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockAppointmentsService.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
+                _appointmentBookRequest.StartTime));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Appointment successfully booked for appointment with id: {0} and startDateTime: {1:O}",
+                _appointmentBookRequest.SlotId, _appointmentBookRequest.StartTime));
         }
     }
 }

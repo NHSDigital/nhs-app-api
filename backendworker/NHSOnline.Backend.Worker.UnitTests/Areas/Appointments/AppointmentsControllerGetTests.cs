@@ -30,6 +30,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_ViewBooked_Request";
         private const string ResponseAuditType = "Appointments_ViewBooked_Response";
 
+        private const string RequestAuditMessage = "Attempting to view booked appointments";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -87,8 +89,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var value = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             value.Should().BeEquivalentTo(appointmentsResponse);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Booked appointments successfully viewed"));
         }
 
         [TestMethod]
@@ -105,8 +107,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Booked appointments view unsuccessful due to supplier being unavailable"));
         }
 
         [TestMethod]
@@ -123,8 +126,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             // Assert
             result.Should().BeAssignableTo<BadRequestResult>();
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Booked appointments view unsuccessful due to bad request"));
         }
 
         [TestMethod]
@@ -142,8 +146,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status500InternalServerError);
             _mockAppointmentsService.Verify();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Booked appointments view unsuccessful due to internal server error"));
         }
 
         [TestMethod]
@@ -158,8 +163,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             _mockGpSystem.VerifyAll();
             _mockGpSystemFactory.VerifyAll();
             _mockAppointmentsService.VerifyAll();
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Booked appointments successfully viewed"));
         }
     }
 }

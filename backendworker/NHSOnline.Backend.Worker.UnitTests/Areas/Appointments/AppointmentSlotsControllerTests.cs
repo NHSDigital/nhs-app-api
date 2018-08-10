@@ -33,6 +33,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private const string RequestAuditType = "Appointments_GetSlots_Request";
         private const string ResponseAuditType = "Appointments_GetSlots_Response";
 
+        private const string RequestAuditMessage = "Attempting to get available appointments";
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -108,8 +110,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             Assert.IsNotNull(okObjectResult);
             var value = okObjectResult.Value;
             value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Available appointment slots successfully viewed"));
         }
         
         [TestMethod]
@@ -127,8 +129,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             // Assert
             result.Should().BeAssignableTo(typeof(BadRequestResult));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Available appointment slots view unsuccessful due to bad request"));
         }
         
         [TestMethod]
@@ -163,8 +166,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             gpSystem.Verify(x => x.GetAppointmentSlotsService());
             appointmentSlotsService.Verify(x => x.GetSlots(_userSession, fromDate, toDate));
             result.Should().BeAssignableTo(typeof(BadRequestResult));
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Available appointment slots view unsuccessful due to bad request"));
         }
         
         [TestMethod]
@@ -202,8 +206,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             var statusCodeResult = (StatusCodeResult) result;
             statusCodeResult.StatusCode.Should().Equals(HttpStatusCode.InternalServerError);
-            _mockAuditor.Verify(x => x.Audit(RequestAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
+                "Available appointment slots view unsuccessful due to supplier unavailable"));
         }
 
         public void Dispose()
