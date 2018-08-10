@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.ResponseParsers;
-using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
 using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
@@ -49,7 +48,8 @@ namespace NHSOnline.Backend.Worker
         public void ConfigureServices(IServiceCollection services)
         {
             var configurationSettings = ConfigurationSettings.GetSettings(Configuration);
-            services.Configure<ConfigurationSettings>(Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
+            services.Configure<ConfigurationSettings>(
+                Configuration.GetSection(ConfigurationSettings.ConfigurationSectionName));
 
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -95,15 +95,14 @@ namespace NHSOnline.Backend.Worker
                     options => options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver()
                 );
-            
+
             services.AddHttpsRedirection(options =>
             {
                 options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-            }); 
-            
+            });
+
             services.AddSingleton(Configuration);
-            services.AddSingleton<IAuditorFactory>(new AuditorFactory(new StreamAuditSink(new System.IO.FileStream(Configuration["Audit:AuditFile"], System.IO.FileMode.Append))));
-            services.AddTransient(AuditorFactory.BuildAuditor);
+            
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
             services.AddSingleton<IJsonResponseParser, JsonResponseParser>();
@@ -114,7 +113,8 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.Session,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
-            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
+
+            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();            
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

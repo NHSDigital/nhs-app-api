@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             var provider = new SHA512CryptoServiceProvider();
             var hash = provider.ComputeHash(bytesToEncrypt);
 
-            return $"[{Convert.ToBase64String(hash, 0, hash.Length)}]";
+            return Convert.ToBase64String(hash, 0, hash.Length);
         }
     }
 }

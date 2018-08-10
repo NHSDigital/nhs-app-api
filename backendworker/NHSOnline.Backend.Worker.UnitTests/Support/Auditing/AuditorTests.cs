@@ -116,7 +116,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
 
             // Set the stream for audits
             _stream = new MemoryStream();
-            var logger = _fixture.Freeze<Mock<ILogger>>(); 
+            var logger = _fixture.Freeze<Mock<ILogger<Auditor>>>(); 
             _fixture.Inject(new AuditorFactory(new StreamAuditSink(_stream)).CreateAuditor(logger.Object));
 
             // Create system under test from IOC injection...
@@ -187,12 +187,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().NotBeEmpty();
-            var splitLog = testString.Split(new char[] { '[', ']' });
-            splitLog[1].Should().Be(AuditCryptographer.Hash("NHS_AppliedNumber").Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Tpp | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith(AuditCryptographer.Hash("NHS_AppliedNumber") + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
-
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
         public void TestThrowsExceptionIfNhsNumberIsNull()
@@ -215,23 +211,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
 
-            var testString = streamReader.ReadLine();
-            testString.Should().NotBeEmpty();
-            var splitLog = testString.Split(new char[] { '[', ']' });
-            splitLog[1].Should().Be(AuditCryptographer.Hash(RubbishScope).Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Emis | Testing | Message with rubbish scope 1 |");
+            var auditLine1 = streamReader.ReadLine();
+            auditLine1.Should().NotBeEmpty();
+            auditLine1.Should().EndWith(AuditCryptographer.Hash(RubbishScope) + " | Emis | Testing | Message with rubbish scope 1 |");
 
-            testString = streamReader.ReadLine();
-            testString.Should().NotBeEmpty();
-            splitLog = testString.Split(new char[] { '[', ']' });
-            splitLog[1].Should().Be(AuditCryptographer.Hash(NhsNumber).Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Emis | Testing | TaskedMethod |");
+            var auditLine2 = streamReader.ReadLine();
+            auditLine2.Should().NotBeEmpty();
+            auditLine2.Should().EndWith(AuditCryptographer.Hash(NhsNumber) + " | Emis | Testing | TaskedMethod |");
 
-            testString = streamReader.ReadLine();
-            testString.Should().NotBeEmpty();
-            splitLog = testString.Split(new char[] { '[', ']' });
-            splitLog[1].Should().Be(AuditCryptographer.Hash(RubbishScope).Trim(new char[] { '[', ']' }));
-            splitLog[2].Should().Be(" | Emis | Testing | Message with rubbish scope 2 |");
+            var auditLine3  = streamReader.ReadLine();
+            auditLine3.Should().NotBeEmpty();
+            auditLine3.Should().EndWith(AuditCryptographer.Hash(RubbishScope) + " | Emis | Testing | Message with rubbish scope 2 |");
         }
 
         public void Dispose()

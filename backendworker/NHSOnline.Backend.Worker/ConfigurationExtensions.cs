@@ -1,28 +1,32 @@
-﻿using System;
+﻿using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker
 {
     public static class ConfigurationExtensions
     {
+        private const string LogMessage = "Attempted to get a value for {0} from the environment but no value was found.";
+
         public static string GetOrWarn<T>(this IConfiguration configuration, string key, ILogger<T> logger)
         {
             var value = configuration[key];
             if (string.IsNullOrEmpty(value))
             {
-                logger.LogWarning($"Attempted to get a value for {key} from the environment but no value was found.", key);
+                logger.LogWarning(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
             }
 
             return value;
         }
 
-        public static string GetOrWarn<T>(this IConfigurationSection configuration, string key, ILogger<T> logger)
+        public static string GetOrThrow<T>(this IConfiguration configuration, string key, ILogger<T> logger)
         {
             var value = configuration[key];
             if (string.IsNullOrEmpty(value))
             {
-                logger.LogWarning($"Attempted to get a value for {key} from the environment but no value was found.", key);
+                logger.LogError(string.Format(CultureInfo.InvariantCulture, LogMessage, key));
+                throw new ConfigurationNotFoundException(key);
             }
 
             return value;
@@ -32,6 +36,5 @@ namespace NHSOnline.Backend.Worker
         {
             return configuration.GetSection("ConfigurationSettings");
         }
-
     }
 }

@@ -1,10 +1,9 @@
-﻿using System.IO;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Support.Auditing
 {
     public interface IAuditorFactory
     {
-        IAuditor CreateAuditor(ILogger logger);
+        IAuditor CreateAuditor(ILogger<Auditor> logger);
     }
 }

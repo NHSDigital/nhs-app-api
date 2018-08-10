@@ -10,13 +10,13 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
     {
         private readonly IAuditSink _auditSink;
         private readonly AsyncLocal<HttpContextAuditorScope> _scopeProvider;
-        private readonly ILogger _logger;
+        private readonly ILogger<Auditor> _logger;
 
-        public Auditor(IAuditSink auditSink, AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger logger)
+        public Auditor(IAuditSink auditSink, AsyncLocal<HttpContextAuditorScope> scopeProvider, ILogger<Auditor> logger)
         {
-            _auditSink = auditSink;
-            _scopeProvider = scopeProvider;
-            _logger = logger;
+            _auditSink = auditSink ?? throw new ArgumentNullException(nameof(auditSink));
+            _scopeProvider = scopeProvider ?? throw new ArgumentNullException(nameof(scopeProvider));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         private string NhsNumber()
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
         private void AuditWithNoTryCatch(string nhsNumber, Supplier supplier, string operation, string details,
             params object[] parameters)
         {
-            _auditSink.WriteAudit(DateTime.Now, AuditCryptographer.Hash(nhsNumber), supplier, operation,
+            _auditSink.WriteAudit(DateTime.UtcNow, AuditCryptographer.Hash(nhsNumber), supplier, operation,
                 string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
         }
 

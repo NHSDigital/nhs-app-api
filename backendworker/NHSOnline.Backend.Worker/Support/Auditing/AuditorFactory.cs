@@ -17,14 +17,15 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             _scopeProvider = new AsyncLocal<HttpContextAuditorScope>();
         }
 
-        public IAuditor CreateAuditor(ILogger logger)
+        public IAuditor CreateAuditor(ILogger<Auditor> logger)
         {
             return new Auditor(_auditSink, _scopeProvider, logger);
         }
 
         public static IAuditor BuildAuditor(IServiceProvider serviceProvider)
         {
-            return serviceProvider.GetService<IAuditorFactory>().CreateAuditor(serviceProvider.GetService<ILogger>());
+            var logger = serviceProvider.GetService<ILogger<Auditor>>();
+            return serviceProvider.GetService<IAuditorFactory>().CreateAuditor(logger);
         }
     }
 }
