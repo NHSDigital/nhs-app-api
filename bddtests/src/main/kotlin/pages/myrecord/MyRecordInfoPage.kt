@@ -165,6 +165,13 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             androidLocator = null,
             page = this)
 
+    val aFirstTestResult =
+            HybridPageElement(
+                    browserLocator = "//h5[contains(text(),'Test results')]/following-sibling::div[1]/div/div/div/ul/li[1]/p/a",
+                    androidLocator = null,
+                    page = this)
+
+
     fun isNameVisible(): Boolean {
         return txtName.element.isCurrentlyVisible
     }
@@ -380,12 +387,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickTestResult() {
-        val testResults = getTestResults()
-        testResults.first().click()
-    }
-
-    fun getTestResults(): List<WebElementFacade> {
-        return txttestResultsMsg.element.thenFindAll(By.tagName("a"));
+        aFirstTestResult.element.click()
     }
 
     private fun toggleShrub(shrub: HybridPageElement) {
