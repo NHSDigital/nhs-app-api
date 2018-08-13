@@ -31,14 +31,13 @@ DOCKER_IMAGE=$DOCKER_IMAGE_CHROME
 # List all docker images in the docker compose setup
 DOCKER_SERVICES=`docker-compose -f docker-compose_ci.yml config --services`
 
-if [ $RUN_SUBSET == 0 ]
+if [ "$RUN_SUBSET" == 0 ]
 then
     info "Test options overridden - User specified Run Configured"
     BDD_CUCUMBER_OPTIONS="$SPECIFIC_TEST_TAGS"
 else
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    
-    if [ $RUN_AS_DEVELOP == 1 ] || [ $CURRENT_BRANCH == "develop" ]
+    if [ "$RUN_AS_DEVELOP" == 1 ] || [ $CURRENT_BRANCH == "develop" ]
     then
         info "Develop Branch - Full BDD Test Run Configured"
         BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS'"
