@@ -26,6 +26,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
         
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
+            var methodName = "GetMyRecord";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var tppUserSession = (TppUserSession) userSession;
 
             try
@@ -34,85 +37,115 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 var patientRecord = await _tppClient.RequestPatientRecordPost(tppUserSession);
                 var testResults = await GetLast180DaysTestResults(tppUserSession);
 
+                _logger.LogDebug("Mapping TPP Patient Overview responses to lists of Allergies and Medication classes");
                 var patientOverviewItems = new GetPatientOverviewTaskChecker(_logger).Check(patientOverview);  
                 
                 var allergies = patientOverviewItems.Item1;
                 var medications = patientOverviewItems.Item2;
                 
+                _logger.LogDebug("Mapping TPP DCR responses to instnace of TppDcrEvents class");
                 var dcrEvents = new GetPatientDcrEventsTaskChecker(_logger).Check(patientRecord);
 
+                _logger.LogInformation("Mapping TPP responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _tppMyRecordMapper.Map(allergies, medications, dcrEvents, testResults);
                 myRecordResponse.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving my record");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.Unsuccessful();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "My record retrieval return null body");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.SupplierBadData();
             }
         }
 
         public async Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
         {
+            var methodName = "GetDetailedTestResult";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var tppUserSession = (TppUserSession) userSession;
 
             try
-            {               
+            {           
+                _logger.LogDebug("Fetching TPP detailed test results");    
                 var detailedTestResult = await _tppClient.TestResultsViewDetailed(tppUserSession, testResultId);
 
+                _logger.LogDebug("Mapping TPP detailed test results to instance of TestResultResponse class");   
                 var tppTestResultResponse = new GetTppDetailedTestResultChecker(_logger).Check(detailedTestResult);
-                
+
                 if (tppTestResultResponse.HasErrored)
+                {
+                    _logger.LogDebug("Exiting: {0}, HasErrored=true", methodName);
                     return new GetDetailedTestResult.Unsuccessful();
-                
+                }
+
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetDetailedTestResult.SuccessfullyRetrieved(tppTestResultResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving test result");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetDetailedTestResult.Unsuccessful();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "Test Result retrieval return null body");
+                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetDetailedTestResult.SupplierBadData();
             }
         }
         
         private async Task<TestResults> GetLast180DaysTestResults(TppUserSession tppUserSession)
-        {           
+        {   
+            var methodName = "GetLast180DaysTestResults";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var tppTestResultDates = GetTestResultDateParams();
             var combinedTestResults = new List<TestResultItem>();
             
+            _logger.LogDebug("Grouping test results by date");
             foreach (var testResultDates in tppTestResultDates)
             {               
                 var testResultsView = await _tppClient.TestResultsView(tppUserSession, 
                     testResultDates.StartDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture), 
-                    testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture));
-                                
+                    testResultDates.EndDate.ToString(TestResultDateFormat, CultureInfo.InvariantCulture));                  
+                
+                _logger.LogDebug("Mapping TPP test results to instance of TestResults class");
                 var testResults = new GetPatientTestResultsTaskChecker(_logger).Check(testResultsView);
 
                 if (!testResults.HasAccess || testResults.HasErrored)
-                    return testResults;
+                {
+                    _logger.LogDebug("Exiting: {0}, HasAccess={1}, HasErrored={2}", methodName, testResults.HasAccess, testResults.HasErrored);
+                    return testResults;                
+                }
                                    
                 testResults.Data.ToList().ForEach(res => combinedTestResults.Add(res));
             }
 
+            _logger.LogDebug("Exiting: {0}", methodName);
             return new TestResults { Data = combinedTestResults };
         }
 
         private List<TppTestResultDates> GetTestResultDateParams()
         {
+            var methodName = "GetTestResultDateParams";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var today = DateTime.Now.Date;
             
+            _logger.LogDebug("Exiting: {0}", methodName);
             return new List<TppTestResultDates>
             {
                 new TppTestResultDates

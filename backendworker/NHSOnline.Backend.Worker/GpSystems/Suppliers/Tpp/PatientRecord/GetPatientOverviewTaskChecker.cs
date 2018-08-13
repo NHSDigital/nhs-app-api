@@ -18,6 +18,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public Tuple<Allergies, Medications> Check(TppClient.TppApiObjectResponse<ViewPatientOverviewReply> taskResponse)
         {
+            var methodName = "Check";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var result = new Tuple<Allergies, Medications>(new Allergies(), new Medications());
             var hasErrored = false;
             var hasAccess = true;
@@ -46,9 +49,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             }
             else
             {
-                result = new TppPatientOverviewMapper().Map(taskResponse.Body);
+                _logger.LogDebug("Mapping TPP response to allergies and medications");
+                result = new TppPatientOverviewMapper(_logger).Map(taskResponse.Body);
             }
 
+            _logger.LogDebug("Exiting: {0}", methodName);
             return result;
         }
     }

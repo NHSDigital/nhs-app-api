@@ -15,9 +15,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public TestResults Check(TppClient.TppApiObjectResponse<TestResultsViewReply> taskResponse)
         {
+            var methodName = "Check";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             TestResults testResults = null;
-            if (taskResponse.HasSuccessResponse) 
+            if (taskResponse.HasSuccessResponse)
+            {            
+                _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);
                 return new TppTestResultsMapper().Map(taskResponse.Body);
+            }
             
             if (taskResponse.HasForbiddenResponse)
             {
@@ -36,6 +42,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 };
             }
 
+            _logger.LogDebug("Exiting: {0}", methodName);
             return testResults;
         }
     }

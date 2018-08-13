@@ -9,6 +9,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientRecord
 {
@@ -17,12 +19,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
     {
         private IFixture _fixture;
         private ITppMyRecordMapper _mapper;
+        private ILogger<TppPatientOverviewMapper> _logger;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mapper = new TppMyRecordMapper();
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            _logger = Mock.Of<ILogger<TppPatientOverviewMapper>>();
         } 
 
         [TestMethod]
@@ -32,7 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             var item = new ViewPatientOverviewReply();
 
             // Act
-            var patientOverview = new TppPatientOverviewMapper().Map(item);
+            var patientOverview = new TppPatientOverviewMapper(_logger).Map(item);
             var result = _mapper.Map(patientOverview.Item1, patientOverview.Item2, new TppDcrEvents(), new TestResults());
 
             // Assert
@@ -69,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.PatientReco
             var expectedPastRepeatMedications = CreateListMedicationItem(patientOverview.PastRepeats);
             
             // Act
-            var result = new TppPatientOverviewMapper().Map(patientOverview);
+            var result = new TppPatientOverviewMapper(_logger).Map(patientOverview);
             var mappedAllergies = result.Item1;
             var mappedMedications= result.Item2;
             

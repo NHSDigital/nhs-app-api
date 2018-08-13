@@ -17,10 +17,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse)
         {
+            var methodName = "Check";
+            _logger.LogDebug("Entered: {0}", methodName);
             TppDcrEvents tppDcrEvents = null;
 
-            if (taskResponse.HasSuccessResponse) 
+            if (taskResponse.HasSuccessResponse)
+            {              
+                _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);
                 return tppDcrEvents ?? new TppDcrEventsMapper().Map(taskResponse.Body);
+            }
             
             if (taskResponse.HasForbiddenResponse)
             {
@@ -39,6 +44,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
                 };
             }
 
+            _logger.LogDebug("Exiting: {0}", methodName);
             return tppDcrEvents;
         }
     }

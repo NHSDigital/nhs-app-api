@@ -62,6 +62,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         
         public async Task<TppApiObjectResponse<PatientSelectedReply>> PatientSelectedPost(TppUserSession tppUserSession)
         {           
+            var methodName = "PatientSelectedPost";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var patientSelected = new PatientSelected
             {
                 OnlineUserId = tppUserSession.OnlineUserId,
@@ -69,11 +72,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 UnitId = tppUserSession.UnitId,                  
             };
            
+            _logger.LogDebug("Exiting: {0}", methodName);
             return await Post<PatientSelected, PatientSelectedReply>(patientSelected, tppUserSession.Suid);          
         }      
         
         public async Task<TppApiObjectResponse<ViewPatientOverviewReply>> PatientOverviewPost(TppUserSession tppUserSession)
         {
+            var methodName = "PatientOverviewPost";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var request = new ViewPatientOverview
             {
                 PatientId = tppUserSession.PatientId,
@@ -81,6 +88,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 UnitId = tppUserSession.UnitId,
             };
             
+            _logger.LogDebug("Exiting: {0}", methodName);
             return await Post<ViewPatientOverview, ViewPatientOverviewReply>(request, tppUserSession.Suid);
         }
         
@@ -88,6 +96,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             TppUserSession tppUserSession)
 
         {
+            var methodName = "RequestPatientRecordPost";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var request = new RequestPatientRecord
             {
                 PatientId = tppUserSession.PatientId,
@@ -95,6 +106,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 UnitId = tppUserSession.UnitId,
             };  
             
+            _logger.LogDebug("Exiting: {0}", methodName);
             return await Post<RequestPatientRecord, RequestPatientRecordReply>(request, tppUserSession.Suid);
         }
 
@@ -106,6 +118,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsView(TppUserSession tppUserSession,
             string startDate, string endDate)
         {
+            var methodName = "TestResultsView";
+            _logger.LogDebug("Entered: {0} with startDate:{1} and endDate:{2}", methodName, startDate, endDate);
+            
             var request = new TestResultsView
             {
                 PatientId = tppUserSession.PatientId,
@@ -114,13 +129,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 StartDate = startDate,
                 EndDate = endDate,
             }; 
-    
+            
+            _logger.LogDebug("Exiting: {0}", methodName);    
             return await Post<TestResultsView, TestResultsViewReply>(request, tppUserSession.Suid);
         }
         
         public async Task<TppApiObjectResponse<TestResultsViewReply>> TestResultsViewDetailed(TppUserSession tppUserSession,
             string testResultId)
         {
+            var methodName = "TestResultsViewDetailed";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
             var request = new TestResultsViewDetailed
             {
                 PatientId = tppUserSession.PatientId,
@@ -129,15 +148,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                 TestResultId = testResultId,
             }; 
     
+            _logger.LogDebug("Exiting: {0}", methodName);   
             return await Post<TestResultsViewDetailed, TestResultsViewReply>(request, tppUserSession.Suid);
         }
 
         public async Task<TppApiObjectResponse<LogoffReply>> LogoffPost(TppUserSession tppUserSession)
         {
+            var methodName = "LogoffPost";
+            _logger.LogDebug("Entered: {0}", methodName);
             var request = new Logoff();
 
             var response = await Post<Logoff, LogoffReply>(request);
 
+            _logger.LogDebug("Exiting: {0}", methodName); 
             return response;
         }
         

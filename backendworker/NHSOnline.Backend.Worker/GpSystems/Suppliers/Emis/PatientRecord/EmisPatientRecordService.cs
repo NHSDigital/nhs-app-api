@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
         
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
-            var methodName = "Get";
+            var methodName = "GetMyRecord";
             _logger.LogDebug("Entered: {0}", methodName);
             
             var emisUserSession = (EmisUserSession) userSession;
