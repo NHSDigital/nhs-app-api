@@ -5,6 +5,58 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage
 {
     public static class CreateLinkageData
     {
+
+        public static LinkageDataItem CidRequestedData1
+        {
+            get
+            {
+                return new LinkageDataItem()
+                {
+                    NhsNumber = "9658526802",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928",
+                        AccountId = "1451029928",
+                        LinkageKey = "PkRNXFZEUAJa2"
+                    }
+                };
+            }
+        }
+        
+        public static LinkageDataItem CidRequestedData2
+        {
+            get
+            {
+                return new LinkageDataItem()
+                {
+                    NhsNumber = "9658526810",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928",
+                        AccountId = "1453029928",
+                        LinkageKey = "SWVMcFZEUAWf1"
+                    }
+                };
+            }
+        }
+        
+        public static LinkageDataItem CidRequestedData3
+        {
+            get
+            {
+                return new LinkageDataItem()
+                {
+                    NhsNumber = "9658526829",
+                    LinkageResponse = new LinkageResponse
+                    {
+                        OdsCode = "A29928",
+                        AccountId = "1462029928",
+                        LinkageKey = "3qbHeFZEUAQf6"
+                    }
+                };
+            }
+        }
+        
         public static LinkageDataItem ValidPatient
         {
             get {

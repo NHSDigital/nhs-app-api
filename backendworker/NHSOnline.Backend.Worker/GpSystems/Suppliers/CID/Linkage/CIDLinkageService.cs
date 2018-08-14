@@ -50,6 +50,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage
             {
                 return Task.FromResult((CreateLinkageResult)new CreateLinkageResult.NhsNumberNotFound());
             }
+            
+            if (CreateLinkageData.CidRequestedData1.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
+            {
+                return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.SuccessfullyRetrieved
+                    (CreateLinkageData.CidRequestedData1.LinkageResponse));
+            }
+            
+            if (CreateLinkageData.CidRequestedData2.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
+            {
+                return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.SuccessfullyRetrieved
+                    (CreateLinkageData.CidRequestedData2.LinkageResponse));
+            }
+            
+            if (CreateLinkageData.CidRequestedData3.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
+            {
+                return Task.FromResult((CreateLinkageResult) new CreateLinkageResult.SuccessfullyRetrieved
+                    (CreateLinkageData.CidRequestedData3.LinkageResponse));
+            }
 
             if (CreateLinkageData.ValidPatient.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal))
             {
