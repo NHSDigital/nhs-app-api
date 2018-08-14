@@ -26,7 +26,7 @@
         </a>
       </span>
     </header>
-    <main :class="[$style.main]">
+    <main :class="[getHeaderState()]">
       <body>
         <div>
           <symptoms-check :class="$style.li"/>
@@ -49,6 +49,11 @@ export default {
       return (
         !this.$store.state.device.isNativeApp
       );
+    },
+  },
+  methods: {
+    getHeaderState() {
+      return this.showHeader ? this.$style.main : this.$style.mainNoHeader;
     },
   },
 };
@@ -110,7 +115,10 @@ export default {
     border-bottom: 1px #D8DDE0 solid;
 }
 .main {
-    padding: 3.125em 0em 3.125em 2.0px;
+  padding: 3.125em 0em 3.125em 2.0px;
+}
+.mainNoHeader {
+  padding: 0em 0em 3.125em 2.0px;
 }
 
 </style>

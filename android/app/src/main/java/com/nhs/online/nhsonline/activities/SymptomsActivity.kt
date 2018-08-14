@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.webkit.WebViewClient
+import android.widget.TextView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
@@ -26,6 +27,7 @@ class SymptomsActivity : AppCompatActivity() {
         setContentView(R.layout.check_my_symptoms_banner)
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
+        supportActionBar!!.title = null
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
@@ -55,11 +57,14 @@ class SymptomsActivity : AppCompatActivity() {
     }
 
     fun setHeaderText(text: String) {
+        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        val headerText = toolbar.findViewById<View>(R.id.header_text_view) as TextView
         runOnUiThread {
-            toolbar.title = text
+            headerText.text = text
             symptomsWebview.announceForAccessibility(text)
         }
     }
+
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         if (symptomsWebview.canGoBack()) {
             symptomsWebview.goBack()

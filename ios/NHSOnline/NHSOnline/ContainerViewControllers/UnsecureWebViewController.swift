@@ -41,7 +41,7 @@ class UnsecureWebViewController: UIViewController {
         navBar?.barTintColor = UIColor.init(red: 0, green: 0.369, blue: 0.722, alpha: 1)
         navBar?.tintColor = UIColor.white
         navBar?.isTranslucent = false
-        navBar?.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white]
+        navBar?.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.white, NSAttributedStringKey.font : UIFont.systemFont(ofSize: 20)]
         self.navigationItem.hidesBackButton = true
         let newBackButton = UIBarButtonItem(image: UIImage(named: "backArrow"), style: UIBarButtonItemStyle.plain, target: self, action: #selector(checkForPages))
         self.navigationItem.leftBarButtonItem = newBackButton

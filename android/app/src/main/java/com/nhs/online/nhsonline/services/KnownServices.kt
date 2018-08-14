@@ -41,7 +41,7 @@ class KnownServices(private val context: Context) {
             nativeHeader = context.resources.getString(R.string.nhs_111_header),
             shouldValidateSession = false))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
-                R.string.appIntroPath)),
+                R.string.conditions)),
                 unavailabilityErrorMessage,
                 nativeHeader = context.resources.getString(R.string.conditions_header),
                 shouldValidateSession = false))

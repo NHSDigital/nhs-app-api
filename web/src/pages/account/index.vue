@@ -2,7 +2,7 @@
   <div v-if="showTemplate" class="content">
     <main :class="$style['panel-title']">
       <div>
-        <h2>About us</h2>
+        <h2 :class="$style['headerLine']">About us</h2>
         <ul :class="$style['list-menu']">
           <li>
             <a id="btn_terms" :href="termsAndConditionsURL" target="_blank">
@@ -31,7 +31,7 @@
           </li>
         </ul>
       </div>
-      <floating-button-bottom id="signout-button" :button-classes="['gray']" @on-click="signout()">
+      <floating-button-bottom id="signout-button" :button-classes="['grey']" @on-click="signout()">
         {{ $t('signOutButton.signOut') }}
       </floating-button-bottom>
     </main>
@@ -84,26 +84,31 @@ export default {
     padding-left: 16px;
     display: block;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 19.6px;
     line-height: 1.5em;
     color: #005EB8;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
     text-decoration: none;
   }
-
+.headerLine {
+  box-sizing: border-box;
+}
   menu li h2, .form h2, .panel-title h2 {
     font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
     font-weight: 700;
-    font-size: 1.375em;
+    font-size: 26.95px;
     line-height: 1.375em;
     color: #425563;
-    padding-bottom: 0.2em;
+    padding-bottom: 13.475px;
     padding-top: 0.5em;
     margin-bottom: 0;
-    margin-left: 15.4px;
+    margin-left: 18.865px;
+    margin-top: 13.475px;
   }
-
+  ul.list-menu {
+    border-top: 1px #D8DDE0 solid;
+  }
   main.content.nopadding {
     padding: 3.125em 3em 3.125em 0em;
   }
