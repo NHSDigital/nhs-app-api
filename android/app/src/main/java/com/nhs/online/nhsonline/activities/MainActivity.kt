@@ -208,6 +208,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         runOnUiThread {
             header_text_view.text = text
             webview.announceForAccessibility(text)
+            this.title = text
         }
     }
 
