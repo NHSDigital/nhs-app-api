@@ -367,11 +367,16 @@ definitions:
       header:
         type: string
         description: Consultation Header
-      observations:
+      observationsWithTerm:
         type: array
         description: An array of observations.
         items:
           $ref: '#/definitions/ObservationItem'
+      associatedTexts:
+              type: array
+              description: An array of associated texts.
+              items:
+                type: string
   
   ObservationItem:
     type: object

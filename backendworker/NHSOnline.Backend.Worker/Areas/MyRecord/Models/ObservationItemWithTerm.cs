@@ -2,9 +2,9 @@
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
-    public class ObservationItem
+    public class ObservationItemWithTerm
     {
-        public ObservationItem()
+        public ObservationItemWithTerm()
         {
             AssociatedTexts = new List<string>();    
         }

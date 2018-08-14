@@ -22,7 +22,7 @@
               <ul>
                 <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
                     :key="`associatedText-${associatedTextItemIndex}`"
-                    :class="$style.testResultLine">
+                    :class="$style.testResultLineSingleItem">
                   {{ associatedText }}
                 </li>
               </ul>
@@ -112,6 +112,12 @@ export default {
   .testResultLine {
     padding-left: 32px;
     list-style-type: disc;
+    list-style-position: inside;
+  }
+
+  .testResultLineSingleItem {
+    padding-left: 32px;
+    list-style-type: none;
     list-style-position: inside;
   }
 

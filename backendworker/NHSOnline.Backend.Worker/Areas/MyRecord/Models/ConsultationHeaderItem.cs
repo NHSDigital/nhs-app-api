@@ -6,10 +6,12 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
     {
         public ConsultationHeaderItem()
         {
-            Observations = new List<ObservationItem>();
+            ObservationsWithTerm = new List<ObservationItemWithTerm>();
+            AssociatedTexts = new List<string>();
         }
         
         public string Header { get; set; }
-        public List<ObservationItem> Observations { get; set; }
+        public List<ObservationItemWithTerm> ObservationsWithTerm { get; set; }
+        public List<string> AssociatedTexts { get; set; }
     }
 }

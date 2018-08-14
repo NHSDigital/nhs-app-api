@@ -25,7 +25,7 @@ class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: S
                         "@patientId='${tppUserSession.patientId}' and " +
                         "@onlineUserId='${tppUserSession.onlineUserId}' and " +
                         "@unitId='${tppUserSession.unitId}' and " +
-                        "@testResultId='$testResultId'")
+                        "@testResultId='$testResultId']")
     }
 
     fun respondWithSuccess(testResultsViewReply: TestResultsViewReply): Mapping {

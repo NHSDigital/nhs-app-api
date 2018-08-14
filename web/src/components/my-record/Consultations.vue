@@ -20,17 +20,22 @@
                     :key="`line-${consultationHeaderIndex}`" :class="$style.consultationLine">
                   <strong> {{ consultationHeader.header }} </strong>
                   <ul :class="$style.consultationTerm">
-                    <li v-for="(consultationObservation, consultationObservationIndex)
-                        in consultationHeader.observations"
-                        :key="`line-${consultationObservationIndex}`">
-                      {{ consultationObservation.term }}
+                    <li v-for="(obsWithTerm, obsWithTermIndex)
+                        in consultationHeader.observationsWithTerm"
+                        :key="`line-${obsWithTermIndex}`">
+                      {{ obsWithTerm.term }}
                       <ul :class="$style.observationText">
-                        <li v-for="(consultationObservationText, consultationObservationTextIndex)
-                            in consultationObservation.associatedTexts"
-                            :key="`line-${consultationObservationTextIndex}`">
-                          {{ consultationObservationText }}
-                        </li>
+                        <li v-for="(obsWithTermText, obsWithTermTextIndex)
+                            in obsWithTerm.associatedTexts"
+                            :key="`line-${obsWithTermTextIndex}`" v-html="obsWithTermText"/>
                       </ul>
+                    </li>
+                  </ul>
+                  <ul :class="$style.consultationTerm">
+                    <li v-for="(associatedText, associatedTextIndex)
+                        in consultationHeader.associatedTexts"
+                        :key="`line-${associatedTextIndex}`">
+                      {{ associatedText }}
                     </li>
                   </ul>
                 </li>
@@ -72,6 +77,7 @@ export default {
     orderedConsultations() {
       return _.orderBy(this.data.data, [obj => obj.effectiveDate.value], ['desc']);
     },
+
   },
 };
 
