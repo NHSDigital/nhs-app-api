@@ -203,6 +203,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                                         AssociatedText = new List<AssociatedText> { new AssociatedText { Text = "Unwell" }},
                                         ObservationType = "Unknown"
                                     },
+                                    new Observation { 
+                                        Term = null, 
+                                        AssociatedText = null,
+                                        ObservationType = "Unknown"
+                                    },
                                   },                                
                                 },
                                 new Section

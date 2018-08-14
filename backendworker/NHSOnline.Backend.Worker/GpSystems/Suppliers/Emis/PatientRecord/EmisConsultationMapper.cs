@@ -67,6 +67,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                              where obs != null 
                                    && string.IsNullOrEmpty(obs.Term)
                                    && FilterObservationTypes(obs)
+                                   && obs.AssociatedText != null
                              from associatedText in obs.AssociatedText
                              where associatedText != null && !string.IsNullOrEmpty(associatedText.Text)                             
                              select GetAssociatedText(associatedText)).ToList()
