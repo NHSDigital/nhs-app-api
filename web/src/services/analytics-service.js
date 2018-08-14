@@ -1,0 +1,85 @@
+import { isEmpty } from 'lodash/fp';
+
+const APP_ID = 'nhsapp';
+const ENGLISH_LANGUAGE = 'en';
+const pageNamePrefix = `${APP_ID}:${ENGLISH_LANGUAGE}`;
+
+export default function (app, store, route) {
+  /* eslint-disable-next-line no-param-reassign */
+  if (process.client) {
+    window.digitalData = {};
+    window.digitalData = (() => {
+      const routePath = route.fullPath;
+      const [path] = routePath.split('?');
+      const fields = path.split('/').slice(1);
+      const pageUrl = window.location.hostname + path;
+      const { domain } = document;
+      const { userAgent } = navigator;
+      const primaryCategory = fields[0] || 'home';
+      const subCategory1 = fields[1] || '';
+      const subCategory2 = fields[2] || '';
+      const subCategory3 = fields[3] || '';
+      const unqPageIdentifier = subCategory3 || subCategory2 || subCategory1 || primaryCategory;
+
+      if (isEmpty(fields) || isEmpty(fields[0])) fields[0] = 'home';
+      const pageName = fields.reduce((combined, field) => `${combined}:${field}`, pageNamePrefix);
+
+      const $analytics = {
+        trackButtonClick: (target) => {
+          const action = {
+            type: 'page_view',
+            senderType: 'button',
+            target,
+          };
+          store.dispatch('analytics/track', action);
+        },
+      };
+
+      Object.assign(app, { $analytics });
+
+      return {
+        page: {
+          pageInfo: {
+            pageName,
+            destinationURL: pageUrl,
+            type: 'dynamic',
+            referrer: app.router.currentRoute.path,
+            referringURL: window.location.hostname,
+            environment: domain,
+            urlParams: window.location.origin + app.router.currentRoute.fullPath,
+          },
+          category: {
+            primaryCategory,
+            subCategory1,
+            subCategory2,
+            subCategory3,
+            unqPageIdentifier,
+          },
+          userAgent,
+        },
+        errors: store.state.errors.apiErrors,
+        action: store.state.analytics.action,
+        timestamp: store.state.analytics.timestamp,
+        environment: process.env.ANALYTICS_ENVIRONMENT,
+        userType: '',
+        user: {
+          gpOdsCode: store.state.session.gpOdsCode,
+        },
+      };
+    })();
+    // eslint-disable-next-line no-underscore-dangle
+    window._satellite.track('track_action');
+  } else {
+    const $analytics = {
+      trackButtonClick: (target) => {
+        const action = {
+          type: 'page_view',
+          senderType: 'button',
+          target,
+        };
+        store.dispatch('analytics/track', action);
+      },
+    };
+    Object.assign(app, { $analytics });
+  }
+}
