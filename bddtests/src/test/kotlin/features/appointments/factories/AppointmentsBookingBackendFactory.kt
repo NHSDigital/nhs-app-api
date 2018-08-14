@@ -40,6 +40,7 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
 
     private fun getAppointmentBookRequest(bookApptSlot: BookAppointmentSlotFacade): AppointmentBookRequest {
         return AppointmentBookRequest(
+                bookApptSlot.userPatientLinkToken,
                 bookApptSlot.slotId.toString(),
                 bookApptSlot.bookingReason,
                 bookApptSlot.startTime,

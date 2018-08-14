@@ -21,7 +21,7 @@ Feature: Book an available appointment slot
   @NHSO-72
   @NHSO-872
   Scenario Outline: A <GP System> user can book an appointment describing symptoms at least 1 character
-    Given there are <GP System> appointments available to book
+    Given there are <GP System> appointments available to book with a reason of 1 character
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
@@ -37,7 +37,7 @@ Feature: Book an available appointment slot
   @NHSO-872
  @smoketest
   Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
-    Given there are <GP System> appointments available to book
+    Given there are <GP System> appointments available to book with a reason of 150 character
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
@@ -52,7 +52,7 @@ Feature: Book an available appointment slot
   @NHSO-72
   @NHSO-872
   Scenario Outline: A <GP System> user cannot enter symptoms with over 150 characters
-    Given there are <GP System> appointments available to book
+    Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
@@ -68,7 +68,7 @@ Feature: Book an available appointment slot
   @NHSO-72
   @NHSO-872
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
-    Given there are <GP System> appointments available to book
+    Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
@@ -82,7 +82,7 @@ Feature: Book an available appointment slot
   @NHSO-72
   @NHSO-872
   Scenario Outline: A <GP System> user who books successfully, but only the first 150 characters of the symptoms are sent
-    Given there are <GP System> appointments available to book
+    Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book

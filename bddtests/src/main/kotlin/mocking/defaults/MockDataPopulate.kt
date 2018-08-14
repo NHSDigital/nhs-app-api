@@ -1,7 +1,6 @@
 package mocking.defaults
 
 import config.Config
-import kotlin.text.Charsets
 import mocking.MockingClient
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.courses.EmisCoursesLoader
@@ -18,25 +17,36 @@ import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
+import models.Patient.Companion.montelFrye
 import models.prescriptions.MedicationCourse
+import org.apache.http.HttpStatus
+import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
 import java.io.File
+import java.time.Duration
 
 const val BASE_NFT_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/nft"
+const val BASE_MOCK_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/mockEnvironmentData"
 const val CONNECTION_TOKEN_SUFFIX_LENGTH = 12
 
 open class MockDataPopulate(private val mockingClient: MockingClient) {
 
     companion object {
-        @JvmStatic fun main(arguments: Array<String>) {
+        @JvmStatic
+        fun main(arguments: Array<String>) {
             val client = MockingClient.instance
             if (arguments.isNotEmpty()) {
                 val type = arguments[0]
-                when(type.toLowerCase()) {
+                when (type.toLowerCase()) {
                     "nft" -> {
                         MockDataPopulate(client).populateNftStubs(numOfPatients = arguments[1].toInt())
                     }
-                    else -> { throw IllegalArgumentException("Type $type not recognised as a mock data set.")}
+                    "mockenvironment" -> {
+                        MockDataPopulate(client).populateEMISStubEnvironment()
+                    }
+                    else -> {
+                        throw IllegalArgumentException("Type $type not recognised as a mock data set.")
+                    }
                 }
             } else {
                 MockDataPopulate(client).populate()
@@ -44,7 +54,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
     }
 
-    fun populateForJustLoggedIn(){
+    fun populateForJustLoggedIn() {
         mockingClient.clearWiremock()
         mockingClient.favicon()
 
@@ -62,15 +72,26 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         MyRecordJournies(mockingClient).create()
     }
 
+    private fun populateEMISStubEnvironment() {
+        mockingClient.clearWiremock()
+        mockingClient.favicon()
+        val patientForStubEnvironment = montelFrye
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patientForStubEnvironment)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(patientForStubEnvironment)
+        generateEMISAppointmentStubs(patientForStubEnvironment = patientForStubEnvironment)
+        generateEMISPrescriptionsStubs(patientForStubEnvironment = patientForStubEnvironment)
+        generateEMISMyMedicalRecordsStubs(patientForStubEnvironment = patientForStubEnvironment)
+    }
+
     private fun populateNftStubs(numOfPatients: Int) {
 
         mockingClient.clearWiremock()
         mockingClient.favicon()
-        
+
         for (i in 1..numOfPatients) {
 
             val index: String = i.toString()
-            val pad=index.padStart(CONNECTION_TOKEN_SUFFIX_LENGTH,'0')
+            val pad = index.padStart(CONNECTION_TOKEN_SUFFIX_LENGTH, '0')
             val patient = Patient.montelFrye.copy(
                     firstName = "NFT.Patient",
                     surname = "Test$pad",
@@ -91,7 +112,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             // Appointment Mocks
             // GET /emis/appointments
             val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json")
-            
+
             mockingClient.forEmis {
                 viewMyAppointmentsRequest(patient = patient)
                         .respondWithSuccess(appointmentsBody)
@@ -204,15 +225,186 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             }
         }
     }
-    
+
     private fun getFileContents(relativePath: String): String {
-        return File("$BASE_NFT_DATA_DIR/$relativePath")
+        return getFileContents(relativePath, BASE_NFT_DATA_DIR)
+    }
+
+    private fun getFileContents(relativePath: String, defaultDir: String): String {
+        val pathname = "$defaultDir/$relativePath"
+        return File(pathname)
                 .bufferedReader(
                         charset = Charsets.UTF_8,
                         bufferSize = DEFAULT_BUFFER_SIZE
                 )
                 .readText()
                 .replace("\t", "")
-                .replace("\n","")
+                .replace("\n", "")
+    }
+
+    private fun generateEMISAppointmentStubs(patientForStubEnvironment: Patient) {
+        // GET /emis/appointments
+        val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json", BASE_MOCK_DATA_DIR)
+
+        mockingClient.forEmis {
+            viewMyAppointmentsRequest(patient = patientForStubEnvironment)
+                    .respondWithSuccess(appointmentsBody)
+        }
+        // GET /emis/appointmentslots/meta
+        val getAppointmentSlotsMetaBody =
+                getFileContents("appointments/GetEmisAppointmentSlotsMeta.json", BASE_MOCK_DATA_DIR)
+
+        mockingClient.forEmis {
+            appointmentSlotsMetaRequest(patient = patientForStubEnvironment)
+                    .respondWithSuccessJson(getAppointmentSlotsMetaBody)
+        }
+
+        // GET /emis/appointmentslots
+        val getAppointmentSlotsBody =
+                getFileContents("appointments/GetEmisAppointmentSlots.json", BASE_MOCK_DATA_DIR)
+
+        mockingClient.forEmis {
+            appointmentSlotsRequest(patient = patientForStubEnvironment)
+                    .respondWithSuccessJson(getAppointmentSlotsBody)
+        }
+
+        // POST /emis/appointments
+        val postAppointmentRequestBody =
+                getFileContents("appointments/PostEmisAppointment.json", BASE_MOCK_DATA_DIR)
+
+        mockingClient.forEmis {
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a good response"))
+                    .respondWithSuccessJson(postAppointmentRequestBody)
+        }
+
+        //POST /emis/appointments - will be declined with SC=500
+        val errorAppointmentRequestBody =
+                getFileContents("appointments/PostEmisAppointmentError.json", BASE_MOCK_DATA_DIR)
+        mockingClient.forEmis {
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a bad response"))
+                    .respondWithFailureJson(errorAppointmentRequestBody, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        }
+
+        //POST /emis/appointments - time out scenario
+        mockingClient.forEmis {
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a time out response"))
+                    .respondWith(HttpStatus.SC_OK, 71000, resolve = {})
+        }
+
+        // DELETE /emis/appointments
+        val deleteAppointmentRequestBody =
+                getFileContents("appointments/DeleteEmisAppointment.json", BASE_MOCK_DATA_DIR)
+
+        mockingClient.forEmis {
+            cancelAppointmentRequest(patientForStubEnvironment, CancelAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "cancel appointment"))
+                    .respondWithSuccess()
+        }
+    }
+
+    private fun generateEMISPrescriptionsStubs(patientForStubEnvironment: Patient) {
+        val numOfPrescriptions: Int = 5
+        val prescriptionsDataLoader = EmisPrescriptionLoader
+        prescriptionsDataLoader.loadData(
+                noPrescriptions = numOfPrescriptions,
+                noCourses = numOfPrescriptions,
+                noRepeats = numOfPrescriptions,
+                showDosage = true,
+                showQuantity = true
+        )
+
+        // GET /emis/prescriptionrequests  Success - Prescription History
+        mockingClient.forEmis {
+            prescriptionsRequest(patientForStubEnvironment)
+                    .respondWithSuccess(prescriptionsDataLoader.data)
+                    .whenScenarioStateIs("Started")
+        }
+
+        // GET /emis/courses
+        val coursesLoader = EmisCoursesLoader
+        coursesLoader.loadData(
+                maxCourses = 1,
+                numOfRepeats = 1,
+                numCanBeRequested = 1,
+                includeDosage = true,
+                includeQuantity = true
+        )
+
+        mockingClient.forEmis {
+            coursesRequest(patientForStubEnvironment)
+                    .respondWithSuccess(CourseRequestsGetResponse(coursesLoader.data))
+        }
+
+        //Repeat prescription submission request - error scenario
+        val courseListForOrderingPrescription = coursesLoader.data
+        var uuids: MutableList<String> = mutableListOf()
+        uuids.add(courseListForOrderingPrescription[0].medicationCourseGuid)
+
+        //Success scenario - Prescription ordered
+        val prescriptionSubmissionRequestGood = PrescriptionSubmissionRequest(uuids, "give me a good response")
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestGood)
+                    .respondWithCreated()
+                    .whenScenarioStateIs("Started")
+        }
+
+        //Error scenario - Prescriptions not Enabled
+        val errorPrescriptionRequestBodyPrescriptionNotEnabled =
+                getFileContents("prescriptions/PostEmisPrescriptionNotEnabledError.json", BASE_MOCK_DATA_DIR)
+        val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(uuids, "give me prescription not enabled response")
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotEnabled)
+                    .respondWithFailureJson(errorPrescriptionRequestBodyPrescriptionNotEnabled, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .whenScenarioStateIs("Started")
+        }
+
+        //Error scenario - Prescriptions not submitted
+        val errorPrescriptionRequestBodyPrescriptionNotSubmitted =
+                getFileContents("/prescriptions/PostEmisPrescriptionNotSubmittedError.json", BASE_MOCK_DATA_DIR)
+        val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(uuids, "give me prescription not submitted response")
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotSubmitted)
+                    .respondWithFailureJson(errorPrescriptionRequestBodyPrescriptionNotSubmitted, HttpStatus.SC_BAD_REQUEST)
+                    .whenScenarioStateIs("Started")
+        }
+
+        //Error scenario - Prescriptions time out
+        val prescriptionSubmissionRequestTimeOut = PrescriptionSubmissionRequest(uuids, "give me a time out response")
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestTimeOut)
+                    .respondWithCreated().delayedBy(Duration.ofSeconds(71))
+                    .whenScenarioStateIs("Started")
+        }
+    }
+
+    private fun generateEMISMyMedicalRecordsStubs(patientForStubEnvironment: Patient) {
+        // GET /emis/record (testResultsRequest)
+        mockingClient.forEmis {
+            testResultsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/TestResults.json", BASE_MOCK_DATA_DIR))
+        }
+
+        // GET /emis/record (immunisationsRequest)
+        mockingClient.forEmis {
+            immunisationsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Immunisations.json", BASE_MOCK_DATA_DIR))
+        }
+
+        // GET /emis/record (allergiesRequest)
+        mockingClient.forEmis {
+            allergiesRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Allergies.json", BASE_MOCK_DATA_DIR))
+        }
+
+        // GET /emis/record (medicationsRequest)
+        mockingClient.forEmis {
+            medicationsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Medications.json", BASE_MOCK_DATA_DIR))
+        }
+
+        // GET /emis/record (problemsRequest)
+        mockingClient.forEmis {
+            problemsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Problems.json", BASE_MOCK_DATA_DIR))
+        }
+
+        // GET /emis/record (consultationsRequest)
+        mockingClient.forEmis {
+            consultationsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Consultations.json", BASE_MOCK_DATA_DIR))
+        }
     }
 }

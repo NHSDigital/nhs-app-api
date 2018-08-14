@@ -2,6 +2,7 @@ package mocking.emis.appointments
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import mocking.GsonFactory
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -25,7 +26,7 @@ class BookAppointmentsBuilderEmis (configuration: EmisConfiguration,
         requestBuilder
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
-                .andJsonBody(request, "")
+                .andJsonBody(request, gson = GsonFactory.asPascal)
 
     }
 

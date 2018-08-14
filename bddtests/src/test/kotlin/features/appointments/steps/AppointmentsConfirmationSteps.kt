@@ -58,7 +58,6 @@ open class AppointmentsConfirmationSteps {
     @Step
     fun describeSymptoms(symptoms: String) {
         appointmentsConfirmation.describeSymptoms(symptoms)
-        setSessionVariable("Symptoms").to(symptoms)
     }
 
     @Step
@@ -88,8 +87,8 @@ open class AppointmentsConfirmationSteps {
     }
 
     @Step
-    fun pasteSymptoms(length: Int) {
-        appointmentsConfirmation.pasteSymptoms("x".repeat(length))
+    fun pasteSymptoms(symptoms: String) {
+        appointmentsConfirmation.pasteSymptoms(symptoms)
     }
 
     @Step

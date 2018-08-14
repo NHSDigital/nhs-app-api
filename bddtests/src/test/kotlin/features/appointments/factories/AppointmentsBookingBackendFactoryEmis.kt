@@ -10,7 +10,7 @@ class AppointmentsBookingBackendFactoryEmis : AppointmentsBookingBackendFactory(
                                            bookingReason: String?): BookAppointmentSlotFacade {
 
         return BookAppointmentSlotFacade(
-                patient.patientId,
+                patient.userPatientLinkToken,
                 slotId ?: defaultApptBookingSlotId,
                 bookingReason ?: defaultApptBookingReason
         )

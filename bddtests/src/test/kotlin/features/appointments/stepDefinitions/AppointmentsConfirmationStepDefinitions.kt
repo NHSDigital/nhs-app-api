@@ -4,10 +4,12 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsBookingFactory
+import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AvailableAppointmentsSteps
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 
 class AppointmentsConfirmationStepDefinitions {
 
@@ -42,18 +44,22 @@ class AppointmentsConfirmationStepDefinitions {
     }
 
     @When("^I enter symptoms of (\\d+) characters$")
-    fun i_enter_symptoms_of_character(n: Int) {
-        appointmentsConfirmationSteps.describeSymptoms("x".repeat(n))
+    fun i_enter_symptoms_of_character(length: Int) {
+        val symptoms: String = getSymptomsOfLength(length)
+        appointmentsConfirmationSteps.describeSymptoms(symptoms)
     }
 
     @When("^I enter symptoms$")
     fun i_enter_symptoms() {
-        appointmentsConfirmationSteps.describeSymptoms("Eye problems. Double vision.")
+        val symptoms =Serenity.sessionVariableCalled<String>(SymptomsToEnter)
+        Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
+        appointmentsConfirmationSteps.describeSymptoms(symptoms)
     }
 
     @When("^I paste symptoms of (\\d+) characters$")
     fun i_paste_symptoms_of_characters(length: Int) {
-        appointmentsConfirmationSteps.pasteSymptoms(length)
+        val symptoms: String = getSymptomsOfLength(length)
+        appointmentsConfirmationSteps.pasteSymptoms(symptoms)
     }
 
     @Then("^only the first (\\d+) characters will be displayed$")
@@ -84,5 +90,12 @@ class AppointmentsConfirmationStepDefinitions {
     @Then("^an error is displayed that \"Describe your symptoms\" is mandatory$")
     fun an_error_is_displayed_that_is_mandatory() {
         appointmentsConfirmationSteps.checkValidationErrorMessage()
+    }
+
+    private fun getSymptomsOfLength(length: Int): String {
+        val symptoms =Serenity.sessionVariableCalled<String>(SymptomsToEnter)
+        Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)
+        Assert.assertEquals("Expected number of characters in symptoms, incorrect test setup", length, symptoms.length)
+        return symptoms
     }
 }

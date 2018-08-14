@@ -81,5 +81,13 @@ Common options are:
 Serenity properties **cannot** be passed as environment variables as Serenity only picks up
   system properties.
 
+###Mock Environment setup
+To populate wiremock in your local environment, gradle task 'mock' with following arguments
 
+'nft' - to populate wiremock with nft stubs (for nft stubs, you will also need to provide 'number of patients' as a gradle argument)
+'mockenvironment' - to populate wiremock with stubs setup for generic scenarios including error scenarios
+
+Command format:
+ gradle mock -DmockArgs="['mockenvironment']
+  gradle mock -DmockArgs="['nft',15]
 

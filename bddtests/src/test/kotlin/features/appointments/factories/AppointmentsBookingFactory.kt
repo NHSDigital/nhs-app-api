@@ -26,18 +26,26 @@ class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSuppl
         Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
     }
 
+    fun generateSuccessfulBookingResponse(bookingReason: String) {
+        generateBookingResponse(bookingReason){ bookRequest->bookRequest.respondWithSuccess()}
+    }
+
     fun generateSuccessfulBookingResponse() {
-        generateBookingResponse{bookRequest->bookRequest.respondWithSuccess()}
+        generateSuccessfulBookingResponse("Reason")
     }
 
     fun generateBookingResponse(booker: (IBookAppointmentsBuilder) -> Mapping) {
-        appointmentMapper.requestMapping {
-            booker(bookAppointmentSlotRequest(patient,
-                    BookAppointmentSlotFacade(patient.userPatientLinkToken, 301, "Reason"))
-            )
-        }
+        generateBookingResponse("Reason", booker)
     }
 
+    fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) -> Mapping) {
+        appointmentMapper.requestMapping {
+            booker(bookAppointmentSlotRequest(patient,
+                    BookAppointmentSlotFacade(patient.userPatientLinkToken, 301, bookingReason))
+            )
+        }
+        Serenity.setSessionVariable(SymptomsToEnter).to(bookingReason)
+    }
     companion object {
 
         private val map : HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
@@ -53,7 +61,8 @@ class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSuppl
             return map.getValue(gpSystem).invoke()
         }
 
-        val TargetAppointmentDateKey = "TargetAppointmentDateKey"
-        val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
+        const val SymptomsToEnter = "SymptomsToEnter"
+        const val TargetAppointmentDateKey = "TargetAppointmentDateKey"
+        const val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
     }
 }

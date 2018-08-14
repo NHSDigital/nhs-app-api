@@ -4,3 +4,7 @@
 .gradle/
 .vscode/
 audit.txt
+
+# Chromedriver#
+######################
+chromedriver_win32/
