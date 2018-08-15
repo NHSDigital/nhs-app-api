@@ -7,10 +7,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     let knownServices: KnownServices
     let viewController: HomeViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    let unsecureActivityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    var unsecureViewController: UnsecureViewController? {
+        didSet {
+            if unsecureViewController != nil {
+                self.unsecureActivityIndicator.center = (self.unsecureViewController?.view.center)!
+                self.unsecureViewController?.view.addSubview(unsecureActivityIndicator)
+            }
+        }
+    }
     let responseWaitingTime = config().ResponseWaitingTime
     var failedUrl: URL? = nil
     var nativeViewController: PageUnavailabilityViewController?
-    var unsecureViewController: UnsecureWebViewController?
+    var unsecureWebViewController: UnsecureWebViewController?
     var safariViewController: SFSafariViewController?
     var shouldHandleErrors = false
     var timer: Timer!
@@ -24,6 +33,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.view.addSubview(activityIndicator)
     }
     
+
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -62,7 +72,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
+        if (unsecureViewController != nil) {
+            self.unsecureActivityIndicator.startAnimating()
+        }
         self.activityIndicator.startAnimating()
+        
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
@@ -80,7 +94,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
             webView.evaluateJavaScript(javascript!, completionHandler: nil)
         }
-        
+        self.failedUrl = nil
         self.showWebViewContainer()
     }
     
@@ -203,6 +217,18 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.callCheckSymptoms()
     }
     @objc func pageIsNotResponding() {
+        if (unsecureViewController != nil) {
+            if(self.unsecureViewController?.webViewController?.webView.isLoading)! {
+                os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
+                self.unsecureViewController?.webViewController?.webView.stopLoading()
+                let url = self.unsecureViewController?.webViewController?.webView.url
+                if let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: url?.host){
+                    self.showNativeViewContainer(errorMessage: knownService.serviceErrorMessage)
+                } else {
+                    self.showNativeViewContainer(errorMessage: knownServices.getServiceUnavailableErrorMessage())
+                }
+            }
+        }
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
             self.viewController.webViewController?.webView.stopLoading()
@@ -233,6 +259,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     private func showWebViewContainer() {
         clearTimer()
+        if (unsecureViewController != nil) {
+            self.unsecureActivityIndicator.stopAnimating()
+            self.unsecureViewController?.showWebViewContainer()
+        }
         self.activityIndicator.stopAnimating()
         self.viewController.showWebViewContainer()
     }
@@ -240,7 +270,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     private func showNativeViewContainer(errorMessage: ErrorMessage) {
         clearTimer()
         self.activityIndicator.stopAnimating()
+        if (unsecureViewController != nil) {
+            self.unsecureActivityIndicator.stopAnimating()
+            self.unsecureViewController?.showNativeViewContainer(errorMessage: errorMessage)
+        }
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)
+        
     }
     
     private func clearTimer() {

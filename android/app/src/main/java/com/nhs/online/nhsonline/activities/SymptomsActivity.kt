@@ -10,16 +10,23 @@ import android.view.View
 import android.webkit.WebViewClient
 import android.widget.TextView
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.data.ErrorMessage
+import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.UnsecureWebClient
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
+import kotlinx.android.synthetic.main.error_layout.*
+import kotlinx.android.synthetic.main.header_layout.*
 import java.net.URL
 
-class SymptomsActivity : AppCompatActivity() {
+class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
 
     private lateinit var chromeClient: ChromeClientLocationHandler
     private lateinit var knownServices: KnownServices
+    private var reloadUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +38,7 @@ class SymptomsActivity : AppCompatActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
-
+        retryButton.setOnClickListener { reloadRequest() }
         configureWebView()
         val urlPath = resources.getString(R.string.baseURL)+resources.getString(R.string.checkYourSymptoms)+resources.getString(R.string.nhsOnlineRequiredQueries)
 
@@ -39,14 +46,13 @@ class SymptomsActivity : AppCompatActivity() {
     }
 
     private fun configureWebView() {
-        symptomsWebview.settings.javaScriptEnabled = true
         symptomsWebview.settings.domStorageEnabled = true
 
         chromeClient = ChromeClientLocationHandler(this)
         symptomsWebview.webChromeClient = chromeClient
 
         knownServices = KnownServices(this)
-        symptomsWebview.webViewClient =  UnsecureWebClient(this, this)
+        symptomsWebview.webViewClient =  UnsecureWebClient(this,  knownServices, this)
     }
 
     private fun loadPage(url: String) {
@@ -55,8 +61,29 @@ class SymptomsActivity : AppCompatActivity() {
 
         symptomsWebview.loadUrl(urlWithMissingQueryStrings)
     }
+    private fun reloadRequest() {
+        if (reloadUrl != null) {
+            symptomsWebview.loadUrl(reloadUrl)
+        } else {
+            symptomsWebview.reload()
+        }
+    }
 
-    fun setHeaderText(text: String) {
+    override fun setReloadUrl(url: String?) {
+        reloadUrl = url
+    }
+
+    override fun showProgressDialog() {
+        if (progressBarLayoutU.visibility == View.GONE)
+            progressBarLayoutU.visibility = View.VISIBLE
+    }
+
+    override fun dismissProgressDialog() {
+        if (progressBarLayoutU.visibility == View.VISIBLE)
+            progressBarLayoutU.visibility = View.GONE
+    }
+
+    override fun setHeaderText(text: String) {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         val headerText = toolbar.findViewById<View>(R.id.header_text_view) as TextView
         runOnUiThread {
@@ -73,6 +100,27 @@ class SymptomsActivity : AppCompatActivity() {
             super.onBackPressed()
         }
         return true
+    }
+
+    override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
+        showErrorScreen()
+        errorTextView.setServiceError(unavailabilityErrorMessage.title,
+                unavailabilityErrorMessage.message)
+        if (unavailabilityErrorMessage.message != null) {
+            tryAgainTextView.visibility = View.GONE
+        } else {
+            tryAgainTextView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showErrorScreen() {
+        errorViewLayoutU.visibility = View.VISIBLE
+        symptomsWebview.visibility = View.GONE
+    }
+
+    override fun showWebviewScreen() {
+        errorViewLayoutU.visibility = View.GONE
+        symptomsWebview.visibility = View.VISIBLE
     }
 }
 

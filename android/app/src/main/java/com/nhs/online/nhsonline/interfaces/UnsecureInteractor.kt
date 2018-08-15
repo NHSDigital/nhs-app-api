@@ -3,31 +3,17 @@ package com.nhs.online.nhsonline.interfaces
 import com.nhs.online.nhsonline.data.ErrorMessage
 
 
-interface IInteractor {
-
-    fun loadPage(url: String)
+interface UnsecureInteractor {
 
     fun showProgressDialog()
 
     fun dismissProgressDialog()
 
-    fun selectSymptomsMenuActive()
-
-    fun selectMoreMenuActive()
-
-    fun goToCheckSymptoms()
-
     fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage)
 
     fun showWebviewScreen()
 
-    fun setHeaderText(text: String)
-
-    fun clearMenuBarItem()
-
-    fun hideHeader()
-
-    fun hideMenuBar()
-
     fun setReloadUrl(url: String?)
+
+    fun setHeaderText(text: String)
 }

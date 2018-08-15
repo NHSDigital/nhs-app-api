@@ -16,6 +16,7 @@ class HomeViewController : UIViewController {
     var lifecycleHandlers: LifecycleHandlers?
     var webViewController: WebViewController?
     var nativeViewController: PageUnavailabilityViewController?
+    var unsecureViewController: UnsecureViewController?
     var webViewDelegate: WebViewDelegate?
     var tabBarDelegate: TabBarDelegate?
     var pageUrl = config().HomeUrl
@@ -27,8 +28,8 @@ class HomeViewController : UIViewController {
         super.viewDidLoad()
         setupNhsLogo()
         setupMyAccountIcon()
-        
-        webViewDelegate = WebViewDelegate(controller: self, knownServices:knownServices)
+
+        webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
         
@@ -63,9 +64,7 @@ class HomeViewController : UIViewController {
         } else {
             self.webViewController?.webView.loadPage(url: pageUrl)
         }
-        
 
-        
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
     }
     
@@ -85,9 +84,8 @@ class HomeViewController : UIViewController {
         }
     }
     func callCheckSymptoms() {
-        let tempVC = self.storyboard?.instantiateViewController(withIdentifier: "UnsecureWebViewController") as? UnsecureWebViewController
-        tempVC?.loadViewIfNeeded()
-        tempVC?.setWebViewDelegate(delegate: webViewDelegate!)
+        let tempVC = self.storyboard?.instantiateViewController(withIdentifier: "UnsecureViewController") as? UnsecureViewController
+        tempVC?.webViewDelegate = self.webViewDelegate
         self.navigationController?.pushViewController(tempVC!, animated: false)
     }
     

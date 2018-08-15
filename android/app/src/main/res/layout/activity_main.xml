@@ -47,17 +47,6 @@
             android:visibility="visible" />
 
         <ScrollView
-            android:id="@+id/symptomsBanner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            android:padding="@dimen/_12sdp"
-            android:visibility="gone">
-
-            <include layout="@layout/check_my_symptoms_banner" />
-        </ScrollView>
-
-        <ScrollView
             android:id="@+id/errorViewLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

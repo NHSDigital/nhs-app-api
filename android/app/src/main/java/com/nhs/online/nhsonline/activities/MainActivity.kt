@@ -254,12 +254,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
 
-    override fun showSymptomsBanner() {
-        symptomsBanner.visibility = View.VISIBLE
-        webview.visibility = View.GONE
-    }
-
-
     override fun onRequestPermissionsResult(
             requestCode: Int,
             permissions: Array<out String>,
