@@ -42,7 +42,6 @@ export default {
       script: [
         {
           src: process.env.ANALYTICS_SCRIPT_URL,
-          async: true,
         },
       ],
     };
