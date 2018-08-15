@@ -1,28 +1,24 @@
 <template>
-  <main v-if="isVisible" class="content">
-    <error-warning-dialog error-or-warning="error">
-      <p :class="$style.header">
-        {{ header }}
-      </p>
-      <p>
-        {{ subheader }}
-      </p>
-    </error-warning-dialog>
+  <div v-if="isVisible" class="pull-content">
+    <message-dialog message-type="error">
+      <message-text :is-header="true">{{ header }}</message-text>
+      <message-text>{{ subheader }}</message-text>
+      <message-text>{{ message }}</message-text>
+    </message-dialog>
     <button :class="$style.button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
     </button>
-    <p>
-      {{ message }}
-    </p>
-  </main>
+  </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
   },
   computed: {
     isVisible() {
@@ -70,9 +66,7 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import '../../style/html';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
   @import '../../style/buttons';
 
 </style>

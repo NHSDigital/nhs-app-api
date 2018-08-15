@@ -609,7 +609,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^the user login details are cleared from cookies$")
     @Throws(Exception::class)
     fun theUserLoginDetailsAreClearedFromCookies() {
-        browser.checkLoginDetailsAreReset();
+        browser.checkLoginDetailsAreReset()
     }
 
     @Given("^I want to register for a (.+) account$")
@@ -658,13 +658,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I am redirected to the signed in home page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheSignedInHomePage() {
-        home.assertPageIsVisible();
+        home.assertPageIsVisible()
     }
 
     @Then("^I am redirected to the app to the signed in home page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheAppToTheSignedInHomePage() {
-        home.assertPageIsVisible();
+        home.assertPageIsVisible()
     }
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {

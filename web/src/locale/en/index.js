@@ -28,7 +28,7 @@ export default {
       line1: 'Once you’ve placed an order here, you\'ll be able to view your repeat prescription status and history.',
       line2: 'If you have an existing order that isn’t shown here, contact your GP surgery or pharmacy for more information.',
     },
-    orderPrescriptionButton: 'Order a repeat prescription',
+    orderPrescriptionButton: 'Order new repeat prescription',
   },
   rp02: {
     pageTitle: 'TBC',
@@ -93,7 +93,7 @@ export default {
   appointments: {
     index: {
       successText: 'Your appointment has been booked. You can view details or cancel it here.',
-      bookButtonText: 'Book an appointment',
+      bookButtonText: 'Book new appointment',
       cancelButtonText: 'Cancel appointment',
       empty: {
         header: 'You don\'t currently have any appointments booked',
@@ -101,7 +101,7 @@ export default {
         text2: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
       },
       upcoming: {
-        header: 'Next appointments',
+        header: 'Upcoming appointments',
         info: 'Click in the appointment if you need to cancel it',
       },
     },
@@ -121,7 +121,7 @@ export default {
         text: 'They\'re highly skilled healthcare professionals who can offer valuable advice​',
       },
       symptomButttonText: 'Check your symptoms',
-      bookButtonText: 'Book an appointment',
+      bookButtonText: 'Book new appointment',
     },
     noSlotErrorMessage: {
       summary: 'There are no appointments available at the moment',
@@ -183,10 +183,12 @@ export default {
       bookButtonText: 'Continue',
       backButtonText: 'Back to my appointments',
       noAppointmentsAvailable: {
-        line1: 'There are currently no appointments available to book online in the next two weeks. If you need to book one now, call your GP surgery.',
+        title: 'No appointments available',
+        line1: 'There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.',
         line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
       },
       adjustSearch: {
+        title: 'No appointments available',
         line1: 'Try selecting a different date and time, or without a preferred practice member selected. If you can\'t find the appointment you need, call your GP surgery.',
         line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
       },
@@ -206,10 +208,11 @@ export default {
           default_option: 'Select location',
         },
         clinician: {
-          label: 'Doctor/Nurse',
+          label: 'Practice member',
           default_option: 'No preference',
         },
         date: {
+          header: 'Available appointments',
           label: 'Filter by date',
           default_option: 'I have no preference',
           options: {
@@ -240,14 +243,18 @@ export default {
       },
     },
     confirmation: {
-      headerLabel: 'What is this appointment for?',
-      label: 'Describe your symptoms',
-      maxReasonDesc: 'Description must be shorter than 150 characters (about 25 words)',
+      headerLabel: 'Reason for this appointment',
+      reasonDesc: {
+        line1: 'Text must be shorter than 150 characters (about 25 words)',
+        line2: 'This text may not be read by your GP or practice member until the day of your appointment.',
+        line3: 'If it\'s urgent, contact your GP surgery before booking.',
+      },
       confirmButtonText: 'Confirm and book appointment',
       changeButtonText: 'Change this appointment',
       noReasonDialogError: 'There\'s a problem',
       noReasonError: 'Enter a reason for this appointment',
       conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
+      info: 'Check your appointment details before booking',
       errors: {
         pageHeader: 'Error sending request',
         header: 'Sorry, there\'s been a problem sending your request',
@@ -413,10 +420,7 @@ export default {
       'Get medical advice, book GP appointments and order repeat prescriptions any time.',
   },
   loginButton: {
-    login: 'Sign in with your NHS account',
-  },
-  loginOrRegister: {
-    createAccount: 'Create an NHS account',
+    login: 'Log in or create account',
   },
   signOutButton: {
     signOut: 'Sign out',
@@ -431,7 +435,7 @@ export default {
     appointmentGuidance: 'Check before you book',
     appointmentBooking: 'Book new appointment',
     appointmentCancelling: 'Cancel appointment',
-    appointmentConfirmation: 'Check appointment details',
+    appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
     symptoms: 'Check my symptoms',
     more: 'More',
@@ -444,13 +448,15 @@ export default {
     openSourceLicenses: 'Open source licenses',
     helpAndSupport: 'Help and support',
   },
-  more: {
-    organDonationLabel: 'Organ donation preferences',
-    organDonationDesc: 'Help us save thousands of lives in the UK every year by signing up to become an organ donor. Register your decision and choose what you want to donate on the NHS Organ Donor Register.',
-    organDonationButtonText: 'Set organ donation preferences',
-    dataSharingHeaderText: 'Sharing health data',
-    dataSharingInfoText: 'The NHS uses identifiable health and care information (like your name or NHS number) for your individual care. This data can also be used in research to find cures for life-threatening diseases, and to plan health services and make them safer.',
-    dataSharingButtonText: 'Set health data sharing preferences',
+  sc04: {
+    organDonation: {
+      subheader: 'Set organ donation preferences',
+      body: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register.',
+    },
+    dataSharing: {
+      subheader: 'Manage your choice for sharing data',
+      body: 'Find out why your data matters and choose whether or not it can be used for research and planning.',
+    },
   },
   navigationMenu: {
     appointmentsLabel: 'Appointments',
@@ -461,7 +467,10 @@ export default {
   },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling right now?',
-    checker: 'Check your symptoms',
+    checker: 'Check my symptoms',
+  },
+  login: {
+    desc: 'Want to book an appointment or order a repeat prescription?',
   },
   icons: {
     accountIcon: {
@@ -504,12 +513,16 @@ export default {
       title: 'Symptoms Checker',
     },
   },
-  symptoms: {
-    checkMySymptomsHeader: 'Check my symptoms',
-    healthAZHeader: 'A-Z of conditions and treatments',
-    healthAZText: 'Search trusted information and advice on hundreds of conditions',
-    medicalHelpHeader: 'Check if I need urgent help',
-    medicalHelpText: 'Answer online questions to get instant advice or medical help near you',
+  sy01: {
+    pageHeader: 'Check my symptoms',
+    a_z: {
+      subheader: 'A-Z of conditions and treatments',
+      body: 'Search trusted information and advice on hundreds of conditions',
+    },
+    111: {
+      subheader: 'Check if I need urgent help',
+      body: 'Answer online questions to get instant advice or medical help near you',
+    },
   },
 };
 

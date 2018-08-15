@@ -13,7 +13,10 @@ describe('actions', () => {
         postV1Session: jest.fn(() => Promise.resolve({ sessionTimeout, odsCode, token })),
         deleteV1Session: jest.fn(() => Promise.resolve()),
       },
-      router: [],
+      router: {
+        go: jest.fn(),
+        push: jest.fn(),
+      },
     };
 
     commit = jest.fn();

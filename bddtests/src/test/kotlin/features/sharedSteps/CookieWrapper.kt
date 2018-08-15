@@ -18,7 +18,7 @@ data class CookieWrapper private constructor(
         private val flashMessage: CookieFlashMessageWrapper
 ) {
     fun isLoggedIn():Boolean {
-        return this.auth.loggedIn;
+        return this.auth.loggedIn
     }
 
     fun assertIsLoggedOut() {
@@ -59,8 +59,8 @@ data class CookieWrapper private constructor(
         )
         this.repeatPrescriptionCourses.AssertEquals(expectedRepeatPrescriptions)
 
-        var mySession = this.session;
-        Assert.assertNull(mySession.lastCalledAt);
+        var mySession = this.session
+        Assert.assertNull(mySession.lastCalledAt)
     }
 
     companion object {

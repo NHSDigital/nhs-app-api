@@ -15,14 +15,17 @@ export default {
   },
   computed: {
     buttonStylingClasses() {
-      const classes = ['button'].concat(this.buttonClasses);
+      const classes = [this.$style.button];
+      this.buttonClasses.forEach((element) => {
+        classes.push(this.$style[element]);
+      });
       return classes;
     },
   },
 };
 
 </script>
-<style lang="scss" scoped>
+<style module lang="scss" scoped>
   @import '../../style/buttons';
 
 </style>

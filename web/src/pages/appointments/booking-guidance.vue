@@ -1,32 +1,29 @@
 <template>
-  <main v-if="showTemplate" :class="$style.main">
-    <div :class="$style.info">
-      <h2>{{ $t('appointments.guidance.header') }}</h2>
-      <p>{{ $t('appointments.guidance.text') }}</p>
-      <ol>
-        <li>
-          <strong>{{ $t('appointments.guidance.li1.header') }}</strong>
-          <p>{{ $t('appointments.guidance.li1.text') }}</p>
-        </li>
-        <li>
-          <strong>{{ $t('appointments.guidance.li2.header') }}</strong>
-          <p>{{ $t('appointments.guidance.li2.text') }}</p>
-        </li>
-        <li>
-          <strong>{{ $t('appointments.guidance.li3.header') }}</strong>
-          <p>{{ $t('appointments.guidance.li3.text') }}</p>
-        </li>
-      </ol>
 
-      <button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
-        {{ $t('appointments.guidance.symptomButttonText') }}
-      </button>
-      <button id="btn_appointment" :class="[$style.button, $style.green]"
-              @click="onBookButtonClicked">
-        {{ $t('appointments.guidance.bookButtonText') }}
-      </button>
+  <div v-if="showTemplate" class="pull-content">
+    <h2>{{ $t('appointments.guidance.header') }}</h2>
+    <div :class="$style.info" data-purpose="info">
+      <p>{{ $t('appointments.guidance.text') }}</p>
+
+      <strong>1. {{ $t('appointments.guidance.li1.header') }}</strong>
+      <p>{{ $t('appointments.guidance.li1.text') }}</p>
+
+      <strong>2. {{ $t('appointments.guidance.li2.header') }}</strong>
+      <p>{{ $t('appointments.guidance.li2.text') }}</p>
+
+      <strong>3. {{ $t('appointments.guidance.li3.header') }}</strong>
+      <p>{{ $t('appointments.guidance.li3.text') }}</p>
     </div>
-  </main>
+
+    <button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
+      {{ $t('appointments.guidance.symptomButttonText') }}
+    </button>
+    <button id="btn_appointment" :class="[$style.button, $style.green]"
+            @click="onBookButtonClicked">
+      {{ $t('appointments.guidance.bookButtonText') }}
+    </button>
+  </div>
+
 </template>
 
 <script>
@@ -50,35 +47,7 @@ export default {
 
 </script>
 
-<style module lang="scss">
-@import "../../style/spacings";
-@import "../../style/colours";
-@import "../../style/textstyles";
+<style module lang="scss" scoped>
 @import "../../style/buttons";
-.main {
-  @include space(padding, all, $three);
-  .info {
-    h2 {
-      @include h2Blue;
-      margin-bottom: 0.5em
-    }
-    p {
-      @include default_text;
-      font-size: 1em;
-      display: block;
-      margin-bottom: 1em;
-    }
-    ol {
-      li {
-        font-weight: bold;
-        list-style-type: decimal;
-        list-style-position: inside;
-        p {
-          font-weight: normal;
-        }
-      }
-    }
-  }
-}
-
+@import "../../style/info";
 </style>

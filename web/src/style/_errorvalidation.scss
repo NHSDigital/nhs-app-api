@@ -1,0 +1,32 @@
+@import './colours';
+
+// ERROR AND VALIDATION
+.validation-inline {
+	& > p.validation-text {
+		& > svg {
+			margin-bottom: -2px !important;
+		}
+	}
+}
+.validation-border-left {
+	border-left: 4px $error solid !important;
+	padding-left: 1em !important;
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+}
+.validation-border {
+	border: 3px $error solid !important;
+	padding-left: 1em !important;
+}
+.validation-select-border {
+	border: 3px $error solid !important;
+	padding-left: 0em !important;
+}
+.validation-text {
+	color: $error !important;
+	font-weight: 700 !important;
+	padding-bottom: 0em !important;
+}
+.error-circle {
+	fill: $error !important;
+}

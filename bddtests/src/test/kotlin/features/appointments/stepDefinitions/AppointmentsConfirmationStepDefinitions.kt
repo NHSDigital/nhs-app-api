@@ -19,8 +19,8 @@ class AppointmentsConfirmationStepDefinitions {
     @Given("^I have selected an appointment slot to book$")
     fun i_have_selected_an_appointment_slot_to_book() {
         availableAppointmentsSteps.selectOptionsToRevealSlots()
-        var date = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
-        var time = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
+        val date = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
+        val time = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
 
         availableAppointmentsSteps.selectSlot(date, time)
         availableAppointmentsSteps.clickOnBookAppointmentButton()

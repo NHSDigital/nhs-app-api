@@ -1,27 +1,49 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" width="33" height="29" viewBox="0 0 122.43 109.69">
+  <svg :class="[$style.menu, selected?$style.selected:undefined]" xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 110.39 110.39">
     <defs/>
-    <title>{{ $t('icons.prescriptionsIcon.title') }}</title>
-    <path class="menu_stroke" d="M102,90.5l-13.61,13A15.23,15.23,0,0,1,66.89,
-        103h0a15.24,15.24,0,0,1,.49-21.46l13.6-13" />
-    <path class="menu_stroke active" d="M81.08,68.46l21,22,13.7-13.09a15.23,15.23,
-        0,0,0,.49-21.46h0a15.22,15.22,0,0,0-21.46-.49Z" />
-    <rect class="menu_stroke active" x="16.75" y="2" width="56.99" height="26.59" rx="7" ry="7" />
-    <path class="menu_stroke" d="M26.69,28.59v7.56l-18,10.49C5,49.42,2,50.58,2,
-        54.24v38a6.67,6.67,0,0,0,6.65,6.65H63.56" />
-    <path class="menu_stroke" d="M87.48,62V54.24c0-3.66-3.6-5.48-6.65-7.6L62.31,
-        36.15V28.59" />
-    <polygon class="menu_stroke active" points="51.58 72.58 51.58 83.13 36.91
-        83.13 36.91 72.58 26.37 72.58 26.37 57.92 36.91 57.92 36.91 47.38 51.58
-        47.38 51.58 57.92 62.12 57.92 62.12 72.58 51.58 72.58" />
+    <title>Prescriptions</title>
+    <g>
+      <rect :class="$style.canvas" width="110.39" height="110.39" />
+      <g>
+        <path :class="$style['menu_stroke']"
+              d="M85.19,81.44,75.17,91a11.22,11.22,0,0,1-15.8-.36h0a11.21,
+              11.21,0,0,1,.37-15.8l10-9.56" />
+        <path :class="[$style['menu_stroke'], $style.active]"
+              d="M69.82,65.22,85.25,81.38l10.09-9.64A11.21,11.21,0,0,0,95.7,
+              56h0a11.21,11.21,0,0,0-15.8-.36Z" />
+        <rect :class="[$style['menu_stroke'], $style.active]" x="22.47" y="16.31"
+              width="41.94" height="19.57" rx="7" ry="7" />
+        <path :class="$style['menu_stroke']"
+              d="M29.79,35.88v5.56L16.51,49.16c-2.7,2-4.89,2.9-4.89,5.59v28a4.9,
+              4.9,0,0,0,4.89,4.89H56.92" />
+        <path :class="$style['menu_stroke']"
+              d="M74.53,60.46V54.75c0-2.69-2.66-4-4.9-5.59L56,41.44V35.88" />
+        <polygon :class="[$style['menu_stroke'], $style.active]"
+                 points="48.1 68.25 48.1 76.01 37.31 76.01 37.31 68.25 29.55 68.25
+                 29.55 57.46 37.31 57.46 37.31 49.7 48.1 49.7 48.1 57.46 55.86 57.46
+                 55.86 68.25 48.1 68.25"/>
+      </g>
+    </g>
   </svg>
 </template>
 
-<style lang="scss" scoped>
-@import "../../style/icons";
+<script>
+export default {
+  props: {
+    selected: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
+</script>
+
+<style lang="scss" module scoped>
 @import "../../style/colours";
-.active {
-  svg {
+@import "../../style/navmenuicons";
+svg.menu {
+  &.selected {
     .active {
       fill: $nhs_blue;
     }

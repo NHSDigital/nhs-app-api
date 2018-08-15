@@ -1,31 +1,27 @@
 <template>
-  <div v-if="isVisible" :id="$style.serverError" class="content">
-    <error-warning-dialog error-or-warning="error">
-      <p :class="$style.header">
-        {{ header }}
-      </p>
-      <p :class="$style.subheader">
-        {{ subheader }}
-      </p>
-      <p>
-        {{ message }}
-      </p>
-      <p v-if="hasAdditionalInfo">
+  <div v-if="isVisible" :id="$style.serverError" class="pull-content">
+    <message-dialog message-type="error">
+      <message-text :is-header="true">{{ header }}</message-text>
+      <message-text>{{ subheader }}</message-text>
+      <message-text>{{ message }}</message-text>
+      <message-text v-if="hasAdditionalInfo">
         {{ additionalInfo }}
-      </p>
-    </error-warning-dialog>
-    <button v-if="retryButtonText" :class="$style.button" @click="onRetryButtonClicked">
+      </message-text >
+    </message-dialog>
+    <button v-if="retryButtonText" :class="buttonClasses" @click="onRetryButtonClicked">
       {{ retryButtonText }}
     </button>
   </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
   },
   computed: {
     isVisible() {
@@ -50,8 +46,15 @@ export default {
       if (this.hasComponentErrorCodeKey('retryButtonText') || this.hasComponentKey('retryButtonText')) {
         return this.getMessage('retryButtonText');
       }
-
       return '';
+    },
+    buttonClasses() {
+      const clazzes = [this.$style.button];
+      const url = this.getRedirectUrl();
+      if (url && url.length > 0) {
+        clazzes.push(this.$style.grey);
+      }
+      return clazzes;
     },
   },
   updated() {
@@ -130,18 +133,6 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import '../../style/html';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
   @import '../../style/buttons';
-
-  #serverError {
-    padding: 16px 16px 5px 16px;
-    box-sizing: border-box;
-    width: 100%;
-  }
-
-  .subheader {
-    padding-top: 10px;
-  }
 </style>

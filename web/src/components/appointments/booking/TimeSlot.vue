@@ -1,6 +1,6 @@
 <template>
   <li
-    :class="[isSelected?$style.selected:undefined, $style.timeSlot]"
+    :class="[isSelected?$style.selected:undefined, $style.selector]"
     :aria-label="isSelected?'selected-slot':undefined" >
     {{ formatTime(timeSlot.startTime) }}
   </li>
@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mm a'),
+    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mma'),
     select() {
       this.isSelected = true;
       this.$store.dispatch('availableAppointments/select', this.timeSlot);
@@ -37,34 +37,9 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-@import "../../../style/textstyles";
-@import "../../../style/colours";
-@import "../../../style/fonts";
-  .timeSlot {
-    @include default_text;
-    width: 101px;
-    box-sizing: border-box;
-    white-space: nowrap;
-    text-align: center;
-    background-color: $white;
-    border: 1px $light_grey solid;
-    box-sizing: border-box;
-    border-radius: 5px;
-    padding: 16px;
-    list-style: none;
-    margin: 8px;
-    transition: all ease 0.5s;
-    &:last-child {
-      margin-right: 0px;
-    }
-  }
-  .selected {
-    background-color: $nhs_blue;
-    border: 1px $nhs_blue solid;
-    color: $white;
-    label {
-      color: $white;
-    }
-  }
+<style module lang="scss" scoped>
+@import "../../../style/selectors";
+.selector {
+  user-select: none;
+}
 </style>

@@ -1,0 +1,96 @@
+/** VARS */
+$logged_height: 12em; //16.5em
+
+/** IMPORTS */
+@import './colours';
+@import './textstyles';
+@import './screensizes';
+
+/** APP */
+body {
+    padding: 0em;
+    margin: 0em;
+	min-height: 31.250em;
+    background: $white;
+    @include default_text;
+    font-family: $default;
+    @include phoneOld {
+        font-size: 0.875em;
+    }
+    @include phone {
+        font-size: 1em;
+    }
+    @include tablet {
+        font-size: 1.225em;
+    }
+    @include iPadPro {
+        font-size: 1.6em;
+    }
+    @include desktop {
+        font-size: 1em;
+    }
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.nhsoLogo {
+  margin-top: 3em;
+  box-sizing: border-box;
+}
+
+.symptomBanner {
+    text-align: center;
+    width: 100%;
+    vertical-align: bottom;
+    box-sizing: border-box;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    border-top: 0.063em rgba(255, 255, 255, .4) solid;
+
+    h2 {
+        @include h2Home;
+        margin-bottom: 1em;
+    }
+
+    button.button {
+        margin-bottom: 0.313em;
+    }
+}
+
+header.logged {
+    bottom: $logged_height;
+}
+.homeMain {
+    position: fixed;
+    bottom: 0em;
+    left: 0em;
+    right: 0em;
+    height: $logged_height;
+    padding: 1em;
+    box-sizing: border-box;
+
+    h2 {
+        @include h2;
+        margin-bottom: 0.750em;
+        font-size: 1.2em;
+        text-align: center;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+    a {
+        @include default_text;
+        color: $nhs_blue;
+        width: 100%;
+        text-align: center;
+    }
+}
+main.logged {
+    height: $logged_height;
+    overflow: auto;
+}
+

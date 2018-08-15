@@ -1,7 +1,7 @@
 <template>
   <div data-purpose="repeat-prescription">
-    <div :class="$style.checkboxPanel">
-      <div @click="check">
+    <div :class="$style['checkbox-panel']">
+      <div class="clickme" @click="check">
         <checked-icon :selected="selected" :id="prescriptionDetails.id" />
       </div>
       <input
@@ -13,17 +13,16 @@
         type="checkbox"
         name="prescription">
       <label
-        :class="$style.checkboxLabel"
         :for="'prescription-' + prescriptionDetails.id"
         @click="check">
         {{ prescriptionDetails.name }}
       </label>
     </div>
-    <span
+    <p
       :class="$style.prescriptionDescription"
-      aria-label="prescription-description">
+      data-label="prescription-description">
       {{ prescriptionDetails.details }}
-    </span>
+    </p>
   </div>
 </template>
 <script>
@@ -64,32 +63,19 @@ export default{
 };
 </script>
 
-<style module lang="scss">
-  @import "../style/fonts";
-  .checkboxPanel {
-    display: flex;
-    margin-bottom: 16px;
-  }
+<style module lang="scss" scoped>
+  @import "../style/forms";
 
-  .checkboxLabel {
-    display: block!important;
-    font-weight: 700!important;
-    font-size: 16px!important;
-    line-height: 22px!important;
-    color: #4A4A4A!important;
-    padding-top: 4px!important;
-    font-family: $frutiger-bold;
-  }
   .prescriptionDescription {
-    display: block;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 22px;
-    color: #4A4A4A;
-    padding-left: 42px;
-    margin-bottom: 16px;
+    padding-left: 2.5em;
+    padding-top: 0em;
+    padding-bottom: 0.250em;
   }
   .prescriptionCheckbox {
     display: none;
+  }
+
+  label {
+    padding-bottom: 0.250em;
   }
 </style>

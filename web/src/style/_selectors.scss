@@ -1,0 +1,42 @@
+@import './colours';
+@import './textstyles';
+.selector {
+  display: inline-block;
+  list-style: none;
+  background-color: $white;
+  border: 0.063em $light_grey solid;
+  box-sizing: border-box;
+  border-radius: 0.313em;
+  padding: 1em;
+  margin: 0.5em;
+  transition: all ease 0.5s;
+  flex-grow: 1;
+  flex-shrink: 1;
+  text-align: center;
+  @include default_text;
+  width: calc(100% * (1/3) - 1.063em);
+  max-width: calc(100% * (1/3) - 1.063em); //min-width: 6.875em;
+  //max-width: 6.875em;
+  &.error {
+    border: 0.063em $error solid;
+    color: $error;
+  }
+  &.selected {
+    background-color: $nhs_blue;
+    border: 0.063em $nhs_blue solid;
+    color: $white;
+    p,
+    label {
+      color: $white;
+    }
+  }
+}
+
+.selector-list {
+    display: flex;
+        flex-wrap: wrap;
+        margin-left: -0.5em;
+        margin-right: -0.5em;
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+  }

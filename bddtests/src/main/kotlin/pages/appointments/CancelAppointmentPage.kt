@@ -8,7 +8,7 @@ import pages.HybridPageElement
 class CancelAppointmentPage : AppointmentSharedElementsPage() {
 
     val checkDetailsText = HybridPageElement(
-            browserLocator = "//main/div/p",
+            browserLocator = "//div[@data-purpose='info']/p",
             androidLocator = null,
             page = this
     )

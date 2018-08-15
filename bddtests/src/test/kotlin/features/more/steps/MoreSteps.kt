@@ -27,11 +27,6 @@ open class MoreSteps {
     }
 
     @Step
-    fun organDonationHeaderVisible(): Boolean {
-        return more.isDonationHeaderVisible()
-    }
-
-    @Step
     fun organDonationDescriptionVisible(): Boolean {
         return more.isDonationDescriptionVisible()
     }
@@ -39,5 +34,15 @@ open class MoreSteps {
     @Step
     fun organDonationButtonVisible(): Boolean {
         return more.isDonationButtonVisible()
+    }
+
+    @Step
+    fun dataSharingDescriptionVisible(): Boolean {
+        return more.isDataSharingDescriptionVisible()
+    }
+
+    @Step
+    fun dataSharingButtonVisible(): Boolean {
+        return more.isDataSharingButtonVisible()
     }
 }

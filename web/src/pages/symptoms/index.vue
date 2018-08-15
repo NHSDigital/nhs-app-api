@@ -1,9 +1,7 @@
 <template>
-  <main>
-    <div>
-      <symptoms-check/>
-    </div>
-  </main>
+  <div class="pull-content">
+    <symptoms-check/>
+  </div>
 </template>
 
 <script>
@@ -17,9 +15,6 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-@import "../../style/html";
-@import "../../style/fonts";
-@import "../../style/buttons";
-@import "../../style/elements";
+<style module lang="scss" scoped>
+
 </style>

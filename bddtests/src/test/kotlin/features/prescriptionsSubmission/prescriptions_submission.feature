@@ -8,6 +8,7 @@ Feature: Prescriptions submission
   @NHSO-860
   @NHSO-855
   @smoketest
+  @prescription
   Scenario Outline: The User orders a repeat prescription with 5 entries
     Given <GP System> is initialised
     And I am using <GP System> GP System to submit my prescription

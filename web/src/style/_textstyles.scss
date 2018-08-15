@@ -4,27 +4,37 @@
 
 $kernel: -0.063em;
 @mixin kerneliOS {
-  @supports (-webkit-overflow-scrolling: touch) {
-    letter-spacing: $kernel;
-  }
+	@supports (-webkit-overflow-scrolling: touch) {
+		letter-spacing: $kernel;
+	}
 }
 @mixin h1 {
-  display: block;
-  font-family: $frutiger-roman;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 29px;
-  color: $white;
+	display: block;
+	font-family: $frutiger-roman;
+	font-weight: 700;
+	font-size: 2em;
+	line-height: 2em;
+	color: $white;
+	@include kerneliOS;
+}
+@mixin h2Home { //New in new textstyles
+	display: block;
+	font-family: $frutiger-roman;
+	font-weight: 700;
+	font-size: 1.250em;
+	line-height: 1.250em;
+	color: $white;
+	@include kerneliOS;
 }
 @mixin h2 {
-  display: block;
-  font-family: $frutiger-roman;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  color: $white;
+	font-family: $frutiger-bold;
+	font-weight: 700;
+	font-size: 1.375em;
+	line-height: 1.375em;
+	color: $dark_grey;
+	@include kerneliOS;
 }
-@mixin h2Blue {
+@mixin h2Blue { //Removed in new textstyles 
   font-family: $frutiger-bold;
   font-weight: 700;
   font-size: 1.375em;
@@ -32,97 +42,176 @@ $kernel: -0.063em;
   color: $nhs_blue;
   @include kerneliOS;
 }
-@mixin screen_title {
-  display: block;
-  font-family: $frutiger-light;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 24px;
-  color: $white;
-}
 @mixin h3 {
-  font-family: $frutiger-bold;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 23px;
-  color: $mid_grey;
+	font-family: $frutiger-bold;
+	font-weight: 700;
+	font-size: 1.125em;
+	line-height: 1.125em;
+	color: $dark_grey;
+	@include kerneliOS;
 }
 @mixin h4 {
-  display: block;
-  font-family: $frutiger-bold;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 23px;
-  color: $dark_grey;
+	display: block;
+	font-family: $frutiger-bold;
+	font-weight: 700;
+	font-size: 1.125em;
+	line-height: 1.125em;
+	color: $dark_grey;
+	letter-spacing: $kernel;
 }
-@mixin h5 {
+@mixin screen_title {
+	display: block;
+	font-family: $frutiger-light;
+	font-weight: normal;
+	font-size: 1.250em;
+	line-height: 1.250em;
+	color: $white;
+	@include kerneliOS;
+}
+@mixin h5 { //Removed in new textstyles
   font-family: $frutiger-bold;
   font-weight: 700;
   font-size: 18px;
   line-height: 23px;
   color: $mid_grey;
 }
+@mixin account { //NEW in new textstyles
+	display: block;
+	font-family: $frutiger-light;
+	font-weight: normal;
+	font-size: 0.8em;
+	line-height: 1.250em;
+	color: $white;
+	@include kerneliOS;
+}
+@mixin h2Appointment { //NEW in new textstyles
+	display: block;
+	font-family: $frutiger-light;
+	font-weight: normal;
+	font-size: 1.370em;
+	line-height: 1.250em;
+	color: $dark_grey;
+	@include kerneliOS;
+}
 @mixin button {
-  display: block;
-  font-family: $frutiger-roman;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 23px;
-  color: $white;
+	display: block;
+	font-family: $frutiger-roman;
+	font-weight: 700;
+	font-size: 1.125em;
+	line-height: 1.125em;
+	color: $white;
+	@include kerneliOS;
 }
 @mixin default_label {
-  display: block;
-  font-family: $default;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 22px;
-  color: $dark_grey;
+	display: block;
+	font-weight: 700;
+	font-size: 1em;
+	line-height: 1.5em;
+	color: $dark_grey;
 }
 @mixin default_text {
-  display: block;
-  font-family: $default;
-  font-weight: normal;
-  font-size: 1em;
-  line-height: 1.5em;
-  color: $dark_grey;
+	display: block;
+	font-weight: normal;
+	font-size: 1em;
+	line-height: 1.5em;
+	color: $black;
 }
 @mixin default_text_white {
-  display: block;
-  font-family: $default;
-  font-size: 16px;
-  line-height: 22px;
-  color: $white;
+	display: block;
+	font-size: 1em;
+	line-height: 1.5em;
+	color: $white;
 }
 @mixin small_label {
-  display: block;
-  font-family: $default;
-  font-weight: 700;
-  font-size: 13px;
-  line-height: 22px;
-  color: $dark_grey;
+	display: block;
+	font-weight: 700;
+	font-size: 0.813em;
+	line-height: 0.813em;
+	color: $dark_grey;
 }
 @mixin small_text {
-  display: block;
-  font-family: $default;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 22px;
-  color: $dark_grey;
+	display: block;
+	font-weight: normal;
+	font-size: 0.875em;
+	line-height: 1.650;
+	color: $black;
 }
 @mixin message {
+	display: block;
+	font-weight: normal;
+	font-size: 1.125em;
+	line-height: 1.125em;
+	color: $black;
+}
+
+@mixin menu { //NEW in new textstyles
+	display: block;
+	font-weight: 500;
+	font-size: 0.75em;
+	line-height: 1.563em;
+	color: $dark_grey;
+}
+@mixin menu_active { //NEW in new textstyles
+	display: block;
+	font-weight: 500;
+	font-size: 0.75em;
+	line-height: 1.563em;
+	color: $nhs_blue;
+}
+
+@mixin text-area {
+  min-height: 100px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: $white;
+  border-radius: 5px;
+  padding: 16px;
+  border: 1px #979797 solid;
+  outline: none;
+  transition: all ease 0.5s;
   display: block;
-  font-family: $default;
   font-weight: normal;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 22px;
   color: $dark_grey;
 }
 
+@mixin panelHeader {
+  display: block;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+  color: $dark_grey;
+  font-family: $frutiger-bold;
+}
+
+@mixin panel {
+  display: table;
+	width: 100%;
+	box-sizing: border-box;
+	padding: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+	margin-top: 0.5em;
+	background-color: $white;
+	-webkit-box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
+	-moz-box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
+	box-shadow: 0.063em 0.063em 0.125em 0em rgba(0,0,0,0.2);
+	transition: all ease 0.5s;
+}
+
 @mixin float-buttons {
-  position: fixed;
-  left: 0;
-  right: 0;
-  background-color: $white;
-  padding: 16px;
-  border-top: 1px $background solid;
+	position: fixed;
+	bottom: 4.250em;
+	left: 0em;
+	right: 0em;
+	background-color: $white;
+	box-sizing: border-box;
+	padding: 1em;
+	border-top: 0.063em $background solid;
+	border-bottom: 0.063em $background solid;
+	height: 5em;
+	transform: translateZ(1em);
+	z-index: 5;
+	box-shadow: 0em -0.100em 0.200em rgba(0, 0, 0, .1);
 }

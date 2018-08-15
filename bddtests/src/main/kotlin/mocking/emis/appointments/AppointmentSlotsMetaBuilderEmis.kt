@@ -19,7 +19,7 @@ class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
                                       userPatientLinkToken: String? = null)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointmentslots/meta") {
 
-    var delayMillisecs = 0;
+    var delayMillisecs = 0
 
     init {
         requestBuilder
@@ -33,7 +33,7 @@ class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
 
     fun withDelay(delayMilliseconds : Duration):AppointmentSlotsMetaBuilderEmis{
         delayMillisecs = delayMilliseconds.toMillis().toInt()
-        return this;
+        return this
     }
 
     fun respondWithSuccess(model: GetAppointmentSlotsMetaResponseModel): Mapping {

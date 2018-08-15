@@ -28,18 +28,26 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  .checkbox {
-    border: 1px #979797 solid;
-    width: 24px;
-    height: 24px;
-    border-radius: 5px;
-    margin-right: 16px;
-    flex: 0 0 24px;
-  }
+<style module lang="scss" scoped>
+@import "../../style/colours";
 
-  .checked {
-    padding-left: 4px;
-    padding-top: 6px;
+  .checkbox {
+    margin-right: 1em;
+    flex: 0 0 1.5em;
+    border: 0.063em $light_grey solid;
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 0.313em;
+    padding-bottom: 0.5em;
+    &:active {
+      border-color: $black;
+    }
+    .checked {
+      margin-left: 0.250em;
+      margin-top: 0.375em;
+    }
+  }
+  label {
+    padding-top: 0.125em;
   }
 </style>

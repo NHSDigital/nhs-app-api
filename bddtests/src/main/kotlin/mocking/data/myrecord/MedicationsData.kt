@@ -9,10 +9,10 @@ object MedicationsData {
 
     fun getEmisMedicationData(): MedicationsResponse {
 
-        val now = LocalDateTime.now();
-        val oneMonthAgo = now.minusMonths(1).toString();
-        val tenMonthsAgo = now.minusMonths(10).toString();
-        val twentyMonthsAgo = now.minusMonths(20).toString();
+        val now = LocalDateTime.now()
+        val oneMonthAgo = now.minusMonths(1).toString()
+        val tenMonthsAgo = now.minusMonths(10).toString()
+        val twentyMonthsAgo = now.minusMonths(20).toString()
 
         return MedicationsResponse (
                 medicalRecord = MedicationMedicalRecord (
@@ -115,9 +115,9 @@ object MedicationsData {
 
     fun getTppMedicationData(): ViewPatientOverviewReply {
 
-        val now = LocalDateTime.now();
-        val tenMonthsAgo = now.minusMonths(10).toString();
-        val twentyMonthsAgo = now.minusMonths(20).toString();
+        val now = LocalDateTime.now()
+        val tenMonthsAgo = now.minusMonths(10).toString()
+        val twentyMonthsAgo = now.minusMonths(20).toString()
 
         return ViewPatientOverviewReply(
                 drugs = mutableListOf
@@ -159,7 +159,7 @@ object MedicationsData {
                                 value = "Ibuprofen"
                         )
                 )
-        );
+        )
     }
 
     fun getTppDefaultMedicationsModel(): ViewPatientOverviewReply {
@@ -167,6 +167,6 @@ object MedicationsData {
                 drugs = mutableListOf<ViewPatientOverviewItem>(),
                 currentRepeats = mutableListOf<ViewPatientOverviewItem>(),
                 pastRepeats = mutableListOf<ViewPatientOverviewItem>()
-        );
+        )
     }
 }

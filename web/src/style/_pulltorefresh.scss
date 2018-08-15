@@ -1,0 +1,241 @@
+@import './colours';
+
+*, *:before, *:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html, body {
+    //font-size: 62.5%;
+    //height: 100%;
+    //overflow: hidden;
+  }
+  /*svg {
+    display: block;
+    overflow: visible;
+  }*/
+  .cont {
+    position: relative;
+    height: 100%;
+    background: $background;
+    overflow: auto;
+  }
+  .pull {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -20rem;
+    margin-top: -32rem;
+    width: 40rem;
+    height: 64rem;
+    background: $nhs_blue;
+    overflow: hidden;
+    
+    &-head {
+      position: relative;
+      height: 10rem;
+      background: #C0C4D7;
+      text-align: center;
+      user-select: none;
+      
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        bottom: 1rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 2px solid $background;
+        border-left: none;
+        border-top: none;
+        transform: rotate(45deg);
+      }
+      &:before {
+        left: 7rem;
+      }
+      &:after {
+        right: 7rem;
+        
+      }
+    }
+    
+    &-pull-down {
+      line-height: 10rem;
+      font-size: 2rem;
+      text-transform: uppercase;
+      color: $background;
+      font-weight: bold;
+    }
+    
+    &-body {
+      //position: relative;
+      //height: 54rem;
+      cursor: grab;
+      
+      &.withTransition {
+        transition: transform 0.45s;
+      }
+    }
+    
+    &-svg {
+      z-index: 2;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+        
+        path {
+            fill: $background;
+            transform: translate(0em, -6.126em);
+        }
+    }
+    &-ball-cont {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 12rem;
+      height: 1rem;
+      margin-left: -6rem;
+      background: $background;
+      filter: url("#goo");
+    }
+    &-ball {
+      position: absolute;
+      top: 9rem;
+      left: 50%;
+      margin-left: -3.5rem;
+      z-index: 1;
+      width: 7rem;
+      height: 7rem;
+      border-radius: 50%;
+      background: #fff;
+      filter: url("#goo");
+      transition: transform 0.7s;
+      
+      &.jump {
+        transform: translateY(-20rem);
+      }
+    }
+    
+    &-progress {
+      position: absolute;
+      top: 13.5rem;
+      left: 50%;
+      margin-left: -4rem;
+      width: 8rem;
+      height: 8rem;
+      
+      &.animate {
+        transition: transform 0.3s 2s, opacity 0.3s 2s;
+        transform: scale(2);
+        opacity: 0;
+        
+        path {
+          animation: animatePath 2s forwards;
+        }
+      }
+      
+      path {
+        stroke-dasharray: 251.36276245117188;
+        stroke-dashoffset: 251.36276245117188;
+      }
+    }
+    
+    &-content {
+      z-index: 3;
+      position: relative;
+      //height: 100%;
+      transition: opacity 0.2s;
+      user-select: none;
+      
+      &.hidden {
+        opacity: 0;
+      }
+    }
+    
+    &-el {
+      position: relative;
+      height: 9rem;
+      border-bottom: 1px solid $background;
+      padding: 1.5rem;
+      
+      &:last-child {
+        border-bottom: 0;
+      }
+      
+      &-img {
+        display: inline-block;
+        width: 6rem;
+        height: 6rem;
+        margin-right: 1.5rem;
+        border-radius: 1rem;
+        background: $nhs_blue;
+      }
+      
+      &-text {
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        width: 9rem;
+        height: 1.2rem;
+        border-radius: 0.5rem;
+        background: $nhs_blue;
+        
+        &:before,
+        &:after {
+          content: "";
+          position: absolute;
+          left: 0;
+          height: 0.9rem;
+          background: $nhs_blue;
+          border-radius: 0.5rem;
+        }
+        &:before {
+          top: 2.5rem;
+          width: 19rem;
+        }
+        &:after {
+          top: 4.9rem;
+          width: 24rem;
+        }
+      }
+    }
+    
+  }
+  
+  .check-out {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 1rem;
+    font-size: 1.5rem;
+  }
+  
+  @keyframes animatePath {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  
+  main.content {
+      background-color: $nhs_blue;
+  }
+  
+  
+  // DISABLE REFRESH
+  main.content {
+      background-color: $background;
+  }
+  .pull-svg {
+      display: none;
+  }
+  .pull-ball-cont {
+      display: none;
+  }
+  .pull-progress {
+      display: none;
+  }
+  .goo-el {
+      display: none;
+  }

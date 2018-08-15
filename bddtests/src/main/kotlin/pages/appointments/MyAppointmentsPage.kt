@@ -15,13 +15,13 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     private val successMessage = HybridPageElement(
-            browserLocator = "//*[@id='success-dialog']/div/p",
+            browserLocator = "//*[@data-purpose='success']",
             androidLocator = null,
             page = this
     )
 
     private val actualNoUpcomingText = HybridPageElement(
-            browserLocator = "//h2/..",
+            browserLocator = "//*[@data-purpose='info']",
             androidLocator = null,
             page = this
     )
@@ -46,8 +46,8 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
         return getAllSlots(upcomingAppointmentParentXpath, areCliniciansExpected)
     }
 
-    fun getWebAppointmentSlotDiv(): List<WebElementFacade> {
-        return findAllByXpath("$upcomingAppointmentParentXpath/div")
+    fun getWebAppointmentSlotDivs(): List<WebElementFacade> {
+        return findAllByXpath("$upcomingAppointmentParentXpath")
     }
 
     fun getSlotAtIndex(index: Int): Slot {

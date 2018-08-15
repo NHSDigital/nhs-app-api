@@ -8,7 +8,7 @@ Feature: Guidance prior to booking an appointment
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user
     And I am on my appointments page
-    When I select "Book an appointment" button
+    When I select "Book new appointment" button
     Then I am given guidance as to my options before booking an appointment
 
   @NHSO-420
@@ -16,7 +16,7 @@ Feature: Guidance prior to booking an appointment
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user
     And I am on my appointments page
-    When I select "Book an appointment" button
+    When I select "Book new appointment" button
     Then I am given guidance as to my options before booking an appointment
 
   @NHSO-420

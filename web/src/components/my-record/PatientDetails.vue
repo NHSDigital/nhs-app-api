@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.recordContent, getCollapseState]">
+  <div :class="[$style['record-content'], getCollapseState]">
     <label>{{ $t('my_record.patientInfo.fieldLabelName') }}</label>
     <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
     <hr>
@@ -45,12 +45,7 @@ export default {
 
 </script>
 
-<style lang="scss" module>
-  @import '../../style/html';
-  @import '../../style/fonts';
-  @import '../../style/spacings';
-  @import '../../style/colours';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
+@import '../../style/medrecordcontent';
 
-  .recordContent { @include record-content };
 </style>

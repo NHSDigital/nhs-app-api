@@ -1,18 +1,22 @@
 <template>
-  <div v-if="$store.state.session.showExpiryMessage" class="alertContainer">
-    <h3>{{ $t('icons.sessionExpired.title') }}</h3>
+  <div :class="$style['error-timeout']" data-purpose="session-timeout">
+    {{ $t('icons.sessionExpired.title') }}
   </div>
 </template>
 
-<style lang="scss">
- @import '../style/colours';
- .alertContainer {
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   box-sizing: border-box;
-   height: 32px;
-   background-color: $warning;
-   color: $dark_grey;
-  }
+<style module lang="scss" scoped>
+@import "../style/textstyles";
+@import "../style/colours";
+.error-timeout {
+  background: $warning_title;
+  @include default_text;
+  color: #000;
+  font-size: 1.125em;
+  text-align: center;
+  height: 2.5em;
+  line-height: 2.5em;
+  width: 100%;
+  margin-top: 0.1em;
+}
+
 </style>

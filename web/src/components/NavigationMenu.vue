@@ -1,43 +1,48 @@
 <template>
-  <nav class="menu">
+  <nav :class="$style.menu">
     <ul>
-      <li :class="getMenuitemState(0)">
+      <li :class="[isMenuItemSelected(0) ? $style.active : undefined]"
+          :data-selected="[isMenuItemSelected(0) ? true : false]">
         <a href="/symptoms"
            data-sid="symptoms-menu-item"
            @click="setMenuitemState($event)">
-          <symptoms-icon/>
+          <symptoms-icon :selected="isMenuItemSelected(0)"/>
           <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
         </a>
       </li>
-      <li :class="getMenuitemState(1)">
+      <li :class="[isMenuItemSelected(1) ? $style.active : undefined]"
+          :data-selected="[isMenuItemSelected(1) ? true : false]">
         <a href="/appointments"
            data-sid="appointments-menu-item"
            @click="setMenuitemState($event)">
-          <appointments-icon/>
+          <appointments-icon :selected="isMenuItemSelected(1)"/>
           <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
         </a>
       </li>
-      <li :class="getMenuitemState(2)">
+      <li :class="[isMenuItemSelected(2) ? $style.active : undefined]"
+          :data-selected="[isMenuItemSelected(2) ? true : false]">
         <a href="/prescriptions"
            data-sid="prescriptions-menu-item"
            @click="setMenuitemState($event)">
-          <prescriptions-icon/>
+          <prescriptions-icon :selected="isMenuItemSelected(2)"/>
           <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
         </a>
       </li>
-      <li :class="getMenuitemState(3)">
+      <li :class="[isMenuItemSelected(3) ? $style.active : undefined]"
+          :data-selected="[isMenuItemSelected(3) ? true : false]">
         <a href="/my-record/myrecordwarning"
            data-sid="myrecord-menu-item"
            @click="setMenuitemState($event)">
-          <record-icon/>
+          <record-icon :selected="isMenuItemSelected(3)"/>
           <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
         </a>
       </li>
-      <li :class="getMenuitemState(4)">
+      <li :class="[isMenuItemSelected(4) ? $style.active : undefined]"
+          :data-selected="[isMenuItemSelected(4) ? true : false]">
         <a href="/more"
            data-sid="more-menu-item"
            @click="setMenuitemState($event)">
-          <more-icon/>
+          <more-icon :selected="isMenuItemSelected(4)"/>
           <span>{{ $t('navigationMenu.moreLabel') }}</span>
         </a>
       </li>
@@ -62,11 +67,8 @@ export default {
     MoreIcon,
   },
   methods: {
-    getMenuitemState(menuItemIndex) {
-      // eslint-disable-next-line
-      return {
-        active: this.$store.state.navigation.menuItemStatusAt[menuItemIndex],
-      };
+    isMenuItemSelected(menuItemIndex) {
+      return this.$store.state.navigation.menuItemStatusAt[menuItemIndex];
     },
     setMenuitemState(event) {
       const a = event.currentTarget;
@@ -83,120 +85,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-  @import '../style/colours';
-  @import '../style/fonts';
-  @import '../style/textstyles';
-
-  nav.menu {
-    background-color: $white;
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    height: 70px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
-    z-index: 1000;
-
-    ul {
-      width: 100%;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      padding-left: 6px;
-      padding-right: 6px;
-      margin: 0;
-
-
-      li {
-        flex-grow: 1;
-        text-align: center;
-        vertical-align: bottom;
-        list-style: none;
-        margin-top: 4px;
-        align-self: stretch;
-        justify-content: space-around;
-        display: flex;
-        flex-direction: column;
-
-        a {
-          text-decoration: none;
-          display: inline-block;
-          text-align: center;
-          flex-grow: 1;
-          justify-content: space-around;
-        }
-
-        svg {
-          display: block;
-          align-self: center;
-          flex-grow: 1;
-          height: 30px;
-          margin: 6px auto 3px;
-        }
-
-        span {
-          align-self: flex-end;
-          box-sizing: border-box;
-          color: $dark_grey;
-          display: inline-block;
-          font-family: $default;
-          font-weight: normal;
-          font-size: 10px;
-          margin-top: 6px;
-          text-align: center;
-          text-transform: uppercase;
-          line-height: 10px;
-          width: 100%;
-        }
-      }
-
-      li.active {
-        span {
-          font-family: $default;
-          font-weight: normal;
-          font-size: 10px;
-          text-transform: uppercase;
-          color: $nhs_blue;
-        }
-      }
-    }
-  }
-
-  header {
-    background: $nhs_blue;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    height: 100px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, .5);
-
-    h1 {
-      @include screen_title;
-      text-align: center;
-    }
-
-    .nhs_logo {
-      margin: 16px;
-      height: 22px;
-      float: left;
-    }
-
-    .account {
-      margin: 16px;
-      float: right;
-      height: 22px;
-    }
-
-    hr {
-      margin: 54px 16px 9px 16px;
-      height: 1px;
-      border: none;
-      background-color: white;
-      opacity: 0.4;
-    }
-  }
+<style module lang="scss" scoped>
+@import '../style/navmenu';
 
 </style>

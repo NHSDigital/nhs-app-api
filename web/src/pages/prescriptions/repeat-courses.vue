@@ -1,94 +1,97 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
-    <main :class="$style.content">
 
-      <error-warning-dialog v-if="error" error-or-warning="error">
-        <p>
-          {{ $t('rp12.reasonMissing.summarySubHeader') }}
-        </p>
-      </error-warning-dialog>
+  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+    <message-dialog v-if="error" message-type="error">
+      <message-text>
+        {{ $t('rp12.reasonMissing.summarySubHeader') }}
+      </message-text>
+      <message-list>
+        <li>{{ $t('rp03.noMedicinesSelected') }}</li>
+      </message-list>
+    </message-dialog>
 
+    <div v-if="showRepeatCourses" :class="$style.info">
+      <p>{{ $t('rp03.subHeader') }}</p>
+    </div>
+
+    <div v-if="showRepeatCourses">
       <form @submit.prevent="validate">
-        <div v-if="showRepeatCourses">
-          <div :class="$style.panel">
-            <h2 :class="$style.panelHeader">
-              {{ $t('rp03.subHeader') }}
-            </h2>
-            <hr>
-
-            <div :class="{ 'validation-border-left': error }">
-              <p v-if="error" style="color:#DA291C; font-weight: 700; margin-bottom: 16px;">
-                <inline-error-icon />
-                {{ $t('rp03.noMedicinesSelected') }}
-              </p>
-              <repeat-prescription
-                v-for="repeatPrescription in repeatPrescriptionCourses"
-                :key="repeatPrescription.id"
-                :selected="repeatPrescription.selected"
-                :prescription-details="repeatPrescription" />
-            </div>
-
+        <div :class="$style.panel">
+          <div :class="{
+            [$style['validation-inline']]: error,
+            [$style['validation-border-left']]: error}">
+            <error-message v-if="error" id="error-type">
+              {{ $t('rp03.noMedicinesSelected') }}
+            </error-message>
+            <repeat-prescription
+              v-for="repeatPrescription in repeatPrescriptionCourses"
+              :key="repeatPrescription.id"
+              :selected="repeatPrescription.selected"
+              :prescription-details="repeatPrescription" />
           </div>
-          <div role="form">
-            <label :class="$style.formLabel" for="specialRequest">
-              {{ $t('rp03.specialRequestsLabel') }}
-            </label>
-            <textarea
-              id="specialRequest"
-              ref="specialRequest"
-              :class="$style.textArea"
-              v-model="specialRequest"
-              maxlength="1000"
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="off"
-              spellcheck="false"/>
-            <p id="maxSpecialRequest">{{ $t('rp03.maxSpecialRequest') }}</p>
-            <p id="disclaimer" :class="$style.disclaimer">{{ $t('rp03.disclaimer') }}</p>
-          </div>
-          <br>
-          <p :class="$style.prescription_not_shown">
+        </div>
+        <div :class="$style.form" role="form">
+          <label for="specialRequest">
+            {{ $t('rp03.specialRequestsLabel') }}
+          </label>
+          <textarea
+            id="specialRequest"
+            ref="specialRequest"
+            v-model="specialRequest"
+            maxlength="1000"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"/>
+          <p id="maxSpecialRequest" class="char">{{ $t('rp03.maxSpecialRequest') }}</p>
+          <p id="disclaimer">{{ $t('rp03.disclaimer') }}</p>
+        </div>
+        <div :class="$style['info']">
+          <p>
             {{ $t('rp03.changePharmacyText') }}
           </p>
-          <br>
-          <button id="btn_order_prescription" :class="[$style.button, $style.green]">
-            {{ $t('rp03.continueButton') }}
-          </button>
         </div>
-
-        <div v-if="showNoRepeatCourses" :class="$style.info">
-          <h3>{{ $t('rp06.empty.subHeader') }}</h3>
-          <p>
-            {{ $t('rp06.empty.body') }}
-          </p>
-        </div>
-
+        <button id="btn_order_prescription" :class="[$style.button, $style.green]">
+          {{ $t('rp03.continueButton') }}
+        </button>
       </form>
-      <nuxt-link
-        v-if="hasLoaded"
-        :class="[$style.button, $style.grey]"
-        to="/prescriptions"
-        tag="button"
-        type="submit">
-        {{ $t('rp03.backButton') }}
-      </nuxt-link>
-    </main>
+    </div>
+
+    <div v-if="showNoRepeatCourses" :class="$style.info">
+      <h3>{{ $t('rp06.empty.subHeader') }}</h3>
+      <p>
+        {{ $t('rp06.empty.body') }}
+      </p>
+    </div>
+
+    <nuxt-link
+      v-if="hasLoaded"
+      :class="[$style.button, $style.grey]"
+      to="/prescriptions"
+      tag="button"
+      type="submit">
+      {{ $t('rp03.backButton') }}
+    </nuxt-link>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
+import MessageList from '@/components/widgets/MessageList';
 import Spinner from '@/components/widgets/Spinner';
 import RepeatPrescription from '@/components/RepeatPrescription';
-import InlineErrorIcon from '../../components/icons/InlineErrorIcon';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 
 export default {
   components: {
-    InlineErrorIcon,
     Spinner,
     RepeatPrescription,
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
+    MessageList,
+    ErrorMessage,
   },
   data() {
     return {
@@ -155,50 +158,10 @@ export default {
 };
 </script>
 
-
-<style module lang="scss">
-  @import "../../style/html";
-  @import "../../style/fonts";
+<style module lang="scss" scoped>
+  @import "../../style/forms";
+  @import "../../style/panels";
+  @import "../../style/info";
+  @import "../../style/errorvalidation";
   @import "../../style/buttons";
-  @import "../../style/elements";
-  @import "../../style/spacings";
-  @import "../../style/textstyles";
-  @import "../../style/colours";
-
-  .formLabel {
-    @include default_label;
-    padding-top: 16px;
-    padding-bottom: 8px;
-  }
-
-  .panel {
-    @include panel;
-  }
-  .panelHeader {
-    @include panelHeader;
-    font-family: $frutiger-bold!important;
-  }
-
-  .panelContent {
-    display: table-cell;
-    vertical-align: top;
-  }
-
-  .form {
-    margin-bottom: 24px;
-    padding: 0;
-    display: block;
-  }
-
-  .textArea {
-    @include text-area;
-  }
-
-  .disclaimer {
-    margin-top: 10px;
-  }
-
-  .prescription_not_shown {
-    margin-top: 10px;
-  }
 </style>

@@ -15,11 +15,11 @@ class AppointmentsBookingStepDefinitions {
     }
 
     @Given("^there are (.*) appointments available to book, but GP system doesn't respond a timely fashion when booking$")
-    fun thereAreAvailableAppointmentsToBookBuySystemDoesntRespond(gpSystem: String) {
+    fun thereAreAvailableAppointmentsToBookButSystemDoesNotRespond(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateBookingResponse{
-            bookRequest->bookRequest.withDelay(Duration.ofSeconds(70)).respondWithSuccess()}
+            bookRequest->bookRequest.withDelay(Duration.ofSeconds(12)).respondWithSuccess()}
     }
 
     @Given("^there are (.*) appointments available to book, but the GP system is unavailable$")

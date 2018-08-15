@@ -1,36 +1,33 @@
 <template>
-  <main v-if="showTemplate" :class="bottomStyle()">
-    <error-warning-dialog v-if="noAvailableAppointments" error-or-warning="warning">
-      <p>
+  <div v-if="showTemplate" class="pull-content">
+    <message-dialog v-if="noAvailableAppointments" message-type="warning">
+      <message-text :is-header="true">
+        {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
+      </message-text>
+      <message-text>
         {{ $t('appointments.booking.noAppointmentsAvailable.line1') }}
-      </p>
-      <p>
+      </message-text>
+      <message-text>
         {{ $t('appointments.booking.noAppointmentsAvailable.line2') }}
-      </p>
-    </error-warning-dialog>
+      </message-text>
+    </message-dialog>
 
-    <div ref="noMatching" tabindex="-1">
-      <error-warning-dialog v-if="showNoMatchingWarning" error-or-warning="warning">
-        <p>
-          {{ $t('appointments.booking.adjustSearch.line1') }}
-        </p>
-        <p>
-          {{ $t('appointments.booking.adjustSearch.line2') }}
-        </p>
-      </error-warning-dialog>
-    </div>
     <div ref = "errors" tabindex="-1">
-      <error-warning-dialog v-show="showValidationError"
-                            error-or-warning="error" error-warning-id="validationErrors">
-        <p> {{ $t('appointments.booking.validationErrors.problemFound') }} </p>
-        <p v-if="!validationError.isTypeValid">
-          - {{ $t('appointments.booking.validationErrors.type') }}
-        </p>
-        <p v-if="!validationError.isLocationValid">
-          - {{ $t('appointments.booking.validationErrors.location') }}
-        </p>
-        <p>- {{ $t('appointments.booking.validationErrors.slot') }}</p>
-      </error-warning-dialog>
+      <message-dialog v-show="showValidationError"
+                      message-type="error" message-id="validationErrors">
+        <message-text>
+          {{ $t('appointments.booking.validationErrors.problemFound') }}
+        </message-text>
+        <message-list :is-error="true">
+          <li v-if="!validationError.isTypeValid">
+            {{ $t('appointments.booking.validationErrors.type') }}
+          </li>
+          <li v-if="!validationError.isLocationValid">
+            {{ $t('appointments.booking.validationErrors.location') }}
+          </li>
+          <li> {{ $t('appointments.booking.validationErrors.slot') }}</li>
+        </message-list>
+      </message-dialog>
     </div>
 
     <filters
@@ -41,7 +38,21 @@
       :validation-error="validationError"
     />
 
-    <slot-list ref="slot_list" :available-slots="availableSlots"/>
+    <slot-list ref="slot_list" :available-slots="availableSlots"
+               :show-validation-error="showValidationError"/>
+
+    <div ref="noMatching" tabindex="-1">
+      <message-dialog v-if="showNoMatchingWarning"
+                      :icon-text="$t('appointments.booking.adjustSearch.title')"
+                      message-type="warning">
+        <message-text>
+          {{ $t('appointments.booking.adjustSearch.line1') }}
+        </message-text>
+        <message-text>
+          {{ $t('appointments.booking.adjustSearch.line2') }}
+        </message-text>
+      </message-dialog>
+    </div>
 
     <button
       v-if="availableAppointments"
@@ -49,16 +60,19 @@
       @click="onConfirmButtonClicked">
       {{ $t('appointments.booking.bookButtonText') }}
     </button>
-    <nuxt-link :class="[$style.button, $style.grey]"
+    <nuxt-link v-if="loadComplete"
+               :class="[$style.button, $style.grey]"
                :to="backButtonPath" tag="button" >
       {{ $t('appointments.booking.backButtonText') }}
     </nuxt-link>
-  </main>
+  </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
+import MessageList from '@/components/widgets/MessageList';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
@@ -66,7 +80,9 @@ import Routes from '../../Routes';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
+    MessageList,
     FloatingButtonBottom,
     Filters,
     SlotList,
@@ -107,6 +123,9 @@ export default {
     availableAppointments() {
       const hasSlots = this.$store.state.availableAppointments.slots.size > 0;
       return this.$store.state.availableAppointments.hasLoaded && hasSlots;
+    },
+    loadComplete() {
+      return this.$store.state.availableAppointments.hasLoaded;
     },
   },
   mounted() {
@@ -181,68 +200,11 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/html";
-  @import "../../style/fonts";
-  @import "../../style/spacings";
-  @import "../../style/buttons";
-  @import "../../style/elements";
+<style module lang="scss" scoped>
+@import "../../style/buttons";
 
-  .main {
-    @include space(padding, all, $three);
-
-    &.error {
-      border: 3px $error solid;
-    }
-
-    .form {
-      margin-bottom: 24px;
-      label {
-        @include default_label;
-        padding-top: 16px;
-        padding-bottom: 8px;
-      }
-    }
-
-    .info p {
-      display: block;
-      font-weight: normal;
-      font-size: 1em;
-      line-height: 1.5em;
-      color: #4A4A4A;
-      font-size: 1em;
-      margin-bottom: 1em;
-    }
-  }
-
-  div:focus {
-    outline: none !important;
-  }
-
-  .mainShowingSlots {
-    @include space(padding, all, $three);
-    padding-bottom: 78px;
-  }
-
-  .summary {
-    font-weight: bold;
-    @include space(margin, bottom, $three);
-  }
-
-  .info {
-    @include default_text;
-    font-size: 12pt;
-    @include space(margin, bottom, $three);
-  }
-
-  .slot {
-    list-style: none;
-    @include space(margin, bottom, $three);
-  }
-
-  .summary {
-    font-weight: bold;
-    @include space(margin, bottom, $three);
-  }
+div:focus {
+  outline: none !important;
+}
 
 </style>

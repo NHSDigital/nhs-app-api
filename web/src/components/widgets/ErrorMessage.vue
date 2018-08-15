@@ -1,13 +1,12 @@
 <template>
-  <div>
-    <p :class="$style.errorMessage">
-      <error-marker-icon/>
-      <span data-purpose="error">
-        <slot/>
-      </span>
-    </p>
-  </div>
+  <p :class="$style['validation-text']">
+    <error-marker-icon/>
+    <span data-purpose="error">
+      <slot/>
+    </span>
+  </p>
 </template>
+
 
 <script>
 /* eslint-disable import/extensions */
@@ -20,17 +19,6 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import '../../style/fonts';
-  @import '../../style/colours';
-
-  #errorMessage {
-    display: block;
-    font-family: $default;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 22px;
-    color: $error;
-    padding-bottom: 10px;
-  }
+<style module lang="scss" scoped>
+  @import "../../style/errorvalidation";
 </style>

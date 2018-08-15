@@ -1,9 +1,9 @@
 <template>
   <div :class="$style.panel">
-    <h5 aria-label="date">{{ formatDate(appointment.startTime) }}</h5>
+    <h3 aria-label="date">{{ formatDate(appointment.startTime) }}</h3>
     <h4 aria-label="start time">{{ formatTime(appointment.startTime) }}</h4>
     <hr aria-hidden="true">
-    <p aria-label="session name">
+    <p :class="$style.session" aria-label="session name">
       {{ appointment.type }}
     </p>
     <hr aria-hidden="true">
@@ -14,7 +14,7 @@
     </p>
 
     <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
-       :class="$style.clinician">
+       :class="$style.person">
       <clinician-icon/>&nbsp;
       <span :aria-label="'clinician ' + (index +1)">
         {{ clinician }}
@@ -22,9 +22,9 @@
     </p>
 
     <span v-if="showCancellationLink">
-      <hr aria-hidden="true">
-      <p>
-        <nuxt-link to="/appointments/cancel" @click.native="select">
+      <hr :class="$style.cancel" aria-hidden="true">
+      <p >
+        <nuxt-link :class="$style['cancel-link']" to="/appointments/cancel" @click.native="select">
           Cancel appointment
         </nuxt-link>
       </p>
@@ -55,7 +55,7 @@ export default {
     },
   },
   methods: {
-    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mm a'),
+    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mma'),
     formatDate: dateTime => moment.tz(dateTime, 'Europe/London').format('dddd D MMMM YYYY'),
     select() {
       if (this.showCancellationLink) {
@@ -66,36 +66,10 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/spacings";
-  @import '../../style/fonts';
-  @import '../../style/colours';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
+@import "../../style/panels";
 
-  .panel {
-     width: 100%;
-     box-sizing: border-box;
-     padding: 16px;
-     margin-bottom: 16px;
-     margin-top: 8px;
-     background-color: $white;
-     -webkit-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2);
-     -moz-box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2);
-     box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.2);
-     display: table;
-     transition: all ease 0.5s;
-   }
-
-  .panel p {
-    display: block;
-    font-weight: normal;
-    font-size: 1em;
-    line-height: 1.5em;
-    color: #4A4A4A;
-  }
-
-  .location, .clinician {
-    margin-bottom: 8px;
-  }
-
+.cancel {
+  margin-top: 0.5em;
+}
 </style>

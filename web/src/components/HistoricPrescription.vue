@@ -1,22 +1,24 @@
 <template>
-  <div :class="$style.container">
-    <div v-if="prescriptionCourse.orderDate != null">
-      <b>
-        {{ $t('rp02.orderDate') }}:
-      </b>
-      <span aria-label="order-date">{{ prescriptionCourse.orderDate | shortDate }}</span>
-      <hr>
-    </div>
-    <b aria-label="course-name">{{ prescriptionCourse.name }}</b>
-    <div :class="$style.dosage" aria-label="detail">{{ prescriptionCourse.details }}</div>
+  <div :class="$style.panel">
+    <p v-if="prescriptionCourse.orderDate != null">
+      <b>{{ $t('rp02.orderDate') }}:</b>
+      <span data-label="order-date">
+        {{ prescriptionCourse.orderDate | shortDate }}
+      </span>
+    </p>
+    <hr v-if="prescriptionCourse.orderDate != null">
+    <b data-label="course-name">{{ prescriptionCourse.name }}</b>
+    <p data-label="detail">{{ prescriptionCourse.details }}</p>
     <div v-if="prescriptionCourse.status != null">
+      <hr>
       <div :class="getStatusStyle()">
-        <hr>
-        <component :is="getIcon()" />
-        <b :class="$style.statusText" aria-label="status">{{ getStatusText() }}</b>
-        <div>
-          <p area-label="status">{{ getStatusDescription() }}</p>
-        </div>
+        <b>
+          <component :is="getIcon()" />
+          <span data-label="status">
+            {{ getStatusText() }}
+          </span>
+        </b>
+        <p data-label="status-description">{{ getStatusDescription() }}</p>
       </div>
     </div>
   </div>
@@ -46,19 +48,19 @@ export default {
   created() {
     this.statusStyling = {
       [MedicationCourseStatus.Rejected]: {
-        style: 'medication-status-rejected',
+        style: 'rejected',
         text: this.$t('rp02.statusRejected.subHeader'),
         description: this.$t('rp02.statusRejected.description'),
         icon: 'InfoIcon',
       },
       [MedicationCourseStatus.Requested]: {
-        style: 'medication-status-requested',
+        style: 'requested',
         text: this.$t('rp02.statusRequested.subHeader'),
         description: this.$t('rp02.statusRequested.description'),
         icon: 'ClockIcon',
       },
       [MedicationCourseStatus.Approved]: {
-        style: 'medication-status-approved',
+        style: 'issued',
         text: this.$t('rp02.statusApproved.subHeader'),
         description: this.$t('rp02.statusApproved.description'),
         icon: 'ReadyIcon',
@@ -83,48 +85,6 @@ export default {
 
 </script>
 
-<style module lang="scss">
-@import "../style/html";
-@import "../style/elements";
-@import "../style/buttons";
-@import "../style/fonts";
-@import "../style/spacings";
-@import "../style/colours";
-
-.container {
-  border: solid 1px $mid_grey;
-  border-radius: 5px;
-  background: $white;
-  @include space(padding, all, $three);
-  transition: all ease 0.5s;
-  hr {
-    height: 1px;
-    border: none;
-    background-color: $dark_grey;
-    opacity: 0.2;
-    @include space(margin, top, $two);
-    @include space(margin, bottom, $two);
-  }
-}
-
-.medication-status-rejected {
-  color: $medication_status_rejected;
-}
-
-.medication-status-requested {
-  color: $medication_status_requested;
-}
-
-.medication-status-approved {
-  color: $medication_status_approved;
-}
-
-.statusText {
-  margin-left: 10px;
-}
-
-.dosage {
-  white-space: pre-wrap;
-}
-
+<style module lang="scss" scoped>
+@import "../style/panels";
 </style>

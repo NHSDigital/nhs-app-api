@@ -50,6 +50,6 @@ open class LoginSteps {
     @Step
     fun assertMenuIsNotVisible()
     {
-        loginPage.assertMenuIsNotVisible();
+        loginPage.assertMenuIsNotVisible()
     }
 }

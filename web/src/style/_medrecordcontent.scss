@@ -1,0 +1,130 @@
+@import './colours';
+@import './textstyles';
+div.record-content {
+  background: $white;
+  box-sizing: border-box;
+  height: auto;
+  overflow: auto;
+  p,
+  li {
+    @include small_text;
+    line-height: 2em;
+    li,
+    p {
+      font-size: 1em;
+    }
+  }
+  p {
+    padding-left: 1.2em;
+    padding-right: 1.2em;
+    padding-bottom: 1em;
+    &:first-child {
+      padding-top: 1em;
+    }
+    &:last-child {
+      padding-bottom: 1em;
+    }
+  }
+  li {
+    list-style-type: none;
+    list-style-position: inside;
+  }
+  label,
+  b {
+    @include small_label;
+    padding-left: 1.3em;
+    padding-right: 1.3em;
+    padding-bottom: 0.250em;
+    &:first-child {
+      padding-top: 1em;
+    }
+  }
+  hr {
+    margin-bottom: 1em;
+    border: none;
+    height: 0.063em;
+    background: $background;
+    &:last-child {
+      display: none;
+    }
+  }
+  .record-item {
+    li {
+      padding-left: 2.4em;
+      padding-right: 1.2em;
+      li {
+        padding: 0em;
+        li {
+          padding-left: 1.2em;
+        }
+      }
+    }
+    p {
+      padding-bottom: 0em;
+    }
+    hr {
+      margin-bottom: 0em;
+      margin-top: 1em;
+      display: block;
+    }
+    &:last-child {
+      padding-bottom: 1em;
+      hr {
+        display: none;
+      }
+    }
+  }
+  &.closed {
+    max-height: 0;
+    transition: max-height 0.5s ease 0.3s;
+    p,
+    b,
+    label,
+    hr {
+      opacity: 0;
+      transition: opacity 0.5s linear;
+    }
+  }
+  &.opened {
+    max-height: 375.000em;
+    transition: max-height 0.5s ease;
+    p,
+    b,
+    label,
+    hr {
+      opacity: 1;
+      transition: opacity 0.1s linear 0.3s;
+    }
+  }
+  .consultationTerm {
+    li {
+      display: list-item;
+      list-style-type: disc;
+      list-style-position: inside;
+        li::before {
+          content: '';
+          height:1px;
+      }
+      .observationText {
+        li {
+          list-style-type: none;
+        }
+        li::before{
+          content: '- ';
+        }
+      }
+    }
+  }
+  .testResultLine {
+    li {
+      display: list-item;
+      list-style-type: disc;
+      list-style-position: inside;
+      .testResultLineAssociatedText {
+        li {
+          list-style-type:none;
+        }
+      }
+    }
+  }
+}

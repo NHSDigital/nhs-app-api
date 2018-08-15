@@ -1,27 +1,22 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
-    <main :class="$style.content">
-      <div id="organdonantion" :class="$style['panel-title']">
-        <h2>{{ $t('more.organDonationLabel') }}</h2>
-        <p>
-          {{ $t('more.organDonationDesc') }}
-        </p>
-      </div>
-      <a id="btn_organdonation" :href="organDonationUrl" :class="$style.button" target="_blank">
-        {{ $t('more.organDonationButtonText') }}
-      </a>
-      <hr>
-      <br>
-      <div id="dataSharing" :class="$style['panel-title']">
-        <h2>{{ $t('more.dataSharingHeaderText') }}</h2>
-        <p>
-          {{ $t('more.dataSharingInfoText') }}
-        </p>
-      </div>
-      <a id="btn_datasharing" :href="dataSharingUrl" :class="$style.button" target="_blank">
-        {{ $t('more.dataSharingButtonText') }}
-      </a>
-    </main>
+  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+
+    <ul :class="$style['list-menu']">
+      <li>
+        <a id="btn_choices" :href="organDonationUrl"
+           style="text-decoration: none" target="_blank">
+          <h2>{{ $t('sc04.organDonation.subheader') }}</h2>
+          <p>{{ $t('sc04.organDonation.body') }}</p>
+        </a>
+      </li>
+      <li>
+        <a id="btn_111" :href="dataSharingUrl"
+           style="text-decoration: none" target="_blank">
+          <h2>{{ $t('sc04.dataSharing.subheader') }}</h2>
+          <p>{{ $t('sc04.dataSharing.body') }}</p>
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -34,12 +29,14 @@ export default {
     };
   },
 };
-
 </script>
 
-<style module lang="scss">
-  @import "../../style/html";
-  @import "../../style/fonts";
-  @import "../../style/buttons";
-  @import "../../style/elements";
+<style module lang="scss" scoped>
+@import '../../style/listmenu';
+.no-padding {
+  margin-top: -0.5em;
+  margin-left: -1em;
+  margin-right: -1em;
+}
+
 </style>

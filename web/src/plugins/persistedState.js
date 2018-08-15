@@ -22,7 +22,6 @@ export default ({
   store,
   req,
   isDev,
-  isServer,
   app,
 }) => {
   createPersistedState({
@@ -37,7 +36,7 @@ export default ({
         removeExcluded(state);
         const stringified = JSON.stringify(state);
 
-        if (isServer) {
+        if (process.server) {
           return app.$cookies.set(key, stringified, { secure: !isDev, sameSite: 'Lax', httpOnly: false });
         }
 

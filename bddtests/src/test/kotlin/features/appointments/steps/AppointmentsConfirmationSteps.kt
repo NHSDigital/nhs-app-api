@@ -7,6 +7,8 @@ import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import pages.ErrorPage
 import pages.appointments.AppointmentsConfirmationPage
 import worker.models.appointments.BookAppointmentSlotRequest
 import java.time.Duration
@@ -14,6 +16,7 @@ import java.time.Duration
 open class AppointmentsConfirmationSteps {
 
     lateinit var appointmentsConfirmation: AppointmentsConfirmationPage
+    lateinit var errorPage: ErrorPage
 
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
@@ -38,9 +41,10 @@ open class AppointmentsConfirmationSteps {
     fun mockEmisSuccessResponseDelayedBy(delayedBy: Long) {
         //accept all requests
         mockingClient
-                .forEmis { bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
-                        .respondWithSuccess()
-                        .delayedBy(Duration.ofSeconds(delayedBy))
+                .forEmis {
+                    bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
+                            .respondWithSuccess()
+                            .delayedBy(Duration.ofSeconds(delayedBy))
                 }
     }
 
@@ -59,7 +63,7 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkSymptomsLength(expectedLength: Int) {
-        Assert.assertTrue(appointmentsConfirmation.getSymptoms().length == expectedLength)
+        assertTrue(appointmentsConfirmation.getSymptoms().length == expectedLength)
     }
 
     @Step
@@ -69,22 +73,27 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkErrorSendingMessage() {
-        val message = appointmentsConfirmation.getServerErrorElement()
-
-        Assert.assertTrue(message.text.contains("Sorry, there's been a problem sending your request"))
-        Assert.assertTrue(message.text.contains("Please go back and try again."))
-        Assert.assertTrue(message.text.contains("If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly."))
+        assertTrue(
+                "Sub-heading is incorrect. ",
+                errorPage.hasSubHeading("Sorry, there's been a problem sending your request")
+        )
+        assertTrue(
+                "First part of the message is incorrect. ",
+                errorPage.hasDetailParagraphOne("Please go back and try again.")
+        )
+        assertTrue(
+                "Second part of the message is incorrect. ",
+                errorPage.hasDetailParagraphTwo("If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.")
+        )
     }
 
     @Step
-    fun pasteSymptoms(length: Int)
-    {
+    fun pasteSymptoms(length: Int) {
         appointmentsConfirmation.pasteSymptoms("x".repeat(length))
     }
 
     @Step
-    fun checkIfButtonIsVisible(button: String)
-    {
+    fun checkIfButtonIsVisible(button: String) {
         val isVisible = appointmentsConfirmation.isButtonVisible(button)
         Assert.assertTrue(isVisible)
     }

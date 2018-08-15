@@ -24,7 +24,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     private val commonSteps : CommonSteps = CommonSteps()
     private var cancellationReasons: ArrayList<GenericResponseObject> = arrayListOf()
 
-    private val SLOT_ID = 1;
+    private val SLOT_ID = 1
     val HTTP_EXCEPTION = "HttpException"
     val HTTP_RESPONSE = "HttpResponse"
 

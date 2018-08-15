@@ -1,0 +1,52 @@
+/** IMPORTS */
+@import './colours';
+@import './textstyles';
+@import './screensizes';
+/** APP */
+body {
+	padding: 0em;
+	margin: 0em;
+	background: $background;
+	@include default_text;
+	font-family: $default;
+	@include phoneOld {
+		font-size: 0.875em;	
+	}
+	@include phone {
+		font-size: 1em;	
+	}
+	@include tablet {
+		font-size: 1.225em;	
+	}
+	@include iPadPro {
+		font-size: 1.6em;	
+	}
+	@include desktop {
+		font-size: 1em;	
+	}
+}
+* {
+	padding: 0;
+	margin: 0;
+	text-rendering: optimizeSpeed;
+}
+
+main.content {
+	padding: 6.750em 1em 4.688em 1em;
+	box-sizing: border-box;
+	width: 100%;
+	
+	&.slim {
+		padding: 4.125em 1em 4.688em 1em;
+	}
+	&.nopadding {
+		padding: 6.250em 0em 3.125em 0em;
+	}
+	&.slim.nopadding  {
+		padding: 3.125em 0em 3.125em 0em;
+	}
+}
+
+
+
+

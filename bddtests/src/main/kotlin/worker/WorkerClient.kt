@@ -57,7 +57,7 @@ class WorkerClient {
 
     fun setCsrfToken(token:String)
     {
-        csrfToken = token;
+        this.csrfToken = token
     }
 
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
@@ -86,8 +86,8 @@ class WorkerClient {
         println(result)
 
         // Extract csrfToken
-        var parsedResponse = JsonParser().parse(result);
-        csrfToken = parsedResponse.asJsonObject.get("token").asString;
+        val parsedResponse = JsonParser().parse(result)
+        setCsrfToken(parsedResponse.asJsonObject.get("token").asString)
 
         val userSessionResponseBody = gson.fromJson<UserSessionResponse.UserSessionResponseBody>(result,
                 UserSessionResponse.UserSessionResponseBody::class.java)
@@ -251,7 +251,7 @@ class WorkerClient {
         // If we have a token, use it
         if(this.csrfToken.isNotEmpty())
         {
-            request.addHeader("X-CSRF-TOKEN", csrfToken);
+            request.addHeader("X-CSRF-TOKEN", csrfToken)
         }
 
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)

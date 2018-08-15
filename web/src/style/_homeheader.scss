@@ -1,0 +1,30 @@
+@import './colours';
+@import './textstyles';
+/** VARS */
+
+$logged_height: 12em; //16.5em
+.home-header {
+  position: fixed;
+  top: 0em;
+  left: 0em;
+  right: 0em;
+  bottom: $logged_height;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: $logged_height - 2em; //14.750em;
+  z-index: 2;
+  header {
+    flex: 1;
+    width: 100%;
+    background: $home_gradient;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: inset 0em -0.375em 0.5em rgba(0, 0, 0, .15);
+  }
+}

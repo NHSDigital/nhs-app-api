@@ -3,13 +3,13 @@ package pages
 class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val parent = HybridPageElement(
-            browserLocator = "//div[@class='msg error']",
+            browserLocator = "//div[@data-purpose='error']",
             androidLocator = null,
             page = this
     )
 
     val heading = HybridPageElement(
-            browserLocator = "//div[@class='msg error']/p[@class='header']",
+            browserLocator = "//div[@data-purpose='error']/p/b",
             androidLocator = null,
             page = this
     )
@@ -28,7 +28,7 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun paragraph(int: Int): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//div[@class='msg error']/p[$int]",
+                browserLocator = "//div[@data-purpose='error']/p[$int]",
                 androidLocator = null,
                 page = this
         )

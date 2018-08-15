@@ -1,11 +1,17 @@
 <template>
-  <div :class="['custom-dropdown', 'custom-dropdown--white', {selectError: errorBorder}]">
+  <span :class="dropdownClass">
     <select v-model="selectedValue" :id="selectId" :name="selectName"
-            :aria-labelledby="aLabelledBy" required="" tabindex="-1"
-            class="custom-dropdown__select custom-dropdown__select--white">
+            :aria-labelledby="aLabelledBy"
+            :class="[
+              $style['custom-dropdown__select'],
+              $style['custom-dropdown__select_element'],
+              $style['custom-dropdown__select--white']
+            ]"
+            required=""
+            tabindex="-1">
       <slot/>
     </select>
-  </div>
+  </span>
 </template>
 
 <script>export default {
@@ -40,16 +46,24 @@
         this.$emit('input', val);
       },
     },
+    dropdownClass() {
+      const dropdownClass = [this.$style.form, this.$style['custom-dropdown'], this.$style['custom-dropdown--white']];
+      if (this.errorBorder) {
+        dropdownClass.push(this.$style['validation-select-border']);
+      }
+
+      if (this.marginBottom) {
+        dropdownClass.push(this.$style['validation-select-border']);
+      }
+
+      return dropdownClass;
+    },
   },
 };
 </script>
 
-<style scoped lang="scss">
+<style module scoped lang="scss">
+@import "../../style/forms";
 @import "../../style/select";
-@import "../../style/colours";
-.custom-dropdown {
-  &.selectError {
-    border: 1px $error solid;
-  }
-}
+@import "../../style/errorvalidation";
 </style>

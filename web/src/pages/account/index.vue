@@ -1,46 +1,41 @@
 <template>
-  <div v-if="showTemplate" class="content">
-    <main :class="$style['panel-title']">
-      <div>
-        <h2 :class="$style['headerLine']">About us</h2>
-        <ul :class="$style['list-menu']">
-          <li>
-            <a id="btn_terms" :href="termsAndConditionsURL" target="_blank">
-              {{ $t('myAccount.termsAndConditions') }}
-            </a>
-          </li>
-          <li>
-            <a id="btn_privacy" :href="privacyPolicyURL" target="_blank">
-              {{ $t('myAccount.privacyPolicy') }}
-            </a>
-          </li>
-          <li>
-            <a id="btn_cookies" :href="cookiesPolicyURL" target="_blank">
-              {{ $t('myAccount.cookiesPolicy') }}
-            </a>
-          </li>
-          <li>
-            <a id="btn_openSource" :href="openSourceLicensesURL" target="_blank">
-              {{ $t('myAccount.openSourceLicenses') }}
-            </a>
-          </li>
-          <li>
-            <a id="btn_help" :href="helpAndSupportURL" target="_blank">
-              {{ $t('myAccount.helpAndSupport') }}
-            </a>
-          </li>
-        </ul>
-      </div>
-      <floating-button-bottom id="signout-button" :button-classes="['grey']" @on-click="signout()">
-        {{ $t('signOutButton.signOut') }}
-      </floating-button-bottom>
-    </main>
+  <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
+    <h2>About us</h2>
+    <ul :class="$style['list-menu']">
+      <li>
+        <a id="btn_terms" :href="termsAndConditionsURL" target="_blank">
+          {{ $t('myAccount.termsAndConditions') }}
+        </a>
+      </li>
+      <li>
+        <a id="btn_privacy" :href="privacyPolicyURL" target="_blank">
+          {{ $t('myAccount.privacyPolicy') }}
+        </a>
+      </li>
+      <li>
+        <a id="btn_cookies" :href="cookiesPolicyURL" target="_blank">
+          {{ $t('myAccount.cookiesPolicy') }}
+        </a>
+      </li>
+      <li>
+        <a id="btn_openSource" :href="openSourceLicensesURL" target="_blank">
+          {{ $t('myAccount.openSourceLicenses') }}
+        </a>
+      </li>
+      <li>
+        <a id="btn_help" :href="helpAndSupportURL" target="_blank">
+          {{ $t('myAccount.helpAndSupport') }}
+        </a>
+      </li>
+    </ul>
+    <floating-button-bottom id="signout-button" :button-classes="['grey']" @on-click="signout()">
+      {{ $t('signOutButton.signOut') }}
+    </floating-button-bottom>
   </div>
 </template>
 
 
 <script>
-
 /* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 
@@ -59,58 +54,22 @@ export default {
   },
   methods: {
     signout() {
-      this.$store.dispatch('auth/logout', '/login');
+      this.$store.dispatch('auth/logout');
     },
   },
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/html";
-  @import "../../style/fonts";
-  @import "../../style/buttons";
-  @import "../../style/elements";
-
-
-  ul.list-menu li a{
-    box-sizing: border-box;
-    background: transparent url('~/assets/icon_arrow_left.svg') no-repeat center right;
-    background-position: right 1em center;
-    position: relative;
-    margin-bottom: 0em;
-    margin-left: 0em;
-    padding: 1em 3em 0.250em 1em;
-    border-bottom: 1px #D8DDE0 solid;
-    padding-left: 16px;
-    display: block;
-    font-weight: 700;
-    font-size: 19.6px;
-    line-height: 1.5em;
-    color: #005EB8;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-    text-decoration: none;
+<style module lang="scss" scoped>
+@import "../../style/listmenu";
+.no-padding {
+  h2 {
+    margin-left: 0.7em;
+    margin-top: 0.5em;
   }
-.headerLine {
-  box-sizing: border-box;
+  margin-top: -0.5em;
+  margin-left: -1em;
+  margin-right: -1em;
 }
-  menu li h2, .form h2, .panel-title h2 {
-    font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
-    font-weight: 700;
-    font-size: 26.95px;
-    line-height: 1.375em;
-    color: #425563;
-    padding-bottom: 13.475px;
-    padding-top: 0.5em;
-    margin-bottom: 0;
-    margin-left: 18.865px;
-    margin-top: 13.475px;
-  }
-  ul.list-menu {
-    border-top: 1px #D8DDE0 solid;
-  }
-  main.content.nopadding {
-    padding: 3.125em 3em 3.125em 0em;
-  }
-</style>
 
+</style>

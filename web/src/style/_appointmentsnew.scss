@@ -1,0 +1,17 @@
+@import './textstyles';
+
+/** APPOINTMENTS */
+.appointmentTime {
+	h2 {
+		@include h2Appointment;
+		padding-bottom: 0.5em;
+		padding-top: 0.5em;
+	}
+	.selector {
+		margin-bottom: 1em;
+	}
+}
+
+.appointmentTimeSelector {
+  margin-bottom: 1em;
+}

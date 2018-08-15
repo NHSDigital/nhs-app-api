@@ -1,0 +1,40 @@
+/*Media Query Breakpoints*/
+
+$phone-width: 375px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+$desktop-wide-width: 1366px;
+
+@mixin phoneOld {
+	@media (max-device-width: #{$phone-width - 1px}) {
+		@content;
+	}
+}
+
+@mixin phone {
+	@media (min-device-width: #{$phone-width}) and (max-device-width: #{$tablet-width - 1px}) {
+		@content;
+	}	
+}
+
+@mixin tablet {
+  @media (min-device-width: #{$tablet-width}) and (max-device-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin iPadPro {
+  @media only screen
+	  	and (min-device-width: #{$desktop-width})
+	  	and (max-device-width: #{$desktop-wide-width}) 
+  		and (orientation: portrait)
+	  	and (-webkit-min-device-pixel-ratio: 1.5) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width + 1px}) {
+    @content;
+  }
+}

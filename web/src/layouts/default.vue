@@ -1,13 +1,14 @@
 <template>
-  <div id="app" :class="{ menusVisible: showMenu}">
+  <div id="app">
+    <home-header v-if="showLoginHeader" />
     <header-menu v-if="showMenu"/>
-    <div id="mainDiv">
+    <main :class="mainClass">
       <spinner />
       <connection-error />
       <api-error />
       <flash-message />
       <nuxt />
-    </div>
+    </main>
     <navigation-menu v-if="showMenu"/>
   </div>
 </template>
@@ -21,6 +22,8 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+import HomeHeader from '@/components/HomeHeader';
+import Routes from '../Routes';
 
 const ANALYTICS_DIRECT_CALL_RULE = 'track_action';
 
@@ -32,6 +35,7 @@ export default {
     ApiError,
     ConnectionError,
     FlashMessage,
+    HomeHeader,
   },
   head() {
     return {
@@ -53,6 +57,15 @@ export default {
         this.$store.state.auth.loggedIn &&
         this.$route.name !== 'Login'
       );
+    },
+    mainClass() {
+      if (this.isLoginPage()) {
+        return this.$style.homeMain;
+      }
+      return 'content pull-body';
+    },
+    showLoginHeader() {
+      return this.isLoginPage();
     },
   },
   created() {
@@ -80,13 +93,20 @@ export default {
       };
     }
   },
+  methods: {
+    isLoginPage() {
+      return this.$route.name === Routes.LOGIN.name;
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-@import "../style/html";
-.menusVisible {
-  margin-top: 100px;
-  margin-bottom: 70px;
-}
+@import "../style/main";
+@import "../style/pulltorefresh";
+@import "../style/elements";
+</style>
+
+<style module lang="scss" scoped>
+@import "../style/home";
 </style>

@@ -1,7 +1,7 @@
 <template>
-  <main v-if="showTemplate && hasLoaded" :class="$style.content">
+  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
     <div :class="$style['above-float-button']">
-      <div :class="$style.info">
+      <div :class="$style.info" data-purpose="info">
         <h2>{{ $t('my_record.testresultdetail.testResultTitle') }}</h2>
       </div>
       <div :class="$style['test-result-content']">
@@ -18,7 +18,7 @@
         {{ $t('my_record.testresultdetail.backButton') }}
       </floating-button-bottom>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -62,15 +62,8 @@ export default {
 
 </script>
 
-<style module lang="scss">
-  @import '../../style/html';
-  @import '../../style/fonts';
+<style module lang="scss" scoped>
   @import '../../style/spacings';
-  @import "../../style/buttons";
-  @import '../../style/elements';
-  @import "../../style/html";
-  @import "../../style/textstyles";
-  @import "../../style/colours";
 
   .content {
     @include space(padding, all, $three);

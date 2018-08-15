@@ -1,16 +1,14 @@
 <template>
-  <main v-if="showTemplate" :class="$style.main">
-    <error-warning-dialog v-if="showValidationError" error-or-warning="error">
-      <p>
-        <span data-purpose="error-heading">
-          {{ $t('appointments.cancel.noReasonDialogError') }}
-        </span><br>
-        <span data-purpose="error">
-          {{ $t('appointments.cancel.noReasonError') }}
-        </span>
-      </p>
-    </error-warning-dialog>
-    <div :class="$style.info">
+  <div v-if="showTemplate" class="pull-content">
+    <message-dialog v-if="showValidationError" message-type="error">
+      <message-text data-purpose="error-heading">
+        {{ $t('appointments.cancel.noReasonDialogError') }}
+      </message-text>
+      <message-list data-purpose="error">
+        <li>{{ $t('appointments.cancel.noReasonError') }}</li>
+      </message-list>
+    </message-dialog>
+    <div :class="$style.info" data-purpose="info">
       <p>{{ $t('appointments.cancel.info') }}</p>
     </div>
 
@@ -21,11 +19,12 @@
         {{ $t('appointments.cancel.form_label') }}
       </label>
 
-      <error-message v-if="showValidationError" id="errorLabel">
+      <error-message v-if="showValidationError" id="error-label" :class="$style.form">
         {{ $t('appointments.cancel.noReasonError') }}
       </error-message>
 
       <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
+                       :error-border="showValidationError"
                        select-id = "txt_reason" select-name="reason">
         <option disabled="" selected="" value="">
           {{ $t('appointments.cancel.dropdownDefaultOption') }}
@@ -46,21 +45,25 @@
             @click="onBackButtonClicked">
       {{ $t('appointments.cancel.backButtonText') }}
     </button>
-  </main>
+  </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import Appointment from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
+import MessageList from '@/components/widgets/MessageList';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import Routes from '../../Routes';
 
 export default {
   components: {
     Appointment,
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
+    MessageList,
     ErrorMessage,
     SelectDropdown,
   },
@@ -115,35 +118,8 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-@import "../../style/spacings";
-@import "../../style/textstyles";
+<style module lang="scss" scoped>
 @import "../../style/buttons";
-
-.main {
-  @include space(padding, all, $three);
-  &.error {
-    border: 3px $error solid;
-  }
-
-  .form {
-      margin-bottom: 24px;
-      label {
-        @include default_label;
-        padding-top: 16px;
-        padding-bottom: 8px;
-      }
-  }
-
-  .info p {
-    display: block;
-    font-weight: normal;
-    font-size: 1em;
-    line-height: 1.5em;
-    color: #4A4A4A;
-    font-size: 1em;
-    margin-bottom: 1em;
-  }
-}
-
+@import "../../style/forms";
+@import "../../style/info";
 </style>

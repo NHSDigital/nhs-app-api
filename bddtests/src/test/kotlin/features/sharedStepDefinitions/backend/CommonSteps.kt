@@ -27,7 +27,7 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import java.util.*
 import java.util.concurrent.TimeUnit
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes;
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 
 

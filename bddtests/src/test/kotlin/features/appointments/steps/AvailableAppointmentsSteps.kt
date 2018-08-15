@@ -22,7 +22,6 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
-import org.apache.xpath.operations.Bool
 import org.junit.Assert
 import org.junit.Assert.*
 import pages.ErrorPage
@@ -34,12 +33,9 @@ import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.time.Duration
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.servlet.http.Cookie
 import kotlin.collections.ArrayList
-import kotlin.math.exp
 
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
@@ -145,7 +141,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun generateDefaultUserData(gpSystem: String = "EMIS") {
-        var patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(gpSystem)
         Serenity.setSessionVariable(Patient::class).to(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
@@ -462,7 +458,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 uniqueAppointmentTypes = uniqueAppointmentTypes.plus(expectedOption)
             }
         }
-        var list = arrayListOf<String>()
+        val list = arrayListOf<String>()
         uniqueAppointmentTypes.forEach{appointment->list.add(appointment)}
         return list
     }
@@ -470,7 +466,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val actualLocationOptions = availableAppointments.getLocationFilterContents()
-        var expectedLocations =
+        val expectedLocations =
                 Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentLocationsKey)
                         ?: defaultEmisMetaSlotLocations.map { l -> l.locationName }
 
@@ -490,7 +486,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val actualClinicianOptions = availableAppointments.getClinicianFilterContents()
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
-        var expectedClinicians =
+        val expectedClinicians =
                 Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsBookingFactory.ExpectedAppointmentCliniciansKey)
                         ?: defaultEmisMetaSlotSessionHolders.map { l -> l.displayName }
 
@@ -565,7 +561,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatNoAppointmentsErrorIsDisplayed() {
-        assertEquals("There are currently no appointments available to book online in the next two weeks. If you need to book one now, call your GP surgery.\n" +
+        assertEquals("No appointments available\n" +
+                "There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.\n" +
                 "If it's urgent and you don't know what to do, call 111 to get help near you.", availableAppointments.getWarningText())
     }
 
@@ -599,37 +596,35 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatValidationErrorsForMissingTypeAndLocationAreDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummaryAtRow(1))
-        assertEquals("- Choose a type of appointment", availableAppointments.getErrorSummaryAtRow(2))
-        assertEquals("- Choose a location", availableAppointments.getErrorSummaryAtRow(3))
-        assertEquals("- Select an appointment slot", availableAppointments.getErrorSummaryAtRow(4))
+        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
+        assertEquals("Choose a type of appointment", availableAppointments.getErrorSummaryBodyAtRow(1))
+        assertEquals("Choose a location", availableAppointments.getErrorSummaryBodyAtRow(2))
+        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(3))
         assertEquals("Choose a type of appointment", availableAppointments.getInlineTypeValidationError())
         assertEquals("Choose a location", availableAppointments.getInlineLocationValidationError())
     }
 
     @Step
     fun verifyThatValidationErrorsForMissingTypeIsDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummaryAtRow(1))
-        assertEquals("- Choose a type of appointment", availableAppointments.getErrorSummaryAtRow(2))
-        assertEquals("- Select an appointment slot", availableAppointments.getErrorSummaryAtRow(3))
+        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
+        assertEquals("Choose a type of appointment", availableAppointments.getErrorSummaryBodyAtRow(1))
+        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(2))
         assertEquals("Choose a type of appointment", availableAppointments.getInlineTypeValidationError())
     }
 
     @Step
     fun verifyThatValidationErrorsForMissingLocationIsDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummaryAtRow(1))
-        assertEquals("- Choose a location", availableAppointments.getErrorSummaryAtRow(2))
-        assertEquals("- Select an appointment slot", availableAppointments.getErrorSummaryAtRow(3))
+        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
+        assertEquals("Choose a location", availableAppointments.getErrorSummaryBodyAtRow(1))
+        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(2))
         assertEquals("Choose a location", availableAppointments.getInlineLocationValidationError())
     }
 
     @Step
     fun verifyThatValidationErrorsForNoSelectedAppointmentIsDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummaryAtRow(1))
-        assertEquals("- Select an appointment slot", availableAppointments.getErrorSummaryAtRow(2))
-
-        // TODO reinstate during NHSO-1772 (NHSO-1821)
-//        assertEquals("Select an appointment slot", availableAppointments.getInlineSlotValidationError())
+        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
+        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(1))
+        assertEquals("Select an appointment slot", availableAppointments.getInlineSlotValidationError())
     }
 
     @Step

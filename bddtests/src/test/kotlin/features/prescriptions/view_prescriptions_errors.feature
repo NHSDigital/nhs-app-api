@@ -31,13 +31,14 @@ Feature: View prescriptions error cases
       | GP System |
       | EMIS      |
 
-  # No yellow banner showing, this is a bug with NHSO-415, so this test will fail until this is resolved
   @NHSO-498
-  @bug
   @prescription
-  Scenario: A user tries to navigate to the prescriptions page, but the session has timed out
-    Given My session has expired
-    When I navigate to prescriptions
+  Scenario: A user navigates to the prescriptions page and the session times out
+    Given EMIS is initialised
+    And I am using EMIS GP System
+    And I am logged in
+    And I navigate to prescriptions
+    When My session has expired
     Then I am kicked back to the login page
 
   @NHSO-513
@@ -50,7 +51,7 @@ Feature: View prescriptions error cases
     And each repeat prescription contains 1 courses of which 1 are repeats
     But The courses endpoint is timing out
     When I navigate to prescriptions
-    And I click 'Order a repeat prescription'
+    And I click 'Order a new repeat prescription'
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout
 
@@ -68,7 +69,7 @@ Feature: View prescriptions error cases
     And each repeat prescription contains 1 courses of which 1 are repeats
     But The courses endpoint is throwing a server error
     When I navigate to prescriptions
-    And I click 'Order a repeat prescription'
+    And I click 'Order a new repeat prescription'
     Then I see the appropriate error message for a prescription server error
 
     Examples:
@@ -89,7 +90,7 @@ Feature: View prescriptions error cases
     And 10 of my prescriptions can be requested
     But The prescription submission endpoint is timing out
     When I navigate to prescriptions
-    And I click 'Order a repeat prescription'
+    And I click 'Order a new repeat prescription'
     And I select 1 prescription to order
     And I wait for 20 seconds
     Then I see the appropriate error message for a course request error
@@ -111,7 +112,7 @@ Feature: View prescriptions error cases
     And 10 of my prescriptions can be requested
     But The prescription submission endpoint is throwing a server error
     When I navigate to prescriptions
-    And I click 'Order a repeat prescription'
+    And I click 'Order a new repeat prescription'
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
     Examples:
@@ -131,7 +132,7 @@ Feature: View prescriptions error cases
     And 10 of my prescriptions can be requested
     But The prescription submission endpoint is throwing an already ordered exception
     When I navigate to prescriptions
-    And I click 'Order a repeat prescription'
+    And I click 'Order a new repeat prescription'
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
     Examples:
@@ -151,7 +152,7 @@ Feature: View prescriptions error cases
     And 10 of my prescriptions can be requested
     But The prescription submission endpoint is throwing an invalid guid exception
     When I navigate to prescriptions
-    And I click 'Order a repeat prescription'
+    And I click 'Order a new repeat prescription'
     And I select 1 prescription to order
     Then I see the appropriate error message for a course request error
     Examples:

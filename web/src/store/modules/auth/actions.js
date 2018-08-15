@@ -53,7 +53,7 @@ export default {
       this.dispatch('session/setGpOdsCode', '');
       this.dispatch('session/setCsrfToken', '');
       this.dispatch('flashMessage/init');
-      this.app.router.push('/login');
+      this.app.router.go('/login');
     };
 
     return this.app.$http.deleteV1Session().then(final).catch(final);

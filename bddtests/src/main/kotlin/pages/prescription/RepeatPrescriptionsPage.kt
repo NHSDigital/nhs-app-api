@@ -32,6 +32,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
+    val PrescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
 
     val orderRepeatPrescriptionButton = HybridPageElement(
             browserLocator = "//button[@id='btn_order_prescription']",
@@ -52,9 +53,14 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         return findByXpath("//p[contains(.,'$message')]").isVisible
     }
 
+    fun isNoMedicationAvailableToOrderMessageVisible(): Boolean {
+        val message = "You don't have any medication available to order right now"
+        return findByXpath("//h3[contains(., \"$message\")]").isVisible
+    }
+
     fun verifyVisiblePrescriptions(coursesData: List<MedicationCourse>) {
         val nameXpath = "//label[contains(@for, 'prescription-')]"
-        val instructionsXpath = "//span[@aria-label=\"prescription-description\"]"
+        val instructionsXpath = "//p[@data-label=\"prescription-description\"]"
 
         val namesListed = findAllByXpath(nameXpath)
         val instructionsListed = findAllByXpath(instructionsXpath)
@@ -91,7 +97,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         repeatPrescriptionContainers.forEach { el ->
             val nameOnScreen = el.findElement(By.tagName( "label"))
-            val instructionsOnScreen = el.findElement(By.tagName("span"))
+            val instructionsOnScreen = el.findElement(PrescriptionInstructionsLocator)
             val inputElement = el.findElement(By.cssSelector("input[name=prescription]"))
 
             if (courseToSelect.name == nameOnScreen.text
@@ -110,7 +116,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         repeatPrescriptionContainers.forEach { el ->
             val nameOnScreen = el.findElement(By.tagName( "label"))
-            val instructionsOnScreen = el.findElement(By.tagName("span"))
+            val instructionsOnScreen = el.findElement(PrescriptionInstructionsLocator)
             val inputElement = el.findElement(By.tagName("input"))
 
             if (medicationCourse.name == nameOnScreen.text

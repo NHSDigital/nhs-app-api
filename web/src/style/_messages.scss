@@ -1,32 +1,48 @@
+
 @import './colours';
 @import './fonts';
+@import './textstyles';
+
 .msg {
-  width: 100%;
-  height: auto;
-  background-color: $white;
-  border-top: 1px $nhs_blue solid;
-  margin-bottom: 16px;
-  padding-bottom: 16px;
-  p {
-    padding-left: 16px;
-    margin: 0px;
-    display: block;
-    font-family: $default;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 22px;
-    color: $dark_grey;
-    margin-top: 14px;
-    &.header {
-      margin-bottom: -14px;
-      font-weight: bold;
-    }
-  }
-  &.warning {
-    background-color: $warning;
-    border-top-color: #000;
-  }
-  &.error {
-    border-top-color: $error;
-  }
+	width: 100%;
+	height: auto;
+	background-color: $white;
+	border-top: 0.250em $nhs_blue solid;
+	margin-bottom: 1em;
+	margin-top: 2.125em;
+	padding-bottom: 0.850em;
+	
+	.msg-content {
+		padding-top: 1.125em;
+	}
+	.icon {
+		@include h4; 
+		position: absolute;
+		height: 2.125em;
+		padding: 0.5em 1em 0.5em 1em;
+		box-sizing: border-box;
+		background-color: $nhs_blue;
+		text-align: center;
+		margin-top: -1.125em;
+		display: inline-block;
+	}
+	&.success {
+		.icon {
+			color: $white;
+		}
+	}
+	&.warning {
+		background-color: $warning;
+		border-top: none;
+		.icon {
+			background-color: $warning_title;
+		}
+	}
+	&.error {
+		border-top-color: $error;
+		.icon {
+			background-color: $error;
+			color: $white;
+		}
+	}
 }

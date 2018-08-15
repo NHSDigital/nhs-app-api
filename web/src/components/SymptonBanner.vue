@@ -1,7 +1,8 @@
 <template>
-  <div class="symptom_banner">
+  <div :class="$style.symptomBanner">
     <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
-    <button id="btn_home_symptoms" class="button white" @click="checkSymptomsButtonClicked()">
+    <button id="btn_home_symptoms" :class="[$style.button, $style.white]"
+            @click="checkSymptomsButtonClicked()">
       {{ $t('symptomBanner.checker') }}
     </button>
   </div>
@@ -15,22 +16,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-@import "../style/textstyles";
+<style module lang="scss" scoped>
 @import "../style/buttons";
-.symptom_banner {
-  text-align: center;
-  width: 100%;
-  vertical-align: bottom;
-
-  h2 {
-    @include h2;
-    margin-bottom: 16px;
-  }
-
-  button.button,
-  a.button {
-    margin-bottom: 5px;
-  }
-}
+@import "../style/home";
 </style>

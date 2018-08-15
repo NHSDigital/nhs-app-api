@@ -129,13 +129,13 @@ open class MyAppointmentsSteps {
         dateTimeFormat.timeZone = timeZone
         val fromDate = dateTimeFormat.format(Calendar.getInstance().time)
         try {
-        val result = Serenity
-                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .getMyAppointments(fromDate)
-        Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
+            val result = Serenity
+                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .getMyAppointments(fromDate)
+            Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
-    }
+        }
     }
 
     @Step
@@ -149,9 +149,8 @@ open class MyAppointmentsSteps {
     }
 
     @Step
-    fun setCsrfToken(crsfToken : String) {
-        val result = Serenity
-                .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+    fun setCsrfToken(crsfToken: String) {
+        Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .setCsrfToken(crsfToken)
     }
 
@@ -200,7 +199,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun verifyThatThereIsACancelLinkForEachUpcomingAppointment() {
-        assertEquals("Missing at least one cancel link. ", myAppointmentsPage.getWebAppointmentSlotDiv().size, myAppointmentsPage.getNumberOfCancelLinks())
+        assertEquals("Missing at least one cancel link. ", myAppointmentsPage.getWebAppointmentSlotDivs().size, myAppointmentsPage.getNumberOfCancelLinks())
     }
 
     private fun getActiveAppointmentsFactory(gpService: String? = null): ViewAppointmentsFactory {

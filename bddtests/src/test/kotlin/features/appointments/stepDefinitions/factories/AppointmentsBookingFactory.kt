@@ -72,8 +72,8 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
         Serenity.setSessionVariable(ExpectedAppointmentFilterFacadeKey).to(defaultFilter)
 
         //Format like : Wednesday 1 August 2018
-        var formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
-        var day = tomorrowDate.format(formatter)
+        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
+        val day = tomorrowDate.format(formatter)
         Serenity.setSessionVariable(TargetAppointmentDateKey).to(day)
         Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
     }
@@ -138,13 +138,12 @@ abstract class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactor
         }
 
 
-        var ExpectedAppointmentTypesKey = "ExpectedAppointmentTypesKey"
-        var ExpectedAppointmentLocationsKey = "ExpectedAppointmentLocationsKey"
-        var ExpectedAppointmentCliniciansKey= "ExpectedAppointmentCliniciansKey"
-        var ExpectedAppointmentFilterFacadeKey = "ExpectedAppointmentFilterFacadeKey"
+        const val ExpectedAppointmentTypesKey = "ExpectedAppointmentTypesKey"
+        const val  ExpectedAppointmentLocationsKey = "ExpectedAppointmentLocationsKey"
+        const val  ExpectedAppointmentCliniciansKey= "ExpectedAppointmentCliniciansKey"
+        const val  ExpectedAppointmentFilterFacadeKey = "ExpectedAppointmentFilterFacadeKey"
 
-
-        var TargetAppointmentDateKey = "TargetAppointmentDateKey"
-        var TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
+        const val  TargetAppointmentDateKey = "TargetAppointmentDateKey"
+        const val  TargetAppointmentTimeKey = "TargetAppointmentTimeKey"
     }
 }

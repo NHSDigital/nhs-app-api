@@ -1,9 +1,11 @@
 <template>
-  <main v-if="showTemplate" :class="$style.main">
-    <div v-if="showNoUpcomingAppointments" :class="$style.info">
+  <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+    <div v-if="showNoUpcomingAppointments" data-purpose="info">
       <h2>{{ $t('appointments.index.empty.header') }}</h2>
-      <p>{{ $t('appointments.index.empty.text1') }}</p>
-      <p>{{ $t('appointments.index.empty.text2') }} </p>
+      <div :class="$style.info">
+        <p>{{ $t('appointments.index.empty.text1') }}</p>
+        <p>{{ $t('appointments.index.empty.text2') }} </p>
+      </div>
     </div>
 
     <upcoming-appointments v-if="showUpcomingAppointments" :appointments = "upcomingAppointments" />
@@ -11,7 +13,7 @@
     <floating-button-bottom v-if="showBookAppointmentButton" @on-click="onBookButtonClicked">
       {{ $t('appointments.index.bookButtonText') }}
     </floating-button-bottom>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -63,34 +65,12 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/spacings";
-  @import "../../style/textstyles";
-  @import "../../style/colours";
+<style module lang="scss" scoped>
+@import "../../style/buttons";
+@import "../../style/info";
 
-  .main {
-    @include space(padding, all, $three);
-
-    .info {
-      p {
-        @include default_text;
-        font-size: 12pt;
-        display: block;
-        margin-bottom: 16px;
-      }
-      h2 {
-        @include h5;
-        font-size: 13pt;
-        color: $dark_grey;
-        margin-bottom: 16px;
-      }
-      margin-bottom: 70px;
-    }
-
-    a:link, a:visited {
-      color: $red;
-      display: inline-block;
-    }
-  }
+.content {
+  padding-bottom : 5em;
+}
 
 </style>

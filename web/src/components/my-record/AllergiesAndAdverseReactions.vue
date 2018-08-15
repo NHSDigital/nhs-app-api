@@ -1,22 +1,20 @@
 <template>
-  <div :class="[$style.recordContent, getCollapseState]">
-    <div v-if="data.hasErrored">
-      <p>  {{ $t('my_record.genericErrorMessage') }} </p>
-    </div>
-    <div v-else>
-      <div v-if="data.data.length > 0">
-        <ul :class="$style.allergyAndAdverseReactions">
-          <li v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`">
-            <label v-if="allergy.date.value">
-              {{ allergy.date.value | datePart(allergy.date.datePart) }}
-            </label>
-            <p>{{ allergy.name }}</p>
-          </li>
-        </ul>
-      </div>
-      <div v-else>
-        <p> {{ $t('my_record.genericNoDataMessage') }} </p>
-      </div>
+  <div v-if="showError" :class="[$style['record-content'], getCollapseState]">
+    <p v-if="data.hasErrored">
+      {{ $t('my_record.genericErrorMessage') }}
+    </p>
+    <p v-else>
+      {{ $t('my_record.genericNoDataMessage') }}
+    </p>
+  </div>
+  <div v-else :class="[$style['record-content'], getCollapseState]">
+    <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
+         :class="$style['record-item']" data-purpose="record-item">
+      <label v-if="allergy.date.value">
+        {{ allergy.date.value | datePart(allergy.date.datePart) }}
+      </label>
+      <p>{{ allergy.name }}</p>
+      <hr>
     </div>
   </div>
 </template>
@@ -43,21 +41,15 @@ export default {
     orderedAllergies() {
       return _.orderBy(this.data.data, [obj => obj.date.value], ['desc']);
     },
+    showError() {
+      return this.data.hasErrored || this.data.data.length === 0;
+    },
   },
 };
 
 </script>
 
-<style module lang="scss">
-  @import '../../style/html';
-  @import '../../style/fonts';
-  @import '../../style/spacings';
-  @import '../../style/colours';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
+  @import '../../style/medrecordcontent';
 
-  .recordContent { @include record-content };
-
-  .allergyAndAdverseReactions li{
-    border-bottom: 1px solid #e8edee;
-  }
 </style>

@@ -13,7 +13,7 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     )
 
     val txtWarning = HybridPageElement(
-            browserLocator = "//div[@class='msg warning']",
+            browserLocator = "//div[@data-purpose='warning']",
             androidLocator = null,
             page = this
     )
@@ -62,7 +62,7 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun getSensitiveList(): ArrayList<String> {
         var list = ArrayList<String>()
-        val listSensitiveData = findAllByXpath("//div[@class='info']/ul/li")
+        val listSensitiveData = findAllByXpath("//div[@data-purpose='info']/ul/li")
         listSensitiveData.forEach { el ->
             list.add(el.text)
         }

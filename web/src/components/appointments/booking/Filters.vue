@@ -1,10 +1,8 @@
 <template>
   <div :class="$style.form">
     <label for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
-    <error-message v-if="!validationError.isTypeValid">
-      <span id="error-type">
-        {{ $t('appointments.booking.validationErrors.type') }}
-      </span>
+    <error-message v-if="!validationError.isTypeValid" id="error-type">
+      {{ $t('appointments.booking.validationErrors.type') }}
     </error-message>
     <select-dropdown v-model="type" :error-border="!validationError.isTypeValid"
                      select-id = "type" select-name="type">
@@ -15,10 +13,8 @@
     </select-dropdown>
 
     <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
-    <error-message v-if="!validationError.isLocationValid">
-      <span id="error-location">
-        {{ $t('appointments.booking.validationErrors.location') }}
-      </span>
+    <error-message v-if="!validationError.isLocationValid" id="error-location">
+      {{ $t('appointments.booking.validationErrors.location') }}
     </error-message>
     <select-dropdown v-model="location" :error-border="!validationError.isLocationValid"
                      select-id = "location" select-name="location">
@@ -35,13 +31,14 @@
       </option>
     </select-dropdown>
 
+    <hr :class="$style.line" aria-hidden="true">
+    <h2>{{ $t('appointments.booking.filters.date.header') }}</h2>
     <label for="time-period">{{ $t('appointments.booking.filters.date.label') }}</label>
     <select-dropdown v-model="date" select-id = "time-period" select-name="time-period">
       <option v-for="option in options.dates" :key="option.value" :value="option.value">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
-    <hr aria-hidden="true">
   </div>
 </template>
 
@@ -127,24 +124,10 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-@import "../../../style/textstyles";
-@import "../../../style/fonts";
-.form {
-  margin-bottom: 24px;
-  label {
-    @include default_label;
-    margin-top: 16px;
-    margin-bottom: 8px;
-  }
-  hr {
-    height: 1px;
-    border: none;
-    background-color: $dark_grey;
-    opacity: 0.2;
-    margin-bottom: 16px;
-    margin-top: 16px;
-  }
-}
+<style module lang="scss" scoped>
+@import "../../../style/forms";
 
+.line {
+  margin-top: 0.5em
+}
 </style>

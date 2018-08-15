@@ -1,0 +1,60 @@
+@import './colours';
+@import './textstyles';
+
+.list-menu {
+	font-size: 1em;
+	margin-bottom: 1em;
+	p {
+		padding-bottom: 0.5em;
+		padding-top: 0.250em;
+	}
+	li {
+		p {
+			padding-bottom: 0.5em;
+			padding-top: 0.5em;
+		}
+		h3 {
+			@include h3;
+			padding-top: 1em;
+		}
+		h4 {
+			@include h4;
+			padding-bottom: 0.5em;
+			padding-top: 0.5em;
+		}
+		a {
+			padding-bottom: 0.5em;
+			padding-top: 0.5em;
+		}
+		a.info-link {
+			display: inline-block;
+			font-size: 1em;
+			font-style: normal;
+		}
+	}
+}
+
+ul.list-menu {
+	border-top: 1px $border_grey solid;
+	list-style: none;
+	li {
+		box-sizing: border-box;
+		background: $background url(/assets/icon_arrow_left.svg) no-repeat center right;
+		background-position: right 1em center;
+		position: relative;
+		margin-bottom: 0em;
+		margin-left: 0em;
+		padding: 0.250em 3em 0.250em 1em;
+		border-bottom: 1px $border_grey solid;
+
+		a {
+			font-size: 1em;
+			h2 {
+				margin: 0em;
+			}
+		}
+		p {
+			margin-bottom: 0;
+		}
+	}
+}

@@ -20,7 +20,7 @@ open class NavBar : HybridPageObject(Companion.PageType.NATIVE) {
                 "//android.widget.LinearLayout[contains(@resource-id, 'myRecord')]"),
         MORE(
                 "//nav//*[@data-sid='more-menu-item']",
-                "//android.widget.LinearLayout[contains(@resource-id, 'more')]");
+                "//android.widget.LinearLayout[contains(@resource-id, 'more')]")
     }
 
     private fun getElement(element: NavBarType): WebElementFacade {
@@ -36,11 +36,11 @@ open class NavBar : HybridPageObject(Companion.PageType.NATIVE) {
     }
 
     fun isHighlighted(type: NavBarType): Boolean {
-        return containsElements("${type.browserLocator}/ancestor::li[@class='active']")
+        return containsElements("${type.browserLocator}/ancestor::li[@data-selected='true']")
     }
 
     fun hasAnActiveSelection() : Boolean {
-        return containsElements( "//nav[descendant::li[@class='active']]")
+        return containsElements( "//nav[descendant::li[@data-selected='true']]")
     }
 
     fun isVisible(type: NavBarType): Boolean {

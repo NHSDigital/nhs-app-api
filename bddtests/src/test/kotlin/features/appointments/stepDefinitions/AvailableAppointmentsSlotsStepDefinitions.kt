@@ -355,8 +355,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
 
-        var expectedDateHeading = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
-        var expectedTimeSlot = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
+        val expectedDateHeading = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
+        val expectedTimeSlot = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
         availableAppointments.assertTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
 
     }

@@ -6,40 +6,52 @@ import net.thucydides.core.annotations.DefaultUrl
 open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val btnOrganDonation = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Set organ donation preferences')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val donationHeading = HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Organ donation preferences')]",
+            browserLocator = "//a/*[contains(text(),'Set organ donation preferences')]",
             androidLocator = null,
             page = this
     )
 
     val donationDescription = HybridPageElement(
-            browserLocator = "//p[contains(text(),'Help us save thousands of lives in the UK every year by signing up to become an organ donor. Register your decision and choose what you want to donate on the NHS Organ Donor Register.')]",
+            browserLocator = "//p[contains(text(),'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register.')]",
             androidLocator = null,
             page = this
     )
 
-    fun clickOrganDonations() {
-        findByXpath("//*[@id='btn_organdonation']").click()
-    }
+    val btnDataSharing = HybridPageElement(
+            browserLocator = "//a/*[contains(text(),'Manage your choice for sharing data')]",
+            androidLocator = null,
+            page = this
+    )
 
-    fun clickDataSharing() {
-        findByXpath("//*[@id='btn_datasharing']").click()
-    }
+    val dataSharingDescription = HybridPageElement(
+            browserLocator = "//p[contains(text(),'Find out why your data matters and choose whether or not it can be used for research and planning.')]",
+            androidLocator = null,
+            page = this
+    )
 
-    fun isDonationHeaderVisible(): Boolean {
-        return donationHeading.element.isCurrentlyEnabled
+    fun isDonationButtonVisible(): Boolean {
+        return btnOrganDonation.element.isCurrentlyVisible
     }
 
     fun isDonationDescriptionVisible(): Boolean {
-        return donationDescription.element.isCurrentlyEnabled
+        return donationDescription.element.isCurrentlyVisible
     }
 
-    fun isDonationButtonVisible(): Boolean {
-        return btnOrganDonation.element.isCurrentlyEnabled
+    fun clickOrganDonations() {
+        btnOrganDonation.element.click()
     }
+
+    fun isDataSharingButtonVisible(): Boolean {
+        return btnDataSharing.element.isCurrentlyVisible
+    }
+
+    fun isDataSharingDescriptionVisible(): Boolean {
+        return dataSharingDescription.element.isCurrentlyVisible
+    }
+
+    fun clickDataSharing() {
+        btnDataSharing.element.click()
+    }
+
+
 }

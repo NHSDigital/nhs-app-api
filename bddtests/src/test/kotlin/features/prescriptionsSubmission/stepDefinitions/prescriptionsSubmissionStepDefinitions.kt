@@ -65,7 +65,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     private var initialHistoricPrescriptionsCount = 0
 
-    val StatusSubmitted = "Submitted";
+    val StatusSubmitted = "Submitted"
 
     @Given("^I have an empty repeat prescription request")
     fun iHaveAnEmptyRepeatPrescriptionRequest() {

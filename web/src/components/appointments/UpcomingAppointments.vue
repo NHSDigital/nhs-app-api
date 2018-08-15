@@ -1,13 +1,13 @@
 <template>
-  <div :class="$style.appointments">
-    <div class="panel-title">
-      <h2>{{ $t('appointments.index.upcoming.header') }}</h2>
-    </div>
-    <div data-purpose="appointments">
-      <appointment v-for="appointment in appointments"
-                   :key="appointment.id" :appointment="appointment" />
-    </div>
-  </div>
+  <span>
+    <h2>{{ $t('appointments.index.upcoming.header') }}</h2>
+
+    <appointment v-for="appointment in appointments"
+                 :class="[$style.upcoming]"
+                 :key="appointment.id"
+                 :appointment="appointment"
+                 data-purpose="appointments" />
+  </span>
 </template>
 
 <script>
@@ -31,15 +31,10 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/textstyles";
+<style module lang="scss" scoped>
 
-  .appointments {
-    margin-bottom: 80px;
-    h2 {
-      @include h2Blue;
-      margin-bottom: 0.5em
-    }
-  }
+.upcoming {
+  display: table !important;
+}
 
 </style>

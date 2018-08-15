@@ -1,46 +1,45 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
-    <main class="content">
-      <error-warning-dialog error-or-warning="warning">
-        <p>
-          {{ $t('my_record.myRecordWarning.warningText') }}
-        </p>
-      </error-warning-dialog>
-      <div class="info">
-        <h2>{{ $t('my_record.myRecordWarning.title') }}</h2>
-        <ul>
-          <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp1') }}</li>
-          <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp2') }}</li>
-        </ul>
-        <h2>{{ $t('my_record.myRecordWarning.extraTitle') }}</h2>
-        <ul>
-          <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp1') }}</li>
-          <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp2') }}</li>
-        </ul>
-        <br>
-        <p>
-          {{ $t('my_record.myRecordWarning.agreementText') }}
-        </p>
-        <generic-button :button-classes="['green']" @on-click="onContinueButtonClicked()">
-          {{ $t('my_record.myRecordWarning.agreeButtonText') }}
-        </generic-button>
-        <generic-button :button-classes="['grey']" @on-click="onBackButtonClicked()">
-          {{ $t('my_record.myRecordWarning.backButtonText') }}
-        </generic-button>
-      </div>
-    </main>
+  <div v-if="showTemplate" id="mainDiv" class="pull-content">
+    <message-dialog message-type="warning" icon-text="Important">
+      <message-text>
+        {{ $t('my_record.myRecordWarning.warningText') }}
+      </message-text>
+    </message-dialog>
+    <div :class="$style.info" data-purpose="info">
+      <h4>{{ $t('my_record.myRecordWarning.title') }}</h4>
+      <ul>
+        <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp1') }}</li>
+        <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp2') }}</li>
+      </ul>
+      <h4>{{ $t('my_record.myRecordWarning.extraTitle') }}</h4>
+      <ul>
+        <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp1') }}</li>
+        <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp2') }}</li>
+      </ul>
+      <p>
+        {{ $t('my_record.myRecordWarning.agreementText') }}
+      </p>
+    </div>
+    <generic-button :button-classes="['green']" @on-click="onContinueButtonClicked()">
+      {{ $t('my_record.myRecordWarning.agreeButtonText') }}
+    </generic-button>
+    <generic-button :button-classes="['grey']" @on-click="onBackButtonClicked()">
+      {{ $t('my_record.myRecordWarning.backButtonText') }}
+    </generic-button>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
     FloatingButtonBottom,
     GenericButton,
   },
@@ -55,32 +54,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-  li {
-    list-style-type: disc;
-  }
-</style>
-
-<style lang="scss">
-  @import '../../style/html';
-  @import '../../style/textstyles';
-  @import '../../style/elements';
-  @import '../../style/fonts';
-
-  #mainDiv {
-    padding: 0;
-    @include default_text;
-  }
-
-  .info h2, .list-menu li h2 {
-    display: block;
-    font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
-    font-weight: 700;
-    font-size: 1.125em;
-    line-height: 1.125em;
-    letter-spacing: -0.063em;
-    padding-bottom: 0.5em;
-    padding-top: 0.5em;
-  }
+<style module lang="scss" scoped>
+  @import '../../style/info';
 
 </style>

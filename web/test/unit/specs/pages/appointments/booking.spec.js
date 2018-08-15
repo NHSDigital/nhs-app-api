@@ -13,6 +13,8 @@ const createBookingPage = ($store, data = []) => {
 
   const $style = {
     mainShowingSlots: 'mainShowingSlots',
+    warning: 'warning',
+    error: 'error',
   };
 
   return mount(BookingPage, {
@@ -121,9 +123,10 @@ describe('booking.vue', () => {
     const page = createBookingPage($store, data);
 
     expect(page.find('.error').exists()).toBeTruthy();
-    expect(page.findAll('.error p').length).toEqual(2);
+    expect(page.findAll('.error p').length).toEqual(1);
+    expect(page.findAll('.error ul li').length).toEqual(1);
     expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
-    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.slot');
+    expect(page.findAll('.error ul li').at(0).text()).toContain('appointments.booking.validationErrors.slot');
   });
 
   it('will show validation error when type is not selected', () => {
@@ -149,10 +152,11 @@ describe('booking.vue', () => {
     const page = createBookingPage($store, data);
 
     expect(page.find('.error').exists()).toBeTruthy();
-    expect(page.findAll('.error p').length).toEqual(3);
+    expect(page.findAll('.error p').length).toEqual(1);
+    expect(page.findAll('.error ul li').length).toEqual(2);
     expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
-    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.type');
-    expect(page.findAll('.error p').at(2).text()).toContain('appointments.booking.validationErrors.slot');
+    expect(page.findAll('.error ul li').at(0).text()).toContain('appointments.booking.validationErrors.type');
+    expect(page.findAll('.error ul li').at(1).text()).toContain('appointments.booking.validationErrors.slot');
   });
 
   it('will show validation error when location is not selected', () => {
@@ -178,10 +182,11 @@ describe('booking.vue', () => {
     const page = createBookingPage($store, data);
 
     expect(page.find('.error').exists()).toBeTruthy();
-    expect(page.findAll('.error p').length).toEqual(3);
+    expect(page.findAll('.error p').length).toEqual(1);
+    expect(page.findAll('.error ul li').length).toEqual(2);
     expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
-    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.location');
-    expect(page.findAll('.error p').at(2).text()).toContain('appointments.booking.validationErrors.slot');
+    expect(page.findAll('.error ul li').at(0).text()).toContain('appointments.booking.validationErrors.location');
+    expect(page.findAll('.error ul li').at(1).text()).toContain('appointments.booking.validationErrors.slot');
   });
 
   it('will show validation error when type and location are not selected', () => {
@@ -207,10 +212,11 @@ describe('booking.vue', () => {
     const page = createBookingPage($store, data);
 
     expect(page.find('.error').exists()).toBeTruthy();
-    expect(page.findAll('.error p').length).toEqual(4);
+    expect(page.findAll('.error p').length).toEqual(1);
+    expect(page.findAll('.error ul li').length).toEqual(3);
     expect(page.findAll('.error p').at(0).text()).toContain('appointments.booking.validationErrors.problemFound');
-    expect(page.findAll('.error p').at(1).text()).toContain('appointments.booking.validationErrors.type');
-    expect(page.findAll('.error p').at(2).text()).toContain('appointments.booking.validationErrors.location');
-    expect(page.findAll('.error p').at(3).text()).toContain('appointments.booking.validationErrors.slot');
+    expect(page.findAll('.error ul li').at(0).text()).toContain('appointments.booking.validationErrors.type');
+    expect(page.findAll('.error ul li').at(1).text()).toContain('appointments.booking.validationErrors.location');
+    expect(page.findAll('.error ul li').at(2).text()).toContain('appointments.booking.validationErrors.slot');
   });
 });

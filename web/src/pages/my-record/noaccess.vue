@@ -1,31 +1,30 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
-    <main class="content">
-      <error-warning-dialog error-or-warning="warning">
-        <p>
-          <b>{{ $t('my_record.noRecordAccess.warningHeader') }}</b>
-          <br>
-          {{ $t('my_record.noRecordAccess.warningBody') }}
-        </p>
-      </error-warning-dialog>
-    </main>
+  <div v-if="showTemplate" id="mainDiv" class="pull-content">
+    <message-dialog message-type="warning">
+      <message-text :is-header="true">
+        {{ $t('myRecord.noRecordAccess.warningHeader') }}
+      </message-text>
+      <message-text>
+        {{ $t('myRecord.noRecordAccess.warningBody') }}
+      </message-text>
+    </message-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
   },
 };
 </script>
-<style lang="scss">
-  @import '../../style/html';
+<style module lang="scss" scoped>
   @import '../../style/textstyles';
-  @import '../../style/elements';
 
   #mainDiv {
     padding: 0;

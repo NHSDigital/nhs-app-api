@@ -23,7 +23,7 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
     )
 
     val backToMyAppointmentsButton = HybridPageElement(
-            browserLocator = "//div[@id='mainDiv']/main/button[contains(text(),'Back to my appointments')]",
+            browserLocator = "//button[contains(text(),'Back to my appointments')]",
             androidLocator = null,
             page = this
     )
@@ -48,10 +48,6 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
 
     fun getSymptoms(): String {
         return reasonFormField.element.value
-    }
-
-    fun getServerErrorElement(): WebElementFacade {
-        return findByXpath("//div[@id='mainDiv']/div[@class='content']").waitUntilVisible<WebElementFacade>()
     }
 
     fun isButtonVisible(button: String): Boolean {

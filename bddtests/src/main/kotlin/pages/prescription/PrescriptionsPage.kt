@@ -26,7 +26,7 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     val serverErrorMessage = ""
     val serverErrorretryButtonText = ""
 
-    private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order a repeat prescription')]"
+    private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order new repeat prescription')]"
 
     fun isLoaded(): Boolean {
         return headerBar.isVisible("My repeat prescriptions")
@@ -35,7 +35,7 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     fun isNoPrescriptionsMessageVisible(): Boolean {
         // note: needs double quotes in "contains" expression because message has apostrophe
         val message = "You don't currently have any repeat prescriptions ordered"
-        return findByXpath("//h3[contains(., \"$message\")]").isVisible
+        return findByXpath("//h2[contains(., \"$message\")]").isVisible
     }
 
     fun isOrderSuccessfullTextVisible(): Boolean {
@@ -46,12 +46,12 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     fun getAllPrescriptions(allFieldsProvided: Boolean): List<HistoricPrescription> {
         val historicPrescriptions = ArrayList<HistoricPrescription>()
 
-        val prescriptions = findAllByXpath("//li[@aria-label='historic-prescription']")
+        val prescriptions = findAllByXpath("//div[@data-label='historic-prescription']")
 
-        var orderDateXpath = ".//*[@aria-label='order-date']"
-        var courseNameXpath = ".//*[@aria-label='course-name']"
-        var dosageXpath = ".//*[@aria-label='detail']"
-        var statusXpath = ".//*[@aria-label='status']"
+        var orderDateXpath = ".//*[@data-label='order-date']"
+        var courseNameXpath = ".//*[@data-label='course-name']"
+        var dosageXpath = ".//*[@data-label='detail']"
+        var statusXpath = ".//*[@data-label='status']"
 
         prescriptions.forEach( { el ->
 

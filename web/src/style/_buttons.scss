@@ -8,19 +8,19 @@ a.button {
 
 button.button,
 a.button {
-  @include button;
+	@include button;
 	box-sizing: border-box;
 	width: 100%;
 	padding: 0.625em;
 	background-color: $nhs_blue;
 	border: none;
-	/** border-radius: 0.125em; */
+	border-radius: 0.125em;
 	box-shadow: 0em 0.125em 0em 0em $dark_blue;
 	margin-bottom: 1.250em;
 	outline: none;
 	transition: all ease 0.5s;
 	cursor: pointer;
-
+	
 	&.green {
 		background-color: $light_green;
 		box-shadow: 0em 0.125em 0em 0em $dark_green;
@@ -35,23 +35,11 @@ a.button {
 		color: $dark_grey;
 	}
 	
-	&.disabled {
-		opacity: 0.5;
-	}
-
 	&:active {
 		-webkit-filter: brightness(120%);
 		filter: brightness(120%);
 	}
-}
-
-.button-container {
-  @include float-buttons;
-  bottom: 68px;
-}
-
-.button-container-native {
-  @include float-buttons;
-  bottom: 0;
-  white-space: nowrap;
+	&.disabled {
+		opacity: 0.5;
+	}
 }

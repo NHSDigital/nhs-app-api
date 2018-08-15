@@ -1,30 +1,41 @@
 <template>
-  <main v-if="showTemplate" :class="$style.main">
-    <error-warning-dialog v-if="showValidationError" error-or-warning="error">
-      <p>
-        <span data-purpose="error-heading">
-          {{ $t('appointments.confirmation.noReasonDialogError') }}
-        </span><br>
-        <span data-purpose="error">
-          {{ $t('appointments.confirmation.noReasonError') }}
-        </span>
-      </p>
-    </error-warning-dialog>
+  <div v-if="showTemplate" class="pull-content">
+
+    <message-dialog v-if="showValidationError" message-type="error">
+      <message-text data-purpose="error-heading">
+        {{ $t('appointments.confirmation.noReasonDialogError') }}
+      </message-text>
+      <message-list data-purpose="error">
+        <li>{{ $t('appointments.confirmation.noReasonError') }}</li>
+      </message-list>
+    </message-dialog>
+
+    <div :class="$style.info" data-purpose="info">
+      <p>{{ $t('appointments.confirmation.info') }}</p>
+    </div>
 
     <appointment-slot v-if="slot" :appointment="slot" :show-cancellation-link="false"
                       aria-label="selected appointment" />
-    <div :class="$style.form" role="form">
-      <label for="reasonText">{{ $t('appointments.confirmation.headerLabel') }}</label>
-      <p>{{ $t('appointments.confirmation.label') }}</p>
+    <div :class="[$style.form, $style.reasonForm]" role="form">
+      <label :class="$style.textReasonLabel" for="reasonText">
+        {{ $t('appointments.confirmation.headerLabel') }}
+      </label>
 
-      <error-message v-if="showValidationError" id="errorLabel">
+      <error-message v-if="showValidationError" id="error-label">
         {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
       <textarea id="reasonText" ref="reason" v-model="symptoms"
                 :aria-labelledby="reasonBoxAriaLabelledBy"
                 :class="textareaClass" maxlength="150" autocomplete="off"
                 autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <p id="maxReasonDesc">{{ $t('appointments.confirmation.maxReasonDesc') }}</p>
+      <p id="maxReasonDesc" :class="$style.char">
+        {{ $t('appointments.confirmation.reasonDesc.line1') }}
+      </p>
+      <p>
+        {{ $t('appointments.confirmation.reasonDesc.line2') }}
+        <br >
+        {{ $t('appointments.confirmation.reasonDesc.line3') }}
+      </p>
     </div>
 
     <button id="btn_book_appointment" :class="[$style.button, $style.green]"
@@ -35,7 +46,7 @@
             @click="onCancelButtonClicked">
       {{ $t('appointments.confirmation.changeButtonText') }}
     </button>
-  </main>
+  </div>
 </template>
 
 
@@ -43,12 +54,17 @@
 /* eslint-disable import/extensions */
 import AppointmentSlot from '@/components/appointments/Appointment';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
+import MessageList from '@/components/widgets/MessageList';
+
 import Routes from '../../Routes';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
+    MessageList,
     AppointmentSlot,
     ErrorMessage,
   },
@@ -121,46 +137,16 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/textstyles";
-  @import "../../style/spacings";
-  @import "../../style/colours";
-  @import "../../style/buttons";
+<style module lang="scss" scoped>
+@import "../../style/buttons";
+@import "../../style/forms";
+@import "../../style/info";
 
-  .main {
-    @include space(padding, all, $three);
+.reasonForm {
+  margin-bottom: 24px;
+}
 
-    .form {
-      margin-bottom: 24px;
-      label {
-        @include default_label;
-        padding-top: 16px;
-        padding-bottom: 8px;
-      }
-
-      p {
-        @include default_text;
-        padding-bottom: 8px;
-      }
-
-      textarea {
-        width: 100%;
-        min-height: 100px;
-        box-sizing: border-box;
-        background-color: $white;
-        border-radius: 5px;
-        padding: 16px;
-        border: 1px $light_grey solid;
-        outline: none;
-        transition: all ease 0.5s;
-        resize: none;
-        @include default_text;
-
-        &.error {
-          border: 3px $error solid;
-        }
-      }
-    }
-  }
-
+.textReasonLabel {
+  padding-top: 8px;
+}
 </style>

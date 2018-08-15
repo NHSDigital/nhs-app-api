@@ -116,7 +116,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         configureWireMockForHistoricPrescriptions()
     }
 
-    @When("I click 'Order a repeat prescription'")
+    @When("I click 'Order a new repeat prescription'")
     fun iClickOrderARepeatPrescription() {
         prescriptionsSteps.prescriptions.clickOrderARepeatPrescriptionButton()
     }
@@ -126,6 +126,11 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         courseSteps.isLoaded()
         val coursesToCheck = getAvailableCoursesFilteredSortedOrdered()
         courseSteps.assertCorrectRepeatPrescriptionsShown(coursesToCheck)
+    }
+
+    @And("a message is displayed indicating that you don't have any medication available to order")
+    fun aMessageIsDisplayedIndicatingThatYouDontHaveAnyRepeatMedicationAvailableToOrder() {
+        courseSteps.assertNoMedicationAvailableToOrderMessageShown()
     }
 
     @Given("I select (\\d+) (.*) repeatable prescriptions out of (\\d+) available")

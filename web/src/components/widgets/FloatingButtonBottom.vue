@@ -1,7 +1,7 @@
 <template>
   <div :class="stylingClass">
-    <!--eslint-disable-next-line -->
-    <button :class="buttonStylingClasses" id="btn_floating" @click="$emit('on-click')" :disabled="isButtonDisabled">
+    <button id="btn_floating" :class="buttonStylingClasses"
+            :disabled="isButtonDisabled" @click="$emit('on-click')">
       <slot/>
     </button>
   </div>
@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      stylingClass: 'button-container',
+      stylingClass: [`${this.$style['float-button-container']}`],
     };
   },
   computed: {
@@ -31,26 +31,45 @@ export default {
     },
 
     buttonStylingClasses() {
-      const classes = ['button'].concat(this.buttonClasses);
+      const classes = [this.$style.button];
+      this.buttonClasses.forEach((element) => {
+        classes.push(this.$style[element]);
+      });
       if (!this.clickable) {
-        classes.push('disabled');
+        classes.push(this.$style.disabled);
       }
       return classes;
     },
   },
   created() {
     if (this.$store.state.device.isNativeApp) {
-      this.stylingClass = 'button-container-native';
+      this.stylingClass.push(this.$style['button-container-native']);
     }
   },
 };
 </script>
-<style lang="scss" scoped>
-@import "../../style/buttons";
 
-  button.button,
-  a.button {
-    margin-bottom: 0;
+<style lang="scss" scoped module>
+@import "../../style/colours";
+@import "../../style/buttons";
+.float-button-container {
+  position: fixed;
+  bottom: 4.250em;
+  left: 0em;
+  right: 0em;
+  background-color: $white;
+  box-sizing: border-box;
+  padding: 1em;
+  border-top: 0.063em $background solid;
+  border-bottom: 0.063em $background solid;
+  height: 5em;
+  transform: translateZ(1em);
+  z-index: 5;
+  box-shadow: 0em -0.100em 0.200em rgba(0, 0, 0, .1);
+  &.button-container-native {
+    bottom: 0;
+    white-space: nowrap;
   }
+}
 
 </style>

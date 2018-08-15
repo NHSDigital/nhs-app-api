@@ -1,113 +1,110 @@
 <template>
-  <div v-if="showTemplate" id="mainDiv">
-    <h5 :class="[$style.recordTitle, getCollapseState(isPatientDetailsCollapsed)]"
+  <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+    <h2 :class="[$style['record-title'], getCollapseState(isPatientDetailsCollapsed)]"
         @click="myRecordSectionClick(PATIENTDETAILS)">
-      {{ $t('my_record.patientInfo.sectionHeader') }}</h5>
+      {{ $t('my_record.patientInfo.sectionHeader') }}</h2>
     <patient-details :is-collapsed="isPatientDetailsCollapsed"
                      :patient-details="patientDetails"/>
 
     <div v-if="myRecord.hasSummaryRecordAccess">
-      <h5 :class="[$style.recordTitle, getCollapseState(isAllergiesAndAdverseReactionsCollapsed)]"
+      <h2 :class="[$style['record-title'],
+                   getCollapseState(isAllergiesAndAdverseReactionsCollapsed)]"
           @click="myRecordSectionClick(ALLERGIESANDADVERSEREACTIONS)">
         {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
-      </h5>
+      </h2>
       <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
-                                       :data="myRecord.allergies"/>
+                                       :data="myRecord.allergies" />
 
-      <h5 :class="[$style.recordTitle, getCollapseState(isAcuteMedicationsCollapsed)]"
+      <h2 :class="[$style['record-title'], getCollapseState(isAcuteMedicationsCollapsed)]"
           @click="myRecordSectionClick(ACUTEMEDICATIONS)">
         {{ $t('my_record.acuteMedications.sectionHeader') }}
-      </h5>
+      </h2>
       <medications :is-collapsed="isAcuteMedicationsCollapsed"
                    :data="myRecord.medications.data.acuteMedications"
                    :has-error="myRecord.medications.hasErrored"/>
 
-      <h5 :class="[$style.recordTitle, getCollapseState(isCurrentRepeatMedicationsCollapsed)]"
+      <h2 :class="[$style['record-title'], getCollapseState(isCurrentRepeatMedicationsCollapsed)]"
           @click="myRecordSectionClick(CURRENTREPEATMEDICATIONS)">
         {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
-      </h5>
+      </h2>
       <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
                    :data="myRecord.medications.data.currentRepeatMedications"
-                   :has-error="myRecord.medications.hasErrored"/>
+                   :has-error="myRecord.medications.hasErrored" />
 
-      <h5 :class="[$style.recordTitle, getCollapseState(isDiscontinuedRepeatMedicationsCollapsed)]"
+      <h2 :class="[$style['record-title'],
+                   getCollapseState(isDiscontinuedRepeatMedicationsCollapsed)]"
           @click="myRecordSectionClick(DISCONTINUEDREPEATMEDICATIONS)">
         {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
-      </h5>
+      </h2>
       <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
                    :data="myRecord.medications.data.discontinuedRepeatMedications"
-                   :has-error="myRecord.medications.hasErrored"/>
+                   :has-error="myRecord.medications.hasErrored" />
 
       <div v-if="myRecord.hasDetailedRecordAccess">
         <div v-if="myRecord.supplier === 'EMIS'">
-          <h5 :class="[$style.recordTitle, getCollapseState(isImmunisationsCollapsed)]"
+          <h2 :class="[$style['record-title'], getCollapseState(isImmunisationsCollapsed)]"
               @click="myRecordSectionClick(IMMUNISATIONS)">
             {{ $t('my_record.immunisations.sectionHeader') }}
-          </h5>
-          <immunisations :is-collapsed="isImmunisationsCollapsed"
-                         :data="myRecord.immunisations"/>
+          </h2>
+          <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
 
-          <h5 :class="[$style.recordTitle, getCollapseState(isProblemsCollapsed)]"
+          <h2 :class="[$style['record-title'], getCollapseState(isProblemsCollapsed)]"
               @click="myRecordSectionClick(PROBLEMS)">
             {{ $t('my_record.problems.sectionHeader') }}
-          </h5>
-          <problems :is-collapsed="isProblemsCollapsed"
-                    :data="myRecord.problems"/>
+          </h2>
+          <problems :is-collapsed="isProblemsCollapsed" :data="myRecord.problems" />
 
-          <h5 :class="[$style.recordTitle, getCollapseState(isConsultationsCollapsed)]"
+          <h2 :class="[$style['record-title'], getCollapseState(isConsultationsCollapsed)]"
               @click="myRecordSectionClick(CONSULTATIONS)">
             {{ $t('my_record.consultations.sectionHeader') }}
-          </h5>
+          </h2>
           <consultations :is-collapsed="isConsultationsCollapsed"
-                         :data="myRecord.consultations"/>
+                         :data="myRecord.consultations" />
         </div>
 
         <div v-if="myRecord.supplier === 'TPP'">
-          <h5 :class="[$style.recordTitle, getCollapseState(isEventsCollapsed)]"
+          <h2 :class="[$style['record-title'], getCollapseState(isEventsCollapsed)]"
               @click="myRecordSectionClick(EVENTS)">
             {{ $t('my_record.events.sectionHeader') }}
-          </h5>
-          <events :is-collapsed="isEventsCollapsed"
-                  :data="myRecord.tppDcrEvents"/>
+          </h2>
+          <events :is-collapsed="isEventsCollapsed" :data="myRecord.tppDcrEvents" />
         </div>
-        <h5 id="testResultsHeader"
-            :class="[$style.recordTitle, getCollapseState(isTestResultsCollapsed)]"
+        <h2 id="testResultsHeader"
+            :class="[$style['record-title'], getCollapseState(isTestResultsCollapsed)]"
             @click="myRecordSectionClick(TESTRESULTS)">
           {{ $t('my_record.testResults.sectionHeader') }}
-        </h5>
-        <test-results :is-collapsed="isTestResultsCollapsed"
-                      :data="myRecord.testResults"
-                      :supplier="myRecord.supplier"/>
+        </h2>
+        <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
+                      :supplier="myRecord.supplier" />
       </div>
-      <div v-else>
-        <main :class="$style.content">
-          <p>
-            {{ $t('my_record.viewRestOfHealthRecordWarning') }}
-          </p>
-        </main>
+      <div v-else class="pull-content">
+        <p>
+          {{ $t('my_record.viewRestOfHealthRecordWarning') }}
+        </p>
       </div>
     </div>
-    <div v-else >
+    <div v-else class="pull-content">
       <div v-if="hasLoaded">
-        <main :class="$style.content">
-          <error-warning-dialog error-or-warning="error">
-            <p>
-              <b>{{ $t('my_record.noRecordAccess.warningHeader') }}</b>
-              <br>
-              {{ $t('my_record.noRecordAccess.warningBody') }}
-            </p>
-          </error-warning-dialog>
-        </main>
+        <message-dialog message-type="error" icon-text="Warning">
+          <message-text :is-header="true">
+            {{ $t('my_record.noRecordAccess.warningHeader') }}
+          </message-text>
+          <message-text>
+            {{ $t('my_record.noRecordAccess.warningBody') }}
+          </message-text>
+        </message-dialog>
       </div>
     </div>
   </div>
 </template>
 
+
 <script>
 /* eslint-disable import/extensions */
 import PatientDetails from '@/components/my-record/PatientDetails';
 import AllergiesAndAdverseReactions from '@/components/my-record/AllergiesAndAdverseReactions';
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 import Medications from '@/components/my-record/Medications';
 import Immunisations from '@/components/my-record/Immunisations';
 import TestResults from '@/components/my-record/TestResults';
@@ -129,7 +126,8 @@ const EVENTS = 'events';
 
 export default {
   components: {
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
     PatientDetails,
     AllergiesAndAdverseReactions,
     Medications,
@@ -250,37 +248,11 @@ export default {
 
 </script>
 
-<style module lang="scss">
-  @import '../../style/html';
-  @import '../../style/fonts';
-  @import '../../style/spacings';
+<style module lang="scss" scoped>
+  @import '../../style/medrecordtitle';
 
-  .content {
-    @include space(padding, all, $three);
+   .no-padding {
+    margin-left: -1em;
+    margin-right: -1em;
   }
-  .recordTitle {
-    font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 23px;
-    color: #005EB8;
-    padding: 16px;
-    padding-right: 30px;
-    box-sizing: border-box;
-    background: transparent url('~/assets/icon_arrow_left.svg') no-repeat center right;
-    background-position: right 16px center;
-    transition: ease 0.5s;
-    border-bottom: 2px solid $white;
-    margin-bottom: 0px !important;
-
-    &.opened {
-      background: transparent url('~/assets/icon_arrow_down.svg') no-repeat center right;
-      background-position: right 16px center;
-    }
-    &.closed {
-      background: transparent url('~/assets/icon_arrow_left.svg') no-repeat center right;
-      background-position: right 16px center;
-    }
-  }
-
 </style>

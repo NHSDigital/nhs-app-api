@@ -24,10 +24,10 @@ open class PrescriptionsSteps {
         val gson = GsonBuilder().setPrettyPrinting().create()
         var p = prescriptions.getAllPrescriptions(isEmis)
 
-        var expectedJson = gson.toJson(p).toString()
-        var actualJson = gson.toJson(list).toString()
+        var actualJson = gson.toJson(p).toString()
+        var expectedJson = gson.toJson(list).toString()
 
-        Assert.assertTrue(expectedJson.equals(actualJson))
+        Assert.assertEquals(expectedJson, actualJson)
         assertEquals(expectedPrescriptions, p.count())
     }
 

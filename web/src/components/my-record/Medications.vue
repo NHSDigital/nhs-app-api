@@ -1,32 +1,28 @@
 <template>
-  <div :class="[$style.recordContent, getCollapseState]">
-    <div v-if="hasError">
-      <p>  {{ $t('my_record.genericErrorMessage') }} </p>
-    </div>
-    <div v-else>
-      <div v-if="data != null && data.length > 0 ">
+  <div v-if="showError" :class="[$style['record-content'], getCollapseState]">
+    <p v-if="hasError">
+      {{ $t('my_record.genericErrorMessage') }}
+    </p>
+    <p v-else>
+      {{ $t('my_record.genericNoDataMessage') }}
+    </p>
+  </div>
+  <div v-else :class="[$style['record-content'], getCollapseState]">
+    <div v-for="(medication, medIndex) in orderedMedications"
+         :key="`medication-${medIndex}`" :class="$style['record-item']"
+         data-purpose="record-item">
+      <label v-if="medication.date">{{ medication.date | datePart }}</label>
+      <p v-for="(lineItem, lineItemIndex) in medication.lineItems"
+         :key="`line-${lineItemIndex}`">
+        {{ lineItem.text }}
         <ul>
-          <li v-for="(medication, medIndex) in orderedMedications" :key="`medication-${medIndex}`"
-              :class="$style.medication">
-            <label v-if="medication.date">{{ medication.date | datePart }}</label>
-            <ul>
-              <li v-for="(lineItem, lineItemIndex) in medication.lineItems"
-                  :key="`line-${lineItemIndex}`" :class="$style.medicationLine">
-                {{ lineItem.text }}
-                <ul>
-                  <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
-                      :key="`innerline-${innerLineItemIndex}`" :class="$style.medicationLine">
-                    {{ innerLineItem }}
-                  </li>
-                </ul>
-              </li>
-            </ul>
+          <li v-for="(innerLineItem, innerLineItemIndex) in lineItem.lineItems"
+              :key="`innerline-${innerLineItemIndex}`">
+            {{ innerLineItem }}
           </li>
         </ul>
-      </div>
-      <div v-else>
-        <p> {{ $t('my_record.genericNoDataMessage') }} </p>
-      </div>
+      </p>
+      <hr>
     </div>
   </div>
 </template>
@@ -57,28 +53,16 @@ export default {
     orderedMedications() {
       return _.orderBy(this.data, [obj => obj.date], ['desc']);
     },
+    showError() {
+      return this.data.hasErrored ||
+             (this.data && this.data.length === 0);
+    },
   },
 };
 
 </script>
 
-<style module lang="scss">
-  @import '../../style/html';
-  @import '../../style/fonts';
-  @import '../../style/spacings';
-  @import '../../style/colours';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
+@import '../../style/medrecordcontent';
 
-  .recordContent { @include record-content };
-
-  .medication {
-    border-bottom: 1px solid #e8edee;
-    padding-bottom: 16px;
-  }
-
-  .medicationLine {
-    @include small_text;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
 </style>

@@ -1,22 +1,13 @@
 <template>
-  <div id="mainPageDiv">
-    <main class="content">
-      <div class="info">
-        <h5>{{ greetingMessage }}</h5>
-        <p>{{ $t('homeLoggedIn.description') }}</p>
-      </div>
-    </main>
+  <div v-if="showTemplate" class="pull-content">
+    <h2 data-purpose="greeting">{{ greetingMessage }}</h2>
+    <p data-purpose="info">{{ $t('homeLoggedIn.description') }}</p>
   </div>
 </template>
 
 <script>
-/* eslint-disable import/extensions */
-import PatientDetailsIcon from '@/components/icons/PatientDetailsIcon';
 
 export default {
-  components: {
-    PatientDetailsIcon,
-  },
   computed: {
     greetingMessage() {
       const message = this.$t('homeLoggedIn.welcome');
@@ -26,18 +17,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-@import "../style/html";
-@import "../style/textstyles";
-@import "../style/elements";
-
-#mainPageDiv {
-  padding: 0;
-  @include default_text;
-}
-
-.info .h5 {
-  color: $nhs_blue;
-}
-</style>

@@ -1,0 +1,62 @@
+@import './colours';
+@import './textstyles';
+
+/** HEADER */
+header.logged {
+	background: $nhs_blue;
+	color: $white;
+	position: fixed;
+	touch-action: none;
+	top: 0em;
+	left: 0em;
+	right: 0em;
+	height: 6.250em;
+	box-shadow: 0em 0em 0.313em rgba(0, 0, 0, .5);
+	z-index: 4;
+	box-sizing: border-box;
+	
+	h1 {
+		@include screen_title;
+		text-align: center;
+		box-sizing: border-box;
+		width: 100%;
+	}
+	.nhs_logo {
+		margin: 1em;
+		height: 1.375em;
+		display: inline-block;
+		cursor: pointer;
+	}
+	svg.account {
+		margin: 1em;
+		display: inline-block;
+		height: 1.375em;
+		position: fixed;
+		right: 0em;
+    	top: 0em;
+		cursor: pointer;
+	}
+	a.account {
+		@include account;
+		margin: 1em;
+		display: inline-block;
+		height: 1.375em;
+		position: absolute;
+		right: 2.3em;
+		line-height: 2.2em;
+		cursor: pointer;
+	}
+	hr {
+		margin: 0em 1em 0.563em 1em;
+		height: 0.063em;
+		border: none;
+		background-color: white;
+		opacity: 0.25;
+	}
+	.breadcrumb {
+		display: none;
+	}
+	.menu-web {
+		display: none;
+	}
+}

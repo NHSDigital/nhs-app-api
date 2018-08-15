@@ -2,7 +2,7 @@ package mocking.emis.models
 
 class ExceptionResponse(val internalResponseCode: Long,
                         exceptionMessage: String) {
-    val internalResponseMessage = "Exception occurred during API processing.";
+    val internalResponseMessage = "Exception occurred during API processing."
     val exceptions = arrayOf(Exception(exceptionMessage))
 
 

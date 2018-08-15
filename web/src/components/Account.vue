@@ -1,9 +1,9 @@
 <template>
-  <main class="content">
-    <button id="signout-button" class="button grey" @click="signoutClicked()">
+  <div class="content">
+    <button id="signout-button" :class="[$style.button, $style.grey]" @click="signoutClicked()">
       {{ $t('signOutButton.signOut') }}
     </button>
-  </main>
+  </div>
 </template>
 
 <script>
@@ -19,8 +19,6 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-  @import '../style/html';
-  @import '../style/elements';
+<style module lang="scss" scoped>
   @import '../style/buttons';
 </style>

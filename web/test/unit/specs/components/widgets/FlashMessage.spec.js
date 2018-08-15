@@ -12,6 +12,7 @@ const createFlashMessage = ($store) => {
 
   const $style = {
     mainShowingSlots: 'mainShowingSlots',
+    warning: 'warning',
   };
 
   return mount(FlashMessage, {

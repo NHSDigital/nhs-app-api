@@ -1,27 +1,24 @@
 <template>
-  <div v-if="showFlashMessage" :class="$style.flashMessage">
-    <error-warning-dialog v-if="isWarning()" error-or-warning = "warning" >
-      <p>
-        {{ message }}
-      </p>
-    </error-warning-dialog>
-    <success-dialog v-else >
-      <p>
-        {{ message }}
-      </p>
-    </success-dialog>
+  <div v-if="showFlashMessage" class="pull-content">
+    <message-dialog v-if="isWarning()" message-type="warning" >
+      <message-text>{{ message }}</message-text>
+    </message-dialog>
+    <message-dialog v-else message-id="success-dialog"
+                    message-type="success">
+      <message-text>{{ message }}</message-text>
+    </message-dialog>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
-import SuccessDialog from '@/components/widgets/SuccessDialog';
-import ErrorWarningDialog from '@/components/errors/ErrorWarningDialog';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import MessageText from '@/components/widgets/MessageText';
 
 export default {
   components: {
-    SuccessDialog,
-    ErrorWarningDialog,
+    MessageDialog,
+    MessageText,
   },
   computed: {
     showFlashMessage() {
@@ -51,13 +48,6 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-  @import "../../style/spacings";
-  @import "../../style/textstyles";
-  @import "../../style/colours";
-
-  .flashMessage {
-    @include space(padding, all, $three);
-  }
+<style module lang="scss" scoped>
 
 </style>

@@ -28,7 +28,7 @@ object ProblemsData {
                                     AssociatedText (text = "Patient advice given"),
                                     AssociatedText (text = "Repeated use of eye drops")
                             )
-                    )));
+                    )))
         }
 
         return ProblemResponseModel(
@@ -53,7 +53,7 @@ object ProblemsData {
                                 AssociatedText (text = "Patient advice given"),
                                 AssociatedText (text = "Repeated use of eye drops")
                         )
-                )));
+                )))
         problems.add(ProblemResponse(
                 status = "Past",
                 significance="Minor",
@@ -65,7 +65,7 @@ object ProblemsData {
                                 AssociatedText (text = "Patient advice given"),
                                 AssociatedText (text = "Bend legs when lifting")
                         )
-                )));
+                )))
         problems.add(ProblemResponse(
                 status = "Past",
                 significance="Minor",
@@ -76,7 +76,7 @@ object ProblemsData {
                         associatedText = mutableListOf<AssociatedText> (
                                 AssociatedText (text = "Patient told to wear ankle support")
                         )
-                )));
+                )))
 
         return ProblemResponseModel(
                 medicalRecord = ProblemMedicalRecord(

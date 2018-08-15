@@ -33,9 +33,10 @@ class MoreStepDefinitions {
 
     @Given("^I am on the More Page$")
     fun iAmOnTheMorePage() {
-        assert(more.organDonationHeaderVisible())
         assert(more.organDonationDescriptionVisible())
         assert(more.organDonationButtonVisible())
+        assert(more.dataSharingDescriptionVisible())
+        assert(more.dataSharingButtonVisible())
     }
 
 }

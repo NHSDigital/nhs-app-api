@@ -14,7 +14,7 @@ Feature: View courses
     And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -30,8 +30,9 @@ Feature: View courses
     And I have 0 <GP System> assigned prescriptions
     And 0 of my prescriptions are of type repeat
     And 0 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
+    And a message is displayed indicating that you don't have any medication available to order
     Examples:
       | GP System |
       | EMIS      |
@@ -46,7 +47,7 @@ Feature: View courses
     And I have 1 <GP System> assigned prescriptions
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -63,7 +64,7 @@ Feature: View courses
     And I have 101 <GP System> assigned prescriptions
     And 101 of my prescriptions are of type repeat
     And 101 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -79,7 +80,7 @@ Feature: View courses
     And I have 100 <GP System> assigned prescriptions
     And 100 of my prescriptions are of type repeat
     And 100 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -95,7 +96,7 @@ Feature: View courses
     And I have 10 <GP System> assigned prescriptions
     And 5 of my prescriptions are of type repeat
     And 3 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
     Examples:
       | GP System |
@@ -104,6 +105,7 @@ Feature: View courses
 
   @smoketest
   @NHSO-502
+  @prescription
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -165,6 +167,7 @@ Feature: View courses
 
   @smoketest
   @NHSO-502 @NHSO-655
+  @prescription
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -235,7 +238,7 @@ Feature: View courses
     And I have 1 assigned prescriptions which have only dosage info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
 
   @NHSO-1509
@@ -248,7 +251,7 @@ Feature: View courses
     And I have 1 assigned prescriptions which have only quantity info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
 
   @NHSO-1509
@@ -261,7 +264,7 @@ Feature: View courses
     And I have 1 assigned prescriptions which have no info
     And 1 of my prescriptions are of type repeat
     And 1 of my prescriptions can be requested
-    When I click 'Order a repeat prescription'
+    When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
 
   @NHSO-1509

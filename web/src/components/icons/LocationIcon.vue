@@ -14,7 +14,7 @@
   </svg>
 </template>
 
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 @import "../../style/icons";
 @import "../../style/colours";
 </style>

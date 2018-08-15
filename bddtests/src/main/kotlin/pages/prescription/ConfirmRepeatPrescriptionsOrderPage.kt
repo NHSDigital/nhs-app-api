@@ -58,8 +58,8 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
             val expectedCourse = selectedCourses[i]
             val currentCourseOnScreen = repeatPrescriptions[i]
 
-            val nameOnScreen = currentCourseOnScreen.findBy<WebElementFacade>( "./label[@data-purpose='prescription-name']")
-            val instructionsOnScreen = currentCourseOnScreen.findBy<WebElementFacade>("./p[@data-purpose='prescription-description']")
+            val nameOnScreen = currentCourseOnScreen.findBy<WebElementFacade>( "[data-purpose='prescription-name']")
+            val instructionsOnScreen = currentCourseOnScreen.findBy<WebElementFacade>("[data-purpose='prescription-description']")
 
             Assert.assertEquals(expectedCourse.name, nameOnScreen.text)
             Assert.assertEquals(expectedCourse.getInstructionsText(), instructionsOnScreen.text)

@@ -1,19 +1,8 @@
 <template>
   <div v-if="isVisible">
-    <img id="loading-spinner" src="~/assets/spinnerImg.gif" alt="loading" >
+    <img id="loading-spinner" src="~/assets/spinnerImg.gif" alt="loading">
   </div>
 </template>
-
-<style lang="scss" scoped>
-#loading-spinner {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-}
-</style>
 
 <script>
 export default {
@@ -24,3 +13,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>#loading-spinner {
+  position: fixed;
+  z-index: 10;
+  top: 0em;
+  right: 0em;
+  left: 0em;
+  bottom: 0em;
+  margin: auto;
+}
+
+</style>

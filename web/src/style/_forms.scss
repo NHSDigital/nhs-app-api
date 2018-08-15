@@ -1,0 +1,56 @@
+
+@import './colours';
+@import './textstyles';
+@import './formspanelshared';
+
+.form {
+	h3 {
+		@include h3;
+		padding-bottom: 0.5em;
+		padding-top: 0.5em;
+	}
+	label {
+		padding-bottom: 0.5em;
+		padding-top: 0.5em;
+	}
+	b {
+		padding-bottom: 0.5em;
+		padding-top: 0.5em;
+	}
+
+	input[type=text],
+	textarea {
+		width: 100%;
+		box-sizing: border-box;
+		background-color: $white;
+		border-radius: 0.313em;
+		padding: 1em;
+		border: 0.063em $light_grey solid;
+		outline: none;
+		transition: all ease 0.5s;
+		@include default_text;
+
+		&.error {
+			border: 0.063em $error solid;
+		}
+	}
+	input[type=text] {
+		height: 3.125em;
+		line-height: 3.125em;
+	}
+	textarea {
+		min-height: 6.250em;
+	}
+}
+
+.checkbox-panel {
+	display: flex;
+	margin-top: 1em;
+	.checkbox {
+		margin-right: 1em;
+		flex: 0 0 1.5em;
+	}
+	label {
+		padding-top: 0.125em;
+	}
+}

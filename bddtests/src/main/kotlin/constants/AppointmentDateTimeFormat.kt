@@ -6,6 +6,6 @@ class AppointmentDateTimeFormat {
         const val backendDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss.'0Z'"
         const val tppDateTimeFormat = "yyyy-MM-dd'T'HH:mm:ss.'0Z'"
         const val frontendDateFormat = "EEEE d MMMM yyyy"
-        const val frontendTimeFormat = "h:mm a"
+        const val frontendTimeFormat = "h:mma"
     }
 }

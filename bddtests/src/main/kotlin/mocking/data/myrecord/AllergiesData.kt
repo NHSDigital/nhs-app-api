@@ -65,14 +65,14 @@ object AllergiesData {
         val result= ViewPatientOverviewReply(
                 drugSensitivities = drugSensitivities,
                 allergies = allergies
-        );
-        return result;
+        )
+        return result
     }
 
     fun getTppDefaultAllergyModel(): ViewPatientOverviewReply {
         return ViewPatientOverviewReply(
                 allergies = mutableListOf<ViewPatientOverviewItem>(),
                 drugSensitivities = mutableListOf<ViewPatientOverviewItem>()
-        );
+        )
     }
 }

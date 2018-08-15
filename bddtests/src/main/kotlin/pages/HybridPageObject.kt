@@ -26,7 +26,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     )
 
     private val warningMessage = HybridPageElement(
-            browserLocator = "//div[@class='msg warning']",
+            browserLocator = "//div[@data-purpose='warning']",
             androidLocator = null,
             page = this
     )
@@ -214,33 +214,22 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return buttons[0].text
     }
 
-    fun isErrorMessageContentCorrect(pageHeaderText: String,
-                                     headerText: String,
-                                     subHeaderText: String,
-                                     messageText: String,
-                                     retryButtonText: String): Boolean {
+    fun isErrorMessageContentCorrect(pageHeaderText: String? = null,
+                                     headerText: String? = null,
+                                     subHeaderText: String? = null,
+                                     messageText: String? = null,
+                                     retryButtonText: String? = null): Boolean {
 
-        var pageHeadIsValid = true
-        var headerIsValid = true
-        var subHeaderIsValid = true
-        var messageIsValid = true
-        var retryButtonIsValid = true
-
-        if (!pageHeaderText.isNullOrEmpty()) {
-            pageHeadIsValid = isAnyXpathVisible("//h1[contains(text(), \"$pageHeaderText\")]")
-        }
-        if (!headerText.isNullOrEmpty()) {
-            headerIsValid = isAnyXpathVisible("//p[contains(text(), \"$headerText\")]")
-        }
-        if (!subHeaderText.isNullOrEmpty()) {
-            subHeaderIsValid = isAnyXpathVisible("//p[contains(text(), \"$subHeaderText\")]")
-        }
-        if (!messageText.isNullOrEmpty()) {
-            messageIsValid = isAnyXpathVisible("//p[contains(text(), \"$messageText\")]")
-        }
-        if (!retryButtonText.isNullOrEmpty()) {
-            retryButtonIsValid = isAnyXpathVisible("//button[contains(text(), \"$retryButtonText\")]")
-        }
+        val pageHeadIsValid = pageHeaderText.isNullOrEmpty() ||
+                isAnyXpathVisible("//h1[contains(text(), \"$pageHeaderText\")]")
+        val headerIsValid = headerText.isNullOrEmpty() ||
+                isAnyXpathVisible("//p[contains(text(), \"$headerText\")]")
+        val subHeaderIsValid = subHeaderText.isNullOrEmpty() ||
+                isAnyXpathVisible("//p[contains(text(), \"$subHeaderText\")]")
+        val messageIsValid = messageText.isNullOrEmpty() ||
+                isAnyXpathVisible("//p[contains(text(), \"$messageText\")]")
+        val retryButtonIsValid = retryButtonText.isNullOrEmpty() ||
+                isAnyXpathVisible("//button[contains(text(), \"$retryButtonText\")]")
 
         return pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
     }
@@ -255,12 +244,12 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     fun clickOnButtonContainingText(text: String) {
        HybridPageElement(
-            browserLocator = "//div[@id='app']//button",
+            browserLocator = "//button",
             androidLocator = null,
             page = this
        )
        .containingText(text)
-       .element.waitUntilClickable<WebElementFacade>()
+       .element
        .click()
     }
 

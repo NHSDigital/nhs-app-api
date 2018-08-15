@@ -1,34 +1,28 @@
 <template>
-  <div :class="[$style.recordContent, getCollapseState]">
-    <div v-if="data.hasErrored">
-      <p> {{ $t('my_record.genericErrorMessage') }} </p>
+  <div v-if="showError" :class="[$style['record-content'], getCollapseState]">
+    <p v-if="data.hasErrored">
+      {{ $t('my_record.genericErrorMessage') }}
+    </p>
+    <p v-else-if="!data.hasAccess">
+      {{ $t('my_record.genericNoAccessMessage') }}
+    </p>
+    <p v-else>
+      {{ $t('my_record.genericNoDataMessage') }}
+    </p>
+  </div>
+  <div v-else :class="[$style['record-content'], getCollapseState]">
+    <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
+         :class="$style['record-item']" data-purpose="record-item">
+      <label v-if="event.date"> {{ event.date | datePart }} </label>
+      <p> {{ event.locationAndDoneBy }}</p>
+      <ul>
+        <li v-for="(eventItem, eventItemIndex) in event.eventItems"
+            :key="`event-${eventItemIndex}`">
+          {{ eventItem }}
+        </li>
+      </ul>
+      <hr>
     </div>
-    <div v-else>
-      <div v-if="data.hasAccess">
-        <div v-if="data.data.length > 0">
-          <ul>
-            <li v-for="(event, eventIndex) in orderedEvents"
-                :key="`event-${eventIndex}`" :class="$style.event">
-              <label v-if="event.date"> {{ event.date | datePart }} </label>
-              <p :class="$style.eventDetail"> {{ event.locationAndDoneBy }}</p>
-              <ul>
-                <li v-for="(eventItem, eventItemIndex) in event.eventItems"
-                    :key="`event-${eventItemIndex}`" :class="$style.eventLine">
-                  {{ eventItem }}
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        <div v-else>
-          <p> {{ $t('my_record.genericNoDataMessage') }} </p>
-        </div>
-      </div>
-      <div v-else>
-        <p> {{ $t('my_record.genericNoAccessMessage') }} </p>
-      </div>
-    </div>
-    <hr>
   </div>
 </template>
 
@@ -54,30 +48,17 @@ export default {
     orderedEvents() {
       return _.orderBy(this.data.data, [obj => obj.date], ['desc']);
     },
+    showError() {
+      return this.data.hasErrored ||
+             this.data.data.length === 0 ||
+             !this.data.hasAccess;
+    },
   },
 };
 
 </script>
 
-<style lang="scss" module>
-  @import '../../style/html';
-  @import '../../style/fonts';
-  @import '../../style/spacings';
-  @import '../../style/colours';
-  @import '../../style/elements';
+<style module lang="scss" scoped>
+@import '../../style/medrecordcontent';
 
-  .recordContent { @include record-content };
-
-  .event {
-    border-bottom: 1px solid #e8edee;
-    padding-bottom: 16px;
-  }
-  .eventDetail {
-    padding-bottom: 0px !important;
-  }
-  .eventLine {
-    padding-left: 32px;
-    list-style-type: disc;
-    list-style-position: inside;
-  }
 </style>

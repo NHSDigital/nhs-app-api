@@ -2,35 +2,35 @@ package pages.appointments
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
-import pages.ErrorPage
 import pages.HybridPageElement
 
 @DefaultUrl("http://localhost:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
-    private val filterXpath = "//select[@id='%s']"
-    private val byIdWithinSpanXpath = "//span[@id='%s']"
+    private val byIdXpath = "//*[@id='%s']"
+    private val inlineErrorByIdXpath = "$byIdXpath//*[@data-purpose='error']"
+    private val validationErrorSummaryParentXpath = "//div[@id='validationErrors']"
 
     private val appointmentTypeFilter = HybridPageElement(
-            browserLocator = String.format(filterXpath, "type"),
+            browserLocator = String.format(byIdXpath, "type"),
             androidLocator = "",
             page = this
     )
 
     private val locationFilter = HybridPageElement(
-            browserLocator = String.format(filterXpath, "location"),
+            browserLocator = String.format(byIdXpath, "location"),
             androidLocator = "",
             page = this
     )
 
     private val clinicianFilter = HybridPageElement(
-            browserLocator = String.format(filterXpath, "clinician"),
+            browserLocator = String.format(byIdXpath, "clinician"),
             androidLocator = "",
             page = this
     )
 
     private val timePeriodFilter = HybridPageElement(
-            browserLocator = String.format(filterXpath, "time-period"),
+            browserLocator = String.format(byIdXpath, "time-period"),
             androidLocator = "",
             page = this
     )
@@ -41,32 +41,55 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             page = this
     )
 
+    private val errorSummarySubHeading = HybridPageElement(
+            browserLocator = "$validationErrorSummaryParentXpath/p",
+            androidLocator = "",
+            page = this
+    )
+
+    override val errorSummaryBody = HybridPageElement(
+            browserLocator = "$validationErrorSummaryParentXpath/ul/li",
+            androidLocator = "",
+            page = this
+    )
+
     private val typeInLineError = HybridPageElement(
-            browserLocator = String.format(byIdWithinSpanXpath, "error-type"),
+            browserLocator = String.format(inlineErrorByIdXpath, "error-type"),
             androidLocator = "",
             page = this
     )
 
     private val locationInLineError = HybridPageElement(
-            browserLocator = String.format(byIdWithinSpanXpath, "error-location"),
+            browserLocator = String.format(inlineErrorByIdXpath, "error-location"),
             androidLocator = "",
             page = this
     )
 
     private val slotInLineError = HybridPageElement(
-            browserLocator = String.format(byIdWithinSpanXpath, "error-slot"),
+            browserLocator = String.format(inlineErrorByIdXpath, "error-slot"),
             androidLocator = "",
             page = this
     )
 
-    val tryAgainButton = HybridPageElement(
-            browserLocator = "//button",
-            androidLocator = null,
+    private val info = HybridPageElement(
+            browserLocator = "//div[@data-purpose='info']",
+            androidLocator = "",
             page = this
-    ).withText("Try again")
+    )
 
-    private val appointmentSlotDateXpath = "//form/span/h5[text() = '%s']"
-    private val appointmentSlotTimeXpath = "$appointmentSlotDateXpath/../ul/li[contains(., '%s')]"
+    private fun timeSlotAtPosition(position: Int) = HybridPageElement(
+            browserLocator = "//form//li[$position]",
+            androidLocator = "",
+            page = this
+    )
+
+    private fun timeSlot(date: String, time: String) = HybridPageElement(
+            browserLocator = "//form/div/span[h2 = '$date']/ul/li['$time']",
+            androidLocator = "",
+            page = this
+    )
+
+    private val appointmentSlotDateXpath = "//form//h2[text() = '%s']"
 
     fun isTypeFilterPresent(): Boolean {
         return appointmentTypeFilter.elements.isNotEmpty()
@@ -85,11 +108,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun selectSlotByPositionNumber(position: Int) {
-        return timeSlotAtPosition(position).click()
+        return timeSlotAtPosition(position).element.click()
     }
 
     fun selectSlot(date: String, time: String) {
-        return timeSlot(date, time).click()
+        return timeSlot(date, time).element.click()
     }
 
     fun getAppointmentTypeFilterContents(): ArrayList<String> {
@@ -162,7 +185,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun isTimeSlotPresent(expectedDateHeading: String, expectedTimeOnSlot: String): Boolean {
         return try {
-            timeSlot(expectedDateHeading, expectedTimeOnSlot).isPresent
+            timeSlot(expectedDateHeading, expectedTimeOnSlot).element.isPresent
         } catch (e: Exception) {
             false
         }
@@ -170,7 +193,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun isTimeSlotAtPositionSelected(position: Int): Boolean {
         return try {
-            timeSlotAtPosition(position).getAttribute("aria-label") == "selected-slot"
+            timeSlotAtPosition(position).element.getAttribute("aria-label") == "selected-slot"
         } catch (e: Exception) {
             false
         }
@@ -184,9 +207,20 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return locationInLineError.element.text
     }
 
-    fun getErrorSummaryAtRow(rowNumber: Int): String {
-        val error = switchToPage(ErrorPage::class.java)
-        return error.paragraph(rowNumber).element.text
+    fun getInlineSlotValidationError(): String {
+        return slotInLineError.element.text
+    }
+
+    fun getErrorSummarySubHeading(): String {
+        return errorSummarySubHeading.element.text
+    }
+
+    fun getErrorSummaryBodyAtRow(rowNumber: Int): String {
+        return errorSummaryBody.elements[rowNumber - 1].text
+    }
+
+    fun getInfoText(): String? {
+        return info.element.text
     }
 
     private fun filterContentsAsStrings(filter: HybridPageElement): ArrayList<String> {
@@ -197,9 +231,4 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         }
         return optionsAsStrings
     }
-
-    private fun timeSlotAtPosition(position: Int) = findByXpath("//form//li[$position]")
-
-    private fun timeSlot(date: String, time: String) = findByXpath("//form/span[h5 = '$date']/ul/li['$time']")
-
 }

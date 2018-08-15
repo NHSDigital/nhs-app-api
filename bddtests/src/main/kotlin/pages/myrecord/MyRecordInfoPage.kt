@@ -11,7 +11,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val secMyDetails = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'My details')]",
+            browserLocator = "//h2[contains(text(),'My details')]",
             androidLocator = null,
             page = this)
 
@@ -53,115 +53,115 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val allergiesAndAdverseReactionsHeader = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Allergies and adverse reactions')]",
+            browserLocator = "//h2[contains(text(),'Allergies and adverse reactions')]",
             androidLocator = null,
             page = this)
 
     val txtAllergyMsg = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val noSummaryCareAccessMessage = 
         HybridPageElement(
-            browserLocator = "//div[@id='mainDiv']//div[@id='mainDiv']//main//child::div[@class='msg error'][1]",
+            browserLocator = "//div[@id='mainDiv']//div[@data-purpose='error'][1]",
             androidLocator = null,
             page = this)
 
     val acuteMedicationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Acute (short-term) medications')]",
+            browserLocator = "//h2[contains(text(),'Acute (short-term) medications')]",
             androidLocator = null,
             page = this)
 
     val acuteMedications = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Acute (short-term) medications')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Acute (short-term) medications')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val currentRepeatMedicationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Repeat medications: current')]",
+            browserLocator = "//h2[contains(text(),'Repeat medications: current')]",
             androidLocator = null,
             page = this)
 
     val txtcurrentRepeatMedications = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Repeat medications: current')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Repeat medications: current')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val discontinuedRepeatMedicationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Repeat medications: discontinued')]",
+            browserLocator = "//h2[contains(text(),'Repeat medications: discontinued')]",
             androidLocator = null,
             page = this)
 
     val txtdiscontinuedRepeatMedications = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Repeat medications: discontinued')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Repeat medications: discontinued')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val testResultsHeader = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Test results')]",
+            browserLocator = "//h2[contains(text(),'Test results')]",
             androidLocator = null,
             page = this)
 
     val txttestResultsMsg = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Test results')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Test results')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val immunisationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Immunisations')]",
+            browserLocator = "//h2[contains(text(),'Immunisations')]",
             androidLocator = null,
             page = this)
 
     val immunisations = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Immunisations')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Immunisations')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val problemsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Problems')]",
+            browserLocator = "//h2[contains(text(),'Problems')]",
             androidLocator = null,
             page = this)
 
     val problems = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Problems')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Problems')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val consultationsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Consultations')]",
+            browserLocator = "//h2[contains(text(),'Consultations')]",
             androidLocator = null,
             page = this)
 
     val consultations = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Consultations')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Consultations')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
     val eventsHeading = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'C')]",
+            browserLocator = "//h2[contains(text(),'C')]",
             androidLocator = null,
             page = this)
 
     val events = 
         HybridPageElement(
-            browserLocator = "//h5[contains(text(),'Consultations')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Consultations')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
@@ -177,7 +177,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun isAllergiesTextMsgVisible(): Boolean {
-        return txtAllergyMsg.element.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+        return txtAllergyMsg.element.findBy<WebElementFacade>(By.tagName("p")).isCurrentlyVisible
     }
 
     fun isOnMyRecordInfoPage(): Boolean {
@@ -241,7 +241,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun getAllergyCount(): Int {
-        return txtAllergyMsg.element.thenFindAll(By.tagName("li")).size
+        return txtAllergyMsg.element.thenFindAll(By.cssSelector("div[data-purpose=\"record-item\"]")).count()
     }
 
     fun getAllergyMessages(): ArrayList<String> {
@@ -307,7 +307,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun getImmunisationRecordCount(): Int {
-        return immunisations.element.thenFindAll(By.cssSelector("ul li")).count()
+        return immunisations.element.thenFindAll(By.cssSelector("div[data-purpose=\"record-item\"]")).count()
     }
 
     fun clickImmunisations() {
@@ -331,7 +331,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun isTestResultsTextMsgVisible(): Boolean {
-        return txttestResultsMsg.element.findBy<WebElementFacade>(By.tagName("div")).isCurrentlyVisible
+        return txttestResultsMsg.element.findBy<WebElementFacade>(By.tagName("p")).isCurrentlyVisible
     }
 
     fun getProblemsHeaderText(): String {
@@ -387,7 +387,12 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickTestResult() {
-        aFirstTestResult.element.click()
+        val testResults = getTestResults()
+        testResults.first().click()
+    }
+
+    fun getTestResults(): List<WebElementFacade> {
+        return txttestResultsMsg.element.thenFindAll(By.tagName("a"))
     }
 
     private fun toggleShrub(shrub: HybridPageElement) {

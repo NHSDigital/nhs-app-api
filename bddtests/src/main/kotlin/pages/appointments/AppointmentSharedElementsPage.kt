@@ -21,7 +21,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
 
     val inLineError = HybridPageElement(
-            browserLocator = "//*[@id='errorLabel']/p/span[@data-purpose='error']",
+            browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
             androidLocator = null,
             page = this
     )
@@ -32,7 +32,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
             page = this
     )
 
-    val errorSummaryBody = HybridPageElement(
+    open val errorSummaryBody = HybridPageElement(
             browserLocator = "//*[@data-purpose='error']",
             androidLocator = null,
             page = this
@@ -117,11 +117,11 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     }
 
     private fun retrieveAppointmentSlotDivs(containerDivXpath: String): List<WebElementFacade> {
-        return findAllByXpath("$containerDivXpath/div")
+        return findAllByXpath("$containerDivXpath")
     }
 
     private fun retrieveAppointmentSlotDivAtPosition(containerDivXpath: String, index: Int): WebElementFacade {
-        return findByXpath("$containerDivXpath/div[$index]")
+        return findByXpath("$containerDivXpath[$index]")
     }
 
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String) {

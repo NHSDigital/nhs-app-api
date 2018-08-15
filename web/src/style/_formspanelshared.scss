@@ -1,0 +1,61 @@
+@import './colours';
+@import './textstyles';
+
+/** FORMS AND PANELS */
+
+.panel,
+.form {
+	font-size: 1em;
+	margin-bottom: 1em;
+	p {
+		padding-bottom: 0.5em;
+		padding-top: 0.250em;
+		b {
+			display: inline-block;
+			padding-top: 0em;
+		}
+		.char {
+			font-size: 1em;
+		}
+	}
+	h4 {
+		@include default_label;
+		color: $light_grey;
+		font-size: 1.250em;
+		padding-bottom: 0.5em;
+		padding-top: 0em;
+	}
+
+	.checkbox {
+		border: 0.063em $light_grey solid;
+		width: 1.5em;
+		height: 1.5em;
+		border-radius: 0.313em;
+		padding-bottom: 0.5em;
+
+		&:active {
+			border-color: $black;
+		}
+
+		.checked {
+			margin-left: 0.250em;
+			margin-top: 0.375em;
+			display: none;
+		}
+	}
+	.custom-dropdown {
+		margin-bottom: 0.5em;
+	}
+}
+
+.checkbox-panel {
+	display: flex;
+	margin-top: 1em;
+	.checkbox {
+		margin-right: 1em;
+		flex: 0 0 1.5em;
+	}
+	label {
+		padding-top: 0.125em;
+	}
+}

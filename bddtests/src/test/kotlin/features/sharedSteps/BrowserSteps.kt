@@ -30,12 +30,12 @@ open class BrowserSteps {
 
     @Step
     open fun waitUntilSignoutCompletes() {
-        val vuexCookieName = "nhso";
+        val vuexCookieName = "nhso"
 
         WebDriverWait(loginPage.driver, 1000)
                 .pollingEvery(Duration.ofMillis(100))
                 .until {
-                    it.currentUrl == loginPage.driver.currentUrl;
+                    it.currentUrl == loginPage.driver.currentUrl
                     CookieWrapper.fromJson(getCookieJson(vuexCookieName)).isLoggedIn() == false
                 }
     }
@@ -51,20 +51,19 @@ open class BrowserSteps {
 
     @Step()
     fun checkLoginDetailsAreReset() {
-        val vuexCookieName = "nhso";
-        var cookieValue = getCookieJson(vuexCookieName)
+        val vuexCookieName = "nhso"
+        val cookieValue = getCookieJson(vuexCookieName)
         val targetObject = CookieWrapper.fromJson(cookieValue)
         targetObject.assertIsLoggedOut()
     }
 
     @Step
-    private fun getCookieJson(cookieName:String):String
-    {
-        var cookieValue = fetchCookieContents(cookieName)
-        var start = cookieValue.indexOf("{" )
-        var cookieValueTrimmed = cookieValue.removeRange(0,start)
-        var end = cookieValueTrimmed.lastIndexOf("}")
-        return cookieValueTrimmed.removeRange(end+1, cookieValueTrimmed.lastIndex+1)
+    private fun getCookieJson(cookieName: String): String {
+        val cookieValue = fetchCookieContents(cookieName)
+        val start = cookieValue.indexOf("{")
+        val cookieValueTrimmed = cookieValue.removeRange(0, start)
+        val end = cookieValueTrimmed.lastIndexOf("}")
+        return cookieValueTrimmed.removeRange(end + 1, cookieValueTrimmed.lastIndex + 1)
     }
 
     private fun fetchCookieContents(cookieName: String): String {
@@ -79,7 +78,7 @@ open class BrowserSteps {
     fun changeTab(url: URL) {
         val driver = loginPage.driver
 
-        var allWindows: MutableList<String> = mutableListOf()
+        val allWindows: MutableList<String> = mutableListOf()
 
         for (window in loginPage.driver.windowHandles) {
             driver.switchTo().window(window)

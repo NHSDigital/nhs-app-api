@@ -1,12 +1,17 @@
 <template>
   <form :class="$style.appointmentTime">
-    <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
-      <h5>{{ formatDate(daySlots[0]) }}</h5>
-      <ul :class="$style.selector">
-        <time-slot v-for="slot in daySlots[1]" :key="slot.ref" :ref="slot.ref"
-                   :time-slot="slot" @click.native="select(slot.ref)" />
-      </ul>
-    </span>
+    <div :class="validationClass()">
+      <error-message v-if="showErrorMessage()" id="error-slot">
+        {{ $t('appointments.booking.validationErrors.slot') }}
+      </error-message>
+      <span v-for="daySlots in availableSlots" :key="formatDate(daySlots[0])">
+        <h2>{{ formatDate(daySlots[0]) }}</h2>
+        <ul :class="[$style['selector-list'], $style.appointmentTimeSelector]">
+          <time-slot v-for="slot in daySlots[1]" :key="slot.ref" :ref="slot.ref"
+                     :time-slot="slot" @click.native="select(slot.ref)" />
+        </ul>
+      </span>
+    </div>
   </form>
 </template>
 
@@ -14,15 +19,21 @@
 /* eslint-disable import/extensions */
 import moment from 'moment-timezone';
 import TimeSlot from '@/components/appointments/booking/TimeSlot';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
 
 export default {
   components: {
     TimeSlot,
+    ErrorMessage,
   },
   props: {
     availableSlots: {
       type: Array,
       default: () => [],
+    },
+    showValidationError: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -34,28 +45,24 @@ export default {
 
       this.$refs[ref][0].select();
     },
+    showErrorMessage() {
+      return this.showValidationError && this.availableSlots.length > 0;
+    },
+    validationClass() {
+      const validationClass = [this.$style['validation-inline']];
+      if (this.showErrorMessage()) {
+        validationClass.push(this.$style['validation-border-left']);
+      }
+
+      return validationClass;
+    },
   },
 };
 </script>
 
-<style module lang="scss">
-@import "../../../style/textstyles";
-@import "../../../style/colours";
-@import "../../../style/fonts";
-.appointmentTime {
-  overflow: hidden;
-  margin-bottom: 8px;
-  h5 {
-    @include h5;
-    color: $nhs_blue;
-    margin-bottom: 8px;
-  }
-  .selector {
-    display: flex;
-    flex-wrap: wrap;
-    margin-left: -8px;
-    margin-bottom: 8px;
-  }
-}
+<style module lang="scss" scoped>
+@import "../../../style/selectors";
+@import "../../../style/errorvalidation";
+@import "../../../style/appointmentsnew";
 
 </style>

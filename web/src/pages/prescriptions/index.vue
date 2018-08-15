@@ -1,47 +1,40 @@
 <template>
-  <main v-if="showTemplate" :class="$style.content">
 
-    <div :class="$style['above-float-button']">
-      <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
-        <h3>{{ $t('rp01.empty.subHeader') }}</h3>
-        <p>
-          {{ $t('rp01.empty.line1') }}
-        </p>
-        <p>
-          {{ $t('rp01.empty.line2') }}
-        </p>
-      </div>
-      <ul v-if="showPrescriptions" data-purpose="prescriptions">
-        <li
-          v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
+  <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
+    <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
+      <h2>{{ $t('rp01.empty.subHeader') }}</h2>
+      <p>
+        {{ $t('rp01.empty.line1') }}
+      </p>
+      <p>
+        {{ $t('rp01.empty.line2') }}
+      </p>
+    </div>
+    <div v-if="showPrescriptions" data-purpose="prescriptions">
+      <div
+        v-for="(statusGroup, key) in prescriptionCoursesToDisplay"
+        :key="key">
+        <div v-if="getMedicationCourseStatus(key) != null">
+          <h2>{{ getMedicationCourseStatus(key) }}</h2>
+        </div>
+        <div
+          v-for="(prescriptionCourse, key) in statusGroup"
           :key="key"
-          :class="$style['prescription-course']">
-          <div v-if="getMedicationCourseStatus(key) != null" :class="$style['panel-title']">
-            <h2>{{ getMedicationCourseStatus(key) }}</h2>
-          </div>
-          <ul>
-            <li
-              v-for="(prescriptionCourse, key) in statusGroup"
-              :key="key"
-              :class="$style['prescription-course']"
-              aria-label="historic-prescription">
-              <historic-prescription :prescription-course="prescriptionCourse" />
-            </li>
-          </ul>
-        </li>
-      </ul>
+          data-label="historic-prescription">
+          <historic-prescription :prescription-course="prescriptionCourse" />
+        </div>
+      </div>
     </div>
 
     <floating-button-bottom v-if="hasLoaded" @on-click="onRepeatPrescriptionButtonClicked">
       {{ $t('rp01.orderPrescriptionButton') }}
     </floating-button-bottom>
-  </main>
+  </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
-import SuccessDialog from '@/components/widgets/SuccessDialog';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import { MedicationCourseStatus } from '@/lib/medication-course-status';
 import _ from 'lodash';
@@ -49,7 +42,6 @@ import _ from 'lodash';
 export default {
   components: {
     FloatingButtonBottom,
-    SuccessDialog,
     HistoricPrescription,
   },
   data() {
@@ -108,19 +100,9 @@ export default {
 };
 </script>
 
-<style module lang="scss">
-@import "../../style/html";
-@import "../../style/elements";
+<style module lang="scss" scoped>
 @import "../../style/buttons";
-@import "../../style/fonts";
 @import "../../style/spacings";
-@import "../../style/textstyles";
-@import "../../style/colours";
-
-.prescription-course {
-  list-style: none;
-  @include space(margin, bottom, $three);
-}
 
 .above-float-button {
   margin-bottom: $marginBottomFullScreen;
