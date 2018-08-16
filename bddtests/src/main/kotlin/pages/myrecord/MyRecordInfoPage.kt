@@ -287,15 +287,15 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun isAcuteMedicationsAvailable(): Boolean {
-        return acuteMedications.element.findBy<WebElementFacade>(By.tagName("li")).isPresent
+        return acuteMedications.element.findBy<WebElementFacade>(By.cssSelector("div[data-purpose=\"record-item\"]")).isPresent
     }
 
     fun isRepeatMedicationsAvailable(): Boolean {
-        return txtcurrentRepeatMedications.element.findBy<WebElementFacade>(By.tagName("li")).isPresent
+        return txtcurrentRepeatMedications.element.findBy<WebElementFacade>(By.cssSelector("div[data-purpose=\"record-item\"]")).isPresent
     }
 
     fun isDiscontinuedMedicationsAvailable(): Boolean {
-        return txtdiscontinuedRepeatMedications.element.findBy<WebElementFacade>(By.tagName("li")).isPresent
+        return txtdiscontinuedRepeatMedications.element.findBy<WebElementFacade>(By.cssSelector("div[data-purpose=\"record-item\"]")).isPresent
     }
 
     fun clickTestResultsSection() {
