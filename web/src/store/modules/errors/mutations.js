@@ -9,6 +9,7 @@ import {
   DISABLE_API_ERROR,
   CLEAR_ALL_API_ERRORS,
   SET_CONNECTION_PROBLEM,
+  ADD_ERROR,
 } from './mutation-types';
 
 export default {
@@ -24,6 +25,12 @@ export default {
     };
 
     state.apiErrors.push(apiError);
+  },
+  [ADD_ERROR](state, error) {
+    if (error === null) {
+      return;
+    }
+    state.errors.push(error);
   },
   [SET_ROUTE_PATH](state, route) {
     state.pageSettings = ErrorSettings.forPage(route);

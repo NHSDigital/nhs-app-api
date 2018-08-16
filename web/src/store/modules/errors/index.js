@@ -13,6 +13,7 @@ export default {
       pageSettings: ErrorSettings.default,
       hasConnectionProblem: false,
       routePath: '',
+      errors: [],
     };
   },
   actions,

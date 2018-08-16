@@ -21,6 +21,7 @@ export default function (app, store, route) {
       const subCategory3 = fields[3] || '';
       const unqPageIdentifier = subCategory3 || subCategory2 || subCategory1 || primaryCategory;
 
+
       if (isEmpty(fields) || isEmpty(fields[0])) fields[0] = 'home';
       const pageName = fields.reduce((combined, field) => `${combined}:${field}`, pageNamePrefix);
 
@@ -37,7 +38,7 @@ export default function (app, store, route) {
 
       Object.assign(app, { $analytics });
 
-      return {
+      window.digitalData = {
         page: {
           pageInfo: {
             pageName,
@@ -66,9 +67,13 @@ export default function (app, store, route) {
           gpOdsCode: store.state.session.gpOdsCode,
         },
       };
+      try {
+        // eslint-disable-next-line no-underscore-dangle
+        window._satellite.track('track_action');
+      } catch (ex) {
+        store.dispatch();
+      }
     })();
-    // eslint-disable-next-line no-underscore-dangle
-    window._satellite.track('track_action');
   } else {
     const $analytics = {
       trackButtonClick: (target) => {
