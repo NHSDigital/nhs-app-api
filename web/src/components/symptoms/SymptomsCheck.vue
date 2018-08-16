@@ -32,8 +32,12 @@ export default {
     AnalyticsTrackedTag,
   },
   data() {
+    let symptomsCheckerUrl = process.env.SYMPTOM_CHECKER_URL;
+    if (this.$store.state.device.isNativeApp) {
+      symptomsCheckerUrl += process.env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
+    }
     return {
-      symptomsCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
+      symptomsCheckerUrl,
       conditionsCheckerUrl: process.env.CONDITIONS_CHECKER_URL,
     };
   },

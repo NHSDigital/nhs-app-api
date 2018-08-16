@@ -43,6 +43,8 @@ module.exports = {
     SYMPTOM_CHECKER_URL:
       process.env.SYMPTOM_CHECKER_URL ||
       'https://111.nhs.uk',
+    SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS:
+      process.env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS || '?referrer=nhsapp&utm_source=%20&utm_medium=NHS%20App&utm_campaign=%20',
     CONDITIONS_CHECKER_URL:
       process.env.CONDITIONS_CHECKER_URL ||
       'https://www.nhs.uk/conditions/',
