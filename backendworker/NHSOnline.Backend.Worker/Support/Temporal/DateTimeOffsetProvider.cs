@@ -28,13 +28,13 @@ namespace NHSOnline.Backend.Worker.Support.Temporal
         }
         public DateTimeOffset CreateDateTimeOffset(DateTime dateTime)
         {
+            dateTime = TimeZoneInfo.ConvertTime(dateTime, _localTimeZone);
             var offSet = _localTimeZone.GetUtcOffset(dateTime);
             return new DateTimeOffset(dateTime, offSet);
         }
         public DateTimeOffset CreateDateTimeOffset()
         {
-            var dateTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, _localTimeZone);
-            return CreateDateTimeOffset(dateTime);
+            return CreateDateTimeOffset(DateTime.UtcNow);
         }
 
         public DateTimeOffset ConvertToLocalTime(DateTimeOffset dateTimeOffset)
