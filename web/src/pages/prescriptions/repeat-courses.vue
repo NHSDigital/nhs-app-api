@@ -1,6 +1,9 @@
 <template>
 
   <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+
+    <glossary-header />
+
     <message-dialog v-if="error" message-type="error">
       <message-text>
         {{ $t('rp12.reasonMissing.summarySubHeader') }}
@@ -83,6 +86,7 @@ import MessageList from '@/components/widgets/MessageList';
 import Spinner from '@/components/widgets/Spinner';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import GlossaryHeader from '@/components/GlossaryHeader';
 
 export default {
   components: {
@@ -92,6 +96,7 @@ export default {
     MessageText,
     MessageList,
     ErrorMessage,
+    GlossaryHeader,
   },
   data() {
     return {

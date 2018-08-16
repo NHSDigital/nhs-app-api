@@ -1,14 +1,6 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
-    <div :class="$style.abbreviations">
-      <p>{{ $t('my_record.clinicalTerms.text') }}</p>
-      <analytics-tracked-tag id="btnClinicalTerms"
-                             :href="clinicalAbbreviationsUrl" event="$event"
-                             tag="a" target="_blank">
-        <AbbreviationsArrowRightIcon/> {{ $t('my_record.clinicalTerms.link') }}
-      </analytics-tracked-tag>
-    </div>
-    <hr>
+    <glossary-header />
     <analytics-tracked-tag :class="[$style['record-title'],
                                     getCollapseState(isPatientDetailsCollapsed)]"
                            :click-func="myRecordSectionClick"
@@ -127,6 +119,7 @@ import Events from '@/components/my-record/Events';
 import VueScrollTo from 'vue-scrollto';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import GlossaryHeader from '@/components/GlossaryHeader';
 
 const PATIENTDETAILS = 'patientdetails';
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
@@ -154,6 +147,7 @@ export default {
     VueScrollTo,
     AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,
+    GlossaryHeader,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === '/my-record/myrecordwarning' || from.path === '/my-record/testresultdetail') {

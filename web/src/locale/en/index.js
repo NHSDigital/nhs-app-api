@@ -38,6 +38,10 @@ export default {
       line2: 'If you have an existing order that isn’t shown here, contact your GP surgery or pharmacy for more information.',
     },
     orderPrescriptionButton: 'Order new repeat prescription',
+    glossary: {
+      headerText: 'You may see medical abbreviations that you aren\'t familiar with.',
+      linkText: 'Help with abbreviations',
+    },
   },
   rp02: {
     pageTitle: 'TBC',

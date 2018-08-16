@@ -1,6 +1,9 @@
 <template>
 
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
+
+    <glossary-header />
+
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
       <p>
@@ -37,12 +40,14 @@
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import { MedicationCourseStatus } from '@/lib/medication-course-status';
+import GlossaryHeader from '@/components/GlossaryHeader';
 import _ from 'lodash';
 
 export default {
   components: {
     FloatingButtonBottom,
     HistoricPrescription,
+    GlossaryHeader,
   },
   data() {
     return {
@@ -55,16 +60,28 @@ export default {
   },
   computed: {
     showNoPrescriptions() {
-      const { hasLoaded, prescriptionCourses } = this.$store.state.prescriptions;
+      const {
+        hasLoaded,
+        prescriptionCourses,
+      } = this.$store.state.prescriptions;
 
-      return hasLoaded
-        && (prescriptionCourses === null || Object.keys(prescriptionCourses).length === 0);
+      return (
+        hasLoaded &&
+        (prescriptionCourses === null ||
+          Object.keys(prescriptionCourses).length === 0)
+      );
     },
     showPrescriptions() {
-      const { hasLoaded, prescriptionCourses } = this.$store.state.prescriptions;
+      const {
+        hasLoaded,
+        prescriptionCourses,
+      } = this.$store.state.prescriptions;
 
-      return hasLoaded && prescriptionCourses !== null
-        && Object.keys(prescriptionCourses).length > 0;
+      return (
+        hasLoaded &&
+        prescriptionCourses !== null &&
+        Object.keys(prescriptionCourses).length > 0
+      );
     },
     prescriptionCoursesToDisplay() {
       const context = this;
@@ -75,12 +92,10 @@ export default {
 
       const orderedMap = {};
 
-      _.each(
-        keys,
-        (k) => {
-          orderedMap[k] = context.$store.state.prescriptions.prescriptionCourses[k];
-        },
-      );
+      _.each(keys, (k) => {
+        orderedMap[k] =
+          context.$store.state.prescriptions.prescriptionCourses[k];
+      });
 
       return orderedMap;
     },

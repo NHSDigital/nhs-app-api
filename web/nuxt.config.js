@@ -64,6 +64,9 @@ module.exports = {
     CLINICAL_ABBREVIATIONS_URL:
       process.env.CLINICAL_ABBREVIATIONS_URL ||
       'https://beta.nhs.uk',
+    GLOSSARY_LINK_LOCATION:
+      process.env.GLOSSARY_LINK_LOCATION ||
+      'https://www.england.nhs.uk/participation/resources/involvejargon/',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',

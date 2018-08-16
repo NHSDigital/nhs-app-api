@@ -1,6 +1,7 @@
 <template>
 
   <div v-if="showTemplate" :class="[$style.content, 'pull-content']">
+
     <div :class="$style.info" data-purpose="info">
       <p>
         {{ $t('rp04.subHeader') }}
