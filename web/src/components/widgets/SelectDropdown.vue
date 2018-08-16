@@ -47,7 +47,7 @@
       },
     },
     dropdownClass() {
-      const dropdownClass = [this.$style.form, this.$style['custom-dropdown'], this.$style['custom-dropdown--white']];
+      const dropdownClass = [this.$style.form, this.$style['custom-dropdown']];
       if (this.errorBorder) {
         dropdownClass.push(this.$style['validation-select-border']);
       }

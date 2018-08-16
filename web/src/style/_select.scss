@@ -1,8 +1,4 @@
 /** SELECT */
-@supports 	(pointer-events: none) and
-	  		((-webkit-appearance: none) or
-	  		(-moz-appearance: none) or
-	  		(appearance: none)) {
 
 .custom-dropdown {
   position: relative;
@@ -12,74 +8,52 @@
   border: 1px #979797 solid;
   border-radius: 4px;
   margin-bottom: 0.5em;
-}
-
-.custom-dropdown__select {
-  padding-right: 2.5em; /* accommodate with the pseudo elements for the dropdown arrow */
-  border: 0;
-  border-radius: 4px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.custom-dropdown__select_element{
-	font-size: inherit; /* inherit size from .custom-dropdown */
-	padding: .5em; /* add some space*/
-	padding: 16px;
-	width: 100%;
-	margin: 0; /* remove default margins */
-	outline: none;
-}
-
-.custom-dropdown::before,
-.custom-dropdown::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.custom-dropdown::after { /*  Custom dropdown arrow */
-  /*content: "\25BC";*/
-  content: url(/assets/icon_arrow_down.svg);
-  height: 1em;
-  font-size: .625em;
-  line-height: 1;
-  right: 1.4em;
-  top: 50%;
-  margin-top: -.5em;
-}
-
-.custom-dropdown::before { /*  Custom dropdown arrow cover */
-  width: 2em;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  border-radius: 0 3px 3px 0;
-}
-
-	.custom-dropdown__select[disabled] {
-		color: rgba(0,0,0,.3);
-	}
-
-	.custom-dropdown.custom-dropdown--disabled::after {
-		color: rgba(0,0,0,.1);
-	}
-
-	/* White dropdown style */
-	.custom-dropdown--white::before {
-		background-color: #fff;
-		/*border-left: 1px solid rgba(0,0,0,.1);*/
-	}
-
-	.custom-dropdown--white::after {
-		color: rgba(0,0,0,.9);
-	}
-
-	/* FF only temp fix */
-	@-moz-document url-prefix() {
-		.custom-dropdown__select { padding-right: .9em }
-		.custom-dropdown--large .custom-dropdown__select { padding-right: 1.3em }
-		.custom-dropdown--small .custom-dropdown__select { padding-right: .5em }
-	}
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+  }
+  &::after {
+    /*  Custom dropdown arrow */
+    /*content: "\25BC";*/
+    content: url(/assets/icon_arrow_down.svg);
+    height: 1em;
+    font-size: .625em;
+    line-height: 1;
+    right: 1.4em;
+    top: 50%;
+    margin-top: -.5em;
+  }
+  &::before {
+    /*  Custom dropdown arrow cover */
+    width: 2em;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 0 3px 3px 0;
+  }
+  .custom-dropdown__select {
+    padding-right: 2.5em;
+    /* accommodate with the pseudo elements for the dropdown arrow */
+    border: 0;
+    border-radius: 4px;
+    appearance: none;
+  }
+  .custom-dropdown__select_element {
+    font-size: inherit;
+    /* inherit size from .custom-dropdown */
+    padding: .5em;
+    /* add some space*/
+    padding: 16px;
+    width: 100%;
+    margin: 0;
+    /* remove default margins */
+    outline: none;
+  }
+  .custom-dropdown__select--white {
+    background-color: #fff;
+    border: 1px #ffffff solid;
+    color: #4a4a4a;
+  }
 }
