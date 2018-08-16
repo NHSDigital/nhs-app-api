@@ -6,12 +6,12 @@
       </message-text>
     </message-dialog>
     <div :class="$style.info" data-purpose="info">
-      <h4>{{ $t('my_record.myRecordWarning.title') }}</h4>
+      <h2 :class="[$style.h2]">{{ $t('my_record.myRecordWarning.title') }}</h2>
       <ul>
         <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp1') }}</li>
         <li>{{ $t('my_record.myRecordWarning.bulletPoints.bp2') }}</li>
       </ul>
-      <h4>{{ $t('my_record.myRecordWarning.extraTitle') }}</h4>
+      <h2 :class="[$style.h2]">{{ $t('my_record.myRecordWarning.extraTitle') }}</h2>
       <ul>
         <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp1') }}</li>
         <li>{{ $t('my_record.myRecordWarning.extraBulletPoints.bp2') }}</li>
@@ -56,5 +56,19 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/info';
+
+
+        .h2 {
+          display: block;
+          font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
+          font-weight: 700;
+          font-size: 1.125em;
+          line-height: 1.125em;
+          color: #425563;
+          letter-spacing: -0.063em;
+          padding-bottom: 0.5em;
+          padding-top: 0.5em;
+      }
+
 
 </style>
