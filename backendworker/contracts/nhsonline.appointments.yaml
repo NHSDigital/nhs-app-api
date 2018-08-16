@@ -199,6 +199,9 @@ definitions:
   AppointmentSlotsResponse:
     type: object
     properties:
+      guidanceMessage:
+        type: string
+        description: Guidance message from GP practice explaining which appointment slot to book.
       slots:
         type: array
         description: Available Appointment Slots.
