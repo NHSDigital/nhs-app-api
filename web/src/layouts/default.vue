@@ -62,7 +62,11 @@ export default {
       if (this.isLoginPage()) {
         return this.$style.homeMain;
       }
-      return 'content pull-body';
+      const clazzes = ['content', 'pull-body']
+      if (this.$store.state.device.isNativeApp) {
+        clazzes.push('native')
+      }
+      return clazzes;
     },
     showLoginHeader() {
       return this.isLoginPage();

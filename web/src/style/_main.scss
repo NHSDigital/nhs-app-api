@@ -35,6 +35,10 @@ main.content {
 	padding: 6.750em 1em 4.688em 1em;
 	box-sizing: border-box;
 	width: 100%;
+
+	&.native {
+		padding: 0em 1em 4.688em 1em;
+	}
 	
 	&.slim {
 		padding: 4.125em 1em 4.688em 1em;
