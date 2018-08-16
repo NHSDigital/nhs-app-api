@@ -26,6 +26,29 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
+  @NHSO-664
+  @pending  @NHSO-664
+  Scenario: A user can expand, view and collapse guidance provided by EMIS
+    Given there are available appointment slots with different criteria for EMIS
+    And I am logged in
+    And I am on the available appointments page
+    When I expand the appointment slot guidance
+    Then the guidance is displayed
+    And the appointment slot guidance is collapsible
+
+  @NHSO-664
+  @pending  @NHSO-664
+  Scenario Outline: A user does not see guidance if none is provided by <GP System>
+    Given there are available appointment slots with different criteria for <GP System>
+    But appointment slot guidance is not provided for <GP System>
+    And I am logged in
+    When I am on the available appointments page
+    Then I cannot see any appointment slot guidance
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   @NHSO-71
   @NHSO-870
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
