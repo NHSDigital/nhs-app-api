@@ -22,6 +22,10 @@ services:
       - TPP_BASE_URL=http://nhsonline.stubs:8080/tpp/
       - VISION_URI=http://nhsonline.stubs:8080/vision
       - VISION_CERT_PASSPHRASE
+      - GP_PROVIDER_ENABLED_EMIS=true
+      - GP_PROVIDER_ENABLED_TPP=true
+      - GP_PROVIDER_ENABLED_VISION=true
+      - GP_PROVIDER_ENABLED_MICROTEST=true
     depends_on:
       - nhsonline.redis.sds
     ports:

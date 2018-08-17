@@ -8,30 +8,40 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
     public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
-        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<ServiceConfigurationModule> _logger;
 
         public ServiceConfigurationModule(ILoggerFactory loggerFactory)
         {
-            _loggerFactory = loggerFactory;
+            _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
-        
+
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var defaultHttpTimeoutSeconds = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
-                _loggerFactory.CreateLogger<ServiceConfigurationModule>());
-            
-            services.AddHttpClient<EmisHttpClient>(client => 
+            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_EMIS", _logger), out bool enabled) && enabled)
             {
-                client.Timeout = TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
-            });
-            
-            services.AddSingleton<IGpSystem, EmisGpSystem>();
-            services.AddSingleton<IEmisClient, EmisClient>();
-            services.AddSingleton<IEmisConfig, EmisConfig>();
-            
-            services.AddTransient<EmisTokenValidationService>();
-            
+                var defaultHttpTimeoutSeconds = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
+                _logger);
+
+                services.AddHttpClient<EmisHttpClient>(client =>
+                {
+                    client.Timeout = TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
+                });
+
+                services.AddSingleton<IGpSystem, EmisGpSystem>();
+                services.AddSingleton<IEmisClient, EmisClient>();
+                services.AddSingleton<IEmisConfig, EmisConfig>();
+
+                services.AddTransient<EmisTokenValidationService>();
+
+                _logger.LogDebug("Emis GP Service was successfully configured");
+            }
+            else
+            {
+                _logger.LogDebug("Emis GP Service was not configured");
+            }
+
             base.ConfigureServices(services, configuration);
+
         }
     }
 }
