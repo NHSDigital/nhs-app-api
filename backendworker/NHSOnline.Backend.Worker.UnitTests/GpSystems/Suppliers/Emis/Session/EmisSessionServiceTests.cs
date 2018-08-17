@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                     new EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>(HttpStatusCode.OK)
                     {
                         Body = _endUserSessionResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                     new EmisClient.EmisApiObjectResponse<SessionsPostResponse>(HttpStatusCode.OK)
                     {
                         Body = _sessionsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                     new EmisClient.EmisApiObjectResponse<DemographicsGetResponse>(HttpStatusCode.OK)
                     {
                         Body = _demographicsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -176,7 +176,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                 .Build<EmisClient.EmisApiObjectResponse<SessionsPostResponse>>()
                 .With(x => x.StatusCode, HttpStatusCode.BadRequest)
                 .With(x => x.Body, null)
-                .With(x => x.ErrorResponse, null)
+                .With(x => x.ExceptionErrorResponse, null)
                 .Create();
 
             _mockEmisClient

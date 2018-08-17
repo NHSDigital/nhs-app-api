@@ -116,16 +116,36 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         }
 
         [TestMethod]
+        public async Task GetAppointments_EmisClientReturnsForbidden_ReturnsCannotViewAppointments()
+        {
+            // Arrange
+            var errorResponse = _fixture.Create<StandardErrorResponse>();
+            var emisResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Forbidden)
+                {
+                    StandardErrorResponse = errorResponse
+                };
+            MockEmisClientAppointmentsGetMethod(emisResponse);
+
+            // Act
+            var result = await _systemUnderTest.GetAppointments(_userSession, false, null);
+
+            // Assert
+            result.Should().BeAssignableTo<AppointmentsResult.CannotViewAppointments>();
+
+        }
+
+        [TestMethod]
         public async Task GetAppointments_EmisClientReturnsInternalServerErrorWithForbiddenMessage_ReturnsCannotViewAppointments()
         {
             // Arrange
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message =
                 "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
             var emisResponse =
                 new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.InternalServerError)
                 {
-                    ErrorResponse = errorResponse
+                    ExceptionErrorResponse = errorResponse
                 };
             MockEmisClientAppointmentsGetMethod(emisResponse);
 
@@ -141,12 +161,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         public async Task GetAppointments_EmisClientReturnsUnknownError_ReturnsSupplierSystemUnavailable()
         {
             // Arrange
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message ="Extra info: UnknownError";
             var emisResponse =
                 new EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>(HttpStatusCode.Ambiguous)
                 {
-                    ErrorResponse = errorResponse
+                    ExceptionErrorResponse = errorResponse
                 };
             MockEmisClientAppointmentsGetMethod(emisResponse);
 

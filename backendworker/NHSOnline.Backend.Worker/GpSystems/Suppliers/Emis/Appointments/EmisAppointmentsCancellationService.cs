@@ -146,7 +146,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         private bool AppointmentIsInThePast(EmisClient.EmisApiResponse response)
         {
-            var check = response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_InThePast);
+            var check = response.StatusCode == HttpStatusCode.BadRequest
+                        || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_InThePast);
             if (check)
             {
                 _logger.LogError("Appointment is in the past.");
@@ -156,7 +157,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         private bool AppointmentNotFound(EmisClient.EmisApiResponse response)
         {
-            var check = response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_NotFound);
+            var check = response.StatusCode == HttpStatusCode.NotFound
+                        || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsDelete_NotFound);
             if (check)
             {
                 _logger.LogError("Appointment not found.");

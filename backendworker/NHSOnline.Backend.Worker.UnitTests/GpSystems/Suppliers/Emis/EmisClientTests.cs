@@ -70,7 +70,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedEndUserSessionResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().BeNull();
+            response.ExceptionErrorResponse.Should().BeNull();
         }
 
         [TestMethod]
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
@@ -120,7 +120,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
@@ -128,7 +128,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             MeApplicationsPost_ReturnsAnApplicationsPostResponseWithErrorDetails_WhenUserAlreadyRegistered()
         {
             var endUserSessionId = _fixture.Create<string>();
-            var expectedResponse = _fixture.Create<ErrorResponse>();
+            var expectedResponse = _fixture.Create<ExceptionErrorResponse>();
             var requestBody = _fixture.Create<MeApplicationsPostRequest>();
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
@@ -145,7 +145,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             var response = await _sut.MeApplicationsPost(endUserSessionId, requestBody);
 
-            response.ErrorResponse.Should().BeEquivalentTo(expectedResponse);
+            response.ExceptionErrorResponse.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(500);
             response.Body.Should().Be(null);
         }
@@ -174,7 +174,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var response = await _sut.SessionsPost(endUserSessionId, requestBody);
 
             response.Body.Should().BeNull();
-            response.ErrorResponse.Should().BeNull();
+            response.ExceptionErrorResponse.Should().BeNull();
             response.ErrorResponseBadRequest.Should().BeNull();
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -222,7 +222,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var response = await _sut.SessionsPost(endUserSessionId, requestBody);
 
             response.Body.Should().BeNull();
-            response.ErrorResponse.Should().BeNull();
+            response.ExceptionErrorResponse.Should().BeNull();
             response.ErrorResponseBadRequest.Should().BeNull();
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
@@ -248,7 +248,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             var response = await _sut.SessionsPost(endUserSessionId, requestBody);
 
             response.Body.Should().BeNull();
-            response.ErrorResponse.Should().BeNull();
+            response.ExceptionErrorResponse.Should().BeNull();
             response.ErrorResponseBadRequest.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
@@ -277,7 +277,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
         
         [TestMethod]
@@ -309,7 +309,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
@@ -336,7 +336,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
@@ -359,7 +359,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            response.ErrorResponse.Should().BeNull();
+            response.ExceptionErrorResponse.Should().BeNull();
         }
 
         [TestMethod]
@@ -388,7 +388,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         [TestMethod]
@@ -409,7 +409,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(200);
-            response.ErrorResponse.Should().Be(null);
+            response.ExceptionErrorResponse.Should().Be(null);
         }
 
         public void Dispose()

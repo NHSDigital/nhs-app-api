@@ -82,10 +82,8 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system is unavailable$")
     fun appointmentBookingUnavailable(gpSystem: String) {
-        var factory = AppointmentsBookingBackendFactory.getForSupplier(gpSystem)
-        var patient = factory.patient
-        var request = factory.defaultAppointmentRequest(patient)
-        factory.setupRequestAndResponse(request)
+
+        defaultAppointmentBookingSetupWithResult(gpSystem) { builder -> builder.respondWithUnavailableException() }
     }
 
     @Given("^an appointment booking for (.*) cannot be successful because the GP system will time out$")

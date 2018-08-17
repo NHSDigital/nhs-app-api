@@ -25,6 +25,7 @@ import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
+import mocking.emis.models.ErrorResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -131,9 +132,16 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
 
     fun linkageKeyPOSTRequest(request: CreateLinkageRequest) = EmisLinkagePOSTBuilder(request)
 
-    fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
-        val exceptionMessage = "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation"
-        return respondWithException(-1030, exceptionMessage)
+    fun responseErrorForbiddenService(): Mapping {
+        return respondWithStandardError(-1030, HttpStatus.SC_FORBIDDEN)
+    }
+
+    fun respondWithStandardError(internalResponseCode: Int, httpResponseCode: Int): Mapping {
+        val responseBody = ErrorResponse(internalResponseCode)
+        return respondWith(httpResponseCode) {
+            andJsonBody(responseBody)
+                    .build()
+        }
     }
 
     protected fun respondWithException(internalResponseCode: Int, message: String): Mapping {

@@ -58,8 +58,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 return new AppointmentBookResult.SlotNotAvailable();
             }
 
-            if(response.HasExceptionWithMessageContaining(
-                    EmisApiErrorMessages.EmisService_BookedAppointmentLimit))
+            if (BookingLimitReached(response))
             {
                 return new AppointmentBookResult.AppointmentLimitReached();
             }
@@ -86,7 +85,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         private bool SlotNotFound(EmisClient.EmisApiResponse response)
         {
-            var check = response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsPost_NotFound);
+            var check = (response.StatusCode == HttpStatusCode.NotFound)
+                        || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsPost_NotFound);
             if (check)
             {
                 _logger.LogError("Slot not found.");
@@ -96,7 +96,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         private bool SlotIsInThePast(EmisClient.EmisApiResponse response)
         {
-            var check = response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsPost_InThePast);
+            var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
+                            EmisApiErrorCode.ProvidedAppointmentSlotInPast)
+                        || response.HasExceptionWithMessage(EmisApiErrorMessages.AppointmentsPost_InThePast);
+            if (check)
+            {
+                _logger.LogError("Slot is in the past.");
+            }
+            return check;
+        }
+
+        private bool BookingLimitReached(EmisClient.EmisApiResponse response)
+        {
+            var check = response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest,
+                            EmisApiErrorCode.OnlineUserMaxAppointmentBookCount)
+                        || response.HasExceptionWithMessageContaining(
+                            EmisApiErrorMessages.EmisService_BookedAppointmentLimit);
+
             if (check)
             {
                 _logger.LogError("Slot is in the past.");

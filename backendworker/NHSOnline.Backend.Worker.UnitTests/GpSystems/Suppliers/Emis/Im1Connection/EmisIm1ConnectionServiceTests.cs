@@ -307,13 +307,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
 
             _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ErrorResponse = errorResponse}));
+                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -330,13 +330,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = accountNotFoundErrorMessage;
 
             _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ErrorResponse = errorResponse}));
+                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -353,13 +353,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = linkageKeyDoesNotMatchErrorMessage;
 
             _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ErrorResponse = errorResponse}));
+                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
 
             // Act
             var result = await _systemUnderTest.Register(request);
@@ -376,13 +376,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = incorrectSurnameOrDateOfBirthErrorMessage;
 
             _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
-                        .InternalServerError) {ErrorResponse = errorResponse}));
+                        .InternalServerError) {ExceptionErrorResponse = errorResponse}));
 
             // Act
             var result = await _systemUnderTest.Register(request);

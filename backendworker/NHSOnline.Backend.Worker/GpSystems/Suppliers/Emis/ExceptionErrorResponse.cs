@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
-    public class ErrorResponse
+    public class ExceptionErrorResponse
     {
         public IEnumerable<ErrorResponseExceptionModel> Exceptions { get; set; }
         public int InternalResponseCode { get; set; }

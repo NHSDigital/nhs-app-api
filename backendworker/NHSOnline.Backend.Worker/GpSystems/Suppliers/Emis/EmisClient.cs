@@ -307,10 +307,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             if (string.IsNullOrEmpty(stringResponse)) return response;
 
             response.Body = _responseParser.ParseBody<TResponse>(stringResponse, responseMessage);
+            response.StandardErrorResponse =
+                _responseParser.ParseBadRequest<StandardErrorResponse>(stringResponse, responseMessage);
             response.ErrorResponseBadRequest =
                 _responseParser.ParseBadRequest<BadRequestErrorResponse>(stringResponse, responseMessage);
-            response.ErrorResponse =
-                _responseParser.ParseError<ErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
+            response.ExceptionErrorResponse =
+                _responseParser.ParseError<ExceptionErrorResponse>(stringResponse, responseMessage, HttpStatusCode.BadRequest);
 
             _logger.LogDebug("Exiting: {0}", methodName);
             return response;
@@ -324,23 +326,45 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             }
 
             public HttpStatusCode StatusCode { get; set; }
-            public ErrorResponse ErrorResponse { get; set; }
+            public StandardErrorResponse StandardErrorResponse { get; set; }
+            public ExceptionErrorResponse ExceptionErrorResponse { get; set; }
             public BadRequestErrorResponse ErrorResponseBadRequest { get; set; }
             public bool HasSuccessStatusCode => StatusCode.IsSuccessStatusCode();
 
+            public bool HasErrorWithMessage(string message)
+            {
+                return StandardErrorResponse?.Message?.Equals(message, StringComparison.OrdinalIgnoreCase) ?? false;
+            }
+
+            public bool HasErrorWithMessageContaining(string message)
+            {
+                return StandardErrorResponse?.Message?.Contains(message, StringComparison.OrdinalIgnoreCase) ?? false;
+            }
+
+            public bool HasInternalErrorCode(EmisApiErrorCode code)
+            {
+                return StandardErrorResponse?.InternalResponseCode == (int) code;
+            }
+
+            public bool HasStatusCodeAndErrorCode(HttpStatusCode statusCode, EmisApiErrorCode emisApiErrorCode)
+            {
+                return (StatusCode == statusCode) && HasInternalErrorCode(emisApiErrorCode);
+            }
+
             public bool HasExceptionWithMessage(string message)
             {
-                return ErrorResponse?.Exceptions?.Any(x => string.Equals(x.Message, message, StringComparison.Ordinal)) ?? false;
+                return ExceptionErrorResponse?.Exceptions?.Any(x => string.Equals(x.Message, message, StringComparison.Ordinal)) ?? false;
             }
+
 
             public bool HasExceptionWithMessageContaining(string message)
             {
-                return ErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message, StringComparison.Ordinal)) ?? false;
+                return ExceptionErrorResponse?.Exceptions?.Any(x => x.Message.Contains(message, StringComparison.Ordinal)) ?? false;
             }
             
             public bool HasExceptionWithAnyMessage(string[] messages)
             {
-                return ErrorResponse?.Exceptions.Any(x => messages.Contains(x.Message)) ?? false;
+                return ExceptionErrorResponse?.Exceptions.Any(x => messages.Contains(x.Message)) ?? false;
             }
 
             public bool HasForbiddenResponse()

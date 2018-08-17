@@ -191,7 +191,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
         private static bool HasAlreadyBeenOrderedLast30Days(EmisClient.EmisApiResponse response)
         {
-            return response.HasExceptionWithMessageContaining(
+            return (response.StatusCode == HttpStatusCode.Conflict) || response.HasExceptionWithMessageContaining(
                 EmisApiErrorMessages.Prescriptions_AlreadyOrderedLast30Days);
         }
     }

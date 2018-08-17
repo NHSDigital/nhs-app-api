@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
                         Body = coursesResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
                         Body = coursesResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -179,7 +179,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
                         Body = coursesResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -247,7 +247,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
                         Body = coursesResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -280,14 +280,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         {
             // Arrange
             const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
 
             _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                     _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError)
-                        { ErrorResponse = errorResponse }));
+                        { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.GetCourses(_userSession);
@@ -301,7 +301,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         {
             // Arrange
             const string alreadyLinkedErrorMessage = "Error occurred";
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = alreadyLinkedErrorMessage;
 
             _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
@@ -327,7 +327,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.OK)
                     {
                         Body = null,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 
@@ -343,14 +343,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
         public async Task Get_ReturnsForbidden_WhenErrorReceivedFromEmis()
         {
             // Arrange
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             _emisClient.Setup(x => x.CoursesGet(_userSession.UserPatientLinkToken, _userSession.SessionId,
                     _userSession.EndUserSessionId))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<CoursesGetResponse>(HttpStatusCode.InternalServerError)
-                        { ErrorResponse = errorResponse }));
+                        { ExceptionErrorResponse = errorResponse }));
 
             // Act
             var result = await _systemUnderTest.GetCourses(_userSession);

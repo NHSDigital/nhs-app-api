@@ -155,7 +155,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.SupplierSystemUnavailable>();
         }
-        
+
         [TestMethod]
         public async Task GetAppointmentSlotsResult_EmisClientGetAppointmentSlotsNotAvailable_ReturnsCannotBookAppointments()
         {
@@ -163,12 +163,35 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var metadataResponse =
                 new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK);
             MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
+
+            var errorResponse = _fixture.Create<StandardErrorResponse>();
+
+            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode
+                .Forbidden) { StandardErrorResponse = errorResponse };
+
+            MockEmisClientAppointmentSlotGetMethod(slotsResponse);
+
+            // Act
+            var result = await GetAppointmentSlotsResult();
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+        }
+        
+        [TestMethod]
+        public async Task GetAppointmentSlotsResult_EmisClientGetAppointmentSlotsNotAvailableException_ReturnsCannotBookAppointments()
+        {
+            // Arrange
+            var metadataResponse =
+                new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotsMetadataGetMethod(metadataResponse);
             
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode
-                .InternalServerError) { ErrorResponse = errorResponse };
+                .InternalServerError) { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentSlotGetMethod(slotsResponse);
             
@@ -179,17 +202,42 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
         }
-        
+
         [TestMethod]
         public async Task GetAppointmentSlotsResult_EmisClientGetAppointmentSlotsMetadataNotAvailable_ReturnsCannotBookAppointment()
         {
             // Arrange
-            var errorResponse = _fixture.Create<ErrorResponse>();
+            var errorResponse = _fixture.Create<StandardErrorResponse>();
+
+            var errorMetadataResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
+                HttpStatusCode
+                    .Forbidden) { StandardErrorResponse = errorResponse };
+
+            MockEmisClientAppointmentSlotsMetadataGetMethod(errorMetadataResponse);
+
+            var slotsResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK);
+            MockEmisClientAppointmentSlotGetMethod(slotsResponse);
+
+            // Act
+            var result = await GetAppointmentSlotsResult();
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentSlotsResult.CannotBookAppointments>();
+        }
+
+
+
+        [TestMethod]
+        public async Task GetAppointmentSlotsResult_EmisClientGetAppointmentSlotsMetadataNotAvailableException_ReturnsCannotBookAppointment()
+        {
+            // Arrange
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
             errorResponse.Exceptions.First().Message = "Extra info: " + EmisApiErrorMessages.EmisService_NotEnabledForUser;
 
             var errorMetadataResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(
                 HttpStatusCode
-                    .InternalServerError) { ErrorResponse = errorResponse };
+                    .InternalServerError) { ExceptionErrorResponse = errorResponse };
 
             MockEmisClientAppointmentSlotsMetadataGetMethod(errorMetadataResponse);
             
@@ -213,7 +261,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK)
                 {
                     Body = new AppointmentSlotsMetadataGetResponse(),
-                    ErrorResponse = null,
+                    ExceptionErrorResponse = null,
                     ErrorResponseBadRequest = null
                 };
 
@@ -222,7 +270,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var slotResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK)
             {
                 Body = new AppointmentSlotsGetResponse(),
-                ErrorResponse = null,
+                ExceptionErrorResponse = null,
                 ErrorResponseBadRequest = null
             };
 
@@ -247,7 +295,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
                 new EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>(HttpStatusCode.OK)
                 {
                     Body = new AppointmentSlotsMetadataGetResponse(),
-                    ErrorResponse = null,
+                    ExceptionErrorResponse = null,
                     ErrorResponseBadRequest = null
                 };
             
@@ -256,7 +304,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             var slotResponse = new EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>(HttpStatusCode.OK)
             {
                 Body = new AppointmentSlotsGetResponse(),
-                ErrorResponse = null,
+                ExceptionErrorResponse = null,
                 ErrorResponseBadRequest = null
             };
             

@@ -47,7 +47,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = medicationsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
             
@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = allergiesResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
             
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = immunisationsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
             
@@ -74,7 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = testResultsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
             
@@ -83,7 +83,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = problemsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
             
@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
                     new EmisClient.EmisApiObjectResponse<MedicationRootObject>(HttpStatusCode.OK)
                     {
                         Body = consultationsResponse,
-                        ErrorResponse = null,
+                        ExceptionErrorResponse = null,
                         ErrorResponseBadRequest = null
                     }));
 

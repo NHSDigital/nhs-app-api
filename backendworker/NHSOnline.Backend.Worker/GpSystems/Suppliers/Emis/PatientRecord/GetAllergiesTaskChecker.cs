@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             if (!allergiesResponse.HasSuccessStatusCode)
             {
                 // User does not have access
-                if (allergiesResponse.HasExceptionWithMessageContaining("Services Access violation") ||
+                if (allergiesResponse.HasForbiddenResponse() ||
                     allergiesResponse.HasExceptionWithMessageContaining("Requested record access is disabled by the practice"))
                 {
                     _logger.LogWarning("User does not have access to their patient record");

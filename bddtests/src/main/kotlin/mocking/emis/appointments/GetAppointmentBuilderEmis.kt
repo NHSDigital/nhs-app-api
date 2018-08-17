@@ -21,7 +21,7 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        return responseErrorWhenGPDisabledAppointmentsService()
+        return responseErrorForbiddenService()
     }
 
     override fun respondWithSuccess(body: String): Mapping {

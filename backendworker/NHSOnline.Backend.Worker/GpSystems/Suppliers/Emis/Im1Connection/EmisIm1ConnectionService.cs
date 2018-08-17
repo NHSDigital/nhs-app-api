@@ -134,8 +134,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                     return new Im1ConnectionRegisterResult.AccountAlreadyExists();
                 }
 
-                if (meApplicationsResponse.StatusCode == HttpStatusCode.InternalServerError && 
-                    meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
+                if (meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
                 {
                     _logger.LogError(
                         $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}, account not found");

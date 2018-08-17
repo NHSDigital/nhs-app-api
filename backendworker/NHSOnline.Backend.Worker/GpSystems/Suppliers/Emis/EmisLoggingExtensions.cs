@@ -13,7 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 return;
             }
 
-            var emisMessages = response.ErrorResponse?.Exceptions?.Select(x => x.Message) ?? new[] { string.Empty };
+            var emisMessages = response.ExceptionErrorResponse?.Exceptions?.Select(x => x.Message) ?? new[] { string.Empty };
 
             var message = string.Join(", ", emisMessages);
 

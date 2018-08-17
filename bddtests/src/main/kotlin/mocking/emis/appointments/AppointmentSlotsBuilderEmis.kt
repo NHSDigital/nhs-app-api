@@ -43,7 +43,7 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        return responseErrorWhenGPDisabledAppointmentsService()
+        return responseErrorForbiddenService()
     }
 
     override fun respondWithUnknownException(): Mapping {

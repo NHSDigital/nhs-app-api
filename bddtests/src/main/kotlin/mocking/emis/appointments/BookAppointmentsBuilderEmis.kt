@@ -8,6 +8,7 @@ import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
+import mocking.emis.models.ErrorResponse
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
@@ -58,21 +59,18 @@ class BookAppointmentsBuilderEmis (configuration: EmisConfiguration,
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val exceptionResponse = ExceptionResponse(-1030,
-                "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation")
-        return respondWithException(exceptionResponse)
+        val errorResponse = ErrorResponse(-1030)
+        return respondWithError(errorResponse, HttpStatus.SC_FORBIDDEN)
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
-        val exceptionResponse = ExceptionResponse(-1002,
-                "Appointment not found")
-        return respondWithException(exceptionResponse)
+        val errorResponse = ErrorResponse(-1151)
+        return respondWithError(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
-        val exceptionResponse = ExceptionResponse(-1002,
-                "Appointment cannot be booked in the past")
-        return respondWithException(exceptionResponse)
+        val errorResponse = ErrorResponse(-1152)
+        return respondWithError(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
@@ -80,6 +78,10 @@ class BookAppointmentsBuilderEmis (configuration: EmisConfiguration,
     }
 
     private fun respondWithException(exceptionResponse: ExceptionResponse, httpStatus: Int): Mapping {
+        return respondWithBody(exceptionResponse, httpStatus)
+    }
+
+    private fun respondWithError(exceptionResponse: ErrorResponse, httpStatus: Int): Mapping {
         return respondWithBody(exceptionResponse, httpStatus)
     }
 
