@@ -111,15 +111,9 @@ class {{&className}} {
       return response.data
     }).then((body) => {
       this.store.dispatch('http/loadingCompleted');
-      if (method == "DELETE") {
-          this.store.dispatch('session/clear');
-      }
       deferred.resolve(body);
     }).catch((error) => {
       this.store.dispatch('http/loadingCompleted');
-      if (method == "DELETE") {
-          this.store.dispatch('session/clear');
-      }
       if(!axios.isCancel(error)) {
         if (error.response !== undefined && 401 === error.response.status) {
           this.store.dispatch('auth/unauthorised')
