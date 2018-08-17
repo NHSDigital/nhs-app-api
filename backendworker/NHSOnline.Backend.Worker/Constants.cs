@@ -25,6 +25,7 @@
             public const string ConnectionToken = NhsoPrefix + "Connection-Token";
             public const string OdsCode = NhsoPrefix + "ODS-Code";
             public const string NhsNumber = NhsoPrefix + "Nhs-Number";
+            public const string IdentityToken = NhsoPrefix + "Identity-Token";
         }
 
         public static class AuditingTitles

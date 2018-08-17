@@ -1,23 +1,22 @@
 ﻿using System;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
 {
     public class EmisLinkageMapper : IEmisLinkageMapper
     {
-        public LinkageResponse Map(LinkageDetailsResponse linkageDetailsResponse)
+        public LinkageResponse Map(AddVerificationResponse addVerificationResponse)
         {
-            if (linkageDetailsResponse == null)
+            if (addVerificationResponse == null)
             {
-                throw new ArgumentNullException(nameof(linkageDetailsResponse));
+                throw new ArgumentNullException(nameof(addVerificationResponse));
             }
             
             var result = new LinkageResponse
             {
-                LinkageKey = linkageDetailsResponse.LinkageKey,
-                OdsCode = linkageDetailsResponse.OdsCode,
-                AccountId = linkageDetailsResponse.AccountId,
+                LinkageKey = addVerificationResponse.LinkageKey,
+                AccountId = addVerificationResponse.AccountId,
             };
 
             return result;

@@ -5,5 +5,9 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage.Models
         public string OdsCode { get; set; }
 
         public string NhsNumber { get; set; }
+
+        public string IdentityToken { get; set; }
+
+        public string EmailAddress { get; set; }
     }
 }

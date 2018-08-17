@@ -1,85 +1,164 @@
 swagger: '2.0'
 
 info:
-  version: 1.0.0
-  title: EMIS - NHS App Get Linkage Details Approach
-  description: This describes an extension to the EMIS PFS API to allow a patient's linkage details to be retrieved by their NHS Number.
+  version: 0.0.3
+  title: Emis PFS API - Citizen ID.
+  description: This is the API for Emis PFS endpoints that are intended for consumption by Citizen ID.
 
 schemes:
   - https
 
 paths:
-  /patient/linkage:
-    get:
-      summary: "Retrieves a patient's Linkage details using their NHS Number"
-      description: "This call finds a user, given their NHS Number and returns the fields required to link the user."
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: header
-          name: NhsNumber
-          type: string
-          description: Patient's NHS Number ID.
-          required: True
-        - in: header
-          name: OdsCode
-          type: string
-          description: The ODS code for the Patient's GP.
-          required: True
-      responses:
-        200:
-          description: Successful operation. User linked Successfully.
-          schema:
-            $ref: "#/definitions/LinkageResponse"
-        403:
-          description: Linkage key has been revoked.
-        404:
-          description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
+  /me/verifications:
     post:
-      summary: "For a given nhs number and ods code, will find a user and create a ROSU account"
+      summary: "For a given nhs number and ods code, will find the user and add Citizen ID Verification"
       description: Will return a linkage key object for a given nhs number
       consumes:
         - application/json
       produces:
         - application/json
       parameters:
-        - in: body
-          name: linkageDetailsRequest
+        - in: header
+          name: X-API-EndUserSessionId
           required: true
-          description: Patient account details for the connection to be created.
+          description: End user session token.
+          type: string
+        - in: header
+          name: X-API-Version
+          required: true
+          description: Version of the API being used.
+          type: string
+        - in: header
+          name: X-API-ApplicationId
+          required: true
+          description: The identity of the application making the call.
+          type: string
+        - in: body
+          name: AddVerificationRequest
+          required: true
+          description: Patient account details who is Citizen ID Verified.
           schema:
-            $ref: "#/definitions/CreateLinkageRequest"
+            $ref: "#/definitions/AddVerificationRequest"
       responses:
-        200:
-          description: Successful operation. User linked Successfully.
+        201:
+          description: Successful operation. Citizen ID added Successfully.
           schema:
-            $ref: "#/definitions/LinkageResponse"
+            $ref: "#/definitions/AddVerificationResponse"
+        400:
+          description: "The request was invalid. Further details are contained in the body and include<br><br>
+          Error code - PracticeNotLive (-1401)<br/>
+		      Error code - PatientMarkedAsArchived (-1552)<br/>
+		      Error code - PatientNonCompetentOrUnder16 (-1553)<br/>
+		      Error code - AccountStatusInvalid (-1107)"
         404:
-          description: NHS Number not found, the patient has changed surgery, or the surgery has changed supplier.
+          description: "NHS Number not found or online user not found. Further details are contained in the body.<br><br>
+         	Error code - PatientNotRegisteredAtPractice (-1551)<br/>
+		      Error code - NoRegisteredOnlineUserFound (-1104)"
         409:
-          description: Linkage key already exists for NHS Number.
-
+          description: The user already exists with the citizen identity. The existing linkage key details will be returned.
+        500:
+          description: An unexpected error occurred processing the request.
+        502:
+          description: The GP system is currently unavailable.
+        504:
+          description: The GP system did not respond in a timely fashion.
+  /users/nhs:
+    post:
+      summary: "Creates a restricted user account (OSU) that is associated with their own patient record"
+      description: For a patient with the specified NHS number, a self associated restricted user account will be created.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: header
+          name: X-API-EndUserSessionId
+          required: true
+          description: End user session token.
+          type: string
+        - in: header
+          name: X-API-Version
+          required: true
+          description: Version of the API being used.
+          type: string
+        - in: header
+          name: X-API-ApplicationId
+          required: true
+          description: The identity of the application making the call.
+          type: string
+        - in: body
+          name: AddNhsUserRequest
+          required: true
+          description: Patient account details used to create the online user.
+          schema:
+            $ref: "#/definitions/AddNhsUserRequest"
+      responses:
+        201:
+          description: Successful operation. The online user was created and associated with the patient.
+          schema:
+            $ref: "#/definitions/AddNhsUserResponse"
+        400:
+          description: "The request was invalid. Further details are contained in the body. <br><br>
+          Error code - PracticeNotLive (-1401)<br/>
+		      Error code - PatientMarkedAsArchived (-1552)<br/>
+		      Error code - PatientNonCompetentOrUnder16 (-1553)"
+        404:
+          description: No patient could be found matching the given NHS Number and ODS code.
+        409:
+          description: The patient already has an online account.
+        500:
+          description: An unexpected error occurred processing the request.
 definitions:
-  LinkageResponse:
+  PatientNhsNumber:
     type: object
     properties:
-      accountId:
-        type: string
-        description: The user's ROSU Account id.
-      odsCode:
-        type: string
-        description: The ODS code for the Patient's GP.
-      linkageKey:
-        type: string
-        description: The user's linkage passphrase.
-  CreateLinkageRequest:
+        NHSNumber:
+         type: string
+         description: Patient's NHS number.
+  AddNhsUserRequest:
     type: object
+    required: [NationalPracticeCode, NHSNumber, EmailAddress]
     properties:
-      odsCode:
+      NationalPracticeCode:
         type: string
         description: User's ODS Code
-      nhsNumber:
+      NHSNumber:
         type: string
         description: NHS Number
+      EmailAddress:
+        type: string
+        description: The email address used for the online user account
+  AddNhsUserResponse:
+    type: object
+    properties:
+      AccessIdentityGuid:
+        type: string
+        description: The access identity guid that represents the online user
+  AddVerificationResponse:
+    type: object
+    properties:
+      AccountId:
+        type: string
+        description: The user's ROSU Account id.
+      IdentityId:
+        type: number
+        description:
+      LinkageKey:
+        type: string
+        description: The user's linkage passphrase.
+  AddVerificationRequest:
+    type: object
+    required: [NationalPracticeCode, NHSNumber, Token]
+    properties:
+      NationalPracticeCode:
+        type: string
+        description: User's ODS Code
+      NHSNumber:
+        type: string
+        description: NHS Number
+      Token:
+        type: string
+        description: Token of Citizen Identity
+      AdditionalComment:
+        type: string
+        description: Any addition text

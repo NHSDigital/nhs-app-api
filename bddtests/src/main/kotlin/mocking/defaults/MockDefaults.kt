@@ -36,7 +36,7 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         )
 
         fun createMockingClient(config: Config): MockingClient {
-            val emisConfig = EmisConfiguration("D66BA979-60D2-49AA-BE82-AEC06356E41F", "2.1.0.0")
+            val emisConfig = EmisConfiguration(config.emisApplicationId, "2.1.0.0")
 
             return MockingClient(MockingConfiguration(config.wiremockUrl, emisConfig))
         }

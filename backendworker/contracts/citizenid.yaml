@@ -1,7 +1,7 @@
 swagger: '2.0'
 
 info:
-  version: 0.0.2
+  version: 0.0.3
   title: NHS Online API - Citizen ID.
   description: This is the API for NHS Online endpoints that are intended for consumption by Citizen ID.
 
@@ -29,7 +29,7 @@ paths:
           name: NHSO-ODS-Code
           type: string
           required: true
-          description: ODS Code
+          description: ODS code for the Patient's GP.
       responses:
         200:
           description: Successful operation. IM1 Connection Token and NHS Numbers returned.
@@ -44,7 +44,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.          
+          description: No GP system was found for ODS Code.
         502:
           description: The GP system is currently unavailable.
         504:
@@ -79,7 +79,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.          
+          description: No GP system was found for ODS Code.
         502:
           description: The GP system is currently unavailable.
         504:
@@ -87,8 +87,8 @@ paths:
 
   /v1/patient/linkage:
     get:
-      summary: Retrieves a patient's Linkage details using their NHS Number
-      description: "This call finds a user, given their NHS Number and returns the fields required to link the user."
+      summary: Retrieves a patient's linkage details using their NHS Number and the practice's ODS Code
+      description: This call finds a user, given their NHS Number and returns the fields required to link the user."
       consumes:
         - application/json
       produces:
@@ -97,12 +97,17 @@ paths:
         - in: header
           name: NHSO-ODS-Code
           type: string
-          description: ODS Code
+          description: ODS code for the Patient's GP.
           required: True
         - in: header
           name: NHSO-Nhs-Number
           type: string
-          description: Patient's NHS Number ID.
+          description: Patient's NHS Number.
+          required: True
+        - in: header
+          name: NHSO-Identity-Token
+          type: string
+          description: Token to uniquely identify the patient at their current practice within the Citizen ID platform.
           required: True
       responses:
         200:
@@ -118,13 +123,13 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.
+          description: No GP system was found for ODS Code.
         502:
           description: The GP system is currently unavailable.
         504:
           description: The GP system did not respond in a timely fashion.
     post:
-      summary: "For a given nhs number and ods code, will find a user and create a ROSU account"
+      summary: For a given patient's NHS Number and practice's ODS Code, will find a patient, create an account and return IM1 linkage details
       description: Will return a linkage key object for a given nhs number
       consumes:
         - application/json
@@ -151,7 +156,7 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         501:
-          description: The ODS code cannot be found or belongs to a GP system that we do not currently support.
+          description: No GP system was found for ODS Code.
         502:
           description: The GP system is currently unavailable.
         504:
@@ -174,7 +179,7 @@ definitions:
         description: Patient's GP IM1 Linkage Key.
       odsCode:
         type: string
-        description: GP's ODS Code.
+        description: ODS code for the Patient's GP.
       surname:
         type: string
         description: Patient's Surname.
@@ -206,19 +211,25 @@ definitions:
     properties:
       accountId:
         type: string
-        description: The user's ROSU Account id.
+        description: Patient's IM1 Account ID.
       odsCode:
         type: string
-        description: The ODS code for the Patient's GP.
+        description: ODS code for the Patient's GP.
       linkageKey:
         type: string
-        description: The user's linkage passphrase.
+        description: Patient's IM1 Linkage Key.
   CreateLinkageRequest:
     type: object
     properties:
       odsCode:
         type: string
-        description: User's ODS Code
+        description: ODS code for the Patient's GP.
       nhsNumber:
         type: string
-        description: NHS Number
+        description: Patient's NHS Number.
+      IdentityToken:
+        type: string
+        description: Token to uniquely identify the patient at their current practice within the Citizen ID platform.
+      EmailAddress:
+        type: string
+        description: Patient's email address, this will be used if a new online user is to be created in the GP System.

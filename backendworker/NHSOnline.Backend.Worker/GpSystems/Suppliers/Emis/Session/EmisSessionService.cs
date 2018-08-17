@@ -11,7 +11,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 {
-    public class EmisSessionService : ISessionService
+    public class EmisSessionService : ISessionService, IEmisSessionService
     {
         private readonly IEmisClient _emisClient;
         private readonly IEmisDemographicsMapper _demographicsMapper;
@@ -27,7 +27,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             _logger = logger;
         }
 
-        private async Task<SessionsEndUserSessionPostResponse> SendSessionsEndUserSessionPost()
+        public async Task<SessionsEndUserSessionPostResponse> SendSessionsEndUserSessionPost()
         {
             var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
             if (!endUserSessionResponse.HasSuccessStatusCode)

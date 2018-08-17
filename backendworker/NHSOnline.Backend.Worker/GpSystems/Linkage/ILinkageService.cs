@@ -5,8 +5,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Linkage
 {
     public interface ILinkageService
     {
-        Task<GetLinkageResult> GetLinkageKey(string nhsNumber, string odsCode);
+        Task<LinkageResult> GetLinkageKey(string nhsNumber, string odsCode, string identityToken);
         
-        Task<CreateLinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest);
+        Task<LinkageResult> CreateLinkageKey(CreateLinkageRequest createLinkageRequest);
     }
 }

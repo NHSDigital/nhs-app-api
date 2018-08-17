@@ -16,6 +16,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
 
@@ -147,7 +148,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             response.ExceptionErrorResponse.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(500);
-            response.Body.Should().Be(null);
+            response.Body.Should().BeEquivalentTo(new MeApplicationsPostResponse());
         }
 
         [TestMethod]
@@ -247,7 +248,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             var response = await _sut.SessionsPost(endUserSessionId, requestBody);
 
-            response.Body.Should().BeNull();
+            response.Body.Should().BeEquivalentTo(new SessionsPostResponse());
             response.ExceptionErrorResponse.Should().BeNull();
             response.ErrorResponseBadRequest.Should().BeEquivalentTo(expectedResponse);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -363,27 +364,34 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task LinkageGet_ReturnsLinkageDetails_WhenValidRequest()
+        public async Task NhsUsersPost_ReturnsLinkageDetails_WhenValidRequest()
         {
             // Arrange
-            const string nhsNumber = "nhsNumber123";
-            const string odsCode = "odsCode";
+            const string EndUserSessionId = "2ijfd";
 
-            var expectedResponse = _fixture.Create<LinkageDetailsResponse>();
+            var requestBody = _fixture.Create<AddNhsUserRequest>();
+            var expectedResponse = _fixture.Create<AddNhsUserResponse>();
+
+            var emisUserSession = new EmisUserSession
+            {
+                EndUserSessionId = EndUserSessionId,
+            };
+            
+            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderNhsNumber, nhsNumber),
-                new KeyValuePair<string, string>(EmisClient.HeaderOdsCode, odsCode),
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, EndUserSessionId),
             };
 
             _mockHttpHandler
-                .WhenEmis(HttpMethod.Get, "patient/linkage")
+                .WhenEmis(HttpMethod.Post, "users/nhs")
                 .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(requestBody))
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _sut.LinkageGet(nhsNumber, odsCode);
+            var response = await _sut.NhsUserPost(emisHeaderParameters, requestBody);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);
@@ -392,19 +400,43 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         }
 
         [TestMethod]
-        public async Task LinkagePost_ReturnsLinkageDetails_WhenValidRequest()
+        public async Task VerificationsPost_ReturnsLinkageDetails_WhenValidRequest()
         {
             // Arrange
-            var requestBody = _fixture.Create<LinkagePostRequest>();
-            var expectedResponse = _fixture.Create<LinkageDetailsResponse>();
-            
+            const string EndUserSessionId = "2ijfd";
+            const string nhsNumber = "nhsNumber123";
+            const string odsCode = "odsCode";
+            const string token = "token1";
+
+            var emisUserSession = new EmisUserSession
+            {
+                EndUserSessionId = EndUserSessionId,
+            };
+
+            var addVerificationRequest = new AddVerificationRequest
+            {
+                NhsNumber = nhsNumber,
+                NationalPracticeCode = odsCode,
+                Token = token,
+            };
+
+            var expectedResponse = _fixture.Create<AddVerificationResponse>();
+
+            var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
+
+            var additionalHeaders = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, EndUserSessionId),
+            };
+
             _mockHttpHandler
-                .WhenEmis(HttpMethod.Post, "patient/linkage")
-                .WithContent(JsonConvert.SerializeObject(requestBody))
+                .WhenEmis(HttpMethod.Post, "me/verifications")
+                .WithEmisHeaders(additionalHeaders)
+                .WithContent(JsonConvert.SerializeObject(addVerificationRequest))
                 .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
 
             // Act
-            var response = await _sut.LinkagePost(requestBody);
+            var response = await _sut.VerificationPost(emisHeaderParameters, addVerificationRequest);
 
             // Assert
             response.Body.Should().BeEquivalentTo(expectedResponse);

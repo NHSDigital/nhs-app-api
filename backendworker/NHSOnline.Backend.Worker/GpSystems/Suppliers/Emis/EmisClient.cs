@@ -14,6 +14,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
@@ -44,9 +45,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
         private const string AppointmentsPath = "appointments";
+        private const string MeVerificationsPath = "me/verifications";
+        private const string UsersNhsPath = "users/nhs";
 
         private readonly EmisHttpClient _httpClient;
-        private const string LinkagePath = "patient/linkage";
         
         private readonly ILogger<EmisClient> _logger;
         private readonly IJsonResponseParser _responseParser;
@@ -210,30 +212,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 deleteRequest, AppointmentsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<LinkageDetailsResponse>> LinkageGet(string nhsNumber, string odsCode)
+        public async Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(
+            EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, LinkagePath);
-
-            if (!string.IsNullOrEmpty(nhsNumber))
-            {
-                request.Headers.Add(HeaderNhsNumber, new[] { nhsNumber });
-            }
-
-            if (!string.IsNullOrEmpty(odsCode))
-            {
-                request.Headers.Add(HeaderOdsCode, new[] { odsCode });
-            }
-
-            var response = await SendRequestAndParseResponse<LinkageDetailsResponse>(request);
-            return response;
+            return await Post<AddVerificationRequest, AddVerificationResponse>(
+                addVerificationRequest, MeVerificationsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
-        public async Task<EmisApiObjectResponse<LinkageDetailsResponse>> LinkagePost(LinkagePostRequest linkagePostRequest)
+        public async Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest)
         {
-            var path = LinkagePath;
-
-            var response = await Post<LinkagePostRequest, LinkageDetailsResponse>(linkagePostRequest, path);
-            return response;
+            return await Post<AddNhsUserRequest, AddNhsUserResponse>(
+                addNhsUserRequest, UsersNhsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,

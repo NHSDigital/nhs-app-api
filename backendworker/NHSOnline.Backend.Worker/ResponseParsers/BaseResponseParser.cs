@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.ResponseParsers
         
         public T ParseBody<T>(string stringResponse, HttpResponseMessage message)
         {
-            return message.IsSuccessStatusCode ? Deserialize<T>(stringResponse) : default(T);
+            return Deserialize<T>(stringResponse);
         }
 
         public T ParseError<T>(

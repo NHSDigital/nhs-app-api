@@ -22,6 +22,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         private const string DefaultOdsCode = "AB1234";
         private const Supplier DefaultSupplier = Supplier.Emis;
         private const string DefaultNhsNumber = "XX00000A";
+        private const string DefaultIdentityToken = "IDTOKEN";
+        private const string DefaultEmailAddress = "john@email.com";
         private Mock<IAuditor> _mockAuditor;
         private IFixture _fixture;
         private LinkageController _linkageController;
@@ -45,7 +47,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         [DataRow("   ")]
         public async Task Get_ReturnsABadRequestResult_WhenTheOdsCodeIsNullOrEmpty(string odsCode)
         {
-            var result = await _linkageController.Get(DefaultNhsNumber, odsCode);
+            var result = await _linkageController.Get(DefaultNhsNumber, odsCode, DefaultIdentityToken);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
@@ -56,7 +58,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         [DataRow("   ")]
         public async Task Get_ReturnsABadRequestResult_WhenTheNhsNumberIsNullOrEmpty(string nhsNumber)
         {
-            var result = await _linkageController.Get(nhsNumber, DefaultOdsCode);
+            var result = await _linkageController.Get(nhsNumber, DefaultOdsCode, DefaultIdentityToken);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
+        public async Task Get_ReturnsABadRequestResult_WhenTheIdentityTokenIsNullOrEmpty(string identityToken)
+        {
+            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode, identityToken);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestResult));
         }
@@ -72,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             _linkageController = CreateLinkageController(mockOdsCodeLookup);
 
             // Act
-            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode);
+            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
             var resultAsStatusCodeResult = result as StatusCodeResult;
@@ -87,17 +100,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
 
             var expectedResponse = _fixture.Create<LinkageResponse>();
 
-            var linkageService = MockLinkageService(new GetLinkageResult.SuccessfullyRetrieved(expectedResponse));
+            var linkageService = MockLinkageService(new LinkageResult.SuccessfullyRetrieved(expectedResponse));
             var gpSystemMock = MockGpSystem(linkageService);
             var gpSystemFactoryMock = MockGpSystemFactory(supplier, gpSystemMock);
 
             _linkageController = CreateLinkageController(gpSystemFactoryMock: gpSystemFactoryMock);
 
             // Act
-            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode);
+            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
-            linkageService.Verify(x => x.GetLinkageKey(DefaultNhsNumber, DefaultOdsCode), Times.Once);
+            linkageService.Verify(x => x.GetLinkageKey(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken), Times.Once);
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -116,6 +129,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             {
                 NhsNumber = DefaultNhsNumber,
                 OdsCode = odsCode,
+                IdentityToken = DefaultIdentityToken,
+                EmailAddress = DefaultEmailAddress,
             };
 
             // Act
@@ -136,6 +151,52 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             {
                 NhsNumber = nhsNumber,
                 OdsCode = DefaultOdsCode,
+                IdentityToken = DefaultIdentityToken,
+                EmailAddress = DefaultEmailAddress,
+            };
+
+            // Act
+            var result = await _linkageController.Post(request);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
+        public async Task Post_ReturnsABadRequestResult_WhenTheIdentityTokenIsNullOrEmpty(string identityToken)
+        {
+            // Arrange
+            var request = new CreateLinkageRequest
+            {
+                NhsNumber = DefaultNhsNumber,
+                OdsCode = DefaultOdsCode,
+                IdentityToken = identityToken,
+                EmailAddress = DefaultEmailAddress,
+            };
+
+            // Act
+            var result = await _linkageController.Post(request);
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        [DataRow("   ")]
+        public async Task Post_ReturnsABadRequestResult_WhenTheEmailAddressIsNullOrEmpty(string emailAddress)
+        {
+            // Arrange
+            var request = new CreateLinkageRequest
+            {
+                NhsNumber = DefaultNhsNumber,
+                OdsCode = DefaultOdsCode,
+                IdentityToken = DefaultIdentityToken,
+                EmailAddress = emailAddress,
             };
 
             // Act
@@ -156,7 +217,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             _linkageController = CreateLinkageController(mockOdsCodeLookup);
 
             // Act
-            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode);
+            var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
             var resultAsStatusCodeResult = result as StatusCodeResult;
@@ -169,16 +230,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         {
             const string nhsNumber = DefaultNhsNumber;
             const string odsCode = DefaultOdsCode;
+            const string identityToken = DefaultIdentityToken;
+            const string emailAddress = DefaultEmailAddress;
             const Supplier supplier = DefaultSupplier;
 
             var expectedResponse = _fixture.Create<LinkageResponse>();
 
-            var mockResult = new CreateLinkageResult.SuccessfullyRetrieved(expectedResponse);
+            var mockResult = new LinkageResult.SuccessfullyRetrieved(expectedResponse);
 
             var mockLinkageService = new Mock<ILinkageService>();
             mockLinkageService.Setup(x => x.CreateLinkageKey(
                 It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
-                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal)))
+                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal) &&
+                                                   req.IdentityToken.Equals(identityToken, StringComparison.Ordinal) &&
+                                                   req.EmailAddress.Equals(emailAddress, StringComparison.Ordinal)))
             ).ReturnsAsync(mockResult);
 
             var gpSystemMock = MockGpSystem(mockLinkageService);
@@ -190,6 +255,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             {
                 NhsNumber = nhsNumber,
                 OdsCode = odsCode,
+                IdentityToken = identityToken,
+                EmailAddress = emailAddress,
             };
 
             // Act
@@ -198,7 +265,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             // Assert
             mockLinkageService.Verify(x => x.CreateLinkageKey(
                 It.Is<CreateLinkageRequest>(req => req.NhsNumber.Equals(nhsNumber, StringComparison.Ordinal) &&
-                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal))), Times.Once);
+                                                   req.OdsCode.Equals(odsCode, StringComparison.Ordinal) &&
+                                                   req.IdentityToken.Equals(identityToken, StringComparison.Ordinal) &&
+                                                   req.EmailAddress.Equals(emailAddress, StringComparison.Ordinal)))
+                                                   , Times.Once);
             var resultValue = result.Should().BeAssignableTo<OkObjectResult>().Subject.Value;
             var actualResponse = resultValue.Should().BeAssignableTo<LinkageResponse>().Subject;
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -249,10 +319,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
         }
 
         private static Mock<ILinkageService> MockLinkageService(
-            GetLinkageResult expectedResult = null)
+            LinkageResult expectedResult = null)
         {
             var mockLinkageService = new Mock<ILinkageService>();
-            mockLinkageService.Setup(x => x.GetLinkageKey(DefaultNhsNumber, DefaultOdsCode)).ReturnsAsync(expectedResult);
+            mockLinkageService.Setup(x => x.GetLinkageKey(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken)).ReturnsAsync(expectedResult);
 
             return mockLinkageService;
         }

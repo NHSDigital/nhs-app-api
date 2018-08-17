@@ -11,8 +11,6 @@ import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.EmisMeBuilder
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.medications.EmisMedicationsBuilder
-import mocking.emis.models.BadRequestResponse
-import mocking.emis.models.ExceptionResponse
 import mocking.emis.prescriptions.EmisPrescriptionsBuilder
 import mocking.emis.prescriptionsSubmission.EmisPrescriptionsSubmissionBuilder
 import mocking.emis.session.EmisEndUserSessionBuilder
@@ -25,11 +23,10 @@ import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
-import mocking.emis.models.ErrorResponse
+import mocking.emis.models.*
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
-import worker.models.linkage.CreateLinkageRequest
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.OffsetDateTime
 
@@ -128,9 +125,9 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
         }
     }
 
-    fun linkageKeyGetRequest(nhsNumber: String, odsCode: String) = EmisLinkageGETBuilder(nhsNumber, odsCode)
+    fun linkageKeyGetRequest(request: AddVerificationRequest) = EmisLinkageGETBuilder(request)
 
-    fun linkageKeyPOSTRequest(request: CreateLinkageRequest) = EmisLinkagePOSTBuilder(request)
+    fun linkageKeyPOSTRequest(request: AddNhsUserRequest) = EmisLinkagePOSTBuilder(request)
 
     fun responseErrorForbiddenService(): Mapping {
         return respondWithStandardError(-1030, HttpStatus.SC_FORBIDDEN)

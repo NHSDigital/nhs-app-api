@@ -4,35 +4,37 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
+using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.EmisClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
     public interface IEmisClient
     {
         // Demographics
-        Task<EmisClient.EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(string userPatientLinkToken,
+        Task<EmisApiObjectResponse<DemographicsGetResponse>> DemographicsGet(string userPatientLinkToken,
             string responseSessionId,
             string endUserSessionId);
 
         // Me
-        Task<EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
+        Task<EmisApiObjectResponse<MeApplicationsPostResponse>> MeApplicationsPost(string endUserSessionId,
             MeApplicationsPostRequest model);
 
         // Sessions
-        Task<EmisClient.EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost();
+        Task<EmisApiObjectResponse<SessionsEndUserSessionPostResponse>> SessionsEndUserSessionPost();
 
-        Task<EmisClient.EmisApiObjectResponse<SessionsPostResponse>> SessionsPost(string endUserSessionId,
+        Task<EmisApiObjectResponse<SessionsPostResponse>> SessionsPost(string endUserSessionId,
             SessionsPostRequest model);
 
         // Prescriptions
-        Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
+        Task<EmisApiObjectResponse<PrescriptionRequestsGetResponse>> PrescriptionsGet(
             string userPatientLinkToken, string responseSessionId, string endUserSessionId,
             DateTimeOffset? fromDateTime, DateTimeOffset? toDateTime);
 
-        Task<EmisClient.EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
+        Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);
         
-        Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken, string responseSessionId,
+        Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken, string responseSessionId,
             string endUserSessionId, RecordType recordType);
         
         // Patient Record
@@ -49,33 +51,33 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 //            string endUserSessionId);
         
         // AppointmentSlots
-        Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
+        Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
             EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);
 
         // AppointmentSlotsMetadata
-        Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
+        Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
             EmisHeaderParameters headerParameters, SlotsMetadataGetQueryParameters queryParameters);
 
         // Courses
-        Task<EmisClient.EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
+        Task<EmisApiObjectResponse<CoursesGetResponse>> CoursesGet(string userPatientLinkToken,
             string responseSessionId, string endUserSessionId);
 
         // Appointments
-        Task<EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
+        Task<EmisApiObjectResponse<BookAppointmentSlotPostResponse>> AppointmentsPost(
             EmisHeaderParameters headerParameters,
             BookAppointmentSlotPostRequest postRequest);
 
-        Task<EmisClient.EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
+        Task<EmisApiObjectResponse<AppointmentsGetResponse>> AppointmentsGet(
             EmisHeaderParameters headerParameters, string userPatientLinkToken, bool fetchPreviousAppointments,
             DateTimeOffset? previousAppointmentsFromDate);
 
-        Task<EmisClient.EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
+        Task<EmisApiObjectResponse<CancelAppointmentDeleteResponse>> AppointmentsDelete(
             EmisHeaderParameters headerParameters,
             CancelAppointmentDeleteRequest deleteRequest);
 
         // Linkage
-        Task<EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>> LinkageGet(string nhsNumber, string odsCode);
+        Task<EmisApiObjectResponse<AddVerificationResponse>> VerificationPost(EmisHeaderParameters headerParameters, AddVerificationRequest addVerificationRequest);
 
-        Task<EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>> LinkagePost(LinkagePostRequest linkagePostRequest);
+        Task<EmisApiObjectResponse<AddNhsUserResponse>> NhsUserPost(EmisHeaderParameters headerParameters, AddNhsUserRequest addNhsUserRequest);
     }
 }

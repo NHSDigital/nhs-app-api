@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var response = await _systemUnderTest.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            response.Body.Should().BeNull();
+            response.Body.Should().BeEquivalentTo(new Token());
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var response = await _systemUnderTest.GetUserInfo(bearerToken);
 
             // Assert
-            response.Body.Should().BeNull();
+            response.Body.Should().BeEquivalentTo(new UserInfo());
             response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             _mockHttpHandler.VerifyNoOutstandingExpectation();

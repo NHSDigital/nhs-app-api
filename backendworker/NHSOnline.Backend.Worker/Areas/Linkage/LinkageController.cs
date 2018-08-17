@@ -8,6 +8,7 @@ using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Linkage
 {
@@ -33,64 +34,82 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
         [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Get(
             [FromHeader(Name = Constants.HttpHeaders.NhsNumber)] string nhsNumber,
-            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode)
+            [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode,
+            [FromHeader(Name = Constants.HttpHeaders.IdentityToken)] string identityToken)
         {
-            if (!GetArgumentsAreValid(nhsNumber, odsCode))
+            try
             {
-                return BadRequest();
-            }
+                _logger.LogEnter(nameof(Get));
 
-            var gpSystemOption = await GetGpSystem(odsCode);
-            if (!gpSystemOption.HasValue)
+                if (!GetArgumentsAreValid(nhsNumber, odsCode, identityToken))
+                {
+                    return BadRequest();
+                }
+
+                var gpSystemOption = await GetGpSystem(odsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {odsCode} provided in header { Constants.HttpHeaders.OdsCode }.");
+                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                }
+
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                var linkageService = gpSystem.GetLinkageService();
+
+                _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
+                    Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest, "Attempting to get linkage details.");
+
+                var result = await linkageService.GetLinkageKey(nhsNumber, odsCode, identityToken);
+                
+                return result.Accept(new LinkageResultAuditingVisitor(
+                    _auditor, gpSystem.Supplier, nhsNumber, Constants.AuditingTitles.GetLinkageDetailsAuditTypeResponse));
+            }
+            finally
             {
-                _logger.LogError(
-                    $"No GP system was found for OdsCode {odsCode} provided in header { Constants.HttpHeaders.OdsCode }.");
-                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                _logger.LogExit(nameof(Get));
             }
-
-            var gpSystem = gpSystemOption.ValueOrFailure();
-            var linkageService = gpSystem.GetLinkageService();
-
-            _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
-                Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest, "Attempting to get linkage details.");
             
-            var result = await linkageService.GetLinkageKey(nhsNumber, odsCode);
-            
-            result.Accept(new GetLinkageResultAuditingVisitor(_auditor, gpSystem.Supplier, nhsNumber));
-
-            return result.Accept(new GetLinkageResultVisitor());
         }
 
         [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateLinkageRequest createLinkageRequest)
         {
-            if (!CreateLinkageRequestBodyIsValid(createLinkageRequest))
+            try
             {
-                return BadRequest();
-            }
+                _logger.LogEnter(nameof(Post));
 
-            var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
-            if (!gpSystemOption.HasValue)
+                if (!CreateLinkageRequestBodyIsValid(createLinkageRequest))
+                {
+                    return BadRequest();
+                }
+
+                var gpSystemOption = await GetGpSystem(createLinkageRequest.OdsCode);
+                if (!gpSystemOption.HasValue)
+                {
+                    _logger.LogError(
+                        $"No GP system was found for OdsCode {createLinkageRequest.OdsCode} provided in header { Constants.HttpHeaders.OdsCode }.");
+                    return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                }
+
+                var gpSystem = gpSystemOption.ValueOrFailure();
+                var linkageService = gpSystem.GetLinkageService();
+
+                _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
+                    Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
+
+                var result = await linkageService.CreateLinkageKey(createLinkageRequest);
+
+                return result.Accept(new LinkageResultAuditingVisitor(
+                    _auditor, gpSystem.Supplier, createLinkageRequest.NhsNumber, Constants.AuditingTitles.CreateLinkageKeyAuditTypeResponse));
+            }
+            finally
             {
-                _logger.LogError(
-                    $"No GP system was found for OdsCode {createLinkageRequest.OdsCode} provided in header { Constants.HttpHeaders.OdsCode }.");
-                return new StatusCodeResult(StatusCodes.Status501NotImplemented);
+                _logger.LogExit(nameof(Post));
             }
-
-            var gpSystem = gpSystemOption.ValueOrFailure();
-            var linkageService = gpSystem.GetLinkageService();
-
-            _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
-                Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
-            
-            var result = await linkageService.CreateLinkageKey(createLinkageRequest);
-
-            result.Accept(new CreateLinkageResultAuditorVisitor(_auditor, gpSystem.Supplier, createLinkageRequest.NhsNumber));
-            
-            return result.Accept(new CreateLinkageResultVisitor());
         }
 
-        private bool GetArgumentsAreValid(string nhsNumber, string odsCode)
+        private bool GetArgumentsAreValid(string nhsNumber, string odsCode, string identityToken)
         {
             var argumentsAreValid = true;
 
@@ -103,6 +122,12 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             if (string.IsNullOrWhiteSpace(odsCode))
             {
                 _logger.LogError($"The header { Constants.HttpHeaders.OdsCode }, has not been supplied in the request.");
+                argumentsAreValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(identityToken))
+            {
+                _logger.LogError($"The header { Constants.HttpHeaders.IdentityToken }, has not been supplied in the request.");
                 argumentsAreValid = false;
             }
 
@@ -122,6 +147,18 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             if (string.IsNullOrWhiteSpace(createLinkageRequest.OdsCode))
             {
                 _logger.LogError($"The value for { nameof(createLinkageRequest.OdsCode) }, has not been supplied in the request.");
+                argumentsAreValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(createLinkageRequest.IdentityToken))
+            {
+                _logger.LogError($"The value for { nameof(createLinkageRequest.IdentityToken) }, has not been supplied in the request.");
+                argumentsAreValid = false;
+            }
+
+            if (string.IsNullOrWhiteSpace(createLinkageRequest.EmailAddress))
+            {
+                _logger.LogError($"The value for { nameof(createLinkageRequest.EmailAddress) }, has not been supplied in the request.");
                 argumentsAreValid = false;
             }
 

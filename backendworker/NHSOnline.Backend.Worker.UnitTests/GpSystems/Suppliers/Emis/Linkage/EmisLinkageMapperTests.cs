@@ -4,7 +4,7 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 {
@@ -28,14 +28,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         {
             Action act = () => _mapper.Map(null);
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("linkageDetailsResponse");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("addVerificationResponse");
         }
 
         [TestMethod]
-        public void MapLinkageDetailsResponseToLinkageResponse_WithValues_MapsCorrectly()
+        public void MapAddVerificationResponseToLinkageResponse_WithValues_MapsCorrectly()
         {
             // Arrange
-            var response = _fixture.Create<LinkageDetailsResponse>();
+            var response = _fixture.Create<AddVerificationResponse>();
 
             // Act
             var result = _mapper.Map(response);
@@ -44,7 +44,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             result.Should().NotBeNull();
             result.AccountId.Should().Be(response.AccountId);
             result.LinkageKey.Should().Be(response.LinkageKey);
-            result.OdsCode.Should().Be(response.OdsCode);
         }
     }
 }

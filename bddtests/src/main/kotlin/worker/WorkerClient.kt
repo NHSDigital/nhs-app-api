@@ -5,8 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import config.Config
-import groovy.json.internal.JsonStringDecoder
-import net.serenitybdd.rest.SerenityRest
 
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.*
@@ -15,7 +13,6 @@ import org.apache.http.client.methods.*
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
-import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.BasicCookieStore
@@ -219,17 +216,20 @@ class WorkerClient {
         return json
     }
 
-    fun getLinkageKey(nhsNumber: String?, odsCode: String?): LinkageResponse {
+    fun getLinkageKey(nhsNumber: String?, odsCode: String?, identityToken: String?): LinkageResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.LinkageKey)
         httpGet.setHeader(WorkerHeaders.NhsNumber, nhsNumber)
         httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
-
+        httpGet.setHeader(WorkerHeaders.IdentityToken, identityToken)
         val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
+        println(result)
 
-        return gson.fromJson(result, LinkageResponse::class.java)
+        val json = gson.fromJson<LinkageResponse>(result, LinkageResponse::class.java)
+
+        return json
     }
 
     fun postLinkageKey(requestBody: CreateLinkageRequest): LinkageResponse {

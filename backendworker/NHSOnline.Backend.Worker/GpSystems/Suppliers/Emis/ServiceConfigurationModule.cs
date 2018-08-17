@@ -3,6 +3,7 @@ using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -30,6 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 services.AddSingleton<IGpSystem, EmisGpSystem>();
                 services.AddSingleton<IEmisClient, EmisClient>();
                 services.AddSingleton<IEmisConfig, EmisConfig>();
+                services.AddSingleton<IEmisSessionService, EmisSessionService>();
 
                 services.AddTransient<EmisTokenValidationService>();
 

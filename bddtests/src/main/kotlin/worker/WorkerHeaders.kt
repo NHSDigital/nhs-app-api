@@ -1,7 +1,8 @@
 package worker
 
 object WorkerHeaders {
-    var ConnectionToken = "NHSO-Connection-Token"
-    var OdsCode = "NHSO-ODS-Code"
-    var NhsNumber = "NHSO-Nhs-Number"
+    val ConnectionToken = "NHSO-Connection-Token"
+    val OdsCode = "NHSO-ODS-Code"
+    val NhsNumber = "NHSO-Nhs-Number"
+    val IdentityToken = "NHSO-Identity-Token"
 }

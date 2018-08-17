@@ -12,6 +12,8 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Verifications;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 {
@@ -21,6 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         private EmisLinkageService _systemUnderTest;
         private Mock<IEmisClient> _emisClient;
         private Mock<IEmisLinkageMapper> _emisLinkageMapper;
+        private Mock<IEmisSessionService> _emisSessionService;
         private IFixture _fixture;
         
         [TestInitialize]
@@ -30,178 +33,344 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisLinkageMapper = _fixture.Freeze<Mock<IEmisLinkageMapper>>();
+            _emisSessionService = _fixture.Freeze<Mock<IEmisSessionService>>();
             _systemUnderTest = _fixture.Create<EmisLinkageService>();
         }
 
         [TestMethod]
-        public async Task Get_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        [DataRow(HttpStatusCode.Created)]
+        public async Task GetLinkageKey_ReturnsSuccessfulResponse_WhenSuccessfulResponseFromEmis(HttpStatusCode httpStatusCode)
         {
             // Arrange
-            var linkageDetailsResponse = _fixture.Create<LinkageDetailsResponse>();
+            var addVerificationResponse = _fixture.Create<AddVerificationResponse>();
             var nhsNumber = _fixture.Create<string>();
             var odsCode = _fixture.Create<string>();
+            var identityToken = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
 
-            _emisClient.Setup(x => x.LinkageGet(nhsNumber, odsCode))
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>(HttpStatusCode.OK)
+                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCode)
                     {
-                        Body = linkageDetailsResponse,
+                        Body = addVerificationResponse,
                     }));
 
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode);
+            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
 
             // Assert
-            _emisClient.Verify(x => x.LinkageGet(nhsNumber, odsCode));
-            _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse));
-            result.Should().BeAssignableTo<GetLinkageResult.SuccessfullyRetrieved>();
-            ((GetLinkageResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+            _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
+            _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrieved>();
+            var successResult = (LinkageResult.SuccessfullyRetrieved)result;
+            successResult.Response.Should().NotBeNull();
+            successResult.Response.OdsCode.Should().Be(odsCode);
         }
 
         [TestMethod]
-        public async Task Get_ReturnsNhsNumberNotFoundError_WhenEmisRespondsWith404()
+        public async Task GetLinkageKey_ReturnsSuccessfulResponse_WhenConflictResponseFromEmis()
+        {
+            // Arrange
+            var addVerificationResponse = _fixture.Create<AddVerificationResponse>();
+            var nhsNumber = _fixture.Create<string>();
+            var odsCode = _fixture.Create<string>();
+            var identityToken = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
+
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.Conflict)
+                    {
+                        Body = addVerificationResponse,
+                    }));
+
+            // Act
+            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
+
+            // Assert
+            _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
+            _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrievedAlreadyExists>();
+            var successResult = (LinkageResult.SuccessfullyRetrievedAlreadyExists)result;
+            successResult.Response.Should().NotBeNull();
+            successResult.Response.OdsCode.Should().Be(odsCode);
+        }
+
+        [TestMethod]
+        [DataRow(EmisApiErrorCode.PatientNotRegisteredAtPractice, HttpStatusCode.NotFound, typeof(LinkageResult.PatientNotRegisteredAtPractice))]
+        [DataRow(EmisApiErrorCode.NoRegisteredOnlineUserFound, HttpStatusCode.NotFound, typeof(LinkageResult.NoRegisteredOnlineUserFound))]
+        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFoundErrorRetrievingNhsUser))]
+        [DataRow(EmisApiErrorCode.PracticeNotLive, HttpStatusCode.BadRequest, typeof(LinkageResult.PracticeNotLive))]
+        [DataRow(EmisApiErrorCode.PatientMarkedAsArchived, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientMarkedAsArchived))]
+        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnder16, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnder16))]
+        [DataRow(EmisApiErrorCode.AccountStatusInvalid, HttpStatusCode.BadRequest, typeof(LinkageResult.AccountStatusInvalid))]
+        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequestErrorRetrievingNhsUser))]
+        public async Task GetLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(EmisApiErrorCode? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
         {
             // Arrange
             var nhsNumber = _fixture.Create<string>();
             var odsCode = _fixture.Create<string>();
+            var identityToken = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
 
-            _emisClient.Setup(x => x.LinkageGet(nhsNumber, odsCode))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>(HttpStatusCode.NotFound)));
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+            
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+            
+            var mockResponse = new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(httpStatusCodeResponse);
+
+            // Add emis specific error code if unit test requires it.
+            if (emisApiErrorCode.HasValue)
+            {
+                mockResponse.StandardErrorResponse = new StandardErrorResponse
+                {
+                    InternalResponseCode = (int)emisApiErrorCode,
+                };
+            }
+
+            _emisClient.Setup(x => x.VerificationPost(
+                It.Is<EmisHeaderParameters>(
+                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                It.Is<AddVerificationRequest>(
+                    req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                    req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                    req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
+                    .ReturnsAsync(mockResponse);
 
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode);
+            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
 
             // Assert
-            _emisClient.Verify(x => x.LinkageGet(nhsNumber, odsCode));
-            result.Should().BeAssignableTo<GetLinkageResult.NhsNumberNotFound>();
+            _emisClient.Verify(x => x.VerificationPost(
+                It.Is<EmisHeaderParameters>(
+                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                It.Is<AddVerificationRequest>(
+                    req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                    req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                    req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
+
+            result.GetType().Should().Be(expectedResultType);
         }
-        
+
         [TestMethod]
-        public async Task Get_ReturnsLinkageKeyRevokedError_WhenEmisRespondsWith403()
+        public async Task GetLinkageKey_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
         {
             // Arrange
             var nhsNumber = _fixture.Create<string>();
             var odsCode = _fixture.Create<string>();
+            var identityToken = _fixture.Create<string>();
+            var endUserSessionId = _fixture.Create<string>();
 
-            _emisClient.Setup(x => x.LinkageGet(nhsNumber, odsCode))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>(HttpStatusCode.Forbidden)));
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
 
-            // Act
-            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode);
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
-            // Assert
-            _emisClient.Verify(x => x.LinkageGet(nhsNumber, odsCode));
-            result.Should().BeAssignableTo<GetLinkageResult.LinkageKeyRevoked>();
-        }
-
-        [TestMethod]
-        public async Task Get_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
-        {
-            // Arrange
-            const string LinkageKey = "linkageKey";
-            const string OdsCode = "odsCode";
-            _emisClient.Setup(x => x.LinkageGet(LinkageKey, OdsCode))
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.GetLinkageKey(LinkageKey, OdsCode);
+            var result = await _systemUnderTest.GetLinkageKey(nhsNumber, odsCode, identityToken);
 
             // Assert
-            result.Should().BeAssignableTo<GetLinkageResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<LinkageResult.SupplierSystemUnavailable>();
             _emisClient.Verify();
         }
 
         [TestMethod]
-        public async Task Post_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
+        public async Task CreateLinkageKey_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromEmis()
         {
             // Arrange
-            var linkageDetailsRequest = _fixture.Create<CreateLinkageRequest>();
-            var linkageDetailsResponse = _fixture.Create<LinkageDetailsResponse>();
+            var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
+            var addNhsUserResponse = _fixture.Create<AddNhsUserResponse>();
+            var addVerificationResponse = _fixture.Create<AddVerificationResponse>();
+            var endUserSessionId = _fixture.Create<string>();
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
 
-            _emisClient.Setup(x => x.LinkagePost(It.IsAny<LinkagePostRequest>()))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>(HttpStatusCode.OK)
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+
+            _emisClient.Setup(x => x.NhsUserPost(
+                It.Is<EmisHeaderParameters>(
+                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                It.Is<AddNhsUserRequest>(
+                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
+                    && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
+                .ReturnsAsync(
+                    new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.OK)
                     {
-                        Body = linkageDetailsResponse,
-                    }));
+                        Body = addNhsUserResponse,
+                    });
 
-            // Act
-            var result = await _systemUnderTest.CreateLinkageKey(linkageDetailsRequest);
-
-            // Assert
-            _emisClient.Verify(x => x.LinkagePost(It.Is<LinkagePostRequest>(request =>
-                request.NhsNumber.Equals(linkageDetailsRequest.NhsNumber, StringComparison.Ordinal)
-                && request.OdsCode.Equals(linkageDetailsRequest.OdsCode, StringComparison.Ordinal)
-            )));
-            _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse));
-            result.Should().BeAssignableTo<CreateLinkageResult.SuccessfullyRetrieved>();
-            ((CreateLinkageResult.SuccessfullyRetrieved)result).Response.Should().NotBeNull();
-        }
-
-        [TestMethod]
-        public async Task Post_ReturnsNhsNumberNotFound_WhenEmisRespondsWith404()
-        {
-            // Arrange
-            var linkageDetailsRequest = _fixture.Create<CreateLinkageRequest>();
-            var linkageDetailsResponse = _fixture.Create<LinkageDetailsResponse>();
-
-            _emisClient.Setup(x => x.LinkagePost(It.IsAny<LinkagePostRequest>()))
+            _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
+                req => req.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                req.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.OrdinalIgnoreCase) &&
+                req.Token.Equals(createLinkageRequest.IdentityToken, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>(HttpStatusCode.NotFound)));
+                    new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.OK)
+                    {
+                        Body = addVerificationResponse,
+                    }))
+                    .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.CreateLinkageKey(linkageDetailsRequest);
+            var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
 
             // Assert
-            _emisClient.Verify(x => x.LinkagePost(It.Is<LinkagePostRequest>(request =>
-                request.NhsNumber.Equals(linkageDetailsRequest.NhsNumber, StringComparison.Ordinal)
-                && request.OdsCode.Equals(linkageDetailsRequest.OdsCode, StringComparison.Ordinal)
-            )));
-            _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse), Times.Never);
-            result.Should().BeAssignableTo<CreateLinkageResult.NhsNumberNotFound>();
+            _emisClient.Verify();
+            _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
+            result.Should().BeAssignableTo<LinkageResult.SuccessfullyCreated>();
+            var successResult = (LinkageResult.SuccessfullyCreated)result;
+            successResult.Response.Should().NotBeNull();
+            successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
         }
 
         [TestMethod]
-        public async Task Post_ReturnsLinkageKeyAlreadyExists_WhenEmisRespondsWith409()
+        [DataRow(EmisApiErrorCode.PatientNotRegisteredAtPractice, HttpStatusCode.NotFound, typeof(LinkageResult.PatientNotRegisteredAtPractice))]
+        [DataRow(EmisApiErrorCode.NoRegisteredOnlineUserFound, HttpStatusCode.NotFound, typeof(LinkageResult.NoRegisteredOnlineUserFound))]
+        [DataRow(null, HttpStatusCode.NotFound, typeof(LinkageResult.NotFoundErrorCreatingNhsUser))]
+        [DataRow(EmisApiErrorCode.PracticeNotLive, HttpStatusCode.BadRequest, typeof(LinkageResult.PracticeNotLive))]
+        [DataRow(EmisApiErrorCode.PatientMarkedAsArchived, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientMarkedAsArchived))]
+        [DataRow(EmisApiErrorCode.PatientNonCompetentOrUnder16, HttpStatusCode.BadRequest, typeof(LinkageResult.PatientNonCompetentOrUnder16))]
+        [DataRow(null, HttpStatusCode.BadRequest, typeof(LinkageResult.BadRequestErrorCreatingNhsUser))]
+        public async Task CreateLinkageKey_ReturnsCorrectErrorResponse_WhenEmisRespondsWithError(EmisApiErrorCode? emisApiErrorCode, HttpStatusCode httpStatusCodeResponse, Type expectedResultType)
         {
             // Arrange
-            var linkageDetailsRequest = _fixture.Create<CreateLinkageRequest>();
-            var linkageDetailsResponse = _fixture.Create<LinkageDetailsResponse>();
+            var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
 
-            _emisClient.Setup(x => x.LinkagePost(It.IsAny<LinkagePostRequest>()))
-                .Returns(Task.FromResult(
-                    new EmisClient.EmisApiObjectResponse<LinkageDetailsResponse>(HttpStatusCode.Conflict)));
+            var endUserSessionId = _fixture.Create<string>();
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+
+            var mockResponse = new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(httpStatusCodeResponse);
+
+            // Add emis specific error code if unit test requires it.
+            if (emisApiErrorCode.HasValue)
+            {
+                mockResponse.StandardErrorResponse = new StandardErrorResponse
+                {
+                    InternalResponseCode = (int)emisApiErrorCode,
+                };
+            }
+
+            _emisClient.Setup(x => x.NhsUserPost(
+                It.Is<EmisHeaderParameters>(
+                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                It.Is<AddNhsUserRequest>(
+                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
+                    && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
+                    .ReturnsAsync(mockResponse)
+                    .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.CreateLinkageKey(linkageDetailsRequest);
+            var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
 
             // Assert
-            _emisClient.Verify(x => x.LinkagePost(It.Is<LinkagePostRequest>(request =>
-                request.NhsNumber.Equals(linkageDetailsRequest.NhsNumber, StringComparison.Ordinal)
-                && request.OdsCode.Equals(linkageDetailsRequest.OdsCode, StringComparison.Ordinal)
-            )));
-            _emisLinkageMapper.Verify(x => x.Map(linkageDetailsResponse), Times.Never);
-            result.Should().BeAssignableTo<CreateLinkageResult.LinkageKeyAlreadyExists>();
+            _emisClient.Verify();
+            result.GetType().Should().Be(expectedResultType);
         }
 
         [TestMethod]
-        public async Task Post_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
+        public async Task CreateLinkageKey_ReturnsLinkageKeyAlreadyExists_WhenEmisRespondsWith409()
         {
             // Arrange
-            var linkageDetailsRequest = _fixture.Create<CreateLinkageRequest>();
+            var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
 
-            _emisClient.Setup(x => x.LinkagePost(It.IsAny<LinkagePostRequest>()))
+            var endUserSessionId = _fixture.Create<string>();
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+
+            _emisClient.Setup(x => x.NhsUserPost(
+                It.Is<EmisHeaderParameters>(
+                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                It.Is<AddNhsUserRequest>(
+                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
+                    && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
+                .ReturnsAsync(
+                    new EmisClient.EmisApiObjectResponse<AddNhsUserResponse>(HttpStatusCode.Conflict))
+                    .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
+
+            // Assert
+            _emisClient.Verify();
+            result.Should().BeAssignableTo<LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount>();
+        }
+
+        [TestMethod]
+        public async Task CreateLinkageKey_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingEmis()
+        {
+            // Arrange
+            var createLinkageRequest = _fixture.Create<CreateLinkageRequest>();
+
+            var endUserSessionId = _fixture.Create<string>();
+            var endUserSessionResponse = new SessionsEndUserSessionPostResponse
+            {
+                EndUserSessionId = endUserSessionId,
+            };
+
+            _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
+
+            _emisClient.Setup(x => x.NhsUserPost(
+                It.Is<EmisHeaderParameters>(
+                    header => string.Equals(header.EndUserSessionId, endUserSessionId, StringComparison.Ordinal)),
+                It.Is<AddNhsUserRequest>(
+                    request => request.NhsNumber.Equals(createLinkageRequest.NhsNumber, StringComparison.Ordinal)
+                    && request.NationalPracticeCode.Equals(createLinkageRequest.OdsCode, StringComparison.Ordinal))))
                 .Throws<HttpRequestException>()
                 .Verifiable();
 
             // Act
-            var result = await _systemUnderTest.CreateLinkageKey(linkageDetailsRequest);
+            var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
 
             // Assert
-            result.Should().BeAssignableTo<CreateLinkageResult.SupplierSystemUnavailable>();
+            result.Should().BeAssignableTo<LinkageResult.SupplierSystemUnavailable>();
             _emisClient.Verify();
         }
     }
