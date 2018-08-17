@@ -59,8 +59,6 @@ data class CookieWrapper private constructor(
         )
         this.repeatPrescriptionCourses.AssertEquals(expectedRepeatPrescriptions)
 
-        var mySession = this.session
-        Assert.assertNull(mySession.lastCalledAt)
     }
 
     companion object {
