@@ -55,7 +55,7 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun clickFirstCancelAppointmentLink() {
-        cancelAppointmentLink.elements[0].click()
+        cancelAppointmentLink.element.click()
     }
 
     fun getNumberOfCancelLinks(): Int {

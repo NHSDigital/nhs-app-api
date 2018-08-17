@@ -100,9 +100,11 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             val instructionsOnScreen = el.findElement(PrescriptionInstructionsLocator)
             val inputElement = el.findElement(By.cssSelector("input[name=prescription]"))
 
+
             if (courseToSelect.name == nameOnScreen.text
                     && courseToSelect.getInstructionsText() == instructionsOnScreen.text
                     && !inputElement.isSelected) {
+                el.setWindowFocus()
                 nameOnScreen.click()
                 return
             }

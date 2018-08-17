@@ -16,7 +16,7 @@ Feature: Ability to cancel an appointment via api
   @NHSO-1027
   Scenario: API will not cancel the appointment if reason an invalid reason is provided
     Given I have upcoming appointments for EMIS
-    Given EMIS is available to cancel an appointment
+    And EMIS is available to cancel an appointment
     When I send a cancellation request to the API with an invalid cancellation reason
     Then I receive a "Bad request" error
 

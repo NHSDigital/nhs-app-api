@@ -36,7 +36,8 @@ Feature: Book an available appointment slot
   @NHSO-72
   @NHSO-872
  @smoketest
-  Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters    Given there are <GP System> appointments available to book
+  Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
+    Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book

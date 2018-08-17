@@ -93,7 +93,7 @@ class MyAccountPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickHelpAndSupportLink() {
-        findByXpath("//*[@id='btn_help']").click()
+        helpAndSupportLink.element.click()
     }
 
 }
