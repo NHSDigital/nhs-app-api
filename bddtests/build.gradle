@@ -2,7 +2,7 @@ defaultTasks 'clean','test','aggregate'
 
 repositories {
     maven {
-        url "https://www-nexus.devuks1.bitraft.io/repository/maven-public/"
+        url "https://nexus.devuks1.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
         credentials {
             username "developer"
             password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
@@ -18,7 +18,7 @@ buildscript {
 
     repositories {
         maven {
-            url "https://www-nexus.devuks1.bitraft.io/repository/maven-public/"
+            url "https://nexus.devuks1.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
             credentials {
                 username "developer"
                 password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
