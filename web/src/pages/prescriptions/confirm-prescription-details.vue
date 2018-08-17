@@ -38,7 +38,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Routes from '../../Routes';
+import Routes from '@/Routes';
 
 export default {
   components: {

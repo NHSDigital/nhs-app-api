@@ -1,4 +1,5 @@
-import mutations from '../../../../../src/store/modules/myAppointments/mutations';
+/* eslint-disable import/extensions */
+import mutations from '@/store/modules/myAppointments/mutations';
 
 const { LOADED } = mutations;
 

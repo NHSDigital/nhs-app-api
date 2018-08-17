@@ -20,7 +20,7 @@
 /* eslint-disable import/extensions */
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
-import Routes from '../../Routes';
+import Routes from '@/Routes';
 
 export default {
   components: {

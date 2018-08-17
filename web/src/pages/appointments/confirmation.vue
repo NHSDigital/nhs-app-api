@@ -57,8 +57,7 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
-
-import Routes from '../../Routes';
+import Routes from '@/Routes';
 
 export default {
   components: {

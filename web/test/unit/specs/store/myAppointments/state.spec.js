@@ -1,4 +1,5 @@
-import myAppointments from '../../../../../src/store/modules/myAppointments';
+/* eslint-disable import/extensions */
+import myAppointments from '@/store/modules/myAppointments';
 
 const { state } = myAppointments;
 describe('state', () => {

@@ -1,5 +1,6 @@
-import { LOADED, CANCEL_SUCCESS } from '../../../../../src/store/modules/myAppointments/mutation-types';
-import actions from '../../../../../src/store/modules/myAppointments/actions';
+/* eslint-disable import/extensions */
+import { LOADED, CANCEL_SUCCESS } from '@/store/modules/myAppointments/mutation-types';
+import actions from '@/store/modules/myAppointments/actions';
 
 const API_HOST = 'http://unit.test';
 

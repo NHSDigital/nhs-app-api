@@ -76,7 +76,7 @@ import MessageList from '@/components/widgets/MessageList';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
-import Routes from '../../Routes';
+import Routes from '@/Routes';
 
 export default {
   components: {

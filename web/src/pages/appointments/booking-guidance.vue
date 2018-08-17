@@ -27,7 +27,8 @@
 </template>
 
 <script>
-import Routes from '../../Routes';
+/* eslint-disable import/extensions */
+import Routes from '@/Routes';
 
 export default {
   data() {

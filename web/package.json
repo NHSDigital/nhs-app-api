@@ -33,11 +33,8 @@
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
     "moduleNameMapper": {
-      "@/pages(.*)$": "<rootDir>/src/pages$1",
-      "@/components(.*)$": "<rootDir>/src/components$1",
-      "@/store(.*)$": "<rootDir>/src/store$1",
-      "@/locale(.*)$": "<rootDir>/src/locale$1",
-      "@/routes$": "<rootDir>/src/Routes"
+      "@/routes$": "<rootDir>/src/Routes",
+      "@/(.*)$": "<rootDir>/src/$1"
     }
   },
   "dependencies": {

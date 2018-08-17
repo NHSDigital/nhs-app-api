@@ -17,9 +17,9 @@
 
 <script>
 /* eslint-disable import/extensions */
-import moment from 'moment-timezone';
 import TimeSlot from '@/components/appointments/booking/TimeSlot';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import DateProvider from '@/services/DateProvider';
 
 export default {
   components: {
@@ -37,7 +37,7 @@ export default {
     },
   },
   methods: {
-    formatDate: dateTime => moment.tz(dateTime, 'Europe/London').format('dddd D MMMM YYYY'),
+    formatDate: dateTime => DateProvider.create(dateTime).format('dddd D MMMM YYYY'),
     select(ref) {
       if (this.$store.state.availableAppointments.selectedSlot) {
         this.$refs[this.$store.state.availableAppointments.selectedSlot.ref][0].deselect();

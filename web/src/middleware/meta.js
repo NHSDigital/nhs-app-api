@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import Routes from '../Routes';
+/* eslint-disable import/extensions */
+import Routes from '@/Routes';
 
 function setPageTitle(route, store, app) {
   let header = '';

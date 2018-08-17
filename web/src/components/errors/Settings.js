@@ -1,5 +1,7 @@
+/* eslint-disable import/extensions */
+/* eslint-disable import/extensions */
 import { assign, has } from 'lodash/fp';
-import Routes from '../../Routes';
+import Routes from '@/Routes';
 
 export default {
   default: {

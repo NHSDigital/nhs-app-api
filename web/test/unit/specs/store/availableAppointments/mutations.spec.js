@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 import mutations from '@/store/modules/availableAppointments/mutations';
+import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 
 const {
   DESELECT,
@@ -54,7 +55,7 @@ describe('CLEAR', () => {
         type: 'Emergency',
         location: 'Leeds',
         clinician: 'Dr Who',
-        date: '5',
+        date: DateFilterValues.ALL,
       },
     };
 
@@ -74,7 +75,7 @@ describe('CLEAR', () => {
         type: '',
         location: '',
         clinician: '',
-        date: 'this_week',
+        date: DateFilterValues.THIS_WEEK,
       },
     };
 
@@ -123,7 +124,7 @@ describe('INIT', () => {
         type: 'Emergency',
         location: 'Leeds',
         clinician: 'Dr Who',
-        date: 'all',
+        date: DateFilterValues.ALL,
       },
     };
 
@@ -143,7 +144,7 @@ describe('INIT', () => {
         type: '',
         location: '',
         clinician: '',
-        date: 'this_week',
+        date: DateFilterValues.THIS_WEEK,
       },
     };
 
@@ -158,14 +159,14 @@ describe('SET_SELECTED_OPTIONS', () => {
       type: 'Emergency',
       location: 'Leeds',
       clinician: 'Dr Who',
-      date: 'all',
+      date: DateFilterValues.ALL,
     };
     const state = {
       selectedOptions: {
         type: '',
         location: '',
         clinician: '',
-        date: 'this_week',
+        date: DateFilterValues.THIS_WEEK,
       },
     };
     SET_SELECTED_OPTIONS(state, selectedOptions);
@@ -217,13 +218,15 @@ describe('LOAD', () => {
     sortedSlots.set('2018-04-22', [slots[3], slots[2]]);
     sortedSlots.set('2018-04-23', [slots[1]]);
 
+    INIT(state);
     LOAD(state, data);
 
     expect(state.slots).toEqual(sortedSlots);
   });
 
   it('will change value of hasLoaded property', () => {
-    const state = { hasLoaded: false };
+    const state = {};
+    INIT(state);
     LOAD(state, { slots: [] });
 
     expect(state.hasLoaded).toEqual(true);
@@ -281,7 +284,7 @@ describe('LOAD', () => {
       ],
     };
 
-    expect(expectedFiltersOptions).toEqual(state.filtersOptions);
+    expect(state.filtersOptions).toEqual(expectedFiltersOptions);
   });
 
   it('will be defaulted to location if only one location has been returned', () => {
@@ -296,7 +299,7 @@ describe('LOAD', () => {
         type: '',
         location: '',
         clinician: '',
-        date: '3',
+        date: DateFilterValues.THIS_WEEK,
       },
     };
 

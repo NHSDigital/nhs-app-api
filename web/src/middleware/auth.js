@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import Routes from '../Routes';
+/* eslint-disable import/extensions */
+import Routes from '@/Routes';
 
 export default function ({ store, redirect, route }) {
   const excludedRoutes = [

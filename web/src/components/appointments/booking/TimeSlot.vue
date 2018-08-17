@@ -8,7 +8,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import moment from 'moment-timezone';
+import DateProvider from '@/services/DateProvider';
 
 export default {
   props: {
@@ -24,7 +24,7 @@ export default {
     };
   },
   methods: {
-    formatTime: dateTime => moment.tz(dateTime, 'Europe/London').format('h:mma'),
+    formatTime: dateTime => DateProvider.create(dateTime).format('h:mma'),
     select() {
       this.isSelected = true;
       this.$store.dispatch('availableAppointments/select', this.timeSlot);
