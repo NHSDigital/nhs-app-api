@@ -5,12 +5,10 @@ import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import net.thucydides.core.pages.WrongPageError
 import org.junit.Assert
-import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageObject
 import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
 import pages.HybridPageElement
-import java.time.Duration
 
 
 fun resolveDetailsField(dosage: String?, quantity: String?): String {
@@ -93,24 +91,17 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun selectRepeatPrescription(courseToSelect: MedicationCourse) {
-        val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
+        var prescription = getRepeatPrescription(courseToSelect)
+        Assert.assertNotNull("Didn't find medication course with: \nname: ${courseToSelect.name} \ndosage: ${courseToSelect.getInstructionsText()}", prescription)
+        prescription.element.click()
+   }
 
-        repeatPrescriptionContainers.forEach { el ->
-            val nameOnScreen = el.findElement(By.tagName( "label"))
-            val instructionsOnScreen = el.findElement(PrescriptionInstructionsLocator)
-            val inputElement = el.findElement(By.cssSelector("input[name=prescription]"))
-
-
-            if (courseToSelect.name == nameOnScreen.text
-                    && courseToSelect.getInstructionsText() == instructionsOnScreen.text
-                    && !inputElement.isSelected) {
-                el.setWindowFocus()
-                nameOnScreen.click()
-                return
-            }
-        }
-
-        Assert.fail("Didn't find medication course with: \nname: ${courseToSelect.name} \ndosage: ${courseToSelect.getInstructionsText()}")
+    private fun getRepeatPrescription(courseToSelect: MedicationCourse):HybridPageElement {
+        return HybridPageElement(
+                browserLocator = "//div[p[text()[contains(.,'${courseToSelect.getInstructionsText()}')]]]/div/label[text()[contains(.,'${courseToSelect.name}')]]",
+                androidLocator = null,
+                page = this
+        )
     }
 
     fun verifyPrescriptionIsSelected(medicationCourse: MedicationCourse) {
