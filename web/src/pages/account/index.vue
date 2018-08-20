@@ -63,13 +63,14 @@ export default {
 <style module lang="scss" scoped>
 @import "../../style/listmenu";
 .no-padding {
+  margin-top: -0.5em;
+  margin-left: -1em;
+  margin-right: -1em;
+  padding-bottom : 5em;
   h2 {
     margin-left: 0.7em;
     margin-top: 0.5em;
   }
-  margin-top: -0.5em;
-  margin-left: -1em;
-  margin-right: -1em;
 }
 
 </style>
