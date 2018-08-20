@@ -1,12 +1,10 @@
 package features.appointments.factories
 
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
-import org.junit.Assert
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -43,19 +41,12 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         setSessionVariable(SymptomsToEnter).to(bookingReason)
     }
 
-    companion object {
+    companion object: SupplierSpecificFactory<AppointmentsBookingFactory>() {
 
-        private val map: HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
+        override val map: HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
             hashMapOf(
                     "EMIS" to { AppointmentsBookingFactory("EMIS") },
                     "TPP" to { AppointmentsBookingFactory("TPP") })
-        }
-
-        fun getForSupplier(gpSystem: String): AppointmentsBookingFactory {
-            if (!map.containsKey(gpSystem)) {
-                Assert.fail("GP system '$gpSystem' is not set up.")
-            }
-            return map.getValue(gpSystem).invoke()
         }
 
         const val SymptomsToEnter = "SymptomsToEnter"

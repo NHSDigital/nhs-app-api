@@ -2,11 +2,11 @@ package features.appointments.factories
 
 import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExample
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
-import org.junit.Assert
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 
@@ -93,19 +93,12 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
 
 
-    companion object {
+    companion object : SupplierSpecificFactory<AppointmentsSlotsFactory>(){
 
-        private val map: HashMap<String, (() -> (AppointmentsSlotsFactory))> by lazy {
+        override val map: HashMap<String, (() -> (AppointmentsSlotsFactory))> by lazy {
             hashMapOf(
                     "EMIS" to { AppointmentsSlotsFactoryEmis() },
                     "TPP" to { AppointmentsSlotsFactoryTpp() })
-        }
-
-        fun getForSupplier(gpSystem: String): AppointmentsSlotsFactory {
-            if (!map.containsKey(gpSystem)) {
-                Assert.fail("GP system '$gpSystem' is not set up.")
-            }
-            return map.getValue(gpSystem).invoke()
         }
     }
 }

@@ -9,6 +9,7 @@ import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
@@ -17,8 +18,6 @@ import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
 import mocking.emis.models.AssociationType
-import mocking.tpp.models.AuthenticateReply
-import mocking.tpp.models.Session
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -26,7 +25,6 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
-import java.util.*
 
 open class SharedStepDefinitions {
 
@@ -76,7 +74,7 @@ open class SharedStepDefinitions {
 
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
-        setSessionVariable(Patient::class).to(this.patient)
+        SerenityHelpers.setPatient(patient)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
     }
 
@@ -105,7 +103,7 @@ open class SharedStepDefinitions {
 
     @Given("^I am logged in$")
     open fun iAmLoggedIn() {
-        this.patient = Serenity.sessionVariableCalled<Patient>(Patient::class) ?: this.patient
+        this.patient = SerenityHelpers.getPatientOrNull() ?: this.patient
         browser.goToApp()
         login.using(this.patient)
     }

@@ -1,12 +1,12 @@
 package features.appointments.factories
 
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import models.Patient
 import net.serenitybdd.core.Serenity
-import org.junit.Assert.fail
 import worker.models.appointments.AppointmentBookRequest
 
 abstract class AppointmentsBookingBackendFactory(gpSupplier:String): AppointmentsFactory(gpSupplier) {
@@ -48,20 +48,13 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
         )
     }
 
-    companion object {
+    companion object : SupplierSpecificFactory<AppointmentsBookingBackendFactory>(){
 
-        private val map: HashMap<String, (()-> AppointmentsBookingBackendFactory)>
+        override val map: HashMap<String, (()-> AppointmentsBookingBackendFactory)>
                by lazy{ hashMapOf(
                         "EMIS" to { AppointmentsBookingBackendFactoryEmis() },
                         "TPP" to { AppointmentsBookingBackendFactoryTpp() })}
 
-        fun getForSupplier(gpSystem: String): AppointmentsBookingBackendFactory {
-            if(! map.containsKey(gpSystem))
-            {
-                fail("GP system '$gpSystem' is not set up.")
-            }
-            return map.getValue(gpSystem).invoke()
-        }
 
         val defaultApptBookingReason = "I have a bad back."
         val defaultApptBookingSlotId = 12345

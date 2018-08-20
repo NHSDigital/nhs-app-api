@@ -6,21 +6,11 @@ import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExampleBuilder
 import features.appointments.data.AppointmentsSlotsExampleBuilder.Companion.EXPECTED_APPOINTMENT_LOCATIONS_KEY
 import features.appointments.factories.AppointmentsFactory
-import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.emis.appointments.GetAppointmentSlotsMetaResponseModel
-import mocking.emis.models.Location
-import mocking.emis.models.Session
-import mocking.emis.models.SessionHolder
 import mockingFacade.appointments.AppointmentFilterFacade
-import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotsResponseFacade
-import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import org.junit.Assert.*
 import pages.ErrorPage
@@ -31,10 +21,8 @@ import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
-import java.time.Duration
 import java.util.*
 import javax.servlet.http.Cookie
-import kotlin.collections.ArrayList
 
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 

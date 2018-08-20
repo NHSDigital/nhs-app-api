@@ -3,10 +3,15 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.data.AppointmentsSlotsExample
+import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsCancellingFactory
+import features.appointments.factories.AppointmentsSlotsFactory
+import features.appointments.factories.ViewAppointmentsFactory
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
+import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -21,33 +26,40 @@ class AppointmentsCancellingStepDefinitionsBackend {
     val mockingClient = MockingClient.instance
     val patient = MockDefaults.patient
 
-    private val commonSteps : CommonSteps = CommonSteps()
-    private var cancellationReasons: ArrayList<GenericResponseObject> = arrayListOf()
+    private val commonSteps: CommonSteps = CommonSteps()
 
     private val SLOT_ID = 1
     val HTTP_EXCEPTION = "HttpException"
     val HTTP_RESPONSE = "HttpResponse"
 
-    @Given("^(.*) is available to cancel an appointment$")
+    @Given("^(.*) is available to cancel a previously booked appointment$")
     fun gpSystemIsAvailableToCancelAnAppointment(gpSystem: String) {
+
         commonSteps.givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem)
         var reason = ""
-        retrieveCancellationReasons()
-        if (cancellationReasons.size > 0) {
-            reason = cancellationReasons.first().displayName
+        if (gpSystem == "EMIS") {
+            reason = "No longer required"
         }
-
         mockCancellationRequestStubForReason(reason, gpSystem)
     }
 
-    @Given("^(.*) is available to cancel an appointment for (.*)$")
+    @Given("^(.*) is available to cancel a previously booked appointment because (.*)$")
     fun gpSystemIsAvailableToCancelAnAppointmentForReason(gpSystem: String, reason: String) {
         mockCancellationRequestStubForReason(reason, gpSystem)
     }
 
     private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String) {
+
+        var patient = Patient.getDefault(gpSystem)
+
+        val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(gpSystem)
+        Serenity.setSessionVariable(Patient::class).to(patient)
+        val response = viewAppointmentFactory.createUpcomingAppointments(patient)
+        viewAppointmentFactory.setUpViewAppointmentsWithResult(gpSystem) { builder ->
+            builder.respondWithSuccess(response)
+        }
+
         var factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        var patient = factory.patient
         var request = factory.defaultRequest(patient, SLOT_ID, reason)
 
         factory.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
@@ -57,8 +69,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_with_a_valid_cancellation_reason() {
         var id = ""
-        if (cancellationReasons.size > 0) {
-            id = cancellationReasons.first().id
+        var reasons = retrieveCancellationReasons()
+        if (reasons.any()) {
+            id = reasons.first().id
+
         }
         val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), id)
 
@@ -112,11 +126,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
         Assert.assertTrue(response.statusLine.statusCode == SC_NO_CONTENT)
     }
 
-    private fun retrieveCancellationReasons()
-    {
+    private fun retrieveCancellationReasons(): ArrayList<GenericResponseObject> {
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .getMyAppointments(LocalDateTime.now().toString())
 
-        cancellationReasons = result.cancellationReasons
+        return result.cancellationReasons
     }
 }

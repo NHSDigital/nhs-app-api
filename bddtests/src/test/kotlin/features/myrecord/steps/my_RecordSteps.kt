@@ -1,6 +1,7 @@
 package features.myrecord.steps
 
 import net.thucydides.core.annotations.Step
+import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordNoAccessPage
 import pages.myrecord.MyRecordWarningPage
@@ -9,6 +10,12 @@ open class MyRecordSteps {
 
     lateinit var myRecordWarningPage: MyRecordWarningPage
     lateinit var myRecordInfoPage: MyRecordInfoPage
+
+    fun assertWarningPageIsLoaded() {
+        Assert.assertEquals("Header","My medical record", getHeaderText())
+        Assert.assertTrue("isBackToHomePresent",isBackToHomePresent())
+        Assert.assertTrue("isAgreePresent",isAgreePresent())
+    }
 
     @Step
     fun isBackToHomePresent(): Boolean {

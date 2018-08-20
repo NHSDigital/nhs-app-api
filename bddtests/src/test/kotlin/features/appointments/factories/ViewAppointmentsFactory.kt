@@ -2,13 +2,13 @@ package features.appointments.factories
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.commonData.BaseAppointmentData
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import models.Patient
 import net.serenitybdd.core.Serenity
-import org.junit.Assert.fail
 
 abstract class ViewAppointmentsFactory {
     val mockingClient = MockingClient.instance
@@ -34,17 +34,10 @@ abstract class ViewAppointmentsFactory {
 
     protected abstract fun sendRequestViaMockingClient(resolver: IAppointmentMappingBuilder.() -> Mapping)
 
-    companion object {
+    companion object: SupplierSpecificFactory<ViewAppointmentsFactory>() {
 
-        private val map: HashMap<String, ViewAppointmentsFactory> by lazy{ hashMapOf(
-                "EMIS" to ViewAppointmentsFactoryEmis(),
-                "TPP" to ViewAppointmentsFactoryTpp())}
-
-        fun getForSupplier(gpSystem: String): ViewAppointmentsFactory {
-            if (!map.containsKey(gpSystem)) {
-                fail("GP system '$gpSystem' is not set up.")
-            }
-            return map.getValue(gpSystem)
-        }
+        override val map: HashMap<String, (() -> (ViewAppointmentsFactory))> by lazy{ hashMapOf(
+                "EMIS" to {ViewAppointmentsFactoryEmis()},
+                "TPP" to {ViewAppointmentsFactoryTpp()})}
     }
 }

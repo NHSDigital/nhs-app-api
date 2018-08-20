@@ -83,6 +83,7 @@ class MyAppointmentsStepDefinitions {
 
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
     fun the_API_call_failes_with_csrf_token_of(provider: String, csrfToken: String) {
+        Assert.assertEquals("Test setup incorrect: Step only implemented for EMIS", "EMIS", provider.toUpperCase())
         myAppointmentsSteps.setCsrfToken(csrfToken)
         try {
             myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()

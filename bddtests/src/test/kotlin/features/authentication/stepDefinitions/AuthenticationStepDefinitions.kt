@@ -10,8 +10,8 @@ import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.myAccount.steps.MyAccountSteps
+import features.sharedSteps.SerenityHelpers
 import features.sharedSteps.NavigationSteps
-import io.restassured.builder.RequestSpecBuilder
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.*
@@ -24,13 +24,13 @@ import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
 import models.Patient
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.serenitybdd.rest.SerenityRest
 import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import pages.ServiceUnavailablePage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.WorkerPaths
@@ -60,6 +60,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Steps
     lateinit var myAccount: MyAccountSteps
 
+    lateinit var serviceUnavailablePage: ServiceUnavailablePage
+
     private var authCode: String? = MockDefaults.patient.cidUserSession.authCode
     private var codeVerifier: String? = MockDefaults.patient.cidUserSession.codeVerifier
     private val accessToken = MockDefaults.DEFAULT_ACCESS_TOKEN
@@ -74,8 +76,17 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     lateinit var currentUrl: String
 
-    @And("^sign in verification is slow$")
-    fun signInVerificationIsSlow() {
+    @Given("^I log in as an EMIS user and sign in verification is slow$")
+    fun iLogInAndSignInVerificationIsSlow() {
+        var patient = Patient.getDefault("EMIS")
+        browser.goToApp()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
+        emisSignInVerificationIsSlow()
+        login.asDefault(patient)
+    }
+
+    private fun emisSignInVerificationIsSlow() {
         mockingClient.forEmis {
             endUserSessionRequest().respondWithSuccess(
                     endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID)
@@ -500,12 +511,40 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(this.patient)
+        setupAndLogIn(patient, gpSystem)
+    }
+
+    @Given("^I attempt to log in as a (.*) user without an NHS Number$")
+    fun iAmLoggedInToWithoutNHSNumber(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem).copy(nhsNumbers = emptyList())
+        setupAndLogIn(patient, gpSystem)
+    }
+
+    @Given("^I attempt to log in as a (.*) user without a date of birth$")
+    fun iAmLoggedInToWithoutDOB(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem).copy(dateOfBirth = "")
+        setupAndLogIn(patient, gpSystem)
+    }
+
+    @Then("^I see an error message informing me I cannot log in as I am under 16$")
+    fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
+        serviceUnavailablePage.assertIsPresent("As you’re under 16, you cannot currently access the NHS App.")
+    }
+
+    @Then("^I see an error message informing me I cannot log in$")
+    fun iSeeAnErrorMessageInformingMeICannotLogIn(){
+        serviceUnavailablePage.assertIsPresent("You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.")
+    }
+
+    fun setupAndLogIn(patient:Patient, gpSystem: String) {
+        this.patient = patient
+        SerenityHelpers.setPatient(patient)
+
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
 
         browser.goToApp()
-        login.using(this.patient)
+        login.using(patient)
         home.waitForLoginToComplete()
     }
 
@@ -515,7 +554,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             Assert.fail("'$gpSystem' not set up for this step")
         }
         this.patient = Patient.getDefault(gpSystem)
-        Serenity.setSessionVariable(Patient::class).to(this.patient)
+        SerenityHelpers.setPatient(patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
         //createAuthenticateRequest does not.
@@ -524,11 +563,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         browser.goToApp()
         login.using(this.patient)
-    }
-
-    @When("^I log in$")
-    fun logIn() {
-        login.asDefault()
     }
 
     @When("I am on the home page")
@@ -560,11 +594,20 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see a welcome message$")
     fun iSeeAWelcomeMessageFor() {
-        val fullName = "${patient.title} ${patient.firstName} ${patient.surname}".trim()
-        home.assertWelcomeMessageShownFor(fullName)
+        var patient = SerenityHelpers.getPatient()
+        home.assertWelcomeMessageShownFor(patient)
     }
 
-    @And("^I see the header$")
+    @Then("I see the patient details of name, date of birth and NHS number$")
+    fun iSeePatientDetails() {
+        var patient = SerenityHelpers.getPatient()
+        val regex ="""${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
+        Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
+                regex.containsMatchIn(patient.nhsNumbers.first()))
+        home.assertPatientDetailsShownFor(patient)
+    }
+
+    @Then("^I see the home page header$")
     fun iSeeHeader() {
         home.assertHeaderVisible()
     }
@@ -608,6 +651,17 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         browser.goToApp()
     }
 
+
+
+    @Given("^I want to register for a (.+) account and sign in verification is slow$")
+    fun iWantToRegisterForAnAccountAndSignInIsSlow(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SuccessfulRegistrationJourney(mockingClient).create(patient, gpSystem)
+        emisSignInVerificationIsSlow()
+        browser.goToApp()
+    }
+
     @Then("^I see create account button$")
     fun iSeeCreateAccountButton() {
         login.assertCreateAccountButtonIsVisible()
@@ -620,7 +674,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I have completed (.+) account creation$")
     fun iCreateAnAccount(gpSystem: String) {
-        this.patient = MockDefaults.patient
+        this.patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(this.patient)
         iWantToRegisterForAnAccount(gpSystem)
         iCompleteAccountRegistration()
     }
@@ -684,9 +739,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     private fun createCidStubs(
             authCode: String? = this.authCode!!,
             codeVerifier: String = this.codeVerifier!!,
-            accessToken: String = this.accessToken,
-            bearerToken: String = this.bearerToken,
-            patient: Patient = MockDefaults.patient) {
+            accessToken: String = this.accessToken) {
         mockingClient.forCitizenId {
             tokenRequest(codeVerifier, authCode)
                     .respondWithSuccess(accessToken)

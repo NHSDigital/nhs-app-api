@@ -187,7 +187,7 @@ Feature: Registration
     Then I am redirected to the signed in home page
     And I see a welcome message
     And I see the navigation menu
-    And I see the header
+    And I see the home page header
 
     Examples:
     |GP System |
@@ -196,7 +196,6 @@ Feature: Registration
 
   @NHSO-313
   Scenario: While a new user who has created an account waits to be logged in a spinner is shown
-    Given I want to register for a EMIS account
-    And sign in verification is slow
+    Given I want to register for a EMIS account and sign in verification is slow
     When I complete the account registration
     Then the spinner appears

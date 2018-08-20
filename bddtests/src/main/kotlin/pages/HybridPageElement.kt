@@ -2,6 +2,7 @@ package pages
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.UnsupportedDriverException
+import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 import org.openqa.selenium.NoSuchElementException
 
@@ -13,31 +14,64 @@ private const val HEADER_HEIGHT_PX = 100
 private const val FLOATING_BUTTON_HEIGHT_PX = 78.5
 private const val NAVBAR_HEIGHT_PX = 70
 
-class HybridPageElement (
+class HybridPageElement(
         private var browserLocator: String,
         private var androidLocator: String?,
-        private val page: HybridPageObject
-){
-    val element: WebElementFacade get() {
-        val element: WebElementFacade
+        private val page: HybridPageObject,
+        helpfulName: String? = null
+) {
+    private val helpfulNameToUse = helpfulName ?: browserLocator
 
-        element = when(locatorStrategy()) {
-            LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!)
-            LOCATOR_STRATEGY_WEBVIEW,
-            LOCATOR_STRATEGY_BROWSER -> page.findByXpath(browserLocator).also {
-                if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
-                    val jsExecutor = page.driver as JavascriptExecutor
-                    try {
-                        jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", it)
-                    } catch (e: NoSuchElementException) {
-                        throw NoSuchElementException("Error scrolling to $it.  No such element existed on the page.  Page source:\n${page.driver.pageSource}\n")
+    val element: WebElementFacade
+        get() {
+            return when (locatorStrategy()) {
+                LOCATOR_STRATEGY_ANDROID -> page.findByXpath(androidLocator!!)
+                LOCATOR_STRATEGY_WEBVIEW,
+                LOCATOR_STRATEGY_BROWSER -> page.findByXpath(browserLocator).also {
+                    if ((!it.isCurrentlyVisible).or(it.isUnderneathFixedElements())) {
+                        it.scroll()
                     }
                 }
+                else -> throw IllegalArgumentException("Unknown element locator strategy.")
             }
-            else -> throw IllegalArgumentException("Unknown element locator strategy.")
         }
 
-        return element
+    private fun WebElementFacade.scroll() {
+        val jsExecutor = page.driver as JavascriptExecutor
+        try {
+            jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", this)
+        } catch (e: NoSuchElementException) {
+            throw NoSuchElementException("Error scrolling to $this.  No such element existed on the page.  Page source:\n${page.driver.pageSource}\n")
+        }
+    }
+
+    val elements: List<WebElementFacade>
+        get() {
+            return if (page.onMobile()) {
+                page.findAllByXpath(androidLocator!!)
+            } else {
+                page.findAllByXpath(browserLocator)
+            }
+        }
+
+    fun assertSingleElementPresent(): HybridPageElement {
+        Assert.assertEquals("Expected only one matching element for $helpfulNameToUse", 1, elements.count())
+        return this
+    }
+
+    fun assertIsVisible(): HybridPageElement {
+        Assert.assertTrue("Expected $helpfulNameToUse to be visible", element.isVisible)
+        return this
+    }
+
+    fun assertIsNotVisible(): HybridPageElement {
+        Assert.assertFalse("Expected $helpfulNameToUse to not be visible", element.isVisible)
+        return this
+    }
+
+    fun assertElementNotPresent(): HybridPageElement {
+        Assert.assertEquals("Expected no matching elements for $helpfulNameToUse", 0, elements.count())
+        return this
     }
 
     private fun locatorStrategy(): String {
@@ -52,14 +86,6 @@ class HybridPageElement (
             throw UnsupportedDriverException("iOS Driver not yet supported")
         } else {
             LOCATOR_STRATEGY_BROWSER
-        }
-    }
-
-    val elements: List<WebElementFacade> get() {
-        return if (page.onMobile()) {
-            page.findAllByXpath(androidLocator!!)
-        } else {
-            page.findAllByXpath(browserLocator)
         }
     }
 
@@ -93,7 +119,7 @@ class HybridPageElement (
         val lowestPixel = highestPixel + element.size.height
 
         val isBehindHeader = highestPixel < HEADER_HEIGHT_PX
-        val isBehindFooter = lowestPixel > page.driver.manage().window().size.height -(FLOATING_BUTTON_HEIGHT_PX + NAVBAR_HEIGHT_PX)
+        val isBehindFooter = lowestPixel > page.driver.manage().window().size.height - (FLOATING_BUTTON_HEIGHT_PX + NAVBAR_HEIGHT_PX)
 
         return isBehindHeader.or(isBehindFooter)
     }

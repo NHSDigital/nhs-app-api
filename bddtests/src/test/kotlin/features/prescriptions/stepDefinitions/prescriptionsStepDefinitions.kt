@@ -33,8 +33,10 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import java.util.*
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
+import features.sharedSteps.SerenityHelpers
 import mocking.tpp.models.Error
 import mocking.defaults.MockDefaults.Companion.patient
+import models.Patient
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
@@ -89,6 +91,15 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         browser.goToApp()
         login.using(currentPatient)
         navigation.select("Prescriptions")
+    }
+
+    @Given("^I have no repeat prescriptions for (.*)$")
+    fun givenIHaveNoRepeatPrescriptions(gpSystem:String) {
+        var patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
+        initialize(gpSystem)
+        givenIHaveXPastRepeatPrescriptions(0)
+        givenEachRepeatPrescriptionContainsXCoursesOfWhichXAreRepeats(0, 0)
     }
 
     @And("^each repeat prescription contains (\\d+) courses of which (\\d+) are repeats$")

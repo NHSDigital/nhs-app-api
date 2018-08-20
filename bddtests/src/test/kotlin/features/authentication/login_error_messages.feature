@@ -23,5 +23,23 @@ Feature: Login error messages
     When I click on the navigation button
     Then I see the login page
 
+
+  Scenario Outline: Cannot log in as a <GP System> user with no Date of Birth
+    Given I attempt to log in as a <GP System> user without a date of birth
+    Then I see an error message informing me I cannot log in as I am under 16
+  Examples:
+  | GP System   |
+  | EMIS        |
+  | TPP         |
+
+
+  Scenario Outline: Cannot log in as a <GP System> user with no NHS Number
+    Given I attempt to log in as a <GP System> user without an NHS Number
+    Then I see an error message informing me I cannot log in
+  Examples:
+  | GP System   |
+  | EMIS        |
+  | TPP         |
+
   @pending
   Scenario: User is inactive for 20 mins and tries to use feature that requires GP System

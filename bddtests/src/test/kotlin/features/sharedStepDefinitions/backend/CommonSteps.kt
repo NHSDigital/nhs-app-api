@@ -29,6 +29,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import features.sharedSteps.SerenityHelpers
 
 
 class CommonSteps : AbstractSteps() {
@@ -176,6 +177,6 @@ class CommonSteps : AbstractSteps() {
 
     private fun setGPServiceAndPatientPatientSerenityVaraibles(gpSystem: String, patient: Patient) {
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
-        setSessionVariable(Patient::class).to(patient)
+        SerenityHelpers.setPatient(patient)
     }
 }

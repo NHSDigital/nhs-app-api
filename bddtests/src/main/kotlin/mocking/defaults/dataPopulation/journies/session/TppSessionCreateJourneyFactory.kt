@@ -2,17 +2,11 @@ package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.tpp.models.Application
-import mocking.tpp.models.Authenticate
-import mocking.tpp.models.AuthenticateReply
-import mocking.tpp.models.User
-import mocking.tpp.models.Person
-import mocking.tpp.models.NationalId
-import mocking.tpp.models.PersonName
+import mocking.tpp.models.*
 import models.Patient
 
-class TppSessionCreateJourneyFactory(val client: MockingClient) :SessionCreateJourneyFactory (){
-    
+class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
+
     private fun authenticateRequest(patient: Patient): Authenticate {
         return Authenticate(
                 apiVersion = "1",
@@ -40,7 +34,7 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) :SessionCreateJo
                                 gender = patient.sex.name,
                                 nationalId = NationalId(
                                         type = "NHS",
-                                        value = patient.nhsNumbers.first()
+                                        value = patient.nhsNumbers.firstOrNull() ?: ""
                                 ),
                                 personName = PersonName(
                                         name = "${patient.title} ${patient.firstName} ${patient.surname}"

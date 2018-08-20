@@ -4,6 +4,7 @@ import com.google.common.collect.Ordering
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.factories.ViewAppointmentsFactory
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import models.Patient
@@ -114,7 +115,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun generateStubsForMyAppointmentsWhenUnavailableToPatient(provider: String) {
-        val patient = Serenity.sessionVariableCalled<Patient>(Patient::class)
+        val patient = SerenityHelpers.getPatient()
         val currentViewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(provider)
         currentViewAppointmentFactory.setupViewAppointmentResponse {
             viewMyAppointmentsRequest(patient)

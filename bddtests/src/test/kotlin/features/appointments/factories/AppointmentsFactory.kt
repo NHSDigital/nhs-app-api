@@ -1,5 +1,6 @@
 package features.appointments.factories
 
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -18,7 +19,7 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     private var tomorrowDate = LocalDateTime.now().plusDays(1)
 
     init {
-        setSessionVariable(Patient::class).to(patient)
+        SerenityHelpers.setPatient(patient)
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }
 
