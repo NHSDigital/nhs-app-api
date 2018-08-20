@@ -56,6 +56,16 @@ open class MyRecordSteps {
     }
 
     @Step
+    fun canSeeClinicalAbbreviationsLink(): Boolean {
+        return myRecordInfoPage.canSeeClinicalAbbreviationsLink()
+    }
+
+    @Step
+    fun clickClinicalAbbreviationsLink() {
+        return myRecordInfoPage.clickClinicalAbbreviationsLink()
+    }
+
+    @Step
     fun clickMyDetails() {
         myRecordInfoPage.clickMyDetails()
     }

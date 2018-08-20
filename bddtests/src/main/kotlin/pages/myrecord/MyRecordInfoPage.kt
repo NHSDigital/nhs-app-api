@@ -15,6 +15,12 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             androidLocator = null,
             page = this)
 
+    val clinicalAbbreviationsLink =
+            HybridPageElement(
+                    browserLocator = "//a[contains(text(),'Help with abbreviations')]",
+                    androidLocator = null,
+                    page = this)
+
     val nameLabel = 
         HybridPageElement(
             browserLocator = "//label[contains(text(),'Name')]",
@@ -107,13 +113,13 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val testResultsHeader = 
         HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Test results')]",
+            browserLocator = "//h2[contains(text(),'Test results (past 6 months)')]",
             androidLocator = null,
             page = this)
 
     val txttestResultsMsg = 
         HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Test results')]/following-sibling::div[1]",
+            browserLocator = "//h2[contains(text(),'Test results (past 6 months)')]/following-sibling::div[1]",
             androidLocator = null,
             page = this)
 
@@ -182,6 +188,14 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun isOnMyRecordInfoPage(): Boolean {
         return secMyDetails.element.isPresent
+    }
+
+    fun canSeeClinicalAbbreviationsLink(): Boolean {
+        return clinicalAbbreviationsLink.element.isPresent
+    }
+
+    fun clickClinicalAbbreviationsLink() {
+        toggleShrub(clinicalAbbreviationsLink)
     }
 
     fun getMyDetailsLabelText(): String {

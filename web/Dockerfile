@@ -15,6 +15,7 @@ ENV PRIVACY_POLICY_URL http://beta.nhs.uk/
 ENV COOKIES_POLICY_URL http://beta.nhs.uk/
 ENV OPEN_SOURCE_LICENSES_URL http://beta.nhs.uk/
 ENV HELP_AND_SUPPORT_URL http://beta.nhs.uk/
+ENV CLINICAL_ABBREVIATIONS_URL http://beta.nhs.uk/
 
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs

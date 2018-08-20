@@ -247,6 +247,19 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         nav.select("MY_RECORD")
         recordSteps.clickAgreeandContinue()
         Assert.assertTrue(recordSteps.isOnMyRecordInfoPage())
+        Assert.assertTrue(recordSteps.canSeeClinicalAbbreviationsLink())
+    }
+
+    @Then("^I can see the clinical abbreviations link$")
+    @Throws(Exception::class)
+    fun i_can_see_the_clinical_abbreviations_link() {
+        Assert.assertTrue(recordSteps.canSeeClinicalAbbreviationsLink())
+    }
+
+    @Then("^I click the clinical abbreviations link$")
+    @Throws(Exception::class)
+    fun i_click_the_clinical_abbreviations_link() {
+        recordSteps.clickClinicalAbbreviationsLink()
     }
 
     @When("^I click My details heading$")
@@ -387,7 +400,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I see the test result heading$")
     @Throws(Exception::class)
     fun i_see_the_test_result_heading() {
-        Assert.assertEquals("Test results", recordSteps.getTestResultsHeaderText())
+        Assert.assertEquals("Test results (past 6 months)", recordSteps.getTestResultsHeaderText())
     }
 
     @Then("^I see the test result section collapsed$")

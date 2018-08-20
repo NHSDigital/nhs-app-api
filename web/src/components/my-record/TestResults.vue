@@ -20,12 +20,12 @@
       <p v-if="supplier === 'TPP'">
         <nuxt-link :to="{
           name: 'my-record-testresultdetail',
-          params: { testResultId: testResult.id }}">
+          params: { testResultId: testResult.id }}" :class="$style.viewTestResult">
           {{ testResult.description }}</nuxt-link>
       </p>
       <p v-if="supplier === 'EMIS'" :class="$style.testTerm">
         {{ testResult.description }}</p>
-      <ul :class="$style.testResultLineSingleItem">
+      <ul :class="$style.testResultNoChild">
         <li v-for="(associatedText, associatedTextItemIndex) in testResult.associatedTexts"
             :key="`associatedText-${associatedTextItemIndex}`">
           {{ associatedText }}
@@ -35,7 +35,7 @@
         <li v-for="(lineItem, lineItemIndex) in testResult.testResultChildLineItems"
             :key="`line-${lineItemIndex}`">
           {{ lineItem.description }}
-          <ul>
+          <ul :class="$style.testResultChildAssociatedText">
             <li v-for="(lineItemAssociatedText, lineItemAssociatedTextIndex)
                 in lineItem.associatedTexts"
                 :key="`lineAssociatedText-${lineItemAssociatedTextIndex}`">

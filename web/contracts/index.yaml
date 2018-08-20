@@ -377,11 +377,6 @@
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
-                        currentRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
                             type: "object"
                             properties: 
                               date: 
@@ -393,11 +388,16 @@
                                 description: "An array of line items."
                                 items: 
                                   $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
+                        currentRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
                         discontinuedRepeatMedications: 
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/currentRepeatMedications/items"
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
                 immunisations: 
                   type: "object"
                   description: "An object containing all immunisation details."
@@ -442,7 +442,7 @@
                             type: "object"
                             properties: 
                               id: 
-                                type: "String"
+                                type: "string"
                                 description: "Id of the test result"
                               date: 
                                 $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/allergies/properties/data/items/properties/date"
@@ -452,7 +452,8 @@
                               associatedTexts: 
                                 type: "array"
                                 description: "Array of associated texts."
-                                items: "string"
+                                items: 
+                                  type: "string"
                               testResultChildItems: 
                                 type: "array"
                                 description: "Array of test result child line items."
@@ -465,7 +466,8 @@
                                     associatedTexts: 
                                       type: "array"
                                       description: "Array of associated texts."
-                                      items: "string"
+                                      items: 
+                                        type: "string"
                 problems: 
                   type: "object"
                   description: "An object containing all problems details."
@@ -723,17 +725,7 @@
                   type: "array"
                   description: "Array of prescription courses."
                   items: 
-                    type: "object"
-                    properties: 
-                      id: 
-                        type: "string"
-                        description: "Course identifier."
-                      name: 
-                        type: "string"
-                        description: "Course name."
-                      details: 
-                        type: "string"
-                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
+                    $ref: "#/paths/~1v1~1patient~1courses/get/responses/200/schema/properties/courses/items"
           400: 
             description: "Bad request. All headers must be provided."
           401: 
@@ -764,7 +756,17 @@
                   type: "array"
                   description: "An array of prescription courses"
                   items: 
-                    $ref: "#/paths/~1v1~1patient~1prescriptions/get/responses/200/schema/properties/courses/items"
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "string"
+                        description: "Course identifier."
+                      name: 
+                        type: "string"
+                        description: "Course name."
+                      details: 
+                        type: "string"
+                        description: "Details of the course. Depending on the provider this may contain different information like dosage, quantity and status."
           401: 
             description: "User session missing or expired."
           403: 

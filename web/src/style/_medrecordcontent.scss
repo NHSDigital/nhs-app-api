@@ -27,7 +27,13 @@ div.record-content {
   }
   li {
     list-style-type: none;
-    list-style-position: inside;
+    margin-top: 0.5em;
+    line-height: 1.5em;
+  }
+  ul {
+    list-style-type: disc;
+    list-style-position: outside;
+    margin-left: 3em;
   }
   label,
   b {
@@ -50,14 +56,7 @@ div.record-content {
   }
   .record-item {
     li {
-      padding-left: 2.4em;
       padding-right: 1.2em;
-      li {
-        padding: 0em;
-        li {
-          padding-left: 1.2em;
-        }
-      }
     }
     p {
       padding-bottom: 0em;
@@ -77,6 +76,8 @@ div.record-content {
   &.closed {
     max-height: 0;
     transition: max-height 0.5s ease 0.3s;
+    ul,
+    li,
     p,
     b,
     label,
@@ -88,6 +89,8 @@ div.record-content {
   &.opened {
     max-height: 375.000em;
     transition: max-height 0.5s ease;
+    ul,
+    li,
     p,
     b,
     label,
@@ -96,21 +99,25 @@ div.record-content {
       transition: opacity 0.1s linear 0.3s;
     }
   }
-  .consultationTerm {
-    li {
-      display: list-item;
-      list-style-type: disc;
-      list-style-position: inside;
+  .consultationHeader {
+    margin-left:-0.75em; 
+    .consultationTerm {
+      li {
+        display: list-item;
+        list-style-type: disc;
+        margin-left: -2em;
         li::before {
-          content: '';
-          height:1px;
-      }
-      .observationText {
-        li {
-          list-style-type: none;
+            content: '';
+            height:1px;
         }
-        li::before{
-          content: '- ';
+        .observationText {
+         margin-left:2em; 
+          li {
+            list-style-type: none;
+          }
+          li::before{
+            content: '- ';
+          }
         }
       }
     }
@@ -118,13 +125,25 @@ div.record-content {
   .testResultLine {
     li {
       display: list-item;
-      list-style-type: disc;
-      list-style-position: inside;
-      .testResultLineAssociatedText {
-        li {
-          list-style-type:none;
-        }
+      list-style-type: disc;      
+      ul li
+      {
+        margin-left: -2em;
+        list-style-position: outside;
+        list-style-type: none;
       }
     }
+  }
+  .testResultNoChild {
+    margin-left: 2em;
+  }
+  .eventLine {
+    li {
+      display: list-item;
+      list-style-type: disc;
+    }
+  }
+  .viewTestResult {
+    padding-top: 0.75em;   
   }
 }

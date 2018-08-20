@@ -23,7 +23,7 @@
       <ul>
         <li v-for="(consultationHeader, consultationHeaderIndex)
             in consultation.consultationHeaders"
-            :key="`line-${consultationHeaderIndex}`">
+            :key="`line-${consultationHeaderIndex}`" :class="$style.consultationHeader">
           <strong> {{ consultationHeader.header }} </strong>
 
           <ul :class="$style.consultationTerm">

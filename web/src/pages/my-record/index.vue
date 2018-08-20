@@ -1,5 +1,12 @@
 <template>
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
+    <div :class="$style.abbreviations">
+      <p>{{ $t('my_record.clinicalTerms.text') }}</p>
+      <a id="btnClinicalTerms" :href="clinicalAbbreviationsUrl" target="_blank">
+        <AbbreviationsArrowRightIcon/> {{ $t('my_record.clinicalTerms.link') }}
+      </a>
+    </div>
+    <hr>
     <h2 :class="[$style['record-title'], getCollapseState(isPatientDetailsCollapsed)]"
         @click="myRecordSectionClick(PATIENTDETAILS)">
       {{ $t('my_record.patientInfo.sectionHeader') }}</h2>
@@ -112,6 +119,7 @@ import Problems from '@/components/my-record/Problems';
 import Consultations from '@/components/my-record/Consultations';
 import Events from '@/components/my-record/Events';
 import VueScrollTo from 'vue-scrollto';
+import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
 
 const PATIENTDETAILS = 'patientdetails';
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
@@ -137,6 +145,7 @@ export default {
     Consultations,
     Events,
     VueScrollTo,
+    AbbreviationsArrowRightIcon,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === '/my-record/myrecordwarning' || from.path === '/my-record/testresultdetail') {
@@ -170,6 +179,7 @@ export default {
       isEventsCollapsed: true,
       myRecord: {},
       patientDetails: {},
+      clinicalAbbreviationsUrl: process.env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
   mounted() {
@@ -251,8 +261,23 @@ export default {
 <style module lang="scss" scoped>
   @import '../../style/medrecordtitle';
 
-   .no-padding {
+  .no-padding {
     margin-left: -1em;
     margin-right: -1em;
+  }
+
+  .abbreviations {
+    margin-bottom: 0.5em;
+    p {
+      padding-left: 1em;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+    }
+    a {
+      line-height: 1em;
+      padding-left: 1em;
+      padding-top: 0.5em;
+      padding-bottom: 0.5em;
+    }
   }
 </style>

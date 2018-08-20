@@ -61,6 +61,9 @@ module.exports = {
     HELP_AND_SUPPORT_URL:
       process.env.HELP_AND_SUPPORT_URL ||
       'http://beta.nhs.uk/',
+    CLINICAL_ABBREVIATIONS_URL:
+      process.env.CLINICAL_ABBREVIATIONS_URL ||
+      'https://beta.nhs.uk',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online-poc',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',

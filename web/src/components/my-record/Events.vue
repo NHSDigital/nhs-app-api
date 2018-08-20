@@ -15,7 +15,7 @@
          :class="$style['record-item']" data-purpose="record-item">
       <label v-if="event.date"> {{ event.date | datePart }} </label>
       <p> {{ event.locationAndDoneBy }}</p>
-      <ul>
+      <ul :class="$style.eventLine">
         <li v-for="(eventItem, eventItemIndex) in event.eventItems"
             :key="`event-${eventItemIndex}`">
           {{ eventItem }}

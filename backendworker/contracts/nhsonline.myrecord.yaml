@@ -238,7 +238,7 @@ definitions:
     type: object
     properties:
       id:
-        type: String
+        type: string
         description: Id of the test result
       date:
         $ref: '#/definitions/Date'
@@ -248,7 +248,8 @@ definitions:
       associatedTexts:
         type: array
         description: Array of associated texts.
-        items: string
+        items:
+          type: string
       testResultChildItems:
         type: array
         description: Array of test result child line items.
@@ -264,7 +265,8 @@ definitions:
         associatedTexts:
           type: array
           description: Array of associated texts.
-          items: string
+          items:
+            type: string 
                    
   Problems:
       type: object
