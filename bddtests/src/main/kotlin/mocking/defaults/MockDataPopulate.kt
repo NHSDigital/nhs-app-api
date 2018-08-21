@@ -10,6 +10,7 @@ import mocking.dataPopulation.journies.prescriptions.PrescriptionsJournies
 import mocking.defaults.dataPopulation.journies.appointmentSlots.AppointmentSlotsJournies
 import mocking.defaults.dataPopulation.journies.courses.CoursesJournies
 import mocking.defaults.dataPopulation.journies.im1Connection.Im1ConnectionJournies
+import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.linkage.LinkageJournies
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
@@ -106,7 +107,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                             redirectUrl = Config.instance.cidRedirectUri
                     ),
                     accessToken = "accessToken$pad",
-                    endUserSessionId = "endUserSessionId$pad",
+                    endUserSessionId = "endUserSessionId",
                     connectionToken = "00000000-0000-0000-0000-$pad"
             )
 
@@ -228,6 +229,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             mockingClient.forEmis {
                 consultationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Consultations.json"))
             }
+
+            SuccessfulRegistrationJourney(mockingClient).create(patient)
         }
     }
 
