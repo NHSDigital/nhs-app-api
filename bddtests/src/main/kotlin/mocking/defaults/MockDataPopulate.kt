@@ -2,6 +2,7 @@ package mocking.defaults
 
 import config.Config
 import mocking.MockingClient
+import mocking.data.myrecord.*
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
@@ -13,6 +14,7 @@ import mocking.defaults.dataPopulation.journies.linkage.LinkageJournies
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
+import mocking.emis.immunisations.ImmunisationResponseModel
 import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -394,32 +396,32 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
     private fun generateEMISMyMedicalRecordsStubs(patientForStubEnvironment: Patient) {
         // GET /emis/record (testResultsRequest)
         mockingClient.forEmis {
-            testResultsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/TestResults.json", BASE_MOCK_DATA_DIR))
+            testResultsRequest(patientForStubEnvironment).respondWithSuccess(TestResultsData.getTestResultsForEmis(6))
         }
 
         // GET /emis/record (immunisationsRequest)
         mockingClient.forEmis {
-            immunisationsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Immunisations.json", BASE_MOCK_DATA_DIR))
+            immunisationsRequest(patientForStubEnvironment).respondWithSuccess(ImmunisationsData.getImmunisationsData())
         }
 
         // GET /emis/record (allergiesRequest)
         mockingClient.forEmis {
-            allergiesRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Allergies.json", BASE_MOCK_DATA_DIR))
+            allergiesRequest(patientForStubEnvironment).respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
         }
 
         // GET /emis/record (medicationsRequest)
         mockingClient.forEmis {
-            medicationsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Medications.json", BASE_MOCK_DATA_DIR))
+            medicationsRequest(patientForStubEnvironment).respondWithSuccess(MedicationsData.getEmisMedicationData())
         }
 
         // GET /emis/record (problemsRequest)
         mockingClient.forEmis {
-            problemsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Problems.json", BASE_MOCK_DATA_DIR))
+            problemsRequest(patientForStubEnvironment).respondWithSuccess(ProblemsData.getProblemsData())
         }
 
         // GET /emis/record (consultationsRequest)
         mockingClient.forEmis {
-            consultationsRequest(patientForStubEnvironment).respondWithSuccessJson(getFileContents("medicalRecords/Consultations.json", BASE_MOCK_DATA_DIR))
+            consultationsRequest(patientForStubEnvironment).respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
         }
     }
 }
