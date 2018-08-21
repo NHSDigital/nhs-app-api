@@ -518,6 +518,13 @@ export default {
     prescriptionsLabel: 'Prescriptions',
     symptomsLabel: 'Symptoms',
   },
+  navigationMenuList: {
+    symptoms: 'Check my symptoms',
+    appointments: 'Book and manage appointments',
+    prescriptions: 'Order a repeat prescription',
+    myRecord: 'View my medical record',
+    organDonation: 'Set organ donation preferences',
+  },
   symptomBanner: {
     howAreYouFeeling: 'How are you feeling right now?',
     checker: 'Check my symptoms',
