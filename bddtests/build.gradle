@@ -1,8 +1,15 @@
 defaultTasks 'clean','test','aggregate'
 
 repositories {
-    mavenCentral()
-    jcenter()
+    maven {
+        url "https://nexus.devuks1.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+        credentials {
+            username "developer"
+            password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+        }
+    }
+    // mavenCentral()
+    // jcenter()
 }
 
 buildscript {
@@ -10,12 +17,20 @@ buildscript {
     ext.serenity_version = '1.9.12'
 
     repositories {
-         maven {
-             url "https://plugins.gradle.org/m2/"
-         }
-        mavenCentral()
-        jcenter()
+        maven {
+            url "https://nexus.devuks1.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+            credentials {
+                username "developer"
+                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+            }
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        // mavenCentral()
+        // jcenter()
     }
+
     dependencies {
         classpath ("net.serenity-bdd:serenity-gradle-plugin:$serenity_version")
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
