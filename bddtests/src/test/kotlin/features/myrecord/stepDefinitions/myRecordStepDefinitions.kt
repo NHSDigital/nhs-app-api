@@ -397,10 +397,17 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         Assert.assertTrue(recordSteps.getTestResultChildCount() > 1)
     }
 
-    @Then("^I see the test result heading$")
+    @Then("^I see the test result heading for (.*)$")
     @Throws(Exception::class)
-    fun i_see_the_test_result_heading() {
-        Assert.assertEquals("Test results (past 6 months)", recordSteps.getTestResultsHeaderText())
+    fun i_see_the_test_result_heading(getService: String) {
+        when (getService) {
+            "TPP" -> {
+                Assert.assertEquals("Test results (past 6 months)", recordSteps.getTestResultsHeaderText())
+            }
+            else -> {
+                Assert.assertEquals("Test results", recordSteps.getTestResultsHeaderText())
+            }
+        }
     }
 
     @Then("^I see the test result section collapsed$")

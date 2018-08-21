@@ -6,7 +6,7 @@ Feature: View My Medical Record Information - Test Results
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
-    Then I see the test result heading
+    Then I see the test result heading for <Service>
     And I see the test result section collapsed
 
     Examples:

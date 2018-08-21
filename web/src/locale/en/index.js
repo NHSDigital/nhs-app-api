@@ -381,7 +381,10 @@ export default {
       sectionHeader: 'Immunisations',
     },
     testResults: {
-      sectionHeader: 'Test results (past 6 months)',
+      sectionHeader: {
+        tpp: 'Test results (past 6 months)',
+        default: 'Test results',
+      },
     },
     problems: {
       sectionHeader: 'Problems',
@@ -408,7 +411,7 @@ export default {
       },
     },
     clinicalTerms: {
-      text: 'You may see abbreviations used in your record that you aren\'t familiar with.',
+      text: 'You may see medical abbreviations that you aren’t familiar with.',
       link: 'Help with abbreviations',
     },
   },

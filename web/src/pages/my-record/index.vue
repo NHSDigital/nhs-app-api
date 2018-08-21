@@ -79,7 +79,7 @@
         <h2 id="testResultsHeader"
             :class="[$style['record-title'], getCollapseState(isTestResultsCollapsed)]"
             @click="myRecordSectionClick(TESTRESULTS)">
-          {{ $t('my_record.testResults.sectionHeader') }}
+          {{ getTestResultSectionHeader(myRecord.supplier) }}
         </h2>
         <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
                       :supplier="myRecord.supplier" />
@@ -205,6 +205,11 @@ export default {
       });
   },
   methods: {
+    getTestResultSectionHeader(supplier) {
+      return supplier === 'TPP' ?
+        this.$t('my_record.testResults.sectionHeader.tpp') :
+        this.$t('my_record.testResults.sectionHeader.default');
+    },
     getCollapseState(collapsed) {
       return collapsed ? this.$style.closed : this.$style.opened;
     },

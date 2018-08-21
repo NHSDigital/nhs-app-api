@@ -73,7 +73,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val discontinuedRepeatMedications by lazy {MyRecordWrapper("Repeat medications: discontinued", this)}
 
-    val testResults by lazy {MyRecordWrapper("Test results (past 6 months)", this)}
+    val testResults by lazy {MyRecordWrapper("Test results", this)}
 
     val immunisations by lazy {MyRecordWrapper("Immunisations", this)}
 
