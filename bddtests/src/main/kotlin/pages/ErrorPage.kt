@@ -1,54 +1,30 @@
 package pages
 
 class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+    private val errorTextFinderFormat = "//div[@data-purpose='error']/p[@data-purpose='%s']"
 
-    val parent = HybridPageElement(
-            browserLocator = "//div[@data-purpose='error']",
-            androidLocator = null,
-            page = this
-    )
+    private val headerLocator = String.format(errorTextFinderFormat, "msg-header")
+    private val subHeaderLocator = String.format(errorTextFinderFormat, "msg-subheader")
+    private val messageTextLocator = String.format(errorTextFinderFormat, "msg-text")
+    private val extraMessageTextLocator = String.format(errorTextFinderFormat, "msg-extratext")
+    private val backButtonLocator = "//button[@data-purpose='retry-or-back-button']"
 
-    val heading = HybridPageElement(
-            browserLocator = "//div[@data-purpose='error']/p/b",
-            androidLocator = null,
-            page = this
-    )
+    val heading = findElementByLocator(headerLocator)
 
-    val subHeading = paragraph(1)
+    val subHeading = findElementByLocator(subHeaderLocator)
 
-    val detailOne = paragraph(2)
+    val errorText1 = findElementByLocator(messageTextLocator)
 
-    val detailTwo = paragraph(3)
+    val errorText2 = findElementByLocator(extraMessageTextLocator)
 
-    val button = HybridPageElement(
-            browserLocator = "//button",
-            androidLocator = null,
-            page = this
-    )
+    val button = findElementByLocator(backButtonLocator)
 
-    fun paragraph(int: Int): HybridPageElement {
+    private fun findElementByLocator(locator: String): HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//div[@data-purpose='error']/p[$int]",
+                browserLocator = locator,
                 androidLocator = null,
                 page = this
         )
-    }
-
-
-    fun hasHeading(text: String): Boolean {
-        return heading.element.text == text
-    }
-
-    fun hasSubHeading(text: String): Boolean {
-        return subHeading.element.text == text
-    }
-
-    fun hasDetailParagraphOne(text: String): Boolean {
-        return detailOne.element.text == text
-    }
-
-    fun hasDetailParagraphTwo(text: String): Boolean {
-        return detailTwo.element.text == text
     }
 
     fun hasButton(text: String): Boolean {
@@ -58,10 +34,6 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             false
         }
 
-    }
-
-    fun shouldNotBeVisible() {
-        parent.shouldNotBeVisible()
     }
 
 }

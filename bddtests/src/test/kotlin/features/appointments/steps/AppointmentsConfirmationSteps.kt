@@ -32,6 +32,11 @@ open class AppointmentsConfirmationSteps {
     }
 
     @Step
+    fun clickErrorPageBackButton() {
+        errorPage.button.element.click()
+    }
+
+    @Step
     fun mockEmisSuccessResponse() {
         //accept all requests
         mockEmisSuccessResponseDelayedBy(0)
@@ -72,18 +77,15 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkErrorSendingMessage() {
-        assertTrue(
-                "Sub-heading is incorrect. ",
-                errorPage.hasSubHeading("Sorry, there's been a problem sending your request")
-        )
-        assertTrue(
-                "First part of the message is incorrect. ",
-                errorPage.hasDetailParagraphOne("Please go back and try again.")
-        )
-        assertTrue(
-                "Second part of the message is incorrect. ",
-                errorPage.hasDetailParagraphTwo("If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.")
-        )
+        val errorHeading = "Sorry, there's been a problem sending your request"
+        val errorSubHeading = "Please go back and try again."
+        val errorText = "If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly."
+        assertEquals("Expected heading text $errorHeading but found ${errorPage.heading.element.text}",
+                errorHeading, errorPage.heading.element.text )
+        assertEquals("Expected sub-heading text $errorSubHeading but found ${errorPage.subHeading.element.text}",
+                errorSubHeading, errorPage.subHeading.element.text )
+        assertEquals("Expected heading text $errorText but found ${errorPage.errorText1.element.text}",
+                errorText, errorPage.errorText1.element.text )
     }
 
     @Step

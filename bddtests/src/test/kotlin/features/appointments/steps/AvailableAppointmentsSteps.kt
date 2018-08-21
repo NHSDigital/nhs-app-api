@@ -100,14 +100,16 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkTimeoutErrorMessage() {
-        val expectation = "should be displayed but got"
         val expectedHeader = "Sorry, there's been a problem loading this page"
-        val expectedFirstBodyLine = "Please try again"
-        val expectedSecondBodyLine = "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        val expectedSubHeader = "Please try again"
+        val expectedMessageText = "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
         errorPage.waitForSpinnerToDisappear(70)
-        assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(1).element.text}\"",  errorPage.hasSubHeading(expectedHeader))
-        assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(2).element.text}\"",  errorPage.hasDetailParagraphOne(expectedFirstBodyLine))
-        assertTrue("\"$expectedHeader\" $expectation \"${errorPage.paragraph(3).element.text}\"",  errorPage.hasDetailParagraphTwo(expectedSecondBodyLine))
+        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedHeader, errorPage.heading.element.text)
+        assertEquals("expected  sub-header text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedSubHeader, errorPage.subHeading.element.text)
+        assertEquals("expected error text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedMessageText, errorPage.errorText1.element.text)
     }
 
     @Step
@@ -131,8 +133,10 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val expectedHeader = "Sorry, there's been a problem loading this page"
         val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
         errorPage.waitForSpinnerToDisappear()
-        assertTrue("$expectedHeader\n$expectedBody", errorPage.hasSubHeading(expectedHeader))
-        assertTrue("$expectedHeader\n$expectedBody", errorPage.hasDetailParagraphTwo(expectedBody))
+        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedHeader, errorPage.heading.element.text)
+        assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.element.text}",
+                expectedBody, errorPage.errorText1.element.text)
     }
 
     @Step
@@ -592,7 +596,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatSlotNoLongerAvailableMessageIsDisplayed() {
-        assertEquals("This slot is no longer available. Please select a different time.", availableAppointments.getWarningText())
+        val expectedHeader = "This slot is no longer available"
+        val expectedMsg = "Please select a different time."
+
+        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedHeader, errorPage.heading.element.text)
+        assertEquals("expected error text $expectedMsg but found ${errorPage.errorText1.element.text}",
+                expectedMsg, errorPage.errorText1.element.text)
     }
 
     @Step

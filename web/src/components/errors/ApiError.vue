@@ -2,13 +2,18 @@
   <div v-if="isVisible" :id="$style.serverError" class="pull-content">
     <message-dialog message-type="error">
       <message-text :is-header="true">{{ header }}</message-text>
-      <message-text>{{ subheader }}</message-text>
-      <message-text>{{ message }}</message-text>
-      <message-text v-if="hasAdditionalInfo">
+      <message-text v-if="subheader!==''" data-purpose="msg-subheader">
+        {{ subheader }}
+      </message-text>
+      <message-text data-purpose="msg-text">
+        {{ message }}
+      </message-text>
+      <message-text v-if="hasAdditionalInfo" data-purpose="msg-extratext">
         {{ additionalInfo }}
       </message-text >
     </message-dialog>
-    <button v-if="retryButtonText" :class="buttonClasses" @click="onRetryButtonClicked">
+    <button v-if="retryButtonText" :class="buttonClasses"
+            data-purpose="retry-or-back-button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
     </button>
   </div>
@@ -73,7 +78,16 @@ export default {
       }
     },
     getRedirectUrl() {
-      return this.$store.state.errors.pageSettings.redirectUrl;
+      const errorCode = this.getApiErrorResponse().status;
+      const redirectUrlMap = this.$store.state.errors.pageSettings.redirectUrl;
+      if (!redirectUrlMap) {
+        return '';
+      }
+      let redirectUrl = redirectUrlMap[errorCode];
+      if (!redirectUrl) {
+        redirectUrl = redirectUrlMap.default;
+      }
+      return redirectUrl;
     },
     getApiErrorResponse() {
       return this.$store.state.errors.apiErrors[0];

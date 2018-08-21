@@ -43,8 +43,12 @@ const assert = (expectedData) => {
 
   expect(component.vm.getMessage('pageHeader')).toEqual(expectedData.pageHeader);
   expect(component.find(`#${errorId}`).findAll('p').at(0).text()).toEqual(expectedData.header);
-  expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.subheader);
-  expect(component.find(`#${errorId}`).findAll('p').at(2).text()).toEqual(expectedData.message);
+  if (expectedData.subheader !== '') {
+    expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.subheader);
+    expect(component.find(`#${errorId}`).findAll('p').at(2).text()).toEqual(expectedData.message);
+  } else {
+    expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.message);
+  }
   if (expectedData.hasRetryButton) {
     expect(component.find(`#${errorId}`).find('.button').text()).toEqual(expectedData.retryButtonText);
     expect(component.vm.getRedirectUrl()).toEqual(expectedData.redirectUrl);

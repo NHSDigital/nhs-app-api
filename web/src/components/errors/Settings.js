@@ -5,31 +5,41 @@ import Routes from '@/Routes';
 
 export default {
   default: {
-    redirectUrl: '',
+    redirectUrl: null,
     showApiError: true,
     ignoredErrors: [],
   },
   pages: [
     {
       route: Routes.APPOINTMENT_CANCELLING.path,
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: {
+        default: Routes.APPOINTMENTS.path,
+      },
     },
     {
       route: Routes.APPOINTMENT_CONFIRMATIONS.path,
-      redirectUrl: Routes.APPOINTMENTS.path,
-      ignoredErrors: [409],
+      redirectUrl: {
+        409: Routes.APPOINTMENT_BOOKING.path,
+        default: Routes.APPOINTMENTS.path,
+      },
     },
     {
       route: Routes.PRESCRIPTION_CONFIRM_COURSES.path,
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: {
+        default: Routes.PRESCRIPTIONS.path,
+      },
     },
     {
       route: Routes.AUTH_RETURN.path,
-      redirectUrl: Routes.LOGIN.path,
+      redirectUrl: {
+        default: Routes.LOGIN.path,
+      },
     },
     {
       route: Routes.MYRECORDTESTRESULT.path,
-      redirectUrl: Routes.MYRECORD.path,
+      redirectUrl: {
+        default: Routes.MYRECORD.path,
+      },
     },
   ],
   forPage(routePath) {

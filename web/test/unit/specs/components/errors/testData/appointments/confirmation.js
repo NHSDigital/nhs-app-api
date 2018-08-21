@@ -31,7 +31,13 @@ export default {
   409: [
     PATH,
     {
-      showError: false,
+      pageHeader: 'Confirm appointment',
+      header: 'This slot is no longer available',
+      subheader: '',
+      message: 'Please select a different time.',
+      hasRetryButton: true,
+      retryButtonText: 'Back',
+      redirectUrl: Routes.APPOINTMENT_BOOKING.path,
     },
   ],
   460: [

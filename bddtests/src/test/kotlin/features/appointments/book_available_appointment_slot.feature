@@ -128,15 +128,14 @@ Feature: Book an available appointment slot
 
   @NHSO-517
   @NHSO-872
-  Scenario Outline: A <GP System> user sees appropriate information message when appointment has already been booked
+  Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    Then I am able to filter on available slots
-    And a message is displayed indicating that the slot has already been taken
+    Then a message is displayed indicating that the slot has already been taken
     Examples:
       | GP System |
       | EMIS      |
@@ -151,8 +150,8 @@ Feature: Book an available appointment slot
     And I have selected an appointment slot to book
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
-    When I click the button to go back to my appointments
-    Then I will be on the My appointments screen
+    When I click the error page back button
+    Then I am taken to the available appointment slots screen
     Examples:
       | GP System |
       | EMIS      |

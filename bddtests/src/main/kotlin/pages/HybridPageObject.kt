@@ -196,7 +196,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     fun getErrorDetailText(): String? {
         return try {
             switchToPage(ErrorPage::class.java)
-                    .detailTwo.element.text
+                    .errorText2.element.text
         } catch (e: NoSuchElementException) {
             null
         }

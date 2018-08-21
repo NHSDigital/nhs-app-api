@@ -269,6 +269,13 @@ export default {
           additionalInfo: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
           retryButtonText: 'Back to my appointments',
         },
+        409: {
+          pageHeader: 'Confirm appointment',
+          header: 'This slot is no longer available',
+          subheader: '',
+          message: 'Please select a different time.',
+          retryButtonText: 'Back',
+        },
       },
     },
   },

@@ -43,6 +43,11 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.goBackToMyAppointments()
     }
 
+    @When("^I click the error page back button$")
+    fun i_click_the_error_page_back_button() {
+        appointmentsConfirmationSteps.clickErrorPageBackButton()
+    }
+
     @When("^I enter symptoms of (\\d+) characters$")
     fun i_enter_symptoms_of_character(length: Int) {
         val symptoms: String = getSymptomsOfLength(length)

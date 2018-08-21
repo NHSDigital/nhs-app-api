@@ -120,13 +120,6 @@ export default {
         .then(() => {
           this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.index.successText'));
           this.$router.push(Routes.APPOINTMENTS.path);
-        })
-        .catch(() => {
-          const error = this.$store.state.errors.apiErrors[0];
-          if (error.status === 409) {
-            this.$store.dispatch('flashMessage/addWarning', this.$t('appointments.confirmation.conflictErrorMessage'));
-            this.$router.push(Routes.APPOINTMENT_BOOKING.path);
-          }
         });
     },
     onCancelButtonClicked() {
