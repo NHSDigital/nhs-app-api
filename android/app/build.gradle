@@ -8,8 +8,8 @@ android {
         applicationId "com.nhs.online.nhsonline"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 3
-        versionName "1.1"
+        versionCode 4
+        versionName "1.0.2"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -19,9 +19,13 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        bitraft {
+        demo {
             initWith debug
-            applicationIdSuffix ".bitraft"
+            applicationIdSuffix ".demo"
+        }
+        preview {
+            initWith debug
+            applicationIdSuffix ".preview"
         }
         browserstack {
             debuggable true

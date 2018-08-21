@@ -97,13 +97,13 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val data = intent?.data
 
         if (data != null) {
-            if(data.scheme == getString(R.string.appScheme))
-            {
-                var url = data.toString()
-                url = url.replace(getString(R.string.appScheme),getString(R.string.baseScheme))
+            if (data.scheme == getString(R.string.appScheme)) {
+                val url = data.buildUpon()
+                        .scheme(getString(R.string.baseScheme))
+                        .toString()
+
                 loadPage(url)
-            }
-            else {
+            } else {
                 loadPage(data.toString())
             }
         }
@@ -273,10 +273,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
             menuBar.deselectActiveItem()
         }
     }
+
     override fun goToCheckSymptoms() {
-            val intent = Intent(this, SymptomsActivity::class.java)
-                startActivity(intent)
+        val intent = Intent(this, SymptomsActivity::class.java)
+        startActivity(intent)
     }
+
     override fun hideMenuBar() {
         runOnUiThread {
             menuBar.visibility = GONE

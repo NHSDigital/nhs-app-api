@@ -7,7 +7,7 @@
 
     <!--MenuBar and MenuBarItem colors-->
     <color name="defaultMenuTextColor">#4A4A4A</color>
-    <color name="activeMenuTextColor">#005EB8</color>
+    <color name="activeMenuTextColor">@color/nhsBlue</color>
     <color name="menuBarTopBorder">#BCC0C4</color>
 
     <color name="progressbar_color">#0054af</color>

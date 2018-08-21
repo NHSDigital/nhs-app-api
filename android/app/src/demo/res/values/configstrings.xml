@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NHS App Demo</string>
+    <string name="baseHost">www-demo.devuks1.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www-demo.devuks1.nonlive.nhsapp.service.nhs.uk/</string>
+</resources>

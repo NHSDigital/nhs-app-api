@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NHS Online</string>
+    <string name="app_name">NHS App</string>
     <string name="symptoms">Symptoms</string>
     <string name="appointment">Appointments</string>
     <string name="prescription">Prescriptions</string>
