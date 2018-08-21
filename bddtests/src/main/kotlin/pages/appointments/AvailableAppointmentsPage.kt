@@ -9,6 +9,39 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val byIdXpath = "//*[@id='%s']"
     private val inlineErrorByIdXpath = "$byIdXpath//*[@data-purpose='error']"
+    private val guidanceParentXpath = "//*[@data-purpose='info-msg']"
+    private val guidanceIconXpath = "$guidanceParentXpath//*[@data-purpose='icon'][contains(text(), '%s')]"
+
+    private val appointmentSlotGuidance = HybridPageElement(
+            browserLocator = guidanceParentXpath,
+            androidLocator = "",
+            page = this
+    )
+
+    private val appointmentSlotGuidanceExpand = HybridPageElement(
+            browserLocator = String.format(guidanceIconXpath, "+"),
+            androidLocator = "",
+            page = this
+    )
+
+    private val appointmentSlotGuidanceCollapse = HybridPageElement(
+            // Note that the character is a true minus sign and not a hyphen
+            browserLocator = String.format(guidanceIconXpath, "−"),
+            androidLocator = "",
+            page = this
+    )
+
+    private val appointmentSlotGuidanceLabel = HybridPageElement(
+            browserLocator = "$guidanceParentXpath//label",
+            androidLocator = "",
+            page = this
+    )
+
+    private val appointmentSlotGuidanceContent = HybridPageElement(
+            browserLocator = "$guidanceParentXpath//*[@data-purpose='info-content']",
+            androidLocator = "",
+            page = this
+    )
 
     private val appointmentTypeFilter = HybridPageElement(
             browserLocator = String.format(byIdXpath, "type"),
@@ -198,6 +231,38 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun getErrorSummaryBodyAtRow(rowNumber: Int): String {
         return errorBanner.bodyElements[rowNumber - 1]
+    }
+
+    fun isGuidancePresent(): Boolean {
+        return try {
+            appointmentSlotGuidance.element.isPresent
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun isGuidanceContentVisible(): Boolean {
+        return try {
+            appointmentSlotGuidanceContent.element.isVisible
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun getGuidanceContent(): String? {
+        return appointmentSlotGuidanceContent.element.text
+    }
+
+    fun getGuidanceLabelText(): String? {
+        return appointmentSlotGuidanceLabel.element.text
+    }
+
+    fun expandGuidance() {
+        appointmentSlotGuidanceExpand.element.click()
+    }
+
+    fun collapseGuidance() {
+        appointmentSlotGuidanceCollapse.element.click()
     }
 
     private fun filterContentsAsStrings(filter: HybridPageElement): ArrayList<String> {

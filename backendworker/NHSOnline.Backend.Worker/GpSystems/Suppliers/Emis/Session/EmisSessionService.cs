@@ -105,7 +105,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                         SessionId = sessionResponse.SessionId,
                         EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                         UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken(),
-                        NhsNumber = _demographicsMapper.Map(demographicsResponse).NhsNumber
+                        NhsNumber = _demographicsMapper.Map(demographicsResponse).NhsNumber,
+                        OdsCode = odsCode
                     }
                 );
             }

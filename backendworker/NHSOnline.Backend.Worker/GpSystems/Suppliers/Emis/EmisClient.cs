@@ -41,6 +41,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         private const string AppointmentSlotsPath =
             "appointmentslots?userPatientLinkToken={0}&fromDateTime={1}&toDateTime={2}";
 
+        private const string PracticeSettingsPath = "practices/{0}/settings";
         private const string PrescriptionsPath = "prescriptionrequests?userPatientLinkToken={0}";
         private const string PrescriptionsPostPath = "prescriptionrequests";
         private const string CoursesPath = "courses?userPatientLinkToken={0}";
@@ -146,6 +147,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
             var response = await Get<AppointmentSlotsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
             return response;
+        }
+
+        public async Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
+            EmisHeaderParameters headerParameters, string practiceCode)
+        {
+            var path = string.Format(CultureInfo.InvariantCulture,
+PracticeSettingsPath,
+practiceCode);
+
+            var response = await Get<PracticeSettingsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
+            return response;
+
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(

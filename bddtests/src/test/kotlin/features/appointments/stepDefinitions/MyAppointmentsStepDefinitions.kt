@@ -52,7 +52,7 @@ class MyAppointmentsStepDefinitions {
     }
 
     @Given("^the (.*) does not offer online booking to my patient$")
-    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider:String) {
+    fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
         myAppointmentsSteps.generateStubsForMyAppointmentsWhenUnavailableToPatient(provider)
     }
 
@@ -82,15 +82,13 @@ class MyAppointmentsStepDefinitions {
     }
 
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
-    fun the_API_call_failes_with_csrf_token_of(provider: String, csrfToken: String)
-    {
+    fun the_API_call_failes_with_csrf_token_of(provider: String, csrfToken: String) {
         myAppointmentsSteps.setCsrfToken(csrfToken)
-        try
-        {
+        try {
             myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()
             Assert.fail("The API did not fail with invalid token.")
+        } catch (exception: NhsoHttpException) {
         }
-        catch (exception: NhsoHttpException){}
     }
 
     @Then("^I will only receive upcoming appointments$")

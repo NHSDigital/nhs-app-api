@@ -9,34 +9,52 @@ import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import java.time.format.DateTimeFormatter
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.time.*
 import java.util.*
 
-abstract class AppointmentsSlotsFactory(gpSupplier:String): AppointmentsFactory(gpSupplier) {
+abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample(startDate: LocalDateTime? = null, endDate: LocalDateTime? = null) {
+    fun generateDefaultAvailableAppointmentSlotExample(startDate: LocalDateTime? = null, endDate: LocalDateTime? = null, guidanceMessage: Boolean = true) {
+        generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate,endDate, guidanceMessage)
+    }
 
-        generateExample(AppointmentsSlotsExample().getExample(), startDate, endDate)
+    fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage(startDate: LocalDateTime? = null, endDate: LocalDateTime? = null) {
+        val example = generateDefaultUserDataAndRetrieveSlotsExample()
+        val startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
+        val endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
+
+        generateDefaultUserData()
+
+        generateAppointmentSlotResponseWithoutGuidance(startDateToUse, endDateToUse) {
+            respondWithSuccess(example)
+        }
     }
 
     fun generateExample(
             example: AppointmentSlotsResponseFacade,
             startDate: LocalDateTime? = null,
-            endDate: LocalDateTime? = null) {
-        var startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
-        var endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
+            endDate: LocalDateTime? = null,
+            guidanceMessage: Boolean = true) {
+        val startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
+        val endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
 
         generateDefaultUserData()
 
-        generateAppointmentSlotResponse(startDateToUse, endDateToUse) {
+        generateAppointmentSlotResponse(startDateToUse, endDateToUse, guidanceMessage) {
             respondWithSuccess(example)
-                    .delayedBy(Duration.ofSeconds(0))
         }
     }
 
-    private fun getFormattedDate(date:LocalDateTime?, key:String):String? {
+    private fun generateDefaultUserDataAndRetrieveSlotsExample(): AppointmentSlotsResponseFacade {
+        generateDefaultUserData()
+        storeDateAndTimeOfExpectedSlotAsPerUI()
+        return AppointmentsSlotsExample().getExample()
+    }
+
+    private fun getFormattedDate(date: LocalDateTime?, key: String): String? {
         if (date != null) {
             Serenity.setSessionVariable(key).to(getRequestDateTime(date))
             return date.format(AppointmentsBookingData.dateTimeFormat)
@@ -46,15 +64,20 @@ abstract class AppointmentsSlotsFactory(gpSupplier:String): AppointmentsFactory(
 
     abstract val zoneOffset: ZoneOffset
 
-    private fun getRequestDateTime(date:LocalDateTime):String{
+    private fun getRequestDateTime(date: LocalDateTime): String {
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK)
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         return sdf.format(Date.from(date.toInstant(zoneOffset)))
     }
 
     abstract fun generateAppointmentSlotResponse(startDate: String?,
-                                                           endDate: String?,
-                                                           mapping: (IAppointmentSlotsBuilder.() -> Mapping))
+                                                 endDate: String?,
+                                                 guidanceMessage: Boolean,
+                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping))
+
+    abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
+                                                                endDate: String?,
+                                                                mapping: (IAppointmentSlotsBuilder.() -> Mapping))
 
     companion object {
 

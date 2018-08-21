@@ -1,8 +1,5 @@
 package mocking.emis.problems
 
-import jxl.write.DateTime
-import java.time.OffsetDateTime
-
 data class ProblemResponseModel(
         var medicalRecord: ProblemMedicalRecord
 )

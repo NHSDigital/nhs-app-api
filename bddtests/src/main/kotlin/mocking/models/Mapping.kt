@@ -41,9 +41,9 @@ class Mapping() {
     override fun toString(): String {
         val requestString = "Request: ${Gson().toJson(request)}"
         val responseString = "Response: ${Gson().toJson(response)}"
-        var scenarioName = if (scenarioName != null)  "scenarioName: ${Gson().toJson(scenarioName)}," else ""
-        var requiredScenarioState = if (requiredScenarioState != null) "requiredScenarioState: ${Gson().toJson(requiredScenarioState)}," else ""
-        var newScenarioState = if (newScenarioState != null)  "newScenarioState: ${Gson().toJson(newScenarioState)}," else ""
+        val scenarioName = if (scenarioName != null)  "scenarioName: ${Gson().toJson(scenarioName)}," else ""
+        val requiredScenarioState = if (requiredScenarioState != null) "requiredScenarioState: ${Gson().toJson(requiredScenarioState)}," else ""
+        val newScenarioState = if (newScenarioState != null)  "newScenarioState: ${Gson().toJson(newScenarioState)}," else ""
         return "Mapping: $scenarioName $requiredScenarioState $newScenarioState $requestString, $responseString"
 
     }

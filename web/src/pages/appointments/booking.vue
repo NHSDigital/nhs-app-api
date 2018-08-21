@@ -36,6 +36,7 @@
       :options="filtersOptions"
       :selected-options="defaultSelectedOptions"
       :validation-error="validationError"
+      :guidance-msg="bookingGuidanceMsg"
     />
 
     <slot-list ref="slot_list" :available-slots="availableSlots"
@@ -109,6 +110,9 @@ export default {
     },
     filtersOptions() {
       return this.$store.state.availableAppointments.filtersOptions;
+    },
+    bookingGuidanceMsg() {
+      return this.$store.state.availableAppointments.bookingGuidance;
     },
     defaultSelectedOptions() {
       return this.$store.state.availableAppointments.selectedOptions;

@@ -33,23 +33,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         Task<EmisApiObjectResponse<PrescriptionRequestPostResponse>> PrescriptionsPost(
             string responseSessionId, string endUserSessionId, PrescriptionRequestsPost model);
-        
+
         Task<EmisApiObjectResponse<MedicationRootObject>> MedicalRecordGet(string userPatientLinkToken, string responseSessionId,
             string endUserSessionId, RecordType recordType);
-        
+
         // Patient Record
-//        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
-//            string endUserSessionId);
-        
-//        Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
-//            string endUserSessionId);
-        
-//        Task<EmisClient.EmisApiObjectResponse<ImmunisationRequestsGetResponse>> ImmunisationsGet(string userPatientLinkToken, string responseSessionId,
-//            string endUserSessionId);
-        
-//        Task<EmisClient.EmisApiObjectResponse<TestResultRequestsGetResponse>> TestResultsGet(string userPatientLinkToken, string responseSessionId,
-//            string endUserSessionId);
-        
+        //        Task<EmisClient.EmisApiObjectResponse<AllergyRequestsGetResponse>> AllergiesGet(string userPatientLinkToken, string responseSessionId,
+        //            string endUserSessionId);
+
+        //        Task<EmisClient.EmisApiObjectResponse<MedicationRootObject>> MedicationsGet(string userPatientLinkToken, string responseSessionId,
+        //            string endUserSessionId);
+
+        //        Task<EmisClient.EmisApiObjectResponse<ImmunisationRequestsGetResponse>> ImmunisationsGet(string userPatientLinkToken, string responseSessionId,
+        //            string endUserSessionId);
+
+        //        Task<EmisClient.EmisApiObjectResponse<TestResultRequestsGetResponse>> TestResultsGet(string userPatientLinkToken, string responseSessionId,
+        //            string endUserSessionId);
+
+        // PracticeSettings
+        Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
+             EmisHeaderParameters headerParameters, string practiceCode);
+
         // AppointmentSlots
         Task<EmisApiObjectResponse<AppointmentSlotsGetResponse>> AppointmentSlotsGet(
             EmisHeaderParameters headerParameters, SlotsGetQueryParameters queryParameters);

@@ -16,10 +16,10 @@ import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotResponse
 import java.time.Duration
 
-class BookAppointmentsBuilderEmis (configuration: EmisConfiguration,
-                                   apiEndUserSessionId: String,
-                                   apiSessionId: String,
-                                   request: BookAppointmentSlotFacade)
+class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
+                                  apiEndUserSessionId: String,
+                                  apiSessionId: String,
+                                  request: BookAppointmentSlotFacade)
     : EmisMappingBuilder(configuration, method = "POST", relativePath = "/appointments")
         , IBookAppointmentsBuilder {
 
@@ -31,7 +31,7 @@ class BookAppointmentsBuilderEmis (configuration: EmisConfiguration,
 
     }
 
-    override fun  withDelay(delayMilliseconds : Duration):BookAppointmentsBuilderEmis{
+    override fun withDelay(delayMilliseconds: Duration): BookAppointmentsBuilderEmis {
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }

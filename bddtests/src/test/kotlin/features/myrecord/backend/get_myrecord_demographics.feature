@@ -4,7 +4,6 @@ Feature: Get demographic data
 
   @NHSO-691
   @backend
-  @runmealeem
   Scenario Outline: Requesting demographics returns demographic data
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

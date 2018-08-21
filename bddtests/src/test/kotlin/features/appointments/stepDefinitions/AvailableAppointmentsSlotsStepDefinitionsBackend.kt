@@ -40,7 +40,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null)
+        factory.generateAppointmentSlotResponse(null, null, true)
         { respondWithExceptionWhenNotEnabled() }
     }
 
@@ -48,7 +48,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null)
+        factory.generateAppointmentSlotResponse(null, null, true)
         { respondWithUnknownException() }
     }
 

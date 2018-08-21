@@ -1,6 +1,9 @@
 <template>
   <div :class="$style.form">
     <label for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
+    <collapsible-dialog v-if="guidanceMsg !==''">
+      {{ guidanceMsg }}
+    </collapsible-dialog>
     <error-message v-if="!validationError.isTypeValid" id="error-type">
       {{ $t('appointments.booking.validationErrors.type') }}
     </error-message>
@@ -47,13 +50,19 @@
 /* eslint-disable import/extensions */
 import SelectDropdown from '@/components/widgets/SelectDropdown';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
+import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 
 export default {
   components: {
     SelectDropdown,
     ErrorMessage,
+    CollapsibleDialog,
   },
   props: {
+    guidanceMsg: {
+      type: String,
+      default: '',
+    },
     options: {
       type: Object,
       default: () => ({

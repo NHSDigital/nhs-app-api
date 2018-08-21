@@ -6,5 +6,6 @@
         public string SessionId { get; set; }
         public string EndUserSessionId { get; set; }
         public string UserPatientLinkToken { get; set; }
+        public string OdsCode { get; set; }
     }
 }

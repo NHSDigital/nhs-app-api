@@ -3,7 +3,6 @@ package features.appointments.steps
 import constants.AppointmentDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.data.AppointmentsBookingData
-import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.data.AppointmentsSlotsExampleBase
 import features.appointments.factories.AppointmentsFactory
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
@@ -32,9 +31,6 @@ import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.servlet.http.Cookie
 import kotlin.collections.ArrayList
@@ -50,11 +46,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private val timePeriodOptions by lazy {
         mapOf(
-                Pair(TODAY_KEY, TODAY_KEY),
-                Pair(TOMORROW_KEY, TOMORROW_KEY),
-                Pair(THIS_WEEK_KEY, THIS_WEEK_KEY),
-                Pair(NEXT_WEEK_KEY, NEXT_WEEK_KEY),
-                Pair(ALL_AVAILABLE, ALL_AVAILABLE)
+                Pair(TimePeriodOptionKeys.TODAY_KEY, TODAY_OPTION),
+                Pair(TimePeriodOptionKeys.TOMORROW_KEY, TOMORROW_OPTION),
+                Pair(TimePeriodOptionKeys.THIS_WEEK_KEY, THIS_WEEK_OPTION),
+                Pair(TimePeriodOptionKeys.NEXT_WEEK_KEY, NEXT_WEEK_OPTION),
+                Pair(TimePeriodOptionKeys.ALL_KEY, ALL_OPTION)
         )
     }
 
@@ -203,7 +199,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
             emisAppointmentSessions: ArrayList<AppointmentSessionFacade> = defaultEmisAppointmentSessions,
             delayedInSeconds: Long = 0
     ) {
-        setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(emisAppointmentSessions)
+        setSessionVariable(AppointmentSessionVariableKeys.EXPECTED_SESSIONS_KEY).to(emisSlotSessions)
 
         generateStubForMetaAppointmentSlotRequest(
                 emisSlotLocations,
@@ -221,7 +217,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     private fun generateTppStubsForAppointmentSlotsForNextFourWeeks(
             tppSessions: ArrayList<AppointmentSessionFacade>
     ) {
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_SESSIONS_KEY).to(tppSessions)
+        Serenity.setSessionVariable(AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(tppSessions)
 
         generateTppStubForAppointmentSlotRequest(tppSessions)
     }
@@ -301,8 +297,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val emisAppointmentSessions = defaultEmisAppointmentSessions
 
         mockingClient.forEmis {
-            appointmentSlotsMetaRequest(patient
-            )
+            appointmentSlotsMetaRequest(patient)
                     .withDelay(Duration.ofSeconds(90))
                     .respondWithSuccess(GetAppointmentSlotsMetaResponseModel(
                             emisSlotLocations,
@@ -312,8 +307,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         }
 
         mockingClient.forEmis {
-            appointmentSlotsRequest(patient
-            )
+            appointmentSlotsRequest(patient)
                     .withDelay(Duration.ofSeconds(90))
                     .respondWithSuccess(AppointmentSlotsResponseFacade(emisAppointmentSessions))
         }
@@ -336,15 +330,15 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange() {
         try {
 
-            var startDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentStartTimeKey)
-            var endDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentEndTimeKey)
+            val startDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentStartTimeKey)
+            val endDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentEndTimeKey)
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .getAppointmentSlots(startDate,
                             endDate,
                             Serenity.sessionVariableCalled<Cookie>(Cookie::class))
-            Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
+            setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
-            Serenity.setSessionVariable("HttpException").to(httpException)
+            setSessionVariable("HttpException").to(httpException)
         }
     }
 
@@ -357,11 +351,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
         for (resultSlot in result.slots) {
             assertSlotIsNotNull(resultSlot)
-            var key = resultSlot.id
-            var keys = unmatchedExpectedSlots.keys
+            val key = resultSlot.id
+            val keys = unmatchedExpectedSlots.keys
             Assert.assertTrue(errorMessageForNotFindingResultSlot(key, keys),
                     unmatchedExpectedSlots.containsKey(key))
-            var matchingExpectedSlot = unmatchedExpectedSlots[key]!!
+            val matchingExpectedSlot = unmatchedExpectedSlots[key]!!
             assertSlotsAreEqual(matchingExpectedSlot, actualSlot = resultSlot)
             unmatchedExpectedSlots.remove(key)
         }
@@ -369,7 +363,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private fun errorMessageForNotFindingResultSlot(targetKey:String, actualKeys: MutableSet<String>):String{
 
-        var keys = actualKeys.joinToString(", ")
+        val keys = actualKeys.joinToString(", ")
         return "Result Slot Id not Expected. Actual '${targetKey}', Expected '$keys'"
     }
 
@@ -403,8 +397,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val actualAppointmentTypeOptions = availableAppointments.getAppointmentTypeFilterContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
-        var expected =
-                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBase.EXPECTED_APPOINTMENT_TYPE_KEY)                        ?: getExpectedAppointmentTypesFromSession()
+        val expected =
+                sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBase.EXPECTED_APPOINTMENT_TYPE_KEY)                        ?: getExpectedAppointmentTypesFromSession()
         for (expectedAppointmentType in expected) {
             assertOptionExists(expectedAppointmentType, actualAppointmentTypeOptions)
         }
@@ -413,7 +407,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getExpectedAppointmentTypesFromSession(): ArrayList<String> {
-        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY)
 
         val sessionsById = generateMapOfSessionsAgainstId(expectedAppointmentSessions)
         var uniqueAppointmentTypes = setOf<String>()
@@ -454,7 +448,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
-                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBase.EXPECTED_APPOINTMENT_CLINICIANS_KEY)
+                sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBase.EXPECTED_APPOINTMENT_CLINICIANS_KEY)
                         ?: defaultEmisMetaSlotSessionHolders.map { l -> l.displayName }
 
         for (expectedClinician in expectedClinicians) {
@@ -521,7 +515,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatTimePeriodIsSetAsTheDefault() {
         assertEquals(
                 "Incorrect time period option currently selected. ",
-                timePeriodOptions[THIS_WEEK_KEY],
+                timePeriodOptions[TimePeriodOptionKeys.THIS_WEEK_KEY],
                 availableAppointments.getSelectedTimePeriod()
         )
     }
@@ -552,13 +546,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun selectOptionsToRevealSlots() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(timePeriodOptions[ALL_AVAILABLE]!!)
+        availableAppointments.selectTimePeriodByText(timePeriodOptions[TimePeriodOptionKeys.ALL_KEY]!!)
     }
 
     @Step
     fun selectOptionsToRevealNoResults() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(timePeriodOptions[TODAY_KEY]!!)
+        availableAppointments.selectTimePeriodByText(timePeriodOptions[TimePeriodOptionKeys.TODAY_KEY]!!)
     }
 
     @Step
@@ -616,6 +610,16 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
+    fun expandAppointmentSlotGuidance() {
+        availableAppointments.expandGuidance()
+    }
+
+    @Step
+    fun collapseAppointmentSlotGuidance() {
+        availableAppointments.collapseGuidance()
+    }
+
+    @Step
     fun verifyThatDifferentSlotIsHighlighted() {
         assertTrue("New time slot is not highlighted. ", availableAppointments.isTimeSlotAtPositionSelected(2))
     }
@@ -628,6 +632,33 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatSlotIsStillHighlighted() {
         assertTrue("Time slot is no longer highlighted. ", availableAppointments.isTimeSlotAtPositionSelected(1))
+    }
+
+    @Step
+    fun verifyGuidanceIsDisplayed() {
+        assertTrue("Appointment guidance isn't present. ", availableAppointments.isGuidancePresent())
+    }
+
+    @Step
+    fun verifyTheLabelIsCorrect() {
+        assertEquals("Appointment guidance help text is incorrect. ",
+                "Which type of appointment do I need?",
+                availableAppointments.getGuidanceLabelText()
+        )
+    }
+
+    fun verifyThatAppointmentGuidanceContentIsDisplayed() {
+        val expectedGuidanceContent = sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
+        assertEquals("Guidance content not displayed correctly. ", expectedGuidanceContent, availableAppointments.getGuidanceContent())
+    }
+
+    fun verifyGuidanceContentIsNotDisplayed() {
+        assertFalse("Appointment slot guidance is displayed when it shouldn't be. ", availableAppointments.isGuidanceContentVisible())
+    }
+
+    @Step
+    fun verifyThatAppointmentGuidanceIsNotDisplayedAtAll() {
+        assertFalse("Appointment guidance is present when it shouldn't be. ", availableAppointments.isGuidancePresent())
     }
 
     private fun assertOptionExists(defaultOption: String, actualOptions: ArrayList<String>, optionType: String = "an") {
@@ -646,7 +677,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getFilterValuesFromSession(): AppointmentFilterFacade {
-        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY)
         val expectedAppointmentSession = expectedAppointmentSessions[0]
         val expectedSessionId = expectedAppointmentSession.sessionId
         val expectedSession = generateMapOfSessionsAgainstId(expectedAppointmentSessions)[expectedSessionId]
@@ -692,12 +723,25 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     companion object {
-        const val EXPECTED_APPOINTMENT_SESSIONS_KEY = "Expected Appointment Sessions"
+        private const val TODAY_OPTION = "Today"
+        private const val TOMORROW_OPTION = "Tomorrow"
+        private const val THIS_WEEK_OPTION = "This week"
+        private const val NEXT_WEEK_OPTION = "Next week"
+        private const val ALL_OPTION = "All available"
+    }
 
-        private const val TODAY_KEY = "Today"
-        private const val TOMORROW_KEY = "Tomorrow"
-        private const val THIS_WEEK_KEY = "This week"
-        private const val NEXT_WEEK_KEY = "Next week"
-        private const val ALL_AVAILABLE = "All available"
+    enum class AppointmentSessionVariableKeys {
+        EXPECTED_SESSIONS_KEY,
+        EXPECTED_APPOINTMENT_SESSIONS_KEY,
+        EXPECTED_APPOINTMENT_SLOTS_KEY,
+        EXPECTED_GUIDANCE_CONTENT_KEY
+    }
+
+    enum class TimePeriodOptionKeys {
+        TODAY_KEY,
+        TOMORROW_KEY,
+        THIS_WEEK_KEY,
+        NEXT_WEEK_KEY,
+        ALL_KEY
     }
 }

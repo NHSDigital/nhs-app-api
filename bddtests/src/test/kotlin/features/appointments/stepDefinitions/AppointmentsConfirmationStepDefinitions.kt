@@ -3,8 +3,8 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsBookingFactory.Companion.SymptomsToEnter
+import features.appointments.factories.AppointmentsFactory
 import features.appointments.steps.AppointmentsConfirmationSteps
 import features.appointments.steps.AvailableAppointmentsSteps
 import net.serenitybdd.core.Serenity
@@ -21,8 +21,8 @@ class AppointmentsConfirmationStepDefinitions {
     @Given("^I have selected an appointment slot to book$")
     fun i_have_selected_an_appointment_slot_to_book() {
         availableAppointmentsSteps.selectOptionsToRevealSlots()
-        val date = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
-        val time = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
+        val date = Serenity.sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentDateKey)
+        val time = Serenity.sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentTimeKey)
 
         availableAppointmentsSteps.selectSlot(date, time)
         availableAppointmentsSteps.clickOnBookAppointmentButton()

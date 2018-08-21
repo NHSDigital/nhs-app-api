@@ -40,11 +40,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
                 var metaTask = _emisClient.AppointmentSlotsMetadataGet(headerParams, metaParams);
                 var slotTask = _emisClient.AppointmentSlotsGet(headerParams, slotsParams);
+                var practiceTask = _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
 
                 await Task.WhenAll(metaTask, slotTask);
+                // Wait for practice task to complete, but unlike the other tasks supress any errors such as timeout.
+                try
+                {
+                    await Task.WhenAll(practiceTask);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Exception has been thrown calling emis practice details.");
+                }
 
                 var result =
-                    new EmisAppointmentSlotsResultBuilder(_logger, _appointmentSlotsResponseMapper, metaTask, slotTask)
+                    new EmisAppointmentSlotsResultBuilder(_logger, _appointmentSlotsResponseMapper, metaTask, slotTask, practiceTask)
                         .Build();
 
                 return result.ValueOrFailure();

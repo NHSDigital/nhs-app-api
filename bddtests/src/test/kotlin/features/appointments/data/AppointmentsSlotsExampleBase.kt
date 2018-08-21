@@ -3,7 +3,6 @@ package features.appointments.data
 import constants.AppointmentDateTimeFormat
 import features.appointments.factories.IdValue
 import features.appointments.steps.AvailableAppointmentsSteps
-import joptsimple.util.KeyValuePair
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -38,7 +37,7 @@ abstract class AppointmentsSlotsExampleBase {
     private fun setExpectations(appointmentSessions: ArrayList<AppointmentSessionFacade>) {
         val appointmentSlots = arrayListOf<AppointmentSlotFacade>()
         appointmentSlots.addAll(appointmentSessions.flatMap { session -> session.slots })
-        Serenity.setSessionVariable(AvailableAppointmentsSteps.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
+        Serenity.setSessionVariable(AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
 
         Serenity.setSessionVariable(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).to(filter)
         Serenity.setSessionVariable(EXPECTED_APPOINTMENT_TYPE_KEY).to(appointmentTypesList)

@@ -183,6 +183,9 @@ export default {
       bookButtonText: 'Continue',
       backButtonText: 'Back to my appointments',
       noSlots: 'No appointments available',
+      gpMessage: {
+        header: 'Which type of appointment do I need?',
+      },
       noAppointmentsAvailable: {
         title: 'No appointments available',
         line1: 'There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.',

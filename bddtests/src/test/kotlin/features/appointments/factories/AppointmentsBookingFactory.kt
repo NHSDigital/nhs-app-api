@@ -4,30 +4,23 @@ import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 
-class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSupplier) {
-
-    private var tomorrowDate = LocalDateTime.now().plusDays(1)
+class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     fun generateDefaultAvailableAppointmentSlotExample() {
         generateDefaultUserData()
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateDefaultAvailableAppointmentSlotExample()
-
-        //Format like : Wednesday 1 August 2018
-        var formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
-        var day = tomorrowDate.format(formatter)
-        Serenity.setSessionVariable(TargetAppointmentDateKey).to(day)
-        Serenity.setSessionVariable(TargetAppointmentTimeKey).to("2:00 pm")
+        storeDateAndTimeOfExpectedSlotAsPerUI()
     }
 
     fun generateSuccessfulBookingResponse(bookingReason: String) {
-        generateBookingResponse(bookingReason){ bookRequest->bookRequest.respondWithSuccess()}
+        generateBookingResponse(bookingReason) { bookRequest -> bookRequest.respondWithSuccess() }
     }
 
     fun generateSuccessfulBookingResponse() {
@@ -44,14 +37,15 @@ class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSuppl
                     BookAppointmentSlotFacade(patient.userPatientLinkToken, 301, bookingReason))
             )
         }
-        Serenity.setSessionVariable(SymptomsToEnter).to(bookingReason)
+        setSessionVariable(SymptomsToEnter).to(bookingReason)
     }
+
     companion object {
 
-        private val map : HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
-                    hashMapOf(
-                            "EMIS" to { AppointmentsBookingFactory("EMIS") },
-                            "TPP" to { AppointmentsBookingFactory("TPP") })
+        private val map: HashMap<String, (() -> (AppointmentsBookingFactory))> by lazy {
+            hashMapOf(
+                    "EMIS" to { AppointmentsBookingFactory("EMIS") },
+                    "TPP" to { AppointmentsBookingFactory("TPP") })
         }
 
         fun getForSupplier(gpSystem: String): AppointmentsBookingFactory {
@@ -62,6 +56,5 @@ class AppointmentsBookingFactory(gpSupplier:String): AppointmentsFactory(gpSuppl
         }
 
         const val SymptomsToEnter = "SymptomsToEnter"
-        const val TargetAppointmentDateKey = "TargetAppointmentDateKey"
-        const val TargetAppointmentTimeKey = "TargetAppointmentTimeKey"    }
+    }
 }

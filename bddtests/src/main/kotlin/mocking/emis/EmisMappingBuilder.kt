@@ -24,6 +24,7 @@ import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
 import mocking.emis.models.*
+import mocking.emis.practices.PracticeSettingsBuilderEmis
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -41,7 +42,7 @@ const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String)
     : MappingBuilder(method, "/emis$relativePath"), IAppointmentMappingBuilder {
 
-    protected var delayMillisecs = 0;
+    protected var delayMillisecs = 0
 
     init {
         if (configuration != null) {
@@ -50,6 +51,8 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
                     .andHeader(HEADER_API_VERSION, configuration!!.version)
         }
     }
+
+    fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
 
     override fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
 

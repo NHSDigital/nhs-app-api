@@ -1,0 +1,32 @@
+@import './colours';
+@import './textstyles';
+/** GP MESSAGE */
+
+.info-message {
+  background: $white;
+  border: none;
+  box-sizing: border-box;
+  margin-bottom: 0.5em;
+  .info-header {
+    display: flex;
+    padding: 1em;
+    box-sizing: border-box;
+    .info-message-title {
+      color: $nhs_blue;
+      font-size: 1em;
+      font-weight: 700;
+      display: inline-block;
+      margin-left: 1em;
+      align-self: center;
+      margin-bottom: 0em;
+      padding-top: 0em;
+      padding-bottom: 0em;
+    }
+  }
+  .info-content {
+    background: $white;
+    box-sizing: border-box;
+    padding: 1em;
+    border-top: 1px solid $border_grey;
+  }
+}

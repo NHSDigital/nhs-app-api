@@ -50,31 +50,31 @@ class BookAppointmentsBuilderTpp (patient: Patient, request: BookAppointmentSlot
 
     override fun respondWithConflictException(): Mapping {
 
-        var error = Error("1103", errorText, TppConfig.uuid)
+        val error = Error("1103", errorText, TppConfig.uuid)
         return respondWith(error)
     }
 
     override fun respondWithUnknownException(): Mapping {
 
-        var error = Error("0000", errorText, TppConfig.uuid)
+        val error = Error("0000", errorText, TppConfig.uuid)
         return respondWith(error)
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
 
-        var error = Error("6", errorText, TppConfig.uuid)
+        val error = Error("6", errorText, TppConfig.uuid)
         return respondWith(error)
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
 
-        var error = Error("1103", errorText, TppConfig.uuid)
+        val error = Error("1103", errorText, TppConfig.uuid)
         return respondWith(error)
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
 
-        var error = Error("5", errorText, TppConfig.uuid)
+        val error = Error("5", errorText, TppConfig.uuid)
         return respondWith(error)
     }
 }

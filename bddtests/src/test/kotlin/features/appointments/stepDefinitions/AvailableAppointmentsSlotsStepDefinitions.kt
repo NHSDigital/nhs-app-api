@@ -5,10 +5,9 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExampleNoneAvailable
-import features.appointments.factories.AppointmentsBookingFactory
+import features.appointments.factories.AppointmentsFactory
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
-import features.appointments.steps.AvailableAppointmentsSteps.Companion.EXPECTED_APPOINTMENT_SESSIONS_KEY
 import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedSteps.NavigationSteps
@@ -58,10 +57,22 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         factory.generateDefaultAvailableAppointmentSlotExample()
     }
 
-    @Given("^there are available appointment slots with different criteria for (.*)$")
+    @Given("^there are available appointment slots with different criteria for (\\w*)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
-        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
-        factory.generateDefaultAvailableAppointmentSlotExample()
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
+    }
+
+    @Given("^there are available appointment slots with different criteria for EMIS when no appointment slot guidance is provided$")
+    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWithNoGuidance() {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false)
+    }
+
+    @Given("^there are available appointment slots with different criteria for EMIS when guidance cannot be retrieved$")
+    fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWhenGuidanceCannotBeRetrieved() {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage()
     }
 
     @Given("^there are no available appointment slots for (.*)$")
@@ -179,6 +190,14 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.clickOnBackButton()
     }
 
+    @When("^I expand the appointment slot guidance$")
+    fun iExpandTheAppointmentSlotGuidance() {
+        availableAppointments.verifyGuidanceIsDisplayed()
+        availableAppointments.verifyGuidanceContentIsNotDisplayed()
+        availableAppointments.verifyTheLabelIsCorrect()
+        availableAppointments.expandAppointmentSlotGuidance()
+    }
+
     @When("^I try to progress without selecting (.*)$")
     fun iTryToProgressWithoutSelecting(optionsToAvoid: String) {
         if (!optionsToAvoid.contains("appointment type")) {
@@ -209,7 +228,9 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Then("^available slots are returned for the given date-time range$")
     fun availableSlotsLocationsCliniciansAndAppointmentSessionsAreReturned() {
-        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(EXPECTED_APPOINTMENT_SESSIONS_KEY)
+        val expectedAppointmentSessions = sessionVariableCalled<ArrayList<AppointmentSessionFacade>>(
+                AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY
+        )
         val expectedAppointmentSlots = arrayListOf<AppointmentSlotFacade>()
         for (appointmentSession in expectedAppointmentSessions) {
             expectedAppointmentSlots.addAll(appointmentSession.slots)
@@ -360,8 +381,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
 
-        val expectedDateHeading = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentDateKey)
-        val expectedTimeSlot = Serenity.sessionVariableCalled<String>(AppointmentsBookingFactory.TargetAppointmentTimeKey)
+        val expectedDateHeading = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentDateKey)
+        val expectedTimeSlot = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentTimeKey)
         availableAppointments.assertTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
 
     }
@@ -385,5 +406,21 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     fun iSeeATimeOutOnTheAppointmentBookingPage(){
         availableAppointments.waitForSpinnerToDisappearBecauseOfTimeout()
         availableAppointments.checkIfTryAgainButtonDisplayed()
+    }
+
+    @Then("^the appointment slot guidance content is displayed$")
+    fun appointmentSlotGuidanceContentIsDisplayed(){
+        availableAppointments.verifyThatAppointmentGuidanceContentIsDisplayed()
+    }
+
+    @Then("^the appointment slot guidance is collapsible$")
+    fun appointmentSlotGuidanceIsCollapsible(){
+        availableAppointments.collapseAppointmentSlotGuidance()
+        iExpandTheAppointmentSlotGuidance()
+    }
+
+    @Then("^I cannot see any appointment slot guidance$")
+    fun iCannotSeeAnyAppointmentSlotGuidance(){
+        availableAppointments.verifyThatAppointmentGuidanceIsNotDisplayedAtAll()
     }
 }

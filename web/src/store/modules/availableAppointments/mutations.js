@@ -54,6 +54,7 @@ export default {
     const mutation = new LoadMutation(DateProvider);
     const result = mutation.execute(data);
 
+    state.bookingGuidance = data.bookingGuidance;
     state.hasLoaded = true;
     state.slots = result.slots;
     state.filtersOptions = result.filtersOptions;

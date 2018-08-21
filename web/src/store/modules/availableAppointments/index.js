@@ -6,6 +6,7 @@ export default {
   state() {
     return {
       slots: new Map(),
+      bookingGuidance: '',
       filteredSlots: [],
       hasLoaded: false,
       selectedSlot: null,

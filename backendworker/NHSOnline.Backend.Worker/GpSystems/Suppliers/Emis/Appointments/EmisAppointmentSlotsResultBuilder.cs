@@ -14,21 +14,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private readonly IAppointmentSlotsResponseMapper _appointmentSlotsResponseMapper;
         private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> _metaTask;
         private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> _slotTask;
+        private readonly Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> _practiceSettingsTask;
 
         private EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> MetaResponse => _metaTask.Result;
         private EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse> SlotResponse => _slotTask.Result;
+
+        private EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse> PracticeSettingsResponse
+            => _practiceSettingsTask.Status == TaskStatus.RanToCompletion ? _practiceSettingsTask.Result : null;
 
         public EmisAppointmentSlotsResultBuilder(
             ILogger<EmisAppointmentSlotsService> logger,
             IAppointmentSlotsResponseMapper appointmentSlotsResponseMapper,
             Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> metaTask,
-            Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> slotTask
+            Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> slotTask,
+            Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask
             )
         {
             _logger = logger;
             _appointmentSlotsResponseMapper = appointmentSlotsResponseMapper;
             _metaTask = metaTask;
             _slotTask = slotTask;
+            _practiceSettingsTask = practiceSettingsTask;
         }
 
         internal Option<AppointmentSlotsResult> Build()
@@ -105,7 +111,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 var result =
                     new AppointmentSlotsResult.SuccessfullyRetrieved(
-                        _appointmentSlotsResponseMapper.Map(SlotResponse.Body, MetaResponse.Body));
+                        _appointmentSlotsResponseMapper.Map(SlotResponse.Body, MetaResponse.Body, PracticeSettingsResponse?.Body));
                 return Option.Some<AppointmentSlotsResult>(result);
             }
             catch (Exception e)
