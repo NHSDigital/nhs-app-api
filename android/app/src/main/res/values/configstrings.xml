@@ -19,6 +19,7 @@
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
+    <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 

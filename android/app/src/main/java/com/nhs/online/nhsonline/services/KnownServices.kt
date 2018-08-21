@@ -9,6 +9,7 @@ import java.net.URL
 
 class KnownServices(private val context: Context) {
     private val serviceList = arrayListOf<KnownService>()
+    private val externalBrowserServiceList = arrayListOf<KnownService>()
     private val unavailabilityErrorMessage =
         ErrorMessage(context.resources.getString(R.string.connection_error_title),
             context.resources.getString(R.string.connection_error_message))
@@ -45,6 +46,12 @@ class KnownServices(private val context: Context) {
                 unavailabilityErrorMessage,
                 nativeHeader = context.resources.getString(R.string.conditions_header),
                 shouldValidateSession = false))
+
+        externalBrowserServiceList.add(KnownService(arrayOf(context.resources.getString(
+                R.string.hotjarLink)),
+                unavailabilityErrorMessage,
+                shouldValidateSession = false))
+
     }
 
     fun findMatchingKnownService(urlString: String): KnownService? {
@@ -62,6 +69,23 @@ class KnownServices(private val context: Context) {
             }
         }
         return null
+    }
+
+    fun isExternalBrowserService(urlString: String): Boolean {
+        val url = try {
+            URL(urlString.toLowerCase())
+        } catch (e: java.net.MalformedURLException) {
+            return false;
+        }
+        externalBrowserServiceList.forEach { knownService ->
+            knownService.urlList.forEach { knownUrl ->
+                if (knownUrl.host == url.host &&
+                        (knownUrl.path == "" || knownUrl.path == "/" || knownUrl.path == url.path )) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
     fun findKnownServiceAddMissingQueryFor(urlString: String): String {

@@ -16,7 +16,9 @@ import java.net.URL
 import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import android.content.pm.ResolveInfo
 import android.content.pm.PackageManager
+import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
+import com.nhs.online.nhsonline.services.KnownServices
 
 class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInterface
 {
@@ -42,24 +44,28 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
 
         var supportedCustomTabsPackages = getCustomTabsPackages(context, url)
 
-        if(supportedCustomTabsPackages.count() > 0) {
-            val customTabsIntent = CustomTabsIntent.Builder()
-                    .setToolbarColor(Color.BLUE)
-                    .build()
+        val knownServices = KnownServices(context);
 
-            if(supportedCustomTabsPackages.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }) {
-                customTabsIntent.intent.setPackage(CHROME_PACKAGE_NAME)
+            if (supportedCustomTabsPackages.count() > 0
+                    && !knownServices.isExternalBrowserService(url)) {
+                val customTabsIntent = CustomTabsIntent.Builder()
+                        .setToolbarColor(Color.BLUE)
+                        .build()
+
+                if (supportedCustomTabsPackages.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }) {
+                    customTabsIntent.intent.setPackage(CHROME_PACKAGE_NAME)
+                } else {
+                    customTabsIntent.intent.setPackage(supportedCustomTabsPackages[0].activityInfo.packageName)
+                }
+
+                customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                customTabsIntent.launchUrl(context, Uri.parse(url))
             } else {
-                customTabsIntent.intent.setPackage(supportedCustomTabsPackages[0].activityInfo.packageName)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+                ContextCompat.startActivity(context, intent, null)
             }
 
-            customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            customTabsIntent.launchUrl(context, Uri.parse(url))
-        } else {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-            ContextCompat.startActivity(context, intent, null)
-        }
     }
 
     private fun getCustomTabsPackages(context: Context, urlString: String): ArrayList<ResolveInfo> {

@@ -532,6 +532,10 @@ export default {
   login: {
     desc: 'Want to book an appointment or order a repeat prescription?',
   },
+  surveyBar: {
+    barText: 'Help us make this service better.',
+    linkText: ' Complete our quick survey.',
+  },
   icons: {
     accountIcon: {
       title: 'My Account',

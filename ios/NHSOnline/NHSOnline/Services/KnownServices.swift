@@ -10,7 +10,9 @@ class KnownServices {
     private let symptomsTitle = NSLocalizedString("SymptomsTitle", comment: "")
     private let dataSharingTitle = NSLocalizedString("DataSharingTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
+    private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
     private var serviceList = Array<KnownService>()
+    private var externalSafariServiceList = Array<KnownService>()
     
     init(config:Config) {
         self.config = config
@@ -25,6 +27,8 @@ class KnownServices {
         serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlStrings: [getCheckSymptomsUrl()], serviceTitle: symptomsTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         
+        externalSafariServiceList.append(KnownService(urlStrings: [config.HotJarLinkUrl], serviceTitle: hotJarTitle, service: .HOT_JAR, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        
         
     }
     
@@ -36,6 +40,11 @@ class KnownServices {
     
     func getAllKnownHosts() -> [String?] {
         let knownHosts = self.serviceList.flatMap { $0.urls }.map { $0.url?.host }
+        return knownHosts
+    }
+    
+    func getAllKnownHostsExternalSafari() -> [String?] {
+        let knownHosts = self.externalSafariServiceList.flatMap { $0.urls }.map { $0.url?.host }
         return knownHosts
     }
     
@@ -88,6 +97,6 @@ class KnownServices {
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, OTHERS;
+        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, HOT_JAR, OTHERS;
     }
 }

@@ -1,0 +1,48 @@
+@import './colours';
+@import './textstyles';
+
+.surveyBanner {
+  position: fixed;
+  bottom: 4.4em;
+  width: 100%;
+  margin: 0;
+  z-index: 4;
+  .surveyTab {
+    height: 1.5em;
+    width: 100%;
+  }
+  .surveyTabHandleOpened {
+    width: 2.5em;
+    height: 1.5em;
+    float: right;
+    margin-right: 1em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    background: $nhs_blue url(../assets/survey-arrow-down.png) center no-repeat;
+    background-position: center 0.4em;
+  }
+  .surveyTabHandleClosed {
+    width: 2.5em;
+    height: 1.5em;
+    float: right;
+    margin-right: 1em;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    background: $nhs_blue url(../assets/survey-arrow-up.png) center no-repeat;
+    background-position: center 0.4em;
+  }
+  .surveyContent {
+    background: $nhs_blue;
+    padding: 1em;
+    max-height: 4.4em;
+    p {
+      color: $white;
+      a {
+        @include default_text;
+        display: inline-block;
+        text-decoration: underline;
+        color: $white;
+      }
+    }
+  }
+}

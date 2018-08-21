@@ -46,8 +46,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
-                openInSafari(url: url)
                 
+                if shouldOpenExternalInSafari(url: url){
+                    UIApplication.shared.open(url)
+                } else {
+                openInSafari(url: url)
+                }
                 return;
             }
         }
@@ -125,6 +129,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func shouldOpenInSafari(url: URL) -> Bool {
         let currentHost = url.host
         let knownHosts = self.knownServices.getAllKnownHosts()
+       
         
         if(url.absoluteString.contains(config().CarouselFileName)) {
             return false
@@ -137,6 +142,19 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         
         return true
+    }
+    
+    func shouldOpenExternalInSafari(url: URL) -> Bool {
+        let currentHost = url.host
+        let knownHosts = self.knownServices.getAllKnownHostsExternalSafari()
+        
+        for host in knownHosts {
+            if (host == currentHost) {
+                return true
+            }
+        }
+        
+        return false
     }
     
     func openInSafari(url: URL) {

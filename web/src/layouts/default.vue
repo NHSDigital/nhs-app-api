@@ -9,6 +9,7 @@
       <flash-message />
       <nuxt />
     </main>
+    <SurveyBar v-if="onEntryPage"/>
     <navigation-menu v-if="showMenu"/>
   </div>
 </template>
@@ -23,6 +24,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import HomeHeader from '@/components/HomeHeader';
+import SurveyBar from '@/components/SurveyBar';
 import Routes from '../Routes';
 
 export default {
@@ -34,6 +36,7 @@ export default {
     ConnectionError,
     FlashMessage,
     HomeHeader,
+    SurveyBar,
   },
   head() {
     const head = {
@@ -60,6 +63,9 @@ export default {
         this.$store.state.auth.loggedIn &&
         this.$route.name !== 'Login'
       );
+    },
+    onEntryPage() {
+      return this.$route.name === 'index';
     },
     mainClass() {
       if (this.isLoginPage()) {

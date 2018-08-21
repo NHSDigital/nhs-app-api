@@ -89,5 +89,6 @@ module.exports = {
     ANALYTICS_ENVIRONMENT:
       process.env.ANALYTICS_ENVIRONMENT || 'development',
     HOTJAR_FILENAME: process.env.HOTJAR_FILENAME,
+    HOT_JAR_URL: process.env.HOT_JAR_URL || 'https://in.hotjar.com/s?siteId=859152&surveyId=95785',
   },
 };

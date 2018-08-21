@@ -30,6 +30,7 @@ class KnownServicesTest {
             on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=android"
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
             on { getString(R.string.appIntroPath) } doReturn "file:///android_asset/appintro.html"
+            on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
         }
 
         return mock { on { resources } doReturn mockresource }
@@ -159,6 +160,28 @@ class KnownServicesTest {
             testKnownServices.findKnownServiceAddMissingQueryFor("https://www.google.co.uk")
 
         Assert.assertEquals("https://www.google.co.uk", result)
+    }
+
+    @Test
+    fun isExternalBrowserService_foundService() {
+        var context: Context = mockContext()
+        val testKnownServices = KnownServices(context)
+
+        val result =
+                testKnownServices.isExternalBrowserService("https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785")
+
+        Assert.assertEquals(true, result)
+    }
+
+    @Test
+    fun isExternalBrowserService_notFoundService() {
+        var context: Context = mockContext()
+        val testKnownServices = KnownServices(context)
+
+        val result =
+                testKnownServices.isExternalBrowserService("https://www.google.co.uk")
+
+        Assert.assertEquals(false, result)
     }
 
 }
