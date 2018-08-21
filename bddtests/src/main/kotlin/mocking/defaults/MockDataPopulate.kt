@@ -351,22 +351,34 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Prescriptions not Enabled
-        val errorPrescriptionRequestBodyPrescriptionNotEnabled =
-                getFileContents("prescriptions/PostEmisPrescriptionNotEnabledError.json", BASE_MOCK_DATA_DIR)
-        val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(uuids, "give me prescription not enabled response")
+       val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(uuids, "give me prescription not enabled response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotEnabled)
-                    .respondWithFailureJson(errorPrescriptionRequestBodyPrescriptionNotEnabled, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                    .respondWithPrescriptionsNotEnabled()
                     .whenScenarioStateIs("Started")
         }
 
         //Error scenario - Prescriptions not submitted
-        val errorPrescriptionRequestBodyPrescriptionNotSubmitted =
-                getFileContents("/prescriptions/PostEmisPrescriptionNotSubmittedError.json", BASE_MOCK_DATA_DIR)
-        val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(uuids, "give me prescription not submitted response")
+       val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(uuids, "give me prescription not submitted response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotSubmitted)
-                    .respondWithFailureJson(errorPrescriptionRequestBodyPrescriptionNotSubmitted, HttpStatus.SC_BAD_REQUEST)
+                    .respondWithGenericInternalServerError()
+                    .whenScenarioStateIs("Started")
+        }
+
+        //Error scenario - Pending request in last 30 days
+        val prescriptionSubmissionRequestWithPendingRequest = PrescriptionSubmissionRequest(uuids, "give me already pending request response")
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestWithPendingRequest)
+                    .respondWithAlreadyAPendingRequestInTheLast30Days()
+                    .whenScenarioStateIs("Started")
+        }
+
+        //Error scenario - Course invalid request
+        val prescriptionSubmissionRequestInvalid = PrescriptionSubmissionRequest(uuids, "give me course invalid response")
+        mockingClient.forEmis {
+            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestInvalid)
+                    .respondWithBadRequestErrorIndicatingACourseIsInvalid()
                     .whenScenarioStateIs("Started")
         }
 
