@@ -4,6 +4,8 @@
 import { sortBy } from 'lodash/fp';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 
+export const DATE_FORMAT = 'YYYY-MM-DD';
+
 export default class LoadMutation {
   constructor(DateProvider) {
     this.dateProvider = DateProvider;
@@ -21,7 +23,7 @@ export default class LoadMutation {
     sortedSlots.forEach((slot, index) => {
       slot.ref = `slot_${index}`;
 
-      const startDate = this.dateProvider.create(slot.startTime).format('YYYY-MM-DD');
+      const startDate = this.dateProvider.create(slot.startTime).format(DATE_FORMAT);
       if (slots.has(startDate)) {
         const slotCollection = slots.get(startDate);
         slotCollection.push(slot);

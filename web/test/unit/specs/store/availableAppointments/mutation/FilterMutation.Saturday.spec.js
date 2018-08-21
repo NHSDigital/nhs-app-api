@@ -82,6 +82,33 @@ describe('FilterMutation [Saturday]', () => {
         ['2018-08-18', [data.slot7]],
       ],
     ],
+    [
+      {
+        type: '',
+        location: 'Leeds',
+        clinician: 'Dr House',
+        date: DateFilterValues.TODAY,
+      },
+      [],
+    ],
+    [
+      {
+        type: 'Baby immunisations',
+        location: '',
+        clinician: 'Dr House',
+        date: DateFilterValues.TODAY,
+      },
+      [],
+    ],
+    [
+      {
+        type: 'Not existing',
+        location: 'Leeds',
+        clinician: 'Dr House',
+        date: DateFilterValues.TODAY,
+      },
+      [],
+    ],
   ]).it('will return correct data for "today"', (selectedOptions, expectedSlots) => {
     const actualSlots = filterMutation.execute(slots, selectedOptions);
 
@@ -121,6 +148,15 @@ describe('FilterMutation [Saturday]', () => {
       [
         ['2018-08-19', [data.slot3, data.slot4]],
       ],
+    ],
+    [
+      {
+        type: 'Not Existing Type',
+        location: 'Leeds',
+        clinician: 'Dr Drake Ramoray',
+        date: DateFilterValues.TOMORROW,
+      },
+      [],
     ],
   ]).it('will return correct data for "tomorrow"', (selectedOptions, expectedSlots) => {
     const actualSlots = filterMutation.execute(slots, selectedOptions);
@@ -162,7 +198,17 @@ describe('FilterMutation [Saturday]', () => {
       },
       [
         ['2018-08-18', [data.slot7]],
+        ['2018-08-19', []],
       ],
+    ],
+    [
+      {
+        type: 'Not Existing Type',
+        location: 'Leeds',
+        clinician: '',
+        date: DateFilterValues.THIS_WEEK,
+      },
+      [],
     ],
   ]).it('will return correct data for "this_week"', (selectedOptions, expectedSlots) => {
     const actualSlots = filterMutation.execute(slots, selectedOptions);
@@ -180,8 +226,22 @@ describe('FilterMutation [Saturday]', () => {
       },
       [
         ['2018-08-20', [data.slot5]],
+        ['2018-08-21', []],
+        ['2018-08-22', []],
+        ['2018-08-23', []],
+        ['2018-08-24', []],
+        ['2018-08-25', []],
         ['2018-08-26', [data.slot6]],
       ],
+    ],
+    [
+      {
+        type: 'Not Existing Type',
+        location: 'Leeds',
+        clinician: '',
+        date: DateFilterValues.NEXT_WEEK,
+      },
+      [],
     ],
   ]).it('will return correct data for "next_week"', (selectedOptions, expectedSlots) => {
     const actualSlots = filterMutation.execute(slots, selectedOptions);
@@ -215,6 +275,15 @@ describe('FilterMutation [Saturday]', () => {
       [
         ['2018-08-18', [data.slot7]],
       ],
+    ],
+    [
+      {
+        type: 'Not Existing Type',
+        location: 'Leeds',
+        clinician: 'Dr House',
+        date: DateFilterValues.ALL,
+      },
+      [],
     ],
   ]).it('will return correct data for "all"', (selectedOptions, expectedSlots) => {
     const actualSlots = filterMutation.execute(slots, selectedOptions);

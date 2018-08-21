@@ -49,7 +49,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 Pair(TOMORROW_KEY, TOMORROW_KEY),
                 Pair(THIS_WEEK_KEY, THIS_WEEK_KEY),
                 Pair(NEXT_WEEK_KEY, NEXT_WEEK_KEY),
-                Pair(ALL_KEY, ALL_KEY)
+                Pair(ALL_AVAILABLE, ALL_AVAILABLE)
         )
     }
 
@@ -548,7 +548,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun selectOptionsToRevealSlots() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(timePeriodOptions[ALL_KEY]!!)
+        availableAppointments.selectTimePeriodByText(timePeriodOptions[ALL_AVAILABLE]!!)
     }
 
     @Step
@@ -688,6 +688,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         private const val TOMORROW_KEY = "Tomorrow"
         private const val THIS_WEEK_KEY = "This week"
         private const val NEXT_WEEK_KEY = "Next week"
-        private const val ALL_KEY = "All"
+        private const val ALL_AVAILABLE = "All available"
     }
 }

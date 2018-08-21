@@ -1,5 +1,6 @@
 /* eslint-disable */
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
+import { DATE_FORMAT } from '@/store/modules/availableAppointments/mutation/LoadMutation';
 
 export default class FilterMutation {
   constructor(DateProvider, DateMapper) {
@@ -8,20 +9,67 @@ export default class FilterMutation {
   }
 
   execute(data, selectedOptions) {
-    const filteredSlots = new Map();
+    let dateRange = null;
+    if (selectedOptions.date !== DateFilterValues.ALL) {
+      dateRange = {
+        from: this.dateMapper.mapToStartDate(selectedOptions.date),
+        to: this.dateMapper.mapToEndDate(selectedOptions.date)
+      };
+    }
+
+    let filteredSlotsMap = this._filter(data, selectedOptions, dateRange);
+    if (this._areMandatoryFieldsSelected(selectedOptions) && filteredSlotsMap.size > 0) {
+      filteredSlotsMap = this._addDaysWithNoAppointments(filteredSlotsMap, dateRange);
+    }
+
+    return Array.from(filteredSlotsMap);
+  }
+
+  _addDaysWithNoAppointments(filteredSlotsMap, dateRange = null) {
+    if (dateRange === null) {
+      return filteredSlotsMap;
+    }
+
+    const fromDate = dateRange.from.clone();
+    const toDate = dateRange.to.clone();
+    const slots = new Map();
+    while (fromDate.isSameOrBefore(toDate, 'day')) {
+      const date = fromDate.format(DATE_FORMAT);
+      if (filteredSlotsMap.has(date)) {
+        slots.set(date, filteredSlotsMap.get(date));
+      } else {
+        slots.set(date, []);
+      }
+
+      fromDate.add(1, 'days');
+    }
+
+    return slots;
+  }
+
+  _areMandatoryFieldsSelected(selectedOptions) {
     if (selectedOptions.type === '' || selectedOptions.location === '') {
-      return Array.from(filteredSlots);
+      return false;
+    }
+
+    return true;
+  }
+
+  _filter(data, selectedOptions, dateRange = null) {
+    const filteredSlots = new Map();
+    if (!this._areMandatoryFieldsSelected(selectedOptions)) {
+      return filteredSlots;
     }
 
     data.forEach((slots, startTime) => {
       const slotTime = this.dateProvider.create(startTime);
-      if (selectedOptions.date !== DateFilterValues.ALL
+      if (dateRange != null
         && (
-          slotTime.isBefore(this.dateMapper.mapToStartDate(selectedOptions.date), 'day')
-          || this.dateMapper.mapToEndDate(selectedOptions.date).isBefore(slotTime, 'day')
+          slotTime.isBefore(dateRange.from, 'day')
+          || dateRange.to.isBefore(slotTime, 'day')
         )
       ) {
-        return Array.from(filteredSlots);
+        return;
       }
 
       slots.forEach((slot) => {
@@ -49,6 +97,6 @@ export default class FilterMutation {
       });
     });
 
-    return Array.from(filteredSlots);
+    return filteredSlots;
   }
 }

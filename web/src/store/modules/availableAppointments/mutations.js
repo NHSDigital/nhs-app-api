@@ -1,8 +1,4 @@
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-unused-vars */
 /* eslint-disable import/extensions */
-import { sortBy } from 'lodash/fp';
 import DateProvider from '@/services/DateProvider';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 import DateFilterMapper from '@/store/modules/availableAppointments/dateFilter/Mapper';

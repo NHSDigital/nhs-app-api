@@ -182,6 +182,7 @@ export default {
     booking: {
       bookButtonText: 'Continue',
       backButtonText: 'Back to my appointments',
+      noSlots: 'No appointments available',
       noAppointmentsAvailable: {
         title: 'No appointments available',
         line1: 'There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.',
@@ -212,15 +213,14 @@ export default {
           default_option: 'No preference',
         },
         date: {
-          header: 'Available appointments',
+          header: 'Select an appointment',
           label: 'Filter by date',
-          default_option: 'I have no preference',
           options: {
             today: 'Today',
             tomorrow: 'Tomorrow',
             this_week: 'This week',
             next_week: 'Next week',
-            all: 'All',
+            all: 'All available',
           },
         },
       },

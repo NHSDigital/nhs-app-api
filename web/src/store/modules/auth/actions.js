@@ -95,6 +95,7 @@ export default {
     commit(LOGOUT, true);
     this.dispatch('analytics/init');
     this.dispatch('availableAppointments/init');
+    this.dispatch('myAppointments/init');
     this.dispatch('auth/init');
     this.dispatch('device/init');
     this.dispatch('header/init');

@@ -9,7 +9,6 @@ export default class Mapper {
   createDate(rangeInDays = 0) {
     const date = this.dateProvider.create();
     date.add(rangeInDays, 'days');
-    date.set({ h: 0, m: 0, s: 0 });
 
     return date;
   }
@@ -51,7 +50,6 @@ export default class Mapper {
     }
 
     const date = this.createDate(rangeInDays);
-    date.set({ h: 23, m: 59, s: 59 });
 
     return date;
   }
