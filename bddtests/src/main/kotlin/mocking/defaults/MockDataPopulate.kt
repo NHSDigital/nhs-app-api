@@ -277,12 +277,19 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     .respondWithSuccessJson(postAppointmentRequestBody)
         }
 
-        //POST /emis/appointments - will be declined with SC=500
-        val errorAppointmentRequestBody =
-                getFileContents("appointments/PostEmisAppointmentError.json", BASE_MOCK_DATA_DIR)
         mockingClient.forEmis {
-            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a bad response"))
-                    .respondWithFailureJson(errorAppointmentRequestBody, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a service not available response"))
+                    .respondWithUnavailableException()
+        }
+
+        mockingClient.forEmis {
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me an appointment not found response"))
+                    .respondWithExceptionWhenNotAvailable()
+        }
+
+        mockingClient.forEmis {
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a service not enabled response"))
+                    .respondWithExceptionWhenNotEnabled()
         }
 
         //POST /emis/appointments - time out scenario
@@ -290,10 +297,6 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a time out response"))
                     .respondWith(HttpStatus.SC_OK, 71000, resolve = {})
         }
-
-        // DELETE /emis/appointments
-        val deleteAppointmentRequestBody =
-                getFileContents("appointments/DeleteEmisAppointment.json", BASE_MOCK_DATA_DIR)
 
         mockingClient.forEmis {
             cancelAppointmentRequest(patientForStubEnvironment, CancelAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "cancel appointment"))
