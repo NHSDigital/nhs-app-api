@@ -57,17 +57,8 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             androidLocator = null,
             page = this)
 
-    val allergiesAndAdverseReactionsHeader = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Allergies and adverse reactions')]",
-            androidLocator = null,
-            page = this)
 
-    val txtAllergyMsg = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Allergies and adverse reactions')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
+    val allergies by lazy {MyRecordWrapper("Allergies and adverse reactions", this)}
 
     val noSummaryCareAccessMessage = 
         HybridPageElement(
@@ -75,89 +66,20 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             androidLocator = null,
             page = this)
 
-    val acuteMedicationsHeading = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Acute (short-term) medications')]",
-            androidLocator = null,
-            page = this)
 
-    val acuteMedications = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Acute (short-term) medications')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
+    val acuteMedications by lazy {MyRecordWrapper("Acute (short-term) medications", this)}
 
-    val currentRepeatMedicationsHeading = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Repeat medications: current')]",
-            androidLocator = null,
-            page = this)
+    val repeatMedications by lazy {MyRecordWrapper("Repeat medications: current", this)}
 
-    val txtcurrentRepeatMedications = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Repeat medications: current')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
+    val discontinuedRepeatMedications by lazy {MyRecordWrapper("Repeat medications: discontinued", this)}
 
-    val discontinuedRepeatMedicationsHeading = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Repeat medications: discontinued')]",
-            androidLocator = null,
-            page = this)
+    val testResults by lazy {MyRecordWrapper("Test results (past 6 months)", this)}
 
-    val txtdiscontinuedRepeatMedications = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Repeat medications: discontinued')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
+    val immunisations by lazy {MyRecordWrapper("Immunisations", this)}
 
-    val testResultsHeader = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Test results (past 6 months)')]",
-            androidLocator = null,
-            page = this)
+    val problems by lazy {MyRecordWrapper("Problems", this)}
 
-    val txttestResultsMsg = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Test results (past 6 months)')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
-
-    val immunisationsHeading = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Immunisations')]",
-            androidLocator = null,
-            page = this)
-
-    val immunisations = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Immunisations')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
-
-    val problemsHeading = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Problems')]",
-            androidLocator = null,
-            page = this)
-
-    val problems = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Problems')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
-
-    val consultationsHeading = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Consultations')]",
-            androidLocator = null,
-            page = this)
-
-    val consultations = 
-        HybridPageElement(
-            browserLocator = "//h2[contains(text(),'Consultations')]/following-sibling::div[1]",
-            androidLocator = null,
-            page = this)
+    val consultations by lazy {MyRecordWrapper("Consultations", this)}
 
     val eventsHeading = 
         HybridPageElement(
@@ -171,19 +93,12 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             androidLocator = null,
             page = this)
 
-    val aFirstTestResult =
-            HybridPageElement(
-                    browserLocator = "//h5[contains(text(),'Test results')]/following-sibling::div[1]/div/div/div/ul/li[1]/p/a",
-                    androidLocator = null,
-                    page = this)
-
-
     fun isNameVisible(): Boolean {
         return txtName.element.isCurrentlyVisible
     }
 
     fun isAllergiesTextMsgVisible(): Boolean {
-        return txtAllergyMsg.element.findBy<WebElementFacade>(By.tagName("p")).isCurrentlyVisible
+        return allergies.firstParagraph.isCurrentlyVisible
     }
 
     fun isOnMyRecordInfoPage(): Boolean {
@@ -227,40 +142,40 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun getAllergiesAndAdverseReactionsHeaderText(): String {
-        return allergiesAndAdverseReactionsHeader.element.text
+        return allergies.header.element.text
     }
 
     fun clickAllergiesAndAdverseReactionsSection() {
-        toggleShrub(allergiesAndAdverseReactionsHeader)
+        allergies.toggleShrub()
     }
 
     fun getAllergyMessage(): String {
-        return txtAllergyMsg.element.text
+        return allergies.msg.element.text
     }
 
     fun getNoAllergyMessage(): String {
-        return txtAllergyMsg.element.findBy<WebElementFacade>(By.tagName("p")).text
-    }
+        return allergies.firstParagraph.text
+}
 
     fun getNoAcuteMedicationMsg(): String {
-        return acuteMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
+        return acuteMedications.firstParagraph.text
     }
 
     fun getNoCurrentRepeatMedicationMsg(): String {
-        return txtcurrentRepeatMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
+        return repeatMedications.firstParagraph.text
     }
 
     fun getNoDiscontinuedRepeatMedicationMsg(): String {
-        return txtdiscontinuedRepeatMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
+        return discontinuedRepeatMedications.firstParagraph.text
     }
 
     fun getAllergyCount(): Int {
-        return txtAllergyMsg.element.thenFindAll(By.cssSelector("div[data-purpose=\"record-item\"]")).count()
+        return allergies.allRecordItems().count()
     }
 
     fun getAllergyMessages(): ArrayList<String> {
         val msgs = ArrayList<String>()
-        val list = txtAllergyMsg.element.thenFindAll(By.tagName("p"))
+        val list = allergies.allRecordItemBodies()
         for (item in list) {
             msgs.add(item.text)
         }
@@ -269,115 +184,115 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun getAllergyDates(): ArrayList<String> {
         val msgs = ArrayList<String>()
-        val list = txtAllergyMsg.element.thenFindAll(By.tagName("label"))
+        val list = allergies.allRecordItemLabels()
         for (item in list) {
             msgs.add(item.text)
         }
         return msgs
     }
 
-    fun getTestResultsMessage(): String {
-        return txttestResultsMsg.element.findBy<WebElementFacade>(By.tagName("p")).text
-    }
-
     fun clickAcuteMedications() {
-        toggleShrub(acuteMedicationsHeading)
+        acuteMedications.toggleShrub()
     }
 
     fun clickCurrentRepeatMedications() {
-        toggleShrub(currentRepeatMedicationsHeading)
+        repeatMedications.toggleShrub()
     }
 
     fun clickDiscontinuedRepeatMedications() {
-        toggleShrub(discontinuedRepeatMedicationsHeading)
+        discontinuedRepeatMedications.toggleShrub()
     }
 
     fun getAcuteMedicationsHeaderText(): String {
-        return acuteMedicationsHeading.element.text
+        return acuteMedications.header.element.text
     }
 
     fun getAcuteMedications(): String {
-        return acuteMedications.element.findBy<WebElementFacade>(By.tagName("p")).text
+        return acuteMedications.firstElement.text
     }
 
     fun isAcuteMedicationsAvailable(): Boolean {
-        return acuteMedications.element.findBy<WebElementFacade>(By.cssSelector("div[data-purpose=\"record-item\"]")).isPresent
+        return acuteMedications.firstElement.isPresent
     }
 
     fun isRepeatMedicationsAvailable(): Boolean {
-        return txtcurrentRepeatMedications.element.findBy<WebElementFacade>(By.cssSelector("div[data-purpose=\"record-item\"]")).isPresent
+        return repeatMedications.firstElement.isPresent
     }
 
     fun isDiscontinuedMedicationsAvailable(): Boolean {
-        return txtdiscontinuedRepeatMedications.element.findBy<WebElementFacade>(By.cssSelector("div[data-purpose=\"record-item\"]")).isPresent
+        return discontinuedRepeatMedications.firstElement.isPresent
     }
 
     fun clickTestResultsSection() {
-        toggleShrub(testResultsHeader)
+        testResults.toggleShrub()
     }
 
     fun getImmunistionsHeaderText(): String {
-        return immunisationsHeading.element.text
+        return immunisations.header.element.text
     }
 
     fun getImmunisationRecordCount(): Int {
-        return immunisations.element.thenFindAll(By.cssSelector("div[data-purpose=\"record-item\"]")).count()
+        return immunisations.allRecordItems().count()
     }
 
     fun clickImmunisations() {
-        toggleShrub(immunisationsHeading)
+        immunisations.toggleShrub()
     }
 
     fun getImmunisationsMessage(): String {
-        return immunisations.element.then<WebElementFacade>(By.cssSelector("p")).text
+        return immunisations.firstParagraph.text
+    }
+
+    fun getTestResultsMessage(): String {
+        return testResults.firstParagraph.text
     }
 
     fun getTestResultsHeaderText(): String {
-        return testResultsHeader.element.text
+        return testResults.header.element.text
     }
 
     fun getTestResultCount(): Int {
-        return txttestResultsMsg.element.thenFindAll(By.tagName("p")).size
+        return testResults.allRecordItems().size
     }
 
     fun getTestResultChildCount(): Int {
-        return txttestResultsMsg.element.thenFindAll(By.tagName("p")).get(0).findBy<WebElementFacade>(By.xpath("..")).thenFindAll(By.tagName("li")).size
+        return testResults.allRecordItems().get(0).findBy<WebElementFacade>(By.xpath("..")).thenFindAll(By.tagName("li")).size
     }
 
     fun isTestResultsTextMsgVisible(): Boolean {
-        return txttestResultsMsg.element.findBy<WebElementFacade>(By.tagName("p")).isCurrentlyVisible
+        return testResults.firstParagraph.isCurrentlyVisible
     }
 
     fun getProblemsHeaderText(): String {
-        return problemsHeading.element.text
+        return problems.header.element.text
     }
 
     fun getProblemsRecordCount(): Int {
-        return problems.element.thenFindAll(By.cssSelector("label")).count()
+        return problems.allRecordItemLabels().count()
     }
 
     fun clickProblems() {
-        toggleShrub(problemsHeading)
+        problems.toggleShrub()
     }
 
     fun getProblemsMessage(): String {
-        return problems.element.then<WebElementFacade>(By.cssSelector("p")).text
+        return problems.firstParagraph.text
     }
 
     fun getConsultationsHeaderText(): String {
-        return consultationsHeading.element.text
+        return consultations.header.element.text
     }
 
     fun getConsultationsRecordCount(): Int {
-        return consultations.element.thenFindAll(By.cssSelector("label")).count()
+        return consultations.allRecordItemLabels().count()
     }
 
     fun clickConsultations() {
-        toggleShrub(consultationsHeading)
+        consultations.toggleShrub()
     }
 
     fun getConsultationsMessage(): String {
-        return consultations.element.then<WebElementFacade>(By.cssSelector("p")).text
+        return consultations.firstParagraph.text
     }
 
     fun getEventsHeaderText(): String {
@@ -401,12 +316,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun clickTestResult() {
-        val testResults = getTestResults()
-        testResults.first().click()
-    }
-
-    fun getTestResults(): List<WebElementFacade> {
-        return txttestResultsMsg.element.thenFindAll(By.tagName("a"))
+        testResults.clickFirst()
     }
 
     private fun toggleShrub(shrub: HybridPageElement) {
