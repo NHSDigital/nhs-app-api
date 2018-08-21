@@ -53,5 +53,7 @@ COPY --chown=nodejs:nodejs --from=build /opt/app/src/pages ./pages
 COPY --chown=nodejs:nodejs --from=build /opt/app/app_links ./app_links
 COPY --chown=nodejs:nodejs --from=build /opt/app/test ./test
 
+ENV NODE_ENV=production
+
 EXPOSE $PORT
-CMD npm run dev
+CMD npm run build && npm run start
