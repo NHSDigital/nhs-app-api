@@ -1,6 +1,6 @@
 <template>
   <!--eslint-disable max-len -->
-  <svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
     <title>Icon - Ready</title>
     <defs/>
     <g class="Icon---Ready" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
