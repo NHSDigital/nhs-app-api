@@ -3,34 +3,36 @@ import SafariServices
 import WebKit
 import os.log
 
-class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+    
     let knownServices: KnownServices
-    let viewController: HomeViewController
+    let viewController: UnsecureViewController
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     let responseWaitingTime = config().ResponseWaitingTime
     var failedUrl: URL? = nil
     var nativeViewController: PageUnavailabilityViewController?
+    var unsecureWebViewController: UnsecureWebViewController?
     var safariViewController: SFSafariViewController?
     var shouldHandleErrors = false
     var timer: Timer!
     var startDate: Date!
     var javascript: String!
     
-    init(controller: HomeViewController, knownServices: KnownServices) {
+    init(controller: UnsecureViewController, knownServices: KnownServices) {
         self.viewController = controller
         self.knownServices = knownServices
         self.activityIndicator.center = viewController.view.center
         self.viewController.view.addSubview(activityIndicator)
     }
     
-
+    
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         shouldHandleErrors = false
-
+        
         if let url = navigationAction.request.url {
-
+            
             guard navigationAction.targetFrame?.isMainFrame != false else {
                 decisionHandler(.allow)
                 return
@@ -55,7 +57,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.callUpdateHeaderTextForURL(url: navigationAction.request.url!)
         decisionHandler(.allow)
     }
-        
+    
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+    }
+    
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
@@ -74,7 +79,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if(url?.absoluteString.contains(config().CarouselFileName))! {
             isIntroPage = true
         }
-
+        
         if knownServices.shouldAllowNativeInteraction(host: webView.url?.host) || isIntroPage {
             let fileReader = FileReader();
             let webEventsJSLocation = Bundle.main.path(forResource: "WebEvents", ofType: "js")!
@@ -98,6 +103,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
                     if let url = info["NSErrorFailingURLKey"] as? URL {
+                        
                         failedUrl = url
                         errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: url)
                         self.showNativeViewContainer(errorMessage: errorMessage!)
@@ -116,7 +122,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
-            selectNavigationMenuFor(url: navigationAction.request.url)
         }
         
         return nil
@@ -144,42 +149,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.present(safariViewController!, animated: true, completion: nil)
     }
     
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        
-        var shouldAllowNativeInteraction = false;
-        
-        let url = self.viewController.webViewController?.webView.url;
-        if(url?.absoluteString.contains("appintro"))!{
-            shouldAllowNativeInteraction = true
-        }
-        
-        if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
-            if (message.name == "onLogin") {
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
-            }
-            
-            if (message.name == "onLogout") {
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false)
-            }
-            
-            if (message.name == "updateHeaderText") {
-                callUpdateHeaderText(headerText: String(describing: message.body))
-            }
-            if (message.name == "clearMenuBarItem") {
-                clearMenuBarItem()
-            }
-            if (message.name == "checkSymptoms") {
-                checkSymptoms()
-            }
-            if (message.name == "completeAppIntro") {
-                
-                let defaults = UserDefaults.standard
-                defaults.set(false, forKey: config().IsFirstTimeOpened)
-                
-                self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
-            }
-        }
-    }
     
     func callUpdateHeaderTextForURL(url: URL) {
         let knownService = self.knownServices.findMatchingKnownServiceForURL(url: url)
@@ -189,14 +158,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func callUpdateHeaderText(headerText: String?) {
-        viewController.updateHeaderText(headerText: headerText)
+        viewController.title = headerText
     }
-    func clearMenuBarItem() {
-        self.viewController.tabBar.selectedItem = nil
-    }
-    func checkSymptoms() {
-        self.viewController.callCheckSymptoms()
-    }
+
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
             os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
@@ -206,22 +170,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 self.showNativeViewContainer(errorMessage: knownService.serviceErrorMessage)
             } else {
                 self.showNativeViewContainer(errorMessage: knownServices.getServiceUnavailableErrorMessage())
-            }
-        }
-    }
-    
-    private func selectNavigationMenuFor(url: URL? ) {
-        if let host = url?.host, let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: host),
-            let tabBarDelegate = self.viewController.tabBarDelegate {
-            
-            switch knownService.service {
-            case .NHS_111:
-                tabBarDelegate.selectMenu(menu: .Symptoms)
-                break
-            case .ORGAN_DONATION, .DATA_SHARING:
-                tabBarDelegate.selectMenu(menu: .More)
-                break
-            default : break
             }
         }
     }
@@ -236,7 +184,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         clearTimer()
         self.activityIndicator.stopAnimating()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)
-        
     }
     
     private func clearTimer() {

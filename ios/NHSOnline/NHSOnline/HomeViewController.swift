@@ -84,8 +84,8 @@ class HomeViewController : UIViewController {
         }
     }
     func callCheckSymptoms() {
+        self.webViewController?.webView.stopLoading()
         let tempVC = self.storyboard?.instantiateViewController(withIdentifier: "UnsecureViewController") as? UnsecureViewController
-        tempVC?.webViewDelegate = self.webViewDelegate
         self.navigationController?.pushViewController(tempVC!, animated: false)
     }
     

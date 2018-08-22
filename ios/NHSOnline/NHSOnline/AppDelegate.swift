@@ -7,7 +7,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         application.ignoreSnapshotOnNextApplicationLaunch()
-        
         let navigationController = UINavigationController(rootViewController: (self.window?.rootViewController as? HomeViewController)!)
         self.window?.rootViewController = navigationController
         rootViewController = navigationController

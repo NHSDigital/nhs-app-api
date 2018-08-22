@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style['slim-no-padding'], 'pull-content']">
+  <div :class="[$style['slim-no-padding'], 'pull-content', getHeaderState()]">
     <header-slim/>
     <body>
       <div>
@@ -18,10 +18,25 @@ export default {
     HeaderSlim,
     symptomsCheck,
   },
+  methods: {
+    getHeaderState() {
+      return this.showHeader ? this.$style.main : this.$style.mainNoHeader;
+    },
+  },
 };
 </script>
+
 <style module lang="scss" scoped>
-.slim-no-padding {
+  .slim-no-padding {
     margin-top: -3.625em;
-}
+  }
+  .main {
+    padding: 3.125em 0em 3.125em 2.0px;
+  }
+  .mainNoHeader {
+    padding: 0em 0em 3.125em 2.0px;
+  }
+  .slim-no-padding {
+    margin-top: -3.625em;
+  }
 </style>

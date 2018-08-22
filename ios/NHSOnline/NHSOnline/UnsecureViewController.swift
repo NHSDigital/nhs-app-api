@@ -12,7 +12,7 @@ class UnsecureViewController : UIViewController {
     var lifecycleHandlers: LifecycleHandlers?
     var webViewController: UnsecureWebViewController?
     var nativeViewController: PageUnavailabilityViewController?
-    var webViewDelegate: WebViewDelegate?
+    var webViewDelegate: UnsecureWebViewDelegate?
 
     var pageUrl = config().HomeUrl
     
@@ -20,7 +20,7 @@ class UnsecureViewController : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.webViewDelegate?.unsecureViewController = self
+        webViewDelegate = UnsecureWebViewDelegate(controller: self, knownServices: knownServices)
         webViewController = self.storyboard?.instantiateViewController(withIdentifier: "UnsecureWebViewController") as? UnsecureWebViewController
         webViewController?.loadViewIfNeeded()
         webViewController?.setWebViewDelegate(delegate: webViewDelegate!)
@@ -32,10 +32,13 @@ class UnsecureViewController : UIViewController {
         
         self.addChildViewController(self.webViewController!)
         self.addSubview(subView: (self.webViewController?.view)!, toView: self.containerView)
+        lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         self.configureNavBar()
     }
+    
     @objc func checkForPages() {
         if (self.webViewController?.webView.canGoBack)! {
             self.webViewController?.webView.goBack()
@@ -50,14 +53,14 @@ class UnsecureViewController : UIViewController {
            closeVC()
         }
     }
+    
     func closeVC() {
-        self.webViewDelegate?.failedUrl = URL(string: config().HomeUrl)
         self.navigationController?.popViewController(animated: true)
-        self.webViewDelegate?.unsecureViewController = nil
         dismiss(animated: true, completion: nil)
     }
+    
     func isCheckSymptomsUnsecureURL(failedUrl: URL) -> Bool {
-        let foundService = self.knownServices.findMatchingKnownServiceForURL(url: self.webViewDelegate?.failedUrl)
+        let foundService = self.knownServices.findMatchingKnownServiceForURL(url: failedUrl)
         let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
         let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
         let unsecureServices = [nhs111Title, conditionsTitle]
@@ -69,14 +72,6 @@ class UnsecureViewController : UIViewController {
             }
         }
         return false
-    }
-    
-    func reloadWebView() {
-        if  webViewDelegate!.failedUrl != nil {
-            self.webViewController?.webView.load(URLRequest(url: webViewDelegate!.failedUrl!))
-        } else {
-            self.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
-        }
     }
     
     func configureNavBar() {

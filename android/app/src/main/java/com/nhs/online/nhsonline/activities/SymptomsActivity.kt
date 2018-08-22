@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
+import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
@@ -95,11 +96,31 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         if (symptomsWebview.canGoBack()) {
             symptomsWebview.goBack()
+        } else if (reloadUrl != null) {
+            if (isCheckSymptomsUnsecureURL(reloadUrl!!)) {
+                val urlPath = resources.getString(R.string.baseURL) + resources.getString(R.string.checkYourSymptoms) + resources.getString(R.string.nhsOnlineRequiredQueries)
+                reloadUrl = urlPath
+                loadPage(urlPath)
+            } else {
+                super.onBackPressed()
+            }
         } else {
-            // Otherwise defer to system default behavior.
             super.onBackPressed()
         }
         return true
+    }
+
+    fun isCheckSymptomsUnsecureURL(failedURL: String): Boolean  {
+        var unsecuredKnownService: KnownService? = knownServices.findMatchingKnownService(failedURL)
+        if (unsecuredKnownService != null) {
+            val nhs111Header: String = resources.getString(R.string.nhs_111_header)
+            val healthAZHeader: String = resources.getString(R.string.conditions_header)
+            val unsecureKnownServices: Array<String> = arrayOf(nhs111Header, healthAZHeader)
+            if(unsecureKnownServices.contains(unsecuredKnownService.nativeHeader)) {
+                        return true
+            }
+        }
+        return false
     }
 
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {

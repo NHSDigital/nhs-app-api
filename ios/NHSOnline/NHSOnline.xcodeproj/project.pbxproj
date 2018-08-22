@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */; };
 		13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BA17E221232D1500DF724B /* UnsecureViewController.swift */; };
+		13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13BA17E6212C4ED200DF724B /* UnsecureWebViewDelegate.swift */; };
 		4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */; };
 		925C3D5E2110C78700534AC5 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 925C3D5D2110C78600534AC5 /* assets */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		138DF3762111CF6F00D71A64 /* UnsecureWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureWebViewController.swift; sourceTree = "<group>"; };
 		13BA17E221232D1500DF724B /* UnsecureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureViewController.swift; sourceTree = "<group>"; };
+		13BA17E6212C4ED200DF724B /* UnsecureWebViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsecureWebViewDelegate.swift; sourceTree = "<group>"; };
 		4649682520C7D97300FDDE87 /* LifecycleHandlers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifecycleHandlers.swift; sourceTree = "<group>"; };
 		925C3D5D2110C78600534AC5 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../android/app/src/main/assets; sourceTree = "<group>"; };
 		C20577FF2028B94800CDBDC5 /* NHSOnline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NHSOnline.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -267,6 +269,7 @@
 			children = (
 				F0D2E5D520501EAA0067DEC4 /* WebViewDelegate.swift */,
 				F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */,
+				13BA17E6212C4ED200DF724B /* UnsecureWebViewDelegate.swift */,
 			);
 			path = Delegates;
 			sourceTree = "<group>";
@@ -325,7 +328,7 @@
 				TargetAttributes = {
 					C20577FE2028B94800CDBDC5 = {
 						CreatedOnToolsVersion = 9.2;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.SafariKeychain = {
 								enabled = 1;
@@ -401,6 +404,7 @@
 				F0AB8F532107276B008176B2 /* BlankViewController.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */,
+				13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */,
 				F0099A8E2055585800530DE3 /* Config.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
@@ -587,7 +591,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
@@ -595,8 +599,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b59a08ee-b920-406e-83be-4f5c3b68a98f";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Develop";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -608,7 +612,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
@@ -616,8 +620,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "b59a08ee-b920-406e-83be-4f5c3b68a98f";
-				PROVISIONING_PROFILE_SPECIFIER = "NHS App Develop";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -4,7 +4,8 @@ import WebKit
 
 class LifecycleHandlers: NSObject {
     var knownServices: KnownServices
-    var webViewController: WebViewController
+    var webViewController: WebViewController?
+    var unsecureWebViewController: UnsecureWebViewController?
     var blankViewController = BlankViewController()
     
     let validateSessionString: String = "window.validateSession()"
@@ -12,10 +13,18 @@ class LifecycleHandlers: NSObject {
     init(knownServices: KnownServices, webViewController: WebViewController) {
         self.knownServices = knownServices
         self.webViewController = webViewController
-        blankViewController.view.backgroundColor = UIColor.white
-        
         super.init()
-        
+        createLifecycleObservers()
+    }
+    init(knownServices: KnownServices, webViewController: UnsecureWebViewController) {
+        self.knownServices = knownServices
+        self.unsecureWebViewController = webViewController
+        super.init()
+        createLifecycleObservers()
+    }
+    
+    func createLifecycleObservers() {
+        blankViewController.view.backgroundColor = UIColor.white
         NotificationCenter.default.addObserver(self, selector: #selector(self.didFinishLaunchingNotification), name: Notification.Name.UIApplicationDidFinishLaunching, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didBecomeActive), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
@@ -27,11 +36,20 @@ class LifecycleHandlers: NSObject {
     }
     
     @objc func didBecomeActive() {
-        if knownServices.shouldValidateSession(host: webViewController.webView.url?.host) {
-            validateSession(knownServices: self.knownServices, webView: self.webViewController.webView)
+        if(unsecureWebViewController != nil) {
+            if knownServices.shouldValidateSession(host: unsecureWebViewController?.webView.url?.host) {
+                validateSession(knownServices: self.knownServices, webView: (self.unsecureWebViewController?.webView)!)
+            } else {
+                hideWhiteScreen()
+            }
         } else {
-            hideWhiteScreen()
-        }   
+            if knownServices.shouldValidateSession(host: webViewController?.webView.url?.host) {
+                validateSession(knownServices: self.knownServices, webView: (self.webViewController?.webView)!)
+            } else {
+                hideWhiteScreen()
+            }
+        }
+
     }
     
     @objc func didEnterBackground() {
@@ -64,18 +82,34 @@ class LifecycleHandlers: NSObject {
     }
     
     private func showWhiteScreen() {
-        let presentedViewController = self.webViewController.presentedViewController;
+        if (unsecureWebViewController != nil) {
+            let presentedViewController = self.unsecureWebViewController?.presentedViewController;
+            
+            if presentedViewController == nil || !(presentedViewController is BlankViewController) {
+                self.unsecureWebViewController?.present(blankViewController, animated: false, completion: nil)
+            }
+        } else {
+            let presentedViewController = self.webViewController?.presentedViewController;
         
-        if presentedViewController == nil || !(presentedViewController is BlankViewController) {
-            self.webViewController.present(blankViewController, animated: false, completion: nil)
+            if presentedViewController == nil || !(presentedViewController is BlankViewController) {
+                self.webViewController?.present(blankViewController, animated: false, completion: nil)
+            }
         }
     }
     
     private func hideWhiteScreen() {
-        let presentedViewController = self.webViewController.presentedViewController;
-        
-        if presentedViewController != nil && presentedViewController is BlankViewController {
-            self.webViewController.dismiss(animated: false, completion: nil)
+        if (unsecureWebViewController != nil) {
+            let presentedViewController = self.unsecureWebViewController?.presentedViewController;
+            
+            if presentedViewController != nil && presentedViewController is BlankViewController {
+                self.unsecureWebViewController?.dismiss(animated: false, completion: nil)
+            }
+        } else {
+            let presentedViewController = self.webViewController?.presentedViewController;
+            
+            if presentedViewController != nil && presentedViewController is BlankViewController {
+                self.webViewController?.dismiss(animated: false, completion: nil)
+            } 
         }
     }
 }

@@ -2,15 +2,15 @@ import UIKit
 import WebKit
 
 class UnsecureWebViewController: UIViewController {
-
     @IBOutlet weak var webView: WKWebView!
-    var webViewDelegate: WebViewDelegate?
+    var webViewDelegate: UnsecureWebViewDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let homeVC = HomeViewController()
         let url = homeVC.createHomeUrlSubRequestWithPath(urlPathToAppend: config().CheckSymptomsUrlPath) + config().NhsOnlineRequiredQueryString
         self.webView.loadPage(url: url)
+        webViewDelegate?.failedUrl = nil
     }
     
     func reloadWebView() {
@@ -21,7 +21,7 @@ class UnsecureWebViewController: UIViewController {
         }
     }
 
-    func setWebViewDelegate(delegate: WebViewDelegate) {
+    func setWebViewDelegate(delegate: UnsecureWebViewDelegate) {
         webView.navigationDelegate = delegate
         webView.uiDelegate = delegate
         webView.configuration.preferences.javaScriptEnabled = true
