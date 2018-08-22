@@ -73,6 +73,7 @@ export default function (app, store, route) {
       } catch (ex) {
         store.dispatch();
       }
+      return window.digitalData;
     })();
   } else {
     const $analytics = {
