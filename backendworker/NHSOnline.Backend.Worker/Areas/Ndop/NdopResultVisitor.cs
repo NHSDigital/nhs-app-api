@@ -14,7 +14,7 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
 
         public IActionResult Visit(GetNdopResult.Unsuccessful result)
         {
-            return new StatusCodeResult(StatusCodes.Status502BadGateway);
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 }
