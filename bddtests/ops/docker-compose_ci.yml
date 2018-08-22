@@ -11,6 +11,11 @@ services:
       - nhsonline.redis.session
     env_file:
       - vars_ci.env
+    environment:
+      - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+    volumes:
+      - ../src/main/kotlin/mocking/ndop:/app/bddcerts
   nhsonline.stubs:
     image: nhsapp.azurecr.io/wiremock:${WIREMOCK_TAG}
     command: --local-response-templating

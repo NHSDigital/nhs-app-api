@@ -1,0 +1,28 @@
+﻿swagger: "2.0"
+
+info:
+  version: 0.0.7
+  title: NHS App Sub-API - Ndop Token
+  description: NHS App Sub-API - endpoints pertaining to ndop token. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+
+paths:
+  /ndop:
+    get:
+      tags:
+        - ndop
+      summary: Request Ndop Token
+      description: Returns a signed Jwt token to be passed to Ndop Web Page
+      consumes:
+        - application/json
+      responses:
+        200:
+          description: Token successfully created.
+        500:
+          description: An unexpected error occurred processing the request.
+definitions:
+  NdopResponse:
+    type: object
+    properties:
+      token:
+        type: string
+        description: signed Jwt Token

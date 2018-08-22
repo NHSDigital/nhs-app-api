@@ -28,6 +28,7 @@ import worker.models.demographics.Demographics
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 import worker.models.myrecord.MyRecordResponse
+import worker.models.ndop.NdopResponse
 import worker.models.prescriptions.PrescriptionsListResponse
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
@@ -203,6 +204,17 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
         val json = gson.fromJson<MyRecordResponse>(result, MyRecordResponse::class.java)
+
+        return json
+    }
+
+    fun getNdopToken(context: HttpContext?): NdopResponse {
+        val httpGet = HttpGet(config.backendUrl + WorkerPaths.ndopConnection)
+        val response = sendAsync(httpGet, context)
+        val rd = BufferedReader(InputStreamReader(response.entity.content))
+        val result = rd.use { it.readText() }
+        httpGet.releaseConnection()
+        val json = gson.fromJson<NdopResponse>(result, NdopResponse::class.java)
 
         return json
     }

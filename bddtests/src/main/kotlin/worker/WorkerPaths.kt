@@ -11,4 +11,5 @@ object WorkerPaths {
     val getMyRecordConnection = "v1/patient/my-record"
     val getDemographicsConnection = "v1/patient/demographics"
     val LinkageKey = "/v1/patient/linkage"
+    val ndopConnection = "v1/patient/ndop"
 }

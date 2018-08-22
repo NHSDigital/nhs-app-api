@@ -630,6 +630,38 @@
             description: "The GP system is currently unavailable."
           504: 
             description: "The GP system did not respond in a timely fashion."
+    /v1/patient/terms-and-conditions: 
+      post: 
+        tags: 
+          - "termsAndConditions"
+        summary: "Records patient consent and date of consent"
+        description: "Records whether the logged in user has given their consent to use the app and date and time of consent"
+        consumes: 
+          - "application/json"
+        parameters: 
+          - 
+            in: "body"
+            name: "ConsentRequest"
+            required: true
+            description: "Object indicating whether consent has been granted, and the date the request was made."
+            schema: 
+              type: "object"
+              required: 
+                - "consentGiven"
+                - "dateOfConsent"
+              properties: 
+                consentGiven: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user has consented to the terms and conditions"
+                dateOfConsent: 
+                  type: "string"
+                  format: "date-time"
+                  description: "Date consent request was placed"
+        responses: 
+          201: 
+            description: "Appointment successfully created."
+          462: 
+            description: "Unable to record consent at this time."
     /v1/patient/prescriptions: 
       post: 
         tags: 
@@ -777,6 +809,19 @@
             description: "The GP system is currently unavailable."
           504: 
             description: "The GP system did not respond in a timely fashion."
+    /v1/patient/ndop: 
+      get: 
+        tags: 
+          - "ndop"
+        summary: "Request Ndop Token"
+        description: "Returns a signed Jwt token to be passed to Ndop Web Page"
+        consumes: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Token successfully created."
+          500: 
+            description: "An unexpected error occurred processing the request."
     /v1/session: 
       post: 
         tags: 

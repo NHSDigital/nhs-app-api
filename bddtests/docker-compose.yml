@@ -26,10 +26,14 @@ services:
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
       - GP_PROVIDER_ENABLED_MICROTEST=true
+      - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
     depends_on:
       - nhsonline.redis.sds
     ports:
       - "8082:8082"
+    volumes:
+      - ./src/main/kotlin/mocking/ndop:/app/bddcerts
   nhsonline.stubs:
     image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
     command: --local-response-templating

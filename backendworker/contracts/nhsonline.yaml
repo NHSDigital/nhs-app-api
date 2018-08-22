@@ -26,5 +26,7 @@ paths:
   /v1/patient/courses:
     # Course endpoints are in the prescriptions file as they share the course definitions
     $ref: './nhsonline.prescriptions.yaml#/paths/~1courses'
+  /v1/patient/ndop:
+    $ref: './nhsonline.ndop.yaml#/paths/~1ndop'
   /v1/session:
     $ref: './nhsonline.usersession.yaml#/paths/~1session'
