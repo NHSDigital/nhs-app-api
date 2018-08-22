@@ -16,7 +16,8 @@
         {
             public const int Status460LimitReached = 460;
             public const int Status461TooLate = 461;
-            public const int Status462FailedToRecordConsent = 463;
+            public const int Status462FailedToRecordConsent = 462;
+            public const int Status463FailedToFetchConsent = 463;
         }
         
         public static class HttpHeaders

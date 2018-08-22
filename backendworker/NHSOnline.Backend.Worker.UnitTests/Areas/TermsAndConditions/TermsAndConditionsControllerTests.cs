@@ -82,5 +82,60 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status462FailedToRecordConsent);
         }
+
+        [TestMethod]
+        public async Task Get_Returns_Success()
+        {
+            // Arrange
+            var consentRecord = _fixture.Create<ConsentResponse>();
+            var response = new TermsAndConditionsFetchConsentResult.Success(consentRecord);
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
+            
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
+            var okObjectResult = result as OkObjectResult;
+            Assert.IsNotNull(okObjectResult);
+            var value = okObjectResult.Value as TermsAndConditionsFetchConsentResult.Success;
+            Assert.IsNotNull(value);
+            var fetchedConsent = value.Response;
+            Assert.AreEqual(consentRecord.ConsentGiven, fetchedConsent.ConsentGiven);
+        }
+
+        [TestMethod]
+        public async Task Get_Returns_NotFound()
+        {
+            // Arrange
+            var response = new TermsAndConditionsFetchConsentResult.NoConsentFound();
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
+            
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
+            var okObjectResult = result as OkObjectResult;
+            Assert.IsNotNull(okObjectResult);
+            var value = okObjectResult.Value as TermsAndConditionsFetchConsentResult.NoConsentFound;
+            Assert.IsNotNull(value);
+        }
+
+        [TestMethod]
+        public async Task Get_Returns_Failure()
+        {
+            // Arrange
+            var response = new TermsAndConditionsFetchConsentResult.FailureToFetchConsent();
+            _termsAndConditionsService.Setup(x => x.FetchConsent(_userSession.NhsNumber)).Returns(Task.FromResult((TermsAndConditionsFetchConsentResult)response));
+            
+            // Act
+            var result = await _systemUnderTest.Get();
+
+            // Assert
+            _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status463FailedToFetchConsent);
+        }
     }
 }

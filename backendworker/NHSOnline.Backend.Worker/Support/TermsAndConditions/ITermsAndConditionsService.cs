@@ -6,5 +6,6 @@ namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
     public interface ITermsAndConditionsService
     {       
         Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, ConsentRequest request);
+        Task<TermsAndConditionsFetchConsentResult> FetchConsent(string nhsNumber);
     }
 }

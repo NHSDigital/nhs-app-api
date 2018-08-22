@@ -13,11 +13,11 @@ namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
                
         public TermsAndConditionsConfig(IConfiguration configuration, ILogger<TermsAndConditionsConfig> logger)
         {
-            var uriString = configuration.GetOrThrow("TERMS_CONDITIONS_COSMOS_ENDPOINT_URI", logger);
+            var uriString = configuration.GetOrWarn("TERMS_CONDITIONS_COSMOS_ENDPOINT_URI", logger);
             EndpointUri = new Uri(uriString, UriKind.Absolute);
-            AuthKey = configuration.GetOrThrow("TERMS_CONDITIONS_COSMOS_AUTH_KEY", logger);
-            DatabaseId = configuration.GetOrThrow("TERMS_CONDITIONS_COSMOS_DATABASE_ID", logger);
-            CollectionName = configuration.GetOrThrow("TERMS_CONDITIONS_COSMOS_COLLECTION_NAME", logger);
+            AuthKey = configuration.GetOrWarn("TERMS_CONDITIONS_COSMOS_AUTH_KEY", logger);
+            DatabaseId = configuration.GetOrWarn("TERMS_CONDITIONS_COSMOS_DATABASE_ID", logger);
+            CollectionName = configuration.GetOrWarn("TERMS_CONDITIONS_COSMOS_COLLECTION_NAME", logger);
         }
     }
 }

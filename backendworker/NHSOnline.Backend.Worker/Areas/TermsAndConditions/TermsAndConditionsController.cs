@@ -25,6 +25,21 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             _auditor = auditor;
         }
 
+        [HttpGet, TimeoutExceptionFilter]
+        public async Task<IActionResult> Get()
+        {
+            var methodName = "Get";
+            _logger.LogDebug("Entered: {0}", methodName);
+            
+            var userSession = HttpContext.GetUserSession();
+          
+            _logger.LogDebug("Fetching user consent");
+            var fetchConsentResult = await _termsAndConditionsService.FetchConsent(userSession.NhsNumber);
+            
+            _logger.LogDebug("Exiting: {0}", methodName);
+            return fetchConsentResult.Accept(new TermsAndConditionsFetchConsentResultVisitor());
+        }
+
         [HttpPost, TimeoutExceptionFilter]
         public async Task<IActionResult> Post([FromBody] ConsentRequest model)
         {

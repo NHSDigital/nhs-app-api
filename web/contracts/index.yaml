@@ -631,6 +631,26 @@
           504: 
             description: "The GP system did not respond in a timely fashion."
     /v1/patient/terms-and-conditions: 
+      get: 
+        tags: 
+          - "termsAndConditions"
+        summary: "Gets the patient consent for the logged on user."
+        description: "Returns the most recent patient consent for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        produces: 
+          - "application/json"
+        responses: 
+          200: 
+            description: "Returns patient consent data for the logged in user."
+            schema: 
+              type: "object"
+              required: 
+                - "consentGiven"
+              properties: 
+                consentGiven: 
+                  type: "boolean"
+                  description: "Flag indicating whether the user has consented to the terms and conditions"
+          463: 
+            description: "Unable to fetch consent at this time."
       post: 
         tags: 
           - "termsAndConditions"
