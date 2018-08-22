@@ -17,6 +17,8 @@ paths:
       responses:
         200:
           description: Token successfully created.
+          schema:
+            $ref: '#/definitions/NdopResponse'
         500:
           description: An unexpected error occurred processing the request.
 definitions:

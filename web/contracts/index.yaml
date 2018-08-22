@@ -820,6 +820,12 @@
         responses: 
           200: 
             description: "Token successfully created."
+            schema: 
+              type: "object"
+              properties: 
+                token: 
+                  type: "string"
+                  description: "signed Jwt Token"
           500: 
             description: "An unexpected error occurred processing the request."
     /v1/session: 
