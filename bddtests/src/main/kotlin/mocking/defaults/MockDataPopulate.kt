@@ -14,12 +14,10 @@ import mocking.defaults.dataPopulation.journies.linkage.LinkageJournies
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
-import mocking.emis.immunisations.ImmunisationResponseModel
 import mocking.emis.models.CourseRequestsGetResponse
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
-import models.Patient.Companion.montelFrye
 import models.prescriptions.MedicationCourse
 import org.apache.http.HttpStatus
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -77,12 +75,17 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
     private fun populateEMISStubEnvironment() {
         mockingClient.clearWiremock()
         mockingClient.favicon()
-        val patientForStubEnvironment = montelFrye
-        CitizenIdSessionCreateJourney(mockingClient).createFor(patientForStubEnvironment)
-        EmisSessionCreateJourneyFactory(mockingClient).createFor(patientForStubEnvironment)
-        generateEMISAppointmentStubs(patientForStubEnvironment = patientForStubEnvironment)
-        generateEMISPrescriptionsStubs(patientForStubEnvironment = patientForStubEnvironment)
-        generateEMISMyMedicalRecordsStubs(patientForStubEnvironment = patientForStubEnvironment)
+
+        val patientOne = generateUniquePatientData("1", CONNECTION_TOKEN_SUFFIX_LENGTH)
+        generateEMISStubs(patientOne)
+        generateEMISMyMedicalRecordsStubs(patientOne)
+
+        val patientTwo = generateUniquePatientData("2", CONNECTION_TOKEN_SUFFIX_LENGTH)
+        generateEMISStubs(patientTwo)
+        generateEMISMyMedicalRecordsNotEnabledErrorStub(patientTwo)
+
+        val patientThree = generateUniquePatientData("3", 2)
+        generateEMISStubs(patientThree)
     }
 
     private fun populateNftStubs(numOfPatients: Int) {
@@ -353,7 +356,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Prescriptions not Enabled
-       val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(uuids, "give me prescription not enabled response")
+        val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(uuids, "give me prescription not enabled response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotEnabled)
                     .respondWithPrescriptionsNotEnabled()
@@ -361,7 +364,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Prescriptions not submitted
-       val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(uuids, "give me prescription not submitted response")
+        val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(uuids, "give me prescription not submitted response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotSubmitted)
                     .respondWithGenericInternalServerError()
@@ -423,5 +426,62 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         mockingClient.forEmis {
             consultationsRequest(patientForStubEnvironment).respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
         }
+    }
+
+    private fun generateEMISMyMedicalRecordsNotEnabledErrorStub(patientForStubEnvironment: Patient) {
+        // GET /emis/record (testResultsRequest)
+        mockingClient.forEmis {
+            testResultsRequest(patientForStubEnvironment).respondWithExceptionWhenNotEnabled()
+        }
+
+        // GET /emis/record (immunisationsRequest)
+        mockingClient.forEmis {
+            immunisationsRequest(patientForStubEnvironment).respondWithExceptionWhenNotEnabled()
+        }
+
+        // GET /emis/record (allergiesRequest)
+        mockingClient.forEmis {
+            allergiesRequest(patientForStubEnvironment).respondWithExceptionWhenNotEnabled()
+        }
+
+        // GET /emis/record (medicationsRequest)
+        mockingClient.forEmis {
+            medicationsRequest(patientForStubEnvironment).respondWithExceptionWhenNotEnabled()
+        }
+
+        // GET /emis/record (problemsRequest)
+        mockingClient.forEmis {
+            problemsRequest(patientForStubEnvironment).respondWithExceptionWhenNotEnabled()
+        }
+
+        // GET /emis/record (consultationsRequest)
+        mockingClient.forEmis {
+            consultationsRequest(patientForStubEnvironment).respondWithExceptionWhenNotEnabled()
+        }
+    }
+
+    private fun generateEMISStubs(forPatient: Patient) {
+        CitizenIdSessionCreateJourney(mockingClient).createFor(forPatient)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(forPatient)
+        generateEMISAppointmentStubs(forPatient)
+        generateEMISPrescriptionsStubs(forPatient)
+    }
+
+    private fun generateUniquePatientData(uniqueId: String, length: Int): Patient {
+        val pad = uniqueId.padStart(length, '0')
+        //do not add end user session id here
+        val patient = Patient.picaJones.copy(
+                firstName = "Test",
+                surname = "Patient$pad",
+                cidUserSession = UserSessionRequest(
+                        authCode = "authCode$pad",
+                        codeVerifier = "codeVerifier$pad",
+                        redirectUrl = Config.instance.cidRedirectUri
+                ),
+                accessToken = "accessToken$pad",
+                connectionToken = "00000000-0000-0000-0000-$pad",
+                userPatientLinkToken = "userPatientLinkToken$pad"
+        )
+        return patient
     }
 }
