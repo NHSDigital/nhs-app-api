@@ -1,0 +1,42 @@
+﻿swagger: "2.0"
+
+info:
+  version: 0.0.7
+  title: NHS App Sub-API - Terms and Conditions
+  description: NHS App Sub-API - endpoints pertaining to terms and conditions. All require an NHSO-Session-Id cookie (obtained from Session endpoint).
+
+paths:
+  /consent:
+    post:
+      tags:
+        - termsAndConditions
+      summary: Records patient consent and date of consent
+      description: Records whether the logged in user has given their consent to use the app and date and time of consent
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: ConsentRequest
+          required: true
+          description: Object indicating whether consent has been granted, and the date the request was made.
+          schema:
+            $ref: "#/definitions/ConsentRequest"
+      responses:
+        201:
+          description: Appointment successfully created.
+        462:
+          description: Unable to record consent at this time.
+definitions:
+  ConsentRequest:
+    type: object
+    required:
+      - consentGiven
+      - dateOfConsent
+    properties:
+      consentGiven:
+        type: boolean
+        description: Flag indicating whether the user has consented to the terms and conditions
+      dateOfConsent:
+        type: string
+        format: date-time
+        description: Date consent request was placed

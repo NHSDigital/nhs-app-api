@@ -16,6 +16,7 @@
         {
             public const int Status460LimitReached = 460;
             public const int Status461TooLate = 461;
+            public const int Status462FailedToRecordConsent = 463;
         }
         
         public static class HttpHeaders
@@ -54,6 +55,9 @@
             public const string CreateLinkageKeyAuditTypeRequest = "Linkage_CreateKey_Request";
             public const string CreateLinkageKeyAuditTypeResponse = "Linkage_CreateKey_Response";
             //Retrieves a patient's Linkage details
+            public const string TermsAndConditionsRecordConsentAuditTypeRequest = "TermsAndConditions_RecordConsent_Request";
+            public const string TermsAndConditionsRecordConsentAuditTypeResponse = "TermsAndConditions_RecordConsent_Response";
+
         }
 
         public static class HttpContextItems

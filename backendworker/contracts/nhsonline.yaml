@@ -18,7 +18,9 @@ paths:
   /v1/patient/my-record:
     $ref: './nhsonline.myrecord.yaml#/paths/~1my-record'
   /v1/patient/test-result:
-    $ref: './nhsonline.myrecord.yaml#/paths/~1test-result'
+    $ref: './nhsonline.myrecord.yaml#/paths/~1test-result'  
+  /v1/patient/terms-and-conditions:
+    $ref: './nhsonline.termsandconditions.yaml#/paths/~1consent'
   /v1/patient/prescriptions:
     $ref: './nhsonline.prescriptions.yaml#/paths/~1prescriptions'
   /v1/patient/courses:

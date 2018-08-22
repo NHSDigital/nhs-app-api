@@ -1,0 +1,10 @@
+﻿using System.Threading.Tasks;
+using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
+
+namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+{
+    public interface ITermsAndConditionsService
+    {       
+        Task<TermsAndConditionsRecordConsentResult> RecordConsent(string nhsNumber, ConsentRequest request);
+    }
+}
