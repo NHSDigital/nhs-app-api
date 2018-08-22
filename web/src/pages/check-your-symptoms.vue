@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style['slim-no-padding'], 'pull-content', getHeaderState()]">
+  <div :class="[getHeaderState(), 'pull-content']">
     <header-slim/>
     <body>
       <div>
@@ -20,23 +20,20 @@ export default {
   },
   methods: {
     getHeaderState() {
-      return this.showHeader ? this.$style.main : this.$style.mainNoHeader;
+      return !this.$store.state.device.isNativeApp
+        ? this.$style.webHeader : this.$style.nativeHeader;
     },
   },
 };
 </script>
 
 <style module lang="scss" scoped>
-  .slim-no-padding {
+  .webHeader {
     margin-top: -3.625em;
   }
-  .main {
-    padding: 3.125em 0em 3.125em 2.0px;
-  }
-  .mainNoHeader {
+
+  .nativeHeader {
     padding: 0em 0em 3.125em 2.0px;
   }
-  .slim-no-padding {
-    margin-top: -3.625em;
-  }
+
 </style>

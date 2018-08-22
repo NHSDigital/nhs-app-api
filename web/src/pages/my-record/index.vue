@@ -277,6 +277,7 @@ export default {
       padding-left: 1em;
       padding-top: 0.5em;
       padding-bottom: 0.5em;
+      padding-right: 0.5em;
     }
     a {
       line-height: 1em;

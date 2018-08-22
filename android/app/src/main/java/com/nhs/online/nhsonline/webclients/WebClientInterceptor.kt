@@ -43,6 +43,7 @@ class WebClientInterceptor(
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        uiInteractor.setReloadUrl(url)
         cancelTrackingWebRequestResponse()
 
         if (!isConnectedToInternet()) {
@@ -177,7 +178,6 @@ class WebClientInterceptor(
     }
 
     private fun handleUnavailability(failingUrl: String?, errorCode: Int? = null) {
-        uiInteractor.setReloadUrl(failingUrl)
         shouldShowErrorPage = true
 
         val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)

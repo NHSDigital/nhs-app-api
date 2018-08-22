@@ -27,6 +27,7 @@ class UnsecureWebClient(
     private var shouldShowErrorPage = false
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        uiInteractor.setReloadUrl(url)
         val urlPath = context.resources.getString(R.string.baseURL)+context.resources.getString(R.string.checkYourSymptoms)+context.resources.getString(R.string.nhsOnlineRequiredQueries)
         when(url) {
             context.resources.getString(R.string.nhs111) -> uiInteractor.setHeaderText(context.resources.getString(R.string.nhs_111_header))
@@ -43,7 +44,7 @@ class UnsecureWebClient(
         }
 
         shouldShowErrorPage = false
-        super.onPageFinished(view, url)
+        super.onPageStarted(view, url, favicon)
     }
 
     override fun onLoadResource(view: WebView?, url: String?) {
@@ -133,7 +134,6 @@ class UnsecureWebClient(
     }
 
     private fun handleUnavailability(failingUrl: String?, errorCode: Int? = null) {
-        uiInteractor.setReloadUrl(failingUrl)
         shouldShowErrorPage = true
 
         val unavailabilityErrorMessage = getUnavailabilityErrorMessageForService(failingUrl)

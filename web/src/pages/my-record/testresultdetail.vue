@@ -14,7 +14,7 @@
           </p>
         </div>
       </div>
-      <floating-button-bottom @on-click="onBackButtonClicked">
+      <floating-button-bottom :button-classes="['grey']" @on-click="onBackButtonClicked">
         {{ $t('my_record.testresultdetail.backButton') }}
       </floating-button-bottom>
     </div>

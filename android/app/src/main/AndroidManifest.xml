@@ -51,10 +51,12 @@
                     android:scheme="@string/appScheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.BlankScreenActivity">
+        <activity android:name=".activities.BlankScreenActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.SymptomsActivity"
-            android:parentActivityName=".activities.MainActivity" >
+            android:parentActivityName=".activities.MainActivity"
+            android:screenOrientation="portrait">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value=".activities.MainActivity" />
