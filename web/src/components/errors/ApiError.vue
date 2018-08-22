@@ -157,6 +157,14 @@ export default {
     setPageHeader() {
       if (this.showError()) {
         const pageHeader = this.getMessage('pageHeader');
+        const pageTitle = this.getMessage('pageTitle');
+
+        if (pageTitle && pageTitle !== '') {
+          this.$store.dispatch('header/updatePageTitle', pageTitle);
+        } else {
+          this.$store.dispatch('header/updatePageTitle', pageHeader);
+        }
+
         this.$store.dispatch('header/updateHeaderText', pageHeader);
       }
     },

@@ -1,0 +1,2 @@
+export const UPDATE_PAGE_TITLE = 'UPDATE_PAGE_TITLE';
+export const INIT_PAGE_TITLE = 'INIT_PAGE_TITLE';

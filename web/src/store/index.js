@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 
 import header from './modules/header';
+import pageTitle from './modules/pageTitle';
 import availableAppointments from './modules/availableAppointments';
 import auth from './modules/auth';
 import device from './modules/device';
@@ -17,6 +18,7 @@ import analytics from './modules/analytics';
 const createStore = () => new Vuex.Store({
   modules: {
     header,
+    pageTitle,
     availableAppointments,
     auth,
     device,

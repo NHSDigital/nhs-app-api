@@ -1,11 +1,13 @@
 export default {
   language: 'en',
   errors: {
+    pageTitle: 'Server error',
     pageHeader: 'Server error',
     header: 'Sorry, we\'re experiencing technical difficulties',
     subheader: 'Please try again later.',
     message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
     502: {
+      pageTitle: 'Service currently unavailable',
       pageHeader: 'Service currently unavailable',
       header: 'Sorry, this service is unavailable right now',
       retryButtonText: 'Please try again later.',
@@ -14,7 +16,8 @@ export default {
   },
   auth_return: {
     errors: {
-      pageHeader: 'Session error - NHS App',
+      pageTitle: 'Session error',
+      pageHeader: 'Session error',
       header: 'Session Error',
       subheader: 'Sorry, there\'s been a problem loading this page',
       message: 'Please go back to the homescreen and sign in again.\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
@@ -448,7 +451,7 @@ export default {
   signOutButton: {
     signOut: 'Sign out',
   },
-  pageHeaderTitles: {
+  pageHeaders: {
     home: 'Home',
     prescriptions: 'My repeat prescriptions',
     repeatPrescriptionCourses: 'Select medication',
@@ -460,6 +463,22 @@ export default {
     appointmentCancelling: 'Cancel appointment',
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
+    symptoms: 'Check my symptoms',
+    more: 'More',
+    login: 'Login',
+  },
+  pageTitles: {
+    home: 'Home',
+    prescriptions: 'My repeat prescriptions',
+    repeatPrescriptionCourses: 'Select medication',
+    confirmPrescription: 'Confirm prescription',
+    account: 'My account',
+    appointments: 'My appointments',
+    appointmentGuidance: 'Check before you book - My appointments',
+    appointmentBooking: 'Book new appointment',
+    appointmentCancelling: 'Cancel appointment',
+    appointmentConfirmation: 'Confirm appointment',
+    myRecord: 'Sensitive information - My record',
     symptoms: 'Check my symptoms',
     more: 'More',
     login: 'Login',

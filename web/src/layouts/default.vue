@@ -40,7 +40,7 @@ export default {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
-      title: `${this.$store.state.header.headerText} screen`,
+      title: `${this.$store.state.pageTitle.pageTitle} - NHS App`,
       script: [
         {
           src: process.env.ANALYTICS_SCRIPT_URL,
