@@ -514,7 +514,7 @@ export default {
       title: 'Prescriptions',
     },
     sessionExpired: {
-      title: 'Session Expired. Please sign in again.',
+      title: 'For your security, you need to sign in again',
     },
     symptomsIcon: {
       title: 'Symptoms Checker',
