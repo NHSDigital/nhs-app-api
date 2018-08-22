@@ -11,7 +11,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.net.URL
 
-
 @RunWith(RobolectricTestRunner::class)
 class KnownServicesTest {
 

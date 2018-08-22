@@ -14,4 +14,15 @@ class AppWebInterface(private val context: MainActivity) {
             context.hideBlankScreen()
         }
     }
+
+    fun loadSpaPage(path: String, baseUrl: String) {
+        var spaPath = path.replace(baseUrl, "/")
+
+        if(!spaPath.startsWith("/")) {
+            spaPath = "/" + spaPath;
+        }
+
+        context.setReloadUrl("$baseUrl$path")
+        context.webview.evaluateJavascript("window.\$nuxt.\$router.push('$spaPath');", null)
+    }
 }

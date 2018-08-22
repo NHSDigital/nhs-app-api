@@ -12,14 +12,12 @@ class WebAppInterface(private val context: MainActivity) {
 
     @JavascriptInterface
     fun onLogin() {
-        context.showMenuBar()
-        context.showHeader()
+        context.loggedIn()
     }
 
     @JavascriptInterface
     fun onLogout() {
-        context.hideMenuBar()
-        context.hideHeader()
+        context.loggedOut()
     }
 
     @JavascriptInterface

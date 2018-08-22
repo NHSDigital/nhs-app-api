@@ -2,21 +2,24 @@ package com.nhs.online.nhsonline.activities
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.webkit.CookieManager
+import android.webkit.WebSettings
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
+import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
 import com.nhs.online.nhsonline.services.KnownServices
+import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.LifeCycleObserver
 import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
@@ -27,17 +30,17 @@ import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
-import android.R.id.edit
-import android.content.SharedPreferences
-import android.preference.PreferenceManager
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
 
     private lateinit var chromeClient: ChromeClientLocationHandler
     private lateinit var knownServices: KnownServices
+    private lateinit var urlLoader: UrlLoader
+    private lateinit var appWebInterface: AppWebInterface
     private var lifeCycleObserver: LifeCycleObserver? = null
-    private var reloadUrl: String? = null
+
+    private var isLoggedIn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +52,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.header))
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
+        knownServices = KnownServices(this)
+        appWebInterface= AppWebInterface(this)
+
         configureWebView()
 
+        urlLoader = UrlLoader(webview, appWebInterface, knownServices, resources.getString(R.string.baseURL))
+
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
-        retryButton.setOnClickListener { reloadRequest() }
+        retryButton.setOnClickListener { urlLoader.reloadRequest() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
 
@@ -62,7 +70,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
             val edit = prefs.edit()
             edit.putBoolean(getString(R.string.isFirstTimeOpened), java.lang.Boolean.FALSE)
             edit.commit()
-            loadPage(getString(R.string.appIntroPath))
+            urlLoader.loadUrl(getString(R.string.appIntroPath))
         } else {
             val urlPath = intent?.data?.path
             val authRedirectPath = resources.getString(R.string.authRedirectPath)
@@ -79,8 +87,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         super.onStart()
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                    AppWebInterface(this),
-                    knownServices)
+                    appWebInterface, knownServices)
         }
 
         lifeCycleObserver?.onMoveToForeground()
@@ -110,7 +117,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun setReloadUrl(url: String?) {
-        reloadUrl = url
+        urlLoader.reloadUrl = url
     }
 
     private fun configureWebView() {
@@ -120,10 +127,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
         chromeClient = ChromeClientLocationHandler(this)
         webview.webChromeClient = chromeClient
 
-        knownServices = KnownServices(this)
         webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities(), this)
 
         webview.addJavascriptInterface(WebAppInterface(this), "nativeApp")
+
+        webview.settings.cacheMode = WebSettings.LOAD_DEFAULT
     }
 
     fun createActivities(): List<ActivityInterface> {
@@ -133,35 +141,47 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
+        var path:String
+        var header:String? = null
+
         when (menuBarItem.id) {
-            R.id.symptoms -> onSymptomMenuSelected()
-            R.id.more -> onMoreMenuSelected()
-            R.id.myRecord -> onMyRecordMenuSelected()
-            R.id.appointments -> onAppointmentsMenuSelected()
-            R.id.prescriptions -> onPrescriptionsMenuSelected()
-            else -> loadWelcomePage()
+            R.id.symptoms -> {
+                path = resources.getString(R.string.symptomsPath)
+                header = resources.getString(R.string.symptoms_header)
+            }
+            R.id.myRecord -> {
+                path = resources.getString(R.string.myRecordPath)
+                header = resources.getString(R.string.my_record_header)
+            }
+            R.id.more -> {
+                path = resources.getString(R.string.morePath)
+                header = resources.getString(R.string.more)
+            }
+            R.id.appointments -> {
+                path = resources.getString(R.string.appointmentsPath)
+                header = resources.getString(R.string.appointments_header)
+            }
+            R.id.prescriptions -> {
+                path = resources.getString(R.string.prescriptionsPath)
+                header = resources.getString(R.string.prescriptions_header)
+            }
+            else -> {
+                path = resources.getString(R.string.baseURL)
+            }
         }
+        loadUrl(path, header)
     }
 
-    private fun onSymptomMenuSelected() =
-            loadSubPage(resources.getString(R.string.symptomsPath),
-                    resources.getString(R.string.symptoms_header))
+    override fun loadPage(url: String) {
+        loadUrl(url, null)
+    }
 
-    private fun onMyRecordMenuSelected() =
-            loadSubPage(resources.getString(R.string.myRecordPath),
-                    resources.getString(R.string.my_record_header))
-
-    private fun onMoreMenuSelected() =
-            loadSubPage(resources.getString(R.string.morePath), resources.getString(
-                    R.string.more))
-
-    private fun onAppointmentsMenuSelected() =
-            loadSubPage(resources.getString(R.string.appointmentsPath),
-                    resources.getString(R.string.appointments_header))
-
-    private fun onPrescriptionsMenuSelected() =
-            loadSubPage(resources.getString(R.string.prescriptionsPath),
-                    resources.getString(R.string.prescriptions_header))
+    private fun loadUrl(path:String, headerText:String?) {
+        urlLoader.loadUrl(path)
+        if (headerText != null) {
+            setHeaderText(headerText)
+        }
+    }
 
     private fun onNhsOnlineLogoIconSelected() {
         loadWelcomePage()
@@ -170,39 +190,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun onMyAccountIconSelected() {
-        loadSubPage(resources.getString(R.string.myAccountPath),
+        loadUrl(resources.getString(R.string.myAccountPath),
                 resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
     }
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
-
-    override fun loadPage(url: String) {
-        val urlWithMissingQueryStrings =
-                knownServices.findKnownServiceAddMissingQueryFor(url)
-
-        webview.loadUrl(urlWithMissingQueryStrings)
-    }
-
-    private fun loadSubPage(pageEndPoint: String, headerText: String?) {
-        val builtUri = Uri.parse(resources.getString(R.string.baseURL))
-                .buildUpon()
-                .appendEncodedPath(pageEndPoint)
-                .build()
-        val fullUrl = builtUri.toString()
-        loadPage(fullUrl)
-        if (headerText != null) {
-            setHeaderText(headerText)
-        }
-    }
-
-    private fun reloadRequest() {
-        if (reloadUrl != null) {
-            webview.loadUrl(reloadUrl)
-        } else {
-            webview.reload()
-        }
-    }
 
     override fun setHeaderText(text: String) {
         runOnUiThread {
@@ -238,6 +231,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 unavailabilityErrorMessage.message)
         if (unavailabilityErrorMessage.message != null) {
             tryAgainTextView.visibility = GONE
+
         } else {
             tryAgainTextView.visibility = VISIBLE
         }
@@ -246,13 +240,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun showErrorScreen() {
         errorViewLayout.visibility = View.VISIBLE
         webview.visibility = View.GONE
+
+        urlLoader.usingAbsoluteUri = true
     }
 
     override fun showWebviewScreen() {
         errorViewLayout.visibility = View.GONE
         webview.visibility = View.VISIBLE
-    }
 
+        if(isLoggedIn) {
+            urlLoader.usingAbsoluteUri = false
+        }
+    }
 
     override fun onRequestPermissionsResult(
             requestCode: Int,
@@ -279,25 +278,40 @@ class MainActivity : IInteractor, AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun hideMenuBar() {
+    private fun hideMenuBar() {
         runOnUiThread {
             menuBar.visibility = GONE
         }
     }
 
-    override fun hideHeader() {
+    private fun hideHeader() {
         runOnUiThread {
             header.visibility = GONE
         }
     }
 
-    fun showMenuBar() {
+    fun loggedIn() {
+        showMenuBar()
+        showHeader()
+        urlLoader.usingAbsoluteUri = false
+        isLoggedIn = true
+    }
+
+    fun loggedOut() {
+        hideHeader()
+        hideMenuBar()
+        urlLoader.usingAbsoluteUri = true
+        isLoggedIn = false
+    }
+
+
+    private fun showMenuBar() {
         runOnUiThread {
             menuBar.visibility = VISIBLE
         }
     }
 
-    fun showHeader() {
+    private fun showHeader() {
         runOnUiThread {
             header.visibility = VISIBLE
         }
