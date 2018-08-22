@@ -183,6 +183,18 @@ export default {
         (!this.validationError.isTypeValid ||
         !this.validationError.isLocationValid ||
         this.$store.state.availableAppointments.selectedSlot === null);
+
+      if (this.showValidationError) {
+        const errors = [];
+        if (!this.validationError.isTypeValid) {
+          errors.push(this.$t('appointments.booking.validationErrors.type'));
+        }
+        if (!this.validationError.isLocationValid) {
+          errors.push(this.$t('appointments.booking.validationErrors.location'));
+        }
+        errors.push(this.$t('appointments.booking.validationErrors.slot'));
+        this.$store.app.$analytics.validationError(errors);
+      }
     },
     bottomStyle() {
       if (

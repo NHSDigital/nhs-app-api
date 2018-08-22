@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 import { isEmpty } from 'lodash/fp';
 
 const APP_ID = 'nhsapp';
 const ENGLISH_LANGUAGE = 'en';
 const pageNamePrefix = `${APP_ID}:${ENGLISH_LANGUAGE}`;
+
 
 export default function (app, store, route) {
   /* eslint-disable-next-line no-param-reassign */
@@ -25,19 +27,6 @@ export default function (app, store, route) {
       if (isEmpty(fields) || isEmpty(fields[0])) fields[0] = 'home';
       const pageName = fields.reduce((combined, field) => `${combined}:${field}`, pageNamePrefix);
 
-      const $analytics = {
-        trackButtonClick: (target) => {
-          const action = {
-            type: 'page_view',
-            senderType: 'button',
-            target,
-          };
-          store.dispatch('analytics/track', action);
-        },
-      };
-
-      Object.assign(app, { $analytics });
-
       window.digitalData = {
         page: {
           pageInfo: {
@@ -58,7 +47,7 @@ export default function (app, store, route) {
           },
           userAgent,
         },
-        errors: store.state.errors.apiErrors,
+        errors: store.state.analytics.error,
         action: store.state.analytics.action,
         timestamp: store.state.analytics.timestamp,
         environment: process.env.ANALYTICS_ENVIRONMENT,
@@ -75,6 +64,26 @@ export default function (app, store, route) {
       }
       return window.digitalData;
     })();
+
+    const $analytics = {
+      trackButtonClick: (target) => {
+        const action = {
+          type: 'page_view',
+          senderType: 'button',
+          target,
+        };
+        store.dispatch('analytics/track', action);
+      },
+      validationError: (messages) => {
+        const error = {
+          type: 'validation_error',
+          messages,
+        };
+        store.dispatch('analytics/trackError', error);
+      },
+    };
+
+    Object.assign(app, { $analytics });
   } else {
     const $analytics = {
       trackButtonClick: (target) => {
@@ -84,6 +93,14 @@ export default function (app, store, route) {
           target,
         };
         store.dispatch('analytics/track', action);
+        window._satellite.track('track_action');
+      },
+      validationError: (messages) => {
+        const error = {
+          type: 'user_validation_error',
+          messages,
+        };
+        store.dispatch('analytics/error', error);
       },
     };
     Object.assign(app, { $analytics });

@@ -37,8 +37,14 @@ const createBookingPage = ($store, data = []) => {
 };
 
 describe('booking.vue - validate', () => {
+  const $analytics = {
+    validationError: jest.fn(),
+  };
   it('will return false when filters have not been initialized', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
@@ -70,6 +76,9 @@ describe('booking.vue - validate', () => {
 
   it('will return false when filters have not been initialized  and default location has been set', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
@@ -101,6 +110,9 @@ describe('booking.vue - validate', () => {
 
   it('will return false when filters have not been selected', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
@@ -133,6 +145,9 @@ describe('booking.vue - validate', () => {
 
   it('will return false when type has not been selected', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
@@ -165,6 +180,9 @@ describe('booking.vue - validate', () => {
 
   it('will return false when location has not been selected', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
@@ -197,6 +215,9 @@ describe('booking.vue - validate', () => {
 
   it('will return false when filter has been selected but slot has not been selected', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
@@ -229,6 +250,9 @@ describe('booking.vue - validate', () => {
 
   it('will return true when filter has been selected ans slot has been selected', () => {
     const $store = {
+      app: {
+        $analytics,
+      },
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
