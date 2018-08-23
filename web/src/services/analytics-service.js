@@ -47,7 +47,7 @@ export default function (app, store, route) {
           },
           userAgent,
         },
-        errors: store.state.analytics.error,
+        error: store.state.analytics.error,
         action: store.state.analytics.action,
         timestamp: store.state.analytics.timestamp,
         environment: process.env.ANALYTICS_ENVIRONMENT,
