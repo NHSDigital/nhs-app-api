@@ -48,6 +48,13 @@ export default {
       this.$refs[ref][0].select();
     },
     showErrorMessage() {
+      if (this.showValidationError && this.availableSlots.length > 0) {
+        const errors = [];
+
+        errors.push(this.$t('appointments.booking.validationErrors.slot'));
+
+        this.$store.app.$analytics.validationError(errors);
+      }
       return this.showValidationError && this.availableSlots.length > 0;
     },
     validationClass() {

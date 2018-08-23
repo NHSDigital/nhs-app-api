@@ -101,6 +101,13 @@ export default {
   computed: {
     error() {
       const { isValid, validated } = this.$store.state.repeatPrescriptionCourses;
+      if (validated && !isValid) {
+        const errors = [];
+
+        errors.push(this.$t('rp03.noMedicinesSelected'));
+
+        this.$store.app.$analytics.validationError(errors);
+      }
       return validated && !isValid;
     },
     repeatPrescriptionCourses() {
