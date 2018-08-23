@@ -1,13 +1,13 @@
 package pages
 
-class ServiceUnavailablePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class ServiceUnavailablePage : HybridPageObject() {
 
     private val header = HybridPageElement(
             browserLocator = "//div/h2",
             androidLocator = null,
             page = this,
             helpfulName = "content"
-    ).containingText("You cannot currently use this service")
+    ).withText("You cannot currently use this service", false)
 
     private val content = HybridPageElement(
             browserLocator = "//div/p",
@@ -18,6 +18,6 @@ class ServiceUnavailablePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
 
     fun assertIsPresent(message: String) {
         header.assertSingleElementPresent()
-        content.containingText(message).assertSingleElementPresent()
+        content.withText(message, false).assertSingleElementPresent()
     }
 }

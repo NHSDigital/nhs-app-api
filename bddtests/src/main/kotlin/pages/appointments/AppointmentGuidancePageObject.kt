@@ -12,14 +12,14 @@ class AppointmentGuidancePageObject(pageObject: HybridPageObject){
 
     val appointmentSlotGuidance = HybridPageElement(
             browserLocator = guidanceParentXpath,
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject,
             helpfulName = "Appointment Slot Guidance section. "
     )
 
     val expand = HybridPageElement(
             browserLocator = String.format(guidanceIconXpathFormat, "+"),
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject,
             helpfulName = "Appointment Slot Guidance expand icon. "
     )
@@ -27,21 +27,21 @@ class AppointmentGuidancePageObject(pageObject: HybridPageObject){
     val collapse = HybridPageElement(
             // Note that the character is a true minus sign and not a hyphen
             browserLocator = String.format(guidanceIconXpathFormat, "−"),
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject,
             helpfulName = "Appointment Slot Guidance collapse icon. "
     )
 
     val label = HybridPageElement(
             browserLocator = "$guidanceParentXpath//h2",
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject,
             helpfulName = "Appointment Slot Guidance section label. "
     )
 
     val content = HybridPageElement(
             browserLocator = "$guidanceParentXpath//*[@data-purpose='info-content']",
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject,
             helpfulName = "Appointment Slot Guidance content. "
     )

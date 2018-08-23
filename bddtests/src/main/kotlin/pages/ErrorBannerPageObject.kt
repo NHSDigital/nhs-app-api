@@ -6,13 +6,13 @@ class ErrorBannerPageObject(pageObject: HybridPageObject)  {
 
     private val errorSummarySubHeading = HybridPageElement(
             browserLocator = "$errorXPath/p",
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject
     )
 
     private val errorSummaryBody = HybridPageElement(
             browserLocator = "$errorXPath/ul/li",
-            androidLocator = "",
+            androidLocator = null,
             page = pageObject
     )
 

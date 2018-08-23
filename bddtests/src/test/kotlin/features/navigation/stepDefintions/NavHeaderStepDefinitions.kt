@@ -7,6 +7,7 @@ import cucumber.api.java.en.When
 import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
+import pages.navigation.NavBarNative
 
 
 class NavHeaderStepDefinitions {
@@ -37,6 +38,6 @@ class NavHeaderStepDefinitions {
 
     @Given("^I navigate away from the home page$")
     fun iAmOnTheRecordWarningPage() {
-        nav.select("MY_RECORD")
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 }

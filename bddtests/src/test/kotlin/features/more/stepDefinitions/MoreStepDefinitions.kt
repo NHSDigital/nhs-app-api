@@ -3,15 +3,18 @@ package features.more.stepDefinitions
 import config.Config
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.dataSharing.stepDefinitions.DataSharingStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import io.appium.java_client.MobileBy
+import io.appium.java_client.MobileElement
 import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.DataSharingPage
 import pages.MorePage
-import pages.navigation.Header
-import pages.navigation.NavBar
+import pages.navigation.HeaderNative
+import pages.navigation.NavBarNative
 import java.net.URL
 
 class MoreStepDefinitions {
@@ -19,11 +22,10 @@ class MoreStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
-    lateinit var dataSharing: DataSharingPage
-    @Steps
     lateinit var nav: NavigationSteps
 
-    lateinit var headerBar: Header
+    lateinit var headerNative: HeaderNative
+
     lateinit var morePage: MorePage
     val mockingClient = MockingClient.instance
 
@@ -51,12 +53,15 @@ class MoreStepDefinitions {
 
     @Then("^I see more button on the nav bar is highlighted$")
     fun moreButtonOnNavBarIsHighlighted() {
-        nav.assertSelectedTab("MORE")
+        nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
     @Then("^I see the more page header$")
     fun pageHeaderVisible() {
-        headerBar.assertIsVisible("More")
+        if(morePage.onMobile()){
+            headerNative.getPageTitle("More").nativeElement.isDisplayed
+        }
+        headerNative.assertIsVisible("More")
     }
 
     @Then("I see and can follow links within the more page body$")
@@ -80,18 +85,23 @@ class MoreStepDefinitions {
 
     private fun followDataSharingLink() {
         morePage.btnDataSharing.element.click()
-        dataSharing.waitForPageHeaderText("Sharing health data preferences")
-        nav.assertSelectedTab("MORE")
+        headerNative.waitForPageHeaderText("Sharing health data preferences")
+        nav.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
-    private fun followOrganDonationLink() {
+
+    fun followOrganDonationLink() {
         morePage.btnOrganDonation.element.click()
-        browser.changeTab(URL(Config.instance.organDonation))
-        browser.shouldHaveUrl(Config.instance.organDonation)
+        if (morePage.onMobile()){
+            URL(Config.instance.organDonation)
+        } else {
+            browser.changeTab(URL(Config.instance.organDonation))
+            browser.shouldHaveUrl(Config.instance.organDonation)
+        }
     }
 
     private fun navigateBackToMorePage() {
-        nav.navBar.select(NavBar.NavBarType.MORE)
+        nav.select(NavBarNative.NavBarType.MORE)
         iAmOnTheMorePage()
     }
 }

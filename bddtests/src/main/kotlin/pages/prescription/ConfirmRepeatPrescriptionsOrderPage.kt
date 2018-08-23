@@ -7,14 +7,13 @@ import net.thucydides.core.pages.WrongPageError
 import org.junit.Assert
 import org.openqa.selenium.Keys
 import pages.HybridPageObject
-import pages.HybridPageObject.Companion.PageType
 import pages.HybridPageElement
-import pages.navigation.Header
+import pages.navigation.HeaderNative
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/confirm-prescription-details")
-open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVIEW_APP) {
+open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject() {
     var headerText: String = "Confirm prescription"
-    lateinit var headerBar: Header
+    lateinit var headerBar: HeaderNative
 
     val specialRequestTextXPath = "//*[@id='specialRequestText']"
 

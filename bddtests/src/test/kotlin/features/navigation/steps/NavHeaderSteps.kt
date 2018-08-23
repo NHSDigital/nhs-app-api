@@ -1,13 +1,12 @@
 package features.navigation.steps
 
 import net.thucydides.core.annotations.Step
-import org.junit.Assert
 import pages.HomePage
-import pages.navigation.Header
+import pages.navigation.HeaderNative
 
 open class NavHeaderSteps {
 
-    lateinit var header: Header
+    lateinit var header: HeaderNative
     lateinit var homePage: HomePage
 
     @Step

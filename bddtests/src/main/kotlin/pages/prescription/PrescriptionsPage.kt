@@ -4,11 +4,10 @@ import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageObject
-import pages.navigation.Header
-import pages.HybridPageObject.Companion.PageType
+import pages.navigation.HeaderNative
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
-open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
+open class PrescriptionsPage : HybridPageObject() {
 
     val timeoutPageHeader = "Prescription data error"
     val timeoutHeader = "There's been a problem getting your prescription information"
@@ -23,9 +22,10 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), " +
                                                         "'Order new repeat prescription')]"
+    private lateinit var headerNative: HeaderNative
 
     fun isLoaded() {
-        waitForPageHeaderText("My repeat prescriptions")
+        headerNative.waitForPageHeaderText("My repeat prescriptions")
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {

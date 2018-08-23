@@ -48,6 +48,7 @@ import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import javax.servlet.http.Cookie
 import mocking.vision.VisionMockDefaults
+import pages.navigation.NavBarNative
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
@@ -101,7 +102,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun whenIAmOnThePrescriptionsPage() {
         browser.goToApp()
         login.using(currentPatient)
-        navigation.select("Prescriptions")
+        navigation.select(NavBarNative.NavBarType.PRESCRIPTIONS)
     }
 
     @Given("^I have no repeat prescriptions for (.*)$")

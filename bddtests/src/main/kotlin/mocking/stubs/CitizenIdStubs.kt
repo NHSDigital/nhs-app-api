@@ -11,7 +11,7 @@ class CitizenIdStubs(private val mockingClient: MockingClient) {
     fun createFor(patient: Patient) {
 
         mockingClient.forCitizenId {
-            initialLoginRequest(".*", Config.instance.cidClientId,"matches")
+            initialLoginRequest(patient,".*", Config.instance.cidClientId,"matches")
                     .respondWithLoginPage()
         }
 

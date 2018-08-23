@@ -9,6 +9,7 @@ import features.appointments.steps.MyAppointmentsSteps
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import net.thucydides.core.annotations.Steps
+import pages.navigation.HeaderNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
@@ -18,11 +19,12 @@ class MyAppointmentsStepDefinitions {
 
     @Steps
     lateinit var myAppointmentsSteps: MyAppointmentsSteps
+    lateinit var headerNative: HeaderNative
 
 
     @Then("^the Appointment Slot page is displayed$")
     fun theAppointmentSlotPageIsDisplayed() {
-        myAppointmentsSteps.myAppointmentsPage.waitForPageHeaderText("Confirm appointment")
+        headerNative.waitForPageHeaderText("Confirm appointment")
     }
 
     @Then("^the Appointment Booking confirmation screen is displayed$")

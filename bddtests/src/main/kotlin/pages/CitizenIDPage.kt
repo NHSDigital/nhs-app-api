@@ -1,6 +1,6 @@
 package pages
 
-class CitizenIDPage : HybridPageObject(Companion.PageType.WEBVIEW_BROWSER) {
+class CitizenIDPage : HybridPageObject() {
 
     fun login(username: String, password: String) {
         findByXpath("//input[@id='username']").sendKeys(username)

@@ -1,6 +1,7 @@
 package pages
 
 import config.Config
+import io.appium.java_client.AppiumDriver
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.ios.IOSDriver
 import net.serenitybdd.core.pages.PageObject
@@ -8,20 +9,19 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
-import org.junit.Assert.assertEquals
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
-import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.support.ui.FluentWait
-import pages.navigation.Header
 import java.time.Duration
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
+const val DEFAULT_MOBILE_WAIT: Long = 4000
 const val POOLING_FREQUENCY: Long = 100
+const val WEB_CONTEXT: String = "webview"
 
 @Suppress("TooManyFunctions", "To be addressed after browser stack implementation work, NHSO-2949")
-abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
+open class HybridPageObject : PageObject() {
 
     val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
 
@@ -30,15 +30,26 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     val spinner = HybridPageElement(
             browserLocator = "//*[@id='loading-spinner']",
             androidLocator = "//ProgressBar",
+            iOSLocator = "//*[@class='nuxt-progress']",
             page = this
     )
 
     fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
+        if(onMobile())
+            spinner.waitForNativeSpinner()
+
         if (!spinner.elements.isEmpty()) spinner.shouldNotBeVisible(seconds)
     }
 
     fun HybridPageElement.waitForSpinner(seconds: Long = DEFAULT_SPINNER_WAIT): WebElementFacade {
         waitForSpinnerToDisappear(seconds)
+        return this.element
+    }
+
+    private fun HybridPageElement.waitForNativeSpinner(milliseconds: Long = DEFAULT_MOBILE_WAIT): WebElementFacade {
+        //Actually waiting for the native spinner can cause problems because it can vanish and comeback
+        //For now; we will sleep for long enough to make sure it's really gone.
+        Thread.sleep(milliseconds)
         return this.element
     }
 
@@ -60,7 +71,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     override fun <T : PageObject?> switchToPage(pageObjectClass: Class<T>?): T {
         val page = super.switchToPage(pageObjectClass)
-        this.pageType = (page as HybridPageObject).pageType
+
         return page
     }
 
@@ -79,68 +90,51 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     fun isAndroid(): Boolean {
         val isAndroid = driver is AndroidDriver<*>
-        val isProxyForAndroid: Boolean
-        if (driver is WebDriverFacade) {
-            isProxyForAndroid = (driver as WebDriverFacade).isAProxyFor(AndroidDriver::class.java)
-        } else {
-            isProxyForAndroid = false
+        val isProxyForAndroid = when (driver is WebDriverFacade) {
+            true -> { (driver as WebDriverFacade).isAProxyFor(AndroidDriver::class.java) }
+            false -> { false }
         }
-
         return isAndroid.xor(isProxyForAndroid)
     }
 
     fun isIOS(): Boolean {
         val isIOS = driver is IOSDriver<*>
-        val isProxyForIOS: Boolean
-        if (driver is WebDriverFacade) {
-            isProxyForIOS = (driver as WebDriverFacade).isAProxyFor(IOSDriver::class.java)
-        } else {
-            isProxyForIOS = false
+        val isProxyForIOS = when  (driver is WebDriverFacade) {
+            true -> { (driver as WebDriverFacade).isAProxyFor(IOSDriver::class.java) }
+            false -> { false }
         }
-
         return isIOS.xor(isProxyForIOS)
     }
 
-    private fun switchView(): AndroidDriver<WebElementFacade> {
-        return when (this.pageType) {
-            PageType.WEBVIEW_APP -> {
-                switchContext("nhsonline")
-            }
-            PageType.WEBVIEW_BROWSER -> {
-                switchContext("chrome")
-            }
-            PageType.NATIVE -> {
-                switchContext("native")
-            }
-        }
-    }
+    fun switchWebview() {
+        if(!onMobile())
+            return
 
-    private fun switchContext(name: String): AndroidDriver<WebElementFacade> {
-        val originalDriver = getAndroidDriver()
-
-        if (originalDriver.context.contains(name, ignoreCase = true)) {
-            println("Already in $name context: ${originalDriver.context}")
+        val driver = getMobileDriver()
+        if (driver.context.contains(WEB_CONTEXT, ignoreCase = true)) {
+            println("Already in ${WEB_CONTEXT} context: ${driver.context}")
         } else {
-            originalDriver.contextHandles.forEach { context-> switchContextIfNeeded(context, originalDriver, name) }
-        }
-        setDriver<HybridPageObject>(originalDriver)
-        return originalDriver
-    }
-
-    private fun switchContextIfNeeded(context: String, originalDriver: AndroidDriver<WebElementFacade>, name: String) {
-        if (context.contains(name, true)) {
-            println("Switching context to $context... Currently on: ${originalDriver.context}")
-            originalDriver.context(context)
-            println("Switched context! Now on: ${originalDriver.context}")
-
-            if (name.contains("chrome")) {
-                switchToDefaultWindow(originalDriver)
+            for (context in driver.contextHandles) {
+                if (context.contains(WEB_CONTEXT, true)) {
+                    println("Switching context to $context... Currently on: ${driver.context}")
+                    driver.context(context)
+                    println("Switched context! Now on: ${driver.context}")
+                    break
+                }
             }
         }
+        setDriver<HybridPageObject>(driver)
     }
 
-    private fun getAndroidDriver(): AndroidDriver<WebElementFacade> {
-        val androidDriver =
+    private fun getMobileDriver(): AppiumDriver<WebElementFacade>{
+        return when (isAndroid()) {
+            true -> {  getSpecificDriver<AndroidDriver<WebElementFacade>>() }
+            false -> { getSpecificDriver<IOSDriver<WebElementFacade>>() }
+        }
+    }
+
+    fun <T>getSpecificDriver(): T {
+        val theDriver =
                 if (driver is WebDriverFacade) {
                     (driver as WebDriverFacade).proxiedDriver
                 } else {
@@ -149,20 +143,17 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         @Suppress("UNCHECKED_CAST",
                 "Cast cannot be checked as a generic type is used, " +
                         "see https://kotlinlang.org/docs/reference/typecasts.html")
-        return androidDriver as AndroidDriver<WebElementFacade>
+        return theDriver as T
     }
 
-    private fun switchToDefaultWindow(originalDriver: AndroidDriver<WebElementFacade>) {
+    private fun switchToDefaultWindow(originalDriver: AppiumDriver<WebElementFacade>) {
         println("Current window: ${originalDriver.windowHandle}")
-        println("All windows: ${originalDriver.windowHandles}")
         println("Switching window to default...")
         originalDriver.switchTo().defaultContent()
-        println("Current window: ${originalDriver.windowHandle}")
-        println("All windows: ${originalDriver.windowHandles}")
     }
 
     fun findByXpath(parent: WebElementFacade, xpath: String): WebElementFacade {
-        if (onMobile()) switchView()
+        switchWebview()
         val element: WebElementFacade
         try {
             element = parent.findBy(By.xpath(xpath))
@@ -172,10 +163,18 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return element
     }
 
+    fun logSelectorAndSource(selector:String){
+        if(Config.instance.showPageSourceForXPathQuery=="true") {
+            println("Selector: $selector")
+            println("Current source:\n${driver.pageSource}")
+        }
+    }
+
     fun findByXpath(xpath: String): WebElementFacade {
-        if (onMobile()) switchView()
+        switchWebview()
         val element: WebElementFacade
         try {
+            logSelectorAndSource(xpath)
             element = findBy(xpath)
         } catch (e: NoSuchElementException) {
             throw NoSuchElementException("No element found on page:\n${driver.pageSource}", e)
@@ -184,36 +183,15 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun findAllByXpath(parent: WebElementFacade, xpath: String): List<WebElementFacade> {
-        if (onMobile()) switchView()
+        switchWebview()
+        logSelectorAndSource(xpath)
         return parent.thenFindAll(xpath)
     }
 
     fun findAllByXpath(xpath: String): List<WebElementFacade> {
-        if (onMobile()) switchView()
+        switchWebview()
+        logSelectorAndSource(xpath)
         return findAll(By.xpath(xpath))
-    }
-
-    companion object {
-        enum class PageType {
-            WEBVIEW_APP,
-            WEBVIEW_BROWSER,
-            NATIVE
-        }
-    }
-
-    fun waitForPageHeaderText(expectedHeaderText: String) {
-        assertEquals(
-                "Header is incorrect",
-                expectedHeaderText,
-                try {
-                    waitFor {
-                        getPageHeaderText() == expectedHeaderText
-                    }
-                    getPageHeaderText()
-                } catch (e: TimeoutException) {
-                    getPageHeaderText()
-                }
-        )
     }
 
     fun clickOnButtonContainingText(text: String) {
@@ -222,20 +200,15 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
                 androidLocator = null,
                 page = this
         )
-                .containingText(text)
-                .element
-                .click()
+                .withText(text, false).element.click()
     }
 
     fun hideKeyboard() {
         if (isAndroid()) {
-            getAndroidDriver().hideKeyboard()
+            getSpecificDriver<AndroidDriver<WebElementFacade>>().hideKeyboard()
         } else if (isIOS()) {
-            throw NotImplementedError("IOS keyboard hiding not yet implemented.")
+            getSpecificDriver<IOSDriver<WebElementFacade>>().hideKeyboard()
         }
     }
-
-    private fun getPageHeaderText(): String {
-        return switchToPage(Header::class.java).pageTitle.element.text
-    }
 }
+

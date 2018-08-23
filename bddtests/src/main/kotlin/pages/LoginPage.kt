@@ -8,7 +8,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
-class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class LoginPage : HybridPageObject() {
 
     val symptomsButtonHeading = HybridPageElement(
             browserLocator = "//h2[contains(text(), 'How are you feeling today?')]",
@@ -43,10 +43,8 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             page = this
     )
 
-    fun signIn(patient: Patient = MockDefaults.patient) {
+    fun signIn() {
         loginOrCreateAccountButton.element.click()
-        findByXpath("//input[@name='mock_patient']").sendKeys(patient.hashCode().toString())
-        findByXpath("//input[@type='submit']").click()
     }
 
     fun createAccount(patient: Patient) {

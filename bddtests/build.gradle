@@ -103,7 +103,7 @@ task frameworkUnitTests(type: Test) {
     }
 }
 test {
-    dependsOn compileTestKotlin, detektCheck, frameworkUnitTests
+    dependsOn compileTestKotlin, detektCheck
     testLogging.showStandardStreams = true
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.getProperties()

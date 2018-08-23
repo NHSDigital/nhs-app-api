@@ -1,14 +1,17 @@
 package features.authentication.steps
 
+import config.Config
 import mocking.defaults.MockDefaults
 import models.Patient
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.LoginPage
+import pages.LoginStubPage
 
-open class LoginSteps {
+open class LoginSteps() {
 
     lateinit var loginPage: LoginPage
+    lateinit var loginStubPage: LoginStubPage
 
     @Step
     fun checkMySymptoms() {
@@ -17,7 +20,10 @@ open class LoginSteps {
 
     @Step
     fun using(patient: Patient) {
-        loginPage.signIn(patient)
+        loginPage.signIn()
+        if(Config.instance.autoLogin != "true") {
+            loginStubPage.signIn(patient)
+        }
     }
 
     @Step

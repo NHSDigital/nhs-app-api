@@ -7,6 +7,7 @@ import features.appointments.steps.AvailableAppointmentsSteps
 import features.appointments.steps.MyAppointmentsSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
+import pages.navigation.NavBarNative
 
 class AppointmentNavigationStepDefinitions {
 
@@ -22,7 +23,8 @@ class AppointmentNavigationStepDefinitions {
 
     @Given("^I am on my appointments page$")
     fun iAmOnMyAppointmentsPage() {
-        navigation.select("Appointments")
+        navigation.waitForSpinnerToDisappear()
+        navigation.select(NavBarNative.NavBarType.APPOINTMENTS)
         myAppointments.waitForSpinnerToDisappear()
     }
 
@@ -39,7 +41,7 @@ class AppointmentNavigationStepDefinitions {
         iAmOnTheGuidancePage()
         appointmentGuidanceSteps.clickBookAnAppointmentButton()
         myAppointments.waitForSpinnerToDisappear()
-        availableAppointments.checkIfPageHeaderIsCorrect()
+       availableAppointments.checkIfPageHeaderIsCorrect()
     }
 
     @When("^I try to progress to the available appointments page$")

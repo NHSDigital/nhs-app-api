@@ -2,7 +2,7 @@ package pages
 
 import org.junit.Assert.assertTrue
 
-class AuthReturnPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class AuthReturnPage : HybridPageObject() {
     val errorPageTitle = "Session error"
     val errorH1 = "Session error"
     val errorH2 = "There's been a problem loading this page"

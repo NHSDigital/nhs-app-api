@@ -17,7 +17,6 @@ class Config private constructor() {
 
     var cidClientId: String
     var cidRedirectUri: String
-    var cidNativeRedirectUri: String
     var cidAuthEndpoint: String
     val cidRegisterEndpoint: String
     val cidJwtIssuer: String
@@ -32,9 +31,11 @@ class Config private constructor() {
     var browserstackAccessKey: String
     var browserstackUrl: String
     var browserstackLocal: String
+    var autoLogin: String
     var appPath: String
     var appiumServer: String
     var sessionExpiryMinutes: Long
+    val showPageSourceForXPathQuery: String
 
     init {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
@@ -49,15 +50,18 @@ class Config private constructor() {
         browserstackAccessKey = envOrDefault("BROWSERSTACK_ACCESSKEY", "NOT_PROVIDED")
         browserstackUrl = "http://$browserstackUsername:$browserstackAccessKey@hub-cloud.browserstack.com/wd/hub"
         browserstackLocal = envOrDefault("BROWSERSTACK_LOCAL", "true")
+        showPageSourceForXPathQuery = envOrDefault("XPATH_PAGE_SOURCE","false")
         appPath = envOrDefault("APP_PATH", "NOT_PROVIDED")
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
 
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
         cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.ext.signin.nhs.uk")
-        val cidHostname = envOrDefault("CID_HOST", "web.local.bitraft.io")
-        cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://$cidHostname:3000/auth-return")
-        cidNativeRedirectUri = envOrDefault("CID_NATIVE_REDIRECT_URI", "nhsapp://$cidHostname:3000/auth-return")
+        val cidHostname = envOrDefault("CID_HOST", "stubs.local.bitraft.io")
+        val webHostname = envOrDefault("WEB_HOST", "web.local.bitraft.io")
+        val appScheme = envOrDefault("APP_SCHEME", "http")
+        autoLogin = envOrDefault("AUTOLOGIN", "false")
+        cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "$appScheme://$webHostname:3000/auth-return")
         cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/authorize")
         cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/register")
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")

@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 
 
 @DefaultUrl("http://web.local.bitraft.io:3000/data-sharing")
-open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class DataSharingPage : HybridPageObject() {
 
     val btnNext = createBrowserElement("//button[contains(text(), 'Next')]")
     val btnPrevious = createBrowserElement("//button[contains(text(), 'Previous')]")

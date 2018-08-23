@@ -1,15 +1,20 @@
 package pages
 
-class NdopPage : HybridPageObject(Companion.PageType.WEBVIEW_BROWSER) {
+class NdopPage : HybridPageObject() {
 
     val pageTitle = HybridPageElement(
-        browserLocator = "//p[contains(text(),'token')]",
-        androidLocator = null,
-        page = this
+            browserLocator = "//p[contains(text(),'token')]",
+            androidLocator = null,
+            iOSLocator = "//*[@id=\"ndop-token-form\"]",
+            page = this
     )
 
     fun tokenIsDisplayed(): Boolean {
-        return pageTitle.element.isDisplayed
+        if (onMobile()){
+            return pageTitle.element.isPresent
+        } else {
+            return pageTitle.element.isDisplayed
+        }
     }
 
 }

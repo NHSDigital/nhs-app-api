@@ -6,7 +6,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 
 @DefaultUrl("http://web.local.bitraft.io:3000/")
-open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class HomePage : HybridPageObject() {
 
     val headerText: String = "Home"
 
@@ -105,7 +105,7 @@ open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun isWelcomeHeaderVisible(): Boolean {
-        return greeting.element.isCurrentlyVisible
+        return greeting.element.isVisible
     }
 
     private fun assertCollection(message: String, expected: ArrayList<String>, actual: ArrayList<String>) {

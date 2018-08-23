@@ -6,8 +6,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageObject
-import pages.navigation.Header
-import pages.HybridPageObject.Companion.PageType
+import pages.navigation.HeaderNative
 import pages.HybridPageElement
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
@@ -25,9 +24,9 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
 }
 
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
-open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
+open class RepeatPrescriptionsPage : HybridPageObject() {
     var headerText: String = "Select medication"
-    lateinit var headerBar: Header
+    lateinit var headerBar: HeaderNative
 
     private val prescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
     private val prescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")

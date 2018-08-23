@@ -3,7 +3,7 @@ package pages
 import net.thucydides.core.annotations.DefaultUrl
 
 @DefaultUrl("http://web.local.bitraft.io:3000/terms-and-conditions")
-class TermsAndConditionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class TermsAndConditionsPage : HybridPageObject() {
 
     val mainErrorMessage = HybridPageElement(
             browserLocator = "//*[@id='error_msg']",

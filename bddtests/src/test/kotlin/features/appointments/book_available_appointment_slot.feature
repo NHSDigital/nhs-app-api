@@ -61,6 +61,8 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
+  @nativepending @NHSO-2956
+    #native issue - length mismatch
   Scenario Outline: A <GP System> user cannot enter symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
@@ -76,6 +78,8 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
+  @nativepending @NHSO-2956
+    #native issue - length mismatch
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
@@ -89,6 +93,8 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
+  @nativepending @NHSO-2956
+    #native issue - length mismatch
   Scenario Outline: A <GP System> user who books successfully, but only the first 150 characters of the symptoms are sent
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in

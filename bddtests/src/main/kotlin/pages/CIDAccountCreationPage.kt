@@ -1,8 +1,9 @@
 package pages
 
+import config.Config
 import models.Patient
 
-open class CIDAccountCreationPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class CIDAccountCreationPage : HybridPageObject() {
     val mockPatientInput = HybridPageElement(
             browserLocator = "//input[@name='mock_patient']",
             androidLocator = null,
@@ -20,10 +21,12 @@ open class CIDAccountCreationPage : HybridPageObject(Companion.PageType.WEBVIEW_
     }
 
     fun completeAccountCreation(patient: Patient) {
-        mockPatientInput.element.sendKeys(patient.hashCode().toString())
-        if (onMobile()) {
-            hideKeyboard()
+        if(Config.instance.autoLogin != "true") {
+            mockPatientInput.element.sendKeys(patient.hashCode().toString())
+            if (onMobile()) {
+                hideKeyboard()
+            }
+            createAccountButton.element.click()
         }
-        createAccountButton.element.click()
     }
 }

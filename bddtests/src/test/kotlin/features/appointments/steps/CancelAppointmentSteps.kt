@@ -9,6 +9,7 @@ import net.thucydides.core.annotations.Step
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert.*
 import pages.appointments.CancelAppointmentPage
+import pages.navigation.HeaderNative
 
 open class CancelAppointmentSteps {
 
@@ -19,10 +20,12 @@ open class CancelAppointmentSteps {
 
     lateinit var cancelAppointmentPage: CancelAppointmentPage
 
+    lateinit var headerNative: HeaderNative
+
     @Step
     fun verifyWeAreOnTheCancelAppointmentScreen() {
         val expectedHeader = "Cancel appointment"
-        cancelAppointmentPage.waitForPageHeaderText(expectedHeader)
+        headerNative.waitForPageHeaderText(expectedHeader)
         assertEquals("Check your appointment details before cancelling",
                 cancelAppointmentPage.getCheckDetailsText())
     }

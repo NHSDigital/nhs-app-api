@@ -11,7 +11,7 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import pages.navigation.NavBar
+import pages.navigation.NavBarNative
 import java.net.URL
 
 private const val surveyUrl = "https://in.hotjar.com/s?siteId=859152&surveyId=95785"
@@ -22,7 +22,7 @@ class HomePageDefinitions : AbstractSteps() {
     @Steps
     private lateinit var browser: BrowserSteps
     @Steps
-    private lateinit var navBar: NavBar
+    private lateinit var navBar: NavBarNative
     @Steps
     private lateinit var navHeader: NavigationSteps
     @Steps
@@ -77,7 +77,7 @@ class HomePageDefinitions : AbstractSteps() {
     }
 
     private fun navigateBackToHomePage(){
-        navHeader.header.clickHome()
+        navHeader.headerNative.clickHome()
         homeSteps.assertHeaderVisible()
     }
 
@@ -85,31 +85,37 @@ class HomePageDefinitions : AbstractSteps() {
         homeSteps.homePage.checkSymptomsLink.element.click()
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
-        navBar.isHighlighted(NavBar.NavBarType.SYMPTOMS)
+        navBar.isHighlighted(NavBarNative.NavBarType.SYMPTOMS)
     }
 
     private fun followAppointmentsLink() {
         homeSteps.homePage.bookAndManageAppointmentsLink.element.click()
         myAppointmentsSteps.checkHeaderTextIsCorrect()
         myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
-        navBar.isHighlighted(NavBar.NavBarType.APPOINTMENTS)
+        navBar.isHighlighted(NavBarNative.NavBarType.APPOINTMENTS)
     }
 
     private fun followPrescriptionLink() {
         homeSteps.homePage.orderRepeatPrescriptionLink.element.click()
         prescriptions.isLoaded()
-        navBar.isHighlighted(NavBar.NavBarType.PRESCRIPTIONS)
+        navBar.isHighlighted(NavBarNative.NavBarType.PRESCRIPTIONS)
     }
 
     private fun followMedicalRecordLink() {
         homeSteps.homePage.viewMedicalRecordLink.element.click()
         recordSteps.i_see_record_warning_page_opened()
-        navBar.isHighlighted(NavBar.NavBarType.MY_RECORD)
+        navBar.isHighlighted(NavBarNative.NavBarType.MY_RECORD)
     }
     private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.element.click()
-        browser.changeTab(URL(organDonationUrl))
-        browser.shouldHaveUrl(organDonationUrl)
+
+        if(homeSteps.homePage.onMobile()) {
+            URL(organDonationUrl)
+        }
+        else {
+            browser.changeTab(URL(organDonationUrl))
+            browser.shouldHaveUrl(organDonationUrl)
+        }
     }
 }
 

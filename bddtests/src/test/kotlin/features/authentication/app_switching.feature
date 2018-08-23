@@ -1,4 +1,4 @@
-@native
+@nativepending @NHSO-2956
 Feature: Switching Apps on Mobile Devices
   If a user switches apps whilst using their device, the app maintains integrity in a variety of different ways
 

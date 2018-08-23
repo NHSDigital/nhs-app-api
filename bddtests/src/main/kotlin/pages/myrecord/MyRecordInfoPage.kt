@@ -8,7 +8,7 @@ import pages.HybridPageObject
 
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
 
-class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class MyRecordInfoPage : HybridPageObject() {
 
     val clinicalAbbreviationsLink =
             HybridPageElement(
@@ -29,7 +29,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                         androidLocator = null,
                         page = this,
                         helpfulName = "Label for '$expectedLabel'")
-                        .containingText(expectedLabel)
+                        .withText(expectedLabel, false)
 
         labelElement.assertSingleElementPresent()
         val value = getValueFromField(expectedLabel)
@@ -64,7 +64,6 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     val problems by lazy { getSection("Problems") }
 
     val consultations by lazy { getSection("Consultations") }
-
 
     fun assertSectionHeaderIsVisible(header: String) {
         MyRecordWrapper(header, this).header.assertSingleElementPresent().assertIsVisible()

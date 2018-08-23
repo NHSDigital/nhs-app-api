@@ -7,7 +7,7 @@ import pages.HybridPageObject
 import pages.HybridPageElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
-class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class AppointmentGuidancePage : HybridPageObject() {
 
     private val mainXPath = "//*[@id='app']/main"
 

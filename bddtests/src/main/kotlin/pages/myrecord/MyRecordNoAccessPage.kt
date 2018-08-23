@@ -3,7 +3,7 @@ package pages.myrecord
 import pages.HybridPageObject
 import pages.HybridPageElement
 
-class MyRecordNoAccessPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class MyRecordNoAccessPage : HybridPageObject() {
 
     val txtNoAccess = HybridPageElement(
             browserLocator = "",

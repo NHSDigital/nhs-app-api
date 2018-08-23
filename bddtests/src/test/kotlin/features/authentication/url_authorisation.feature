@@ -72,8 +72,8 @@ Feature: Authorisation occurs during each URL visit
     | /more                         |
     | /account                      |
 
+  @nativepending @NHSO-2956
   @manual
-  @native
   Scenario Outline: Mobile Web User switches app then browses to <URL>
     Given I am logged in
     And I switch apps

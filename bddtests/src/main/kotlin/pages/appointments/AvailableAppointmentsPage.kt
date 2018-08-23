@@ -52,35 +52,35 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(
             browserLocator = String.format(timeSlotByDateAndTimeXpath, date, time),
-            androidLocator = "",
+            androidLocator = null,
             page = this,
             helpfulName = "Time slot by date and time. "
     )
 
     private val timeSlots = HybridPageElement(
             browserLocator = timeSlotsXpath,
-            androidLocator = "",
+            androidLocator = null,
             page = this,
             helpfulName = "Any time slot. "
     )
 
     private val dateHeading = HybridPageElement(
             browserLocator = dateHeadingXpath,
-            androidLocator = "",
+            androidLocator = null,
             page = this,
             helpfulName = "Any date heading. "
     )
 
     private fun dateHeadingByText(date: String) = HybridPageElement(
             browserLocator = String.format(dateHeadingByTextXpathFormat, date),
-            androidLocator = "",
+            androidLocator = null,
             page = this,
             helpfulName = "Date heading by text. "
     )
 
     private fun noAppointmentsAvailableForDateTextByDate(date: String) = HybridPageElement(
             browserLocator = String.format(noAppointmentsAvailableForDateTextByDateXpathFormat, date),
-            androidLocator = "",
+            androidLocator = null,
             page = this,
             helpfulName = "Text displayed when there are no appointments on a particular date. "
     )

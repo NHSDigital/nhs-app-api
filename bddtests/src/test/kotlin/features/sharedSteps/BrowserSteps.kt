@@ -42,10 +42,10 @@ open class BrowserSteps {
 
     @Step
     open fun shouldHaveUrl(url: String) {
-        WebDriverWait(loginPage.driver, 1000)
+        WebDriverWait(loginPage.driver, 180)
                 .pollingEvery(Duration.ofMillis(100))
                 .until {
-                    it.currentUrl == url
+                    it.currentUrl.startsWith(url)
                 }
     }
 

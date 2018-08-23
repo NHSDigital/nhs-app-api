@@ -3,7 +3,7 @@ package pages.myrecord
 import pages.HybridPageObject
 import pages.HybridPageElement
 
-class MyRecordTestResultDetailPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class MyRecordTestResultDetailPage: HybridPageObject() {
 
     val serverErrorPageHeader = "Test result details data error"
     val serverErrorHeader = "There's been a problem getting details of your test results"

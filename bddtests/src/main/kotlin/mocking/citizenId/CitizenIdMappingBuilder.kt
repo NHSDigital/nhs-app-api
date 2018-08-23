@@ -14,10 +14,11 @@ import models.Patient
 open class CitizenIdMappingBuilder(method: String, relativePath: String)
     : MappingBuilder(method, "/citizenid$relativePath") {
 
-    fun initialLoginRequest(redirectUri: String,
+    fun initialLoginRequest(patient: Patient,
+                            redirectUri: String,
                             clientId: String,
                             customMatcher: String? = null) = InitialLoginRequestBuilder(
-            redirectUri, clientId,customMatcher)
+            patient, redirectUri, clientId,customMatcher)
 
     fun createAccountRequest(redirectUri: String = Config.instance.cidRedirectUri,
                              clientId: String = Config.instance.cidClientId) =

@@ -36,8 +36,8 @@ class Pixel2Driver : DriverSource {
             caps.setCapability("autoWebview", true)
             caps.setCapability(AndroidMobileCapabilityType.AUTO_GRANT_PERMISSIONS, true)
             caps.setCapability(AndroidMobileCapabilityType.NATIVE_WEB_SCREENSHOT, true)
-            caps.setCapability(AndroidMobileCapabilityType.ANDROID_SCREENSHOT_PATH, "target/screenshots")
             caps.setCapability("browserstack.local", "true")
+            caps.setCapability("browserstack.debug","true")
 
             return caps
         }

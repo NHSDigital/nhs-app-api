@@ -17,6 +17,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
+import pages.navigation.HeaderNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
@@ -36,11 +37,12 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private lateinit var availableAppointments: AvailableAppointmentsPage
     private lateinit var errorPage: ErrorPage
+    lateinit var headerNative: HeaderNative
 
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
-        availableAppointments.waitForPageHeaderText(pageHeader)
+        headerNative.waitForPageHeaderText(pageHeader)
     }
 
     @Step

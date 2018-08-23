@@ -48,6 +48,7 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkTimeoutErrorMessage() {
+        errorPage.waitForSpinnerToDisappear()
         checkErrorSendingMessage()
     }
 

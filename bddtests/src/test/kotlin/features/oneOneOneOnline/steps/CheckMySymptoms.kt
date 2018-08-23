@@ -19,4 +19,9 @@ open class CheckMySymptoms {
     fun assertNhs111HeaderVisible() {
         Assert.assertTrue("Conditions header not visible, expected to be visible", checkMySymptoms.isNhs111HeaderVisible())
     }
+
+    @Step
+    fun waitForSpinnerToDisappear() {
+        checkMySymptoms.waitForSpinnerToDisappear()
+    }
 }

@@ -9,12 +9,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
     fun createFor(patient: Patient) {
         mockingClient.forCitizenId {
-            initialLoginRequest(Config.instance.cidRedirectUri, Config.instance.cidClientId)
-                    .respondWithLoginPage()
-        }
-
-        mockingClient.forCitizenId {
-            initialLoginRequest(Config.instance.cidNativeRedirectUri, Config.instance.cidClientId)
+            initialLoginRequest(patient, Config.instance.cidRedirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 
@@ -43,7 +38,7 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
 
     fun createInvalidFor(patient: Patient) {
         mockingClient.forCitizenId {
-            initialLoginRequest(Config.instance.cidRedirectUri, Config.instance.cidClientId)
+            initialLoginRequest(patient, Config.instance.cidRedirectUri, Config.instance.cidClientId)
                     .respondWithLoginPage()
         }
 

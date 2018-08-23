@@ -8,6 +8,7 @@ import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.navigation.NavBarNative
 
 open class OneOneOneStepDefinitions {
 
@@ -25,7 +26,7 @@ open class OneOneOneStepDefinitions {
 
     @And("^Symptoms is unselected")
     fun symptomsIsUnselected() {
-        Assert.assertFalse(navBar.hasSelectedTab("Symptoms"))
+        Assert.assertFalse(navBar.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
     }
 
     @And("^Check My symptoms page is displayed")
@@ -36,7 +37,7 @@ open class OneOneOneStepDefinitions {
 
     @Then("^Check My symptoms page header and navigation menu are correct$")
     fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
-        navBar.header.assertIsVisible("Check my symptoms")
-        navBar.assertSelectedTab("Symptoms")
+        navBar.headerNative.assertIsVisible("Check my symptoms")
+        navBar.assertSelectedTab(NavBarNative.NavBarType.SYMPTOMS)
     }
 }

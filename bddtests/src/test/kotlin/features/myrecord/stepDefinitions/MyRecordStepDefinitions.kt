@@ -37,6 +37,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
+import pages.navigation.HeaderNative
+import pages.navigation.NavBarNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -52,6 +54,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
+
+    lateinit var headerNative: HeaderNative
 
     lateinit var myRecordWarningPage: MyRecordWarningPage
 
@@ -223,7 +227,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @When("^I click my record button on menu bar$")
     fun i_click_my_record_button_on_menu_bar() {
-        nav.select("MY_RECORD")
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 
     @When("^I enter url address for my record directly into the url$")
@@ -262,7 +266,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see header text is My medical record$")
     fun i_see_header_text_is_My_medical_record() {
-        myRecordWarningPage.waitForPageHeaderText("My medical record")
+        headerNative.waitForPageHeaderText("My medical record")
     }
 
     @Then("^I see your record may contain sensitive information message$")
@@ -292,14 +296,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see my record button on the nav bar is highlighted$")
     fun i_see_my_record_button_on_the_nav_bar_is_highlighted() {
-        assertTrue(nav.hasSelectedTab("MY_RECORD"))
+        assertTrue(nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
     }
 
     @Given("^I am on the record warning page$")
     fun i_am_on_the_record_warning_page() {
         browser.goToApp()
         login.using(this.patient)
-        nav.select("MY_RECORD")
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
     }
 
     @When("^I click agree and continue$")
@@ -324,11 +328,11 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^No navigation menu bar item will be selected$")
     fun no_navigation_menu_bar_item_will_be_selected() {
-        assertTrue(!nav.hasSelectedTab("SYMPTOMS"))
-        assertTrue(!nav.hasSelectedTab("APPOINTMENTS"))
-        assertTrue(!nav.hasSelectedTab("PRESCRIPTIONS"))
-        assertTrue(!nav.hasSelectedTab("MY_RECORD"))
-        assertTrue(!nav.hasSelectedTab("MORE"))
+        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.SYMPTOMS))
+        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.APPOINTMENTS))
+        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.PRESCRIPTIONS))
+        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MY_RECORD))
+        assertTrue(!nav.hasSelectedTab(NavBarNative.NavBarType.MORE))
     }
 
     @Then("^I see the patient information details$")
@@ -347,7 +351,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun i_am_on_my_record_information_page() {
         browser.goToApp()
         login.using(this.patient)
-        nav.select("MY_RECORD")
+        nav.select(NavBarNative.NavBarType.MY_RECORD)
         myRecordWarningPage.clickAgreeAndContinue()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
         myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()

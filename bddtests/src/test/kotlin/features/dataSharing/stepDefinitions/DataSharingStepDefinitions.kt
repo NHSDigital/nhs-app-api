@@ -5,12 +5,17 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.dataSharing.steps.NdopSteps
+import features.more.stepDefinitions.MoreStepDefinitions
 import features.myrecord.stepDefinitions.AbstractDemographicsStepDefinitions
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import pages.DataSharingPage
-import pages.navigation.Header
+import pages.MorePage
+import pages.NativePageElement
+import pages.NativePageObject
+import pages.navigation.HeaderNative
+import pages.navigation.NavBarNative
 import java.net.URL
 
 class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
@@ -24,6 +29,8 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     lateinit var dataSharing: DataSharingPage
 
+    lateinit var headerNative: HeaderNative
+
     private val overviewId = "Overview"
     private val benefitsId = "Benefits"
     private val dataUseId = "Data Use"
@@ -32,8 +39,8 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
-        dataSharing.waitForPageHeaderText("Sharing health data preferences")
-        navbarSteps.assertSelectedTab("More")
+        headerNative.waitForPageHeaderText("Sharing health data preferences")
+        navbarSteps.assertSelectedTab(NavBarNative.NavBarType.MORE)
     }
 
     @Given("^I am on the Data Sharing (.*) page$")
@@ -115,8 +122,7 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Then("I am on the Ndop website")
     fun iAmOnTheNDOPWebsite() {
-        Thread.sleep(1000)
-        browser.changeTab(URL(Config.instance.dataPreferencesUrl))
         assert(ndop.tokenIsDisplayed())
     }
+
 }

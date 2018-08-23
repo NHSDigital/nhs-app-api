@@ -4,7 +4,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
-class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class MyAccountPage : HybridPageObject() {
 
     private val aboutUsHeaderXpath = String.format("//div[h2$containsTextXpathSubstring]", "About us")
     private val linkPath = "$aboutUsHeaderXpath/ul/li/a"

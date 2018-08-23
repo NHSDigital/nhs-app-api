@@ -1,9 +1,11 @@
 package features.appointments.steps
 
+import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Step
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.appointments.AppointmentGuidancePage
+import pages.navigation.HeaderNative
 
 open class AppointmentGuidanceSteps {
     private val expectedPageHeader = "Check before you book"
@@ -19,10 +21,11 @@ open class AppointmentGuidanceSteps {
     )
 
     lateinit var appointmentGuidancePage: AppointmentGuidancePage
+    lateinit var headerNative: HeaderNative
 
     @Step
     fun checkThePageHeaderIsCorrect() {
-        appointmentGuidancePage.waitForPageHeaderText(expectedPageHeader)
+        headerNative.waitForPageHeaderText(expectedPageHeader)
     }
 
     @Step
@@ -41,6 +44,7 @@ open class AppointmentGuidanceSteps {
 
     @Step
     fun clickBookAnAppointmentButton() {
+        appointmentGuidancePage.bookButton.element.waitUntilVisible<WebElementFacade>()
         appointmentGuidancePage.bookButton.element.click()
     }
 

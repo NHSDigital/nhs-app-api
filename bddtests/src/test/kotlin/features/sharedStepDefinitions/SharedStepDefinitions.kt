@@ -20,6 +20,7 @@ import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.navigation.NavBarNative
 import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
 
@@ -92,7 +93,7 @@ open class SharedStepDefinitions {
 
     @When("^I navigate to (.*)$")
     open fun iNavigateTo(tab: String) {
-        navBar.select(tab)
+        navBar.select(NavBarNative.NavBarType.valueOf(tab.toUpperCase()))
     }
 
     @When("^I wait (\\d*) seconds$")
@@ -107,7 +108,7 @@ open class SharedStepDefinitions {
 
     @And("^the (.*) menu button is highlighted")
     fun iSeeAHighlightedMenuButton(type: String) {
-        Assert.assertTrue(navBar.hasSelectedTab(type))
+        Assert.assertTrue(navBar.hasSelectedTab(NavBarNative.NavBarType.valueOf(type.toUpperCase())))
     }
 
     @Then("^none of the menu buttons are highlighted")

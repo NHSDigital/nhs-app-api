@@ -215,9 +215,6 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
-
-
-  @native
   @manual
   Scenario: A user sees appropriate information message when internet connection has been lost
     #    GP System agnostic scenario, so only need to test with EMIS

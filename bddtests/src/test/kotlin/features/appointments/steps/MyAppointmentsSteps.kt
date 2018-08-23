@@ -9,12 +9,13 @@ import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.*
 import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
-import pages.navigation.Header
+import pages.navigation.HeaderNative
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
@@ -26,12 +27,12 @@ open class MyAppointmentsSteps {
     val mockingClient = MockingClient.instance
 
     lateinit var myAppointmentsPage: MyAppointmentsPage
-    lateinit var header: Header
     lateinit var errorPage: ErrorPage
 
+    lateinit var headerNative: HeaderNative
 
-    private val pageHeader = "My appointments"
-    private val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
+    val pageHeader = "My appointments"
+    val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
             "Once you've booked an appointment here, you'll be able to view details and cancel it.\n" +
             "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
     private val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
@@ -55,7 +56,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun checkHeaderTextIsCorrect() {
-        myAppointmentsPage.waitForPageHeaderText(pageHeader)
+        headerNative.waitForPageHeaderText(pageHeader)
     }
 
     @Step
@@ -89,6 +90,8 @@ open class MyAppointmentsSteps {
     fun checkIfBookAnAppointmentButtonExistAndEnabled() {
         try {
             myAppointmentsPage.bookButton.element.isVisible
+            myAppointmentsPage.bookButton.element.waitUntilVisible<WebElementFacade>()
+
             assertTrue("Book an appointment is not displaying",
                     myAppointmentsPage.bookButton.element.isDisplayed)
 
@@ -197,7 +200,7 @@ open class MyAppointmentsSteps {
     }
 
     fun verifyAppointmentDataErrorHeaderIsDisplayed() {
-        Assert.assertEquals("Appointment data error", header.pageTitle.element.text)
+        headerNative.waitForPageHeaderText("Appointment data error")
     }
 
     fun checkAppointmentDataErrorMessagesAreCorrect() {

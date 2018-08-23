@@ -5,7 +5,7 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 
 @DefaultUrl("http://web.local.bitraft.io:3000/more")
-open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+open class MorePage : HybridPageObject() {
 
     private val sections = "//div[@id='mainDiv']/ul/li//a"
     private val organDonationTitle = "Set organ donation preferences"

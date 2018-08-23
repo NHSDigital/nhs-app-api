@@ -2,9 +2,9 @@ package pages.myrecord
 
 import pages.HybridPageObject
 import pages.HybridPageElement
-import pages.navigation.Header
+import pages.navigation.HeaderNative
 
-class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+class MyRecordWarningPage : HybridPageObject() {
 
     private val txtWarning = HybridPageElement(
             browserLocator = "//div[@data-purpose='warning']",
@@ -14,7 +14,6 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     private val btnAgree = HybridPageElement(
             browserLocator = "//main/div/button[contains(text(),'Agree and continue')]",
-            //*[@id="mainDiv"]/main/div[2]/button[1]
             androidLocator = null,
             page = this
     )
