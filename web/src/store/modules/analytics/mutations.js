@@ -2,6 +2,7 @@ import {
   INIT_ANALYTICS,
   CLEAR_ACTION,
   TRACK_ACTION,
+  TRACK_LINK,
 } from './mutation-types';
 
 const clear = (state) => {
@@ -18,5 +19,9 @@ export default {
   [TRACK_ACTION](state, action) {
     state.timestamp = Date.now();
     state.action = `${action.type}|${action.senderType}|${action.target}`;
+  },
+  [TRACK_LINK](state, navigationInfo) {
+    state.timestamp = Date.now();
+    state.navigationInfo = navigationInfo;
   },
 };

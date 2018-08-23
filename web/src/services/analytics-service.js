@@ -93,7 +93,7 @@ export default function (app, store, route) {
           target,
         };
         store.dispatch('analytics/track', action);
-        window._satellite.track('track_action');
+        window._satellite.track('page_view');
       },
       validationError: (messages) => {
         const error = {

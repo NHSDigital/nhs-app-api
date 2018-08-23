@@ -2,14 +2,20 @@
   <div v-if="showTemplate" id="mainDiv" :class="[$style['no-padding'], 'pull-content']">
     <div :class="$style.abbreviations">
       <p>{{ $t('my_record.clinicalTerms.text') }}</p>
-      <a id="btnClinicalTerms" :href="clinicalAbbreviationsUrl" target="_blank">
+      <analytics-tracked-tag id="btnClinicalTerms"
+                             :href="clinicalAbbreviationsUrl" event="$event"
+                             tag="a" target="_blank">
         <AbbreviationsArrowRightIcon/> {{ $t('my_record.clinicalTerms.link') }}
-      </a>
+      </analytics-tracked-tag>
     </div>
     <hr>
-    <h2 :class="[$style['record-title'], getCollapseState(isPatientDetailsCollapsed)]"
-        @click="myRecordSectionClick(PATIENTDETAILS)">
-      {{ $t('my_record.patientInfo.sectionHeader') }}</h2>
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapseState(isPatientDetailsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="PATIENTDETAILS"
+                           event="$event" tag="h2">
+      {{ $t('my_record.patientInfo.sectionHeader') }}
+    </analytics-tracked-tag>
     <patient-details :is-collapsed="isPatientDetailsCollapsed"
                      :patient-details="patientDetails"/>
 
@@ -120,6 +126,7 @@ import Consultations from '@/components/my-record/Consultations';
 import Events from '@/components/my-record/Events';
 import VueScrollTo from 'vue-scrollto';
 import AbbreviationsArrowRightIcon from '@/components/icons/AbbreviationsArrowRightIcon';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 const PATIENTDETAILS = 'patientdetails';
 const ALLERGIESANDADVERSEREACTIONS = 'allergiesandadversereactions';
@@ -146,6 +153,7 @@ export default {
     Events,
     VueScrollTo,
     AbbreviationsArrowRightIcon,
+    AnalyticsTrackedTag,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path === '/my-record/myrecordwarning' || from.path === '/my-record/testresultdetail') {

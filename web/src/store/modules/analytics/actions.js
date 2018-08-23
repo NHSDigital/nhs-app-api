@@ -2,6 +2,7 @@ import {
   INIT_ANALYTICS,
   CLEAR_ACTION,
   TRACK_ACTION,
+  TRACK_LINK,
 } from './mutation-types';
 
 export default {
@@ -25,6 +26,18 @@ export default {
         // eslint-disable-next-line no-underscore-dangle
         window._satellite.track('track_validation_errors');
       });
+    }
+  },
+  trackLink({ commit }, navigationInfo) {
+    commit(TRACK_LINK, navigationInfo);
+    if (process.client) {
+      window.digitalData.event = {
+        eventInfo: {
+          navigation: navigationInfo,
+        },
+      };
+      // eslint-disable-next-line no-underscore-dangle
+      window._satellite.track('click_link');
     }
   },
 };
