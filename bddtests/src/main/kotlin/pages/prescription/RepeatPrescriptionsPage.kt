@@ -94,7 +94,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         var prescription = getRepeatPrescription(courseToSelect)
         Assert.assertNotNull("Didn't find medication course with: \nname: ${courseToSelect.name} \ndosage: ${courseToSelect.getInstructionsText()}", prescription)
         prescription.element.click()
-   }
+        Thread.sleep(50) //In order to ensure each prescription is selected
+        verifyPrescriptionIsSelected(courseToSelect)
+    }
 
     private fun getRepeatPrescription(courseToSelect: MedicationCourse):HybridPageElement {
         return HybridPageElement(
