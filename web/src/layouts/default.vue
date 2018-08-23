@@ -36,7 +36,7 @@ export default {
     HomeHeader,
   },
   head() {
-    return {
+    const head = {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
@@ -47,6 +47,10 @@ export default {
         },
       ],
     };
+    if (process.env.NODE_ENV === 'Preview') {
+      head.script.push({ src: 'hotjar.js' });
+    }
+    return head;
   },
   computed: {
     showMenu() {
