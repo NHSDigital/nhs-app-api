@@ -6,7 +6,7 @@ import mocking.models.Mapping
 import models.Patient
 
 class CompleteLoginRequestBuilder(val patient: Patient = MockDefaults.patient)
-    : CitizenIdMappingBuilder("GET", "/cicauth/realms/NHS/protocol/openid-connect/complete-login") {
+    : CitizenIdMappingBuilder("GET", "/complete-login") {
 
     init {
         requestBuilder.andQueryParameter("mock_patient", patient.hashCode().toString(), "equalTo")

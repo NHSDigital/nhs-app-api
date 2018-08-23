@@ -85,7 +85,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
-        createCidStubs()
+
+        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
         createEmisStubs()
     }
 
@@ -109,48 +110,33 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
                     .respondWithServerError()
         }
-        mockingClient.forCitizenId {
-            userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
-                    .respondWithSuccess(Patient.montelFrye)
-        }
         createEmisStubs()
-    }
-
-    @Given("^I have valid OAuth details and the CID user profile endpoint fails to process the request$")
-    fun iHaveValidOAuthDetailsAndCIDUserProfileEndpointFails() {
-        mockingClient.forCitizenId {
-            tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
-                    .respondWithSuccess(accessToken)
-        }
-        mockingClient.forCitizenId {
-            userInfoRequest(this@AuthenticationStepDefinitions.bearerToken)
-                    .respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) { build() }
-        }
     }
 
     @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
-        createCidStubs()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
         mockingClient.forEmis { endUserSessionRequest().respondWithServerError() }
         mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
-        createCidStubs()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
         mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
     }
 
     @Given("^I have valid OAuth details and (.*) is not available$")
     fun iHaveValidOAuthDetailsAndGpSystemUnavailable(gpSystem: String) {
-        createCidStubs()
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
                 mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
                 mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
             }
             "TPP" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
                 mockingClient.forTpp {
                     authenticateRequest(Authenticate())
                             // respond with error.  Unconfirmed format.
@@ -158,6 +144,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 }
             }
             "VISION" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientVision)
                 mockingClient.forVision {
                     getConfigurationRequest(
                             MockDefaults.visionUserSession,
@@ -168,16 +155,16 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         }
     }
 
-
     @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
     fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
-        createCidStubs()
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
                 mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault(gpSystem).endUserSessionId) }
                 mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithForbidden() }
             }
             "TPP" -> {
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
                 mockingClient.forTpp {
                     authenticateRequest(Authenticate())
                             // respond with error.  Unconfirmed format.
@@ -185,7 +172,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 }
             }
             "VISION" -> {
-                createCidStubs(patient = MockDefaults.patientVision)
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientVision)
                 mockingClient
                         .forVision {
                             getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
@@ -200,7 +187,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         when (gpSystem.toUpperCase()) {
             "EMIS" -> {
-                createCidStubs()
+                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
                 mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
                 mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
             }
@@ -679,7 +666,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         )
     }
 
-
     private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
@@ -704,10 +690,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forCitizenId {
             tokenRequest(codeVerifier, authCode)
                     .respondWithSuccess(accessToken)
-        }
-        mockingClient.forCitizenId {
-            userInfoRequest(bearerToken)
-                    .respondWithSuccess(patient)
         }
     }
 
@@ -749,4 +731,3 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setSessionVariable("HttpException").to(errorResponse)
     }
 }
-

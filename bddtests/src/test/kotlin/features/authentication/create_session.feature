@@ -48,14 +48,6 @@ Feature: Session Registration
     Then I get a "Bad Gateway" error
 
   @NHSO-63
-  @bug @NHSO-720
-  @backend
-  Scenario: CID user profile endpoint fails to process the request
-    Given I have valid OAuth details and the CID user profile endpoint fails to process the request
-    When I create a user session
-    Then I get a "Bad Gateway" error
-
-  @NHSO-63
   @backend
   Scenario: EMIS end user session fails to create
     Given I have valid OAuth details and the EMIS end user session endpoint fails to create

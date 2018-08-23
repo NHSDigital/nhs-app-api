@@ -72,5 +72,11 @@
         {
             public const string GpPracticeEnglandWales = @"^[A-Z0-9]{6}$";
         }
+
+        public static class CitizenIdClaimTypes
+        {
+            public const string Im1ConnectionTokenClaim = "im1_token";
+            public const string OdscodeClaim = "ods_code";
+        }
     }
 }

@@ -2,6 +2,8 @@ package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
 import mocking.MockingClient
+import mocking.citizenId.models.IdTokenBuilder
+import mocking.citizenId.models.signingKeys.SuceededResponse
 import models.Patient
 
 class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
@@ -22,26 +24,45 @@ class CitizenIdSessionCreateJourney(val mockingClient: MockingClient) {
                     .respondWithRedirectResponse()
         }
 
+        val idToken = Patient.getIdToken(patient)
+
         mockingClient.forCitizenId {
-            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
-                    .respondWithSuccess(accessToken = patient.accessToken)
+            signingKeyRequest()
+                    .respondWithSuccess(SuceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
         }
 
         mockingClient.forCitizenId {
-            userInfoRequest("Bearer ${patient.accessToken}")
-                    .respondWithSuccess(patient)
+            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
+                    .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
         }
     }
 
-    fun createForInvalidData(patient: Patient) {
-        createFor(patient)
-
-
-        var nullPatient = Patient()
+    fun createInvalidFor(patient: Patient) {
+        mockingClient.forCitizenId {
+            initialLoginRequest(Config.instance.cidRedirectUri, Config.instance.cidClientId)
+                    .respondWithLoginPage()
+        }
 
         mockingClient.forCitizenId {
-            userInfoRequest("Bearer ${patient.accessToken}")
-                    .respondWithSuccess(nullPatient)
+            createAccountRequest()
+                    .respondWithLoginPage()
+        }
+
+        mockingClient.forCitizenId {
+            completeLoginRequest(patient)
+                    .respondWithRedirectResponse()
+        }
+
+        val idToken = ""
+
+        mockingClient.forCitizenId {
+            signingKeyRequest()
+                    .respondWithSuccess(SuceededResponse(listOf(Config.keyStore.publicJwk.toJSONObject())))
+        }
+
+        mockingClient.forCitizenId {
+            tokenRequest(patient.cidUserSession.codeVerifier, patient.cidUserSession.authCode)
+                    .respondWithSuccess(accessToken = patient.accessToken, idToken = idToken)
         }
     }
 }

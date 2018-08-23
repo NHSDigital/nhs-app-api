@@ -9,14 +9,14 @@ services:
       - API_HOST_SERVER=http://nhsonline.backend.worker:8082
       - CID_REDIRECT_URI=http://localhost:3000/auth-return
       - ANDROID_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
-      - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
-      - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations
+      - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/authorize
+      - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/register
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - CORS_AUTHORITY=*
-      - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/
+      - CITIZEN_ID_BASE_URL=http://nhsonline.stubs:8080/citizenid/
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
       - EMIS_BASE_URL=http://nhsonline.stubs:8080/emis/
       - TPP_BASE_URL=http://nhsonline.stubs:8080/tpp/

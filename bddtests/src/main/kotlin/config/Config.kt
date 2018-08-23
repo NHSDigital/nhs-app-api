@@ -17,6 +17,7 @@ class Config private constructor() {
     var cidRedirectUri: String
     var cidAuthEndpoint: String
     val cidRegisterEndpoint: String
+    val cidJwtIssuer: String
     var emisApplicationId: String
     var emisVersion: String
     var organDonation: String
@@ -45,11 +46,12 @@ class Config private constructor() {
         appiumServer = envOrDefault("APPIUM_SERVER", "http://127.0.0.1:4723/wd/hub")
 
 
-        cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online-poc")
+        cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
+        cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.uat.signin.nhs.uk")
         val cidHostname = envOrDefault("CID_HOST", "localhost")
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://$cidHostname:3000/auth-return")
-        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth")
-        cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations")
+        cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/authorize")
+        cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/register")
         emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "D66BA979-60D2-49AA-BE82-AEC06356E41F")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 
@@ -72,6 +74,7 @@ class Config private constructor() {
 
     companion object {
         val instance: Config by lazy { Config() }
+        val keyStore: KeyStore = KeyStore(constants.JwkValues.cidKeys)
         val logger: Logger = LoggerFactory.getLogger(Config::class.simpleName)
     }
 }

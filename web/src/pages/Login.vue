@@ -2,10 +2,10 @@
   <div :class="$style.homeMain">
     <h2>{{ $t('login.desc') }}</h2>
     <form :action="loginUrl" method="get">
+      <input :value="scope" type="hidden" name="scope" >
       <input :value="clientId" type="hidden" name="client_id" >
       <input :value="codeChallenge" type="hidden" name="code_challenge">
       <input :value ="codeMethod" type="hidden" name="code_challenge_method" >
-      <input :value="prompt" type="hidden" name="prompt">
       <input :value="this.$store.state.auth.redirectUri" type="hidden" name="redirect_uri">
       <input :value="state" type="hidden" name="state">
       <input :value="responseType" type="hidden" name="response_type">
@@ -43,11 +43,11 @@ export default {
     codeMethod() {
       return this.$store.state.auth.config.code_challenge_method;
     },
+    scope() {
+      return this.$store.state.auth.config.scope;
+    },
     state() {
       return this.$store.state.auth.config.state;
-    },
-    prompt() {
-      return this.$store.state.auth.config.prompt;
     },
     responseType() {
       return this.$store.state.auth.config.response_type;

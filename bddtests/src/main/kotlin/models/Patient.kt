@@ -1,6 +1,7 @@
 package models
 
 import config.Config
+import mocking.citizenId.models.IdTokenBuilder
 import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
@@ -52,6 +53,15 @@ data class Patient(
                 mobileNumber = "07737483567",
                 emailAddress = "HalleD@fakeemail.com"
         )
+
+        private val idTokenBuilder = IdTokenBuilder(
+                Config.instance.cidJwtIssuer,
+                Config.instance.cidClientId
+        )
+
+        fun getIdToken(patient: Patient): String {
+            return idTokenBuilder.getSignedToken(Config.keyStore.signer, patient).serialize()
+        }
 
         fun getDefault(gpSystem: String): Patient {
             return when(gpSystem.toUpperCase()) {

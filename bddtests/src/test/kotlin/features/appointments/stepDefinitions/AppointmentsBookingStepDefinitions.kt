@@ -6,7 +6,6 @@ import features.appointments.factories.AppointmentsBookingFactory.Companion.Symp
 import net.serenitybdd.core.Serenity
 import java.time.Duration
 
-
 class AppointmentsBookingStepDefinitions {
 
     @Given("^there are (.*) appointments available to book$")

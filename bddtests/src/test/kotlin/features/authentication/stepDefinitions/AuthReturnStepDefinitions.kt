@@ -29,7 +29,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     fun loggedInInCitizenIdInvalidData() {
         this.patient = Patient.paulSmith
 
-        CitizenIdSessionCreateJourney(mockingClient).createForInvalidData(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createInvalidFor(patient)
 
         browser.goToApp()
         login.using(this.patient)
@@ -39,7 +39,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     fun loggedInInCitizenIdGpAuthenticationFails() {
         this.patient = Patient.kevinBarry
 
-        CitizenIdSessionCreateJourney(mockingClient).createForInvalidData(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 
         browser.goToApp()
         login.using(this.patient)
@@ -49,7 +49,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     fun loggedInInCitizenIdSessionNotEstablished() {
         this.patient = Patient.montelFrye
 
-        CitizenIdSessionCreateJourney(mockingClient).createForInvalidData(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
 
         browser.goToApp()
         login.using(this.patient)

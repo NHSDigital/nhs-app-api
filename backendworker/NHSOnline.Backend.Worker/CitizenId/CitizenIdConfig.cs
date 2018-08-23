@@ -9,6 +9,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         Uri CitizenIdApiBaseUrl { get; set; }
         string ClientId { get; set; }
         string ClientSecret { get; set; }
+        string Issuer { get; set; }
     }
 
     public class CitizenIdConfig : ICitizenIdConfig
@@ -16,6 +17,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         public Uri CitizenIdApiBaseUrl { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
+        public string Issuer { get; set; }
 
         public CitizenIdConfig(IConfiguration configuration, ILogger<CitizenIdConfig> logger)
         {
@@ -23,6 +25,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
             CitizenIdApiBaseUrl = new Uri(citizenIdBaseUrl);
             ClientId = configuration.GetOrWarn("CITIZEN_ID_CLIENT_ID", logger);
             ClientSecret = configuration.GetOrWarn("CITIZEN_ID_CLIENT_SECRET", logger);
+            Issuer = configuration.GetOrWarn("CITIZEN_ID_JWT_ISSUER", logger);
         }
     }
 }

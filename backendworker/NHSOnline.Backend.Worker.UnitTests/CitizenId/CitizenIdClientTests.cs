@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -28,7 +29,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private CitizenIdClient _systemUnderTest;
         private MockHttpMessageHandler _mockHttpHandler;
         private CitizenIdHttpClient _httpClient;
-
+        
         [TestInitialize]
         public void TestInitialize()
         {
@@ -60,15 +61,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var redirectUrl = _fixture.Create<string>();
             var expectedTokenResponse = _fixture.Create<Token>();
 
-            var dict = new Dictionary<string, string>
-            {
-                { "grant_type", "authorization_code" },
-                { "code", authCode },
-                { "redirect_uri", redirectUrl },
-                { "code_verifier", codeVerifier },
-                { "client_id", _clientId },
-                { "code_challenge_method", "S256" }
-            };
+            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier);
 
             var basicAuthString = Convert.ToBase64String(
                 System.Text.Encoding.ASCII.GetBytes($"{_clientId}:{_clientSecret}"));
@@ -98,15 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var redirectUrl = _fixture.Create<string>();
             var expectedErrorResponse = _fixture.Create<ErrorResponse>();
 
-            var dict = new Dictionary<string, string>
-            {
-                { "grant_type", "authorization_code" },
-                { "code", authCode },
-                { "redirect_uri", redirectUrl },
-                { "code_verifier", codeVerifier },
-                { "client_id", _clientId },
-                { "code_challenge_method", "S256" }
-            };
+            var dict = CreateTokenBody(authCode, redirectUrl, codeVerifier);
 
             var basicAuthString = Convert.ToBase64String(
                 System.Text.Encoding.ASCII.GetBytes($"{_clientId}:{_clientSecret}"));
@@ -127,6 +112,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
             _mockHttpHandler.VerifyNoOutstandingExpectation();
         }
+
+        
 
         [TestMethod]
         public async Task GetUserInfo_HappyPath()
@@ -212,10 +199,100 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             response.ErrorResponse.Should().BeNull();
             response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
+        
+        [TestMethod]
+        public async Task GetSigningKeys_ErrorResponseReceived_ReturnsErrorMessage()
+        {
+            // Arrange
+            var expectedErrorResponse = _fixture.Create<ErrorResponse>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, ".well-known/jwks.json").ToString())
+                .Respond(HttpStatusCode.InternalServerError, "application/json",
+                    JsonConvert.SerializeObject(expectedErrorResponse));
+
+            // Act
+            var response = await _systemUnderTest.GetSigningKeys();
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.InternalServerError);
+            response.ErrorResponse.Should().BeEquivalentTo(expectedErrorResponse);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestMethod]
+        public async Task GetSigningKeys_ReceivedOkWithPoorlyFormedJson_ReturnsErrorMessage()
+        {
+            // Arrange
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, ".well-known/jwks.json").ToString())
+                .Respond(HttpStatusCode.OK, "application/json",
+                    "{ \"something\" : \"Here\"}}}");
+
+            // Act
+            var response = await _systemUnderTest.GetSigningKeys();
+
+            // Assert
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestMethod]
+        public async Task GetSigningKeys_ReceivedOkWithNoContent_ReturnsErrorMessage()
+        {
+            // Arrange
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, ".well-known/jwks.json").ToString())
+                .Respond(HttpStatusCode.OK, "application/json",
+                    "");
+
+            // Act
+            var response = await _systemUnderTest.GetSigningKeys();
+
+            // Assert
+            response.Body.Should().BeNull();
+            response.ErrorResponse.Should().BeNull();
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
+        
+        [TestMethod]
+        public async Task GetSigningKeys_HappyPath()
+        {
+            // Arrange
+            var expectedResponse = _fixture.Create<JsonWebKeySet>();
+
+            _mockHttpHandler
+                .When(HttpMethod.Get, new Uri(_citizenIdApiBaseUrl, ".well-known/jwks.json").ToString())
+                .Respond("application/json", JsonConvert.SerializeObject(expectedResponse));
+
+            // Act
+            var response = await _systemUnderTest.GetSigningKeys();
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(expectedResponse);
+            _mockHttpHandler.VerifyNoOutstandingExpectation();
+        }
 
         public void Dispose()
         {
             _mockHttpHandler.Dispose();
+        }
+        
+        private Dictionary<string, string> CreateTokenBody(string authCode, string redirectUrl, string codeVerifier)
+        {
+            var dict = new Dictionary<string, string>
+            {
+                { "grant_type", "authorization_code" },
+                { "code", authCode },
+                { "redirect_uri", redirectUrl },
+                { "code_verifier", codeVerifier },
+                { "client_id", _clientId },
+                { "code_challenge_method", "S256" }
+            };
+            return dict;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.ApplicationInsights.DependencyCollector;
@@ -10,7 +11,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
@@ -104,7 +107,11 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton(Configuration);
             
             services.AddSingleton<IOdsCodeLookup, OdsCodeLookup>();
+            services.AddSingleton<ISecurityTokenValidator, JwtSecurityTokenHandler>();
+            services.AddSingleton<ITokenValidationParameterBuilder, TokenValidationParameterBuilder>();
+            services.AddSingleton<IJwtTokenService<UserProfile>,IdTokenService>();
             services.AddSingleton<ISessionCacheService, SessionCacheService>();
+            services.AddSingleton<ICitizenIdSigningKeysService,CitizenIdSigningKeysService>();
             services.AddSingleton<IJsonResponseParser, JsonResponseParser>();
             services.AddSingleton<IXmlResponseParser, XmlResponseParser>();
             services.AddSingleton(x => new NamedConnectionMultiplexer(
@@ -113,8 +120,7 @@ namespace NHSOnline.Backend.Worker
             services.AddSingleton(x => new NamedConnectionMultiplexer(
                 ConnectionMultiplexerName.Session,
                 ConnectionMultiplexer.Connect(Configuration["REDIS_SESSION_CONFIG"])));
-
-            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();            
+            services.AddSingleton<IConnectionMultiplexerFactory, ConnectionMultiplexerFactory>();
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();

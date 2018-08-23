@@ -67,13 +67,13 @@ class AuthorizationService {
     const redirectUri = AuthorizationService.getRedirectUri(store.state);
     const clientId = process.env.CID_CLIENT_ID;
     const request = {
+      scope: 'openid',
       client_id: clientId,
       redirect_uri: redirectUri,
       response_type: 'code',
       state: myState,
       code_challenge: challenge,
       code_challenge_method: 'S256',
-      prompt: 'login',
       baseUrl: process.env.CID_AUTH_ENDPOINT,
       registerUrl: process.env.CID_REGISTER_ENDPOINT,
     };
@@ -86,13 +86,13 @@ class AuthorizationService {
     const clientId = process.env.CID_CLIENT_ID;
 
     const request = {
-      redirect_uri: redirectUri,
+      scope: 'openid',
       client_id: clientId,
+      redirect_uri: redirectUri,
       response_type: 'code',
-      state: myState,
       code_challenge: challenge,
       code_challenge_method: 'S256',
-      prompt: 'login',
+      state: myState,
     };
 
     const baseUrl = process.env.CID_AUTH_ENDPOINT;

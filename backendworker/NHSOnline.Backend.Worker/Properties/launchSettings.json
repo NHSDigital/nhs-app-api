@@ -29,14 +29,16 @@
         "EMIS_BASE_URL": "http://127.0.0.1:8080/emis/",
         "REDIS_ODSLOOKUP_CONFIG": "127.0.0.1:6379",
         "REDIS_SESSION_CONFIG": "127.0.0.1:6380",
-        "CITIZEN_ID_BASE_URL": "https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/",
-        "CITIZEN_ID_CLIENT_ID": "nhs-online-poc",
-        "CITIZEN_ID_CLIENT_SECRET": "872b46c9-0afe-4037-8958-e7bbc209a379",
+        "CITIZEN_ID_BASE_URL": "https://auth.uat.signin.nhs.uk/",
+        "CITIZEN_ID_CLIENT_ID": "nhs-online",
+        "CITIZEN_ID_CLIENT_SECRET": "secret",
         "SESSION_ENCRYPTION_KEY_FILE": "DevelopmentSessionEncryptionKey.txt",
         "GP_PROVIDER_ENABLED_EMIS": "true",
         "GP_PROVIDER_ENABLED_TPP": "true",
         "GP_PROVIDER_ENABLED_VISION": "true",
-        "GP_PROVIDER_ENABLED_MICROTEST":"true"
+        "GP_PROVIDER_ENABLED_MICROTEST":"true",
+        "CITIZEN_ID_JWT_ISSUER": "https://auth.uat.signin.nhs.uk",
+        "AUDIT_SINK_TYPE": "FILE"
       }
     },
     "NHSOnline.Backend.Worker": {
@@ -60,14 +62,16 @@
         "EMIS_BASE_URL": "http://127.0.0.1:8080/emis/",
         "REDIS_ODSLOOKUP_CONFIG": "127.0.0.1:6379",
         "REDIS_SESSION_CONFIG": "127.0.0.1:6380",
-        "CITIZEN_ID_BASE_URL": "https://keycloak.dev1.signin.nhs.uk/cicauth/realms/NHS/protocol/openid-connect/",
-        "CITIZEN_ID_CLIENT_ID": "nhs-online-poc",
-        "CITIZEN_ID_CLIENT_SECRET": "872b46c9-0afe-4037-8958-e7bbc209a379",
+        "CITIZEN_ID_CLIENT_ID": "nhs-online",
+        "CITIZEN_ID_BASE_URL": "https://auth.uat.signin.nhs.uk/",
+        "CITIZEN_ID_CLIENT_SECRET": "secret",
         "SESSION_ENCRYPTION_KEY_FILE": "DevelopmentSessionEncryptionKey.txt",
         "GP_PROVIDER_ENABLED_EMIS": "true",
         "GP_PROVIDER_ENABLED_TPP": "true",
         "GP_PROVIDER_ENABLED_VISION": "true",
-        "GP_PROVIDER_ENABLED_MICROTEST": "true"
+        "GP_PROVIDER_ENABLED_MICROTEST": "true",
+        "CITIZEN_ID_JWT_ISSUER": "https://auth.uat.signin.nhs.uk",
+        "AUDIT_SINK_TYPE": "FILE"
       }
     }
   }

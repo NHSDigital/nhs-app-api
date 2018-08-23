@@ -1,12 +1,11 @@
 package mocking.citizenId.login
 
-import mocking.MockingClient
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
 class InitialLoginRequestBuilder(redirectUri: String, clientId: String)
-    : CitizenIdMappingBuilder("GET", "/cicauth/realms/NHS/protocol/openid-connect/auth") {
+    : CitizenIdMappingBuilder("GET", "/authorize") {
 
     init {
         requestBuilder
@@ -24,7 +23,7 @@ class InitialLoginRequestBuilder(redirectUri: String, clientId: String)
                             <input value="clientId" type="hidden" name="client_id" >
                             <input value="3" type="hidden" name="code_challenge">
                             <input value ="codeMethod" type="hidden" name="code_challenge_method" >
-                            <input value="prompt" type="hidden" name="prompt">
+                            <input value="openid" type="hidden" name="scope">
                             <input value="{{request.query.redirect_uri}}" type="hidden" name="redirect_uri">
                             <input value="{{request.query.state}}" type="hidden" name="state">
                             <input value="responseType" type="hidden" name="response_type">

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -18,6 +19,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         Task<CitizenIdClient.CitizenIdApiObjectResponse<Token>> ExchangeAuthToken(string authCode, string codeVerifier, string redirectUrl);
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
         Task<CitizenIdClient.CitizenIdApiObjectResponse<UserInfo>> GetUserInfo(string bearerToken);
+        Task<CitizenIdClient.CitizenIdApiObjectResponse<JsonWebKeySet>>GetSigningKeys();
     }
 
     public class CitizenIdClient : ICitizenIdClient
@@ -25,6 +27,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private readonly ILogger<CitizenIdClient> _logger;
         private const string TokenPath = "token";
         private const string UserInfoPath = "userinfo";
+        private const string SigningKeysPath = ".well-known/jwks.json";
 
         private readonly CitizenIdHttpClient _httpClient;
         private readonly string _clientId;
@@ -86,6 +89,14 @@ namespace NHSOnline.Backend.Worker.CitizenId
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
 
             var response = await SendRequestAndParseResponse<UserInfo>(request);
+            return response;
+        }
+
+        public async Task<CitizenIdApiObjectResponse<JsonWebKeySet>> GetSigningKeys()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, SigningKeysPath);
+
+            var response = await SendRequestAndParseResponse<JsonWebKeySet>(request);
             return response;
         }
 
