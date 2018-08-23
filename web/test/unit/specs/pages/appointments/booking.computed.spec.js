@@ -37,7 +37,7 @@ describe('booking.vue - noAvailableAppointments', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -53,7 +53,7 @@ describe('booking.vue - noAvailableAppointments', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -81,13 +81,13 @@ describe('booking.vue - noAvailableAppointments', () => {
   });
 });
 
-describe('booking.vue - availableAppointments', () => {
+describe('booking.vue - showNoMatchingWarning', () => {
   it('will return true when slots has been loaded and are not empty', () => {
     const $store = {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -103,7 +103,7 @@ describe('booking.vue - availableAppointments', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -119,7 +119,7 @@ describe('booking.vue - availableAppointments', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           hasLoaded: false,
         },
@@ -137,14 +137,14 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [{}],
           filteredSlots: [[['2018-04-12'], [{}]]],
         },
       },
     };
 
     const page = createBookingPage($store, {});
-    expect(page.vm.notMatchSearchCriteria).toBeFalsy();
+    expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
   it('will return false when filtered slots are empty and type has been selected', () => {
@@ -152,7 +152,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
         },
       },
@@ -166,7 +166,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
-    expect(page.vm.notMatchSearchCriteria).toBeFalsy();
+    expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
   it('will return false when filtered slots are empty and location has been selected', () => {
@@ -174,7 +174,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
         },
       },
@@ -188,7 +188,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
-    expect(page.vm.notMatchSearchCriteria).toBeFalsy();
+    expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
   it('will return false when filtered slots are empty and location and type have not been selected', () => {
@@ -196,7 +196,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
         },
       },
@@ -210,7 +210,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
-    expect(page.vm.notMatchSearchCriteria).toBeFalsy();
+    expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
   it('will return true when filtered slots are empty and location and type have been selected', () => {
@@ -218,7 +218,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
         },
       },

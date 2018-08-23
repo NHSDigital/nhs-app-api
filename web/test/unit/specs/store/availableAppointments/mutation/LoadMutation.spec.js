@@ -8,7 +8,7 @@ describe('LoadMutation', () => {
     mutation = new LoadMutation(DateProvider);
   });
 
-  it('will sort slots', () => {
+  it('will return slots', () => {
     const slots = [
       {
         id: 1,
@@ -44,14 +44,10 @@ describe('LoadMutation', () => {
       },
     ];
 
-    const expectedSlots = new Map();
-    expectedSlots.set('2018-04-21', [slots[0]]);
-    expectedSlots.set('2018-04-22', [slots[3], slots[2]]);
-    expectedSlots.set('2018-04-23', [slots[1]]);
+    const data = { slots };
+    const actualResult = mutation.execute(data);
 
-    const actualResult = mutation.execute(slots);
-
-    expect(actualResult.slots).toEqual(actualResult.slots);
+    expect(actualResult.slots).toEqual(slots);
   });
 
   it('will set filtersOptions', () => {
@@ -66,7 +62,8 @@ describe('LoadMutation', () => {
       },
     ];
 
-    const actualResult = mutation.execute(slots);
+    const data = { slots };
+    const actualResult = mutation.execute(data);
 
     const expectedFiltersOptions = {
       types: [
@@ -114,7 +111,21 @@ describe('LoadMutation', () => {
       },
     ];
 
-    const actualResult = mutation.execute(slots);
+    const data = { slots };
+    const actualResult = mutation.execute(data);
     expect(actualResult.defaultLocationSelectedOption).toEqual('Leeds');
+  });
+
+  it('will return correct object', () => {
+    const slots = [];
+    const data = { slots };
+    const actualResult = mutation.execute(data);
+
+    expect(Array.isArray(actualResult.slots)).toBeTruthy();
+    expect(Array.isArray(actualResult.filtersOptions.types)).toBeTruthy();
+    expect(Array.isArray(actualResult.filtersOptions.locations)).toBeTruthy();
+    expect(Array.isArray(actualResult.filtersOptions.clinicians)).toBeTruthy();
+    expect(Array.isArray(actualResult.filtersOptions.dates)).toBeTruthy();
+    expect(typeof actualResult.defaultLocationSelectedOption).toEqual('string');
   });
 });

@@ -37,8 +37,7 @@ describe('DESELECT', () => {
 describe('CLEAR', () => {
   it('will set default values', () => {
     const slot = { id: 1 };
-    const slots = new Map();
-    slots.set('2018-12-02', [slot]);
+    const slots = [slot];
     const state = {
       slots,
       filteredSlots: [['2018-12-01', [slot]]],
@@ -60,7 +59,7 @@ describe('CLEAR', () => {
     };
 
     const expectedState = {
-      slots: new Map(),
+      slots: [],
       filteredSlots: [],
       hasLoaded: false,
       selectedSlot: slot,
@@ -106,8 +105,8 @@ describe('CLEAR', () => {
 describe('INIT', () => {
   it('will set default values', () => {
     const slot = { id: 1 };
-    const slots = new Map();
-    slots.set('2018-12-02', [slot]);
+    const slots = [slot];
+
     const state = {
       slots,
       filteredSlots: [['2018-12-01', [slot]]],
@@ -129,7 +128,7 @@ describe('INIT', () => {
     };
 
     const expectedState = {
-      slots: new Map(),
+      slots: [],
       filteredSlots: [],
       hasLoaded: false,
       selectedSlot: null,
@@ -175,7 +174,7 @@ describe('SET_SELECTED_OPTIONS', () => {
 });
 
 describe('LOAD', () => {
-  it('will sort slots', () => {
+  it('will return slots', () => {
     const slots = [
       {
         id: 1,
@@ -213,15 +212,10 @@ describe('LOAD', () => {
     const data = { slots };
     const state = {};
 
-    const sortedSlots = new Map();
-    sortedSlots.set('2018-04-21', [slots[0]]);
-    sortedSlots.set('2018-04-22', [slots[3], slots[2]]);
-    sortedSlots.set('2018-04-23', [slots[1]]);
-
     INIT(state);
     LOAD(state, data);
 
-    expect(state.slots).toEqual(sortedSlots);
+    expect(state.slots).toEqual(slots);
   });
 
   it('will change value of hasLoaded property', () => {

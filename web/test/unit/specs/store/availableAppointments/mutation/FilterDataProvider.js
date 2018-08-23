@@ -1,7 +1,8 @@
 /* eslint-disable */
 /*jshint esversion: 6 */
+import { assign } from 'lodash/fp';
 
-export default class DataProvider {
+export default class FilterDataProvider {
   constructor(DateProvider) {
     this.dateProvider = DateProvider;
   }
@@ -40,6 +41,7 @@ export default class DataProvider {
 
     const slot1 = {
       id: 1,
+      ref: 'slot_1',
       type: 'Emergency',
       startTime: today.toISOString(),
       endTime: today.toISOString(),
@@ -49,6 +51,7 @@ export default class DataProvider {
 
     const slot2 = {
       id: 2,
+      ref: 'slot_2',
       type: 'Emergency',
       startTime: today.toISOString(),
       endTime: today.toISOString(),
@@ -58,6 +61,7 @@ export default class DataProvider {
 
     const slot3 = {
       id: 3,
+      ref: 'slot_3',
       type: 'Emergency',
       startTime: startOfTomorrow.toISOString(),
       endTime: startOfTomorrow.toISOString(),
@@ -67,6 +71,7 @@ export default class DataProvider {
 
     const slot4 = {
       id: 4,
+      ref: 'slot_4',
       type: 'Emergency',
       startTime: endOfTomorrow.toISOString(),
       endTime: endOfTomorrow.toISOString(),
@@ -76,6 +81,7 @@ export default class DataProvider {
 
     const slot5 = {
       id: 5,
+      ref: 'slot_5',
       type: 'Emergency',
       startTime: startOfNextWeek.toISOString(),
       endTime: startOfNextWeek.toISOString(),
@@ -85,6 +91,7 @@ export default class DataProvider {
 
     const slot6 = {
       id: 6,
+      ref: 'slot_6',
       type: 'Emergency',
       startTime: endOfNextWeek.toISOString(),
       endTime: endOfNextWeek.toISOString(),
@@ -94,6 +101,7 @@ export default class DataProvider {
 
     const slot7 = {
       id: 7,
+      ref: 'slot_7',
       type: 'Baby immunisations',
       startTime: today.toISOString(),
       endTime: today.toISOString(),
@@ -103,6 +111,7 @@ export default class DataProvider {
 
     const slot8 = {
       id: 8,
+      ref: 'slot_8',
       type: 'Emergency',
       startTime: today.toISOString(),
       endTime: today.toISOString(),
@@ -112,6 +121,7 @@ export default class DataProvider {
 
     const slot9 = {
       id: 9,
+      ref: 'slot_9',
       type: 'Emergency',
       startTime: today.toISOString(),
       endTime: today.toISOString(),
@@ -121,6 +131,7 @@ export default class DataProvider {
 
     const slot10 = {
       id: 10,
+      ref: 'slot_10',
       type: 'Emergency',
       startTime: startOfNext2Week.toISOString(),
       endTime: startOfNext2Week.toISOString(),
@@ -130,6 +141,7 @@ export default class DataProvider {
 
     const slot11 = {
       id: 11,
+      ref: 'slot_11',
       type: 'Emergency',
       startTime: endOfThisWeek.toISOString(),
       endTime: endOfThisWeek.toISOString(),
@@ -137,6 +149,34 @@ export default class DataProvider {
       clinicians: ['Dr House'],
     };
 
-    return { slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8, slot9, slot10, slot11 };
+    const slot12 = {
+      id: 12,
+      ref: 'slot_12',
+      type: 'Emergency',
+      startTime: today.clone().subtract(15, 'minutes').toISOString(),
+      endTime: today.clone().subtract(15, 'minutes'),
+      location: 'Leeds',
+      clinicians: ['Dr Drake Ramoray'],
+    };
+
+    const slot13 = assign({}, slot1);
+    slot13.ref = 'slot_13';
+    const slot14 = assign({}, slot2);
+    slot14.ref = 'slot_14';
+    const slot15 = assign({}, slot4);
+    slot15.ref = 'slot_15';
+    const slot16 = assign({}, slot6);
+    slot16.ref = 'slot_16';
+    const slot17 = assign({}, slot10);
+    slot17.ref = 'slot_17';
+    const slot18 = assign({}, slot11);
+    slot18.ref = 'slot_18';
+
+    return {
+      slot1, slot2, slot3, slot4, slot5,
+      slot6, slot7, slot8, slot9, slot10,
+      slot11, slot12, slot13, slot14, slot15,
+      slot16, slot17, slot18
+    };
   }
 }

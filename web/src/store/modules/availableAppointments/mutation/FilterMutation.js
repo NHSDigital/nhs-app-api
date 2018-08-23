@@ -1,6 +1,9 @@
 /* eslint-disable */
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
-import { DATE_FORMAT } from '@/store/modules/availableAppointments/mutation/LoadMutation';
+import _ from 'lodash';
+import { sortBy } from 'lodash/fp';
+
+export const DATE_FORMAT = 'YYYY-MM-DD';
 
 export default class FilterMutation {
   constructor(DateProvider, DateMapper) {
@@ -8,7 +11,7 @@ export default class FilterMutation {
     this.dateMapper = DateMapper;
   }
 
-  execute(data, selectedOptions) {
+  execute(slots, selectedOptions) {
     let dateRange = null;
     if (selectedOptions.date !== DateFilterValues.ALL) {
       dateRange = {
@@ -17,8 +20,12 @@ export default class FilterMutation {
       };
     }
 
-    let filteredSlotsMap = this._filter(data, selectedOptions, dateRange);
-    if (this._areMandatoryFieldsSelected(selectedOptions) && filteredSlotsMap.size > 0) {
+    if (!this._areMandatoryFieldsSelected(selectedOptions)) {
+      return [];
+    }
+
+    let filteredSlotsMap = this._filter(slots, selectedOptions, dateRange);
+    if (filteredSlotsMap.size > 0) {
       filteredSlotsMap = this._addDaysWithNoAppointments(filteredSlotsMap, dateRange);
     }
 
@@ -55,14 +62,13 @@ export default class FilterMutation {
     return true;
   }
 
-  _filter(data, selectedOptions, dateRange = null) {
+  _filter(slots, selectedOptions, dateRange = null) {
+    const sortedSlots = this._sort(slots);
     const filteredSlots = new Map();
-    if (!this._areMandatoryFieldsSelected(selectedOptions)) {
-      return filteredSlots;
-    }
 
-    data.forEach((slots, startTime) => {
-      const slotTime = this.dateProvider.create(startTime);
+    _.each(sortedSlots, (slot) => {
+      const slotTime = this.dateProvider.create(slot.startTime);
+      const day = slotTime.format(DATE_FORMAT);
       if (dateRange != null
         && (
           slotTime.isBefore(dateRange.from, 'day')
@@ -72,31 +78,45 @@ export default class FilterMutation {
         return;
       }
 
-      slots.forEach((slot) => {
-        if (selectedOptions.type !== '' && selectedOptions.type !== slot.type) {
+      if (selectedOptions.type !== '' && selectedOptions.type !== slot.type) {
+        return;
+      }
+
+      if (selectedOptions.location !== '' && selectedOptions.location !== slot.location) {
+        return;
+      }
+
+      if (selectedOptions.clinician !== ''
+        && Array.isArray(slot.clinicians)
+        && slot.clinicians.indexOf(selectedOptions.clinician) === -1) {
+        return;
+      }
+
+      if (filteredSlots.has(day)) {
+        const slotCollection = filteredSlots.get(day);
+        const lastSlot = slotCollection[slotCollection.length -1];
+        if (selectedOptions.clinician === ''
+          && this.dateProvider.create(lastSlot.startTime).isSame(this.dateProvider.create(slot.startTime), 'minute')) {
           return;
         }
 
-        if (selectedOptions.location !== '' && selectedOptions.location !== slot.location) {
-          return;
-        }
+        slotCollection.push(slot);
+        filteredSlots.set(day, slotCollection);
 
-        if (selectedOptions.clinician !== ''
-          && Array.isArray(slot.clinicians)
-          && slot.clinicians.indexOf(selectedOptions.clinician) === -1) {
-          return;
-        }
+      } else {
+        filteredSlots.set(day, [slot]);
+      }
 
-        if (filteredSlots.has(startTime)) {
-          const slotCollection = filteredSlots.get(startTime);
-          slotCollection.push(slot);
-          filteredSlots.set(startTime, slotCollection);
-        } else {
-          filteredSlots.set(startTime, [slot]);
-        }
-      });
     });
 
     return filteredSlots;
+  }
+
+  _sort(slots) {
+    const sort = sortBy(slot => [
+      slot.startTime,
+    ]);
+
+    return sort(slots);
   }
 }

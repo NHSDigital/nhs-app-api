@@ -2,29 +2,25 @@
 /* eslint-disable prefer-destructuring */
 import DateProvider from '@/services/DateProvider';
 import Mapper from '@/store/modules/availableAppointments/dateFilter/Mapper';
-import LoadMutation from '@/store/modules/availableAppointments/mutation/LoadMutation';
 import FilterMutation from '@/store/modules/availableAppointments/mutation/FilterMutation';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
 import each from 'jest-each';
-import DataProvider from './DataProvider';
+import FilterDataProvider from './FilterDataProvider';
 
 describe('FilterMutation [Weekday]', () => {
   const fakeDateProvider = {
-    create: (date = new Date('2018-08-13 17:23:18')) => DateProvider.create(date),
+    create: (date = new Date('2018-08-13')) => DateProvider.create(date),
   };
-  const dataProvider = new DataProvider(fakeDateProvider);
+  const dataProvider = new FilterDataProvider(fakeDateProvider);
   const filterMutation = new FilterMutation(fakeDateProvider, new Mapper(fakeDateProvider));
-  const loadMutation = new LoadMutation(fakeDateProvider);
   const data = dataProvider.generate();
 
-  const dataCollection = [
-    data.slot1, data.slot2, data.slot3,
-    data.slot4, data.slot5, data.slot6,
-    data.slot7, data.slot8, data.slot9,
-    data.slot10, data.slot11,
+  const slots = [
+    data.slot17, data.slot5, data.slot8, data.slot4, data.slot12,
+    data.slot6, data.slot7, data.slot14, data.slot9, data.slot16,
+    data.slot11, data.slot2, data.slot13, data.slot3, data.slot15,
+    data.slot10, data.slot1, data.slot18,
   ];
-
-  const slots = loadMutation.execute(dataCollection).slots;
 
   each([
     [
@@ -35,7 +31,7 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.TODAY,
       },
       [
-        ['2018-08-13', [data.slot1, data.slot2, data.slot9]],
+        ['2018-08-13', [data.slot12, data.slot14]],
       ],
     ],
     [
@@ -46,7 +42,7 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.TODAY,
       },
       [
-        ['2018-08-13', [data.slot1, data.slot2]],
+        ['2018-08-13', [data.slot14, data.slot2, data.slot13, data.slot1]],
       ],
     ],
     [
@@ -57,7 +53,7 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.TODAY,
       },
       [
-        ['2018-08-13', [data.slot2]],
+        ['2018-08-13', [data.slot12, data.slot14, data.slot2]],
       ],
     ],
     [
@@ -135,7 +131,7 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.TOMORROW,
       },
       [
-        ['2018-08-14', [data.slot3, data.slot4]],
+        ['2018-08-14', [data.slot3, data.slot4, data.slot15]],
       ],
     ],
     [
@@ -146,7 +142,7 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.TOMORROW,
       },
       [
-        ['2018-08-14', [data.slot3, data.slot4]],
+        ['2018-08-14', [data.slot3, data.slot4, data.slot15]],
       ],
     ],
     [
@@ -173,7 +169,7 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.THIS_WEEK,
       },
       [
-        ['2018-08-13', [data.slot1, data.slot2, data.slot9]],
+        ['2018-08-13', [data.slot12, data.slot14]],
         ['2018-08-14', [data.slot3, data.slot4]],
         ['2018-08-15', []],
         ['2018-08-16', []],
@@ -190,8 +186,8 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.THIS_WEEK,
       },
       [
-        ['2018-08-13', [data.slot2]],
-        ['2018-08-14', [data.slot3, data.slot4]],
+        ['2018-08-13', [data.slot12, data.slot14, data.slot2]],
+        ['2018-08-14', [data.slot3, data.slot4, data.slot15]],
         ['2018-08-15', []],
         ['2018-08-16', []],
         ['2018-08-17', []],
@@ -273,12 +269,12 @@ describe('FilterMutation [Weekday]', () => {
         date: DateFilterValues.ALL,
       },
       [
-        ['2018-08-13', [data.slot1, data.slot2, data.slot9]],
+        ['2018-08-13', [data.slot12, data.slot14]],
         ['2018-08-14', [data.slot3, data.slot4]],
         ['2018-08-19', [data.slot11]],
         ['2018-08-20', [data.slot5]],
         ['2018-08-26', [data.slot6]],
-        ['2018-08-27', [data.slot10]],
+        ['2018-08-27', [data.slot17]],
       ],
     ],
     [

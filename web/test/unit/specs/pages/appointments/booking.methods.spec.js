@@ -48,7 +48,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: null,
           selectedOptions: {
@@ -82,7 +82,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: null,
           selectedOptions: {
@@ -116,7 +116,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: null,
         },
@@ -151,7 +151,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: null,
         },
@@ -186,7 +186,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: null,
         },
@@ -221,7 +221,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: null,
         },
@@ -256,7 +256,7 @@ describe('booking.vue - validate', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           selectedSlot: {},
         },

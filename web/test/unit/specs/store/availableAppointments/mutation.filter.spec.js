@@ -3,7 +3,7 @@ import each from 'jest-each';
 import mutations from '@/store/modules/availableAppointments/mutations';
 import DateProvider from '@/services/DateProvider';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
-import DataProvider from './mutation/DataProvider';
+import FilterDataProvider from './mutation/FilterDataProvider';
 
 const {
   INIT,
@@ -12,7 +12,7 @@ const {
 } = mutations;
 
 describe('FILTER', () => {
-  const dataProvider = new DataProvider(DateProvider);
+  const dataProvider = new FilterDataProvider(DateProvider);
   const data = dataProvider.generate();
   const state = {};
 

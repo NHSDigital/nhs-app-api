@@ -40,7 +40,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map(),
+          slots: [],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -58,7 +58,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -85,7 +85,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -105,7 +105,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -134,7 +134,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -164,7 +164,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },
@@ -194,7 +194,7 @@ describe('booking.vue', () => {
       dispatch: jest.fn(),
       state: {
         availableAppointments: {
-          slots: new Map([['2018-04-12'], [{}]]),
+          slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
         },

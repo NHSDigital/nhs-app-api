@@ -15,7 +15,7 @@ import {
 } from './mutation-types';
 
 const clearState = (state) => {
-  state.slots = new Map();
+  state.slots = [];
   state.filteredSlots = [];
   state.hasLoaded = false;
   state.filtersOptions = {
@@ -52,7 +52,7 @@ export default {
   },
   [LOAD](state, data) {
     const mutation = new LoadMutation(DateProvider);
-    const result = mutation.execute(data.slots);
+    const result = mutation.execute(data);
 
     state.hasLoaded = true;
     state.slots = result.slots;

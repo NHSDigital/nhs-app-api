@@ -1,10 +1,6 @@
 /* eslint-disable */
-/*jshint esversion: 6 */
-/*global fetch, btoa */
-import { sortBy } from 'lodash/fp';
+import _ from 'lodash';
 import DateFilterValues from '@/store/modules/availableAppointments/dateFilter/Values';
-
-export const DATE_FORMAT = 'YYYY-MM-DD';
 
 export default class LoadMutation {
   constructor(DateProvider) {
@@ -12,25 +8,14 @@ export default class LoadMutation {
   }
 
   execute(data) {
-    const sortedSlots = this.sort(data);
-    const slots = new Map();
     const filters = new Map();
     const types = [];
     const locations = [];
     const clinicians = [];
     let defaultLocationSelectedOption = '';
 
-    sortedSlots.forEach((slot, index) => {
+    _.each(data.slots, (slot, index) => {
       slot.ref = `slot_${index}`;
-
-      const startDate = this.dateProvider.create(slot.startTime).format(DATE_FORMAT);
-      if (slots.has(startDate)) {
-        const slotCollection = slots.get(startDate);
-        slotCollection.push(slot);
-        slots.set(startDate, slotCollection);
-      } else {
-        slots.set(startDate, [slot]);
-      }
 
       if (!filters.has(slot.type)) {
         filters.set(slot.type, true);
@@ -42,7 +27,7 @@ export default class LoadMutation {
         locations.push({ value: slot.location, name: slot.location, translate: false });
       }
 
-      slot.clinicians.forEach((clinician) => {
+      _.each(slot.clinicians, (clinician) => {
         if (!filters.has(clinician)) {
           filters.set(clinician, true);
           clinicians.push({ value: clinician, name: clinician, translate: false });
@@ -72,7 +57,7 @@ export default class LoadMutation {
     clinicians.unshift({ value: '', name: 'appointments.booking.filters.clinician.default_option', translate: true });
 
     return {
-      slots,
+      slots: data.slots,
       filtersOptions: {
         types,
         locations,
@@ -81,13 +66,5 @@ export default class LoadMutation {
       },
       defaultLocationSelectedOption
     };
-  }
-
-  sort(slots) {
-    const sortSlots = sortBy(slot => [
-      slot.startTime,
-    ]);
-
-    return sortSlots(slots);
   }
 }

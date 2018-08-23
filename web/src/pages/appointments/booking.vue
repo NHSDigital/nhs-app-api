@@ -117,11 +117,11 @@ export default {
       return this.$store.state.availableAppointments.filteredSlots;
     },
     noAvailableAppointments() {
-      const hasNoSlots = this.$store.state.availableAppointments.slots.size === 0;
+      const hasNoSlots = this.$store.state.availableAppointments.slots.length === 0;
       return this.$store.state.availableAppointments.hasLoaded && hasNoSlots;
     },
     availableAppointments() {
-      const hasSlots = this.$store.state.availableAppointments.slots.size > 0;
+      const hasSlots = this.$store.state.availableAppointments.slots.length > 0;
       return this.$store.state.availableAppointments.hasLoaded && hasSlots;
     },
     loadComplete() {
