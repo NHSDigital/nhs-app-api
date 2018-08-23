@@ -12,7 +12,7 @@ import java.io.StringWriter
 import javax.xml.bind.Marshaller
 
 
-class TppLogOffBuilder() : TppMappingBuilder("POST", "/tpp/") {
+class TppLogOffBuilder : TppMappingBuilder("POST", "/tpp/") {
     init {
         val typeHeader = "type"
         val typeValue = "Logoff"

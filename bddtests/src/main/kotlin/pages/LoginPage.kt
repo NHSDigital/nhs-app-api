@@ -7,7 +7,7 @@ import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
-
+@Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/login")
 class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 

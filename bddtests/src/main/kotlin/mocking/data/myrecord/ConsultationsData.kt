@@ -1,10 +1,16 @@
 package mocking.data.myrecord
 
-import mocking.emis.consultations.*
+import mocking.emis.consultations.Observation
+import mocking.emis.consultations.AssociatedText
+import mocking.emis.consultations.EffectiveDate
+import mocking.emis.consultations.ConsultationMedicalRecord
+import mocking.emis.consultations.ConsultationResponse
+import mocking.emis.consultations.ConsultationsResponseModel
+import mocking.emis.consultations.Section
 
 object ConsultationsData {
 
-    fun getDefaultConsultationsData(): ConsultationsResponseModel {
+    fun getDefaultConsultationsData() : ConsultationsResponseModel {
         return ConsultationsResponseModel(
                 medicalRecord = ConsultationMedicalRecord(
                         consultations = mutableListOf()

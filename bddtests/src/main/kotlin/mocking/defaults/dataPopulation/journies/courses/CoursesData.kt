@@ -7,6 +7,9 @@ import java.util.*
 
 object CoursesData {
 
+    const val MAX_PRESCRIPTIONS_NUMBER = 5
+
+    @Suppress("LongParameterList", "ComplexMethod")
     fun getCourseData(maxCourses: Int,
                       numOfRepeats: Int,
                       numCanBeRequested: Int,
@@ -20,7 +23,7 @@ object CoursesData {
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {
             val constituents = mutableListOf<String>()
-            for (constituentNo in 1..PrescriptionsData.getRandomNumber(5)) {
+            for (constituentNo in 1..PrescriptionsData.getRandomNumber(MAX_PRESCRIPTIONS_NUMBER)) {
                 constituents.add("Constituent" + constituentNo)
             }
 

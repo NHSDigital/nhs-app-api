@@ -8,7 +8,10 @@ import mocking.emis.models.AddVerificationRequest
 import worker.models.linkage.CreateLinkageRequest
 import java.time.Duration
 
+private const val TIMEOUT_DURATION_SECONDS:Long = 15
+
 class LinkageJournies(private val client: MockingClient) {
+
 
     fun create() {
         createGetJournies()
@@ -50,9 +53,8 @@ class LinkageJournies(private val client: MockingClient) {
             linkageKeyPOSTRequest(
                     AddNhsUserRequest(timeoutPatient.odsCode, timeoutPatient.nhsNumber, notFoundPatient.emailAddress))
                     .respondWithSuccessfullyCreated(AddNhsUserResponse(""))
-                    .delayedBy( Duration.ofSeconds(15))
+                    .delayedBy( Duration.ofSeconds(TIMEOUT_DURATION_SECONDS))
         }
-
     }
 
     private fun createGetJournies() {
@@ -103,14 +105,7 @@ class LinkageJournies(private val client: MockingClient) {
         client.forEmis {
             linkageKeyGetRequest(AddVerificationRequest(timeoutPatient.nhsNumber, timeoutPatient.odsCode, timeoutPatient.emailAddress))
                     .respondWithSuccessfullyRetrieved(AddVerificationResponse(timeoutPatient.odsCode, timeoutPatient.linkageKey!!, timeoutPatient.accountId!!))
-                    .delayedBy( Duration.ofSeconds(15))
+                    .delayedBy( Duration.ofSeconds(TIMEOUT_DURATION_SECONDS))
         }
-
-
-
-
-
-
-
     }
 }

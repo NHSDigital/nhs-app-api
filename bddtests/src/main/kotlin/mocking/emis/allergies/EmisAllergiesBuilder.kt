@@ -32,7 +32,7 @@ class EmisAllergiesBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val exceptionResponse = ExceptionResponse(500,
+        val exceptionResponse = ExceptionResponse(HttpStatus.SC_INTERNAL_SERVER_ERROR.toLong(),
                 "Requested record access is disabled by the practice")
         return respondWithException(exceptionResponse)
     }

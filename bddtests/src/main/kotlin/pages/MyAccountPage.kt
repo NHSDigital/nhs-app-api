@@ -2,6 +2,7 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 
+@Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/account")
 class MyAccountPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
@@ -95,5 +96,4 @@ class MyAccountPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     fun clickHelpAndSupportLink() {
         helpAndSupportLink.element.click()
     }
-
 }

@@ -1,10 +1,10 @@
 package mocking.emis.models
 
-enum class PrescriptionType(val prescriptionType: Int)
+enum class PrescriptionType
 {
-    Unknown(1),
-    Acute(2),
-    Repeat(3),
-    RepeatDispensing(4),
-    Automatic(5)
+    Unknown,
+    Acute,
+    Repeat,
+    RepeatDispensing,
+    Automatic
 }

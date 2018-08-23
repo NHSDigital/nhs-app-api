@@ -16,7 +16,9 @@ import pages.navigation.Header
 import java.time.Duration
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
+const val POOLING_FREQUENCY: Long = 100
 
+@Suppress("TooManyFunctions")
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     val errorBanner by lazy{ ErrorBannerPageObject(this) }
@@ -46,7 +48,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         try {
             FluentWait<WebElementFacade>(this.element)
                     .withTimeout(Duration.ofSeconds(seconds))
-                    .pollingEvery(Duration.ofMillis(100))
+                    .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
                     .until {
                         !it.isCurrentlyVisible
                     }
@@ -114,6 +116,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
     }
 
+    @Suppress("NestedBlockDepth")
     private fun switchContext(name: String): AndroidDriver<WebElementFacade> {
         val originalDriver = getAndroidDriver()
 

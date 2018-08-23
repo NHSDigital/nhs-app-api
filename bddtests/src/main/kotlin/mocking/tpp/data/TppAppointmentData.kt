@@ -15,6 +15,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+private const val DEFAULT_APPOINTMENTS_NUMBER = 4
+private const val APPOINTMENT_DURATION_IN_MINUTES = 15
+private const val APPOINTMENT_HOUR = 9
+
 class TppAppointmentData private constructor() : BaseAppointmentData() {
 
     val timeZone = TimeZone.getTimeZone("Europe/London")
@@ -28,7 +32,6 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
     private val appointmentSiteName = "Kainos GP Demo Unit"
     private val locations = arrayOf("Leeds", "Sheffield")
     private val addresses = arrayListOf("Tpp, Leeds, West Yorkshire, LS18 5PX", "Tpp, Sheffield, South Yorkshire, S15 5PX")
-
     private val appointments = arrayListOf<Appointment>()
 
     val drJamesBaseSession = Session(
@@ -77,15 +80,14 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
                 uuid = TppConfig.uuid)
     }
 
-    private fun generateTppAppointmentFor(baseTppAppointment: Appointment, withBaseDate: Calendar, howMany: Int = 4): ArrayList<Appointment> {
-        val duration = 15
+    private fun generateTppAppointmentFor(baseTppAppointment: Appointment, withBaseDate: Calendar, howMany: Int = DEFAULT_APPOINTMENTS_NUMBER): ArrayList<Appointment> {
         val appointmentTime = copyCalendarDate(withBaseDate)
         val appointments = arrayListOf<Appointment>()
         for (counter in 1..howMany) {
             if (counter % 2 == 0)
-                appointmentTime.addDays(1).set(Calendar.HOUR_OF_DAY, 9)
+                appointmentTime.addDays(1).set(Calendar.HOUR_OF_DAY, APPOINTMENT_HOUR)
             val startTime = dateTimeFormat.format(appointmentTime.time)
-            val endTime = dateTimeFormat.format(appointmentTime.addMinutes(duration).time)
+            val endTime = dateTimeFormat.format(appointmentTime.addMinutes(APPOINTMENT_DURATION_IN_MINUTES).time)
             appointments.add(baseTppAppointment.copy(startDate = startTime, endDate = endTime, apptId = counter.toString()))
         }
         return appointments

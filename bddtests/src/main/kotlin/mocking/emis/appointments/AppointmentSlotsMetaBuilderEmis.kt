@@ -1,11 +1,16 @@
 package mocking.emis.appointments
 
+import constants.EmisResponseCode
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
-import mocking.emis.models.*
+import mocking.emis.models.Location
+import mocking.emis.models.Session
+import mocking.emis.models.SessionHolder
+import mocking.emis.models.SessionType
+import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -13,6 +18,9 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
+
+private const val DEFAULT_DURATION: Int = 10
+private const val NUMBER_OF_SLOTS: Int = 1
 
 class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
                                       apiEndUserSessionId: String,
@@ -70,9 +78,9 @@ class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
                 Session(session.sessionType!!,
                         slot.slotId!!,
                         session.locationid,
-                        10,
+                        DEFAULT_DURATION,
                         SessionType.Timed,
-                        1,
+                        NUMBER_OF_SLOTS,
                         arrayListOf(session.staffDetailsid!!),
                         slot.startTime,
                         slot.endTime)
@@ -86,13 +94,13 @@ class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val exceptionResponse = ExceptionResponse(-1030,
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.SERVICE_ACCESS_VIOLATION,
                 "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation")
         return respondWithException(exceptionResponse)
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(-9999,
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Unknown Exception")
         return respondWithException(exceptionResponse)
     }
@@ -108,6 +116,5 @@ class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
                     .andDelay(delayMillisecs)
 
         }
-
     }
 }

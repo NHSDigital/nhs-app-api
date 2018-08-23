@@ -1,12 +1,12 @@
 package mocking.tpp
 
+import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.ICancelAppointmentsBuilder
 import mocking.MappingBuilder
 import mocking.tpp.appointments.AppointmentSlotsBuilderTpp
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
-import mocking.*
 import mocking.models.Mapping
 import mocking.tpp.appointments.BookAppointmentsBuilderTpp
 import mocking.tpp.appointments.MyAppointmentsBuilderTpp
@@ -32,6 +32,7 @@ import worker.models.demographics.TppUserSession
 import java.time.OffsetDateTime
 import java.util.*
 
+@Suppress("TooManyFunctions")
 open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") : MappingBuilder(method, relativePath), IAppointmentMappingBuilder {
 
     private val HEADER_CONTENT_TYPE = "Content-Type"

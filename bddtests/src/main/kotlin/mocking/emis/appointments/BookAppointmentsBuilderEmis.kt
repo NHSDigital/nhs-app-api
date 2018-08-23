@@ -3,6 +3,7 @@ package mocking.emis.appointments
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
 import mocking.GsonFactory
+import constants.EmisResponseCode
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -16,6 +17,7 @@ import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotResponse
 import java.time.Duration
 
+@Suppress("TooManyFunctions")
 class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
                                   apiEndUserSessionId: String,
                                   apiSessionId: String,
@@ -41,35 +43,34 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithUnavailableException(): Mapping {
-        val exceptionResponse = ExceptionResponse(-9999,
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Unavailable Exception")
         return respondWithException(exceptionResponse, HttpStatus.SC_SERVICE_UNAVAILABLE)
     }
 
     override fun respondWithConflictException(): Mapping {
-        val exceptionResponse = ExceptionResponse(-9999,
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Conflict Exception")
         return respondWithException(exceptionResponse, HttpStatus.SC_CONFLICT)
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(-9999,
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Unknown Exception")
         return respondWithException(exceptionResponse)
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        val errorResponse = ErrorResponse(-1030)
-        return respondWithError(errorResponse, HttpStatus.SC_FORBIDDEN)
+        return responseErrorForbiddenService()
     }
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
-        val errorResponse = ErrorResponse(-1151)
+        val errorResponse = ErrorResponse(EmisResponseCode.NOT_AVAILABLE.toInt())
         return respondWithError(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
-        val errorResponse = ErrorResponse(-1152)
+        val errorResponse = ErrorResponse(EmisResponseCode.REQUESTED_APPOINTMENT_SLOT_IN_PAST.toInt())
         return respondWithError(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 

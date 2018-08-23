@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 
+@Suppress("TooManyFunctions")
 class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: String? = null, endDate: String? = null) :
         TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 

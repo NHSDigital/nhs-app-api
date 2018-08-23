@@ -51,7 +51,7 @@ class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: S
     }
 
     fun respondWithServiceNotAvailableException(): Mapping {
-        val exceptionResponse = ExceptionResponse(503,
+        val exceptionResponse = ExceptionResponse(HttpStatus.SC_SERVICE_UNAVAILABLE.toLong(),
                 "Service unavailable")
         return respondWithException(exceptionResponse)
     }

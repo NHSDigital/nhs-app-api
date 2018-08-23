@@ -1,15 +1,19 @@
 package mocking.defaults.dataPopulation.journies.prescriptions
 
 import mocking.defaults.dataPopulation.journies.courses.CoursesData
-import mocking.emis.models.*
+import mocking.emis.models.PrescriptionRequest
+import mocking.emis.models.PrescriptionRequestsGetResponse
+import mocking.emis.models.RequestedMedicationCourse
+import mocking.emis.models.RequestedMedicationCourseStatus
 import models.prescriptions.MedicationCourse
 import java.time.OffsetDateTime
-import java.util.*
+import java.util.Random
 
 object PrescriptionsData {
+    private const val MAX_PRESCRIPTIONS_NUMBER = 100
 
+    @Suppress("ComplexMethod")
     fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?, showDosage: Boolean = true, showQuantity: Boolean = true): PrescriptionRequestsGetResponse {
-
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
 
@@ -18,8 +22,8 @@ object PrescriptionsData {
             // Create courses first as these will be used in the prescriptions
             medicationCourses = CoursesData.getCourseData(
                     noCourses,
-                    if (noRepeats == null) noPrescriptions else noRepeats,
-                    if (noRepeats == null) noPrescriptions else noRepeats,
+                    noRepeats ?: noPrescriptions,
+                    noRepeats ?: noPrescriptions,
                     medicationCourses,
                     showDosage,
                     showQuantity)
@@ -98,8 +102,7 @@ object PrescriptionsData {
     }
 
     fun getQuantity(): String {
-
-        val quantity = getRandomNumber(100)
+        val quantity = getRandomNumber(MAX_PRESCRIPTIONS_NUMBER)
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",

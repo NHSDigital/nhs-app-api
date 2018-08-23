@@ -7,7 +7,14 @@ import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
-import mocking.tpp.models.*
+import mocking.tpp.models.Application
+import mocking.tpp.models.Authenticate
+import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.LinkAccountReply
+import mocking.tpp.models.User
+import mocking.tpp.models.NationalId
+import mocking.tpp.models.Person
+import mocking.tpp.models.PersonName
 import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {

@@ -1,6 +1,8 @@
 package mocking.data.myrecord
 
-import mocking.tpp.models.*
+import mocking.tpp.models.Event
+import mocking.tpp.models.EventItem
+import mocking.tpp.models.RequestPatientRecordReply
 
 object TppDcrData {
 

@@ -4,6 +4,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import pages.HybridPageElement
 
+@Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
@@ -189,6 +190,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         timePeriodFilter.element.selectByVisibleText<WebElementFacade>(text)
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun isDateHeadingPresent(expectedDateHeading: String?): Boolean {
         return try {
             findByXpath(String.format(appointmentSlotDateXpath, expectedDateHeading)).isPresent
@@ -196,7 +198,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             false
         }
     }
-
+    @Suppress("TooGenericExceptionCaught")
     fun isTimeSlotPresent(expectedDateHeading: String, expectedTimeOnSlot: String): Boolean {
         return try {
             timeSlot(expectedDateHeading, expectedTimeOnSlot).element.isPresent
@@ -213,6 +215,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun isTimeSlotAtPositionSelected(position: Int): Boolean {
         return try {
             timeSlotAtPosition(position).element.getAttribute("aria-label") == "selected-slot"
@@ -241,6 +244,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return errorBanner.bodyElements[rowNumber - 1]
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun isGuidancePresent(): Boolean {
         return try {
             appointmentSlotGuidance.element.isPresent
@@ -249,6 +253,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun isGuidanceContentVisible(): Boolean {
         return try {
             appointmentSlotGuidanceContent.element.isVisible

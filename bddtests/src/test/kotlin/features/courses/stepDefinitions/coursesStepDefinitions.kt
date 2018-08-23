@@ -21,10 +21,9 @@ import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
-import worker.models.courses.CoursesResponse
+import worker.models.courses.CoursesListResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 
 
@@ -89,7 +88,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .getCoursesConnection(null)
 
-            Serenity.setSessionVariable(CoursesResponse::class).to(result)
+            Serenity.setSessionVariable(CoursesListResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -97,7 +96,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @Then("^I receive a list of (\\d+) repeating prescriptions that can be requested$")
     fun thenIReceiveAListOfXRepeatingPrescriptionsDateDescending(expectedNumberOfRepeatingPrescriptions: Int) {
-        val result = Serenity.sessionVariableCalled<CoursesResponse>(CoursesResponse::class)
+        val result = Serenity.sessionVariableCalled<CoursesListResponse>(CoursesListResponse::class)
         Assert.assertNotNull("No courses in session", result)
 
         val actualNumberOfRepeatPrescriptions = result.courses.count()

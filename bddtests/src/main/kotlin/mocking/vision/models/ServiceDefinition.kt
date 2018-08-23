@@ -1,6 +1,6 @@
 package mocking.vision.models
 
-import javax.xml.bind.annotation.*
+import javax.xml.bind.annotation.XmlElement
 
 data class ServiceDefinition(
         @XmlElement(namespace = "urn:vision")

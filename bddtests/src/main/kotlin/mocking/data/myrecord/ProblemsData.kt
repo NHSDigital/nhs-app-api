@@ -1,10 +1,16 @@
 package mocking.data.myrecord
 
-import mocking.emis.problems.*
+import mocking.emis.problems.Observation
+import mocking.emis.problems.ProblemMedicalRecord
+import mocking.emis.problems.ProblemResponse
+import mocking.emis.problems.ProblemResponseModel
+import mocking.emis.problems.EffectiveDate
+import mocking.emis.problems.AssociatedText
 
 object ProblemsData {
+    private const val PROBLEMS_NUMBER = 3
 
-    fun getDefaultProblemModel(): ProblemResponseModel {
+    fun getDefaultProblemModel() : ProblemResponseModel {
         return ProblemResponseModel(
                 medicalRecord = ProblemMedicalRecord(
                         problems = mutableListOf()
@@ -13,10 +19,9 @@ object ProblemsData {
     }
 
     fun getProblemsData(): ProblemResponseModel {
-
         val problems = mutableListOf<ProblemResponse>()
 
-        for (i in 1..3) {
+        for (i in 1..PROBLEMS_NUMBER) {
             problems.add(ProblemResponse(
                     status = "Past",
                     significance="Minor",
@@ -39,7 +44,6 @@ object ProblemsData {
     }
 
     fun getProblemRecordsWithDifferentDateParts(): ProblemResponseModel {
-
         val problems = mutableListOf<ProblemResponse>()
 
         problems.add(ProblemResponse(

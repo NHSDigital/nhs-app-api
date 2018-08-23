@@ -1,5 +1,6 @@
 package mocking.emis.session
 
+import constants.EmisResponseCode
 import mocking.CONTENT_TYPE_APPLICATION_JSON
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
@@ -39,7 +40,7 @@ class EmisSessionBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithUserNotRegistered(): Mapping {
-        return respondWithException(-1030, "User Identity '00000000-0000-0000-0000-000000000000' required account status 'Inactive, Active' from Application '00000000-0000-0000-0000-000000000000'. Actual account status is 'NotRegistered'. Extra info: Invalid account registration status")
+        return respondWithException(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(), "User Identity '00000000-0000-0000-0000-000000000000' required account status 'Inactive, Active' from Application '00000000-0000-0000-0000-000000000000'. Actual account status is 'NotRegistered'. Extra info: Invalid account registration status")
     }
 
     fun respondWithServerError(): Mapping {

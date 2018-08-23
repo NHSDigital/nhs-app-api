@@ -1,6 +1,9 @@
 package mocking.tpp.models
 
-import javax.xml.bind.annotation.*
+import javax.xml.bind.annotation.XmlAccessType
+import javax.xml.bind.annotation.XmlAccessorType
+import javax.xml.bind.annotation.XmlAttribute
+import javax.xml.bind.annotation.XmlElement
 
 @XmlAccessorType(XmlAccessType.FIELD)
 data class Person(
@@ -16,5 +19,5 @@ data class Person(
         ),
         @field:XmlElement(name = "Address") var address: TppAddress = TppAddress(
         "default address"
-)
+        )
 )

@@ -4,6 +4,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.net.URI
 
+private const val SESSION_EXPIRY_MINUTES: Long = 3
 
 class Config private constructor() {
 
@@ -57,7 +58,7 @@ class Config private constructor() {
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
-        sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", 3)
+        sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

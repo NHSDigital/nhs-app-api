@@ -4,14 +4,14 @@ import mocking.GsonFactory
 import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.models.*
+import mocking.tpp.models.Error
+import mocking.tpp.models.TestResultsViewReply
 import org.apache.http.HttpStatus
 import worker.models.demographics.TppUserSession
 import javax.xml.bind.JAXBContext
 import java.io.StringWriter
 import java.time.OffsetDateTime
 import javax.xml.bind.Marshaller
-
 
 class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) : TppMappingBuilder("POST", "/tpp/") {
     init {
@@ -75,7 +75,7 @@ class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: Offse
     }
 
     fun respondWithServiceNotAvailableException(): Mapping {
-        val exceptionResponse = ExceptionResponse(503,
+        val exceptionResponse = ExceptionResponse(HttpStatus.SC_SERVICE_UNAVAILABLE.toLong(),
                 "Service unavailable")
         return respondWithException(exceptionResponse)
     }

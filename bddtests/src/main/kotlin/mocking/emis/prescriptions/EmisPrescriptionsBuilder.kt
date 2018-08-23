@@ -1,14 +1,19 @@
 package mocking.emis.prescriptions
 
+import constants.EmisResponseCode
 import mocking.GsonFactory
-import mocking.emis.*
+import mocking.emis.EmisConfiguration
+import mocking.emis.EmisMappingBuilder
+import mocking.emis.HEADER_API_END_USER_SESSION_ID
+import mocking.emis.HEADER_API_SESSION_ID
+import mocking.emis.QUERY_PARAM_USER_PATIENT_LINK_TOKEN
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import java.time.OffsetDateTime
 
-private const val QUERY_PRESCRIPTION_FROMDATE = "filterFromDate"
-private const val QUERY_PRESCRIPTION_TODATE = "filterToDate"
+private const val QUERY_PRESCRIPTION_FROM_DATE = "filterFromDate"
+private const val QUERY_PRESCRIPTION_TO_DATE = "filterToDate"
 
 class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
                                 apiEndUserSessionId: String,
@@ -16,7 +21,7 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
                                 linkToken: String?,
                                 fromDate: OffsetDateTime?,
                                 toDate: OffsetDateTime?)
-    :EmisMappingBuilder(configuration, "GET", "/prescriptionrequests"){
+    : EmisMappingBuilder(configuration, "GET", "/prescriptionrequests") {
 
     init {
         requestBuilder
@@ -28,11 +33,11 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
         }
 
         if(fromDate != null) {
-            requestBuilder.andQueryParameter(QUERY_PRESCRIPTION_FROMDATE, getDateFormattedString(fromDate), "contains")
+            requestBuilder.andQueryParameter(QUERY_PRESCRIPTION_FROM_DATE, getDateFormattedString(fromDate), "contains")
         }
 
         if(toDate != null) {
-            requestBuilder.andQueryParameter(QUERY_PRESCRIPTION_TODATE, getDateFormattedString(toDate), "contains" )
+            requestBuilder.andQueryParameter(QUERY_PRESCRIPTION_TO_DATE, getDateFormattedString(toDate), "contains" )
         }
     }
 
@@ -44,11 +49,11 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
         return responseErrorForbiddenService()
     }
 
-    private fun getDateFormattedString(dateTime: OffsetDateTime): String{
+    private fun getDateFormattedString(dateTime: OffsetDateTime): String {
         return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
     }
 
-    private fun formatDateToTwoDigits(daysOrMonths: Int): String{
+    private fun formatDateToTwoDigits(daysOrMonths: Int): String {
         return String.format("%02d", daysOrMonths)
     }
 

@@ -2,6 +2,8 @@ package mocking.data.prescriptions
 
 import java.util.*
 
+private const val MAX_QUANTITY_NUMBER = 100
+
 interface IPrescriptionLoader<T> {
     var data: T
 
@@ -40,8 +42,7 @@ interface IPrescriptionLoader<T> {
     }
 
     fun getQuantity(): String {
-
-        val quantity = getRandomNumber(100)
+        val quantity = getRandomNumber(MAX_QUANTITY_NUMBER)
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",
@@ -53,10 +54,9 @@ interface IPrescriptionLoader<T> {
     fun getRandomNumber(maxNum: Int): Int {
         val random = Random()
         val minNum = 1
-
         var localMaxNum = maxNum
 
-        if(localMaxNum == 1){
+        if(localMaxNum == 1) {
             localMaxNum += 1
         }
 

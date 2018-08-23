@@ -4,7 +4,7 @@ import mocking.MockingClient
 import models.Patient
 import org.junit.Assert
 
-abstract class SessionCreateJourneyFactory(){
+abstract class SessionCreateJourneyFactory {
 
     abstract fun createFor(patient: Patient)
 

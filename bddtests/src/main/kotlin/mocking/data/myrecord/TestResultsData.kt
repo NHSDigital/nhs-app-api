@@ -1,6 +1,11 @@
 package mocking.data.myrecord
 
-import mocking.emis.testResults.*
+import mocking.emis.testResults.EffectiveDate
+import mocking.emis.testResults.TestResultResponse
+import mocking.emis.testResults.TestResultResponseModel
+import mocking.emis.testResults.TestResultValue
+import mocking.emis.testResults.TestResultRange
+import mocking.emis.testResults.TestResultMedicalRecord
 import mocking.tpp.models.TestResultsViewReply
 import mocking.tpp.models.TestResultsViewReplyItem
 
@@ -9,7 +14,6 @@ object TestResultsData {
     val mockTestResultId: String = "c435000000000000"
 
     fun getTestResultsForEmis(count: Int): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         for(testResultCount: Int in 1..count) {
@@ -29,7 +33,6 @@ object TestResultsData {
     }
 
     fun getSingleTestResultWithMultipleChildValuesWithRanges(): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
@@ -57,7 +60,6 @@ object TestResultsData {
 
 
     fun getSingleTestResultWithSingleChildValuesWithARange(): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
@@ -80,7 +82,6 @@ object TestResultsData {
     }
 
     fun getSingleTestResultWithMultipleChildValuesWithNoRanges(): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
@@ -107,7 +108,6 @@ object TestResultsData {
     }
 
     fun getSingleTestResultWithSingleChildValuesWithNoRanges(): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
@@ -130,7 +130,6 @@ object TestResultsData {
     }
 
     fun getSingleTestResultWithNoChildValuesOrRange(): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
@@ -148,7 +147,6 @@ object TestResultsData {
     }
 
     fun getSingleTestResultWithNoChildValuesAndARange(): TestResultResponseModel {
-
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
@@ -166,7 +164,6 @@ object TestResultsData {
     }
 
     fun getDefaultTestResultsModel(): TestResultResponseModel {
-
         return TestResultResponseModel(
                 medicalRecord =  TestResultMedicalRecord(
                         testResults = mutableListOf()
@@ -174,7 +171,6 @@ object TestResultsData {
     }
 
     fun getMultipleTestResultsForTpp(count: Int): TestResultsViewReply {
-
         val testResults = mutableListOf<TestResultsViewReplyItem>()
 
         for (testCount: Int in 1..count) {

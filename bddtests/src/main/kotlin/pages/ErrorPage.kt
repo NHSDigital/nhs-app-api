@@ -27,13 +27,12 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         )
     }
 
+    @Suppress("TooGenericExceptionCaught")
     fun hasButton(text: String): Boolean {
         return try {
             button.element.text == text
         } catch (e: Exception) {
             false
         }
-
     }
-
 }

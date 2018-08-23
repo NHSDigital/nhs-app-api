@@ -7,6 +7,7 @@ import pages.HybridPageObject
 
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
 
+@Suppress("TooManyFunctions")
 class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val secMyDetails = 

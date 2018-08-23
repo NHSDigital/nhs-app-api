@@ -1,13 +1,15 @@
 package mocking.data.prescriptions.courses
 
 import mocking.data.prescriptions.EmisPrescriptionLoader
-import mocking.emis.models.*
+import mocking.emis.models.PrescriptionType
 import models.prescriptions.MedicationCourse
-import java.util.*
+import java.util.UUID
 
 object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
-
     override lateinit var data:MutableList<MedicationCourse>
+
+    private const val CONSTITUENTS_NUMBER = 5
+    private const val COURSES_NUMBER = 100
 
     override fun loadData(maxCourses: Int,
                           numOfRepeats: Int,
@@ -23,7 +25,7 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {
             val constituents = mutableListOf<String>()
-            for (constituentNo in 1..EmisPrescriptionLoader.getRandomNumber(5)) {
+            for (constituentNo in 1..EmisPrescriptionLoader.getRandomNumber(CONSTITUENTS_NUMBER)) {
                 constituents.add("Constituent" + constituentNo)
             }
 
@@ -37,13 +39,13 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
                     false)
 
             // Check if the course needs to be set to repeat
-            if(numberOfRepeats != 0){
+            if(numberOfRepeats != 0) {
                 createdCourse.prescriptionType = PrescriptionType.Repeat
                 numberOfRepeats--
             }
 
             // Check if the course needs to be true for canBeRequested
-            if(numberCanBeRequested != 0){
+            if(numberCanBeRequested != 0) {
                 createdCourse.canBeRequested = true
                 numberCanBeRequested--
             }
@@ -58,7 +60,7 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
         var coursesDataFiltered = data.filter { medicationCourse -> medicationCourse.canBeRequested!! }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.take(100).toMutableList()
+        coursesDataFiltered = coursesDataFiltered.take(COURSES_NUMBER).toMutableList()
 
         return coursesDataFiltered
     }

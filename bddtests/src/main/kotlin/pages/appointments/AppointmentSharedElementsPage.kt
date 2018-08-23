@@ -10,8 +10,8 @@ import pages.HybridPageElement
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 
+@Suppress("TooManyFunctions")
 open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
-
     private val xPathRoot = "//*"
     private val relativeToParentXPath = ".//*"
     private val appointmentDateXpath = "[@data-label='date']"

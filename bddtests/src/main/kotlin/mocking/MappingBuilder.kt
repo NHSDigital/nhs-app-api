@@ -25,7 +25,7 @@ abstract class MappingBuilder(method: String, url: String) {
     }
 
     fun respondWithSuccessJson(jsonBody: String): Mapping {
-        return respondWith(200){
+        return respondWith(HttpStatus.SC_OK) {
             andBody(jsonBody, contentType = "application/json")
         }
     }

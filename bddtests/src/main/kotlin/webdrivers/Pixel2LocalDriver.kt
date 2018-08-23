@@ -12,6 +12,8 @@ import org.openqa.selenium.remote.DesiredCapabilities
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
+private const val TIMEOUT: Long = 10
+
 class Pixel2LocalDriver : DriverSource {
 
     override fun newDriver(): WebDriver {
@@ -26,9 +28,9 @@ class Pixel2LocalDriver : DriverSource {
         caps.setCapability(AndroidMobileCapabilityType.ANDROID_SCREENSHOT_PATH, "target/screenshots")
 
         val driver = AndroidDriver<WebElementFacade>(URL(Config.instance.appiumServer), caps)
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS)
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS)
-        driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS)
+        driver.manage().timeouts().implicitlyWait(TIMEOUT, TimeUnit.SECONDS)
+        driver.manage().timeouts().pageLoadTimeout(TIMEOUT, TimeUnit.SECONDS)
+        driver.manage().timeouts().setScriptTimeout(TIMEOUT, TimeUnit.SECONDS)
         return driver
     }
 

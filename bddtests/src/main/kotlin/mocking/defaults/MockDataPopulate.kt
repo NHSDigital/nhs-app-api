@@ -2,7 +2,12 @@ package mocking.defaults
 
 import config.Config
 import mocking.MockingClient
-import mocking.data.myrecord.*
+import mocking.data.myrecord.AllergiesData
+import mocking.data.myrecord.ConsultationsData
+import mocking.data.myrecord.ImmunisationsData
+import mocking.data.myrecord.MedicationsData
+import mocking.data.myrecord.ProblemsData
+import mocking.data.myrecord.TestResultsData
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.dataPopulation.journies.myRecord.MyRecordJournies
@@ -29,7 +34,14 @@ import java.time.Duration
 const val BASE_NFT_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/nft"
 const val BASE_MOCK_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/mockEnvironmentData"
 const val CONNECTION_TOKEN_SUFFIX_LENGTH = 12
+const val NUMBER_OF_PRESCRIPTIONS: Int = 5
+const val NUMBER_OF_COURSES: Int = 5
+const val NUMBER_OF_REPEAT_PRESCRIPTIONS: Int = 5
+const val TIMEOUT_DELAY_MILLISECONDS: Int = 71000
+const val TIMEOUT_DELAY_SECONDS: Long = 71
+const val EMIS_RESULT_COUNT: Int = 6
 
+@Suppress("TooManyFunctions", "LargeClass", "LongMethod")
 open class MockDataPopulate(private val mockingClient: MockingClient) {
 
     companion object {
@@ -164,9 +176,9 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             // GET /emis/prescriptionrequests
             val prescriptionsDataLoader = EmisPrescriptionLoader
             prescriptionsDataLoader.loadData(
-                    noPrescriptions = 5,
-                    noCourses = 5,
-                    noRepeats = 5,
+                    noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
+                    noCourses = NUMBER_OF_COURSES,
+                    noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS,
                     showDosage = true,
                     showQuantity = true
             )
@@ -303,7 +315,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         //POST /emis/appointments - time out scenario
         mockingClient.forEmis {
             bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a time out response"))
-                    .respondWith(HttpStatus.SC_OK, 71000, resolve = {})
+                    .respondWith(HttpStatus.SC_OK, TIMEOUT_DELAY_MILLISECONDS, resolve = {})
         }
 
         mockingClient.forEmis {
@@ -313,12 +325,11 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
     }
 
     private fun generateEMISPrescriptionsStubs(patientForStubEnvironment: Patient) {
-        val numOfPrescriptions: Int = 5
         val prescriptionsDataLoader = EmisPrescriptionLoader
         prescriptionsDataLoader.loadData(
-                noPrescriptions = numOfPrescriptions,
-                noCourses = numOfPrescriptions,
-                noRepeats = numOfPrescriptions,
+                noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
+                noCourses = NUMBER_OF_COURSES,
+                noRepeats = NUMBER_OF_REPEAT_PRESCRIPTIONS,
                 showDosage = true,
                 showQuantity = true
         )
@@ -394,7 +405,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         val prescriptionSubmissionRequestTimeOut = PrescriptionSubmissionRequest(uuids, "give me a time out response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestTimeOut)
-                    .respondWithCreated().delayedBy(Duration.ofSeconds(71))
+                    .respondWithCreated().delayedBy(Duration.ofSeconds(TIMEOUT_DELAY_SECONDS))
                     .whenScenarioStateIs("Started")
         }
     }
@@ -402,7 +413,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
     private fun generateEMISMyMedicalRecordsStubs(patientForStubEnvironment: Patient) {
         // GET /emis/record (testResultsRequest)
         mockingClient.forEmis {
-            testResultsRequest(patientForStubEnvironment).respondWithSuccess(TestResultsData.getTestResultsForEmis(6))
+            testResultsRequest(patientForStubEnvironment).respondWithSuccess(TestResultsData.getTestResultsForEmis(EMIS_RESULT_COUNT))
         }
 
         // GET /emis/record (immunisationsRequest)

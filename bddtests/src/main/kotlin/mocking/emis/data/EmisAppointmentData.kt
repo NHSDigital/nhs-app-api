@@ -7,13 +7,20 @@ import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
 import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
 import mocking.commonData.BaseAppointmentData
 import mocking.emis.appointments.GetAppointmentsResponseModel
-import mocking.emis.models.*
+import mocking.emis.models.Location
+import mocking.emis.models.Session
+import mocking.emis.models.SessionHolder
+import mocking.emis.models.SessionType
+import mocking.emis.models.TelephoneAppointmentDetails
+import mocking.emis.models.AppointmentCancellationReason
+import mocking.emis.models.Appointment
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import models.Patient
 import models.Slot
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.TimeZone
 import kotlin.collections.ArrayList
 
 private const val LOCATION_ID_SURGERY: Int = 1
@@ -106,31 +113,31 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
     fun createAppointmentSessions(): ArrayList<AppointmentSessionFacade> {
         val baseTime = Calendar.getInstance(timeZone)
 
-        var startTime = copyCalendarDate(baseTime, 1)
+        var startTime = copyCalendarDate(baseTime = baseTime, addDays = 1)
         var sessionDate = dateTimeFormat.format(startTime.time)
-        val slot1 = createAppointmentSlot(1, startTime, 15)
-        startTime.addDays(1).addMinutes(15)
-        val slot2 = createAppointmentSlot(2, startTime, 1)
+        val slot1 = createAppointmentSlot(sessionId = 1, startTime = startTime, durationInMinutes = 15)
+        startTime.addDays(1).addMinutes(minutes = 15)
+        val slot2 = createAppointmentSlot(sessionId = 2, startTime = startTime, durationInMinutes = 1)
         val footClinicSession = AppointmentSessionFacade(
                 sessionId = SESSION_ID_FOOTCLINIC,
                 sessionDate = sessionDate,
                 slots = arrayListOf(slot1, slot2)
         )
 
-        startTime = copyCalendarDate(baseTime, 2)
+        startTime = copyCalendarDate(baseTime = baseTime, addDays = 2)
         sessionDate = dateTimeFormat.format(startTime.time)
-        val slot3 = createAppointmentSlot(3, startTime, 15)
+        val slot3 = createAppointmentSlot(sessionId = 3, startTime = startTime, durationInMinutes = 15)
         startTime.addDays(1)
-        val slot4 = createAppointmentSlot(4, startTime, 20)
+        val slot4 = createAppointmentSlot(sessionId = 4, startTime = startTime, durationInMinutes = 20)
         val eyeClinicSession = AppointmentSessionFacade(
                 sessionId = SESSION_ID_EYECLINIC,
                 sessionDate = sessionDate,
                 slots = arrayListOf(slot3, slot4)
         )
 
-        startTime = copyCalendarDate(baseTime, 4)
+        startTime = copyCalendarDate(baseTime = baseTime, addDays = 4)
         sessionDate = dateTimeFormat.format(startTime.time)
-        val slot5 = createAppointmentSlot(3, startTime, 15)
+        val slot5 = createAppointmentSlot(sessionId = 3, startTime = startTime, durationInMinutes = 15)
         val earClinicSession = AppointmentSessionFacade(
                 sessionId = SESSION_ID_EYECLINIC,
                 sessionDate = sessionDate,
@@ -143,15 +150,15 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
         val baseDate = Calendar.getInstance(timeZone)
 
         var bookingDate = copyCalendarDate(baseDate)
-        val appointment1 = addDateToAppointment(unspecifiedTimeAppointment1.copy(), bookingDate, 1, 30)
+        val appointment1 = addDateToAppointment(unspecifiedTimeAppointment1.copy(), bookingDate, bookInDay = 1, durationInMinutes = 30)
         appointment1.telephoneAppointmentDetails = telephoneAppointmentDetails1
 
         bookingDate = copyCalendarDate(baseDate, addHours = 2)
-        val appointment2 = addDateToAppointment(unspecifiedTimeAppointment2.copy(), bookingDate, 2, 20)
+        val appointment2 = addDateToAppointment(unspecifiedTimeAppointment2.copy(), bookingDate, bookInDay = 2, durationInMinutes = 20)
         appointment2.telephoneAppointmentDetails = telephoneAppointmentDetails2
 
         bookingDate = copyCalendarDate(baseDate, addHours = 2, addMinutes = 20)
-        val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(), bookingDate, 3, 15)
+        val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(), bookingDate, bookInDay = 4, durationInMinutes = 15)
         appointment3.telephoneAppointmentDetails = telephoneAppointmentDetails1
 
         appointments.clear()

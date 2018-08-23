@@ -4,10 +4,9 @@ import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import models.prescriptions.MedicationCourse
 
-
 object TppCoursesLoader: ICoursesLoader<ListRepeatMedicationReply> {
-
     override lateinit var data: ListRepeatMedicationReply
+    private const val COURSES_NUMBER = 100
 
     override fun loadData(maxCourses: Int,
                           numOfRepeats: Int,
@@ -24,7 +23,7 @@ object TppCoursesLoader: ICoursesLoader<ListRepeatMedicationReply> {
             mc.requestable.toLowerCase() == "y"
         }
         coursesDataFiltered = coursesDataFiltered.sortedBy{ m -> m.drug }
-        coursesDataFiltered = coursesDataFiltered.take(100).toMutableList()
+        coursesDataFiltered = coursesDataFiltered.take(COURSES_NUMBER).toMutableList()
 
         return coursesDataFiltered.map { m -> MedicationCourse(m.drugId, m.drug, m.details) }
     }

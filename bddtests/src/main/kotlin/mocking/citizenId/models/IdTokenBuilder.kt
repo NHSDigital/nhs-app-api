@@ -9,6 +9,9 @@ import com.nimbusds.jwt.SignedJWT
 import models.Patient
 import java.util.*
 
+private const val DELAY_IN_SECONDS: Int = 1008000
+private const val EXPIRATION_TIME_MULTIPLIER = 1000
+
 class IdTokenBuilder(issuer: String, audience: String) {
     private val usedIssuer: String = issuer
     private val usedAudience: String = audience
@@ -19,7 +22,7 @@ class IdTokenBuilder(issuer: String, audience: String) {
                 .customParam("sub","3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
                 .customParam("aud", usedAudience)
                 .customParam("iss", usedIssuer)
-                .customParam("exp", Date(Date().time + 1008000 * 1000).toInstant().epochSecond)
+                .customParam("exp", Date(Date().time + DELAY_IN_SECONDS * EXPIRATION_TIME_MULTIPLIER).toInstant().epochSecond)
                 .customParam("iat", Date().toInstant().epochSecond)
                 .customParam("jti", "2581a97f-13ba-4bd5-89d4-099c70531db2")
                 .build()
@@ -32,9 +35,9 @@ class IdTokenBuilder(issuer: String, audience: String) {
                 .subject("3ad631b4-7a7a-434d-8a7b-1c8ac3c56132")
                 .issuer(usedIssuer)
                 .audience(usedAudience)
-                .expirationTime(Date(Date().time + 1008000 * 1000))
+                .expirationTime(Date(Date().time + DELAY_IN_SECONDS * EXPIRATION_TIME_MULTIPLIER))
                 .issueTime(Date(Date().time))
-                .claim("auth_time", Date(Date().time -1 * 1000))
+                .claim("auth_time", Date(Date().time -1 * EXPIRATION_TIME_MULTIPLIER))
                 .claim("ods_code", patient.odsCode)
                 .claim("email", patient.contactDetails.emailAddress)
                 .claim("email_verified",true)

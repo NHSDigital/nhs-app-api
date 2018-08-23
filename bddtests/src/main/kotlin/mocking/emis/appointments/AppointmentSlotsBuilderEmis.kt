@@ -14,6 +14,8 @@ import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
 
+private const val UNKNOWN_HTTP_STATUS_CODE:Long = -9999
+
 class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                                   apiEndUserSessionId: String,
                                   apiSessionId: String,
@@ -47,7 +49,7 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
     }
 
     override fun respondWithUnknownException(): Mapping {
-        val exceptionResponse = ExceptionResponse(-9999,
+        val exceptionResponse = ExceptionResponse(UNKNOWN_HTTP_STATUS_CODE,
                 "Unknown Exception")
         return respondWithException(exceptionResponse)
     }

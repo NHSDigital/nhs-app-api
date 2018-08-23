@@ -5,3 +5,4 @@ data class CreateLinkageRequest (
         var nhsNumber: String,
         var identityToken: String,
         var emailAddress: String)
+

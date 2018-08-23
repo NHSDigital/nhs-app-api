@@ -1,9 +1,9 @@
 package mocking.emis.courses
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
+import constants.EmisResponseCode
 import mocking.GsonFactory
-import mocking.emis.*
+import mocking.emis.EmisConfiguration
+import mocking.emis.EmisMappingBuilder
 import mocking.emis.models.CourseRequestsGetResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
@@ -16,11 +16,11 @@ class EmisCoursesBuilder(configuration: EmisConfiguration,
 
     init {
         requestBuilder
-                .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
-                .andHeader(HEADER_API_SESSION_ID, apiSessionId)
+                .andHeader(mocking.emis.HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
+                .andHeader(mocking.emis.HEADER_API_SESSION_ID, apiSessionId)
 
         if (!linkToken.isNullOrEmpty()) {
-            requestBuilder.andQueryParameter(QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken!!, "equalTo")
+            requestBuilder.andQueryParameter(mocking.emis.QUERY_PARAM_USER_PATIENT_LINK_TOKEN, linkToken!!, "equalTo")
         }
     }
 
@@ -38,5 +38,4 @@ class EmisCoursesBuilder(configuration: EmisConfiguration,
     fun respondWithPrescriptionsNotEnabled(): Mapping {
         return responseErrorForbiddenService()
     }
-
 }

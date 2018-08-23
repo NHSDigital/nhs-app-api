@@ -1,14 +1,21 @@
 package mocking.data.myrecord
 
-import mocking.emis.demographics.*
-import mocking.emis.models.*
-import mocking.tpp.models.*
-import worker.models.demographics.*
+import mocking.emis.demographics.Address
+import mocking.emis.demographics.ContactDetails
+import mocking.emis.demographics.EmisDemographicsResponse
+import mocking.emis.demographics.PatientIdentifier
+import mocking.emis.demographics.Sex
+import mocking.emis.models.IdentifierType
+import mocking.tpp.models.NationalId
+import mocking.tpp.models.PatientSelectedReply
+import mocking.tpp.models.Person
+import mocking.tpp.models.PersonName
+import mocking.tpp.models.TppAddress
+
 
 object DemographicsData {
 
-    fun getEmisDemographicData(): EmisDemographicsResponse {
-
+    fun getEmisDemographicData() : EmisDemographicsResponse {
         val patientIdentifiers = mutableListOf<PatientIdentifier>()
 
         patientIdentifiers.add(PatientIdentifier("NHS123", IdentifierType.NhsNumber))
@@ -27,7 +34,6 @@ object DemographicsData {
     }
 
     fun getTppDemographicsData(): PatientSelectedReply {
-
         return PatientSelectedReply(
                 "84df400000000000",
                 "84df400000000000",

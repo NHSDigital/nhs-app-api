@@ -1,12 +1,17 @@
 package mocking.data.prescriptions
 
 import mocking.data.prescriptions.courses.EmisCoursesLoader
-import mocking.emis.models.*
+import mocking.emis.models.PrescriptionRequest
+import mocking.emis.models.PrescriptionRequestsGetResponse
+import mocking.emis.models.RequestedMedicationCourse
+import mocking.emis.models.RequestedMedicationCourseStatus
 import models.prescriptions.MedicationCourse
 import java.time.OffsetDateTime
 
 object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetResponse> {
     override lateinit var data:PrescriptionRequestsGetResponse
+
+    private const val MAX_RANDOM_NUMBER = 6
 
     override fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean, showQuantity: Boolean) {
 
@@ -66,7 +71,7 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
     }
 
     private fun getPrescriptionStatus(): RequestedMedicationCourseStatus {
-        return RequestedMedicationCourseStatus.values()[getRandomNumber(6)]
+        return RequestedMedicationCourseStatus.values()[getRandomNumber(MAX_RANDOM_NUMBER)]
     }
 
     fun orderCourses(orderedCourses: MutableList<MedicationCourse>, oldPrescriptions: PrescriptionRequestsGetResponse = data)

@@ -7,7 +7,7 @@ import mocking.emis.models.IdentifierType
 import models.Patient
 import mocking.emis.demographics.PatientIdentifier
 
-class EmisSessionCreateJourneyFactory(val client: MockingClient): SessionCreateJourneyFactory() {
+class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {
 
     override fun createFor(patient: Patient) {
         client

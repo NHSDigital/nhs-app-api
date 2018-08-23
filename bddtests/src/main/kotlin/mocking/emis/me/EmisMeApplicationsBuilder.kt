@@ -1,5 +1,6 @@
 package mocking.emis.me
 
+import constants.EmisResponseCode
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -28,7 +29,7 @@ class EmisMeApplicationsBuilder(configuration: EmisConfiguration,
     fun respondWithAlreadyLinked(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(ExceptionResponse(
-                internalResponseCode = -1002,
+                internalResponseCode = EmisResponseCode.INTERNAL_ERROR,
                 exceptionMessage = "Registered online user is already linked"
             ), GsonFactory.asPascal)
         }
@@ -37,7 +38,7 @@ class EmisMeApplicationsBuilder(configuration: EmisConfiguration,
     fun respondWithLinkageKeyDoesNotMatch(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(ExceptionResponse(
-                    internalResponseCode = -1002,
+                    internalResponseCode = EmisResponseCode.INTERNAL_ERROR,
                     exceptionMessage = "Invalid linkage details"
             ), GsonFactory.asPascal)
         }
@@ -46,7 +47,7 @@ class EmisMeApplicationsBuilder(configuration: EmisConfiguration,
     fun respondWithIncorrectSurnameOrDateOfBirth(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(ExceptionResponse(
-                    internalResponseCode = -1002,
+                    internalResponseCode = EmisResponseCode.INTERNAL_ERROR,
                     exceptionMessage = "No match found for given demographics"
             ), GsonFactory.asPascal)
         }
@@ -55,7 +56,7 @@ class EmisMeApplicationsBuilder(configuration: EmisConfiguration,
     fun respondWithNoOnlineUserFound(): Mapping {
         return respondWith(HttpStatus.SC_INTERNAL_SERVER_ERROR) {
             andJsonBody(ExceptionResponse(
-                internalResponseCode = -1002,
+                internalResponseCode = EmisResponseCode.INTERNAL_ERROR,
                 exceptionMessage = "No registered online user found for given linkage details"
             ), GsonFactory.asPascal)
         }

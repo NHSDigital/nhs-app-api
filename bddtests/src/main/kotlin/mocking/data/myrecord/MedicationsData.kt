@@ -1,18 +1,25 @@
 package mocking.data.myrecord
 
-import mocking.emis.models.*
+import mocking.emis.models.MedicationItem
+import mocking.emis.models.MedicationMedicalRecord
+import mocking.emis.models.MedicationMixture
+import mocking.emis.models.MedicationMixtureItem
+import mocking.emis.models.MedicationsResponse
 import mocking.tpp.models.ViewPatientOverviewItem
 import mocking.tpp.models.ViewPatientOverviewReply
 import java.time.LocalDateTime
 
 object MedicationsData {
+    private const val TWENTY_MONTHS: Long = 20
+    private const val TEN_MONTHS: Long = 10
+    private const val ONE_MONTH: Long = 1
 
     fun getEmisMedicationData(): MedicationsResponse {
 
         val now = LocalDateTime.now()
-        val oneMonthAgo = now.minusMonths(1).toString()
-        val tenMonthsAgo = now.minusMonths(10).toString()
-        val twentyMonthsAgo = now.minusMonths(20).toString()
+        val oneMonthAgo = now.minusMonths(ONE_MONTH).toString()
+        val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
+        val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
 
         return MedicationsResponse (
                 medicalRecord = MedicationMedicalRecord (
@@ -106,7 +113,6 @@ object MedicationsData {
     }
 
     fun getEmisDefaultMedicationsModel(): MedicationsResponse {
-
         return MedicationsResponse(
                 medicalRecord =  MedicationMedicalRecord(
                         medication = mutableListOf()
@@ -114,10 +120,10 @@ object MedicationsData {
     }
 
     fun getTppMedicationData(): ViewPatientOverviewReply {
-
+        
         val now = LocalDateTime.now()
-        val tenMonthsAgo = now.minusMonths(10).toString()
-        val twentyMonthsAgo = now.minusMonths(20).toString()
+        val tenMonthsAgo = now.minusMonths(TEN_MONTHS).toString()
+        val twentyMonthsAgo = now.minusMonths(TWENTY_MONTHS).toString()
 
         return ViewPatientOverviewReply(
                 drugs = mutableListOf

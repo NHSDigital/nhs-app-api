@@ -1,6 +1,10 @@
 package mocking.emis.prescriptionsSubmission
 
-import mocking.emis.*
+import constants.EmisResponseCode
+import mocking.emis.EmisConfiguration
+import mocking.emis.EmisMappingBuilder
+import mocking.emis.HEADER_API_END_USER_SESSION_ID
+import mocking.emis.HEADER_API_SESSION_ID
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
@@ -38,7 +42,7 @@ class EmisPrescriptionsSubmissionBuilder(
     }
 
     fun respondWithAlreadyAPendingRequestInTheLast30Days(): Mapping {
-        return respondWithStandardError(-1455, HttpStatus.SC_CONFLICT)
+        return respondWithStandardError(EmisResponseCode.ALREADY_PENDING_REQUEST.toInt(), HttpStatus.SC_CONFLICT)
     }
 
     fun respondWithPrescriptionsNotEnabled(): Mapping {

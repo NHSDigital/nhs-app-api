@@ -26,6 +26,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
         requestBuilder.andBody(body, "matches")
     }
 
+    @Suppress("TooGenericExceptionThrown")
     private fun tokenRequestToQueryParams(tokenRequest: TokenRequest): String {
         val map = LinkedHashMap<String, String>()
         map["grant_type"] = tokenRequest.grantType

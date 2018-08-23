@@ -2,12 +2,17 @@ package mocking.emis.linkage
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
+import constants.EmisResponseCode
 import mocking.GsonFactory
-import mocking.emis.*
-import mocking.emis.models.*
+import mocking.emis.EmisMappingBuilder
+import mocking.emis.models.AddNhsUserRequest
+import mocking.emis.models.AddNhsUserResponse
+import mocking.emis.models.ErrorResponse
+import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
+@Suppress("TooManyFunctions")
 class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     : EmisMappingBuilder(null, method = "POST", relativePath = "/users/nhs") {
 
@@ -31,22 +36,22 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     }
 
     fun respondWithNoRegisteredOnlineUserFound(): Mapping {
-        val errorResponse = ErrorResponse(-1104)
+        val errorResponse = ErrorResponse(EmisResponseCode.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithPracticeNotLive(): Mapping {
-        val errorResponse = ErrorResponse(-1401)
+        val errorResponse = ErrorResponse(EmisResponseCode.PRACTICE_NOT_LIVE.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientMarkedAsArchived(): Mapping {
-        val errorResponse = ErrorResponse(-1552)
+        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_MARKED_AS_ARCHIVED.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientNonCompetentOrUnder16(): Mapping {
-        val errorResponse = ErrorResponse(-1553)
+        val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
         return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
@@ -56,7 +61,7 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     }
 
     fun respondWithBadGatewayException(): Mapping {
-        val exceptionResponse = ExceptionResponse(-9999,
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Bad Gateway")
         return respondWithException(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }

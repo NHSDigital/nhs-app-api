@@ -13,11 +13,13 @@ import webdrivers.browserstack.BrowserstackLocalService
 import java.net.URL
 import java.util.concurrent.TimeUnit
 
+private const val TIMEOUT: Long = 5
+
 class IPhoneXDriver : DriverSource {
 
     override fun newDriver(): WebDriver {
         val driver: IOSDriver<WebElementFacade> = IOSDriver(URL(Config.instance.browserstackUrl), caps())
-        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS)
+        driver.manage().timeouts().implicitlyWait(TIMEOUT, TimeUnit.SECONDS)
         return driver
     }
 

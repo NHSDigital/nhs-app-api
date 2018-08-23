@@ -1,11 +1,16 @@
 package mocking.emis
 
+import constants.EmisResponseCode
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.MappingBuilder
 import mocking.emis.courses.EmisCoursesBuilder
 import mocking.emis.demographics.EmisDemographicsBuilder
 import mocking.emis.allergies.EmisAllergiesBuilder
-import mocking.emis.appointments.*
+import mocking.emis.appointments.AppointmentSlotsBuilderEmis
+import mocking.emis.appointments.AppointmentSlotsMetaBuilderEmis
+import mocking.emis.appointments.BookAppointmentsBuilderEmis
+import mocking.emis.appointments.GetAppointmentBuilderEmis
+import mocking.emis.appointments.DeleteAppointmentsBuilderEmis
 import mocking.emis.immunisations.EmisImmunisationsBuilder
 import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.EmisMeBuilder
@@ -23,8 +28,12 @@ import mocking.emis.consultations.EmisConsultationsBuilder
 import mocking.emis.problems.EmisProblemsBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
-import mocking.emis.models.*
 import mocking.emis.practices.PracticeSettingsBuilderEmis
+import mocking.emis.models.AddNhsUserRequest
+import mocking.emis.models.AddVerificationRequest
+import mocking.emis.models.BadRequestResponse
+import mocking.emis.models.ErrorResponse
+import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
@@ -39,6 +48,7 @@ const val HEADER_NHS_NUMBER = "nhsNumber"
 const val HEADER_ODS_CODE = "odsCode"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
+@Suppress("TooManyFunctions")
 open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String)
     : MappingBuilder(method, "/emis$relativePath"), IAppointmentMappingBuilder {
 
@@ -133,7 +143,7 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
     fun linkageKeyPOSTRequest(request: AddNhsUserRequest) = EmisLinkagePOSTBuilder(request)
 
     fun responseErrorForbiddenService(): Mapping {
-        return respondWithStandardError(-1030, HttpStatus.SC_FORBIDDEN)
+        return respondWithStandardError(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(), HttpStatus.SC_FORBIDDEN)
     }
 
     fun respondWithStandardError(internalResponseCode: Int, httpResponseCode: Int): Mapping {

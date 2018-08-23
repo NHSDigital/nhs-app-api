@@ -7,9 +7,14 @@ import com.google.gson.JsonParser
 import config.Config
 
 import org.apache.http.HttpResponse
-import org.apache.http.HttpStatus.*
+import org.apache.http.HttpStatus.SC_CREATED
+import org.apache.http.HttpStatus.SC_OK
+import org.apache.http.HttpStatus.SC_NO_CONTENT
 import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.*
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.client.protocol.HttpClientContext
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.impl.client.HttpClients
@@ -19,8 +24,11 @@ import org.apache.http.impl.client.BasicCookieStore
 import org.apache.http.impl.cookie.BasicClientCookie
 import org.apache.http.protocol.BasicHttpContext
 import org.apache.http.protocol.HttpContext
-import worker.models.appointments.*
-import worker.models.courses.CoursesResponse
+import worker.models.appointments.AppointmentBookRequest
+import worker.models.appointments.AppointmentSlotsResponse
+import worker.models.appointments.CancelAppointmentRequest
+import worker.models.appointments.MyAppointmentsResponse
+import worker.models.courses.CoursesListResponse
 import worker.models.demographics.Demographics
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
@@ -37,9 +45,8 @@ import java.net.URI
 import java.net.URLEncoder
 import javax.servlet.http.Cookie
 
-
+@Suppress("TooManyFunctions", "LargeClass")
 class WorkerClient {
-
     var cookieHeaderKey = "Set-Cookie"
     private val _client: HttpClient
     private val gsonBuilder: GsonBuilder = GsonBuilder()
@@ -94,7 +101,7 @@ class WorkerClient {
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
     }
 
-    fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false): MyAppointmentsResponse {
+    fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false) : MyAppointmentsResponse {
         val uriBuilder = URIBuilder(config.backendUrl)
                 .setPath(WorkerPaths.myAppointments)
                 .addParameter("pastAppointmentsFromDate", fromDate)
@@ -173,7 +180,7 @@ class WorkerClient {
         return response
     }
 
-    fun getCoursesConnection(context: HttpContext?): CoursesResponse {
+    fun getCoursesConnection(context: HttpContext?): CoursesListResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
 
         val response = sendAsync(httpGet, context)
@@ -181,7 +188,7 @@ class WorkerClient {
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
 
-        return gson.fromJson<CoursesResponse>(result, CoursesResponse::class.java)
+        return gson.fromJson<CoursesListResponse>(result, CoursesListResponse::class.java)
     }
 
     fun getDemographics(context: HttpContext?): Demographics {
@@ -317,4 +324,3 @@ class WorkerClient {
         }
     }
 }
-

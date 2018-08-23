@@ -10,9 +10,10 @@ import pages.navigation.Header
 import pages.HybridPageObject.Companion.PageType
 import pages.HybridPageElement
 
+const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 
+@Suppress("ReturnCount")
 fun resolveDetailsField(dosage: String?, quantity: String?): String {
-
     if (dosage != null && quantity != null) {
         return dosage + " - " + quantity.replace("  ", " ")
     }
@@ -25,9 +26,9 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
     return ""
 }
 
+@Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
-
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
     val PrescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
@@ -94,7 +95,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         var prescription = getRepeatPrescription(courseToSelect)
         Assert.assertNotNull("Didn't find medication course with: \nname: ${courseToSelect.name} \ndosage: ${courseToSelect.getInstructionsText()}", prescription)
         prescription.element.click()
-        Thread.sleep(50) //In order to ensure each prescription is selected
+        Thread.sleep(DELAY_FOR_ELEMENT_SELECTION) //In order to ensure each prescription is selected
         verifyPrescriptionIsSelected(courseToSelect)
     }
 

@@ -4,13 +4,22 @@ import mocking.MockingClient
 import mocking.emis.EmisConfiguration
 import config.Config
 import mocking.MockingConfiguration
-import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
-import mocking.tpp.models.*
+import mocking.tpp.models.Application
+import mocking.tpp.models.Authenticate
+import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.User
+import mocking.tpp.models.Person
+import mocking.tpp.models.NationalId
+import mocking.tpp.models.PersonName
+import mocking.tpp.models.Error
 import mocking.vision.VisionConstants
-import mocking.vision.models.*
+import mocking.vision.models.Account
+import mocking.vision.models.Configuration
+import mocking.vision.models.PatientNumber
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
+
 import models.Patient
-import worker.models.demographics.TppUserSession
-import worker.models.session.UserSessionRequest
 
 class MockDefaults(val config: Config, val mockingClient: MockingClient = MockingClient.instance) {
 
@@ -97,6 +106,5 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         fun getFullPatientName(patient: Patient): String{
           return "${patient.title} ${patient.firstName} ${patient.surname}"
         }
-
     }
 }
