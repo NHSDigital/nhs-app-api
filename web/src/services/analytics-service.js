@@ -58,7 +58,7 @@ export default function (app, store, route) {
       };
       try {
         // eslint-disable-next-line no-underscore-dangle
-        window._satellite.track('track_action');
+        window._satellite.track('page_view');
       } catch (ex) {
         store.dispatch();
       }
