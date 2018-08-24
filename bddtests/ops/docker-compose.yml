@@ -22,6 +22,7 @@ services:
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
       - GP_PROVIDER_ENABLED_MICROTEST=true
+      - EMIS_LINKAGE_USE_STUBBED_DATA=false
     depends_on:
       - nhsonline.redis.sds
     ports:
