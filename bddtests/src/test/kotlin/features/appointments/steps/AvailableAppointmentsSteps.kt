@@ -67,11 +67,20 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun assertTimeSlotPresent(expectedDateHeading:String, expectedTimeSlot:String) {
+    fun assertTimeSlotPresent(expectedDateHeading: String, expectedTimeSlot: String) {
         Assert.assertTrue("Appointment Slot Date heading not found: $expectedDateHeading",
                 availableAppointments.isDateHeadingPresent(expectedDateHeading))
         Assert.assertTrue("Appointment Time Slot not found: $expectedTimeSlot for date: $expectedDateHeading",
                 availableAppointments.isTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
+        )
+    }
+
+    @Step
+    fun assertOnlyOneTimeSlotPresent(expectedDateHeading: String, expectedTimeSlot: String) {
+        assertEquals(
+                "Incorrect number of time-slots present",
+                1,
+                availableAppointments.numberOfTimeSlotsPresent(expectedDateHeading, expectedTimeSlot)
         )
     }
 
@@ -169,7 +178,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatAvailableSlotsAreReturnedWithAppropriateFields() {
         val result = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
-        val unmatchedExpectedSlots =getExpectedResponseSlots()
+        val unmatchedExpectedSlots = getExpectedResponseSlots()
 
         Assert.assertEquals("Number of response slots", unmatchedExpectedSlots.count(), result.slots.count())
 
@@ -185,7 +194,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         }
     }
 
-    private fun errorMessageForNotFindingResultSlot(targetKey:String, actualKeys: MutableSet<String>):String{
+    private fun errorMessageForNotFindingResultSlot(targetKey: String, actualKeys: MutableSet<String>): String {
         val keys = actualKeys.joinToString(", ")
         return "Result Slot Id not Expected. Actual '$targetKey', Expected '$keys'"
     }
@@ -197,7 +206,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         return unmatchedExpectedSlots
     }
 
-    private fun assertSlotsAreEqual(expectedSlot : SlotResponseObject, actualSlot: SlotResponseObject) {
+    private fun assertSlotsAreEqual(expectedSlot: SlotResponseObject, actualSlot: SlotResponseObject) {
         assertEquals("Slot type", expectedSlot.type, actualSlot.type)
         assertEquals("Slot start time", toUTC(expectedSlot.startTime), toUTC(actualSlot.startTime))
         assertEquals("Slot end time", toUTC(expectedSlot.endTime), toUTC(actualSlot.endTime))
@@ -211,7 +220,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertNotNull("Null startTime", actualSlot.startTime)
         assertNotNull("Null endTime", actualSlot.endTime)
         assertNotNull("Null location", actualSlot.location)
-        assertNotNull("Null clinicians", actualSlot.clinicians)}
+        assertNotNull("Null clinicians", actualSlot.clinicians)
+    }
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
@@ -296,7 +306,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatLocationIsSelected() {
         val locations = Serenity.sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_LOCATIONS_KEY)
-        assertEquals("Test setup incorrect, expected only one location",1, locations.count())
+        assertEquals("Test setup incorrect, expected only one location", 1, locations.count())
         assertEquals(
                 "Incorrect location option currently selected. ",
                 locations.first(),
@@ -472,9 +482,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private fun selectFilterOptionsToRevealSlots() {
         val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilder.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
-        availableAppointments.selectAppointmentTypeByText(filterValues.type)
-        availableAppointments.selectLocationByText(filterValues.location)
-        availableAppointments.selectClinicianByText(filterValues.doctor ?: "")
+        if (!filterValues.type.isNullOrEmpty()) availableAppointments.selectAppointmentTypeByText(filterValues.type)
+        if (!filterValues.location.isNullOrEmpty()) availableAppointments.selectLocationByText(filterValues.location)
+        if (!filterValues.doctor.isNullOrEmpty()) availableAppointments.selectClinicianByText(filterValues.doctor!!)
     }
 
     private fun toUTC(date: String?): String {

@@ -13,28 +13,31 @@ import java.util.*
 class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     fun generateDefaultAvailableAppointmentSlotExample() {
-        generateDefaultUserData()
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
         factory.generateDefaultAvailableAppointmentSlotExample()
-        storeDateAndTimeOfExpectedSlotAsPerUI()
+    }
+
+    fun generateMultipleAvailableAppointmentSlots() {
+        val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
+        factory.generateMultipleAvailableAppointmentSlotsForTheSameTime()
     }
 
     fun generateSuccessfulBookingResponse(bookingReason: String) {
-        generateBookingResponse(bookingReason) { bookRequest -> bookRequest.respondWithSuccess() }
+        generateBookingResponse(bookingReason = bookingReason) { bookRequest -> bookRequest.respondWithSuccess() }
     }
 
     fun generateSuccessfulBookingResponse() {
-        generateSuccessfulBookingResponse("Reason")
+        generateSuccessfulBookingResponse(bookingReason = "Reason")
     }
 
     fun generateBookingResponse(booker: (IBookAppointmentsBuilder) -> Mapping) {
-        generateBookingResponse("Reason", booker)
+        generateBookingResponse(bookingReason = "Reason", booker = booker)
     }
 
-    fun generateBookingResponse(bookingReason: String, booker: (IBookAppointmentsBuilder) -> Mapping) {
+    fun generateBookingResponse(slotId: Int = 301, bookingReason: String, booker: (IBookAppointmentsBuilder) -> Mapping) {
         appointmentMapper.requestMapping {
             booker(bookAppointmentSlotRequest(patient,
-                    BookAppointmentSlotFacade(patient.userPatientLinkToken, 301, bookingReason))
+                    BookAppointmentSlotFacade(patient.userPatientLinkToken, slotId, bookingReason))
             )
         }
         setSessionVariable(SymptomsToEnter).to(bookingReason)

@@ -12,7 +12,7 @@ import java.util.*
 class AppointmentsSlotsExampleBuilder {
 
     private var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
-    private var filter: AppointmentFilterFacade = AppointmentFilterFacade("", "", "")
+    private var filter: AppointmentFilterFacade = AppointmentFilterFacade()
     private var expectedResponseSlots: ArrayList<SlotResponseObject> = arrayListOf()
     private var appointmentTypesList: ArrayList<String> = arrayListOf()
     private var locationsList: ArrayList<String> = arrayListOf()

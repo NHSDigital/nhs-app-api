@@ -112,12 +112,71 @@ Feature: View available appointment slots
 
   @NHSO-71
   @NHSO-870
-  Scenario Outline: A <GP System> user refines criteria but no slots are available
+  @NHSO-2079
+  Scenario Outline: A <GP System> user sees appropriate message, if filtering by today but no appointments are available
     Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
     When I am on the available appointments page
     And I select options from the filters that don't yield any results
     Then a message is displayed indicating there are no slots for selected criteria
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @NHSO-71
+  @NHSO-870
+  @NHSO-2079
+  @pending  @NHSO-2079
+  Scenario Outline: A <GP System> user sees appropriate message, if filtering by tomorrow but no appointments are available
+    Given there are appointment slots on some days other than tomorrow, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    When I select a type and location that have available slots
+    And I select time period for 'tomorrow'
+    Then a message is displayed indicating there are no slots for selected criteria
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @NHSO-2079
+  @pending  @NHSO-2079
+  Scenario Outline: A <GP System> user still sees the remainder of the current week, if filtering by this week but no appointments are available for some days
+    Given there are appointment slots on some days this week but not others, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    When I select a type and location that have available slots
+    And I select time period for 'this week'
+    Then I see results for each of the remaining days for this week, with an appropriate message when there are no slots
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @NHSO-2079
+  @pending  @NHSO-2079
+  Scenario Outline: A <GP System> user still sees the whole of week, if filtering by next week but no appointments are available for some days
+    Given there are appointment slots on some days next week but not others, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    When I select a type and location that have available slots
+    And I select time period for 'next week'
+    Then I see results for each of the days for next week, with an appropriate message when there are no slots
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @NHSO-2079
+  @pending  @NHSO-2079
+  Scenario Outline: A <GP System> user only sees days with available slots, if filtering by "All available" but no appointments are available for some days
+    Given there are appointment slots on some days in the next few weeks but not others, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    When I select a type and location that have available slots
+    And I select time period for 'all available'
+    Then I only see results for days that have available slots
     Examples:
       | GP System |
       | EMIS      |

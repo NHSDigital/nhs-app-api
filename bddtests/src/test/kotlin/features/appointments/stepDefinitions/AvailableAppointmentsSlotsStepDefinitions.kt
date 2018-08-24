@@ -174,6 +174,21 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         }
     }
 
+    @Given("^I have filtered such that there is one time displayed that represents multiple slots$")
+    fun iSelectAOptionsFromTheFiltersThatIncludeTimesWhenMultipleSlotsExist() {
+        availableAppointments.selectOptionsToRevealSlots()
+    }
+
+    @Given("^I have selected a time when multiple slots are available$")
+    fun iSelectATimeWhenMultipleSlotsAreAvailable() {
+        val date = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentDateKey)
+        val time = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentTimeKey)
+        availableAppointments.assertTimeSlotPresent(date, time)
+        availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
+        availableAppointments.selectSlot(date, time)
+        availableAppointments.clickOnBookAppointmentButton()
+    }
+
     @When("^I click on the (.*) appointment$")
     fun iClickOnXTheAppointment(position: String) {
         if (position == "same") {

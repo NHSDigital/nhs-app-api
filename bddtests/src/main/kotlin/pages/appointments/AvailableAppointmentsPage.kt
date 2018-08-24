@@ -205,6 +205,14 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         }
     }
 
+    fun numberOfTimeSlotsPresent(expectedDateHeading: String, expectedTimeOnSlot: String): Int {
+        return if (isTimeSlotPresent(expectedDateHeading, expectedTimeOnSlot)) {
+            timeSlot(expectedDateHeading, expectedTimeOnSlot).elements.size
+        } else {
+            0
+        }
+    }
+
     fun isTimeSlotAtPositionSelected(position: Int): Boolean {
         return try {
             timeSlotAtPosition(position).element.getAttribute("aria-label") == "selected-slot"

@@ -4,9 +4,24 @@ Feature: Book an available appointment slot
   As a logged in user
   I want to be able to select, confirm and book selected appointment
 
+  @NHSO-2133
+  Scenario Outline: Only one appointment slot time is displayed when multiple are available for <GP System>
+    Given there are multiple appointment slots at the same time, provided by <GP System>
+    And I am logged in
+    And I am on the available appointments page
+    And I have filtered such that there is one time displayed that represents multiple slots
+    And I have selected a time when multiple slots are available
+    When I enter symptoms
+    And  I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   @NHSO-72
   @NHSO-872
- Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
+  Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
     And I am on the available appointments page
@@ -35,7 +50,7 @@ Feature: Book an available appointment slot
 
   @NHSO-72
   @NHSO-872
- @smoketest
+  @smoketest
   Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 character
     And I am logged in

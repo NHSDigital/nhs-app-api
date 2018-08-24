@@ -205,5 +205,50 @@ class AppointmentsSlotsExample {
                             )))
                     .build()
         }
+
+        fun multipleSlotsOneTime(): AppointmentSlotsResponseFacade {
+            return AppointmentsSlotsExampleBuilder()
+                    .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
+                            .sessionId(301)
+                            .sessionType(clinic)
+                            .staffDetails(staffDrWho)
+                            .location(locationLeeds)
+                            .slots {
+                                addAppointment {
+                                    slotId(301)
+                                            .startDate(startDateAppointment1)
+                                            .endDate(endDateAppointment1)
+                                }
+                            }.build(),
+                            AppointmentSessionFacadeBuilder()
+                                    .sessionId(302)
+                                    .sessionType(clinic)
+                                    .staffDetails(staffDrScott)
+                                    .location(locationLeeds)
+                                    .slots {
+                                        addAppointment {
+                                            slotId(302)
+                                                    .startDate(startDateAppointment1)
+                                                    .endDate(endDateAppointment1)
+                                        }
+                                    }.build()))
+                    .filterValues(AppointmentFilterFacade(
+                            type = clinicSlot,
+                            location = locationLeeds.value
+                    ))
+                    .appointmentTypesList(arrayListOf(clinicSlot))
+                    .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
+                    .locationsList(arrayListOf(locationLeeds.value))
+                    .expectedResponseSlots(
+                            arrayListOf(SlotResponseObject(
+                                    id = "301",
+                                    type = clinicSlot,
+                                    startTime = startDateAppointment1,
+                                    endTime = endDateAppointment1,
+                                    location = locationLeeds.value,
+                                    clinicians = arrayOf(staffDrWho.value)
+                            )))
+                    .build()
+        }
     }
 }

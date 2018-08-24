@@ -34,6 +34,12 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         }
     }
 
+    fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
+        generateDefaultUserData()
+        storeDateAndTimeOfExpectedSlotAsPerUI()
+        generateExample(AppointmentsSlotsExample.multipleSlotsOneTime())
+    }
+
     fun generateExample(
             example: AppointmentSlotsResponseFacade,
             startDate: LocalDateTime? = null,
@@ -84,6 +90,8 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
                                                                 endDate: String?,
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping))
+
+
 
     companion object {
 

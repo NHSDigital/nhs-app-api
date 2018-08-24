@@ -15,9 +15,16 @@ class AppointmentsBookingStepDefinitions {
         factory.generateSuccessfulBookingResponse()
     }
 
+    @Given("^there are multiple appointment slots at the same time, provided by (.*)$")
+    fun thereAreAvailableAppointmentsAtTheSameTime(gpSystem: String) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.generateMultipleAvailableAppointmentSlots()
+        factory.generateSuccessfulBookingResponse()
+    }
+
     @Given("^there are (.*) appointments available to book with a reason of (\\d+) character$")
     fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String, numberOfCharacters: Int) {
-        var bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharacters)
+        val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharacters)
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
         factory.generateSuccessfulBookingResponse(bookingReasonOfSpecifiedLength)
@@ -25,7 +32,7 @@ class AppointmentsBookingStepDefinitions {
 
     @Given("^there are (.*) appointments available to book with a reason of (\\d+) characters but user attempts to enter (\\d+) characters$")
     fun thereAreAvailableAppointmentsToBookWithAReasonOfNumberOfCharactersSpecified(gpSystem: String,numberOfCharactersAllowed: Int, numberOfCharactersEntered: Int) {
-        var bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharactersAllowed)
+        val bookingReasonOfSpecifiedLength = "x".repeat(numberOfCharactersAllowed)
         val symptomsToEnter = "x".repeat(numberOfCharactersEntered)
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
