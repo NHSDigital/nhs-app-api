@@ -8,6 +8,7 @@ import mocking.defaults.MockDefaults
 import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
+import mocking.ndop.NdopMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
 import net.serenitybdd.core.Serenity
@@ -52,6 +53,13 @@ class MockingClient(private val configuration: MockingConfiguration) {
 
     fun forVision(method: String = "POST", resolver: VisionMappingBuilder.() -> Mapping) {
         val mappingBuilder = VisionMappingBuilder(method)
+        val mapping: Mapping = mappingBuilder.resolver()
+
+        this.postMapping(mapping)
+    }
+
+    fun forNdop(method: String = "GET", resolver: NdopMappingBuilder.() -> Mapping) {
+        val mappingBuilder = NdopMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

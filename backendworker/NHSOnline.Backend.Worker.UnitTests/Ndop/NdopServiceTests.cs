@@ -3,7 +3,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using Castle.Core.Configuration;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -17,12 +19,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
         private NdopService _ndopService;
         private IFixture _fixture;
         private Mock<INdopSigning> _ndopSigning;
+        private Mock<Microsoft.Extensions.Configuration.IConfiguration> _configuration;
         
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());           
+           
+            _configuration = _fixture.Create<Mock<Microsoft.Extensions.Configuration.IConfiguration>>(); 
+            _configuration.SetupGet(x => x["NDOP_CLAIM_AUDIENCE"]).Returns("testaudience");
+            _configuration.SetupGet(x => x["NDOP_CLAIM_ISSUER"]).Returns("testissuer");
+            
             _ndopSigning = _fixture.Freeze<Mock<INdopSigning>>();
+            _fixture.Inject(_configuration.Object);
             _ndopService = _fixture.Create<NdopService>();
         }
         
@@ -31,9 +40,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
         {
             // Arrange
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => null);
-            const string testNhsNumber = "123456789";
-            
+            const string testNhsNumber = "123456789"; 
             // Act
+            
             var ndopResponse = await _ndopService.GetJwtToken(testNhsNumber);
             
             // Assert
@@ -66,10 +75,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Ndop
             
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));            
             var credentials = new SigningCredentials
-                (securityKey, SecurityAlgorithms.HmacSha256Signature); 
+                (securityKey, SecurityAlgorithms.HmacSha256); 
+            
             _ndopSigning.Setup(x => x.GetSigningCredentials()).Returns(() => credentials);
-            
-            
+
             // Act
             var ndopResponse = await _ndopService.GetJwtToken(testNhsNumber);
             

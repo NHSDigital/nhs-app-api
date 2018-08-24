@@ -11,6 +11,7 @@ services:
       - ANDROID_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://localhost:8080/citizenid/authorize
       - CID_REGISTER_ENDPOINT=http://localhost:8080/citizenid/register
+      - DATA_PREFERENCES_URL=http://localhost:8080/ndop/ndopapp-build1.thunderbird.service.nhs.uk/createsession
   nhsonline.backend.worker:
     image: nhsonline.backend.worker
     environment:
@@ -28,6 +29,8 @@ services:
       - GP_PROVIDER_ENABLED_MICROTEST=true
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
+      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - EMIS_LINKAGE_USE_STUBBED_DATA=false
     depends_on:
       - nhsonline.redis.sds

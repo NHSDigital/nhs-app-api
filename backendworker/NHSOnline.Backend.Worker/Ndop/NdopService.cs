@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Ndop.Models;
 
@@ -11,10 +12,14 @@ namespace NHSOnline.Backend.Worker.Ndop
     {
         private readonly ILogger<NdopService> _logger;
         private readonly INdopSigning _ndopSigning;
+        private readonly IConfiguration _configuration;
+
+        private const string ClaimTypeNhsNumber = "nhs_number";
         
-        public NdopService(INdopSigning ndopSigning, ILoggerFactory loggerFactory)
+        public NdopService(INdopSigning ndopSigning, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _ndopSigning = ndopSigning;
+            _configuration = configuration;
             _logger = loggerFactory.CreateLogger<NdopService>();
         }
         
@@ -33,15 +38,25 @@ namespace NHSOnline.Backend.Worker.Ndop
                 
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, nhsNumber)
+                    new Claim(ClaimTypeNhsNumber, nhsNumber)
                 };
 
+                var expiryTime = DateTime.UtcNow.AddSeconds(30);
+                
+                var claimAudience = _configuration.GetOrWarn("NDOP_CLAIM_AUDIENCE", _logger);
+                var claimIssuer = _configuration.GetOrWarn("NDOP_CLAIM_ISSUER", _logger);
+
+                if (string.IsNullOrEmpty(claimAudience) || string.IsNullOrEmpty(claimIssuer))
+                {
+                    _logger.LogError("Could not get Ndop claim audience/issuer.");
+                    return new GetNdopResult.Unsuccessful();
+                }
+
                 var jwtToken = new JwtSecurityToken(
-                    issuer: "testdomain.com",
-                    audience: "testdomain.com",
+                    audience: claimAudience,
+                    issuer: claimIssuer,
                     claims: claims,
-                    notBefore: DateTime.UtcNow,
-                    expires: DateTime.UtcNow.AddMinutes(30),
+                    expires: expiryTime,
                     signingCredentials: signingCredentials
                 );
 

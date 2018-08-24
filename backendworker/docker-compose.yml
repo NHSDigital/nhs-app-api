@@ -22,6 +22,8 @@ services:
       - GP_PROVIDER_ENABLED_MICROTEST=false
       - NDOP_CERTIFICATE_PASSWORD
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
+      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
+      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
   nhsonline.stubs:
     image: rodolpheche/wiremock
     ports:

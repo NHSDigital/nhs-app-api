@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -32,13 +31,12 @@ namespace NHSOnline.Backend.Worker.Ndop
                     _logger.LogError("Could not get Ndop certificate due to missing certificate path or password.");
                     return null;
                 }
-
+                
                 var certificate = new X509Certificate2(certPath, password);
 
-                var provider = (RSA) certificate.PrivateKey;
-
-                var key = new RsaSecurityKey(provider);
-                return new SigningCredentials(key, SecurityAlgorithms.RsaSha256Signature);
+                var key = new X509SecurityKey(certificate);
+                
+                return new SigningCredentials(key, SecurityAlgorithms.RsaSha256);
             }
             catch (Exception)
             {
