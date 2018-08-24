@@ -3,8 +3,8 @@ package features.appointments.steps
 import constants.AppointmentDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.data.AppointmentsBookingData
-import features.appointments.data.AppointmentsSlotsExampleBuilder
-import features.appointments.data.AppointmentsSlotsExampleBuilder.Companion.EXPECTED_APPOINTMENT_LOCATIONS_KEY
+import features.appointments.data.AppointmentsSlotsExample
+import features.appointments.data.AppointmentsSlotsExampleBuilder.AppointmentSlotExpectations.*
 import features.appointments.factories.AppointmentsFactory
 import mockingFacade.appointments.AppointmentFilterFacade
 import net.serenitybdd.core.Serenity
@@ -33,16 +33,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     private val locationDefaultOption = "Select location"
     private val clinicianDefaultOption = "No preference"
 
-    private val timePeriodOptions by lazy {
-        mapOf(
-                Pair(TimePeriodOptionKeys.TODAY_KEY, TODAY_OPTION),
-                Pair(TimePeriodOptionKeys.TOMORROW_KEY, TOMORROW_OPTION),
-                Pair(TimePeriodOptionKeys.THIS_WEEK_KEY, THIS_WEEK_OPTION),
-                Pair(TimePeriodOptionKeys.NEXT_WEEK_KEY, NEXT_WEEK_OPTION),
-                Pair(TimePeriodOptionKeys.ALL_KEY, ALL_OPTION)
-        )
-    }
-
     private lateinit var availableAppointments: AvailableAppointmentsPage
     private lateinit var errorPage: ErrorPage
 
@@ -56,11 +46,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun assertTimeSlotPresent(expectedDateHeading: String, expectedTimeSlot: String) {
-        Assert.assertTrue("Appointment Slot Date heading not found: $expectedDateHeading",
-                availableAppointments.isDateHeadingPresent(expectedDateHeading))
-        Assert.assertTrue("Appointment Time Slot not found: $expectedTimeSlot for date: $expectedDateHeading",
-                availableAppointments.isTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
-        )
+        availableAppointments.assertDateHeadingPresent(expectedDateHeading)
+        availableAppointments.assertTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
+    }
+
+    @Step
+    fun assertNumberOfSlotsPresent(size: Int) {
+        assertEquals("Incorrect number of slots displayed", size, availableAppointments.getNumberOfTimeSlotsPresent())
     }
 
     @Step
@@ -68,8 +60,26 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect number of time-slots present",
                 1,
-                availableAppointments.numberOfTimeSlotsPresent(expectedDateHeading, expectedTimeSlot)
+                availableAppointments.numberOfTimeSlotsPresentForSpecificTime(expectedDateHeading, expectedTimeSlot)
         )
+    }
+
+    @Step
+    fun assertThatOtherDatesAreNotDisplayed(expectedDates: Set<String>) {
+        assertEquals("Incorrect number of dates displayed. ", expectedDates.size, availableAppointments.getNumberOfDateHeadingsPresent())
+    }
+
+    @Step
+    fun assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates: Set<String>, allDates: ArrayList<String>) {
+        for (date in allDates) {
+            if (!expectedDates.contains(date)) {
+                assertEquals(
+                        "Incorrect text found when expecting there to be no appointments for $date.",
+                        "No appointments available",
+                        availableAppointments.getNoSlotsAvailableTextAtDate(date)
+                )
+            }
+        }
     }
 
     @Step
@@ -188,7 +198,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
-        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(AppointmentsSlotsExampleBuilder.EXPECTED_RESPONSE_SLOTS_KEY)
+        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(EXPECTED_RESPONSE_SLOTS_KEY)
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
         expectedResponseSlots.forEach { slot -> unmatchedExpectedSlots[slot.id] = slot }
         return unmatchedExpectedSlots
@@ -216,7 +226,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val actualAppointmentTypeOptions = availableAppointments.getAppointmentTypeFilterContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
-        val expected = Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilder.EXPECTED_APPOINTMENT_TYPE_KEY)
+        val expected = Serenity.sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_TYPE_KEY)
 
         expected.forEach { expectedAppointmentType -> assertOptionExists(expectedAppointmentType, actualAppointmentTypeOptions) }
 
@@ -227,7 +237,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val actualLocationOptions = availableAppointments.getLocationFilterContents()
         val expectedLocations =
-                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilder.EXPECTED_APPOINTMENT_LOCATIONS_KEY)
+                Serenity.sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_LOCATIONS_KEY)
 
         for (expectedLocation in expectedLocations) {
             assertOptionExists(expectedLocation, actualLocationOptions)
@@ -246,7 +256,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
-                sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilder.EXPECTED_APPOINTMENT_CLINICIANS_KEY)
+                sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_CLINICIANS_KEY)
 
         Assert.assertNotNull("Expected session variable 'EXPECTED_APPOINTMENT_CLINICIANS_KEY' to have value", expectedClinicians)
 
@@ -260,13 +270,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated() {
         val actualTimePeriodOptions = availableAppointments.getTimePeriodFilterContents()
-        for (expectedTimePeriod in timePeriodOptions) {
-            assertOptionExists(
-                    expectedTimePeriod.value,
-                    actualTimePeriodOptions
-            )
-        }
-
+        assertOptionExists(TODAY_OPTION, actualTimePeriodOptions)
+        assertOptionExists(TOMORROW_OPTION, actualTimePeriodOptions)
+        assertOptionExists(THIS_WEEK_OPTION, actualTimePeriodOptions)
+        assertOptionExists(NEXT_WEEK_OPTION, actualTimePeriodOptions)
+        assertOptionExists(ALL_OPTION, actualTimePeriodOptions)
         verifyThatTimePeriodIsSetAsTheDefault()
     }
 
@@ -279,7 +287,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatNoSlotsAreDisplayed() {
-        assertFalse("Slots are displayed. ", availableAppointments.areAnySlotsPresent())
+        assertFalse("Slots are displayed. ", availableAppointments.getAreAnySlotsPresent())
     }
 
     @Step
@@ -315,7 +323,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatTimePeriodIsSetAsTheDefault() {
         assertEquals(
                 "Incorrect time period option currently selected. ",
-                timePeriodOptions[TimePeriodOptionKeys.THIS_WEEK_KEY],
+                THIS_WEEK_OPTION,
                 availableAppointments.getSelectedTimePeriod()
         )
     }
@@ -346,13 +354,26 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun selectOptionsToRevealSlots() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(timePeriodOptions[TimePeriodOptionKeys.ALL_KEY]!!)
+        availableAppointments.selectTimePeriodByText(ALL_OPTION)
     }
 
     @Step
     fun selectOptionsToRevealNoResults() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(timePeriodOptions[TimePeriodOptionKeys.TODAY_KEY]!!)
+        availableAppointments.selectTimePeriodByText(TODAY_OPTION)
+    }
+
+    @Step
+    fun selectTimePeriodOption(timePeriod: String) {
+        availableAppointments.selectTimePeriodByText(timePeriod)
+    }
+
+    @Step
+    fun selectFilterOptionsToRevealSlots() {
+        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
+        if (!filterValues.type.isNullOrEmpty()) availableAppointments.selectAppointmentTypeByText(filterValues.type!!)
+        if (!filterValues.location.isNullOrEmpty()) availableAppointments.selectLocationByText(filterValues.location!!)
+        if (!filterValues.doctor.isNullOrEmpty()) availableAppointments.selectClinicianByText(filterValues.doctor!!)
     }
 
     @Step
@@ -406,7 +427,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun selectSlot(date: String, time: String) {
-        return availableAppointments.selectSlot(date, time)
+        availableAppointments.selectSlot(date, time)
     }
 
     @Step
@@ -436,7 +457,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyGuidanceIsDisplayed() {
-        assertTrue("Appointment guidance isn't present. ", availableAppointments.isGuidancePresent())
+        availableAppointments.assertGuidancePresent()
     }
 
     @Step
@@ -447,18 +468,20 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         )
     }
 
+    @Step
     fun verifyThatAppointmentGuidanceContentIsDisplayed() {
         val expectedGuidanceContent = sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
         assertEquals("Guidance content not displayed correctly. ", expectedGuidanceContent, availableAppointments.getGuidanceContent())
     }
 
+    @Step
     fun verifyGuidanceContentIsNotDisplayed() {
-        assertFalse("Appointment slot guidance is displayed when it shouldn't be. ", availableAppointments.isGuidanceContentVisible())
+        availableAppointments.assertGuidanceContentNotVisible()
     }
 
     @Step
     fun verifyThatAppointmentGuidanceIsNotDisplayedAtAll() {
-        assertFalse("Appointment guidance is present when it shouldn't be. ", availableAppointments.isGuidancePresent())
+        availableAppointments.assertGuidanceNotPresent()
     }
 
     private fun assertOptionExists(defaultOption: String, actualOptions: ArrayList<String>, optionType: String = "an") {
@@ -466,13 +489,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 String.format("%s not present as %s option", defaultOption, optionType),
                 actualOptions.contains(defaultOption)
         )
-    }
-
-    private fun selectFilterOptionsToRevealSlots() {
-        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilder.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
-        if (!filterValues.type.isNullOrEmpty()) availableAppointments.selectAppointmentTypeByText(filterValues.type)
-        if (!filterValues.location.isNullOrEmpty()) availableAppointments.selectLocationByText(filterValues.location)
-        if (!filterValues.doctor.isNullOrEmpty()) availableAppointments.selectClinicianByText(filterValues.doctor!!)
     }
 
     private fun toUTC(date: String?): String {
@@ -496,13 +512,5 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         EXPECTED_APPOINTMENT_SESSIONS_KEY,
         EXPECTED_APPOINTMENT_SLOTS_KEY,
         EXPECTED_GUIDANCE_CONTENT_KEY
-    }
-
-    enum class TimePeriodOptionKeys {
-        TODAY_KEY,
-        TOMORROW_KEY,
-        THIS_WEEK_KEY,
-        NEXT_WEEK_KEY,
-        ALL_KEY
     }
 }

@@ -2,109 +2,151 @@ package pages.appointments
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import org.junit.Assert.assertTrue
 import pages.HybridPageElement
 
 @Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
-    private val byIdXpath = "//*[@id='%s']"
-    private val inlineErrorByIdXpath = "$byIdXpath//*[@data-purpose='error']"
+    private val byIdXpathFormat = "//*[@id='%s']"
+    private val containsTextXpathSubstring = "[contains(text(), '%s')]"
+    private val inlineErrorByIdXpath = "$byIdXpathFormat//*[@data-purpose='error']"
     private val guidanceParentXpath = "//*[@data-purpose='info-msg']"
-    private val guidanceIconXpath = "$guidanceParentXpath//*[@data-purpose='icon'][contains(text(), '%s')]"
+    private val guidanceIconXpathFormat = "$guidanceParentXpath//*[@data-purpose='icon']$containsTextXpathSubstring"
+    private val dateHeadingXpath = "//form//h2"
+    private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
+    private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li%s"
+    private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat, containsTextXpathSubstring, containsTextXpathSubstring)
+    private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "")
+    private val noAppointmentsAvailableForDateTextByDateXpathFormat = "$dateHeadingByTextXpathFormat/following-sibling::p"
 
     private val appointmentSlotGuidance = HybridPageElement(
             browserLocator = guidanceParentXpath,
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Slot Guidance section. "
     )
 
     private val appointmentSlotGuidanceExpand = HybridPageElement(
-            browserLocator = String.format(guidanceIconXpath, "+"),
+            browserLocator = String.format(guidanceIconXpathFormat, "+"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Slot Guidance expand icon. "
     )
 
     private val appointmentSlotGuidanceCollapse = HybridPageElement(
             // Note that the character is a true minus sign and not a hyphen
-            browserLocator = String.format(guidanceIconXpath, "−"),
+            browserLocator = String.format(guidanceIconXpathFormat, "−"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Slot Guidance collapse icon. "
     )
 
     private val appointmentSlotGuidanceLabel = HybridPageElement(
             browserLocator = "$guidanceParentXpath//label",
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Slot Guidance section label. "
     )
 
     private val appointmentSlotGuidanceContent = HybridPageElement(
             browserLocator = "$guidanceParentXpath//*[@data-purpose='info-content']",
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Slot Guidance content. "
     )
 
     private val appointmentTypeFilter = HybridPageElement(
-            browserLocator = String.format(byIdXpath, "type"),
+            browserLocator = String.format(byIdXpathFormat, "type"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Type filter. "
     )
 
     private val locationFilter = HybridPageElement(
-            browserLocator = String.format(byIdXpath, "location"),
+            browserLocator = String.format(byIdXpathFormat, "location"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Location filter. "
     )
 
     private val clinicianFilter = HybridPageElement(
-            browserLocator = String.format(byIdXpath, "clinician"),
+            browserLocator = String.format(byIdXpathFormat, "clinician"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment Clinician filter. "
     )
 
     private val timePeriodFilter = HybridPageElement(
-            browserLocator = String.format(byIdXpath, "time-period"),
+            browserLocator = String.format(byIdXpathFormat, "time-period"),
             androidLocator = "",
-            page = this
-    )
-
-    private val firstAppointmentDate = HybridPageElement(
-            browserLocator = "//form/span/*",
-            androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Appointment time period filter. "
     )
 
     private val typeInLineError = HybridPageElement(
             browserLocator = String.format(inlineErrorByIdXpath, "error-type"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "In-line error for Appointment Type filter. "
     )
 
     private val locationInLineError = HybridPageElement(
             browserLocator = String.format(inlineErrorByIdXpath, "error-location"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "In-line error for Appointment Location filter. "
     )
 
     private val slotInLineError = HybridPageElement(
             browserLocator = String.format(inlineErrorByIdXpath, "error-slot"),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "In-line error for Appointment Slot selection. "
     )
 
     private fun timeSlotAtPosition(position: Int) = HybridPageElement(
             browserLocator = "//form//li[$position]",
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Time slot by index (base 1). "
     )
 
-    private fun timeSlot(date: String, time: String) = HybridPageElement(
-            browserLocator = "//form/div/span[h2 = '$date']/ul/li['$time']",
+    private fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(
+            browserLocator = String.format(timeSlotByDateAndTimeXpath, date, time),
             androidLocator = "",
-            page = this
+            page = this,
+            helpfulName = "Time slot by date and time. "
     )
 
-    private val appointmentSlotDateXpath = "//form//h2[text() = '%s']"
+    private val timeSlots = HybridPageElement(
+            browserLocator = timeSlotsXpath,
+            androidLocator = "",
+            page = this,
+            helpfulName = "Any time slot. "
+    )
+
+    private val dateHeading = HybridPageElement(
+            browserLocator = dateHeadingXpath,
+            androidLocator = "",
+            page = this,
+            helpfulName = "Any date heading. "
+    )
+
+    private fun dateHeadingByText(date: String) = HybridPageElement(
+            browserLocator = String.format(dateHeadingByTextXpathFormat, date),
+            androidLocator = "",
+            page = this,
+            helpfulName = "Date heading by text. "
+    )
+
+    private fun noAppointmentsAvailableForDateTextByDate(date: String) = HybridPageElement(
+            browserLocator = String.format(noAppointmentsAvailableForDateTextByDateXpathFormat, date),
+            androidLocator = "",
+            page = this,
+            helpfulName = "Text displayed when there are no appointments on a particular date. "
+    )
 
     fun isTypeFilterPresent(): Boolean {
         return appointmentTypeFilter.elements.isNotEmpty()
@@ -123,11 +165,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun selectSlotByPositionNumber(position: Int) {
-        return timeSlotAtPosition(position).element.click()
+        timeSlotAtPosition(position).element.click()
     }
 
     fun selectSlot(date: String, time: String) {
-        return timeSlot(date, time).element.click()
+        timeSlotForDateAndTime(date, time).assertIsVisible().element.click()
     }
 
     fun getAppointmentTypeFilterContents(): ArrayList<String> {
@@ -162,8 +204,8 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         return timePeriodFilter.element.selectedVisibleTextValue.trim()
     }
 
-    fun areAnySlotsPresent(): Boolean {
-        return firstAppointmentDate.elements.isNotEmpty()
+    fun getAreAnySlotsPresent(): Boolean {
+        return timeSlots.elements.isNotEmpty()
     }
 
     fun selectAnAppointmentType() {
@@ -190,85 +232,74 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
         timePeriodFilter.element.selectByVisibleText<WebElementFacade>(text)
     }
 
-    @Suppress("TooGenericExceptionCaught")
-    fun isDateHeadingPresent(expectedDateHeading: String?): Boolean {
-        return try {
-            findByXpath(String.format(appointmentSlotDateXpath, expectedDateHeading)).isPresent
-        } catch (e: Exception) {
-            false
-        }
-    }
-    @Suppress("TooGenericExceptionCaught")
-    fun isTimeSlotPresent(expectedDateHeading: String, expectedTimeOnSlot: String): Boolean {
-        return try {
-            timeSlot(expectedDateHeading, expectedTimeOnSlot).element.isPresent
-        } catch (e: Exception) {
-            false
-        }
+    fun assertDateHeadingPresent(expectedDateHeading: String) {
+        dateHeadingByText(expectedDateHeading).assertSingleElementPresent()
     }
 
-    fun numberOfTimeSlotsPresent(expectedDateHeading: String, expectedTimeOnSlot: String): Int {
-        return if (isTimeSlotPresent(expectedDateHeading, expectedTimeOnSlot)) {
-            timeSlot(expectedDateHeading, expectedTimeOnSlot).elements.size
-        } else {
-            0
-        }
+    fun getNoSlotsAvailableTextAtDate(date: String): String {
+        val hybridPageElement = noAppointmentsAvailableForDateTextByDate(date)
+        hybridPageElement.assertSingleElementPresent()
+        return hybridPageElement.element.text
     }
 
-    @Suppress("TooGenericExceptionCaught")
+    fun getNumberOfDateHeadingsPresent(): Int {
+        assertTrue(
+                "No date headings are present. Please use assertElementNotPresent() if this is correct behaviour. ",
+                dateHeading.element.isPresent
+        )
+        return dateHeading.elements.size
+    }
+
+    fun assertTimeSlotPresent(expectedDateHeading: String, expectedTimeOnSlot: String) {
+        assertTrue("No timeslot present. ", timeSlotForDateAndTime(expectedDateHeading, expectedTimeOnSlot).element.isPresent)
+    }
+
+    fun numberOfTimeSlotsPresentForSpecificTime(expectedDateHeading: String, expectedTimeOnSlot: String): Int {
+        timeSlotForDateAndTime(expectedDateHeading, expectedTimeOnSlot).assertSingleElementPresent()
+        return timeSlotForDateAndTime(expectedDateHeading, expectedTimeOnSlot).elements.size
+    }
+
+    fun getNumberOfTimeSlotsPresent(): Int {
+        assertTrue(
+                "No time slots are present. Please use assertElementNotPresent() if this is correct behaviour. ",
+                timeSlots.element.isPresent
+        )
+        return timeSlots.elements.size
+    }
+
     fun isTimeSlotAtPositionSelected(position: Int): Boolean {
-        return try {
-            timeSlotAtPosition(position).element.getAttribute("aria-label") == "selected-slot"
-        } catch (e: Exception) {
-            false
-        }
+        val hybridPageElement = timeSlotAtPosition(position)
+        hybridPageElement.assertSingleElementPresent()
+        return hybridPageElement.element.getAttribute("aria-label") == "selected-slot"
     }
 
-    fun getInlineTypeValidationError(): String {
-        return typeInLineError.element.text
-    }
+    fun getInlineTypeValidationError(): String = typeInLineError.element.text
 
-    fun getInlineLocationValidationError(): String {
-        return locationInLineError.element.text
-    }
+    fun getInlineLocationValidationError(): String = locationInLineError.element.text
 
-    fun getInlineSlotValidationError(): String {
-        return slotInLineError.element.text
-    }
+    fun getInlineSlotValidationError(): String = slotInLineError.element.text
 
-    fun getErrorSummarySubHeading(): String {
-        return errorBanner.subHeading
-    }
+    fun getErrorSummarySubHeading(): String = errorBanner.subHeading
 
     fun getErrorSummaryBodyAtRow(rowNumber: Int): String {
         return errorBanner.bodyElements[rowNumber - 1]
     }
 
-    @Suppress("TooGenericExceptionCaught")
-    fun isGuidancePresent(): Boolean {
-        return try {
-            appointmentSlotGuidance.element.isPresent
-        } catch (e: Exception) {
-            false
-        }
+    fun assertGuidancePresent() {
+        appointmentSlotGuidance.assertSingleElementPresent()
     }
 
-    @Suppress("TooGenericExceptionCaught")
-    fun isGuidanceContentVisible(): Boolean {
-        return try {
-            appointmentSlotGuidanceContent.element.isVisible
-        } catch (e: Exception) {
-            false
-        }
+    fun assertGuidanceNotPresent() {
+        appointmentSlotGuidance.assertElementNotPresent()
     }
 
-    fun getGuidanceContent(): String? {
-        return appointmentSlotGuidanceContent.element.text
+    fun assertGuidanceContentNotVisible() {
+        appointmentSlotGuidanceContent.assertElementNotPresent()
     }
 
-    fun getGuidanceLabelText(): String? {
-        return appointmentSlotGuidanceLabel.element.text
-    }
+    fun getGuidanceContent(): String = appointmentSlotGuidanceContent.element.text
+
+    fun getGuidanceLabelText(): String = appointmentSlotGuidanceLabel.element.text
 
     fun expandGuidance() {
         appointmentSlotGuidanceExpand.element.click()

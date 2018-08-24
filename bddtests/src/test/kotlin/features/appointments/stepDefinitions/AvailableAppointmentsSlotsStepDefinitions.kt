@@ -6,7 +6,9 @@ import cucumber.api.java.en.When
 import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.data.AppointmentsSlotsExampleBuilder
-import features.appointments.factories.AppointmentsFactory
+import features.appointments.data.AppointmentsSlotsExampleBuilder.AppointmentSlotExpectations.*
+import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentDateKey
+import features.appointments.factories.AppointmentsFactory.Companion.TargetAppointmentTimeKey
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
@@ -14,6 +16,7 @@ import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedSteps.NavigationSteps
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
+import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import net.serenitybdd.core.Serenity
@@ -21,8 +24,7 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
 import javax.servlet.http.Cookie
@@ -46,7 +48,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     )
 
     @Given("^there are available (.*) appointment slots for an explicit date-time range$")
-    fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange(gpSystem : String) {
+    fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(
                 AppointmentsBookingData.defaultSessionStartDateRaw,
@@ -54,12 +56,12 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     }
 
     @Given("^there are available (.*) appointment slots$")
-    fun thereAreAvailableAppointmentSlots(gpSystem : String) {
+    fun thereAreAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample()
     }
 
-    @Given("^there are available appointment slots with different criteria for (\\w*)$")
+    @Given("^there are available appointment slots with different criteria for (\\w+)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
@@ -91,9 +93,34 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
-
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample(AppointmentsSlotsExample.multipleSlotsOneLocation())
+    }
+
+    @Given("^there are appointment slots on some days other than tomorrow, provided by (.*)$")
+    fun thereAreAvailableAppointmentSlotsButNotForTomorrowForGPSystem(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val example = AppointmentsSlotsExample.slotForDayAfterTomorrow()
+        appointmentsSlotsFactory.generateExample(example)
+    }
+
+    @Given("^there are appointment slots on some days this week but not others, provided by (.*)$")
+    fun thereAreAvailableAppointmentSlotsOnSomeDaysThisWeekButNotAllForGPSystem(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val example = AppointmentsSlotsExample.slotForEndOfToday()
+        appointmentsSlotsFactory.generateExample(example)
+    }
+
+    @Given("^there are appointment slots on some days next week but not others, provided by (.*)$")
+    fun thereAreAvailableAppointmentSlotsOnSomeDaysNextWeekButNotAllForGPSystem(gpSystem: String) {
+        val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        val example = AppointmentsSlotsExample.slotForThisTimeNextWeek()
+        appointmentsSlotsFactory.generateExample(example)
+    }
+
+    @Given("^there are appointment slots on some days in the next few weeks but not others, provided by (.*)$")
+    fun thereAreAvailableAppointmentSlotsInTheNextFewWeeksForGPSystem(gpSystem: String) {
+        thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem)
     }
 
     @Given("^EMIS doesn't respond a timely fashion for available appointment slots$")
@@ -115,7 +142,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     }
 
     @When("^EMIS responds a timely fashion for available appointment slots$")
-     fun emis_responds_a_timely_fashion_for_available_appointment_slots() {
+    fun emis_responds_a_timely_fashion_for_available_appointment_slots() {
         thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem("EMIS")
     }
 
@@ -126,14 +153,14 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
         mockingClient.forEmis {
             appointmentSlotsMetaRequest(patient)
-                    .respondWith(SC_INTERNAL_SERVER_ERROR, 0) {
+                    .respondWith(SC_INTERNAL_SERVER_ERROR) {
                         andHtmlBody("Internal server Error")
                     }
         }
 
         mockingClient.forEmis {
             appointmentSlotsRequest(patient)
-                    .respondWith(SC_INTERNAL_SERVER_ERROR, 0) {
+                    .respondWith(SC_INTERNAL_SERVER_ERROR) {
                         andHtmlBody("Internal server Error")
                     }
         }
@@ -181,8 +208,8 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have selected a time when multiple slots are available$")
     fun iSelectATimeWhenMultipleSlotsAreAvailable() {
-        val date = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentDateKey)
-        val time = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentTimeKey)
+        val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
+        val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
         availableAppointments.assertTimeSlotPresent(date, time)
         availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
         availableAppointments.selectSlot(date, time)
@@ -244,6 +271,16 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     fun iFilterToReviewMultipleSlots() {
         iSelectAnOptionFromEachOfTheFilters()
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
+    }
+
+    @When("^I select a type and location that have available slots$")
+    fun iFilterTypeAndLocation() {
+        availableAppointments.selectFilterOptionsToRevealSlots()
+    }
+
+    @When("^I select time period for '(.*)'$")
+    fun iFilterTimePeriod(timePeriod: String) {
+        availableAppointments.selectTimePeriodOption(timePeriod)
     }
 
     @When("^I select an option from each of the filters$")
@@ -410,11 +447,36 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Then("^available slots are displayed that meet the new criteria$")
     fun availableSlotsAreDisplayedThatMeetTheNewCriteria() {
+        val expectedDatesAndTimes = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots
+        assertTrue("Invalid test as there are no expected slots stored. ", expectedDatesAndTimes.isNotEmpty())
+        val expectedNumberOfSlots = expectedDatesAndTimes.flatMap { it.value.toList() }.size
+        for (date in expectedDatesAndTimes.keys) {
+            for (time in expectedDatesAndTimes[date].orEmpty()) {
+                availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
+            }
+        }
+        availableAppointments.assertNumberOfSlotsPresent(expectedNumberOfSlots)
+    }
 
-        val expectedDateHeading = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentDateKey)
-        val expectedTimeSlot = sessionVariableCalled<String>(AppointmentsFactory.TargetAppointmentTimeKey)
-        availableAppointments.assertTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
+    @Then("^I only see results for days that have available slots$")
+    fun onlyAvailableSlotsAreDisplayed() {
+        availableSlotsAreDisplayedThatMeetTheNewCriteria()
+        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        availableAppointments.assertThatOtherDatesAreNotDisplayed(expectedDates)
+    }
 
+    @Then("^I see results for each of the remaining days for this week, with an appropriate message when there are no slots$")
+    fun iSeeResultsForEachOfTheRemainingDaysForThisWeek() {
+        availableSlotsAreDisplayedThatMeetTheNewCriteria()
+        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates, AppointmentsSlotsExample.remainingDatesForThisWeek)
+    }
+
+    @Then("^I see results for each of the days for next week, with an appropriate message when there are no slots$")
+    fun iSeeResultsForEachOfTheRemainingDaysForNextWeek() {
+        availableSlotsAreDisplayedThatMeetTheNewCriteria()
+        val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
+        availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates, AppointmentsSlotsExample.datesForNextWeek)
     }
 
     @Then("^the 2nd slot is highlighted$")
@@ -433,24 +495,24 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     }
 
     @Then("^I see a timeout on the appointment booking page$")
-    fun iSeeATimeOutOnTheAppointmentBookingPage(){
+    fun iSeeATimeOutOnTheAppointmentBookingPage() {
         availableAppointments.waitForSpinnerToDisappearBecauseOfTimeout()
         availableAppointments.checkIfTryAgainButtonDisplayed()
     }
 
     @Then("^the appointment slot guidance content is displayed$")
-    fun appointmentSlotGuidanceContentIsDisplayed(){
+    fun appointmentSlotGuidanceContentIsDisplayed() {
         availableAppointments.verifyThatAppointmentGuidanceContentIsDisplayed()
     }
 
     @Then("^the appointment slot guidance is collapsible$")
-    fun appointmentSlotGuidanceIsCollapsible(){
+    fun appointmentSlotGuidanceIsCollapsible() {
         availableAppointments.collapseAppointmentSlotGuidance()
         iExpandTheAppointmentSlotGuidance()
     }
 
     @Then("^I cannot see any appointment slot guidance$")
-    fun iCannotSeeAnyAppointmentSlotGuidance(){
+    fun iCannotSeeAnyAppointmentSlotGuidance() {
         availableAppointments.verifyThatAppointmentGuidanceIsNotDisplayedAtAll()
     }
 }

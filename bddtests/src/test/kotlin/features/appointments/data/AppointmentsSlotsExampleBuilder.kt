@@ -6,6 +6,7 @@ import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.setSessionVariable
 import worker.models.appointments.SlotResponseObject
 import java.util.*
 
@@ -63,20 +64,20 @@ class AppointmentsSlotsExampleBuilder {
     private fun setExpectations(appointmentSessions: ArrayList<AppointmentSessionFacade>) {
         val appointmentSlots = arrayListOf<AppointmentSlotFacade>()
         appointmentSlots.addAll(appointmentSessions.flatMap { session -> session.slots })
-        Serenity.setSessionVariable(AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
+        setSessionVariable(AvailableAppointmentsSteps.AppointmentSessionVariableKeys.EXPECTED_APPOINTMENT_SESSIONS_KEY).to(appointmentSessions)
 
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).to(filter)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_TYPE_KEY).to(appointmentTypesList)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_LOCATIONS_KEY).to(locationsList)
-        Serenity.setSessionVariable(EXPECTED_APPOINTMENT_CLINICIANS_KEY).to(cliniciansList)
-        Serenity.setSessionVariable(EXPECTED_RESPONSE_SLOTS_KEY).to(expectedResponseSlots)
+        setSessionVariable(AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).to(filter)
+        setSessionVariable(AppointmentSlotExpectations.EXPECTED_APPOINTMENT_TYPE_KEY).to(appointmentTypesList)
+        setSessionVariable(AppointmentSlotExpectations.EXPECTED_APPOINTMENT_LOCATIONS_KEY).to(locationsList)
+        setSessionVariable(AppointmentSlotExpectations.EXPECTED_APPOINTMENT_CLINICIANS_KEY).to(cliniciansList)
+        setSessionVariable(AppointmentSlotExpectations.EXPECTED_RESPONSE_SLOTS_KEY).to(expectedResponseSlots)
     }
 
-    companion object {
-        const val EXPECTED_APPOINTMENT_TYPE_KEY = "ExpectedAppointmentTypesKey"
-        const val EXPECTED_APPOINTMENT_LOCATIONS_KEY = "ExpectedAppointmentLocationsKey"
-        const val EXPECTED_APPOINTMENT_CLINICIANS_KEY = "ExpectedAppointmentCliniciansKey"
-        const val EXPECTED_APPOINTMENT_FILTER_FACADE_KEY = "ExpectedAppointmentFilterFacadeKey"
-        const val EXPECTED_RESPONSE_SLOTS_KEY = "ExpectedResponseSlotsKey"
+    enum class AppointmentSlotExpectations{
+        EXPECTED_APPOINTMENT_TYPE_KEY,
+        EXPECTED_APPOINTMENT_LOCATIONS_KEY,
+        EXPECTED_APPOINTMENT_CLINICIANS_KEY,
+        EXPECTED_APPOINTMENT_FILTER_FACADE_KEY,
+        EXPECTED_RESPONSE_SLOTS_KEY
     }
 }

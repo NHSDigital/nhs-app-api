@@ -3,14 +3,12 @@ package features.appointments.steps
 import mocking.defaults.MockDefaults
 import mocking.MockingClient
 import mockingFacade.appointments.BookAppointmentSlotFacade
-import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AppointmentsConfirmationPage
-import worker.models.appointments.BookAppointmentSlotRequest
 import java.time.Duration
 
 open class AppointmentsConfirmationSteps {
@@ -24,6 +22,7 @@ open class AppointmentsConfirmationSteps {
     @Step
     fun clickOnConfirmAndBookAppointmentButton() {
         appointmentsConfirmation.clickOnConfirmAndBookAppointmentButton()
+        appointmentsConfirmation.waitForSpinnerToDisappear()
     }
 
     @Step

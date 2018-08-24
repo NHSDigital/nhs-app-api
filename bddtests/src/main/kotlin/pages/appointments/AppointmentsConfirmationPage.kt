@@ -8,15 +8,15 @@ import pages.HybridPageElement
 import java.time.Duration
 
 @DefaultUrl("http://localhost:3000/appointments/confirmation")
-open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
+class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
 
-    val confirmAndBookAppointmentButton = HybridPageElement(
+    private val confirmAndBookAppointmentButton = HybridPageElement(
         browserLocator = "//*[@id='btn_book_appointment']",
         androidLocator = null,
         page = this
     )
 
-    val reasonFormField = HybridPageElement(
+    private val reasonFormField = HybridPageElement(
             browserLocator = "//*[@id='reasonText']",
             androidLocator = null,
             page = this

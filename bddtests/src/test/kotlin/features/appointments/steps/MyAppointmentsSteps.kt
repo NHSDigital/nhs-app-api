@@ -52,7 +52,6 @@ open class MyAppointmentsSteps {
         myAppointmentsPage.waitForSpinnerToDisappear()
     }
 
-
     @Step
     fun checkHeaderTextIsCorrect() {
         assertTrue("Expected Header text is not found: $pageHeader",

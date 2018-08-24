@@ -41,8 +41,8 @@ class AppointmentSlotsMetaBuilderEmis(
         requestBuilder.andQueryParameterIfNotNull("sessionEndDate", sessionEndDate)
         requestBuilder.andQueryParameterIfNotNull("userPatientLinkToken", userPatientLinkToken)
     }
-    
-    override fun withDelay(delayMilliseconds : Duration):AppointmentSlotsMetaBuilderEmis{
+
+    override fun withDelay(delayMilliseconds: Duration): AppointmentSlotsMetaBuilderEmis {
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }
@@ -63,17 +63,17 @@ class AppointmentSlotsMetaBuilderEmis(
 
     private fun getMetaSlotLocationsList(sessions: ArrayList<AppointmentSessionFacade>): ArrayList<Location> {
         val arrayList = arrayListOf<Location>()
-        arrayList.addAll( sessions.map {  session-> Location(session.locationid!!, session.location!!) })
+        arrayList.addAll(sessions.map { session -> Location(session.locationid!!, session.location!!) })
         return arrayList
     }
 
     private fun getMetaSlotSessionHoldersList(sessions: ArrayList<AppointmentSessionFacade>): ArrayList<SessionHolder> {
         val arrayList = arrayListOf<SessionHolder>()
-        arrayList.addAll( sessions.map {  session-> SessionHolder(session.staffDetailsid!!, session.staffDetails!!) })
+        arrayList.addAll(sessions.map { session -> SessionHolder(session.staffDetailsid!!, session.staffDetails!!) })
         return arrayList
     }
 
-    private fun getMetaSlotSessionsList(sessions: ArrayList<AppointmentSessionFacade>):ArrayList<Session> {
+    private fun getMetaSlotSessionsList(sessions: ArrayList<AppointmentSessionFacade>): ArrayList<Session> {
         val arrayList = arrayListOf<Session>()
         arrayList.addAll(sessions.flatMap { session ->
             session.slots.map { slot ->

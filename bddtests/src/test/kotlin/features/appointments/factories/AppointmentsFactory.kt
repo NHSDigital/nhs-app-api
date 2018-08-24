@@ -5,9 +5,6 @@ import mocking.MockingClient
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import models.Patient
-import net.serenitybdd.core.Serenity.setSessionVariable
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 abstract class AppointmentsFactory(gpSupplier: String) {
 
@@ -15,8 +12,6 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     var patient: Patient = Patient.getDefault(gpSupplier)
     protected var supplier: String = gpSupplier
     protected var appointmentMapper: MockingClientAppointmentMappingFactory
-
-    private var tomorrowDate = LocalDateTime.now().plusDays(1)
 
     init {
         SerenityHelpers.setPatient(patient)
@@ -34,14 +29,6 @@ abstract class AppointmentsFactory(gpSupplier: String) {
         val getResponse = viewAppointmentFactory.createEmptyUpcomingAppointmentResponse(patient)
         appointmentMapper
                 .requestMapping { viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse) }
-    }
-
-    protected fun storeDateAndTimeOfExpectedSlotAsPerUI() {
-        //Format like : Wednesday 1 August 2018
-        val formatter = DateTimeFormatter.ofPattern("EEEE d MMMM yyyy")
-        val day = tomorrowDate.format(formatter)
-        setSessionVariable(TargetAppointmentDateKey).to(day)
-        setSessionVariable(TargetAppointmentTimeKey).to("2:00pm")
     }
 
     companion object {

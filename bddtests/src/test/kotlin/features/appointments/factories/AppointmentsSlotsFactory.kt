@@ -3,10 +3,14 @@ package features.appointments.factories
 import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExample
 import features.sharedSteps.SupplierSpecificFactory
+import features.appointments.data.AppointmentsSlotsExampleBuilder.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
+import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity.setSessionVariable
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 
@@ -27,17 +31,15 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         val startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
         val endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
 
-        generateDefaultUserData()
-
         generateAppointmentSlotResponseWithoutGuidance(startDateToUse, endDateToUse) {
             respondWithSuccess(example)
         }
     }
 
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
-        generateDefaultUserData()
-        storeDateAndTimeOfExpectedSlotAsPerUI()
-        generateExample(AppointmentsSlotsExample.multipleSlotsOneTime())
+        val example = AppointmentsSlotsExample.multipleSlotsOneTime()
+        storeUIDateAndTimeOfSlotToSelect()
+        generateExample(example)
     }
 
     fun generateExample(
@@ -57,8 +59,9 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     private fun generateDefaultUserDataAndRetrieveSlotsExample(): AppointmentSlotsResponseFacade {
         generateDefaultUserData()
-        storeDateAndTimeOfExpectedSlotAsPerUI()
-        return AppointmentsSlotsExample.getGenericExample()
+        val example = AppointmentsSlotsExample.getGenericExample()
+        storeUIDateAndTimeOfSlotToSelect()
+        return example
     }
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
@@ -80,6 +83,14 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK)
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         return sdf.format(Date.from(date.toInstant(zoneOffset)))
+    }
+
+    private fun storeUIDateAndTimeOfSlotToSelect() {
+        val expectedFilteredSlots = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots
+        val dateToSelect = expectedFilteredSlots.keys.first()
+        val timeToSelect = expectedFilteredSlots[dateToSelect]!!.first()
+        setSessionVariable(TargetAppointmentDateKey).to(dateToSelect)
+        setSessionVariable(TargetAppointmentTimeKey).to(timeToSelect)
     }
 
     abstract fun generateAppointmentSlotResponse(startDate: String?,
