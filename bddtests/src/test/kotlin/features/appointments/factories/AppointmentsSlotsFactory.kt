@@ -1,27 +1,28 @@
 package features.appointments.factories
 
-import constants.AppointmentDateTimeFormat
 import features.appointments.data.AppointmentsBookingData
 import features.appointments.data.AppointmentsSlotsExample
-import features.appointments.data.AppointmentsSlotsExampleBase
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
-import java.time.format.DateTimeFormatter
-import java.text.ParsePosition
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+
 import java.time.*
 import java.util.*
 
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample(startDate: LocalDateTime? = null, endDate: LocalDateTime? = null, guidanceMessage: Boolean = true) {
-        generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate,endDate, guidanceMessage)
+    fun generateDefaultAvailableAppointmentSlotExample(startDate: LocalDateTime? = null,
+                                                       endDate: LocalDateTime? = null,
+                                                       guidanceMessage: Boolean = true) {
+        generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate, endDate, guidanceMessage)
     }
 
-    fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage(startDate: LocalDateTime? = null, endDate: LocalDateTime? = null) {
+    fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage(startDate: LocalDateTime? = null,
+                                                                                              endDate: LocalDateTime? = null) {
         val example = generateDefaultUserDataAndRetrieveSlotsExample()
         val startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
         val endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
@@ -51,7 +52,12 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     private fun generateDefaultUserDataAndRetrieveSlotsExample(): AppointmentSlotsResponseFacade {
         generateDefaultUserData()
         storeDateAndTimeOfExpectedSlotAsPerUI()
-        return AppointmentsSlotsExample().getExample()
+        return AppointmentsSlotsExample.getGenericExample()
+    }
+
+    fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
+        generateDefaultUserData()
+        generateAppointmentSlotResponse(null, null, true, mapping)
     }
 
     private fun getFormattedDate(date: LocalDateTime?, key: String): String? {

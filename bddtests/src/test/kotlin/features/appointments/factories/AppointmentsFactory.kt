@@ -8,21 +8,21 @@ import net.serenitybdd.core.Serenity.setSessionVariable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-abstract class AppointmentsFactory(gpSupplier:String){
+abstract class AppointmentsFactory(gpSupplier: String) {
 
     val mockingClient = MockingClient.instance
-    var patient : Patient = Patient.getDefault(gpSupplier)
-    protected var supplier :String = gpSupplier
+    var patient: Patient = Patient.getDefault(gpSupplier)
+    protected var supplier: String = gpSupplier
     protected var appointmentMapper: MockingClientAppointmentMappingFactory
 
     private var tomorrowDate = LocalDateTime.now().plusDays(1)
 
-    init{
+    init {
         setSessionVariable(Patient::class).to(patient)
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }
 
-    protected fun generateDefaultUserData() {
+    fun generateDefaultUserData() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
         SessionCreateJourneyFactory.getForSupplier(supplier, mockingClient).createFor(patient)
         createGetEmptyAppointmentList()
@@ -32,7 +32,7 @@ abstract class AppointmentsFactory(gpSupplier:String){
         val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(supplier)
         val getResponse = viewAppointmentFactory.createEmptyUpcomingAppointmentResponse(patient)
         appointmentMapper
-                .requestMapping{ viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse)}
+                .requestMapping { viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse) }
     }
 
     protected fun storeDateAndTimeOfExpectedSlotAsPerUI() {

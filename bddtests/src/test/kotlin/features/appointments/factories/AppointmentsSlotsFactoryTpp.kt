@@ -2,7 +2,6 @@ package features.appointments.factories
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
-import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {

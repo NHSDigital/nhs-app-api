@@ -258,8 +258,7 @@ Feature: View available appointment slots
   @NHSO-1168
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
     #    GP System agnostic scenario, so only need to test with EMIS
-    Given there are available appointment slots with different criteria for EMIS
-    But there is a slight delay in retrieving them
+    Given there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them
     And I am logged in
     And I am on the available appointments page
     When I navigate to Prescriptions

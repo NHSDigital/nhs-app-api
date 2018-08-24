@@ -4,7 +4,8 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.data.AppointmentsBookingData
-import features.appointments.data.AppointmentsSlotsExampleNoneAvailable
+import features.appointments.data.AppointmentsSlotsExample
+import features.appointments.data.AppointmentsSlotsExampleBuilder
 import features.appointments.factories.AppointmentsFactory
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
@@ -23,6 +24,7 @@ import org.apache.http.HttpStatus.SC_OK
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import worker.models.appointments.AppointmentSlotsResponse
+import java.time.Duration
 import javax.servlet.http.Cookie
 
 
@@ -47,7 +49,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     fun thereAreAvailableAppointmentSlotsForAnExplicitDateTimeRange(gpSystem : String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(
-        AppointmentsBookingData.defaultSessionStartDateRaw,
+                AppointmentsBookingData.defaultSessionStartDateRaw,
                 AppointmentsBookingData.defaultSessionEndDateRaw)
     }
 
@@ -78,31 +80,38 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExampleNoneAvailable().getExample())
+        factory.generateExample(AppointmentsSlotsExampleBuilder().build())
     }
 
     @Given("^there is 1 available appointment slot for (.*)$")
     fun thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem: String) {
-        availableAppointments.generateDefaultUserData(gpSystem)
-        availableAppointments.generateAvailableOneAppointmentSlotForGPSystem(gpSystem)
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        factory.generateExample(AppointmentsSlotsExample.singleSlotExample())
     }
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
-        availableAppointments.generateDefaultUserData(gpSystem)
-        availableAppointments.generateAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem)
+
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
+        factory.generateExample(AppointmentsSlotsExample.multipleSlotsOneLocation())
     }
 
     @Given("^EMIS doesn't respond a timely fashion for available appointment slots$")
     fun emis_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
-        availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 90)
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateExample() {
+            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .delayedBy(Duration.ofSeconds(90))
+        }
     }
 
-    @Given("^there is a slight delay in retrieving them$")
+    @Given("^there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them$")
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
-        availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAppointmentSlotsForNextFourWeeks(delayedInSeconds = 1)
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateExample() {
+            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .delayedBy(Duration.ofSeconds(1))
+        }
     }
 
     @When("^EMIS responds a timely fashion for available appointment slots$")
@@ -112,7 +121,9 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^EMIS is unavailable for available appointment slots$")
     fun emis_is_unavailable_for_available_appointment_slots() {
-        availableAppointments.generateDefaultUserData()
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateDefaultUserData()
+
         mockingClient.forEmis {
             appointmentSlotsMetaRequest(patient)
                     .respondWith(SC_INTERNAL_SERVER_ERROR, 0) {
@@ -130,7 +141,9 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^EMIS returns corrupt data for appointment slots$")
     fun emis_returns_corrupt_data_for_appointment_slots() {
-        availableAppointments.generateDefaultUserData()
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateDefaultUserData()
+
         mockingClient.forEmis {
             appointmentSlotsMetaRequest(patient)
                     .respondWith(SC_OK, 0) {
@@ -155,8 +168,10 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^an unknown exception will occur when wanting to view appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
-        availableAppointments.generateDefaultUserData()
-        availableAppointments.generateEmisStubsForAvailableSlotsGivingUnknownException()
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateExample {
+            respondWithUnknownException()
+        }
     }
 
     @When("^I click on the (.*) appointment$")

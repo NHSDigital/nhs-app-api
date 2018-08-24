@@ -6,7 +6,7 @@ import java.util.ArrayList
 
 class AppointmentSessionFacadeBuilder {
 
-    var session = AppointmentSessionFacade(
+    private var session = AppointmentSessionFacade(
             sessionId = 1,
             sessionType = "Clinic",
             staffDetails = "Dr. Who",
@@ -38,8 +38,8 @@ class AppointmentSessionFacadeBuilder {
 
     fun slots(value: (AppointmentSlotFacadeArrayBuilder.()-> AppointmentSlotFacadeArrayBuilder)): AppointmentSessionFacadeBuilder {
 
-        var builder = AppointmentSlotFacadeArrayBuilder()
-        var thing = value.invoke(builder)
+        val builder = AppointmentSlotFacadeArrayBuilder()
+        val thing = value.invoke(builder)
         session.slots = thing.build()
         return this
     }
@@ -50,14 +50,13 @@ class AppointmentSessionFacadeBuilder {
 }
 class AppointmentSlotFacadeArrayBuilder {
 
-    var nextSlotId = 1
-
-    var appointmentSlots: ArrayList<AppointmentSlotFacade> = arrayListOf()
+    private var nextSlotId = 1
+    private var appointmentSlots: ArrayList<AppointmentSlotFacade> = arrayListOf()
 
     fun addAppointment(appointment: AppointmentSlotFacadeBuilder.()-> AppointmentSlotFacadeBuilder): AppointmentSlotFacadeArrayBuilder
     {
-        var builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
-        var appointmentBuilder= appointment.invoke(builder)
+        val builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
+        val appointmentBuilder= appointment.invoke(builder)
         appointmentSlots.add(appointmentBuilder.build())
         return this
     }

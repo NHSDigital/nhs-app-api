@@ -1,7 +1,5 @@
 package features.appointments.data
 
-import constants.AppointmentDateTimeFormat
-import features.appointments.factories.IdValue
 import features.appointments.steps.AvailableAppointmentsSteps
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
@@ -9,24 +7,52 @@ import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import worker.models.appointments.SlotResponseObject
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.ArrayList
+import java.util.*
 
-abstract class AppointmentsSlotsExampleBase {
+class AppointmentsSlotsExampleBuilder {
 
-    protected var dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
-    protected var tomorrowDate = LocalDateTime.now().plusDays(1)
+    private var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
+    private var filter: AppointmentFilterFacade = AppointmentFilterFacade("", "", "")
+    private var expectedResponseSlots: ArrayList<SlotResponseObject> = arrayListOf()
+    private var appointmentTypesList: ArrayList<String> = arrayListOf()
+    private var locationsList: ArrayList<String> = arrayListOf()
+    private var cliniciansList: ArrayList<String> = arrayListOf()
 
-    protected abstract val appointmentSessions: ArrayList<AppointmentSessionFacade>
-    protected abstract val filter: AppointmentFilterFacade
-    protected abstract val expectedResponseSlots: ArrayList<SlotResponseObject>
-    protected abstract val appointmentTypesList: ArrayList<String>
-    protected abstract val locationsList: ArrayList<String>
-    protected abstract val cliniciansList: ArrayList<String>
+    fun appointmentSessions(value: ArrayList<AppointmentSessionFacade>): AppointmentsSlotsExampleBuilder {
+        appointmentSessions = value
+        return this
+    }
 
+    fun filterValues(value: AppointmentFilterFacade): AppointmentsSlotsExampleBuilder {
+        filter = value
+        return this
+    }
 
-    fun getExample(): AppointmentSlotsResponseFacade {
+    fun expectedResponseSlots(value: ArrayList<SlotResponseObject>): AppointmentsSlotsExampleBuilder {
+        expectedResponseSlots = value
+        return this
+    }
+
+    fun appointmentTypesList(value: ArrayList<String>): AppointmentsSlotsExampleBuilder {
+        appointmentTypesList = value
+        return this
+    }
+
+    fun locationsList(value: ArrayList<String>): AppointmentsSlotsExampleBuilder {
+        locationsList = value
+        return this
+    }
+
+    fun cliniciansList(value: ArrayList<String>): AppointmentsSlotsExampleBuilder {
+        cliniciansList = value
+        return this
+    }
+
+    fun build(): AppointmentSlotsResponseFacade {
+        return getExample()
+    }
+
+    private fun getExample(): AppointmentSlotsResponseFacade {
 
         val getAppointmentSlotsResponseModel = AppointmentSlotsResponseFacade(appointmentSessions, "1")
         setExpectations(appointmentSessions)
@@ -47,19 +73,10 @@ abstract class AppointmentsSlotsExampleBase {
     }
 
     companion object {
-
-
         const val EXPECTED_APPOINTMENT_TYPE_KEY = "ExpectedAppointmentTypesKey"
         const val EXPECTED_APPOINTMENT_LOCATIONS_KEY = "ExpectedAppointmentLocationsKey"
         const val EXPECTED_APPOINTMENT_CLINICIANS_KEY = "ExpectedAppointmentCliniciansKey"
         const val EXPECTED_APPOINTMENT_FILTER_FACADE_KEY = "ExpectedAppointmentFilterFacadeKey"
         const val EXPECTED_RESPONSE_SLOTS_KEY = "ExpectedResponseSlotsKey"
     }
-
-    protected val clinic = "Clinic"
-    protected val clinicSlot = "Clinic - Slot"
-    protected val locationLeeds = IdValue (1, "Leeds")
-    protected val locationSheffield = IdValue (2, "Sheffield")
-    protected val staffDrWho = IdValue (101, "Dr. Who")
-    protected val staffDrScott = IdValue (102, "Dr. Scott")
 }

@@ -10,6 +10,7 @@ import features.appointments.data.AppointmentsBookingData.Companion.defaultSessi
 import features.appointments.data.AppointmentsBookingData.Companion.defaultSessionStartDate
 import features.appointments.data.AppointmentsBookingData.Companion.pastFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.pastToDate
+import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
@@ -21,6 +22,7 @@ import worker.WorkerClient
 import worker.models.appointments.AppointmentSlotsResponse
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -28,12 +30,13 @@ import javax.servlet.http.Cookie
 
 class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
 
-    @Steps
-    lateinit var availableAppointments: AvailableAppointmentsSteps
-
     @Given("^the system will time out when trying to retrieve appointment slots$")
     fun appointmentSlotsTimesOut() {
-        availableAppointments.appointmentSlotsTimesOut()
+        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        factory.generateExample {
+            respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
+                    .delayedBy(Duration.ofSeconds(90))
+        }
     }
 
     @Given("^online appointment booking is not available to the patient, when wanting to view appointment slots$")

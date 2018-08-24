@@ -48,10 +48,9 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
         mockingClient.forEmis { mapping(appointmentSlotsMetaRequest(patient, startDate, endDate)) }
     }
 
-
     override val zoneOffset= getOffset()
 
-    fun getOffset():ZoneOffset{
+    private fun getOffset():ZoneOffset{
         val odt = OffsetDateTime.now(ZoneId.of("Europe/London"))
         return odt.offset
     }
