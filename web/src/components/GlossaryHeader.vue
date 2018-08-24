@@ -1,10 +1,11 @@
 <template>
   <div :class="$style.info">
     <p>{{ $t('rp01.glossary.headerText') }}</p>
-    <a :href="gloasaryLinkURL" target="_blank">
+    <analytics-tracked-tag :href="glossaryLinkURL" :text="$t('rp01.glossary.linkText')"
+                           tag="a" target="_blank">
       <abbreviations-arrow-right-icon />
       {{ $t('rp01.glossary.linkText') }}
-    </a>
+    </analytics-tracked-tag>
     <hr>
   </div>
 </template>
@@ -12,14 +13,16 @@
 <script>
 /* eslint-disable import/extensions */
 import AbbreviationsArrowRightIcon from './icons/AbbreviationsArrowRightIcon';
+import AnalyticsTrackedTag from './widgets/AnalyticsTrackedTag';
 
 export default {
   components: {
     AbbreviationsArrowRightIcon,
+    AnalyticsTrackedTag,
   },
   data() {
     return {
-      gloasaryLinkURL: process.env.GLOSSARY_LINK_LOCATION,
+      glossaryLinkURL: process.env.GLOSSARY_LINK_LOCATION,
     };
   },
 };
@@ -29,7 +32,7 @@ export default {
     .info {
         margin-bottom: 0.5em;
 
-        p, a {
+        p, a, analytics-tracked-tag {
             padding-bottom: 0.5em;
             padding-top: 0.5em;
         }

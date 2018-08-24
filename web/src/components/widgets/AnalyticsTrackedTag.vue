@@ -16,7 +16,7 @@ export default {
       type: String,
       default: undefined,
     },
-    event: {
+    text: {
       type: String,
       default: undefined,
     },
@@ -32,8 +32,8 @@ export default {
   methods: {
     trackClick(evt) {
       if (window.digitalData) {
-        const el = evt.srcElement;
-        const text = el.innerText.trim();
+        const el = evt.currentTarget;
+        const text = this.text.trim();
         const { pageName } = window.digitalData.page.pageInfo;
         const type = this.getType(el.tagName);
         const navigation = `${pageName}|${type}|${text}`;
@@ -48,7 +48,7 @@ export default {
       switch (tagName) {
         case 'A': return 'text_link'; break;
         case 'H2': return 'accordion'; break;
-        default: return 'unknown_tag'; break;
+        default: return `unhandled_tag:${tagName}`; break;
       }
     },
   },

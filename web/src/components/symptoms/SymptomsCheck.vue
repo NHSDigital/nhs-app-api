@@ -2,26 +2,35 @@
   <div v-if="showTemplate" :class="$style['no-padding']" data-purpose="">
     <ul :class="$style['list-menu']">
       <li>
-        <a id="btn_choices" :href="conditionsCheckerUrl"
-           style="text-decoration: none" target="_blank">
+        <analytics-tracked-tag id="btn_choices" :href="conditionsCheckerUrl"
+                               :class="$style['no-decoration']"
+                               :text="$t('sy01.a_z.subheader')"
+                               tag="a" target="_blank">
           <h2>{{ $t('sy01.a_z.subheader') }}</h2>
           <p>{{ $t('sy01.a_z.body') }}</p>
-        </a>
+        </analytics-tracked-tag>
       </li>
       <li>
-        <a id="btn_111" :href="symptomsCheckerUrl"
-           style="text-decoration: none" target="_blank">
+        <analytics-tracked-tag id="btn_111" :href="symptomsCheckerUrl"
+                               :class="$style['no-decoration']"
+                               :text="$t('sy01.111.subheader')"
+                               tag="a" target="_blank">
           <h2>{{ $t('sy01.111.subheader') }}</h2>
           <p>{{ $t('sy01.111.body') }}</p>
-        </a>
+        </analytics-tracked-tag>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+/* eslint-disable import/extensions */
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
+  components: {
+    AnalyticsTrackedTag,
+  },
   data() {
     return {
       symptomsCheckerUrl: process.env.SYMPTOM_CHECKER_URL,
@@ -34,6 +43,11 @@ export default {
 <style module lang="scss" scoped>
 @import '../../style/buttons';
 @import '../../style/listmenu';
+
+.no-decoration {
+  text-decoration: none;
+}
+
 .no-padding {
   margin-top: -0.5em;
   margin-left: -1em;

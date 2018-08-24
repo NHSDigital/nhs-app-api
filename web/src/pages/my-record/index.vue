@@ -5,80 +5,125 @@
                                     getCollapseState(isPatientDetailsCollapsed)]"
                            :click-func="myRecordSectionClick"
                            :click-param="PATIENTDETAILS"
-                           event="$event" tag="h2">
+                           :text="$t('my_record.patientInfo.sectionHeader')"
+                           data-purpose="accordion"
+                           tag="h2">
       {{ $t('my_record.patientInfo.sectionHeader') }}
     </analytics-tracked-tag>
     <patient-details :is-collapsed="isPatientDetailsCollapsed"
                      :patient-details="patientDetails"/>
 
     <div v-if="myRecord.hasSummaryRecordAccess">
-      <h2 :class="[$style['record-title'],
-                   getCollapseState(isAllergiesAndAdverseReactionsCollapsed)]"
-          @click="myRecordSectionClick(ALLERGIESANDADVERSEREACTIONS)">
+      <analytics-tracked-tag :class="[$style['record-title'],
+                                      getCollapseState(isAllergiesAndAdverseReactionsCollapsed)]"
+                             :click-func="myRecordSectionClick"
+                             :click-param="ALLERGIESANDADVERSEREACTIONS"
+                             :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
+                             data-purpose="accordion"
+                             tag="h2">
         {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
-      </h2>
+      </analytics-tracked-tag>
       <allergies-and-adverse-reactions :is-collapsed="isAllergiesAndAdverseReactionsCollapsed"
                                        :data="myRecord.allergies" />
 
-      <h2 :class="[$style['record-title'], getCollapseState(isAcuteMedicationsCollapsed)]"
-          @click="myRecordSectionClick(ACUTEMEDICATIONS)">
+      <analytics-tracked-tag :class="[$style['record-title'],
+                                      getCollapseState(isAcuteMedicationsCollapsed)]"
+                             :click-func="myRecordSectionClick"
+                             :click-param="ACUTEMEDICATIONS"
+                             :text="$t('my_record.acuteMedications.sectionHeader')"
+                             data-purpose="accordion"
+                             tag="h2">
         {{ $t('my_record.acuteMedications.sectionHeader') }}
-      </h2>
+      </analytics-tracked-tag>
       <medications :is-collapsed="isAcuteMedicationsCollapsed"
                    :data="myRecord.medications.data.acuteMedications"
                    :has-error="myRecord.medications.hasErrored"/>
 
-      <h2 :class="[$style['record-title'], getCollapseState(isCurrentRepeatMedicationsCollapsed)]"
-          @click="myRecordSectionClick(CURRENTREPEATMEDICATIONS)">
+      <analytics-tracked-tag :class="[$style['record-title'],
+                                      getCollapseState(isCurrentRepeatMedicationsCollapsed)]"
+                             :click-func="myRecordSectionClick"
+                             :click-param="CURRENTREPEATMEDICATIONS"
+                             :text="$t('my_record.currentRepeatMedications.sectionHeader')"
+                             data-purpose="accordion"
+                             tag="h2">
         {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
-      </h2>
+      </analytics-tracked-tag>
       <medications :is-collapsed="isCurrentRepeatMedicationsCollapsed"
                    :data="myRecord.medications.data.currentRepeatMedications"
                    :has-error="myRecord.medications.hasErrored" />
 
-      <h2 :class="[$style['record-title'],
-                   getCollapseState(isDiscontinuedRepeatMedicationsCollapsed)]"
-          @click="myRecordSectionClick(DISCONTINUEDREPEATMEDICATIONS)">
+      <analytics-tracked-tag :class="[$style['record-title'],
+                                      getCollapseState(isDiscontinuedRepeatMedicationsCollapsed)]"
+                             :click-func="myRecordSectionClick"
+                             :click-param="DISCONTINUEDREPEATMEDICATIONS"
+                             :text="$t('my_record.discontinuedRepeatMedications.sectionHeader')"
+                             data-purpose="accordion"
+                             tag="h2">
         {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
-      </h2>
+      </analytics-tracked-tag>
       <medications :is-collapsed="isDiscontinuedRepeatMedicationsCollapsed"
                    :data="myRecord.medications.data.discontinuedRepeatMedications"
                    :has-error="myRecord.medications.hasErrored" />
 
       <div v-if="myRecord.hasDetailedRecordAccess">
         <div v-if="myRecord.supplier === 'EMIS'">
-          <h2 :class="[$style['record-title'], getCollapseState(isImmunisationsCollapsed)]"
-              @click="myRecordSectionClick(IMMUNISATIONS)">
+          <analytics-tracked-tag :class="[$style['record-title'],
+                                          getCollapseState(isImmunisationsCollapsed)]"
+                                 :click-func="myRecordSectionClick"
+                                 :click-param="IMMUNISATIONS"
+                                 :text="$t('my_record.immunisations.sectionHeader')"
+                                 data-purpose="accordion"
+                                 tag="h2">
             {{ $t('my_record.immunisations.sectionHeader') }}
-          </h2>
+          </analytics-tracked-tag>
           <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
 
-          <h2 :class="[$style['record-title'], getCollapseState(isProblemsCollapsed)]"
-              @click="myRecordSectionClick(PROBLEMS)">
+          <analytics-tracked-tag :class="[$style['record-title'],
+                                          getCollapseState(isProblemsCollapsed)]"
+                                 :click-func="myRecordSectionClick"
+                                 :click-param="PROBLEMS"
+                                 :text="$t('my_record.problems.sectionHeader')"
+                                 data-purpose="accordion"
+                                 tag="h2">
             {{ $t('my_record.problems.sectionHeader') }}
-          </h2>
+          </analytics-tracked-tag>
           <problems :is-collapsed="isProblemsCollapsed" :data="myRecord.problems" />
 
-          <h2 :class="[$style['record-title'], getCollapseState(isConsultationsCollapsed)]"
-              @click="myRecordSectionClick(CONSULTATIONS)">
+          <analytics-tracked-tag :class="[$style['record-title'],
+                                          getCollapseState(isConsultationsCollapsed)]"
+                                 :click-func="myRecordSectionClick"
+                                 :click-param="CONSULTATIONS"
+                                 :text="$t('my_record.consultations.sectionHeader')"
+                                 data-purpose="accordion"
+                                 tag="h2">
             {{ $t('my_record.consultations.sectionHeader') }}
-          </h2>
+          </analytics-tracked-tag>
           <consultations :is-collapsed="isConsultationsCollapsed"
                          :data="myRecord.consultations" />
         </div>
 
         <div v-if="myRecord.supplier === 'TPP'">
-          <h2 :class="[$style['record-title'], getCollapseState(isEventsCollapsed)]"
-              @click="myRecordSectionClick(EVENTS)">
+          <analytics-tracked-tag :class="[$style['record-title'],
+                                          getCollapseState(isEventsCollapsed)]"
+                                 :click-func="myRecordSectionClick"
+                                 :click-param="EVENTS"
+                                 :text="$t('my_record.events.sectionHeader')"
+                                 data-purpose="accordion"
+                                 tag="h2">
             {{ $t('my_record.events.sectionHeader') }}
-          </h2>
+          </analytics-tracked-tag>
           <events :is-collapsed="isEventsCollapsed" :data="myRecord.tppDcrEvents" />
         </div>
-        <h2 id="testResultsHeader"
-            :class="[$style['record-title'], getCollapseState(isTestResultsCollapsed)]"
-            @click="myRecordSectionClick(TESTRESULTS)">
+        <analytics-tracked-tag id="testResultsHeader"
+                               :class="[$style['record-title'],
+                                        getCollapseState(isTestResultsCollapsed)]"
+                               :click-func="myRecordSectionClick"
+                               :click-param="TESTRESULTS"
+                               :text="getTestResultSectionHeader(myRecord.supplier)"
+                               data-purpose="accordion"
+                               tag="h2">
           {{ getTestResultSectionHeader(myRecord.supplier) }}
-        </h2>
+        </analytics-tracked-tag>
         <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
                       :supplier="myRecord.supplier" />
       </div>
