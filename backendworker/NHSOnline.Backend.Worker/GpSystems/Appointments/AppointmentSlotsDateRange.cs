@@ -1,7 +1,7 @@
 ﻿using System;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
+namespace NHSOnline.Backend.Worker.GpSystems.Appointments
 {
     public class AppointmentSlotsDateRange
     {

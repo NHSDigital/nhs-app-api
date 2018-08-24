@@ -4,10 +4,10 @@ using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
-namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointments
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
 {
     [TestClass]
     public class AppointmentSlotsDateRangeTests

@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                     queryParameters.ToDate
                 );
             
-                var result = await appointmentService.GetSlots(userSession, dateRange.FromDate, dateRange.ToDate);
+                var result = await appointmentService.GetSlots(userSession, dateRange);
 
                 result.Accept(new AppointmentSlotsAuditingVisitor(_auditor));
                 return result.Accept(new AppointmentSlotsResultVisitor());

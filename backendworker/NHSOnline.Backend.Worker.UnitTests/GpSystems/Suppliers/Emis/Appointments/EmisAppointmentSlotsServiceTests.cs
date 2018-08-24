@@ -30,6 +30,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private EmisUserSession _userSession;
+        private AppointmentSlotsDateRange _dateRange;
         private DateTimeOffset _fromdDteTimeOffset;
         private DateTimeOffset _toDateTimeOffset;
         private SlotsMetadataGetQueryParameters _slotsMetadataGetQueryParameters;
@@ -59,6 +60,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
             _fromdDteTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
             _toDateTimeOffset = dateTimeOffsetProvider.CreateDateTimeOffset();
+
+            _dateRange = new AppointmentSlotsDateRange(
+                dateTimeOffsetProvider,
+                _fromdDteTimeOffset,
+                _toDateTimeOffset
+            );
 
             _slotsMetadataGetQueryParameters =
                 new SlotsMetadataGetQueryParameters(_fromdDteTimeOffset, _toDateTimeOffset, UserPatientLinkToken);
@@ -458,7 +465,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 
         private async Task<AppointmentSlotsResult> GetAppointmentSlotsResult()
         {
-            return await _systemUnderTest.GetSlots(_userSession, _fromdDteTimeOffset, _toDateTimeOffset);
+            return await _systemUnderTest.GetSlots(_userSession, _dateRange);
         }
     }
 }

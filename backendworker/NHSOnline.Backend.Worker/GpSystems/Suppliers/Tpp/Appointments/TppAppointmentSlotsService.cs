@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _logger = logger;
             _slotResultBuilder = appointmentSlotResultBuilder;
         }
-        public async Task<AppointmentSlotsResult> GetSlots(UserSession userSession, DateTimeOffset fromDate, DateTimeOffset toDate)
+        public async Task<AppointmentSlotsResult> GetSlots(UserSession userSession, AppointmentSlotsDateRange dateRange)
         {
             try
             {
@@ -31,8 +31,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                 var tppUserSession = (TppUserSession)userSession;
                 var request = new ListSlots
                 {
-                    StartDate = fromDate.DateTime,
-                    NumberOfDays = (toDate - fromDate).Days,
+                    StartDate = dateRange.FromDate.DateTime,
+                    NumberOfDays = (dateRange.ToDate - dateRange.FromDate).Days,
                     UnitId = tppUserSession.UnitId,
                     PatientId = tppUserSession.PatientId,
                     OnlineUserId = tppUserSession.OnlineUserId
