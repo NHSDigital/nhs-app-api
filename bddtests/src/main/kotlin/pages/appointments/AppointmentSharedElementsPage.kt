@@ -14,11 +14,11 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     private val xPathRoot = "//*"
     private val relativeToParentXPath = ".//*"
-    private val appointmentDateXpath = "[@aria-label='date']"
-    private val appointmentTimeXpath = "[@aria-label='start time']"
-    private val appointmentSessionNameXpath = "[@aria-label='session name']"
-    private val appointmentLocationXpath = "[@aria-label='location']"
-    private val appointmentClinicianXPath = "[@aria-label='clinician %d']"
+    private val appointmentDateXpath = "[@data-label='date']"
+    private val appointmentTimeXpath = "[@data-label='start time']"
+    private val appointmentSessionNameXpath = "[@data-label='session name']"
+    private val appointmentLocationXpath = "[@data-label='location']"
+    private val appointmentClinicianXPath = "[@data-label='clinician %d']"
 
     private val inLineError = HybridPageElement(
             browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
@@ -105,10 +105,10 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     }
 
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String) {
-        val cliniciansPresent = driver.findElements(By.xpath("$xPathRoot//span[starts-with(@aria-label, 'clinician')]")).size > 0
+        val cliniciansPresent = driver.findElements(By.xpath("$xPathRoot//span[contains(@data-label, 'clinician')]")).size > 0
         if (!cliniciansPresent) return
 
-        val clinicians = findAllByXpath(parentContainer, "$relativePath//span[starts-with(@aria-label, 'clinician')]")
+        val clinicians = findAllByXpath(parentContainer, "$relativePath//span[contains(@data-label, 'clinician')]")
 
         clinicians.forEach { clinician ->
             slot.clinician.add(clinician.text)

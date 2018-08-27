@@ -1,29 +1,29 @@
 <template>
   <div :class="$style.panel">
-    <h3 aria-label="date">{{ formatDate(appointment.startTime) }}</h3>
-    <h4 aria-label="start time">{{ formatTime(appointment.startTime) }}</h4>
+    <h3 data-label="date">{{ formatDate(appointment.startTime) }}</h3>
+    <h4 data-label="start time">{{ formatTime(appointment.startTime) }}</h4>
     <hr aria-hidden="true">
-    <p :class="$style.session" aria-label="session name">
+    <p :class="$style.session" data-label="session name">
       {{ appointment.type }}
     </p>
     <hr aria-hidden="true">
 
     <p :class="$style.location">
       <location-icon/>&nbsp;
-      <span aria-label="location">{{ appointment.location }}</span>
+      <span data-label="location">{{ appointment.location }}</span>
     </p>
 
     <p v-for="(clinician, index) in appointment.clinicians" :key="clinician"
        :class="$style.person">
       <clinician-icon/>&nbsp;
-      <span :aria-label="'clinician ' + (index +1)">
+      <span :data-label="'clinician ' + (index +1)">
         {{ clinician }}
       </span>
     </p>
 
     <span v-if="showCancellationLink">
       <hr :class="$style.cancel" aria-hidden="true">
-      <p >
+      <p>
         <nuxt-link :class="$style['cancel-link']" to="/appointments/cancel" @click.native="select">
           Cancel appointment
         </nuxt-link>
