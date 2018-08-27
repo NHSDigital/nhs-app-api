@@ -18,6 +18,7 @@
             public const int Status461TooLate = 461;
             public const int Status462FailedToRecordConsent = 462;
             public const int Status463FailedToFetchConsent = 463;
+            public const int Status464ODSCodeNotSupported = 464;
         }
         
         public static class HttpHeaders

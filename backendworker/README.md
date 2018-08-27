@@ -54,7 +54,7 @@ need to run Wiremock and Redis on their own.  To do this run the following in th
 worker directory:
 
 ```
-docker-compose up -f docker-compose.stubs.yml
+docker-compose -f docker-compose.stubs.yml up
 ```
 
 ## Example curls to verify

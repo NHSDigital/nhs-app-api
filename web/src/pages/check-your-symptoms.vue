@@ -1,6 +1,6 @@
 <template>
   <div :class="[getHeaderState(), 'pull-content']">
-    <header-slim/>
+    <header-slim> {{ $t('sy01.pageHeader') }}</header-slim>
     <body>
       <div>
         <symptoms-check/>

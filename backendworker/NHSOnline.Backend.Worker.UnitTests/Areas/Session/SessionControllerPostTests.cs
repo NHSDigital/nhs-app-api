@@ -166,7 +166,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         }
 
         [TestMethod]
-        public async Task Post_UnknownOdsCode_ReturnsForbidden()
+        public async Task Post_UnknownOdsCode_Returns464ODSCodeNotSupported()
         {
             // Arrange
             _mockOdsCodeLookup
@@ -180,7 +180,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Assert
             _mockOdsCodeLookup.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status403Forbidden);
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464ODSCodeNotSupported);
             _mockAuditor.VerifyNoOtherCalls();
         }
 

@@ -31,3 +31,6 @@ svg.back {
 }
 
 </style>
+
+// The script tag and export default are both needed for the unit tests to run
+<script>export default {}; </script>

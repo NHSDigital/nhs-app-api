@@ -42,18 +42,24 @@ const assert = (expectedData) => {
   }
 
   expect(component.vm.getMessage('pageHeader')).toEqual(expectedData.pageHeader);
-  expect(component.find(`#${errorId}`).findAll('p').at(0).text()).toEqual(expectedData.header);
-  if (expectedData.subheader !== '') {
-    expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.subheader);
-    expect(component.find(`#${errorId}`).findAll('p').at(2).text()).toEqual(expectedData.message);
+  if (expectedData.isInformationError !== true) {
+    expect(component.find(`#${errorId}`).findAll('p').at(0).text()).toEqual(expectedData.header);
+    if (expectedData.subheader !== '') {
+      expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.subheader);
+      expect(component.find(`#${errorId}`).findAll('p').at(2).text()).toEqual(expectedData.message);
+    } else {
+      expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.message);
+    }
+    if (expectedData.hasRetryButton) {
+      expect(component.find(`#${errorId}`).find('.button').text()).toEqual(expectedData.retryButtonText);
+      expect(component.vm.getRedirectUrl()).toEqual(expectedData.redirectUrl);
+    } else {
+      expect(component.find(`#${errorId}`).find('button').exists()).toBeFalsy();
+    }
   } else {
-    expect(component.find(`#${errorId}`).findAll('p').at(1).text()).toEqual(expectedData.message);
-  }
-  if (expectedData.hasRetryButton) {
-    expect(component.find(`#${errorId}`).find('.button').text()).toEqual(expectedData.retryButtonText);
-    expect(component.vm.getRedirectUrl()).toEqual(expectedData.redirectUrl);
-  } else {
-    expect(component.find(`#${errorId}`).find('button').exists()).toBeFalsy();
+    expect(component.findAll('h1').at(0).text()).toEqual(expectedData.header);
+    expect(component.findAll('h2').at(0).text()).toEqual(expectedData.subheader);
+    expect(component.findAll('p').at(0).text()).toEqual(expectedData.message);
   }
 };
 
@@ -97,6 +103,15 @@ describe('ApiError.vue', () => {
   each(testData[461]).it('page %s will show correct message when the API returns a 461 too late response', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 461 }, message: 'Too late' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
+  each(testData[464]).it('page %s will show correct message when the API returns a 464 unsupported ods code', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 464 }, message: 'Too late' };
 
     createApiErrorComponent(route, apiError);
 

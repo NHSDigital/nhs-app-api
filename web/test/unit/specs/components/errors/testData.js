@@ -5,6 +5,7 @@ import AppointmentsCancel from './testData/appointments/cancel';
 import PrescriptionsConfirmDetails from './testData/prescriptions/confirm-prescription-details';
 import Prescriptions from './testData/prescriptions/index';
 import PrescriptionsRepeatCourses from './testData/prescriptions/repeat-courses';
+import AuthReturn from './testData/authReturn/index';
 
 const status = [403, 409, 500, 502, 504, 400];
 const testData = {};
@@ -24,5 +25,6 @@ for (let i = 0, max = status.length; i < max; i += 1) {
 
 testData[460] = [[...AppointmentsConfirmation[460]]];
 testData[461] = [[...AppointmentsCancel[461]]];
+testData[464] = [[...AuthReturn[464]]];
 
 export default testData;

@@ -1,6 +1,6 @@
 <template>
   <header v-if="showHeader" :class="[$style.slim]">
-    <h1 :class="[$style.h1]"> {{ $t('sy01.pageHeader') }}</h1>
+    <h1 :class="[$style.h1]"><slot/></h1>
     <a href="/login">
       <back-icon/>
     </a>

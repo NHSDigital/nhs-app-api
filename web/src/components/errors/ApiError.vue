@@ -1,36 +1,50 @@
 <template>
-  <div v-if="isVisible" :id="$style.serverError" class="pull-content">
-    <message-dialog message-type="error">
-      <message-text :is-header="true">{{ header }}</message-text>
-      <message-text v-if="subheader!==''" data-purpose="msg-subheader">
-        {{ subheader }}
-      </message-text>
-      <message-text data-purpose="msg-text">
-        {{ message }}
-      </message-text>
-      <message-text v-if="hasAdditionalInfo" data-purpose="msg-extratext">
-        {{ additionalInfo }}
-      </message-text >
-    </message-dialog>
-    <button v-if="retryButtonText" :class="buttonClasses"
-            data-purpose="retry-or-back-button" @click="onRetryButtonClicked">
-      {{ retryButtonText }}
-    </button>
+  <div v-if="isVisible">
+    <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
+      <message-dialog message-type="error">
+        <message-text :is-header="true">{{ header }}</message-text>
+        <message-text v-if="subheader!==''" data-purpose="msg-subheader">
+          {{ subheader }}
+        </message-text>
+        <message-text data-purpose="msg-text">
+          {{ message }}
+        </message-text>
+        <message-text v-if="hasAdditionalInfo" data-purpose="msg-extratext">
+          {{ additionalInfo }}
+        </message-text >
+      </message-dialog>
+      <button v-if="retryButtonText" :class="buttonClasses"
+              data-purpose="retry-or-back-button" @click="onRetryButtonClicked">
+        {{ retryButtonText }}
+      </button>
+    </div>
+    <div v-else>
+      <header-slim>{{ header }}</header-slim>
+      <div :class="$style['information-error']">
+        <h2>{{ subheader }}</h2>
+        <p>{{ message }}</p>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import HeaderSlim from '@/components/HeaderSlim';
 
 export default {
   components: {
     MessageDialog,
     MessageText,
+    HeaderSlim,
   },
   computed: {
     isVisible() {
       return this.showError();
+    },
+    isStandardError() {
+      return this.showStandardErrorView();
     },
     header() {
       return this.getMessage('header');
@@ -68,6 +82,9 @@ export default {
   methods: {
     showError() {
       return this.$store.getters['errors/showApiError'];
+    },
+    showStandardErrorView() {
+      return this.$store.getters['errors/isStandardError'];
     },
     onRetryButtonClicked() {
       const url = this.getRedirectUrl();
@@ -149,4 +166,11 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/buttons';
+
+  .information-error {
+      margin-top: -2em;
+      p {
+        margin-top: 0.5em
+      }
+  }
 </style>

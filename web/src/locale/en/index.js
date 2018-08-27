@@ -19,6 +19,12 @@ export default {
       subheader: 'Sorry, there\'s been a problem loading this page',
       message: 'Please go back to the homescreen and sign in again.\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
       retryButtonText: 'Back to home',
+      464: {
+        pageHeader: 'Service unavailable - NHS App',
+        header: 'Service unavailable',
+        subheader: 'You cannot currently use this service',
+        message: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
+      },
     },
   },
   rp01: {
