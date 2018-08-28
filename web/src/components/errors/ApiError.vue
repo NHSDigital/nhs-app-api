@@ -160,9 +160,9 @@ export default {
         const pageTitle = this.getMessage('pageTitle');
 
         if (pageTitle && pageTitle !== '') {
-          this.$store.dispatch('header/updatePageTitle', pageTitle);
+          this.$store.dispatch('pageTitle/updatePageTitle', pageTitle);
         } else {
-          this.$store.dispatch('header/updatePageTitle', pageHeader);
+          this.$store.dispatch('pageTitle/updatePageTitle', pageHeader);
         }
 
         this.$store.dispatch('header/updateHeaderText', pageHeader);
