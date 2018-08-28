@@ -473,9 +473,9 @@ export default {
   },
   pageTitles: {
     home: 'Home',
-    prescriptions: 'My repeat prescriptions',
-    repeatPrescriptionCourses: 'Select medication',
-    confirmPrescription: 'Confirm prescription',
+    prescriptions: 'Repeat prescriptions',
+    repeatPrescriptionCourses: 'Select medication - Repeat prescriptions',
+    confirmPrescription: 'Confirm prescription - Repeat prescriptions',
     account: 'My account',
     appointments: 'My appointments',
     appointmentGuidance: 'Check before you book - My appointments',
