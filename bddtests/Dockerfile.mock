@@ -1,6 +1,15 @@
-FROM nhsapp.azurecr.io/nhsonline-stubs-data:latest
+FROM java:8 AS base
 
 ENV wiremockUrl http://nhsonline.stubs:8080
 ENV WAIT_FOR_TIMEOUT 60
+
+RUN apt-get update -y; apt-get install -y netcat; apt-get clean all
+
+WORKDIR /repo
+COPY . .
+RUN ./gradlew mock --no-daemon 2>/dev/null; exit 0;
+
+ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin
+RUN chmod +rx /usr/local/bin/wait-for
 
 CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${wiremockUrl#*//} -- ./gradlew mock -DmockArgs="['mockenvironment']"
