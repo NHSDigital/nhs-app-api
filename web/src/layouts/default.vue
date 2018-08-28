@@ -47,8 +47,9 @@ export default {
         },
       ],
     };
-    if (process.env.NODE_ENV === 'Preview') {
-      head.script.push({ src: 'hotjar.js' });
+
+    if (process.env.HOTJAR_FILENAME) {
+      head.script.push({ src: `hotjar/${process.env.HOTJAR_FILENAME}.js` });
     }
     return head;
   },

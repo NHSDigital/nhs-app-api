@@ -82,5 +82,6 @@ module.exports = {
       process.env.ANALYTICS_SCRIPT_URL || '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
     ANALYTICS_ENVIRONMENT:
       process.env.ANALYTICS_ENVIRONMENT || 'development',
+    HOTJAR_FILENAME: process.env.HOTJAR_FILENAME,
   },
 };
