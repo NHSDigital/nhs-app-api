@@ -3,34 +3,46 @@
     <h2>About us</h2>
     <ul :class="$style['list-menu']">
       <li>
-        <a id="btn_terms" :href="termsAndConditionsURL" target="_blank">
+        <analytics-tracked-tag id="btn_terms" :href="termsAndConditionsURL"
+                               :text="$t('myAccount.termsAndConditions')"
+                               tag="a" target="_blank">
           {{ $t('myAccount.termsAndConditions') }}
-        </a>
+        </analytics-tracked-tag>
       </li>
       <li>
-        <a id="btn_privacy" :href="privacyPolicyURL" target="_blank">
+        <analytics-tracked-tag id="btn_privacy" :href="privacyPolicyURL"
+                               :text="$t('myAccount.privacyPolicy')"
+                               tag="a" target="_blank">
           {{ $t('myAccount.privacyPolicy') }}
-        </a>
+        </analytics-tracked-tag>
       </li>
       <li>
-        <a id="btn_cookies" :href="cookiesPolicyURL" target="_blank">
+        <analytics-tracked-tag id="btn_cookies" :href="cookiesPolicyURL"
+                               :text="$t('myAccount.cookiesPolicy')"
+                               tag="a" target="_blank">
           {{ $t('myAccount.cookiesPolicy') }}
-        </a>
+        </analytics-tracked-tag>
       </li>
       <li>
-        <a id="btn_openSource" :href="openSourceLicensesURL" target="_blank">
+        <analytics-tracked-tag id="btn_openSource" :href="openSourceLicensesURL"
+                               :text="$t('myAccount.openSourceLicenses')"
+                               tag="a" target="_blank">
           {{ $t('myAccount.openSourceLicenses') }}
-        </a>
+        </analytics-tracked-tag>
       </li>
       <li>
-        <a id="btn_help" :href="helpAndSupportURL" target="_blank">
+        <analytics-tracked-tag id="btn_help" :href="helpAndSupportURL"
+                               :text="$t('myAccount.helpAndSupport')"
+                               tag="a" target="_blank">
           {{ $t('myAccount.helpAndSupport') }}
-        </a>
+        </analytics-tracked-tag>
       </li>
     </ul>
-    <floating-button-bottom id="signout-button" :button-classes="['grey']" @on-click="signout()">
-      {{ $t('signOutButton.signOut') }}
-    </floating-button-bottom>
+    <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
+      <floating-button-bottom id="signout-button" :button-classes="['grey']" @on-click="signout()">
+        {{ $t('signOutButton.signOut') }}
+      </floating-button-bottom>
+    </analytics-tracked-tag>
   </div>
 </template>
 
@@ -38,9 +50,11 @@
 <script>
 /* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 
 export default {
   components: {
+    AnalyticsTrackedTag,
     FloatingButtonBottom,
   },
   data() {

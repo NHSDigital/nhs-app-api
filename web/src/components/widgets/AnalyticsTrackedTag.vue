@@ -14,7 +14,7 @@ export default {
     },
     tag: {
       type: String,
-      default: undefined,
+      default: 'DIV',
     },
     text: {
       type: String,
@@ -35,7 +35,8 @@ export default {
         const el = evt.currentTarget;
         const text = this.text.trim();
         const { pageName } = window.digitalData.page.pageInfo;
-        const type = this.getType(el.tagName);
+        const type = (el.hasAttribute('data-purpose')) ? el.getAttribute('data-purpose')
+          : this.getType(el.tagName);
         const navigation = `${pageName}|${type}|${text}`;
         this.$store.dispatch('analytics/trackLink', navigation);
 

@@ -1,70 +1,68 @@
 <template>
   <ul :class="$style.listMenu" data-sid="navigation-list-menu">
     <li :class="$style.listMenuItem">
-      <a :class="$style.listMenuAnchor"
-         href="/symptoms"
-         data-sid="symptoms-list-item"
-         @click="setMenuitemState($event)">
+      <analytics-tracked-tag :class="$style.listMenuAnchor"
+                             :text="$t('navigationMenuList.symptoms')"
+                             href="/symptoms"
+                             data-sid="symptoms-list-item"
+                             tag="a">
         {{ $t('navigationMenuList.symptoms') }}
-      </a>
+      </analytics-tracked-tag>
     </li>
     <li :class="$style.listMenuItem">
-      <a :class="$style.listMenuAnchor"
-         href="/appointments"
-         data-sid="appointments-menu-item"
-         @click="setMenuitemState($event)">
+      <analytics-tracked-tag :class="$style.listMenuAnchor"
+                             :text="$t('navigationMenuList.appointments')"
+                             href="/appointments"
+                             data-sid="appointments-menu-item"
+                             tag="a">
         {{ $t('navigationMenuList.appointments') }}
-      </a>
+      </analytics-tracked-tag>
     </li>
     <li :class="$style.listMenuItem">
-      <a :class="$style.listMenuAnchor"
-         href="/prescriptions"
-         data-sid="prescriptions-menu-item"
-         @click="setMenuitemState($event)">
+      <analytics-tracked-tag :class="$style.listMenuAnchor"
+                             :text="$t('navigationMenuList.prescriptions')"
+                             href="/prescriptions"
+                             data-sid="prescriptions-menu-item"
+                             tag="a">
         {{ $t('navigationMenuList.prescriptions') }}
-      </a>
+      </analytics-tracked-tag>
     </li>
     <li :class="$style.listMenuItem">
-      <a :class="$style.listMenuAnchor"
-         href="/my-record/myrecordwarning"
-         data-sid="myrecord-menu-item"
-         @click="setMenuitemState($event)">
+      <analytics-tracked-tag :class="$style.listMenuAnchor"
+                             :text="$t('navigationMenuList.myRecord')"
+                             href="/my-record/myrecordwarning"
+                             data-sid="myrecord-menu-item"
+                             tag="a">
         {{ $t('navigationMenuList.myRecord') }}
-      </a>
+      </analytics-tracked-tag>
     </li>
     <li :class="$style.listMenuItem">
-      <a :class="$style.listMenuAnchor"
-         :href="organDonationUrl"
-         data-sid="organ-donation-menu-item"
-         target="_blank"
-         @click="setMenuitemState($event)">
+      <analytics-tracked-tag :class="$style.listMenuAnchor"
+                             :href="organDonationUrl"
+                             :text="$t('navigationMenuList.organDonation')"
+                             data-sid="organ-donation-menu-item"
+                             tag="a"
+                             target="_blank">
         {{ $t('navigationMenuList.organDonation') }}
-      </a>
+      </analytics-tracked-tag>
     </li>
   </ul>
 </template>
 
 <script>
+/* eslint-disable import/extensions */
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+
 export default {
   name: 'NavigationListMenu',
+  components: {
+    AnalyticsTrackedTag,
+  },
   data() {
     return {
       organDonationUrl: process.env.ORGAN_DONATION_URL,
       dataSharingUrl: process.env.DATA_SHARING_URL,
     };
-  },
-  methods: {
-    setMenuitemState(event) {
-      const a = event.currentTarget;
-      this.$store.app.$analytics.trackButtonClick(a.pathname);
-      if (a.target === '_blank') {
-        window.open(a.href, '_blank');
-      } else {
-        this.$router.push(a.pathname);
-      }
-
-      event.preventDefault();
-    },
   },
 };
 </script>
