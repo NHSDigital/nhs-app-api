@@ -39,6 +39,10 @@ export default {
     const param = {
       appointmentBookRequest: slot,
     };
+    if (process.client) {
+      // eslint-disable-next-line no-underscore-dangle
+      window._satellite.track('track_appointment_booked');
+    }
     return this.app.$http
       .postV1PatientAppointments(param);
   },

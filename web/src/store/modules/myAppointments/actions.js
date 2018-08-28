@@ -38,6 +38,11 @@ export default {
       appointmentCancelRequest: data,
     };
 
+    if (process.client) {
+      // eslint-disable-next-line no-underscore-dangle
+      window._satellite.track('track_appointment_cancelled');
+    }
+
     return this.app.$http
       .deleteV1PatientAppointments(param);
   },
