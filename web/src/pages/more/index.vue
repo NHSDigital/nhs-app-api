@@ -10,8 +10,9 @@
         </a>
       </li>
       <li>
-        <a id="btn_111" :href="dataSharingUrl"
-           style="text-decoration: none" target="_blank">
+        <a id="btn_111" href="/data-sharing"
+           style="text-decoration: none"
+           @click="navigate($event)">
           <h2>{{ $t('sc04.dataSharing.subheader') }}</h2>
           <p>{{ $t('sc04.dataSharing.body') }}</p>
         </a>
@@ -25,8 +26,13 @@ export default {
   data() {
     return {
       organDonationUrl: process.env.ORGAN_DONATION_URL,
-      dataSharingUrl: process.env.DATA_SHARING_URL,
     };
+  },
+  methods: {
+    navigate(event) {
+      this.$router.push(event.currentTarget.pathname);
+      event.preventDefault();
+    },
   },
 };
 </script>

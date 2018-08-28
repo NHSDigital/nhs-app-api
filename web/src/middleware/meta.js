@@ -93,6 +93,9 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.more';
       route.meta.pageTitleKey = 'pageTitles.more';
       break;
+    case Routes.DATA_SHARING_PREFERENCES.name:
+      route.meta.headerKey = 'pageHeaders.dataSharing';
+      break;
     default:
       route.meta.headerKey = '';
       route.meta.pageTitleKey = '';

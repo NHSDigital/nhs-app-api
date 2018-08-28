@@ -474,6 +474,7 @@ export default {
     appointmentConfirmation: 'Confirm appointment',
     myRecord: 'My medical record',
     symptoms: 'Check my symptoms',
+    dataSharing: 'Sharing health data preferences',
     more: 'More',
     login: 'Login',
   },
@@ -574,6 +575,51 @@ export default {
     111: {
       subheader: 'Check if I need urgent help',
       body: 'Answer online questions to get instant advice or medical help near you',
+    },
+  },
+  ds01: {
+    header: 'Sharing health data preferences',
+    titles: {
+      p1: 'Overview',
+      p2: 'Manage your choice',
+    },
+    subtitle: 'Manage your data choice',
+    startNowButton: 'Start Now',
+    nextButton: 'Next',
+    previousButton: 'Previous',
+    pages: {
+      p1: {
+        intro: {
+          paragraph: 'This service allows you to choose whether or not your confidential patient information is used for research and planning. You can make or change your decision at any time. Unless you have chosen to opt out, your confidential patient information can and may be used for research and planning.',
+        },
+        confidential: {
+          title: 'Confidential patient information',
+          paragraphs: [
+            'Confidential patient information identifies you and says something about your health care or treatment. Information that only identifies you like your name and address is not confidential patient information.',
+            'Health and care professionals may use your confidential patient information to help with your treatment and care. This information is also used to research cures for serious illnesses and to improve health and care services.',
+          ],
+        },
+        yourChoice: {
+          title: 'Your choice',
+          paragraph: 'If you don’t want your confidential patient information to be used for research and planning, you can opt out of this. Your confidential patient information will still be used to support your individual care as any choice you set will not change this. If you do not wish to opt out, you don’t have to do anything at all.',
+          manageChoiceLink: 'Manage your choice',
+        },
+        moreOptions: {
+          title: 'More options',
+          paragraph: {
+            part1: 'Visit the ',
+            nhsWebsiteLink: 'NHS Website',
+            part3: ' for more information or to find out how to manage a choice on behalf of another person.',
+          },
+        },
+      },
+      p2: {
+        paragraphs: [
+          'If you decide to opt out, this will be respected and applied by NHS Digital and Public Health England. These organisations collect, process and release health and adult social care data on a national basis. Your decision will also be respected and applied by all other organisations that are responsible for health and care information by March 2020.',
+          'An opt-out will only apply to the health and care system in England. This does not apply to your health data where you have accessed health or care services outside of England, such as in Scotland and Wales.',
+          'If you choose to opt out, your data may still be used during some specific situations. For example, during an epidemic where there might be a risk to other people’s health.',
+        ],
+      },
     },
   },
 };

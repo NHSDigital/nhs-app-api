@@ -75,5 +75,9 @@ export default {
     name: 'check-your-symptoms',
     path: '/check-your-symptoms',
   },
+  DATA_SHARING_PREFERENCES: {
+    name: 'data-sharing',
+    path: '/data-sharing',
+  },
 };
 

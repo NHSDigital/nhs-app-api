@@ -17,5 +17,5 @@ Feature: Invoke Organ Donation and Data Sharing
   Scenario: User clicks on the 'Set health data sharing preferences'
     Given I am on the More Page
     When I choose to set my data sharing preferences
-    Then a new tab opens https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/
+    Then I am on the Data Sharing page
 

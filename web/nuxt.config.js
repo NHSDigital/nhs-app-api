@@ -68,6 +68,12 @@ module.exports = {
       process.env.GLOSSARY_LINK_LOCATION ||
       'https://www.england.nhs.uk/participation/resources/involvejargon/',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online',
+    YOUR_NHS_DATA_MATTERS_URL:
+      process.env.YOUR_NHS_DATA_MATTERS_URL ||
+      'https://www.nhs.uk/your-nhs-data-matters/',
+    DATA_PREFERENCES_URL:
+      process.env.DATA_PREFERENCES_URL ||
+      'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',
     ANDROID_CID_REDIRECT_URI:
