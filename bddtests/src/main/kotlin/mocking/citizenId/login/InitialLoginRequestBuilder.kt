@@ -4,14 +4,16 @@ import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class InitialLoginRequestBuilder(redirectUri: String, clientId: String)
+class InitialLoginRequestBuilder(redirectUri: String, clientId: String, matcherToUse:String? = null)
     : CitizenIdMappingBuilder("GET", "/authorize") {
 
     init {
-        requestBuilder
-                .andQueryParameter("redirect_uri", redirectUri)
-                .andQueryParameter("client_id", clientId)
-                .andQueryParameter("response_type", "code")
+            val matcherString = matcherToUse?: "equalTo"
+            requestBuilder
+                    .andQueryParameter("redirect_uri", redirectUri,matcherString)
+                    .andQueryParameter("client_id", clientId)
+                    .andQueryParameter("response_type", "code")
+
     }
 
     fun respondWithLoginPage(): Mapping {

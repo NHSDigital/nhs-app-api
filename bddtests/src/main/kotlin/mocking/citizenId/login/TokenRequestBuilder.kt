@@ -1,18 +1,15 @@
 package mocking.citizenId.login
 
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.login.token.SucceededResponse
 import mocking.defaults.MockDefaults
 import mocking.models.Mapping
-import models.Patient
 import org.apache.http.HttpStatus
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
-class TokenRequestBuilder(codeVerifier: String, authCode: String?)
+class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRequest: TokenRequest? =null)
     : CitizenIdMappingBuilder("POST", "/token") {
 
     init {
@@ -21,7 +18,8 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?)
                 .andHeader("Content-Type", "application/x-www-form-urlencoded")
 
         // add token query parameters
-        val tokenRequest = TokenRequest(codeVerifier, code = authCode)
+
+        val tokenRequest = customTokenRequest ?: TokenRequest(codeVerifier, code = authCode)
         val body = tokenRequestToQueryParams(tokenRequest)
         requestBuilder.andBody(body, "matches")
     }

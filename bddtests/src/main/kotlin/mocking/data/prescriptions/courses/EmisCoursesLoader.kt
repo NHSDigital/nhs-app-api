@@ -2,6 +2,7 @@ package mocking.data.prescriptions.courses
 
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.emis.models.PrescriptionType
+import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
 import java.util.UUID
 

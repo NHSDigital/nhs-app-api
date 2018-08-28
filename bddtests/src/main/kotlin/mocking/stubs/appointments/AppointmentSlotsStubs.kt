@@ -1,0 +1,44 @@
+package mocking.stubs.appointments
+
+import mocking.MockingClient
+import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
+import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS
+import mocking.stubs.StubsPatientFactory.Companion.serviceNotEnabledPatientEMIS
+import mocking.stubs.StubsPatientFactory.Companion.timeoutPatientEMIS
+import mocking.stubs.InputResponse
+import mocking.stubs.StubbedEnvironment.Companion.TIMEOUT_DELAY
+import mocking.stubs.appointments.factories.AppointmentsSlotsExample
+import models.Patient
+import java.time.Duration
+
+class AppointmentSlotsStubs (private val mockingClient: MockingClient) {
+
+
+    fun generateEMISStubs() {
+        val facade = AppointmentsSlotsExample.multipleSlotsOneLocation()
+        val mapAppointmentSlotsStubs =
+                InputResponse<Patient, IAppointmentSlotsBuilder>()
+                        .addResponse(goodPatientEMIS) { builder
+                            ->
+                            builder.respondWithSuccess(facade)
+                        }
+
+                        .addResponse(serviceNotEnabledPatientEMIS) { builder
+                            ->
+                            builder.respondWithExceptionWhenNotEnabled()
+                        }
+
+                        .addResponse(timeoutPatientEMIS) { builder
+                            ->
+                            builder.withDelay(Duration.ofSeconds(TIMEOUT_DELAY))
+                                    .respondWithSuccess(facade)
+                        }
+
+        mapAppointmentSlotsStubs.listResponse().forEach { scenario ->
+            mockingClient.forEmis { scenario.getResponse(appointmentSlotsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis {
+                scenario.getResponse(appointmentSlotsMetaRequest(scenario.forMatcher))
+            }
+        }
+    }
+}

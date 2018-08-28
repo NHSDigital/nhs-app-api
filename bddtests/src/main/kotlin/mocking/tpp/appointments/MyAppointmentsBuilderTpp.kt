@@ -22,6 +22,10 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
         return respondWithBody(body)
     }
 
+    override fun respondWithUnknownException(): Mapping {
+        throw Exception("Test Setup Incorrect: respondWithUnknownException() is not yet implemented in MyAppointmentsBuilderTpp")
+    }
+
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         return responseErrorWhenGPDisabledAppointmentsService()
     }

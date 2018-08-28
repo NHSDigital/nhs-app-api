@@ -6,7 +6,7 @@ import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import mocking.data.prescriptions.courses.EmisCoursesLoader
-import mocking.data.prescriptions.courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
 import mocking.data.prescriptions.courses.TppCoursesLoader
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps

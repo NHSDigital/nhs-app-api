@@ -2,7 +2,6 @@ package mocking.defaults.dataPopulation.journies.session
 
 import config.Config
 import mocking.MockingClient
-import mocking.citizenId.models.IdTokenBuilder
 import mocking.citizenId.models.signingKeys.SuceededResponse
 import models.Patient
 

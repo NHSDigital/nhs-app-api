@@ -1,4 +1,4 @@
-package mocking.data.prescriptions.courses
+package mocking.gpServiceBuilderInterfaces.Courses
 
 import models.prescriptions.MedicationCourse
 
@@ -11,5 +11,5 @@ interface ICoursesLoader<T> {
                  includeDosage: Boolean,
                  includeQuantity: Boolean)
 
-    fun getAvailableCoursesFilteredSortedOrdered() : List<MedicationCourse>
+    fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse>
 }

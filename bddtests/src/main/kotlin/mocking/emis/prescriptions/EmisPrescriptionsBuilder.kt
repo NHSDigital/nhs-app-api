@@ -1,6 +1,5 @@
 package mocking.emis.prescriptions
 
-import constants.EmisResponseCode
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -23,6 +22,7 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
                                 toDate: OffsetDateTime?)
     : EmisMappingBuilder(configuration, "GET", "/prescriptionrequests") {
 
+    lateinit var data:PrescriptionRequestsGetResponse
     init {
         requestBuilder
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)

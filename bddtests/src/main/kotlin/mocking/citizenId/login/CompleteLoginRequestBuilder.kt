@@ -5,14 +5,13 @@ import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import models.Patient
 
-class CompleteLoginRequestBuilder(val patient: Patient = MockDefaults.patient)
+class CompleteLoginRequestBuilder(val patient: Patient = MockDefaults.patient, customId: String? = null)
     : CitizenIdMappingBuilder("GET",
         "/complete-login") {
 
     init {
-        requestBuilder.andQueryParameter("mock_patient",
-                patient.hashCode().toString(),
-                "equalTo")
+        val customIdForLogin = customId ?: patient.hashCode().toString()
+        requestBuilder.andQueryParameter("mock_patient",customIdForLogin , "equalTo")
     }
 
     fun respondWithRedirectResponse(): Mapping {

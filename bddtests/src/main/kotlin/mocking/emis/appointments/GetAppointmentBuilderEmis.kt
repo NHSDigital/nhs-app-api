@@ -1,9 +1,12 @@
 package mocking.emis.appointments
 
+import constants.EmisResponseCode
+import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
+import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import models.Patient
@@ -23,6 +26,25 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         return responseErrorForbiddenService()
+    }
+
+    override fun respondWithUnknownException(): Mapping {
+        val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
+                "Unknown Exception")
+        return respondWithException(exceptionResponse)
+    }
+
+    private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
+        return respondWithBody(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+    }
+
+    private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_OK): Mapping {
+
+        return respondWith(statusCode) {
+            andJsonBody(body, GsonFactory.asPascal)
+                    .andDelay(delayMillisecs)
+
+        }
     }
 
     override fun respondWithSuccess(body: String): Mapping {
