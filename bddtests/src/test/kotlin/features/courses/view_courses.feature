@@ -198,6 +198,7 @@ Feature: View courses
       | TPP       |
 
   @NHSO-556
+  @bug @NHSO-2324
   Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -209,6 +210,7 @@ Feature: View courses
     Then I see a message informing me that I don't currently have access to this service
 
   @NHSO-556
+  @bug @NHSO-2324
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined
     And I have historic prescriptions

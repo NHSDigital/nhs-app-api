@@ -7,7 +7,7 @@ Feature: My Record - Clinical Abbreviations
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
     When I click the clinical abbreviations link
-    Then a new tab opens https://beta.nhs.uk/
+    Then a new tab opens https://www.england.nhs.uk/participation/resources/involvejargon/
 
   Examples:
     |Service|
