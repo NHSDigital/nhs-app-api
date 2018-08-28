@@ -146,7 +146,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.CID.Linkage
 
             new LinkageDataItem { NhsNumber = "5454253356",
                 LinkageResponse = new LinkageResponse
-                    { AccountId = "897348", LinkageKey = "vVGO8bgV6fvPb", OdsCode = "A29928" }}
+                    { AccountId = "897348", LinkageKey = "vVGO8bgV6fvPb", OdsCode = "A29928" }},
+
+            new LinkageDataItem { NhsNumber = "9658527000",
+                LinkageResponse = new LinkageResponse
+                    { AccountId = "1481029928", LinkageKey = "qECxDHZEUAAq2", OdsCode = "A29928" }},
+
+            new LinkageDataItem { NhsNumber = "9658527019",
+                LinkageResponse = new LinkageResponse
+                    { AccountId = "1490029928", LinkageKey = "TumqMHZEUAGb8", OdsCode = "A29928" }},
         };
 
         public static readonly List<LinkageDataItem> ExpiredPatientLinkage = new List<LinkageDataItem>
