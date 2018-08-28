@@ -10,6 +10,7 @@ Feature: Sign out of mobile web
   @NHSO-186
   @NHSO-985
   @smoketest
+  @pending
   Scenario Outline: A <GP Supplier> user is shown the onboarding sign in screen after clicking the "Sign out" button
     Given I am logged in as a <GP Supplier> user
     When I sign out

@@ -62,6 +62,7 @@ Feature: Authorisation occurs during each URL visit
 
   @NHSO-906
   @NHSO-1012
+  @pending
   Scenario Outline: User browses to <URL> when logged in
     Given I am logged in
     And I see the home page
