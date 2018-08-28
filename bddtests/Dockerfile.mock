@@ -7,9 +7,9 @@ RUN apt-get update -y; apt-get install -y netcat; apt-get clean all
 
 WORKDIR /repo
 COPY . .
-RUN ./gradlew mock --no-daemon 2>/dev/null; exit 0;
+RUN ./gradlew --build-cache mock --no-daemon 2>/dev/null; exit 0;
 
 ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin
 RUN chmod +rx /usr/local/bin/wait-for
 
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${wiremockUrl#*//} -- ./gradlew mock -DmockArgs="['mockenvironment']"
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${wiremockUrl#*//} -- ./gradlew --build-cache mock -DmockArgs="['mockenvironment']"
