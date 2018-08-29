@@ -36,10 +36,14 @@
 	<string>/account</string>
 	<key>SessionUrlPath</key>
 	<string>/session</string>
+	<key>BaseScheme</key>
+	<string>https</string>
 	<key>NhsOnlineRequiredQueryString</key>
 	<string>?source=ios</string>
 	<key>CheckSymptomsUrlPath</key>
 	<string>/check-your-symptoms</string>
+	<key>AppScheme</key>
+	<string>nhsapp</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
 </dict>

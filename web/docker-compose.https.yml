@@ -15,7 +15,7 @@ services:
     environment:
       - API_HOST=https://local.bitraft.io:444
       - CID_REDIRECT_URI=https://local.bitraft.io/auth-return
-      - ANDROID_CID_REDIRECT_URI=nhsapp://local.bitraft.io/auth-return
+      - NATIVE_CID_REDIRECT_URI=nhsapp://local.bitraft.io/auth-return
   nhsonline.backend.worker:
     environment:
       - NHS_WEB_APP_BASE_URL=https://local.bitraft.io/

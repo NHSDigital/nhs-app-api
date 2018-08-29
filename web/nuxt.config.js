@@ -76,8 +76,8 @@ module.exports = {
       'https://ndopapp-int1.thunderbird.service.nhs.uk/createsession',
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://localhost:3000/auth-return',
-    ANDROID_CID_REDIRECT_URI:
-      process.env.ANDROID_CID_REDIRECT_URI || 'nhsapp://10.0.2.2:3000/auth-return',
+      NATIVE_CID_REDIRECT_URI:
+      process.env.NATIVE_CID_REDIRECT_URI || 'nhsapp://10.0.2.2:3000/auth-return',
     CID_AUTH_ENDPOINT:
       process.env.CID_AUTH_ENDPOINT
       || 'https://auth.uat.signin.nhs.uk/authorize',

@@ -20,8 +20,8 @@ class AuthorizationService {
 
   static getRedirectUri(state) {
     const device = state.device.source;
-    if (device === 'android') {
-      return process.env.ANDROID_CID_REDIRECT_URI;
+    if (device === 'android' || device === 'ios') {
+      return process.env.NATIVE_CID_REDIRECT_URI;
     }
 
     return process.env.CID_REDIRECT_URI;
