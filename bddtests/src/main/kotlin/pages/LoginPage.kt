@@ -12,7 +12,7 @@ import org.junit.Assert.assertTrue
 class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val symptomsButtonHeading = HybridPageElement(
-            browserLocator = "//h2[contains(text(), 'How are you feeling right now?')]",
+            browserLocator = "//h2[contains(text(), 'How are you feeling today?')]",
             androidLocator = null,
             page = this
     )
@@ -24,7 +24,7 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     )
 
     val loginOrCreateAccountButtonHeading = HybridPageElement(
-            browserLocator = "//h2[contains(text(), 'Want to book an appointment or order a repeat prescription?')]",
+            browserLocator = "//h2[contains(text(), 'To access your GP services')]",
             androidLocator = null,
             page = this
     )
