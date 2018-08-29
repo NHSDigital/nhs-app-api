@@ -56,4 +56,4 @@ COPY --chown=nodejs:nodejs --from=build /opt/app/test ./test
 ENV NODE_ENV=production
 
 EXPOSE $PORT
-CMD npm run build && npm run start
+CMD sudo update-ca-certificates && npm run build && npm run start

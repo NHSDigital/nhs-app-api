@@ -1,11 +1,14 @@
 FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y netcat && \
+    apt-get install -y netcat sudo && \
     rm -rf /var/lib/apt/lists/* && \
     useradd -m aspnetcore && \
     curl -L -o /usr/local/bin/wait-for https://raw.githubusercontent.com/eficode/wait-for/master/wait-for && \
     chmod +rx /usr/local/bin/wait-for
+
+RUN echo "aspnetcore ALL=(ALL) NOPASSWD: /usr/sbin/update-ca-certificates" >> /etc/sudoers.d/default; \
+    chmod 400 /etc/sudoers.d/default
 
 FROM microsoft/dotnet:2.1-sdk AS build
 RUN apt-get update && \
@@ -85,4 +88,4 @@ RUN update-ca-certificates
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- dotnet NHSOnline.Backend.Worker.dll
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && dotnet NHSOnline.Backend.Worker.dll
