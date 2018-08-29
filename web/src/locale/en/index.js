@@ -202,6 +202,7 @@ export default {
       bookButtonText: 'Continue',
       backButtonText: 'Back to my appointments',
       noSlots: 'No appointments available',
+      availableAppointmentsScreenReaderMessage: '0 appointments available | 1 appointment available | {appointmentsCount} appointments available',
       gpMessage: {
         header: 'Which type of appointment do I need?',
       },

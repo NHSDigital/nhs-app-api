@@ -5,6 +5,7 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import BookingPage from '@/pages/appointments/booking';
 
 const $t = key => `translate_${key}`;
+const $tc = key => `translate_${key}`;
 
 const createBookingPage = ($store, data = []) => {
   const $http = jest.fn();
@@ -24,6 +25,7 @@ const createBookingPage = ($store, data = []) => {
       $http,
       $store,
       $t,
+      $tc,
       $style,
       showTemplate: () => true,
     },

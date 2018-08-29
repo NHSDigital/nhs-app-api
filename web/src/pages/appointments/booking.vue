@@ -1,5 +1,15 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
+
+    <ul :class="$style['sr-only']" role="presentation"
+        aria-live="polite" aria-relevant="additions" aria-atomic="false">
+      <li v-for="(text, index) in availableAppointmentsScreenReaderMessage" :key="index">
+        <span :aria-hidden="availableAppointmentsScreenReaderMessage.length !== (index + 1)">
+          {{ text }}
+        </span>
+      </li>
+    </ul>
+
     <message-dialog v-if="noAvailableAppointments" message-type="warning">
       <message-text :is-header="true">
         {{ $t('appointments.booking.noAppointmentsAvailable.title') }}
@@ -98,6 +108,7 @@ export default {
         isLocationValid: true,
       },
       filters: null,
+      availableAppointmentsScreenReaderMessage: [],
     };
   },
   computed: {
@@ -131,6 +142,13 @@ export default {
     loadComplete() {
       return this.$store.state.availableAppointments.hasLoaded;
     },
+    numberOfAvailableAppointments() {
+      let count = 0;
+      this.availableSlots.forEach((value) => {
+        count += value[1].length;
+      });
+      return count;
+    },
   },
   mounted() {
     this.$store.dispatch('availableAppointments/init');
@@ -156,6 +174,14 @@ export default {
       this.showValidationError = false;
       this.validationError.isTypeValid = true;
       this.validationError.isLocationValid = true;
+
+      const screenReaderMessage = this.$tc(
+        'appointments.booking.availableAppointmentsScreenReaderMessage',
+        this.numberOfAvailableAppointments,
+        { appointmentsCount: this.numberOfAvailableAppointments },
+      );
+
+      this.availableAppointmentsScreenReaderMessage.push(screenReaderMessage);
     },
     onConfirmButtonClicked() {
       this.validate();
@@ -218,6 +244,7 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../../style/buttons";
+@import "../../style/accessibility";
 
 div:focus {
   outline: none !important;
