@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Worker.Settings
 {
@@ -13,6 +14,8 @@ namespace NHSOnline.Backend.Worker.Settings
         public int DefaultSessionExpiryMinutes { get; set; }
 
         public int DefaultHttpTimeoutSeconds { get; set; }
+        
+        public int MinimumAge { get; set; }
 
         public const string ConfigurationSectionName = "ConfigurationSettings";
 
@@ -48,6 +51,11 @@ namespace NHSOnline.Backend.Worker.Settings
             if (DefaultHttpTimeoutSeconds == default(int))
             {
                 throw new ConfigurationNotFoundException(nameof(DefaultHttpTimeoutSeconds));
+            }
+            
+            if (MinimumAge == default(int))
+            {
+                throw new ConfigurationNotFoundException(nameof(MinimumAge));
             }
         }
     }

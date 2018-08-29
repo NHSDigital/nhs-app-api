@@ -28,6 +28,12 @@ export default {
         subheader: 'You cannot currently use this service',
         message: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
       },
+      465: {
+        pageHeader: 'Service unavailable - NHS App',
+        header: 'Service unavailable',
+        subheader: 'You cannot currently use this service',
+        message: 'As you’re under 16, you cannot currently access the NHS App. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
+      },
     },
   },
   rp01: {

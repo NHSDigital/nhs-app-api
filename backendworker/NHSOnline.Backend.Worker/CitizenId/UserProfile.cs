@@ -4,5 +4,7 @@
     {
         public string Im1ConnectionToken { get; set; }
         public string OdsCode { get; set; }
+        public string DateOfBirth { get; set; }
+        public string NhsNumber { get; set; }
     }
 }

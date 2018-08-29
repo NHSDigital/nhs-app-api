@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -40,6 +41,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IOptions<ConfigurationSettings>> _configurationSettings;
         private Mock<IAntiforgery> _mockAntiforgery;
         private Mock<IAuditor> _mockAuditor;
+        private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
+        private const string DATE_FORMAT = "yyyy-MM-dd";
+
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
@@ -59,6 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
+            _userProfile.DateOfBirth = DateTime.Now.ToString(DATE_FORMAT, CultureInfo.InvariantCulture);
             _name = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             _sessionTimeoutSeconds = _sessionTimeoutMinutes * 60;
@@ -128,6 +133,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockAntiforgery = _fixture.Freeze<Mock<IAntiforgery>>();
             _mockAntiforgery.Setup(x => x.GetTokens(httpContextMock.Object)).Returns(new AntiforgeryTokenSet(CsrfRequestToken, "", "", ""));
 
+            _mockMinimumAgeValidator = _fixture.Freeze<Mock<IMinimumAgeValidator>>();
+            _mockMinimumAgeValidator
+                .Setup(x => x.IsValid(It.IsAny<DateTime>()))
+                .Returns(true);
+            
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAuthenticationService)))
                 .Returns(_authenticationServiceMock.Object);
@@ -180,7 +190,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Assert
             _mockOdsCodeLookup.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464ODSCodeNotSupported);
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464ODSCodeNotSupportedOrNoNhsNumber);
             _mockAuditor.VerifyNoOtherCalls();
         }
 
@@ -259,13 +269,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             {
                 Name = _name,
                 SessionTimeout = _sessionTimeoutSeconds,
-                OdsCode = _userProfile.OdsCode
+                OdsCode = _userProfile.OdsCode,
+                DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DATE_FORMAT,
+                    CultureInfo.InvariantCulture),
+                NhsNumber = _userProfile.NhsNumber,
             };
 
             actualUserSessionResponse.Name.Should().Be(expectedUserSessionResponse.Name);
             actualUserSessionResponse.SessionTimeout.Should().Be(expectedUserSessionResponse.SessionTimeout);
             actualUserSessionResponse.Token.Should().Be(CsrfRequestToken);
             actualUserSessionResponse.OdsCode.Should().Be(expectedUserSessionResponse.OdsCode);
+            actualUserSessionResponse.DateOfBirth.Should().Be(expectedUserSessionResponse.DateOfBirth);
+            actualUserSessionResponse.NhsNumber.Should().Be(expectedUserSessionResponse.NhsNumber);
         }
 
         [TestMethod]
@@ -286,6 +301,55 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockSessionService.VerifyAll();
             _authenticationServiceMock.VerifyAll();
             _mockAntiforgery.VerifyAll();
+        }
+        
+        [TestMethod]
+        public async Task Post_Im1ConnectionTokenFailsMinimumAgeValidation_Returned465FailedAgeRequirement()
+        {
+            // Arrange
+            _mockMinimumAgeValidator
+                .Setup(x => x.IsValid(It.IsAny<DateTime>())).Returns(false)
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            _mockMinimumAgeValidator.Verify();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
+            _mockAuditor.VerifyNoOtherCalls();
+        }
+        
+        [TestMethod]
+        public async Task Post_Im1ConnectionTokenFailsMinimumAgeValidation_NullDateOfBirth_Returned465FailedAgeRequirement()
+        {
+            // Arrange
+            _fixture.Freeze<UserProfile>().DateOfBirth = null;
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            _mockMinimumAgeValidator.Verify();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
+            _mockAuditor.VerifyNoOtherCalls();
+        }
+        
+        [TestMethod]
+        public async Task Post_Im1ConnectionTokenNoNhsNumber_Returned464NoNhsNumber()
+        {
+            // Arrange
+            _fixture.Freeze<UserProfile>().NhsNumber = null;
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464ODSCodeNotSupportedOrNoNhsNumber);
+            _mockAuditor.VerifyNoOtherCalls();
         }
     }
 }

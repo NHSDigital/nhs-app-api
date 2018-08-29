@@ -52,6 +52,8 @@ namespace NHSOnline.Backend.Worker.CitizenId
 
                 var im1Token = principal.FindFirstValue(Constants.CitizenIdClaimTypes.Im1ConnectionTokenClaim);
                 var odsCode = principal.FindFirstValue(Constants.CitizenIdClaimTypes.OdscodeClaim);
+                var dateOfBirth = principal.FindFirstValue(ClaimTypes.DateOfBirth);
+                var nhsNumber = principal.FindFirstValue(Constants.CitizenIdClaimTypes.NhsNumber);
             
                 if (im1Token == null)
                 {
@@ -68,7 +70,9 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 return Option.Some(new UserProfile()
                 {
                     Im1ConnectionToken = im1Token,
-                    OdsCode = odsCode
+                    OdsCode = odsCode,
+                    DateOfBirth = dateOfBirth,
+                    NhsNumber = nhsNumber,
                 });
             }
             catch (Exception e)

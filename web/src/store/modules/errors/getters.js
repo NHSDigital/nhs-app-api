@@ -1,4 +1,4 @@
-const handledErrors = [464];
+const handledErrors = [464, 465];
 const standardErrors = [400, 403, 409, 460, 461];
 
 export default {

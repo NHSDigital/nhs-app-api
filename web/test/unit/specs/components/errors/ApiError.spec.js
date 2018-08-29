@@ -109,14 +109,24 @@ describe('ApiError.vue', () => {
     assert(expectedData);
   });
 
-  each(testData[464]).it('page %s will show correct message when the API returns a 464 unsupported ods code', (path, expectedData) => {
+  each(testData[464]).it('page %s will show correct message when the API returns a 464 unsupported ods code or no nhs number', (path, expectedData) => {
     const route = { path };
-    const apiError = { response: { status: 464 }, message: 'Too late' };
+    const apiError = { response: { status: 464 }, message: 'ODS code not supported or no nhs number' };
 
     createApiErrorComponent(route, apiError);
 
     assert(expectedData);
   });
+
+  each(testData[465]).it('page %s will show correct message when the API returns a 465 user did not meet the minimum age requirement', (path, expectedData) => {
+    const route = { path };
+    const apiError = { response: { status: 465 }, message: 'Underage' };
+
+    createApiErrorComponent(route, apiError);
+
+    assert(expectedData);
+  });
+
 
   each(testData[500]).it('page %s will show correct message when unexpected error occurred processing the request in api', (path, expectedData) => {
     const route = { path };

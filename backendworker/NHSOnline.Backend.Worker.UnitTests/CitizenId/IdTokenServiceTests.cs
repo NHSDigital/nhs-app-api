@@ -30,8 +30,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private string _audience;
         private string _im1Token;
         private string _odsCode;
+        private string _nhsNumber;
+        private string _dateOfBirth;
         private string _im1Key;
         private string _odsKey;
+        private string _nhsNumberKey;
 
         [TestInitialize]
         public void TestInitialize()
@@ -42,9 +45,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _audience = _fixture.Create<string>();
             _im1Token = _fixture.Create<string>();
             _odsCode = _fixture.Create<string>();
+            _dateOfBirth = _fixture.Create<string>();
+            _nhsNumber = _fixture.Create<string>();
             
             _im1Key = Constants.CitizenIdClaimTypes.Im1ConnectionTokenClaim;
             _odsKey = Constants.CitizenIdClaimTypes.OdscodeClaim;
+            _nhsNumberKey = Constants.CitizenIdClaimTypes.NhsNumber;
 
             _mockConfig = _fixture.Freeze<Mock<ICitizenIdConfig>>();
 
@@ -85,6 +91,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             mockPrincipal
                 .Setup(x => x.FindFirst(_odsKey))
                 .Returns(new Claim(_odsKey, _odsCode));
+            mockPrincipal
+                .Setup(x => x.FindFirst(_nhsNumberKey))
+                .Returns(new Claim(_nhsNumberKey, _nhsNumber));
+            mockPrincipal
+                .Setup(x => x.FindFirst(ClaimTypes.DateOfBirth))
+                .Returns(new Claim(ClaimTypes.DateOfBirth, _dateOfBirth));
 
             SecurityToken secToken;
             _mockJwtTokenValidator
@@ -104,6 +116,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var actualUserProfile = result.ValueOrFailure(); 
             actualUserProfile.Im1ConnectionToken.Should().Be(_im1Token);
             actualUserProfile.OdsCode.Should().Be(_odsCode);
+            actualUserProfile.NhsNumber.Should().Be(_nhsNumber);
+            actualUserProfile.DateOfBirth.Should().Be(_dateOfBirth);
         }
         
         [TestMethod]

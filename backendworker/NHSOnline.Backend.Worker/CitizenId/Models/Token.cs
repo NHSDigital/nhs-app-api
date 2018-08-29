@@ -20,5 +20,8 @@ namespace NHSOnline.Backend.Worker.CitizenId.Models
 
         [JsonProperty("id_Token")]
         public string IdToken { get; set; }
+        
+        [JsonProperty("nhs_number")]
+        public string NhsNumber { get; set; }
     }
 }

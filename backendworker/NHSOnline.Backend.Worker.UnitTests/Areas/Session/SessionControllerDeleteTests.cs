@@ -36,6 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<ISessionService> _mockSessionService;
         private Mock<IGpSystem> _mockGpSystem;
         private Mock<IGpSystemFactory> _mockGpSystemFactory;
+        private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         
         private SessionController _systemUnderTest;
         private UserSession _tppUserSession;
@@ -62,6 +63,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockLogger = new Mock<ILogger<SessionController>>();
             _mockAuditor = new Mock<IAuditor>();
             _mockAntiforgery = _fixture.Freeze<Mock<IAntiforgery>>();
+            _mockMinimumAgeValidator = new Mock<IMinimumAgeValidator>();
 
             var authenticationServiceMock = new Mock<IAuthenticationService>();
             authenticationServiceMock
@@ -90,6 +92,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockGpSystem
                 .Setup(x => x.GetSessionService())
                 .Returns(_mockSessionService.Object);
+            
+            _mockGpSystem
+                .Setup(x => x.GetSessionService())
+                .Returns(_mockSessionService.Object);
 
             _systemUnderTest = new SessionController(
                 _mockCitizenIdService.Object,
@@ -99,7 +105,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 _configurationSettings.Object,
                 _mockLogger.Object,
                 _mockAuditor.Object,
-                _mockAntiforgery.Object
+                _mockAntiforgery.Object,
+                _mockMinimumAgeValidator.Object
             )
             {
                 ControllerContext = new ControllerContext

@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
+using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.ResponseParsers;
@@ -76,6 +77,7 @@ namespace NHSOnline.Backend.Worker
 
             services.AddScoped<CustomCookieAuthenticationEvents>();
             services.AddTransient<ICertificateService, CertificateService>();
+            services.AddTransient<IMinimumAgeValidator, MinimumAgeValidator>();
 
             services.AddCors();
 
