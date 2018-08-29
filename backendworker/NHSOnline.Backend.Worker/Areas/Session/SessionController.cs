@@ -86,7 +86,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                     DateTimeStyles.None,
                     out formattedDateOfBirth))
                 {
-                    _logger.LogError($"Missing or invalid date of birth '{cidUserProfile.DateOfBirth}'");
+                    _logger.LogError($"Missing or invalid date of birth");
                     return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
                 }
 

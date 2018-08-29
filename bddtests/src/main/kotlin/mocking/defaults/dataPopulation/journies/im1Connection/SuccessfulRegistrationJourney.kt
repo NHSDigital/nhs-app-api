@@ -53,7 +53,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                     meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
                                     surname = patient.surname,
-                                    dateOfBirth = patient.dateOfBirth,
+                                    dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
                                     linkageDetails = LinkageDetailsModel(
                                             accountId = patient.accountId,
                                             linkageKey = patient.linkageKey,

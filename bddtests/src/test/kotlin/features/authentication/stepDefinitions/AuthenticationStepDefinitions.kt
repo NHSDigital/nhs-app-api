@@ -275,7 +275,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have data for a (.+) patient with incorrect date of birth$")
     fun iHaveDataForAPatientWithIncorrectDateOfBirth(gpSystem: String) {
-        this.patient = Patient.getDefault(gpSystem).copy(dateOfBirth = "1918-12-24T14:03:15.892Z")
+        this.patient = Patient.getDefault(gpSystem)
 
         when (gpSystem) {
             "EMIS" -> {
@@ -657,7 +657,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
         return LinkApplicationRequestModel(
                 surname = patient.surname,
-                dateOfBirth = patient.dateOfBirth,
+                dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
                 linkageDetails = LinkageDetailsModel(
                         accountId = patient.accountId,
                         nationalPracticeCode = patient.odsCode,
