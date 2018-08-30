@@ -226,7 +226,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 Token = sessionCreatedResultVisited.UserSession.CsrfToken,
                 OdsCode = odsCode,
                 DateOfBirth = dateOfBirth,
-                NhsNumber = nhsNumber
+                NhsNumber = nhsNumber.FormatToNhsNumber()
             };
 
             return new CreatedResult(string.Empty, responseBody);
