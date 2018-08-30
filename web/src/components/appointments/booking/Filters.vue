@@ -2,6 +2,9 @@
   <div :class="$style.form">
     <label for="type">{{ $t('appointments.booking.filters.type.label') }}</label>
     <collapsible-dialog v-if="guidanceMsg !==''">
+      <template slot="header">
+        {{ $t('appointments.booking.gpMessage.header') }}
+      </template>
       {{ guidanceMsg }}
     </collapsible-dialog>
     <error-message v-if="!validationError.isTypeValid" id="error-type">

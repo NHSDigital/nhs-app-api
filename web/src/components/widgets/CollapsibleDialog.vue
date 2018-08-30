@@ -3,7 +3,7 @@
     <div :class="$style['info-header']" @click="toggle">
       <plus-minus-icon :icon-plus="!showContent" />
       <label :class="$style['info-message-title']">
-        {{ $t('appointments.booking.gpMessage.header') }}
+        <slot name="header" />
       </label>
     </div>
     <div v-if="showContent" :class="$style['info-content']"
@@ -12,7 +12,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 /* eslint-disable import/extensions */
@@ -36,9 +35,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import "../../style/gpmessage";
-
-.info-content {
-  white-space: pre-line;
-}
+@import "../../style/collapsibledialog";
 </style>
