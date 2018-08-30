@@ -6,15 +6,14 @@
       </div>
       <input
         :value="prescriptionDetails.id"
-        :class="$style.prescriptionCheckbox"
+        :class="$style['sr-only']"
         :id="'prescription-' + prescriptionDetails.id"
-        :checked="check"
         v-model="selected"
         type="checkbox"
-        name="prescription">
+        name="prescription"
+        @change="check">
       <label
-        :for="'prescription-' + prescriptionDetails.id"
-        @click="check">
+        :for="'prescription-' + prescriptionDetails.id">
         {{ prescriptionDetails.name }}
       </label>
     </div>
@@ -65,14 +64,12 @@ export default{
 
 <style module lang="scss" scoped>
   @import "../style/forms";
+  @import "../style/accessibility";
 
   .prescriptionDescription {
     padding-left: 2.5em;
     padding-top: 0em;
     padding-bottom: 0.250em;
-  }
-  .prescriptionCheckbox {
-    display: none;
   }
 
   label {

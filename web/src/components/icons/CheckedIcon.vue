@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.checkbox">
+  <div :class="$style.checkbox" aria-hidden="true">
     <svg v-if="selected" :class="$style.checked" xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12">
       <defs><style>.efcdf5ce-b03e-4827-8f05-4c309bf09cb0{fill:#0059c1;}</style></defs>
       <title>Checked</title>
