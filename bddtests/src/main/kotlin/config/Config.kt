@@ -48,7 +48,7 @@ class Config private constructor() {
 
 
         cidClientId = envOrDefault("CID_CLIENT_ID", "nhs-online")
-        cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.uat.signin.nhs.uk")
+        cidJwtIssuer = envOrDefault("CITIZEN_ID_JWT_ISSUER", "https://auth.ext.signin.nhs.uk")
         val cidHostname = envOrDefault("CID_HOST", "localhost")
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://$cidHostname:3000/auth-return")
         cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/authorize")

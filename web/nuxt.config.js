@@ -80,7 +80,7 @@ module.exports = {
       process.env.NATIVE_CID_REDIRECT_URI || 'nhsapp://10.0.2.2:3000/auth-return',
     CID_AUTH_ENDPOINT:
       process.env.CID_AUTH_ENDPOINT
-      || 'https://auth.uat.signin.nhs.uk/authorize',
+      || 'https://auth.ext.signin.nhs.uk/authorize',
     CID_REGISTER_ENDPOINT:
       process.env.CID_REGISTER_ENDPOINT
       || 'https://account.uat.signin.nhs.uk/#/account/register',
