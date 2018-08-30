@@ -1,7 +1,7 @@
 <template>
   <div v-if="isVisible" class="pull-content">
-    <message-dialog message-type="error">
-      <message-text :is-header="true">{{ header }}</message-text>
+    <message-dialog :override-style="overrideStyle" message-type="error">
+      <message-text :is-header="true" :override-style="overrideStyle">{{ header }}</message-text>
       <message-text>{{ subheader }}</message-text>
       <message-text>{{ message }}</message-text>
     </message-dialog>
@@ -35,6 +35,11 @@ export default {
     },
     retryButtonText() {
       return this.getMessage('retryButtonText');
+    },
+    overrideStyle() {
+      const overrideStyles = this.$store.getters['errors/errorOverrideStyle'];
+      const overrideStyle = overrideStyles[this.getApiErrorResponse().status];
+      return overrideStyle;
     },
   },
   updated() {

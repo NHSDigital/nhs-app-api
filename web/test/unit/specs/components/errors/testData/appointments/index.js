@@ -17,9 +17,9 @@ export default {
     PATH,
     {
       pageHeader: 'Service unavailable',
-      header: 'Sorry, you don\'t currently have access to this service',
-      subheader: '',
-      message: 'Contact your GP surgery for more information.',
+      header: 'You are not currently able to book appointments online.',
+      subheader: 'Contact your GP surgery for more information.',
+      message: 'For urgent medical help, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',

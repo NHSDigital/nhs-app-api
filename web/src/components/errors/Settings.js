@@ -8,13 +8,22 @@ export default {
     redirectUrl: null,
     showApiError: true,
     ignoredErrors: [],
+    errorOverrideStyles: {},
   },
   pages: [
+    {
+      route: Routes.APPOINTMENTS.path,
+      errorOverrideStyles: { 403: 'plain' },
+    },
     {
       route: Routes.APPOINTMENT_CANCELLING.path,
       redirectUrl: {
         default: Routes.APPOINTMENTS.path,
       },
+    },
+    {
+      route: Routes.APPOINTMENT_BOOKING.path,
+      errorOverrideStyles: { 403: 'plain' },
     },
     {
       route: Routes.APPOINTMENT_CONFIRMATIONS.path,
@@ -50,6 +59,7 @@ export default {
         if (!has('redirectUrl', settings)) settings.redirectUrl = this.default.redirectUrl;
         if (!has('showApiError', settings)) settings.showApiError = this.default.showApiError;
         if (!has('ignoredErrors', settings)) settings.ignoredErrors = this.default.ignoredErrors;
+        if (!has('errorOverrideStyles', settings)) settings.errorOverrideStyles = this.default.errorOverrideStyles;
         break;
       }
     }

@@ -9,7 +9,7 @@ open class AppointmentGuidanceSteps {
     private val expectedPageHeader = "Check before you book"
     private val expectedContentHeader = "Want to avoid waiting?"
     private val expectedGuidanceLinesAndIfInBold = arrayListOf(
-            Pair("If it isn't urgent, you can try three things before booking an appointment:", false),
+            Pair("Three things to try before you book an appointment:", false),
             Pair("1. Self care", true),
             Pair("Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines", false),
             Pair("2. Check your symptoms", true),

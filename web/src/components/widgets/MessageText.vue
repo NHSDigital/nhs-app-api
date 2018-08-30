@@ -1,5 +1,5 @@
 <template>
-  <p :class="[$style.msgText, isHeader ? $style.header : undefined]"
+  <p :class="[$style.msgText, extendedStyle]"
      :data-purpose="isHeader ? 'msg-header' : undefined">
     <slot/>
   </p>
@@ -13,6 +13,23 @@ export default {
       type: Boolean,
       default: false,
     },
+    overrideStyle: {
+      type: String,
+      default: 'none',
+      validator: value => ['none', 'plain'].indexOf(value) !== -1,
+    },
+  },
+  computed: {
+    extendedStyle() {
+      let style;
+      if (this.isHeader) {
+        style = this.$style.header;
+      }
+      if (this.isHeader && this.overrideStyle === 'plain') {
+        style = this.$style.plainHeader;
+      }
+      return style;
+    },
   },
 };
 </script>
@@ -25,6 +42,10 @@ export default {
   &.header {
     @include default_label;
     font-size: 1.125em;
+    }
+  &.plainHeader {
+    @include default_label;
+    font-size: 1.325em;
     }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div :class="[$style.msg, mType]">
-    <div :class="$style.icon">
+  <div :class="mType">
+    <div v-if="showIcon" :class="$style.icon">
       {{ iText }}
     </div>
     <div :id="messageId" :class="$style['msg-content']"
@@ -27,6 +27,11 @@ export default {
       type: String,
       default: undefined,
     },
+    overrideStyle: {
+      type: String,
+      default: 'none',
+      validator: value => ['none', 'plain'].indexOf(value) !== -1,
+    },
   },
   data() {
     return {
@@ -42,7 +47,10 @@ export default {
       return this.iconText ? this.iconText : this.defaultIconTexts[this.messageType];
     },
     mType() {
-      return this.$style[this.messageType];
+      return this.showIcon ? [this.$style.msg, this.$style[this.messageType]] : [];
+    },
+    showIcon() {
+      return this.overrideStyle !== 'plain';
     },
   },
 };
