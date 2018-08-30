@@ -11,7 +11,7 @@ services:
       - NATIVE_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
       - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
-      - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/ndopapp-build1.thunderbird.service.nhs.uk/createsession
+      - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/createsession
       - COOKIE_DOMAIN=.bitraft.io
   api.local.bitraft.io:
     image: nhsonline.backend.worker

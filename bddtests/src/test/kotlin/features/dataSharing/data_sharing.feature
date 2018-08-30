@@ -34,3 +34,10 @@ Feature: Data Sharing
     And I am on the Data Sharing Manage Your Choice page
     When I click the Previous button
     Then I am taken to Data Sharing Overview page
+
+  @NHSO-2363
+  Scenario: A user chooses to manage their Data Sharing preferences
+    Given I click the Next button
+    And I am on the Data Sharing Manage Your Choice page
+    When I click the Start Now button
+    Then I am on the Ndop website

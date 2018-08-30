@@ -37,6 +37,10 @@ class WebClientInterceptor(
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+        if (url.equals(context.getString(R.string.dataPreferencesRedirect))) {
+            view.loadUrl(url)
+            return false
+        }
         activities.forEach { activity ->
             if (activity.canStart(view.context, url)) {
                 activity.start(view.context, url)

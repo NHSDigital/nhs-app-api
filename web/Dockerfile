@@ -18,6 +18,7 @@ ENV OPEN_SOURCE_LICENSES_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-n
 ENV HELP_AND_SUPPORT_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
 ENV CLINICAL_ABBREVIATIONS_URL https://www.england.nhs.uk/participation/resources/involvejargon/
 ENV HOT_JAR_URL https://in.hotjar.com/s?siteId=859152&surveyId=95785
+ENV DATA_PREFERENCES_URL https://ndopapp-int1.thunderbird.service.nhs.uk/createsession
 
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs

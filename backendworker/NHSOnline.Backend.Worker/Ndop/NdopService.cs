@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.Ndop
             _configuration = configuration;
             _logger = loggerFactory.CreateLogger<NdopService>();
         }
-        
+
         public async Task<GetNdopResult> GetJwtToken(string nhsNumber)
         {
             return await Task.Run(() => GetToken(nhsNumber));
@@ -35,10 +35,10 @@ namespace NHSOnline.Backend.Worker.Ndop
                 var signingCredentials = _ndopSigning.GetSigningCredentials();
                 if (signingCredentials == null)
                     return new GetNdopResult.Unsuccessful();
-                
+
                 var claims = new[]
                 {
-                    new Claim(ClaimTypeNhsNumber, nhsNumber)
+                    new Claim(ClaimTypeNhsNumber, nhsNumber.Replace(" ", String.Empty, StringComparison.Ordinal))
                 };
 
                 var expiryTime = DateTime.UtcNow.AddSeconds(30);
@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.Ndop
                 );
 
                 var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-                
+
                 return new GetNdopResult.SuccessfullyRetrieved(new NdopResponse { Token = token });
             }
             catch (Exception e)
