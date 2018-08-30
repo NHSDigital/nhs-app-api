@@ -124,6 +124,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun configureWebView() {
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
+        webview.settings.javaScriptCanOpenWindowsAutomatically = true
 
         chromeClient = ChromeClientLocationHandler(this)
         webview.webChromeClient = chromeClient
@@ -297,6 +298,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun loggedIn() {
+        if(isLoggedIn) return
+
         showMenuBar()
         showHeader()
         setHeaderText(resources.getString(R.string.home_header))

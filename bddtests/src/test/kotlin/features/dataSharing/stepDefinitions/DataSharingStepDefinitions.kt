@@ -1,34 +1,28 @@
 package features.dataSharing.stepDefinitions
 
+import config.Config
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.dataSharing.steps.DataSharingSteps
+import features.dataSharing.steps.NdopSteps
 import features.myrecord.stepDefinitions.AbstractDemographicsStepDefinitions
+import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
+import java.net.URL
 
 class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Steps
     lateinit var dataSharing: DataSharingSteps
+    @Steps
+    lateinit var ndop: NdopSteps
+    @Steps
+    lateinit var browser: BrowserSteps
 
     @When("^I am on the data sharing final page$")
     fun iAmOnTheDataSharingCompletionPage() {
         assert(dataSharing.dataSharingCompleteButtonVisible())
-    }
-
-    @Then("^a new web page opens for Ndop$")
-    fun aNewWebPageOpensForNdop() {
-        assert(dataSharing.isNdopTestTextIsVisible())
-    }
-
-    @Given("^Ndop wiremock is set up$")
-    fun ndopWiremockIsSetUp() {
-        mockingClient.forNdop {
-            linkToNdopRequest()
-                    .respondWithNdopMockPage()
-        }
-
     }
 
     @Given("^I am on the Data Sharing page$")
@@ -79,5 +73,12 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Then("^I am taken to Data Sharing Manage Your Choice page$")
     fun iAmTakenToTheDataSharingManageYourChoicePage() {
         assert(dataSharing.isManageYourChoiceTitleVisible());
+    }
+
+    @Then("I am on the Ndop website")
+    fun iAmOnTheNDOPWebsite() {
+        Thread.sleep(1000)
+        browser.changeTab(URL(Config.instance.dataPreferencesUrl))
+        assert(ndop.tokenIsDisplayed())
     }
 }

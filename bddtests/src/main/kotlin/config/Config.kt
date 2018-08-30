@@ -24,6 +24,9 @@ class Config private constructor() {
     var emisVersion: String
     var organDonation: String
     var symptomChecker: String
+    var dataPreferencesHost: String
+    var dataPreferencesPath: String
+    var dataPreferencesUrl: String
 
     var browserstackAccessKey: String
     var browserstackUrl: String
@@ -61,6 +64,10 @@ class Config private constructor() {
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")
         symptomChecker = envOrDefault("SYMPTOM_CHECKER_URL", "https://111.nhs.uk")
         sessionExpiryMinutes = envOrDefault("SESSION_EXPIRY_MINUTES", SESSION_EXPIRY_MINUTES)
+
+        dataPreferencesHost = "http://stubs.local.bitraft.io:8080"
+        dataPreferencesPath = "/ndop/createsession"
+        dataPreferencesUrl = envOrDefault("DATA_PREFERENCES_URL", dataPreferencesHost + dataPreferencesPath)
     }
 
     private fun envOrDefault(key: String, defaultValue: String): String {

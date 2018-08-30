@@ -1,5 +1,6 @@
 package features.dataSharing.steps
 
+import features.appointments.data.AppointmentsBookingData.Companion.mockingClient
 import net.thucydides.core.annotations.Step
 import pages.DataSharingPage
 import pages.navigation.Header
@@ -15,7 +16,6 @@ open class DataSharingSteps {
     fun isDisplayed(): Boolean {
         return header.isVisible("Sharing health data preferences") && navbar.isHighlighted(NavBar.NavBarType.MORE)
     }
-
 
     @Step
     fun clickNextButton() {
@@ -44,6 +44,10 @@ open class DataSharingSteps {
 
     @Step
     fun clickStartNowButton() {
+        mockingClient.forNdop {
+            postTokenToNdop()
+                    .respondWithNdopMockPage()
+        }
         return datasharing.clickStartNow()
     }
 
@@ -57,8 +61,4 @@ open class DataSharingSteps {
         return datasharing.onManageYourChoicePage()
     }
 
-    @Step
-    fun isNdopTestTextIsVisible(): Boolean {
-        return datasharing.isNdopTestTextIsVisible()
-    }
 }
