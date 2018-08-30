@@ -36,6 +36,7 @@
       <a :class="$style.listMenuAnchor"
          :href="organDonationUrl"
          data-sid="organ-donation-menu-item"
+         target="_blank"
          @click="setMenuitemState($event)">
         {{ $t('navigationMenuList.organDonation') }}
       </a>
