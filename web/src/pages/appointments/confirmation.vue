@@ -21,14 +21,14 @@
         {{ $t('appointments.confirmation.headerLabel') }}
       </label>
 
-      <error-message v-if="showValidationError" id="errorLabel">
+      <error-message v-if="showValidationError" id="error-label">
         {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
       <textarea id="reasonText" ref="reason" v-model="symptoms"
                 :aria-labelledby="reasonBoxAriaLabelledBy"
                 :class="textareaClass" maxlength="150" autocomplete="off"
                 autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <p id="maxReasonDesc" :class="$style.char">
+      <p id="max-reason-desc" :class="$style.char">
         {{ $t('appointments.confirmation.reasonDesc.line1') }}
       </p>
       <p>
@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     reasonBoxAriaLabelledBy() {
-      return this.showValidationError ? 'errorLabel maxReasonDesc' : 'maxReasonDesc';
+      return this.showValidationError ? 'error-label max-reason-desc' : 'max-reason-desc';
     },
     textareaClass() {
       return this.showValidationError ? this.$style.error : undefined;

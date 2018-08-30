@@ -35,6 +35,9 @@
     background: $nhs_blue;
     padding: 1em;
     max-height: 4.4em;
+    &.closed {
+      display: none;
+    }
     p {
       color: $white;
       a {

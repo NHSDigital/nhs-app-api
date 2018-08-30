@@ -49,7 +49,8 @@ open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             helpfulName = "Survey Link"
     )
 
-    private val listMenuPath = "//div/ul/li/a"
+    private val listMenuPath = "//ul[@data-sid= 'navigation-list-menu']//a"
+
 
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
@@ -61,7 +62,11 @@ open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     private fun link(linkText: String): HybridPageElement {
-        return listOfLinks().containingText(linkText)
+        return HybridPageElement(
+                browserLocator = "$listMenuPath${String.format(containsTextXpathSubstring, linkText)}",
+                androidLocator = null,
+                page = this,
+                helpfulName = "$linkText Link")
     }
 
     val checkSymptomsLink = link("Check my symptoms")

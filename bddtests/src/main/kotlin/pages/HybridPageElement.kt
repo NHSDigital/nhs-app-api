@@ -42,8 +42,8 @@ class HybridPageElement(
             jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", this)
         } catch (e: NoSuchElementException) {
             throw NoSuchElementException("Error scrolling to $this.  " +
-                                         "No such element existed on the page.  " +
-                                         "Page source:\n${page.driver.pageSource}\n")
+                    "No such element existed on the page.  " +
+                    "Page source:\n${page.driver.pageSource}\n")
         }
     }
 
@@ -114,13 +114,18 @@ class HybridPageElement(
     }
 
     private fun WebElementFacade.isUnderneathFixedElements(): Boolean {
+
         val element = this.wrappedElement
 
         val highestPixel = element.location.y
         val lowestPixel = highestPixel + element.size.height
 
+        val pageLength = ((page.driver as JavascriptExecutor)
+                .executeScript("return window.innerHeight || document.body.clientHeight", this) as Long)
+                .toInt()
+
         val isBehindHeader = highestPixel < HEADER_HEIGHT_PX
-        val isBehindFooter = lowestPixel > page.driver.manage().window().size.height - (
+        val isBehindFooter = lowestPixel > pageLength - (
                 FLOATING_BUTTON_HEIGHT_PX + NAVBAR_HEIGHT_PX)
 
         return isBehindHeader.or(isBehindFooter)

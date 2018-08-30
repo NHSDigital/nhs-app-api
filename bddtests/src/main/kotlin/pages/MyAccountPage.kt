@@ -2,7 +2,6 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
-import org.openqa.selenium.JavascriptExecutor
 
 @Suppress("TooManyFunctions")
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
@@ -12,7 +11,7 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     private val linkPath = "$aboutUsHeaderXpath/ul/li/a"
 
     val signOutButton = HybridPageElement(
-            browserLocator = "//*[@id='signout-button']",
+            browserLocator = "//button[@id='signout-button']",
             androidLocator = null,
             page = this
     )

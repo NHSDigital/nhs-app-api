@@ -1,9 +1,11 @@
 <template>
   <div :class="$style.surveyBanner" :style="{ bottom: setBottom() }" data-purpose="survey">
     <div :class="$style.surveyTab" data-purpose="tabForToggle">
-      <div ref="tab" :class="surveyStyle()" data-purpose="toggleContent" @click="toggleTab()"/>
+      <div :class="[open ? $style.surveyTabHandleOpened : $style.surveyTabHandleClosed]"
+           data-purpose="toggleContent" @click="toggleTab()"/>
     </div>
-    <div ref="content" :class="$style.surveyContent" data-purpose="content">
+    <div :class="[$style.surveyContent, !open ? $style.closed : undefined]"
+         data-purpose="content">
       <p data-purpose="info" >{{ $t('surveyBar.barText') }}
         <a :href="hotJarLinkUrl" data-purpose="link" target="_blank">
           {{ $t('surveyBar.linkText') }}</a>
@@ -13,41 +15,35 @@
 </template>
 <script>
 export default {
+  props: {
+    initialBarStatusOpen: {
+      default: true,
+      type: Boolean,
+    },
+  },
   data() {
     return {
       open: true,
       hotJarLinkUrl: process.env.HOT_JAR_URL,
     };
   },
+  created() {
+    this.open = this.initialBarStatusOpen;
+  },
   methods: {
     toggleTab() {
-      // using refs in html to grab elements
-      if (this.$refs.content.style.display === 'none') {
-        // will show the banner
-        this.$refs.content.style.display = '';
-        this.open = true;
-      } else {
-        // will hide the banner
-        this.$refs.content.style.display = 'none';
-        this.open = false;
-      }
+      this.open = !this.open;
+      this.$emit('onBarStatusChanged', this.open);
     },
     setBottom() {
       if (this.$store.state.device.isNativeApp) {
         return '0em';
       }
-      return '4.4em';
-    },
-    surveyStyle() {
-      // check if the banner is hidden or not to determine arrow
-      if (this.open) {
-        return this.$style.surveyTabHandleOpened;
-      }
-      return this.$style.surveyTabHandleClosed;
+      return '4.375em';
     },
   },
 };
 </script>
-<style lang="scss" module>
+<style lang="scss" module scoped>
   @import "../style/surveybar";
 </style>

@@ -19,7 +19,7 @@
         {{ $t('appointments.cancel.form_label') }}
       </label>
 
-      <error-message v-if="showValidationError" id="errorLabel" :class="$style.form">
+      <error-message v-if="showValidationError" id="error-label" :class="$style.form">
         {{ $t('appointments.cancel.noReasonError') }}
       </error-message>
 
@@ -107,7 +107,7 @@ export default {
       } else {
         this.showValidationError = true;
         document.getElementById('txt_reason').focus();
-        this.labelledBy = 'errorLabel';
+        this.labelledBy = 'error-label';
       }
     },
     onBackButtonClicked() {

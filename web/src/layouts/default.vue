@@ -8,7 +8,8 @@
       <flash-message />
       <nuxt />
     </main>
-    <SurveyBar v-if="onEntryPage"/>
+    <SurveyBar v-if="onEntryPage" :initial-bar-status-open="surveyBarOpen"
+               @onBarStatusChanged="setSurveyBarStatus"/>
     <navigation-menu v-if="showMenu"/>
   </div>
 </template>
@@ -52,6 +53,11 @@ export default {
     }
     return head;
   },
+  data() {
+    return {
+      surveyBarOpen: true,
+    };
+  },
   computed: {
     showMenu() {
       return (
@@ -61,7 +67,7 @@ export default {
       );
     },
     onEntryPage() {
-      return this.$route.name === 'index';
+      return this.$route.name === Routes.INDEX.name;
     },
     mainClass() {
       if (this.isLoginPage()) {
@@ -70,6 +76,13 @@ export default {
       const clazzes = ['content', 'pull-body'];
       if (this.$store.state.device.isNativeApp) {
         clazzes.push('native');
+      }
+      if (this.$route.name === Routes.INDEX.name) {
+        if (this.surveyBarOpen) {
+          clazzes.push('survey-open');
+        } else {
+          clazzes.push('survey-closed');
+        }
       }
       return clazzes;
     },
@@ -99,6 +112,9 @@ export default {
   methods: {
     isLoginPage() {
       return this.$route.name === Routes.LOGIN.name;
+    },
+    setSurveyBarStatus(isBarOpen) {
+      this.surveyBarOpen = isBarOpen;
     },
   },
 };

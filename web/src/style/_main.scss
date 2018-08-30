@@ -30,14 +30,32 @@ body {
 	margin: 0;
 	text-rendering: optimizeSpeed;
 }
+$survey_open: 5.5em;
+$survey_closed: 1.5em;
 
 main.content {
 	padding: 6.750em 1em 4.688em 1em;
 	box-sizing: border-box;
 	width: 100%;
 
+	&.survey-open {
+		padding-bottom: 4.688em + $survey_open;
+	}
+
+	&.survey-closed {
+		padding-bottom: 4.688em + $survey_closed;
+	}
+
 	&.native {
 		padding: 0em 1em 4.688em 1em;
+
+		&.survey-open {
+			padding-bottom: 1em + $survey_open;
+		}
+	
+		&.survey-closed {
+			padding-bottom: 1em + $survey_closed;
+		}
 	}
 	
 	&.slim {

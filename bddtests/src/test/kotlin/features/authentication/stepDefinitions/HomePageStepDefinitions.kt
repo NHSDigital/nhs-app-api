@@ -58,20 +58,21 @@ class HomePageDefinitions : AbstractSteps() {
         homeSteps.homePage.assertLinksPresentWithinHomePageBody()
 
         val linksToFollow = arrayListOf(
-                { -> followSymptomLink() },
-                { -> followAppointmentsLink() },
-                { -> followPrescriptionLink() },
-                { -> followMedicalRecordLink() },
-                { -> followOrganDonationLink() }
+                { followSymptomLink() },
+                { followAppointmentsLink() },
+                { followPrescriptionLink() },
+                { followMedicalRecordLink() },
+                { followOrganDonationLink() }
         )
 
         Assert.assertEquals("Test Setup Incorrect. Expected Number of links does not match those to follow. This test must be updated if a link is added or removed.",
                 homeSteps.homePage.expectedLinks.count(),
                 linksToFollow.count())
 
-        linksToFollow.forEach { link ->
+        linksToFollow.forEachIndexed { index, link ->
             link.invoke()
-            navigateBackToHomePage()
+            if (index != linksToFollow.size - 1)
+                navigateBackToHomePage()
         }
     }
 
@@ -80,14 +81,14 @@ class HomePageDefinitions : AbstractSteps() {
         homeSteps.assertHeaderVisible()
     }
 
-    private fun followSymptomLink(){
+    private fun followSymptomLink() {
         homeSteps.homePage.checkSymptomsLink.element.click()
         checkMySymptoms.assertConditionsHeaderVisbile()
         checkMySymptoms.assertNhs111HeaderVisbile()
         navBar.isHighlighted(NavBar.NavBarType.SYMPTOMS)
     }
 
-    private fun followAppointmentsLink(){
+    private fun followAppointmentsLink() {
         homeSteps.homePage.bookAndManageAppointmentsLink.element.click()
         myAppointmentsSteps.checkHeaderTextIsCorrect()
         myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
@@ -100,13 +101,13 @@ class HomePageDefinitions : AbstractSteps() {
         navBar.isHighlighted(NavBar.NavBarType.PRESCRIPTIONS)
     }
 
-    private fun followMedicalRecordLink(){
+    private fun followMedicalRecordLink() {
         homeSteps.homePage.viewMedicalRecordLink.element.click()
         recordSteps.assertWarningPageIsLoaded()
         navBar.isHighlighted(NavBar.NavBarType.MY_RECORD)
     }
 
-    private fun followOrganDonationLink(){
+    private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.element.click()
         browser.changeTab(URL(organDonationUrl))
         browser.shouldHaveUrl(organDonationUrl)
