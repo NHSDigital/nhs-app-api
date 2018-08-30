@@ -38,8 +38,6 @@
     }
   },
   "dependencies": {
-    "@types/jest": "22.2.3",
-    "@vue/test-utils": "1.0.0-beta.16",
     "ajv": "6.5.0",
     "ajv-keywords": "3.2.0",
     "axios": "0.18.0",
@@ -60,6 +58,29 @@
     "cookie": "0.3.1",
     "cookie-universal-nuxt": "2.0.3",
     "crypto": "1.0.1",
+    "js-cookie": "2.2.0",
+    "js-yaml": "3.11.0",
+    "lodash": "4.17.10",
+    "minimist": "1.2.0",
+    "moment": "2.22.1",
+    "moment-timezone": "0.5.21",
+    "node-sass": "4.9.1",
+    "nuxt": "1.4.1",
+    "sass-loader": "7.0.1",
+    "swagger-js-codegen": "1.12.0",
+    "vee-validate": "2.0.9",
+    "vue-i18n": "7.6.0",
+    "vue-jest": "2.5.0",
+    "vue-scrollto": "2.11.0",
+    "vuelidate": "0.7.4",
+    "vuex": "3.0.1",
+    "vuex-persist": "1.2.2",
+    "vuex-persistedstate": "2.5.2"
+  },
+  "devDependencies": {
+    "@types/jest": "22.2.3",
+    "@vue/test-utils": "1.0.0-beta.16",
+    "avoriaz": "6.3.0",
     "eslint": "4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-config-logux": "23.0.0",
@@ -79,27 +100,6 @@
     "jest": "22.4.3",
     "jest-each": "23.2.0",
     "jest-serializer-vue": "1.0.0",
-    "jest-vue-preprocessor": "1.4.0",
-    "js-cookie": "2.2.0",
-    "js-yaml": "3.11.0",
-    "lodash": "4.17.10",
-    "minimist": "1.2.0",
-    "moment": "2.22.1",
-    "moment-timezone": "0.5.21",
-    "node-sass": "4.9.1",
-    "nuxt": "1.4.1",
-    "sass-loader": "7.0.1",
-    "swagger-js-codegen": "1.12.0",
-    "vee-validate": "2.0.9",
-    "vue-i18n": "7.6.0",
-    "vue-jest": "2.5.0",
-    "vue-scrollto": "2.11.0",
-    "vuelidate": "0.7.4",
-    "vuex-persistedstate": "2.5.2"
-  },
-  "devDependencies": {
-    "avoriaz": "6.3.0",
-    "vuex": "3.0.1",
-    "vuex-persist": "1.2.2"
+    "jest-vue-preprocessor": "1.4.0"
   }
 }
