@@ -109,7 +109,7 @@ Feature: View prescriptions
 
   @NHSO-858
   @NHSO-556
-
+  @bug @NHSO-2324
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
