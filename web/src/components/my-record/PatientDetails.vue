@@ -1,19 +1,19 @@
 <template>
   <div :class="[$style['record-content'], getCollapseState]">
-    <b>{{ $t('my_record.patientInfo.fieldLabelName') }}</b>
+    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelName') }}</span>
     <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
     <hr>
-    <b>{{ $t('my_record.patientInfo.fieldLabelDOB') }}</b>
+    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelDOB') }}</span>
     <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
     <hr>
-    <b>{{ $t('my_record.patientInfo.fieldLabelSex') }}</b>
+    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelSex') }}</span>
     <p v-if="patientDetails">{{ patientDetails.sex }}</p>
     <hr>
-    <b>{{ $t('my_record.patientInfo.fieldLabelAddress') }}</b>
+    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelAddress') }}</span>
     <p v-if="patientDetails">
       {{ patientDetails.address }}</p>
     <hr>
-    <b>{{ $t('my_record.patientInfo.fieldLabelNHS') }}</b>
+    <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelNHS') }}</span>
     <p v-if="patientDetails">{{ patientDetails.nhsNumber }}</p>
     <hr>
   </div>
@@ -47,5 +47,14 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/medrecordcontent';
+
+  .fieldName {
+    padding-left: 1.3em;
+    padding-right: 1.3em;
+    padding-bottom: 0.250rem;
+    color: #425563;
+    font-size: 0.813em;
+    font-weight: 700;
+  }
 
 </style>

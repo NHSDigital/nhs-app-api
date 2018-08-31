@@ -48,7 +48,7 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
     }
 
     fun allRecordItemLabels(): MutableList<WebElementFacade> {
-        return msg.element.thenFindAll(By.tagName("b"))
+        return msg.element.thenFindAll(By.tagName("span"))
     }
 
     fun allRecordItemBodies(): MutableList<WebElementFacade> {

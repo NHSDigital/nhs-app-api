@@ -13,7 +13,7 @@
   <div v-else :class="[$style['record-content'], getCollapseState]">
     <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <b v-if="event.date"> {{ event.date | datePart }} </b>
+      <span v-if="event.date" :class="$style.fieldName"> {{ event.date | datePart }} </span>
       <p> {{ event.locationAndDoneBy }}</p>
       <ul :class="$style.eventLine">
         <li v-for="(eventItem, eventItemIndex) in event.eventItems"
@@ -60,5 +60,14 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/medrecordcontent';
+
+.fieldName {
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  padding-bottom: 0.250rem;
+  color: #425563;
+  font-size: 0.813em;
+  font-weight: 700;
+}
 
 </style>

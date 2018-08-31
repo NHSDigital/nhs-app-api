@@ -13,9 +13,9 @@
   <div v-else :class="[$style['record-content'], getCollapseState]">
     <div v-for="(item, index) in orderedImmunisations" :key="`item-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <b v-if="item.effectiveDate.value">
+      <span v-if="item.effectiveDate.value" :class="$style.fieldName">
         {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
-      </b>
+      </span>
       <p>{{ item.term }}</p>
       <hr>
     </div>
@@ -56,5 +56,14 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/medrecordcontent';
+
+.fieldName {
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  padding-bottom: 0.250rem;
+  color: #425563;
+  font-size: 0.813em;
+  font-weight: 700;
+}
 
 </style>

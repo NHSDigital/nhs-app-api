@@ -14,9 +14,9 @@
     <div v-for="(problem, problemIndex) in orderedProblems"
          :key="`problem-${problemIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <b v-if="problem.effectiveDate.value">
+      <span v-if="problem.effectiveDate.value" :class="$style.fieldName">
         {{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}
-      </b>
+      </span>
       <p v-for="(lineItem, lineItemIndex) in problem.lineItems"
          :key="`line-${lineItemIndex}`">
         {{ lineItem.text }}
@@ -66,5 +66,14 @@ export default {
 
 <style module lang="scss" scoped>
 @import '../../style/medrecordcontent';
+
+.fieldName {
+  padding-left: 1.3em;
+  padding-right: 1.3em;
+  padding-bottom: 0.250rem;
+  color: #425563;
+  font-size: 0.813em;
+  font-weight: 700;
+}
 
 </style>

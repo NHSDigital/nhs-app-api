@@ -14,9 +14,9 @@
     <div v-for="(testResult, testIndex) in orderedTestResults"
          :key="`testResult-${testIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <b v-if="testResult.date.value">
+      <span v-if="testResult.date.value" :class="$style.fieldName">
         {{ testResult.date.value | datePart(testResult.date.datePart) }}
-      </b>
+      </span>
       <p v-if="supplier === 'TPP'">
         <nuxt-link :to="{
           name: 'my-record-testresultdetail',
@@ -88,5 +88,14 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/medrecordcontent';
+
+  .fieldName {
+    padding-left: 1.3em;
+    padding-right: 1.3em;
+    padding-bottom: 0.250rem;
+    color: #425563;
+    font-size: 0.813em;
+    font-weight: 700;
+  }
 
 </style>

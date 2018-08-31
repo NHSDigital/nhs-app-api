@@ -14,9 +14,9 @@
     <div v-for="(consultation, consultationIndex) in orderedConsultations"
          :key="`consultation-${consultationIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <b v-if="consultation.effectiveDate.value">
+      <span v-if="consultation.effectiveDate.value" :class="$style.fieldName">
         {{ consultation.effectiveDate.value | datePart(consultation.effectiveDate.datePart) }}
-      </b>
+      </span>
 
       <p> {{ consultation.consultantLocation }} </p>
 
@@ -76,9 +76,9 @@ export default {
       return _.orderBy(this.data.data, [obj => obj.effectiveDate.value], ['desc']);
     },
     showError() {
-      return this.data.hasErrored ||
-             this.data.data.length === 0 ||
-             !this.data.hasAccess;
+      return this.data.hasErrored
+             || this.data.data.length === 0
+             || !this.data.hasAccess;
     },
   },
 };
@@ -87,5 +87,14 @@ export default {
 
 <style module lang="scss" scoped>
  @import '../../style/medrecordcontent';
+
+ .fieldName {
+   padding-left: 1.3em;
+   padding-right: 1.3em;
+   padding-bottom: 0.250rem;
+   color: #425563;
+   font-size: 0.813em;
+   font-weight: 700;
+ }
 
 </style>
