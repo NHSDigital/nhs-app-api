@@ -69,16 +69,40 @@ import Foundation
             return urlString
         }
         
-        var queryItems = urlComponents.queryItems ?? [URLQueryItem]()
+        /*
+         Using URLComponents strips encoding from the query string values.
+         We don't want to meddle with the encoding (e.g. nhs symptom site is
+         quite particular about some urls which are encoded already).
+         So find out what extra query strings need added and add them to
+         the raw string being requested.
+         */
+        let queryItems = urlComponents.queryItems ?? [URLQueryItem]()
+        var queryItemsToAdd = [URLQueryItem]()
         
         urlQueryItems.forEach { urlQueryItem in
-            if !queryItems.contains(urlQueryItem) {
-                queryItems.append(urlQueryItem)
+            let containsQueryItemAlready : Bool = urlComponents.queryItems?.contains(urlQueryItem) ?? false
+            if containsQueryItemAlready == false {
+                queryItemsToAdd.append(urlQueryItem)
             }
         }
         
-        urlComponents.queryItems = queryItems
+        var stringToReturn = urlString
         
-        return urlComponents.string ?? urlString
+        if (queryItemsToAdd.count > 0) {
+            if (queryItems.count == 0) {
+                stringToReturn += "?"
+            } else {
+                stringToReturn += "&"
+            }
+            
+            for (index, queryItem) in queryItemsToAdd.enumerated() {
+                stringToReturn += "\(queryItem.name)=\(queryItem.value ?? "")"
+                if (index != queryItemsToAdd.count - 1) {
+                    stringToReturn += "&"
+                }
+            }
+        }
+        
+        return stringToReturn
     }
 }
