@@ -5,7 +5,7 @@
       <template slot="header">
         {{ $t('appointments.booking.gpMessage.header') }}
       </template>
-      {{ guidanceMsg }}
+      <p>{{ guidanceMsg }}</p>
     </collapsible-dialog>
     <error-message v-if="!validationError.isTypeValid" id="error-type">
       {{ $t('appointments.booking.validationErrors.type') }}
