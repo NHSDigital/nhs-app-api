@@ -91,3 +91,27 @@ Command format:
  gradle mock -DmockArgs="['mockenvironment']
   gradle mock -DmockArgs="['nft',15]
 
+
+### Semi-stubbed Environment
+It is possible to run the application against a real GP environement, with a mocked CID instance.
+
+Run the application, pointing towards the CID mocks.
+
+```
+docker-compose -f docker-compose.semi-stubbed.yml  up
+```
+
+Populate the CID mocks, with the default file (This should be copied from the shared keybase folder - `<NHS APP TEAM>/gp\ practice\ details/performance/EmisUsers.csv` to `src/main/kotlin/mocking/defaults/dataPopulation/nft`):
+
+```
+gradle mock -DmockArgs="['semistubbed']"
+```
+
+Or to run it with a custom csv in the format: `firstName,surname,dob,odsCode,connectionToken,nhsNumber`, including a header row:
+
+```
+gradle mock -DmockArgs="['semistubbed', FILE_LOCATION]"
+```
+
+Note that all DOBs whould be in the format: `yyyy-MM-dd`
+

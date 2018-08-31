@@ -28,18 +28,31 @@ import models.prescriptions.MedicationCourse
 import org.apache.http.HttpStatus
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import worker.models.session.UserSessionRequest
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.time.Duration
 
 const val BASE_NFT_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/nft"
+const val NFT_EMIS_USER_CSV = "$BASE_NFT_DATA_DIR/EmisUsers.csv"
 const val BASE_MOCK_DATA_DIR = "src/main/kotlin/mocking/defaults/dataPopulation/mockEnvironmentData"
 const val CONNECTION_TOKEN_SUFFIX_LENGTH = 12
+
 const val NUMBER_OF_PRESCRIPTIONS: Int = 5
 const val NUMBER_OF_COURSES: Int = 5
 const val NUMBER_OF_REPEAT_PRESCRIPTIONS: Int = 5
 const val TIMEOUT_DELAY_MILLISECONDS: Int = 71000
 const val TIMEOUT_DELAY_SECONDS: Long = 71
 const val EMIS_RESULT_COUNT: Int = 6
+
+const val NFT_NUM_COLUMNS = 6
+const val NFT_FIRST_NAME_IDX = 0
+const val NFT_LAST_NAME_IDX = 1
+const val NFT_DOB_IDX = 2
+const val NFT_ODS_IDX = 3
+const val NFT_IM1_CONNECTION_IDX = 4
+const val NFT_NHS_NUMBER_IDX = 5
 
 @Suppress("TooManyFunctions", "LargeClass", "LongMethod")
 open class MockDataPopulate(private val mockingClient: MockingClient) {
@@ -53,6 +66,10 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                 when (type.toLowerCase()) {
                     "nft" -> {
                         MockDataPopulate(client).populateNftStubs(numOfPatients = arguments[1].toInt())
+                    }
+                    "semistubbed" -> {
+                        MockDataPopulate(client)
+                                .populateSemiStubbedEnvironment(csvFileLocation = arguments.getOrElse(1) { NFT_EMIS_USER_CSV } )
                     }
                     "mockenvironment" -> {
                         MockDataPopulate(client).populateEMISStubEnvironment()
@@ -246,8 +263,75 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
     }
 
+    private fun populateSemiStubbedEnvironment(csvFileLocation: String) {
+        mockingClient.clearWiremock()
+        mockingClient.favicon()
+
+        val patients = getPatientsFromCsv(csvFileLocation)
+
+        for (patient in patients) {
+            CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+            EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
+
+            SuccessfulRegistrationJourney(mockingClient).create(patient)
+        }
+    }
+
     private fun getFileContents(relativePath: String): String {
         return getFileContents(relativePath, BASE_NFT_DATA_DIR)
+    }
+
+    private fun getPatientsFromCsv(filePath: String): List<Patient> {
+        val patients = ArrayList<Patient>()
+
+        var fileReader: BufferedReader? = null
+
+        try {
+            var currentLine: String?
+
+            fileReader = File(filePath)
+                    .bufferedReader(
+                            charset = Charsets.UTF_8,
+                            bufferSize = DEFAULT_BUFFER_SIZE
+                    )
+            // Read CSV header
+            fileReader.readLine()
+
+            // Read the file line by line starting from the second line
+            currentLine = fileReader.readLine()
+            while (currentLine != null) {
+                println("CURRENT LINE: $currentLine")
+                val entries = currentLine.split(",")
+                if (entries.isNotEmpty() && entries.size >= NFT_NUM_COLUMNS) {
+                    patients.add(Patient(
+                            title =  "",
+                            firstName =  entries[NFT_FIRST_NAME_IDX],
+                            surname =  entries[NFT_LAST_NAME_IDX],
+                            dateOfBirth =  entries[NFT_DOB_IDX],
+                            odsCode = entries[NFT_ODS_IDX],
+                            connectionToken =  entries[NFT_IM1_CONNECTION_IDX],
+                            nhsNumbers =  listOf(entries[NFT_NHS_NUMBER_IDX])
+                    ))
+                }
+
+                currentLine = fileReader.readLine()
+            }
+        } catch(e: FileNotFoundException) {
+            println("Error, Could not find csv file: $filePath")
+        }
+        catch (e: Exception) {
+            println("Error when reading user csv!")
+            e.printStackTrace()
+        } finally {
+            try {
+                fileReader!!.close()
+            } catch (e: IOException) {
+                println("Closing fileReader Error!")
+                e.printStackTrace()
+            }
+        }
+
+        return patients
     }
 
     private fun getFileContents(relativePath: String, defaultDir: String): String {

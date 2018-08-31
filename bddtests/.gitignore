@@ -21,6 +21,9 @@ build/
 
 chromedriver*
 
+# Secret files
+src/main/kotlin/mocking/defaults/dataPopulation/nft/EmisUsers.csv
+
 # User-specific stuff:
 .idea/
 local.properties
