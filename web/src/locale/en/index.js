@@ -79,7 +79,7 @@ export default {
     subHeader: 'Medication currently available to order',
     noMedicinesSelected: 'Select at least one medicine',
     specialRequestsLabel: 'Special requests relating to this order (optional)',
-    maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words',
+    maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words)',
     changePharmacyText: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
     noSpecialRequestDefaultText: 'None',
     continueButton: 'Continue',
