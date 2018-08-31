@@ -7,9 +7,7 @@
       </label>
     </div>
     <div v-if="showContent" :class="$style['info-content']"
-         data-purpose="info-content">
-      <slot/>
-    </div>
+         data-purpose="info-content"><slot /></div>
   </div>
 </template>
 
