@@ -59,7 +59,8 @@ class LinkAccountBuilder(linkAccount: LinkAccount) : TppMappingBuilder("POST", "
     fun respondWithInvalidLinkageCredentials(): Mapping {
         val invalidLinkageCredentialsError = Error(
                 "8",
-                "There was a problem linking your account. Please contact Kainos GP Demo Unit to complete the online account registration."
+                "There was a problem linking your account." +
+                        " Please contact Kainos GP Demo Unit to complete the online account registration."
         )
 
         return respondWithError(invalidLinkageCredentialsError)

@@ -11,7 +11,8 @@ import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
 import org.apache.http.HttpStatus
 
-class DeleteAppointmentsBuilderEmis (configuration: EmisConfiguration, patient: Patient, request: CancelAppointmentSlotFacade) :
+class DeleteAppointmentsBuilderEmis (configuration: EmisConfiguration,
+                                     patient: Patient, request: CancelAppointmentSlotFacade) :
         EmisMappingBuilder(configuration, "DELETE", "/appointments"), ICancelAppointmentsBuilder {
 
     init {

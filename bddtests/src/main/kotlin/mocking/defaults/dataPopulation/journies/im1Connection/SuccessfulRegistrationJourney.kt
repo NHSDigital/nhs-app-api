@@ -105,7 +105,9 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                                             value = patient.nhsNumbers.first()
                                                     ),
                                                     personName = PersonName(
-                                                            name = "${patient.title} ${patient.firstName} ${patient.surname}"
+                                                            name =
+                                                            "${patient.title} " +
+                                                            "${patient.firstName} ${patient.surname}"
                                                     )
                                             )
                                     )

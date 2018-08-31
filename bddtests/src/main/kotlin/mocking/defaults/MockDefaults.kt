@@ -30,9 +30,67 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         const val DEFAULT_ODS_CODE_TPP: String = "KGPD"
         const val DEFAULT_ODS_CODE_VISION: String = "X00100"
         const val DEFAULT_SESSION_ID: String = "AJYF0ufQI6tTpdfwaXAt"
-        const val DEFAULT_ACCESS_TOKEN: String = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3WGlNdHVGSHN0MVdtYUppSXdJYVZJZlJOazQ5SzlTNXlWa0thMkZZZHA0In0.eyJqdGkiOiIwNjBlZjM4Yy00YmRlLTQ1ZjgtYjExMy1iOGYzZjVjYWJjOGQiLCJleHAiOjE1MjM5NTg5MTYsIm5iZiI6MCwiaWF0IjoxNTIzOTU4NjE2LCJpc3MiOiJodHRwczovL2tleWNsb2FrLmRldjEuc2lnbmluLm5ocy51ay9jaWNhdXRoL3JlYWxtcy9OSFMiLCJhdWQiOiJuaHMtb25saW5lLXBvYyIsInN1YiI6IjlmZmFhMmNiLTM3MTQtNDMwOS1hZDIyLTlkNGY2YmYwZjUzMSIsInR5cCI6IkJlYXJlciIsImF6cCI6Im5ocy1vbmxpbmUtcG9jIiwiYXV0aF90aW1lIjoxNTIzOTU4NTkyLCJzZXNzaW9uX3N0YXRlIjoiYTRmYmYwN2EtNGM3MS00MTdjLWE2OTYtYmUxNjQ3MDIwOGM0IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6W10sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InJlYWxtLW1hbmFnZW1lbnQiOnsicm9sZXMiOlsidmlldy1yZWFsbSIsInZpZXctaWRlbnRpdHktcHJvdmlkZXJzIiwibWFuYWdlLWlkZW50aXR5LXByb3ZpZGVycyIsImltcGVyc29uYXRpb24iLCJyZWFsbS1hZG1pbiIsImNyZWF0ZS1jbGllbnQiLCJtYW5hZ2UtdXNlcnMiLCJxdWVyeS1yZWFsbXMiLCJ2aWV3LWF1dGhvcml6YXRpb24iLCJxdWVyeS1jbGllbnRzIiwicXVlcnktdXNlcnMiLCJtYW5hZ2UtZXZlbnRzIiwibWFuYWdlLXJlYWxtIiwidmlldy1ldmVudHMiLCJ2aWV3LXVzZXJzIiwidmlldy1jbGllbnRzIiwibWFuYWdlLWF1dGhvcml6YXRpb24iLCJtYW5hZ2UtY2xpZW50cyIsInF1ZXJ5LWdyb3VwcyJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwibmFtZSI6IlJlYWxtMSBBZG1pbiIsInByZWZlcnJlZF91c2VybmFtZSI6InJlYWxtYWRtaW5AZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6IlJlYWxtMSIsImZhbWlseV9uYW1lIjoiQWRtaW4iLCJlbWFpbCI6InJlYWxtYWRtaW5AZ21haWwuY29tIn0.D2nSVJbZ7M2JZosiC6z-HXx7-Rg1n7w7CCKvWtBzErJVDIedvS5y6syxQnJbtl0yITYM4qP-gN0Ji13qnwu0wjy-NorXvG7BOB5wl2SXekaaphXjv9e6NshQ5SEhyV1hMzfPRqLkZbpETjEOdPiMziG6k8sZCpast3c3diKb96dxjVIOhPayf2P9Z75b-qnegFuV1LkD9mIkGDyA7t5givfouskPSr09EKyxHf_m7kjPipy39cKODgcbsyYpwqAmHYaHJGsqIZYDPTCjvzmkrZOQlGJ_sXAVmxrZY8psUZ7MKeFd4l9xwvfi4N-3FFT5D4_tJq0Yp3RW5Bs3JVc1ig"
+        const val DEFAULT_ACCESS_TOKEN: String = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSl" +
+                                                 "dUIiwia2lkIiA6ICI3WGlNdHVGS" +
+                                                 "HN0MVdtYUppSXdJYVZJZlJOazQ5SzlTNXlWa" +
+                                                 "0thMkZZZHA0In0.eyJqdGkiOiIwNjB" +
+                                                 "lZjM4Yy00YmRlLTQ1ZjgtYjExMy1iOGYzZjVjY" +
+                                                 "WJjOGQiLCJleHAiOjE1MjM5NTg5MTYsI" +
+                                                 "m5iZiI6MCwiaWF0IjoxNTIzOTU4NjE2LCJpc3Mi" +
+                                                 "OiJodHRwczovL2tleWNsb2FrLmRldjEu" +
+                                                 "c2lnbmluLm5ocy51ay9jaWNhdXRoL3JlYWxtcy9O" +
+                                                 "SFMiLCJhdWQiOiJuaHMtb25saW5lLXBv" +
+                                                 "YyIsInN1YiI6IjlmZmFhMmNiLTM3MTQtNDMwOS1hZD" +
+                                                 "IyLTlkNGY2YmYwZjUzMSIsInR5cCI6" +
+                                                 "IkJlYXJlciIsImF6cCI6Im5ocy1vbmxpbmUtcG9j" +
+                                                 "IiwiYXV0aF90aW1lIjoxNTIzOTU4NTkyL" +
+                                                 "CJzZXNzaW9uX3N0YXRlIjoiYTRmYmYwN2EtNGM3M" +
+                                                 "S00MTdjLWE2OTYtYmUxNjQ3MDIwOGM0" +
+                                                 "IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6W1" +
+                                                 "0sInJlYWxtX2FjY2VzcyI6eyJyb2xl" +
+                                                 "cyI6WyJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb" +
+                                                 "3VyY2VfYWNjZXNzIjp7InJlYWxtLW1hb" +
+                                                 "mFnZW1lbnQiOnsicm9sZXMiOlsidmlldy1yZWFsbSI" +
+                                                 "sInZpZXctaWRlbnRpdHktcHJvdmlkZXJ" +
+                                                 "zIiwibWFuYWdlLWlkZW50aXR5LXByb3ZpZGVycyIsI" +
+                                                 "mltcGVyc29uYXRpb24iLCJyZWFsbS1hZG" +
+                                                 "1pbiIsImNyZWF0ZS1jbGllbnQiLCJtYW5hZ2UtdXNl" +
+                                                 "cnMiLCJxdWVyeS1yZWFsbXMiLCJ2aWV3L" +
+                                                 "WF1dGhvcml6YXRpb24iLCJxdWVyeS1jbGllbnRzIi" +
+                                                 "wicXVlcnktdXNlcnMiLCJtYW5hZ2UtZXZlb" +
+                                                 "nRzIiwibWFuYWdlLXJlYWxtIiwidmlldy1ldmVudHM" +
+                                                 "iLCJ2aWV3LXVzZXJzIiwidmlldy1jbGllbn" +
+                                                 "RzIiwibWFuYWdlLWF1dGhvcml6YXRpb24iLCJtYW5h" +
+                                                 "Z2UtY2xpZW50cyIsInF1ZXJ5LWdyb3VwcyJ" +
+                                                 "dfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYW" +
+                                                 "Njb3VudCIsIm1hbmFnZS1hY2NvdW50LWx" +
+                                                 "pbmtzIiwidmlldy1wcm9maWxlIl19fSwibmFtZSI6I" +
+                                                 "lJlYWxtMSBBZG1pbiIsInByZWZlcnJlZF9" +
+                                                 "1c2VybmFtZSI6InJlYWxtYWRtaW5AZ21haWwuY29tIi" +
+                                                 "wiZ2l2ZW5fbmFtZSI6IlJlYWxtMSIsIm" +
+                                                 "ZhbWlseV9uYW1lIjoiQWRtaW4iLCJlbWFpbCI6InJ" +
+                                                 "lYWxtYWRtaW5AZ21haWwuY29tIn0.D2" +
+                                                 "nSVJbZ7M2JZosiC6z-HXx7-Rg1n7w7CCKvWtBzErJ" +
+                                                 "VDIedvS5y6syxQnJbtl0yITYM4qP-gN0J" +
+                                                 "i13qnwu0wjy-NorXvG7BOB5wl2SXekaaphXjv9e6N" +
+                                                 "shQ5SEhyV1hMzfPRqLkZbpETjEOdPiMziG" +
+                                                 "6k8sZCpast3c3diKb96dxjVIOhPayf2P9Z75b-qne" +
+                                                 "gFuV1LkD9mIkGDyA7t5givfouskPSr09EK" +
+                                                 "yxHf_m7kjPipy39cKODgcbsyYpwqAmHYaHJGsqIZ" +
+                                                 "YDPTCjvzmkrZOQlGJ_sXAVmxrZY8psUZ7MKe" +
+                                                 "Fd4l9xwvfi4N-3FFT5D4_tJq0Yp3RW5Bs3JVc1ig"
         const val DEFAULT_BEARER_TOKEN: String = "Bearer $DEFAULT_ACCESS_TOKEN"
-        const val DEFAULT_SIGNING_KEY: String = "{\"keys\": [{\"kty\": \"RSA\", \"e\": \"AQAB\", \"n\": \"vYKSjXOcKZI5eNvKT0BuMUAy-N7-f1-88H-Lgz5UOlyAT3wmKNHwwuz11qmovmZaKSTHk94bLIigwGIoc-nsQOahLxS1T-g0R5xN5PRvZUfK6B5W7ONX5EaXDXimKnxQLvIFXJpqzYyStkhYROTuELv70aKQNfYBrb2yZxdPNbjMzSL881awt6wiTIk76kDpzGJ0TcBBrhNKOxPU_L00FT-ASf2mKENTx2QLW8Srgw2SYo3xWhhccz1cEgjllnsX21EYNM95_hcQOBFeDfU7lYEfYGj4bX2mHE4m5up0uLAf5hOIXnfvpmtOKmUizyA9_3yPye1zJpIfZKNgtUo6-Q\"}]}"
+        const val DEFAULT_SIGNING_KEY: String = "{\"keys\": [{\"kty\": \"RSA\", \"e\":" +
+                                                " \"AQAB\", \"n\": \"vYKSjXOcKZI5eNvKT0BuM" +
+                                                "UAy-N7-f1-88H-Lgz5UOlyAT3wmKNHwwuz11qm" +
+                                                "ovmZaKSTHk94bLIigwGIoc-nsQOahLxS1T-g0R5xN" +
+                                                "5PRvZUfK6B5W7ONX5EaXDXimKnxQLvIFXJpq" +
+                                                "zYyStkhYROTuELv70aKQNfYBrb2yZxdPNbjMzSL881" +
+                                                "awt6wiTIk76kDpzGJ0TcBBrhNKOxPU_L00FT" +
+                                                "-ASf2mKENTx2QLW8Srgw2SYo3xWhhccz1cEgjllnsX" +
+                                                "21EYNM95_hcQOBFeDfU7lYEfYGj4bX2mHE4" +
+                                                "m5up0uLAf5hOIXnfvpmtOKmUizyA9_3yP" +
+                                                "ye1zJpIfZKNgtUo6-Q\"}]}"
 
         const val TPP_API_VERSION = "1"
         const val DEFAULT_TPP_UUID = "af0a8175-e6c2-4c49-883e-020b2b3600f9"

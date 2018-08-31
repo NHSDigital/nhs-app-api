@@ -51,6 +51,8 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
     }
 
     fun isButtonVisible(button: String): Boolean {
-        return findBy<WebElementFacade>("//button[contains(text(),'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
+        return findBy<WebElementFacade>(
+                "//button[contains(text()," +
+                "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
     }
 }

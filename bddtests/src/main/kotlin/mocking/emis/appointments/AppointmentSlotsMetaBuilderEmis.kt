@@ -22,13 +22,15 @@ import java.time.Duration
 private const val DEFAULT_DURATION: Int = 10
 private const val NUMBER_OF_SLOTS: Int = 1
 
-class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
-                                      apiEndUserSessionId: String,
-                                      apiSessionId: String,
-                                      sessionStartDate: String? = null,
-                                      sessionEndDate: String? = null,
-                                      userPatientLinkToken: String? = null)
-    : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointmentslots/meta"), IAppointmentSlotsBuilder {
+class AppointmentSlotsMetaBuilderEmis(
+        configuration: EmisConfiguration,
+        apiEndUserSessionId: String,
+        apiSessionId: String,
+        sessionStartDate: String? = null,
+        sessionEndDate: String? = null,
+        userPatientLinkToken: String? = null)
+    : EmisMappingBuilder(configuration, method = "GET",
+                         relativePath = "/appointmentslots/meta"), IAppointmentSlotsBuilder {
 
     init {
         requestBuilder
@@ -95,7 +97,10 @@ class AppointmentSlotsMetaBuilderEmis(configuration: EmisConfiguration,
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.SERVICE_ACCESS_VIOLATION,
-                "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. Extra info: Services Access violation")
+                "User Identity 'efa22020-9221-46a6-a0f0-6c0340b8f44d' requested services 'AppointmentBooking' " +
+                "from Application 'd66ba979-60d2-49aa-be82-aec06356e41f' for linked patient. " +
+                "Available services are 'AddressChange, RecordViewer, RepeatPrescribing, SharedRecordAuditView'. " +
+                "Extra info: Services Access violation")
         return respondWithException(exceptionResponse)
     }
 

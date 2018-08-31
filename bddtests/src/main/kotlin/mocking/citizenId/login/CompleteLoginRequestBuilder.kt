@@ -6,13 +6,18 @@ import mocking.models.Mapping
 import models.Patient
 
 class CompleteLoginRequestBuilder(val patient: Patient = MockDefaults.patient)
-    : CitizenIdMappingBuilder("GET", "/complete-login") {
+    : CitizenIdMappingBuilder("GET",
+        "/complete-login") {
 
     init {
-        requestBuilder.andQueryParameter("mock_patient", patient.hashCode().toString(), "equalTo")
+        requestBuilder.andQueryParameter("mock_patient",
+                patient.hashCode().toString(),
+                "equalTo")
     }
 
     fun respondWithRedirectResponse(): Mapping {
-        return redirectTo("{{request.query.redirect_uri}}?state={{request.query.state}}&code=${patient.cidUserSession.authCode!!}")
+        return redirectTo(
+                "{{request.query.redirect_uri}}?state={{request.query.state}}&code=" +
+                "${patient.cidUserSession.authCode!!}")
     }
 }

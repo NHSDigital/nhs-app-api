@@ -31,7 +31,10 @@ data class Patient(
         val rosuAccountId: String = "",
         val apiKey: String = "",
         val cidUserSession: UserSessionRequest= UserSessionRequest(
-                authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPSETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-7657b5e9e403.8d4c0a21-6483-4a52-9d47-6bcd737c634e",
+                authCode = "uss.UHLq4ghr4wsANlw5lMdUPFRGji4xlmPS" +
+                           "ETNewHxUpW0.4dff5848-0cc8-47a1-8eb1-76" +
+                           "57b5e9e403.8d4c0a21-6483-4a52-9d47" +
+                           "-6bcd737c634e",
                 codeVerifier = "xmoKFiYSK6APIDwc7cULOskbmkWD3vD2Map5lIQDdVU",
                 redirectUrl = Config.instance.cidRedirectUri),
         val accessToken: String ="access_token",
@@ -194,11 +197,28 @@ data class Patient(
                 accountId =  "520993083",
                 patientId = "84df400000000000",
                 onlineUserId = "84df400000000000",
-                passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=",
-                connectionToken =  "{\"accountId\":\"520993083\",\"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgL" +
+                             "k0NFY15hIdI6aRytptqiBs6r/k+0Ov" +
+                             "GEZfcEdMLJEMp/J4pkOGm2ViaSLca" +
+                             "49ODQzz4y+Cu2xOxLaehq/SjEIwfls" +
+                             "WeSwCvCAxroId1bXejTdNsV17fOAD0" +
+                             "M5nAZF6X9TysOfRR/j5tuR+o=",
+                connectionToken =  "{\"accountId\":\"52099308" +
+                                   "3\",\"passphrase\":\"c2ax" +
+                                   "hQ9VWB2/62XFxvKrNKh9JwgLk0" +
+                                   "NFY15hIdI6aRytptqiBs6r/k+0O" +
+                                   "vGEZfcEdMLJEMp/J4pkOGm2ViaSL" +
+                                   "ca49ODQzz4y+Cu2xOxLaehq/SjEI" +
+                                   "wflsWeSwCvCAxroId1bXejTdNsV17" +
+                                   "fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
                 endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                tppUserSession = TppUserSession("ZT8wLjK6beFOdXoiNIHbD+TbPrl0Y3KmVXy4GYM253hQlxwp2qMKW7zgbjgTWJzCvTcZxb2BZNW5IdGtaWtahGkv" +
-                        "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
+                tppUserSession = TppUserSession("ZT8wLjK6beFO" +
+                                                "dXoiNIHbD+TbPrl0Y3Km" +
+                                                "VXy4GYM253hQlxwp2qMKW" +
+                                                "7zgbjgTWJzCvTcZxb2BZN" +
+                                                "W5IdGtaWtahGkv" +
+                        "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD" +
+                                                "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
                         "84df400000000000", "KGPD", "84df400000000000")
         )
 
@@ -220,9 +240,13 @@ data class Patient(
                 contactDetails = defaultContactDetails,
                 odsCode = MockDefaults.DEFAULT_ODS_CODE_VISION,
                 nhsNumbers = listOf("5785445875"),
-                connectionToken = "{\"rosuAccountId\": \"104969\", \"apiKey\":\"h4h9869kj3ytz6427y7rctkdy3zkpxcncnhvfph76g2h6p9gywjq484c9ghan8tt\"}",
+                connectionToken = "{\"rosuAccountId\": \"104969\", \"" +
+                                  "apiKey\":\"h4h9869kj3ytz6427y7" +
+                                  "rctkdy3zkpxcncnhvfph76g2h6p9" +
+                                  "gywjq484c9ghan8tt\"}",
                 rosuAccountId = "104969",
-                apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnhvfph76g2h6p9gywjq484c9ghan8tt"
+                apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
+                         "vfph76g2h6p9gywjq484c9ghan8tt"
         )
     }
 }

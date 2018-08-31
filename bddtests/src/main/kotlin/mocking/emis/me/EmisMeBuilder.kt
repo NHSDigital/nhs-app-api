@@ -59,14 +59,21 @@ class EmisMeBuilder(configuration: EmisConfiguration,
     }
 
     fun respondWithNoOnlineUserFound(): Mapping {
-        return respondWithException(EmisResponseCode.INTERNAL_ERROR.toInt(), "No registered online user found for given linkage details")
+        return respondWithException(EmisResponseCode.INTERNAL_ERROR.toInt(),
+                                    "No registered online user found for given linkage details")
     }
 
     fun respondWithUserAlreadyLinked(): Mapping {
-        return respondWithException(EmisResponseCode.INTERNAL_ERROR.toInt(), "Registered online user is already linked")
+        return respondWithException(EmisResponseCode.INTERNAL_ERROR.toInt(),
+                                    "Registered online user is already linked")
     }
 
     fun respondWithInvalidLinkLevel(): Mapping {
-        return respondWithException(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(), "User Identity '00000000-0000-0000-0000-000000000000' requested access level 'Linked' from Application '00000000-0000-0000-0000-000000000000'. Actual access level is 'Restricted'. Extra info: Invalid UserApplication link level")
+        return respondWithException(EmisResponseCode.SERVICE_ACCESS_VIOLATION.toInt(),
+                                    "User Identity '00000000-0000-0000-0000-000000000000' " +
+                                    "requested access level 'Linked' " +
+                                    "from Application '00000000-0000-0000-0000-000000000000'. " +
+                                    "Actual access level is 'Restricted'. Extra info: " +
+                                    "Invalid UserApplication link level")
     }
 }

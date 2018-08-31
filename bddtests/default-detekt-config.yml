@@ -416,7 +416,7 @@ style:
   MandatoryBracesIfStatements:
     active: false
   MaxLineLength:
-    active: false #temporary disabled
+    active: true
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false

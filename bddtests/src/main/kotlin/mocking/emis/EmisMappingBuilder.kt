@@ -49,7 +49,8 @@ const val HEADER_ODS_CODE = "odsCode"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
 @Suppress("TooManyFunctions")
-open class EmisMappingBuilder(private var configuration: EmisConfiguration?, private val method: String, relativePath: String)
+open class EmisMappingBuilder(private var configuration: EmisConfiguration?,
+                              private val method: String, relativePath: String)
     : MappingBuilder(method, "/emis$relativePath"), IAppointmentMappingBuilder {
 
     protected var delayMillisecs = 0
@@ -64,9 +65,11 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
 
     fun practiceSettingsRequest(patient: Patient) = PracticeSettingsBuilderEmis(patient)
 
-    override fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
+    override fun viewMyAppointmentsRequest(patient: Patient):
+            IMyAppointmentsBuilder = GetAppointmentBuilderEmis(configuration, patient)
 
-    override fun appointmentSlotsRequest(patient: Patient, fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderEmis(
+    override fun appointmentSlotsRequest(patient: Patient,
+                                         fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -74,7 +77,9 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             toDateTime,
             patient.userPatientLinkToken)
 
-    fun appointmentSlotsMetaRequest(patient: Patient, sessionStartDate: String? = null, sessionEndDate: String? = null) = AppointmentSlotsMetaBuilderEmis(
+    fun appointmentSlotsMetaRequest(patient: Patient,
+                                    sessionStartDate: String? = null,
+                                    sessionEndDate: String? = null) = AppointmentSlotsMetaBuilderEmis(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -82,34 +87,58 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             sessionEndDate,
             patient.userPatientLinkToken)
 
-    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade) =
+    override fun bookAppointmentSlotRequest(patient: Patient,
+                                            request: BookAppointmentSlotFacade) =
             BookAppointmentsBuilderEmis(configuration!!, patient.endUserSessionId, patient.sessionId, request)
 
-    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade) = DeleteAppointmentsBuilderEmis(configuration!!, patient, request)
+    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade)
+            = DeleteAppointmentsBuilderEmis(configuration!!, patient, request)
 
-    fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun demographicsRequest(patient: Patient) = EmisDemographicsBuilder(configuration!!,
+                                                                        patient.userPatientLinkToken,
+                                                                        patient.endUserSessionId, patient.sessionId)
 
-    fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun allergiesRequest(patient: Patient) = EmisAllergiesBuilder(configuration!!,
+                                                                  patient.userPatientLinkToken,
+                                                                  patient.endUserSessionId,
+                                                                  patient.sessionId)
 
-    fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun medicationsRequest(patient: Patient) = EmisMedicationsBuilder(configuration!!,
+                                                                      patient.userPatientLinkToken,
+                                                                      patient.endUserSessionId,
+                                                                      patient.sessionId)
 
-    fun problemsRequest(patient: Patient) = EmisProblemsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun problemsRequest(patient: Patient) = EmisProblemsBuilder(configuration!!,
+                                                                patient.userPatientLinkToken,
+                                                                patient.endUserSessionId,
+                                                                patient.sessionId)
 
-    fun consultationsRequest(patient: Patient) = EmisConsultationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun consultationsRequest(patient: Patient) = EmisConsultationsBuilder(configuration!!,
+                                                                          patient.userPatientLinkToken,
+                                                                          patient.endUserSessionId,
+                                                                          patient.sessionId)
 
-    fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun immunisationsRequest(patient: Patient) = EmisImmunisationsBuilder(configuration!!,
+                                                                          patient.userPatientLinkToken,
+                                                                          patient.endUserSessionId,
+                                                                          patient.sessionId)
 
-    fun testResultsRequest(patient: Patient) = EmisTestResultsBuilder(configuration!!, patient.userPatientLinkToken, patient.endUserSessionId, patient.sessionId)
+    fun testResultsRequest(patient: Patient) = EmisTestResultsBuilder(configuration!!,
+                                                                      patient.userPatientLinkToken,
+                                                                      patient.endUserSessionId,
+                                                                      patient.sessionId)
 
     fun meRequest(patient: Patient) = EmisMeBuilder(configuration!!, method, patient)
 
-    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(configuration!!, patient.endUserSessionId, model)
+    fun meApplicationsRequest(patient: Patient, model: LinkApplicationRequestModel) = EmisMeApplicationsBuilder(
+            configuration!!, patient.endUserSessionId, model)
 
     fun endUserSessionRequest() = EmisEndUserSessionBuilder(configuration!!)
 
     fun sessionRequest(patient: Patient) = EmisSessionBuilder(configuration!!, patient)
 
-    fun prescriptionsRequest(patient: Patient, fromDate: OffsetDateTime? = null, toDate: OffsetDateTime? = null) = EmisPrescriptionsBuilder(
+    fun prescriptionsRequest(patient: Patient, fromDate: OffsetDateTime? = null,
+                             toDate: OffsetDateTime? = null) = EmisPrescriptionsBuilder(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,
@@ -123,7 +152,9 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?, pri
             patient.sessionId,
             patient.userPatientLinkToken)
 
-    fun repeatPrescriptionSubmissionRequest(patient: Patient, prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null) = EmisPrescriptionsSubmissionBuilder(
+    fun repeatPrescriptionSubmissionRequest(patient: Patient,
+                                            prescriptionSubmissionRequest: PrescriptionSubmissionRequest? = null) =
+                                            EmisPrescriptionsSubmissionBuilder(
             configuration!!,
             patient.endUserSessionId,
             patient.sessionId,

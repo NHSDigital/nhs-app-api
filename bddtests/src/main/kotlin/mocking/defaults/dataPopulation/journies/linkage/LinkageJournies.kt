@@ -30,28 +30,34 @@ class LinkageJournies(private val client: MockingClient) {
         val notFoundPatient = Linkage("A29928", "4447770001", "notFound@email.com", identityToken = "idToken")
         client.forEmis {
                 linkageKeyPOSTRequest(
-                        AddNhsUserRequest(notFoundPatient.odsCode, notFoundPatient.nhsNumber, notFoundPatient.emailAddress))
+                        AddNhsUserRequest(notFoundPatient.odsCode,
+                                          notFoundPatient.nhsNumber, notFoundPatient.emailAddress))
                         .respondWithNoRegisteredOnlineUserFound()
         }
 
         val conflictPatient = Linkage("A29928", "5558881112", "conflict@email.com", identityToken = "idToken")
         client.forEmis {
                 linkageKeyPOSTRequest(
-                        AddNhsUserRequest(conflictPatient.odsCode, conflictPatient.nhsNumber, notFoundPatient.emailAddress))
+                        AddNhsUserRequest(conflictPatient.odsCode,
+                                          conflictPatient.nhsNumber, notFoundPatient.emailAddress))
                         .respondWithPatientAlreadyHasAnOnlineAccount()
         }
 
         val badGatewayPatient = Linkage("A29928", "5634234345", "badgateway@email.com", identityToken = "idToken")
         client.forEmis {
             linkageKeyPOSTRequest(
-                    AddNhsUserRequest(badGatewayPatient.odsCode, badGatewayPatient.nhsNumber, notFoundPatient.emailAddress))
+                    AddNhsUserRequest(badGatewayPatient.odsCode,
+                                      badGatewayPatient.nhsNumber, notFoundPatient.emailAddress))
                     .respondWithBadGatewayException()
         }
 
-        val timeoutPatient = Linkage("A29928", "5634200045", "timeout@email.com", "tTALtBP3rLR16", "542343", identityToken = "idToken")
+        val timeoutPatient = Linkage("A29928", "5634200045",
+                                     "timeout@email.com", "tTALtBP3rLR16",
+                                     "542343", identityToken = "idToken")
         client.forEmis {
             linkageKeyPOSTRequest(
-                    AddNhsUserRequest(timeoutPatient.odsCode, timeoutPatient.nhsNumber, notFoundPatient.emailAddress))
+                    AddNhsUserRequest(timeoutPatient.odsCode,
+                                      timeoutPatient.nhsNumber, notFoundPatient.emailAddress))
                     .respondWithSuccessfullyCreated(AddNhsUserResponse(""))
                     .delayedBy( Duration.ofSeconds(TIMEOUT_DURATION_SECONDS))
         }
@@ -67,7 +73,8 @@ class LinkageJournies(private val client: MockingClient) {
         for (linkage in existingPatientLinkages) {
             client.forEmis {
                 linkageKeyGetRequest(AddVerificationRequest(linkage.nhsNumber, linkage.odsCode, linkage.emailAddress))
-                        .respondWithSuccessfullyRetrieved(AddVerificationResponse(linkage.odsCode, linkage.linkageKey!!, linkage.accountId!!))
+                        .respondWithSuccessfullyRetrieved(AddVerificationResponse(
+                                linkage.odsCode, linkage.linkageKey!!, linkage.accountId!!))
             }
         }
 
@@ -85,26 +92,31 @@ class LinkageJournies(private val client: MockingClient) {
 
         val notFoundPatient = Linkage("A29928", "3434994345", "")
         client.forEmis {
-                linkageKeyGetRequest(AddVerificationRequest(notFoundPatient.nhsNumber, notFoundPatient.odsCode, notFoundPatient.emailAddress))
+                linkageKeyGetRequest(AddVerificationRequest(
+                        notFoundPatient.nhsNumber, notFoundPatient.odsCode, notFoundPatient.emailAddress))
                         .respondWithNoRegisteredOnlineUserFound()
         }
 
         val invalidODSCode = Linkage("C94839", "3434234345", "")
         client.forEmis {
-            linkageKeyGetRequest(AddVerificationRequest(invalidODSCode.nhsNumber, invalidODSCode.odsCode, invalidODSCode.emailAddress))
+            linkageKeyGetRequest(AddVerificationRequest(
+                    invalidODSCode.nhsNumber, invalidODSCode.odsCode, invalidODSCode.emailAddress))
                     .respondWithNotImplementedException()
         }
 
         val badGatewayPatient = Linkage("A29928", "5634234345", "")
         client.forEmis {
-            linkageKeyGetRequest(AddVerificationRequest(badGatewayPatient.nhsNumber, badGatewayPatient.odsCode, badGatewayPatient.emailAddress))
+            linkageKeyGetRequest(AddVerificationRequest(
+                    badGatewayPatient.nhsNumber, badGatewayPatient.odsCode, badGatewayPatient.emailAddress))
                     .respondWithBadGatewayException()
         }
 
         val timeoutPatient = Linkage("A29928", "5634200045", "tTALtBP3rLR16", "542343", "14232")
         client.forEmis {
-            linkageKeyGetRequest(AddVerificationRequest(timeoutPatient.nhsNumber, timeoutPatient.odsCode, timeoutPatient.emailAddress))
-                    .respondWithSuccessfullyRetrieved(AddVerificationResponse(timeoutPatient.odsCode, timeoutPatient.linkageKey!!, timeoutPatient.accountId!!))
+            linkageKeyGetRequest(AddVerificationRequest(
+                    timeoutPatient.nhsNumber, timeoutPatient.odsCode, timeoutPatient.emailAddress))
+                    .respondWithSuccessfullyRetrieved(AddVerificationResponse(
+                            timeoutPatient.odsCode, timeoutPatient.linkageKey!!, timeoutPatient.accountId!!))
                     .delayedBy( Duration.ofSeconds(TIMEOUT_DURATION_SECONDS))
         }
     }

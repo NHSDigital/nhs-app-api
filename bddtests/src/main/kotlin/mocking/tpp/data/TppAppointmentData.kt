@@ -31,7 +31,8 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
     private val appointmentDetailList = arrayOf("$clinicianRole: Dr James Jones", "$clinicianRole: Sean Devlin")
     private val appointmentSiteName = "Kainos GP Demo Unit"
     private val locations = arrayOf("Leeds", "Sheffield")
-    private val addresses = arrayListOf("Tpp, Leeds, West Yorkshire, LS18 5PX", "Tpp, Sheffield, South Yorkshire, S15 5PX")
+    private val addresses = arrayListOf("Tpp, Leeds, West Yorkshire, LS18 5PX",
+                                        "Tpp, Sheffield, South Yorkshire, S15 5PX")
     private val appointments = arrayListOf<Appointment>()
 
     val drJamesBaseSession = Session(
@@ -80,7 +81,8 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
                 uuid = TppConfig.uuid)
     }
 
-    private fun generateTppAppointmentFor(baseTppAppointment: Appointment, withBaseDate: Calendar, howMany: Int = DEFAULT_APPOINTMENTS_NUMBER): ArrayList<Appointment> {
+    private fun generateTppAppointmentFor(baseTppAppointment: Appointment, withBaseDate: Calendar,
+                                          howMany: Int = DEFAULT_APPOINTMENTS_NUMBER): ArrayList<Appointment> {
         val appointmentTime = copyCalendarDate(withBaseDate)
         val appointments = arrayListOf<Appointment>()
         for (counter in 1..howMany) {
@@ -88,7 +90,8 @@ class TppAppointmentData private constructor() : BaseAppointmentData() {
                 appointmentTime.addDays(1).set(Calendar.HOUR_OF_DAY, APPOINTMENT_HOUR)
             val startTime = dateTimeFormat.format(appointmentTime.time)
             val endTime = dateTimeFormat.format(appointmentTime.addMinutes(APPOINTMENT_DURATION_IN_MINUTES).time)
-            appointments.add(baseTppAppointment.copy(startDate = startTime, endDate = endTime, apptId = counter.toString()))
+            appointments.add(baseTppAppointment.copy(startDate = startTime,
+                                                     endDate = endTime, apptId = counter.toString()))
         }
         return appointments
     }

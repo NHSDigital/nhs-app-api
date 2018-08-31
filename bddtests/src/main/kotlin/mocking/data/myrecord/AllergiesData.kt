@@ -31,11 +31,16 @@ object AllergiesData {
 
         val allergies = mutableListOf<AllergyResponse>()
 
-        allergies.add(AllergyResponse(term = "Hay Fever", effectiveDate = EffectiveDate("UnKnown", "2018-05-15T09:52:44.927")))
-        allergies.add(AllergyResponse(term = "Nut Allergy", effectiveDate = EffectiveDate("Year", "2018-05-15T09:52:44.927")))
-        allergies.add(AllergyResponse(term = "H/O: analgesic allergy", effectiveDate = EffectiveDate("YearMonth", "2018-05-15T09:52:44.927")))
-        allergies.add(AllergyResponse(term = "H/O: penicillin allergy", effectiveDate = EffectiveDate("YearMonthDay", "2018-05-15T09:52:44.927")))
-        allergies.add(AllergyResponse(term = "Hay Fever 2", effectiveDate = EffectiveDate("YearMonthDayTime", "2018-05-15T09:52:44.927")))
+        allergies.add(AllergyResponse(term = "Hay Fever", effectiveDate = EffectiveDate(
+                "UnKnown", "2018-05-15T09:52:44.927")))
+        allergies.add(AllergyResponse(term = "Nut Allergy", effectiveDate = EffectiveDate(
+                "Year", "2018-05-15T09:52:44.927")))
+        allergies.add(AllergyResponse(term = "H/O: analgesic allergy", effectiveDate = EffectiveDate(
+                "YearMonth", "2018-05-15T09:52:44.927")))
+        allergies.add(AllergyResponse(term = "H/O: penicillin allergy", effectiveDate = EffectiveDate(
+                "YearMonthDay", "2018-05-15T09:52:44.927")))
+        allergies.add(AllergyResponse(term = "Hay Fever 2", effectiveDate = EffectiveDate(
+                "YearMonthDayTime", "2018-05-15T09:52:44.927")))
 
         return AllergyResponseModel(
                 medicalRecord = AllergyMedicalRecord(
@@ -59,7 +64,8 @@ object AllergiesData {
         val drugSensitivities = mutableListOf<ViewPatientOverviewItem>()
 
         for (i in 1..count) {
-            allergies.add(ViewPatientOverviewItem(id = i.toString(), description = "Allergies", date="2018-05-15T09:52:44.927", value="Hay Fever"))
+            allergies.add(ViewPatientOverviewItem(id = i.toString(), description = "Allergies",
+                                                  date="2018-05-15T09:52:44.927", value="Hay Fever"))
         }
 
         val result= ViewPatientOverviewReply(

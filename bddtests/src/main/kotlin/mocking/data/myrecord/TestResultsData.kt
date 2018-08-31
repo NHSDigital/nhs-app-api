@@ -44,11 +44,13 @@ object TestResultsData {
                         TestResultValue(
                                 effectiveDate = EffectiveDate("YearMonthDay", "2006-05-15T09:52:44.927"),
                                 term = "Platelet count", textValue = "5.9",
-                                numericUnits = "x10^9/L", range = TestResultRange(minimumText = "3.6", maximumText = "10")),
+                                numericUnits = "x10^9/L", range = TestResultRange(
+                                minimumText = "3.6", maximumText = "10")),
                         TestResultValue(
                                 effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
                                 term = "Basophil count", textValue = "5.58",
-                                numericUnits = "x10^9/L", range = TestResultRange(minimumText = "3.6", maximumText = "10")
+                                numericUnits = "x10^9/L", range = TestResultRange(
+                                minimumText = "3.6", maximumText = "10")
                         ))))
 
         return TestResultResponseModel(
@@ -71,7 +73,8 @@ object TestResultsData {
                         TestResultValue(
                                 effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
                                 term = "Basophil count", textValue = "5.58",
-                                numericUnits = "x10^9/L", range = TestResultRange(minimumText = "3.6", maximumText = "10")
+                                numericUnits = "x10^9/L", range = TestResultRange(
+                                minimumText = "3.6", maximumText = "10")
                         ))))
 
         return TestResultResponseModel(
@@ -85,17 +88,22 @@ object TestResultsData {
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
-                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                effectiveDate = EffectiveDate("Unknown",
+                                              "2018-05-15T09:52:44.927"),
                 term = "Neutrophil count", textValue = "5.58",
                 numericUnits = "x10^9/L",
                 range = TestResultRange(minimumText = "1.7", maximumText = "6")),
                 childValues = mutableListOf(
                         TestResultValue(
-                                effectiveDate = EffectiveDate("YearMonthDay", "2006-05-15T09:52:44.927"),
+                                effectiveDate = EffectiveDate(
+                                        "YearMonthDay",
+                                        "2006-05-15T09:52:44.927"),
                                 term = "Platelet count", textValue = "5.9",
                                 numericUnits = "x10^9/L", range = null),
                         TestResultValue(
-                                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                                effectiveDate = EffectiveDate(
+                                        "Unknown",
+                                        "2018-05-15T09:52:44.927"),
                                 term = "Basophil count", textValue = "5.58",
                                 numericUnits = "x10^9/L", range = null
                         ))))
@@ -111,13 +119,15 @@ object TestResultsData {
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
-                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                effectiveDate = EffectiveDate("Unknown",
+                                              "2018-05-15T09:52:44.927"),
                 term = "Neutrophil count", textValue = "5.58",
                 numericUnits = "x10^9/L",
                 range = TestResultRange(minimumText = "1.7", maximumText = "6")),
                 childValues = mutableListOf(
                         TestResultValue(
-                                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                                effectiveDate = EffectiveDate(
+                                        "Unknown", "2018-05-15T09:52:44.927"),
                                 term = "Basophil count", textValue = "5.58",
                                 numericUnits = "x10^9/L", range = null
                         ))))
@@ -133,7 +143,8 @@ object TestResultsData {
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
-                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                effectiveDate = EffectiveDate("Unknown",
+                                              "2018-05-15T09:52:44.927"),
                 term = "Neutrophil count", textValue = "5.58",
                 numericUnits = "x10^9/L",
                 range = null),
@@ -150,7 +161,8 @@ object TestResultsData {
         val testResults = mutableListOf<TestResultResponse>()
 
         testResults.add(TestResultResponse(value = TestResultValue(
-                effectiveDate = EffectiveDate("Unknown", "2018-05-15T09:52:44.927"),
+                effectiveDate = EffectiveDate("Unknown",
+                                              "2018-05-15T09:52:44.927"),
                 term = "Neutrophil count", textValue = "5.58",
                 numericUnits = "x10^9/L",
                 range = TestResultRange(minimumText = "1.7", maximumText = "6")),
@@ -174,7 +186,9 @@ object TestResultsData {
         val testResults = mutableListOf<TestResultsViewReplyItem>()
 
         for (testCount: Int in 1..count) {
-            testResults.add(TestResultsViewReplyItem(id = mockTestResultId, value = "Anticoag Control (Warfarin), Read $testCount", description = "Pathology $testCount",
+            testResults.add(TestResultsViewReplyItem(id = mockTestResultId,
+                                                     value = "Anticoag Control (Warfarin), Read $testCount",
+                                                     description = "Pathology $testCount",
                     date = "2001-06-28T00:00:00.0Z"))
         }
 

@@ -97,7 +97,8 @@ class WorkerClient {
         val userSessionResponseBody = gson.fromJson<UserSessionResponse.UserSessionResponseBody>(result,
                 UserSessionResponse.UserSessionResponseBody::class.java)
 
-        val userSessionResponseCookie = UserSessionResponseCookie(Cookie(cookieHeaderKey, response.getHeaders(cookieHeaderKey).first().value))
+        val userSessionResponseCookie = UserSessionResponseCookie(Cookie(
+                cookieHeaderKey, response.getHeaders(cookieHeaderKey).first().value))
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
     }
 
@@ -118,7 +119,9 @@ class WorkerClient {
         return gson.fromJson<MyAppointmentsResponse>(result, MyAppointmentsResponse::class.java)
     }
 
-    fun getAppointmentSlots(fromDate: String? = null, toDate: String? = null, sessionCookie: Cookie? = null): AppointmentSlotsResponse {
+    fun getAppointmentSlots(fromDate: String? = null,
+                            toDate: String? = null,
+                            sessionCookie: Cookie? = null): AppointmentSlotsResponse {
         val uriBuilder = createUriBuilderForAppointmentSlots(fromDate, toDate)
         val httpGet = HttpGet(uriBuilder.build())
 
@@ -275,8 +278,11 @@ class WorkerClient {
 
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)
 
-        if (response.statusLine.statusCode != SC_OK && response.statusLine.statusCode != SC_CREATED && response.statusLine.statusCode != SC_NO_CONTENT) {
-            // Exception is thrown here to ensure that the tests fail at the appropriate location and not further down the line
+        if (response.statusLine.statusCode != SC_OK &&
+            response.statusLine.statusCode != SC_CREATED &&
+            response.statusLine.statusCode != SC_NO_CONTENT) {
+            // Exception is thrown here to ensure that the
+            // tests fail at the appropriate location and not further down the line
             // when values are not as expected.  This makes it easier to debug.
             throw NhsoHttpException(request, response)
         } else {

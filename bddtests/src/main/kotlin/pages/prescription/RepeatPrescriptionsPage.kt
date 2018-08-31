@@ -93,7 +93,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     fun selectRepeatPrescription(courseToSelect: MedicationCourse) {
         var prescription = getRepeatPrescription(courseToSelect)
-        Assert.assertNotNull("Didn't find medication course with: \nname: ${courseToSelect.name} \ndosage: ${courseToSelect.getInstructionsText()}", prescription)
+        Assert.assertNotNull("Didn't find medication course with: \nname: " +
+                             "${courseToSelect.name} \ndosage: " +
+                             "${courseToSelect.getInstructionsText()}", prescription)
         prescription.element.click()
         Thread.sleep(DELAY_FOR_ELEMENT_SELECTION) //In order to ensure each prescription is selected
         verifyPrescriptionIsSelected(courseToSelect)
@@ -101,7 +103,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     private fun getRepeatPrescription(courseToSelect: MedicationCourse):HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//div[p[text()[contains(.,'${courseToSelect.getInstructionsText()}')]]]/div/label[text()[contains(.,'${courseToSelect.name}')]]",
+                browserLocator = "//div[p[text()[contains(.,'" +
+                                 "${courseToSelect.getInstructionsText()}')]]]/div/label[text()[" +
+                                 "contains(.,'${courseToSelect.name}')]]",
                 androidLocator = null,
                 page = this
         )
@@ -123,7 +127,8 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             }
         }
 
-        Assert.fail("Didn't find medication course with: \nname: ${medicationCourse.name} \ndosage: ${medicationCourse.getInstructionsText()}")
+        Assert.fail("Didn't find medication course with: \nname: ${medicationCourse.name} " +
+                    "\ndosage: ${medicationCourse.getInstructionsText()}")
     }
 
     fun clickContinueButton() {

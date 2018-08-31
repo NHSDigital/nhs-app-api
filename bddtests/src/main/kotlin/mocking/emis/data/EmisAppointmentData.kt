@@ -150,15 +150,18 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
         val baseDate = Calendar.getInstance(timeZone)
 
         var bookingDate = copyCalendarDate(baseDate)
-        val appointment1 = addDateToAppointment(unspecifiedTimeAppointment1.copy(), bookingDate, bookInDay = 1, durationInMinutes = 30)
+        val appointment1 = addDateToAppointment(unspecifiedTimeAppointment1.copy(),
+                                                bookingDate, bookInDay = 1, durationInMinutes = 30)
         appointment1.telephoneAppointmentDetails = telephoneAppointmentDetails1
 
         bookingDate = copyCalendarDate(baseDate, addHours = 2)
-        val appointment2 = addDateToAppointment(unspecifiedTimeAppointment2.copy(), bookingDate, bookInDay = 2, durationInMinutes = 20)
+        val appointment2 = addDateToAppointment(unspecifiedTimeAppointment2.copy(),
+                                                bookingDate, bookInDay = 2, durationInMinutes = 20)
         appointment2.telephoneAppointmentDetails = telephoneAppointmentDetails2
 
         bookingDate = copyCalendarDate(baseDate, addHours = 2, addMinutes = 20)
-        val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(), bookingDate, bookInDay = 4, durationInMinutes = 15)
+        val appointment3 = addDateToAppointment(unspecifiedTimeAppointment3.copy(),
+                                                bookingDate, bookInDay = 4, durationInMinutes = 15)
         appointment3.telephoneAppointmentDetails = telephoneAppointmentDetails1
 
         appointments.clear()
@@ -166,7 +169,8 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
 
         val appointmentsFromDate = appointment1.startTime
 
-        return GetAppointmentsResponseModel(appointmentsFromDate, appointments, locations, sessionHolders, sessions)
+        return GetAppointmentsResponseModel(appointmentsFromDate, appointments,
+                                            locations, sessionHolders, sessions)
     }
 
     fun createGetAppointmentsResponseForNoUpcomingAppointments(): GetAppointmentsResponseModel {
@@ -211,7 +215,8 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
         return arrayListOf(emisCancellationReason1, emisCancellationReason2)
     }
 
-    private fun addDateToAppointment(appointment: Appointment, bookingDate: Calendar, bookInDay: Int, durationInMinutes: Int): Appointment {
+    private fun addDateToAppointment(appointment: Appointment, bookingDate: Calendar,
+                                     bookInDay: Int, durationInMinutes: Int): Appointment {
         appointment.bookingDate = dateTimeFormat.format(bookingDate.time)
         val startDate = bookingDate.addDays(bookInDay)
         appointment.startTime = dateTimeFormat.format(startDate.time)
@@ -219,7 +224,8 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
         return appointment
     }
 
-    private fun createAppointmentSlot(sessionId: Int, startTime: Calendar, durationInMinutes: Int): AppointmentSlotFacade {
+    private fun createAppointmentSlot(sessionId: Int, startTime: Calendar,
+                                      durationInMinutes: Int): AppointmentSlotFacade {
         val startSession = dateTimeFormat.format(startTime.time)
         val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes).time)
         return AppointmentSlotFacade(sessionId, startSession, endSession)

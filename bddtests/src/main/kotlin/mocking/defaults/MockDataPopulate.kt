@@ -176,7 +176,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/PostEmisAppointment.json")
 
             mockingClient.forEmis {
-                bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 1, "NFT Test Book Slot"))
+                bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken,
+                                                                              1, "NFT Test Book Slot"))
                         .respondWithSuccessJson(postAppointmentRequestBody)
             }
 
@@ -185,7 +186,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/DeleteEmisAppointment.json")
 
             mockingClient.forEmis {
-                cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(patient.userPatientLinkToken, 1, "No longer required"))
+                cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(patient.userPatientLinkToken,
+                                                                              1, "No longer required"))
                         .respondWithSuccessJson(deleteAppointmentRequestBody)
             }
 
@@ -236,27 +238,32 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
             // GET /emis/record (immunisationsRequest)
             mockingClient.forEmis {
-                immunisationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Immunisations.json"))
+                immunisationsRequest(patient).respondWithSuccessJson(getFileContents(
+                        "medicalRecords/Immunisations.json"))
             }
 
             // GET /emis/record (allergiesRequest)
             mockingClient.forEmis {
-                allergiesRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Allergies.json"))
+                allergiesRequest(patient).respondWithSuccessJson(getFileContents(
+                        "medicalRecords/Allergies.json"))
             }
 
             // GET /emis/record (medicationsRequest)
             mockingClient.forEmis {
-                medicationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Medications.json"))
+                medicationsRequest(patient).respondWithSuccessJson(getFileContents(
+                        "medicalRecords/Medications.json"))
             }
 
             // GET /emis/record (problemsRequest)
             mockingClient.forEmis {
-                problemsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Problems.json"))
+                problemsRequest(patient).respondWithSuccessJson(getFileContents(
+                        "medicalRecords/Problems.json"))
             }
 
             // GET /emis/record (consultationsRequest)
             mockingClient.forEmis {
-                consultationsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/Consultations.json"))
+                consultationsRequest(patient).respondWithSuccessJson(getFileContents(
+                        "medicalRecords/Consultations.json"))
             }
 
             SuccessfulRegistrationJourney(mockingClient).create(patient)
@@ -377,33 +384,39 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                 getFileContents("appointments/PostEmisAppointment.json", BASE_MOCK_DATA_DIR)
 
         mockingClient.forEmis {
-            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a good response"))
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(
+                    patientForStubEnvironment.userPatientLinkToken, 1, "give me a good response"))
                     .respondWithSuccessJson(postAppointmentRequestBody)
         }
 
         mockingClient.forEmis {
-            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a service not available response"))
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(
+                    patientForStubEnvironment.userPatientLinkToken, 1, "give me a service not available response"))
                     .respondWithUnavailableException()
         }
 
         mockingClient.forEmis {
-            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me an appointment not found response"))
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(
+                    patientForStubEnvironment.userPatientLinkToken, 1, "give me an appointment not found response"))
                     .respondWithExceptionWhenNotAvailable()
         }
 
         mockingClient.forEmis {
-            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a service not enabled response"))
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(
+                    patientForStubEnvironment.userPatientLinkToken, 1, "give me a service not enabled response"))
                     .respondWithExceptionWhenNotEnabled()
         }
 
         //POST /emis/appointments - time out scenario
         mockingClient.forEmis {
-            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "give me a time out response"))
+            bookAppointmentSlotRequest(patientForStubEnvironment, BookAppointmentSlotFacade(
+                    patientForStubEnvironment.userPatientLinkToken, 1, "give me a time out response"))
                     .respondWith(HttpStatus.SC_OK, TIMEOUT_DELAY_MILLISECONDS, resolve = {})
         }
 
         mockingClient.forEmis {
-            cancelAppointmentRequest(patientForStubEnvironment, CancelAppointmentSlotFacade(patientForStubEnvironment.userPatientLinkToken, 1, "cancel appointment"))
+            cancelAppointmentRequest(patientForStubEnvironment, CancelAppointmentSlotFacade(
+                    patientForStubEnvironment.userPatientLinkToken, 1, "cancel appointment"))
                     .respondWithSuccess()
         }
     }
@@ -454,7 +467,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Prescriptions not Enabled
-        val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(uuids, "give me prescription not enabled response")
+        val prescriptionSubmissionRequestNotEnabled = PrescriptionSubmissionRequest(
+                uuids, "give me prescription not enabled response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotEnabled)
                     .respondWithPrescriptionsNotEnabled()
@@ -462,7 +476,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Prescriptions not submitted
-        val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(uuids, "give me prescription not submitted response")
+        val prescriptionSubmissionRequestNotSubmitted = PrescriptionSubmissionRequest(
+                uuids, "give me prescription not submitted response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestNotSubmitted)
                     .respondWithGenericInternalServerError()
@@ -470,15 +485,18 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Pending request in last 30 days
-        val prescriptionSubmissionRequestWithPendingRequest = PrescriptionSubmissionRequest(uuids, "give me already pending request response")
+        val prescriptionSubmissionRequestWithPendingRequest = PrescriptionSubmissionRequest(
+                uuids, "give me already pending request response")
         mockingClient.forEmis {
-            repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestWithPendingRequest)
+            repeatPrescriptionSubmissionRequest(
+                    patientForStubEnvironment, prescriptionSubmissionRequestWithPendingRequest)
                     .respondWithAlreadyAPendingRequestInTheLast30Days()
                     .whenScenarioStateIs("Started")
         }
 
         //Error scenario - Course invalid request
-        val prescriptionSubmissionRequestInvalid = PrescriptionSubmissionRequest(uuids, "give me course invalid response")
+        val prescriptionSubmissionRequestInvalid = PrescriptionSubmissionRequest(
+                uuids, "give me course invalid response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestInvalid)
                     .respondWithBadRequestErrorIndicatingACourseIsInvalid()
@@ -486,7 +504,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
 
         //Error scenario - Prescriptions time out
-        val prescriptionSubmissionRequestTimeOut = PrescriptionSubmissionRequest(uuids, "give me a time out response")
+        val prescriptionSubmissionRequestTimeOut = PrescriptionSubmissionRequest(
+                uuids, "give me a time out response")
         mockingClient.forEmis {
             repeatPrescriptionSubmissionRequest(patientForStubEnvironment, prescriptionSubmissionRequestTimeOut)
                     .respondWithCreated().delayedBy(Duration.ofSeconds(TIMEOUT_DELAY_SECONDS))
@@ -497,7 +516,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
     private fun generateEMISMyMedicalRecordsStubs(patientForStubEnvironment: Patient) {
         // GET /emis/record (testResultsRequest)
         mockingClient.forEmis {
-            testResultsRequest(patientForStubEnvironment).respondWithSuccess(TestResultsData.getTestResultsForEmis(EMIS_RESULT_COUNT))
+            testResultsRequest(patientForStubEnvironment).respondWithSuccess(
+                    TestResultsData.getTestResultsForEmis(EMIS_RESULT_COUNT))
         }
 
         // GET /emis/record (immunisationsRequest)
@@ -507,7 +527,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
         // GET /emis/record (allergiesRequest)
         mockingClient.forEmis {
-            allergiesRequest(patientForStubEnvironment).respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
+            allergiesRequest(patientForStubEnvironment).respondWithSuccess(
+                    AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
         }
 
         // GET /emis/record (medicationsRequest)
@@ -522,7 +543,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
         // GET /emis/record (consultationsRequest)
         mockingClient.forEmis {
-            consultationsRequest(patientForStubEnvironment).respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
+            consultationsRequest(patientForStubEnvironment).respondWithSuccess(
+                    ConsultationsData.getMultipleConsultationRecords())
         }
     }
 

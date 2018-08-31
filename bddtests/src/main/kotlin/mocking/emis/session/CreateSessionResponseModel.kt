@@ -14,5 +14,8 @@ class CreateSessionResponseModel(val sessionId: String,
                                  associationType: AssociationType) {
     val applicationLinkLevel = ApplicationLinkLevel.Linked
     val lastAccessTime = DateTime.now()
-    val userPatientLinks = arrayOf(UserPatientLink(title, firstName, surname, userPatientLinkToken, odsCode, associationType))
+    val userPatientLinks = arrayOf(UserPatientLink(title,
+                                                   firstName, surname,
+                                                   userPatientLinkToken,
+                                                   odsCode, associationType))
 }

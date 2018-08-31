@@ -50,7 +50,9 @@ class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
     }
 
     private fun getDateFormattedString(dateTime: OffsetDateTime): String {
-        return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
+        return String.format("%s-%s-%s", dateTime.year,
+                             formatDateToTwoDigits(dateTime.monthValue),
+                             formatDateToTwoDigits(dateTime.dayOfMonth))
     }
 
     private fun formatDateToTwoDigits(daysOrMonths: Int): String {

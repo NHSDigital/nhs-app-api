@@ -16,17 +16,21 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     val timeoutPageHeader = "Error retrieving data"
     val timeoutHeader = "Sorry, there\'s been a problem getting your prescription information"
     val timeoutSubHeader = "Please try again"
-    val timeoutMessage = "If the problem persists and you need this information now, please contact your GP surgery directly."
+    val timeoutMessage = "If the problem persists and you need this " +
+                         "information now, please contact your GP surgery directly."
     val timeoutRetryButtonText = "Try again"
 
     val serverErrorPageTitle = "Prescription data error"
     val serverErrorPageHeader = "Error retrieving data"
     val serverErrorHeader = "Sorry, there\'s been a problem getting your prescription information"
-    val serverErrorSubHeader = "Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly."
+    val serverErrorSubHeader = "Please try again later. If the problem " +
+                               "persists and you need this information now, " +
+                               "please contact your GP surgery directly."
     val serverErrorMessage = ""
     val serverErrorretryButtonText = ""
 
-    private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), 'Order new repeat prescription')]"
+    private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), " +
+                                                        "'Order new repeat prescription')]"
 
     fun isLoaded(): Boolean {
         return headerBar.isVisible("My repeat prescriptions")

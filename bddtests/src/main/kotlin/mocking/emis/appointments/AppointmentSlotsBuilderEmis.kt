@@ -25,14 +25,17 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointmentslots"), IAppointmentSlotsBuilder {
 
     init {
-        if (apiEndUserSessionId.isEmpty()) requestBuilder.andHeader(HEADER_API_END_USER_SESSION_ID, MockDefaults.patient.endUserSessionId)
+        if (apiEndUserSessionId.isEmpty()) requestBuilder.andHeader(
+                HEADER_API_END_USER_SESSION_ID, MockDefaults.patient.endUserSessionId)
         else requestBuilder.andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
         if (apiSessionId.isEmpty()) requestBuilder.andHeader(HEADER_API_SESSION_ID, MockDefaults.patient.sessionId)
         else requestBuilder.andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
-        if (!fromDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(name = "fromDateTime", value = fromDateTime!!)
+        if (!fromDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
+                name = "fromDateTime", value = fromDateTime!!)
         if (!toDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(name = "toDateTime", value = toDateTime!!)
-        if (!linkToken.isNullOrEmpty()) requestBuilder.andQueryParameter(name = "userPatientLinkToken", value = linkToken!!)
+        if (!linkToken.isNullOrEmpty()) requestBuilder.andQueryParameter(
+                name = "userPatientLinkToken", value = linkToken!!)
     }
 
     override fun withDelay(delayMilliseconds : Duration):AppointmentSlotsBuilderEmis{

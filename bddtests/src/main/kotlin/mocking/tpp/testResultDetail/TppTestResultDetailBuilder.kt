@@ -12,7 +12,8 @@ import mocking.models.Mapping
 import org.apache.http.HttpStatus
 import java.time.OffsetDateTime
 
-class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: String) : TppMappingBuilder("POST", "/tpp/") {
+class TppTestResultDetailBuilder(tppUserSession: TppUserSession, testResultId: String) :
+        TppMappingBuilder("POST", "/tpp/") {
     init {
         val typeHeader = "type"
         val typeValue = "TestResultsView"

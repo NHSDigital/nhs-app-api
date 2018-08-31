@@ -69,7 +69,8 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: Stri
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         val errorMsg = "You don't have access to this online service"
-        val disabledTppError = Error(errorCode = "6", userFriendlyMessage = errorMsg, uuid = UUID.randomUUID().toString())
+        val disabledTppError = Error(errorCode = "6",
+                userFriendlyMessage = errorMsg, uuid = UUID.randomUUID().toString())
         return respondWith(disabledTppError)
     }
 

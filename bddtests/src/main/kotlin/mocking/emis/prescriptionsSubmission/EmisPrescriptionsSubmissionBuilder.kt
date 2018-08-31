@@ -27,7 +27,8 @@ class EmisPrescriptionsSubmissionBuilder(
         }
 
         if (prescriptionSubmissionRequest != null) {
-            val emisRequest = mocking.emis.models.PrescriptionSubmissionRequest(prescriptionSubmissionRequest.courseIds, prescriptionSubmissionRequest.specialRequest)
+            val emisRequest = mocking.emis.models.PrescriptionSubmissionRequest(
+                    prescriptionSubmissionRequest.courseIds, prescriptionSubmissionRequest.specialRequest)
 
             if (userPatientLinkToken != null) {
                 emisRequest.UserPatientLinkToken = userPatientLinkToken

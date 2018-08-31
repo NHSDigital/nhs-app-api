@@ -13,7 +13,9 @@ object PrescriptionsData {
     private const val MAX_PRESCRIPTIONS_NUMBER = 100
 
     @Suppress("ComplexMethod")
-    fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?, showDosage: Boolean = true, showQuantity: Boolean = true): PrescriptionRequestsGetResponse {
+    fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?,
+                              showDosage: Boolean = true, showQuantity: Boolean = true):
+            PrescriptionRequestsGetResponse {
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
 
@@ -40,14 +42,19 @@ object PrescriptionsData {
                 time = time.minusDays(prescriptionNum.toLong())
 
                 if (!isSecondIteration) {
-                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
+                    requestedMedicationCourses.add(RequestedMedicationCourse(
+                            medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, RequestedMedicationCourseStatus.Requested.toString()))
+                    prescriptionRequests.add(PrescriptionRequest(
+                            time.toString(), requestedMedicationCourses,
+                            RequestedMedicationCourseStatus.Requested.toString()))
                 } else {
-                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNum).medicationCourseGuid,
+                    requestedMedicationCourses.add(RequestedMedicationCourse(
+                            medicationCourses.get(courseNum).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
 
-                    prescriptionRequests.get(prescriptionNum).requestedMedicationCourses.addAll(requestedMedicationCourses)
+                    prescriptionRequests.get(
+                            prescriptionNum).requestedMedicationCourses.addAll(requestedMedicationCourses)
                 }
 
                 courseNum--

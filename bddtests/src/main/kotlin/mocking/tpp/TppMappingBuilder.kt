@@ -33,7 +33,8 @@ import java.time.OffsetDateTime
 import java.util.*
 
 @Suppress("TooManyFunctions")
-open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") : MappingBuilder(method, relativePath), IAppointmentMappingBuilder {
+open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") :
+        MappingBuilder(method, relativePath), IAppointmentMappingBuilder {
 
     private val HEADER_CONTENT_TYPE = "Content-Type"
     internal val HEADER_TYPE = "type"
@@ -50,8 +51,8 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     override fun viewMyAppointmentsRequest(patient: Patient): IMyAppointmentsBuilder = MyAppointmentsBuilderTpp(patient)
 
-    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade): IBookAppointmentsBuilder =
-            BookAppointmentsBuilderTpp(patient, request)
+    override fun bookAppointmentSlotRequest(patient: Patient, request: BookAppointmentSlotFacade):
+            IBookAppointmentsBuilder = BookAppointmentsBuilderTpp(patient, request)
 
     fun patientSelectedPost(tppUserSession: TppUserSession) = TppPatientSelectedBuilder(tppUserSession)
 
@@ -65,24 +66,28 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     fun linkAccountRequest(patient: Patient) = LinkAccountBuilder(LinkAccount.forPatient(patient))
 
-    fun prescriptionSubmission(patient: Patient, drugIds: List<String>?) = TppPrescriptionsSubmissionBuilder(patient, drugIds)
+    fun prescriptionSubmission(patient: Patient, drugIds: List<String>?) =
+            TppPrescriptionsSubmissionBuilder(patient, drugIds)
 
     fun patientRecordRequest(tppUserSession: TppUserSession) = TppRequestPatientRecordBuilder(tppUserSession)
 
-    fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) = TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
+    fun testResultsViewRequest(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) =
+            TppTestResultsViewBuilder(tppUserSession, startDate, endDate)
 
-    fun testResultsDetailRequest(tppUserSession: TppUserSession, testResultId: String) = TppTestResultDetailBuilder(tppUserSession, testResultId)
+    fun testResultsDetailRequest(tppUserSession: TppUserSession, testResultId: String) =
+            TppTestResultDetailBuilder(tppUserSession, testResultId)
 
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"
-        val disabledTppError = Error(errorCode = "6", userFriendlyMessage = errorMsg, uuid = UUID.randomUUID().toString())
+        val disabledTppError = Error(errorCode = "6", userFriendlyMessage = errorMsg,
+                                     uuid = UUID.randomUUID().toString())
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(JSonXmlConverter.toXML(disabledTppError))
         }
     }
 
-    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade): ICancelAppointmentsBuilder =
-            CancelAppointmentsBuilderTpp(patient, request)
+    override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade):
+            ICancelAppointmentsBuilder = CancelAppointmentsBuilderTpp(patient, request)
 
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 

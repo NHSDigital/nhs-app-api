@@ -7,7 +7,9 @@ private const val MAX_QUANTITY_NUMBER = 100
 interface IPrescriptionLoader<T> {
     var data: T
 
-    fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean = true, showQuantity: Boolean = true)
+    fun loadData(noPrescriptions: Int, noCourses: Int,
+                 noRepeats: Int, showDosage: Boolean = true,
+                 showQuantity: Boolean = true)
 
     fun getCourseName(): String {
         return getStringValue(getMedicationCourseNames())

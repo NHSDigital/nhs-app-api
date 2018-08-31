@@ -12,7 +12,9 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
     private const val ITERATIONS_NUMBER = 100
 
     @Suppress("ComplexMethod")
-    override fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean, showQuantity: Boolean) {
+    override fun loadData(noPrescriptions: Int, noCourses: Int,
+                          noRepeats: Int, showDosage: Boolean,
+                          showQuantity: Boolean) {
         var medicationList = ListRepeatMedicationReply()
         medicationList.patientId = generateRandomId()
         medicationList.onlineUserId = generateRandomId()

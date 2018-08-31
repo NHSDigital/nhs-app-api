@@ -13,7 +13,10 @@ import java.io.StringWriter
 import java.time.OffsetDateTime
 import javax.xml.bind.Marshaller
 
-class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: OffsetDateTime, endDate: OffsetDateTime) : TppMappingBuilder("POST", "/tpp/") {
+class TppTestResultsViewBuilder(tppUserSession: TppUserSession,
+                                startDate: OffsetDateTime,
+                                endDate: OffsetDateTime) : TppMappingBuilder("POST",
+        "/tpp/") {
     init {
         val typeHeader = "type"
         val typeValue = "TestResultsView"
@@ -39,44 +42,37 @@ class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: Offse
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
-        stringWriter.use {
-            marshaller.marshal(testResultsViewReply, stringWriter)
+        stringWriter.use { marshaller.marshal(testResultsViewReply, stringWriter)
         }
 
         var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(stringWriter.toString())
-                    .andHeader(suidHeader, suidValue)
-                    .build()
-        }
-
-         return resp
+            andXmlBody(stringWriter.toString()).andHeader(suidHeader, suidValue).build()
+                }
+        return resp
     }
 
     fun respondWithError(errorBody: Error): Mapping {
         val responseBody = Error(
-                errorBody.errorCode,
-                errorBody.userFriendlyMessage,
-                errorBody.uuid
-        )
+                        errorBody.errorCode,
+                        errorBody.userFriendlyMessage,
+                        errorBody.uuid
+                )
 
         val jaxbContext = JAXBContext.newInstance(Error::class.java)
         val marshaller = jaxbContext.createMarshaller()
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
-        stringWriter.use {
-            marshaller.marshal(responseBody, stringWriter)
+        stringWriter.use { marshaller.marshal(responseBody, stringWriter)
         }
 
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(stringWriter.toString())
-                    .build()
+        return respondWith(HttpStatus.SC_OK) { andXmlBody(stringWriter.toString()).build()
         }
     }
 
     fun respondWithServiceNotAvailableException(): Mapping {
         val exceptionResponse = ExceptionResponse(HttpStatus.SC_SERVICE_UNAVAILABLE.toLong(),
-                "Service unavailable")
+                        "Service unavailable")
         return respondWithException(exceptionResponse)
     }
 
@@ -85,16 +81,19 @@ class TppTestResultsViewBuilder(tppUserSession: TppUserSession, startDate: Offse
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_OK): Mapping {
-        return respondWith(statusCode) {
-            andJsonBody(body, GsonFactory.asPascal)
+        return respondWith(statusCode) { andJsonBody(body, GsonFactory.asPascal)
         }
     }
 
-    private fun getDateFormattedString(dateTime: OffsetDateTime): String{
-        return String.format("%s-%s-%s", dateTime.year, formatDateToTwoDigits(dateTime.monthValue), formatDateToTwoDigits(dateTime.dayOfMonth))
+    private fun getDateFormattedString(dateTime: OffsetDateTime): String {
+        return String.format(
+                "%s-%s-%s",
+                dateTime.year,
+                formatDateToTwoDigits(dateTime.monthValue),
+                formatDateToTwoDigits(dateTime.dayOfMonth))
     }
 
-    private fun formatDateToTwoDigits(daysOrMonths: Int): String{
+    private fun formatDateToTwoDigits(daysOrMonths: Int): String {
         return String.format("%02d", daysOrMonths)
     }
 }

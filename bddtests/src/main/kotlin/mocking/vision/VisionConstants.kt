@@ -18,7 +18,8 @@ object VisionConstants {
                 .replace("vision:/", "/")
 
 
-        return "<soapenv:Envelope xmlns:urn=\"urn:vision\" xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+        return "<soapenv:Envelope xmlns:urn=\"urn:vision\" " +
+               "xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "    <soapenv:body>\n" +
                 "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "            <vision:serviceDefinition>\n" +
@@ -69,8 +70,10 @@ object VisionConstants {
             "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                     "   <soap:body>\n" +
                     "      <soap:Fault>\n" +
-                    "         <faultcode xmlns:ns1=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\">ns1:InvalidSecurity</faultcode>\n" +
-                    "         <faultstring>An error was discovered processing the &lt;wsse:Security> header</faultstring>\n" +
+                    "         <faultcode xmlns:ns1=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-" +
+                    "wssecurity-secext-1.0.xsd\">ns1:InvalidSecurity</faultcode>\n" +
+                    "         <faultstring>An error was discovered processing the &lt;wsse:Security> " +
+                    "header</faultstring>\n" +
                     "      </soap:Fault>\n" +
                     "   </soap:body>\n" +
                     "</soap:Envelope>"
@@ -103,10 +106,14 @@ object VisionConstants {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "   <soap:Header>\n" +
-                "      <Action xmlns=\"http://www.w3.org/2005/08/addressing\">urn:vision:Vision:VisionResponse</Action>\n" +
-                "      <MessageID xmlns=\"http://www.w3.org/2005/08/addressing\">FAEC4FE2-D8CE-4129-BCB4-F65154B1E60F</MessageID>\n" +
-                "      <To xmlns=\"http://www.w3.org/2005/08/addressing\">http://www.w3.org/2005/08/addressing/anonymous</To>\n" +
-                "      <RelatesTo xmlns=\"http://www.w3.org/2005/08/addressing\">uuid:bd81e6a9-c971-4b48-9306-28b2d8cd9a50</RelatesTo>\n" +
+                "      <Action xmlns=\"http://www.w3.org/2005/08/addressing\">" +
+                "urn:vision:Vision:VisionResponse</Action>\n" +
+                "      <MessageID xmlns=\"http://www.w3.org/2005/08/addressing\">" +
+                "FAEC4FE2-D8CE-4129-BCB4-F65154B1E60F</MessageID>\n" +
+                "      <To xmlns=\"http://www.w3.org/2005/08/addressing\">" +
+               "http://www.w3.org/2005/08/addressing/anonymous</To>\n" +
+                "      <RelatesTo xmlns=\"http://www.w3.org/2005/08/addressing\">" +
+                "uuid:bd81e6a9-c971-4b48-9306-28b2d8cd9a50</RelatesTo>\n" +
                 "   </soap:Header>\n" +
                 "   <soap:body>\n" +
                 "      <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +

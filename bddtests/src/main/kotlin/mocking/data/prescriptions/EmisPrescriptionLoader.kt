@@ -13,7 +13,9 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
 
     private const val MAX_RANDOM_NUMBER = 6
 
-    override fun loadData(noPrescriptions: Int, noCourses: Int, noRepeats: Int, showDosage: Boolean, showQuantity: Boolean) {
+    override fun loadData(noPrescriptions: Int, noCourses: Int,
+                          noRepeats: Int, showDosage: Boolean,
+                          showQuantity: Boolean) {
 
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
@@ -41,14 +43,20 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
                 time = time.minusDays(prescriptionNumber.toLong())
 
                 if (!isSecondIteration) {
-                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNumber).medicationCourseGuid,
+                    requestedMedicationCourses.add(
+                            RequestedMedicationCourse(
+                                    medicationCourses.get(courseNumber).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
-                    prescriptionRequests.add(PrescriptionRequest(time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
+                    prescriptionRequests.add(
+                            PrescriptionRequest(
+                                    time.toString(), requestedMedicationCourses, getPrescriptionStatus().toString()))
                 } else {
-                    requestedMedicationCourses.add(RequestedMedicationCourse(medicationCourses.get(courseNumber).medicationCourseGuid,
+                    requestedMedicationCourses.add(
+                            RequestedMedicationCourse(medicationCourses.get(courseNumber).medicationCourseGuid,
                             RequestedMedicationCourseStatus.Requested))
 
-                    prescriptionRequests.get(prescriptionNumber).requestedMedicationCourses.addAll(requestedMedicationCourses)
+                    prescriptionRequests.get(
+                            prescriptionNumber).requestedMedicationCourses.addAll(requestedMedicationCourses)
                 }
 
                 courseNumber--
@@ -74,7 +82,8 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
         return RequestedMedicationCourseStatus.values()[getRandomNumber(MAX_RANDOM_NUMBER)]
     }
 
-    fun orderCourses(orderedCourses: MutableList<MedicationCourse>, oldPrescriptions: PrescriptionRequestsGetResponse = data)
+    fun orderCourses(orderedCourses: MutableList<MedicationCourse>,
+                     oldPrescriptions: PrescriptionRequestsGetResponse = data)
             : PrescriptionRequestsGetResponse {
 
         //1 create new prescription object and add ordered courses to it..
@@ -86,7 +95,8 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
         }
 
         val prescriptionsList = mutableListOf<PrescriptionRequest>()
-        prescriptionsList.add(PrescriptionRequest(OffsetDateTime.now().toString(), newCourses, RequestedMedicationCourseStatus.Requested.toString()))
+        prescriptionsList.add(PrescriptionRequest(OffsetDateTime.now().toString(),
+                                                  newCourses, RequestedMedicationCourseStatus.Requested.toString()))
 
         //2 add all the old prescriptions to the list
         oldPrescriptions.prescriptionRequests.forEach {

@@ -12,7 +12,9 @@ open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     )
 
     val donationDescription = HybridPageElement(
-            browserLocator = "//p[contains(text(),'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register.')]",
+            browserLocator = "//p[contains(text(),'Help save thousands " +
+                             "of lives in the UK every year by signing up" +
+                             " to become a donor on the NHS Organ Donor Register.')]",
             androidLocator = null,
             page = this
     )
@@ -24,7 +26,8 @@ open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     )
 
     val dataSharingDescription = HybridPageElement(
-            browserLocator = "//p[contains(text(),'Find out why your data matters and choose whether or not it can be used for research and planning.')]",
+            browserLocator = "//p[contains(text(),'Find out why your data " +
+                             "matters and choose whether or not it can be used for research and planning.')]",
             androidLocator = null,
             page = this
     )

@@ -9,7 +9,8 @@ import mocking.models.Mapping
 import models.Patient
 import org.apache.http.HttpStatus
 
-class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient, fetchPreviousAppointments: Boolean = false)
+class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient,
+                                fetchPreviousAppointments: Boolean = false)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointments"), IMyAppointmentsBuilder {
 
     init {

@@ -257,7 +257,8 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun getTestResultChildCount(): Int {
-        return testResults.allRecordItems().get(0).findBy<WebElementFacade>(By.xpath("..")).thenFindAll(By.tagName("li")).size
+        return testResults.allRecordItems().get(0).findBy<WebElementFacade>(
+                By.xpath("..")).thenFindAll(By.tagName("li")).size
     }
 
     fun isTestResultsTextMsgVisible(): Boolean {

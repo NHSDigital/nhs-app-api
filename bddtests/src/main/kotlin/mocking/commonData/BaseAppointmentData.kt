@@ -18,7 +18,8 @@ abstract class BaseAppointmentData {
 
     abstract fun getAppointmentCancellationReasons(): List<AppointmentCancellationReason>?
 
-    protected fun copyCalendarDate(baseTime: Calendar, addDays: Int = 0, addHours: Int = 0, addMinutes: Int = 0) : Calendar {
+    protected fun copyCalendarDate(baseTime: Calendar, addDays: Int = 0,
+                                   addHours: Int = 0, addMinutes: Int = 0) : Calendar {
         val theStartTime = baseTime.clone() as Calendar
         val numberOfMinutesToNext = roundMinutes - (theStartTime.get(Calendar.MINUTE) % roundMinutes)
 

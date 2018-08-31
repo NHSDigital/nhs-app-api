@@ -38,7 +38,9 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     val serverErrorPageHeader = "Error sending request"
     val serverErrorHeader = "Sorry, there's been a problem sending your request"
     val serverErrorSubHeader = "Please go back and try again."
-    val serverErrorMessage = "If the problem persists and you need to order a repeat prescription now, please contact your GP surgery directly."
+    val serverErrorMessage = "If the problem persists and you need to " +
+                             "order a repeat prescription now, please " +
+                             "contact your GP surgery directly."
     val serverErrorRetryButtonText = "Back to my repeat prescriptions"
 
     override fun shouldBeDisplayed() {
@@ -58,8 +60,10 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
             val expectedCourse = selectedCourses[i]
             val currentCourseOnScreen = repeatPrescriptions[i]
 
-            val nameOnScreen = currentCourseOnScreen.findBy<WebElementFacade>( "[data-purpose='prescription-name']")
-            val instructionsOnScreen = currentCourseOnScreen.findBy<WebElementFacade>("[data-purpose='prescription-description']")
+            val nameOnScreen = currentCourseOnScreen.findBy<WebElementFacade>(
+                    "[data-purpose='prescription-name']")
+            val instructionsOnScreen = currentCourseOnScreen.findBy<WebElementFacade>(
+                    "[data-purpose='prescription-description']")
 
             Assert.assertEquals(expectedCourse.name, nameOnScreen.text)
             Assert.assertEquals(expectedCourse.getInstructionsText(), instructionsOnScreen.text)
