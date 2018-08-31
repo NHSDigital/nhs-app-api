@@ -79,7 +79,7 @@ export default {
     subHeader: 'Medication currently available to order',
     noMedicinesSelected: 'Select at least one medicine',
     specialRequestsLabel: 'Special requests relating to this order (optional)',
-    maxSpecialRequest: 'Text must be shorter than 1000 characters (about 150 words)​',
+    maxSpecialRequest: 'Special requests must be shorter than 1000 characters (about 150 words',
     changePharmacyText: 'To discuss your medication or change your chosen pharmacy, contact your GP surgery before ordering.​',
     noSpecialRequestDefaultText: 'None',
     continueButton: 'Continue',
@@ -126,7 +126,7 @@ export default {
     },
     guidance: {
       header: 'Want to avoid waiting?',
-      text: 'Three things to try before you book an appointment:',
+      text: 'If it isn\'t urgent, you can try three things before booking an appointment:',
       li1: {
         header: 'Self care​',
         text: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
@@ -236,7 +236,7 @@ export default {
           default_option: 'No preference',
         },
         date: {
-          header: 'Available appointments',
+          header: 'Select an appointment',
           label: 'Filter by date',
           options: {
             today: 'Today',
