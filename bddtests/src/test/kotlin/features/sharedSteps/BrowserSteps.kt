@@ -36,7 +36,7 @@ open class BrowserSteps {
                 .pollingEvery(Duration.ofMillis(100))
                 .until {
                     it.currentUrl == loginPage.driver.currentUrl
-                    CookieWrapper.fromJson(getCookieJson(vuexCookieName)).isLoggedIn() == false
+                    !cookieExists(vuexCookieName) || !CookieWrapper.fromJson(getCookieJson(vuexCookieName)).isLoggedIn()
                 }
     }
 
@@ -72,6 +72,11 @@ open class BrowserSteps {
         cookieValue = cookieValue.replace("%22", "'")
         cookieValue = cookieValue.replace("%2C", ",")
         return cookieValue
+    }
+
+    private fun cookieExists(cookieName: String): Boolean {
+        val driver = loginPage.driver
+        return driver.manage().cookies.any { x -> x.name == cookieName }
     }
 
     @Step
