@@ -11,10 +11,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
     public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
+        private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger<ServiceConfigurationModule> _logger;
 
         public ServiceConfigurationModule(ILoggerFactory loggerFactory)
         {
+            _loggerFactory = loggerFactory;
             _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
 
@@ -25,9 +27,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 var defaultHttpTimeoutSeconds = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
                 _logger);
 
+                services.AddSingleton<EmisHttpClientHandler>();
+                
                 services.AddHttpClient<EmisHttpClient>(client =>
                 {
-                    client.Timeout = TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
+                    client.Timeout =
+                        TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
+                }).ConfigurePrimaryHttpMessageHandler(() =>
+                {
+                    return new EmisHttpClientHandler(configuration,
+                        _loggerFactory.CreateLogger<EmisHttpClientHandler>());
                 });
 
                 services.AddSingleton<IGpSystem, EmisGpSystem>();

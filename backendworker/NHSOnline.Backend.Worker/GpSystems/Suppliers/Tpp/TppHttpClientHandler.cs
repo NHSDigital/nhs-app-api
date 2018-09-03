@@ -8,29 +8,18 @@ using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
-    public class TppHttpClientHandler : HttpClientHandler
+    public class TppHttpClientHandler : HttpClientCertificateHandler<TppHttpClientHandler>
     {
-        public TppHttpClientHandler(IConfiguration configuration, ILogger<TppHttpClientHandler> logger)
+        public TppHttpClientHandler(IConfiguration configuration, ILogger<TppHttpClientHandler> logger) :
+            base(configuration, logger)
         {
-            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
-            {
-                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
-            }
-
             var path = configuration.GetOrWarn("TPP_CERTIFICATE_PATH", logger);
             var password = configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", logger);
             logger.LogInformation("TPP_CERTIFICATE_PATH: {path}", path);
 
-            if (!string.IsNullOrEmpty(path) && File.Exists(path) && !string.IsNullOrEmpty(password))
+            if (ValidateParameters(path, password))
             {
-                try
-                {
-                    ClientCertificates.Add(new X509Certificate2(path, password));
-                }
-                catch (CryptographicException e)
-                {
-                    logger.LogError(e.Message);
-                }        
+                AddCertificate(path, password);
             }
             else
             {

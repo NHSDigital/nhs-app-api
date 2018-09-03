@@ -24,6 +24,7 @@ services:
       - TPP_CERTIFICATE_PASSWORD
       - VISION_CERT_PATH=./certs/vps_nhson001.pfx
       - VISION_CERT_PASSPHRASE
+      - EMIS_CERTIFICATE_PATH=
       - ConfigurationSettings__CookieDomain=.bitraft.io
       - DATA_PREFERENCES_URL=http://ndopapp-int1.thunderbird.service.nhs.uk/createsession
       - NDOP_CERTIFICATE_PASSWORD

@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Bridges\**" />
+    <None Update="GpSystems\Suppliers\Emis\Resources\EMISTestCert.cer">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />
