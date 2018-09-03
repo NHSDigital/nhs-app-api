@@ -1,12 +1,12 @@
 <template>
   <header :class="$style.header">
-    <nuxt-link to="/">
+    <nuxt-link :class="$style['anchor-icon']" to="/">
       <home-icon/>
     </nuxt-link>
     <nuxt-link :class="$style.account" to="/account">
       Account
     </nuxt-link>
-    <nuxt-link to="/account">
+    <nuxt-link :class="$style['anchor-icon']" to="/account">
       <account-icon/>
     </nuxt-link>
     <hr :class="$style.rule">
@@ -59,6 +59,9 @@ export default {
     right: 2.3em;
     line-height: 2.2em;
     cursor: pointer;
+  }
+   a.anchor-icon {
+    color: $white;
   }
   h1.title {
     @include screen_title;

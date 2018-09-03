@@ -11,7 +11,8 @@ export default {
 };
 </script>
 
-<style module lang="scss">
+<style module lang="scss" scoped>
+@import "../style/colours";
   .betaBanner {
     padding: 1em 1em 0.7em;
   }
@@ -20,7 +21,7 @@ export default {
     font-weight: 700;
     font-size: 1em;
     line-height: 1.5em;
-    color: #425563;
+    color: $black;
     display: inline-block;
     margin-right: 0.6em;
     margin-left: -0.3em;

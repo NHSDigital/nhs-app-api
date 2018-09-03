@@ -13,9 +13,9 @@
   <div v-else :class="[$style['record-content'], getCollapseState]">
     <div v-for="(item, index) in orderedImmunisations" :key="`item-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <label v-if="item.effectiveDate.value">
+      <b v-if="item.effectiveDate.value">
         {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
-      </label>
+      </b>
       <p>{{ item.term }}</p>
       <hr>
     </div>

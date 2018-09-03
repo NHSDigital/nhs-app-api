@@ -2,9 +2,9 @@
   <div :class="$style['info-message']" data-purpose="info-msg">
     <div :class="$style['info-header']" @click="toggle">
       <plus-minus-icon :icon-plus="!showContent" />
-      <label :class="$style['info-message-title']">
+      <h2 :class="$style['info-message-title']">
         <slot name="header" />
-      </label>
+      </h2>
     </div>
     <div v-if="showContent" :class="$style['info-content']"
          data-purpose="info-content">

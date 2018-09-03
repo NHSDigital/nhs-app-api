@@ -21,7 +21,7 @@
         {{ $t('appointments.confirmation.headerLabel') }}
       </label>
 
-      <error-message v-if="showValidationError" id="error-label">
+      <error-message v-if="showValidationError" id="errorLabel">
         {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
       <textarea id="reasonText" ref="reason" v-model="symptoms"

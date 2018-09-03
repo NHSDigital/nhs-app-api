@@ -127,7 +127,7 @@
         <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
                       :supplier="myRecord.supplier" />
       </div>
-      <div v-else class="pull-content">
+      <div v-else>
         <p>
           {{ $t('my_record.viewRestOfHealthRecordWarning') }}
         </p>

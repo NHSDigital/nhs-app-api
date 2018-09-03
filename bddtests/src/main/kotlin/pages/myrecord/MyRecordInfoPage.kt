@@ -24,37 +24,37 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val nameLabel = 
         HybridPageElement(
-            browserLocator = "//label[contains(text(),'Name')]",
+            browserLocator = "//b[contains(text(),'Name')]",
             androidLocator = null,
             page = this)
 
     val txtName = 
         HybridPageElement(
-            browserLocator = "//label[contains(text(),'Name')]/following-sibling::p[1]",
+            browserLocator = "//b[contains(text(),'Name')]/following-sibling::p[1]",
             androidLocator = null,
             page = this)
 
     val dobLabel = 
         HybridPageElement(
-            browserLocator = "//label[contains(text(),'Date of birth')]",
+            browserLocator = "//b[contains(text(),'Date of birth')]",
             androidLocator = null,
             page = this)
 
     val sexLabel = 
         HybridPageElement(
-            browserLocator = "//label[contains(text(),'Sex')]",
+            browserLocator = "//b[contains(text(),'Sex')]",
             androidLocator = null,
             page = this)
 
     val addressLabel = 
         HybridPageElement(
-            browserLocator = "//label[contains(text(),'Address')]",
+            browserLocator = "//b[contains(text(),'Address')]",
             androidLocator = null,
             page = this)
 
     val nhsNumberLabel = 
         HybridPageElement(
-            browserLocator = "//label[contains(text(),'NHS number')]",
+            browserLocator = "//b[contains(text(),'NHS number')]",
             androidLocator = null,
             page = this)
 
@@ -302,7 +302,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun getEventsRecordCount(): Int {
-        return events.element.thenFindAll(By.cssSelector("label")).count()
+        return events.element.thenFindAll(By.cssSelector("b")).count()
     }
 
     fun clickEvents() {

@@ -7,7 +7,7 @@
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g id="errors-v4" transform="translate(-16.000000, -666.000000)">
         <g id="error-marker" transform="translate(16.000000, 666.000000)">
-          <circle id="Oval-2" fill="#DA291C" cx="8" cy="8" r="8"/>
+          <circle id="Oval-2" :class="$style['error-circle']" cx="8" cy="8" r="8"/>
           <path id="!" d="M8.791,10.13 L7.195,10.13 L6.929,3.228 L9.085,3.228 L8.791,
           10.13 Z M8.987,13 L7.027,13 L7.027,11.04 L8.987,11.04 L8.987,13 Z" fill="#FFFFFF"/>
         </g>
@@ -19,3 +19,9 @@
 <script>
 export default {};
 </script>
+<style module lang="scss" scoped>
+@import "../../style/colours";
+.error-circle {
+  fill: $error_dark
+}
+</style>

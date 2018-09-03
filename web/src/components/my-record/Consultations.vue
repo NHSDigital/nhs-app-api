@@ -14,9 +14,9 @@
     <div v-for="(consultation, consultationIndex) in orderedConsultations"
          :key="`consultation-${consultationIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <label v-if="consultation.effectiveDate.value">
+      <b v-if="consultation.effectiveDate.value">
         {{ consultation.effectiveDate.value | datePart(consultation.effectiveDate.datePart) }}
-      </label>
+      </b>
 
       <p> {{ consultation.consultantLocation }} </p>
 

@@ -14,9 +14,9 @@
     <div v-for="(testResult, testIndex) in orderedTestResults"
          :key="`testResult-${testIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <label v-if="testResult.date.value">
+      <b v-if="testResult.date.value">
         {{ testResult.date.value | datePart(testResult.date.datePart) }}
-      </label>
+      </b>
       <p v-if="supplier === 'TPP'">
         <nuxt-link :to="{
           name: 'my-record-testresultdetail',

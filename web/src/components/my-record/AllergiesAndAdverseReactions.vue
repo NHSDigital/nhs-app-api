@@ -10,9 +10,9 @@
   <div v-else :class="[$style['record-content'], getCollapseState]">
     <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <label v-if="allergy.date.value">
+      <b v-if="allergy.date.value">
         {{ allergy.date.value | datePart(allergy.date.datePart) }}
-      </label>
+      </b>
       <p>{{ allergy.name }}</p>
       <hr>
     </div>

@@ -11,7 +11,7 @@
     <div v-for="(medication, medIndex) in orderedMedications"
          :key="`medication-${medIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <label v-if="medication.date">{{ medication.date | datePart }}</label>
+      <b v-if="medication.date">{{ medication.date | datePart }}</b>
       <p v-for="(lineItem, lineItemIndex) in medication.lineItems"
          :key="`line-${lineItemIndex}`">
         {{ lineItem.text }}

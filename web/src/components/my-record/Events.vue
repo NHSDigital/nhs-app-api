@@ -13,7 +13,7 @@
   <div v-else :class="[$style['record-content'], getCollapseState]">
     <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
          :class="$style['record-item']" data-purpose="record-item">
-      <label v-if="event.date"> {{ event.date | datePart }} </label>
+      <b v-if="event.date"> {{ event.date | datePart }} </b>
       <p> {{ event.locationAndDoneBy }}</p>
       <ul :class="$style.eventLine">
         <li v-for="(eventItem, eventItemIndex) in event.eventItems"

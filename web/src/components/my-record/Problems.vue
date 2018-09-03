@@ -14,9 +14,9 @@
     <div v-for="(problem, problemIndex) in orderedProblems"
          :key="`problem-${problemIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
-      <label v-if="problem.effectiveDate.value">
+      <b v-if="problem.effectiveDate.value">
         {{ problem.effectiveDate.value | datePart(problem.effectiveDate.datePart) }}
-      </label>
+      </b>
       <p v-for="(lineItem, lineItemIndex) in problem.lineItems"
          :key="`line-${lineItemIndex}`">
         {{ lineItem.text }}

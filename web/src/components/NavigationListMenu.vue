@@ -106,6 +106,6 @@ export default {
     line-height: 1em;
     font-weight: bold;
     text-decoration: none;
-    vertical-align: middle;
+    // vertical-align: middle;
   }
 </style>
