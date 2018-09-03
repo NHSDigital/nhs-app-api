@@ -80,9 +80,13 @@ export default function ({ route, store, app }) {
       route.meta.headerKey = 'pageHeaders.confirmPrescription';
       route.meta.pageTitleKey = 'pageTitles.confirmPrescription';
       break;
+    case Routes.MYRECORDWARNING.name:
+      store.dispatch('navigation/setNewMenuItem', 3);
+      route.meta.headerKey = 'pageHeaders.myRecordWarning';
+      route.meta.pageTitleKey = 'pageTitles.myRecordWarning';
+      break;
     case Routes.MYRECORD.name:
     case Routes.MYRECORDNOACCESS.name:
-    case Routes.MYRECORDWARNING.name:
     case Routes.MYRECORDTESTRESULT.name:
       store.dispatch('navigation/setNewMenuItem', 3);
       route.meta.headerKey = 'pageHeaders.myRecord';
