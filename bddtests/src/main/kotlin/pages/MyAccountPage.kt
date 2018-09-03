@@ -1,6 +1,7 @@
 package pages
 
 import net.thucydides.core.annotations.DefaultUrl
+import org.junit.Assert
 
 @Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/account")
@@ -18,36 +19,26 @@ class MyAccountPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             page = this
     )
 
-    val termsAndConditionsLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Terms and conditions')]",
-            androidLocator = null,
-            page = this
-    )
+    var linkPath = "//div[h2[contains(text(),'About us')]]/ul/li/a"
 
-    val privacyPolicyLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Privacy policy')]",
-            androidLocator = null,
-            page = this
-    )
+    private val links = HybridPageElement(
+                browserLocator = linkPath,
+                androidLocator = null,
+                page = this)
 
-    val cookiesPolicyLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Cookies policy')]",
-            androidLocator = null,
-            page = this
-    )
+    private fun getLink(text:String): HybridPageElement{
+        return HybridPageElement(
+                browserLocator = linkPath,
+                androidLocator = null,
+                page = this,
+                helpfulName = "$text Link").containingText(text)
+    }
 
-    val openSourceLicensesLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Open source licenses')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val helpAndSupportLink = HybridPageElement(
-            browserLocator = "//a[contains(text(),'Help and support')]",
-            androidLocator = null,
-            page = this
-    )
-
+    private val termsAndConditionsLink = getLink("Terms of use")
+    private val privacyPolicyLink = getLink("Privacy policy")
+    private val cookiesPolicyLink = getLink("Cookies policy")
+    private val openSourceLicensesLink = getLink("Open source licenses")
+    private val helpAndSupportLink = getLink("Help and support")
 
     fun isSignOutButtonVisible() : Boolean {
         return signOutButton.element.isVisible
@@ -57,25 +48,18 @@ class MyAccountPage: HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return aboutUsHeader.element.isVisible
     }
 
-    fun isTermsAndConditionsLinkVisible() : Boolean {
-        return termsAndConditionsLink.element.isVisible
+    fun assertAllLinksVisible() {
+        var expectedLinks = arrayListOf(
+                termsAndConditionsLink,
+                privacyPolicyLink,
+                cookiesPolicyLink,
+                openSourceLicensesLink,
+                helpAndSupportLink)
+
+        Assert.assertEquals("Expected Number of Links", expectedLinks.count(), links.elements.count())
+        expectedLinks.forEach { link -> link.assertSingleElementPresent().assertIsVisible() }
     }
 
-    fun isPrivacyPolicyLinkVisible() : Boolean {
-        return privacyPolicyLink.element.isVisible
-    }
-
-    fun isCookiesPolicyLinkVisible() : Boolean {
-        return cookiesPolicyLink.element.isVisible
-    }
-
-    fun isOpenSourceLicensesLinkVisible() : Boolean {
-        return openSourceLicensesLink.element.isVisible
-    }
-
-    fun isHelpAndSupportLinkVisible() : Boolean {
-        return helpAndSupportLink.element.isVisible
-    }
 
     fun clickTermsAndConditionsLink() {
         findByXpath("//*[@id='btn_terms']").click()

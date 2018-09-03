@@ -24,31 +24,6 @@ open class MyAccountSteps {
     }
 
     @Step
-    fun assertTermsAndConditionsLinkVisible() {
-        Assert.assertTrue("terms and conditions link not visible, expected to be visible", myAccountPage.isTermsAndConditionsLinkVisible())
-    }
-
-    @Step
-    fun assertPrivacyPolicyLinkVisible() {
-        Assert.assertTrue("Privacy policy link not visible, expected to be visible", myAccountPage.isPrivacyPolicyLinkVisible())
-    }
-
-    @Step
-    fun assertCookiesPolicyLinkVisible() {
-        Assert.assertTrue("Cookies policy link not visible, expected to be visible", myAccountPage.isCookiesPolicyLinkVisible())
-    }
-
-    @Step
-    fun assertOpenSourceLicensesLinkVisible() {
-        Assert.assertTrue("Open source licenses link not visible, expected to be visible", myAccountPage.isOpenSourceLicensesLinkVisible())
-    }
-
-    @Step
-    fun assertHelpAndSupportLinkVisible() {
-        Assert.assertTrue("Help and support link not visible, expected to be visible", myAccountPage.isHelpAndSupportLinkVisible())
-    }
-
-    @Step
     fun goToTermsAndConditions() {
         myAccountPage.clickTermsAndConditionsLink()
     }

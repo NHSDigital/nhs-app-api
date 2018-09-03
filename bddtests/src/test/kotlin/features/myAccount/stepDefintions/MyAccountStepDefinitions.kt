@@ -19,11 +19,7 @@ class MyAccountStepDefinitions {
     fun iAmOnTheMyAccountPage() {
         myAccount.assertSignoutButtonVisible()
         myAccount.assertAboutUsHeaderVisible()
-        myAccount.assertTermsAndConditionsLinkVisible()
-        myAccount.assertPrivacyPolicyLinkVisible()
-        myAccount.assertCookiesPolicyLinkVisible()
-        myAccount.assertOpenSourceLicensesLinkVisible()
-        myAccount.assertHelpAndSupportLinkVisible()
+        myAccount.myAccountPage.assertAllLinksVisible()
     }
 
     @When("^I click the Terms and conditions link$")
