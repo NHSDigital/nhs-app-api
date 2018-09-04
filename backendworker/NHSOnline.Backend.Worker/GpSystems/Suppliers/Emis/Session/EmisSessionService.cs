@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Session;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -14,16 +13,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
     public class EmisSessionService : ISessionService, IEmisSessionService
     {
         private readonly IEmisClient _emisClient;
-        private readonly IEmisDemographicsMapper _demographicsMapper;
         private readonly ILogger<EmisSessionService> _logger;
 
         private static readonly HttpStatusCode[] InvalidTokenStatusCodes =
             { HttpStatusCode.Forbidden, HttpStatusCode.BadRequest };
 
-        public EmisSessionService(IEmisClient emisClient, IEmisDemographicsMapper demographicsMapper, ILogger<EmisSessionService> logger)
+        public EmisSessionService(IEmisClient emisClient, ILogger<EmisSessionService> logger)
         {
             _emisClient = emisClient;
-            _demographicsMapper = demographicsMapper;
             _logger = logger;
         }
 
@@ -63,25 +60,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             return sessionsResponse.Body;
         }
 
-        private async Task<DemographicsGetResponse> SendDemographicsGetRequest(string userPatientLinkToken, string sessionId, string endUserSessionId)
-        {
-            var demographicsResponse = await _emisClient.DemographicsGet(userPatientLinkToken, sessionId, endUserSessionId);
-            if (!demographicsResponse.HasSuccessStatusCode)
-            {
-                if (InvalidTokenStatusCodes.Contains(demographicsResponse.StatusCode))
-                {
-                    _logger.LogEmisResponseIsForbidden();
-                    throw new EmisSessionResponseErrorException(new SessionCreateResult.InvalidIm1ConnectionToken());
-                }
-
-                _logger.LogEmisUnknownError(demographicsResponse);
-                throw new EmisSessionResponseErrorException(new SessionCreateResult.SupplierSystemUnavailable());
-            }
-
-            return demographicsResponse.Body;
-        }
-
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             try
             {
@@ -92,11 +71,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 var sessionResponse =
                     await SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
 
-                var demographicsResponse = await SendDemographicsGetRequest(
-                    sessionResponse.ExtractUserPatientLinkToken(),
-                    sessionResponse.SessionId,
-                    endUserSessionResponse.EndUserSessionId);
-
                 _logger.LogDebug("Emis session successfully created");
                 return new SessionCreateResult.SuccessfullyCreated(
                     $"{sessionResponse.FirstName} {sessionResponse.Surname}",
@@ -105,7 +79,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                         SessionId = sessionResponse.SessionId,
                         EndUserSessionId = endUserSessionResponse.EndUserSessionId,
                         UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken(),
-                        NhsNumber = _demographicsMapper.Map(demographicsResponse).NhsNumber,
+                        NhsNumber = nhsNumber,
                         OdsCode = odsCode
                     }
                 );
@@ -132,6 +106,5 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
         {
             return Task.FromResult((SessionLogoffResult) new SessionLogoffResult.SuccessfullyDeleted(userSession));
         }
-
     }
 }

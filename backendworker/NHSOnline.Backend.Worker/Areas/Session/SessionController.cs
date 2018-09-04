@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Antiforgery;
@@ -17,7 +16,6 @@ using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -68,7 +66,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             {
                 _logger.LogEnter(nameof(Post));
 
-                // Call Citizen ID to get the IM1 connection token and ODS code.
+                // Call Citizen ID to get the User Profile (IM1 connection token, ODS code, Date of Birth, NHS Number).
                 var userProfileResult = await _citizenIdService.GetUserProfile(model.AuthCode, model.CodeVerifier, model.RedirectUrl);
                 var cidUserProfileOption = userProfileResult.UserProfile;
                     
@@ -80,20 +78,27 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 var cidUserProfile = cidUserProfileOption.ValueOrFailure();
 
-                DateTime formattedDateOfBirth;
-
+                // Validate the Date of Birth meets expected format and minimum age requirements
                 if (!DateTime.TryParseExact(cidUserProfile.DateOfBirth, DATE_FORMAT, CultureInfo.InvariantCulture,
-                    DateTimeStyles.None,
-                    out formattedDateOfBirth))
+                    DateTimeStyles.None, out var dateOfBirthParsed))
                 {
                     _logger.LogError($"Missing or invalid date of birth");
                     return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
                 }
 
-                if (!_minimumAgeValidator.IsValid(formattedDateOfBirth))
+                if (!_minimumAgeValidator.IsValid(dateOfBirthParsed))
                 {
                     _logger.LogWarning("Failed to meet the minimum age requirement.");
                     return new StatusCodeResult(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
+                }
+                
+                // Validate the NHS number has been returned from CID.
+                var nhsNumberFormatted = cidUserProfile.NhsNumber.FormatToNhsNumber();
+                if (string.IsNullOrEmpty(nhsNumberFormatted))
+                {
+                    _logger.LogError($"No NHS number was found");
+                    return new StatusCodeResult(Constants.CustomHttpStatusCodes
+                        .Status464OdsCodeNotSupportedOrNoNhsNumber);
                 }
 
                 // Get a suitable GP system, based on the ODS code.
@@ -102,14 +107,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 {
                     _logger.LogError($"Failed to determine the GP system based on ODS code '{cidUserProfile.OdsCode}'");
                     return new StatusCodeResult(Constants.CustomHttpStatusCodes
-                        .Status464ODSCodeNotSupportedOrNoNhsNumber);
-                }
-
-                if (String.IsNullOrEmpty(cidUserProfile.NhsNumber))
-                {
-                    _logger.LogError($"No nhs number was found");
-                    return new StatusCodeResult(Constants.CustomHttpStatusCodes
-                        .Status464ODSCodeNotSupportedOrNoNhsNumber);
+                        .Status464OdsCodeNotSupportedOrNoNhsNumber);
                 }
 
                 var gpSystem = gpSystemOption.ValueOrFailure();
@@ -117,7 +115,6 @@ namespace NHSOnline.Backend.Worker.Areas.Session
 
                 // Validate the format of the IM1 connection token for this GP system.
                 var tokenValidationService = gpSystem.GetTokenValidationService();
-
                 if (!tokenValidationService.IsValidConnectionTokenFormat(cidUserProfile.Im1ConnectionToken))
                 {
                     _logger.LogError("Failed to validate Im1 connection");
@@ -125,7 +122,8 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 }
 
                 // Create a session with the GP system, using the IM1 connection token.
-                var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, cidUserProfile);
+                var sessionCreatedResultVisited = await GetSessionCreateResultVisitorOutput(gpSystem, 
+                    cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode, nhsNumberFormatted);
                 if (!sessionCreatedResultVisited.SessionWasCreated)
                 {
                     _logger.LogError(
@@ -136,14 +134,14 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 // Build and save session token in our redis session cache
                 await FetchSessionIdAndSaveInCookie(sessionCreatedResultVisited);
 
-                // Audit that the use is logged on.
+                // Audit that the user is logged on.
                 HttpContext.SetUserSession(sessionCreatedResultVisited.UserSession);
                 _auditor.Audit(Constants.AuditingTitles.SessionCreateResponse, "Session successfully created.");
 
                 _logger.LogDebug($"Finished session post with status code {sessionCreatedResultVisited.StatusCode}");
 
                 return await Task.FromResult(CreateCreatedResult(sessionCreatedResultVisited, cidUserProfile.OdsCode,
-                    formattedDateOfBirth, cidUserProfile.NhsNumber));
+                    dateOfBirthParsed, nhsNumberFormatted));
             }
             finally
             {
@@ -216,7 +214,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             }
         }
 
-        private CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited,
+        private static CreatedResult CreateCreatedResult(SessionCreateResultVisitorOutput sessionCreatedResultVisited,
             string odsCode, DateTime dateOfBirth, string nhsNumber)
         {
             var responseBody = new UserSessionResponse
@@ -226,7 +224,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 Token = sessionCreatedResultVisited.UserSession.CsrfToken,
                 OdsCode = odsCode,
                 DateOfBirth = dateOfBirth,
-                NhsNumber = nhsNumber.FormatToNhsNumber()
+                NhsNumber = nhsNumber
             };
 
             return new CreatedResult(string.Empty, responseBody);
@@ -248,11 +246,11 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         }
 
         private async Task<SessionCreateResultVisitorOutput> GetSessionCreateResultVisitorOutput(IGpSystem gpSystem,
-            UserProfile cidUserProfile)
+            string im1ConnectionToken, string odsCode, string nhsNumber)
         {
             var sessionService = gpSystem.GetSessionService();
             var sessionCreateResult =
-                await sessionService.Create(cidUserProfile.Im1ConnectionToken, cidUserProfile.OdsCode);
+                await sessionService.Create(im1ConnectionToken, odsCode, nhsNumber);
 
             return sessionCreateResult.Accept(new SessionCreateResultVisitor(_settings));
         }

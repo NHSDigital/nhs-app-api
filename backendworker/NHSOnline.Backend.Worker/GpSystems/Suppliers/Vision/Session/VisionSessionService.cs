@@ -1,12 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.Settings;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
@@ -15,16 +10,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
     {
         private readonly IVisionClient _visionClient;
 
-        private readonly ConfigurationSettings _settings;
-
-        public VisionSessionService(IVisionClient visionClient, IOptions<ConfigurationSettings> settings)
+        public VisionSessionService(IVisionClient visionClient)
         {
             _visionClient = visionClient;
-            _settings = settings.Value;
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2201", Justification = "Raised bug NHSO-2040 to fix inconsistent approaches when no NHS number")]
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             try
             {
@@ -34,13 +25,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 
                 if (!response.HasErrorResponse)
                 {
-                    var nhsNumber = response.Body.Account.PatientNumbers.FirstOrDefault(x => "NHS".Equals(x.NumberType, StringComparison.Ordinal));
-
-                    if (nhsNumber == null)
-                    {
-                        throw new Exception("NHS Number Null");
-                    }
-
                     return new SessionCreateResult.SuccessfullyCreated(
                         response.Body.Account.Name,
                         new VisionUserSession
@@ -48,7 +32,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                             RosuAccountId = visionConnectionToken.RosuAccountId,
                             OdsCode = odsCode,
                             Key = visionConnectionToken.ApiKey,
-                            NhsNumber = nhsNumber.Number
+                            NhsNumber = nhsNumber
                         }
                     );
                 }

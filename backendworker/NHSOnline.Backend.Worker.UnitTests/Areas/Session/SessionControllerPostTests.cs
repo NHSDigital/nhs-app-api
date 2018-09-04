@@ -99,7 +99,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _mockSessionService = _fixture.Freeze<Mock<ISessionService>>();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .Returns(Task.FromResult(_sessionCreateResult));
 
             _mockTokenValidationService = _fixture.Freeze<Mock<ITokenValidationService>>();
@@ -225,7 +225,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Assert
             _mockOdsCodeLookup.Verify();
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464ODSCodeNotSupportedOrNoNhsNumber);
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
             _mockAuditor.VerifyNoOtherCalls();
         }
 
@@ -254,7 +254,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Arrange
             var sessionCreateResult = new SessionCreateResult.InvalidIm1ConnectionToken();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .ReturnsAsync(sessionCreateResult)
                 .Verifiable();
 
@@ -274,7 +274,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             // Arrange
             var sessionCreateResult = new SessionCreateResult.SupplierSystemUnavailable();
             _mockSessionService
-                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode))
+                .Setup(x => x.Create(_userProfile.Im1ConnectionToken, _userProfile.OdsCode, _userProfile.NhsNumber))
                 .ReturnsAsync(sessionCreateResult)
                 .Verifiable();
 
@@ -383,7 +383,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464ODSCodeNotSupportedOrNoNhsNumber);
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status464OdsCodeNotSupportedOrNoNhsNumber);
             _mockAuditor.VerifyNoOtherCalls();
         }
     }

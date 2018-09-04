@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
             _logger = logger;
         }
 
-        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode)
+        public async Task<SessionCreateResult> Create(string connectionToken, string odsCode, string nhsNumber)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Session
                     OnlineUserId = reply.Body.OnlineUserId,
                     PatientId = reply.Body.PatientId,
                     UnitId = odsCode,
-                    NhsNumber = reply?.Body?.User?.Person?.NationalId.Value
+                    NhsNumber = nhsNumber
                 };
 
                 _logger.LogDebug($"TPP user session successfully create to OdsCode {odsCode}");
