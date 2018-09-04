@@ -27,7 +27,12 @@ export default {
       repeatPrescriptionRequest: repeatPrescriptionOrder,
     };
     return this.app.$http
-      .postV1PatientPrescriptions(param);
+      .postV1PatientPrescriptions(param).then(() => {
+        if (process.client) {
+          // eslint-disable-next-line no-underscore-dangle
+          window._satellite.track('prescription_ordered');
+        }
+      });
   },
   updateAdditionalInfo({ commit }, repeatPrescriptionAdditionalInfo) {
     commit(REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO, repeatPrescriptionAdditionalInfo);
