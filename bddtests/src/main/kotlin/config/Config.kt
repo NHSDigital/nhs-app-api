@@ -53,7 +53,7 @@ class Config private constructor() {
         cidRedirectUri = envOrDefault("CID_REDIRECT_URI", "http://$cidHostname:3000/auth-return")
         cidAuthEndpoint = envOrDefault("CID_AUTH_ENDPOINT", "http://$cidHostname:8080/authorize")
         cidRegisterEndpoint = envOrDefault("CID_REGISTER_ENDPOINT", "http://$cidHostname:8080/register")
-        emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "D66BA979-60D2-49AA-BE82-AEC06356E41F")
+        emisApplicationId = envOrDefault("EMIS_APPLICATION_ID", "16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7")
         emisVersion = envOrDefault("EMIS_VERSION", "2.1.0.0")
 
         organDonation = envOrDefault("ORGAN_DONATION_URL", "https://www.organdonation.nhs.uk/")

@@ -33,13 +33,12 @@
 					"raw": "{\n  \"Surname\": \"Cook\",\n  \"DateOfBirth\": \"1935-02-23T00:00:00.000Z\",\n  \"LinkageDetails\": {\n    \"AccountId\": \"1236029928\",\n    \"LinkageKey\": \"AKBAPESEUATu1\",\n    \"NationalPracticeCode\": \"A29928\"\n   }\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/me/applications",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/me/applications",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -93,13 +92,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{AccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/sessions",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/sessions",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -144,13 +142,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/appointmentslots/meta?userPatientLinkToken={{UserPatientLinkToken}}&sessionStartDate=2018-03-23T09:00:00&sessionEndDate=2018-03-26T17:00:00",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/appointmentslots/meta?userPatientLinkToken={{UserPatientLinkToken}}&sessionStartDate=2018-03-23T09:00:00&sessionEndDate=2018-03-26T17:00:00",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -213,13 +210,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/courses?userPatientLinkToken={{UserPatientLinkToken}}",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/courses?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -301,13 +297,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -389,13 +384,12 @@
 					"raw": "{\n  \"MedicationCourseGuids\": [\"029474e2-c160-4486-97d6-a8f85fc95c47\"],\n  \"RequestComment\": \"Need my meds\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -477,13 +471,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/prescriptionrequests?userPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -565,13 +558,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Medication",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Medication",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -628,13 +620,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Medication",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Medication",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -691,13 +682,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Allergies",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Allergies",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -754,13 +744,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Consultations",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Consultations",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -817,13 +806,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Consultations",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Consultations",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -880,13 +868,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Documents",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Documents",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -943,13 +930,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Immunisations",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Immunisations",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1006,13 +992,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Problems",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=Problems",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1069,13 +1054,12 @@
 					"raw": "{\n  \"PrescriptionRequestGuid\": \"bb7fdd01-55f0-4238-bd86-d20a09974049\",\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"CancellationReason\": \"No need\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=TestResults",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/record?userPatientLinkToken={{UserPatientLinkToken}}&itemType=TestResults",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1132,13 +1116,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/demographics?UserPatientLinkToken={{UserPatientLinkToken}}",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/demographics?UserPatientLinkToken={{UserPatientLinkToken}}",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1185,13 +1168,12 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/sessions/endusersession",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/sessions/endusersession",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1237,13 +1219,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/appointmentslots?userPatientLinkToken={{UserPatientLinkToken}}&fromDateTime=2018-03-15T09:00:00&toDateTime=2018-03-19T18:00:00",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/appointmentslots?userPatientLinkToken={{UserPatientLinkToken}}&fromDateTime=2018-03-15T09:00:00&toDateTime=2018-03-19T18:00:00",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1331,13 +1312,12 @@
 					"raw": "{\n  \"UserPatientLinkToken\": \"{{UserPatientLinkToken}}\",\n  \"SlotId\": 31011,\n  \"BookingReason\": \"30209\",\n  \"TelephoneNumber\": \"08838383838383\",\n  \"TelephoneContactType\": \"Home\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/appointments",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/appointments",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1382,13 +1362,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/appointments?userPatientLinkToken={{UserPatientLinkToken}}&FetchPreviousAppointments=true",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/appointments?userPatientLinkToken={{UserPatientLinkToken}}&FetchPreviousAppointments=true",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
@@ -1475,13 +1454,12 @@
 					"raw": "{\n  \"AccessIdentityGuid\": \"{{PaulSmithAccessGUID}}\",\n  \"NationalPracticeCode\": \"{{NationalPracticeCode}}\"\n}"
 				},
 				"url": {
-					"raw": "http://185.13.72.81/PFS/appointmentslots?userPatientLinkToken={{UserPatientLinkToken}}&fromDateTime=2018-03-15T09:00:00&toDateTime=2018-03-19T18:00:00",
-					"protocol": "http",
+					"raw": "https://nhs70apptest.emishealth.com/PFS/appointmentslots?userPatientLinkToken={{UserPatientLinkToken}}&fromDateTime=2018-03-15T09:00:00&toDateTime=2018-03-19T18:00:00",
+					"protocol": "https",
 					"host": [
-						"185",
-						"13",
-						"72",
-						"81"
+						"nhs70apptest",
+						"emishealth",
+						"com"
 					],
 					"path": [
 						"PFS",
