@@ -255,7 +255,6 @@ class WorkerClient(config:Config = Config.instance){
         return gson.fromJson<LinkageResponse>(result, LinkageResponse::class.java)
     }
 
-
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {
         val uriBuilder = URIBuilder(config.pfsBackendUrl + WorkerPaths.appointmentSlots)
         if (!fromDate.isNullOrEmpty()) {

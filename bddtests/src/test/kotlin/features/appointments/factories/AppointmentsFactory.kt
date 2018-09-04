@@ -9,11 +9,12 @@ import models.Patient
 abstract class AppointmentsFactory(gpSupplier: String) {
 
     val mockingClient = MockingClient.instance
-    var patient: Patient = Patient.getDefault(gpSupplier)
+    var patient: Patient
     protected var supplier: String = gpSupplier
     protected var appointmentMapper: MockingClientAppointmentMappingFactory
 
     init {
+        patient = SerenityHelpers.getPatientOrNull()?: Patient.getDefault(gpSupplier)
         SerenityHelpers.setPatient(patient)
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }

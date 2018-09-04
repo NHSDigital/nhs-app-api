@@ -28,7 +28,7 @@ class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreate
                                     patientIdentifiers = arrayOf(
                                             PatientIdentifier(
                                                     identifierType = IdentifierType.NhsNumber,
-                                                    identifierValue = MockDefaults.patient.nhsNumbers[0]
+                                                    identifierValue = patient.nhsNumbers.firstOrNull()
                                             )
                                     )
                             )

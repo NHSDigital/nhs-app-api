@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import features.sharedSteps.SerenityHelpers
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.tpp.models.Authenticate
 
 
@@ -123,60 +124,17 @@ class CommonSteps : AbstractSteps() {
     @Given("^I have logged into (.*) and have a valid session cookie$")
     fun givenIHaveLoggedIntoXAndHaveAValidSessionCookie(gpSystem: String) {
         val patient = Patient.getDefault(gpSystem)
-        setGPServiceAndPatientPatientSerenityVaraibles(gpSystem, patient)
-
         CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
-
-        when (ProviderTypes.valueOf(gpSystem)) {
-            ProviderTypes.EMIS -> {
-
-                mockingClient.forEmis {
-                    endUserSessionRequest()
-                            .respondWithSuccess(DEFAULT_END_USER_SESSION_ID)
-                }
-
-                mockingClient.forEmis {
-                    sessionRequest(patient)
-                            .respondWithSuccess(patient, AssociationType.Self)
-                }
-                mockingClient.forEmis {
-                    demographicsRequest(patient)
-                            .respondWithSuccess(patient,
-                                    patientIdentifiers = arrayOf(
-                                            PatientIdentifier(
-                                                    identifierType = IdentifierType.NhsNumber,
-                                                    identifierValue = patient.nhsNumbers[0])))
-                }
-
-            }
-            ProviderTypes.TPP -> {
-
-                mockingClient.forTpp {
-
-                    val authReply = AuthenticateReply()
-                    authReply.uuid = UUID.randomUUID().toString()
-                    authReply.user.person.dateOfBirth = MockDefaults.patientTpp.dateOfBirth
-                    authReply.onlineUserId = MockDefaults.patientTpp.onlineUserId
-                    authReply.patientId = MockDefaults.patientTpp.patientId
-                    authReply.onlineUserId = MockDefaults.patientTpp.onlineUserId
-
-                    authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(authReply)
-                }
-            }
-        }
-
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         sessionVariableCalled<WorkerClient>(WorkerClient::class).postSessionConnection(patient.cidUserSession)
         Serenity.setSessionVariable(GP_SYSTEM).to(gpSystem)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
+        SerenityHelpers.setPatient(patient)
     }
 
     @And("I allow my session to expire")
     fun andIDelayMyRequestByTheDefaultTime() {
         var delayTime = TimeUnit.MINUTES.toMillis(Config.instance.sessionExpiryMinutes)
         Thread.sleep(delayTime + 10)
-    }
-
-    private fun setGPServiceAndPatientPatientSerenityVaraibles(gpSystem: String, patient: Patient) {
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
-        SerenityHelpers.setPatient(patient)
     }
 }

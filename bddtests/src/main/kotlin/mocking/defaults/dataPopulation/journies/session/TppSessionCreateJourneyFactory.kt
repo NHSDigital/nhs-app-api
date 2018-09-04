@@ -10,7 +10,7 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
 
     private fun authenticateRequest(patient: Patient): Authenticate {
         return Authenticate(
-                apiVersion = "1",
+                apiVersion = MockDefaults.TPP_API_VERSION,
                 accountId = patient.accountId,
                 passphrase = patient.passphrase,
                 unitId = MockDefaults.DEFAULT_ODS_CODE_TPP,
@@ -47,7 +47,7 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
     fun createAuthenticateRequest(patient: Patient) {
         client.forTpp {
             authenticateRequest(authenticateRequest(patient))
-                    .respondWithSuccesssWithoutSuid(authenticationReply(patient))
+                    .respondWithSuccess(authenticationReply(patient))
         }
     }
 

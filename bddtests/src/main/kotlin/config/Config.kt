@@ -86,6 +86,7 @@ class Config private constructor() {
 
     companion object {
         val instance: Config by lazy { createConfig() }
+
         val keyStore: KeyStore = KeyStore(constants.JwkValues.cidKeys)
         val logger: Logger = LoggerFactory.getLogger(Config::class.simpleName)
 

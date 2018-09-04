@@ -86,7 +86,8 @@ data class Patient(
                 dateOfBirth =  "1972-04-12",
                 sessionId = MockDefaults.DEFAULT_SESSION_ID,
                 connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
-                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID)
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("2227007273"))
 
         val jackJackson = Patient(
                 title = "Mr",
@@ -96,7 +97,8 @@ data class Patient(
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 sessionId = "gY39SJJMEEg7rNbcsfF8",
                 connectionToken = "efa22020-9221-46a6-a0f0-6c0340b8f44d",
-                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("2227007273")
         )
 
         val alanCook = Patient(
@@ -107,7 +109,8 @@ data class Patient(
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
-                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("2227007273")
         )
 
         val halleDawe = Patient(

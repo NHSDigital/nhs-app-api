@@ -2,27 +2,29 @@ package features.authentication.stepDefinitions
 
 import com.google.gson.Gson
 import config.Config
-import cucumber.api.java.en.*
+import cucumber.api.java.en.And
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
+import features.myAccount.steps.MyAccountSteps
+import features.navigation.steps.NavHeaderSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
-import features.myAccount.steps.MyAccountSteps
-import features.sharedSteps.SerenityHelpers
-import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.SerenityHelpers
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
-import mocking.defaults.dataPopulation.journies.session.*
-import mocking.emis.demographics.PatientIdentifier
+import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
+import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
-import mocking.emis.models.IdentifierType
-import mocking.tpp.models.Authenticate
-import mocking.tpp.models.AuthenticateReply
-import mocking.tpp.models.Error
+import mocking.models.Mapping
 import models.Patient
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.serenitybdd.rest.SerenityRest
@@ -40,7 +42,6 @@ import worker.models.patient.Im1ConnectionResponse
 import worker.models.session.UserSessionRequest
 import worker.models.session.UserSessionResponse
 import java.net.URI
-import java.time.Duration
 
 const val INVALID_VALUE = "xxx-wrong-format-xxx"
 
@@ -126,81 +127,24 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have valid OAuth details and (.*) is not available$")
     fun iHaveValidOAuthDetailsAndGpSystemUnavailable(gpSystem: String) {
-        when (gpSystem.toUpperCase()) {
-            "EMIS" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-                mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
-                mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
-            }
-            "TPP" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
-                mockingClient.forTpp {
-                    authenticateRequest(Authenticate())
-                            // respond with error.  Unconfirmed format.
-                            .respondWithError(Error(errorCode = "0", userFriendlyMessage = "Service Unavailable"))
-                }
-            }
-            "VISION" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientVision)
-                mockingClient.forVision {
-                    getConfigurationRequest(
-                            MockDefaults.visionUserSession,
-                            MockDefaults.visionGetConfiguration)
-                            .respondWithServiceUnavailable()
-                }
-            }
-        }
+        mockingClient = SerenityHelpers.getMockingClient()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
+        AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsAndGpSystemUnavailable()
     }
 
     @Given("^I have invalid OAuth details and CID connection token fails to authenticate with (.*)$")
     fun iHaveInvalidOAuthDetailsAndCIDConnectionTokenFailsToAuthenticateWithGpSystem(gpSystem: String) {
-        when (gpSystem.toUpperCase()) {
-            "EMIS" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault(gpSystem).endUserSessionId) }
-                mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithForbidden() }
-            }
-            "TPP" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
-                mockingClient.forTpp {
-                    authenticateRequest(Authenticate())
-                            // respond with error.  Unconfirmed format.
-                            .respondWithError(Error(errorCode = "9", userFriendlyMessage = "There was a problem logging on"))
-                }
-            }
-            "VISION" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientVision)
-                mockingClient
-                        .forVision {
-                            getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
-                                    .respondWitInvalidUserCredentials()
-                        }
-            }
-        }
+        mockingClient = SerenityHelpers.getMockingClient()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
+        AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsCidConnectionTokenFailsToAuthenticate()
     }
 
     @Given("^I have valid OAuth details and (.*) fails to respond in 30 seconds$")
     fun iHaveValidOAuthDetailsAndEmisFailsToRespondInThirtySeconds(gpSystem: String) {
 
-        when (gpSystem.toUpperCase()) {
-            "EMIS" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
-                mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
-            }
-            "TPP" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientTpp)
-                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithSuccess(AuthenticateReply()).delayedBy(Duration.ofSeconds(31)) }
-            }
-            "VISION" -> {
-                CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patientVision)
-                mockingClient
-                        .forVision {
-                            getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
-                                    .respondWithSuccess(MockDefaults.visionConfigurationResponse).delayedBy(Duration.ofSeconds(31))
-                        }
-            }
-        }
+        mockingClient = SerenityHelpers.getMockingClient()
+        CitizenIdSessionCreateJourney(mockingClient).createFor(Patient.getDefault(gpSystem))
+        AuthenticationFactory.getForSupplier(gpSystem).validOAuthDetailsAndGpSystemSlowToRespond()
     }
 
     @Given("^I have a new (.+) patient with Nhs Numbers of (.*)$")
@@ -216,10 +160,16 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have data for a (.+) patient that does not exist$")
     fun iHaveDataForAPatientThatDoesNotExist(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(nhsNumbers = arrayListOf("nonExistingNhsNumber"))
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithNoOnlineUserFound() }
+        setIm1Request()
+    }
+
+
+    private fun createInvalidLinkageTest(gpSystem: String, patient: Patient, emisResponse: (EmisMeApplicationsBuilder.() -> Mapping)) {
 
         when (gpSystem) {
             "EMIS" -> {
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithNoOnlineUserFound() }
+                mockingClient.forEmis { emisResponse(meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
                 mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
             }
             "TPP" -> {
@@ -228,64 +178,26 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                 }
             }
         }
-
-
-        setIm1Request()
     }
 
     @Given("^I have data for a (.+) patient with incorrect linkage key$")
     fun iHaveDataForAPatientWithIncorrectLinkageKey(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(linkageKey = "incorrectLinkageKey")
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithLinkageKeyDoesNotMatch() }
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
-                }
-            }
-        }
-
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithLinkageKeyDoesNotMatch() }
         setIm1Request()
     }
 
     @Given("^I have data for a (.+) patient with incorrect surname$")
     fun iHaveDataForAPatientWithIncorrectSurname(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(surname = "incorrectSurname")
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithIncorrectSurnameOrDateOfBirth() }
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
-                }
-            }
-        }
-
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithIncorrectSurnameOrDateOfBirth() }
         setIm1Request()
     }
 
     @Given("^I have data for a (.+) patient with incorrect date of birth$")
     fun iHaveDataForAPatientWithIncorrectDateOfBirth(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithIncorrectSurnameOrDateOfBirth() }
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
-                }
-            }
-        }
-
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithIncorrectSurnameOrDateOfBirth() }
         setIm1Request()
     }
 
@@ -298,51 +210,21 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have a (.+) user's IM1 credentials with a Surname not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithASurnameNotInTheExpectedFormat(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(surname = INVALID_VALUE)
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithBadRequest("The request is invalid.", "Surname") }
-            }
-            "TPP" -> {
-                mockingClient.forTpp { linkAccountRequest(patient).respondWithInvalidLinkageCredentials() }
-            }
-        }
-
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithBadRequest("The request is invalid.", "Surname") }
         setIm1Request()
     }
 
     @Given("^I have a (.+) user's IM1 credentials with an Account ID not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnAccountIdNotInTheExpectedFormat(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(accountId = INVALID_VALUE)
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithBadRequest("The request is invalid.", "LinkageDetails.AccountId") }
-            }
-            "TPP" -> {
-                mockingClient.forTpp { linkAccountRequest(patient).respondWithInvalidLinkageCredentials() }
-            }
-        }
-
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithBadRequest("The request is invalid.", "LinkageDetails.AccountId") }
         setIm1Request()
     }
 
     @Given("^I have a (.+) user's IM1 credentials with a Linkage Key not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithALinkageKeyNotInTheExpectedFormat(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem).copy(linkageKey = INVALID_VALUE)
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-                mockingClient.forEmis { meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithBadRequest("The request is invalid.", "LinkageDetails.LinkageKey") }
-            }
-            "TPP" -> {
-                mockingClient.forTpp { linkAccountRequest(patient).respondWithInvalidLinkageCredentials() }
-            }
-        }
-
+        createInvalidLinkageTest(gpSystem, this.patient) { respondWithBadRequest("The request is invalid.", "LinkageDetails.LinkageKey") }
         setIm1Request()
     }
 
@@ -436,7 +318,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         if (arrayOf(200, 201).contains(response.statusCode)) {
             this.im1ConnectionResponse = Gson().fromJson(response.body.asString(), Im1ConnectionResponse::class.java)
         } else {
-            setErrorResponse(NhsoHttpException(uri=uri.toString(), statusCode = response.statusCode, body = response.body?.toString(), method = "POST"))
+            setErrorResponse(NhsoHttpException(uri = uri.toString(), statusCode = response.statusCode, body = response.body?.toString(), method = "POST"))
         }
     }
 
@@ -513,8 +395,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     }
 
     @Given("I attempt to log in as a (.*) user with invalid ODS Code$")
-    fun iAttemptToLogInWithInvalidOdsCode(gpSystem: String){
-        this.patient=Patient.getDefault(gpSystem).copy(odsCode="A33224")
+    fun iAttemptToLogInWithInvalidOdsCode(gpSystem: String) {
+        this.patient = Patient.getDefault(gpSystem).copy(odsCode = "A33224")
         setupAndLogIn(patient, gpSystem)
     }
 
@@ -524,11 +406,11 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     }
 
     @Then("^I see an error message informing me I cannot log in$")
-    fun iSeeAnErrorMessageInformingMeICannotLogIn(){
+    fun iSeeAnErrorMessageInformingMeICannotLogIn() {
         serviceUnavailablePage.assertIsPresent("You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.")
     }
 
-    fun setupAndLogIn(patient:Patient, gpSystem: String) {
+    fun setupAndLogIn(patient: Patient, gpSystem: String) {
         this.patient = patient
         SerenityHelpers.setPatient(patient)
 
@@ -593,7 +475,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("I see the patient details of name, date of birth and NHS number$")
     fun iSeePatientDetails() {
         var patient = SerenityHelpers.getPatient()
-        val regex ="""${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
+        val regex = """${'^'}${'['}0-9${']'}${'{'}10${'}'}${'$'}""".toRegex()
         Assert.assertTrue("Test Setup Incorrect: Patient must have unformatted nhs number to check front end formatting. Regex: '$regex' Number: '${patient.nhsNumbers.first()}' ",
                 regex.containsMatchIn(patient.nhsNumbers.first()))
         home.assertPatientDetailsShownFor(patient)
