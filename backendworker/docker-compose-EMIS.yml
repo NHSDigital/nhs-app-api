@@ -11,10 +11,14 @@ services:
     ports:
       - "8082:8082"
     environment:
+      - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8082
+      - PORT=8082
       - CORS_AUTHORITY=*
       - EMIS_BASE_URL=https://nhs70apptest.emishealth.com/PFS/
       - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

@@ -160,6 +160,23 @@ Feature: Registration
     |EMIS      |Bad Request |
     |TPP       |Bad Request |
 
+  @backend
+  @NHS-2383
+  Scenario: Targeting the IM1 endpoint does not expose the Patient Facing Services endpoint
+    Given I target the IM1 endpoint
+    And I have an IM1 request and a Patient Facing Request
+    Then I receive a response from the IM1 request
+    And I receive a Not Found response from the Patient Facing request
+
+
+  @backend
+  @NHS-2383
+  Scenario: Targeting the Patient Facing Services endpoint does not expose the IM1 endpoint
+    Given I target the Patient Facing Services endpoint
+    And I have an IM1 request and a Patient Facing Request
+    Then I receive a response from the Patient Facing request
+    And I receive a Not Found response from the IM1 request
+
   @NHSO-313
   Scenario Outline: <GP System> User launches the create account CitizenID journey
     Given I want to register for a <GP System> account

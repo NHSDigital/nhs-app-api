@@ -7,7 +7,7 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
-    [Route("patient/courses")]
+    [Route("patient/courses"),PfsSecurityMode]
     public class CoursesController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

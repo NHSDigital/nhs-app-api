@@ -7,7 +7,7 @@ using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.Areas.Demographics
 {
-    [Route("patient")]
+    [Route("patient"),PfsSecurityMode]
     public class DemographicsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

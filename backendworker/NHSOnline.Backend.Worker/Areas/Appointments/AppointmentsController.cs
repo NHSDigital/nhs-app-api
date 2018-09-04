@@ -11,7 +11,7 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    [Route("patient/appointments")]
+    [Route("patient/appointments"),PfsSecurityMode]
     public class AppointmentsController : Controller
     {
         private readonly ILogger<AppointmentsController> _logger;

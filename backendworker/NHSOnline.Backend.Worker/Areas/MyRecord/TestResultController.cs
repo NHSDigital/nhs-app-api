@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.GpSystems;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    [Route("patient/test-result")]
+    [Route("patient/test-result"),PfsSecurityMode]
     public class TestResultController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

@@ -7,7 +7,7 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord
 {
-    [Route("patient/my-record")]
+    [Route("patient/my-record"),PfsSecurityMode]
     public class MyRecordController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

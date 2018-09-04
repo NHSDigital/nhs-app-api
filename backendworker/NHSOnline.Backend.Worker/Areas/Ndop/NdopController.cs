@@ -9,7 +9,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Ndop
 {
-    [Route("patient/ndop")]
+    [Route("patient/ndop"),PfsSecurityMode]
     public class NdopController : Controller
     {
         private readonly INdopService _ndopService;

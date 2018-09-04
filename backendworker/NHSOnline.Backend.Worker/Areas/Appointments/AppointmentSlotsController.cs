@@ -12,7 +12,7 @@ using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments
 {
-    [Route("patient/appointment-slots")]
+    [Route("patient/appointment-slots"),PfsSecurityMode]
     public class AppointmentSlotsController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

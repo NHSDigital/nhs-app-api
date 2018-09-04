@@ -426,7 +426,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @When("^I register the user's IM1 credentials$")
     fun iRegisterAnEMISUsersIMCredentials() {
-        val uri = URI(Config.instance.backendUrl + WorkerPaths.patientIm1Connection)
+        val uri = URI(Config.instance.cidBackendUrl + WorkerPaths.patientIm1Connection)
         val response = SerenityRest
                 .given()
                 .contentType("application/json")

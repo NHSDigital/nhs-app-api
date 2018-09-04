@@ -15,7 +15,10 @@ services:
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
+      - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8082
+      - PORT=8082
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
       - ConfigurationSettings__DefaultSessionExpiryMinutes=20
@@ -35,6 +38,34 @@ services:
       - nhsonline.redis.sds
     ports:
       - "8082:8082"
+    volumes:
+      - ./src/main/kotlin/mocking/ndop:/app/bddcerts
+  cid.local.bitraft.io:
+    image: nhsonline.backend.worker
+    environment:
+      - BACKENDWORKER_RUNMODE=cid
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8084
+      - PORT=8084
+      - CORS_AUTHORITY=*
+      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - ConfigurationSettings__DefaultSessionExpiryMinutes=20
+      - VISION_CERT_PASSPHRASE
+      - GP_PROVIDER_ENABLED_EMIS=true
+      - GP_PROVIDER_ENABLED_TPP=false
+      - GP_PROVIDER_ENABLED_VISION=false
+      - GP_PROVIDER_ENABLED_MICROTEST=false
+      - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
+      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - EMIS_LINKAGE_USE_STUBBED_DATA=false
+      - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io
+    depends_on:
+      - nhsonline.redis.sds
+    ports:
+      - "8084:8084"
     volumes:
       - ./src/main/kotlin/mocking/ndop:/app/bddcerts
   stubs.local.bitraft.io:

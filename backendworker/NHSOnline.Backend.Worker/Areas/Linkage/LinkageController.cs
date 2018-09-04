@@ -12,7 +12,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Linkage
 {
-    [Route("patient/linkage")]
+    [Route("patient/linkage"),CidSecurityMode]
     public class LinkageController : Controller
     {
         private readonly IGpSystemFactory _gpSystemFactory;

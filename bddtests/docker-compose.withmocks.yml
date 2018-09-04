@@ -14,7 +14,34 @@ services:
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
+      - BACKENDWORKER_RUNMODE=pfs
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8082
+      - PORT=8082
+      - CORS_AUTHORITY=*
+      - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
+      - ConfigurationSettings__DefaultSessionExpiryMinutes=1
+      - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
+      - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
+      - VISION_URI=http://stubs.local.bitraft.io:8080/vision
+      - VISION_CERT_PASSPHRASE
+      - GP_PROVIDER_ENABLED_EMIS=true
+      - GP_PROVIDER_ENABLED_TPP=true
+      - GP_PROVIDER_ENABLED_VISION=true
+      - GP_PROVIDER_ENABLED_MICROTEST=true
+      - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io
+    depends_on:
+      - nhsonline.redis.sds
+    ports:
+      - "8082:8082"
+  cid.local.bitraft.io:
+    image: nhsonline.backend.worker
+    environment:
+      - BACKENDWORKER_RUNMODE=cid
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8084
+      - PORT=8084
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
@@ -30,7 +57,7 @@ services:
     depends_on:
       - nhsonline.redis.sds
     ports:
-      - "8082:8082"
+      - "8084:8084"
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
     command: --local-response-templating

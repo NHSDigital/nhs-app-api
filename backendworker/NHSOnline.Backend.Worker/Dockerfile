@@ -33,9 +33,9 @@ RUN dotnet publish -c Release -o /app -r linux-x64
 COPY NHSOnline.Backend.Worker/certs/* /app/certs/
 
 FROM runtime AS final
-ENV PORT 8082
+ENV PORT=
 ENV ASPNETCORE_ENVIRONMENT Production
-ENV ASPNETCORE_URLS http://*:8082
+ENV ASPNETCORE_URLS=
 ENV CITIZEN_ID_BASE_URL https://auth.ext.signin.nhs.uk/
 ENV CITIZEN_ID_CLIENT_ID nhs-online
 ENV CITIZEN_ID_CLIENT_SECRET secret
@@ -77,6 +77,7 @@ ENV TERMS_CONDITIONS_COSMOS_COLLECTION_NAME consent
 ENV NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
 ENV NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
 ENV STUB_TERMS_AND_CONDITIONS false
+ENV BACKENDWORKER_RUNMODE none
 
 WORKDIR /app
 EXPOSE $PORT
@@ -91,4 +92,4 @@ RUN update-ca-certificates
 
 RUN chown aspnetcore:aspnetcore -R /app
 USER aspnetcore
-CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && dotnet NHSOnline.Backend.Worker.dll
+CMD wait-for -t ${WAIT_FOR_TIMEOUT} ${REDIS_ODSLOOKUP_CONFIG} -- sudo update-ca-certificates && dotnet NHSOnline.Backend.Worker.dll --runMode=$BACKENDWORKER_RUNMODE

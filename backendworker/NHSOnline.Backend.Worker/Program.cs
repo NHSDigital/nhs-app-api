@@ -12,14 +12,15 @@ namespace NHSOnline.Backend.Worker
             BuildWebHost(args).Run();
         }
 
-        public static IConfigurationRoot BuildConfiguration() => new ConfigurationBuilder()
+        public static IConfigurationRoot BuildConfiguration(string[] args) => new ConfigurationBuilder()
             .AddEnvironmentVariables()
+            .AddCommandLine(args)
             .Build();
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseConfiguration(BuildConfiguration())
+                .UseConfiguration(BuildConfiguration(args))
                 // Clear default loggin providers these will be added later in startup.
                 .ConfigureLogging((context, logBuilder) => logBuilder.ClearProviders())
                 .Build();

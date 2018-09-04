@@ -9,7 +9,8 @@ private const val SESSION_EXPIRY_MINUTES: Long = 3
 class Config private constructor() {
 
     var url: String
-    var backendUrl: String
+    var pfsBackendUrl: String
+    var cidBackendUrl: String
     var wiremockUrl: String
     var nodeEnv: String
     var port: String
@@ -39,7 +40,8 @@ class Config private constructor() {
         url = envOrDefault("url", "http://web.local.bitraft.io:3000")
         val uri = URI(url)
         wiremockUrl = envOrDefault("wiremockUrl", "http://${uri.host}:8080")
-        backendUrl = envOrDefault("backendUrl", "http://${uri.host}:8082")
+        cidBackendUrl = envOrDefault("cidBackendUrl", "http://cid.local.bitraft.io:8084")
+        pfsBackendUrl = envOrDefault("pfsBackendUrl", "http://api.local.bitraft.io:8082")
         nodeEnv = envOrDefault("NODE_ENV", "production")
         port = envOrDefault("PORT", "3000")
 
@@ -83,8 +85,13 @@ class Config private constructor() {
     }
 
     companion object {
-        val instance: Config by lazy { Config() }
+        val instance: Config by lazy { createConfig() }
         val keyStore: KeyStore = KeyStore(constants.JwkValues.cidKeys)
         val logger: Logger = LoggerFactory.getLogger(Config::class.simpleName)
+
+        fun createConfig():Config{
+            return Config()
+        }
+
     }
 }

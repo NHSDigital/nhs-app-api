@@ -15,7 +15,7 @@ using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
-    [Route("patient/prescriptions")]
+    [Route("patient/prescriptions"),PfsSecurityMode]
     public class PrescriptionsController : Controller
     {
         private readonly ConfigurationSettings _settings;

@@ -10,5 +10,10 @@ services:
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
+      - BACKENDWORKER_RUNMODE=pfs
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:8082
+      - PORT=8082
       - NHS_WEB_APP_BASE_URL=http://bs-local.com:3000
       - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io

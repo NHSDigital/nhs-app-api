@@ -13,7 +13,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 {
-    [Route("patient/im1connection")]
+    [Route("patient/im1connection"),CidSecurityMode]
     public class Im1ConnectionController : Controller
     {
         private readonly IOdsCodeLookup _odsCodeLookup;

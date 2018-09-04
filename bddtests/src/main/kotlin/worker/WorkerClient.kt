@@ -46,12 +46,12 @@ import java.net.URLEncoder
 import javax.servlet.http.Cookie
 
 @Suppress("TooManyFunctions", "LargeClass")
-class WorkerClient {
+class WorkerClient(config:Config = Config.instance){
     var cookieHeaderKey = "Set-Cookie"
     private val _client: HttpClient
     private val gsonBuilder: GsonBuilder = GsonBuilder()
     private var gson: Gson
-    private val config = Config.instance
+    private val config = config
     private var csrfToken = ""
 
     init {
@@ -65,7 +65,7 @@ class WorkerClient {
     }
 
     fun getIm1Connection(connectionToken: String?, odsCode: String?): Im1ConnectionResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.patientIm1Connection)
+        val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.patientIm1Connection)
         httpGet.setHeader(WorkerHeaders.ConnectionToken, connectionToken)
         httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
 
@@ -78,7 +78,7 @@ class WorkerClient {
     }
 
     fun postSessionConnection(requestBody: UserSessionRequest): UserSessionResponse {
-        val httpPost = HttpPost(config.backendUrl + WorkerPaths.sessionConnection)
+        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.sessionConnection)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
@@ -102,7 +102,7 @@ class WorkerClient {
     }
 
     fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false): MyAppointmentsResponse {
-        val uriBuilder = URIBuilder(config.backendUrl)
+        val uriBuilder = URIBuilder(config.pfsBackendUrl)
                 .setPath(WorkerPaths.myAppointments)
                 .addParameter("pastAppointmentsFromDate", fromDate)
                 .addParameter("includePastAppointments", includePastAppointments.toString())
@@ -138,7 +138,7 @@ class WorkerClient {
     fun getPrescriptionsConnection(fromDate: String?, context: HttpContext? = null): PrescriptionsListResponse {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
+        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
         val response = sendAsync(httpGet, context)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
@@ -148,7 +148,7 @@ class WorkerClient {
     }
 
     fun deleteAppointment(requestBody: CancelAppointmentRequest): HttpResponse {
-        val httpDelete = HttpDeleteWithBody(config.backendUrl + WorkerPaths.myAppointments)
+        val httpDelete = HttpDeleteWithBody(config.pfsBackendUrl + WorkerPaths.myAppointments)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpDelete.entity = entity
@@ -159,7 +159,7 @@ class WorkerClient {
     }
 
     fun postAppointment(appointmentBookRequest: AppointmentBookRequest, sessionCookie: Cookie? = null): HttpResponse {
-        val httpPost = HttpPost(config.backendUrl + WorkerPaths.myAppointments)
+        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.myAppointments)
 
         if (sessionCookie != null) httpPost.addHeader("Cookie", sessionCookie.value.split(";")[0])
         val entity = StringEntity(gson.toJson(appointmentBookRequest), "UTF-8")
@@ -172,7 +172,7 @@ class WorkerClient {
     }
 
     fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?): HttpResponse {
-        val httpPost = HttpPost(config.backendUrl + WorkerPaths.postPrescriptionsConnection)
+        val httpPost = HttpPost(config.pfsBackendUrl + WorkerPaths.postPrescriptionsConnection)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
@@ -183,7 +183,7 @@ class WorkerClient {
     }
 
     fun getCoursesConnection(): CoursesListResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
+        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getCoursesConnection)
 
         val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
@@ -194,7 +194,7 @@ class WorkerClient {
     }
 
     fun getDemographics(): Demographics {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getDemographicsConnection)
+        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getDemographicsConnection)
         val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
@@ -204,7 +204,7 @@ class WorkerClient {
     }
 
     fun getMyRecord(): MyRecordResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.getMyRecordConnection)
+        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.getMyRecordConnection)
         val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
@@ -215,7 +215,7 @@ class WorkerClient {
     }
 
     fun getNdopToken(): NdopResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.ndopConnection)
+        val httpGet = HttpGet(config.pfsBackendUrl + WorkerPaths.ndopConnection)
         val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
@@ -226,7 +226,7 @@ class WorkerClient {
     }
 
     fun getLinkageKey(nhsNumber: String?, odsCode: String?, identityToken: String?): LinkageResponse {
-        val httpGet = HttpGet(config.backendUrl + WorkerPaths.LinkageKey)
+        val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.LinkageKey)
         httpGet.setHeader(WorkerHeaders.NhsNumber, nhsNumber)
         httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
         httpGet.setHeader(WorkerHeaders.IdentityToken, identityToken)
@@ -242,7 +242,7 @@ class WorkerClient {
     }
 
     fun postLinkageKey(requestBody: CreateLinkageRequest): LinkageResponse {
-        val httpPost = HttpPost(config.backendUrl + WorkerPaths.LinkageKey)
+        val httpPost = HttpPost(config.cidBackendUrl + WorkerPaths.LinkageKey)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
@@ -257,7 +257,7 @@ class WorkerClient {
 
 
     private fun createUriBuilderForAppointmentSlots(fromDate: String?, toDate: String?): URIBuilder {
-        val uriBuilder = URIBuilder(config.backendUrl + WorkerPaths.appointmentSlots)
+        val uriBuilder = URIBuilder(config.pfsBackendUrl + WorkerPaths.appointmentSlots)
         if (!fromDate.isNullOrEmpty()) {
             uriBuilder.setParameter("fromDate", fromDate)
         }

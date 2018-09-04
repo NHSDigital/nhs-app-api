@@ -40,7 +40,12 @@ namespace NHSOnline.Backend.Worker
         {
             Configuration = configuration;
             _env = env;
-            
+
+            if (null == configuration["runMode"])
+            {
+                throw new ArgumentException("command line parameter runMode is not set");
+            }
+
             if (env.IsDevelopment())
             {
                 loggerFactory.AddConsole(LogLevel.Debug);
@@ -97,9 +102,10 @@ namespace NHSOnline.Backend.Worker
                 .AddMvc(
                     options =>
                     {
-                        options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute));
-                        options.Filters.Add(typeof(HttpContextLogActionFilterAttribute));
-                        options.Filters.Add(typeof(ModelStateValidationFilterAttribute));
+                        options.Filters.Add(typeof(SecurityModeFilter), 0);
+                        options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
+                        options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
+                        options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
                         options.Filters.Add(new AuthorizeFilter(
                             new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
                         );
@@ -198,4 +204,5 @@ namespace NHSOnline.Backend.Worker
             });
         }
     }
+
 }

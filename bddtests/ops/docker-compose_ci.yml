@@ -13,7 +13,31 @@ services:
       - nhsonline.redis.session
     env_file:
       - vars_ci.env
+    ports:
+      - "8082:8082"
     environment:
+      - BACKENDWORKER_RUNMODE=pfs
+      - ASPNETCORE_URLS=http://*:8082
+      - PORT=8082
+      - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - STUB_TERMS_AND_CONDITIONS=true
+      - ConfigurationSettings__CookieDomain=.bitraft.io
+    volumes:
+      - ../src/main/kotlin/mocking/ndop:/app/bddcerts
+  cid.local.bitraft.io:
+    image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
+    depends_on:
+      - nhsonline.redis.sds
+      - nhsonline.redis.session
+    env_file:
+      - vars_ci.env
+    ports:
+      - "8084:8084"
+    environment:
+      - BACKENDWORKER_RUNMODE=cid
+      - ASPNETCORE_URLS=http://*:8084
+      - PORT=8084
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
       - STUB_TERMS_AND_CONDITIONS=true
