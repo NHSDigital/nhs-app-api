@@ -78,12 +78,12 @@ open class SharedStepDefinitions {
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
     }
 
-    @Given("(.*) is initialised")
+    @Given("(TPP|EMIS) is initialised")
     fun system(system: String) {
 
         when (system) {
             "TPP" -> initialiseTpp()
-            else -> initialiseEmis()
+            "EMIS" -> initialiseEmis()
         }
 
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)

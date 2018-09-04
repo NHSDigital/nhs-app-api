@@ -2,10 +2,6 @@ Feature: CRSF Token Validation
 
     Tests authentication failure when the CRSF token is not sent correctly.
 
-  Background:
-    Given wiremock is initialised
-
-
   @NHSO-406
   @backend
   Scenario: API fails with no csrf token
