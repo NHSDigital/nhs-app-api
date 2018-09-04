@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import features.sharedSteps.SerenityHelpers
+import mocking.tpp.models.Authenticate
 
 
 class CommonSteps : AbstractSteps() {
@@ -53,27 +54,27 @@ class CommonSteps : AbstractSteps() {
         setSessionVariable(WorkerClient::class).to(workerClient)
     }
 
-    @Given("^(EMIS|VISION) is not available$")
+    @Given("^(EMIS|TPP|VISION) is not available$")
     fun givenXIsNotAvailable(gpSystem: String) {
+
+        val patient = Patient.getDefault(gpSystem)
+        setSessionVariable("ConnectionToken").to(patient.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(patient.odsCode)
+
         when (gpSystem) {
             EMIS -> {
-                val connectionToken = "f6ca8e0c-dd67-4863-ba9e-3d34bfe930d0"
-                val odsCode = "A29928"
-
-                setSessionVariable("ConnectionToken").to(connectionToken)
-                setSessionVariable("NationalPracticeCode").to(odsCode)
-
                 mockingClient.forEmis {
                     endUserSessionRequest()
                             .respondWithServiceUnavailable()
                 }
             }
+            TPP -> {
+                mockingClient.forTpp {
+                    authenticateRequest(Authenticate())
+                            .respondWithServiceUnavailable()
+                }
+            }
             VISION -> {
-                val patient = MockDefaults.patientVision
-
-                setSessionVariable("ConnectionToken").to(patient.connectionToken)
-                setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-
                 mockingClient.forVision {
                     getConfigurationRequest(
                             MockDefaults.visionUserSession,
@@ -83,7 +84,6 @@ class CommonSteps : AbstractSteps() {
             }
         }
     }
-
 
     @Then("^I receive (?:a|an) \"(.*)\" error")
     fun thenIReceiveAMessage(expectedStatusCode: String) {

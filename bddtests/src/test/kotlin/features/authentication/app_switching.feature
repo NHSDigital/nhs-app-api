@@ -1,48 +1,27 @@
 @native
 Feature: Switching Apps on Mobile Devices
-
   If a user switches apps whilst using their device, the app maintains integrity in a variety of different ways
 
-  @NHSO-893  
-  @pending
-  Scenario Outline: User is on <start page> and switches apps
-    Given I am on the <start page> page
-    And I switch apps
-    When I switch to the NHS App
-    Then I see the <end page> page
-
-    Examples:
-    | start page    | end page      |
-    | symptoms      | symptoms      |
-    | appointments  | appointments  |
-    | prescriptions | prescriptions |
-    | my record     | my record     |
-    | more          | more          |
-
+  @NHSO-893
+  @manual
+  Scenario: A user on any page within the app can switch apps, switch back, and still be on the same page
 
   @NHSO-893
   @manual
-  Scenario Outline: User switches back to <start page> after session times out
-    Given I am on the <start page> page
-    And I switch apps
-    And I wait for 20 minutes
-    When I switch to the NHS App
-    Then I see the <end page> page
-
-    Examples:
-      | start page    | end page      |
-      | symptoms      | symptoms      |
-      | appointments  | login         |
-      | prescriptions | login         |
-      | my record     | login         |
-      | more          | login         |
+  Scenario: When a user on any secure page switches apps, and switches back after session timeout, they are shown the login page
+    #For instance, Appointments and Prescription pages
 
   @NHSO-893
   @manual
-  Scenario: User switches back to app after session times out without an internet connection
-    Given I am on my appointments page
-    And I switch apps
-    And I wait for 20 minutes
-    And I lose connection
-    When I switch to the NHS App
-    Then I see the session expired screen
+  Scenario: When a user on any non secure page switches apps, and switches back after session timeout, they are shown the same page
+    #For instance, Symptoms
+
+  @NHSO-893
+  @manual
+  Scenario: When a user on any secure page switches apps, and switches back after session timeout and internet connection loss, they are shown the login page
+    #For instance, Appointments and Prescription pages
+
+  @NHSO-893
+  @manual
+  Scenario: When a user on any non secure page switches apps, and switches back after session timeout and internet connection loss, they are shown the same page
+    #For instance, Symptoms

@@ -41,5 +41,3 @@ Feature: Login error messages
   | EMIS        |
   | TPP         |
 
-  @pending
-  Scenario: User is inactive for 20 mins and tries to use feature that requires GP System

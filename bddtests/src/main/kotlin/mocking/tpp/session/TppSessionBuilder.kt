@@ -74,25 +74,20 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
         }
     }
 
+    fun respondWithServiceUnavailable(): Mapping {
+        val responseBody = "Service Unavailable"
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andXmlBody(responseBody)
+            build()
+        }
+    }
+
     fun respondWithError(errorBody: Error): Mapping {
         val responseBody = Error(
                 errorBody.errorCode,
                 errorBody.userFriendlyMessage,
                 errorBody.uuid
         )
-
-        val jaxbContext = JAXBContext.newInstance(Error::class.java)
-        val marshaller = jaxbContext.createMarshaller()
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
-
-        val stringWriter = StringWriter()
-        stringWriter.use {
-            marshaller.marshal(responseBody, stringWriter)
-        }
-
-        return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(stringWriter.toString())
-                    .build()
-        }
+        return respondWith(responseBody)
     }
 }

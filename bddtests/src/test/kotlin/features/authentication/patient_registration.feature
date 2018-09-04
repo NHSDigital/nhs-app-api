@@ -70,21 +70,12 @@ Feature: Registration
     When I register the user's IM1 credentials
     Then I get a "Conflict" error
 
-  @pending
-  @backend
-  Scenario: EMIS Demographics endpoint is disabled
-    Given I have valid patient data to register new account
-    And EMIS Demographics endpoint is disable
-    When I register the user's IM1 credentials
-    Then I get a "Forbidden" error
-
 
   @backend
   Scenario: ODS Code not in the expected format
     Given I have a user's IM1 credentials with an ODS Code not in the expected format
     When I register the user's IM1 credentials
     Then I get a "Not Implemented" error
-
 
   @backend
   Scenario Outline: <GP System> - Surname not in the expected format

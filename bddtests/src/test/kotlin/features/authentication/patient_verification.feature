@@ -131,10 +131,10 @@ Feature: Patient Verification
     Given <GP System> is not available
     When I verify patient data
     Then I receive an "Bad Gateway" error
-
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
   #    | VISION    |
 
   @NHSO-125

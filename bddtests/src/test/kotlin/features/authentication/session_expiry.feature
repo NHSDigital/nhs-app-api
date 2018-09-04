@@ -23,9 +23,8 @@ Feature: Session Expiry
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
 
-  @pending
   @native
-  @NHSO-1742
+  @tech-debt @NHSO-1742
   Scenario: On session expiry, a user of the native app, on a non secure screen, is signed out on navigating back to a secure screen and sending a request
     Given I am logged in
     And I am on the symptoms page
