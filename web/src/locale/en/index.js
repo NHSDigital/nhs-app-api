@@ -126,7 +126,7 @@ export default {
     },
     guidance: {
       header: 'Want to avoid waiting?',
-      text: 'If it isn\'t urgent, you can try three things before booking an appointment:',
+      text: 'Three things to try before you book an appointment:',
       li1: {
         header: 'Self care​',
         text: 'Many minor problems can be treated at home, for example through rest or appropriate over-the-counter medicines​',
@@ -236,7 +236,7 @@ export default {
           default_option: 'No preference',
         },
         date: {
-          header: 'Select an appointment',
+          header: 'Available appointments',
           label: 'Filter by date',
           options: {
             today: 'Today',
