@@ -36,14 +36,12 @@ open class MyAppointmentsSteps {
 
     @Step
     fun checkBookingSuccessMessage() {
-        myAppointmentsPage.waitForSpinnerToDisappear()
         val message = myAppointmentsPage.getSuccessMessage()
         assertEquals(bookingSuccessMessage, message)
     }
 
     @Step
     fun clickOnBookAppointmentButton() {
-        myAppointmentsPage.waitForSpinnerToDisappear()
         myAppointmentsPage.bookButton.element.click()
     }
 
@@ -62,7 +60,7 @@ open class MyAppointmentsSteps {
     fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated() {
         val serviceFactory = getActiveAppointmentsFactory()
         val expectedSlots = serviceFactory.getAppointmentData().generateExpectedMyAppointments()
-        val areCliniciansExpected = if (expectedSlots.isNotEmpty()) expectedSlots[0].clinician.isNotEmpty() else false
+        val areCliniciansExpected = expectedSlots.isNotEmpty() || expectedSlots[0].clinician.isNotEmpty()
         val slots = myAppointmentsPage.getAllSlots(areCliniciansExpected)
         assertEquals("Expected upcoming myAppointments size doesn't match with the actual size",
                 expectedSlots.size, slots.size)

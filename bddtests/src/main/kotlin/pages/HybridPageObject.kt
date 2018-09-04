@@ -36,21 +36,22 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     )
 
     fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
-        spinner.shouldNotBeVisible(seconds)
+        if (!spinner.elements.isEmpty()) spinner.shouldNotBeVisible(seconds)
     }
 
     fun HybridPageElement.waitForSpinner(seconds: Long = DEFAULT_SPINNER_WAIT): WebElementFacade {
-        spinner.shouldNotBeVisible(seconds)
+        waitForSpinnerToDisappear(seconds)
         return this.element
     }
 
     fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
         try {
-            FluentWait<WebElementFacade>(this.element)
+            val currentElement = this.element
+            FluentWait<WebElementFacade>(currentElement)
                     .withTimeout(Duration.ofSeconds(seconds))
                     .pollingEvery(Duration.ofMillis(POOLING_FREQUENCY))
                     .until {
-                        !it.isCurrentlyVisible
+                        !it.isPresent || !it.isCurrentlyVisible
                     }
         } catch (e: NoSuchElementException) {
             // continue
@@ -66,15 +67,15 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun onMobile(): Boolean {
-        if (SerenityWebdriverManager.inThisTestThread().hasAnInstantiatedDriver()) {
-            return isAndroid().xor(isIOS())
+        return if (SerenityWebdriverManager.inThisTestThread().hasAnInstantiatedDriver()) {
+            isAndroid().xor(isIOS())
 
         } else { //no driver yet instantiated so check the environment variables
 
             val pathMatchesBrowserstack = Regex("bs://[a-z0-9]+").matches(Config.instance.appPath)
             val pathMatchesLocalApk = Regex("[A-Z]:\\\\.+\\.apk").matches(Config.instance.appPath)
 
-            return pathMatchesBrowserstack.xor(pathMatchesLocalApk)
+            pathMatchesBrowserstack.xor(pathMatchesLocalApk)
         }
     }
 
