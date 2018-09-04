@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>HotJarLinkUrl</key>
-	<string>https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
 	<key>CarouselDirectory</key>
 	<string>assets</string>
 	<key>CarouselContentType</key>
@@ -13,7 +11,9 @@
 	<key>IsFirstTimeOpened</key>
 	<string>IsFirstTimeOpened</string>
 	<key>HomeUrl</key>
-	<string>https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk/</string>
+	<string>https://local.bitraft.io/</string>
+	<key>HotJarLinkUrl</key>
+	<string>https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
 	<key>Nhs111Url</key>
 	<string>https://111.nhs.uk/</string>
 	<key>Nhs111LocationUrl</key>
@@ -27,7 +27,7 @@
 	<key>MoreUrlPath</key>
 	<string>/more</string>
 	<key>MyRecordUrlPath</key>
-	<string>/my-record/myrecordwarning</string>
+	<string>/my-record-warning</string>
 	<key>AppointmentsUrlPath</key>
 	<string>/appointments</string>
 	<key>SymptomsUrlPath</key>
@@ -48,5 +48,17 @@
 	<string>nhsapp</string>
 	<key>ResponseWaitingTime</key>
 	<integer>10</integer>
+	<key>MedicalRecordAbbreviationsURL</key>
+	<string>https://www.england.nhs.uk/participation/resources/involvejargon/</string>
+	<key>HelpURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/</string>
+	<key>TermsAndConditionsURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/</string>
+	<key>PrivacyPolicyURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/</string>
+	<key>CookiesPolicyURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
+	<key>OpenSourceLicensesURL</key>
+	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/</string>
 </dict>
 </plist>

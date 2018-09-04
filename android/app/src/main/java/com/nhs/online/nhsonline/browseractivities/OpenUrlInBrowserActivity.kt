@@ -26,6 +26,10 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
 
     override fun canStart(context: Context, url: String): Boolean
     {
+        val knownServices = KnownServices(context)
+        if (knownServices.shouldURLOpenExternally(URL(url))){
+            return true
+        }
         val currentHost = URL(url).host
         nativeAppHosts.forEach { nativeAppHost ->
             if (URL(nativeAppHost).host == currentHost) {
@@ -47,7 +51,7 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
         val knownServices = KnownServices(context);
 
             if (supportedCustomTabsPackages.count() > 0
-                    && !knownServices.isExternalBrowserService(url)) {
+                    && !knownServices.isHotJar(URL(url))) {
                 val customTabsIntent = CustomTabsIntent.Builder()
                         .setToolbarColor(Color.BLUE)
                         .build()

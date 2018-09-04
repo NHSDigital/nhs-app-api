@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      glossaryLinkURL: process.env.GLOSSARY_LINK_LOCATION,
+      glossaryLinkURL: process.env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
 };
@@ -30,7 +30,8 @@ export default {
 
 <style module scoped lang="scss">
     .info {
-        margin-bottom: 0.5em;
+      margin-bottom: 0.5em;
+      padding: 0.5em 1em 0em 1em;
 
         p, a, analytics-tracked-tag {
             padding-bottom: 0.5em;

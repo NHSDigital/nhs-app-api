@@ -5,12 +5,16 @@ import android.os.Handler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.Uri
+import android.support.v4.content.ContextCompat
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.services.KnownServices
+import java.net.URL
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME = 500L

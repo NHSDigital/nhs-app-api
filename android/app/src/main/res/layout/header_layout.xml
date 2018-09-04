@@ -28,6 +28,17 @@
             android:focusable="true"
             android:src="@mipmap/icon_header_account" />
 
+        <ImageView
+            android:id="@+id/helpIcon"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="25dp"
+            android:contentDescription="Help icon"
+            android:focusable="true"
+            android:src="@mipmap/ic_header_help" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"

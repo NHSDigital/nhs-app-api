@@ -5,17 +5,10 @@ import net.thucydides.core.annotations.Step
 import org.joda.time.DateTime
 import org.junit.Assert
 import pages.HomePage
-import pages.navigation.Header
 
 open class HomeSteps {
 
     lateinit var homePage: HomePage
-    lateinit var header: Header
-
-    @Step
-    fun assertPageIsVisible() {
-        assertHeaderVisible()
-    }
 
     @Step
     fun assertWelcomeMessageShownFor(patient: Patient) {
@@ -43,7 +36,7 @@ open class HomeSteps {
 
     @Step
     fun assertHeaderVisible() {
-        Assert.assertTrue(header.isVisible(homePage.headerText))
+        Assert.assertTrue(homePage.isWelcomeHeaderVisible())
     }
 
     @Step

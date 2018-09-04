@@ -7,8 +7,7 @@ Feature: My Record - Clinical Abbreviations
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
     When I click the clinical abbreviations link
-    Then a new tab opens https://www.england.nhs.uk/participation/resources/involvejargon/
-
+    Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/
   Examples:
     |Service|
     |EMIS|

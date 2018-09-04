@@ -30,7 +30,7 @@
       </li>
       <li :class="[isMenuItemSelected(3) ? $style.active : undefined]"
           :data-selected="[isMenuItemSelected(3) ? true : false]">
-        <a href="/my-record/myrecordwarning"
+        <a href="/my-record-warning"
            data-sid="myrecord-menu-item"
            @click="setMenuitemState($event)">
           <record-icon :selected="isMenuItemSelected(3)"/>

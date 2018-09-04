@@ -542,6 +542,7 @@ export default {
   icons: {
     accountIcon: {
       title: 'My Account',
+      desc: 'Click here to access my account settings',
     },
     appointmentsIcon: {
       title: 'Appointments',
@@ -549,6 +550,10 @@ export default {
     clinicianIcon: {
       title: 'Clinician',
       description: 'Clinician Graphic',
+    },
+    helpIcon: {
+      title: 'Help and support',
+      desc: 'Click here to access help and support',
     },
     homeIcon: {
       title: 'NHS Online',

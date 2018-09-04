@@ -63,6 +63,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         retryButton.setOnClickListener { urlLoader.reloadRequest() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
+        helpIcon.setOnClickListener { onHelpIconSelected() }
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(baseContext)
         val isFirstTimeOpened = prefs.getBoolean(getString(R.string.isFirstTimeOpened), true)
@@ -193,6 +194,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
         loadUrl(resources.getString(R.string.myAccountPath),
                 resources.getString(R.string.my_account_header))
         menuBar.deselectActiveItem()
+    }
+
+    private fun onHelpIconSelected() {
+        val temp = OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
+        temp.start(this, resources.getString(R.string.helpURL))
     }
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))

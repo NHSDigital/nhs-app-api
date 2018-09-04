@@ -1,5 +1,6 @@
 import UIKit
 import os.log
+import SafariServices
 
 class HomeViewController : UIViewController {
     private let showConstraintPriority = UILayoutPriority.init(rawValue: 900)
@@ -28,7 +29,8 @@ class HomeViewController : UIViewController {
         super.viewDidLoad()
         setupNhsLogo()
         setupMyAccountIcon()
-
+        setupHelpIcon()
+        
         webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
@@ -101,6 +103,12 @@ class HomeViewController : UIViewController {
         self.headerBar.myAccountIcon.addGestureRecognizer(tapGesture)
     }
     
+    func setupHelpIcon() {
+        let tapGesture = UITapGestureRecognizer(target: self, action:  #selector(self.selectHelp))
+        self.headerBar.helpIcon.isUserInteractionEnabled = true
+        self.headerBar.helpIcon.addGestureRecognizer(tapGesture)
+    }
+    
     func setVisibilityOfHeaderAndMenuBars(visible:Bool) {
         UIView.animate(withDuration: 0.3, animations: {
             let constraintPriority:UILayoutPriority
@@ -151,7 +159,12 @@ class HomeViewController : UIViewController {
         webViewController?.webView.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
         updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
-
+        
+    }
+    
+    @objc func selectHelp(sender : UITapGestureRecognizer) {
+        self.pageUrl = config().HelpURL
+        webViewController?.webView.loadPage(url: self.pageUrl)
     }
     
     @objc func goHome(sender: UITapGestureRecognizer) {

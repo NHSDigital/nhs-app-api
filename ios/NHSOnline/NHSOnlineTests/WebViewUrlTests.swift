@@ -73,11 +73,4 @@ class WebViewUrlTests: XCTestCase {
             XCTAssertEqual(knownService.getTitleFor(urlHost: url?.host), title, "expected title \(title ) for url \(urlString) not found")
         }
     }
-    
-    func test_When_linksForExternalSafari() {
-        let knownExternalSafariHosts = knownServices?.getAllKnownHostsExternalSafari();
-        let host = knownExternalSafariHosts?[0]
-        XCTAssertEqual(host, "in.hotjar.com")
-        XCTAssertNotNil(knownExternalSafariHosts);
-    }
 }

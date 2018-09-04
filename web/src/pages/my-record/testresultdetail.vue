@@ -33,7 +33,7 @@ export default {
     if (from.path === '/my-record') {
       next();
     } else {
-      next('/my-record/myrecordwarning');
+      next('/my-record-warning');
     }
   },
   data() {

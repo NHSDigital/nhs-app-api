@@ -30,7 +30,7 @@
     <li :class="$style.listMenuItem">
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.myRecord')"
-                             href="/my-record/myrecordwarning"
+                             href="/my-record-warning"
                              data-sid="myrecord-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.myRecord') }}

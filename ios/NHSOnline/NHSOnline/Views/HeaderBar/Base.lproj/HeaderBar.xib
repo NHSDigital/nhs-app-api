@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -15,6 +14,7 @@
                 <outlet property="NHSHomeLogo" destination="kyn-vf-7A4" id="CSR-a4-p3k"/>
                 <outlet property="headerBarView" destination="iN0-l3-epB" id="9Wq-mY-ysG"/>
                 <outlet property="headerTitle" destination="2kX-eU-qpv" id="z5R-J1-Xaw"/>
+                <outlet property="helpIcon" destination="4AS-MC-8rV" id="fhk-EL-ROc"/>
                 <outlet property="myAccountIcon" destination="edM-z3-SMh" id="Sz0-hb-544"/>
             </connections>
         </placeholder>
@@ -70,6 +70,16 @@
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_header_help" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-MC-8rV">
+                    <rect key="frame" x="311" y="16" width="16" height="18"/>
+                    <accessibility key="accessibilityConfiguration" identifier="My account icon">
+                        <accessibilityTraits key="traits" button="YES"/>
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="16" id="eJT-I8-nT2"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -77,11 +87,14 @@
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="edM-z3-SMh" secondAttribute="bottom" constant="16" id="4FC-Fz-XRM"/>
                 <constraint firstAttribute="trailing" secondItem="ycK-JE-PkZ" secondAttribute="trailing" constant="16" id="9WA-eZ-FGq"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="9i1-qI-xvL"/>
+                <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="4AS-MC-8rV" secondAttribute="bottom" constant="16" id="BcO-YZ-3Hn"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="F1J-Hl-Xg7"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2kX-eU-qpv" secondAttribute="trailing" constant="16" id="Qdc-xx-bEI"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="kyn-vf-7A4" secondAttribute="bottom" constant="16" id="RWe-ue-G1R"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2kX-eU-qpv" secondAttribute="bottom" id="VXz-kb-2es"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="dfh-PR-ohj"/>
+                <constraint firstItem="4AS-MC-8rV" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="idC-1f-hgt"/>
+                <constraint firstItem="edM-z3-SMh" firstAttribute="leading" secondItem="4AS-MC-8rV" secondAttribute="trailing" constant="16" id="mEE-dP-kwP"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="mNB-eG-aaV"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="top" secondItem="ycK-JE-PkZ" secondAttribute="bottom" id="q3h-Nq-Dgz"/>
                 <constraint firstItem="edM-z3-SMh" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="w4N-xa-BuP"/>
@@ -97,5 +110,6 @@
     <resources>
         <image name="Icon - Header - Account" width="21" height="24"/>
         <image name="NHS Online - Logo" width="59" height="24"/>
+        <image name="icon_header_help" width="25" height="25"/>
     </resources>
 </document>

@@ -10,13 +10,12 @@ ENV ANALYTICS_SCRIPT_URL //assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aa
 ENV ANALYTICS_ENVIRONMENT development
 ENV CONDITIONS_CHECKER_URL https://www.nhs.uk/conditions/
 ENV TEMPORARY_ACCOUNT_URL http://beta.nhs.uk/
-ENV TERMS_AND_CONDITIONS_URL http://beta.nhs.uk/
-ENV PRIVACY_POLICY_URL http://beta.nhs.uk/
-ENV COOKIES_POLICY_URL http://beta.nhs.uk/
-ENV OPEN_SOURCE_LICENSES_URL http://beta.nhs.uk/
-ENV HELP_AND_SUPPORT_URL http://beta.nhs.uk/
-ENV CLINICAL_ABBREVIATIONS_URL http://beta.nhs.uk/
-ENV GLOSSARY_LINK_LOCATION https://www.england.nhs.uk/participation/resources/involvejargon/
+ENV TERMS_AND_CONDITIONS_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
+ENV PRIVACY_POLICY_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
+ENV COOKIES_POLICY_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
+ENV OPEN_SOURCE_LICENSES_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
+ENV HELP_AND_SUPPORT_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
+ENV CLINICAL_ABBREVIATIONS_URL https://www.england.nhs.uk/participation/resources/involvejargon/
 ENV HOT_JAR_URL https://in.hotjar.com/s?siteId=859152&surveyId=95785
 
 RUN chown nodejs:nodejs -R /opt/app

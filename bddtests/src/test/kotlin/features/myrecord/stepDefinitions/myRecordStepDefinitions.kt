@@ -7,6 +7,7 @@ import cucumber.api.java.en.When
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
 import features.myrecord.steps.MyRecordSteps
+import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import mocking.data.myrecord.*
@@ -36,6 +37,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     lateinit var recordSteps: MyRecordSteps
     @Steps
     lateinit var nav: NavigationSteps
+    @Steps
+    lateinit var navHeader: NavHeaderSteps
     @Steps
     lateinit var homesteps: HomeSteps
 
@@ -210,7 +213,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     @Then("^I will return to the home page$")
     @Throws(Exception::class)
     fun i_will_return_to_the_home_page() {
-        homesteps.assertHeaderVisible()
+        navHeader.assertHeaderVisible()
     }
 
     @Then("^No navigation menu bar item will be selected$")
@@ -305,7 +308,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see Service not offered by GP or to specific user or access revoked warning message$")
     @Throws(Exception::class)
-    fun i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
+    fun  i_see_Service_not_offered_by_GP_or_to_specific_user_or_access_revoked_warning_message() {
         Assert.assertEquals("You don’t currently have online access to your medical record\nPlease contact your GP surgery for more information.", recordSteps.getSummaryCareNoAccessMessage())
     }
 

@@ -11,6 +11,7 @@ import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.myAccount.steps.MyAccountSteps
 import features.sharedSteps.SerenityHelpers
+import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.NavigationSteps
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
@@ -53,6 +54,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     lateinit var home: HomeSteps
     @Steps
     lateinit var nav: NavigationSteps
+    @Steps
+    lateinit var navHeader: NavHeaderSteps
     @Steps
     lateinit var authReturn: AuthReturnSteps
     @Steps
@@ -503,7 +506,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iHaveJustLoggedOut() {
         browser.goToApp()
         login.asDefault()
-        nav.myAccount()
+        navHeader.clickMyAccount()
         myAccount.signOut()
     }
 
@@ -578,7 +581,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
-        home.assertPageIsVisible()
+        home.assertHeaderVisible()
     }
 
     @Then("^I see the login page$")
@@ -619,7 +622,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @When("^I sign out")
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
-        nav.myAccount()
+        navHeader.clickMyAccount()
         myAccount.signOut()
         browser.waitUntilSignoutCompletes()
     }
@@ -699,13 +702,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I am redirected to the signed in home page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheSignedInHomePage() {
-        home.assertPageIsVisible()
+        navHeader.assertHeaderVisible()
     }
 
     @Then("^I am redirected to the app to the signed in home page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheAppToTheSignedInHomePage() {
-        home.assertPageIsVisible()
+        navHeader.assertHeaderVisible()
     }
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {

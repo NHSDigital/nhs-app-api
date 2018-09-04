@@ -12,7 +12,7 @@ class KnownServices {
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
     private var serviceList = Array<KnownService>()
-    private var externalSafariServiceList = Array<KnownService>()
+    private var externalSites = Array<URL>()
     
     init(config:Config) {
         self.config = config
@@ -27,9 +27,14 @@ class KnownServices {
         serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlStrings: [getCheckSymptomsUrl()], serviceTitle: symptomsTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         
-        externalSafariServiceList.append(KnownService(urlStrings: [config.HotJarLinkUrl], serviceTitle: hotJarTitle, service: .HOT_JAR, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         
-        
+        let helpURL: URL = URL(string: config.HelpURL)!
+        let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
+        let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
+        let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
+        let openSourceLicensesURL: URL = URL(string: config.OpenSourceLicensesURL)!
+        let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
+        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL]
     }
     
     func getCheckSymptomsUrl() -> String {
@@ -38,13 +43,23 @@ class KnownServices {
         return url!
     }
     
-    func getAllKnownHosts() -> [String?] {
-        let knownHosts = self.serviceList.flatMap { $0.urls }.map { $0.url?.host }
-        return knownHosts
+    func isHotJar(url: URL) -> Bool {
+        let hotjarURL: URL = URL(string: config.HotJarLinkUrl)!
+        if (url.host == hotjarURL.host) {
+            return true
+        }
+        return false
     }
     
-    func getAllKnownHostsExternalSafari() -> [String?] {
-        let knownHosts = self.externalSafariServiceList.flatMap { $0.urls }.map { $0.url?.host }
+    func shouldURLOpenExternally(url: URL) -> Bool {
+        if externalSites.contains(url) {
+            return true
+        }
+        return false
+    }
+    
+    func getAllKnownHosts() -> [String?] {
+        let knownHosts = self.serviceList.flatMap { $0.urls }.map { $0.url?.host }
         return knownHosts
     }
     
@@ -97,6 +112,6 @@ class KnownServices {
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, HOT_JAR, OTHERS;
+        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_SHARING, OTHERS;
     }
 }

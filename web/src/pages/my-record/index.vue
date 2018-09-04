@@ -135,19 +135,16 @@
     </div>
     <div v-else class="pull-content">
       <div v-if="hasLoaded">
-        <message-dialog message-type="error" icon-text="Warning">
-          <message-text :is-header="true">
+        <div id="errorMsg" :class="$style.info">
+          <p><strong style="margin-top: 0.5em;">
             {{ $t('my_record.noRecordAccess.warningHeader') }}
-          </message-text>
-          <message-text>
-            {{ $t('my_record.noRecordAccess.warningBody') }}
-          </message-text>
-        </message-dialog>
+          </strong></p>
+          <p>{{ $t('my_record.noRecordAccess.warningBody') }} </p>
+        </div>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 /* eslint-disable import/extensions */
@@ -195,10 +192,10 @@ export default {
     GlossaryHeader,
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === '/my-record/myrecordwarning' || from.path === '/my-record/testresultdetail') {
+    if (from.path === '/my-record-warning' || from.path === '/my-record/testresultdetail') {
       next();
     } else {
-      next('/my-record/myrecordwarning');
+      next('/my-record-warning');
     }
   },
   data() {
@@ -332,5 +329,23 @@ export default {
       padding-top: 0.5em;
       padding-bottom: 0.5em;
     }
+  }
+
+  .info {
+    padding: 0.5em 1em 0em 1em;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+    p {
+      padding-bottom: 0.5em;
+      padding-top: 0.5em;
+    }
+  }
+
+  p {
+    display: block;
+    font-weight: normal;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #212B32;
   }
 </style>

@@ -1,5 +1,6 @@
 /*Header titles*/
 "MyAccountTitle" = "My account";
+"HelpTitle" = "Help and support";
 "OrganDonationTitle" = "Organ donation register";
 "DataSharingTitle" = "Sharing health data preferences";
 "NHS111Title" = "111 Online";
@@ -19,5 +20,6 @@
 
 /*Accessibility*/
 "MyAccountHint" = "Navigates to my account page";
+"HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";

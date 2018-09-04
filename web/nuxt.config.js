@@ -48,24 +48,21 @@ module.exports = {
       'https://www.nhs.uk/conditions/',
     TERMS_AND_CONDITIONS_URL:
       process.env.TERMS_AND_CONDITIONS_URL ||
-      'http://beta.nhs.uk/',
+      'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/',
     PRIVACY_POLICY_URL:
       process.env.PRIVACY_POLICY_URL ||
-      'http://beta.nhs.uk/',
+      'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/',
     COOKIES_POLICY_URL:
       process.env.COOKIES_POLICY_URL ||
-      'http://beta.nhs.uk/',
+      'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/',
     OPEN_SOURCE_LICENSES_URL:
       process.env.OPEN_SOURCE_LICENSES_URL ||
-      'http://beta.nhs.uk/',
+      'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/',
     HELP_AND_SUPPORT_URL:
       process.env.HELP_AND_SUPPORT_URL ||
-      'http://beta.nhs.uk/',
+      'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/',
     CLINICAL_ABBREVIATIONS_URL:
       process.env.CLINICAL_ABBREVIATIONS_URL ||
-      'https://beta.nhs.uk',
-    GLOSSARY_LINK_LOCATION:
-      process.env.GLOSSARY_LINK_LOCATION ||
       'https://www.england.nhs.uk/participation/resources/involvejargon/',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online',
     YOUR_NHS_DATA_MATTERS_URL:

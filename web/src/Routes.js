@@ -44,8 +44,8 @@ export default {
     path: '/my-record',
   },
   MYRECORDWARNING: {
-    name: 'my-record-myrecordwarning',
-    path: '/my-record/myrecordwarning',
+    name: 'my-record-warning',
+    path: '/my-record-warning',
   },
   MYRECORDNOACCESS: {
     name: 'my-record-noaccess',

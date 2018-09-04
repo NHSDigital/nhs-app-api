@@ -99,6 +99,10 @@ open class HomePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         assertCollection("PatientDetails", expectedDetails, actualDetails)
     }
 
+    fun isWelcomeHeaderVisible(): Boolean {
+        return greeting.element.isCurrentlyVisible
+    }
+
     private fun assertCollection(message: String, expected: ArrayList<String>, actual: ArrayList<String>) {
         val listed = "Expected = ${expected.joinToString(", ")} Actual = ${actual.joinToString(", ")}"
         Assert.assertEquals("$message. Expected number. $listed", expected.count(), actual.count())

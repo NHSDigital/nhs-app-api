@@ -120,11 +120,6 @@ open class SharedStepDefinitions {
         navBar.select(tab)
     }
 
-    @When("^I go to the my account page$")
-    fun iGoToTheMyAccountPage() {
-        navBar.myAccount()
-    }
-
     @When("^I wait (\\d*) seconds$")
     open fun iWait(waitInSeconds: Int) {
         Thread.sleep(waitInSeconds * 1000L)

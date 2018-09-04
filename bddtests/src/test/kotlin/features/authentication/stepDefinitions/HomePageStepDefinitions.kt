@@ -8,6 +8,7 @@ import features.oneOneOneOnline.Steps.CheckMySymptoms
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
+import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.navigation.NavBar
@@ -22,6 +23,8 @@ class HomePageDefinitions : AbstractSteps() {
     lateinit var browser: BrowserSteps
     @Steps
     lateinit var navBar: NavBar
+    @Steps
+    lateinit var navHeader: NavigationSteps
     @Steps
     lateinit var homeSteps: HomeSteps
     @Steps
@@ -73,8 +76,8 @@ class HomePageDefinitions : AbstractSteps() {
     }
 
     private fun navigateBackToHomePage(){
-        homeSteps.header.homeIcon.element.click()
-        homeSteps.assertPageIsVisible()
+        navHeader.header.clickHome()
+        homeSteps.assertHeaderVisible()
     }
 
     private fun followSymptomLink(){

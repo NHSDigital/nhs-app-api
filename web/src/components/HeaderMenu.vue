@@ -3,9 +3,9 @@
     <nuxt-link :class="$style['anchor-icon']" to="/">
       <home-icon/>
     </nuxt-link>
-    <nuxt-link :class="$style.account" to="/account">
-      Account
-    </nuxt-link>
+    <a id="help_icon" :class="$style['anchor-icon']" :href="helpAndSupportURL" target="_blank">
+      <help-icon/>
+    </a>
     <nuxt-link :class="$style['anchor-icon']" to="/account">
       <account-icon/>
     </nuxt-link>
@@ -17,12 +17,14 @@
 <script>
 /* eslint-disable import/extensions */
 import AccountIcon from '../components/icons/AccountIcon';
+import HelpIcon from '../components/icons/HelpIcon';
 import HomeIcon from '../components/icons/HomeIcon';
 
 export default {
   components: {
     AccountIcon,
     HomeIcon,
+    HelpIcon,
   },
   head() {
     return {
@@ -30,6 +32,11 @@ export default {
         lang: `${this.$t('language')}`,
       },
       title: `${this.$store.state.pageTitle.pageTitle} - NHS App`,
+    };
+  },
+  data() {
+    return {
+      helpAndSupportURL: process.env.HELP_AND_SUPPORT_URL,
     };
   },
 };
@@ -50,17 +57,8 @@ export default {
   box-shadow: 0em 0em 0.313em rgba(0, 0, 0, .5);
   z-index: 4;
   box-sizing: border-box;
-  a.account {
-    @include account;
-    margin: 1em;
-    display: inline-block;
-    height: 1.375em;
-    position: absolute;
-    right: 2.3em;
-    line-height: 2.2em;
-    cursor: pointer;
-  }
-   a.anchor-icon {
+
+  a.anchor-icon {
     color: $white;
   }
   h1.title {

@@ -6,6 +6,7 @@ class HeaderBar: UIView {
     @IBOutlet weak var headerTitle: UILabel!
     @IBOutlet weak var NHSHomeLogo: UIImageView!
     @IBOutlet weak var myAccountIcon: UIImageView!
+    @IBOutlet weak var helpIcon: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -22,6 +23,8 @@ class HeaderBar: UIView {
         headerBarView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         myAccountIcon.accessibilityLabel = NSLocalizedString("MyAccountTitle", comment: "")
         myAccountIcon.accessibilityHint = NSLocalizedString("MyAccountHint", comment: "")
+        helpIcon.accessibilityLabel = NSLocalizedString("HelpTitle", comment: "")
+        helpIcon.accessibilityHint = NSLocalizedString("HelpHint", comment: "")
         NHSHomeLogo.accessibilityLabel = NSLocalizedString("NHSAppHomeTitle", comment: "")
         NHSHomeLogo.accessibilityHint = NSLocalizedString("NHSAppHomeHint", comment: "")
         addSubview(headerBarView)

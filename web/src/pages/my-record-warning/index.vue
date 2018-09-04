@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     onContinueButtonClicked() {
-      this.$router.push('../my-record');
+      this.$router.push('/my-record');
     },
     onBackButtonClicked() {
       this.$router.push('/');

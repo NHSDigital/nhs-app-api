@@ -30,6 +30,14 @@ class KnownServicesTest {
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
             on { getString(R.string.appIntroPath) } doReturn "file:///android_asset/appintro.html"
             on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
+            on { getStringArray(R.array.externalSiteUrls)} doReturn arrayOf(
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
+                    "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
+            )
         }
 
         return mock { on { resources } doReturn mockresource }
@@ -162,12 +170,33 @@ class KnownServicesTest {
     }
 
     @Test
+    fun isHotJarService_foundService() {
+        var context: Context = mockContext()
+        val testKnownServices = KnownServices(context)
+
+        val result = testKnownServices.isHotJar(URL("https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"))
+
+        Assert.assertEquals(true, result)
+    }
+
+    @Test
+    fun isHotJarService_notFoundService() {
+        var context: Context = mockContext()
+        val testKnownServices = KnownServices(context)
+
+        val result =
+                testKnownServices.isHotJar(URL("https://www.google.co.uk"))
+
+        Assert.assertEquals(false, result)
+    }
+
+    @Test
     fun isExternalBrowserService_foundService() {
         var context: Context = mockContext()
         val testKnownServices = KnownServices(context)
 
         val result =
-                testKnownServices.isExternalBrowserService("https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785")
+                testKnownServices.shouldURLOpenExternally(URL("https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/"))
 
         Assert.assertEquals(true, result)
     }
@@ -178,9 +207,8 @@ class KnownServicesTest {
         val testKnownServices = KnownServices(context)
 
         val result =
-                testKnownServices.isExternalBrowserService("https://www.google.co.uk")
+                testKnownServices.shouldURLOpenExternally(URL("https://www.google.co.uk"))
 
         Assert.assertEquals(false, result)
     }
-
 }

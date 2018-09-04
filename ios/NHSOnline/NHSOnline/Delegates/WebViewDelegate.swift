@@ -35,6 +35,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 decisionHandler(.allow)
                 return
             }
+
+            self.failedUrl = url
+            if knownServices.shouldURLOpenExternally(url: url) {
+                decisionHandler(.cancel)
+                openInSafari(url: url)
+                return
+            }
             if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
                 if matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
                     let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
@@ -46,12 +53,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
-                
-                if shouldOpenExternalInSafari(url: url){
+                if knownServices.isHotJar(url: url) {
                     UIApplication.shared.open(url)
-                } else {
-                openInSafari(url: url)
+                    return
                 }
+                openInSafari(url: url)
                 return;
             }
         }
@@ -102,14 +108,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if withError._domain == "NSURLErrorDomain" {
                 if let info = withError._userInfo as? [String: Any] {
                     if let url = info["NSErrorFailingURLKey"] as? URL {
-                        failedUrl = url
                         errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: url)
                         self.showNativeViewContainer(errorMessage: errorMessage!)
                     }
                 }
             } else {
                 errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: webView.url!)
-                failedUrl = webView.url
                 self.showNativeViewContainer(errorMessage: errorMessage!)
             }
             os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
@@ -142,19 +146,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
         
         return true
-    }
-    
-    func shouldOpenExternalInSafari(url: URL) -> Bool {
-        let currentHost = url.host
-        let knownHosts = self.knownServices.getAllKnownHostsExternalSafari()
-        
-        for host in knownHosts {
-            if (host == currentHost) {
-                return true
-            }
-        }
-        
-        return false
     }
     
     func openInSafari(url: URL) {

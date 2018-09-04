@@ -10,7 +10,7 @@ const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
 @Suppress("TooManyFunctions")
 class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    val secMyDetails = 
+    val secMyDetails =
         HybridPageElement(
             browserLocator = "//h2[contains(text(),'My details')]",
             androidLocator = null,
@@ -22,37 +22,37 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                     androidLocator = null,
                     page = this)
 
-    val nameLabel = 
+    val nameLabel =
         HybridPageElement(
             browserLocator = "//b[contains(text(),'Name')]",
             androidLocator = null,
             page = this)
 
-    val txtName = 
+    val txtName =
         HybridPageElement(
             browserLocator = "//b[contains(text(),'Name')]/following-sibling::p[1]",
             androidLocator = null,
             page = this)
 
-    val dobLabel = 
+    val dobLabel =
         HybridPageElement(
             browserLocator = "//b[contains(text(),'Date of birth')]",
             androidLocator = null,
             page = this)
 
-    val sexLabel = 
+    val sexLabel =
         HybridPageElement(
             browserLocator = "//b[contains(text(),'Sex')]",
             androidLocator = null,
             page = this)
 
-    val addressLabel = 
+    val addressLabel =
         HybridPageElement(
             browserLocator = "//b[contains(text(),'Address')]",
             androidLocator = null,
             page = this)
 
-    val nhsNumberLabel = 
+    val nhsNumberLabel =
         HybridPageElement(
             browserLocator = "//b[contains(text(),'NHS number')]",
             androidLocator = null,
@@ -61,9 +61,9 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val allergies by lazy {MyRecordWrapper("Allergies and adverse reactions", this)}
 
-    val noSummaryCareAccessMessage = 
+    val noSummaryCareAccessMessage =
         HybridPageElement(
-            browserLocator = "//div[@id='mainDiv']//div[@data-purpose='error'][1]",
+            browserLocator = "//div[@id='mainDiv']//div[@id='errorMsg']",
             androidLocator = null,
             page = this)
 
@@ -82,13 +82,13 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val consultations by lazy {MyRecordWrapper("Consultations", this)}
 
-    val eventsHeading = 
+    val eventsHeading =
         HybridPageElement(
             browserLocator = "//h2[contains(text(),'C')]",
             androidLocator = null,
             page = this)
 
-    val events = 
+    val events =
         HybridPageElement(
             browserLocator = "//h2[contains(text(),'Consultations')]/following-sibling::div[1]",
             androidLocator = null,

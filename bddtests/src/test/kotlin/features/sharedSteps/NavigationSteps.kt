@@ -35,11 +35,6 @@ open class NavigationSteps {
     }
 
     @Step
-    fun myAccount() {
-        header.clickMyAccount()
-    }
-
-    @Step
     fun assertVisible() {
         for (tab in NavBar.NavBarType.values()) {
             Assert.assertTrue("$tab not visible", hasVisible(tab))
