@@ -1,9 +1,11 @@
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Logging;
 
@@ -12,7 +14,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
     public interface ICitizenIdService
     {
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier, string redirectUrl);
+        Task<GetUserProfileResult> GetUserProfile(string authCode, string codeVerifier, string redirectUrl);
     }
 
     public class CitizenIdService : ICitizenIdService
@@ -32,11 +34,12 @@ namespace NHSOnline.Backend.Worker.CitizenId
         }
 
         [SuppressMessage("Microsoft.Design", "CA1054", Justification = "Uris are not serializable")]
-        public async Task<Option<UserProfile>> GetUserProfile(string authCode, string codeVerifier, string redirectUrl)
+        public async Task<GetUserProfileResult> GetUserProfile(string authCode, string codeVerifier, string redirectUrl)
         {
             try
             {
                 _logger.LogEnter(nameof(GetUserProfile));
+                var result = new GetUserProfileResult();
 
                 // Sanity-check input parameters - no point invoking CID endpoint if they are clearly invalid
                 if (string.IsNullOrWhiteSpace(authCode) || string.IsNullOrWhiteSpace(codeVerifier) ||
@@ -59,7 +62,9 @@ namespace NHSOnline.Backend.Worker.CitizenId
                     }
 
                     _logger.LogWarning($"Missing input parameters: {string.Join(", ", missing)}");
-                    return Option.None<UserProfile>();
+                    result.StatusCode = HttpStatusCode.BadRequest;
+                    result.UserProfile = Option.None<UserProfile>();
+                    return result;
                 }
 
                 var tokenTask = _citizenIdClient.ExchangeAuthToken(authCode, codeVerifier, redirectUrl);
@@ -72,16 +77,22 @@ namespace NHSOnline.Backend.Worker.CitizenId
                 if (!tokenResponse.HasSuccessStatusCode)
                 {
                     LogError(tokenResponse, "Failed to exchange auth token for access token.");
-                    return Option.None<UserProfile>();
+                    result.StatusCode = MapCitizenIdErrorStatusCode(tokenResponse.StatusCode);
+                    result.UserProfile = Option.None<UserProfile>();
+                    return result;
                 }
 
                 if (!signingKeys.HasValue)
                 {
                     _logger.LogError("Failed to get signing keys");
-                    return Option.None<UserProfile>();
+                    result.StatusCode = HttpStatusCode.BadRequest;
+                    result.UserProfile = Option.None<UserProfile>();
+                    return result;
                 }
 
-                return _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure());
+                result.StatusCode = HttpStatusCode.OK;
+                result.UserProfile = _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure());
+                return result;
             }
             finally
             {
@@ -92,6 +103,13 @@ namespace NHSOnline.Backend.Worker.CitizenId
         private void LogError<T>(CitizenIdClient.CitizenIdApiObjectResponse<T> apiResponse, string errorMessage)
         {
             _logger.LogError($"{errorMessage} Error code: '{apiResponse.ErrorResponse?.Error}'");
+        }
+        
+        private static HttpStatusCode MapCitizenIdErrorStatusCode(HttpStatusCode code)
+        {           
+            return code == HttpStatusCode.BadRequest
+                ? HttpStatusCode.BadRequest
+                : HttpStatusCode.BadGateway;
         }
     }
 }

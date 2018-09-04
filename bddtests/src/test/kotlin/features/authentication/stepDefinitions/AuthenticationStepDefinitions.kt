@@ -103,9 +103,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have incomplete OAuth details$")
     fun iHaveIncompleteOAuthDetails() {
-        createCidStubs(authCode = null)
+        this.authCode = null
     }
-
 
     @Given("^I have invalid OAuth details$")
     fun iHaveInvalidOAuthDetails() {
@@ -733,16 +732,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                             )
                     )
             )
-        }
-    }
-
-    private fun createCidStubs(
-            authCode: String? = this.authCode!!,
-            codeVerifier: String = this.codeVerifier!!,
-            accessToken: String = this.accessToken) {
-        mockingClient.forCitizenId {
-            tokenRequest(codeVerifier, authCode)
-                    .respondWithSuccess(accessToken)
         }
     }
 

@@ -48,7 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            actualResult.HasValue.Should().BeFalse();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
         }
 
         [DataTestMethod]
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            actualResult.HasValue.Should().BeFalse();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
         }
 
         [DataTestMethod]
@@ -82,17 +82,22 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
             // Assert
-            actualResult.HasValue.Should().BeFalse();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
         }
 
-        [TestMethod]
-        public async Task GetUserProfile_TokenCallUnsuccessful_ReturnsNone()
+        [DataTestMethod]
+        [DataRow(HttpStatusCode.BadRequest)]
+        [DataRow(HttpStatusCode.NotFound)]
+        [DataRow(HttpStatusCode.InternalServerError)]
+        [DataRow(HttpStatusCode.BadGateway)]
+        public async Task GetUserProfile_TokenCallUnsuccessful_ReturnsNone(HttpStatusCode statusCode)
         {
             // Arrange
             var tokenResponse = new CitizenIdClient.CitizenIdApiObjectResponse<Token>(HttpStatusCode.BadRequest)
             {
                 Body = null,
-                ErrorResponse = new ErrorResponse { Error = "invalid_grant" }
+                ErrorResponse = new ErrorResponse { Error = "invalid_grant" },
+                StatusCode = statusCode
             };
 
             var authCode = _fixture.Create<string>();
@@ -106,9 +111,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             // Act
             var actualResult = await _systemUnderTest.GetUserProfile(authCode, codeVerifier, redirectUrl);
 
-            // Assert
+            // Assert?:
             _citizenIdClientMock.VerifyAll();
-            actualResult.HasValue.Should().BeFalse();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
+
+            var mappedStatusCode = actualResult.StatusCode;
+            
+            if (statusCode == HttpStatusCode.BadRequest)
+            {
+                mappedStatusCode.Should().Be(HttpStatusCode.BadRequest);               
+            }
+            else
+            {           
+                mappedStatusCode.Should().Be(HttpStatusCode.BadGateway);  
+            }
         }
         
         [TestMethod] 
@@ -151,9 +167,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _citizenIdSigningKeysMock.VerifyAll();
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll(); 
-            actualResult.HasValue.Should().BeTrue(); 
+            actualResult.UserProfile.HasValue.Should().BeTrue(); 
  
-            var actualUserProfile = actualResult.ValueOrFailure(); 
+            var actualUserProfile = actualResult.UserProfile.ValueOrFailure(); 
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfile.Im1ConnectionToken); 
             actualUserProfile.OdsCode.Should().Be(userProfile.OdsCode);
         } 
@@ -191,7 +207,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _citizenIdSigningKeysMock.VerifyAll();
             _citizenIdClientMock.VerifyAll(); 
             
-            actualResult.HasValue.Should().BeFalse();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
         } 
         
         [TestMethod] 
@@ -226,7 +242,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _citizenIdSigningKeysMock.VerifyAll();
             _citizenIdClientMock.VerifyAll(); 
             
-            actualResult.HasValue.Should().BeFalse();
+            actualResult.UserProfile.HasValue.Should().BeFalse();
         } 
         
         [TestMethod] 
@@ -269,7 +285,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _idTokenService.VerifyAll();
             _citizenIdClientMock.VerifyAll(); 
             
-            actualResult.HasValue.Should().BeFalse(); 
+            actualResult.UserProfile.HasValue.Should().BeFalse(); 
         } 
         
     }

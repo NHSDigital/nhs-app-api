@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -16,6 +17,7 @@ using Moq;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.CitizenId;
+using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
@@ -84,7 +86,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockCitizenIdService = _fixture.Freeze<Mock<ICitizenIdService>>();
             _mockCitizenIdService
                 .Setup(x => x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(Option.Some(_userProfile)));
+                .Returns(Task.FromResult(new GetUserProfileResult
+                {
+                    StatusCode = HttpStatusCode.OK, 
+                    UserProfile = Option.Some(_userProfile)
+                }));
 
             _mockOdsCodeLookup = _fixture.Freeze<Mock<IOdsCodeLookup>>();
             _mockOdsCodeLookup
@@ -163,7 +169,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockCitizenIdService
                 .Setup(x =>
                     x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
-                .Returns(Task.FromResult(Option.None<UserProfile>()))
+                .Returns(Task.FromResult(new GetUserProfileResult
+                {
+                    StatusCode = HttpStatusCode.BadRequest, 
+                    UserProfile = Option.None<UserProfile>()
+                }))
                 .Verifiable();
 
             // Act
@@ -171,7 +181,32 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             // Assert
             _mockCitizenIdService.Verify();
-            result.Should().BeAssignableTo<BadRequestResult>();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            _mockAuditor.VerifyNoOtherCalls();
+        }
+        
+        [TestMethod]
+        public async Task Post_CIDUserProfileCallFails_WithBadGateway_ReturnsBadGateway()
+        {
+            // Arrange
+            _mockCitizenIdService
+                .Setup(x =>
+                    x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
+                .Returns(Task.FromResult(new GetUserProfileResult
+                {
+                    StatusCode = HttpStatusCode.BadGateway, 
+                    UserProfile = Option.None<UserProfile>()
+                }))
+                .Verifiable();
+
+            // Act
+            var result = await _systemUnderTest.Post(_userSessionRequest);
+
+            // Assert
+            _mockCitizenIdService.Verify();
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAuditor.VerifyNoOtherCalls();
         }
 

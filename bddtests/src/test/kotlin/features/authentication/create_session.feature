@@ -40,7 +40,6 @@ Feature: Session Registration
     Then I get a "Bad Request" error
 
   @NHSO-63
-  @bug @NHSO-720
   @backend
   Scenario: CID tokens endpoint fails to process the request
     Given I have valid OAuth details and the CID tokens endpoint fails to process the request
