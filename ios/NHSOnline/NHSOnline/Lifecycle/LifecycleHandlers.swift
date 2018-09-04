@@ -16,6 +16,7 @@ class LifecycleHandlers: NSObject {
         super.init()
         createLifecycleObservers()
     }
+    
     init(knownServices: KnownServices, webViewController: UnsecureWebViewController) {
         self.knownServices = knownServices
         self.unsecureWebViewController = webViewController

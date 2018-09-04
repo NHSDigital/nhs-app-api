@@ -165,10 +165,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             if (message.name == "onLogin") {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
+                WebViewController.Properties.usingAbsoluteUri = false
             }
             
             if (message.name == "onLogout") {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: false)
+                WebViewController.Properties.usingAbsoluteUri = true
             }
             
             if (message.name == "updateHeaderText") {

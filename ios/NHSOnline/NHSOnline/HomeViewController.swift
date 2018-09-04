@@ -64,7 +64,7 @@ class HomeViewController : UIViewController {
                 os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
             }
         } else {
-            self.webViewController?.webView.loadPage(url: pageUrl)
+            self.webViewController?.loadPage(url: pageUrl)
         }
 
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
@@ -156,7 +156,7 @@ class HomeViewController : UIViewController {
     
     @objc func selectMyAccount(sender : UITapGestureRecognizer) {
         self.pageUrl = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
-        webViewController?.webView.loadPage(url: self.pageUrl)
+        webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
         updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
         
@@ -169,7 +169,7 @@ class HomeViewController : UIViewController {
     
     @objc func goHome(sender: UITapGestureRecognizer) {
         self.pageUrl = config().HomeUrl
-        self.webViewController?.webView.loadPage(url: self.pageUrl)
+        self.webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
         updateHeaderText(headerText: NSLocalizedString("HomeTitle", comment: ""))
 

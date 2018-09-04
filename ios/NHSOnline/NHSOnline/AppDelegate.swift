@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         let webPageUrl = userActivity.webpageURL?.absoluteString
         let vc = rootViewController?.childViewControllers.first as! HomeViewController
-        vc.webViewController?.webView.loadPage(url: webPageUrl!)
+        vc.webViewController?.loadPage(url: webPageUrl!)
         vc.webViewController?.dismissSafariViewController()
         return true
     }
@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         let webPageUrl = resolveAppScheme(url: url)
         let vc = rootViewController?.childViewControllers.first as! HomeViewController
-        vc.webViewController?.webView.loadPage(url: webPageUrl)
+        vc.webViewController?.loadPage(url: webPageUrl)
         vc.webViewController?.dismissSafariViewController()
         return true
     }
