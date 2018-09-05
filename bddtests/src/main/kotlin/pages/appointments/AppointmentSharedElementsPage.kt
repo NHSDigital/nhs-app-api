@@ -21,7 +21,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentClinicianXPath = "[@data-label='clinician %d']"
 
     private val inLineError = HybridPageElement(
-            browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
+            browserLocator = "//*[@id='errorLabel']//*[@data-purpose='error']",
             androidLocator = null,
             page = this
     )

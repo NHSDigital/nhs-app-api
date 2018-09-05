@@ -44,7 +44,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     )
 
     private val appointmentSlotGuidanceLabel = HybridPageElement(
-            browserLocator = "$guidanceParentXpath//label",
+            browserLocator = "$guidanceParentXpath//h2",
             androidLocator = "",
             page = this,
             helpfulName = "Appointment Slot Guidance section label. "
