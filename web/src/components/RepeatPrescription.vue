@@ -12,16 +12,15 @@
         type="checkbox"
         name="prescription"
         @change="check">
-      <label
-        :for="'prescription-' + prescriptionDetails.id">
-        {{ prescriptionDetails.name }}
+      <label :for="'prescription-' + prescriptionDetails.id">
+        <span data-label="prescription-name">
+          {{ prescriptionDetails.name }}
+        </span>
+        <p :class="$style.prescriptionDescription" data-label="prescription-description">
+          {{ prescriptionDetails.details }}
+        </p>
       </label>
     </div>
-    <p
-      :class="$style.prescriptionDescription"
-      data-label="prescription-description">
-      {{ prescriptionDetails.details }}
-    </p>
   </div>
 </template>
 <script>
@@ -67,8 +66,7 @@ export default{
   @import "../style/accessibility";
 
   .prescriptionDescription {
-    padding-left: 2.5em;
-    padding-top: 0em;
+    padding-top: 0.250em;
     padding-bottom: 0.250em;
   }
 
