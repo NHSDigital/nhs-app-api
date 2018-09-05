@@ -1,5 +1,5 @@
 export default {
-  language: 'en',
+  language: 'en-GB',
   errors: {
     pageHeader: 'Server error',
     header: 'We\'re experiencing technical difficulties',

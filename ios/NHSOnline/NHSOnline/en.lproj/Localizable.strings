@@ -23,3 +23,6 @@
 "HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";
+
+/*Configuration*/
+"locale" = "en-GB";

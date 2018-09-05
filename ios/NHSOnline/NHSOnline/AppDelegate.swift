@@ -11,14 +11,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.rootViewController = navigationController
         rootViewController = navigationController
 
+        setLocale()
+
         return true
     }
-    
+
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         let webPageUrl = userActivity.webpageURL?.absoluteString
         let vc = rootViewController?.childViewControllers.first as! HomeViewController
         vc.webViewController?.loadPage(url: webPageUrl!)
         vc.webViewController?.dismissSafariViewController()
+
         return true
     }
     
@@ -27,7 +30,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = rootViewController?.childViewControllers.first as! HomeViewController
         vc.webViewController?.loadPage(url: webPageUrl)
         vc.webViewController?.dismissSafariViewController()
+
         return true
+    }
+    
+    func setLocale() {
+        let locale = NSLocalizedString("locale", comment: "")
+        UserDefaults.standard.set([locale], forKey: "AppleLanguages")
     }
     
     func resolveAppScheme(url: URL) -> String {
@@ -37,6 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             comps.scheme = config().BaseScheme
             webPageUrl = comps.url!.absoluteString
         }
+
         return webPageUrl
     }
 }
