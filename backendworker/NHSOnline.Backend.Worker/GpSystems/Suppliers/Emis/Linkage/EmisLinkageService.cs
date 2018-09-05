@@ -105,6 +105,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                     // This is straight after a successful creation, so the chance of
                     // getting a conflict retrieving the linkage key is incredibly unlikely.
                     // Returning a 409 from creation indicates that CID should call GET.
+                    _logger.LogError($"Linkage create request unsuccessful - The patient already has an online account.");
+                    
                     return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
                 }
 
@@ -144,23 +146,33 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             {
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PracticeNotLive))
                 {
+                    _logger.LogError($"Linkage get request unsuccessful - practice not live. - Emis error code: {EmisApiErrorCode.PracticeNotLive}");
+
                     return new LinkageResult.PracticeNotLive();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientMarkedAsArchived))
                 {
+                    _logger.LogError($"Linkage get request unsuccessful - patient marked as archived. - Emis error code: {EmisApiErrorCode.PatientMarkedAsArchived}");
+
                     return new LinkageResult.PatientMarkedAsArchived();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnder16))
                 {
+                    _logger.LogError($"Linkage get request unsuccessful - patient non competent or under 16. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnder16}");
+
                     return new LinkageResult.PatientNonCompetentOrUnder16();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.AccountStatusInvalid))
                 {
+                    _logger.LogError($"Linkage get request unsuccessful - invalid account status. - Emis error code: {EmisApiErrorCode.AccountStatusInvalid}");
+
                     return new LinkageResult.AccountStatusInvalid();
                 }
+
+                _logger.LogError($"Linkage get request unsuccessful - Bad Request - Unknown error.");
 
                 return new LinkageResult.BadRequestErrorRetrievingNhsUser();
             }
@@ -168,18 +180,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             {
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.PatientNotRegisteredAtPractice))
                 {
+                    _logger.LogError($"Linkage get request unsuccessful - patient not registered at practice. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
+
                     return new LinkageResult.PatientNotRegisteredAtPractice();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.NoRegisteredOnlineUserFound))
                 {
+                    _logger.LogError($"Linkage get request unsuccessful - no registered online user found. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
+
                     return new LinkageResult.NoRegisteredOnlineUserFound();
                 }
+                
+                _logger.LogError($"Linkage get request unsuccessful - Not Found - Unknown error.");
+
 
                 return new LinkageResult.NotFoundErrorRetrievingNhsUser();
             }
 
-            _logger.LogError("Emis system is currently unavailable");
+            _logger.LogError("Linkage get request unsuccessful - Emis system is currently unavailable");
 
             return new LinkageResult.SupplierSystemUnavailable();
         }
@@ -211,19 +230,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             {
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PracticeNotLive))
                 {
+                    _logger.LogError($"Linkage create request unsuccessful - practice not live. - Emis error code: {EmisApiErrorCode.PracticeNotLive}");
+                  
                     return new LinkageResult.PracticeNotLive();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientMarkedAsArchived))
                 {
+                    _logger.LogError($"Linkage create request unsuccessful - patient marked as archived. - Emis error code: {EmisApiErrorCode.PatientMarkedAsArchived}");
+
                     return new LinkageResult.PatientMarkedAsArchived();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.BadRequest, EmisApiErrorCode.PatientNonCompetentOrUnder16))
                 {
+                    _logger.LogError($"Linkage create request unsuccessful - patient non competent or under 16. - Emis error code: {EmisApiErrorCode.PatientNonCompetentOrUnder16}");
+
                     return new LinkageResult.PatientNonCompetentOrUnder16();
                 }
-
+                
+                _logger.LogError($"Linkage create request unsuccessful - Bad Request - Unknown error.");
+                
                 return new LinkageResult.BadRequestErrorCreatingNhsUser();
             }
 
@@ -231,23 +258,31 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
             {
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.PatientNotRegisteredAtPractice))
                 {
+                    _logger.LogError($"Linkage create request unsuccessful - patient not registered at practice. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
+
                     return new LinkageResult.PatientNotRegisteredAtPractice();
                 }
 
                 if (response.HasStatusCodeAndErrorCode(HttpStatusCode.NotFound, EmisApiErrorCode.NoRegisteredOnlineUserFound))
                 {
+                    _logger.LogError($"Linkage create request unsuccessful - no registered online user found. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
+
                     return new LinkageResult.NoRegisteredOnlineUserFound();
                 }
+
+                _logger.LogError($"Linkage create request unsuccessful - no registered online user found. - Emis error code: {EmisApiErrorCode.PatientNotRegisteredAtPractice}");
 
                 return new LinkageResult.NotFoundErrorCreatingNhsUser();
             }
 
             if (response.StatusCode == HttpStatusCode.Conflict)
             {
+                _logger.LogError($"Linkage create request unsuccessful - The patient already has an online account.");
+
                 return new LinkageResult.ErrorCreatingPatientWhoAlreadyHasAnOnlineAccount();
             }
 
-            _logger.LogError("Emis system is currently unavailable");
+            _logger.LogError("Linkage create request unsuccessful - Emis system is currently unavailable");
 
             return new LinkageResult.SupplierSystemUnavailable();
         }

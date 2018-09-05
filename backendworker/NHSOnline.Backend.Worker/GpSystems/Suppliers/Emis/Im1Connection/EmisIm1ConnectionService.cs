@@ -130,28 +130,28 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                         EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
                 {
                     _logger.LogError(
-                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}, account already exists");
+                        $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, account already exists");
                     return new Im1ConnectionRegisterResult.AccountAlreadyExists();
                 }
 
                 if (meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
                 {
                     _logger.LogError(
-                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}, account not found");
+                        $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, account not found");
                     return new Im1ConnectionRegisterResult.NotFound();
                 }
 
                 if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)
                 {
                     _logger.LogError(
-                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}");
+                        $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.BadRequest();
                 }
 
                 if (!meApplicationsResponse.HasSuccessStatusCode)
                 {
                     _logger.LogError(
-                        $"Emis MeApplicationsPost returned with statuscode {endUserSessionResponse.StatusCode}");
+                        $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
@@ -167,7 +167,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 if (!sessionsResponse.HasSuccessStatusCode)
                 {
                     _logger.LogError(
-                        $"Emis SessionsPost returned with statuscode {endUserSessionResponse.StatusCode}");
+                        $"Emis SessionsPost returned with statuscode {sessionsResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
@@ -185,7 +185,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 if (!demographicsResponse.HasSuccessStatusCode)
                 {
                     _logger.LogError(
-                        $"Emis DemographicsGet returned with statuscode {endUserSessionResponse.StatusCode}");
+                        $"Emis DemographicsGet returned with statuscode {demographicsResponse.StatusCode}");
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
@@ -98,9 +99,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             _emisSessionService.Setup(x => x.SendSessionsEndUserSessionPost()).ReturnsAsync(endUserSessionResponse);
 
             _emisClient.Setup(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
-                req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
-                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
+                    req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
+                           req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                           req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))))
                 .Returns(Task.FromResult(
                     new EmisClient.EmisApiObjectResponse<AddVerificationResponse>(HttpStatusCode.Conflict)
                     {
@@ -113,11 +114,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             // Assert
             _emisClient.Verify(x => x.VerificationPost(It.IsAny<EmisHeaderParameters>(), It.Is<AddVerificationRequest>(
                 req => req.NhsNumber.Equals(nhsNumber, StringComparison.OrdinalIgnoreCase) &&
-                req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
-                req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
+                       req.NationalPracticeCode.Equals(odsCode, StringComparison.OrdinalIgnoreCase) &&
+                       req.Token.Equals(identityToken, StringComparison.OrdinalIgnoreCase))));
             _emisLinkageMapper.Verify(x => x.Map(addVerificationResponse));
             result.Should().BeAssignableTo<LinkageResult.SuccessfullyRetrievedAlreadyExists>();
-            var successResult = (LinkageResult.SuccessfullyRetrievedAlreadyExists)result;
+            var successResult = (LinkageResult.SuccessfullyRetrievedAlreadyExists) result;
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(odsCode);
         }
