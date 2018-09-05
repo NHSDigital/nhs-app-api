@@ -161,7 +161,7 @@ export default {
         retryButtonText: 'Try again',
       },
       403: {
-        pageHeader: 'Service unavailable',
+        pageHeader: 'Appointment booking unavailable',
         header: 'You are not currently able to book appointments online.',
         subheader: 'Contact your GP surgery for more information.',
         message: 'For urgent medical help, call 111.',
@@ -258,7 +258,7 @@ export default {
           retryButtonText: 'Try again',
         },
         403: {
-          pageHeader: 'Service unavailable',
+          pageHeader: 'Appointment booking unavailable',
           header: 'You are not currently able to book appointments online.',
           subheader: 'Contact your GP surgery for more information.',
           message: 'For urgent medical help, call 111.',
