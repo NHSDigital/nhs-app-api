@@ -146,7 +146,7 @@ data class Patient(
                 title =  "",
                 firstName =  "Pica",
                 surname =  "Jones",
-                dateOfBirth =  "1972-04-12T00:00:00",
+                dateOfBirth =  "1972-04-12",
                 address = defaultAddress,
                 contactDetails = defaultContactDetails,
                 odsCode =  MockDefaults.DEFAULT_ODS_CODE,
