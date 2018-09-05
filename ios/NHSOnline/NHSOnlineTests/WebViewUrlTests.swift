@@ -29,6 +29,27 @@ class WebViewUrlTests: XCTestCase {
         XCTAssertTrue((correctUrl?.contains(config().NhsOnlineRequiredQueryString))!)
     }
     
+    func test_When_KnownServiceHasFragment_Then_HasMissingQueryStringReturnsFalse() {
+        let urlString = config().HomeUrl + "#test"
+        let webViewUrl = URL(string: urlString);
+        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        
+        let result = knownService?.hasMissingQueryString(urlString: webViewUrl!.absoluteString)
+        
+        XCTAssertFalse(result!)
+    }
+    
+    func test_When_KnownServiceHasFragment_Then_QueryStringIsNotAdded() {
+        let urlString = config().HomeUrl + "#test"
+        let webViewUrl = URL(string: urlString);
+        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        
+        let resultUrl = knownService?.addingMissingQueryParameters(urlString: (webViewUrl?.absoluteString)!)
+        
+        XCTAssertFalse((resultUrl?.contains(config().NhsOnlineRequiredQueryString))!)
+        XCTAssertEqual(resultUrl, urlString)
+    }
+    
     func test_When_KnownServiceContainsQueryString_Then_ItsNotAdded() {
         let urlString = config().HomeUrl + config().NhsOnlineRequiredQueryString
         let webViewUrl = URL(string: urlString)

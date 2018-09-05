@@ -47,7 +47,11 @@ import Foundation
             return false
         }
         
-        guard let queryItems  = urlComponents.queryItems else {
+        if (urlComponents.fragment != nil) {
+            return false
+        }
+        
+        guard let queryItems = urlComponents.queryItems else {
             return true
         }
         
@@ -66,6 +70,10 @@ import Foundation
         }
         
         guard var urlComponents = URLComponents(string: urlString) else {
+            return urlString
+        }
+        
+        if (urlComponents.fragment != nil) {
             return urlString
         }
         
