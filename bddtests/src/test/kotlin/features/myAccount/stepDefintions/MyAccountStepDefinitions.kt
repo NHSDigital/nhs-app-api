@@ -1,12 +1,9 @@
 package features.myAccount.stepDefintions
 
 import cucumber.api.java.en.And
-import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.more.steps.MoreSteps
 import features.myAccount.steps.MyAccountSteps
-import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 
 
@@ -47,4 +44,8 @@ class MyAccountStepDefinitions {
         myAccount.goToHelpAndSupport()
     }
 
+    @And("^I scroll to the bottom of the page$")
+    fun iScrollToTheBottomOfThePage() {
+        myAccount.scrollToBottom()
+    }
 }

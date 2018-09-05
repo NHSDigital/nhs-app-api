@@ -4,6 +4,7 @@ describe('actions', () => {
   const sessionTimeout = 1200;
   const odsCode = 'P123';
   const token = 'sdfdhgmbnrdstgjxjcbv';
+  const response = { consentGiven: true };
   let commit;
   let state;
 
@@ -12,6 +13,7 @@ describe('actions', () => {
       $http: {
         postV1Session: jest.fn(() => Promise.resolve({ sessionTimeout, odsCode, token })),
         deleteV1Session: jest.fn(() => Promise.resolve()),
+        getV1PatientTermsAndConditionsConsent: jest.fn(() => Promise.resolve({ response })),
       },
       router: {
         go: jest.fn(),

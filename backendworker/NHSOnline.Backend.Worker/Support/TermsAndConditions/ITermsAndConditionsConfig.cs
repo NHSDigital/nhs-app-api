@@ -8,5 +8,6 @@ namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
         string AuthKey { get; }
         string DatabaseId { get; }
         string CollectionName  { get; }
+        bool Stubbed { get; }
     }
 }

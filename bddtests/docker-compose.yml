@@ -32,6 +32,7 @@ services:
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - EMIS_LINKAGE_USE_STUBBED_DATA=false
+      - STUB_TERMS_AND_CONDITIONS=true
     depends_on:
       - nhsonline.redis.sds
     ports:

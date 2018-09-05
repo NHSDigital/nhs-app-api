@@ -8,7 +8,7 @@ using NHSOnline.Backend.Worker.Support.TermsAndConditions;
 
 namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
 {
-    [Route("terms-and-conditions/consent")]
+    [Route("patient/terms-and-conditions/consent")]
     public class TermsAndConditionsController : Controller
     {
         private readonly ITermsAndConditionsService _termsAndConditionsService;

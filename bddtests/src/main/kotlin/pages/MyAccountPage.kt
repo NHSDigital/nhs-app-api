@@ -2,6 +2,9 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
+import org.openqa.selenium.JavascriptExecutor
+
+
 
 @Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/account")
@@ -59,7 +62,12 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         Assert.assertEquals("Expected Number of Links", expectedLinks.count(), links.elements.count())
         expectedLinks.forEach { link -> link.assertSingleElementPresent().assertIsVisible() }
     }
-    
+
+    fun scrollBottom() {
+        (driver as JavascriptExecutor)
+                .executeScript("window.scrollTo(0, document.body.scrollHeight)")
+    }
+
     fun clickTermsAndConditionsLink() {
         termsAndConditionsLink.element.click()
     }

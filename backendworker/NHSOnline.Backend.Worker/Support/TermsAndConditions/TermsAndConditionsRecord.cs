@@ -17,8 +17,8 @@ namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
         
         [JsonProperty(PropertyName="Id")]
         public string Id { get; private set; }
-        public string NhsNumber { get; private set; }
-        public bool ConsentGiven { get; private set; }
-        public DateTimeOffset DateOfConsent { get; private set; }       
+        public string NhsNumber { get; }
+        public bool ConsentGiven { get; }
+        public DateTimeOffset DateOfConsent { get; }       
     }
 }

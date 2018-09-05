@@ -21,13 +21,43 @@ export default {
         this.dispatch('session/setGpOdsCode', response.odsCode);
         this.dispatch('session/hideExpiryMessage');
         this.dispatch('session/setCsrfToken', response.token);
-        commit(AUTH_RESPONSE, response);
+        this.app.$http
+          .getV1PatientTermsAndConditionsConsent({})
+          .then((data) => {
+            if (data.response) {
+              if (data.response.consentGiven === true) {
+                commit(AUTH_RESPONSE, response);
+                this.dispatch('session/startValidationChecking');
+                this.app.router.push({
+                  name: 'index',
+                });
+              } else {
+                this.app.router.push({
+                  name: 'terms-and-conditions',
+                  params: { authResponse: response },
+                });
+              }
+            } else {
+              this.app.router.push({
+                name: 'terms-and-conditions',
+                params: { authResponse: response },
+              });
+            }
+          });
+      });
+  },
+  goHandleAuthResponse({ commit }, message) {
+    return this.app.$http
+      .postV1PatientTermsAndConditionsConsent(message.a)
+      .then(() => {
+        commit(AUTH_RESPONSE, message.b);
         this.dispatch('session/startValidationChecking');
         this.app.router.push({
           name: 'index',
         });
       });
   },
+
   logoutWhenExpired() {
     this.dispatch('session/showExpiryMessage');
     this.dispatch('auth/logout');

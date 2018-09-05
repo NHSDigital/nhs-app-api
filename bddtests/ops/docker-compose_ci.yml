@@ -14,6 +14,7 @@ services:
     environment:
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
       - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - STUB_TERMS_AND_CONDITIONS=true
     volumes:
       - ../src/main/kotlin/mocking/ndop:/app/bddcerts
   nhsonline.stubs:

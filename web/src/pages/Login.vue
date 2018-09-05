@@ -61,6 +61,7 @@ export default {
   },
 };
 </script>
-<style module lang="scss"  scoped>
+<style module lang="scss" scoped>
 @import "../style/home";
+
 </style>

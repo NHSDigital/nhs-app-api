@@ -79,5 +79,9 @@ export default {
     name: 'data-sharing',
     path: '/data-sharing',
   },
+  TERMSANDCONDITIONS: {
+    name: 'terms-and-conditions',
+    path: '/terms-and-conditions',
+  },
 };
 

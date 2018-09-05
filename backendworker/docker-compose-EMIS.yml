@@ -14,6 +14,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - CORS_AUTHORITY=*
       - EMIS_BASE_URL=https://nhs70apptest.emishealth.com/PFS/
+      - STUB_TERMS_AND_CONDITIONS=true
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:latest
     environment:

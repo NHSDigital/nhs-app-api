@@ -24,6 +24,7 @@ services:
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - STUB_TERMS_AND_CONDITIONS=true
   nhsonline.stubs:
     image: rodolpheche/wiremock
     ports:

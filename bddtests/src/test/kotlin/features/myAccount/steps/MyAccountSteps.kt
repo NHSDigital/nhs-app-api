@@ -47,4 +47,9 @@ open class MyAccountSteps {
     fun goToHelpAndSupport() {
         myAccountPage.clickHelpAndSupportLink()
     }
+
+    @Step
+    fun scrollToBottom() {
+        myAccountPage.scrollBottom()
+    }
 }

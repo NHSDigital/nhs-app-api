@@ -108,6 +108,13 @@ open class SharedStepDefinitions {
         login.using(this.patient)
     }
 
+    @Given("^I am logged in and have not accepted the terms and conditions$")
+    open fun iAmLoggedInAndHaveNotAcceptedTermsAndConditions() {
+        this.patient = Serenity.sessionVariableCalled<Patient>(Patient::class) ?: this.patient
+        browser.goToApp()
+        login.using(this.patient)
+    }
+
     @Given("^I am not logged in$")
     open fun iAmNotLoggedIn() {
         browser.goToApp()

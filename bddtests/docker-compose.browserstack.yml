@@ -9,3 +9,4 @@ services:
   nhsonline.backend.worker:
     environment:
       - NHS_WEB_APP_BASE_URL=http://bs-local.com:3000
+      - STUB_TERMS_AND_CONDITIONS=true
