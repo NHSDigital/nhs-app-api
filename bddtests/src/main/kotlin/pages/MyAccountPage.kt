@@ -61,19 +61,19 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
     
     fun clickTermsAndConditionsLink() {
-        findByXpath("//*[@id='btn_terms']").click()
+        termsAndConditionsLink.element.click()
     }
 
     fun clickPrivacyPolicyLink() {
-        findByXpath("//*[@id='btn_privacy']").click()
+        privacyPolicyLink.element.click()
     }
 
     fun clickCookiesPolicyLink() {
-        findByXpath("//*[@id='btn_cookies']").click()
+        cookiesPolicyLink.element.click()
     }
 
     fun clickOpenSourceLicensesLink() {
-        findByXpath("//*[@id='btn_openSource']").click()
+        openSourceLicensesLink.element.click()
     }
 
     fun clickHelpAndSupportLink() {
