@@ -9,7 +9,7 @@ import features.sharedSteps.BrowserSteps
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import models.Patient
 import net.thucydides.core.annotations.Steps
-import pageobjects.AuthReturnPage
+import pages.AuthReturnPage
 
 class AuthReturnStepDefinitions : AbstractSteps() {
 
@@ -18,7 +18,7 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     @Steps
     lateinit var login: LoginSteps
 
-    lateinit private var patient: Patient
+    private lateinit var patient: Patient
 
     @Steps
     lateinit var authReturn: AuthReturnSteps
@@ -58,19 +58,19 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     @Then("I see the appropriate error message for a login error")
     fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
 
-        var pageTitle = ""
-        var pageHeader = ""
-        var header = authReturnPage.errorH1
-        var subHeader = authReturnPage.errorH2
-        var message = authReturnPage.errorParagraph
-        var retryButtonText = authReturnPage.errorCtaText
+        val pageTitle = ""
+        val pageHeader = ""
+        val header = authReturnPage.errorH1
+        val subHeader = authReturnPage.errorH2
+        val message = authReturnPage.errorParagraph
+        val retryButtonText = authReturnPage.errorCtaText
 
         authReturn.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
     }
 
     @Then("I click on the navigation button")
     fun thenICLickOnTheNavigationButton() {
-        var retryButtonText = authReturnPage.errorCtaText
+        val retryButtonText = authReturnPage.errorCtaText
         authReturnPage.clickOnButtonContainingText(retryButtonText)
     }
 

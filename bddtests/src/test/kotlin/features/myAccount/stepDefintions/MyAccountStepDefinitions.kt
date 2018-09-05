@@ -43,9 +43,4 @@ class MyAccountStepDefinitions {
     fun iClickTheHelpAndSupportLink() {
         myAccount.goToHelpAndSupport()
     }
-
-    @And("^I scroll to the bottom of the page$")
-    fun iScrollToTheBottomOfThePage() {
-        myAccount.scrollToBottom()
-    }
 }

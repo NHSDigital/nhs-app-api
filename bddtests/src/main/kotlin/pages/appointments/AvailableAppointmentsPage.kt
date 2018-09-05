@@ -10,7 +10,6 @@ import pages.HybridPageElement
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val byIdXpathFormat = "//*[@id='%s']"
-    private val containsTextXpathSubstring = "[contains(text(), '%s')]"
     private val inlineErrorByIdXpath = "$byIdXpathFormat//*[@data-purpose='error']"
     private val guidanceParentXpath = "//*[@data-purpose='info-msg']"
     private val guidanceIconXpathFormat = "$guidanceParentXpath//*[@data-purpose='icon']$containsTextXpathSubstring"

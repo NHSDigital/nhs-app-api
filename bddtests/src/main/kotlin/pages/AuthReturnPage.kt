@@ -1,6 +1,4 @@
-package pageobjects
-
-import pages.HybridPageObject
+package pages
 
 class AuthReturnPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     val errorPageTitle = "Session error - NHS App"

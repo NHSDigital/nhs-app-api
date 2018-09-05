@@ -21,6 +21,8 @@ const val POOLING_FREQUENCY: Long = 100
 @Suppress("TooManyFunctions")
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
+    protected val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
+
     val errorBanner by lazy{ ErrorBannerPageObject(this) }
 
     val spinner = HybridPageElement(
@@ -227,15 +229,15 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
                                      retryButtonText: String? = null): Boolean {
 
         val pageHeadIsValid = pageHeaderText.isNullOrEmpty() ||
-                isAnyXpathVisible("//h1[contains(text(), \"$pageHeaderText\")]")
+                isAnyXpathVisible("//h1${String.format(containsTextXpathSubstring, pageHeaderText)}")
         val headerIsValid = headerText.isNullOrEmpty() ||
-                isAnyXpathVisible("//p[contains(text(), \"$headerText\")]")
+                isAnyXpathVisible("//p${String.format(containsTextXpathSubstring, headerText)}")
         val subHeaderIsValid = subHeaderText.isNullOrEmpty() ||
-                isAnyXpathVisible("//p[contains(text(), \"$subHeaderText\")]")
+                isAnyXpathVisible("//p${String.format(containsTextXpathSubstring, subHeaderText)}")
         val messageIsValid = messageText.isNullOrEmpty() ||
-                isAnyXpathVisible("//p[contains(text(), \"$messageText\")]")
+                isAnyXpathVisible("//p${String.format(containsTextXpathSubstring, messageText)}")
         val retryButtonIsValid = retryButtonText.isNullOrEmpty() ||
-                isAnyXpathVisible("//button[contains(text(), \"$retryButtonText\")]")
+                isAnyXpathVisible("//button${String.format(containsTextXpathSubstring, retryButtonText)}")
 
         return pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
     }

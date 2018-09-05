@@ -4,11 +4,12 @@ import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import org.openqa.selenium.JavascriptExecutor
 
-
-
 @Suppress("TooManyFunctions")
 @DefaultUrl("http://localhost:3000/account")
 class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
+
+    private val aboutUsHeaderXpath = String.format("//div[h2$containsTextXpathSubstring]", "About us")
+    private val linkPath = "$aboutUsHeaderXpath/ul/li/a"
 
     val signOutButton = HybridPageElement(
             browserLocator = "//*[@id='btn_floating']",
@@ -16,25 +17,18 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             page = this
     )
 
-    val aboutUsHeader = HybridPageElement(
-            browserLocator = "//h2[contains(text(),'About us')]",
+    private val aboutUsHeader = HybridPageElement(
+            browserLocator = aboutUsHeaderXpath,
             androidLocator = null,
             page = this
     )
 
-    var linkPath = "//div[h2[contains(text(),'About us')]]/ul/li/a"
-
-    private val links = HybridPageElement(
-                browserLocator = linkPath,
-                androidLocator = null,
-                page = this)
-
-    private fun getLink(text:String): HybridPageElement{
+    private fun getLink(text: String = ""): HybridPageElement {
         return HybridPageElement(
-                browserLocator = linkPath,
+                browserLocator = "$linkPath${String.format(containsTextXpathSubstring, text)}",
                 androidLocator = null,
                 page = this,
-                helpfulName = "$text Link").containingText(text)
+                helpfulName = "$text Link")
     }
 
     private val termsAndConditionsLink = getLink("Terms of use")
@@ -59,13 +53,8 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                 openSourceLicensesLink,
                 helpAndSupportLink)
 
-        Assert.assertEquals("Expected Number of Links", expectedLinks.count(), links.elements.count())
+        Assert.assertEquals("Expected Number of Links", expectedLinks.count(), getLink().elements.count())
         expectedLinks.forEach { link -> link.assertSingleElementPresent().assertIsVisible() }
-    }
-
-    fun scrollBottom() {
-        (driver as JavascriptExecutor)
-                .executeScript("window.scrollTo(0, document.body.scrollHeight)")
     }
 
     fun clickTermsAndConditionsLink() {

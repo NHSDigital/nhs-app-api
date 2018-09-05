@@ -38,6 +38,5 @@ Feature: View My Account Page
   @NHSO-1917
   Scenario: A patient can navigate to the Help and support page
     Given I am on the My Account page
-    And I scroll to the bottom of the page
     When I click the Help and support link
     Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/

@@ -1,7 +1,7 @@
 package features.authentication.steps
 
 import net.thucydides.core.annotations.Step
-import pageobjects.AuthReturnPage
+import pages.AuthReturnPage
 import org.junit.Assert
 
 
