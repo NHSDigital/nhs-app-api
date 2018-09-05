@@ -39,6 +39,10 @@ class KnownServicesTest {
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
             )
+            on { getString(R.string.symptomsPath) } doReturn "/symptoms"
+            on { getString(R.string.appointmentsPath) } doReturn "/appointments"
+            on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
+            on { getString(R.string.myRecordPath) } doReturn "/my-record-warning"
         }
 
         return mock { on { resources } doReturn mockresource }
@@ -83,6 +87,47 @@ class KnownServicesTest {
             testKnownServices.findMatchingKnownService("http://10.0.2.2:3000?source=android")
 
         Assert.assertEquals(URL("http://10.0.2.2:3000"), result?.urlList?.get(0))
+    }
+
+    @Test
+    fun findMatchingInternalService_returnsNull_forNotAUrl() {
+        var context: Context = mockContext()
+        val testInternalServices = KnownServices(context)
+
+        val result = testInternalServices.findMatchingInternalService("Not A Url")
+
+        Assert.assertNull(result)
+    }
+
+    @Test
+    fun findMatchingInternalService_returnsService_forValidServiceUrl() {
+        var context: Context = mockContext()
+        val testInternalServices = KnownServices(context)
+
+        val result = testInternalServices.findMatchingInternalService("http://10.0.2.2:3000/appointments")
+
+        Assert.assertEquals(URL("http://10.0.2.2:3000/appointments"), result?.urlList?.get(0))
+    }
+
+    @Test
+    fun findMatchingInternalService_returnsService_forValidServiceUrlDifferentCasing() {
+        var context: Context = mockContext()
+        val testInternalServices = KnownServices(context)
+
+        val result = testInternalServices.findMatchingInternalService("http://10.0.2.2:3000/APPOINTMENTS")
+
+        Assert.assertEquals(URL("http://10.0.2.2:3000/appointments"), result?.urlList?.get(0))
+    }
+
+    @Test
+    fun findMatchingInternalService_returnsService_forValidServiceUrlWithQueryString() {
+        var context: Context = mockContext()
+        val testInternalServices = KnownServices(context)
+
+        val result =
+                testInternalServices.findMatchingInternalService("http://10.0.2.2:3000/appointments?source=android")
+
+        Assert.assertEquals(URL("http://10.0.2.2:3000/appointments"), result?.urlList?.get(0))
     }
 
     @Test

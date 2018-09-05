@@ -38,6 +38,10 @@ class OpenUrlInBrowserActivityTest {
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-record-abbreviations/"
             )
+            on { getString(R.string.symptomsPath) } doReturn "/symptoms"
+            on { getString(R.string.appointmentsPath) } doReturn "/appointments"
+            on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
+            on { getString(R.string.myRecordPath) } doReturn "/my-record-warning"
         }
 
         return mock { on { resources } doReturn mockresource }

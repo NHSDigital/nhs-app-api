@@ -62,7 +62,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
         }
         
-        self.callUpdateHeaderTextForURL(url: navigationAction.request.url!)
+        self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         decisionHandler(.allow)
     }
         
@@ -132,7 +132,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if navigationAction.targetFrame == nil {
             webView.load(navigationAction.request)
-            selectNavigationMenuFor(url: navigationAction.request.url)
+            self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         }
         
         return nil
@@ -182,7 +182,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             
             if (message.name == "updateHeaderText") {
-                callUpdateHeaderText(headerText: String(describing: message.body))
+                viewController.updateHeaderText(headerText: String(describing: message.body))
             }
             if (message.name == "postNdopToken") {
                 callPostNdopToken(token: String(describing: message.body))
@@ -207,22 +207,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.webViewController?.postNdopToken(token: token!)
     }
     
-    func callUpdateHeaderTextForURL(url: URL) {
-        let knownService = self.knownServices.findMatchingKnownServiceForURL(url: url)
-        if (knownService?.serviceTitle != "") {
-            self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
-        }
-    }
-    
-    func callUpdateHeaderText(headerText: String?) {
-        viewController.updateHeaderText(headerText: headerText)
-    }
     func clearMenuBarItem() {
         self.viewController.tabBar.selectedItem = nil
     }
+    
     func checkSymptoms() {
         self.viewController.callCheckSymptoms()
     }
+    
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
             if #available(iOS 10.0, *) {
@@ -240,20 +232,37 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
     
-    private func selectNavigationMenuFor(url: URL? ) {
-        if let host = url?.host, let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: host),
+    private func updateHeaderAndNavigationMenu(url: URL?) {
+        let service: KnownService
+        if let host = url?.host,
             let tabBarDelegate = self.viewController.tabBarDelegate {
+                if let internalService = knownServices.findMatchingInternalServiceForURL(url: url) {
+                    service = internalService
+                } else {
+                    service = knownServices.findMatchingKnownServiceForHostname(hostname: host)!
+                }
+                switch service.service {
+                case .NHS_111, .SYMPTOMS:
+                    tabBarDelegate.selectMenu(menu: .Symptoms)
+                    break
+                case .APPOINTMENTS:
+                    tabBarDelegate.selectMenu(menu: .Appointments)
+                    break
+                case .PRESCRIPTIONS:
+                    tabBarDelegate.selectMenu(menu: .Prescriptions)
+                    break
+                case .MY_RECORD:
+                    tabBarDelegate.selectMenu(menu: .MyRecord)
+                    break
+                case .ORGAN_DONATION, .DATA_SHARING:
+                    tabBarDelegate.selectMenu(menu: .More)
+                default : break
+                }
             
-            switch knownService.service {
-            case .NHS_111:
-                tabBarDelegate.selectMenu(menu: .Symptoms)
-                break
-            case .ORGAN_DONATION, .DATA_SHARING:
-                tabBarDelegate.selectMenu(menu: .More)
-                break
-            default : break
+                if (service.serviceTitle != "") {
+                    viewController.updateHeaderText(headerText: service.serviceTitle)
+                }
             }
-        }
     }
     
     private func showWebViewContainer() {

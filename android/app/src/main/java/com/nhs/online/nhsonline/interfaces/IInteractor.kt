@@ -11,9 +11,7 @@ interface IInteractor {
 
     fun dismissProgressDialog()
 
-    fun selectSymptomsMenuActive()
-
-    fun selectMoreMenuActive()
+    fun selectNavigationMenuActive(navigationMenuId: Int)
 
     fun goToCheckSymptoms()
 

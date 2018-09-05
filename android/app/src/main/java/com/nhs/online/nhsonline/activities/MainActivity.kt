@@ -222,14 +222,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
             progressBarLayout.visibility = View.GONE
     }
 
-    override fun selectSymptomsMenuActive() {
+    override fun selectNavigationMenuActive(navigationMenuId: Int) {
         if (menuBar.visibility == VISIBLE)
-            menuBar.switchActiveMenuItemTo(R.id.symptoms)
-    }
-
-    override fun selectMoreMenuActive() {
-        if (menuBar.visibility == VISIBLE)
-            menuBar.switchActiveMenuItemTo(R.id.more)
+            menuBar.switchActiveMenuItemTo(navigationMenuId)
     }
 
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {

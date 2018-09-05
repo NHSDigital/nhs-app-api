@@ -13,6 +13,7 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
 import java.util.logging.Logger
@@ -108,6 +109,7 @@ class WebClientInterceptor(
             cancelTrackingWebRequestResponse()
         }
 
+        updateHeaderAndNavMenu(url)
         super.onPageFinished(view, url)
     }
 
@@ -157,14 +159,24 @@ class WebClientInterceptor(
     }
 
     private fun updateHeaderAndNavMenu(url: String?) {
+        var service: KnownService?
         url?.let {
-            val matchingKnownService = knownServices.findMatchingKnownService(it)
-            val header = matchingKnownService?.nativeHeader
+            service = knownServices.findMatchingInternalService(it)
+            if (service == null) {
+                service = knownServices.findMatchingKnownService(it)
+            }
+
+            val header = service?.nativeHeader
             if (header != null) {
                 when (header) {
-                    context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectSymptomsMenuActive()
-                    context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectMoreMenuActive()
+                    context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectNavigationMenuActive(R.id.symptoms)
+                    context.resources.getString(R.string.symptoms_header) -> uiInteractor.selectNavigationMenuActive(R.id.symptoms)
+                    context.resources.getString(R.string.appointments_header) -> uiInteractor.selectNavigationMenuActive(R.id.appointments)
+                    context.resources.getString(R.string.prescriptions_header) -> uiInteractor.selectNavigationMenuActive(R.id.prescriptions)
+                    context.resources.getString(R.string.my_record_header) -> uiInteractor.selectNavigationMenuActive(R.id.myRecord)
+                    context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectNavigationMenuActive(R.id.more)
                 }
+
                 uiInteractor.setHeaderText(header)
             }
         }
