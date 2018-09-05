@@ -1,6 +1,5 @@
 <template>
-  <p :class="[$style.msgText, extendedStyle]"
-     :data-purpose="isHeader ? 'msg-header' : undefined">
+  <p :class="[$style.msgText, extendedStyle]">
     <slot/>
   </p>
 </template>

@@ -2,7 +2,9 @@
   <div v-if="isVisible">
     <div v-if="isStandardError" :id="$style.serverError" class="pull-content">
       <message-dialog :override-style="overrideStyle" message-type="error">
-        <message-text :is-header="true" :override-style="overrideStyle">{{ header }}</message-text>
+        <message-text :is-header="true" :override-style="overrideStyle" data-purpose="msg-header">
+          {{ header }}
+        </message-text>
         <message-text v-if="subheader!==''" data-purpose="msg-subheader">
           {{ subheader }}
         </message-text>
