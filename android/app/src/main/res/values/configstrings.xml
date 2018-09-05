@@ -7,7 +7,7 @@
     <string name="baseURL">https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk/</string>
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
-    <string name="myRecordPath">my-record/myrecordwarning</string>
+    <string name="myRecordPath">my-record-warning</string>
     <string name="symptomsPath">symptoms</string>
     <string name="appointmentsPath">appointments</string>
     <string name="prescriptionsPath">prescriptions</string>
