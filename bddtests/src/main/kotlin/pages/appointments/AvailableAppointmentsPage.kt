@@ -10,7 +10,6 @@ import pages.HybridPageElement
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val byIdXpathFormat = "//*[@id='%s']"
-    private val inlineErrorByIdXpath = "$byIdXpathFormat//*[@data-purpose='error']"
     private val guidanceParentXpath = "//*[@data-purpose='info-msg']"
     private val guidanceIconXpathFormat = "$guidanceParentXpath//*[@data-purpose='icon']$containsTextXpathSubstring"
     private val dateHeadingXpath = "//form//h2"
@@ -84,34 +83,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             helpfulName = "Appointment time period filter. "
     )
 
-    private val typeInLineError = HybridPageElement(
-            browserLocator = String.format(inlineErrorByIdXpath, "error-type"),
-            androidLocator = "",
-            page = this,
-            helpfulName = "In-line error for Appointment Type filter. "
-    )
-
-    private val locationInLineError = HybridPageElement(
-            browserLocator = String.format(inlineErrorByIdXpath, "error-location"),
-            androidLocator = "",
-            page = this,
-            helpfulName = "In-line error for Appointment Location filter. "
-    )
-
-    private val slotInLineError = HybridPageElement(
-            browserLocator = String.format(inlineErrorByIdXpath, "error-slot"),
-            androidLocator = "",
-            page = this,
-            helpfulName = "In-line error for Appointment Slot selection. "
-    )
-
-    private fun timeSlotAtPosition(position: Int) = HybridPageElement(
-            browserLocator = "//form//li[$position]",
-            androidLocator = "",
-            page = this,
-            helpfulName = "Time slot by index (base 1). "
-    )
-
     private fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(
             browserLocator = String.format(timeSlotByDateAndTimeXpath, date, time),
             androidLocator = "",
@@ -161,10 +132,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     fun isTimePeriodFilterPresent(): Boolean {
         return timePeriodFilter.elements.isNotEmpty()
-    }
-
-    fun selectSlotByPositionNumber(position: Int) {
-        timeSlotAtPosition(position).element.click()
     }
 
     fun selectSlot(date: String, time: String) {
@@ -264,24 +231,6 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
                 timeSlots.element.isPresent
         )
         return timeSlots.elements.size
-    }
-
-    fun isTimeSlotAtPositionSelected(position: Int): Boolean {
-        val hybridPageElement = timeSlotAtPosition(position)
-        hybridPageElement.assertSingleElementPresent()
-        return hybridPageElement.element.getAttribute("aria-label") == "selected-slot"
-    }
-
-    fun getInlineTypeValidationError(): String = typeInLineError.element.text
-
-    fun getInlineLocationValidationError(): String = locationInLineError.element.text
-
-    fun getInlineSlotValidationError(): String = slotInLineError.element.text
-
-    fun getErrorSummarySubHeading(): String = errorBanner.subHeading
-
-    fun getErrorSummaryBodyAtRow(rowNumber: Int): String {
-        return errorBanner.bodyElements[rowNumber - 1]
     }
 
     fun assertGuidancePresent() {

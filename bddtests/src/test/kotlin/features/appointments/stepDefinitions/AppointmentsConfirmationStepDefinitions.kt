@@ -26,7 +26,6 @@ class AppointmentsConfirmationStepDefinitions {
         val date = sessionVariableCalled<String>(TargetAppointmentDateKey)
         val time = sessionVariableCalled<String>(TargetAppointmentTimeKey)
         availableAppointmentsSteps.selectSlot(date, time)
-        availableAppointmentsSteps.clickOnBookAppointmentButton()
     }
 
     @When("^I click the 'Confirm and book appointment' button$")

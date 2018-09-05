@@ -180,65 +180,6 @@ Feature: View available appointment slots
 
   @NHSO-71
     #    GP System agnostic scenario, so only need to test with EMIS
-  Scenario: A user selects a second appointment slot and the first selected slot gets deselected.
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the available appointments page
-    And I filter to reveal multiple slots
-    And I click on the 1st appointment
-    When I click on the 2nd appointment
-    Then the 2nd slot is highlighted
-    And the 1st slot is no longer highlighted
-
-  @NHSO-71
-    #    GP System agnostic scenario, so only need to test with EMIS
-  Scenario: A user select the same appointment twice and the selected appointment stay selected.
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the available appointments page
-    And I filter to reveal multiple slots
-    And I click on the 1st appointment
-    When I click on the same appointment
-    Then the slot remains highlighted
-
-  @NHSO-71
-    #    GP System agnostic scenario, so only need to test with EMIS
-  Scenario: A user tries to progress without selecting an appointment type or location
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the available appointments page
-    When I try to progress without selecting an appointment type or location
-    Then I see an appropriate message informing that I need to select an appointment type and location
-
-  @NHSO-71
-    #    GP System agnostic scenario, so only need to test with EMIS
-  Scenario: A user tries to progress without selecting an appointment type
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the available appointments page
-    When I try to progress without selecting an appointment type
-    Then I see an appropriate message informing that I need to select an appointment type
-
-  @NHSO-71
-    #    GP System agnostic scenario, so only need to test with EMIS
-  Scenario: A user tries to progress without selecting a location
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the available appointments page
-    When I try to progress without selecting a location
-    Then I see an appropriate message informing that I need to select a location
-
-  @NHSO-71
-    #    GP System agnostic scenario, so only need to test with EMIS
-  Scenario: A user tries to progress without selecting an appointment
-    Given there are available appointment slots with different criteria for EMIS
-    And I am logged in
-    And I am on the available appointments page
-    When I try to progress without selecting an appointment
-    Then I see an appropriate message informing that I need to select an appointment
-
-  @NHSO-71
-    #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
     Given there are available appointment slots with different criteria for EMIS
     And I am logged in

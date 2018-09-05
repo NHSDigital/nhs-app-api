@@ -27,7 +27,6 @@ import javax.servlet.http.Cookie
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private val pageHeader = "Book new appointment"
-    private val bookThisButtonText = "Continue"
     private val backButtonText = "Back to my appointments"
     private val appointmentTypeDefaultOption = "Select type"
     private val locationDefaultOption = "Select location"
@@ -85,11 +84,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun waitForSpinnerToDisappearBecauseOfTimeout() {
         availableAppointments.waitForSpinnerToDisappear(70)
-    }
-
-    @Step
-    fun clickOnBookAppointmentButton() {
-        availableAppointments.clickOnButtonContainingText(bookThisButtonText)
     }
 
     @Step
@@ -377,39 +371,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun verifyThatValidationErrorsForMissingTypeAndLocationAreDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
-        assertEquals("Choose a type of appointment", availableAppointments.getErrorSummaryBodyAtRow(1))
-        assertEquals("Choose a location", availableAppointments.getErrorSummaryBodyAtRow(2))
-        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(3))
-        assertEquals("Choose a type of appointment", availableAppointments.getInlineTypeValidationError())
-        assertEquals("Choose a location", availableAppointments.getInlineLocationValidationError())
-    }
-
-    @Step
-    fun verifyThatValidationErrorsForMissingTypeIsDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
-        assertEquals("Choose a type of appointment", availableAppointments.getErrorSummaryBodyAtRow(1))
-        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(2))
-        assertEquals("Choose a type of appointment", availableAppointments.getInlineTypeValidationError())
-    }
-
-    @Step
-    fun verifyThatValidationErrorsForMissingLocationIsDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
-        assertEquals("Choose a location", availableAppointments.getErrorSummaryBodyAtRow(1))
-        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(2))
-        assertEquals("Choose a location", availableAppointments.getInlineLocationValidationError())
-    }
-
-    @Step
-    fun verifyThatValidationErrorsForNoSelectedAppointmentIsDisplayed() {
-        assertEquals("There's a problem", availableAppointments.getErrorSummarySubHeading())
-        assertEquals("Select an appointment slot", availableAppointments.getErrorSummaryBodyAtRow(1))
-        assertEquals("Select an appointment slot", availableAppointments.getInlineSlotValidationError())
-    }
-
-    @Step
     fun verifyThatSlotNoLongerAvailableMessageIsDisplayed() {
         val expectedHeader = "This slot is no longer available"
         val expectedMsg = "Please select a different time."
@@ -418,11 +379,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 expectedHeader, errorPage.heading.element.text)
         assertEquals("expected error text $expectedMsg but found ${errorPage.errorText1.element.text}",
                 expectedMsg, errorPage.errorText1.element.text)
-    }
-
-    @Step
-    fun clickOnASlot(slotNumber: Int = 1) {
-        availableAppointments.selectSlotByPositionNumber(slotNumber)
     }
 
     @Step
@@ -438,21 +394,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun collapseAppointmentSlotGuidance() {
         availableAppointments.collapseGuidance()
-    }
-
-    @Step
-    fun verifyThatDifferentSlotIsHighlighted() {
-        assertTrue("New time slot is not highlighted. ", availableAppointments.isTimeSlotAtPositionSelected(2))
-    }
-
-    @Step
-    fun verifyThatFirstSlotIsNotHighlighted() {
-        assertFalse("Old time slot is still highlighted. ", availableAppointments.isTimeSlotAtPositionSelected(1))
-    }
-
-    @Step
-    fun verifyThatSlotIsStillHighlighted() {
-        assertTrue("Time slot is no longer highlighted. ", availableAppointments.isTimeSlotAtPositionSelected(1))
     }
 
     @Step

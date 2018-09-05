@@ -217,7 +217,6 @@ export default {
       },
     },
     booking: {
-      bookButtonText: 'Continue',
       backButtonText: 'Back to my appointments',
       noSlots: 'No appointments available',
       availableAppointmentsScreenReaderMessage: '0 appointments available | 1 appointment available | {appointmentsCount} appointments available',
@@ -233,12 +232,6 @@ export default {
         title: 'No appointments available',
         line1: 'Try selecting a different date and time, or without a preferred practice member selected. If you can\'t find the appointment you need, call your GP surgery.',
         line2: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
-      },
-      validationErrors: {
-        problemFound: 'There\'s a problem',
-        type: 'Choose a type of appointment',
-        location: 'Choose a location',
-        slot: 'Select an appointment slot',
       },
       filters: {
         type: {

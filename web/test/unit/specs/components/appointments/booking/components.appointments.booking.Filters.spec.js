@@ -23,40 +23,6 @@ const createFiltersComponent = (props = {}) => {
 };
 
 describe('Filters.vue', () => {
-  it('will hide validation error by default', () => {
-    const component = createFiltersComponent();
-
-    expect(component.find('#error-type').exists()).toBeFalsy();
-    expect(component.find('#error-location').exists()).toBeFalsy();
-  });
-
-  it('will hide validation error', () => {
-    const props = {
-      validationError: {
-        isTypeValid: true,
-        isLocationValid: true,
-      },
-    };
-
-    const component = createFiltersComponent(props);
-
-    expect(component.find('#error-type').exists()).toBeFalsy();
-    expect(component.find('#error-location').exists()).toBeFalsy();
-  });
-
-  it('will show validation error', () => {
-    const props = {
-      validationError: {
-        isTypeValid: false,
-        isLocationValid: false,
-      },
-    };
-    const component = createFiltersComponent(props);
-
-    expect(component.find('#error-type').exists()).toBeTruthy();
-    expect(component.find('#error-location').exists()).toBeTruthy();
-  });
-
   it('will do not render drop-down options by default', () => {
     const component = createFiltersComponent();
 

@@ -7,11 +7,7 @@
       </template>
       <p>{{ guidanceMsg }}</p>
     </collapsible-dialog>
-    <error-message v-if="!validationError.isTypeValid" id="error-type">
-      {{ $t('appointments.booking.validationErrors.type') }}
-    </error-message>
-    <select-dropdown v-model="type" :error-border="!validationError.isTypeValid"
-                     select-id = "type" select-name="type">
+    <select-dropdown v-model="type" select-id = "type" select-name="type">
       <option v-for="option in options.types" :key="option.value" :value="option.value"
               :disabled="option.value===''">
         {{ displayName(option) }}
@@ -19,11 +15,7 @@
     </select-dropdown>
 
     <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
-    <error-message v-if="!validationError.isLocationValid" id="error-location">
-      {{ $t('appointments.booking.validationErrors.location') }}
-    </error-message>
-    <select-dropdown v-model="location" :error-border="!validationError.isLocationValid"
-                     select-id = "location" select-name="location">
+    <select-dropdown v-model="location" select-id = "location" select-name="location">
       <option v-for="option in options.locations" :key="option.value" :value="option.value"
               :disabled="option.value===''">
         {{ displayName(option) }}
@@ -51,13 +43,11 @@
 
 <script>
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import ErrorMessage from '@/components/widgets/ErrorMessage';
 import CollapsibleDialog from '@/components/widgets/CollapsibleDialog';
 
 export default {
   components: {
     SelectDropdown,
-    ErrorMessage,
     CollapsibleDialog,
   },
   props: {
@@ -81,13 +71,6 @@ export default {
         location: '',
         clinician: '',
         date: '',
-      }),
-    },
-    validationError: {
-      type: Object,
-      default: () => ({
-        isTypeValid: true,
-        isLocationValid: true,
       }),
     },
   },

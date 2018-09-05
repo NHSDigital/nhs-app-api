@@ -213,18 +213,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.assertTimeSlotPresent(date, time)
         availableAppointments.assertOnlyOneTimeSlotPresent(date, time)
         availableAppointments.selectSlot(date, time)
-        availableAppointments.clickOnBookAppointmentButton()
-    }
-
-    @When("^I click on the (.*) appointment$")
-    fun iClickOnXTheAppointment(position: String) {
-        if (position == "same") {
-            availableAppointments.clickOnASlot()
-        } else {
-            val regex = Regex("[a-z]+")
-            val positionNumberAsString = position.split(regex)[0]
-            availableAppointments.clickOnASlot(positionNumberAsString.toInt())
-        }
     }
 
     @When("^the available appointment slots are retrieved$")
@@ -253,24 +241,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.verifyGuidanceContentIsNotDisplayed()
         availableAppointments.verifyTheLabelIsCorrect()
         availableAppointments.expandAppointmentSlotGuidance()
-    }
-
-    @When("^I try to progress without selecting (.*)$")
-    fun iTryToProgressWithoutSelecting(optionsToAvoid: String) {
-        if (!optionsToAvoid.contains("appointment type")) {
-            availableAppointments.selectAnAppointmentType()
-        }
-        if (!optionsToAvoid.contains("location")) {
-            availableAppointments.selectALocation()
-        }
-
-        availableAppointments.clickOnBookAppointmentButton()
-    }
-
-    @When("^I filter to reveal multiple slots$")
-    fun iFilterToReviewMultipleSlots() {
-        iSelectAnOptionFromEachOfTheFilters()
-        availableSlotsAreDisplayedThatMeetTheNewCriteria()
     }
 
     @When("^I select a type and location that have available slots$")
@@ -420,26 +390,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableAppointments.verifyThatNoAppointmentsForSelectedCriteriaErrorIsDisplayed()
     }
 
-    @Then("^I see an appropriate message informing that I need to select an appointment type and location$")
-    fun aMessageIsDisplayedInformingThatINeedToSelectAnAppointmentTypeAndLocation() {
-        availableAppointments.verifyThatValidationErrorsForMissingTypeAndLocationAreDisplayed()
-    }
-
-    @Then("^I see an appropriate message informing that I need to select an appointment type$")
-    fun aMessageIsDisplayedInformingThatINeedToSelectAnAppointmentType() {
-        availableAppointments.verifyThatValidationErrorsForMissingTypeIsDisplayed()
-    }
-
-    @Then("^I see an appropriate message informing that I need to select a location$")
-    fun aMessageIsDisplayedInformingThatINeedToSelectALocation() {
-        availableAppointments.verifyThatValidationErrorsForMissingLocationIsDisplayed()
-    }
-
-    @Then("^I see an appropriate message informing that I need to select an appointment$")
-    fun aMessageIsDisplayedInformingThatINeedToSelectAnAppointment() {
-        availableAppointments.verifyThatValidationErrorsForNoSelectedAppointmentIsDisplayed()
-    }
-
     @Then("^a message is displayed indicating that the slot has already been taken$")
     fun aMessageIsDisplayedInformingTheSlotHasAlreadyBeenTaken() {
         availableAppointments.verifyThatSlotNoLongerAvailableMessageIsDisplayed()
@@ -477,21 +427,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         availableSlotsAreDisplayedThatMeetTheNewCriteria()
         val expectedDates = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY).filteredSlots.keys
         availableAppointments.assertThatRemainingDaysAreDisplayedWithAppropriateMessage(expectedDates, AppointmentsSlotsExample.datesForNextWeek)
-    }
-
-    @Then("^the 2nd slot is highlighted$")
-    fun theNewSlotIsHighlighted() {
-        availableAppointments.verifyThatDifferentSlotIsHighlighted()
-    }
-
-    @Then("^the 1st slot is no longer highlighted$")
-    fun theFirstSlotIsNotHighlighted() {
-        availableAppointments.verifyThatFirstSlotIsNotHighlighted()
-    }
-
-    @Then("^the slot remains highlighted$")
-    fun theSlotIsStillHighlighted() {
-        availableAppointments.verifyThatSlotIsStillHighlighted()
     }
 
     @Then("^I see a timeout on the appointment booking page$")

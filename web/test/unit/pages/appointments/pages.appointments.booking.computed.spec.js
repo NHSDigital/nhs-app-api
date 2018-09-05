@@ -46,6 +46,7 @@ describe('booking.vue - noAvailableAppointments', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.noAvailableAppointments).toBeDefined();
     expect(page.vm.noAvailableAppointments).toBeTruthy();
   });
 
@@ -62,6 +63,7 @@ describe('booking.vue - noAvailableAppointments', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.noAvailableAppointments).toBeDefined();
     expect(page.vm.noAvailableAppointments).toBeFalsy();
   });
 
@@ -78,6 +80,7 @@ describe('booking.vue - noAvailableAppointments', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.noAvailableAppointments).toBeDefined();
     expect(page.vm.noAvailableAppointments).toBeFalsy();
   });
 });
@@ -96,6 +99,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.availableAppointments).toBeDefined();
     expect(page.vm.availableAppointments).toBeTruthy();
   });
 
@@ -112,6 +116,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.availableAppointments).toBeDefined();
     expect(page.vm.availableAppointments).toBeFalsy();
   });
 
@@ -128,6 +133,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.availableAppointments).toBeDefined();
     expect(page.vm.availableAppointments).toBeFalsy();
   });
 });
@@ -145,6 +151,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, {});
+    expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
@@ -167,6 +174,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
+    expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
@@ -189,6 +197,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
+    expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
@@ -211,6 +220,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     };
 
     const page = createBookingPage($store, data);
+    expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
 
@@ -235,6 +245,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
     const page = createBookingPage($store, data);
     page.vm.filterSlots();
 
+    expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeTruthy();
   });
 });
