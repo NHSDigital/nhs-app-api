@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:local.bitraft.io</string>
+		<string>applinks:www-preview.devuks1.nonlive.nhsapp.service.nhs.uk</string>
 	</array>
 </dict>
 </plist>
