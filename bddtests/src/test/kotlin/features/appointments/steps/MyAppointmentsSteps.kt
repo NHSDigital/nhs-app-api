@@ -60,7 +60,7 @@ open class MyAppointmentsSteps {
     fun checkAppointmentsExistAndAppointmentDataAreCorrectlyPopulated() {
         val serviceFactory = getActiveAppointmentsFactory()
         val expectedSlots = serviceFactory.getAppointmentData().generateExpectedMyAppointments()
-        val areCliniciansExpected = expectedSlots.isNotEmpty() || expectedSlots[0].clinician.isNotEmpty()
+        val areCliniciansExpected = expectedSlots.isNotEmpty() && expectedSlots[0].clinician.isNotEmpty()
         val slots = myAppointmentsPage.getAllSlots(areCliniciansExpected)
         assertEquals("Expected upcoming myAppointments size doesn't match with the actual size",
                 expectedSlots.size, slots.size)
