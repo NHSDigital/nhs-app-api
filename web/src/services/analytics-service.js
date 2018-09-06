@@ -85,25 +85,5 @@ export default function (app, store, route) {
     };
 
     Object.assign(app, { $analytics });
-  } else {
-    const $analytics = {
-      trackButtonClick: (target) => {
-        const action = {
-          type: 'page_view',
-          senderType: 'button',
-          target,
-        };
-        store.dispatch('analytics/track', action);
-        store.dispatch('analytics/satelliteTrack', 'page_view');
-      },
-      validationError: (messages) => {
-        const error = {
-          type: 'user_validation_error',
-          messages,
-        };
-        store.dispatch('analytics/error', error);
-      },
-    };
-    Object.assign(app, { $analytics });
   }
 }

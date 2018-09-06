@@ -49,7 +49,9 @@ export default {
       return this.showStandardErrorView();
     },
     header() {
-      return this.getMessage('header');
+      const headerMessage = this.getMessage('header');
+      this.trackSystemError(headerMessage);
+      return headerMessage;
     },
     subheader() {
       return this.getMessage('subheader');
@@ -95,6 +97,13 @@ export default {
     },
     showStandardErrorView() {
       return this.$store.getters['errors/isStandardError'];
+    },
+    trackSystemError(message) {
+      const errorMessage = {
+        type: 'system_error',
+        messages: [message],
+      };
+      this.$store.dispatch('analytics/trackError', errorMessage);
     },
     onRetryButtonClicked() {
       const url = this.getRedirectUrl();
