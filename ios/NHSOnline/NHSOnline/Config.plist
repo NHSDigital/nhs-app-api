@@ -47,7 +47,7 @@
 	<key>AppScheme</key>
 	<string>nhsapp</string>
 	<key>ResponseWaitingTime</key>
-	<integer>20</integer>
+	<integer>10</integer>
 	<key>MedicalRecordAbbreviationsURL</key>
 	<string>https://www.england.nhs.uk/participation/resources/involvejargon/</string>
 	<key>HelpURL</key>

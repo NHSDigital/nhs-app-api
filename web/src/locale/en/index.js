@@ -376,7 +376,7 @@ export default {
   my_record: {
     genericErrorMessage: 'An error has occurred trying to retrieve this data.',
     genericNoDataMessage: 'No information recorded',
-    genericNoAccessMessage: 'You do not currently have access to this section',
+    genericNoAccessMessage: 'You don\'t currently have access to this section',
     name: 'Name',
     dateOfBirthday: 'Date of Birthday',
     sex: 'Sex',
@@ -401,8 +401,8 @@ export default {
       backButtonText: 'Back to home',
     },
     noRecordAccess: {
-      warningHeader: 'You do not currently have online access to your medical record',
-      warningBody: 'Contact your GP surgery for more information.',
+      warningHeader: 'You don’t currently have online access to your medical record',
+      warningBody: 'Please contact your GP surgery for more information.',
     },
     patientInfo: {
       fieldLabelName: 'Name',
