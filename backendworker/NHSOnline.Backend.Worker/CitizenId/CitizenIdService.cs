@@ -90,8 +90,10 @@ namespace NHSOnline.Backend.Worker.CitizenId
                     return result;
                 }
 
-                result.StatusCode = HttpStatusCode.OK;
                 result.UserProfile = _idTokenService.ReadToken(tokenResponse.Body.IdToken, signingKeys.ValueOrFailure());
+                result.StatusCode = result.UserProfile.HasValue
+                    ? HttpStatusCode.OK
+                    : HttpStatusCode.BadRequest;
                 return result;
             }
             finally

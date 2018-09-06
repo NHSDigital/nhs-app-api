@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.CitizenId;
 using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
@@ -49,6 +48,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [DataTestMethod]
@@ -66,6 +66,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [DataTestMethod]
@@ -83,6 +84,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 
             // Assert
             actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
 
         [DataTestMethod]
@@ -172,6 +174,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             var actualUserProfile = actualResult.UserProfile.ValueOrFailure(); 
             actualUserProfile.Im1ConnectionToken.Should().Be(userProfile.Im1ConnectionToken); 
             actualUserProfile.OdsCode.Should().Be(userProfile.OdsCode);
+           
+            actualResult.StatusCode.Should().Be(StatusCodes.Status200OK);
         } 
         
         [TestMethod] 
@@ -208,6 +212,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _citizenIdClientMock.VerifyAll(); 
             
             actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         } 
         
         [TestMethod] 
@@ -243,6 +248,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _citizenIdClientMock.VerifyAll(); 
             
             actualResult.UserProfile.HasValue.Should().BeFalse();
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         } 
         
         [TestMethod] 
@@ -286,7 +292,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _citizenIdClientMock.VerifyAll(); 
             
             actualResult.UserProfile.HasValue.Should().BeFalse(); 
-        } 
-        
+            actualResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }        
     }
 }
