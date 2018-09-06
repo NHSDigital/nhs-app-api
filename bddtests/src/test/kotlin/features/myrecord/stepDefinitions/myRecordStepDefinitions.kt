@@ -1,6 +1,7 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
+import constants.AppointmentDateTimeFormat
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -27,6 +28,7 @@ import mocking.emis.models.IdentifierType
 import mocking.tpp.models.Error
 import models.Patient
 import java.time.OffsetDateTime
+import utils.DateConverter
 
 open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -230,14 +232,29 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         Assert.assertEquals("My details", recordSteps.getMyDetailsLabelText())
     }
 
-    @Then("^I see patient information details$")
+    @Then("^I see the patient information details$")
     @Throws(Exception::class)
-    fun i_see_patient_information_details() {
+    fun i_see_the_patient_information_details() {
+
+        // See the labels
         Assert.assertEquals("Name", recordSteps.getNameLabelText())
         Assert.assertEquals("Date of birth", recordSteps.getDOBLabelText())
         Assert.assertEquals("Sex", recordSteps.getSexLabelText())
         Assert.assertEquals("Address", recordSteps.getAddressLabelText())
         Assert.assertEquals("NHS number", recordSteps.getNHSNumberLabelText())
+
+        // populated with correct information
+        val name = "${this.patient.title} ${this.patient.firstName} ${this.patient.surname}";
+        val dob = DateConverter.ConvertDateToDateTimeFormat(this.patient.dateOfBirth, AppointmentDateTimeFormat.mockDataDobFormat, AppointmentDateTimeFormat.frontendDobDateFormat)
+        val sex = this.patient.sex.name;
+        val address = "${this.patient.address.houseNameFlatNumber}, ${this.patient.address.numberStreet}, ${this.patient.address.village}, ${this.patient.address.town}, ${this.patient.address.county}, ${this.patient.address.postcode}";
+        val nhsNumbers = StringBuilder(this.patient.nhsNumbers.first()).insert(6," ").insert(3, " ").toString();
+
+        Assert.assertEquals(name, recordSteps.getNameControlText())
+        Assert.assertEquals(dob, recordSteps.getDOBText())
+        Assert.assertEquals(sex, recordSteps.getSexText())
+        Assert.assertEquals(address, recordSteps.getAddressText())
+        Assert.assertEquals(nhsNumbers, recordSteps.getNHSNumberText())
     }
 
     @Given("^I am on my record information page$")

@@ -83,8 +83,18 @@ open class MyRecordSteps {
     }
 
     @Step
+    fun getNameControlText(): String {
+        return myRecordInfoPage.getNameText()
+    }
+
+    @Step
     fun getDOBLabelText(): String {
         return myRecordInfoPage.getDOBLabelText()
+    }
+
+    @Step
+    fun getDOBText(): String {
+        return myRecordInfoPage.getDOBText()
     }
 
     @Step
@@ -93,13 +103,28 @@ open class MyRecordSteps {
     }
 
     @Step
+    fun getSexText(): String {
+        return myRecordInfoPage.getSexText()
+    }
+
+    @Step
     fun getAddressLabelText(): String {
         return myRecordInfoPage.getAddressLabelText()
     }
 
     @Step
+    fun getAddressText(): String {
+        return myRecordInfoPage.getAddressText()
+    }
+
+    @Step
     fun getNHSNumberLabelText(): String {
         return myRecordInfoPage.getNHSNumberLabelText()
+    }
+
+    @Step
+    fun getNHSNumberText(): String {
+        return myRecordInfoPage.getNHSNumberText()
     }
 
     @Step

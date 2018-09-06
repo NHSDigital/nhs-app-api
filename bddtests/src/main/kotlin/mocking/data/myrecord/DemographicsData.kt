@@ -1,5 +1,7 @@
 package mocking.data.myrecord
 
+import constants.AppointmentDateTimeFormat
+import constants.TppConstants
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.EmisDemographicsResponse
@@ -11,38 +13,48 @@ import mocking.tpp.models.PatientSelectedReply
 import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
 import mocking.tpp.models.TppAddress
+import models.Patient
+import utils.DateConverter
 
 
 object DemographicsData {
 
-    fun getEmisDemographicData() : EmisDemographicsResponse {
+    fun getEmisDemographicData(patient: Patient) : EmisDemographicsResponse {
         val patientIdentifiers = mutableListOf<PatientIdentifier>()
 
-        patientIdentifiers.add(PatientIdentifier("NHS123", IdentifierType.NhsNumber))
+        patient.nhsNumbers.forEach {
+            patientIdentifiers.add(PatientIdentifier(it, IdentifierType.NhsNumber))
+        }
 
         return EmisDemographicsResponse(
-                "Mr",
-                "John",
-                "Smith",
+                patient.title,
+                patient.firstName,
+                patient.surname,
                 "Johnny",
                 patientIdentifiers,
-                "1984-11-07T00:00:00",
-                Sex.Male,
-                ContactDetails("01011010101", "87878787878", "email@ddress.com"),
-                Address("1", "2", "3", "4", "5", "6")
+                DateConverter.ConvertDateToDateTimeFormat(patient.dateOfBirth, AppointmentDateTimeFormat.mockDataDobFormat, AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone),
+                patient.sex,
+                ContactDetails(patient.contactDetails.telephoneNumber, patient.contactDetails.mobileNumber, patient.contactDetails.emailAddress),
+                Address(patient.address.houseNameFlatNumber,
+                        patient.address.numberStreet,
+                        patient.address.village,
+                        patient.address.town,
+                        patient.address.county,
+                        patient.address.postcode)
         )
     }
 
-    fun getTppDemographicsData(): PatientSelectedReply {
+    fun getTppDemographicsData(patient: Patient): PatientSelectedReply {
         return PatientSelectedReply(
-                "84df400000000000",
-                "84df400000000000",
+                patient.patientId,
+                patient.onlineUserId,
                 "1f907c07-9063-4d3a-81d7-ee8c98c54f4a",
-                Person("84df400000000000",
-                        "1985-05-29T00:00:00.0Z",
-                        "Male", NationalId("0123456789"),
-                        PersonName("Mr Kevin Barry"),
-                        TppAddress("28 Central Path,  Troy Road, Horsforth, Leeds, West Yorkshire, LS18 5 TN"))
+                Person(patient.patientId,
+                        DateConverter.ConvertDateToDateTimeFormat(patient.dateOfBirth, AppointmentDateTimeFormat.mockDataDobFormat, AppointmentDateTimeFormat.backendDateTimeFormat),
+                        patient.sex.name,
+                        NationalId(type = TppConstants.NationalIdTypeNhs, value = patient.nhsNumbers.first()),
+                        PersonName(patient.title + " " + patient.firstName + " " + patient.surname),
+                        TppAddress("${patient.address.houseNameFlatNumber}, ${patient.address.numberStreet}, ${patient.address.village}, ${patient.address.town}, ${patient.address.county}, ${patient.address.postcode}"))
         )
     }
 }

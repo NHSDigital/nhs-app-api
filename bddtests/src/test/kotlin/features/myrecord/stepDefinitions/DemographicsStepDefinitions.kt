@@ -28,12 +28,12 @@ open class DemographicsStepDefinitions: AbstractDemographicsStepDefinitions() {
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithSuccess(DemographicsData.getEmisDemographicData())
+                    demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithSuccess(DemographicsData.getEmisDemographicData(this@DemographicsStepDefinitions.patient))
                 }
             }
             "TPP"->{
                 mockingClient.forTpp {
-                    patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData())
+                    patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData(this@DemographicsStepDefinitions.patient))
                 }
             }
         }

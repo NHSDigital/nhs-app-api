@@ -1,5 +1,6 @@
 package mocking.defaults.dataPopulation.journies.session
 
+import constants.TppConstants
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.tpp.models.*
@@ -33,7 +34,7 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
                                 dateOfBirth = patient.dateOfBirth,
                                 gender = patient.sex.name,
                                 nationalId = NationalId(
-                                        type = "NHS",
+                                        type = TppConstants.NationalIdTypeNhs,
                                         value = patient.nhsNumbers.firstOrNull() ?: ""
                                 ),
                                 personName = PersonName(

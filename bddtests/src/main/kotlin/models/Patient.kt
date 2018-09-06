@@ -126,7 +126,7 @@ data class Patient(
         )
 
         val montelFrye = Patient(
-                title =  "",
+                title =  "Mr",
                 firstName =  "Montel",
                 surname =  "Frye",
                 dateOfBirth =  "1972-04-12",

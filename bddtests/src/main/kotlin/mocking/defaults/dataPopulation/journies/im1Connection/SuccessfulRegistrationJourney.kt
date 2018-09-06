@@ -1,5 +1,6 @@
 package mocking.defaults.dataPopulation.journies.im1Connection
 
+import constants.TppConstants
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.emis.demographics.PatientIdentifier
@@ -101,7 +102,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                                                     dateOfBirth = patient.dateOfBirth,
                                                     gender = patient.sex.name,
                                                     nationalId = NationalId(
-                                                            type = "NHS",
+                                                            type = TppConstants.NationalIdTypeNhs,
                                                             value = patient.nhsNumbers.first()
                                                     ),
                                                     personName = PersonName(

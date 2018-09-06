@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 
                 _logger.LogDebug("Emis session successfully created");
                 return new SessionCreateResult.SuccessfullyCreated(
-                    $"{sessionResponse.FirstName} {sessionResponse.Surname}",
+                    FormatName(sessionResponse),
                     new EmisUserSession
                     {
                         SessionId = sessionResponse.SessionId,
@@ -99,6 +99,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             {
                 _logger.LogExit(nameof(Create));
             }
+        }
+
+        private static string FormatName(SessionsPostResponse sessionResponse)
+        {
+            return string.Join(" ", new[] { sessionResponse.Title, sessionResponse.FirstName, sessionResponse.Surname }
+                .Where(part => !string.IsNullOrEmpty(part)));
         }
 
         // Emis does not have a logoff endpoint, returning successfully deleted

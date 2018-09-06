@@ -2,7 +2,7 @@
 Feature: View My Medical Record Information - Demographics
 
   @NHSO-361
-  Scenario Outline: A user with access navigates to the patient record information page
+  Scenario Outline: A <Service> user with access navigates to the patient record information page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on the record warning page
@@ -23,7 +23,7 @@ Feature: View My Medical Record Information - Demographics
     Then I click agree and continue
     And I see header text is My medical record
     And I see heading My details
-    And I see patient information details
+    And I see the patient information details
     And I see my record button on the nav bar is highlighted
 
     Examples:

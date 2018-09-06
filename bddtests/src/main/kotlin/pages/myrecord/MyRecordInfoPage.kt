@@ -24,39 +24,63 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val nameLabel =
         HybridPageElement(
-            browserLocator = "//span[contains(text(),'Name')]",
+            browserLocator = getLabelLocator("Name"),
             androidLocator = null,
             page = this)
 
     val txtName =
         HybridPageElement(
-            browserLocator = "//span[contains(text(),'Name')]/following-sibling::p[1]",
+            browserLocator = getfieldLocator("Name"),
             androidLocator = null,
             page = this)
 
     val dobLabel =
         HybridPageElement(
-            browserLocator = "//span[contains(text(),'Date of birth')]",
+            browserLocator = getLabelLocator("Date of birth"),
             androidLocator = null,
             page = this)
+
+    val txtDob =
+            HybridPageElement(
+                    browserLocator = getfieldLocator("Date of birth"),
+                    androidLocator = null,
+                    page = this)
 
     val sexLabel =
         HybridPageElement(
-            browserLocator = "//span[contains(text(),'Sex')]",
+            browserLocator = getLabelLocator("Sex"),
             androidLocator = null,
             page = this)
+
+    val txtSex=
+            HybridPageElement(
+                    browserLocator = getfieldLocator("Sex"),
+                    androidLocator = null,
+                    page = this)
 
     val addressLabel =
         HybridPageElement(
-            browserLocator = "//span[contains(text(),'Address')]",
+            browserLocator = getLabelLocator("Address"),
             androidLocator = null,
             page = this)
 
+    val txtAddress=
+            HybridPageElement(
+                    browserLocator = getfieldLocator("Address"),
+                    androidLocator = null,
+                    page = this)
+
     val nhsNumberLabel =
         HybridPageElement(
-            browserLocator = "//span[contains(text(),'NHS number')]",
+            browserLocator = getLabelLocator("NHS number"),
             androidLocator = null,
             page = this)
+
+    val txtNhsNumber=
+            HybridPageElement(
+                    browserLocator = getfieldLocator("NHS number"),
+                    androidLocator = null,
+                    page = this)
 
 
     val allergies by lazy {MyRecordWrapper("Allergies and adverse reactions", this)}
@@ -67,6 +91,13 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             androidLocator = null,
             page = this)
 
+    private fun getfieldLocator(parentLabelCaption: String) : String {
+        return "//span${String.format(containsTextXpathSubstring, parentLabelCaption)}/following-sibling::p[1]"
+    }
+
+    private fun getLabelLocator(labelCaption: String) : String {
+        return "//span${String.format(containsTextXpathSubstring, labelCaption)}"
+    }
 
     val acuteMedications by lazy {MyRecordWrapper("Acute (short-term) medications", this)}
 
@@ -125,21 +156,40 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     fun getNameLabelText(): String {
         return nameLabel.element.text
     }
+    fun getNameText(): String {
+        return txtName.element.text
+    }
 
     fun getDOBLabelText(): String {
         return dobLabel.element.text
+    }
+
+    fun getDOBText(): String {
+        return txtDob.element.text
     }
 
     fun getSexLabelText(): String {
         return sexLabel.element.text
     }
 
+    fun getSexText(): String {
+        return txtSex.element.text
+    }
+
     fun getAddressLabelText(): String {
         return addressLabel.element.text
     }
 
+    fun getAddressText(): String {
+        return txtAddress.element.text
+    }
+
     fun getNHSNumberLabelText(): String {
         return nhsNumberLabel.element.text
+    }
+
+    fun getNHSNumberText(): String {
+        return txtNhsNumber.element.text
     }
 
     fun getAllergiesAndAdverseReactionsHeaderText(): String {

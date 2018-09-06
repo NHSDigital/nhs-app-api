@@ -50,7 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                     }));
 
             _sessionsResponse = _fixture.Create<SessionsPostResponse>();
-            
+
             _mockEmisClient
                 .Setup(x => x.SessionsPost(_endUserSessionResponse.EndUserSessionId,
                     It.Is<SessionsPostRequest>(y =>
@@ -206,11 +206,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<SessionCreateResult.SupplierSystemUnavailable>();
         }
-        
-        [TestMethod]
-        public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData()
+
+        [DataTestMethod]
+        [DataRow("Mr", "Fred", "Blogs", "Mr Fred Blogs")]
+        [DataRow("", "Fred", "Blogs", "Fred Blogs")]
+        [DataRow("Mr", "", "Blogs", "Mr Blogs")]
+        [DataRow("Mr", "Fred", "", "Mr Fred")]
+        public async Task Create_HappyPath_ReturnsSuccessfullyCreatedWithExpectedUserData(string title, string firstname, string surname, string expected)
         {
+
             // Arrange
+            _sessionsResponse.Title = title;
+            _sessionsResponse.FirstName = firstname;
+            _sessionsResponse.Surname = surname;
             var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger);
             
             // Act
@@ -220,10 +228,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _mockEmisClient.VerifyAll();
             var createdResult = result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>().Subject;
 
-            var expectedResult = new SessionCreateResult.SuccessfullyCreated(
-                $"{_sessionsResponse.FirstName} {_sessionsResponse.Surname}",
-                new EmisUserSession { NhsNumber = _nhsNumber}
-            );
+            var expectedResult = new SessionCreateResult.SuccessfullyCreated(expected, new EmisUserSession { NhsNumber = _nhsNumber});
 
             createdResult.Should().BeEquivalentTo(expectedResult);
         }

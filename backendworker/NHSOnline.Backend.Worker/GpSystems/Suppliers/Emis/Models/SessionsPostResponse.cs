@@ -4,6 +4,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
     public class SessionsPostResponse
     {
+        public string Title { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public string SessionId { get; set; }

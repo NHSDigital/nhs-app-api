@@ -5,6 +5,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models
 {
     public class DemographicsGetResponse
     {
+        public string Title { get; set; }
         public string FirstName { get; set; }
         public string Surname { get; set; }
         public DateTime DateOfBirth { get; set; }

@@ -449,7 +449,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @And("^the response has a name$")
     fun theResponseHasAName() {
-        Assert.assertEquals("${MockDefaults.patient.firstName} ${MockDefaults.patient.surname}", this.userSessionResponse?.userSessionResponseBody?.name)
+        Assert.assertEquals("${MockDefaults.patient.title} ${MockDefaults.patient.firstName} ${MockDefaults.patient.surname}", this.userSessionResponse?.userSessionResponseBody?.name)
     }
 
     @And("^the response has a session timeout$")
