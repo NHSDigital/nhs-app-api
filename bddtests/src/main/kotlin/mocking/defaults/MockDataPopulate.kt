@@ -69,7 +69,8 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     }
                     "semistubbed" -> {
                         MockDataPopulate(client)
-                                .populateSemiStubbedEnvironment(csvFileLocation = arguments.getOrElse(1) { NFT_EMIS_USER_CSV } )
+                                .populateSemiStubbedEnvironment(
+                                        csvFileLocation = arguments.getOrElse(1) { NFT_EMIS_USER_CSV } )
                     }
                     "mockenvironment" -> {
                         MockDataPopulate(client).populateEMISStubEnvironment()
@@ -295,6 +296,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
         try {
             var currentLine: String?
+            var userNumber = 0
 
             fileReader = File(filePath)
                     .bufferedReader(
@@ -317,8 +319,14 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                             dateOfBirth =  entries[NFT_DOB_IDX],
                             odsCode = entries[NFT_ODS_IDX],
                             connectionToken =  entries[NFT_IM1_CONNECTION_IDX],
-                            nhsNumbers =  listOf(entries[NFT_NHS_NUMBER_IDX])
+                            nhsNumbers =  listOf(entries[NFT_NHS_NUMBER_IDX]),
+                            cidUserSession = UserSessionRequest(
+                                    authCode = "authCode$userNumber",
+                                    codeVerifier = "codeVerifier$userNumber",
+                                    redirectUrl = Config.instance.cidRedirectUri
+                            )
                     ))
+                    userNumber++
                 }
 
                 currentLine = fileReader.readLine()
