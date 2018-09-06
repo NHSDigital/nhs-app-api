@@ -5,9 +5,9 @@ class HeaderBar: UIView {
     @IBOutlet var headerBarView: UIView!
     @IBOutlet weak var headerTitle: UILabel!
     @IBOutlet weak var NHSHomeLogo: UIImageView!
-    @IBOutlet weak var myAccountIcon: UIImageView!
-    @IBOutlet weak var helpIcon: UIImageView!
-    
+    @IBOutlet weak var helpIcon: UIButton!
+    @IBOutlet weak var myAccountIcon: UIButton!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }

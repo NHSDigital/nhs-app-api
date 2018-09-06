@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -14,8 +14,8 @@
                 <outlet property="NHSHomeLogo" destination="kyn-vf-7A4" id="CSR-a4-p3k"/>
                 <outlet property="headerBarView" destination="iN0-l3-epB" id="9Wq-mY-ysG"/>
                 <outlet property="headerTitle" destination="2kX-eU-qpv" id="z5R-J1-Xaw"/>
-                <outlet property="helpIcon" destination="4AS-MC-8rV" id="fhk-EL-ROc"/>
-                <outlet property="myAccountIcon" destination="edM-z3-SMh" id="Sz0-hb-544"/>
+                <outlet property="helpIcon" destination="7Ul-k3-LEd" id="6st-SB-icv"/>
+                <outlet property="myAccountIcon" destination="EEC-3w-uCv" id="aRp-cn-QLh"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -24,23 +24,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NHS Online - Logo" translatesAutoresizingMaskIntoConstraints="NO" id="kyn-vf-7A4">
-                    <rect key="frame" x="16" y="16" width="50" height="18"/>
+                    <rect key="frame" x="16" y="16" width="60" height="23"/>
                     <accessibility key="accessibilityConfiguration" identifier="NHS Online - Logo">
                         <accessibilityTraits key="traits" button="YES"/>
                         <bool key="isElement" value="YES"/>
                     </accessibility>
                     <constraints>
-                        <constraint firstAttribute="width" constant="50" id="KiL-db-edk"/>
-                    </constraints>
-                </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon - Header - Account" translatesAutoresizingMaskIntoConstraints="NO" id="edM-z3-SMh">
-                    <rect key="frame" x="343" y="16" width="16" height="18"/>
-                    <accessibility key="accessibilityConfiguration" identifier="My account icon">
-                        <accessibilityTraits key="traits" button="YES"/>
-                        <bool key="isElement" value="YES"/>
-                    </accessibility>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="16" id="QFx-sN-0OM"/>
+                        <constraint firstAttribute="width" constant="60" id="KiL-db-edk"/>
                     </constraints>
                 </imageView>
                 <view alpha="0.40000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ycK-JE-PkZ" userLabel="Line Separator">
@@ -51,6 +41,13 @@
                         <constraint firstAttribute="height" constant="1" id="BoD-Ck-z9l"/>
                     </constraints>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EEC-3w-uCv">
+                    <rect key="frame" x="332" y="3" width="43" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="contentEdgeInsets" minX="-30" minY="0.0" maxX="-26" maxY="1"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
+                    <state key="normal" image="Icon - Header - Account"/>
+                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kX-eU-qpv">
                     <rect key="frame" x="16" y="51" width="343" height="49"/>
                     <accessibility key="accessibilityConfiguration">
@@ -70,35 +67,26 @@
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_header_help" translatesAutoresizingMaskIntoConstraints="NO" id="4AS-MC-8rV">
-                    <rect key="frame" x="311" y="16" width="16" height="18"/>
-                    <accessibility key="accessibilityConfiguration" identifier="My account icon">
-                        <accessibilityTraits key="traits" button="YES"/>
-                        <bool key="isElement" value="YES"/>
-                    </accessibility>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="16" id="eJT-I8-nT2"/>
-                    </constraints>
-                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ul-k3-LEd" userLabel="Help Icon">
+                    <rect key="frame" x="283" y="3" width="45" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="contentEdgeInsets" minX="-11" minY="0.0" maxX="-26" maxY="1"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
+                    <state key="normal" image="icon_header_help"/>
+                </button>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="edM-z3-SMh" secondAttribute="bottom" constant="16" id="4FC-Fz-XRM"/>
                 <constraint firstAttribute="trailing" secondItem="ycK-JE-PkZ" secondAttribute="trailing" constant="16" id="9WA-eZ-FGq"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="9i1-qI-xvL"/>
-                <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="4AS-MC-8rV" secondAttribute="bottom" constant="16" id="BcO-YZ-3Hn"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="F1J-Hl-Xg7"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2kX-eU-qpv" secondAttribute="trailing" constant="16" id="Qdc-xx-bEI"/>
-                <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="kyn-vf-7A4" secondAttribute="bottom" constant="16" id="RWe-ue-G1R"/>
+                <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="kyn-vf-7A4" secondAttribute="bottom" constant="11" id="RWe-ue-G1R"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2kX-eU-qpv" secondAttribute="bottom" id="VXz-kb-2es"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="dfh-PR-ohj"/>
-                <constraint firstItem="4AS-MC-8rV" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="idC-1f-hgt"/>
-                <constraint firstItem="edM-z3-SMh" firstAttribute="leading" secondItem="4AS-MC-8rV" secondAttribute="trailing" constant="16" id="mEE-dP-kwP"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="mNB-eG-aaV"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="top" secondItem="ycK-JE-PkZ" secondAttribute="bottom" id="q3h-Nq-Dgz"/>
-                <constraint firstItem="edM-z3-SMh" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="16" id="w4N-xa-BuP"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="edM-z3-SMh" secondAttribute="trailing" constant="16" id="zlf-R6-xsE"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
