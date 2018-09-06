@@ -1,6 +1,6 @@
 <template>
   <div :class="[getHeaderState(), 'pull-content']">
-    <header-slim> {{ $t('termsAndConditions.title') }} </header-slim>
+    <header-slim :show-in-native="true"> {{ $t('termsAndConditions.title') }} </header-slim>
     <body>
       <div>
         <terms-conditions/>
@@ -33,7 +33,7 @@ export default {
   }
 
   .nativeHeader {
-    padding: 0em 0em 3.125em 2.0px;
+    padding: 3.625em 0em 3.125em 2.0px;
   }
 
 </style>

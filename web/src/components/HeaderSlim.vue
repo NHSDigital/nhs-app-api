@@ -16,11 +16,18 @@ export default {
   components: {
     BackIcon,
   },
+  props: {
+    showInNative: {
+      type: Boolean,
+      default: false,
+    },
+  },
   computed: {
     showHeader() {
-      return (
-        !this.$store.state.device.isNativeApp
-      );
+      if (this.showInNative) {
+        return true;
+      }
+      return !this.$store.state.device.isNativeApp;
     },
   },
 };
