@@ -37,7 +37,7 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     lateinit var accountCreationPage: CIDAccountCreationPage
 
-    val timeoutBanner = HybridPageElement(
+    private val timeoutBanner = HybridPageElement(
             browserLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
                              "'Session Expired. Please sign in again.')]",
             androidLocator = null,

@@ -404,40 +404,36 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Then("I see the appropriate error message for a prescription timeout")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
 
-        val pageTitle = prescriptionsPage.timeoutPageTitle
         val pageHeader = prescriptionsPage.timeoutPageHeader
         val header = prescriptionsPage.timeoutHeader
         val subHeader = prescriptionsPage.timeoutSubHeader
         val message = prescriptionsPage.timeoutMessage
         val retryButtonText = prescriptionsPage.timeoutRetryButtonText
 
-        prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+        prescriptions.assertCorrectErrorMessageShown(pageHeader, header, subHeader, message, retryButtonText)
     }
 
     @Then("I see the appropriate error message for a prescription server error")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionServerError() {
 
-        val pageTitle = prescriptionsPage.serverErrorPageTitle
         val pageHeader = prescriptionsPage.serverErrorPageHeader
         val header = prescriptionsPage.serverErrorHeader
         val subHeader = prescriptionsPage.serverErrorSubHeader
         val message = prescriptionsPage.serverErrorMessage
-        val retryButtonText = prescriptionsPage.serverErrorretryButtonText
 
-        prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+        prescriptions.assertCorrectErrorMessageShown(pageHeader, header, subHeader, message)
     }
 
     @Then("I see the appropriate error message for a course request error")
     fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
-
-        val pageTitle = confirmRepeatPrescriptionsOrderPage.serverErrorPageTitle
+        
         val pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
         val header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
         val subHeader = confirmRepeatPrescriptionsOrderPage.serverErrorSubHeader
         val message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
         val retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
 
-        prescriptions.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+        prescriptions.assertCorrectErrorMessageShown(pageHeader, header, subHeader, message, retryButtonText)
     }
 
     @Then("I select (\\d+) prescription to order")
@@ -445,14 +441,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         prescriptions.selectSubscriptionsToOrder(prescriptionToOrder)
         prescriptions.clickContinue()
         prescriptions.clickConfirmAndOrderRepeat()
-    }
-
-    @Then("I am kicked back to the login page")
-    fun thenIAmKickedBackToTheLoginPage() {
-        login.assertPageIsDisplayed()
-
-        // There is a bug with NHSO-415, which means that this banner isn't shown on a server-session timeout. Uncomment once bug is fixed.
-        // login.assertTimeoutBannerIsShown()
     }
 
     @And("each course has (.*)")

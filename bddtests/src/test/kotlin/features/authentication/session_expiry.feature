@@ -6,6 +6,7 @@ Feature: Session Expiry
 
   @NHSO-1704
   @long-running
+  @bug  @NHSO-2443
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I am logged in
     And I am on the home page

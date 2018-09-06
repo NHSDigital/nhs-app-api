@@ -27,7 +27,6 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
                                "persists and you need this information now, " +
                                "please contact your GP surgery directly."
     val serverErrorMessage = ""
-    val serverErrorretryButtonText = ""
 
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), " +
                                                         "'Order new repeat prescription')]"

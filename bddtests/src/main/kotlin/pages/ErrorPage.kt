@@ -1,5 +1,7 @@
 package pages
 
+import org.junit.Assert.assertEquals
+
 class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     private val errorTextFinderFormat = "//div[@data-purpose='error']/p[@data-purpose='%s']"
 
@@ -34,5 +36,24 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         } catch (e: Exception) {
             false
         }
+    }
+
+    fun assertCorrectErrorMessageShown(
+            pageHeaderText: String? = null,
+            headerText: String,
+            subHeaderText: String,
+            messageText: String? = null,
+            retryButtonText: String? = null
+    ) {
+        assertEquals("Content header incorrect. ", headerText, heading.element.text)
+        assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.element.text)
+        if (!messageText.isNullOrEmpty()) assertEquals("Content message incorrect. ", messageText, errorText1.element.text)
+        if (retryButtonText.isNullOrEmpty()) {
+            button.assertElementNotPresent()
+        } else {
+            assertEquals("Retry button text incorrect. ", retryButtonText, button.element.text)
+        }
+        // Asserting page header last, as it's generic, whereas the content header and subheader are specific to errors
+        if (!pageHeaderText.isNullOrEmpty()) assertEquals("Page header incorrect. ", pageHeaderText, getPageHeaderText())
     }
 }

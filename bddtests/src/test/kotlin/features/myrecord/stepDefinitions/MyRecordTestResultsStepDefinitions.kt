@@ -5,6 +5,7 @@ import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
+import pages.ErrorPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -14,6 +15,7 @@ import java.time.OffsetDateTime
 open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
+    lateinit var errorPage: ErrorPage
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
@@ -123,7 +125,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-                var today = OffsetDateTime.now()
+                val today = OffsetDateTime.now()
 
                 val startDate = today.minusDays(179)
                 val endDate = today.minusDays(120)
@@ -184,7 +186,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-                var today = OffsetDateTime.now()
+                val today = OffsetDateTime.now()
 
                 val startDate = today.minusDays(179)
                 val endDate = today.minusDays(120)
@@ -206,7 +208,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 }
             }
             "TPP" -> {
-                var today = OffsetDateTime.now()
+                val today = OffsetDateTime.now()
 
                 val startDate = today.minusDays(179)
                 val endDate = today.minusDays(120)
@@ -287,18 +289,11 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("I see the appropriate error message for retrieving test result detail")
     fun thenISeeTheAppropriateErrorMessageForAMyRecordServerError() {
 
-        val pageTitle = myRecordDetailedTestResultPage.serverErrorPageTitle
         val pageHeader = myRecordDetailedTestResultPage.serverErrorPageHeader
         val header = myRecordDetailedTestResultPage.serverErrorHeader
         val subHeader = myRecordDetailedTestResultPage.serverErrorSubHeader
 
-        Assert.assertTrue("Expected error message: { " +
-                "page title: $pageTitle, " +
-                "page header text: $pageHeader, " +
-                "header text: $header, " +
-                "sub-header text: $subHeader, ",
-                myRecordDetailedTestResultPage.isErrorMessageContentCorrect(pageHeader, header, subHeader, "", ""))
-
+        errorPage.assertCorrectErrorMessageShown(pageHeader, header, subHeader)
     }
 }
 

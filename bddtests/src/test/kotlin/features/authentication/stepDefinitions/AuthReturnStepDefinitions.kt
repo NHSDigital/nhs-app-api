@@ -2,7 +2,6 @@ package features.authentication.stepDefinitions
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import features.authentication.steps.AuthReturnSteps
 import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
@@ -10,6 +9,7 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import models.Patient
 import net.thucydides.core.annotations.Steps
 import pages.AuthReturnPage
+import pages.ErrorPage
 
 class AuthReturnStepDefinitions : AbstractSteps() {
 
@@ -20,10 +20,8 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
     private lateinit var patient: Patient
 
-    @Steps
-    lateinit var authReturn: AuthReturnSteps
-
     lateinit var authReturnPage: AuthReturnPage
+    lateinit var errorPage: ErrorPage
 
     @Given("^I am logged into Citizen ID but am receiving invalid data$")
     fun loggedInInCitizenIdInvalidData() {
@@ -56,16 +54,19 @@ class AuthReturnStepDefinitions : AbstractSteps() {
     }
 
     @Then("I see the appropriate error message for a login error")
-    fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
+    fun thenISeeTheAppropriateErrorMessageForALoginError() {
 
-        val pageTitle = ""
-        val pageHeader = ""
         val header = authReturnPage.errorH1
         val subHeader = authReturnPage.errorH2
         val message = authReturnPage.errorParagraph
         val retryButtonText = authReturnPage.errorCtaText
 
-        authReturn.assertCorrectErrorMessageShown(pageTitle, pageHeader, header, subHeader, message, retryButtonText)
+        errorPage.assertCorrectErrorMessageShown(
+                headerText = header,
+                subHeaderText = subHeader,
+                messageText = message,
+                retryButtonText = retryButtonText
+        )
     }
 
     @Then("I click on the navigation button")

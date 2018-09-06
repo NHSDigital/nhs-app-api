@@ -69,7 +69,7 @@ class Config private constructor() {
     }
 
     private fun envOrDefault(key: String, defaultValue: Long): Long {
-        var result = System.getenv(key)?.toLong() ?: defaultValue
+        val result = System.getenv(key)?.toLong() ?: defaultValue
                 .also { println("$key set as $it") }
 
         return result

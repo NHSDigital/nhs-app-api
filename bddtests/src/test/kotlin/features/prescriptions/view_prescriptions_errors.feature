@@ -33,14 +33,14 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-498
-  
+  @bug  @NHSO-2443
   Scenario: A user navigates to the prescriptions page and the session times out
     Given EMIS is initialised
     And I am using EMIS GP System
     And I am logged in
     And I navigate to prescriptions
     When My session has expired
-    Then I am kicked back to the login page
+    Then I see the login page with the session expiry notification
 
   @NHSO-513
   

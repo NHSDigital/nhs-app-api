@@ -8,6 +8,7 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
+import org.junit.Assert.assertTrue
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
@@ -23,7 +24,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     protected val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
 
-    val errorBanner by lazy{ ErrorBannerPageObject(this) }
+    val errorBanner by lazy { ErrorBannerPageObject(this) }
 
     val spinner = HybridPageElement(
             browserLocator = "//*[@id='loading-spinner']",
@@ -222,26 +223,6 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return buttons[0].text
     }
 
-    fun isErrorMessageContentCorrect(pageHeaderText: String? = null,
-                                     headerText: String? = null,
-                                     subHeaderText: String? = null,
-                                     messageText: String? = null,
-                                     retryButtonText: String? = null): Boolean {
-
-        val pageHeadIsValid = pageHeaderText.isNullOrEmpty() ||
-                isAnyXpathVisible("//h1${String.format(containsTextXpathSubstring, pageHeaderText)}")
-        val headerIsValid = headerText.isNullOrEmpty() ||
-                isAnyXpathVisible("//p${String.format(containsTextXpathSubstring, headerText)}")
-        val subHeaderIsValid = subHeaderText.isNullOrEmpty() ||
-                isAnyXpathVisible("//p${String.format(containsTextXpathSubstring, subHeaderText)}")
-        val messageIsValid = messageText.isNullOrEmpty() ||
-                isAnyXpathVisible("//p${String.format(containsTextXpathSubstring, messageText)}")
-        val retryButtonIsValid = retryButtonText.isNullOrEmpty() ||
-                isAnyXpathVisible("//button${String.format(containsTextXpathSubstring, retryButtonText)}")
-
-        return pageHeadIsValid && headerIsValid && subHeaderIsValid && messageIsValid && retryButtonIsValid
-    }
-
     fun waitForPageHeaderText(expectedHeaderText: String): Boolean {
         return waitFor { getPageHeaderText() == expectedHeaderText } != null
     }
@@ -251,14 +232,14 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     fun clickOnButtonContainingText(text: String) {
-       HybridPageElement(
-            browserLocator = "//button",
-            androidLocator = null,
-            page = this
-       )
-       .containingText(text)
-       .element
-       .click()
+        HybridPageElement(
+                browserLocator = "//button",
+                androidLocator = null,
+                page = this
+        )
+                .containingText(text)
+                .element
+                .click()
     }
 
     private fun isAnyXpathVisible(xpath: String): Boolean {

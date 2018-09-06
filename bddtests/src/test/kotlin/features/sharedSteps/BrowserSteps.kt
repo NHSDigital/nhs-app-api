@@ -1,5 +1,6 @@
 package features.sharedSteps
 
+import config.Config
 import junit.framework.TestCase.assertNull
 import net.serenitybdd.core.SerenitySystemProperties
 import net.serenitybdd.core.exceptions.SerenityManagedException
@@ -34,7 +35,7 @@ open class BrowserSteps {
         WebDriverWait(loginPage.driver, 1000)
                 .pollingEvery(Duration.ofMillis(100))
                 .until {
-                    it.currentUrl == loginPage.driver.currentUrl
+                    it.currentUrl == loginPage.driver.currentUrl ||
                     fetchCookie("nhso.session") == null
                 }
     }
@@ -81,11 +82,11 @@ open class BrowserSteps {
 
     @Step
     fun changeTabToApp() {
-        val baseUrl: String = SerenitySystemProperties.getProperties().getValue(ThucydidesSystemProperty.WEBDRIVER_BASE_URL)
+        val baseUrl: String = Config.instance.url
         try {
             changeTab(URL(baseUrl))
         } catch (e: MalformedURLException) {
-            val message = "Malformed URL from ${ThucydidesSystemProperty.WEBDRIVER_BASE_URL}: $baseUrl"
+            val message = "Malformed URL: $baseUrl"
             println("ERROR:")
             println(message)
             throw SerenityManagedException(message, e)

@@ -3,7 +3,6 @@ package features.authentication.stepDefinitions
 import com.google.gson.Gson
 import config.Config
 import cucumber.api.java.en.*
-import features.authentication.steps.AuthReturnSteps
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
@@ -31,6 +30,7 @@ import net.thucydides.core.annotations.Steps
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
 import org.junit.Assert
+import pages.AuthReturnPage
 import pages.ServiceUnavailablePage
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -57,19 +57,16 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Steps
     lateinit var navHeader: NavHeaderSteps
     @Steps
-    lateinit var authReturn: AuthReturnSteps
-    @Steps
     lateinit var accountCreation: CIDAccountCreationSteps
     @Steps
     lateinit var myAccount: MyAccountSteps
 
+    lateinit var authReturnPage: AuthReturnPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
 
     private var authCode: String? = MockDefaults.patient.cidUserSession.authCode
     private var codeVerifier: String? = MockDefaults.patient.cidUserSession.codeVerifier
-    private val accessToken = MockDefaults.DEFAULT_ACCESS_TOKEN
-    private val bearerToken = MockDefaults.DEFAULT_BEARER_TOKEN
-    lateinit private var patient: Patient
+    private lateinit var patient: Patient
     private val associationType = AssociationType.Self
 
     private var im1ConnectionRequest: Im1ConnectionRequest? = null
@@ -666,7 +663,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^the spinner appears$")
     @Throws(Exception::class)
     fun theSpinnerAppears() {
-        authReturn.assertSpinnerVisible()
+        authReturnPage.assertSpinnerVisible()
     }
 
     @Then("^I am redirected to the CID create an account page$")

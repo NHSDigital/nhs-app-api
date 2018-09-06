@@ -20,6 +20,7 @@ class Header: HybridPageObject(Companion.PageType.NATIVE) {
             browserLocator = "//a[@href='/account']",
             page = this
     )
+
     val pageTitle = HybridPageElement(
             androidLocator = "//*[contains(@resource-id, 'header_text_view')]",
             browserLocator = "//header/h1",

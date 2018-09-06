@@ -4,14 +4,16 @@ import com.google.gson.GsonBuilder
 import models.prescriptions.HistoricPrescription
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
+import pages.ErrorPage
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage
 
 open class PrescriptionsSteps {
 
     lateinit var prescriptions : PrescriptionsPage
-    lateinit var repeatPrescriptions: RepeatPrescriptionsPage
+    private lateinit var repeatPrescriptions: RepeatPrescriptionsPage
+    private lateinit var errorPage: ErrorPage
 
     @Step
     open fun isLoaded() {
@@ -22,35 +24,27 @@ open class PrescriptionsSteps {
     fun assertPrescriptionsMatch(list : List<HistoricPrescription>, expectedPrescriptions : Int, isEmis: Boolean = true) {
 
         val gson = GsonBuilder().setPrettyPrinting().create()
-        var p = prescriptions.getAllPrescriptions(isEmis)
+        val p = prescriptions.getAllPrescriptions(isEmis)
 
-        var actualJson = gson.toJson(p).toString()
-        var expectedJson = gson.toJson(list).toString()
+        val actualJson = gson.toJson(p).toString()
+        val expectedJson = gson.toJson(list).toString()
 
-        Assert.assertEquals(expectedJson, actualJson)
+        assertEquals(expectedJson, actualJson)
         assertEquals(expectedPrescriptions, p.count())
     }
 
     @Step
     fun assertNoRepeatPrescriptionsMessageShown() {
-        Assert.assertTrue(prescriptions.isNoPrescriptionsMessageVisible())
+        assertTrue(prescriptions.isNoPrescriptionsMessageVisible())
     }
 
     @Step
-    fun assertCorrectErrorMessageShown(pageTitle: String,
-                                       pageHeaderText: String,
+    fun assertCorrectErrorMessageShown(pageHeaderText: String,
                                        headerText: String,
                                        subHeaderText: String,
                                        messageText: String,
-                                       retryButtonText: String){
-        Assert.assertTrue("Expected error message: { " +
-                "page title: $pageTitle, " +
-                "page header text: $pageHeaderText, " +
-                "header text: $headerText, " +
-                "sub-header text: $subHeaderText, " +
-                "message text: $messageText, " +
-                "retry button text: $retryButtonText } ",
-                prescriptions.isErrorMessageContentCorrect(pageHeaderText, headerText, subHeaderText, messageText, retryButtonText))
+                                       retryButtonText: String? = null){
+        errorPage.assertCorrectErrorMessageShown(pageHeaderText, headerText, subHeaderText, messageText, retryButtonText)
     }
 
     @Step
