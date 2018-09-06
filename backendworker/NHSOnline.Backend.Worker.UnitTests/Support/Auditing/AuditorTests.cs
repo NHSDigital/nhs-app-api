@@ -23,7 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
     [TestClass]
     public sealed class AuditorTests : IDisposable
     {
-        private const string NhsNumber = "123-2321-21312";
+        private const string NhsNumber = "424 933 2837";
         private const Supplier Supplier = Worker.Supplier.Emis;
         private const string RubbishScope = "THIS IS A RUBBISH AUDIT";
 
@@ -147,7 +147,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         }
 
         [TestMethod]
-        public void TestCanAuditBaiscStaticStringMessage()
+        public void TestCanAuditBasicStaticStringMessage()
         {
             RunControllerMethod(_systemUnderTest.BasicAudit);
 
@@ -155,7 +155,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().Contain("woke up.");
-            testString.Should().NotContain(NhsNumber);
+            testString.Should().Contain(NhsNumber);
             testString.Should().Contain(Supplier.ToString());
         }
 
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().Contain("Had breakfast of eggs and 5 sausages.");
-            testString.Should().NotContain(NhsNumber);
+            testString.Should().Contain(NhsNumber);
             testString.Should().Contain(Supplier.ToString());
         }
 
@@ -181,13 +181,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         [TestMethod]
         public void TestAuditWithScopeProvidedInAuditMethod()
         {
-            _systemUnderTest.AuditWithScope("NHS_AppliedNumber", Supplier.Tpp);
+            _systemUnderTest.AuditWithScope(NhsNumber, Supplier.Tpp);
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
 
             var testString = streamReader.ReadLine();
-            testString.Should().EndWith(AuditCryptographer.Hash("NHS_AppliedNumber") + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
+            testString.Should().EndWith(NhsNumber + " | Tpp | Test Audit | SomeDetails 'with parameters' |");
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
@@ -213,15 +213,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
 
             var auditLine1 = streamReader.ReadLine();
             auditLine1.Should().NotBeEmpty();
-            auditLine1.Should().EndWith(AuditCryptographer.Hash(RubbishScope) + " | Emis | Testing | Message with rubbish scope 1 |");
+            auditLine1.Should().EndWith(RubbishScope + " | Emis | Testing | Message with rubbish scope 1 |");
 
             var auditLine2 = streamReader.ReadLine();
             auditLine2.Should().NotBeEmpty();
-            auditLine2.Should().EndWith(AuditCryptographer.Hash(NhsNumber) + " | Emis | Testing | TaskedMethod |");
+            auditLine2.Should().EndWith(NhsNumber + " | Emis | Testing | TaskedMethod |");
 
             var auditLine3  = streamReader.ReadLine();
             auditLine3.Should().NotBeEmpty();
-            auditLine3.Should().EndWith(AuditCryptographer.Hash(RubbishScope) + " | Emis | Testing | Message with rubbish scope 2 |");
+            auditLine3.Should().EndWith(RubbishScope + " | Emis | Testing | Message with rubbish scope 2 |");
         }
 
         public void Dispose()

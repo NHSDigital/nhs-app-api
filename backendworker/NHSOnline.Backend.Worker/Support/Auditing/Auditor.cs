@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
         private void AuditWithNoTryCatch(string nhsNumber, Supplier supplier, string operation, string details,
             params object[] parameters)
         {
-            _auditSink.WriteAudit(DateTime.UtcNow, AuditCryptographer.Hash(nhsNumber), supplier, operation,
+            _auditSink.WriteAudit(DateTime.UtcNow, nhsNumber, supplier, operation,
                 string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
         }
 
