@@ -22,6 +22,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 using NHSOnline.Backend.Worker.Settings;
+using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Cipher;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
@@ -62,6 +63,7 @@ namespace NHSOnline.Backend.Worker
                     options.Cookie.Name = Constants.CookieNames.SessionId;
                     options.Cookie.HttpOnly = true;
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
+                    options.TicketDataFormat = new UnencryptedCookieDataFormat();
 
                     if (!string.IsNullOrEmpty(configurationSettings.CookieDomain))
                     {
