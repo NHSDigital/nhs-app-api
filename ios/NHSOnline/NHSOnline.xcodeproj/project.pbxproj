@@ -25,6 +25,8 @@
 		C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */; };
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
+		DA5EAEC0213FEC2A0046C023 /* NdopPostBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5EAEBF213FEC2A0046C023 /* NdopPostBody.swift */; };
+		C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED05D521427E950036189C /* TabBar_Extension.swift */; };
 		F0099A8C205557C700530DE3 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0099A8B205557C700530DE3 /* Config.plist */; };
 		F0099A8E2055585800530DE3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0099A8D2055585800530DE3 /* Config.swift */; };
 		F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */; };
@@ -75,6 +77,8 @@
 		C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView_Extension.swift; sourceTree = "<group>"; };
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextViewTests.swift; sourceTree = "<group>"; };
+		DA5EAEBF213FEC2A0046C023 /* NdopPostBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NdopPostBody.swift; sourceTree = "<group>"; };
+		C2ED05D521427E950036189C /* TabBar_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar_Extension.swift; sourceTree = "<group>"; };
 		F0099A8B205557C700530DE3 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		F0099A8D2055585800530DE3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -271,6 +275,7 @@
 				F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */,
 				C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */,
 				C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */,
+				C2ED05D521427E950036189C /* TabBar_Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -411,6 +416,7 @@
 				138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
+				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
 				F0AB8F532107276B008176B2 /* BlankViewController.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,

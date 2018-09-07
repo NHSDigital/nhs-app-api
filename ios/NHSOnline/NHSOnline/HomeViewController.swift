@@ -34,6 +34,7 @@ class HomeViewController : UIViewController {
         webViewDelegate = WebViewDelegate(controller: self, knownServices: knownServices)
         tabBarDelegate = TabBarDelegate(controller: self)
         tabBar.delegate = tabBarDelegate
+        tabBar.setDefaultTabBarItemsAppearance()
         
         webViewController = self.storyboard?.instantiateViewController(withIdentifier: "WebViewController") as? WebViewController
         webViewController?.loadViewIfNeeded()

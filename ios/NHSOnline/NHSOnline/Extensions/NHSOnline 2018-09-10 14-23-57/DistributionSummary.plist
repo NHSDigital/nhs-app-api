@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NHSOnline.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>F06BB6B93EC748747E2E8EB27065E7902B179BC3</string>
+				<key>dateExpires</key>
+				<string>05/06/2019</string>
+				<key>type</key>
+				<string>iOS Development</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>5Y58TN94AP.com.nhs.online</string>
+				<key>com.apple.developer.associated-domains</key>
+				<array>
+					<string>applinks:web.local.bitraft.io:3000</string>
+				</array>
+				<key>com.apple.developer.team-identifier</key>
+				<string>5Y58TN94AP</string>
+				<key>get-task-allow</key>
+				<true/>
+			</dict>
+			<key>name</key>
+			<string>NHSOnline.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>0b291c4f-6e64-4a52-9912-6d4434074255</string>
+				<key>name</key>
+				<string>iOS Team Provisioning Profile: com.nhs.online</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>5Y58TN94AP</string>
+				<key>name</key>
+				<string>Health &amp; Social Care Information Centre</string>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

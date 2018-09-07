@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "icon_menu_appointment_active@0.5x.png",
+      "filename" : "icon_apt_active.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icon_menu_appointment_active.png",
+      "filename" : "icon_apt_active@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "icon_menu_appointment_active@2x.png",
+      "filename" : "icon_apt_active@3x.png",
       "scale" : "3x"
     }
   ],

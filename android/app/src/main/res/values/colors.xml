@@ -6,22 +6,22 @@
     <color name="colorAccent">@color/lightGreen</color>
 
     <!--MenuBar and MenuBarItem colors-->
-    <color name="defaultMenuTextColor">#4A4A4A</color>
+    <color name="defaultMenuTextColor">@color/darkGrey</color>
     <color name="activeMenuTextColor">@color/nhsBlue</color>
     <color name="menuBarTopBorder">#BCC0C4</color>
 
     <color name="progressbar_color">#0054af</color>
 
-    <color name="background">#E8EDEE</color>
+    <color name="background">#F0F4F5</color>
     <color name="error">#DA291C</color>
     <color name="nhsBlue">#005EB8</color>
     <color name="darkBlue">#003087</color>
-    <color name="lightGreen">#006747</color>
-    <color name="darkGreen">#004D34</color>
-    <color name="lightGrey">#979797</color>
-    <color name="darkGrey">#4A4A4A</color>
+    <color name="lightGreen">#007F3B</color>
+    <color name="darkGreen">#005326</color>
+    <color name="lightGrey">#637683</color>
+    <color name="darkGrey">#425563</color>
     <color name="homeGradientStart">#0072DF</color>
     <color name="homeGradientEnd">#0053A3</color>
     <color name="black">#231F20</color>
-    <color name="warning">#FCED66</color>
+    <color name="warning">#fffbce</color>
 </resources>

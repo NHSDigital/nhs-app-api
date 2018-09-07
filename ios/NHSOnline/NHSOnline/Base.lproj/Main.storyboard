@@ -25,23 +25,24 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0OU-1V-r5y" userLabel="NavMenu">
-                                <rect key="frame" x="0.0" y="618" width="375" height="49"/>
+                                <rect key="frame" x="0.0" y="607" width="375" height="60"/>
                                 <subviews>
-                                    <tabBar hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-IT-U0z">
+                                    <tabBar hidden="YES" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZaB-IT-U0z">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <items>
-                                            <tabBarItem title="SYMPTOMS" image="SymptomsIcon" selectedImage="SymptomsActiveIcon" id="BOa-Jr-RcV"/>
-                                            <tabBarItem tag="1" title="APPOINTMENTS" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="Iw9-xN-bck"/>
-                                            <tabBarItem tag="2" title="PRESCRIPTIONS" image="PrescriptionsIcon" selectedImage="PrescriptionsActiveIcon" id="7Db-Tb-Oqe"/>
-                                            <tabBarItem tag="3" title="MY RECORD" image="RecordIcon" selectedImage="RecordActiveIcon" id="fD1-cw-8z4"/>
-                                            <tabBarItem tag="4" title="MORE" image="MoreIcon" selectedImage="MoreActiveIcon" id="TDg-3X-xAn"/>
+                                            <tabBarItem title="Symptoms" image="SymptomsIcon" selectedImage="SymptomsActiveIcon" id="BOa-Jr-RcV"/>
+                                            <tabBarItem tag="1" title="Appointments" image="AppointmentIcon" selectedImage="AppointmentActiveIcon" id="Iw9-xN-bck"/>
+                                            <tabBarItem tag="2" title="Prescriptions" image="PrescriptionsIcon" selectedImage="PrescriptionsActiveIcon" id="7Db-Tb-Oqe"/>
+                                            <tabBarItem tag="3" title="My record" image="RecordIcon" selectedImage="RecordActiveIcon" id="fD1-cw-8z4"/>
+                                            <tabBarItem tag="4" title="More" image="MoreIcon" selectedImage="MoreActiveIcon" id="TDg-3X-xAn"/>
                                         </items>
+                                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tabBar>
                                 </subviews>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="49" id="lne-R1-6xH"/>
+                                    <constraint firstAttribute="height" constant="60" id="lne-R1-6xH"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="top" secondItem="0OU-1V-r5y" secondAttribute="top" id="pE2-6d-SNE"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="leading" secondItem="0OU-1V-r5y" secondAttribute="leading" id="pp9-V8-8hO"/>
                                     <constraint firstItem="ZaB-IT-U0z" firstAttribute="trailing" secondItem="0OU-1V-r5y" secondAttribute="trailing" id="wrT-J1-CxW"/>
@@ -156,7 +157,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
-                                    <dataDetectorTypes key="dataDetectorTypes"/>
+                                    <dataDetectorTypes key="dataDetectorTypes" none="YES"/>
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
@@ -267,15 +268,15 @@
     </scenes>
     <resources>
         <image name="AppointmentActiveIcon" width="25" height="25"/>
-        <image name="AppointmentIcon" width="25" height="25"/>
+        <image name="AppointmentIcon" width="26" height="26"/>
         <image name="MoreActiveIcon" width="25" height="25"/>
-        <image name="MoreIcon" width="25" height="25"/>
+        <image name="MoreIcon" width="26" height="26"/>
         <image name="PrescriptionsActiveIcon" width="25" height="25"/>
-        <image name="PrescriptionsIcon" width="25" height="25"/>
+        <image name="PrescriptionsIcon" width="26" height="26"/>
         <image name="RecordActiveIcon" width="25" height="25"/>
-        <image name="RecordIcon" width="25" height="25"/>
+        <image name="RecordIcon" width="26" height="26"/>
         <image name="SymptomsActiveIcon" width="25" height="25"/>
-        <image name="SymptomsIcon" width="25" height="25"/>
+        <image name="SymptomsIcon" width="26" height="26"/>
         <image name="WarningIcon" width="29" height="29"/>
     </resources>
     <color key="tintColor" red="0.0047798985619999998" green="0.18509393930000001" blue="0.52652108669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

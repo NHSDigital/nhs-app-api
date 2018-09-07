@@ -1,0 +1,8 @@
+
+App Thinning Size Report for All Variants of NHSOnline
+
+Variant: NHSOnline-iPhone 8.ipa
+Supported devices: iPhone 8
+App + On Demand Resources size: 2.6 MB compressed, 7.4 MB uncompressed
+App size: 2.6 MB compressed, 7.4 MB uncompressed
+On Demand Resources size: Zero KB compressed, Zero KB uncompressed
