@@ -17,8 +17,8 @@ import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
 import java.util.logging.Logger
 
-private const val DELAY_PROGRESS_SHOW_TIME = 500L
-private const val REQUEST_TIMEOUT = 10 * 1000L
+private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
+private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L 
 
 class WebClientInterceptor(
     private val uiInteractor: IInteractor,
@@ -176,8 +176,8 @@ class WebClientInterceptor(
         }
 
         handler.postDelayed(showDialogFn,
-            DELAY_PROGRESS_SHOW_TIME)
-        handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT)
+            DELAY_PROGRESS_SHOW_TIME_MILLISECONDS)
+        handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT_MILLISECONDS)
 
     }
 
