@@ -29,8 +29,6 @@ class WebViewController: UIViewController {
     
     private func loadSpaPage(path: String)  {
         
-        
-        
         var spaPath = path.replacingOccurrences(of: homeUrl, with: "/")
         
         if(!spaPath.starts(with: "/")) {
@@ -52,6 +50,7 @@ class WebViewController: UIViewController {
     func loadPage(url: String) {
         
         if(!Reachability.isConnectedToNetwork()) {
+            self.webViewDelegate?.failedUrl = URL(string: url)
             let errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: self.webView.url!)
             self.webViewDelegate?.showNativeViewContainer(errorMessage: errorMessage!)
             return
