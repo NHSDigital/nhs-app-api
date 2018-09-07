@@ -574,7 +574,7 @@ export default {
   icons: {
     accountIcon: {
       title: 'My Account',
-      desc: 'Click here to access my account settings',
+      desc: 'Access my account settings',
     },
     appointmentsIcon: {
       title: 'Appointments',
@@ -585,11 +585,11 @@ export default {
     },
     helpIcon: {
       title: 'Help and support',
-      desc: 'Click here to access help and support',
+      desc: 'Access help and support',
     },
     homeIcon: {
       title: 'NHS Online',
-      desc: 'Click here to go back to the home screen.',
+      desc: 'Go back to the home screen.',
     },
     locationIcon: {
       title: 'Location',
