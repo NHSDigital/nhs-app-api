@@ -1,6 +1,6 @@
 version: "3.2"
 services:
-  nhsonline.backend.worker:
+  api.local.bitraft.io:
     image: nhsonline.backend.worker
     build:
       context: .

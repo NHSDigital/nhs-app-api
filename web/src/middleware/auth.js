@@ -11,8 +11,7 @@ export default function ({ store, redirect, route }) {
   ];
 
   const hasNotLoggedUserAccess = excludedRoutes.indexOf(route.name) !== -1;
-
-  if (!hasNotLoggedUserAccess && !store.state.session.csrfToken) {
+  if (!hasNotLoggedUserAccess && !store.getters['session/isLoggedIn']()) {
     redirect('/login');
   }
 }

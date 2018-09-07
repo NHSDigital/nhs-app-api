@@ -2,6 +2,20 @@ import moment from 'moment';
 import getters from '@/store/modules/session/getters';
 
 describe('getters', () => {
+  describe('isLoggedIn', () => {
+    const { isLoggedIn } = getters;
+
+    it('will be true if the csrfToken is set', () => {
+      const currentState = { csrfToken: 'boo' };
+      expect(isLoggedIn(currentState)()).toEqual(true);
+    });
+
+    it('will be false if the csrfToken is not set', () => {
+      const currentState = { csrfToken: undefined };
+      expect(isLoggedIn(currentState)()).toEqual(false);
+    });
+  });
+
   describe('isValid', () => {
     const { isValid } = getters;
 

@@ -1,13 +1,15 @@
 version: "3.2"
 services:
-  nhsonline.web:
+  web.local.bitraft.io:
+    image: nhsonline.web
     environment:
       - API_HOST=http://10.0.2.2:8082
       - CID_REDIRECT_URI=http://10.0.2.2:3000/auth-return
       - NATIVE_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://10.0.2.2:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
       - CID_REGISTER_ENDPOINT=http://10.0.2.2:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations
-  nhsonline.backend.worker:
+  api.local.bitraft.io:
+    image: nhsonline.backend.worker
     environment:
       - NHS_WEB_APP_BASE_URL=http://10.0.2.2:3000
       - STUB_TERMS_AND_CONDITIONS=true

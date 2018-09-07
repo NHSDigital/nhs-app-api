@@ -30,7 +30,7 @@ Before running the web locally, some entries need to be added to your machine's 
 ```
 docker-compose up --build
 # if on windows execute docker-port-forward.sh from the nhsonline-dev-utils repository
-# open browser to http://localhost:3000
+# open browser to http://web.local.bitraft.io:3000
 ```
 
 ## Running with HTTPS

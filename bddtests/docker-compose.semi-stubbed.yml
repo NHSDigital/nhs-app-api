@@ -12,7 +12,6 @@ services:
       - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
       - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
       - DATA_PREFERENCES_URL=http://stubs.local.bitraft.io:8080/ndop/ndopapp-build1.thunderbird.service.nhs.uk/createsession
-      - COOKIE_DOMAIN=.bitraft.io
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

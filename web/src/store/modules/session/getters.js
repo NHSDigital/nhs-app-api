@@ -1,6 +1,9 @@
 import moment from 'moment';
 
 export default {
+  isLoggedIn(state) {
+    return () => !!state.csrfToken;
+  },
   isValid(state) {
     return () => {
       const { durationSeconds, lastCalledAt } = state;

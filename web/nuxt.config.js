@@ -76,7 +76,7 @@ module.exports = {
     CID_REDIRECT_URI:
       process.env.CID_REDIRECT_URI || 'http://web.local.bitraft.io:3000/auth-return',
     NATIVE_CID_REDIRECT_URI:
-      process.env.NATIVE_CID_REDIRECT_URI || 'nhsapp://10.0.2.2:3000/auth-return',
+      process.env.NATIVE_CID_REDIRECT_URI || 'nhsapp://android.local.bitraft.io:3000/auth-return',
     CID_AUTH_ENDPOINT:
       process.env.CID_AUTH_ENDPOINT
       || 'https://auth.ext.signin.nhs.uk/authorize',
