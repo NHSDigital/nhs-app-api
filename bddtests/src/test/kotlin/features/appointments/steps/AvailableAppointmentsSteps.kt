@@ -93,9 +93,9 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkTimeoutErrorMessage() {
-        val expectedHeader = "Sorry, there's been a problem loading this page"
+        val expectedHeader = "There's been a problem loading this page"
         val expectedSubHeader = "Please try again"
-        val expectedMessageText = "If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        val expectedMessageText = "If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear(70)
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
@@ -123,8 +123,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkUnavailableErrorMessage() {
-        val expectedHeader = "Sorry, there's been a problem loading this page"
-        val expectedBody = "Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly."
+        val expectedHeader = "There's been a problem loading this page"
+        val expectedBody = "Please try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear()
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)

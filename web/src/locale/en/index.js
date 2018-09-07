@@ -1,17 +1,15 @@
 export default {
   language: 'en',
   errors: {
-    pageTitle: 'Server error',
     pageHeader: 'Server error',
-    header: 'Sorry, we\'re experiencing technical difficulties',
+    header: 'We\'re experiencing technical difficulties',
     subheader: 'Please try again later.',
-    message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+    message: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
     502: {
-      pageTitle: 'Service currently unavailable',
       pageHeader: 'Service currently unavailable',
-      header: 'Sorry, this service is unavailable right now',
-      retryButtonText: 'Please try again later.',
-      message: 'If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+      header: 'This service is unavailable right now',
+      retryButtonText: 'Try again',
+      message: 'Try again in a few moments.',
     },
   },
   auth_return: {
@@ -23,13 +21,13 @@ export default {
       message: 'Please go back to the homescreen and sign in again.\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
       retryButtonText: 'Back to home',
       464: {
-        pageHeader: 'Service unavailable - NHS App',
+        pageHeader: 'Service unavailable',
         header: 'Service unavailable',
         subheader: 'You cannot currently use this service',
         message: 'You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
       },
       465: {
-        pageHeader: 'Service unavailable - NHS App',
+        pageHeader: 'Service unavailable',
         header: 'Service unavailable',
         subheader: 'You cannot currently use this service',
         message: 'As you’re under 16, you cannot currently access the NHS App. You can still call or visit your GP surgery to access your NHS services. For urgent medical advice, call 111.',
@@ -141,6 +139,25 @@ export default {
         header: 'Upcoming appointments',
         info: 'Click in the appointment if you need to cancel it',
       },
+      errors: {
+        pageTitle: 'Appointment data error',
+        pageHeader: 'Error retrieving data',
+        header: 'There\'s been a problem getting your appointment history',
+        subheader: '',
+        message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        504: {
+          subheader: 'Please try again',
+          retryButtonText: 'Try again',
+          message: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        },
+        403: {
+          pageTitle: 'Appointment booking unavailable',
+          pageHeader: 'Appointment booking unavailable',
+          header: 'You are not currently able to book appointments online.',
+          subheader: 'Contact your GP surgery for more information.',
+          message: 'For urgent medical help, call 111.',
+        },
+      },
     },
     guidance: {
       header: 'Want to avoid waiting?',
@@ -180,7 +197,7 @@ export default {
       },
       403: {
         pageHeader: 'Appointment booking unavailable',
-        header: 'You are not currently able to book appointments online.',
+        header: 'You are not currently able to book appointments online',
         subheader: 'Contact your GP surgery for more information.',
         message: 'For urgent medical help, call 111.',
       },
@@ -195,10 +212,11 @@ export default {
       dropdownDefaultOption: 'Select reason',
       successText: 'Your appointment has been cancelled.',
       errors: {
+        pageTitle: 'Appointment request error',
         pageHeader: 'Error sending request',
-        header: 'Sorry, there\'s been a problem sending your request',
+        header: 'There\'s been a problem sending your request',
         subheader: 'Please go back and try again.',
-        message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
+        message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
         retryButtonText: 'Back to my appointments',
         403: {
           pageHeader: 'Cancel appointment',
@@ -259,18 +277,20 @@ export default {
         },
       },
       errors: {
+        pageTitle: 'Appointment data error',
         pageHeader: 'Error retrieving data',
-        header: 'Sorry, there\'s been a problem loading this page',
+        header: 'There\'s been a problem loading this page',
         subheader: '',
-        message: 'Please try again later. If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+        message: 'Please try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
         504: {
-          message: 'If the problem persists and you need to book an appointment now, contact your GP surgery directly.',
+          message: 'If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
           subheader: 'Please try again',
           retryButtonText: 'Try again',
         },
         403: {
+          pageTitle: 'Appointment booking unavailable',
           pageHeader: 'Appointment booking unavailable',
-          header: 'You are not currently able to book appointments online.',
+          header: 'You are not currently able to book appointments online',
           subheader: 'Contact your GP surgery for more information.',
           message: 'For urgent medical help, call 111.',
         },
@@ -290,14 +310,15 @@ export default {
       conflictErrorMessage: 'This slot is no longer available. Please select a different time.',
       info: 'Check your appointment details before booking',
       errors: {
+        pageTitle: 'Appointment request error',
         pageHeader: 'Error sending request',
-        header: 'Sorry, there\'s been a problem sending your request',
+        header: 'There\'s been a problem sending your request',
         subheader: 'Please go back and try again.',
-        message: 'If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly.',
+        message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
         retryButtonText: 'Back to my appointments',
         460: {
           pageHeader: 'Appointment limit reached',
-          header: 'You can\'t book any more appointments right now.',
+          header: 'You can\'t book any more appointments right now',
           subheader: 'Contact your GP surgery if you still need to book one.',
           message: 'You can go back to see what you\'ve already booked and cancel any appointments that you may no longer need.',
           additionalInfo: 'If it\'s urgent and you don\'t know what to do, call 111 to get help near you.',
@@ -442,7 +463,7 @@ export default {
       noTestResultData: 'There is no detail to display for this test result.',
       errors: {
         502: {
-          pageTitle: 'Test result details data error - NHS App',
+          pageTitle: 'Test result details data error',
           pageHeader: 'Error retrieving data',
           header: 'Sorry, there\'s been a problem getting details of your test results',
           subheader: 'If the problem persists and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',

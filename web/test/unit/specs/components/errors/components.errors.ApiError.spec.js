@@ -36,11 +36,13 @@ const createApiErrorComponent = ($route, apiError) => {
 
 const assert = (expectedData) => {
   if (expectedData.showError === false) {
+    expect(component.vm.showError()).toBeDefined();
     expect(component.vm.showError()).toBeFalsy();
     return;
   }
 
-  expect(component.vm.getMessage('pageHeader')).toEqual(expectedData.pageHeader);
+  expect(component.vm.getPageTitle()).toEqual(expectedData.pageTitle);
+  expect(component.vm.getPageHeader()).toEqual(expectedData.pageHeader);
   if (expectedData.isInformationError !== true) {
     expect(component.find(`#${errorId}`).findAll('p').at(0).text()).toEqual(expectedData.header);
     if (expectedData.subheader !== '') {
@@ -72,7 +74,7 @@ describe('ApiError.vue', () => {
     assert(expectedData);
   });
 
-  each(testData[403]).it('page %s will show correct message when patient does not have the necessary permissions within the GP system.', (path, expectedData) => {
+  each(testData[403]).it('page %s will show correct message when the API returns a 403 forbidden response', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 403 }, message: 'Forbidden' };
 
@@ -127,7 +129,7 @@ describe('ApiError.vue', () => {
   });
 
 
-  each(testData[500]).it('page %s will show correct message when unexpected error occurred processing the request in api', (path, expectedData) => {
+  each(testData[500]).it('page %s will show correct message when the API returns a 500 internal server error response', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 500 }, message: 'Internal Server Error' };
 
@@ -136,7 +138,7 @@ describe('ApiError.vue', () => {
     assert(expectedData);
   });
 
-  each(testData[502]).it('page %s will show correct message when api is currently unavailable', (path, expectedData) => {
+  each(testData[502]).it('page %s will show correct message when the API returns a 502 bad gateway response', (path, expectedData) => {
     const route = { path };
     const apiError = { status: 502, message: 'Bad Gateway' };
 
@@ -145,7 +147,7 @@ describe('ApiError.vue', () => {
     assert(expectedData);
   });
 
-  each(testData[504]).it('page %s will show correct message when api did not respond in a timely fashion', (path, expectedData) => {
+  each(testData[504]).it('page %s will show correct message when the API returns a 504 gateway timeout response', (path, expectedData) => {
     const route = { path };
     const apiError = { response: { status: 504 }, message: 'Gateway Timeout' };
 

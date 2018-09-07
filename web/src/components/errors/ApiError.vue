@@ -84,7 +84,10 @@ export default {
     },
   },
   updated() {
-    this.setPageHeader();
+    if (this.showError()) {
+      this.updatePageTitle();
+      this.updatePageHeader();
+    }
   },
   methods: {
     showError() {
@@ -161,19 +164,23 @@ export default {
       }
       return '';
     },
-    setPageHeader() {
-      if (this.showError()) {
-        const pageHeader = this.getMessage('pageHeader');
-        const pageTitle = this.getMessage('pageTitle');
+    getPageHeader() {
+      return this.getMessage('pageHeader');
+    },
+    getPageTitle() {
+      let pageTitle = this.getMessage('pageTitle');
 
-        if (pageTitle && pageTitle !== '') {
-          this.$store.dispatch('pageTitle/updatePageTitle', pageTitle);
-        } else {
-          this.$store.dispatch('pageTitle/updatePageTitle', pageHeader);
-        }
-
-        this.$store.dispatch('header/updateHeaderText', pageHeader);
+      if (!pageTitle || pageTitle === '') {
+        pageTitle = this.getPageHeader();
       }
+
+      return pageTitle;
+    },
+    updatePageTitle() {
+      this.$store.dispatch('pageTitle/updatePageTitle', this.getPageTitle());
+    },
+    updatePageHeader() {
+      this.$store.dispatch('header/updateHeaderText', this.getPageHeader());
     },
   },
 };

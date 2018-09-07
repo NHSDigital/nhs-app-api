@@ -76,9 +76,9 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkErrorSendingMessage() {
-        val errorHeading = "Sorry, there's been a problem sending your request"
+        val errorHeading = "There's been a problem sending your request"
         val errorSubHeading = "Please go back and try again."
-        val errorText = "If the problem persists and you need to book or cancel an appointment now, contact your GP surgery directly."
+        val errorText = "If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         assertEquals("Expected heading text $errorHeading but found ${errorPage.heading.element.text}",
                 errorHeading, errorPage.heading.element.text )
         assertEquals("Expected sub-heading text $errorSubHeading but found ${errorPage.subHeading.element.text}",

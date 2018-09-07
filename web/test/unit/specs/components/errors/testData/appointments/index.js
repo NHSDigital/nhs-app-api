@@ -1,13 +1,14 @@
-const PATH = '/appointments';
+const PATH = '/appointments/index';
 
 export default {
   400: [
     PATH,
     {
+      pageTitle: 'Appointment data error',
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your appointment history',
+      header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -16,6 +17,7 @@ export default {
   403: [
     PATH,
     {
+      pageTitle: 'Appointment booking unavailable',
       pageHeader: 'Appointment booking unavailable',
       header: 'You are not currently able to book appointments online.',
       subheader: 'Contact your GP surgery for more information.',
@@ -28,10 +30,11 @@ export default {
   409: [
     PATH,
     {
+      pageTitle: 'Appointment data error',
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your appointment history',
+      header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -40,10 +43,11 @@ export default {
   500: [
     PATH,
     {
+      pageTitle: 'Appointment data error',
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your appointment history',
+      header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -52,10 +56,11 @@ export default {
   502: [
     PATH,
     {
+      pageTitle: 'Appointment data error',
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your appointment history',
+      header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -64,10 +69,11 @@ export default {
   504: [
     PATH,
     {
+      pageTitle: 'Appointment data error',
       pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your appointment history',
+      header: 'There\'s been a problem getting your appointment history',
       subheader: 'Please try again',
-      message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Try again',
       redirectUrl: '',

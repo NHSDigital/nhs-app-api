@@ -6,6 +6,7 @@ export default {
   400: [
     PATH,
     {
+      pageTitle: 'Error sending request',
       pageHeader: 'Error sending request',
       header: 'Sorry, there\'s been a problem sending your request',
       subheader: 'Please go back and try again.',
@@ -18,6 +19,7 @@ export default {
   403: [
     PATH,
     {
+      pageTitle: 'Error sending request',
       pageHeader: 'Error sending request',
       header: 'Sorry, there\'s been a problem sending your request',
       subheader: 'Please go back and try again.',
@@ -30,6 +32,7 @@ export default {
   409: [
     PATH,
     {
+      pageTitle: 'Error sending request',
       pageHeader: 'Error sending request',
       header: 'Sorry, there\'s been a problem sending your request',
       subheader: 'Please go back and try again.',
@@ -42,6 +45,7 @@ export default {
   500: [
     PATH,
     {
+      pageTitle: 'Error sending request',
       pageHeader: 'Error sending request',
       header: 'Sorry, there\'s been a problem sending your request',
       subheader: 'Please go back and try again.',
@@ -54,6 +58,7 @@ export default {
   502: [
     PATH,
     {
+      pageTitle: 'Error sending request',
       pageHeader: 'Error sending request',
       header: 'Sorry, there\'s been a problem sending your request',
       subheader: 'Please go back and try again.',
@@ -66,6 +71,7 @@ export default {
   504: [
     PATH,
     {
+      pageTitle: 'Error sending request',
       pageHeader: 'Error sending request',
       header: 'Sorry, there\'s been a problem sending your request',
       subheader: 'Please go back and try again.',
