@@ -30,7 +30,7 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                 helpfulName = "$text Link")
     }
 
-    private val termsAndConditionsLink = getLink("Terms of use")
+    private val termsOfUseLink = getLink("Terms of use")
     private val privacyPolicyLink = getLink("Privacy policy")
     private val cookiesPolicyLink = getLink("Cookies policy")
     private val openSourceLicensesLink = getLink("Open source licenses")
@@ -46,7 +46,7 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun assertAllLinksVisible() {
         val expectedLinks = arrayListOf(
-                termsAndConditionsLink,
+                termsOfUseLink,
                 privacyPolicyLink,
                 cookiesPolicyLink,
                 openSourceLicensesLink,
@@ -56,8 +56,8 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         expectedLinks.forEach { link -> link.assertSingleElementPresent().assertIsVisible() }
     }
 
-    fun clickTermsAndConditionsLink() {
-        termsAndConditionsLink.element.click()
+    fun clickTermsOfUseLink() {
+        termsOfUseLink.element.click()
     }
 
     fun clickPrivacyPolicyLink() {

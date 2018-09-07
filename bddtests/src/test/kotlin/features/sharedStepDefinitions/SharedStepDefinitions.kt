@@ -49,21 +49,6 @@ open class SharedStepDefinitions {
         BrowserstackLocalService.stop()
     }
 
-    @Given("(.*) logged in session started$")
-    @Throws(Exception::class)
-    fun emis_logged_in_session_started(system: String) {
-        when (system) {
-            "TPP" -> initialiseTpp()
-            else -> initialiseEmisLoggedSession()
-        }
-    }
-
-    private fun initialiseEmisLoggedSession() {
-        this.patient = MockDefaults.patient
-        MockDataPopulate(mockingClient).populateForJustLoggedIn()
-        mockingClient.forEmis { sessionRequest(this@SharedStepDefinitions.patient).respondWithSuccess(this@SharedStepDefinitions.patient, AssociationType.Self) }
-    }
-
     @Given("a patient from (.*) is defined")
     fun systemPatient(gpSystem: String)
     {
@@ -71,34 +56,18 @@ open class SharedStepDefinitions {
         mockingClient.favicon()
         this.patient = Patient.getDefault(gpSystem)
         CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
-
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
-
         SerenityHelpers.setPatient(patient)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
     }
 
     @Given("(TPP|EMIS) is initialised")
     fun system(system: String) {
-
-        when (system) {
-            "TPP" -> initialiseTpp()
-            "EMIS" -> initialiseEmis()
-        }
-
-        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)
-    }
-
-    private fun initialiseEmis() {
-        this.patient = MockDefaults.patient
-        MockDataPopulate(mockingClient).populate()
-        mockingClient.forEmis { sessionRequest(this@SharedStepDefinitions.patient).respondWithSuccess(this@SharedStepDefinitions.patient, AssociationType.Self) }
-    }
-
-    private fun initialiseTpp() {
-        this.patient = Patient.getDefault("TPP")
+        this.patient = Patient.getDefault(system)
+        SerenityHelpers.setPatient(this.patient)
         CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
-        TppSessionCreateJourneyFactory(mockingClient).createFor(this.patient)
+        SessionCreateJourneyFactory.getForSupplier(system, mockingClient).createFor(this.patient)
+        setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)
     }
 
     @Given("^I am logged in$")

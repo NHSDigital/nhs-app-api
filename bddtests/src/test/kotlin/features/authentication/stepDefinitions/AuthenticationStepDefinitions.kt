@@ -81,9 +81,11 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have a valid authCode and codeVerifier$")
     fun iHaveValidAuthCodeAndCodeVerifier() {
-
-        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-        createEmisStubs()
+        val gpSystem = "EMIS"
+        val patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
+        SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
     }
 
     @Given("^I have incomplete OAuth details$")
@@ -101,11 +103,14 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have valid OAuth details and the CID tokens endpoint fails to process the request$")
     fun iHaveValidOAuthDetailsAndCIDTokenEndpointFails() {
+        val gpSystem = "EMIS"
+        val patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
         mockingClient.forCitizenId {
             tokenRequest(this@AuthenticationStepDefinitions.codeVerifier!!, this@AuthenticationStepDefinitions.authCode)
                     .respondWithServerError()
         }
-        createEmisStubs()
+        SessionCreateJourneyFactory.getForSupplier("EMIS", mockingClient).createFor(patient)
     }
 
     @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")

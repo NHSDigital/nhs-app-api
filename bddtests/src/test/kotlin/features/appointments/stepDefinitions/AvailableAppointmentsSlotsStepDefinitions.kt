@@ -14,11 +14,13 @@ import features.appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
+import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.thucydides.core.annotations.Steps
@@ -40,7 +42,6 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     lateinit var availableAppointments: AvailableAppointmentsSteps
 
     val mockingClient = MockingClient.instance
-    val patient = MockDefaults.patient
 
     private val expiredCookie = Cookie(
             "Set-Cookie",
@@ -148,8 +149,11 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^EMIS is unavailable for available appointment slots$")
     fun emis_is_unavailable_for_available_appointment_slots() {
-        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        val gpSystem = "EMIS"
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultUserData()
+        val patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
 
         mockingClient.forEmis {
             appointmentSlotsMetaRequest(patient)
@@ -168,8 +172,11 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
 
     @Given("^EMIS returns corrupt data for appointment slots$")
     fun emis_returns_corrupt_data_for_appointment_slots() {
-        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+        val gpSystem = "EMIS"
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultUserData()
+        val patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(patient)
 
         mockingClient.forEmis {
             appointmentSlotsMetaRequest(patient)

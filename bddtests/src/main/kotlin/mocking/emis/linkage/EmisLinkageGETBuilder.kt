@@ -5,8 +5,6 @@ import com.google.gson.GsonBuilder
 import constants.EmisResponseCode
 import mocking.GsonFactory
 import mocking.emis.EmisMappingBuilder
-import mocking.emis.HEADER_NHS_NUMBER
-import mocking.emis.HEADER_ODS_CODE
 import mocking.emis.models.ExceptionResponse
 import mocking.emis.models.AddVerificationResponse
 import mocking.models.Mapping

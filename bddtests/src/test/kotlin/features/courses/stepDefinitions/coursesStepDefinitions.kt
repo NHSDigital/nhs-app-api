@@ -208,16 +208,14 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         return coursesLoader.getAvailableCoursesFilteredSortedOrdered()
     }
 
-    private fun configureWireMockForHistoricPrescriptions(){
-        if (currentProvider == null)
-        {
+    private fun configureWireMockForHistoricPrescriptions() {
+        if (currentProvider == null) {
             initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
         }
 
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-            }
+        if (currentProvider == ProviderTypes.EMIS) {
+            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+
         }
     }
 

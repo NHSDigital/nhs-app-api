@@ -3,7 +3,6 @@ package features.appointments.data
 import addDays
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -16,7 +15,6 @@ open class AppointmentsBookingData {
         const val pastToDate = "2017-12-30T14:00:00"
         val dateTimeFormat = DateTimeFormatter.ofPattern(backendDateTimeFormatWithoutTimezone)!!
         val mockingClient = MockingClient.instance
-        val patient = MockDefaults.patient
 
         val defaultSessionStartDateRaw = tomorrowMidnight()
         val defaultSessionEndDateRaw = threeWeeksTomorrowMidnight()

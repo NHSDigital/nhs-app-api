@@ -12,9 +12,9 @@ Feature: View My Account Page
     And none of the menu buttons are highlighted
 
   @NHSO-1917
-  Scenario: A patient can navigate to the terms and conditions page
+  Scenario: A patient can navigate to the Terms of use page
     Given I am on the My Account page
-    When I click the Terms and conditions link
+    When I click the Terms of use link
     Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
 
   @NHSO-1917

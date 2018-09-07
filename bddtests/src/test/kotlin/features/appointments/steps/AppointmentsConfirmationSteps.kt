@@ -1,15 +1,12 @@
 package features.appointments.steps
 
-import mocking.defaults.MockDefaults
 import mocking.MockingClient
-import mockingFacade.appointments.BookAppointmentSlotFacade
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AppointmentsConfirmationPage
-import java.time.Duration
 
 open class AppointmentsConfirmationSteps {
 
@@ -17,7 +14,6 @@ open class AppointmentsConfirmationSteps {
     lateinit var errorPage: ErrorPage
 
     val mockingClient = MockingClient.instance
-    val patient = MockDefaults.patient
 
     @Step
     fun clickOnConfirmAndBookAppointmentButton() {
@@ -34,24 +30,6 @@ open class AppointmentsConfirmationSteps {
     fun clickErrorPageBackButton() {
         errorPage.button.element.click()
     }
-
-    @Step
-    fun mockEmisSuccessResponse() {
-        //accept all requests
-        mockEmisSuccessResponseDelayedBy(0)
-    }
-
-    @Step
-    fun mockEmisSuccessResponseDelayedBy(delayedBy: Long) {
-        //accept all requests
-        mockingClient
-                .forEmis {
-                    bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken, 123, "Reason"))
-                            .respondWithSuccess()
-                            .delayedBy(Duration.ofSeconds(delayedBy))
-                }
-    }
-
 
     @Step
     fun checkValidationErrorMessage() {

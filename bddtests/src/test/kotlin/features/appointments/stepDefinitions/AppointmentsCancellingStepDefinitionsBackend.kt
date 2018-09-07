@@ -24,7 +24,6 @@ import java.time.LocalDateTime
 class AppointmentsCancellingStepDefinitionsBackend {
 
     val mockingClient = MockingClient.instance
-    val patient = MockDefaults.patient
 
     private val commonSteps: CommonSteps = CommonSteps()
 

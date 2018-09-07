@@ -24,8 +24,8 @@ open class MyAccountSteps {
     }
 
     @Step
-    fun goToTermsAndConditions() {
-        myAccountPage.clickTermsAndConditionsLink()
+    fun goToTermsOfUse() {
+        myAccountPage.clickTermsOfUseLink()
     }
 
     @Step

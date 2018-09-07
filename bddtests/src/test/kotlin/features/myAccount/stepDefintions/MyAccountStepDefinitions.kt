@@ -19,9 +19,9 @@ class MyAccountStepDefinitions {
         myAccount.myAccountPage.assertAllLinksVisible()
     }
 
-    @When("^I click the Terms and conditions link$")
+    @When("^I click the Terms of use link$")
     fun iClickTheTermsAndConditionsLink() {
-        myAccount.goToTermsAndConditions()
+        myAccount.goToTermsOfUse()
     }
 
     @When("^I click the Privacy policy link$")

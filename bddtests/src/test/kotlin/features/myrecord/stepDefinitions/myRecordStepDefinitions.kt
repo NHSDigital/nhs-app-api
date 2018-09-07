@@ -14,6 +14,7 @@ import mocking.data.myrecord.*
 import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.emis.demographics.PatientIdentifier
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -39,17 +40,16 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     lateinit var nav: NavigationSteps
     @Steps
     lateinit var navHeader: NavHeaderSteps
-    @Steps
-    lateinit var homesteps: HomeSteps
+
 
     @Given("^the my record wiremocks are initialised for (.*)$")
     fun givenMyRecordWiremocksAreInitialisedfor(getService: String) {
         setPatientToDefaultFor(getService)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+        SessionCreateJourneyFactory.getForSupplier(getService, mockingClient).createFor(this.patient)
 
         when (getService) {
             "EMIS" -> {
-                MockDataPopulate(mockingClient).populate()
-
                 mockingClient.forEmis {
                     testResultsRequest(patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
                 }
@@ -75,8 +75,6 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 }
             }
             "TPP" -> {
-                MockDataPopulate(mockingClient).populate()
-                CitizenIdSessionCreateJourney(mockingClient).createFor(patient)
                 mockingClient.forTpp {
                     viewPatientOverviewPost(patient.tppUserSession!!).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
                 }

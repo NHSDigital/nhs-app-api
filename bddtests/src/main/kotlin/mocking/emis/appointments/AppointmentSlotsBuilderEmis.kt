@@ -1,7 +1,6 @@
 package mocking.emis.appointments
 
 import mocking.GsonFactory
-import mocking.defaults.MockDefaults
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
@@ -10,6 +9,7 @@ import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
+import models.Patient
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
@@ -17,25 +17,25 @@ import java.time.Duration
 private const val UNKNOWN_HTTP_STATUS_CODE:Long = -9999
 
 class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
-                                  apiEndUserSessionId: String,
-                                  apiSessionId: String,
+                                  patient: Patient,
                                   fromDateTime: String?,
-                                  toDateTime: String?,
-                                  linkToken: String?)
+                                  toDateTime: String?)
     : EmisMappingBuilder(configuration, method = "GET", relativePath = "/appointmentslots"), IAppointmentSlotsBuilder {
 
     init {
-        if (apiEndUserSessionId.isEmpty()) requestBuilder.andHeader(
-                HEADER_API_END_USER_SESSION_ID, MockDefaults.patient.endUserSessionId)
-        else requestBuilder.andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
-        if (apiSessionId.isEmpty()) requestBuilder.andHeader(HEADER_API_SESSION_ID, MockDefaults.patient.sessionId)
-        else requestBuilder.andHeader(HEADER_API_SESSION_ID, apiSessionId)
+        val apiEndUserSessionId = patient.endUserSessionId
+        val apiSessionId = patient.sessionId
+        val linkToken = patient.userPatientLinkToken
+
+        requestBuilder.andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
+        requestBuilder.andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
         if (!fromDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
                 name = "fromDateTime", value = fromDateTime!!)
-        if (!toDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(name = "toDateTime", value = toDateTime!!)
-        if (!linkToken.isNullOrEmpty()) requestBuilder.andQueryParameter(
-                name = "userPatientLinkToken", value = linkToken!!)
+        if (!toDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
+                name = "toDateTime", value = toDateTime!!)
+        if (!linkToken.isEmpty()) requestBuilder.andQueryParameter(
+                name = "userPatientLinkToken", value = linkToken)
     }
 
     override fun withDelay(delayMilliseconds : Duration):AppointmentSlotsBuilderEmis{

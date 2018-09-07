@@ -80,17 +80,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                                                  "YDPTCjvzmkrZOQlGJ_sXAVmxrZY8psUZ7MKe" +
                                                  "Fd4l9xwvfi4N-3FFT5D4_tJq0Yp3RW5Bs3JVc1ig"
         const val DEFAULT_BEARER_TOKEN: String = "Bearer $DEFAULT_ACCESS_TOKEN"
-        const val DEFAULT_SIGNING_KEY: String = "{\"keys\": [{\"kty\": \"RSA\", \"e\":" +
-                                                " \"AQAB\", \"n\": \"vYKSjXOcKZI5eNvKT0BuM" +
-                                                "UAy-N7-f1-88H-Lgz5UOlyAT3wmKNHwwuz11qm" +
-                                                "ovmZaKSTHk94bLIigwGIoc-nsQOahLxS1T-g0R5xN" +
-                                                "5PRvZUfK6B5W7ONX5EaXDXimKnxQLvIFXJpq" +
-                                                "zYyStkhYROTuELv70aKQNfYBrb2yZxdPNbjMzSL881" +
-                                                "awt6wiTIk76kDpzGJ0TcBBrhNKOxPU_L00FT" +
-                                                "-ASf2mKENTx2QLW8Srgw2SYo3xWhhccz1cEgjllnsX" +
-                                                "21EYNM95_hcQOBFeDfU7lYEfYGj4bX2mHE4" +
-                                                "m5up0uLAf5hOIXnfvpmtOKmUizyA9_3yP" +
-                                                "ye1zJpIfZKNgtUo6-Q\"}]}"
 
         const val TPP_API_VERSION = "1"
         const val DEFAULT_TPP_UUID = "af0a8175-e6c2-4c49-883e-020b2b3600f9"
@@ -120,26 +109,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 unitId = DEFAULT_ODS_CODE_TPP,
                 uuid = DEFAULT_TPP_UUID,
                 application = DEFAULT_TPP_APPLICATION
-        )
-
-        val tppAuthenticateReplyResponse = AuthenticateReply(
-                patientId = patientTpp.patientId,
-                onlineUserId = patientTpp.onlineUserId,
-                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
-                user = User(
-                        person = Person(
-                                patientId = patientTpp.patientId,
-                                dateOfBirth = patientTpp.dateOfBirth,
-                                gender = patientTpp.sex.name,
-                                nationalId = NationalId(
-                                        type = "NHS",
-                                        value = patientTpp.nhsNumbers.first()
-                                ),
-                                personName = PersonName(
-                                        name = "${patientTpp.title} ${patientTpp.firstName} ${patientTpp.surname}"
-                                )
-                        )
-                )
         )
 
         val tppNonExistingAccountIdErrorResponse = Error(

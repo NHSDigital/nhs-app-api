@@ -21,9 +21,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 open class MyAppointmentsSteps {
-    @Steps
+
     val mockingClient = MockingClient.instance
-    val patient = MockDefaults.patient
 
     lateinit var myAppointmentsPage: MyAppointmentsPage
 

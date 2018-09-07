@@ -32,8 +32,7 @@ Feature: My appointments
 
   @NHSO-524
   Scenario Outline: A user has never booked an appointment
-    Given <GP System> logged in session started
-    And I have no upcoming appointments for <GP System>
+    Given I have no upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
     When I am on my appointments page
     Then I am informed I have no booked appointments
@@ -49,8 +48,7 @@ Feature: My appointments
   @NHSO-1591
   @smoketest
   Scenario Outline: A <GP System> user can see their upcoming appointments
-    Given <GP System> logged in session started
-    And I have upcoming appointments for <GP System>
+    Given I have upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
     When I am on my appointments page
     Then the page title is "My appointments"

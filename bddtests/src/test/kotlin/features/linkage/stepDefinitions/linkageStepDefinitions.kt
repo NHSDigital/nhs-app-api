@@ -5,6 +5,9 @@ import features.linkage.LinkageResult
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.DEFAULT_ODS_CODE
+import mocking.emis.EmisMappingBuilder
+import mocking.emis.linkage.EmisLinkageGETBuilder
+import mocking.emis.linkage.EmisLinkagePOSTBuilder
 import mocking.emis.models.AddNhsUserRequest
 import mocking.emis.models.AddNhsUserResponse
 import mocking.emis.models.AddVerificationResponse
@@ -13,6 +16,8 @@ import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
 import mocking.emis.models.AddVerificationRequest
+import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
+import mocking.models.Mapping
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 
@@ -94,7 +99,7 @@ open class LinkageStepDefinitions {
     fun ihaveAnEmptyEmailAddress() {
         emailAddress = ""
     }
-    
+
     @But("^The practice is not live$")
     fun thePraticeIsNotLive() {
         linkageResult = LinkageResult.PracticeNotLive
@@ -152,80 +157,38 @@ open class LinkageStepDefinitions {
 
     @When("^I call the Linkage GET endpoint$")
     fun iCallTheLinkageGETEndpoint() {
-        when (currentGPSystem) {
-            EMIS -> {
 
-                // end user session setup always required
-                mockingClient.forEmis {
-                    endUserSessionRequest()
-                            .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
-                }
+        val linkageToGetRequestResponse = hashMapOf<LinkageResult, (EmisLinkageGETBuilder) -> Mapping>(
+                LinkageResult.SuccessfullyRetrievedFirstTime to { get ->
+                    get.respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
+                },
+                LinkageResult.SuccessfullyRetrieved to { get ->
+                    get.respondWithSuccessfullyRetrieved(AddVerificationResponse(odsCode, linkageKey, accountId))
+                },
+                LinkageResult.PatientNotRegisteredAtPractice to { get ->
+                    get.respondWithPatientNotRegisteredAtPractice()
+                },
+                LinkageResult.NoRegisteredOnlineUserFound to { get -> get.respondWithNoRegisteredOnlineUserFound() },
+                LinkageResult.PracticeNotLive to { get -> get.respondWithPracticeNotLive() },
+                LinkageResult.PatientMarkedAsArchived to { get -> get.respondWithPatientMarkedAsArchived() },
+                LinkageResult.PatientNonCompetentOrUnder16 to { get -> get.respondWithPatientNonCompetentOrUnder16() },
+                LinkageResult.AccountStatusInvalid to { get -> get.respondWithAccountStatusInvalid() },
+                LinkageResult.InternalServerError to { get -> get.respondWithInternalServerError() }
+        )
 
-                when (linkageResult) {
+        if (currentGPSystem == EMIS) {
 
-                    LinkageResult.SuccessfullyRetrievedFirstTime -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
-                        }
-                    }
+            // end user session setup always required
+            mockingClient.forEmis {
+                endUserSessionRequest()
+                        .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
+            }
 
-                    LinkageResult.SuccessfullyRetrieved -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithSuccessfullyRetrieved(AddVerificationResponse(odsCode, linkageKey, accountId))
-                        }
-                    }
-
-                    LinkageResult.PatientNotRegisteredAtPractice -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithPatientNotRegisteredAtPractice()
-                        }
-                    }
-
-                    LinkageResult.NoRegisteredOnlineUserFound -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithNoRegisteredOnlineUserFound()
-                        }
-                    }
-
-                    LinkageResult.PracticeNotLive -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithPracticeNotLive()
-                        }
-                    }
-
-                    LinkageResult.PatientMarkedAsArchived -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithPatientMarkedAsArchived()
-                        }
-                    }
-
-                    LinkageResult.PatientNonCompetentOrUnder16 -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithPatientNonCompetentOrUnder16()
-                        }
-                    }
-
-                    LinkageResult.AccountStatusInvalid -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithAccountStatusInvalid()
-                        }
-                    }
-
-                    LinkageResult.InternalServerError -> {
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithInternalServerError()
-                        }
-                    }
-                }
+            Assert.assertTrue("Test Setup Incorrect, Mapping not set up for linkage $linkageResult",
+                    linkageToGetRequestResponse.containsKey(linkageResult))
+            val response = linkageToGetRequestResponse[linkageResult]!!
+            mockingClient.forEmis {
+                response(linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken)))
             }
         }
 
@@ -236,83 +199,52 @@ open class LinkageStepDefinitions {
         }
     }
 
+    private fun successfulPost(): (EmisLinkagePOSTBuilder) -> Mapping {
+
+        mockingClient.forEmis {
+            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
+                    .respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
+        }
+
+        return { post -> post.respondWithSuccessfullyCreated(AddNhsUserResponse("")) }
+    }
+
+
     @When("I call the Linkage POST endpoint")
     fun iCallTheLinkagePOSTEndpoint() {
-        when (currentGPSystem) {
-            EMIS -> {
+        val linkageToPostRequestResponse = hashMapOf(
+                LinkageResult.SuccessfullyRetrieved to successfulPost(),
+                LinkageResult.SuccessfullyCreated to successfulPost(),
+                LinkageResult.PatientAlreadyHasAnOnlineAccount to { get -> get.respondWithPatientAlreadyHasAnOnlineAccount() },
+                LinkageResult.NoRegisteredOnlineUserFound to { get -> get.respondWithNoRegisteredOnlineUserFound() },
+                LinkageResult.PatientNotRegisteredAtPractice to null,
+                LinkageResult.PracticeNotLive to { get -> get.respondWithPracticeNotLive() },
+                LinkageResult.PatientMarkedAsArchived to { get -> get.respondWithPatientMarkedAsArchived() },
+                LinkageResult.PatientNonCompetentOrUnder16 to { get -> get.respondWithPatientNonCompetentOrUnder16() },
+                LinkageResult.InternalServerError to { get -> get.respondWithInternalServerError() }
+        )
 
-                // end user session setup always required
+        if (currentGPSystem == EMIS) {
+            // end user session setup always required
+            mockingClient.forEmis {
+                endUserSessionRequest()
+                        .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
+            }
+            Assert.assertTrue("Test Setup Incorrect, Mapping not set up for linkage $linkageResult",
+                    linkageToPostRequestResponse.containsKey(linkageResult))
+            val response = linkageToPostRequestResponse[linkageResult]
+            if (response != null) {
                 mockingClient.forEmis {
-                    endUserSessionRequest()
-                            .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
-                }
-
-                when (linkageResult) {
-                    LinkageResult.SuccessfullyCreated -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithSuccessfullyCreated(AddNhsUserResponse(""))
-                        }
-
-
-                        mockingClient.forEmis {
-                            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                                    .respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
-                        }
-                    }
-
-                    LinkageResult.PatientAlreadyHasAnOnlineAccount -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithPatientAlreadyHasAnOnlineAccount()
-                        }
-                    }
-
-                    LinkageResult.NoRegisteredOnlineUserFound -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithNoRegisteredOnlineUserFound()
-                        }
-                    }
-
-                    LinkageResult.PracticeNotLive -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithPracticeNotLive()
-                        }
-                    }
-
-                    LinkageResult.PatientMarkedAsArchived -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithPatientMarkedAsArchived()
-                        }
-                    }
-
-                    LinkageResult.PatientNonCompetentOrUnder16 -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithPatientNonCompetentOrUnder16()
-                        }
-                    }
-
-                    LinkageResult.InternalServerError -> {
-                        mockingClient.forEmis {
-                            linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress))
-                                    .respondWithInternalServerError()
-                        }
-                    }
+                    response(linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress)))
                 }
             }
         }
-
         try {
             linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .postLinkageKey(CreateLinkageRequest(odsCode, nhsNumber, identityToken, emailAddress))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
-
     }
 
     @When("^I receive a valid response$")

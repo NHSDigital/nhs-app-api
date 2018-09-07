@@ -44,8 +44,6 @@ const val HEADER_API_APPLICATION_ID = "X-API-ApplicationId"
 const val HEADER_API_END_USER_SESSION_ID = "X-API-EndUserSessionId"
 const val HEADER_API_SESSION_ID = "X-API-SessionId"
 const val HEADER_API_VERSION = "X-API-Version"
-const val HEADER_NHS_NUMBER = "nhsNumber"
-const val HEADER_ODS_CODE = "odsCode"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
 @Suppress("TooManyFunctions")
@@ -71,11 +69,9 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?,
     override fun appointmentSlotsRequest(patient: Patient,
                                          fromDateTime: String?, toDateTime: String?) = AppointmentSlotsBuilderEmis(
             configuration!!,
-            patient.endUserSessionId,
-            patient.sessionId,
+            patient,
             fromDateTime,
-            toDateTime,
-            patient.userPatientLinkToken)
+            toDateTime)
 
     fun appointmentSlotsMetaRequest(patient: Patient,
                                     sessionStartDate: String? = null,
