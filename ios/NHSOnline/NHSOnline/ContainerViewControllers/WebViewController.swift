@@ -6,6 +6,8 @@ class WebViewController: UIViewController {
     @IBOutlet weak var webView: WKWebView!
     var webViewDelegate: WebViewDelegate?
     
+    let knownServices = KnownServices(config: config())
+    
     struct Properties {
         static var usingAbsoluteUri: Bool = true
     }
@@ -26,6 +28,9 @@ class WebViewController: UIViewController {
     }
     
     private func loadSpaPage(path: String)  {
+        
+        
+        
         var spaPath = path.replacingOccurrences(of: homeUrl, with: "/")
         
         if(!spaPath.starts(with: "/")) {
@@ -34,16 +39,23 @@ class WebViewController: UIViewController {
         
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
-            if(error != nil) {
+            if(error != nil) {    
                 os_log("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.", log: OSLog.default, type: .error)
                 self.webView.loadPage(url: self.homeUrl + path)
             }
         }
         
         webView.evaluateJavaScript("window.$nuxt.$router.push('\(spaPath)');", completionHandler: completionHandler)
+        webViewDelegate?.viewController.showWebViewContainer()
     }
     
     func loadPage(url: String) {
+        
+        if(!Reachability.isConnectedToNetwork()) {
+            let errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: self.webView.url!)
+            self.webViewDelegate?.showNativeViewContainer(errorMessage: errorMessage!)
+            return
+        }
         
         var urlToNavigateTo = url
         let webviewUrl = self.webView.url

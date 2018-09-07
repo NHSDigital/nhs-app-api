@@ -243,7 +243,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.showWebViewContainer()
     }
     
-    private func showNativeViewContainer(errorMessage: ErrorMessage) {
+    func showNativeViewContainer(errorMessage: ErrorMessage) {
         clearTimer()
         self.activityIndicator.stopAnimating()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)
