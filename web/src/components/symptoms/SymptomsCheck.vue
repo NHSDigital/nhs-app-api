@@ -7,6 +7,7 @@
                                :text="$t('sy01.a_z.subheader')"
                                tag="a" target="_blank">
           <h2>{{ $t('sy01.a_z.subheader') }}</h2>
+          <screen-reader-pause/>
           <p>{{ $t('sy01.a_z.body') }}</p>
         </analytics-tracked-tag>
       </li>
@@ -16,6 +17,7 @@
                                :text="$t('sy01.111.subheader')"
                                tag="a" target="_blank">
           <h2>{{ $t('sy01.111.subheader') }}</h2>
+          <screen-reader-pause/>
           <p>{{ $t('sy01.111.body') }}</p>
         </analytics-tracked-tag>
       </li>
@@ -26,10 +28,12 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import ScreenReaderPause from '@/components/widgets/ScreenReaderPause';
 
 export default {
   components: {
     AnalyticsTrackedTag,
+    ScreenReaderPause,
   },
   data() {
     let symptomsCheckerUrl = process.env.SYMPTOM_CHECKER_URL;
