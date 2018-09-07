@@ -3,13 +3,13 @@
     <p>
       <strong>Date of birth:</strong>
       <span data-sid="user-date-of-birth">
-        {{ $store.state.auth.user.dateOfBirth | shortDate }}
+        {{ $store.state.session.dateOfBirth | shortDate }}
       </span>
     </p>
     <p>
       <strong>NHS number:</strong>
       <span data-sid="user-nhs-number">
-        {{ $store.state.auth.user.nhsNumber }}
+        {{ $store.state.session.nhsNumber }}
       </span>
     </p>
   </div>

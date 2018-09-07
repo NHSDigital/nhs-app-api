@@ -27,6 +27,8 @@ export default {
     sessionTimeout,
     token,
     lastCalledAt = new Date(),
+    nhsNumber,
+    dateOfBirth,
   } = {}) {
     state.user = name;
     state.durationSeconds = durationSeconds;
@@ -34,6 +36,8 @@ export default {
     state.sessionTimeout = sessionTimeout;
     state.csrfToken = token;
     state.lastCalledAt = lastCalledAt;
+    state.nhsNumber = nhsNumber;
+    state.dateOfBirth = dateOfBirth;
   },
   [SET_LAST_CALLED_AT](state, date) {
     state.lastCalledAt = date;

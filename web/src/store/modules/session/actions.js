@@ -49,6 +49,8 @@ export default {
         gpOdsCode: info.gpOdsCode,
         token: info.token,
         lastCalledAt: info.lastCalledAt || new Date(),
+        nhsNumber: info.nhsNumber,
+        dateOfBirth: info.dateOfBirth,
       });
 
     setCookie({
