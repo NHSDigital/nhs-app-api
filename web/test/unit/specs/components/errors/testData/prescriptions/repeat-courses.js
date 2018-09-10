@@ -1,4 +1,6 @@
-const PATH = '/prescriptions/repeat-courses';
+import Routes from '@/routes';
+
+const PATH = Routes.PRESCRIPTION_REPEAT_COURSES.path;
 
 export default {
   400: [

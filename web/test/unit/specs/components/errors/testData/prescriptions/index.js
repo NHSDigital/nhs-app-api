@@ -1,4 +1,6 @@
-const PATH = '/prescriptions';
+import Routes from '@/routes';
+
+const PATH = Routes.PRESCRIPTIONS.path;
 
 export default {
   400: [

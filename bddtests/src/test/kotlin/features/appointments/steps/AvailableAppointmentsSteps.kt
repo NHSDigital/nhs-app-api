@@ -94,13 +94,11 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun checkTimeoutErrorMessage() {
         val expectedHeader = "There's been a problem loading this page"
-        val expectedSubHeader = "Please try again"
-        val expectedMessageText = "If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
+        val expectedMessageText = "Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear(70)
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)
-        assertEquals("expected  sub-header text $expectedHeader but found ${errorPage.heading.element.text}",
-                expectedSubHeader, errorPage.subHeading.element.text)
+        errorPage.subHeading.assertElementNotPresent()
         assertEquals("expected error text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedMessageText, errorPage.errorText1.element.text)
     }
@@ -124,7 +122,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun checkUnavailableErrorMessage() {
         val expectedHeader = "There's been a problem loading this page"
-        val expectedBody = "Please try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
+        val expectedBody = "Try again later. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111."
         errorPage.waitForSpinnerToDisappear()
         assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
                 expectedHeader, errorPage.heading.element.text)

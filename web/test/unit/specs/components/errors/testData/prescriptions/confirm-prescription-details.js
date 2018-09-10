@@ -1,6 +1,6 @@
 import Routes from '@/routes';
 
-const PATH = '/prescriptions/confirm-prescription-details';
+const PATH = Routes.PRESCRIPTION_CONFIRM_COURSES.path;
 
 export default {
   400: [

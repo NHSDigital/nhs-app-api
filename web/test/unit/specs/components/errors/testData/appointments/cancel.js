@@ -1,6 +1,6 @@
 import Routes from '@/routes';
 
-const PATH = '/appointments/cancel';
+const PATH = Routes.APPOINTMENT_CANCELLING.path;
 
 export default {
   400: [
@@ -9,8 +9,8 @@ export default {
       pageTitle: 'Appointment request error',
       pageHeader: 'Error sending request',
       header: 'There\'s been a problem sending your request',
-      subheader: 'Please go back and try again.',
-      message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      subheader: '',
+      message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
       redirectUrl: Routes.APPOINTMENTS.path,
@@ -35,8 +35,8 @@ export default {
       pageTitle: 'Appointment request error',
       pageHeader: 'Error sending request',
       header: 'There\'s been a problem sending your request',
-      subheader: 'Please go back and try again.',
-      message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      subheader: '',
+      message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
       redirectUrl: Routes.APPOINTMENTS.path,
@@ -61,8 +61,8 @@ export default {
       pageTitle: 'Appointment request error',
       pageHeader: 'Error sending request',
       header: 'There\'s been a problem sending your request',
-      subheader: 'Please go back and try again.',
-      message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      subheader: '',
+      message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
       redirectUrl: Routes.APPOINTMENTS.path,
@@ -74,8 +74,8 @@ export default {
       pageTitle: 'Appointment request error',
       pageHeader: 'Error sending request',
       header: 'There\'s been a problem sending your request',
-      subheader: 'Please go back and try again.',
-      message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      subheader: '',
+      message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
       redirectUrl: Routes.APPOINTMENTS.path,
@@ -87,8 +87,8 @@ export default {
       pageTitle: 'Appointment request error',
       pageHeader: 'Error sending request',
       header: 'There\'s been a problem sending your request',
-      subheader: 'Please go back and try again.',
-      message: 'If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      subheader: '',
+      message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
       redirectUrl: Routes.APPOINTMENTS.path,

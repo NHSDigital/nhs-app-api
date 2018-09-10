@@ -1,14 +1,16 @@
-const PATH = '/appointments/index';
+import Routes from '@/routes';
+
+const PATH = `${Routes.APPOINTMENTS.path}/index`;
 
 export default {
   400: [
     PATH,
     {
       pageTitle: 'Appointment data error',
-      pageHeader: 'Error retrieving data',
+      pageHeader: 'Appointment data error',
       header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -31,10 +33,10 @@ export default {
     PATH,
     {
       pageTitle: 'Appointment data error',
-      pageHeader: 'Error retrieving data',
+      pageHeader: 'Appointment data error',
       header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -44,10 +46,10 @@ export default {
     PATH,
     {
       pageTitle: 'Appointment data error',
-      pageHeader: 'Error retrieving data',
+      pageHeader: 'Appointment data error',
       header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -57,10 +59,10 @@ export default {
     PATH,
     {
       pageTitle: 'Appointment data error',
-      pageHeader: 'Error retrieving data',
+      pageHeader: 'Appointment data error',
       header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: false,
       retryButtonText: '',
       redirectUrl: '',
@@ -70,10 +72,10 @@ export default {
     PATH,
     {
       pageTitle: 'Appointment data error',
-      pageHeader: 'Error retrieving data',
+      pageHeader: 'Appointment data error',
       header: 'There\'s been a problem getting your appointment history',
-      subheader: 'Please try again',
-      message: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      subheader: '',
+      message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Try again',
       redirectUrl: '',
