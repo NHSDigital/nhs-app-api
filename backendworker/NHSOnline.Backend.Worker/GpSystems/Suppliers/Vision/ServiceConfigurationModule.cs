@@ -20,8 +20,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var _logger = _loggerFactory.CreateLogger<ServiceConfigurationModule>();
-
             if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_VISION", _logger), out bool enabled) && enabled)
             {
                 var configValue = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
@@ -40,11 +38,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                     {
                         client.Timeout = TimeSpan.FromSeconds(timeout);
                     })
-                    .ConfigurePrimaryHttpMessageHandler((() =>
-                            new VisionHttpClientHandler(configuration,
-                                _loggerFactory.CreateLogger<VisionHttpClientHandler>(),
-                                certificateService)
-                        ));
+                    .ConfigurePrimaryHttpMessageHandler(() =>
+                    {
+                        return new VisionHttpClientHandler(configuration, _loggerFactory.CreateLogger<VisionHttpClientHandler>(), certificateService)
+                            .ConfigureForwardProxy(configuration);
+                    });
 
                 _logger.LogDebug("Vision GP Service was successfully configured");
             }
