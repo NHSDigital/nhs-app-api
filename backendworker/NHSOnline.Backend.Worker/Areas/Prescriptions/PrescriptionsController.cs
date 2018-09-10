@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _auditor = auditor;
         }
 
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet]
         public async Task<IActionResult> Get([FromQuery] DateTimeOffset? fromDate)
         {
             var defaultFromDate = GetDefaultFromDate();
@@ -66,7 +66,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             return result.Accept(new PrescriptionResultVisitor());
         }
 
-        [HttpPost, TimeoutExceptionFilter]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             PrescriptionResult result;

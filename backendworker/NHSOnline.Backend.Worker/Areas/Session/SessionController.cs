@@ -59,7 +59,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
             _minimumAgeValidator = minimumAgeValidator;
         }
 
-        [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
+        [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] UserSessionRequest model)
         {
             try

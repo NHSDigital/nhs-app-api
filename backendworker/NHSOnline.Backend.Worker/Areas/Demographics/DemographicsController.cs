@@ -22,7 +22,6 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
         }
 
         [HttpGet("demographics")]
-        [TimeoutExceptionFilter]
         public async Task<IActionResult> Get()
         {
             var methodName = "Get";
@@ -47,7 +46,6 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
         /// </summary>
         /// <returns></returns>
         [HttpGet("my-record/demographics")]
-        [TimeoutExceptionFilter]
         public async Task<IActionResult> GetOld()
         {
             var userSession = HttpContext.GetUserSession();

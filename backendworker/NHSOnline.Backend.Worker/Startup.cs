@@ -101,6 +101,7 @@ namespace NHSOnline.Backend.Worker
                         options.Filters.Add(new AuthorizeFilter(
                             new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())
                         );
+                        options.Filters.Add(typeof(TimeoutExceptionFilterAttribute));
                     }
                 )
                 .AddJsonOptions(

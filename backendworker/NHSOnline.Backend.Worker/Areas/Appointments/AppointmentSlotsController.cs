@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             _auditor = auditor;
         }
 
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet]
         public async Task<IActionResult> Get([FromQuery] PatientAppointmentSlotsQueryParameters queryParameters)
         {
             try

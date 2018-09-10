@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             _auditor = auditor;
         }
 
-        [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Get(
             [FromHeader(Name = Constants.HttpHeaders.ConnectionToken)] string connectionToken,
             [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode
@@ -81,7 +81,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
             }
         }
 
-        [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
+        [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] PatientIm1ConnectionRequest model)
         {
             try

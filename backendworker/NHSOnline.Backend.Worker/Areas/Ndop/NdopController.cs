@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
         }
 
         [HttpGet]
-        [TimeoutExceptionFilter]
         public async Task<IActionResult> GetToken()
         {
             try

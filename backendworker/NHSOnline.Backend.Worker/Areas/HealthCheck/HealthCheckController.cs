@@ -18,7 +18,6 @@ namespace NHSOnline.Backend.Worker.Areas.HealthCheck
         }
 
         [HttpGet]
-        [TimeoutExceptionFilter]
         [AllowAnonymous]
         public async Task<IActionResult> RunHealthCheck()
         {

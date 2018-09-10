@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _auditor = auditor;
         }
 
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var userSession = HttpContext.GetUserSession();

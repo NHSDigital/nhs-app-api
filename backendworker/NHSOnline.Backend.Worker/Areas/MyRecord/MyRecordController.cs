@@ -25,7 +25,6 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
         }
 
         [HttpGet]
-        [TimeoutExceptionFilter]
         public async Task<IActionResult> GetMyRecord()
         {   
             var methodName = "GetMyRecord";

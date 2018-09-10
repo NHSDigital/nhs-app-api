@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             _auditor = auditor;
         }
 
-        [HttpDelete, TimeoutExceptionFilter]
+        [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] AppointmentCancelRequest model)
         {
             try
@@ -54,7 +54,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             }
         }
 
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet]
         public async Task<IActionResult> Get(
             [FromQuery] bool includePastAppointments,
             [FromQuery] DateTimeOffset? pastAppointmentsFromDate = null)
@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
         }
         
 
-        [HttpPost, TimeoutExceptionFilter]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody]AppointmentBookRequest model)
         {
             try

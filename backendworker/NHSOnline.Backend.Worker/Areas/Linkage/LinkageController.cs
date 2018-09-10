@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             _auditor = auditor;
         }
 
-        [HttpGet, TimeoutExceptionFilter, AllowAnonymous]
+        [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Get(
             [FromHeader(Name = Constants.HttpHeaders.NhsNumber)] string nhsNumber,
             [FromHeader(Name = Constants.HttpHeaders.OdsCode)] string odsCode,
@@ -72,7 +72,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
             
         }
 
-        [HttpPost, TimeoutExceptionFilter, AllowAnonymous]
+        [HttpPost, AllowAnonymous]
         public async Task<IActionResult> Post([FromBody] CreateLinkageRequest createLinkageRequest)
         {
             try

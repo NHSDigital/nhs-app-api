@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             _auditor = auditor;
         }
 
-        [HttpGet, TimeoutExceptionFilter]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             var methodName = "Get";
@@ -40,7 +40,7 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             return fetchConsentResult.Accept(new TermsAndConditionsFetchConsentResultVisitor());
         }
 
-        [HttpPost, TimeoutExceptionFilter]
+        [HttpPost]
         public async Task<IActionResult> Post([FromBody] ConsentRequest model)
         {
             var methodName = "Post";
