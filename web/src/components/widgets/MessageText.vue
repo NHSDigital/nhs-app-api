@@ -44,7 +44,7 @@ export default {
     }
   &.plainHeader {
     @include default_label;
-    font-size: 1.325em;
+    font-size: 1.125em;
     }
 }
 </style>
