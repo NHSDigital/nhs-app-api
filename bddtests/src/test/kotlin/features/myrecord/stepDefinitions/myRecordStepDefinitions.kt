@@ -542,75 +542,75 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getProblemsMessage())
     }
 
-    @When("^I click the Consultations section$")
+    @When("^I click the Consultations section EMIS$")
     @Throws(Exception::class)
-    fun i_click_the_consultations_section() {
+    fun i_click_the_consultations_section_EMIS() {
         recordSteps.clickConsultations()
     }
 
-    @Then("^I see heading Consultations$")
+    @Then("^I see heading Consultations EMIS$")
     @Throws(Exception::class)
-    fun i_see_heading_consultations() {
+    fun i_see_heading_consultations_EMIS() {
         Assert.assertEquals("Consultations", recordSteps.getConsultationsHeaderText())
     }
 
-    @Then("^I see Consultations records displayed$")
+    @Then("^I see Consultations records displayed EMIS$")
     @Throws(Exception::class)
-    fun i_see_consultations_records_displayed() {
+    fun i_see_consultations_records_displayed_EMIS() {
         Assert.assertEquals(2, recordSteps.getConsultationsRecordCount())
     }
 
-    @Then("^I see a message indicating that I have no access to view Consultations$")
+    @Then("^I see a message indicating that I have no access to view Consultations EMIS$")
     @Throws(Exception::class)
-    fun i_see_a_message_indicating_that_I_have_no_access_to_view_consultations() {
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_consultations_EMIS() {
         Assert.assertEquals("You do not currently have access to this section", recordSteps.getConsultationsMessage())
     }
 
-    @Then("^I see a message indicating that I have no information recorded for Consultations$")
+    @Then("^I see a message indicating that I have no information recorded for Consultations EMIS$")
     @Throws(Exception::class)
-    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_consultations() {
+    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_consultations_EMIS() {
         Assert.assertEquals("No information recorded", recordSteps.getConsultationsMessage())
     }
 
-    @Then("^I see an error occured message with Consultations$")
+    @Then("^I see an error occurred message with Consultations EMIS$")
     @Throws(Exception::class)
-    fun i_see_an_error_occured_message_for_consultations() {
+    fun i_see_an_error_occurred_message_for_consultations_EMIS() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getConsultationsMessage())
     }
 
-    @When("^I click the Events section$")
+    @When("^I click the Consultations section TPP$")
     @Throws(Exception::class)
-    fun i_click_the_Events_section() {
+    fun i_click_the_Consultations_section_TPP() {
         recordSteps.clickEvents()
     }
 
-    @Then("^I see heading Events$")
+    @Then("^I see heading Consultations TPP$")
     @Throws(Exception::class)
-    fun i_see_heading_Events() {
+    fun i_see_heading_consultations_TPP() {
         Assert.assertEquals("Consultations", recordSteps.getEventsHeaderText())
     }
 
-    @Then("^I see Events records displayed$")
+    @Then("^I see Consultations records displayed TPP$")
     @Throws(Exception::class)
-    fun i_see_Events_records_displayed() {
+    fun i_see_consultations_records_displayed_TPP() {
         Assert.assertEquals(2, recordSteps.getEventsRecordCount())
     }
 
-    @Then("^I see a message indicating that I have no access to view Events$")
+    @Then("^I see a message indicating that I have no access to view Consultations TPP$")
     @Throws(Exception::class)
-    fun i_see_a_message_indicating_that_I_have_no_access_to_view_Events() {
+    fun i_see_a_message_indicating_that_I_have_no_access_to_view_Consultations_TPP() {
         Assert.assertEquals("You do not currently have access to this section", recordSteps.getEventsMessage())
     }
 
-    @Then("^I see a message indicating that I have no information recorded for Events$")
+    @Then("^I see a message indicating that I have no information recorded for Consultations TPP$")
     @Throws(Exception::class)
-    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_Events() {
+    fun i_see_a_message_indicating_that_I_have_No_information_recorded_for_Consultations_TPP() {
         Assert.assertEquals("No information recorded", recordSteps.getEventsMessage())
     }
 
-    @Then("^I see an error occured message with Events$")
+    @Then("^I see an error occurred message with Consultations TPP$")
     @Throws(Exception::class)
-    fun i_see_an_error_occured_message_for_Events() {
+    fun i_see_an_error_occurred_message_for_Consultations_TPP() {
         Assert.assertEquals("An error has occurred trying to retrieve this data.", recordSteps.getEventsMessage())
     }
 

@@ -3,7 +3,9 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.*
 import mocking.data.myrecord.ConsultationsData
 import mocking.MockingClient
+import mocking.data.myrecord.TppDcrData
 import mocking.defaults.MockDefaults
+import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
@@ -11,14 +13,14 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 
-open class MyRecordConsultationStepDefinitions {
+open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinitions(){
 
     @Steps
-    val mockingClient = MockingClient.instance
     val HTTP_EXCEPTION = "HttpException"
 
     @Given("the GP Practice has multiple consultations for (.*)")
     fun givenTheGpPracticeHasMultipleConsultationsFor(getService:String) {
+        setPatientToDefaultFor(getService)
         when(getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
@@ -26,7 +28,10 @@ open class MyRecordConsultationStepDefinitions {
                 }
             }
             "TPP" -> {
-
+                mockingClient.forTpp {
+                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                            .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
+                }
             }
         }
     }
@@ -40,6 +45,13 @@ open class MyRecordConsultationStepDefinitions {
                 }
             }
             "TPP" -> {
+                setPatientToDefaultFor("TPP")
+                mockingClient.forTpp {
+                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                            .respondWithError(Error("6", "You don&apos;t have access to this online service. " +
+                                    "You can request access to this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
+                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
 
             }
         }
@@ -54,6 +66,12 @@ open class MyRecordConsultationStepDefinitions {
                 }
             }
             "TPP" -> {
+                setPatientToDefaultFor("TPP")
+                mockingClient.forTpp {
+                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                            .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
+
+                }
 
             }
         }
@@ -68,6 +86,11 @@ open class MyRecordConsultationStepDefinitions {
                 }
             }
             "TPP" -> {
+                setPatientToDefaultFor("TPP")
+                mockingClient.forTpp {
+                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                            .respondWithServiceNotAvailableException()
+                }
 
             }
         }
