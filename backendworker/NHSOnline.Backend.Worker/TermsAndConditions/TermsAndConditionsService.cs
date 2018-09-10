@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
-using System;
+﻿using System;
 using System.Linq;
-using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
+using System.Threading.Tasks;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
 
-namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
     #pragma warning disable CA1309  
     [CLSCompliant(false)]  // CA1309  

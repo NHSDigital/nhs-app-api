@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
     public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {

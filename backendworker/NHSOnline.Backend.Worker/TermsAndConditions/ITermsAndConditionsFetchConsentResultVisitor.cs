@@ -1,4 +1,4 @@
-﻿namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+﻿namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
     public interface ITermsAndConditionsFetchConsentResultVisitor<out T>
     {

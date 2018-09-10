@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
     public interface ITermsAndConditionsConfig
     {

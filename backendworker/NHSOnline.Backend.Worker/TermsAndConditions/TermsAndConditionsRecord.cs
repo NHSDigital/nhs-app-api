@@ -1,8 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
-namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
     [Serializable]
     public class TermsAndConditionsRecord

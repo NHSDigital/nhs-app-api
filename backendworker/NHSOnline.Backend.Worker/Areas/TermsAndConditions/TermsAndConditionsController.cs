@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.TermsAndConditions.Models;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using NHSOnline.Backend.Worker.Support.TermsAndConditions;
+using NHSOnline.Backend.Worker.TermsAndConditions;
 
 namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
 {

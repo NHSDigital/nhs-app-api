@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Support.TermsAndConditions;
 using System;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using NHSOnline.Backend.Worker.TermsAndConditions;
 
 namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
 {

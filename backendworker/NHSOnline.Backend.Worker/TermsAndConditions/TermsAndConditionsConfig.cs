@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace NHSOnline.Backend.Worker.Support.TermsAndConditions
+namespace NHSOnline.Backend.Worker.TermsAndConditions
 {
     public class TermsAndConditionsConfig : ITermsAndConditionsConfig
     {
