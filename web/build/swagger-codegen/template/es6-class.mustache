@@ -101,12 +101,12 @@ class {{&className}} {
 
     const resolve = ({ store, deferred, result, cancel }) => {
       deferred.resolve(result)
-      if(store.dispatch) store.dispatch('http/addCancelRequestHandler', cancel);
+      if(store && store.dispatch) store.dispatch('http/addCancelRequestHandler', cancel);
     };
 
     const reject = ({ store, deferred, error, cancel }) => {
       deferred.reject(error)
-      if(store.dispatch) store.dispatch('http/addCancelRequestHandler', cancel);
+      if(store && store.dispatch) store.dispatch('http/addCancelRequestHandler', cancel);
     };
 
     axios({
