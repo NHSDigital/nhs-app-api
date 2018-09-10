@@ -23,11 +23,6 @@ services:
       - VISION_CERT_PASSPHRASE
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
-      - DATA_PREFERENCES_URL=http://ndopapp-int1.thunderbird.service.nhs.uk/createsession
-      - NDOP_CERTIFICATE_PASSWORD
-      - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
-      - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
-      - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
     depends_on:
       - nhsonline.redis.sds
     ports:

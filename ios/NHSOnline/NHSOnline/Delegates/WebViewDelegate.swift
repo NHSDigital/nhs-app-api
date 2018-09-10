@@ -176,9 +176,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if (message.name == "updateHeaderText") {
                 callUpdateHeaderText(headerText: String(describing: message.body))
             }
-            if (message.name == "postNdopToken") {
-                callPostNdopToken(token: String(describing: message.body))
-            }
             if (message.name == "clearMenuBarItem") {
                 clearMenuBarItem()
             }
@@ -193,10 +190,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 self.viewController.webViewController?.webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
             }
         }
-    }
-    
-    func callPostNdopToken(token: String?) {
-        self.viewController.webViewController?.postNdopToken(token: token!)
     }
     
     func callUpdateHeaderTextForURL(url: URL) {

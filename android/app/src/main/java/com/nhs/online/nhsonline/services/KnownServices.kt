@@ -46,11 +46,6 @@ class KnownServices(private val context: Context) {
                 unavailabilityErrorMessage,
                 nativeHeader = context.resources.getString(R.string.conditions_header),
                 shouldValidateSession = false))
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-                R.string.dataPreferencesRedirect)),
-                unavailabilityErrorMessage,
-                nativeHeader = context.resources.getString(R.string.data_preferences_header),
-                shouldValidateSession = false))
 
         val externalStrings = context.resources.getStringArray(R.array.externalSiteUrls)
         for (i in externalStrings) {

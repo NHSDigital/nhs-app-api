@@ -18,7 +18,6 @@
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
-    <string name="dataPreferencesRedirect">https://ndopapp-int1.thunderbird.service.nhs.uk/preferences</string>
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
 
     <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>

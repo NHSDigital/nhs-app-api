@@ -60,7 +60,5 @@
 	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
 	<key>OpenSourceLicensesURL</key>
 	<string>https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/</string>
-	<key>DataPreferencesURL</key>
-	<string>https://ndopapp-int1.thunderbird.service.nhs.uk/createsession</string>
 </dict>
 </plist>

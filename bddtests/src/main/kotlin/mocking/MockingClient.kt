@@ -58,7 +58,7 @@ class MockingClient(private val configuration: MockingConfiguration) {
         this.postMapping(mapping)
     }
 
-    fun forNdop(method: String = "POST", resolver: NdopMappingBuilder.() -> Mapping) {
+    fun forNdop(method: String = "GET", resolver: NdopMappingBuilder.() -> Mapping) {
         val mappingBuilder = NdopMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 

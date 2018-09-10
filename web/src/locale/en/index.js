@@ -526,7 +526,6 @@ export default {
     myRecord: 'My record',
     myRecordWarning: 'Sensitive information - My record',
     symptoms: 'Check my symptoms',
-    dataSharing: 'Sharing health data preferences',
     more: 'More',
     login: 'Login',
   },

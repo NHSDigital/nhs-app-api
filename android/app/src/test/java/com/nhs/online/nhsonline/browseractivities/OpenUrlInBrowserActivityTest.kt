@@ -29,7 +29,6 @@ class OpenUrlInBrowserActivityTest {
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"
             on { getString(R.string.appIntroPath) } doReturn "file:///android_asset/appintro.html"
             on { getString(R.string.hotjarLink) } doReturn "https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785"
-            on { getString(R.string.dataPreferencesRedirect) } doReturn "https://ndopapp-int1.thunderbird.service.nhs.uk/createsession"
             on { getStringArray(R.array.externalSiteUrls)} doReturn arrayOf(
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/",
                     "https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/",
