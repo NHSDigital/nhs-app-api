@@ -12,7 +12,7 @@ export default {
     state.user = user;
   },
   [LOGOUT]() {
-    if (typeof window.nativeApp !== 'undefined') {
+    if (process.client && window.nativeApp) {
       window.nativeApp.onLogout();
     }
   },

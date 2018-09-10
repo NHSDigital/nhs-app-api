@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 
-const PATH = Routes.PRESCRIPTION_REPEAT_COURSES.path;
+const PATH = PRESCRIPTION_REPEAT_COURSES.path;
 
 export default {
   400: [

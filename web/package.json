@@ -33,7 +33,7 @@
       ".*\\.(vue)$": "<rootDir>/node_modules/jest-vue-preprocessor"
     },
     "moduleNameMapper": {
-      "@/routes$": "<rootDir>/src/Routes",
+      "@/routes$": "<rootDir>/src/lib/routes",
       "@/(.*)$": "<rootDir>/src/$1"
     }
   },

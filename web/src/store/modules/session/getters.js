@@ -1,7 +1,8 @@
 import moment from 'moment';
 
 export default {
-  isLoggedIn(state) {
+  isLoggedIn(input) {
+    const state = input.session || input;
     return () => !!state.csrfToken;
   },
   isValid(state) {

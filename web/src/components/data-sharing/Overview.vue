@@ -31,7 +31,7 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import Routes from '@/Routes';
+import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
 
 export default {
   components: {
@@ -45,7 +45,7 @@ export default {
   methods: {
     goToManageChoices(event) {
       event.preventDefault();
-      this.$store.app.$analytics.trackButtonClick(`${Routes.DATA_SHARING_PREFERENCES.name}-overview:text_link:${Routes.DATA_SHARING_PREFERENCES.name}-manage-your-choice`);
+      this.$store.app.$analytics.trackButtonClick(`${DATA_SHARING_PREFERENCES.name}-overview:text_link:${DATA_SHARING_PREFERENCES.name}-manage-your-choice`);
       this.$emit('manage-choices');
     },
   },

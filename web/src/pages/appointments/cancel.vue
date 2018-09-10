@@ -55,7 +55,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
-import Routes from '@/Routes';
+import { APPOINTMENTS } from '@/lib/routes';
 
 export default {
   components: {
@@ -102,7 +102,7 @@ export default {
         this.$store.dispatch('myAppointments/cancel', data)
           .then(() => {
             this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.cancel.successText'));
-            this.$router.push(Routes.APPOINTMENTS.path);
+            this.$router.push(APPOINTMENTS.path);
           });
       } else {
         this.showValidationError = true;

@@ -22,7 +22,7 @@ module.exports = {
     './handler.js',
   ],
   router: {
-    middleware: ['auth', 'meta', 'analytics'],
+    middleware: ['auth', 'meta', 'analytics', 'termsAndConditions'],
   },
   link: [
     {
@@ -64,5 +64,7 @@ module.exports = {
     YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
     // Appointments
     CLINICAL_ABBREVIATIONS_URL: 'https://www.england.nhs.uk/participation/resources/involvejargon/',
+    // Terms and conditions
+    STUB_TERMS_AND_CONDITIONS: true,
   },
 };

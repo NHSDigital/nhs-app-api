@@ -61,8 +61,8 @@ import MessageList from '@/components/widgets/MessageList';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
-import Routes from '@/Routes';
 import VueScrollTo from 'vue-scrollto';
+import { APPOINTMENTS } from '@/lib/routes';
 
 export default {
   components: {
@@ -76,7 +76,7 @@ export default {
   },
   data() {
     return {
-      backButtonPath: Routes.APPOINTMENTS.path,
+      backButtonPath: APPOINTMENTS.path,
       showNoMatchingWarning: false,
       filters: null,
       availableAppointmentsScreenReaderMessage: [],

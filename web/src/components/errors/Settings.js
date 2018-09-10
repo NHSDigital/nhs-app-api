@@ -1,7 +1,18 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/extensions */
 import { assign, has } from 'lodash/fp';
-import Routes from '@/Routes';
+import {
+  APPOINTMENTS,
+  APPOINTMENT_BOOKING,
+  APPOINTMENT_CANCELLING,
+  APPOINTMENT_CONFIRMATIONS,
+  AUTH_RETURN,
+  LOGIN,
+  MYRECORD,
+  MYRECORDTESTRESULT,
+  PRESCRIPTIONS,
+  PRESCRIPTION_CONFIRM_COURSES,
+} from '@/lib/routes';
 
 export default {
   default: {
@@ -12,42 +23,42 @@ export default {
   },
   pages: [
     {
-      route: Routes.APPOINTMENTS.path,
+      route: APPOINTMENTS.path,
       errorOverrideStyles: { 403: 'plain' },
     },
     {
-      route: Routes.APPOINTMENT_CANCELLING.path,
+      route: APPOINTMENT_CANCELLING.path,
       redirectUrl: {
-        default: Routes.APPOINTMENTS.path,
+        default: APPOINTMENTS.path,
       },
     },
     {
-      route: Routes.APPOINTMENT_BOOKING.path,
+      route: APPOINTMENT_BOOKING.path,
       errorOverrideStyles: { 403: 'plain' },
     },
     {
-      route: Routes.APPOINTMENT_CONFIRMATIONS.path,
+      route: APPOINTMENT_CONFIRMATIONS.path,
       redirectUrl: {
-        409: Routes.APPOINTMENT_BOOKING.path,
-        default: Routes.APPOINTMENTS.path,
+        409: APPOINTMENT_BOOKING.path,
+        default: APPOINTMENTS.path,
       },
     },
     {
-      route: Routes.PRESCRIPTION_CONFIRM_COURSES.path,
+      route: PRESCRIPTION_CONFIRM_COURSES.path,
       redirectUrl: {
-        default: Routes.PRESCRIPTIONS.path,
+        default: PRESCRIPTIONS.path,
       },
     },
     {
-      route: Routes.AUTH_RETURN.path,
+      route: AUTH_RETURN.path,
       redirectUrl: {
-        default: Routes.LOGIN.path,
+        default: LOGIN.path,
       },
     },
     {
-      route: Routes.MYRECORDTESTRESULT.path,
+      route: MYRECORDTESTRESULT.path,
       redirectUrl: {
-        default: Routes.MYRECORD.path,
+        default: MYRECORD.path,
       },
     },
   ],

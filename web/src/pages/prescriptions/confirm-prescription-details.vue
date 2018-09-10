@@ -39,12 +39,9 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Routes from '@/Routes';
+import { PRESCRIPTIONS } from '@/lib/routes';
 
 export default {
-  components: {
-    Routes,
-  },
   data() {
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
@@ -65,7 +62,7 @@ export default {
       this.$store.dispatch('repeatPrescriptionCourses/orderRepeatPrescription', repeatPrescriptionOrder)
         .then(() => {
           this.$store.dispatch('flashMessage/addSuccess', this.$t('rp05.confirmationMessage'));
-          this.$router.push(Routes.PRESCRIPTIONS.path);
+          this.$router.push(PRESCRIPTIONS.path);
         });
     },
   },

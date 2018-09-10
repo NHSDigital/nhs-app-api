@@ -16,7 +16,7 @@
 /* eslint-disable import/extensions */
 import TimeSlot from '@/components/appointments/booking/TimeSlot';
 import DateProvider from '@/services/DateProvider';
-import Routes from '@/Routes';
+import { APPOINTMENT_CONFIRMATIONS } from '@/lib/routes';
 
 export default {
   components: {
@@ -32,7 +32,7 @@ export default {
     formatDate: dateTime => DateProvider.create(dateTime).format('dddd D MMMM YYYY'),
     select(ref) {
       this.$refs[ref][0].select();
-      this.$router.push(Routes.APPOINTMENT_CONFIRMATIONS.path);
+      this.$router.push(APPOINTMENT_CONFIRMATIONS.path);
     },
     hasAppointments(daySlots) {
       return daySlots[1].length > 0;

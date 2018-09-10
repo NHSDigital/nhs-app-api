@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
 
-const PATH = Routes.PRESCRIPTION_CONFIRM_COURSES.path;
+const PATH = PRESCRIPTION_CONFIRM_COURSES.path;
 
 export default {
   400: [
@@ -13,7 +13,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       retryButtonText: 'Back to my repeat prescriptions',
       hasRetryButton: true,
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: PRESCRIPTIONS.path,
     },
   ],
   403: [
@@ -26,7 +26,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my repeat prescriptions',
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: PRESCRIPTIONS.path,
     },
   ],
   409: [
@@ -39,7 +39,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my repeat prescriptions',
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: PRESCRIPTIONS.path,
     },
   ],
   500: [
@@ -52,7 +52,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my repeat prescriptions',
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: PRESCRIPTIONS.path,
     },
   ],
   502: [
@@ -65,7 +65,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my repeat prescriptions',
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: PRESCRIPTIONS.path,
     },
   ],
   504: [
@@ -78,7 +78,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to order a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my repeat prescriptions',
-      redirectUrl: Routes.PRESCRIPTIONS.path,
+      redirectUrl: PRESCRIPTIONS.path,
     },
   ],
 };

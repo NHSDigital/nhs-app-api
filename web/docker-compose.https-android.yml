@@ -21,5 +21,4 @@ services:
     image: nhsonline.backend.worker
     environment:
       - NHS_WEB_APP_BASE_URL=http://10.0.2.2:3000/
-      - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io

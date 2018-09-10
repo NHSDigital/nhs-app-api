@@ -1,4 +1,6 @@
-export default {
+import find from 'lodash/fp/find';
+
+const routes = {
   ACCOUNT: {
     name: 'account',
     path: '/account',
@@ -26,6 +28,16 @@ export default {
   AUTH_RETURN: {
     name: 'auth-return',
     path: '/auth-return',
+    isAnonymous: true,
+  },
+  CHECKYOURSYMPTOMS: {
+    name: 'check-your-symptoms',
+    path: '/check-your-symptoms',
+    isAnonymous: true,
+  },
+  DATA_SHARING_PREFERENCES: {
+    name: 'data-sharing',
+    path: '/data-sharing',
   },
   INDEX: {
     name: 'index',
@@ -34,6 +46,7 @@ export default {
   LOGIN: {
     name: 'Login',
     path: '/login',
+    isAnonymous: true,
   },
   MORE: {
     name: 'more',
@@ -71,17 +84,42 @@ export default {
     name: 'symptoms',
     path: '/symptoms',
   },
-  CHECKYOURSYMPTOMS: {
-    name: 'check-your-symptoms',
-    path: '/check-your-symptoms',
-  },
-  DATA_SHARING_PREFERENCES: {
-    name: 'data-sharing',
-    path: '/data-sharing',
-  },
   TERMSANDCONDITIONS: {
     name: 'terms-and-conditions',
     path: '/terms-and-conditions',
+    isAnonymous: true,
   },
 };
+
+const findByName = name => find(({ name: routeName }) => routeName === name)(routes);
+
+export const isAnonymous = (input) => {
+  if (!input) return false;
+  const route = input.name ? input : findByName(input);
+  return route ? !!route.isAnonymous : false;
+};
+
+export const {
+  ACCOUNT,
+  APPOINTMENTS,
+  APPOINTMENT_BOOKING_GUIDANCE,
+  APPOINTMENT_CANCELLING,
+  APPOINTMENT_BOOKING,
+  APPOINTMENT_CONFIRMATIONS,
+  AUTH_RETURN,
+  CHECKYOURSYMPTOMS,
+  DATA_SHARING_PREFERENCES,
+  INDEX,
+  LOGIN,
+  MORE,
+  MYRECORD,
+  MYRECORDWARNING,
+  MYRECORDNOACCESS,
+  MYRECORDTESTRESULT,
+  PRESCRIPTIONS,
+  PRESCRIPTION_REPEAT_COURSES,
+  PRESCRIPTION_CONFIRM_COURSES,
+  SYMPTOMS,
+  TERMSANDCONDITIONS,
+} = routes;
 

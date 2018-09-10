@@ -28,7 +28,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Routes from '@/Routes';
+import { APPOINTMENT_BOOKING } from '@/lib/routes';
 
 export default {
   data(app) {
@@ -45,7 +45,7 @@ export default {
       window.open(this.symptomsCheckerUrl, '_blank');
     },
     onBookButtonClicked() {
-      this.$router.push(Routes.APPOINTMENT_BOOKING.path);
+      this.$router.push(APPOINTMENT_BOOKING.path);
     },
   },
 };

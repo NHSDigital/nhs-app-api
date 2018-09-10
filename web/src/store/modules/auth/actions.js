@@ -1,4 +1,4 @@
-import Routes from '@/Routes';
+import { LOGIN } from '@/lib/routes';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 
 const MAX_TRIES = 10;
@@ -22,11 +22,11 @@ const final = ({ self, commit, expired }) => {
   if (expired) {
     // When the session is expired, a `push` must be used to ensure the state and,
     // by implication, the `showExpiryMessage` property is preserved.
-    self.app.router.push(Routes.LOGIN.name);
+    self.app.router.push(LOGIN.name);
   } else {
     // When logout occurs through the button, `go` is used to reduce flickering.  This makes
     // a server request which clears the state.
-    self.app.router.go(Routes.LOGIN.path);
+    self.app.router.go(LOGIN.path);
   }
 };
 
@@ -51,42 +51,6 @@ export default {
         // eslint-disable-next-line object-curly-newline
         const { name, odsCode, sessionTimeout, token, nhsNumber, dateOfBirth } = (response || {});
         this.dispatch('session/hideExpiryMessage');
-
-        // TODO: Fix
-        // This will not work using the new authentication mechanisms.
-        // <<<<<<< HEAD
-        //         this.dispatch('session/setCsrfToken', response.token);
-        //         this.app.$http
-        //           .getV1PatientTermsAndConditionsConsent({})
-        //           .then((data) => {
-        //             if (data.response) {
-        //               if (data.response.consentGiven === true) {
-        //                 commit(AUTH_RESPONSE, response);
-        //                 this.dispatch('session/startValidationChecking');
-        //                 this.app.router.push({
-        //                   name: 'index',
-        //                 });
-        //               } else {
-        //                 this.app.router.push({
-        //                   name: 'terms-and-conditions',
-        //                   params: { authResponse: response },
-        //                 });
-        //               }
-        //             } else {
-        //               this.app.router.push({
-        //                 name: 'terms-and-conditions',
-        //                 params: { authResponse: response },
-        //               });
-        //             }
-        //           });
-        //       });
-        //   },
-        //   goHandleAuthResponse({ commit }, message) {
-        //     return this.app.$http
-        //       .postV1PatientTermsAndConditionsConsent(message.a)
-        //       .then(() => {
-        //         commit(AUTH_RESPONSE, message.b);
-        // =======
         this.dispatch('session/setInfo', {
           name,
           durationSeconds: sessionTimeout,
@@ -110,6 +74,8 @@ export default {
     this.dispatch('session/clear');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
+
+    this.app.$cookies.remove('nhso.auth');
 
     return this
       .app

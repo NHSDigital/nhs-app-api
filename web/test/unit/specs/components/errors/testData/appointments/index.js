@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { APPOINTMENTS } from '@/lib/routes';
 
-const PATH = `${Routes.APPOINTMENTS.path}/index`;
+const PATH = `${APPOINTMENTS.path}/index`;
 
 export default {
   400: [

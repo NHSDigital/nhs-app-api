@@ -56,7 +56,7 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
-import Routes from '@/Routes';
+import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
 
 export default {
   components: {
@@ -91,7 +91,7 @@ export default {
   mounted() {
     this.slot = this.$store.state.availableAppointments.selectedSlot;
     if (!this.slot) {
-      this.$router.push(Routes.APPOINTMENT_BOOKING.path);
+      this.$router.push(APPOINTMENT_BOOKING.path);
     }
   },
   beforeDestroy() {
@@ -118,11 +118,11 @@ export default {
       this.$store.dispatch('availableAppointments/book', bookingData)
         .then(() => {
           this.$store.dispatch('flashMessage/addSuccess', this.$t('appointments.index.successText'));
-          this.$router.push(Routes.APPOINTMENTS.path);
+          this.$router.push(APPOINTMENTS.path);
         });
     },
     onCancelButtonClicked() {
-      this.$router.push(Routes.APPOINTMENT_BOOKING.path);
+      this.$router.push(APPOINTMENT_BOOKING.path);
     },
   },
 };

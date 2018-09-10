@@ -22,7 +22,7 @@
 <script>
 import UpcomingAppointments from '@/components/appointments/UpcomingAppointments';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
-import Routes from '@/Routes';
+import { APPOINTMENT_BOOKING_GUIDANCE } from '@/lib/routes';
 
 export default {
   components: {
@@ -60,8 +60,8 @@ export default {
   },
   methods: {
     onBookButtonClicked() {
-      this.$store.app.$analytics.trackButtonClick(Routes.APPOINTMENT_BOOKING_GUIDANCE.path, true);
-      this.$router.push(Routes.APPOINTMENT_BOOKING_GUIDANCE.path);
+      this.$store.app.$analytics.trackButtonClick(APPOINTMENT_BOOKING_GUIDANCE.path, true);
+      this.$router.push(APPOINTMENT_BOOKING_GUIDANCE.path);
     },
   },
 };

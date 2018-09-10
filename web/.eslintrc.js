@@ -34,7 +34,8 @@ module.exports = {
         'e' // for e.returnvalue
       ]
     }],
-    "vue/max-attributes-per-line": "off",
+    'object-curly-newline': 'off', // ES6 dereferencing often uses curly braces on a single line.
+    'vue/max-attributes-per-line': 'off',
     // allow optionalDependencies
     'import/no-extraneous-dependencies': ['error', {
       optionalDependencies: ['test/unit/index.js']

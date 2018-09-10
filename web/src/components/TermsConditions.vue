@@ -84,12 +84,8 @@ export default {
           ConsentGiven: true,
           DateOfConsent: moment().format(),
         };
-        const { authResponse } = this.$route.params;
-        const message = {
-          a: { consentRequest },
-          b: authResponse,
-        };
-        this.$store.dispatch('auth/goHandleAuthResponse', message);
+
+        this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
       }
     },
     getErrorState() {

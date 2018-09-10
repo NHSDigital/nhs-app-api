@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { APPOINTMENTS, APPOINTMENT_CANCELLING } from '@/lib/routes';
 
-const PATH = Routes.APPOINTMENT_CANCELLING.path;
+const PATH = APPOINTMENT_CANCELLING.path;
 
 export default {
   400: [
@@ -13,7 +13,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
   403: [
@@ -26,7 +26,7 @@ export default {
       message: 'You can\'t cancel appointments online right now. Call your GP surgery as soon as possible to let them know you need to cancel.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
   409: [
@@ -39,7 +39,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
   461: [
@@ -52,7 +52,7 @@ export default {
       message: 'It\'s too late to cancel this appointment online. Call your GP surgery as soon as possible to let them know you need to cancel.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
   500: [
@@ -65,7 +65,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
   502: [
@@ -78,7 +78,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
   504: [
@@ -91,7 +91,7 @@ export default {
       message: 'Go back and try again. If the problem continues and you need to book or cancel an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Back to my appointments',
-      redirectUrl: Routes.APPOINTMENTS.path,
+      redirectUrl: APPOINTMENTS.path,
     },
   ],
 };

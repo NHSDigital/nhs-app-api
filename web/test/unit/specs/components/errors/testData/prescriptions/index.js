@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { PRESCRIPTIONS } from '@/lib/routes';
 
-const PATH = Routes.PRESCRIPTIONS.path;
+const PATH = PRESCRIPTIONS.path;
 
 export default {
   400: [

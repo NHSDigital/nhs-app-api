@@ -23,7 +23,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import SurveyBar from '@/components/SurveyBar';
-import Routes from '../Routes';
+import { INDEX, LOGIN } from '@/lib/routes';
 
 export default {
   components: {
@@ -67,7 +67,7 @@ export default {
       );
     },
     onEntryPage() {
-      return this.$route.name === Routes.INDEX.name;
+      return this.$route.name === INDEX.name;
     },
     mainClass() {
       if (this.isLoginPage()) {
@@ -77,7 +77,7 @@ export default {
       if (this.$store.state.device.isNativeApp) {
         clazzes.push('native');
       }
-      if (this.$route.name === Routes.INDEX.name) {
+      if (this.$route.name === INDEX.name) {
         if (this.surveyBarOpen) {
           clazzes.push('survey-open');
         } else {
@@ -111,7 +111,7 @@ export default {
   },
   methods: {
     isLoginPage() {
-      return this.$route.name === Routes.LOGIN.name;
+      return this.$route.name === LOGIN.name;
     },
     setSurveyBarStatus(isBarOpen) {
       this.surveyBarOpen = isBarOpen;

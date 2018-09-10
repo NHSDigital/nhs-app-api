@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { APPOINTMENT_BOOKING } from '@/lib/routes';
 
-const PATH = Routes.APPOINTMENT_BOOKING.path;
+const PATH = APPOINTMENT_BOOKING.path;
 
 export default {
   400: [

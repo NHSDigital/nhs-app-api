@@ -5,14 +5,28 @@ describe('getters', () => {
   describe('isLoggedIn', () => {
     const { isLoggedIn } = getters;
 
-    it('will be true if the csrfToken is set', () => {
-      const currentState = { csrfToken: 'boo' };
-      expect(isLoggedIn(currentState)()).toEqual(true);
+    describe('session state', () => {
+      it('will be true if the csrfToken is set', () => {
+        const currentState = { csrfToken: 'boo' };
+        expect(isLoggedIn(currentState)()).toEqual(true);
+      });
+
+      it('will be false if the csrfToken is not set', () => {
+        const currentState = { csrfToken: undefined };
+        expect(isLoggedIn(currentState)()).toEqual(false);
+      });
     });
 
-    it('will be false if the csrfToken is not set', () => {
-      const currentState = { csrfToken: undefined };
-      expect(isLoggedIn(currentState)()).toEqual(false);
+    describe('global state', () => {
+      it('will be true if the csrfToken is set', () => {
+        const currentState = { session: { csrfToken: 'boo' } };
+        expect(isLoggedIn(currentState)()).toEqual(true);
+      });
+
+      it('will be false if the csrfToken is not set', () => {
+        const currentState = { session: { csrfToken: undefined } };
+        expect(isLoggedIn(currentState)()).toEqual(false);
+      });
     });
   });
 

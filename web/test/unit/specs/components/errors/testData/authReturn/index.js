@@ -1,6 +1,6 @@
-import Routes from '@/routes';
+import { AUTH_RETURN } from '@/lib/routes';
 
-const PATH = Routes.AUTH_RETURN.path;
+const PATH = AUTH_RETURN.path;
 
 export default {
   464: [
