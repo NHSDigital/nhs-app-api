@@ -408,6 +408,48 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
         }
+        
+        [TestMethod]
+        public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest_NullMessage()
+        {
+            // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
+            errorResponse.Exceptions.First().Message = null;
+
+            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+                        .BadRequest) {ExceptionErrorResponse = errorResponse}));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+        }
+        
+        [TestMethod]
+        public async Task Register_ReturnsBadRequest_WhenEmisClientMeApplicationsReturnsBadRequest_NullExceptions()
+        {
+            // Arrange
+            var request = _fixture.Create<PatientIm1ConnectionRequest>();
+
+            var errorResponse = _fixture.Create<ExceptionErrorResponse>();
+            errorResponse.Exceptions = null;
+
+            _mockEmisClient.Setup(x =>x.MeApplicationsPost(It.IsAny<string>(), It.IsAny<MeApplicationsPostRequest>()))
+                .Returns(Task.FromResult(
+                    new EmisClient.EmisApiObjectResponse<MeApplicationsPostResponse>(HttpStatusCode
+                        .BadRequest) {ExceptionErrorResponse = errorResponse}));
+
+            // Act
+            var result = await _systemUnderTest.Register(request);
+
+            // Assert
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+        }
 
         private static PatientIdentifier CreatePatientIdentifier(
             string identifierValue = DefaultIdentifierValue,

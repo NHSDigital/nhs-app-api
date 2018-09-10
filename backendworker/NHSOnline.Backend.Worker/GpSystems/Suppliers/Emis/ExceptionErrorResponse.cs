@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {

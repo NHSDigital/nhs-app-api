@@ -366,7 +366,7 @@ practiceCode);
             
             public bool HasExceptionWithAnyMessage(string[] messages)
             {
-                return ExceptionErrorResponse?.Exceptions.Any(x => messages.Contains(x.Message)) ?? false;
+                return ExceptionErrorResponse?.Exceptions?.Any(x => messages.Contains(x.Message)) ?? false;
             }
 
             public bool HasForbiddenResponse()
@@ -378,6 +378,20 @@ practiceCode);
 
                 return HasExceptionWithMessageContaining(
                     EmisApiErrorMessages.EmisService_NotEnabledForUser);
+            }
+            
+            public string GetExceptionLogMessage(string methodCall)
+            {
+                var baseMessage = $"Emis {methodCall} returned with status code {StatusCode}";
+
+                if (string.IsNullOrEmpty(ExceptionErrorResponse?.Exceptions?.FirstOrDefault()?.Message))
+                {
+                    return baseMessage + " and no error message";
+                }
+
+                return baseMessage
+                       + " and error message "
+                       + $"{ExceptionErrorResponse?.Exceptions.First().Message}";
             }
         }
 
