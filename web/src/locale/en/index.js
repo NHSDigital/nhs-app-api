@@ -154,8 +154,8 @@ export default {
           pageTitle: 'Appointment booking unavailable',
           pageHeader: 'Appointment booking unavailable',
           header: 'You are not currently able to book appointments online.',
-          subheader: 'Contact your GP surgery for more information.',
-          message: 'For urgent medical help, call 111.',
+          subheader: '',
+          message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
         },
       },
     },
@@ -198,8 +198,8 @@ export default {
       403: {
         pageHeader: 'Appointment booking unavailable',
         header: 'You are not currently able to book appointments online',
-        subheader: 'Contact your GP surgery for more information.',
-        message: 'For urgent medical help, call 111.',
+        subheader: '',
+        message: 'Contact your GP surgery for more information. For urgent medical help, call 111.',
       },
     },
     cancel: {
