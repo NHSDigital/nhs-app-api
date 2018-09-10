@@ -83,7 +83,7 @@ export default {
     position: relative;
     margin-bottom: 0em;
     margin-left: 0em;
-    padding: 0.5em 3em 0.5em 1em;
+    padding: 0.5em 0em 0.5em 1em;
     border-bottom: 1px #D8DDE0 solid;
     font-size: 1em;
     font-weight: normal;
@@ -92,6 +92,7 @@ export default {
   }
   .listMenuAnchor {
     font-size: 1em;
+    padding-right: 3em;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
     display: block;

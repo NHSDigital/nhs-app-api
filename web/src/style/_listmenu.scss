@@ -44,10 +44,11 @@ ul.list-menu {
 		position: relative;
 		margin-bottom: 0em;
 		margin-left: 0em;
-		padding: 0.250em 3em 0.250em 1em;
+		padding: 0.250em 0em 0.250em 1em;
 		border-bottom: 1px $border_grey solid;
 
 		a {
+      padding-right: 3em;
 			font-size: 1em;
 			h2 {
 				margin: 0em;
