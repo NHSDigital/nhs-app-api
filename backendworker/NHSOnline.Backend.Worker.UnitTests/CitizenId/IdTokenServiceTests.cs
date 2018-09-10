@@ -1,19 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security;
-using System.Security.Claims;
-using System.Security.Principal;
+﻿using System.Security.Claims;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.CitizenId.Models;
-using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
 {
@@ -23,7 +15,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private IFixture _fixture;
         private Mock<ITokenValidationParameterBuilder> _mockParameterBuilder;
         private Mock<ISecurityTokenValidator> _mockJwtTokenValidator;
-        private Mock<ILogger<IdTokenService>> _mockLogger;
         private Mock<ICitizenIdConfig> _mockConfig;
         private IdTokenService _systemUndertest;
         private string _issuer; 
@@ -63,7 +54,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             
             _mockParameterBuilder = _fixture.Freeze<Mock<ITokenValidationParameterBuilder>>();
             _mockJwtTokenValidator = _fixture.Freeze<Mock<ISecurityTokenValidator>>();
-            _mockLogger = _fixture.Freeze<Mock<ILogger<IdTokenService>>>();
         }
 
         [TestMethod]

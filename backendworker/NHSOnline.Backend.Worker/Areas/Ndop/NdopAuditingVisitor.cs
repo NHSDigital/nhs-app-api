@@ -1,5 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Areas.Ndop.Models;
-using NHSOnline.Backend.Worker.Ndop;
+﻿using NHSOnline.Backend.Worker.Ndop;
 using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Ndop

@@ -367,21 +367,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         public async Task NhsUsersPost_ReturnsLinkageDetails_WhenValidRequest()
         {
             // Arrange
-            const string EndUserSessionId = "2ijfd";
+            const string endUserSessionId = "2ijfd";
 
             var requestBody = _fixture.Create<AddNhsUserRequest>();
             var expectedResponse = _fixture.Create<AddNhsUserResponse>();
 
             var emisUserSession = new EmisUserSession
             {
-                EndUserSessionId = EndUserSessionId,
+                EndUserSessionId = endUserSessionId,
             };
             
             var emisHeaderParameters = new EmisHeaderParameters(emisUserSession);
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, EndUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
             };
 
             _mockHttpHandler
@@ -403,14 +403,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         public async Task VerificationsPost_ReturnsLinkageDetails_WhenValidRequest()
         {
             // Arrange
-            const string EndUserSessionId = "2ijfd";
+            const string endUserSessionId = "2ijfd";
             const string nhsNumber = "nhsNumber123";
             const string odsCode = "odsCode";
             const string token = "token1";
 
             var emisUserSession = new EmisUserSession
             {
-                EndUserSessionId = EndUserSessionId,
+                EndUserSessionId = endUserSessionId,
             };
 
             var addVerificationRequest = new AddVerificationRequest
@@ -426,7 +426,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
 
             var additionalHeaders = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, EndUserSessionId),
+                new KeyValuePair<string, string>(EmisClient.HeaderEndUserSessionId, endUserSessionId),
             };
 
             _mockHttpHandler

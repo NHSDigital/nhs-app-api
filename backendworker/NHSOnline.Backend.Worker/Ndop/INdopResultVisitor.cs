@@ -1,6 +1,4 @@
-﻿using NHSOnline.Backend.Worker.Areas.Ndop.Models;
-
-namespace NHSOnline.Backend.Worker.Ndop
+﻿namespace NHSOnline.Backend.Worker.Ndop
 {
     public interface INdopResultVisitor<out T>
     {

@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             var methodName = "Check";
             _logger.LogDebug("Entered: {0}", methodName);
             
-            TestResults testResults = null;
+            TestResults testResults;
             if (taskResponse.HasSuccessResponse)
             {            
                 _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);

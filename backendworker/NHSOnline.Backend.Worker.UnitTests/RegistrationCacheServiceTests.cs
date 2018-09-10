@@ -9,7 +9,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support.Cipher;
 using NHSOnline.Backend.Worker.Support.Hasher;
 using StackExchange.Redis;
 

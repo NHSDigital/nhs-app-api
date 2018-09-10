@@ -2,20 +2,15 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Soap;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
-using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {

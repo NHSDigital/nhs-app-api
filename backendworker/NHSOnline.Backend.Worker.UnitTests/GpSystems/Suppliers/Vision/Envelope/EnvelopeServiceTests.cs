@@ -17,35 +17,35 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
 
         private EnvelopeService _systemUnderTest;
         private X509Certificate2 _certificate;
-        private const string certificatePath = "GpSystems/Suppliers/Vision/Resources/mycert.pfx";
-        private const string password = "password1";
+        private const string CertificatePath = "GpSystems/Suppliers/Vision/Resources/mycert.pfx";
+        private const string Password = "password1";
 
         [TestInitialize]
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _certificate = new X509Certificate2(certificatePath, password);
+            _certificate = new X509Certificate2(CertificatePath, Password);
             _systemUnderTest = _fixture.Create<EnvelopeService>();
         }
 
         [TestMethod]
         public void BuildEnvelope_GetConfiguration_CorrectFormat()
         {
-            const string ExpectedServiceDefinition = "VOS.GetConfiguration";
-            const string ExpectedVersionDefinition = "2.3.0";
+            const string expectedServiceDefinition = "VOS.GetConfiguration";
+            const string expectedVersionDefinition = "2.3.0";
 
-            const string ExpectedRosuAccountId = "104969";
-            const string ExpectedApiKey = "xahry1234";
-            const string ExpectedOdsCode = "X00100";
-            const string ExpectedProviderId = "nhson001";
-            const string RequestUsername = "vps-nhson001";
+            const string expectedRosuAccountId = "104969";
+            const string expectedApiKey = "xahry1234";
+            const string expectedOdsCode = "X00100";
+            const string expectedProviderId = "nhson001";
+            const string requestUsername = "vps-nhson001";
 
-            var visionRequest = new VisionRequest<Object>(ExpectedServiceDefinition, ExpectedVersionDefinition,
-                ExpectedRosuAccountId, ExpectedApiKey, ExpectedOdsCode, ExpectedProviderId, null);
+            var visionRequest = new VisionRequest<Object>(expectedServiceDefinition, expectedVersionDefinition,
+                expectedRosuAccountId, expectedApiKey, expectedOdsCode, expectedProviderId, null);
 
             var result = _systemUnderTest.BuildEnvelope(_certificate,
                 visionRequest,
-                RequestUsername);
+                requestUsername);
 
             result.Should().BeAssignableTo<String>();
             result.Should().Contain("<vision:serviceContent />");
@@ -53,26 +53,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
             var getConfiguration = new GetConfigurationEvaluator(result);
 
             getConfiguration.Validate(
-                ExpectedServiceDefinition,
-                ExpectedVersionDefinition,
-                ExpectedRosuAccountId,
-                ExpectedApiKey,
-                ExpectedOdsCode,
-                ExpectedProviderId);
+                expectedServiceDefinition,
+                expectedVersionDefinition,
+                expectedRosuAccountId,
+                expectedApiKey,
+                expectedOdsCode,
+                expectedProviderId);
         }
 
         // Test to ensure that the request body can be built using a generic ServiceContent
         [TestMethod]
         public void BuildEnvelope_GenericContentBody_CorrectFormat()
         {
-            const string ExpectedServiceDefinition = "VOS.GenericService";
-            const string ExpectedVersionDefinition = "9.9.9";
+            const string expectedServiceDefinition = "VOS.GenericService";
+            const string expectedVersionDefinition = "9.9.9";
 
-            const string ExpectedRosuAccountId = "104969";
-            const string ExpectedApiKey = "xahry1234";
-            const string ExpectedOdsCode = "X00100";
-            const string ExpectedProviderId = "nhson001";
-            const string RequestUsername = "vps-nhson001";
+            const string expectedRosuAccountId = "104969";
+            const string expectedApiKey = "xahry1234";
+            const string expectedOdsCode = "X00100";
+            const string expectedProviderId = "nhson001";
+            const string requestUsername = "vps-nhson001";
 
             const string expectedServiceContent = "<vision:serviceContent>" +
                                                   "<vision:vos>" +
@@ -80,13 +80,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
                                                   "</vision:vos>" +
                                                   "</vision:serviceContent>";
 
-            var visionRequest = new VisionRequest<TestClass>(ExpectedServiceDefinition, ExpectedVersionDefinition,
-                ExpectedRosuAccountId, ExpectedApiKey, ExpectedOdsCode, ExpectedProviderId,
+            var visionRequest = new VisionRequest<TestClass>(expectedServiceDefinition, expectedVersionDefinition,
+                expectedRosuAccountId, expectedApiKey, expectedOdsCode, expectedProviderId,
                 new TestClass { TestProp = "myTest" });
 
             var result = _systemUnderTest.BuildEnvelope(_certificate,
                 visionRequest,
-                RequestUsername);
+                requestUsername);
 
             result.Should().Contain(expectedServiceContent);
         }

@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using FluentAssertions;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.Areas.Session;
-using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 {

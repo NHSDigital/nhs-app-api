@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using RichardSzalay.MockHttp;
 

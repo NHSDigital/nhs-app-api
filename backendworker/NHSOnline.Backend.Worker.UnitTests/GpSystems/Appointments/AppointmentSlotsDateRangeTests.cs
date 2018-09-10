@@ -85,8 +85,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
             var expectedFromDateOut = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 4, 29)).SetTimeToMidnight();
             var expectedToDateOut = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 5, 27, 18, 45, 22));
 
-
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             var mockDateTimeOffsetProvider = new Mock<IDateTimeOffsetProvider>();
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset()).Returns(expectedFromDate);
             mockDateTimeOffsetProvider.Setup(x => x.CreateDateTimeOffset(toDateAtMidnight.DateTime)).Returns(toDateAtMidnight);

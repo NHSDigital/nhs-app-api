@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,7 +15,7 @@ namespace NHSOnline.Backend.Worker.Filters
 
         public TimeoutExceptionFilterAttribute(ILogger<TimeoutExceptionFilterAttribute> logger)
         {
-            this._logger = logger;
+            _logger = logger;
         }
 
         public override void OnException(ExceptionContext context)

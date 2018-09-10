@@ -1,11 +1,7 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.CitizenId.Models;
 using NHSOnline.Backend.Worker.Support;
 
 namespace NHSOnline.Backend.Worker.CitizenId

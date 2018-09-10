@@ -12,7 +12,6 @@ using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Support.Auditing;
-using static NHSOnline.Backend.Worker.Constants;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 {
@@ -118,7 +117,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             // Assert
             var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
-            statusCodeResult.StatusCode.Should().Be(CustomHttpStatusCodes.Status460LimitReached);
+            statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status460LimitReached);
             _mockAppointmentsService.Verify();
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage, _appointmentBookRequest.SlotId,
                 _appointmentBookRequest.StartTime));

@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         //            string endUserSessionId);
 
         // PracticeSettings
-        Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
+        Task<EmisApiObjectResponse<PracticeSettingsGetResponse>> PracticeSettingsGet(
              EmisHeaderParameters headerParameters, string practiceCode);
 
         // AppointmentSlots

@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Threading;
 using FluentAssertions;
-using Microsoft.Data.Edm.Library.Expressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

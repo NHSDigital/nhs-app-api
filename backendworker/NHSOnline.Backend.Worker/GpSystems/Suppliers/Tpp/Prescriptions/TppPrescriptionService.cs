@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions

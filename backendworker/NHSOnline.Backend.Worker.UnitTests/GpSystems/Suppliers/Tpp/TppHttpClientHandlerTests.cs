@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -55,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _systemUnderTest = new TppHttpClientHandler(_mockConfiguration.Object, _mockLogger.Object);
             _systemUnderTest.ClientCertificates.Should().BeEmpty();
             _mockLogger.Verify(x => x.Log(
-                LogLevel.Warning, (EventId) 0,
+                LogLevel.Warning, 0,
                 It.Is<FormattedLogValues>(values => values.ToString()
                     .Equals("Could not add TPP client certificate due to missing certificate path or password.",
                         StringComparison.Ordinal)),

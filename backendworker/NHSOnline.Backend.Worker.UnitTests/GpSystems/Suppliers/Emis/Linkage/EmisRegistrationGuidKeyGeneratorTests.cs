@@ -4,7 +4,6 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
-using Remotion.Linq.Clauses.ResultOperators;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
 {
@@ -21,7 +20,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             _systemUnderTest = _fixture.Create<EmisRegistrationGuidKeyGenerator>();
         }
         
-
         [TestMethod]
         public void GenerateRegistrationKey_Returns_OK()
         {
@@ -33,8 +31,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                 accountId, odsCode, linkageKey);
 
             result.Should().Be(odsCode + accountId + linkageKey);
-
-
         }
         
         [TestMethod]
@@ -83,18 +79,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             const string odsCode = "";
             const string linkageKey = null;
 
-            try
-            {
-                var result = _systemUnderTest.GenerateRegistrationKey(
-                    accountId, odsCode, linkageKey);
-            }
-            catch (ArgumentException e)
-            {
-                e.Message.Should().BeEquivalentTo("need to provide values to create key");
-                return;
-            }
+            Action act = () => _systemUnderTest.GenerateRegistrationKey(accountId, odsCode, linkageKey);
 
-            Assert.Fail();
+            act.Should().Throw<ArgumentException>()
+                .WithMessage("need to provide values to create key");
         }
     }
 }

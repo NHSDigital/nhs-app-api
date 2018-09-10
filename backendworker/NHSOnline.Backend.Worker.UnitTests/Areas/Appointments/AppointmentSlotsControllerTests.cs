@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -216,7 +215,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
             result.Should().BeAssignableTo(typeof(StatusCodeResult));
 
             var statusCodeResult = (StatusCodeResult) result;
-            statusCodeResult.StatusCode.Should().Equals(HttpStatusCode.InternalServerError);
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status502BadGateway);
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType,
                 "Available appointment slots view unsuccessful due to supplier unavailable"));

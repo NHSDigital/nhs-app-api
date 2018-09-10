@@ -6,7 +6,6 @@ using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using NHSOnline.Backend.Worker.Support.Temporal;
 

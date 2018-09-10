@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Worker.Settings
 {

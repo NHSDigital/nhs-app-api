@@ -6,11 +6,8 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using System.Threading;
-using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -76,7 +73,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             };
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-
         }
 
         [TestMethod]
@@ -200,11 +196,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
                 }
             };
             actualResponse.Should().BeEquivalentTo(expectedResponse);
-        }
-
-        private DateTimeOffset DateFromNow(int days = 0, int hours = 0, int minutes = 0)
-        {
-            return _dateTimeOffsetProvider.CreateDateTimeOffset(DateTime.Now).AddMinutes(minutes).AddHours(hours).AddDays(days);
         }
 
         private DateTimeOffset Tomorrow()

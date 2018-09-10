@@ -1,6 +1,4 @@
-﻿using System.Xml.Serialization;
-
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 {
     public interface ITppRequest
     {

@@ -77,9 +77,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
             successResult.Response.NhsNumbers.Should().BeEquivalentTo(expectedNhsNumbers);
@@ -107,9 +106,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.NhsNumbers.Single().NhsNumber.Should().Be(expectedNhsNumber);
         }
@@ -139,9 +137,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.NhsNumbers.Select(x => x.NhsNumber).Should().BeEquivalentTo(expectedNhsNumbers);
         }
@@ -159,9 +156,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                 patientIdentifiers: patientIdentifiers);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.NhsNumbers.Should().BeEmpty();
         }
@@ -179,8 +175,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Im1Connect
                 patientIdentifiers: patientIdentifiers);
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.NhsNumbers.Should().BeEmpty();
         }

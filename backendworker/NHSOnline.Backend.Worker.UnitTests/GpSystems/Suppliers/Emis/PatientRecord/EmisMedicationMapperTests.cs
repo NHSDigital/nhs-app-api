@@ -51,7 +51,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.PatientRec
         {
             // Arrange
             var now = DateTimeOffset.Now;
-            var oneMonthAgo = now.AddMonths(-1);
             var oneYearAgo = now.AddYears(-1);
             var twoYearsAgo = now.AddYears(-2);
             

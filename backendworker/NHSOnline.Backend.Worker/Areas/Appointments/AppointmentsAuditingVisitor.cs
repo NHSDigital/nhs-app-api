@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.GpSystems.Appointments;
+﻿using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Appointments

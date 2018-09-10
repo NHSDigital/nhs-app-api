@@ -27,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         private ILoggerFactory _loggerFactory;
         private ITppDemographicsMapper _tppDemographicsMapper;
         private ITppMyRecordMapper _tppMyRecordMapper;
-        private ITppDetailedTestResultMapper _tppDetailedTestResultMapper;
         
         private ILogger<TppCourseService> _tppCourseLogger;
         private ILogger<TppPrescriptionService> _tppPrescriptionLogger;
@@ -43,7 +42,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
             _loggerFactory = new Mock<ILoggerFactory>().Object;
             _tppDemographicsMapper = new Mock<ITppDemographicsMapper>().Object;
             _tppMyRecordMapper = new Mock<ITppMyRecordMapper>().Object;
-            _tppDetailedTestResultMapper = new Mock<ITppDetailedTestResultMapper>().Object;
             
             _tppCourseLogger = Mock.Of<ILogger<TppCourseService>>();
             _tppPrescriptionLogger = Mock.Of<ILogger<TppPrescriptionService>>();
@@ -58,7 +56,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
         [TestMethod]
         public void GetAppointmentsService_WhenCalled_ReturnsTppAppointmentService()
         {
-            var logger = Mock.Of<ILogger<TppAppointmentsService>>();
             var dateTimeOffsetProvider = Mock.Of<IDateTimeOffsetProvider>();
             var builder = Mock.Of<IAppointmentsResultBuilder>();
             var service = new TppAppointmentsService(

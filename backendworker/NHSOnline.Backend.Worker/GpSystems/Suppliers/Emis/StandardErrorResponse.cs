@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
     public class StandardErrorResponse
     {

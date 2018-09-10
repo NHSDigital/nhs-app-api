@@ -1,10 +1,7 @@
-﻿using NHSOnline.Backend.Worker.Areas;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
+﻿using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments

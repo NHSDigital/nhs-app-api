@@ -58,9 +58,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
             successResult.Response.NhsNumbers.Should().BeEquivalentTo(expectedNhsNumbers);
@@ -80,9 +79,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Im1Connecti
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
             successResult.Response.NhsNumbers.Should().BeEmpty();

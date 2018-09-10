@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using NHSOnline.Backend.Worker.Support.Auditing;
 using System;
-using Microsoft.Extensions.Logging;
 
 namespace NHSOnline.Backend.Worker.Filters
 {

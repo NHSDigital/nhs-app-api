@@ -4,9 +4,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
 {
     public class GetConfigurationEvaluator : AbstractXmlEvaluator
     {
-        const string visionRequestXpath = soapBody + "vision:visionRequest/vision:serviceHeader/";
-        private const string visionCredentialsXpath = visionRequestXpath + "vision:credentials/";
-        private const string visionOpsXpath = visionRequestXpath + "vision:opsReference/";
+        private const string VisionRequestXpath = SoapBody + "vision:visionRequest/vision:serviceHeader/";
+        private const string VisionCredentialsXpath = VisionRequestXpath + "vision:credentials/";
+        private const string VisionOpsXpath = VisionRequestXpath + "vision:opsReference/";
 
         public GetConfigurationEvaluator(string envelope) : base(envelope)
         {
@@ -16,18 +16,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
             string odsCode, string providerId)
         {
             ValidateServiceDefinition(serviceDefinition, serviceVersion);
-            Assert.IsTrue((bool) nav.Evaluate(
-                visionRequestXpath + $"/vision:target/vision:nationalCode[text()='{odsCode}'])",
-                manager), $"Failed to find odsCode: {odsCode}");
-            Assert.IsTrue((bool) nav.Evaluate(
-                visionCredentialsXpath + $"vision:rosuAccountId[text()='{rosuAccountId}'])",
-                manager), $"Failed to find rosuAccountId: {rosuAccountId}");
-            Assert.IsTrue((bool) nav.Evaluate(visionCredentialsXpath + $"vision:apiKey[text()='{apiKey}'])",
-                manager), $"Failed to find apiKey: {apiKey}");
-            Assert.IsTrue((bool) nav.Evaluate(visionOpsXpath + $"vision:provider[text()='{providerId}'])",
-                manager), $"Failed to find providerId: {providerId}");
-            Assert.IsTrue((bool) nav.Evaluate(visionOpsXpath + $"vision:accountId[text()='{providerId}'])",
-                manager), $"Failed to find accountId: {providerId}");
+            Assert.IsTrue((bool) Nav.Evaluate(
+                VisionRequestXpath + $"/vision:target/vision:nationalCode[text()='{odsCode}'])",
+                Manager), $"Failed to find odsCode: {odsCode}");
+            Assert.IsTrue((bool) Nav.Evaluate(
+                VisionCredentialsXpath + $"vision:rosuAccountId[text()='{rosuAccountId}'])",
+                Manager), $"Failed to find rosuAccountId: {rosuAccountId}");
+            Assert.IsTrue((bool) Nav.Evaluate(VisionCredentialsXpath + $"vision:apiKey[text()='{apiKey}'])",
+                Manager), $"Failed to find apiKey: {apiKey}");
+            Assert.IsTrue((bool) Nav.Evaluate(VisionOpsXpath + $"vision:provider[text()='{providerId}'])",
+                Manager), $"Failed to find providerId: {providerId}");
+            Assert.IsTrue((bool) Nav.Evaluate(VisionOpsXpath + $"vision:accountId[text()='{providerId}'])",
+                Manager), $"Failed to find accountId: {providerId}");
         }
     }
 

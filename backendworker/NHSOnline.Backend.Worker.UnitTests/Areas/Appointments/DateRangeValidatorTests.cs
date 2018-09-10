@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support.Temporal;

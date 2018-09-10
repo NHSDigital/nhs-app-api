@@ -187,7 +187,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Soap
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
             ns.Add("vision", "urn:vision");
 
-            XmlDocument xd = null;
+            XmlDocument xd;
 
             using (MemoryStream memStm = new MemoryStream())
             {

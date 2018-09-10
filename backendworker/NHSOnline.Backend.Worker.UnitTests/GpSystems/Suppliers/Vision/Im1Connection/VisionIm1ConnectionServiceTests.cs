@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -66,9 +65,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
 
             var result = await systemUnderTest.Verify(DefaultConnectionToken, DefaultOdsCode);
 
-            result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>();
-
-            var successResult = result as Im1ConnectionVerifyResult.SuccessfullyVerified;
+            var successResult = result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SuccessfullyVerified>()
+                .Subject;
 
             successResult.Response.ConnectionToken.Should().Be(DefaultConnectionToken);
             successResult.Response.NhsNumbers.Should().BeEquivalentTo(expectedNhsNumbers);
@@ -187,8 +185,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
         public async Task Verify_UnknownError_ReturnsUnknownErrorResult()
         {
             // Arrange
-            var patientConfiguration = _fixture.Create<PatientConfiguration>();
-
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(

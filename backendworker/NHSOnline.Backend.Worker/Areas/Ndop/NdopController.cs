@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Filters;
@@ -47,7 +46,5 @@ namespace NHSOnline.Backend.Worker.Areas.Ndop
                 _logger.LogExit(nameof(GetToken));
             }
         }
-        
-        
     }
 }

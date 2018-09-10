@@ -1,6 +1,5 @@
 ﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
-using Location = NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Location;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 {

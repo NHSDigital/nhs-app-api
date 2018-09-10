@@ -1,7 +1,5 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Microsoft.AspNetCore.Authentication;
-using Newtonsoft.Json;
 
 namespace NHSOnline.Backend.Worker.Support
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
 {
@@ -24,7 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions
                 throw new ArgumentNullException(nameof(medications));
             }
 
-            _logger.LogInformation($"Mapping {medications?.Count()} prescriptions.");
+            _logger.LogInformation($"Mapping {medications.Count} prescriptions.");
 
             PrescriptionListResponse result;
             

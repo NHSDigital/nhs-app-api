@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions
 {
     public class RequestMedication : AbstractTppRequestModel
     {
@@ -19,6 +19,5 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models
 
         [XmlIgnore]
         public override string RequestType => "RequestMedication";
-
     }
 }

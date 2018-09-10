@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NHSOnline.Backend.Worker.Areas.Ndop.Models;
 using NHSOnline.Backend.Worker.Ndop;
 
 namespace NHSOnline.Backend.Worker.Areas.Ndop

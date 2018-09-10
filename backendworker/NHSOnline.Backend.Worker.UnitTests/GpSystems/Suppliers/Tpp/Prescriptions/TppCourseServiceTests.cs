@@ -13,6 +13,7 @@ using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
 using TppUserSession = NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppUserSession;
@@ -212,7 +213,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
         public async Task Get_ReturnsSuccessfulResponse_TppResponseContainsNullableRequestableProperty()
         {
             // Arrange
-            const int ExpectedNumberOfPrescriptions = 1;
+            const int expectedNumberOfPrescriptions = 1;
             _fixture.Customize<Medication>(c => c.With(s => s.Requestable, "y"));
 
             var listRepeatMedicationReply = new ListRepeatMedicationReply
@@ -260,7 +261,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
             _tppClient.Verify(x => x.ListRepeatMedicationPost(_userSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
-            Assert.AreEqual(ExpectedNumberOfPrescriptions, capturedItemToMap.Count);
+            Assert.AreEqual(expectedNumberOfPrescriptions, capturedItemToMap.Count);
         }
         
         [TestMethod]

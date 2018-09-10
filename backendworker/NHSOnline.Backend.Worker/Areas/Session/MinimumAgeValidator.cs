@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Worker.Areas.Im1Connection;
-using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Settings;
-using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {

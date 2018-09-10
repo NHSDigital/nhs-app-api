@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp;
 using RichardSzalay.MockHttp;
-using RichardSzalay.MockHttp.Matchers;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
+﻿namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
     public class ImmunisationItem
     {

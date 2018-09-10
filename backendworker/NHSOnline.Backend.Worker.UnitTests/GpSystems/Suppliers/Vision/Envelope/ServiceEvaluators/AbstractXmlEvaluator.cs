@@ -6,34 +6,34 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Envelope
 {
     public abstract class AbstractXmlEvaluator
     {
-        protected XPathNavigator nav;
-        protected XmlNamespaceManager manager;
+        protected readonly XPathNavigator Nav;
+        protected readonly XmlNamespaceManager Manager;
 
-        protected const string soapBody = "boolean(//soapenv:Envelope/soapenv:Body/";
+        protected const string SoapBody = "boolean(//soapenv:Envelope/soapenv:Body/";
 
         protected AbstractXmlEvaluator(string envelope)
         {
             XmlDocument d = new XmlDocument();
             d.LoadXml(envelope);
-            nav = d.CreateNavigator();
-            manager = new XmlNamespaceManager(d.NameTable);
-            manager.AddNamespace("vision", "urn:vision");
-            manager.AddNamespace("soapenv", "http://schemas.xmlsoap.org/soap/envelope/");
-            manager.AddNamespace("wsa", "http://www.w3.org/2005/08/addressing");
-            manager.AddNamespace("wsse",
+            Nav = d.CreateNavigator();
+            Manager = new XmlNamespaceManager(d.NameTable);
+            Manager.AddNamespace("vision", "urn:vision");
+            Manager.AddNamespace("soapenv", "http://schemas.xmlsoap.org/soap/envelope/");
+            Manager.AddNamespace("wsa", "http://www.w3.org/2005/08/addressing");
+            Manager.AddNamespace("wsse",
                 "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
-            manager.AddNamespace("wsu",
+            Manager.AddNamespace("wsu",
                 "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd");
         }
 
         protected void ValidateServiceDefinition(string serviceDefinition, string serviceVersion)
         {
-            Assert.IsTrue((bool) nav.Evaluate(
-                soapBody + $"vision:visionRequest/vision:serviceDefinition/vision:name[text()='{serviceDefinition}'])",
-                manager), $"Failed to find service definition: {serviceDefinition}");
-            Assert.IsTrue((bool) nav.Evaluate(
-                soapBody + $"vision:visionRequest/vision:serviceDefinition/vision:version[text()='{serviceVersion}'])",
-                manager), $"Failed to find service version: {serviceVersion}");
+            Assert.IsTrue((bool) Nav.Evaluate(
+                SoapBody + $"vision:visionRequest/vision:serviceDefinition/vision:name[text()='{serviceDefinition}'])",
+                Manager), $"Failed to find service definition: {serviceDefinition}");
+            Assert.IsTrue((bool) Nav.Evaluate(
+                SoapBody + $"vision:visionRequest/vision:serviceDefinition/vision:version[text()='{serviceVersion}'])",
+                Manager), $"Failed to find service version: {serviceVersion}");
         }
     }
 }

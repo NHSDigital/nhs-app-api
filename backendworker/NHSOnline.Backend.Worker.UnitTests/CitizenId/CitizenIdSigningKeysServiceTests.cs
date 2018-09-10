@@ -18,10 +18,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
         private IFixture _fixture;
         private CitizenIdSigningKeysService _systemUnderTest;
         private Mock<ICitizenIdClient> _citizenIdClientMock;
-        private Mock<IJwtTokenService<UserProfile>> _idTokenService;
         private string _signingKey =
             "{\"keys\": [{\"kty\": \"RSA\", \"e\": \"AQAB\", \"n\": \"vYKSjXOcKZI5eNvKT0BuMUAy-N7-f1-88H-Lgz5UOlyAT3wmKNHwwuz11qmovmZaKSTHk94bLIigwGIoc-nsQOahLxS1T-g0R5xN5PRvZUfK6B5W7ONX5EaXDXimKnxQLvIFXJpqzYyStkhYROTuELv70aKQNfYBrb2yZxdPNbjMzSL881awt6wiTIk76kDpzGJ0TcBBrhNKOxPU_L00FT-ASf2mKENTx2QLW8Srgw2SYo3xWhhccz1cEgjllnsX21EYNM95_hcQOBFeDfU7lYEfYGj4bX2mHE4m5up0uLAf5hOIXnfvpmtOKmUizyA9_3yPye1zJpIfZKNgtUo6-Q\"}]}";
-        
         
         [TestInitialize]
         public void TestInitialize()
@@ -29,7 +27,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.CitizenId
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
 
             _citizenIdClientMock = _fixture.Freeze<Mock<ICitizenIdClient>>();
-            _idTokenService = _fixture.Freeze<Mock<IJwtTokenService<UserProfile>>>();
             _systemUnderTest = _fixture.Create<CitizenIdSigningKeysService>();
         }
 

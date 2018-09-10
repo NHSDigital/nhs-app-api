@@ -2,6 +2,7 @@
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Prescriptions;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.TppClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp

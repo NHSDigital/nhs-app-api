@@ -10,20 +10,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
     public class ServiceConfigurationModule : Support.DependencyInjection.ServiceConfigurationModule
     {
         private readonly ILoggerFactory _loggerFactory;
-        private readonly ILogger<ServiceConfigurationModule> _logger;
 
         public ServiceConfigurationModule(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
-            _logger = loggerFactory.CreateLogger<ServiceConfigurationModule>();
         }
 
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_VISION", _logger), out bool enabled) && enabled)
+            var logger = _loggerFactory.CreateLogger<ServiceConfigurationModule>();
+
+            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_VISION", logger), out bool enabled) && enabled)
             {
                 var configValue = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
-                _logger);
+                logger);
                 var timeout = int.Parse(configValue, CultureInfo.InvariantCulture);
 
                 services.AddSingleton<IGpSystem, VisionGpSystem>();
@@ -44,15 +44,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                             .ConfigureForwardProxy(configuration);
                     });
 
-                _logger.LogDebug("Vision GP Service was successfully configured");
+                logger.LogDebug("Vision GP Service was successfully configured");
             }
             else
             {
-                _logger.LogDebug("Vision GP Service was not configured");
+                logger.LogDebug("Vision GP Service was not configured");
             }
 
             base.ConfigureServices(services, configuration);
-
         }
     }
 }
