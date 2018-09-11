@@ -36,6 +36,7 @@ open class HomeSteps {
 
     @Step
     fun assertHeaderVisible() {
+        homePage.waitForPageHeaderText("Home")
         Assert.assertTrue(homePage.isWelcomeHeaderVisible())
     }
 

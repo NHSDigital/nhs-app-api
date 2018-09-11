@@ -22,9 +22,7 @@ open class AppointmentGuidanceSteps {
 
     @Step
     fun checkThePageHeaderIsCorrect() {
-        val actualHeader = appointmentGuidancePage.getPageHeaderText()
-        assertEquals("Page header for the appointment guidance is not matching",
-                expectedPageHeader, actualHeader)
+        appointmentGuidancePage.waitForPageHeaderText(expectedPageHeader)
     }
 
     @Step

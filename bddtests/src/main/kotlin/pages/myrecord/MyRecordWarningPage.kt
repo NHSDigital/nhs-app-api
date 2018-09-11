@@ -40,10 +40,6 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return btnAgree.element.isVisible
     }
 
-    fun getHeaderText(): String {
-        return switchToPage(Header::class.java).getPageHeaderText()
-    }
-
     fun warningText(): String {
         return txtWarning.element.text
     }
@@ -52,7 +48,7 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return txtWarning.element.getCssValue("background-color")
     }
 
-    fun clickAgreeandContinue() {
+    fun clickAgreeAndContinue() {
         btnAgree.element.click()
     }
 
@@ -61,7 +57,7 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun getSensitiveList(): ArrayList<String> {
-        var list = ArrayList<String>()
+        val list = ArrayList<String>()
         val listSensitiveData = findAllByXpath("//div[@data-purpose='info']/ul/li")
         listSensitiveData.forEach { el ->
             list.add(el.text)

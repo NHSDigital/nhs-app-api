@@ -31,8 +31,8 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), " +
                                                         "'Order new repeat prescription')]"
 
-    fun isLoaded(): Boolean {
-        return headerBar.isVisible("My repeat prescriptions")
+    fun isLoaded() {
+        waitForPageHeaderText("My repeat prescriptions")
     }
 
     fun isNoPrescriptionsMessageVisible(): Boolean {
@@ -51,14 +51,14 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         val prescriptions = findAllByXpath("//div[@data-label='historic-prescription']")
 
-        var orderDateXpath = ".//*[@data-label='order-date']"
-        var courseNameXpath = ".//*[@data-label='course-name']"
-        var dosageXpath = ".//*[@data-label='detail']"
-        var statusXpath = ".//*[@data-label='status']"
+        val orderDateXpath = ".//*[@data-label='order-date']"
+        val courseNameXpath = ".//*[@data-label='course-name']"
+        val dosageXpath = ".//*[@data-label='detail']"
+        val statusXpath = ".//*[@data-label='status']"
 
-        prescriptions.forEach( { el ->
+        prescriptions.forEach { el ->
 
-            var p: HistoricPrescription
+            val p: HistoricPrescription
 
             if (allFieldsProvided) {
                 p = HistoricPrescription(
@@ -74,7 +74,7 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             }
 
             historicPrescriptions.add(p)
-        })
+        }
 
         return historicPrescriptions
     }

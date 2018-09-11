@@ -38,9 +38,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkIfPageHeaderIsCorrect() {
-        val actualHeader = availableAppointments.getPageHeaderText()
-        assertEquals("Expected Header text $pageHeader of the page is not found",
-                pageHeader, actualHeader)
+        availableAppointments.waitForPageHeaderText(pageHeader)
     }
 
     @Step

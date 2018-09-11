@@ -78,21 +78,18 @@ class HomePageDefinitions : AbstractSteps() {
 
     private fun navigateBackToHomePage(){
         navHeader.header.clickHome()
-        Thread.sleep(1 * 1000L)
         homeSteps.assertHeaderVisible()
     }
 
     private fun followSymptomLink() {
         homeSteps.homePage.checkSymptomsLink.element.click()
-        Thread.sleep(1 * 1000L)
-        checkMySymptoms.assertConditionsHeaderVisbile()
-        checkMySymptoms.assertNhs111HeaderVisbile()
+        checkMySymptoms.assertConditionsHeaderVisible()
+        checkMySymptoms.assertNhs111HeaderVisible()
         navBar.isHighlighted(NavBar.NavBarType.SYMPTOMS)
     }
 
     private fun followAppointmentsLink() {
         homeSteps.homePage.bookAndManageAppointmentsLink.element.click()
-        Thread.sleep(1 * 1000L)
         myAppointmentsSteps.checkHeaderTextIsCorrect()
         myAppointmentsSteps.checkNoUpcomingAppointmentsTextIsDisplaying()
         navBar.isHighlighted(NavBar.NavBarType.APPOINTMENTS)
@@ -100,21 +97,18 @@ class HomePageDefinitions : AbstractSteps() {
 
     private fun followPrescriptionLink() {
         homeSteps.homePage.orderRepeatPrescriptionLink.element.click()
-        Thread.sleep(1 * 1000L)
         prescriptions.isLoaded()
         navBar.isHighlighted(NavBar.NavBarType.PRESCRIPTIONS)
     }
 
     private fun followMedicalRecordLink() {
         homeSteps.homePage.viewMedicalRecordLink.element.click()
-        Thread.sleep(1 * 1000L)
         recordSteps.assertWarningPageIsLoaded()
         navBar.isHighlighted(NavBar.NavBarType.MY_RECORD)
     }
 
     private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.element.click()
-        Thread.sleep(1 * 1000L)
         browser.changeTab(URL(organDonationUrl))
         browser.shouldHaveUrl(organDonationUrl)
     }

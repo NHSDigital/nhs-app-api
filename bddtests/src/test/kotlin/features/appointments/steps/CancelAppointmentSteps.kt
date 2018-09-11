@@ -20,7 +20,8 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyWeAreOnTheCancelAppointmentScreen() {
-        assertEquals("Cancel appointment", cancelAppointmentPage.getPageHeaderText())
+        val expectedHeader = "Cancel appointment"
+        cancelAppointmentPage.waitForPageHeaderText(expectedHeader)
         assertEquals("Check your appointment details before cancelling",
                 cancelAppointmentPage.getCheckDetailsText())
     }

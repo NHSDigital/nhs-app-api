@@ -54,6 +54,6 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             assertEquals("Retry button text incorrect. ", retryButtonText, button.element.text)
         }
         // Asserting page header last, as it's generic, whereas the content header and subheader are specific to errors
-        if (!pageHeaderText.isNullOrEmpty()) assertEquals("Page header incorrect. ", pageHeaderText, getPageHeaderText())
+        if (!pageHeaderText.isNullOrEmpty()) waitForPageHeaderText(pageHeaderText!!)
     }
 }

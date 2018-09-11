@@ -51,8 +51,7 @@ open class MyAppointmentsSteps {
 
     @Step
     fun checkHeaderTextIsCorrect() {
-        assertTrue("Expected Header text is not found: $pageHeader",
-                myAppointmentsPage.waitForPageHeaderText(pageHeader))
+        myAppointmentsPage.waitForPageHeaderText(pageHeader)
     }
 
     @Step
@@ -61,7 +60,7 @@ open class MyAppointmentsSteps {
         val expectedSlots = serviceFactory.getAppointmentData().generateExpectedMyAppointments()
         val areCliniciansExpected = expectedSlots.isNotEmpty() && expectedSlots[0].clinician.isNotEmpty()
         val slots = myAppointmentsPage.getAllSlots(areCliniciansExpected)
-        assertEquals("Expected upcoming myAppointments size doesn't match with the actual size",
+        assertEquals("Expected upcoming Appointments size doesn't match with the actual size",
                 expectedSlots.size, slots.size)
         assertEquals("Exact expected Appointments list not found. ", expectedSlots, slots)
     }

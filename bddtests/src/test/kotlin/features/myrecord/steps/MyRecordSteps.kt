@@ -3,7 +3,6 @@ package features.myrecord.steps
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
 import pages.myrecord.MyRecordInfoPage
-import pages.myrecord.MyRecordNoAccessPage
 import pages.myrecord.MyRecordWarningPage
 
 open class MyRecordSteps {
@@ -12,7 +11,7 @@ open class MyRecordSteps {
     lateinit var myRecordInfoPage: MyRecordInfoPage
 
     fun assertWarningPageIsLoaded() {
-        Assert.assertEquals("Header","My medical record", getHeaderText())
+        waitForCorrectHeader()
         Assert.assertTrue("isBackToHomePresent",isBackToHomePresent())
         Assert.assertTrue("isAgreePresent",isAgreePresent())
     }
@@ -28,13 +27,13 @@ open class MyRecordSteps {
     }
 
     @Step
-    fun getHeaderText(): String {
-        return myRecordWarningPage.getHeaderText()
+    fun waitForCorrectHeader() {
+        myRecordWarningPage.waitForPageHeaderText("My medical record")
     }
 
     @Step
     fun clickAgreeandContinue() {
-        myRecordWarningPage.clickAgreeandContinue()
+        myRecordWarningPage.clickAgreeAndContinue()
     }
 
     @Step

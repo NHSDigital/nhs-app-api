@@ -135,7 +135,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see header text is My medical record$")
     fun i_see_header_text_is_My_medical_record() {
-        assertEquals("My medical record", recordSteps.getHeaderText())
+        recordSteps.waitForCorrectHeader()
     }
 
     @Then("^I see your record may contain sensitive information message$")

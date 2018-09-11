@@ -8,13 +8,16 @@ import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
+import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.support.ui.FluentWait
 import pages.navigation.Header
 import java.time.Duration
+import java.time.LocalDateTime
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
 const val POOLING_FREQUENCY: Long = 100
@@ -223,12 +226,19 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return buttons[0].text
     }
 
-    fun waitForPageHeaderText(expectedHeaderText: String): Boolean {
-        return waitFor { getPageHeaderText() == expectedHeaderText } != null
-    }
-
-    fun getPageHeaderText(): String {
-        return switchToPage(Header::class.java).pageTitle.element.text
+    fun waitForPageHeaderText(expectedHeaderText: String) {
+        assertEquals(
+                "Header is incorrect",
+                expectedHeaderText,
+                try {
+                    waitFor {
+                        getPageHeaderText() == expectedHeaderText
+                    }
+                    getPageHeaderText()
+                } catch (e: TimeoutException) {
+                    getPageHeaderText()
+                }
+        )
     }
 
     fun clickOnButtonContainingText(text: String) {
@@ -240,6 +250,14 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
                 .containingText(text)
                 .element
                 .click()
+    }
+
+    fun hideKeyboard() {
+        if (isAndroid()) {
+            getAndroidDriver().hideKeyboard()
+        } else if (isIOS()) {
+            throw NotImplementedError("IOS keyboard hiding not yet implemented.")
+        }
     }
 
     private fun isAnyXpathVisible(xpath: String): Boolean {
@@ -258,11 +276,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return anyVisible
     }
 
-    fun hideKeyboard() {
-        if (isAndroid()) {
-            getAndroidDriver().hideKeyboard()
-        } else if (isIOS()) {
-            throw NotImplementedError("IOS keyboard hiding not yet implemented.")
-        }
+    private fun getPageHeaderText(): String {
+        return switchToPage(Header::class.java).pageTitle.element.text
     }
 }

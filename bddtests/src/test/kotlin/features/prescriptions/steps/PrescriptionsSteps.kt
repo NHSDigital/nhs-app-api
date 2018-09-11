@@ -17,7 +17,7 @@ open class PrescriptionsSteps {
 
     @Step
     open fun isLoaded() {
-        Assert.assertTrue(prescriptions.isLoaded())
+        prescriptions.isLoaded()
     }
 
     @Step

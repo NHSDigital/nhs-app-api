@@ -29,7 +29,7 @@ open class OneOneOneStepDefinitions {
 
     @And("^Check My symptoms page is displayed")
     fun checkMySymptomsPageIsDisplayed() {
-        checkMySymptoms.assertConditionsHeaderVisbile()
-        checkMySymptoms.assertNhs111HeaderVisbile()
+        checkMySymptoms.assertConditionsHeaderVisible()
+        checkMySymptoms.assertNhs111HeaderVisible()
     }
 }
