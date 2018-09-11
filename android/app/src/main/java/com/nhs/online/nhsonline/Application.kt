@@ -19,7 +19,7 @@ class Application : Application() {
         var textToSpeech = TextToSpeech(this, null)
 
         // Note we are specifying a language, and a region, the variant doesn't matter.
-        val locale = Locale(resources.getString(R.string.locale_language), resources.getString(R.string.locale_region), null)
+        val locale = Locale(resources.getString(R.string.locale_language), resources.getString(R.string.locale_region))
 
         // This method checks the device to see if the specified locale is installed, and returns one of five constants (integers):
         // 1. LANG_AVAILABLE (0) - Denotes the language is available for the language by the locale, but not the country and variant.
