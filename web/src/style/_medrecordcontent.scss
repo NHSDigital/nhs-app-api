@@ -81,6 +81,7 @@ div.record-content {
     p,
     b,
     label,
+    span,
     hr {
       opacity: 0;
       transition: opacity 0.5s linear;
@@ -94,6 +95,7 @@ div.record-content {
     p,
     b,
     label,
+    span,
     hr {
       opacity: 1;
       transition: opacity 0.1s linear 0.3s;
