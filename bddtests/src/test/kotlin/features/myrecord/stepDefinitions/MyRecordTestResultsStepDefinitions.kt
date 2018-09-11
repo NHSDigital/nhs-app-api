@@ -4,7 +4,7 @@ import cucumber.api.java.en.*
 import mocking.data.myrecord.TestResultsData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import org.junit.Assert
+import org.junit.Assert.*
 import pages.ErrorPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
@@ -224,7 +224,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     fun whenIGetTheUsersMyRecordData()
     {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
@@ -235,55 +235,55 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("^I receive (.*) test results as part of the my record object$")
     fun thenIReceiveATestResultsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.testResults.data.count())
+        assertEquals(count, result.response.testResults.data.count())
     }
 
     @Then("^I receive the test result with term set correctly to Term$")
     fun thenIReceiveATestResultWithTermSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count", result.response.testResults.data.first().description)
+        assertEquals("Neutrophil count", result.response.testResults.data.first().description)
     }
 
     @Then("^the line item displays text value and range$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectlyIncludingRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultChildLineItems.first().description)
+        assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L (normal range: 3.6 - 10)", result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^the line item value is set correctly$")
     fun thenIReceiveATestResultWithLineItemValueSetCorrectly() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultChildLineItems.first().description)
+        assertEquals("Child LineItem Description does not match","Platelet count: 5.9 x10^9/L", result.response.testResults.data.first().testResultChildLineItems.first().description)
     }
 
     @Then("^I receive line items for each child value$")
     fun thenIReceiveATestResultWithLineItemsForEachChildValue() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Expected two ChildLineItems in TestResult",2, result.response.testResults.data.first().testResultChildLineItems.count())
+        assertEquals("Expected two ChildLineItems in TestResult",2, result.response.testResults.data.first().testResultChildLineItems.count())
     }
 
     @Then("^I receive a single test result with the term set correctly to Term TextValue NumericUnits$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnits() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults.data.first().description)
+        assertEquals("Neutrophil count: 5.58 x10^9/L", result.response.testResults.data.first().description)
     }
 
     @Then("^I receive the term set correctly to Term TextValue NumericUnits Range$")
     fun thenIReceiveASingleTestWithTheTermSetCorrectlyToTermTextValueAndNumericUnitsWithRange() {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults.data.first().description)
+        assertEquals("Neutrophil count: 5.58 x10^9/L (normal range: 1.7 - 6)", result.response.testResults.data.first().description)
     }
 
     @And("^the flag informing that the patient has access to the test results data is set to \"(.*)\"$")
     fun andHasAccessToMedicationsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.testResults.hasAccess)
+        assertEquals(value, result.response.testResults.hasAccess)
     }
 
     @And("^the flag informing that there was an error retrieving the test results data is set to \"(.*)\"$")
     fun andHasErrorsWhenRetrievingMedicationsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.testResults.hasErrored)
+        assertEquals(value, result.response.testResults.hasErrored)
     }
 
     @Then("I see the appropriate error message for retrieving test result detail")

@@ -86,7 +86,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         try {
             val result = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getCoursesConnection(null)
+                    .getCoursesConnection()
 
             Serenity.setSessionVariable(CoursesListResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
@@ -222,8 +222,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     @Suppress("UNCHECKED_CAST")
     private fun setupWiremockandCreateData() {
 
-        if (currentProvider == null)
-        {
+        if (currentProvider == null) {
             initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
         }
 

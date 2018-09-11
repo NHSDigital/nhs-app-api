@@ -24,7 +24,7 @@ import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
+import org.junit.Assert.*
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -76,7 +76,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     fun iHaveARepeatPrescriptionRequestWithXCourses(numOfCourses: Int) {
         currentPatient = Patient.getDefault("EMIS")
 
-        var uuids: MutableList<String> = mutableListOf()
+        val uuids: MutableList<String> = mutableListOf()
 
         for (i in 0 until numOfCourses) {
             uuids.add(UUID.randomUUID().toString())
@@ -87,7 +87,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @And("^(\\d+) invalid courses")
     fun xInvalidCourses(numOfCourses: Int) {
-        var uuids: MutableList<String> = mutableListOf()
+        val uuids: MutableList<String> = mutableListOf()
 
         for (i in 0 until numOfCourses) {
             uuids.add("invalidCourse-$i")
@@ -121,7 +121,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .postPrescriptionsConnection(prescriptionSubmissionRequest, null)
+                    .postPrescriptionsConnection(prescriptionSubmissionRequest)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -205,7 +205,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
     @Then("I see a order successful message on the Repeat prescription page with (\\d+) prescriptions")
     fun iSeeAOrderSuccessfulMessageOnTheRequestPrescriptionPageWithXPrescriptions(amount: Int) {
-        Assert.assertTrue(prescriptionPage.isOrderSuccessfullTextVisible())
+        assertTrue(prescriptionPage.isOrderSuccessfullTextVisible())
 
         when (currentProvider) {
             ProviderTypes.TPP -> {

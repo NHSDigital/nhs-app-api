@@ -3,7 +3,7 @@ package features.myrecord.stepDefinitions
 import cucumber.api.java.en.*
 import mocking.data.myrecord.ProblemsData
 import net.serenitybdd.core.Serenity
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import worker.models.myrecord.MyRecordResponse
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -97,7 +97,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     fun whenIGetTheUsersMyRecordData()
     {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
@@ -108,18 +108,18 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     @Then("^I receive \"(.*)\" problems as part of the my record object$")
     fun thenIReceiveAnProblemsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.problems.data.count())
+        assertEquals(count, result.response.problems.data.count())
     }
 
     @And("^the flag informing that the patient has access to the problem data is set to \"(.*)\"$")
     fun andHasAccessToProblemsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.problems.hasAccess)
+        assertEquals(value, result.response.problems.hasAccess)
     }
 
     @And("^the flag informing that there was an error retrieving the problem data is set to \"(.*)\"$")
     fun andHasErrorsWhenRetrievingProblemsDataIsSetTo(value: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(value, result.response.problems.hasErrored)
+        assertEquals(value, result.response.problems.hasErrored)
     }
 }

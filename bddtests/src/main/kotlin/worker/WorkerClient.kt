@@ -52,7 +52,7 @@ class WorkerClient {
     private val gsonBuilder: GsonBuilder = GsonBuilder()
     private var gson: Gson
     private val config = Config.instance
-    private var csrfToken=""
+    private var csrfToken = ""
 
     init {
         _client = HttpClients.createDefault()
@@ -60,8 +60,7 @@ class WorkerClient {
         gson = gsonBuilder.create()
     }
 
-    fun setCsrfToken(token:String)
-    {
+    fun setCsrfToken(token: String) {
         this.csrfToken = token
     }
 
@@ -102,7 +101,7 @@ class WorkerClient {
         return UserSessionResponse(userSessionResponseCookie, userSessionResponseBody)
     }
 
-    fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false) : MyAppointmentsResponse {
+    fun getMyAppointments(fromDate: String, includePastAppointments: Boolean = false): MyAppointmentsResponse {
         val uriBuilder = URIBuilder(config.backendUrl)
                 .setPath(WorkerPaths.myAppointments)
                 .addParameter("pastAppointmentsFromDate", fromDate)
@@ -136,7 +135,7 @@ class WorkerClient {
         return gson.fromJson<AppointmentSlotsResponse>(result, AppointmentSlotsResponse::class.java)
     }
 
-    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext?): PrescriptionsListResponse {
+    fun getPrescriptionsConnection(fromDate: String?, context: HttpContext? = null): PrescriptionsListResponse {
         var queryString = ""
         if (fromDate != null) queryString = "?FromDate=" + URLEncoder.encode(fromDate, "UTF-8")
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getPrescriptionsConnection + queryString)
@@ -148,13 +147,13 @@ class WorkerClient {
         return gson.fromJson<PrescriptionsListResponse>(result, PrescriptionsListResponse::class.java)
     }
 
-    fun deleteAppointment(requestBody: CancelAppointmentRequest, context: HttpContext?): HttpResponse {
+    fun deleteAppointment(requestBody: CancelAppointmentRequest): HttpResponse {
         val httpDelete = HttpDeleteWithBody(config.backendUrl + WorkerPaths.myAppointments)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpDelete.entity = entity
 
-        val response = sendAsync(httpDelete, context)
+        val response = sendAsync(httpDelete)
         httpDelete.releaseConnection()
         return response
     }
@@ -172,21 +171,21 @@ class WorkerClient {
         return response
     }
 
-    fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?, context: HttpContext?): HttpResponse {
+    fun postPrescriptionsConnection(requestBody: PrescriptionSubmissionRequest?): HttpResponse {
         val httpPost = HttpPost(config.backendUrl + WorkerPaths.postPrescriptionsConnection)
         val entity = StringEntity(gson.toJson(requestBody), "UTF-8")
         entity.setContentType("application/json")
         httpPost.entity = entity
 
-        val response = sendAsync(httpPost, context)
+        val response = sendAsync(httpPost)
         httpPost.releaseConnection()
         return response
     }
 
-    fun getCoursesConnection(context: HttpContext?): CoursesListResponse {
+    fun getCoursesConnection(): CoursesListResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getCoursesConnection)
 
-        val response = sendAsync(httpGet, context)
+        val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
@@ -194,9 +193,9 @@ class WorkerClient {
         return gson.fromJson<CoursesListResponse>(result, CoursesListResponse::class.java)
     }
 
-    fun getDemographics(context: HttpContext?): Demographics {
+    fun getDemographics(): Demographics {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getDemographicsConnection)
-        val response = sendAsync(httpGet, context)
+        val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
@@ -204,9 +203,9 @@ class WorkerClient {
         return gson.fromJson<Demographics>(result, Demographics::class.java)
     }
 
-    fun getMyRecord(context: HttpContext?): MyRecordResponse {
+    fun getMyRecord(): MyRecordResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.getMyRecordConnection)
-        val response = sendAsync(httpGet, context)
+        val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
@@ -215,9 +214,9 @@ class WorkerClient {
         return json
     }
 
-    fun getNdopToken(context: HttpContext?): NdopResponse {
+    fun getNdopToken(): NdopResponse {
         val httpGet = HttpGet(config.backendUrl + WorkerPaths.ndopConnection)
-        val response = sendAsync(httpGet, context)
+        val response = sendAsync(httpGet)
         val rd = BufferedReader(InputStreamReader(response.entity.content))
         val result = rd.use { it.readText() }
         httpGet.releaseConnection()
@@ -268,19 +267,17 @@ class WorkerClient {
         return uriBuilder
     }
 
-    private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse
-    {
+    private fun sendAsync(request: HttpUriRequest, context: HttpContext? = null): HttpResponse {
         // If we have a token, use it
-        if(this.csrfToken.isNotEmpty())
-        {
+        if (this.csrfToken.isNotEmpty()) {
             request.addHeader("X-CSRF-TOKEN", csrfToken)
         }
 
         val response = if (context != null) _client.execute(request, context) else _client.execute(request)
 
         if (response.statusLine.statusCode != SC_OK &&
-            response.statusLine.statusCode != SC_CREATED &&
-            response.statusLine.statusCode != SC_NO_CONTENT) {
+                response.statusLine.statusCode != SC_CREATED &&
+                response.statusLine.statusCode != SC_NO_CONTENT) {
             // Exception is thrown here to ensure that the
             // tests fail at the appropriate location and not further down the line
             // when values are not as expected.  This makes it easier to debug.
@@ -290,9 +287,9 @@ class WorkerClient {
         }
     }
 
-    companion object{
+    companion object {
 
-        fun  getHttpContext(includeBadCookie: Boolean): HttpContext{
+        fun getHttpContext(includeBadCookie: Boolean): HttpContext {
             val localContext = BasicHttpContext()
             val cookieStore = BasicCookieStore()
 
@@ -314,14 +311,15 @@ class WorkerClient {
             return localContext
         }
     }
-    class HttpDeleteWithBody constructor(): HttpEntityEnclosingRequestBase() {
+
+    class HttpDeleteWithBody constructor() : HttpEntityEnclosingRequestBase() {
         val METHOD_NAME = "DELETE"
 
-        constructor(uri: URI): this() {
+        constructor(uri: URI) : this() {
             setURI(uri)
         }
 
-        constructor(uri: String): this() {
+        constructor(uri: String) : this() {
             setURI(URI.create(uri))
         }
 

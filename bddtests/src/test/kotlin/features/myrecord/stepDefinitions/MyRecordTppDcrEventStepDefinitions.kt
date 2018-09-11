@@ -4,7 +4,7 @@ import cucumber.api.java.en.*
 import mocking.data.myrecord.TppDcrData
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
@@ -54,7 +54,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     fun whenIGetTheUsersMyRecordData()
     {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord(null)
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
@@ -65,19 +65,19 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     @Then("^I receive \"(.*)\" dcr events as part of the my record object$")
     fun thenIReceiveATestResultsObject(count: Int) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(count, result.response.tppDcrEvents.data.count())
+        assertEquals(count, result.response.tppDcrEvents.data.count())
     }
 
     @Then("^the flag informing that the patient has access to the dcr event data is set to \"(.*)\"$")
     fun thenTheFlagInformingThePatientHasAccessToDcrEventDataIs(hasAccess: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(hasAccess, result.response.tppDcrEvents.hasAccess)
+        assertEquals(hasAccess, result.response.tppDcrEvents.hasAccess)
     }
 
     @Then("^the flag informing that there was an error retrieving the dcr event data is set to \"(.*)\"$")
     fun thenTheFlagInformingAnErrorOccurredGettingTheDcrEventDataIs(hasAccess: Boolean) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
-        Assert.assertEquals(hasAccess, result.response.tppDcrEvents.hasErrored)
+        assertEquals(hasAccess, result.response.tppDcrEvents.hasErrored)
     }
 }
 

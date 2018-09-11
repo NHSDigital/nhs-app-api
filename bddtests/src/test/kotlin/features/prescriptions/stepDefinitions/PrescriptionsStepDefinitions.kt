@@ -21,7 +21,7 @@ import mocking.tpp.models.ListRepeatMedicationReply
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert
+import org.junit.Assert.*
 import pages.ErrorPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
@@ -95,7 +95,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Given("^I have no repeat prescriptions for (.*)$")
     fun givenIHaveNoRepeatPrescriptions(gpSystem:String) {
-        var patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(gpSystem)
         SerenityHelpers.setPatient(patient)
         initialize(gpSystem)
         givenIHaveXPastRepeatPrescriptions(0)
@@ -124,7 +124,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Given("From date is 6 months ago and I have 10 prescriptions in the last 6 months")
     fun givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths() {
-        var EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
+        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
         numberOfPrescriptions = 10
         numOfRepeats = 10
         numOfCourses = 10
@@ -138,7 +138,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         try {
             val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            PrescriptionsListResponse = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate, null)
+            PrescriptionsListResponse = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -147,20 +147,20 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @Then("I receive a list of (\\d+) prescriptions")
     fun thenIReceiveAListOfTenPrescriptions(count: Int) {
 
-        Assert.assertNotNull(PrescriptionsListResponse)
+        assertNotNull(PrescriptionsListResponse)
 
         when (currentProvider) {
             ProviderTypes.EMIS -> {
-                Assert.assertEquals(count, PrescriptionsListResponse.prescriptions.count())
+                assertEquals(count, PrescriptionsListResponse.prescriptions.count())
                 val prescriptions = PrescriptionsListResponse.prescriptions
 
                 // We had to use a string here and then parse the screen as kotlin did not like the date time format sent from the worker
                 for (int in 0 until prescriptions.count() - 2) {
-                    Assert.assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >= ZonedDateTime.parse(prescriptions[int + 1].orderDate))
+                    assertTrue(ZonedDateTime.parse(prescriptions[int].orderDate)!! >= ZonedDateTime.parse(prescriptions[int + 1].orderDate))
                 }
             }
             ProviderTypes.TPP -> {
-                Assert.assertEquals(count, PrescriptionsListResponse.courses.count())
+                assertEquals(count, PrescriptionsListResponse.courses.count())
             }
             else -> {
                 throw Exception("Invalid GP System")
@@ -239,7 +239,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
-            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, null)
+            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -256,9 +256,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Then("^I get a response with a list of prescriptions for the last 6 months$")
     fun iGetAResponseWithAListOfPrescriptionForTheLastSixMonths() {
-        Assert.assertNotNull(PrescriptionsListResponse)
-        Assert.assertTrue(PrescriptionsListResponse.prescriptions.isNotEmpty())
-        Assert.assertTrue(PrescriptionsListResponse.courses.isNotEmpty())
+        assertNotNull(PrescriptionsListResponse)
+        assertTrue(PrescriptionsListResponse.prescriptions.isNotEmpty())
+        assertTrue(PrescriptionsListResponse.courses.isNotEmpty())
     }
 
     @But("^a fromDate in an unexpected format$")
@@ -339,8 +339,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Then("I see a message informing me that I don't currently have access to this service")
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
-        Assert.assertEquals("Sorry, you don't currently have access to this service", errorPage.heading.element.text)
-        Assert.assertEquals("Contact your GP surgery for more information.", errorPage.errorText1.element.text)
+        assertEquals("Sorry, you don't currently have access to this service", errorPage.heading.element.text)
+        assertEquals("Contact your GP surgery for more information.", errorPage.errorText1.element.text)
     }
 
     @But("The prescriptions endpoint is timing out")
@@ -482,7 +482,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     private fun setupWiremockAndData(fromdate: OffsetDateTime, numOfCourses: Int = this.numOfCourses, numOfRepeats: Int = this.numOfRepeats) {
 
         if (!::prescriptionLoader.isInitialized) {
-            var gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
+            val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)
             initialize(gpSystem)
         }
 

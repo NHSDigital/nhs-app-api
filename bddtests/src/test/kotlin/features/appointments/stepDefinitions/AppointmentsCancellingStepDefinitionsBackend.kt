@@ -3,21 +3,17 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.appointments.data.AppointmentsSlotsExample
-import features.appointments.factories.AppointmentsBookingFactory
 import features.appointments.factories.AppointmentsCancellingFactory
-import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.factories.ViewAppointmentsFactory
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import models.Patient
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 import worker.WorkerClient
 import org.apache.http.HttpResponse
 import org.apache.http.HttpStatus.SC_NO_CONTENT
-import org.junit.Assert
+import org.junit.Assert.assertTrue
 import worker.models.appointments.GenericResponseObject
 import java.time.LocalDateTime
 
@@ -49,7 +45,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     private fun mockCancellationRequestStubForReason(reason: String, gpSystem: String) {
 
-        var patient = Patient.getDefault(gpSystem)
+        val patient = Patient.getDefault(gpSystem)
 
         val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(gpSystem)
         Serenity.setSessionVariable(Patient::class).to(patient)
@@ -58,8 +54,8 @@ class AppointmentsCancellingStepDefinitionsBackend {
             builder.respondWithSuccess(response)
         }
 
-        var factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        var request = factory.defaultRequest(patient, SLOT_ID, reason)
+        val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
+        val request = factory.defaultRequest(patient, SLOT_ID, reason)
 
         factory.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
     }
@@ -68,7 +64,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_with_a_valid_cancellation_reason() {
         var id = ""
-        var reasons = retrieveCancellationReasons()
+        val reasons = retrieveCancellationReasons()
         if (reasons.any()) {
             id = reasons.first().id
 
@@ -78,7 +74,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .deleteAppointment(body, null)
+                    .deleteAppointment(body)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -94,7 +90,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .deleteAppointment(body, null)
+                    .deleteAppointment(body)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -110,7 +106,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .deleteAppointment(body, null)
+                    .deleteAppointment(body)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -122,7 +118,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @Throws(Exception::class)
     fun i_will_receive_a_successful_response() {
         val response = Serenity.sessionVariableCalled<HttpResponse>(HTTP_RESPONSE)
-        Assert.assertTrue(response.statusLine.statusCode == SC_NO_CONTENT)
+        assertTrue(response.statusLine.statusCode == SC_NO_CONTENT)
     }
 
     private fun retrieveCancellationReasons(): ArrayList<GenericResponseObject> {
