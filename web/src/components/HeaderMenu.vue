@@ -6,7 +6,7 @@
     <a id="help_icon" :class="$style['anchor-icon']" :href="helpAndSupportURL" target="_blank">
       <help-icon/>
     </a>
-    <nuxt-link :class="$style.account" to="/account"><account-icon/></nuxt-link>
+    <nuxt-link :class="$style['anchor-icon']" to="/account"><account-icon/></nuxt-link>
     <hr :class="$style.rule">
     <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
   </header>
@@ -43,10 +43,6 @@ export default {
 @import "../style/colours";
 @import "../style/textstyles";
 
-.account {
-  float: right;
-}
-
 .header {
   background: $nhs_blue;
   color: $white;
@@ -58,14 +54,6 @@ export default {
   box-shadow: 0em 0em 0.313em rgba(0, 0, 0, .5);
   z-index: 4;
   box-sizing: border-box;
-  a.account {
-    @include account;
-    margin: 1.7em 1em 1em 1em;
-    display: inline-block;
-    position: absolute;
-    right: 1.2em;
-    cursor: pointer;
-  }
    a.anchor-icon {
     color: $white;
   }

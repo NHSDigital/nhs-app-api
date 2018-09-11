@@ -41,13 +41,6 @@
                         <constraint firstAttribute="height" constant="1" id="BoD-Ck-z9l"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EEC-3w-uCv">
-                    <rect key="frame" x="332" y="3" width="43" height="48"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="contentEdgeInsets" minX="-30" minY="0.0" maxX="-26" maxY="1"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
-                    <state key="normal" image="Icon - Header - Account"/>
-                </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2kX-eU-qpv">
                     <rect key="frame" x="16" y="51" width="343" height="49"/>
                     <accessibility key="accessibilityConfiguration">
@@ -67,13 +60,21 @@
                     </attributedString>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ul-k3-LEd" userLabel="Help Icon">
-                    <rect key="frame" x="283" y="3" width="45" height="48"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <inset key="contentEdgeInsets" minX="-11" minY="0.0" maxX="-26" maxY="1"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
-                    <state key="normal" image="icon_header_help"/>
-                </button>
+                <stackView opaque="NO" contentMode="center" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="nQx-4N-DoZ">
+                    <rect key="frame" x="299" y="14" width="60" height="26"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Ul-k3-LEd" userLabel="Help Icon">
+                            <rect key="frame" x="0.0" y="0.5" width="25" height="25"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
+                            <state key="normal" backgroundImage="icon_header_help"/>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EEC-3w-uCv">
+                            <rect key="frame" x="35" y="1" width="25" height="24"/>
+                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="6" maxY="0.0"/>
+                            <state key="normal" backgroundImage="Icon - Header - Account"/>
+                        </button>
+                    </subviews>
+                </stackView>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.36862745098039218" blue="0.72156862745098038" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -84,15 +85,18 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="2kX-eU-qpv" secondAttribute="trailing" constant="16" id="Qdc-xx-bEI"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="kyn-vf-7A4" secondAttribute="bottom" constant="11" id="RWe-ue-G1R"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="2kX-eU-qpv" secondAttribute="bottom" id="VXz-kb-2es"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="nQx-4N-DoZ" secondAttribute="trailing" constant="16" id="dLV-L7-EO3"/>
                 <constraint firstItem="kyn-vf-7A4" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="dfh-PR-ohj"/>
                 <constraint firstItem="ycK-JE-PkZ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="mNB-eG-aaV"/>
                 <constraint firstItem="2kX-eU-qpv" firstAttribute="top" secondItem="ycK-JE-PkZ" secondAttribute="bottom" id="q3h-Nq-Dgz"/>
+                <constraint firstItem="nQx-4N-DoZ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="14" id="zCL-nz-6ai"/>
+                <constraint firstItem="ycK-JE-PkZ" firstAttribute="top" secondItem="nQx-4N-DoZ" secondAttribute="bottom" constant="10" id="zJK-96-erY"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <point key="canvasLocation" x="-52.5" y="-273"/>
+            <point key="canvasLocation" x="-62.5" y="-273"/>
         </view>
     </objects>
     <resources>
