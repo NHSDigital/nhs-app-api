@@ -1,26 +1,29 @@
 @import './colours';
 @import './textstyles';
 
-h3.title {
-    font-size: 1.375em;
-    margin-top: 56px;
-    margin-bottom: 12px;
+h2.title {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
 }
 
 a.paragraph-link {
     display: inline-block;
-    margin-top: -0.25em;
-}
-
-p, a {
-    line-height: 28px;
-    font-size: 19px;
+    margin-top: -0.125em;
 }
 
 h3, p, a {
     font-family: $frutiger-roman;
 }
 
-p, p+a {
-    margin-top: 24px;
+p, p+a{
+    margin-bottom: 1em;
+}
+
+ul {
+
+    margin-bottom: 1em;
+
+    li {
+        margin: 0 0 0.5em 1em;
+    }
 }

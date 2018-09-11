@@ -1,13 +1,16 @@
 <template>
   <div class="content">
     <div :class="$style['page']">
-      <Contents :page-index="pageIndex" @change-page="changePage"/>
+      <h1 :class="$style['pageTitle']">{{ $t('ds01.titles.' + pageId) }}</h1>
       <Overview v-if="pageId === 'p1'" @manage-choices="goToManageChoices"/>
-      <ManageChoice v-if="pageId === 'p2'"/>
+      <Benefits v-if="pageId === 'p2'"/>
+      <DataUse v-if="pageId === 'p3'"/>
+      <OptOutNotApply v-if="pageId === 'p4'"/>
+      <ManageChoice v-if="pageId === 'p5'"/>
     </div>
     <form id="ndop-token-form" :action="dataPreferencesUrl" method="POST" name="ndopTokenForm"
           target="_blank">
-      <button v-if="pageId === 'p2'" id="start-now-button" :class="[$style.button, $style.green]"
+      <button v-if="pageId === 'p5'" id="start-now-button" :class="[$style.button, $style.green]"
               @click="startNowClicked($event)">
         {{ $t('ds01.startNowButton') }}
       </button>
@@ -19,18 +22,22 @@
 
 <script>
 /* eslint-disable import/extensions */
-import Contents from '@/components/data-sharing/Contents';
 import BottomNav from '@/components/data-sharing/BottomNav';
 import Overview from '@/components/data-sharing/Overview';
+import Benefits from '@/components/data-sharing/Benefits';
+import DataUse from '@/components/data-sharing/DataUse';
+import OptOutNotApply from '@/components/data-sharing/OptOutNotApply';
 import ManageChoice from '@/components/data-sharing/ManageChoice';
 
 import _ from 'lodash';
 
 export default {
   components: {
-    Contents,
     BottomNav,
     Overview,
+    Benefits,
+    DataUse,
+    OptOutNotApply,
     ManageChoice,
   },
   data() {
@@ -56,7 +63,7 @@ export default {
       this.pageIndex = index;
     },
     goToManageChoices() {
-      this.changePage(_.indexOf(this.pageIds, 'p2'));
+      this.changePage(_.indexOf(this.pageIds, 'p5'));
     },
     startNowClicked(event) {
       event.preventDefault();
@@ -82,7 +89,7 @@ export default {
 };
 </script>
 
-<style module scoped lang='scss'>
+<style module lang='scss'>
 @import '../../style/buttons';
 @import '../../style/datasharing';
 </style>

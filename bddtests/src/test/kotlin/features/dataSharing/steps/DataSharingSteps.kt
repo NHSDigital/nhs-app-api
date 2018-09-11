@@ -28,18 +28,13 @@ open class DataSharingSteps {
     }
 
     @Step
-    fun clickOverviewLink() {
-        datasharing.clickOverview()
-    }
-
-    @Step
     fun clickManageYourChoiceLink() {
         datasharing.clickManageYourChoice()
     }
 
     @Step
-    fun dataSharingCompleteButtonVisible(): Boolean {
-        return datasharing.isStartNowVisible()
+    fun clickDataSharingMoreInfoLink() {
+        datasharing.clickDataSharingMoreInfoLink()
     }
 
     @Step
@@ -54,6 +49,21 @@ open class DataSharingSteps {
     @Step
     fun isOverviewTitleVisible(): Boolean {
         return datasharing.onOverviewPage()
+    }
+
+    @Step
+    fun isBenefitsTitleVisible(): Boolean {
+        return datasharing.onBenefitsPage()
+    }
+
+    @Step
+    fun isDataUseTitleVisible(): Boolean {
+        return datasharing.onDataUsePage()
+    }
+
+    @Step
+    fun isWhereOptOutDoesntApplyTitleVisible(): Boolean {
+        return datasharing.onWhereOptOutDoesntApplyPage()
     }
 
     @Step

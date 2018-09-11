@@ -20,44 +20,31 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Steps
     lateinit var browser: BrowserSteps
 
-    @When("^I am on the data sharing final page$")
-    fun iAmOnTheDataSharingCompletionPage() {
-        assert(dataSharing.dataSharingCompleteButtonVisible())
-    }
-
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
         assert(dataSharing.isDisplayed())
     }
 
-    @Given("^I am on the Data Sharing Overview page$")
-    fun iAmOnTheDataSharingOverviewPage(): Boolean {
-        return dataSharing.isOverviewTitleVisible()
+    @Given("^I am on the Data Sharing (.*) page$")
+    fun iAmOnTheDataSharingXPage(page: String) {
+        when(page) {
+            "Overview" -> { assert(dataSharing.isOverviewTitleVisible()) }
+            "Benefits" -> { assert(dataSharing.isBenefitsTitleVisible()) }
+            "Data Use" -> { assert(dataSharing.isDataUseTitleVisible()) }
+            "Where Opt Out Doesn't Apply" -> { assert(dataSharing.isWhereOptOutDoesntApplyTitleVisible()) }
+            "Manage Your Choice" -> { assert(dataSharing.isManageYourChoiceTitleVisible()) }
+            else -> throw IllegalArgumentException("$page is not a valid page name.")
+        }
     }
 
-    @Given("^I am on the Data Sharing Manage Your Choice page$")
-    fun iAmOnTheDataSharingManageYourChoicePage(): Boolean {
-        return dataSharing.isManageYourChoiceTitleVisible()
-    }
-
-    @When("^I click the Overview contents link$")
-    fun iClickTheOverviewContentsLink() {
-        dataSharing.clickOverviewLink()
-    }
-
-    @When("^I click the Manage Your Choice contents link$")
-    fun iClickTheManageYourChoiceContentsLink() {
+    @When("^I click the Manage Your Choice direct link$")
+    fun iClickTheManageYourChoiceDirectLink() {
         dataSharing.clickManageYourChoiceLink()
     }
 
-    @When("^I click the Next button$")
-    fun iClickTheNextButton() {
-        dataSharing.clickNextButton()
-    }
-
-    @When("^I click the Previous button$")
-    fun iClickThePreviousButton() {
-        dataSharing.clickPreviousButton()
+    @When("^I click the Data Sharing More Info link$")
+    fun iClickTheDataSharingMoreInfoLink() {
+        dataSharing.clickDataSharingMoreInfoLink()
     }
 
     @When("^I click the Start Now button$")
@@ -65,14 +52,22 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
         dataSharing.clickStartNowButton()
     }
 
-    @Then("^I am taken to Data Sharing Overview page$")
-    fun iAmTakenToTheDataSharingOverviewPage() {
-        assert(dataSharing.isOverviewTitleVisible())
-    }
+    @When("^I click the (.*) button (.*) times$")
+    fun iClickTheNextButtonXTimes(_button: String, _clicks: String) {
+        var clicks = _clicks.toInt()
+        if (clicks <= 0) {
+            throw IllegalArgumentException("At least one click required")
+        }
 
-    @Then("^I am taken to Data Sharing Manage Your Choice page$")
-    fun iAmTakenToTheDataSharingManageYourChoicePage() {
-        assert(dataSharing.isManageYourChoiceTitleVisible());
+        while(clicks > 0) {
+            when(_button) {
+                "Next" -> dataSharing.clickNextButton()
+                "Previous" -> dataSharing.clickPreviousButton()
+            }
+            if (--clicks != 0) {
+                Thread.sleep(500)
+            }
+        }
     }
 
     @Then("I am on the Ndop website")
@@ -81,4 +76,5 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
         browser.changeTab(URL(Config.instance.dataPreferencesUrl))
         assert(ndop.tokenIsDisplayed())
     }
+
 }

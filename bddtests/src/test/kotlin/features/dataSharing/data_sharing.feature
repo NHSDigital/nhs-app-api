@@ -9,36 +9,37 @@ Feature: Data Sharing
     And I navigate to more
     When I choose to set my data sharing preferences
 
-  @NHSO-2184
-  Scenario: A user navigates to Data Sharing Preferences Manage Your Choice from Overview via contents
+  @NHSO-2437
+  Scenario Outline: A user navigates through Data Sharing Preferences pages
+    Given I am on the Data Sharing <StartingPage> page
+    When I click the Next button <Clicks> times
+    Then I am on the Data Sharing <TargetPage> page
+    When I click the Previous button <Clicks> times
+    Then I am on the Data Sharing <StartingPage> page
+  Examples:
+  |StartingPage|Clicks|TargetPage                 |
+  |Overview    |1     |Benefits                   |
+  |Overview    |2     |Data Use                   |
+  |Overview    |3     |Where Opt Out Doesn't Apply|
+  |Overview    |4     |Manage Your Choice         |
+
+  @NHSO-2437
+  Scenario: A user navigates to Data Sharing Manage Your Choice page directly from Overview
     Given I am on the Data Sharing Overview page
-    When I click the Manage Your Choice contents link
-    Then I am taken to Data Sharing Manage Your Choice page
+    When I click the Manage Your Choice direct link
+    Then I am on the Data Sharing Manage Your Choice page
 
-  @NHSO-2184
-  Scenario: A user navigates to Data Sharing Preferences Manage Your Choice from Overview via the Next button
+  @NHSO-2437
+  Scenario: A user can navigate to the NHS website to find out more information on Data Sharing
     Given I am on the Data Sharing Overview page
-    When I click the Next button
-    Then I am taken to Data Sharing Manage Your Choice page
-
-  @NHSO-2184
-  Scenario: A user navigates to Data Sharing Preferences Overview from Manage Your Choice via contents
-    Given I click the Next button
-    And I am on the Data Sharing Manage Your Choice page
-    When I click the Overview contents link
-    Then I am taken to Data Sharing Overview page
-
-  @NHSO-2184
-  Scenario: A user navigates to Data Sharing Preferences Overview from Manage Your Choice via the Previous button
-    Given I click the Next button
-    And I am on the Data Sharing Manage Your Choice page
-    When I click the Previous button
-    Then I am taken to Data Sharing Overview page
+    When I click the Data Sharing More Info link
+    Then a new tab opens https://www.nhs.uk/your-nhs-data-matters/
 
   @NHSO-2363
   @smoketest
   Scenario: A user chooses to manage their Data Sharing preferences
-    Given I click the Next button
+    Given I am on the Data Sharing Overview page
+    And I click the Next button 4 times
     And I am on the Data Sharing Manage Your Choice page
     When I click the Start Now button
     Then I am on the Ndop website

@@ -5,22 +5,25 @@ import net.thucydides.core.annotations.DefaultUrl
 @DefaultUrl("http://web.local.bitraft.io:3000/data-sharing")
 open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    private val linkContentOverview = createBrowserElement("//span[contains(text(), 'Overview')]")
-    private val linkContentManageYourChoice = createBrowserElement("//span[contains(text(), 'Manage your choice')]")
     private val btnNext = createBrowserElement("//button[contains(text(), 'Next')]")
     private val btnPrevious = createBrowserElement("//button[contains(text(), 'Previous')]")
     private val btnStartNow = createBrowserElement("//button[contains(text(),'Start Now')]")
     private val titleOverview = createBrowserElement("//h1[contains(text(),'Overview')]")
+    private val titleBenefits = createBrowserElement("//h1[contains(text(),'Benefits of data sharing')]")
+    private val titleDataUse = createBrowserElement("//h1[contains(text(),'How your data is used')]")
+    private val titleWhereOptOutDoesntApply = createBrowserElement("//h1[contains(text(),\"Where an opt-out doesn't apply\")]")
     private val titleManageYourChoice = createBrowserElement("//h1[contains(text(),'Manage your choice')]")
+    private val linkManageYourChoice = createBrowserElement("//a[contains(text(), 'Manage your choice')]")
+    private val linkDataSharingMoreInfo = createBrowserElement("//a[contains(text(), 'NHS Website')]")
 
     // Actions
 
-    fun clickOverview() {
-        linkContentOverview.element.click()
+    fun clickManageYourChoice() {
+        linkManageYourChoice.element.click()
     }
 
-    fun clickManageYourChoice() {
-        linkContentManageYourChoice.element.click()
+    fun clickDataSharingMoreInfoLink() {
+        linkDataSharingMoreInfo.element.click()
     }
 
     fun clickNext() {
@@ -41,12 +44,20 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return titleOverview.element.isCurrentlyVisible
     }
 
-    fun onManageYourChoicePage(): Boolean {
-        return titleManageYourChoice.element.isCurrentlyVisible
+    fun onBenefitsPage(): Boolean {
+        return titleBenefits.element.isCurrentlyVisible
     }
 
-    fun isStartNowVisible(): Boolean {
-        return btnStartNow.element.isCurrentlyVisible
+    fun onDataUsePage(): Boolean {
+        return titleDataUse.element.isCurrentlyVisible
+    }
+
+    fun onWhereOptOutDoesntApplyPage(): Boolean {
+        return titleWhereOptOutDoesntApply.element.isCurrentlyVisible
+    }
+
+    fun onManageYourChoicePage(): Boolean {
+        return titleManageYourChoice.element.isCurrentlyVisible
     }
 
     private fun createBrowserElement(locator: String): HybridPageElement {
@@ -56,4 +67,5 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                 page = this
         )
     }
+
 }

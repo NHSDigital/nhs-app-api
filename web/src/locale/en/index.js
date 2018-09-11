@@ -631,7 +631,10 @@ export default {
     header: 'Sharing health data preferences',
     titles: {
       p1: 'Overview',
-      p2: 'Manage your choice',
+      p2: 'Benefits of data sharing',
+      p3: 'How your data is used',
+      p4: 'Where an opt-out doesn\'t apply',
+      p5: 'Manage your choice',
     },
     subtitle: 'Manage your data choice',
     startNowButton: 'Start Now',
@@ -651,7 +654,7 @@ export default {
         },
         yourChoice: {
           title: 'Your choice',
-          paragraph: 'If you don’t want your confidential patient information to be used for research and planning, you can opt out of this. Your confidential patient information will still be used to support your individual care as any choice you set will not change this. If you do not wish to opt out, you don’t have to do anything at all.',
+          paragraph: 'If you don\'t want your confidential patient information to be used for research and planning, you can opt out of this. Your confidential patient information will still be used to support your individual care as any choice you set will not change this. If you do not wish to opt out, you don\'t have to do anything at all.',
           manageChoiceLink: 'Manage your choice',
         },
         moreOptions: {
@@ -659,15 +662,108 @@ export default {
           paragraph: {
             part1: 'Visit the ',
             nhsWebsiteLink: 'NHS Website',
-            part3: ' for more information or to find out how to manage a choice on behalf of another person.',
+            part3: ' for more information or to read our privacy notice. You can also find out how to manage a choice on behalf of another person.',
           },
         },
       },
       p2: {
+        research: {
+          title: 'Research',
+          listItems: [
+            'Prevent serious illness',
+            'Develop new treatments',
+            'Learn more about diseases',
+          ],
+          paragraphs: [
+            'Your confidential patient information provides numerous benefits. It is used in research to find cures and better treatments for diseases like diabetes and cancer.',
+            'With your data, we are better able to develop and improve health and care services for the future.',
+          ],
+        },
+        planning: {
+          title: 'Planning',
+          listItems: [
+            'Plan NHS health services',
+            'Make services safer',
+            'Improving quality of care',
+          ],
+          paragraphs: [
+            'Confidential patient information can also be used to plan health and care services more effectively. The NHS and local authorities can plan where they need to provide further care services more efficiently.',
+            'This helps to improve health and social care for you and your family.',
+          ],
+        },
+      },
+      p3: {
+        intro: {
+          paragraphs: [
+            'The NHS collects health and care data from all NHS organisations, trusts and local authorities. Data is also collected from private organisations, such as private hospitals providing NHS funded care. Research bodies and organisations can request access to this data.',
+            'Research bodies and organisations include:',
+          ],
+          listItems: [
+            'university researchers',
+            'hospital researchers',
+            'medical royal colleges',
+            'pharmaceutical companies researching new treatments',
+          ],
+        },
+        thoseWhoCant: {
+          title: 'Who can\'t use your data',
+          paragraphs: [
+            'Confidential patient information is used to support the delivery of health and social care.',
+            {
+              part1: 'Access to confidential patient information will ',
+              emphasised: 'not',
+              part3: ' be given for:',
+            },
+          ],
+          listItems: [
+            'marketing purposes',
+            'insurance purposes',
+          ],
+          paragraph: '(unless you specifically request this).',
+        },
+        dataProtection: {
+          title: 'How your data is protected',
+          paragraphs: [
+            'Protection of your confidential patient information is taken very seriously and is looked after in accordance with good practice and the law.',
+            'Every organisation that provides health and care services will take every step to:',
+          ],
+          listItems: [
+            'ensure data remains secure',
+            'use anonymised data whenever possible',
+            'use confidential patient information to benefit health and care',
+            'not use confidential patient information for marketing or insurance purposes (unless you specifically request this)',
+            'make it clear why and how data is being used',
+            'respect your decision if you decide to opt out',
+            'only use information about you where allowed by the law',
+          ],
+          paragraph: 'All NHS organisations must provide information on the type of data they collect and how it is used. Data release registers are published by NHS Digital and Public Health England, showing records of the data they have shared with other organisations.',
+        },
+      },
+      p4: {
+        paragraphs: [
+          'There are some circumstances where opt-outs do not apply. In these circumstances, your confidential patient information may still be used.',
+          'Opting out will not apply:',
+        ],
+        listItems: [
+          'where the information is used for purposes relating to your individual care',
+          'where the confidential patient information does not contain your NHS number if obtaining the number would involve disproportionate effort',
+          'if you have given consent for your data to be used for a specific reason, like a medical research study',
+          'where data is anonymised which means you cannot be identified from the information',
+          'where there is a legal requirement to provide information, such as an order of court',
+          'where there is an overriding public interest in the disclosure of your data',
+          'where information is used to support the management of communicable diseases and other risks to public health, like meningitis',
+          'to information given to the Office for National Statistics for official statistics, like the Population Census',
+          'to national patient experience surveys sent out before April 2019',
+          'to data shared with Public Health England for the National Cancer Registration Service, the National Congenital Anomalies and Rare Diseases Registration Service and the oversight of population screening programmes',
+          'where data is used to make sure people with learning disabilities and/or autism receive the best care possible when in hospital for mental health or challenging behaviour issues (also known as assuring transformation)',
+          'where data is used to make sure correct payment is made when there is no contract. For example, if a patient lives in Bromley but is treated in hospital in Devon, an invoice will be sent from Devon to the Clinical Commissioning Group (CCG) in Bromley that holds the budget for the patient',
+        ],
+      },
+      p5: {
         paragraphs: [
           'If you decide to opt out, this will be respected and applied by NHS Digital and Public Health England. These organisations collect, process and release health and adult social care data on a national basis. Your decision will also be respected and applied by all other organisations that are responsible for health and care information by March 2020.',
           'An opt-out will only apply to the health and care system in England. This does not apply to your health data where you have accessed health or care services outside of England, such as in Scotland and Wales.',
-          'If you choose to opt out, your data may still be used during some specific situations. For example, during an epidemic where there might be a risk to other people’s health.',
+          'If you choose to opt out, your data may still be used during some specific situations. For example, during an epidemic where there might be a risk to other people\'s health.',
         ],
       },
     },
