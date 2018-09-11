@@ -1,7 +1,7 @@
 defaultTasks 'clean','test','aggregate'
 repositories {
     maven {
-        url "https://nexus.devuks1.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+        url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
         credentials {
             username "developer"
             password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
@@ -16,7 +16,7 @@ buildscript {
     ext.detekt_version = '1.0.0.RC8'
     repositories {
         maven {
-            url "https://nexus.devuks1.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
             credentials {
                 username "developer"
                 password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
