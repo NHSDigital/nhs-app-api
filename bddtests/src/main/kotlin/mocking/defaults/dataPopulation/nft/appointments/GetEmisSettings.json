@@ -1,0 +1,32 @@
+{
+  "Services": {
+    "AppointmentsSupported": true,
+    "MaxAppointments": 91,
+    "PrescribingSupported": true,
+    "EpsSupported": false,
+    "DemographicsUpdateSupported": true,
+    "PracticePatientCommunicationSupported": true,
+    "OnlineRegistrationSupported": true,
+    "PreRegistrationSupported": true,
+    "MedicalRecordSupported": true,
+    "MedicalRecord": {
+      "RecordAccessScheme": "DetailedCodedCareRecord",
+      "AllergiesEnabled": true,
+      "ConsultationsEnabled": true,
+      "ImmunisationsEnabled": true,
+      "DocumentsEnabled": true,
+      "MedicationEnabled": true,
+      "ProblemsEnabled": true,
+      "TestResultsEnabled": true
+    }
+  },
+  "Messages": {
+    "WelcomeMessage": "",
+    "AppointmentsMessage": "Please do not book appointments if you have a sore throat.",
+    "PrescribingMessage": ""
+  },
+  "InputRequirements": {
+    "AppointmentBookingReason": "RequestedOptional",
+    "PrescribingComment": "RequestedOptional"
+  }
+}

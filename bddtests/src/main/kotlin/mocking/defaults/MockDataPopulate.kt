@@ -118,6 +118,14 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             EmisSessionCreateJourneyFactory(mockingClient).createFor(patient)
 
             // Appointment Mocks
+            //GET /practice/ODSCODE/settings
+            val settingsResponse = getFileContents("appointments/GetEmisSettings.json")
+
+            mockingClient.forEmis {
+                practiceSettingsRequest(patient)
+                        .respondWithSuccessJson(settingsResponse)
+            }
+
             // GET /emis/appointments
             val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json")
 
