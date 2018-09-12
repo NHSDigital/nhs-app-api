@@ -8,8 +8,8 @@
       <OptOutNotApply v-if="pageId === 'p4'"/>
       <ManageChoice v-if="pageId === 'p5'"/>
     </div>
-    <form id="ndop-token-form" :action="dataPreferencesUrl" method="POST" name="ndopTokenForm"
-          target="_blank">
+    <form id="ndop-token-form" :action="dataPreferencesUrl" :target="formTarget" method="POST"
+          name="ndopTokenForm">
       <button v-if="pageId === 'p5'" id="start-now-button" :class="[$style.button, $style.green]"
               @click="startNowClicked($event)">
         {{ $t('ds01.startNowButton') }}
@@ -50,6 +50,9 @@ export default {
   computed: {
     pageId() {
       return this.pageIds[this.pageIndex];
+    },
+    formTarget() {
+      return !this.$store.state.device.isNativeApp ? '_self' : '_blank';
     },
   },
   mounted() {
