@@ -339,8 +339,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Then("I see a message informing me that I don't currently have access to this service")
     fun iSeeAMessageInformingMeThatIdontCurrentlyHaveAccessToThisService() {
-        assertEquals("Sorry, you don't currently have access to this service", errorPage.heading.element.text)
-        assertEquals("Contact your GP surgery for more information.", errorPage.errorText1.element.text)
+        assertEquals("You are not currently able to order repeat prescriptions online", errorPage.heading.element.text)
+        assertEquals("Contact your GP surgery for more information. For urgent medical help, call 111.", errorPage.errorText1.element.text)
     }
 
     @But("The prescriptions endpoint is timing out")

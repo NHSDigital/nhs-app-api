@@ -16,7 +16,7 @@ ENV PRIVACY_POLICY_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app
 ENV COOKIES_POLICY_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
 ENV OPEN_SOURCE_LICENSES_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
 ENV HELP_AND_SUPPORT_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
-ENV CLINICAL_ABBREVIATIONS_URL https://www.england.nhs.uk/participation/resources/involvejargon/
+ENV CLINICAL_ABBREVIATIONS_URL https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations
 ENV HOT_JAR_URL https://in.hotjar.com/s?siteId=859152&surveyId=95785
 ENV DATA_PREFERENCES_URL https://ndopapp-int1.thunderbird.service.nhs.uk/createsession
 
