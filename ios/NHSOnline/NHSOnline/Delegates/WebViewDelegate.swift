@@ -54,7 +54,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
                 if knownServices.isHotJar(url: url) {
-                    UIApplication.shared.open(url)
+//                    UIApplication.shared.open(url)
                     return
                 }
                 openInSafari(url: url)
@@ -98,7 +98,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
         
         if withError._code == NSURLErrorCancelled {
-            os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
+            if #available(iOS 10.0, *) {
+                os_log("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", log: OSLog.default, type: .info, withError.localizedDescription)
+            } else {
+                NSLog("Page navigation cancelled (user may have double tapped or tapped a different nav menu button while page was still loading): %@", withError.localizedDescription)
+            }
             return
         }
         
@@ -116,7 +120,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: webView.url!)
                 self.showNativeViewContainer(errorMessage: errorMessage!)
             }
-            os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
+            if #available(iOS 10.0, *) {
+                os_log("Failed to load the page with error: %@", log: OSLog.default, type: .error, withError.localizedDescription)
+            } else {
+                NSLog("Failed to load the page with error: %@", withError.localizedDescription)
+            }
         }
     }
     
@@ -217,7 +225,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
-            os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
+            if #available(iOS 10.0, *) {
+                os_log("Page is not responding for a long time, loading stoped.", log: OSLog.default, type: .error)
+            } else {
+                NSLog("Page is not responding for a long time, loading stoped.")
+            }
             self.viewController.webViewController?.webView.stopLoading()
             let url = self.viewController.webViewController?.webView.url
             if let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: url?.host){

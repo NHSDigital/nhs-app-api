@@ -1,9 +1,17 @@
 import UIKit
 import WebKit
 
-class UnsecureWebViewController: UIViewController {
-    @IBOutlet weak var webView: WKWebView!
+class UnsecureWebViewController: UIViewController, WKUIDelegate {
     var webViewDelegate: UnsecureWebViewDelegate?
+    public var webView: WKWebView!
+    
+    override func loadView() {
+        super.loadView()
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        view = webView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

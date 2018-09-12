@@ -2,9 +2,17 @@ import UIKit
 import WebKit
 import os.log
 
-class WebViewController: UIViewController {
-    @IBOutlet weak var webView: WKWebView!
+class WebViewController: UIViewController, WKUIDelegate {
     var webViewDelegate: WebViewDelegate?
+    public var webView: WKWebView!
+    
+    override func loadView() {
+        super.loadView()
+        let webConfiguration = WKWebViewConfiguration()
+        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        webView.uiDelegate = self
+        view = webView
+    }
     
     let knownServices = KnownServices(config: config())
     
@@ -38,8 +46,13 @@ class WebViewController: UIViewController {
         
         let completionHandler: (Any?, Error?) -> Void = {
             (data, error) in
-            if(error != nil) {    
-                os_log("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.", log: OSLog.default, type: .error)
+            if(error != nil) {
+                if #available(iOS 10.0, *) {
+                    os_log("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.", log: OSLog.default, type: .error)
+                } else {
+                    NSLog("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.")
+                }
+                
                 self.webView.loadPage(url: self.homeUrl + path)
             }
         }

@@ -62,7 +62,11 @@ class HomeViewController : UIViewController {
             if path != nil {
                 self.webViewController?.webView.loadFileURL(path!, allowingReadAccessTo: path!)
             } else {
-                os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
+                if #available(iOS 10.0, *) {
+                    os_log("Critical - Files for carousel missing", log: OSLog.default, type: .error)
+                } else {
+                    NSLog("Critical - Files for carousel missing")
+                }
             }
         } else {
             self.webViewController?.loadPage(url: pageUrl)

@@ -5,6 +5,7 @@ import android.content.res.TypedArray
 import android.support.annotation.DrawableRes
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.TextViewCompat
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
@@ -96,6 +97,8 @@ class MenuBarItem @JvmOverloads constructor(
         viewTitle.layoutParams = params
         TextViewCompat.setTextAppearance(viewTitle, R.style.menu_default_text)
         viewTitle.text = title
+        viewTitle.maxLines = 1
+        viewTitle.ellipsize = TextUtils.TruncateAt.END
 
         addView(viewTitle)
     }

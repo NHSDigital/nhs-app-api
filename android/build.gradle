@@ -3,18 +3,18 @@
 buildscript {
     ext.kotlin_version = '1.2.50'
     repositories {
-        // google()
-        // jcenter()
-        // maven {
-        //     url "http://repo.maven.apache.org/maven2"
-        // }
-        maven {
-            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
-            credentials {
-                username "developer"
-                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
-            }
-        }
+         google()
+         jcenter()
+         maven {
+             url "http://repo.maven.apache.org/maven2"
+         }
+//        maven {
+//            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+//            credentials {
+//                username "developer"
+//                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+//            }
+//        }
         google()
     }
     dependencies {
@@ -28,15 +28,15 @@ buildscript {
 
 allprojects {
     repositories {
-        // google()
-        // jcenter()
-        maven {
-            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
-            credentials {
-                username "developer"
-                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
-            }
-        }
+         google()
+         jcenter()
+//        maven {
+//            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+//            credentials {
+//                username "developer"
+//                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+//            }
+//        }
     }
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NHS App Preview</string>
-    <string name="baseHost">www-preview.devuks1.nonlive.nhsapp.service.nhs.uk</string>
-    <string name="baseURL">https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk/</string>
+    <string name="baseHost">www-preview.dev.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseURL">https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
 </resources>

@@ -25,7 +25,6 @@
 		C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */; };
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
-		DA5EAEC0213FEC2A0046C023 /* NdopPostBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5EAEBF213FEC2A0046C023 /* NdopPostBody.swift */; };
 		C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED05D521427E950036189C /* TabBar_Extension.swift */; };
 		F0099A8C205557C700530DE3 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0099A8B205557C700530DE3 /* Config.plist */; };
 		F0099A8E2055585800530DE3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0099A8D2055585800530DE3 /* Config.swift */; };
@@ -77,7 +76,6 @@
 		C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView_Extension.swift; sourceTree = "<group>"; };
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextViewTests.swift; sourceTree = "<group>"; };
-		DA5EAEBF213FEC2A0046C023 /* NdopPostBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NdopPostBody.swift; sourceTree = "<group>"; };
 		C2ED05D521427E950036189C /* TabBar_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar_Extension.swift; sourceTree = "<group>"; };
 		F0099A8B205557C700530DE3 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
 		F0099A8D2055585800530DE3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -615,7 +613,7 @@
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -636,7 +634,7 @@
 				DEVELOPMENT_TEAM = 5Y58TN94AP;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NHSOnline/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
 				PRODUCT_NAME = "$(TARGET_NAME)";
