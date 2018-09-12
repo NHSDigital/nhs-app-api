@@ -1,6 +1,5 @@
 <template>
-  <button :class="[$style.button, $style.green]"
-          data-id="login-button">
+  <button :class="[$style.button, $style.green]" data-id="login-button" @click="loginClicked">
     {{ $t('loginButton.login') }}
   </button>
 </template>
@@ -8,11 +7,11 @@
 <script>
 export default {
   methods: {
-    async loginClicked(evt) {
-      evt.preventDefault();
-      this.$store.dispatch('header/updateHeaderText', this.$t('pageHeaders.login'));
-      this.$store.dispatch('pageTitle/updatePageTitle', this.$t('pageTitles.login'));
-      this.$store.dispatch('auth/login', process.env);
+    async loginClicked() {
+      if (process.client) {
+        // eslint-disable-next-line no-underscore-dangle
+        window._satellite.track('login');
+      }
     },
   },
 };
