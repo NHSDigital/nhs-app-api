@@ -1,3 +1,4 @@
+import Routes from '@/Routes';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 
 const MAX_TRIES = 10;
@@ -21,11 +22,11 @@ const final = ({ self, commit, expired }) => {
   if (expired) {
     // When the session is expired, a `push` must be used to ensure the state and,
     // by implication, the `showExpiryMessage` property is preserved.
-    self.app.router.push('login');
+    self.app.router.push(Routes.LOGIN.name);
   } else {
     // When logout occurs through the button, `go` is used to reduce flickering.  This makes
     // a server request which clears the state.
-    self.app.router.go('/login');
+    self.app.router.go(Routes.LOGIN.path);
   }
 };
 
@@ -147,6 +148,6 @@ export default {
     commit(UPDATE_CONFIG, config);
   },
   unauthorised({ commit }) {
-    final({ self: this, commit });
+    final({ self: this, commit, expired: this.state.session.showExpiryMessage });
   },
 };
