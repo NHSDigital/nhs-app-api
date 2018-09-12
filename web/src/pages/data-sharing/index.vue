@@ -40,11 +40,11 @@ export default {
     OptOutNotApply,
     ManageChoice,
   },
-  data() {
+  data(app) {
     return {
       pageIds: _.keys(this.$t('ds01.titles')),
       pageIndex: 0,
-      dataPreferencesUrl: process.env.DATA_PREFERENCES_URL,
+      dataPreferencesUrl: app.$env.DATA_PREFERENCES_URL,
     };
   },
   computed: {

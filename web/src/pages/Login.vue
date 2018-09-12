@@ -1,11 +1,11 @@
 <template>
   <div :class="$style.homeMain">
     <h2>{{ $t('login.desc') }}</h2>
-    <form :action="loginUrl" method="get">
+    <form :action="authoriseUrl" method="get">
       <input :value="scope" type="hidden" name="scope">
       <input v-model="clientId" type="hidden" name="client_id">
       <input :value="codeChallenge" type="hidden" name="code_challenge">
-      <input :value ="codeMethod" type="hidden" name="code_challenge_method">
+      <input :value="codeChallengeMethod" type="hidden" name="code_challenge_method">
       <input :value="redirectUri" type="hidden" name="redirect_uri">
       <input :value="state" type="hidden" name="state">
       <input :value="responseType" type="hidden" name="response_type">
@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import AuthorisationService from '@/services/authorization-service';
+import AuthorisationService from '@/services/authorisation-service';
 import LoginButton from '@/components/LoginButton';
 
 export default {
@@ -27,40 +27,18 @@ export default {
   components: {
     LoginButton,
   },
-  asyncData({ app: { $cookies: cookies }, route: { query } }) {
+  asyncData({ env, app: { $cookies: cookies }, route: { query } }) {
+    const authorisationService = new AuthorisationService(env);
     const source = query.source || 'web';
-    const codeVerifier = AuthorisationService.createVerifier();
-    const {
-      baseUrl: loginUrl,
-      client_id: clientId,
-      code_challenge: codeChallenge,
-      code_challenge_method: codeMethod,
-      state,
-      prompt,
-      registerUrl,
-      redirect_uri: redirectUri,
-      response_type: responseType,
-      scope,
-    } = new AuthorisationService().buildLoginObject(codeVerifier, { device: { source } });
+
+    const loginValues = authorisationService.generateLoginValues({ device: { source } });
 
     cookies.set('nhso.auth', {
-      redirectUri,
-      codeVerifier,
+      redirectUri: loginValues.redirectUri,
+      codeVerifier: loginValues.codeVerifier,
     });
 
-    return Promise.resolve({
-      codeVerifier,
-      loginUrl,
-      clientId,
-      codeChallenge,
-      codeMethod,
-      state,
-      prompt,
-      registerUrl,
-      redirectUri,
-      responseType,
-      scope,
-    });
+    return Promise.resolve(loginValues);
   },
 };
 </script>

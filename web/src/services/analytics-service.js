@@ -49,7 +49,7 @@ export default function (app, store, route) {
         error: store.state.analytics.error,
         action: store.state.analytics.action,
         timestamp: store.state.analytics.timestamp,
-        environment: process.env.ANALYTICS_ENVIRONMENT,
+        environment: app.$env.ANALYTICS_ENVIRONMENT,
         userType: '',
         user: {
           gpOdsCode: store.state.session.gpOdsCode,

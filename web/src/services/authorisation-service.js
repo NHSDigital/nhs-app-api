@@ -11,26 +11,51 @@ const sha256 = value =>
     .createHash('sha256')
     .update(value)
     .digest();
+const createVerifier = () => base64URLEncode(crypto.randomBytes(32));
 const createChallenge = verifier => base64URLEncode(sha256(verifier));
 
-class AuthorizationService {
-  static createVerifier() {
-    return base64URLEncode(crypto.randomBytes(32));
+class AuthorisationService {
+  constructor(environment) {
+    this.nativeCidRedirectUri = environment.NATIVE_CID_REDIRECT_URI;
+    this.webCidRedirectUri = environment.CID_REDIRECT_URI;
+    this.cidClientId = environment.CID_CLIENT_ID;
+    this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
   }
 
-  static getRedirectUri(state) {
+  generateLoginValues(state) {
+    const verifier = createVerifier();
+    const challenge = createChallenge(verifier);
+    const myState = this.newState(this.cryptoGenerateRandom);
+
+    const request = {
+      scope: 'openid',
+      clientId: this.cidClientId,
+      redirectUri: this.getRedirectUri(state),
+      responseType: 'code',
+      state: myState,
+      codeVerifier: verifier,
+      codeChallenge: challenge,
+      codeChallengeMethod: 'S256',
+      authoriseUrl: this.cidAuthEndpoint,
+    };
+
+    return request;
+  }
+
+  getRedirectUri(state) {
     const device = state.device.source;
     if (device === 'android' || device === 'ios') {
-      return process.env.NATIVE_CID_REDIRECT_URI;
+      return this.nativeCidRedirectUri;
     }
 
-    return process.env.CID_REDIRECT_URI;
+    return this.webCidRedirectUri;
   }
 
   /* eslint-disable class-methods-use-this */
   newState(randomGenerator) {
     return randomGenerator(10);
   }
+
   /* eslint-disable class-methods-use-this */
   cryptoGenerateRandom() {
     const buffer = new Uint8Array(1);
@@ -60,27 +85,6 @@ class AuthorizationService {
     }
     return encoded.join('&');
   }
-
-  buildLoginObject(verifier, state) {
-    const challenge = createChallenge(verifier);
-    const myState = this.newState(this.cryptoGenerateRandom);
-    const redirectUri = AuthorizationService.getRedirectUri(state);
-    const clientId = process.env.CID_CLIENT_ID;
-
-    const request = {
-      scope: 'openid',
-      client_id: clientId,
-      redirect_uri: redirectUri,
-      response_type: 'code',
-      state: myState,
-      code_challenge: challenge,
-      code_challenge_method: 'S256',
-      baseUrl: process.env.CID_AUTH_ENDPOINT,
-      registerUrl: process.env.CID_REGISTER_ENDPOINT,
-    };
-
-    return request;
-  }
 }
 
-export default AuthorizationService;
+export default AuthorisationService;

@@ -34,9 +34,9 @@ export default {
   components: {
     AnalyticsTrackedTag,
   },
-  data() {
+  data(app) {
     return {
-      organDonationUrl: process.env.ORGAN_DONATION_URL,
+      organDonationUrl: app.$env.ORGAN_DONATION_URL,
     };
   },
   methods: {

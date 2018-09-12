@@ -35,14 +35,14 @@ export default {
     AnalyticsTrackedTag,
     ScreenReaderPause,
   },
-  data() {
-    let symptomsCheckerUrl = process.env.SYMPTOM_CHECKER_URL;
+  data(app) {
+    let symptomsCheckerUrl = app.$env.SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
-      symptomsCheckerUrl += process.env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
+      symptomsCheckerUrl += app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
       symptomsCheckerUrl,
-      conditionsCheckerUrl: process.env.CONDITIONS_CHECKER_URL,
+      conditionsCheckerUrl: app.$env.CONDITIONS_CHECKER_URL,
     };
   },
 };

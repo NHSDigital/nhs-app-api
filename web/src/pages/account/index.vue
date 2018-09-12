@@ -57,13 +57,13 @@ export default {
     AnalyticsTrackedTag,
     FloatingButtonBottom,
   },
-  data() {
+  data(app) {
     return {
-      termsAndConditionsURL: process.env.TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: process.env.PRIVACY_POLICY_URL,
-      cookiesPolicyURL: process.env.COOKIES_POLICY_URL,
-      openSourceLicensesURL: process.env.OPEN_SOURCE_LICENSES_URL,
-      helpAndSupportURL: process.env.HELP_AND_SUPPORT_URL,
+      termsAndConditionsURL: app.$env.TERMS_AND_CONDITIONS_URL,
+      privacyPolicyURL: app.$env.PRIVACY_POLICY_URL,
+      cookiesPolicyURL: app.$env.COOKIES_POLICY_URL,
+      openSourceLicensesURL: app.$env.OPEN_SOURCE_LICENSES_URL,
+      helpAndSupportURL: app.$env.HELP_AND_SUPPORT_URL,
     };
   },
   methods: {

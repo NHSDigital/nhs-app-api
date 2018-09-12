@@ -34,7 +34,7 @@ export default {
       title: `${this.$store.state.header.headerText} screen`,
       script: [
         {
-          src: process.env.ANALYTICS_SCRIPT_URL,
+          src: this.$env.ANALYTICS_SCRIPT_URL,
         },
       ],
     };

@@ -3,7 +3,7 @@ import NHSOnlineApi from '../services/nhsonlineapi';
 
 export default ({ app, store, res }) => {
   const api = new NHSOnlineApi({
-    domain: process.server ? process.env.API_HOST_SERVER : process.env.API_HOST,
+    domain: process.server ? app.$env.API_HOST_SERVER : app.$env.API_HOST,
     store,
     res,
     cookies: app.$cookies,

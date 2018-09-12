@@ -15,15 +15,18 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     rm -rf /var/lib/apt/lists/*
 
-FROM build as built
+FROM build as dependencies
 WORKDIR /src
 COPY *.sln ./
-COPY . .
-COPY NHSOnline.Backend.Worker/NHSOnline.Backend.Worker.csproj NHSOnline.Backend.Worker/
-COPY NHSOnline.Backend.Worker/certs/* NHSOnline.Backend.Worker/certs/
 WORKDIR /src/NHSOnline.Backend.Worker
-RUN dotnet restore
-RUN dotnet build -c Release -o /app
+COPY NHSOnline.Backend.Worker/NHSOnline.Backend.Worker.csproj ./
+RUN dotnet restore  -r linux-x64
+
+FROM dependencies as built
+WORKDIR /src
+COPY . .
+WORKDIR /src/NHSOnline.Backend.Worker
+RUN dotnet build -c Release -o /app  -r linux-x64
 
 FROM built AS publish
 RUN dotnet publish -c Release -o /app -r linux-x64

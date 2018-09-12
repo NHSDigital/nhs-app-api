@@ -21,10 +21,10 @@ export default {
       type: Boolean,
     },
   },
-  data() {
+  data(app) {
     return {
       open: true,
-      hotJarLinkUrl: process.env.HOT_JAR_URL,
+      hotJarLinkUrl: app.$env.HOT_JAR_URL,
     };
   },
   created() {

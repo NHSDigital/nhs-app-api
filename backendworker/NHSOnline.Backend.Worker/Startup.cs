@@ -184,9 +184,7 @@ namespace NHSOnline.Backend.Worker
         }
 
         private static void UseSecurityHeaders(IApplicationBuilder app)
-        {            
-            app.UseHttpsRedirection();
-
+        {
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Xss-Protection", "1; mode=block");

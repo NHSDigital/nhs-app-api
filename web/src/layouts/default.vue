@@ -43,13 +43,13 @@ export default {
       title: `${this.$store.state.pageTitle.pageTitle} - NHS App`,
       script: [
         {
-          src: process.env.ANALYTICS_SCRIPT_URL,
+          src: this.$env.ANALYTICS_SCRIPT_URL,
         },
       ],
     };
 
-    if (process.env.HOTJAR_FILENAME) {
-      head.script.push({ src: `hotjar/${process.env.HOTJAR_FILENAME}.js` });
+    if (this.$env.HOTJAR_FILENAME) {
+      head.script.push({ src: `hotjar/${this.$env.HOTJAR_FILENAME}.js` });
     }
     return head;
   },

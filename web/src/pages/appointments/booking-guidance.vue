@@ -31,10 +31,10 @@
 import Routes from '@/Routes';
 
 export default {
-  data() {
-    let symptomsCheckerUrl = process.env.SYMPTOM_CHECKER_URL;
+  data(app) {
+    let symptomsCheckerUrl = app.$env.SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
-      symptomsCheckerUrl += process.env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
+      symptomsCheckerUrl += app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
       symptomsCheckerUrl,

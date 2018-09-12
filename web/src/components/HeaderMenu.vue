@@ -31,9 +31,9 @@ export default {
       title: `${this.$store.state.pageTitle.pageTitle} - NHS App`,
     };
   },
-  data() {
+  data(app) {
     return {
-      helpAndSupportURL: process.env.HELP_AND_SUPPORT_URL,
+      helpAndSupportURL: app.$env.HELP_AND_SUPPORT_URL,
     };
   },
 };

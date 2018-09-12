@@ -59,7 +59,7 @@ export BACKEND_TAG=$APP_DOCKER_TAG
 
 # Pull images
 for s in $DOCKER_SERVICES; do
-  if [[ "$s" != "nhsonline.web" && "$s" != "nhsonline.backend.worker" ]]; then #Don't pull local images we've built as part of the pipeline
+  if [[ "$s" != "api.local.bitraft.io" && "$s" != "www.local.bitraft.io" ]]; then #Don't pull local images we've built as part of the pipeline
     docker-compose -f docker-compose_ci.yml pull $s
   fi
 done

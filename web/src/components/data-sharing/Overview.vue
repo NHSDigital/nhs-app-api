@@ -37,9 +37,9 @@ export default {
   components: {
     AnalyticsTrackedTag,
   },
-  data() {
+  data(app) {
     return {
-      yourDataMattersUrl: process.env.YOUR_NHS_DATA_MATTERS_URL,
+      yourDataMattersUrl: app.$env.YOUR_NHS_DATA_MATTERS_URL,
     };
   },
   methods: {
