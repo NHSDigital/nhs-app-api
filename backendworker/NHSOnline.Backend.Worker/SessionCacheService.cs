@@ -15,13 +15,13 @@ namespace NHSOnline.Backend.Worker
     {
         Task<string> CreateUserSession(UserSession userSession);
         Task<Option<UserSession>> GetUserSession(string sessionId);
-        Task<bool> DeleteUserSession(string sessionId);
+        Task<bool> DeleteUserSession(string sessionId);        
     }
 
     public class SessionCacheService : ISessionCacheService
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
-        private readonly ICipherService _cipherService;
+        private readonly ICipherService _cipherService;        
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionCacheService> _logger;

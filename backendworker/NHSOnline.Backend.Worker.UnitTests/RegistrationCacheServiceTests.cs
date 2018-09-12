@@ -8,30 +8,30 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Cipher;
+using NHSOnline.Backend.Worker.Support.Hasher;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker.UnitTests
 {
     [TestClass]
-    public class SessionCacheServiceTests
+    public class RegistrationCacheServiceTests
     {
         private IFixture _fixture;
         private Mock<IOptions<ConfigurationSettings>> _settings;
-        private Mock<ICipherService> _cipherService;
+        private int _defaultSessionExpiryMinutes;
         private Mock<IDatabase> _database;
         private Mock<IConnectionMultiplexerFactory> _connectionMultiplexerFactory;
-        private int _defaultSessionExpiryMinutes;
-        private ILogger<SessionCacheService> _logger;
+        private ILogger<RegistrationCacheService> _logger;
+        private Mock<IHashingService> _hashingService; 
         
         [TestInitialize]
         public void TestInitializeInitialize()
         {
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
-
+            
             _defaultSessionExpiryMinutes = _fixture.Create<int>();
             _settings = new Mock<IOptions<ConfigurationSettings>>();
             _settings.Setup(x => x.Value).Returns(
@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.Worker.UnitTests
                 {
                     DefaultSessionExpiryMinutes = _defaultSessionExpiryMinutes
                 });
-            _cipherService = new Mock<ICipherService>();
+            _hashingService = new Mock<IHashingService>();
 
             _database = new Mock<IDatabase>();
             var connectionMultiplexer = new Mock<IConnectionMultiplexer>();
@@ -49,69 +49,79 @@ namespace NHSOnline.Backend.Worker.UnitTests
             _connectionMultiplexerFactory.Setup(x => x.GetMultiplexer(ConnectionMultiplexerName.Session))
                 .Returns(connectionMultiplexer.Object);
 
-            _logger = new LoggerFactory().CreateLogger<SessionCacheService>();
+            _logger = new LoggerFactory().CreateLogger<RegistrationCacheService>();
         }
-        
+
         [TestMethod]
-        public async Task CreateUserSession_UserSessionIsStoredInRedis()
+        public async Task CreateRegistrationGuid_GuidIsStoredInRedis()
         {
             // Arrange
-            var userSession = _fixture.Create<EmisUserSession>();
-            RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
+            var passedValue = _fixture.Create<Guid>();
+            var passedKey = _fixture.Create<string>();
+            RedisValue registrationValueJson = JsonConvert.SerializeObject(passedValue);
             
-            string redisSessionKey = null;
+            string registrationGuidKey = null;
             string redisValue = null;
+
+            const string encryptedKey = "encrypted_string";
+            const string prefix = "AccessGuid:";
             
-            _cipherService.Setup(x => x.Encrypt(It.IsAny<string>())).Returns("encrypted_string");
+            _hashingService.Setup(
+                x => x.Hash(passedKey)).Returns(encryptedKey);
             
             _database
                 .Setup(x =>
                     x.StringSetAsync(
-                        It.IsAny<RedisKey>(),
-                        _cipherService.Object.Encrypt(userSessionJson),
+                        prefix + encryptedKey,
+                        registrationValueJson,
                         TimeSpan.FromMinutes(_defaultSessionExpiryMinutes),
                         When.Always,
                         CommandFlags.None))
                 .Returns(Task.FromResult(true))
                 .Callback<RedisKey, RedisValue, TimeSpan?, When, CommandFlags>((key, value, expiry, when, flags) =>
                 {
-                    redisSessionKey = key;  // Store the guid key that was used as Redis session key
+                    registrationGuidKey = key;  // Store the guid key that was used as Redis session key
                     redisValue = value;
                 })
                 .Verifiable();
                 
                 
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
+            var systemUnderTest = new RegistrationCacheService(_connectionMultiplexerFactory.Object, _settings.Object, _logger, _hashingService.Object);
             
             // Act
-            var result = await systemUnderTest.CreateUserSession(userSession);
+            var result = await systemUnderTest.CreateRegistrationGuid(passedKey, passedValue);
             
             // Assert
             _database.Verify();
-            result.Should().Be(redisSessionKey);
+            result.Should().Be(prefix + encryptedKey);
             redisValue.Should().NotBeNullOrEmpty();
-            redisValue.Should().NotBeSameAs(userSessionJson);
+            redisValue.Should().NotBeSameAs(registrationValueJson);
         }
-
-
+        
         [TestMethod]
-        public async Task DeleteUserSession_SessionIsDeletedFromRedis()
+        public async Task DeleteRegistrationGuid_SessionIsDeletedFromRedis()
         {
             // Arrange            
-            string redisSessionKey = "test";
+            string redisKey = "test";
+            
+            const string encryptedKey = "encrypted_string";
+            const string prefix = "AccessGuid:";
+            
+            _hashingService.Setup(
+                x => x.Hash(redisKey)).Returns(encryptedKey);
                         
             _database
                 .Setup(x =>
                     x.KeyDeleteAsync(
-                            redisSessionKey,
-                            CommandFlags.None))
+                        prefix + encryptedKey,
+                        CommandFlags.None))
                 .Returns(Task.FromResult(true))
                 .Verifiable();
             
-            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
+            var systemUnderTest = new RegistrationCacheService(_connectionMultiplexerFactory.Object, _settings.Object, _logger, _hashingService.Object);
             
             // Act
-            var result = await systemUnderTest.DeleteUserSession(redisSessionKey);
+            var result = await systemUnderTest.DeleteRegistrationGuid(redisKey);
             
             // Assert
             _database.Verify();

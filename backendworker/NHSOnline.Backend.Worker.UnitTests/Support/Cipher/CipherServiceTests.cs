@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Threading;
 using FluentAssertions;
+using Microsoft.Data.Edm.Library.Expressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -69,6 +71,25 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Cipher
             // Assert
             decryptedData.Should().NotBeNullOrEmpty();
             decryptedData.Should().BeEquivalentTo("some_data_to_encrypt");
+        }
+        
+        
+        [TestMethod]
+        public void CheckEncyptIsNotConsistant()
+        {
+            const string key = "A000024176050002NxdUgCyDUAVz6";
+
+            var e1 = _cipherService.Encrypt(key);           
+            Thread.Sleep(1000);
+            var e2 = _cipherService.Encrypt(key);
+
+
+            var r1 = _cipherService.Decrypt(e1);
+            var r2 = _cipherService.Decrypt(e2);
+
+            r1.Should().BeEquivalentTo(r2);
+            r1.Should().BeEquivalentTo(key);
+            e1.Should().NotMatch(e2);
         }
     }
 }

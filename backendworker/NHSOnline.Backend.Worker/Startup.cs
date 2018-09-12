@@ -24,6 +24,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Cipher;
+using NHSOnline.Backend.Worker.Support.Hasher;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace NHSOnline.Backend.Worker
@@ -90,6 +91,7 @@ namespace NHSOnline.Backend.Worker
 
             services.AddSingleton<CipherConfiguration>();
             services.AddSingleton<ICipherService, CipherService>();
+            services.AddSingleton<IHashingService, HashingService>();
 
             services
                 .AddMvc(

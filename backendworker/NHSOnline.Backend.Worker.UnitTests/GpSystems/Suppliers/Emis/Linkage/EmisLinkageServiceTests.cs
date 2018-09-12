@@ -26,6 +26,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
         private Mock<IEmisLinkageMapper> _emisLinkageMapper;
         private Mock<IEmisSessionService> _emisSessionService;
         private IFixture _fixture;
+        private Mock<IRegistrationGuidKeyGenerator> _mockRegistrationGuidKeyGenerator;
+        private Mock<IRegistrationCacheService> _mockRegistrationCacheService;
         
         [TestInitialize]
         public void TestInitialize()
@@ -35,6 +37,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             _emisClient = _fixture.Freeze<Mock<IEmisClient>>();
             _emisLinkageMapper = _fixture.Freeze<Mock<IEmisLinkageMapper>>();
             _emisSessionService = _fixture.Freeze<Mock<IEmisSessionService>>();
+            _mockRegistrationGuidKeyGenerator = _fixture.Freeze<Mock<IRegistrationGuidKeyGenerator>>();
+            _mockRegistrationCacheService = _fixture.Freeze<Mock<IRegistrationCacheService>>();
             _systemUnderTest = _fixture.Create<EmisLinkageService>();
         }
 
@@ -250,6 +254,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
                         Body = addVerificationResponse,
                     }))
                     .Verifiable();
+            
+            const string key = "Key";
+            _mockRegistrationGuidKeyGenerator.Setup(x => x.GenerateRegistrationKey(
+                    It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Returns(key).Verifiable();
+
+            
+            _mockRegistrationCacheService.Setup(x => x.CreateRegistrationGuid(key, addNhsUserResponse.AccessIdentityGuid))
+                .Returns(Task.FromResult(
+                    "Encrypted key"
+                )).Verifiable();
 
             // Act
             var result = await _systemUnderTest.CreateLinkageKey(createLinkageRequest);
@@ -261,6 +276,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Linkage
             var successResult = (LinkageResult.SuccessfullyCreated)result;
             successResult.Response.Should().NotBeNull();
             successResult.Response.OdsCode.Should().Be(createLinkageRequest.OdsCode);
+            _mockRegistrationGuidKeyGenerator.Verify();
+            _mockRegistrationCacheService.Verify(x => x.CreateRegistrationGuid(key, addNhsUserResponse.AccessIdentityGuid));
         }
 
         [TestMethod]

@@ -3,6 +3,8 @@ using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
@@ -32,6 +34,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 services.AddSingleton<IEmisClient, EmisClient>();
                 services.AddSingleton<IEmisConfig, EmisConfig>();
                 services.AddSingleton<IEmisSessionService, EmisSessionService>();
+                services.AddSingleton<IRegistrationGuidKeyGenerator, EmisRegistrationGuidKeyGenerator>();
+                services.AddSingleton<IRegistrationCacheService, RegistrationCacheService>();
 
                 services.AddTransient<EmisTokenValidationService>();
 

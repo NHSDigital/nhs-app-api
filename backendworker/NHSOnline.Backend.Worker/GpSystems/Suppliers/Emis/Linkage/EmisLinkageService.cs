@@ -19,17 +19,23 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
         private readonly IEmisClient _emisClient;
         private readonly IEmisLinkageMapper _emisLinkageMapper;
         private readonly IEmisSessionService _emisSessionService;
+        private readonly IRegistrationGuidKeyGenerator _emisRegistrationGuidKeyGenerator;
+        private readonly IRegistrationCacheService _registrationCacheService;
 
         public EmisLinkageService(
             ILoggerFactory loggerFactory,
             IEmisClient emisClient,
             IEmisLinkageMapper emisLinkageMapper,
-            IEmisSessionService emisSessionService)
+            IEmisSessionService emisSessionService,
+            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator,
+            IRegistrationCacheService registrationCacheService)
         {
             _emisClient = emisClient;
             _emisLinkageMapper = emisLinkageMapper;
             _logger = loggerFactory.CreateLogger<EmisLinkageService>();
             _emisSessionService = emisSessionService;
+            _emisRegistrationGuidKeyGenerator = registrationGuidKeyGenerator;
+            _registrationCacheService = registrationCacheService;
         }
 
         public async Task<LinkageResult> GetLinkageKey(string nhsNumber, string odsCode, string identityToken)
@@ -92,6 +98,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                     {
                         var linkage = _emisLinkageMapper.Map(getLinkageKeyResponse.Body);
                         linkage.OdsCode = createLinkageRequest.OdsCode;
+                        await StoreAccessGuidInCache(linkage, createLinkageKeyResponse.Body);
                         return new LinkageResult.SuccessfullyCreated(linkage);
                     }
                     catch (Exception e)
@@ -117,6 +124,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage
                 _logger.LogError(e, "Unsuccessful request creating linkage key");
                 return new LinkageResult.SupplierSystemUnavailable();
             }
+        }
+
+        private async Task StoreAccessGuidInCache(LinkageResponse linkage, AddNhsUserResponse addNhsUserResponse)
+        {
+            var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(
+                    linkage.AccountId, linkage.OdsCode, linkage.LinkageKey);
+
+            await _registrationCacheService.CreateRegistrationGuid(key, addNhsUserResponse.AccessIdentityGuid);
         }
 
         private async Task<EmisApiObjectResponse<AddVerificationResponse>> GetLinkageKeyResponse(string nhsNumber, string odsCode, string identityToken, string endUserSessionId)

@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
+using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
 using NHSOnline.Backend.Worker.Support.Logging;
@@ -15,11 +17,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
     {
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisIm1ConnectionService> _logger;
+        private readonly IRegistrationGuidKeyGenerator _emisRegistrationGuidKeyGenerator;
+        private readonly IRegistrationCacheService _registrationCacheService;
 
-        public EmisIm1ConnectionService(IEmisClient emisClient, ILogger<EmisIm1ConnectionService> logger)
+        public EmisIm1ConnectionService(IEmisClient emisClient, 
+            ILogger<EmisIm1ConnectionService> logger,
+            IRegistrationGuidKeyGenerator registrationGuidKeyGenerator,
+            IRegistrationCacheService registrationCacheService)
         {
             _emisClient = emisClient;
             _logger = logger;
+            _emisRegistrationGuidKeyGenerator = registrationGuidKeyGenerator;
+            _registrationCacheService = registrationCacheService;
         }
 
         public async Task<Im1ConnectionVerifyResult> Verify(string connectionToken, string odsCode)
@@ -96,69 +105,85 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
             try
             {
                 _logger.LogEnter(nameof(Register));
-
+                
                 var endUserSessionResponse = await _emisClient.SessionsEndUserSessionPost();
                 if (!endUserSessionResponse.HasSuccessStatusCode)
                 {
                     LogExceptionError(nameof(_emisClient.SessionsEndUserSessionPost), endUserSessionResponse);
-                    
+
                     return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
-                var meApplicationsPostRequest = new MeApplicationsPostRequest
+                string accessIdentityGuid = null;
+                
+                _logger.LogInformation("Checking Cache for AccessIdentityGuid");
+                var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(
+                    request.AccountId, request.OdsCode, request.LinkageKey);
+                var cachedGuid = await _registrationCacheService.GetRegistrationGuid(key);
+
+                if (cachedGuid.HasValue)
                 {
-                    DateOfBirth = request.DateOfBirth,
-                    Surname = request.Surname,
-                    LinkageDetails = new LinkageDetails
+                    _logger.LogInformation("AccessIdentityGuid found in cache.");
+                    accessIdentityGuid = cachedGuid.ValueOrFailure();
+                }
+                else
+                {                    
+                    var meApplicationsPostRequest = new MeApplicationsPostRequest
                     {
-                        AccountId = request.AccountId,
-                        NationalPracticeCode = request.OdsCode,
-                        LinkageKey = request.LinkageKey
+                        DateOfBirth = request.DateOfBirth,
+                        Surname = request.Surname,
+                        LinkageDetails = new LinkageDetails
+                        {
+                            AccountId = request.AccountId,
+                            NationalPracticeCode = request.OdsCode,
+                            LinkageKey = request.LinkageKey
+                        }
+                    };
+
+                    var meApplicationsResponse =
+                        await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
+
+                    var notFoundMessages = new[]
+                    {
+                        EmisApiErrorMessages.MeApplicationsPost_AccountIdNotFound,
+                        EmisApiErrorMessages.MeApplicationsPost_LinkageKeyDoesNotMatch,
+                        EmisApiErrorMessages.MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect
+                    };
+
+                    if (meApplicationsResponse.StatusCode == HttpStatusCode.Conflict ||
+                        meApplicationsResponse.HasExceptionWithMessage(
+                            EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
+                    {
+                        _logger.LogError(
+                            $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, account already exists");
+                        return new Im1ConnectionRegisterResult.AccountAlreadyExists();
                     }
-                };
 
-                var meApplicationsResponse =
-                    await _emisClient.MeApplicationsPost(endUserSessionId, meApplicationsPostRequest);
+                    if (meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
+                    {
+                        LogExceptionError(nameof(_emisClient.MeApplicationsPost), meApplicationsResponse);
 
-                var notFoundMessages = new[]
-                {
-                    EmisApiErrorMessages.MeApplicationsPost_AccountIdNotFound,
-                    EmisApiErrorMessages.MeApplicationsPost_LinkageKeyDoesNotMatch,
-                    EmisApiErrorMessages.MeApplicationsPost_SurnameOrDateOfBirthAreIncorrect
-                };
+                        return new Im1ConnectionRegisterResult.NotFound();
+                    }
 
-                if (meApplicationsResponse.StatusCode == HttpStatusCode.Conflict ||
-                    meApplicationsResponse.HasExceptionWithMessage(
-                        EmisApiErrorMessages.MeApplicationsPost_AlreadyLinked))
-                {
-                    _logger.LogError(
-                        $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, account already exists");
-                    return new Im1ConnectionRegisterResult.AccountAlreadyExists();
+                    if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        LogExceptionError(nameof(_emisClient.MeApplicationsPost), meApplicationsResponse);
+
+                        return new Im1ConnectionRegisterResult.BadRequest();
+                    }
+
+                    if (!meApplicationsResponse.HasSuccessStatusCode)
+                    {
+                        _logger.LogError(
+                            $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, success");
+                        return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                    }
+                    accessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid;
                 }
 
-                if (meApplicationsResponse.HasExceptionWithAnyMessage(notFoundMessages))
-                {
-                    LogExceptionError(nameof(_emisClient.MeApplicationsPost), meApplicationsResponse);
-
-                    return new Im1ConnectionRegisterResult.NotFound();
-                }
-
-                if (meApplicationsResponse.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    LogExceptionError(nameof(_emisClient.MeApplicationsPost), meApplicationsResponse);
-
-                    return new Im1ConnectionRegisterResult.BadRequest();
-                }
-
-                if (!meApplicationsResponse.HasSuccessStatusCode)
-                {
-                    _logger.LogError(
-                        $"Emis MeApplicationsPost returned with statuscode {meApplicationsResponse.StatusCode}, success");
-                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
-                }
-
-                var accessIdentityGuid = meApplicationsResponse.Body.AccessIdentityGuid;
+                
                 var sessionPostRequestModel = new SessionsPostRequest
                 {
                     AccessIdentityGuid = accessIdentityGuid,
