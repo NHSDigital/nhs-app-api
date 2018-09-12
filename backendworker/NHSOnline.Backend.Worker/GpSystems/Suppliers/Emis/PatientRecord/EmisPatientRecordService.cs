@@ -4,31 +4,32 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 {
     public class EmisPatientRecordService : IPatientRecordService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<EmisPatientRecordService> _logger;
         private readonly IEmisClient _emisClient;
         private readonly IEmisMyRecordMapper _emisMyRecordMapper;
 
-        public EmisPatientRecordService(ILoggerFactory loggerFactory, IEmisClient emisClient, IEmisMyRecordMapper emisMyRecordMapper)
+        public EmisPatientRecordService(ILogger<EmisPatientRecordService> logger, IEmisClient emisClient, IEmisMyRecordMapper emisMyRecordMapper)
         {
             _emisClient = emisClient;
             _emisMyRecordMapper = emisMyRecordMapper;
-            _logger = loggerFactory.CreateLogger<EmisPatientRecordService>();
+            _logger = logger;
         }
         
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
-            var methodName = "GetMyRecord";
-            _logger.LogDebug("Entered: {0}", methodName);
+            _logger.LogEnter(nameof(GetMyRecord));
             
             var emisUserSession = (EmisUserSession) userSession;
 
             try
             {
+                _logger.LogInformation("Creating patient record api tasks");
                 var medicationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Medication);
                             
@@ -48,6 +49,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Consultations);
                     
                 await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask);
+                _logger.LogInformation("Patient record tasks completed");
 
                 _logger.LogInformation("Checking status of all patient record tasks");
                 var allergies = new GetAllergiesTaskChecker(_logger).Check(allergiesTask);
@@ -64,20 +66,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
 
                 _logger.LogInformation("MyRecordResponse: " + myRecordResponse);
 
-                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, "Unsuccessful request retrieving my record");
-                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.Unsuccessful();
             }
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "My record retrieval return null body");
-                _logger.LogDebug("Exiting: {0}", methodName);
                 return new GetMyRecordResult.SupplierBadData();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(GetMyRecord));
             }
         }
 

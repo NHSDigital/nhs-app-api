@@ -38,11 +38,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 var slotsParams = new SlotsGetQueryParameters(dateRange.FromDate, dateRange.ToDate, patientLinkToken);
                 var headerParams = new EmisHeaderParameters(emisUserSession);
 
+                _logger.LogInformation("Creating appointment slots requests");
                 var metaTask = _emisClient.AppointmentSlotsMetadataGet(headerParams, metaParams);
                 var slotTask = _emisClient.AppointmentSlotsGet(headerParams, slotsParams);
                 var practiceTask = _emisClient.PracticeSettingsGet(headerParams, emisUserSession.OdsCode);
 
                 await Task.WhenAll(metaTask, slotTask);
+                _logger.LogInformation("Appointment slot requests completed");
+
                 // Wait for practice task to complete, but unlike the other tasks supress any errors such as timeout.
                 try
                 {

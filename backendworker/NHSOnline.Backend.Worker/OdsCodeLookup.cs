@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Logging;
 using StackExchange.Redis;
 
 namespace NHSOnline.Backend.Worker
@@ -43,10 +44,20 @@ namespace NHSOnline.Backend.Worker
 
         private async Task<RedisValue> GetSupplierNameFromRedis(string odsCode)
         {
-            var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
-            var database = multiplexer.GetDatabase();
-            var redisValue = await database.StringGetAsync(odsCode);
-            return redisValue;
+            try
+            {
+                _logger.LogEnter(nameof(GetSupplierNameFromRedis));
+                var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
+                var database = multiplexer.GetDatabase();
+                _logger.LogDebug("Retrieving Supplier Name from Redis");
+                var redisValue = await database.StringGetAsync(odsCode);
+                _logger.LogDebug("Retrieved Supplier Name from Redis");
+                return redisValue;
+            }
+            finally
+            {
+                _logger.LogExit(nameof(GetSupplierNameFromRedis));
+            }
         }
     }
 }

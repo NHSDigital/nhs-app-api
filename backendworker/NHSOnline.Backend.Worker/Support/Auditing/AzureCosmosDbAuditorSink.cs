@@ -29,7 +29,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             if (_disposed)
             {
                 throw new ObjectDisposedException(GetType().FullName);
-            }
+            }   
             
             _logger.LogEnter(nameof(WriteAudit));
 
