@@ -1,13 +1,13 @@
 defaultTasks 'clean','test','aggregate'
 repositories {
-    maven {
-        url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
-        credentials {
-            username "developer"
-            password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
-        }
-    }
-    // mavenCentral()
+//    maven {
+//        url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+//        credentials {
+//            username "developer"
+//            password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+//        }
+//    }
+     mavenCentral()
     // jcenter()
 }
 buildscript {
@@ -15,17 +15,17 @@ buildscript {
     ext.serenity_version = '1.9.12'
     ext.detekt_version = '1.0.0.RC8'
     repositories {
-        maven {
-            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
-            credentials {
-                username "developer"
-                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
-            }
-        }
+//        maven {
+//            url "https://nexus.dev.nonlive.nhsapp.service.nhs.uk/repository/maven-public/"
+//            credentials {
+//                username "developer"
+//                password '?H96nNh^DRS76bpRbWM6bg2FGct$CMXW'
+//            }
+//        }
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        // mavenCentral()
+         mavenCentral()
         // jcenter()
     }
 
