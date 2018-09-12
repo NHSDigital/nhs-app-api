@@ -2,8 +2,7 @@
 import { isEmpty } from 'lodash/fp';
 
 const APP_ID = 'nhsapp';
-const ENGLISH_LANGUAGE = 'en';
-const pageNamePrefix = `${APP_ID}:${ENGLISH_LANGUAGE}`;
+const pageNamePrefix = `${APP_ID}`;
 
 
 export default function (app, store, route) {
