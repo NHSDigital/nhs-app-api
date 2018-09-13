@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -25,12 +24,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 _logger);
 
                 services.AddHttpClient<EmisHttpClient>(client =>
-                    {
-                        client.Timeout = TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds,
-                            CultureInfo.InvariantCulture));
-                    })
-                    .ConfigurePrimaryHttpMessageHandler(() => 
-                        new HttpClientHandler().ConfigureForwardProxy(configuration));
+                {
+                    client.Timeout = TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
+                });
 
                 services.AddSingleton<IGpSystem, EmisGpSystem>();
                 services.AddSingleton<IEmisClient, EmisClient>();
