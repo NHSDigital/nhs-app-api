@@ -2,15 +2,49 @@ package com.nhs.online.nhsonline
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
+import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.*
 import android.webkit.WebView
 import java.util.*
+import kotlin.concurrent.schedule
+import kotlin.math.max
 
 @Suppress("unused") // This is referenced by the AndroidManifest.xml
 class Application : Application() {
+
+    lateinit var timer: Timer
+    var wasInBackground: Boolean = false
+    var sessionExpired: Boolean = true
+
+    fun startActivityTransitionTimer() {
+
+        this.timer = Timer()
+
+        var self = this
+
+        var maxActivityTransitionTime = applicationContext.resources.getInteger(R.integer.BackgroundTimeout).toLong()
+        var sessionTimeout = applicationContext.resources.getInteger(R.integer.SessionTimeout).toLong()
+
+        this.timer.schedule(maxActivityTransitionTime) {
+            self.wasInBackground = true
+        }
+
+        this.timer.schedule(sessionTimeout) {
+            self.sessionExpired = true
+        }
+    }
+
+    fun stopActivityTransitionTimer() {
+        if (::timer.isInitialized && timer != null) {
+            timer.cancel()
+        }
+    }
+
+
     override fun onCreate() {
         super.onCreate()
+
         setLocale()
         enableWebDebuggingIfApplicationDebuggable()
     }

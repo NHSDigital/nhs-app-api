@@ -13,6 +13,7 @@ import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
+import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
@@ -138,13 +139,7 @@ class WebClientInterceptor(
     }
 
     private fun isConnectedToInternet(): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        for (network in cm.allNetworks) {
-            val info = cm.getNetworkInfo(network)
-            if (info.isConnectedOrConnecting) return true
-        }
-
-        return false
+        return Reachability.isConnectedToNetwork(context)
     }
 
     private fun hasMissingQueryString(url: String?): Boolean {

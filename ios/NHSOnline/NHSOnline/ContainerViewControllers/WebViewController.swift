@@ -13,7 +13,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.uiDelegate = self
         view = webView
     }
-    
+
     let knownServices = KnownServices(config: config())
     
     struct Properties {
@@ -60,18 +60,11 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.evaluateJavaScript("window.$nuxt.$router.push('\(spaPath)');", completionHandler: completionHandler)
         webViewDelegate?.viewController.showWebViewContainer()
     }
-    
+
     func loadPage(url: String) {
         
         if(!Reachability.isConnectedToNetwork()) {
-            self.webViewDelegate?.failedUrl = URL(string: url)
-            var myErrorMessage = knownServices.getServiceUnavailableErrorMessage()
-            if let errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: URL(string: url)!) {
-                myErrorMessage = errorMessage
-            }
-            self.webViewDelegate?.showNativeViewContainer(errorMessage: myErrorMessage)
-            self.webViewDelegate?.viewController.updateHeaderText(headerText: "Internet connection error")
-            return
+            return (webViewDelegate?.showNoConnectionErrorView(urlNavigatingTo: url, currentWebviewUrl: webView.url!))!
         }
         
         var urlToNavigateTo = url

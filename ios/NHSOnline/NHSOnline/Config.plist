@@ -46,6 +46,8 @@
 	<string>nhsapp</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
+	<key>SessionTimeout</key>
+	<integer>20</integer>
 	<key>MedicalRecordAbbreviationsURL</key>
 	<string>https://www.england.nhs.uk/participation/resources/involvejargon/</string>
 	<key>HelpURL</key>

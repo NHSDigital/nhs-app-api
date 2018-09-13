@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.WebSettings
+import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
@@ -30,6 +31,7 @@ import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
+import java.util.*
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -86,6 +88,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
+        reloadIfAppWasInBackground()
+
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
                     appWebInterface, knownServices)
@@ -94,9 +99,30 @@ class MainActivity : IInteractor, AppCompatActivity() {
         lifeCycleObserver?.onMoveToForeground()
     }
 
+    fun reloadIfAppWasInBackground() {
+        var app = application as Application
+
+        if(app.wasInBackground) {
+            urlLoader.reloadRequest()
+        }
+        if(app.sessionExpired) {
+            this.loggedOut()
+        }
+
+        app.stopActivityTransitionTimer()
+    }
+
     override fun onStop() {
         super.onStop()
+
+        startBackgroundTimer()
+
         lifeCycleObserver?.onMoveToBackground()
+    }
+
+    fun startBackgroundTimer() {
+        var app = application as Application
+        app.startActivityTransitionTimer()
     }
 
     override fun onNewIntent(intent: Intent?) {

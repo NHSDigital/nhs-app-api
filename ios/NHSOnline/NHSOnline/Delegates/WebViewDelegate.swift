@@ -27,6 +27,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+
+        if(!Reachability.isConnectedToNetwork()) {
+            decisionHandler(.cancel)
+            let urlNavigatingTo = navigationAction.request.url?.absoluteString
+            showNoConnectionErrorView(urlNavigatingTo: urlNavigatingTo!, currentWebviewUrl: webView.url!)
+            return
+        }
+
         shouldHandleErrors = false
 
         if let url = navigationAction.request.url {
@@ -60,6 +68,21 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         decisionHandler(.allow)
+    }
+
+    func showNoConnectionErrorView(urlNavigatingTo: String, currentWebviewUrl: URL) {
+
+        self.failedUrl = URL(string: urlNavigatingTo)
+        var myErrorMessage = knownServices.getServiceUnavailableErrorMessage()
+
+        if let errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: URL(string: urlNavigatingTo)!) {
+            myErrorMessage = errorMessage
+        }
+
+        self.showNativeViewContainer(errorMessage: myErrorMessage)
+        self.viewController.updateHeaderText(headerText: "Internet connection error")
+
+        return
     }
         
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
@@ -178,6 +201,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             
             if (message.name == "updateHeaderText") {
+
+                if(!Reachability.isConnectedToNetwork()) {
+                    showNoConnectionErrorView(urlNavigatingTo: (url?.absoluteString)!, currentWebviewUrl: url!)
+                    return
+                }
+
                 viewController.updateHeaderText(headerText: String(describing: message.body))
             }
             if (message.name == "postNdopToken") {
