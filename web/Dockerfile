@@ -4,7 +4,6 @@ ENV HOST 0.0.0.0
 ENV PORT 3000
 ENV API_HOST https://api-preview.devuks1.bitraft.io
 ENV ORGAN_DONATION_URL https://www.organdonation.nhs.uk/
-ENV DATA_SHARING_URL https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/
 ENV SYMPTOM_CHECKER_URL https://111.nhs.uk
 ENV SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS ?referrer=nhsapp&utm_source=%20&utm_medium=NHS%20App&utm_campaign=%20
 ENV ANALYTICS_SCRIPT_URL //assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js

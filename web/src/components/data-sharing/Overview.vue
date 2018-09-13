@@ -7,7 +7,6 @@
     <p v-for="paragraph of $t('ds01.pages.p1.confidential.paragraphs')" :key="paragraph">
       {{ paragraph }}
     </p>
-    <p>{{ $t('ds01.pages.p1.confidential.paragraphs[1]') }}</p>
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.yourChoice.title') }}</h2>
     <p>{{ $t('ds01.pages.p1.yourChoice.paragraph') }}</p>

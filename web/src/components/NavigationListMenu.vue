@@ -61,7 +61,6 @@ export default {
   data() {
     return {
       organDonationUrl: process.env.ORGAN_DONATION_URL,
-      dataSharingUrl: process.env.DATA_SHARING_URL,
     };
   },
 };

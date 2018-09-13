@@ -38,8 +38,6 @@ module.exports = {
     PORT: process.env.PORT || '3000',
     ORGAN_DONATION_URL:
       process.env.ORGAN_DONATION_URL || 'https://www.organdonation.nhs.uk',
-    DATA_SHARING_URL:
-      process.env.DATA_SHARING_URL || 'https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/',
     SYMPTOM_CHECKER_URL:
       process.env.SYMPTOM_CHECKER_URL ||
       'https://111.nhs.uk',

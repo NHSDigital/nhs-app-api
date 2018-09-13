@@ -2,6 +2,7 @@
 @import './textstyles';
 
 h2.title {
+    font-size: 1.125em;
     margin-top: 1em;
     margin-bottom: 0.5em;
 }
@@ -9,10 +10,6 @@ h2.title {
 a.paragraph-link {
     display: inline-block;
     margin-top: -0.125em;
-}
-
-h3, p, a {
-    font-family: $frutiger-roman;
 }
 
 p, p+a{
