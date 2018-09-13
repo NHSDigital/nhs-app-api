@@ -6,8 +6,6 @@ class LifecycleHandlers: NSObject {
     var knownServices: KnownServices
     var webViewController: WebViewController?
     var unsecureWebViewController: UnsecureWebViewController?
-    var blankViewController = BlankViewController()
-    
     let validateSessionString: String = "window.validateSession()"
     
     init(knownServices: KnownServices, webViewController: WebViewController) {
@@ -25,7 +23,6 @@ class LifecycleHandlers: NSObject {
     }
     
     func createLifecycleObservers() {
-        blankViewController.view.backgroundColor = UIColor.white
         NotificationCenter.default.addObserver(self, selector: #selector(self.didFinishLaunchingNotification), name: Notification.Name.UIApplicationDidFinishLaunching, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didBecomeActive), name: Notification.Name.UIApplicationDidBecomeActive, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didEnterBackground), name: Notification.Name.UIApplicationDidEnterBackground, object: nil)
@@ -83,34 +80,14 @@ class LifecycleHandlers: NSObject {
     }
     
     private func showWhiteScreen() {
-        if (unsecureWebViewController != nil) {
-            let presentedViewController = self.unsecureWebViewController?.presentedViewController;
-            
-            if presentedViewController == nil || !(presentedViewController is BlankViewController) {
-                self.unsecureWebViewController?.present(blankViewController, animated: false, completion: nil)
-            }
-        } else {
-            let presentedViewController = self.webViewController?.presentedViewController;
-        
-            if presentedViewController == nil || !(presentedViewController is BlankViewController) {
-                self.webViewController?.present(blankViewController, animated: false, completion: nil)
-            }
-        }
+        let window = UIApplication.shared.keyWindow!
+        let v = UIView(frame: window.frame)
+        v.backgroundColor = UIColor.white
+        v.tag = 1
+        window.addSubview(v);
     }
     
     private func hideWhiteScreen() {
-        if (unsecureWebViewController != nil) {
-            let presentedViewController = self.unsecureWebViewController?.presentedViewController;
-            
-            if presentedViewController != nil && presentedViewController is BlankViewController {
-                self.unsecureWebViewController?.dismiss(animated: false, completion: nil)
-            }
-        } else {
-            let presentedViewController = self.webViewController?.presentedViewController;
-            
-            if presentedViewController != nil && presentedViewController is BlankViewController {
-                self.webViewController?.dismiss(animated: false, completion: nil)
-            } 
-        }
+        UIApplication.shared.keyWindow?.viewWithTag(1)?.removeFromSuperview()
     }
 }

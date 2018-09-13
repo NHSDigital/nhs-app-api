@@ -36,7 +36,6 @@
 		F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F065B3D9205FDFC6004EF388 /* TabBarDelegate.swift */; };
 		F07607F320B44C0300069F7F /* WebEvents.js in Resources */ = {isa = PBXBuildFile; fileRef = F07607F220B44C0300069F7F /* WebEvents.js */; };
 		F07607F620B465E400069F7F /* FileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F07607F520B465E400069F7F /* FileReader.swift */; };
-		F0AB8F532107276B008176B2 /* BlankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0AB8F522107276B008176B2 /* BlankViewController.swift */; };
 		F0B4B8B8204D68DC004E4120 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F0B4B8BA204D68DC004E4120 /* Localizable.strings */; };
 		F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */; };
 		F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D2E5D520501EAA0067DEC4 /* WebViewDelegate.swift */; };
@@ -88,7 +87,6 @@
 		F07607F220B44C0300069F7F /* WebEvents.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = WebEvents.js; sourceTree = "<group>"; };
 		F07607F520B465E400069F7F /* FileReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReader.swift; sourceTree = "<group>"; };
 		F08E80FF2077DBA700017BFB /* NHSOnline.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NHSOnline.entitlements; sourceTree = "<group>"; };
-		F0AB8F522107276B008176B2 /* BlankViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlankViewController.swift; sourceTree = "<group>"; };
 		F0B4B8B2204D50E9004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		F0B4B8B9204D68DC004E4120 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F0B7D86F204EA1990078D56E /* WKWebView_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebView_Extensions.swift; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				9200DC9D2142854C009EFFEF /* Network */,
-				F0AB8F5121072733008176B2 /* StandaloneViewControllers */,
 				4649682420C7D94B00FDDE87 /* Lifecycle */,
 				C2BFD3BD20C9358F00D3E361 /* Data */,
 				F07607F420B4655B00069F7F /* Utils */,
@@ -211,7 +208,6 @@
 			isa = PBXGroup;
 			children = (
 				C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */,
-				DA5EAEBF213FEC2A0046C023 /* NdopPostBody.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -248,14 +244,6 @@
 			);
 			name = Utils;
 			path = "New Group";
-			sourceTree = "<group>";
-		};
-		F0AB8F5121072733008176B2 /* StandaloneViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				F0AB8F522107276B008176B2 /* BlankViewController.swift */,
-			);
-			path = StandaloneViewControllers;
 			sourceTree = "<group>";
 		};
 		F0B7D860204E8B8A0078D56E /* ContainerViewControllers */ = {
@@ -414,11 +402,9 @@
 				F0B7D870204EA1990078D56E /* WKWebView_Extensions.swift in Sources */,
 				138DF3772111CF6F00D71A64 /* UnsecureWebViewController.swift in Sources */,
 				4649682620C7D97300FDDE87 /* LifecycleHandlers.swift in Sources */,
-				DA5EAEC0213FEC2A0046C023 /* NdopPostBody.swift in Sources */,
 				F065B3D8205FCFFE004EF388 /* HomeViewController.swift in Sources */,
 				C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */,
 				C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */,
-				F0AB8F532107276B008176B2 /* BlankViewController.swift in Sources */,
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */,
 				13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */,
