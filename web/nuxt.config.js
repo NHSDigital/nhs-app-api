@@ -65,7 +65,7 @@ module.exports = {
       'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/',
     CLINICAL_ABBREVIATIONS_URL:
       process.env.CLINICAL_ABBREVIATIONS_URL ||
-      'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations',
+      'https://www.england.nhs.uk/participation/resources/involvejargon/',
     CID_CLIENT_ID: process.env.CID_CLIENT_ID || 'nhs-online',
     YOUR_NHS_DATA_MATTERS_URL:
       process.env.YOUR_NHS_DATA_MATTERS_URL ||
