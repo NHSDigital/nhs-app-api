@@ -53,10 +53,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
-                if knownServices.isHotJar(url: url) {
-//                    UIApplication.shared.open(url)
-                    return
-                }
                 openInSafari(url: url)
                 return;
             }
@@ -234,12 +230,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     private func updateHeaderAndNavigationMenu(url: URL?) {
         let service: KnownService
-        if let host = url?.host,
-            let tabBarDelegate = self.viewController.tabBarDelegate {
+        if let tabBarDelegate = self.viewController.tabBarDelegate {
                 if let internalService = knownServices.findMatchingInternalServiceForURL(url: url) {
                     service = internalService
+                } else if let knownService = knownServices.findMatchingKnownServiceForURL(url: url) {
+                    service = knownService
                 } else {
-                    service = knownServices.findMatchingKnownServiceForHostname(hostname: host)!
+                    return
                 }
                 switch service.service {
                 case .NHS_111, .SYMPTOMS:
@@ -254,11 +251,11 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 case .MY_RECORD:
                     tabBarDelegate.selectMenu(menu: .MyRecord)
                     break
-                case .ORGAN_DONATION, .DATA_SHARING:
+                case .ORGAN_DONATION:
                     tabBarDelegate.selectMenu(menu: .More)
                 default : break
                 }
-            
+
                 if (service.serviceTitle != "") {
                     viewController.updateHeaderText(headerText: service.serviceTitle)
                 }
