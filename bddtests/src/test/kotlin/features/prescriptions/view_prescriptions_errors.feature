@@ -33,7 +33,6 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-498
-  @bug  @NHSO-2443
   Scenario: A user navigates to the prescriptions page and the session times out
     Given EMIS is initialised
     And I am using EMIS GP System
