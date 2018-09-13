@@ -33,5 +33,9 @@
 
     <string name="locale_language">en</string>
     <string name="locale_region">GB</string>
+    <!-- Icon Content description texts-->
+
+    <string name="header_icon_account">My account icon</string>
+    <string name="header_icon_help">Help icon</string>
 </resources>
 

@@ -5,40 +5,40 @@
         android:id="@+id/symptoms"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:activeIcon="@mipmap/icon_menu_symptoms_active"
-        app:inactiveIcon="@mipmap/icon_menu_symptoms"
+        app:activeIcon="@drawable/icon_drawable__symptoms_active"
+        app:inactiveIcon="@drawable/icon_drawable_symptoms"
         app:menuTitle="@string/symptoms" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/appointments"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:activeIcon="@mipmap/icon_menu_appointments_active"
-        app:inactiveIcon="@mipmap/icon_menu_appointments"
+        app:activeIcon="@drawable/icon_drawable_appointment_active"
+        app:inactiveIcon="@drawable/icon_drawable_appointment"
         app:menuTitle="@string/appointment" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/prescriptions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:activeIcon="@mipmap/icon_menu_prescriptions_active"
-        app:inactiveIcon="@mipmap/icon_menu_prescriptions"
+        app:activeIcon="@drawable/icon_drawable_prescription_active"
+        app:inactiveIcon="@drawable/icon_drawable_prescription"
         app:menuTitle="@string/prescription" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/myRecord"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:activeIcon="@mipmap/icon_menu_record_active"
-        app:inactiveIcon="@mipmap/icon_menu_record"
+        app:activeIcon="@drawable/icon_drawable_record_active"
+        app:inactiveIcon="@drawable/icon_drawable_record"
         app:menuTitle="@string/my_record" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/more"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:activeIcon="@mipmap/icon_menu_more_active"
-        app:inactiveIcon="@mipmap/icon_menu_more"
+        app:activeIcon="@drawable/icon_drawable_more_active"
+        app:inactiveIcon="@drawable/icon_drawable_more"
         app:menuTitle="@string/more" />
 
 </merge>

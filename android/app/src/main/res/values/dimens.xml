@@ -2,8 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
 
 
-    <dimen name="menuBarItemIconHeight">@dimen/_18sdp</dimen>
-    <dimen name="menuBarItemIconWidth">@dimen/_18sdp</dimen>
+    <dimen name="menuBarItemIconHeight">@dimen/_21sdp</dimen>
+    <dimen name="menuBarItemIconWidth">@dimen/_21sdp</dimen>
     <dimen name="menuBarItemIconBottomMargin">@dimen/_5sdp</dimen>
     <dimen name="menuBarItemFontSize">@dimen/_7ssp</dimen>
 

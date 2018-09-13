@@ -1,66 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/_96sdp"
     android:layout_marginLeft="@dimen/_16sdp"
     android:layout_marginRight="@dimen/_16sdp"
-    android:layout_marginTop="@dimen/_16sdp">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <RelativeLayout
         android:id="@+id/top_header"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp">
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_12sdp">
 
         <ImageView
             android:id="@+id/nhsOnlineLogoIcon"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/nhsAppHome"
-            android:src="@mipmap/icon_nhs_online_logo" />
+            android:src="@drawable/icon_drawable_nhs_logo" />
 
         <ImageView
             android:id="@+id/myAccountIcon"
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_50sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:contentDescription="My account icon"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/header_icon_account"
             android:focusable="true"
-            android:src="@mipmap/icon_header_account" />
+            android:src="@drawable/icon_drawable_account" />
 
         <ImageView
             android:id="@+id/helpIcon"
-            android:layout_width="@dimen/_15sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="25dp"
-            android:contentDescription="Help icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/myAccountIcon"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_toStartOf="@id/myAccountIcon"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/header_icon_help"
             android:focusable="true"
-            android:src="@mipmap/ic_header_help" />
+            android:src="@drawable/icon_drawable_help" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:layout_alignParentBottom="true"
-            android:background="#64FFFFFF" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/bottom_header"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
-        android:layout_below="@id/top_header">
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="#40ffffff" />
 
         <TextView
             android:id="@+id/header_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/_6sdp"
             android:gravity="center"
-            android:text="Home"
+            android:text="@string/home_header"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/_18sdp" />
     </RelativeLayout>
 
-</RelativeLayout>
+</LinearLayout>
