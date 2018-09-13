@@ -46,7 +46,7 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             retryButtonText: String? = null
     ) {
         assertEquals("Content header incorrect. ", headerText, heading.element.text)
-        assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.element.text)
+        if (!subHeaderText.isNullOrEmpty()) assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.element.text)
         if (!messageText.isNullOrEmpty()) assertEquals("Content message incorrect. ", messageText, errorText1.element.text)
         if (retryButtonText.isNullOrEmpty()) {
             button.assertElementNotPresent()
