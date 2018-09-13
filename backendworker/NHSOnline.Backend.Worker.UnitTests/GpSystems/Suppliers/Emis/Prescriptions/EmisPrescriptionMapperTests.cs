@@ -122,7 +122,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                 {
                     new Course
                     {
-                        Details = $"{item.MedicationCourses.ElementAt(0).Dosage} - {item.MedicationCourses.ElementAt(0).QuantityRepresentation}",
+                        Details = $"{item.MedicationCourses.ElementAt(0).Dosage} ‐ {item.MedicationCourses.ElementAt(0).QuantityRepresentation}",
                         Id = item.MedicationCourses.ElementAt(0).MedicationCourseGuid,
                         Name = item.MedicationCourses.ElementAt(0).Name,
                     }
@@ -326,7 +326,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Prescripti
                     {
                         Id = item.Courses.ElementAt(0).MedicationCourseGuid,
                         Name = item.Courses.ElementAt(0).Name,
-                        Details = $"{item.Courses.ElementAt(0).Dosage} - {item.Courses.ElementAt(0).QuantityRepresentation}",
+                        Details = $"{item.Courses.ElementAt(0).Dosage} ‐ {item.Courses.ElementAt(0).QuantityRepresentation}",
 
                     }
                 }

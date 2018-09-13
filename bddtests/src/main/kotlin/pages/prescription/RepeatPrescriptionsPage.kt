@@ -15,7 +15,7 @@ const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 @Suppress("ReturnCount")
 fun resolveDetailsField(dosage: String?, quantity: String?): String {
     if (dosage != null && quantity != null) {
-        return dosage + " - " + quantity.replace("  ", " ")
+        return dosage + " ‐ " + quantity.replace("  ", " ")
     }
     else if (dosage != null) {
         return dosage

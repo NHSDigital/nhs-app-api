@@ -94,7 +94,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             
             if (!string.IsNullOrEmpty(course.Dosage) && !string.IsNullOrEmpty(course.QuantityRepresentation))
             {
-                details = $"{course.Dosage} - {course.QuantityRepresentation}";
+                details = $"{course.Dosage} ‐ {course.QuantityRepresentation}";
             }
             else if (!string.IsNullOrEmpty(course.Dosage))
             {
