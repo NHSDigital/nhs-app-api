@@ -12,6 +12,7 @@
     <string name="data_preferences_header">Sharing health data preferences</string>
     <string name="nhs_111_header">111 Online</string>
     <string name="conditions_header">Health A-Z</string>
+    <string name="conditions_header_description">Health A to Z</string>
     <string name="my_record_header">My medical record</string>
     <string name="symptoms_header">Check my symptoms</string>
     <string name="appointments_header">My appointments</string>

@@ -7,6 +7,7 @@ class KnownServices {
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
     private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
     private let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
+    private let accessibleConditionsTitle = NSLocalizedString("AccessibleConditionsTitle", comment: "")
     private let symptomsTitle = NSLocalizedString("SymptomsTitle", comment: "")
     private let appointmentsTitle = NSLocalizedString("AppointmentsTitle", comment: "")
     private let prescriptionsTitle = NSLocalizedString("PrescriptionsTitle", comment: "")
@@ -29,7 +30,7 @@ class KnownServices {
         serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldValidateSession:false))
         serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlStrings: [config.DataPreferencesURL], serviceTitle: dataPreferencesTitle, service: .DATA_PREFERENCES, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, accessibleServiceTitle: accessibleConditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlStrings: [getCheckSymptomsUrl()], serviceTitle: symptomsTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         
         

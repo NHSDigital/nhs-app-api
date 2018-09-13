@@ -15,5 +15,5 @@ interface UnsecureInteractor {
 
     fun setReloadUrl(url: String?)
 
-    fun setHeaderText(text: String)
+    fun setHeaderText(text: String, description: String? = null)
 }

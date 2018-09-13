@@ -9,6 +9,7 @@ import java.net.URL
      val unavailabilityErrorMessage: ErrorMessage,
      queryString: String? = null,
      var nativeHeader: String? = null,
+     var nativeHeaderDescription: String? = null,
      var shouldValidateSession: Boolean = true
 ) {
     private val serviceQueryMap: MutableMap<String, String> = mutableMapOf()

@@ -91,9 +91,12 @@ class HomeViewController : UIViewController {
             self.webViewController?.postNdopToken(token: token!)
         }
     }
-    func updateHeaderText(headerText: String?) {
+    func updateHeaderText(headerText: String?, accessibilityLabel: String? = nil) {
         if (headerText != nil) {
             self.headerBar.headerTitle.text = headerText
+        }
+        if (accessibilityLabel != nil) {
+            self.headerBar.headerTitle.accessibilityLabel = accessibilityLabel
         }
     }
     func callCheckSymptoms() {

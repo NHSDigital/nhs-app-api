@@ -6,16 +6,18 @@ import Foundation
     let shouldAllowNativeInteraction: Bool
     let shouldValidateSession: Bool
     let serviceTitle: String?
+    let accessibleServiceTitle: String?
     let serviceErrorMessage: ErrorMessage
     private var urlQueryItems = Array<URLQueryItem>()
     
-    init(urlStrings:[String], serviceTitle: String? = "", service: KnownServices.Service, serviceErrorMessage: ErrorMessage,
+    init(urlStrings:[String], serviceTitle: String? = "", accessibleServiceTitle: String? = "", service: KnownServices.Service, serviceErrorMessage: ErrorMessage,
          shouldAllowNativeInteraction: Bool = false,shouldValidateSession: Bool = true, urlQueryString:String? = nil) {
         self.urls = urlStrings.map { URLComponents(string: $0)! }
         self.service = service
         self.shouldAllowNativeInteraction = shouldAllowNativeInteraction
         self.shouldValidateSession = shouldValidateSession
         self.serviceTitle = serviceTitle
+        self.accessibleServiceTitle = accessibleServiceTitle
         self.serviceErrorMessage = serviceErrorMessage
         self.retrieveQueryKeyValueFrom(queryString: urlQueryString)
     }

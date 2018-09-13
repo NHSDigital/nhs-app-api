@@ -230,9 +230,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
-    override fun setHeaderText(text: String) {
+    override fun setHeaderText(text: String, description: String?) {
         runOnUiThread {
             header_text_view.text = text
+            if(!description.isNullOrEmpty()) {
+                header_text_view.contentDescription = description
+            }
             webview.announceForAccessibility(text)
             this.title = text
         }

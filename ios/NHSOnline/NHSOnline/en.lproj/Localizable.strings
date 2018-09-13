@@ -23,6 +23,7 @@
 "HelpHint" = "Navigates to help page";
 "NHSAppHomeTitle" = "NHS App Home";
 "NHSAppHomeHint" = "Takes you to NHS App home page";
+"AccessibleConditionsTitle" = "Health A to Z";
 
 /*Configuration*/
 "locale" = "en-GB";

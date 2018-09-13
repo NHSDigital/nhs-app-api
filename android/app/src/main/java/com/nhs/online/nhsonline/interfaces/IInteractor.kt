@@ -19,7 +19,7 @@ interface IInteractor {
 
     fun showWebviewScreen()
 
-    fun setHeaderText(text: String)
+    fun setHeaderText(text: String, description: String? = null)
 
     fun clearMenuBarItem()
 

@@ -286,7 +286,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 }
 
                 if (service.serviceTitle != "") {
-                    viewController.updateHeaderText(headerText: service.serviceTitle)
+                    viewController.updateHeaderText(headerText: service.serviceTitle, accessibilityLabel: service.accessibleServiceTitle)
                 }
             }
     }

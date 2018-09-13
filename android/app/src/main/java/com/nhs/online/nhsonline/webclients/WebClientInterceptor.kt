@@ -162,6 +162,7 @@ class WebClientInterceptor(
             }
 
             val header = service?.nativeHeader
+            val headerDescription = service?.nativeHeaderDescription
             if (header != null) {
                 when (header) {
                     context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectNavigationMenuActive(R.id.symptoms)
@@ -172,7 +173,7 @@ class WebClientInterceptor(
                     context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectNavigationMenuActive(R.id.more)
                 }
 
-                uiInteractor.setHeaderText(header)
+                uiInteractor.setHeaderText(header, headerDescription)
             }
         }
     }

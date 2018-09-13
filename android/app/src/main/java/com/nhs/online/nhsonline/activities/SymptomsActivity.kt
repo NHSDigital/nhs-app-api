@@ -84,11 +84,14 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
             progressBarLayoutU.visibility = View.GONE
     }
 
-    override fun setHeaderText(text: String) {
+    override fun setHeaderText(text: String, description: String?) {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         val headerText = toolbar.findViewById<View>(R.id.header_text_view) as TextView
         runOnUiThread {
             headerText.text = text
+            if(!description.isNullOrEmpty()) {
+                headerText.contentDescription = description
+            }
             symptomsWebview.announceForAccessibility(text)
         }
     }
