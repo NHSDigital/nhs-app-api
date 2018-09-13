@@ -23,8 +23,7 @@ export default {
           description: message,
           descriptionwithpagename: `${window.digitalData.page.pageInfo.pageName}:${message}`,
         };
-        // eslint-disable-next-line no-underscore-dangle
-        window._satellite.track('track_validation_errors');
+        this.dispatch('analytics/satelliteTrack', 'track_validation_errors');
       });
     }
   },
@@ -36,8 +35,15 @@ export default {
           navigation: navigationInfo,
         },
       };
+      this.dispatch('analytics/satelliteTrack', 'click_link');
+    }
+  },
+  satelliteTrack(nameOfCall) {
+    // Put track call in try-catch, as it likely called under error, so no internet connection.
+    if (process.client) {
+      /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
       // eslint-disable-next-line no-underscore-dangle
-      window._satellite.track('click_link');
+      try { window._satellite.track(nameOfCall); } catch (exception) { }
     }
   },
 };

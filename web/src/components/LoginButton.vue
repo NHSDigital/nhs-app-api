@@ -9,8 +9,7 @@ export default {
   methods: {
     async loginClicked() {
       if (process.client) {
-        // eslint-disable-next-line no-underscore-dangle
-        window._satellite.track('login');
+        this.$store.dispatch('analytics/satelliteTrack', 'login');
       }
     },
   },

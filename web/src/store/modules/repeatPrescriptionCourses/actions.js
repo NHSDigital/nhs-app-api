@@ -29,8 +29,7 @@ export default {
     return this.app.$http
       .postV1PatientPrescriptions(param).then(() => {
         if (process.client) {
-          // eslint-disable-next-line no-underscore-dangle
-          window._satellite.track('prescription_ordered');
+          this.dispatch('analytics/satelliteTrack', 'prescription_ordered');
         }
       });
   },

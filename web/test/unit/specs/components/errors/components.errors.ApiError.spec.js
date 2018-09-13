@@ -140,7 +140,7 @@ describe('ApiError.vue', () => {
 
   each(testData[502]).it('page %s will show correct message when the API returns a 502 bad gateway response', (path, expectedData) => {
     const route = { path };
-    const apiError = { status: 502, message: 'Bad Gateway' };
+    const apiError = { response: { status: 502 }, message: 'Bad Gateway' };
 
     createApiErrorComponent(route, apiError);
 

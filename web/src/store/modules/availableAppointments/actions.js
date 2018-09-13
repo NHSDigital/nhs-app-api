@@ -43,8 +43,7 @@ export default {
     return this.app.$http
       .postV1PatientAppointments(param).then(() => {
         if (process.client) {
-          // eslint-disable-next-line no-underscore-dangle
-          window._satellite.track('appointment_booked');
+          this.dispatch('analytics/satelliteTrack', 'appointment_booked');
         }
       });
   },

@@ -59,7 +59,9 @@ export default function (app, store, route) {
         // eslint-disable-next-line no-underscore-dangle
         window._satellite.track('page_view');
       } catch (ex) {
-        store.dispatch();
+        // Put track call in try-catch, as it likely called under error, so no internet connection.
+        // eslint-disable-next-line no-empty
+        try { store.dispatch(); } catch (exception) { }
       }
       return window.digitalData;
     })();
@@ -92,7 +94,7 @@ export default function (app, store, route) {
           target,
         };
         store.dispatch('analytics/track', action);
-        window._satellite.track('page_view');
+        store.dispatch('analytics/satelliteTrack', 'page_view');
       },
       validationError: (messages) => {
         const error = {

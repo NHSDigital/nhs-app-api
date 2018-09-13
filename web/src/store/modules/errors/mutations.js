@@ -13,11 +13,18 @@ import {
 
 export default {
   [ADD_API_ERROR](state, error) {
+    let statusCode;
+
     if (error == null) {
       return;
     }
 
-    const statusCode = (error.response) ? error.response.status : 500;
+    if (error.response) {
+      statusCode = error.response.status;
+    } else {
+      statusCode = 500;
+      state.hasConnectionProblem = true;
+    }
     const apiError = {
       status: statusCode,
       message: error.message,

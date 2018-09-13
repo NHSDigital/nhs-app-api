@@ -41,8 +41,7 @@ export default {
     return this.app.$http
       .deleteV1PatientAppointments(param).then(() => {
         if (process.client) {
-          // eslint-disable-next-line no-underscore-dangle
-          window._satellite.track('appointment_cancelled');
+          this.dispatch('analytics/satelliteTrack', 'appointment_cancelled');
         }
       });
   },
