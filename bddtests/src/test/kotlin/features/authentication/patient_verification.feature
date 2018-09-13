@@ -14,7 +14,10 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-   #   | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -26,7 +29,10 @@ Feature: Patient Verification
     Examples:
       | GP System |
       | EMIS      |
-   #   | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -38,7 +44,10 @@ Feature: Patient Verification
     Examples:
       | GP System |
       | EMIS      |
-   #   | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -71,7 +80,10 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-   #   | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -84,7 +96,10 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-   #   | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -97,7 +112,10 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-   #   | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -110,7 +128,10 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-  #    | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -123,7 +144,10 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-  #    | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
@@ -135,11 +159,14 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-  #    | VISION    |
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-125
   @backend
-  @pending
+  @pending @NHSO-2522
   Scenario: Vision responds with security header error
     Given Vision responds with a security header error
     When I verify patient data
@@ -147,7 +174,7 @@ Feature: Patient Verification
 
   @NHSO-125
   @backend
-  @pending
+  @pending @NHSO-2522
   Scenario: Vision responds with invalid request error
     Given Vision responds with an invalid request error
     When I verify patient data
@@ -155,7 +182,7 @@ Feature: Patient Verification
 
   @NHSO-125
   @backend
-  @pending
+  @pending @NHSO-2522
   Scenario: Vision responds with an unknown error
     Given Vision responds with an unknown error
     When I verify patient data

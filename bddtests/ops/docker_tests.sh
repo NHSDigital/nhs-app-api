@@ -46,7 +46,8 @@ else
         BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS'"
     else
         info "Non-Develop Branch - BDD Smoketest Run Configured"
-        BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running and @smoketest $SPECIFIC_TEST_TAGS'"
+        BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
+        not @long-running and @smoketest $SPECIFIC_TEST_TAGS'"
     fi
 fi
 

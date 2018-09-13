@@ -1,60 +1,70 @@
 package pages
 
+import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
+import org.junit.Assert
 
 @DefaultUrl("http://web.local.bitraft.io:3000/more")
 open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    val btnOrganDonation = HybridPageElement(
-            browserLocator = "//a/*[contains(text(),'Set organ donation preferences')]",
-            androidLocator = null,
-            page = this
-    )
+    private val sections = "//div[@id='mainDiv']/ul/li//a"
+    private val organDonationTitle = "Set organ donation preferences"
+    private val organDonationDescription = "Help save thousands of lives in the UK every year by signing up" +
+            " to become a donor on the NHS Organ Donor Register."
+    private val dataSharingTitle = "Manage your choice for sharing data"
+    private val dataSharingDescription =
+            "Find out why your data matters and choose whether or not it can be used for research and planning."
 
-    val donationDescription = HybridPageElement(
-            browserLocator = "//p[contains(text(),'Help save thousands " +
-                             "of lives in the UK every year by signing up" +
-                             " to become a donor on the NHS Organ Donor Register.')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val btnDataSharing = HybridPageElement(
-            browserLocator = "//a/*[contains(text(),'Manage your choice for sharing data')]",
-            androidLocator = null,
-            page = this
-    )
-
-    val dataSharingDescription = HybridPageElement(
-            browserLocator = "//p[contains(text(),'Find out why your data " +
-                             "matters and choose whether or not it can be used for research and planning.')]",
-            androidLocator = null,
-            page = this
-    )
-
-    fun isDonationButtonVisible(): Boolean {
-        return btnOrganDonation.element.isCurrentlyVisible
+    private fun listOfLinks(): HybridPageElement {
+        return HybridPageElement(
+                browserLocator = sections,
+                androidLocator = null,
+                page = this,
+                helpfulName = "ListOfLinks"
+        )
     }
 
-    fun isDonationDescriptionVisible(): Boolean {
-        return donationDescription.element.isCurrentlyVisible
+    private fun link(linkTitle: String): HybridPageElement {
+        return HybridPageElement(
+                browserLocator = "$sections[h2[contains(text(),'$linkTitle')]]",
+                androidLocator = null,
+                page = this,
+                helpfulName = "$linkTitle Link")
     }
 
-    fun clickOrganDonations() {
-        btnOrganDonation.element.click()
+    private fun linkDescriptionBody(linkTitle: String): HybridPageElement {
+        return HybridPageElement(
+                browserLocator = "$sections[h2[contains(text(),'$linkTitle')]]//p",
+                androidLocator = null,
+                page = this,
+                helpfulName = "$linkTitle Link")
     }
 
-    fun isDataSharingButtonVisible(): Boolean {
-        return btnDataSharing.element.isCurrentlyVisible
+    val btnOrganDonation  by lazy{ link(organDonationTitle)}
+    val btnDataSharing by lazy{ link(dataSharingTitle)}
+
+    val expectedLinks by
+    lazy {
+        arrayListOf(
+                Pair(organDonationTitle, organDonationDescription),
+                Pair(dataSharingTitle, dataSharingDescription))
     }
 
-    fun isDataSharingDescriptionVisible(): Boolean {
-        return dataSharingDescription.element.isCurrentlyVisible
+    private fun assertDescription(title: String, description: String){
+        val body = linkDescriptionBody(title)
+        Assert.assertEquals("Description Body",
+                description,
+                body.assertSingleElementPresent().element.text)
     }
 
-    fun clickDataSharing() {
-        btnDataSharing.element.click()
+    fun assertLinksPresent() {
+        val links = listOfLinks().elements
+        Assert.assertEquals("Number of expected Links",
+                expectedLinks.count(),
+                links.count())
+        expectedLinks.forEach { link ->
+            link(link.first).assertSingleElementPresent()
+            assertDescription(link.first, link.second)
+        }
     }
-
-
 }

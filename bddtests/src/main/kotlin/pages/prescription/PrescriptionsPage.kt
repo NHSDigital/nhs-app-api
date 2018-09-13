@@ -10,8 +10,6 @@ import pages.HybridPageObject.Companion.PageType
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
-    lateinit var headerBar: Header
-
     val timeoutPageTitle = "Prescription data error"
     val timeoutPageHeader = "Prescription data error"
     val timeoutHeader = "There's been a problem getting your prescription information"

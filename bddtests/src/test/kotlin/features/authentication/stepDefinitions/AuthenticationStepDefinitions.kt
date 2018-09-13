@@ -681,13 +681,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I am redirected to the signed in home page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheSignedInHomePage() {
-        navHeader.assertHeaderVisible()
+        navHeader.assertHomePageHeaderVisible()
     }
 
     @Then("^I am redirected to the app to the signed in home page$")
     @Throws(Exception::class)
     fun IAmRedirectedToTheAppToTheSignedInHomePage() {
-        navHeader.assertHeaderVisible()
+        navHeader.assertHomePageHeaderVisible()
     }
 
     private fun createLinkApplicationRequestModel(patient: Patient): LinkApplicationRequestModel {
@@ -700,21 +700,6 @@ class AuthenticationStepDefinitions : AbstractSteps() {
                         linkageKey = patient.linkageKey
                 )
         )
-    }
-
-    private fun createEmisStubs(patient: Patient = Patient.getDefault("EMIS"), defaultAssociationType: AssociationType = this.associationType) {
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), defaultAssociationType) }
-        mockingClient.forEmis {
-            demographicsRequest(patient).respondWithSuccess(patient,
-                    patientIdentifiers = arrayOf(
-                            PatientIdentifier(
-                                    identifierType = IdentifierType.NhsNumber,
-                                    identifierValue = patient.nhsNumbers[0]
-                            )
-                    )
-            )
-        }
     }
 
     private val _errorMapping: HashMap<String, Int> = hashMapOf(

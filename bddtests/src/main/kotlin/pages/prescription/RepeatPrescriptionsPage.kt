@@ -41,10 +41,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     )
 
     override fun shouldBeDisplayed() {
-        if(!headerBar.isVisible(headerText)){
-            throw WrongPageError("The expected header is not visible, you are on the wrong page.")
-        }
-
+        headerBar.assertIsVisible(headerText)
         super.shouldBeDisplayed()
     }
 

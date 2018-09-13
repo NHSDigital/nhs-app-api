@@ -1,20 +1,24 @@
 package features.dataSharing.steps
 
 import features.appointments.data.AppointmentsBookingData.Companion.mockingClient
+import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Step
+import net.thucydides.core.annotations.Steps
 import pages.DataSharingPage
 import pages.navigation.Header
 import pages.navigation.NavBar
 
 open class DataSharingSteps {
 
+    @Steps
+    lateinit var navbarSteps: NavigationSteps
     lateinit var header: Header
-    lateinit var navbar: NavBar
     lateinit var datasharing: DataSharingPage
 
     @Step
-    fun isDisplayed(): Boolean {
-        return header.isVisible("Sharing health data preferences") && navbar.isHighlighted(NavBar.NavBarType.MORE)
+    fun assertIsDisplayed() {
+        header.assertIsVisible("Sharing health data preferences")
+        navbarSteps.assertSelectedTab("More")
     }
 
     @Step

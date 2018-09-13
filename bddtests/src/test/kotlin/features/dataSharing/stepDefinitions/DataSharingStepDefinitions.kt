@@ -22,7 +22,7 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
 
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
-        assert(dataSharing.isDisplayed())
+        dataSharing.assertIsDisplayed()
     }
 
     @Given("^I am on the Data Sharing (.*) page$")

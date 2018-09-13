@@ -192,7 +192,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I will return to the home page$")
     fun i_will_return_to_the_home_page() {
-        navHeader.assertHeaderVisible()
+        navHeader.assertHomePageHeaderVisible()
     }
 
     @Then("^No navigation menu bar item will be selected$")

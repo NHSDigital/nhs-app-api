@@ -1,5 +1,6 @@
 package pages.navigation
 
+import org.junit.Assert
 import pages.HybridPageObject
 import pages.HybridPageElement
 
@@ -27,13 +28,12 @@ class Header: HybridPageObject(Companion.PageType.NATIVE) {
             page = this
     )
 
-    fun isVisible(title: String): Boolean {
-        val logoIsVisible = homeIcon.element.isVisible
-        val accountIsVisible = accountIcon.element.isVisible
-        val helpIsVisible = helpIcon.element.isVisible
-        val headingIsVisible = pageTitle.withText(title).element.isVisible
+    fun assertIsVisible(title: String) {
 
-        return logoIsVisible && accountIsVisible && headingIsVisible && helpIsVisible
+        Assert.assertTrue("Expected logo to be visible", homeIcon.element.isVisible)
+        Assert.assertTrue("Expected account icon to be visible", accountIcon.element.isVisible)
+        Assert.assertTrue("Expected help icon to be visible", helpIcon.element.isVisible)
+        waitForPageHeaderText(title)
     }
 
     fun clickMyAccount() {

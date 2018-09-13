@@ -57,7 +57,10 @@ class HybridPageElement(
         }
 
     fun assertSingleElementPresent(): HybridPageElement {
-        Assert.assertEquals("Expected only one matching element for $helpfulNameToUse", 1, elements.count())
+        Assert.assertEquals(
+                "Expected only one matching element for $helpfulNameToUse, with xpath $browserLocator",
+                1,
+                elements.count())
         return this
     }
 

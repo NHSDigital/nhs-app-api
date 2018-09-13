@@ -16,7 +16,10 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
-    # | VISION      | - Blocked until Vision login implemented
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-186
   @NHSO-985
@@ -53,7 +56,10 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
-      # | VISION      | - Blocked until Vision login implemented
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-2038
   @NHSO-186
@@ -68,7 +74,10 @@ Feature: Sign out of mobile web
       | GP Supplier |
       | EMIS        |
       | TPP         |
-      # | VISION      | - Blocked until Vision login implemented
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
   @NHSO-985
   Scenario Outline: The nsho cookie should be clear of <GP Supplier> session and user information if server side sign out fails

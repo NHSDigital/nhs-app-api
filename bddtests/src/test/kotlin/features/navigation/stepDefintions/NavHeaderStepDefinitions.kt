@@ -32,7 +32,7 @@ class NavHeaderStepDefinitions {
 
     @And("^I see the header$")
     fun iSeeHeader() {
-        navHeader.assertHeaderVisible()
+        navHeader.assertHomePageHeaderVisible()
     }
 
     @Given("^I navigate away from the home page$")

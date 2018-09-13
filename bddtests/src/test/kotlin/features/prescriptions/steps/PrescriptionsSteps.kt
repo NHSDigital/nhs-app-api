@@ -3,8 +3,8 @@ package features.prescriptions.steps
 import com.google.gson.GsonBuilder
 import models.prescriptions.HistoricPrescription
 import net.thucydides.core.annotations.Step
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.prescription.PrescriptionsPage
 import pages.prescription.RepeatPrescriptionsPage

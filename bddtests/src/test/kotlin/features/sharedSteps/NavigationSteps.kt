@@ -11,6 +11,12 @@ open class NavigationSteps {
     lateinit var header: Header
 
     @Step
+    fun assertSelectedTab(tab:String){
+        Assert.assertTrue("Expected tab '$tab' to be selected, but no tabs selected" , hasAnyTabSelected())
+        Assert.assertTrue("Expected tab '$tab' to be selected." , hasSelectedTab(tab))
+    }
+
+    @Step
     fun hasSelectedTab(tab: String): Boolean {
         return navBar.isHighlighted(NavBar.NavBarType.valueOf(tab.toUpperCase()))
     }

@@ -1,26 +1,29 @@
+@more
 Feature: Display More Menu
   In order to access functionality that is not available on the standard app menu bar
-  As a user
-  I want to be able access more available functionality
-  s
+  including Organ Donation and Data Sharing preferences
 
-  @pending
-  Scenario: A logged in user in the mobile web sees the more screen when they click on the "More" option in the menu bar
+  @smoketest
+  Scenario: A logged in user can navigate to the more screen
+    Given a patient from EMIS is defined
+    And I am logged in
+    And I navigate to More
+    And I see the more page header
+    Then I see more button on the nav bar is highlighted
+    And I see and can follow links within the more page body
 
-  @pending
-  Scenario: When a logged in user to the mobile web looks at the more screen, they see a button with the text 'Set organ donation preferences'
+  Scenario: A user can navigate to the 'Set organ donation preferences' page
+    Given a patient from EMIS is defined
+    And I am logged in
+    And I navigate to more
+    Given I am on the More Page
+    When I choose to set my organ donation preferences
+    Then a new tab opens https://www.organdonation.nhs.uk/
 
-  @pending
-  Scenario: When a logged in user to the mobile web looks at the more screen, they see a button with the text 'Set health data sharing preferences'
-
-  @pending
-  Scenario: When a logged in user to the mobile web looks at the more screen, they see a toolbar at the bottom with the "More" option highlighted
-
-  @pending
-  Scenario: When a logged in user to the mobile web looks at the more screen, they see a Header saying 'More'
-
-  @pending
-  Scenario: When a user that is not logged in to the mobile web clicks on the "More" option in the menu bar, they are redirected to the login page
-
-  @pending
-  Scenario: When a logged in user to the mobile web is on the more screen and refreshes/reloads the screen, they still stay on the more screen with the 'More' button highlighted
+  Scenario:  A user can navigate to the 'Set health data sharing preferences' page
+    Given a patient from EMIS is defined
+    And I am logged in
+    And I navigate to more
+    Given I am on the More Page
+    When I choose to set my data sharing preferences
+    Then I am on the Data Sharing page

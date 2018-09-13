@@ -18,7 +18,10 @@ Feature: Login
       | GP System |
       | EMIS      |
       | TPP       |
-      #| VISION | - Barry to fix on 19/07.  Cert issue.
+  @pending @NHSO-2522
+    Examples:
+      | GP System |
+      | VISION    |
 
 
   @NHSO-125
@@ -44,6 +47,3 @@ Feature: Login
       | EMIS   |
       | TPP    |
       | VISION |
-
-  @pending
-  Scenario: User has been inactive for less than 20 minutes

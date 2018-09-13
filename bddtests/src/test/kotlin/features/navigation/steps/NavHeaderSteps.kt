@@ -26,7 +26,7 @@ open class NavHeaderSteps {
     }
 
     @Step
-    fun assertHeaderVisible() {
-        Assert.assertTrue(header.isVisible(homePage.headerText))
+    fun assertHomePageHeaderVisible() {
+        header.assertIsVisible(homePage.headerText)
     }
 }
