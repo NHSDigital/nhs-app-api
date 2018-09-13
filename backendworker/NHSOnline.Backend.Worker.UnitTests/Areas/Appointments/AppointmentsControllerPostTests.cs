@@ -32,7 +32,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         private const string ResponseAuditType = "Appointments_Book_Response";
 
         private const string RequestAuditMessage =
-            "Attempting to book appointment with id: {0} and startTimeDate: {1:O}";
+            "Attempting to book appointment with id: {0} and startTime: {1:O}";
 
         [TestInitialize]
         public void TestInitialize()

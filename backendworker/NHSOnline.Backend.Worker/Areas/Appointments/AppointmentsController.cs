@@ -92,7 +92,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
                 _logger.LogEnter(nameof(Post));
                 
                 _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
-                    "Attempting to book appointment with id: {0} and startTimeDate: {1:O}", model.SlotId, model.StartTime);
+                    "Attempting to book appointment with id: {0} and startTime: {1:O}", model.SlotId, model.StartTime);
 
                 var userSession = HttpContext.GetUserSession();
 
