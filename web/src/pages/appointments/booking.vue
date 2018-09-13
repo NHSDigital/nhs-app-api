@@ -62,6 +62,7 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
 import Routes from '@/Routes';
+import VueScrollTo from 'vue-scrollto';
 
 export default {
   components: {
@@ -71,6 +72,7 @@ export default {
     FloatingButtonBottom,
     Filters,
     SlotList,
+    VueScrollTo,
   },
   data() {
     return {
@@ -133,7 +135,7 @@ export default {
 
       this.showNoMatchingWarning = this.shouldShowNoMatchingWarning();
       if (this.showNoMatchingWarning) {
-        this.$refs.noMatching.focus();
+        VueScrollTo.scrollTo(this.$refs.noMatching, 500, { easing: VueScrollTo['ease-in'] });
       }
 
       const screenReaderMessage = this.$tc(
