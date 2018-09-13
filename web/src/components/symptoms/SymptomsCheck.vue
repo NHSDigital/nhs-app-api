@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" :class="$style['no-padding']" data-purpose="">
-    <ul :class="$style['list-menu']">
-      <li>
+    <ul :class="$style['list-menu']" role="list">
+      <li role="link">
         <analytics-tracked-tag id="btn_choices" :href="conditionsCheckerUrl"
                                :class="$style['no-decoration']"
                                :text="$t('sy01.a_z.subheader')"
@@ -11,7 +11,7 @@
           <p>{{ $t('sy01.a_z.body') }}</p>
         </analytics-tracked-tag>
       </li>
-      <li>
+      <li role="link">
         <analytics-tracked-tag id="btn_111" :href="symptomsCheckerUrl"
                                :class="$style['no-decoration']"
                                :text="$t('sy01.111.subheader')"
