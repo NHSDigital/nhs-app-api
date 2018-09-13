@@ -512,6 +512,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         setupAndLogIn(patient, gpSystem)
     }
 
+    @Given("I attempt to log in as a (.*) user with invalid ODS Code$")
+    fun iAttemptToLogInWithInvalidOdsCode(gpSystem: String){
+        this.patient=Patient.getDefault(gpSystem).copy(odsCode="A33224")
+        setupAndLogIn(patient, gpSystem)
+    }
+
     @Then("^I see an error message informing me I cannot log in as I am under 16$")
     fun iSeeAnErrorMessageInformingMeICannotLogInAsIAmUnderSixteen() {
         serviceUnavailablePage.assertIsPresent("As you’re under 16, you cannot currently access the NHS App.")

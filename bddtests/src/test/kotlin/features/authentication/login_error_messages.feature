@@ -41,3 +41,10 @@ Feature: Login error messages
   | EMIS        |
   | TPP         |
 
+   @NHSO-1748
+  Scenario Outline: Cannot log in as a <GP System> user with invalid ODS Code
+    Given I attempt to log in as a <GP System> user with invalid ODS Code
+    Then I see an error message informing me I cannot log in
+    Examples:
+      | GP System   |
+      | EMIS        |
