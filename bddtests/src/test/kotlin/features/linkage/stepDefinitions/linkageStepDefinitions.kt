@@ -5,6 +5,7 @@ import features.linkage.LinkageResult
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.DEFAULT_ODS_CODE
+import mocking.defaults.MockDefaults.Companion.patient
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
@@ -206,7 +207,7 @@ open class LinkageStepDefinitions {
                     .respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
         }
 
-        return { post -> post.respondWithSuccessfullyCreated(AddNhsUserResponse("")) }
+        return { post -> post.respondWithSuccessfullyCreated(AddNhsUserResponse(patient.connectionToken)) }
     }
 
 
