@@ -2,6 +2,7 @@ FROM nhsapp.azurecr.io/nhsonline-web-base:latest AS base
 
 ENV HOST 0.0.0.0
 ENV PORT 3000
+ENV NODE_TLS_REJECT_UNAUTHORIZED 0
 
 RUN chown nodejs:nodejs -R /opt/app
 USER nodejs
