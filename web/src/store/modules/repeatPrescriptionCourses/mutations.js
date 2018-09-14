@@ -18,7 +18,6 @@ export default {
     mapKeys((key) => {
       state[key] = courses[key];
     })(courses);
-
     state.repeatPrescriptionCourses = map((course) => {
       const result = assign({}, course);
       result.selected = false;
@@ -30,6 +29,8 @@ export default {
     mapKeys((key) => {
       state[key] = initialState[key];
     })(initialState);
+    state.hasLoaded = false;
+    state.specialRequest = null;
   },
   [REPEAT_PRESCRIPTION_VALIDATED](state, validationObject) {
     if (validationObject.submitted) {
