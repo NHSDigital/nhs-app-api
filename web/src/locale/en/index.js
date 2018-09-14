@@ -637,7 +637,7 @@ export default {
       p5: 'Manage your choice',
     },
     subtitle: 'Manage your data choice',
-    startNowButton: 'Start Now',
+    startNowButton: 'Start now',
     nextButton: 'Next',
     previousButton: 'Previous',
     pages: {
@@ -661,7 +661,7 @@ export default {
           title: 'More options',
           paragraph: {
             part1: 'Visit the ',
-            nhsWebsiteLink: 'NHS Website',
+            nhsWebsiteLink: 'NHS website',
             part3: ' for more information or to read our privacy notice. You can also find out how to manage a choice on behalf of another person.',
           },
         },
