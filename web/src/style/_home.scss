@@ -5,6 +5,11 @@ $logged_height: 12em; //16.5em
 @import './colours';
 @import './textstyles';
 @import './screensizes';
+@import './fonts';
+
+html {
+  font: $apple-system-body;
+}
 
 /** APP */
 body {
@@ -65,13 +70,8 @@ header.logged {
     bottom: $logged_height;
 }
 .homeMain {
-    position: fixed;
-    bottom: 0em;
-    left: 0em;
-    right: 0em;
-    height: $logged_height;
-    padding: 1em;
     box-sizing: border-box;
+    padding: 1em;
 
     h2 {
         @include h2;
@@ -89,6 +89,26 @@ header.logged {
         text-align: center;
     }
 }
+
+.loginMain {
+    margin-bottom: 3em;
+    h2 {
+        @include h2;
+        margin-bottom: 0.750em;
+        font-size: 1.2em;
+        text-align: center;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+    a {
+        @include default_text;
+        color: $nhs_blue;
+        width: 100%;
+        text-align: center;
+    }
+}
+
 main.logged {
     height: $logged_height;
     overflow: auto;

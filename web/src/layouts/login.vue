@@ -1,12 +1,15 @@
 <template>
-  <div id="app">
-    <home-header />
-    <main :class="this.$style.homeMain">
-      <connection-error />
-      <api-error />
-      <flash-message />
-      <nuxt />
-    </main>
+  <div id="app" :class="$style['login-app-header']">
+    <div :class="$style['login-app-header-flex-container']">
+      <home-header />
+      <session-expired-banner v-if="showSessionExpiredBanner" />
+      <main :class="this.$style.homeMain">
+        <connection-error />
+        <api-error />
+        <flash-message />
+        <nuxt />
+      </main>
+    </div>
   </div>
 </template>
 
@@ -17,6 +20,7 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
+import SessionExpiredBanner from '@/components/SessionExpiredBanner';
 
 export default {
   components: {
@@ -25,6 +29,12 @@ export default {
     ConnectionError,
     FlashMessage,
     HomeHeader,
+    SessionExpiredBanner,
+  },
+  computed: {
+    showSessionExpiredBanner() {
+      return this.$store.state.session.showExpiryMessage;
+    },
   },
   head() {
     return {
@@ -62,4 +72,18 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../style/home";
+
+.login-app-header {
+  position: absolute;
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+}
+
+.login-app-header-flex-container {
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
 </style>

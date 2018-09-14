@@ -27,6 +27,10 @@ class HeaderBar: UIView {
         helpIcon.accessibilityHint = NSLocalizedString("HelpHint", comment: "")
         NHSHomeLogo.accessibilityLabel = NSLocalizedString("NHSAppHomeTitle", comment: "")
         NHSHomeLogo.accessibilityHint = NSLocalizedString("NHSAppHomeHint", comment: "")
+        self.headerTitle.font = UIFont.preferredFont(forTextStyle: .headline)
+        if #available(iOS 10.0, *) {
+            self.headerTitle.adjustsFontForContentSizeCategory = true
+        }
         addSubview(headerBarView)
     }
     

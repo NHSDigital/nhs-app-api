@@ -4,16 +4,12 @@
 
 $logged_height: 12em; //16.5em
 .home-header {
-  position: fixed;
-  top: 0em;
-  left: 0em;
-  right: 0em;
-  bottom: $logged_height;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   justify-content: space-between;
   align-items: center;
-  min-height: $logged_height - 2em; //14.750em;
+  min-height: 18em;
   z-index: 2;
   header {
     flex: 1;

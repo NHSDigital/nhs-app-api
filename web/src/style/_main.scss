@@ -2,7 +2,12 @@
 @import './colours';
 @import './textstyles';
 @import './screensizes';
+@import './fonts';
 /** APP */
+html {
+  font: $apple-system-body;
+}
+
 body {
 	padding: 0em;
 	margin: 0em;

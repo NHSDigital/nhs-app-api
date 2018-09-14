@@ -56,11 +56,12 @@ export default {
 
 <style module lang="scss" scoped>
   @import '../../style/info';
+  @import '../../style/fonts';
 
 
         .h2 {
           display: block;
-          font-family: "FrutigerLTW01-65Bold", Arial, sans-serif;
+          font-family: $frutiger-bold;
           font-weight: 700;
           font-size: 1.125em;
           line-height: 1.125em;

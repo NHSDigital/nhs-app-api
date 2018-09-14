@@ -1,7 +1,7 @@
 <template>
   <div :class="stylingClass">
     <!--eslint-disable-next-line -->
-    <button :class="buttonStylingClasses" :id="this.id" :disabled="isButtonDisabled" @click="$emit('on-click')">
+    <button :class="buttonStylingClasses" :style="{ 'margin-bottom': 0}" :id="this.id" :disabled="isButtonDisabled" @click="$emit('on-click')">
       <slot/>
     </button>
   </div>
@@ -66,7 +66,6 @@ export default {
   padding: 1em;
   border-top: 0.063em $background solid;
   border-bottom: 0.063em $background solid;
-  height: 5em;
   transform: translateZ(1em);
   z-index: 5;
   box-shadow: 0em -0.100em 0.200em rgba(0, 0, 0, .1);

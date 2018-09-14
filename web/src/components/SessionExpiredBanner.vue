@@ -13,10 +13,9 @@
   color: #000;
   font-size: 1.125em;
   text-align: center;
-  height: 2.5em;
-  line-height: 2.5em;
   width: 100%;
   margin-top: 0.1em;
+  padding: 0.3em;
 }
 
 </style>

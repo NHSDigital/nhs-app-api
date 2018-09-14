@@ -108,3 +108,8 @@ $frutiger-light: "FrutigerLTW01-45Light", Arial, sans-serif;
 $frutiger-bold: "FrutigerLTW01-65Bold", Arial, sans-serif;
 $default: 'Roboto', Arial, sans-serif;
 $default-web: Arial, sans-serif;
+
+// base font to use if available so text scaling works in webviews in iOS. See:
+// - https://useyourloaf.com/blog/using-dynamic-type-with-web-views/
+// - http://www.interactiveaccessibility.com/blog/text-resizing-web-pages-ios-using-dynamic-type
+$apple-system-body: -apple-system-body;

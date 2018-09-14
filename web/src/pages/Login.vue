@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.homeMain">
+  <div :class="$style.loginMain">
     <h2>{{ $t('login.desc') }}</h2>
     <form :action="authoriseUrl" method="get">
       <input :value="scope" type="hidden" name="scope">

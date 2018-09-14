@@ -19,8 +19,9 @@ a.button {
 	margin-bottom: 1.250em;
 	outline: none;
 	transition: all ease 0.5s;
+	white-space: normal;
 	cursor: pointer;
-	
+
 	&.green {
 		background-color: $light_green;
 		box-shadow: 0em 0.125em 0em 0em $dark_green;
