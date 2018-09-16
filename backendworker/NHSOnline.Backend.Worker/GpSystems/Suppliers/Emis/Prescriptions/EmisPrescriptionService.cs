@@ -34,17 +34,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
         public async Task<PrescriptionResult> GetPrescriptions(UserSession userSession, DateTimeOffset? fromDate,
             DateTimeOffset? toDate)
         {
-            var emisUserSession = (EmisUserSession) userSession;
-            
+            var emisUserSession = (EmisUserSession)userSession;
+
             try
             {
                 _logger.LogDebug("Beginning Fetch Prescriptions For User");
-                
+
                 var prescriptionsResponse = await _emisClient.PrescriptionsGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, fromDate, toDate);
 
                 _logger.LogDebug("Fetch Prescriptions For User Complete");
-                
+
                 if (prescriptionsResponse.HasSuccessStatusCode)
                 {
                     try
@@ -69,24 +69,29 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                         _logger.LogError(e, $"Something went wrong building the Prescription History response");
                         return new PrescriptionResult.InternalServerError();
                     }
-                }    
-                
-               return GetCorrectErrorResult(prescriptionsResponse);
+                }
+
+                return GetCorrectErrorResult(prescriptionsResponse);
             }
             catch (HttpRequestException e)
             {
                 _logger.LogError(e, $"Unsuccessful request retrieving prescriptions");
                 return new PrescriptionResult.SupplierSystemUnavailable();
-            }                                     
+            }
         }
 
         private PrescriptionRequestsGetResponse GetPrescriptionsWithoutRepeatCourses(
             PrescriptionRequestsGetResponse prescriptionsResponse)
         {
             int totalCoursesRunningTotal = 0;
-            var repeatCourses =
-                prescriptionsResponse.MedicationCourses.Where(x => x.PrescriptionType == PrescriptionType.Repeat).ToList();
-            var repeatCourseGuids = repeatCourses.Select(x => x.MedicationCourseGuid);
+            var repeatCourses = prescriptionsResponse.MedicationCourses
+                                                     .Where(x => x.PrescriptionType == PrescriptionType.Repeat)
+                                                     .ToList();
+            var repeatCourseIdLookup = repeatCourses.Select(x => x.MedicationCourseGuid)
+                                                    .Distinct()
+                                                    .ToDictionary(x => x);
+
+            var filteredPrescriptionsCount = 0;
 
             var prescriptionsWithRepeatCourses = new List<PrescriptionRequest>();
             foreach (var prescription in prescriptionsResponse.PrescriptionRequests.OrderByDescending(x =>
@@ -94,24 +99,36 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 if (totalCoursesRunningTotal >= _settings.PrescriptionsMaxCoursesSoftLimit.Value)
                 {
+                    _logger.LogWarning("Total courses exceeded maximum, discarding remainder.");
                     break;
                 }
 
-                var thisPrescription = prescription;
-                var requestedMedicationCourses = thisPrescription.RequestedMedicationCourses.ToList();
-                
-                var repeatCoursesInPrescription =
-                    requestedMedicationCourses.Where(x =>
-                        repeatCourseGuids.Contains(x.RequestedMedicationCourseGuid)).ToList();
+                var requestedMedicationCourses = prescription.RequestedMedicationCourses.ToList();
 
-                if (repeatCoursesInPrescription.Any())
+                var repeatCoursesInPrescription = prescription
+                    .RequestedMedicationCourses
+                    .Where(x => repeatCourseIdLookup.ContainsKey(x.RequestedMedicationCourseGuid))
+                    .ToList();
+
+                if (repeatCoursesInPrescription.Count != 0)
                 {
                     prescription.RequestedMedicationCourses = repeatCoursesInPrescription;
                     prescriptionsWithRepeatCourses.Add(prescription);
                 }
+                else
+                {
+                    filteredPrescriptionsCount += 1;
+                }
 
-                totalCoursesRunningTotal += repeatCoursesInPrescription.Count();
+                totalCoursesRunningTotal += repeatCoursesInPrescription.Count;
             }
+
+            _logger.LogInformation("{receivedPrescriptions} prescriptions received. " +
+                                   "{filteredPrescriptions} filtered for containing no repeatable courses. " +
+                                   "{validPrescriptions} being returned.",
+                                   prescriptionsResponse.PrescriptionRequests.Count(),
+                                   filteredPrescriptionsCount,
+                                   prescriptionsWithRepeatCourses.Count);
 
             var prescriptionListResponseFiltered = new PrescriptionRequestsGetResponse
             {
@@ -124,7 +141,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
         public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            var emisUserSession = (EmisUserSession) userSession;
+            var emisUserSession = (EmisUserSession)userSession;
 
             var postRequest = new PrescriptionRequestsPost
             {
@@ -136,7 +153,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             try
             {
                 _logger.LogInformation("Beginning Place Prescription Request");
-                
+
                 var response = await _emisClient.PrescriptionsPost(
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, postRequest);
 
@@ -168,7 +185,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             if (response.HasForbiddenResponse())
             {
                 _logger.LogError("The emis prescriptions service is not enabled");
-                
+
                 return new PrescriptionResult.SupplierNotEnabled();
             }
 
@@ -178,7 +195,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
                 return new PrescriptionResult.BadRequest();
             }
-            
+
             _logger.LogError("Emis system is currently unavailable");
 
             return new PrescriptionResult.SupplierSystemUnavailable();

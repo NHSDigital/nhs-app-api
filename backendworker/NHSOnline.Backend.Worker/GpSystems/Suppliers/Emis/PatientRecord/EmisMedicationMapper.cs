@@ -25,7 +25,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             var result = new Medications();
             
             if (medicationRootObject.MedicalRecord != null)
-            {                
+            {
                 var medicalRecord = medicationRootObject.MedicalRecord;
 
                 if (medicalRecord.Medication.Any())

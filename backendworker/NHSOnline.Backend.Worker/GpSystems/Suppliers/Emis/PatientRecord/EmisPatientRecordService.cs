@@ -20,34 +20,34 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
             _emisMyRecordMapper = emisMyRecordMapper;
             _logger = logger;
         }
-        
+
         public async Task<GetMyRecordResult> GetMyRecord(UserSession userSession)
         {
             _logger.LogEnter(nameof(GetMyRecord));
-            
-            var emisUserSession = (EmisUserSession) userSession;
+
+            var emisUserSession = (EmisUserSession)userSession;
 
             try
             {
                 _logger.LogInformation("Creating patient record api tasks");
                 var medicationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Medication);
-                            
+
                 var allergiesTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Allergies);
-                  
+
                 var immunisationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Immunisations);
-                
+
                 var testResultsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
-                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);               
-                
+                    emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.TestResults);
+
                 var problemsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Problems);
 
                 var consultationsTask = _emisClient.MedicalRecordGet(emisUserSession.UserPatientLinkToken,
                     emisUserSession.SessionId, emisUserSession.EndUserSessionId, RecordType.Consultations);
-                    
+
                 await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask, testResultsTask, problemsTask, consultationsTask);
                 _logger.LogInformation("Patient record tasks completed");
 
@@ -57,8 +57,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 var immunisations = new GetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
                 var testResults = new GetTestResultsTaskChecker(_logger).Check(testResultsTask);
                 var problems = new GetProblemsTaskChecker(_logger).Check(problemsTask);
-                var consultations = new GetConsultationsTaskChecker(_logger).Check(consultationsTask);                
-                
+                var consultations = new GetConsultationsTaskChecker(_logger).Check(consultationsTask);
+
                 _logger.LogInformation("Mapping EMIS responses to universal MyRecordResponse class instance");
                 var myRecordResponse = _emisMyRecordMapper.Map(allergies, medications, immunisations, testResults, problems, consultations);
 

@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         }
 
         [TestMethod]
-        public async void Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()        
+        public async Task Create_WhenCalledWithIm1ConnectionToken_DeserializesFromJsonAndPassesItToTheTppClient()        
         {
             // Arrange
             const string accountId = "boo";
@@ -104,7 +104,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Session
         }
     
         [TestMethod]
-        public async void Create_WhenCalledWithOdsCode_PassesItToTheTppClientAsUnitId()
+        public async Task Create_WhenCalledWithOdsCode_PassesItToTheTppClientAsUnitId()
         {
             // Arrange
             const string expected = "bar";

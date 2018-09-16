@@ -98,7 +98,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                         var exceptionMessage = string.Empty;
                         if (exception != null)
                         {
-                            exceptionMessage = $"[Exception, message: '{exception.Message}'] ";
+                            exceptionMessage = $"[Exception: {exception}] ";
                         }
 
                         _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {CensorLogMessage(formatter(state, exception))} {exceptionMessage}|");

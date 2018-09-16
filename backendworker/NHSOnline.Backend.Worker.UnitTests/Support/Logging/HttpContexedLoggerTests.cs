@@ -269,7 +269,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Logging
             var testString = new StreamReader(_stream).ReadLine();
             testString.Should().NotBeEmpty();
             testString.Should().Contain(SessionId);
-            testString.Should().EndWith("| Logging an exception. [Exception, message: 'Something has gone wrong!'] |");
+            testString.Should().EndWith("| Logging an exception. [Exception: System.ArgumentException: Something has gone wrong!");
         }
 
         [TestMethod]

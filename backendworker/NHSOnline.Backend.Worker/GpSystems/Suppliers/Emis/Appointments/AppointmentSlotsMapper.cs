@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
@@ -17,11 +18,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentSlotsMapper : IAppointmentSlotsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private readonly ILogger<AppointmentSlotsMapper> _logger;
         private const string SessionTypeSeparator = " - ";
 
-        public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public AppointmentSlotsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentSlotsMapper> logger)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _logger = logger;
         }
 
         public IEnumerable<Slot> Map(
@@ -50,8 +53,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     {
                         startTime = _dateTimeOffsetProvider.CreateDateTimeOffset(sourceSlot.StartTime);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        _logger.LogError(e, "Unable to parse EMIS Appointment Slot Start Time of '{}'", sourceSlot.StartTime);
                         continue;
                     }
 
@@ -60,8 +64,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                     {
                         endTime = _dateTimeOffsetProvider.CreateDateTimeOffset(sourceSlot.EndTime);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
+                        _logger.LogError(e, "Unable to parse EMIS Appointment Slot End Time of '{}'", sourceSlot.StartTime);
                         endTime = null;
                     }
                     

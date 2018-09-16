@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using Appointment = NHSOnline.Backend.Worker.Areas.Appointments.Models.Appointment;
@@ -21,11 +22,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public class AppointmentsMapper : IAppointmentsMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private readonly ILogger<AppointmentsMapper> _logger;
         private const string SessionTypeSeparator = " - ";
 
-        public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public AppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<AppointmentsMapper> logger)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _logger = logger;
         }
 
         public IEnumerable<Appointment> Map(
@@ -54,8 +57,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 {
                     startTime = _dateTimeOffsetProvider.CreateDateTimeOffset(sourceAppointment.StartTime);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _logger.LogError(e, "Unable to parse EMIS Appointment Start Time of '{}'", sourceAppointment.StartTime);
                     continue;
                 }
 
@@ -64,8 +68,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 {
                     endTime = _dateTimeOffsetProvider.CreateDateTimeOffset(sourceAppointment.EndTime);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    _logger.LogError(e, "Unable to parse EMIS Appointment End Time of '{}'", sourceAppointment.StartTime);
                     endTime = null;
                 }
 

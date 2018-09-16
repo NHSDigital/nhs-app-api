@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
@@ -12,7 +15,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
 {
     [TestClass]
     public class AppointmentSlotsMapperTests
-    {       
+    {
+        private IFixture _fixture;
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private AppointmentSlotsMapper _systemUnderTest;
@@ -20,11 +24,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture().Customize(new AutoMoqCustomization());
+            
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
-            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider);
+            
+            var logger = _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsMapper>();
+            
+            _systemUnderTest = new AppointmentSlotsMapper(_dateTimeOffsetProvider, logger);
         }
 
         [TestMethod]
