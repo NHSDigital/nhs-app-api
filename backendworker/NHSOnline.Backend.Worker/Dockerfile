@@ -39,7 +39,7 @@ ENV ASPNETCORE_URLS=
 ENV CITIZEN_ID_BASE_URL https://auth.ext.signin.nhs.uk/
 ENV CITIZEN_ID_CLIENT_ID nhs-online
 ENV CITIZEN_ID_CLIENT_SECRET secret
-ENV CORS_AUTHORITY *.nhsapp.service.nhs.uk
+ENV CORS_AUTHORITY https://www-preview.devuks1.bitraft.io
 ENV EMIS_APPLICATION_ID 16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7
 ENV EMIS_BASE_URL https://nhs70apptest.emishealth.com/PFS/
 ENV EMIS_VERSION 2.1.0.0

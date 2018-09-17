@@ -14,9 +14,7 @@ services:
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
-      - API_PORT=444,
-      - API_PORT_SERVER=444
-      - API_HOST_SERVER=http://web.local.bitraft.io:8082
+      - API_HOST=https://android.local.bitraft.io:444
       - CID_REDIRECT_URI=https://android.local.bitraft.io/auth-return
       - NATIVE_CID_REDIRECT_URI=nhsapp://android.local.bitraft.io/auth-return
   api.local.bitraft.io:

@@ -1,14 +1,16 @@
 import crypto from 'crypto';
 
-const base64URLEncode = value => value
-  .toString('base64')
-  .replace(/\+/g, '-')
-  .replace(/\//g, '_')
-  .replace(/=/g, '');
-const sha256 = value => crypto
-  .createHash('sha256')
-  .update(value)
-  .digest();
+const base64URLEncode = value =>
+  value
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+const sha256 = value =>
+  crypto
+    .createHash('sha256')
+    .update(value)
+    .digest();
 const createVerifier = () => base64URLEncode(crypto.randomBytes(32));
 const createChallenge = verifier => base64URLEncode(sha256(verifier));
 
@@ -61,7 +63,8 @@ class AuthorisationService {
     for (let i = 0; i < 1; i += 1) {
       buffer[i] = Math.random();
     }
-    const CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const CHARSET =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const state = [];
     for (let i = 0; i < buffer.byteLength; i += 1) {
       const index = (buffer[i] % CHARSET.length) || 0;
