@@ -394,6 +394,20 @@ export default {
     },
   },
   my_record: {
+    errors: {
+      pageHeader: 'Error retrieving data',
+      header: 'Sorry, there\'s been a problem getting your medical record',
+      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: '',
+      retryButtonText: '',
+      504: {
+        pageHeader: 'Medical record error',
+        header: 'There\'s been a problem getting your medical record information',
+        subheader: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: '',
+        retryButtonText: 'Try again',
+      },
+    },
     genericErrorMessage: 'An error has occurred trying to retrieve this data.',
     genericNoDataMessage: 'No information recorded',
     genericNoAccessMessage: 'You do not currently have access to this section',
