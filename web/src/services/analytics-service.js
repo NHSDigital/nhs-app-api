@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { isEmpty } from 'lodash/fp';
 
-const APP_ID = 'nhsapp';
+const APP_ID = 'nhs:app';
 const pageNamePrefix = `${APP_ID}`;
 
 
