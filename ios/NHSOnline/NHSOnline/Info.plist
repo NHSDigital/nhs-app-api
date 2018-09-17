@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>NHSOnline</string>
+	<string>$(APP_DISPLAY_NAME)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -65,5 +65,63 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CarouselDirectory</key>
+	<string>$(CAROUSEL_DIRECTORY)</string>
+	<key>CarouselContentType</key>
+	<string>$(CAROUSEL_CONTENT_TYPE)</string>
+	<key>CarouselFileName</key>
+	<string>$(CAROUSEL_FILE_NAME</string>
+	<key>IsFirstTimeOpened</key>
+	<string>$(IS_FIRST_TIME_OPENED)</string>
+	<key>HomeUrl</key>
+	<string>https://$(HOME_URL)</string>
+	<key>HotJarLinkUrl</key>
+	<string>https://$(HOT_JAR_LINK_URL)</string>
+	<key>Nhs111Url</key>
+	<string>https://$(NHS_111_URL)</string>
+	<key>Nhs111LocationUrl</key>
+	<string>https://$(NHS_111_LOCATION_URL)</string>
+	<key>OrganDonationUrl</key>
+	<string>https://$(ORGAN_DONTAION_URL)</string>
+	<key>ConditionsUrlPath</key>
+	<string>https://$(CONDITIONS_URL_PATH)</string>
+	<key>MoreUrlPath</key>
+	<string>$(MORE_URL)</string>
+	<key>MyRecordUrlPath</key>
+	<string>$(MY_RECORD_URL_PATH)</string>
+	<key>AppointmentsUrlPath</key>
+	<string>$(APPOINTMENTS_URL_PATH)</string>
+	<key>SymptomsUrlPath</key>
+	<string>$(SYMPTOMS_URL_PATH)</string>
+	<key>PrescriptionsUrlPath</key>
+	<string>$(PRESCRIPTIONS_URL_PATH)</string>
+	<key>MyAccountUrlPath</key>
+	<string>$(MY_ACCOUNT_URL_PATH)</string>
+	<key>SessionUrlPath</key>
+	<string>$(SESSION_URL_PATH)</string>
+	<key>BaseScheme</key>
+	<string>$(BASE_SCHEME)</string>
+	<key>NhsOnlineRequiredQueryString</key>
+	<string>$(NHS_ONLINE_REQUIRED_QUERY_STRING)</string>
+	<key>CheckSymptomsUrlPath</key>
+	<string>$(CHECK_SYMPTOMS_URL_PATH)</string>
+	<key>AppScheme</key>
+	<string>$(APP_SCHEME)</string>
+	<key>MedicalRecordAbbreviationsURL</key>
+	<string>https://$(MEDICAL_RECORD_ABBREVIATIONS_URL)</string>
+	<key>HelpURL</key>
+	<string>https://$(HELP_URL)</string>
+	<key>TermsAndConditionsURL</key>
+	<string>https://$(TERMS_AND_CONDITIONS_URL)</string>
+	<key>PrivacyPolicyURL</key>
+	<string>https://$(PRIVACY_POLICY)</string>
+	<key>CookiesPolicyURL</key>
+	<string>https://$(COOKIES_POLICY_URL)</string>
+	<key>OpenSourceLicensesURL</key>
+	<string>https://$(OPEN_SOURCE_LICENSE_URL)</string>
+	<key>DataPreferencesURL</key>
+	<string>https://$(DATA_PREFERENCES_URL)</string>
+	<key>ResponseWaitingTime</key>
+	<integer>20</integer>
 </dict>
 </plist>

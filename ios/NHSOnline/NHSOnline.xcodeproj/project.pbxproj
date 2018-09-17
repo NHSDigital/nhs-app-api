@@ -14,6 +14,7 @@
 		609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */; };
 		9200DC9F21428562009EFFEF /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9200DC9E21428562009EFFEF /* Reachability.swift */; };
 		925C3D5E2110C78700534AC5 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 925C3D5D2110C78600534AC5 /* assets */; };
+		981E9E32214E5FB300DA80EB /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 981E9E31214E5FB300DA80EB /* Config.swift */; };
 		C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578022028B94800CDBDC5 /* AppDelegate.swift */; };
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
 		C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C20578092028B94800CDBDC5 /* Assets.xcassets */; };
@@ -27,8 +28,6 @@
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
 		C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */; };
 		C2ED05D621427E950036189C /* TabBar_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2ED05D521427E950036189C /* TabBar_Extension.swift */; };
-		F0099A8C205557C700530DE3 /* Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0099A8B205557C700530DE3 /* Config.plist */; };
-		F0099A8E2055585800530DE3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0099A8D2055585800530DE3 /* Config.swift */; };
 		F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */; };
 		F01745BB207BA39200877E4D /* SafariTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20578172028B94800CDBDC5 /* SafariTests.swift */; };
 		F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F026199A2050AFE100EDDFE0 /* WebViewController.swift */; };
@@ -61,6 +60,10 @@
 		609C40AD62E44AC0C0D3247A /* DateTime_Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTime_Extensions.swift; sourceTree = "<group>"; };
 		9200DC9E21428562009EFFEF /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		925C3D5D2110C78600534AC5 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../../android/app/src/main/assets; sourceTree = "<group>"; };
+		981E9E31214E5FB300DA80EB /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		981E9E33214E8EA200DA80EB /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
+		981E9E34214E8F1000DA80EB /* Demo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Demo.xcconfig; sourceTree = "<group>"; };
+		981E9E35214E8F2000DA80EB /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
 		C20577FF2028B94800CDBDC5 /* NHSOnline.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NHSOnline.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C20578022028B94800CDBDC5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C20578072028B94800CDBDC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -78,8 +81,6 @@
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextViewTests.swift; sourceTree = "<group>"; };
 		C2ED05D521427E950036189C /* TabBar_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar_Extension.swift; sourceTree = "<group>"; };
-		F0099A8B205557C700530DE3 /* Config.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
-		F0099A8D2055585800530DE3 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		F01745A6207B700700877E4D /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewUrlTests.swift; sourceTree = "<group>"; };
 		F026199A2050AFE100EDDFE0 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +153,7 @@
 		C20578012028B94800CDBDC5 /* NHSOnline */ = {
 			isa = PBXGroup;
 			children = (
+				981E9E31214E5FB300DA80EB /* Config.swift */,
 				9200DC9D2142854C009EFFEF /* Network */,
 				4649682420C7D94B00FDDE87 /* Lifecycle */,
 				C2BFD3BD20C9358F00D3E361 /* Data */,
@@ -169,10 +171,11 @@
 				C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */,
 				C205780E2028B94800CDBDC5 /* Info.plist */,
 				F0B4B8BA204D68DC004E4120 /* Localizable.strings */,
-				F0099A8B205557C700530DE3 /* Config.plist */,
-				F0099A8D2055585800530DE3 /* Config.swift */,
 				F065B3D7205FCFFE004EF388 /* HomeViewController.swift */,
 				13BA17E221232D1500DF724B /* UnsecureViewController.swift */,
+				981E9E33214E8EA200DA80EB /* Development.xcconfig */,
+				981E9E34214E8F1000DA80EB /* Demo.xcconfig */,
+				981E9E35214E8F2000DA80EB /* Production.xcconfig */,
 			);
 			path = NHSOnline;
 			sourceTree = "<group>";
@@ -372,7 +375,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0099A8C205557C700530DE3 /* Config.plist in Resources */,
 				925C3D5E2110C78700534AC5 /* assets in Resources */,
 				C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */,
 				F057336920A72F040059032D /* HeaderBar.xib in Resources */,
@@ -411,8 +413,8 @@
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */,
 				13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */,
-				F0099A8E2055585800530DE3 /* Config.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
+				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
 				9200DC9F21428562009EFFEF /* Reachability.swift in Sources */,
@@ -480,10 +482,109 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		C20578252028B94800CDBDC5 /* Debug */ = {
+		987E7B40214AF7DB00433F9C /* Production */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E35214E8F2000DA80EB /* Production.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = "NHS App";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Production;
+		};
+		987E7B41214AF7DB00433F9C /* Production */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E35214E8F2000DA80EB /* Production.xcconfig */;
+			buildSettings = {
+				APP_DISPLAY_NAME = "NHS App";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = NHSOnline/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Production;
+		};
+		987E7B42214AF7DB00433F9C /* Production */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5Y58TN94AP;
+				INFOPLIST_FILE = NHSOnlineTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = online.nhs.com.NHSOnlineTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
+			};
+			name = Production;
+		};
+		C20578252028B94800CDBDC5 /* Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = "NHS App Debug";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -531,19 +632,23 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.demo;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
-			name = Debug;
+			name = Development;
 		};
-		C20578262028B94800CDBDC5 /* Release */ = {
+		C20578262028B94800CDBDC5 /* Demo */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E34214E8F1000DA80EB /* Demo.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_DISPLAY_NAME = "NHS App Demo";
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -585,17 +690,21 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.demo;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Demo;
 		};
-		C20578282028B94800CDBDC5 /* Debug */ = {
+		C20578282028B94800CDBDC5 /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
 			buildSettings = {
+				APP_DISPLAY_NAME = "NHS App Development";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -605,18 +714,20 @@
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Debug;
+			name = Development;
 		};
-		C20578292028B94800CDBDC5 /* Release */ = {
+		C20578292028B94800CDBDC5 /* Demo */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E34214E8F1000DA80EB /* Demo.xcconfig */;
 			buildSettings = {
+				APP_DISPLAY_NAME = "NHS App Demo";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = NHSOnline/NHSOnline.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -626,16 +737,16 @@
 				INFOPLIST_FILE = NHSOnline/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nhs.online.demo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			name = Release;
+			name = Demo;
 		};
-		C205782B2028B94800CDBDC5 /* Debug */ = {
+		C205782B2028B94800CDBDC5 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -650,9 +761,9 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
 			};
-			name = Debug;
+			name = Development;
 		};
-		C205782C2028B94800CDBDC5 /* Release */ = {
+		C205782C2028B94800CDBDC5 /* Demo */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
@@ -667,7 +778,7 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NHSOnline.app/NHSOnline";
 			};
-			name = Release;
+			name = Demo;
 		};
 /* End XCBuildConfiguration section */
 
@@ -675,29 +786,32 @@
 		C20577FA2028B94800CDBDC5 /* Build configuration list for PBXProject "NHSOnline" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C20578252028B94800CDBDC5 /* Debug */,
-				C20578262028B94800CDBDC5 /* Release */,
+				C20578252028B94800CDBDC5 /* Development */,
+				C20578262028B94800CDBDC5 /* Demo */,
+				987E7B40214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Production;
 		};
 		C20578272028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnline" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C20578282028B94800CDBDC5 /* Debug */,
-				C20578292028B94800CDBDC5 /* Release */,
+				C20578282028B94800CDBDC5 /* Development */,
+				C20578292028B94800CDBDC5 /* Demo */,
+				987E7B41214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Production;
 		};
 		C205782A2028B94800CDBDC5 /* Build configuration list for PBXNativeTarget "NHSOnlineTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C205782B2028B94800CDBDC5 /* Debug */,
-				C205782C2028B94800CDBDC5 /* Release */,
+				C205782B2028B94800CDBDC5 /* Development */,
+				C205782C2028B94800CDBDC5 /* Demo */,
+				987E7B42214AF7DB00433F9C /* Production */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Production;
 		};
 /* End XCConfigurationList section */
 	};

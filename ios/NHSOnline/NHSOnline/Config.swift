@@ -46,8 +46,8 @@ struct Config: Decodable {
 }
 
 func config() -> Config {
-    let url = Bundle.main.url(forResource: "Config", withExtension: "plist")!
+    let url = Bundle.main.url(forResource: "Info", withExtension: "plist")!
     let data = try! Data(contentsOf: url)
     let decoder = PropertyListDecoder()
-    return try! decoder.decode(Config.self, from: data)
+    return try! decoder.decode(Config.self, from: data) 
 }
