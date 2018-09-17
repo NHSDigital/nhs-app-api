@@ -9,7 +9,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 6
-        versionName "1.0.2"
+        versionName "0.1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
@@ -18,16 +18,25 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [appName: "NHS App"]
         }
         demo {
             applicationIdSuffix ".demo"
+            manifestPlaceholders = [appName: "NHS App Demo"]
         }
         preview {
             initWith debug
             applicationIdSuffix ".preview"
+            manifestPlaceholders = [appName: "NHS App Preview"]
         }
         browserstack {
             debuggable true
+            manifestPlaceholders = [appName: "NHS App Browserstack"]
+        }
+        debug {
+            initWith debug
+            debuggable true
+            manifestPlaceholders = [appName: "NHS App Debug"]
         }
     }
     testOptions {

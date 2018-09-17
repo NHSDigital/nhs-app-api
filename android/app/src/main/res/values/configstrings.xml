@@ -2,9 +2,9 @@
 <resources>
     <string name="baseScheme">https</string>
     <string name="appScheme">nhsapp</string>
-    <string name="baseHost">www-preview.dev.nonlive.nhsapp.service.nhs.uk</string>
+    <string name="baseHost">www.nhsapp.service.nhs.uk</string>
     <string name="authRedirectPath">/auth-return</string>
-    <string name="baseURL">https://www-preview.dev.nonlive.nhsapp.service.nhs.uk/</string>
+    <string name="baseURL">https://www.nhsapp.service.nhs.uk/</string>
     <string name="morePath">more</string>
     <string name="checkYourSymptoms">check-your-symptoms</string>
     <string name="myRecordPath">my-record-warning</string>
