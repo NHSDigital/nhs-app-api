@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace NHSOnline.Backend.Worker.CitizenId
@@ -8,8 +7,7 @@ namespace NHSOnline.Backend.Worker.CitizenId
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddHttpClient<CitizenIdHttpClient>()
-                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler().ConfigureForwardProxy(configuration));
+            services.AddHttpClient<CitizenIdHttpClient>();
             
             services.AddScoped<ICitizenIdService, CitizenIdService>();
             services.AddSingleton<ICitizenIdClient, CitizenIdClient>();

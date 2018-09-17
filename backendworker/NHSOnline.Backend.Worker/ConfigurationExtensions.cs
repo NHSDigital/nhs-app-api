@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Settings;
@@ -36,12 +35,6 @@ namespace NHSOnline.Backend.Worker
         public static IConfigurationSection ConfigurationSettings(this IConfiguration configuration)
         {
             return configuration.GetSection("ConfigurationSettings");
-        }
-
-        public static string GetFirstOrDefault(this IConfiguration configuration, params string[] keys)
-        {
-            return keys.Select(key => configuration[key])
-                .FirstOrDefault(value => !string.IsNullOrEmpty(value));
         }
     }
 }

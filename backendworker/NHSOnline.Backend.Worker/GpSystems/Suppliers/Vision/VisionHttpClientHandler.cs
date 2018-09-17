@@ -22,7 +22,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             logger.LogInformation("VISION_CERT_PATH: {path}", certificatePath);
 
             // Get the certificate from a file
-            var certificate = certificateService.GetCertificate(certificatePath, certifcatePassphrase);
+            var  certificate = certificateService.GetCertificate(certificatePath, certifcatePassphrase);
 
             // Set up a http handler to deal with the client certificate.
             ClientCertificateOptions = ClientCertificateOption.Manual;

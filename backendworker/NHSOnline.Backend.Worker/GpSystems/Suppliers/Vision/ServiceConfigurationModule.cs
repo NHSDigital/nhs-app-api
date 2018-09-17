@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             {
                 var configValue = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
                 logger);
+
                 var timeout = int.Parse(configValue, CultureInfo.InvariantCulture);
 
                 services.AddSingleton<IGpSystem, VisionGpSystem>();
@@ -38,11 +39,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                     {
                         client.Timeout = TimeSpan.FromSeconds(timeout);
                     })
-                    .ConfigurePrimaryHttpMessageHandler(() =>
-                    {
-                        return new VisionHttpClientHandler(configuration, _loggerFactory.CreateLogger<VisionHttpClientHandler>(), certificateService)
-                            .ConfigureForwardProxy(configuration);
-                    });
+                    .ConfigurePrimaryHttpMessageHandler((() =>
+                            new VisionHttpClientHandler(configuration,
+                                _loggerFactory.CreateLogger<VisionHttpClientHandler>(),
+                                certificateService)
+                        ));
 
                 logger.LogDebug("Vision GP Service was successfully configured");
             }

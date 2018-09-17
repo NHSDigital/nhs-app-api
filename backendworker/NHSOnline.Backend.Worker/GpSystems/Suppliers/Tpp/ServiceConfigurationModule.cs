@@ -37,8 +37,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                     })
                     .ConfigurePrimaryHttpMessageHandler(() =>
                     {
-                        return new TppHttpClientHandler(configuration, _loggerFactory.CreateLogger<TppHttpClientHandler>())
-                            .ConfigureForwardProxy(configuration);
+                        return new TppHttpClientHandler(configuration, _loggerFactory.CreateLogger<TppHttpClientHandler>());
                     });
 
                 services.AddSingleton<IGpSystem, TppGpSystem>();
