@@ -15,23 +15,24 @@ class Application : Application() {
 
     lateinit var timer: Timer
     var wasInBackground: Boolean = false
-    var sessionExpired: Boolean = true
+    var sessionExpired: Boolean = false
 
-    fun startActivityTransitionTimer() {
+    fun startActivityTransitionTimer(isLoggedIn: Boolean) {
+        if(isLoggedIn) {
+            this.timer = Timer()
 
-        this.timer = Timer()
+            var self = this
 
-        var self = this
+            var maxActivityTransitionTime = applicationContext.resources.getInteger(R.integer.BackgroundTimeout).toLong()
+            var sessionTimeout = applicationContext.resources.getInteger(R.integer.SessionTimeout).toLong()
 
-        var maxActivityTransitionTime = applicationContext.resources.getInteger(R.integer.BackgroundTimeout).toLong()
-        var sessionTimeout = applicationContext.resources.getInteger(R.integer.SessionTimeout).toLong()
+            this.timer.schedule(maxActivityTransitionTime) {
+                self.wasInBackground = true
+            }
 
-        this.timer.schedule(maxActivityTransitionTime) {
-            self.wasInBackground = true
-        }
-
-        this.timer.schedule(sessionTimeout) {
-            self.sessionExpired = true
+            this.timer.schedule(sessionTimeout) {
+                self.sessionExpired = true
+            }
         }
     }
 

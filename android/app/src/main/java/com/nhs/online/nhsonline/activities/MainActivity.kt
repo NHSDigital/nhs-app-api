@@ -99,7 +99,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         lifeCycleObserver?.onMoveToForeground()
     }
 
-    fun reloadIfAppWasInBackground() {
+    private fun reloadIfAppWasInBackground() {
         var app = application as Application
 
         if(app.wasInBackground) {
@@ -120,9 +120,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         lifeCycleObserver?.onMoveToBackground()
     }
 
-    fun startBackgroundTimer() {
+    private fun startBackgroundTimer() {
         var app = application as Application
-        app.startActivityTransitionTimer()
+        app.startActivityTransitionTimer(isLoggedIn)
     }
 
     override fun onNewIntent(intent: Intent?) {
