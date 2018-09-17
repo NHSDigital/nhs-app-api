@@ -1,5 +1,6 @@
 <template>
-  <div v-if="showError" :class="[$style['record-content'], getCollapseState]">
+  <div v-if="showError" :class="[$style['record-content'], getCollapseState]"
+       :aria-hidden="isCollapsed">
     <p v-if="data.hasErrored">
       {{ $t('my_record.genericErrorMessage') }}
     </p>
@@ -10,7 +11,8 @@
       {{ $t('my_record.genericNoDataMessage') }}
     </p>
   </div>
-  <div v-else :class="[$style['record-content'], getCollapseState]">
+  <div v-else :class="[$style['record-content'], getCollapseState]"
+       :aria-hidden="isCollapsed">
     <div v-for="(event, eventIndex) in orderedEvents" :key="`event-${eventIndex}`"
          :class="$style['record-item']" data-purpose="record-item">
       <span v-if="event.date" :class="$style.fieldName"> {{ event.date | datePart }} </span>

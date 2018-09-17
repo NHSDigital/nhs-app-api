@@ -1,5 +1,6 @@
 <template>
-  <div v-if="showError" :class="[$style['record-content'], getCollapseState]">
+  <div v-if="showError" :class="[$style['record-content'], getCollapseState]"
+       :aria-hidden="isCollapsed">
     <p v-if="data.hasErrored">
       {{ $t('my_record.genericErrorMessage') }}
     </p>
@@ -7,7 +8,8 @@
       {{ $t('my_record.genericNoDataMessage') }}
     </p>
   </div>
-  <div v-else :class="[$style['record-content'], getCollapseState]">
+  <div v-else :class="[$style['record-content'], getCollapseState]"
+       :aria-hidden="isCollapsed">
     <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
          :class="$style['record-item']" data-purpose="record-item">
       <span v-if="allergy.date.value" :class="$style.fieldName">

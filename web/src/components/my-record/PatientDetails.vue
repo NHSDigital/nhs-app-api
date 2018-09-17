@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style['record-content'], getCollapseState]">
+  <div :class="[$style['record-content'], getCollapseState]" :aria-hidden="isCollapsed">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelName') }}</span>
     <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
     <hr>
