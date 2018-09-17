@@ -12,6 +12,7 @@ import {
   MYRECORDTESTRESULT,
   PRESCRIPTIONS,
   PRESCRIPTION_CONFIRM_COURSES,
+  PRESCRIPTION_REPEAT_COURSES,
 } from '@/lib/routes';
 
 export default {
@@ -60,6 +61,18 @@ export default {
       redirectUrl: {
         default: MYRECORD.path,
       },
+    },
+    {
+      route: PRESCRIPTIONS.path,
+      errorOverrideStyles: { 403: 'plain' },
+    },
+    {
+      route: PRESCRIPTION_REPEAT_COURSES.path,
+      errorOverrideStyles: { 403: 'plain' },
+    },
+    {
+      route: PRESCRIPTION_CONFIRM_COURSES.path,
+      errorOverrideStyles: { 403: 'plain' },
     },
   ],
   forPage(routePath) {
