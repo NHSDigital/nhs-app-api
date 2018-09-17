@@ -180,6 +180,7 @@ namespace NHSOnline.Backend.Worker
             {
                 app.UseCors(builder => builder
                     .WithOrigins(corsAuthority)
+                    .SetIsOriginAllowedToAllowWildcardSubdomains()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials()
