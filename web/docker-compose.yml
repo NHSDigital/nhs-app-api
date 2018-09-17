@@ -30,6 +30,7 @@ services:
       - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
+      - STUB_TERMS_AND_CONDITIONS=true
     depends_on:
       - nhsonline.redis.sds
     ports:
@@ -46,7 +47,6 @@ services:
       - TPP_CERTIFICATE_PASSWORD
       - VISION_CERT_PATH=./certs/vps_nhson001.pfx
       - VISION_CERT_PASSPHRASE
-      - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
     depends_on:
       - nhsonline.redis.sds

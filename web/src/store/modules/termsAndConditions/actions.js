@@ -1,3 +1,4 @@
+import getOr from 'lodash/fp/getOr';
 import { INDEX } from '@/lib/routes';
 import { SET_ACCEPTANCE } from '@/store/modules/termsAndConditions/mutation-types';
 
@@ -10,6 +11,8 @@ const setAcceptance = (app, commit, consentTerms) => {
 
   commit(SET_ACCEPTANCE, consentTerms);
 };
+
+const extractConsentGiven = getOr(false, 'response.consentGiven');
 
 export default {
   async acceptTerms({ commit }, consentTerms) {
@@ -25,12 +28,16 @@ export default {
   },
   async checkAcceptance({ commit, state }) {
     if (state.areAccepted) return Promise.resolve();
-
-    const {
-      response: { consentGiven = true },
-    } = await this.app.$http.getV1PatientTermsAndConditionsConsent({});
-    setAcceptance(this.app, commit, consentGiven);
-    return Promise.resolve();
+    return this
+      .app
+      .$http
+      .getV1PatientTermsAndConditionsConsent({})
+      .then((data) => {
+        const consentGiven = extractConsentGiven(data);
+        setAcceptance(this.app, commit, consentGiven);
+        return Promise.resolve();
+      })
+      .catch(err => Promise.reject(err));
   },
 
   setAcceptance({ commit }, consentTerms) {

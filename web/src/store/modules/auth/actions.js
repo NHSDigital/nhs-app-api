@@ -3,7 +3,7 @@ import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-type
 
 const MAX_TRIES = 10;
 
-const final = ({ self, commit, expired }) => {
+const final = ({ self, commit }) => {
   commit(LOGOUT, true);
   self.dispatch('analytics/init');
   self.dispatch('availableAppointments/init');
@@ -19,15 +19,7 @@ const final = ({ self, commit, expired }) => {
   self.dispatch('session/setInfo');
   self.dispatch('flashMessage/init');
 
-  if (expired) {
-    // When the session is expired, a `push` must be used to ensure the state and,
-    // by implication, the `showExpiryMessage` property is preserved.
-    self.app.router.push(LOGIN.name);
-  } else {
-    // When logout occurs through the button, `go` is used to reduce flickering.  This makes
-    // a server request which clears the state.
-    self.app.router.go(LOGIN.path);
-  }
+  self.app.router.push(LOGIN.name);
 };
 
 export default {
