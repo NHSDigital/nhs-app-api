@@ -30,8 +30,7 @@ Feature: Get demographic data
       | EMIS    |
       | TPP     |
 
-  @NHSO-691
-  @pending
+  @NHSO-2549 @tech-debt
   @backend
   Scenario Outline: GP System Unavailable
     Given the my record wiremocks are initialised for <Service>
@@ -45,8 +44,7 @@ Feature: Get demographic data
       | EMIS    |
       | TPP     |
 
-  @NHSO-691
-  @pending
+  @NHSO-2549 @tech-debt
   @backend
   Scenario Outline: GP System Times Out
     Given the my record wiremocks are initialised for <Service>

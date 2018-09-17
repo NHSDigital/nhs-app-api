@@ -65,8 +65,12 @@ class WebViewController: UIViewController, WKUIDelegate {
         
         if(!Reachability.isConnectedToNetwork()) {
             self.webViewDelegate?.failedUrl = URL(string: url)
-            let errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: self.webView.url!)
-            self.webViewDelegate?.showNativeViewContainer(errorMessage: errorMessage!)
+            var myErrorMessage = knownServices.getServiceUnavailableErrorMessage()
+            if let errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: URL(string: url)!) {
+                myErrorMessage = errorMessage
+            }
+            self.webViewDelegate?.showNativeViewContainer(errorMessage: myErrorMessage)
+            self.webViewDelegate?.viewController.updateHeaderText(headerText: "Internet connection error")
             return
         }
         
