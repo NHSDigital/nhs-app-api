@@ -10,17 +10,23 @@
     </div>
     <div id="text_body" :class="$style.info">
       <p> {{ $t('termsAndConditions.body1') }}
-        <a href="">{{ $t('termsAndConditions.link1') }}</a>,
-        <a href="">{{ $t('termsAndConditions.link2') }}</a> and
-        <a href="">{{ $t('termsAndConditions.link3') }}</a>.
+        <a :href="termsAndConditionsURL">{{ $t('termsAndConditions.link1') }}</a>,
+        <a :href="privacyPolicyURL">{{ $t('termsAndConditions.link2') }}</a> and
+        <a :href="cookiesPolicyURL">{{ $t('termsAndConditions.link3') }}</a>.
         {{ $t('termsAndConditions.body2') }} </p>
-      <p> {{ $t('termsAndConditions.listTitle') }} </p>
-      <ul>
-        <li> {{ $t('termsAndConditions.listItem1') }} </li>
-        <li> {{ $t('termsAndConditions.listItem2') }} </li>
-        <li> {{ $t('termsAndConditions.listItem3') }} </li>
-      </ul>
       <p> {{ $t('termsAndConditions.body3') }} </p>
+      <p><strong> {{ $t('termsAndConditions.listTitle') }} </strong></p>
+      <ul>
+        <li v-for="listItem of $t('termsAndConditions.listItems')" :key="listItem">
+          {{ listItem }}
+        </li>
+      </ul>
+      <h2>{{ $t('termsAndConditions.cookiesTitle') }}</h2>
+      <p>
+        {{ $t('termsAndConditions.cookiesText1') }}
+        <a :href="cookiesPolicyURL">{{ $t('termsAndConditions.link4') }}</a>
+        {{ $t('termsAndConditions.cookiesText2') }}
+      </p>
     </div>
     <div :class="getErrorState()">
       <error-message v-if="hasTriedToContinue && !areTermsAccepted"
@@ -42,6 +48,8 @@
           name="termsAndConditions">
         <label for="hiddenCheckbox" @click="check">
           {{ $t('termsAndConditions.checkBoxText') }}
+          <a :href="cookiesPolicyURL" style="display: inline-block;">
+            {{ $t('termsAndConditions.link3') }}</a>
         </label>
       </div>
     </div>
@@ -67,8 +75,11 @@ export default {
     GenericButton,
     MessageDialog,
   },
-  data() {
+  data(app) {
     return {
+      termsAndConditionsURL: app.$env.TERMS_AND_CONDITIONS_URL,
+      privacyPolicyURL: app.$env.PRIVACY_POLICY_URL,
+      cookiesPolicyURL: app.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
       hasTriedToContinue: false,
     };
@@ -117,6 +128,13 @@ export default {
     font-weight: bold;
     text-decoration: none;
     vertical-align: middle;
+  }
+  strong {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #425563;
   }
   .hideDefaultCheckbox {
     display: none;
