@@ -116,9 +116,10 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             val inputElement = el.findElement(By.tagName("input"))
 
             if (medicationCourse.name == nameOnScreen.text
-                    && medicationCourse.getInstructionsText() == instructionsOnScreen.text) {
-                Assert.assertEquals(medicationCourse.medicationCourseGuid, inputElement.getAttribute("value"))
-                Assert.assertTrue(inputElement.isSelected())
+                    && medicationCourse.getInstructionsText() == instructionsOnScreen.text
+                    && medicationCourse.medicationCourseGuid == inputElement.getAttribute("value")
+            ) {
+                Assert.assertTrue("${medicationCourse.name}-${medicationCourse.getInstructionsText()} is not selected and should be",inputElement.isSelected())
                 return
             }
         }
