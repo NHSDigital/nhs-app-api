@@ -260,6 +260,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title,
                 unavailabilityErrorMessage.message)
+        errorTextView.contentDescription = unavailabilityErrorMessage.title + ". " + unavailabilityErrorMessage.accessibleMessage
         if (unavailabilityErrorMessage.message != null) {
             tryAgainTextView.visibility = GONE
 

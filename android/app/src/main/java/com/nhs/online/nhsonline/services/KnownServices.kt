@@ -11,7 +11,7 @@ class KnownServices(private val context: Context) {
     private val internalServiceList = arrayListOf<KnownService>()
     private val unavailabilityErrorMessage =
         ErrorMessage(context.resources.getString(R.string.connection_error_title),
-            context.resources.getString(R.string.connection_error_message))
+            context.resources.getString(R.string.connection_error_message), context.resources.getString(R.string.Accessible_connection_error_message))
     private val externalSites = arrayListOf<URL>()
 
     enum class ServiceName { NHS111, NHS_ONLINE, ORGAN_DONATION, UNKNOWN }

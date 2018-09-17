@@ -5,6 +5,7 @@ class KnownServices {
     private let homeTitle = NSLocalizedString("HomeTitle", comment: "")
     private let nhsOnlineErrorTitle = NSLocalizedString("ConnectionErrorTitle", comment: "")
     private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
+    private let accessibleNhsOnlineErrorMessage = NSLocalizedString("AccessibilityConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
     private let organDonationTitle = NSLocalizedString("OrganDonationTitle", comment: "")
     private let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
@@ -29,12 +30,12 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceTitle: homeTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.DataPreferencesURL], serviceTitle: dataPreferencesTitle, service: .DATA_PREFERENCES, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, accessibleServiceTitle: accessibleConditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [getCheckSymptomsUrl()], serviceTitle: symptomsTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceTitle: homeTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldValidateSession:false))
+        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.DataPreferencesURL], serviceTitle: dataPreferencesTitle, service: .DATA_PREFERENCES, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false))
+        serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, accessibleServiceTitle: accessibleConditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: accessibleNhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [getCheckSymptomsUrl()], serviceTitle: symptomsTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         
         
         let helpURL: URL = URL(string: config.HelpURL)!
