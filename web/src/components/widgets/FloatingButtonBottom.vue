@@ -71,7 +71,7 @@ export default {
   box-shadow: 0em -0.100em 0.200em rgba(0, 0, 0, .1);
   &.button-container-native {
     bottom: 0;
-    white-space: nowrap;
+    word-wrap:break-word;
   }
 }
 
