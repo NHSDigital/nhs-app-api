@@ -46,9 +46,6 @@ services:
       - ./src/main/kotlin/mocking/ndop:/app/bddcerts
   cid.local.bitraft.io:
     image: nhsonline.backend.worker
-    build:
-      context: .
-      dockerfile: NHSOnline.Backend.Worker/Dockerfile
     depends_on:
       - nhsonline.redis.sds
       - nhsonline.redis.session
