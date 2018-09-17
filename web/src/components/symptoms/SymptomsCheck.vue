@@ -5,9 +5,9 @@
         <analytics-tracked-tag id="btn_choices" :href="conditionsCheckerUrl"
                                :class="$style['no-decoration']"
                                :text="$t('sy01.a_z.subheader')"
+                               :aria-label="`${$t('sy01.a_z.subheader')}. ${$t('sy01.a_z.body')}`"
                                tag="a" target="_blank">
           <h2>{{ $t('sy01.a_z.subheader') }}</h2>
-          <screen-reader-pause/>
           <p>{{ $t('sy01.a_z.body') }}</p>
         </analytics-tracked-tag>
       </li>
@@ -15,9 +15,9 @@
         <analytics-tracked-tag id="btn_111" :href="symptomsCheckerUrl"
                                :class="$style['no-decoration']"
                                :text="$t('sy01.111.subheader')"
+                               :aria-label="`${$t('sy01.111.subheader')}. ${$t('sy01.111.body')}`"
                                tag="a" target="_blank">
           <h2>{{ $t('sy01.111.subheader') }}</h2>
-          <screen-reader-pause/>
           <p>{{ $t('sy01.111.body') }}</p>
         </analytics-tracked-tag>
       </li>
@@ -28,12 +28,10 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
-import ScreenReaderPause from '@/components/widgets/ScreenReaderPause';
 
 export default {
   components: {
     AnalyticsTrackedTag,
-    ScreenReaderPause,
   },
   data(app) {
     let symptomsCheckerUrl = app.$env.SYMPTOM_CHECKER_URL;
