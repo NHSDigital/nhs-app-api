@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Problems
 
-  @smoketest
   @NHSO-1095
   Scenario Outline: A <Service> user has Problems on their record
     Given the my record wiremocks are initialised for <Service>

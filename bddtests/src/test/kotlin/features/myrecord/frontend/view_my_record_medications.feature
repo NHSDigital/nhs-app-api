@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Medications
 
-  @smoketest
   @NHSO-678
   Scenario Outline: A <Service> user views acute medications
     Given the my record wiremocks are initialised for <Service>
@@ -17,7 +16,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @smoketest
   @NHSO-678
   Scenario Outline: A <Service> user views current repeat medications
     Given the my record wiremocks are initialised for <Service>

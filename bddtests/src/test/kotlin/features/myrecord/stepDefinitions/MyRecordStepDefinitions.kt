@@ -133,6 +133,18 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertTrue(recordSteps.isAgreePresent())
     }
 
+    @Then("^I see the my record warning page")
+    fun iSeeTheMyRecordWarningPage() {
+        i_see_record_warning_page_opened()
+        i_see_header_text_is_My_medical_record()
+        i_see_your_record_may_contain_sensitive_information_message()
+        i_see_list_of_sensitive_data_information()
+        i_see_agree_and_continue_button()
+        i_see_back_to_home_button()
+        i_see_my_record_button_on_the_nav_bar_is_highlighted()
+
+    }
+
     @Then("^I see header text is My medical record$")
     fun i_see_header_text_is_My_medical_record() {
         recordSteps.waitForCorrectHeader()

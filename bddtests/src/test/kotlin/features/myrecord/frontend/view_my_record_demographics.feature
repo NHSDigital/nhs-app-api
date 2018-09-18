@@ -14,7 +14,6 @@ Feature: View My Medical Record Information - Demographics
       | EMIS    |
       | TPP     |
 
-  @smoketest
   @NHSO-361
   Scenario Outline: A <Service> user navigates to patient information page
     Given the my record wiremocks are initialised for <Service>

@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Warning
 
-  @smoketest
   @NHSO-359
   Scenario Outline: A user navigates to my record warning page
     Given the my record wiremocks are initialised for <Service>

@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Allergies
 
-
   @NHSO-677
   @NHSO-1081
   Scenario Outline: A <Service> user can view allergies and adverse reactions section
@@ -48,7 +47,6 @@ Feature: View My Medical Record Information - Allergies
 
   @NHSO-677
   @NHSO-1081
-  @smoketest
   Scenario Outline: A <Service> user has one or more allergy records
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

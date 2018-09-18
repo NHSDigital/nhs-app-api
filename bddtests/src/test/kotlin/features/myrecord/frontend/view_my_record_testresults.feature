@@ -14,7 +14,6 @@ Feature: View My Medical Record Information - Test Results
       | EMIS    |
       | TPP     |
 
-  @smoketest
   @NHSO-686
   Scenario Outline: A <Service> user can view test result information
     Given the my record wiremocks are initialised for <Service>

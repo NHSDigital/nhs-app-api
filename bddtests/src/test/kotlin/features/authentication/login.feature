@@ -25,7 +25,6 @@ Feature: Login
 
 
   @NHSO-125
-  @smoketest
   Scenario Outline: A <GP System> user sees a beta banner and a survey link on the home page
     Given I am logged in as a <GP System> user
     Then I see the home page

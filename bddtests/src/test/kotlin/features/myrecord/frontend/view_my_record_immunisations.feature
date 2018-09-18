@@ -1,7 +1,7 @@
 @my-record
 Feature: View My Medical Record Information - Immunisations
 
-  @smoketest
+
   @NHSO-685
   Scenario Outline: A <Service> user has immunisations on their record
     Given the my record wiremocks are initialised for <Service>
