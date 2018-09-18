@@ -28,7 +28,7 @@ open class MyAppointmentsSteps {
 
     val pageHeader = "My appointments"
     val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
-            "Once you've booked an appointment here, you'll be able to view details, cancel it and see your appointment history.\n" +
+            "Once you've booked an appointment here, you'll be able to view details and cancel it.\n" +
             "If you have an upcoming appointment that isn't shown here, contact your GP surgery for more information."
     val bookingSuccessMessage = "Your appointment has been booked. You can view details or cancel it here."
     val cancellationSuccessMessage = "Your appointment has been cancelled."

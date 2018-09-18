@@ -139,7 +139,7 @@ export default {
       cancelButtonText: 'Cancel appointment',
       empty: {
         header: 'You don\'t currently have any appointments booked',
-        text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details, cancel it and see your appointment history.',
+        text1: 'Once you\'ve booked an appointment here, you\'ll be able to view details and cancel it.',
         text2: 'If you have an upcoming appointment that isn\'t shown here, contact your GP surgery for more information.',
       },
       upcoming: {
