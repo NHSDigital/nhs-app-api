@@ -145,6 +145,15 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     }
 
+    @Then("^I see the my medical record page$")
+    fun iSeeTheMyMedicalRecordPage() {
+        i_see_header_text_is_My_medical_record()
+        i_see_heading_My_details()
+        i_see_the_patient_information_details()
+        i_see_my_record_button_on_the_nav_bar_is_highlighted()
+    }
+
+
     @Then("^I see header text is My medical record$")
     fun i_see_header_text_is_My_medical_record() {
         recordSteps.waitForCorrectHeader()
