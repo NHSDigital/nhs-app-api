@@ -103,10 +103,10 @@ export default {
     },
   },
   noConnection: {
-    header: 'Connection error.',
-    subheader: 'Please check your internet connection and try again.',
+    header: 'Connection error',
+    subheader: 'There\'s an issue with your internet connection',
     retryButtonText: 'Try again',
-    message: 'Please try again later. If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+    message: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
   },
   termsAndConditions: {
     title: 'Accept terms of use',
@@ -187,10 +187,6 @@ export default {
     noSlotErrorMessage: {
       summary: 'There are no appointments available at the moment',
       info: 'If you need an appointment, please contact your GP.',
-    },
-    noConnection: {
-      message:
-        'If the problem persists and you need to book an appointment immediately please contact your GP practice.',
     },
     errors: {
       pageHeader: 'Error retrieving data',

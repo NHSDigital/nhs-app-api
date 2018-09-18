@@ -22,9 +22,9 @@
     <string name="connection_error_header">Internet connection error</string>
     <string name="connection_error_title">There\'s an issue with your internet connection</string>
     <string name="connection_error_message">
-        Please check your connection and try again.
-        \n\nIf the problem persists and you need to book an appointment or get a prescription now,
-        contact your GP surgery directly. For immediate medical advice, call 111.
+        \nCheck your connection and try again.
+        \n\nIf the problem continues and you need to book an appointment or get a prescription now,
+        contact your GP surgery directly. For urgent medical advice, call 111.
     </string>
 
     <string name="Accessible_connection_error_message">
@@ -35,7 +35,7 @@
     <string name="service_unavailable">Service unavailable</string>
 
     <string name="retryButtonText">Try again</string>
-    <string name="errorIconDesc">warning icon</string>
+    <string name="errorIconText">Error</string>
     <string name="tryLaterText">Please try again later.</string>
     <string name="nhsAppHome">NHS App Home</string>
 

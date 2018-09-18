@@ -3,12 +3,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="@dimen/_35sdp"
+    <TextView
+        style="@style/default_error_icon"
+        android:layout_width="@dimen/_55ssp"
         android:layout_height="@dimen/_35sdp"
-        android:background="@color/error"
-        android:contentDescription="@string/errorIconDesc"
-        android:src="@mipmap/ic_error" />
+        android:paddingTop="@dimen/_6sdp"
+        android:text="@string/errorIconText"/>
 
     <LinearLayout
         android:layout_width="match_parent"

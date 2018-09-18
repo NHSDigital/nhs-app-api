@@ -116,9 +116,9 @@ class ExtensionsKtTest {
         val mockedResource: Resources = mock {
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
-            on { getString(R.string.connection_error_message) } doReturn "Please check your connection and try again. \n\nIf the problem persists and you need to " +
+            on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again. \n\nIf the problem continues and you need to " +
                     "book an appointment or get a prescription now, contact your GP surgery directly." +
-                    " For immediate medical advice, call 111."
+                    " For urgent medical advice, call 111."
         }
 
         return mock { on { resources } doReturn mockedResource }

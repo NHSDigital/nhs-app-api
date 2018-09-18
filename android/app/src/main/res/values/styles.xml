@@ -9,8 +9,16 @@
 
     <style name="menu_default_text" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textColor">@color/defaultMenuTextColor</item>
-        <item name="android:textSize">@dimen/menuBarItemFontSize</item>
+      <item name="android:textColor">@color/defaultMenuTextColor</item>
+      <item name="android:textSize">@dimen/menuBarItemFontSize</item>
+    </style>
+
+    <style name="default_error_icon" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:background">@color/error</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/errorTextSize</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
     <style name="default_warning_text" parent="TextAppearance.AppCompat">

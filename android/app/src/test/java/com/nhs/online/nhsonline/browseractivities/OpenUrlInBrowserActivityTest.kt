@@ -21,9 +21,9 @@ class OpenUrlInBrowserActivityTest {
             on { getString(R.string.organDonation) } doReturn "https://www.organdonation.nhs.uk/"
             on { getString(R.string.dataSharing) } doReturn "https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing"
             on { getString(R.string.connection_error_title) } doReturn "There's an issue with your internet connection"
-            on { getString(R.string.connection_error_message) } doReturn "Please check your connection and try again." +
-                    "\n\nIf the problem persists and you need to book an appointment or get a prescription now, " +
-                    "contact your GP surgery directly. For immediate medical advice, call 111."
+            on { getString(R.string.connection_error_message) } doReturn "\nCheck your connection and try again." +
+                    "\n\nIf the problem continues and you need to book an appointment or get a prescription now, " +
+                    "contact your GP surgery directly. For urgent medical advice, call 111."
             on { getString(R.string.service_unavailable) } doReturn "Service unavailable"
             on { getString(R.string.nhsOnlineRequiredQueries) } doReturn "?source=android"
             on { getString(R.string.conditions) } doReturn "https://www.nhs.uk/conditions/"

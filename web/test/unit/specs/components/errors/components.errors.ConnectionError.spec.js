@@ -33,7 +33,7 @@ const createApiErrorComponent = ($route, apiError) => {
   });
 };
 
-const testDataSet1 = [
+const testDataSet = [
   '/appointments/booking-guidance',
   '/appointments/booking',
   '/appointments/confirmation',
@@ -46,32 +46,19 @@ const testDataSet1 = [
   '/my-record/testresultdetail/:testResultId',
   '/prescriptions',
   '/prescriptions/repeat-courses',
-  '/prescriptions/confirm-prescription-details'];
-
-const testDataSet2 = ['/appointments'];
+  '/prescriptions/confirm-prescription-details',
+  '/appointments'];
 
 describe('ConnectionError.vue', () => {
-  each(testDataSet1).it('page %s will show correct message when the API fails times out with no response', (path) => {
+  each(testDataSet).it('page %s will show correct message when the API fails times out with no response', (path) => {
     const route = { path };
     const apiError = { message: 'API failed to return a response.' };
 
     createApiErrorComponent(route, apiError);
 
-    expect(component.vm.header).toEqual('Connection error.');
-    expect(component.vm.subheader).toEqual('Please check your internet connection and try again.');
-    expect(component.vm.message).toEqual('Please try again later. If the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.');
-    expect(component.vm.retryButtonText).toEqual('Try again');
-  });
-
-  each(testDataSet2).it('page %s will show correct message when the API fails times out with no response', (path) => {
-    const route = { path };
-    const apiError = { message: 'API failed to return a response.' };
-
-    createApiErrorComponent(route, apiError);
-
-    expect(component.vm.header).toEqual('Connection error.');
-    expect(component.vm.subheader).toEqual('Please check your internet connection and try again.');
-    expect(component.vm.message).toEqual('If the problem persists and you need to book an appointment immediately please contact your GP practice.');
+    expect(component.vm.header).toEqual('Connection error');
+    expect(component.vm.subheader).toEqual('There\'s an issue with your internet connection');
+    expect(component.vm.message).toEqual('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.');
     expect(component.vm.retryButtonText).toEqual('Try again');
   });
 });
