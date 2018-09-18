@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using System.Threading;
+using Microsoft.Extensions.Logging;
+using Moq;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
 {
@@ -23,7 +25,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _systemUnderTest = new AppointmentMapper(_dateTimeOffsetProvider);
         }

@@ -6,6 +6,10 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
@@ -16,16 +20,23 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
         private SessionMapper _systemUnderTest;
+        private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture() 
+                .Customize(new AutoMoqCustomization()); 
+            
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
-            _systemUnderTest = new SessionMapper(_dateTimeOffsetProvider);
+            _fixture.Inject(_dateTimeOffsetProvider); 
+            
+            _systemUnderTest = _fixture.Create<SessionMapper>(); 
         }
+        
         [TestMethod]
         public void Map_TPPDateFormatShouldBeValid_ReturnsExpectedSlot()
         {
@@ -39,6 +50,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             actualResponse.Should().HaveCount(1);
         }
+        
         [TestMethod]
         public void Map_HappyPath_ReturnsAnArrayOfSlots()
         {

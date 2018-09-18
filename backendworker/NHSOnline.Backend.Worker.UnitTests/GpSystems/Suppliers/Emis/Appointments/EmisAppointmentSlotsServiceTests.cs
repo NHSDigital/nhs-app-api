@@ -43,7 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
             _fixture = new Fixture().Customize(new AutoMoqCustomization());

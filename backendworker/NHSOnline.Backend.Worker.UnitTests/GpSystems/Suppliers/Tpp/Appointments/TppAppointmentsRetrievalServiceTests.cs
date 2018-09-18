@@ -84,7 +84,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
 
             var builder = new TppAppointmentsResultBuilder(
                 _fixture.Create<ILogger<TppAppointmentsService>>(),

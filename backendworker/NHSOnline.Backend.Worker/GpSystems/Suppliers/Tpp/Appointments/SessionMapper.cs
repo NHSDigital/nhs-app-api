@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
@@ -10,15 +11,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
     {
         IEnumerable<Areas.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions);
     }
+    
     public class SessionMapper : ISessionMapper
     {
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
+        private readonly ILogger<SessionMapper> _logger;
         private const string SessionTypeSeparator = " - ";
 
-        public SessionMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public SessionMapper(IDateTimeOffsetProvider dateTimeOffsetProvider, ILogger<SessionMapper> logger)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
+            _logger = logger;
         }
+        
         public IEnumerable<Areas.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions)
         {
             if (sessions == null)
@@ -39,14 +44,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                         continue;
                     }
 
-                    DateTimeOffset? endDate;
-                    try
+                    DateTimeOffset? endDate = null;
+                    if (!string.IsNullOrEmpty(slot.EndDate))
                     {
-                        endDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.EndDate.TrimEnd('Z'));
-                    }
-                    catch (Exception)
-                    {
-                        endDate = null;
+                        try
+                        {
+                            endDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.EndDate.TrimEnd('Z'));
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "Unable to create DateTimeOffset from slot EndDate '{0}'.",
+                                slot.EndDate);
+                            endDate = null;
+                        }
                     }
 
                     yield return new Areas.Appointments.Models.Slot

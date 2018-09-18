@@ -38,9 +38,9 @@ namespace NHSOnline.Backend.Worker.Ndop
                 
                 return new SigningCredentials(key, SecurityAlgorithms.RsaSha256);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.LogError("Error creating signing credentials for JWT Token");
+                _logger.LogError(ex, "Error creating signing credentials for JWT Token");
                 return null;
             }
         }

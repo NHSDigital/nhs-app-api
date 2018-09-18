@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Support.Temporal;
@@ -21,7 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _dateRangeValidator = new DateRangeValidator(_dateTimeOffsetProvider);
         }

@@ -55,12 +55,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
 
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
             _systemUnderTest = new AppointmentSlotsController(_gpSystemFactory.Object,
                 _dateTimeOffsetProvider,
-                _fixture.Create<ILoggerFactory>().CreateLogger<AppointmentSlotsController>(),
+                new Mock<ILogger<AppointmentSlotsController>>().Object,
                 _mockAuditor.Object)
             {
                 ControllerContext = new ControllerContext

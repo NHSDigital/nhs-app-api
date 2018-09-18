@@ -7,6 +7,10 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using Microsoft.Extensions.Logging;
+using Moq;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointments
@@ -16,18 +20,24 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
     {
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
-        private IListSlotsReplyMapper _sut;
+        private ListSlotsReplyMapper _systemUnderTest;
+        private IFixture _fixture;
 
         [TestInitialize]
         public void TestInitialize()
         {
+            _fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
+            
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            _timeZoneInfoProvider = new TimeZoneInfoProvider(configBuilder.Build());
+            _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
-            _sut = new ListSlotsReplyMapper(
-                new SessionMapper(_dateTimeOffsetProvider));
+            _fixture.Inject(_dateTimeOffsetProvider);
+            
+            _systemUnderTest = new ListSlotsReplyMapper(_fixture.Create<SessionMapper>());
         }
+        
         [TestMethod]
         public void Map_WhenSessionSlotsIsEmpty_ReturnsEmptySetOfSlots()
         {
@@ -38,12 +48,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.Areas.Appointments.Models.Slot>() };
 
-            var actualResponse = _sut.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply);
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
-
-
 
         [TestMethod]
         public void Map_WhenSessionSlotsIsNull_ReturnsEmptySetOfSlots()
@@ -54,7 +62,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var expectedResponse = new AppointmentSlotsResponse { Slots = Array.Empty<Worker.Areas.Appointments.Models.Slot>() };
 
-            var actualResponse = _sut.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply);
 
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
@@ -89,7 +97,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             };
 
             // Act
-            var actualResponse = _sut.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply);
 
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -125,7 +133,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             };
 
             // Act
-            var actualResponse = _sut.Map(listSlotsReply);
+            var actualResponse = _systemUnderTest.Map(listSlotsReply);
 
             // Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
@@ -152,6 +160,5 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             EndDate = endDate,
             Type = type
         };
-
     }
 }
