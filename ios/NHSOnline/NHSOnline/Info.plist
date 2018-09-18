@@ -123,5 +123,7 @@
 	<string>https://$(DATA_PREFERENCES_URL)</string>
 	<key>ResponseWaitingTime</key>
 	<integer>20</integer>
+	<key>SessionTimeout</key>
+	<integer>20</integer>
 </dict>
 </plist>
