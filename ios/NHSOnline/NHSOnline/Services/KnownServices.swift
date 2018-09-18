@@ -2,6 +2,7 @@ import Foundation
 
 class KnownServices {
     private let config:Config
+    private let homeTitle = NSLocalizedString("HomeTitle", comment: "")
     private let nhsOnlineErrorTitle = NSLocalizedString("ConnectionErrorTitle", comment: "")
     private let nhsOnlineErrorMessage = NSLocalizedString("ConnectionErrorMessage", comment: "")
     private let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
@@ -12,6 +13,8 @@ class KnownServices {
     private let appointmentsTitle = NSLocalizedString("AppointmentsTitle", comment: "")
     private let prescriptionsTitle = NSLocalizedString("PrescriptionsTitle", comment: "")
     private let myRecordTitle = NSLocalizedString("MyRecordTitle", comment: "")
+    private let moreTitle = NSLocalizedString("MoreTitle", comment: "")
+    private let myAccountTitle = NSLocalizedString("MyAccountTitle", comment: "")
     private let dataPreferencesTitle = NSLocalizedString("DataPreferencesTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
@@ -26,7 +29,7 @@ class KnownServices {
     }
     
     func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
+        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceTitle: homeTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldValidateSession:false))
         serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
         serviceList.append(KnownService(urlStrings: [config.DataPreferencesURL], serviceTitle: dataPreferencesTitle, service: .DATA_PREFERENCES, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false))
@@ -48,6 +51,8 @@ class KnownServices {
         internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.AppointmentsUrlPath)], serviceTitle: appointmentsTitle, service: .APPOINTMENTS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
         internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.PrescriptionsUrlPath)], serviceTitle: prescriptionsTitle, service: .PRESCRIPTIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
         internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.MyRecordUrlPath)], serviceTitle: myRecordTitle, service: .MY_RECORD, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
+        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.MoreUrlPath)], serviceTitle: moreTitle, service: .MORE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
+        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.MyAccountUrlPath)], serviceTitle: myAccountTitle, service: .ACCOUNT, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))        
     }
     
     func getCheckSymptomsUrl() -> String {
@@ -132,6 +137,6 @@ class KnownServices {
     }
     
     enum Service {
-        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS;
+        case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT;
     }
 }

@@ -80,8 +80,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
 
         self.showNativeViewContainer(errorMessage: myErrorMessage)
-        self.viewController.updateHeaderText(headerText: "Internet connection error")
-
         return
     }
         
@@ -201,12 +199,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             
             if (message.name == "updateHeaderText") {
-
                 if(!Reachability.isConnectedToNetwork()) {
                     showNoConnectionErrorView(urlNavigatingTo: (url?.absoluteString)!, currentWebviewUrl: url!)
                     return
                 }
-
                 viewController.updateHeaderText(headerText: String(describing: message.body))
             }
             if (message.name == "postNdopToken") {
@@ -257,7 +253,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         }
     }
     
-    private func updateHeaderAndNavigationMenu(url: URL?) {
+    func updateHeaderAndNavigationMenu(url: URL?) {
         let service: KnownService
         if let tabBarDelegate = self.viewController.tabBarDelegate {
                 if let internalService = knownServices.findMatchingInternalServiceForURL(url: url) {

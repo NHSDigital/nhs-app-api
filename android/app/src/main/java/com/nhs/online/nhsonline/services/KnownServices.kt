@@ -26,6 +26,7 @@ class KnownServices(private val context: Context) {
                 R.string.baseURL)),
             queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
             unavailabilityErrorMessage = unavailabilityErrorMessage,
+            nativeHeader = context.resources.getString(R.string.home_header),
             shouldValidateSession = true))
         serviceList.add(KnownService(arrayOf(context.resources.getString(
                 R.string.organDonation)),

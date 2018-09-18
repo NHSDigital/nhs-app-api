@@ -23,46 +23,31 @@ class TabBarDelegate : NSObject, UITabBarDelegate {
     
     func tabBar(_ tabBar: UITabBar, didSelect: UITabBarItem) {
         let selectedItem = Menu(rawValue: didSelect.tag)!
+        var selectedURL: String
         switch selectedItem {
         case .Symptoms:
-            let symptomsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
-            if selectPage(pageUrl: symptomsUrl) {
-                self.viewController.updateHeaderText(headerText: NSLocalizedString("SymptomsTitle", comment: ""))
-            }
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().SymptomsUrlPath)
             break
         case .Appointments:
-            let appointmentsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
-            if selectPage(pageUrl: appointmentsUrl) {
-                self.viewController.updateHeaderText(headerText: NSLocalizedString("AppointmentsTitle", comment: ""))
-            }
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().AppointmentsUrlPath)
             break
         case .Prescriptions:
-            let prescriptionsUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
-            if selectPage(pageUrl: prescriptionsUrl) {
-                self.viewController.updateHeaderText(headerText: NSLocalizedString("PrescriptionsTitle", comment: ""))
-            }
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().PrescriptionsUrlPath)
             break
         case .MyRecord:
-            let myRecordUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
-            if selectPage(pageUrl: myRecordUrl) {
-                self.viewController.updateHeaderText(headerText: NSLocalizedString("MyRecordTitle", comment: ""))
-            }
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyRecordUrlPath)
             break
         case .More:
-            let moreUrl = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
-            if selectPage(pageUrl: moreUrl) {
-                self.viewController.updateHeaderText(headerText: NSLocalizedString("MoreTitle", comment: ""))
-            }
+            selectedURL = viewController.createHomeUrlSubRequestWithPath(urlPathToAppend: config().MoreUrlPath)
             break
         }
+        selectPage(pageUrl: selectedURL)
     }
     
-    private func selectPage(pageUrl: String) -> Bool {
+    private func selectPage(pageUrl: String) {
         if (viewController.webViewController?.webView.url?.absoluteString != pageUrl + config().NhsOnlineRequiredQueryString) {
             viewController.webViewController?.webView.stopLoading()
             viewController.webViewController?.loadPage(url: pageUrl)
-            return true
         }
-        return false
     }
 }

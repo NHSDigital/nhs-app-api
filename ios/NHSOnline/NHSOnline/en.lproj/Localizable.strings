@@ -1,4 +1,5 @@
 /*Header titles*/
+"HomeTitle" = "Home";
 "MyAccountTitle" = "My account";
 "HelpTitle" = "Help and support";
 "OrganDonationTitle" = "Organ donation register";
@@ -14,6 +15,7 @@
 "CheckSymptomsTitle" = "Check my symptoms";
 
 /*Error messages*/
+"ConnectionErrorHeader" = "Internet connection error";
 "ServiceUnavailableErrorMessage" = "Service unavailable";
 "ConnectionErrorTitle" = "There's an issue with your internet connection";
 "ConnectionErrorMessage" = "Please check your connection and try again.\n\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.";

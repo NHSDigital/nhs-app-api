@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
+import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -14,11 +15,13 @@ import android.webkit.CookieManager
 import android.webkit.WebSettings
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
+import com.nhs.online.nhsonline.R.id.menuBar
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
+import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.LifeCycleObserver
@@ -77,7 +80,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
         } else {
             val urlPath = intent?.data?.path
             val authRedirectPath = resources.getString(R.string.authRedirectPath)
-
             if (urlPath == authRedirectPath) {
                 loadPage(intent.data.toString())
             } else {
@@ -170,56 +172,54 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
         var path:String
-        var header:String? = null
 
         when (menuBarItem.id) {
             R.id.symptoms -> {
                 path = resources.getString(R.string.symptomsPath)
-                header = resources.getString(R.string.symptoms_header)
             }
             R.id.myRecord -> {
                 path = resources.getString(R.string.myRecordPath)
-                header = resources.getString(R.string.my_record_header)
             }
             R.id.more -> {
                 path = resources.getString(R.string.morePath)
-                header = resources.getString(R.string.more)
             }
             R.id.appointments -> {
                 path = resources.getString(R.string.appointmentsPath)
-                header = resources.getString(R.string.appointments_header)
             }
             R.id.prescriptions -> {
                 path = resources.getString(R.string.prescriptionsPath)
-                header = resources.getString(R.string.prescriptions_header)
             }
             else -> {
                 path = resources.getString(R.string.baseURL)
             }
         }
-        loadUrl(path, header)
+        loadUrl(path)
     }
 
     override fun loadPage(url: String) {
-        loadUrl(url, null)
+        loadUrl(url)
     }
 
-    private fun loadUrl(path:String, headerText:String?) {
-        urlLoader.loadUrl(path)
-        if (headerText != null) {
-            setHeaderText(headerText)
+    private fun loadUrl(path:String) {
+        var knownService: KnownService? = knownServices.findMatchingInternalService(path)
+        if (knownService != null) {
+            setHeaderText(knownService.nativeHeader!!)
+        } else {
+            knownService = knownServices.findMatchingKnownService(path)
+            if (knownService != null) {
+                setHeaderText(knownService.nativeHeader!!)
+            }
         }
+        urlLoader.loadUrl(path)
     }
 
     private fun onNhsOnlineLogoIconSelected() {
         loadWelcomePage()
         menuBar.deselectActiveItem()
-        setHeaderText(resources.getString(R.string.home_header))
     }
 
     private fun onMyAccountIconSelected() {
-        loadUrl(resources.getString(R.string.myAccountPath),
-                resources.getString(R.string.my_account_header))
+        loadUrl(resources.getString(R.string.myAccountPath))
         menuBar.deselectActiveItem()
     }
 
@@ -326,7 +326,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         showMenuBar()
         showHeader()
-        setHeaderText(resources.getString(R.string.home_header))
         urlLoader.usingAbsoluteUri = false
         isLoggedIn = true
     }

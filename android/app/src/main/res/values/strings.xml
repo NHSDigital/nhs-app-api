@@ -19,6 +19,7 @@
     <string name="prescriptions_header">My repeat prescriptions</string>
     <string name="home_header">Home</string>
 
+    <string name="connection_error_header">Internet connection error</string>
     <string name="connection_error_title">There\'s an issue with your internet connection</string>
     <string name="connection_error_message">
         Please check your connection and try again.

@@ -146,6 +146,7 @@ class HomeViewController : UIViewController {
     
     func showNativeViewContainer(errorMessage: ErrorMessage) {
         self.nativeViewController?.setUnavailabilityError(errorMessage: errorMessage)
+        self.updateHeaderText(headerText: NSLocalizedString("ConnectionErrorHeader", comment: ""))
         self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.nativeViewController!)
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.nativeViewController?.errorTextView)
     }
@@ -172,8 +173,6 @@ class HomeViewController : UIViewController {
         self.pageUrl = createHomeUrlSubRequestWithPath(urlPathToAppend: config().MyAccountUrlPath)
         webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
-        updateHeaderText(headerText: NSLocalizedString("MyAccountTitle", comment: ""))
-        
     }
     
     @objc func selectHelp(sender : UITapGestureRecognizer) {
@@ -185,8 +184,6 @@ class HomeViewController : UIViewController {
         self.pageUrl = config().HomeUrl
         self.webViewController?.loadPage(url: self.pageUrl)
         self.tabBar.selectedItem = nil
-        updateHeaderText(headerText: NSLocalizedString("HomeTitle", comment: ""))
-
     }
 }
 

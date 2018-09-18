@@ -62,15 +62,9 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
 
     func loadPage(url: String) {
-        
-        if(!Reachability.isConnectedToNetwork()) {
-            return (webViewDelegate?.showNoConnectionErrorView(urlNavigatingTo: url, currentWebviewUrl: webView.url!))!
-        }
-        
-        var urlToNavigateTo = url
-        let webviewUrl = self.webView.url
-        
+        var urlToNavigateTo = url        
         let urlIsValid = verifyUrl(urlString: urlToNavigateTo)
+        self.webViewDelegate?.updateHeaderAndNavigationMenu(url: URL(string: url))
         
         if(!urlIsValid) {
             urlToNavigateTo = homeUrl + urlToNavigateTo
@@ -79,7 +73,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         if(WebViewController.Properties.usingAbsoluteUri) {
             webView.loadPage(url: urlToNavigateTo)
         }
-        else if(webviewUrl?.absoluteString.contains(homeUrl))! {
+        else if(knownServices.findMatchingInternalServiceForURL(url: URL(string: urlToNavigateTo)) != nil) {
             self.loadSpaPage(path: urlToNavigateTo)
         }
         else {

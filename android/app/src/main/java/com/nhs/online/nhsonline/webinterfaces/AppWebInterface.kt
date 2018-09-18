@@ -21,7 +21,6 @@ class AppWebInterface(private val context: MainActivity) {
         if(!spaPath.startsWith("/")) {
             spaPath = "/" + spaPath;
         }
-
         context.setReloadUrl("$baseUrl$path")
         context.webview.evaluateJavascript("window.\$nuxt.\$router.push('$spaPath');", null)
     }

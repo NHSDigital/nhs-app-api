@@ -57,7 +57,6 @@ class WebClientInterceptor(
         cancelTrackingWebRequestResponse()
 
         if (!isConnectedToInternet()) {
-            updateHeaderAndNavMenu(url)
             stopLoadingWebviewAndShowNoConnectionError(view)
             noConnectionHandled = true
             return
@@ -83,7 +82,6 @@ class WebClientInterceptor(
         if (!isConnectedToInternet()) {
             if (!noConnectionHandled) {
                 cancelTrackingWebRequestResponse()
-                stopLoadingWebviewAndShowNoConnectionError(view)
             }
             return
         }
@@ -109,8 +107,6 @@ class WebClientInterceptor(
         if (shouldHandleUnavailability(url)) {
             cancelTrackingWebRequestResponse()
         }
-
-        updateHeaderAndNavMenu(url)
         super.onPageFinished(view, url)
     }
 
@@ -151,6 +147,8 @@ class WebClientInterceptor(
     private fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
         handleUnavailability(view?.url)
         view?.stopLoading()
+        uiInteractor.setHeaderText(context.resources.getString(R.string.connection_error_header))
+
     }
 
     private fun updateHeaderAndNavMenu(url: String?) {
