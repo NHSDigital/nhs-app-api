@@ -1,5 +1,10 @@
 <template>
   <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
+    <h2>Details</h2>
+    <welcome-section :name="$store.state.session.user"
+                     :date-of-birth="$store.state.session.dateOfBirth"
+                     :nhs-number="$store.state.session.nhsNumber" />
+
     <h2>About us</h2>
     <ul :class="$style['list-menu']">
       <li>
@@ -46,16 +51,17 @@
   </div>
 </template>
 
-
 <script>
 /* eslint-disable import/extensions */
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import WelcomeSection from '@/components/WelcomeSection';
 
 export default {
   components: {
     AnalyticsTrackedTag,
     FloatingButtonBottom,
+    WelcomeSection,
   },
   methods: {
     signout() {

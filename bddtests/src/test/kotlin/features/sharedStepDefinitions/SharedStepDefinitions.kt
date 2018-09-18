@@ -37,7 +37,9 @@ open class SharedStepDefinitions {
 
     val mockingClient = MockingClient.instance
 
-    lateinit var patient: Patient
+    companion object {
+        lateinit var patient: Patient
+    }
 
     @Before
     fun resetWiremock() {
@@ -54,8 +56,8 @@ open class SharedStepDefinitions {
     {
         mockingClient.clearWiremock()
         mockingClient.favicon()
-        this.patient = Patient.getDefault(gpSystem)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
+        SharedStepDefinitions.patient = Patient.getDefault(gpSystem)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SharedStepDefinitions.patient)
         SessionCreateJourneyFactory.getForSupplier(gpSystem, mockingClient).createFor(patient)
         SerenityHelpers.setPatient(patient)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
@@ -63,25 +65,25 @@ open class SharedStepDefinitions {
 
     @Given("(TPP|EMIS) is initialised")
     fun system(system: String) {
-        this.patient = Patient.getDefault(system)
-        SerenityHelpers.setPatient(this.patient)
-        CitizenIdSessionCreateJourney(mockingClient).createFor(this.patient)
-        SessionCreateJourneyFactory.getForSupplier(system, mockingClient).createFor(this.patient)
+        SharedStepDefinitions.patient = Patient.getDefault(system)
+        SerenityHelpers.setPatient(SharedStepDefinitions.patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(SharedStepDefinitions.patient)
+        SessionCreateJourneyFactory.getForSupplier(system, mockingClient).createFor(SharedStepDefinitions.patient)
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(system)
     }
 
     @Given("^I am logged in$")
     open fun iAmLoggedIn() {
-        this.patient = SerenityHelpers.getPatientOrNull() ?: this.patient
+        SharedStepDefinitions.patient = SerenityHelpers.getPatientOrNull() ?: SharedStepDefinitions.patient
         browser.goToApp()
-        login.using(this.patient)
+        login.using(SharedStepDefinitions.patient)
     }
 
     @Given("^I am logged in and have not accepted the terms and conditions$")
     open fun iAmLoggedInAndHaveNotAcceptedTermsAndConditions() {
-        this.patient = Serenity.sessionVariableCalled<Patient>(Patient::class) ?: this.patient
+        SharedStepDefinitions.patient = Serenity.sessionVariableCalled<Patient>(Patient::class) ?: SharedStepDefinitions.patient
         browser.goToApp()
-        login.using(this.patient)
+        login.using(SharedStepDefinitions.patient)
     }
 
     @Given("^I am not logged in$")

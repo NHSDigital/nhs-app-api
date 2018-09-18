@@ -4,7 +4,9 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.myAccount.steps.MyAccountSteps
+import features.sharedStepDefinitions.SharedStepDefinitions
 import net.thucydides.core.annotations.Steps
+import org.junit.Assert
 
 
 class MyAccountStepDefinitions {
@@ -42,5 +44,10 @@ class MyAccountStepDefinitions {
     @When("^I click the Help and support link$")
     fun iClickTheHelpAndSupportLink() {
         myAccount.goToHelpAndSupport()
+    }
+
+    @Then("^I see my personal details")
+    fun iSeeMyPersonalDetails() {
+        myAccount.checkAccountDetailsShowing()
     }
 }

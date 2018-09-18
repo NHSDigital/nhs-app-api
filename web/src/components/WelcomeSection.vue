@@ -1,15 +1,21 @@
 <template>
   <div :class="$style.welcomeInfo" data-sid="welcome-info">
-    <p>
-      <strong>Date of birth:</strong>
-      <span data-sid="user-date-of-birth">
-        {{ $store.state.session.dateOfBirth | shortDate }}
+    <p v-if="name">
+      <strong>Name:</strong>
+      <span data-sid="user-name">
+        {{ name }}
       </span>
     </p>
-    <p>
+    <p v-if="dateOfBirth">
+      <strong>Date of birth:</strong>
+      <span data-sid="user-date-of-birth">
+        {{ dateOfBirth | shortDate }}
+      </span>
+    </p>
+    <p v-if="nhsNumber">
       <strong>NHS number:</strong>
       <span data-sid="user-nhs-number">
-        {{ $store.state.session.nhsNumber }}
+        {{ nhsNumber }}
       </span>
     </p>
   </div>
@@ -18,6 +24,20 @@
 <script>
 export default {
   name: 'WelcomeSection',
+  props: {
+    name: {
+      type: String,
+      default: '',
+    },
+    dateOfBirth: {
+      type: String,
+      default: '',
+    },
+    nhsNumber: {
+      type: String,
+      default: '',
+    },
+  },
 };
 </script>
 
