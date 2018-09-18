@@ -19,7 +19,7 @@ BASE_SCHEME = https
 NHS_ONLINE_REQUIRED_QUERY_STRING = ?source=ios
 CHECK_SYMPTOMS_URL_PATH = /check-your-symptoms
 APP_SCHEME = nhsapp
-MEDICAL_RECORD_ABBREVIATIONS_URL = www.england.nhs.uk/participation/resources/involvejargon/
+MEDICAL_RECORD_ABBREVIATIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/
 HELP_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/
 TERMS_AND_CONDITIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/
 PRIVACY_POLICY = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/

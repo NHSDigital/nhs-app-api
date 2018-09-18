@@ -27,7 +27,7 @@
     <string name="privacyPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/</string>
     <string name="cookiesPolicyURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/</string>
     <string name="openSourceLicensesURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/</string>
-    <string name="medicalRecordAbbreviationsURL">https://www.england.nhs.uk/participation/resources/involvejargon/</string>
+    <string name="medicalRecordAbbreviationsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/</string>
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 

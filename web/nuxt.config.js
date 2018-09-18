@@ -63,7 +63,7 @@ module.exports = {
     HELP_AND_SUPPORT_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/',
     YOUR_NHS_DATA_MATTERS_URL: 'https://www.nhs.uk/your-nhs-data-matters/',
     // Appointments
-    CLINICAL_ABBREVIATIONS_URL: 'https://www.england.nhs.uk/participation/resources/involvejargon/',
+    CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/',
     // Terms and conditions
     STUB_TERMS_AND_CONDITIONS: true,
   },
