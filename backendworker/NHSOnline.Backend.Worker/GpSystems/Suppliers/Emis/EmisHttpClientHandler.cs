@@ -17,10 +17,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             }
             else
             {
-                logger.LogWarning("Could not add Emis client certificate due to missing certificate path.");
+                logger.LogWarning("Could not add EMIS client certificate due to missing certificate path.");
             }
         }
-
-        
     }
 }

@@ -26,6 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems
         {
             return !string.IsNullOrEmpty(path) && File.Exists(path) && !string.IsNullOrEmpty(password);
         }
+        
         protected bool ValidateParameters(string path)
         {
             return !string.IsNullOrEmpty(path) && File.Exists(path);
@@ -42,6 +43,7 @@ namespace NHSOnline.Backend.Worker.GpSystems
                 _logger.LogError(e.Message);
             }        
         }
+        
         protected void AddCertificate(string path)
         {
             try

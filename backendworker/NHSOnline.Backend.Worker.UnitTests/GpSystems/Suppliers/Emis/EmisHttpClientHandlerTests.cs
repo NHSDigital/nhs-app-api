@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -52,7 +51,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
             _mockLogger.Verify(x => x.Log(
                 LogLevel.Warning, 0,
                 It.Is<FormattedLogValues>(values => values.ToString()
-                    .Equals("Could not add Emis client certificate due to missing certificate path.",
+                    .Equals("Could not add EMIS client certificate due to missing certificate path.",
                         StringComparison.Ordinal)),
                 null,
                 It.IsAny<Func<object, Exception, string>>()
@@ -62,7 +61,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis
         [TestMethod]
         public void Constructor_WhenCertifcatePathIsValid_AddsTheCertificate()
         {
-            var path = "GpSystems/Suppliers/Emis/Resources/EMISTestCert.cer";
+            const string path = "GpSystems/Suppliers/Emis/Resources/EMISTestCert.cer";
             _mockConfiguration.SetupGet(x => x["EMIS_CERTIFICATE_PATH"]).Returns(path);
             
             _systemUnderTest = new EmisHttpClientHandler(_mockConfiguration.Object, _mockLogger.Object);
