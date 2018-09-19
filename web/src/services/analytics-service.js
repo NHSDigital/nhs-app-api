@@ -82,6 +82,13 @@ export default function (app, store, route) {
         };
         store.dispatch('analytics/trackError', error);
       },
+      logicError: (messages) => {
+        const error = {
+          type: 'logic_error',
+          messages,
+        };
+        store.dispatch('analytics/trackError', error);
+      },
     };
 
     Object.assign(app, { $analytics });

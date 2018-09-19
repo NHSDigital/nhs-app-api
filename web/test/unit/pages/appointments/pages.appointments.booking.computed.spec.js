@@ -233,6 +233,11 @@ describe('booking.vue - notMatchSearchCriteria', () => {
           filteredSlots: [],
         },
       },
+      app: {
+        $analytics: {
+          logicError: jest.fn(),
+        },
+      },
     };
 
     const data = {

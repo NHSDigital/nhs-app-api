@@ -136,6 +136,9 @@ export default {
       this.showNoMatchingWarning = this.shouldShowNoMatchingWarning();
       if (this.showNoMatchingWarning) {
         VueScrollTo.scrollTo(this.$refs.noMatching, 500, { easing: VueScrollTo['ease-in'] });
+        const errors = [];
+        errors.push(this.$t('appointments.booking.adjustSearch.title'));
+        this.$store.app.$analytics.logicError(errors);
       }
 
       const screenReaderMessage = this.$tc(

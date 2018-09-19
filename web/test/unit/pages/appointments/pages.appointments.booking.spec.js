@@ -6,6 +6,12 @@ import BookingPage from '@/pages/appointments/booking';
 const $t = key => `translate_${key}`;
 const $tc = key => `translate_${key}`;
 
+const app = {
+  $analytics: {
+    logicError: jest.fn(),
+  },
+};
+
 const createBookingPage = ($store, data = []) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
@@ -46,6 +52,7 @@ describe('booking.vue', () => {
           hasLoaded: true,
         },
       },
+      app,
     };
 
     const page = createBookingPage($store, {});
@@ -64,6 +71,7 @@ describe('booking.vue', () => {
           hasLoaded: true,
         },
       },
+      app,
     };
 
     const data = {
