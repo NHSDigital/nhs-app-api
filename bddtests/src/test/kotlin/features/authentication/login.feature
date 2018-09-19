@@ -25,10 +25,21 @@ Feature: Login
 
 
   @NHSO-125
-  Scenario Outline: A <GP System> user sees a beta banner and a survey link on the home page
+  Scenario Outline: A <GP System> user sees a beta banner on the home page
     Given I am logged in as a <GP System> user
     Then I see the home page
     And I see the beta banner
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+  @NHSO-125
+  @manual
+  # to enable survey link change SHOW_SURVEY env variable value
+  Scenario Outline: A <GP System> user sees a survey link on the home page if enabled
+    Given I am logged in as a <GP System> user
+    Then I see the home page
     And I see a collapsible link to a survey, which I can follow
     Examples:
       | GP System |
