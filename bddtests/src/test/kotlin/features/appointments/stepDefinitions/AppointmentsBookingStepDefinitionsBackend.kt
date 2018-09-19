@@ -100,7 +100,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
 
     @When("^an appointment booking is submitted$")
     fun anAppointmentBookingIsSubmitted() {
-        val appointmentToBook = Serenity.sessionVariableCalled<AppointmentBookRequest>("AppointmentToBook")
+        val appointmentToBook = Serenity.sessionVariableCalled<AppointmentBookRequest>(AppointmentsBookingBackendFactory.appointmentToBookKey)
         submitAppointmentRequest(appointmentToBook)
     }
 

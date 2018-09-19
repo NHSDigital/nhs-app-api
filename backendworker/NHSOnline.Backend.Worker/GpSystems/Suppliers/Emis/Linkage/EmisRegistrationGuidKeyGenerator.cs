@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Azure.Documents.SystemFunctions;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage

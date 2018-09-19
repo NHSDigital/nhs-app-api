@@ -35,7 +35,7 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
 
 
     private fun setAppointmentToBeBooked(toBeBooked: BookAppointmentSlotFacade) {
-        Serenity.setSessionVariable("AppointmentToBook").to(getAppointmentBookRequest(toBeBooked))
+        Serenity.setSessionVariable(appointmentToBookKey).to(getAppointmentBookRequest(toBeBooked))
     }
 
     private fun getAppointmentBookRequest(bookApptSlot: BookAppointmentSlotFacade): AppointmentBookRequest {
@@ -56,7 +56,8 @@ abstract class AppointmentsBookingBackendFactory(gpSupplier:String): Appointment
                         "TPP" to { AppointmentsBookingBackendFactoryTpp() })}
 
 
-        val defaultApptBookingReason = "I have a bad back."
-        val defaultApptBookingSlotId = 12345
+        const val appointmentToBookKey = "AppointmentToBook"
+        const val defaultApptBookingReason = "I have a bad back."
+        const val defaultApptBookingSlotId = 12345
     }
 }

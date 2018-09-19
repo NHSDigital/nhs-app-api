@@ -3,21 +3,21 @@ using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Im1Connection;
-using NHSOnline.Backend.Worker.Filters;
+using NHSOnline.Backend.Worker.Conventions;
 
-namespace NHSOnline.Backend.Worker.UnitTests.Filters
+namespace NHSOnline.Backend.Worker.UnitTests.Conventions
 {
     [TestClass]
-    public class SecurityModeFilterConventionTests
+    public class SecurityModeAttributeTests
     {
         /// <summary>
         /// All endpoints in backend worker should be decorated with a subclass of SecurityModeAttribute, either
         /// at the class or method level.
         /// </summary>
         [TestMethod]
-        public void FilterTest_AllEndpointsShouldHaveASecurityModeFilter()
+        public void ConventionTest_AllEndpointsShouldHaveASecurityModeAttribute()
         {    
-            var endpointsWithoutSecurityModeFilter =
+            var endpointsWithoutSecurityModeAttribute =
                 Assembly.GetAssembly(typeof(Im1ConnectionController))
                     .GetTypes()
                     .Where(t => typeof(Controller).IsAssignableFrom(t) && !t.IsAbstract)
@@ -27,10 +27,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Filters
                     .Where(m => !m.DeclaringType.GetCustomAttributes(typeof(SecurityModeAttribute), true).Any())
                     .ToList();
 
-            if (endpointsWithoutSecurityModeFilter.Any())
+            if (endpointsWithoutSecurityModeAttribute.Any())
             {
-                var endPointNames = endpointsWithoutSecurityModeFilter.Select(x => x.DeclaringType.Name + " " + x.Name);
-                Assert.Fail("The following endpoints are missing a SecurityModeFilter:\r\n" + string.Join("\r\n",endPointNames));
+                var endPointNames = endpointsWithoutSecurityModeAttribute.Select(x => x.DeclaringType.Name + " " + x.Name);
+                Assert.Fail("The following endpoints are missing a SecurityModeAttribute:\r\n" + string.Join("\r\n",endPointNames));
             }
         }
     }

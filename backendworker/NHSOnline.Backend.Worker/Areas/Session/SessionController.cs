@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Session.Models;
 using NHSOnline.Backend.Worker.CitizenId;
-using NHSOnline.Backend.Worker.Filters;
+using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support;

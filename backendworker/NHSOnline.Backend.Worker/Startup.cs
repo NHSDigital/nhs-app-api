@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NHSOnline.Backend.Worker.Areas.Session;
 using NHSOnline.Backend.Worker.CitizenId;
+using NHSOnline.Backend.Worker.Conventions;
 using NHSOnline.Backend.Worker.Filters;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support.DependencyInjection;
@@ -32,6 +33,8 @@ namespace NHSOnline.Backend.Worker
     public class Startup
     {
         private readonly IHostingEnvironment _env;
+        private readonly ILoggerFactory _loggerFactory;
+        private RunMode _runMode;
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
@@ -40,11 +43,9 @@ namespace NHSOnline.Backend.Worker
         {
             Configuration = configuration;
             _env = env;
+            _loggerFactory = loggerFactory;
 
-            if (null == configuration["runMode"])
-            {
-                throw new ArgumentException("command line parameter runMode is not set");
-            }
+            _runMode = GetRunMode(configuration);
 
             if (env.IsDevelopment())
             {
@@ -102,7 +103,8 @@ namespace NHSOnline.Backend.Worker
                 .AddMvc(
                     options =>
                     {
-                        options.Filters.Add(typeof(SecurityModeFilter), 0);
+                        options.Conventions.Add(new SecurityModeConvention(
+                            _runMode, _loggerFactory.CreateLogger<SecurityModeConvention>()));
                         options.Filters.Add(typeof(HttpContextAuditActionFilterAttribute), 1);
                         options.Filters.Add(typeof(HttpContextLogActionFilterAttribute), 1);
                         options.Filters.Add(typeof(ModelStateValidationFilterAttribute), 1);
@@ -202,6 +204,23 @@ namespace NHSOnline.Backend.Worker
                 
                 await next();
             });
+        }
+        
+        private static RunMode GetRunMode(IConfiguration configuration)
+        {
+            if (null == configuration["runMode"])
+            {
+                throw new ConfigurationNotFoundException("command line parameter runMode is not set");
+            }
+
+            var stringMode = configuration["runMode"];
+
+            if (!Enum.TryParse(stringMode, true, out RunMode runMode))
+            {
+                runMode = RunMode.None;
+            }
+
+            return runMode;
         }
     }
 

@@ -1,11 +1,8 @@
 using System;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Options;
-using NHSOnline.Backend.Worker.Settings;
 
-namespace NHSOnline.Backend.Worker.Filters
+namespace NHSOnline.Backend.Worker.Conventions
 {
-    public abstract class SecurityModeAttribute : Attribute, IFilterMetadata
+    public abstract class SecurityModeAttribute : Attribute
     {
         public RunMode SecurityMode { get; protected set; }
     }

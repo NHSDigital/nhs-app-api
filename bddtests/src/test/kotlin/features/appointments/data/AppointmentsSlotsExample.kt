@@ -126,7 +126,9 @@ class AppointmentsSlotsExample {
                     .build()
         }
 
-        fun singleSlotExample(startDate: DateTimeWrapper = startDateAppointment1, endDate: DateTimeWrapper = endDateAppointment1): AppointmentSlotsResponseFacade {
+        fun singleSlotExample(startDate: DateTimeWrapper = startDateAppointment1,
+                              endDate: DateTimeWrapper = endDateAppointment1)
+                : AppointmentSlotsResponseFacade {
             return AppointmentsSlotsExampleBuilder()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
@@ -296,7 +298,8 @@ class AppointmentsSlotsExample {
             return singleSlotExample(startDate, endDate)
         }
 
-        private fun generateMapOfAppointmentDatesAndTimes(arrayOfDateTimes: ArrayList<DateTimeWrapper>): Map<String, Set<String>> {
+        private fun generateMapOfAppointmentDatesAndTimes(arrayOfDateTimes: ArrayList<DateTimeWrapper>)
+                : Map<String, Set<String>> {
             var result = mapOf<String, Set<String>>()
             for (dateTime in arrayOfDateTimes) {
                 val date = dateTime.dateAsUIString
