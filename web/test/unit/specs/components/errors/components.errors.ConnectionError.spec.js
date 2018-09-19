@@ -34,6 +34,7 @@ const createApiErrorComponent = ($route, apiError) => {
 };
 
 const testDataSet = [
+  '/appointments',
   '/appointments/booking-guidance',
   '/appointments/booking',
   '/appointments/confirmation',
@@ -46,8 +47,7 @@ const testDataSet = [
   '/my-record/testresultdetail/:testResultId',
   '/prescriptions',
   '/prescriptions/repeat-courses',
-  '/prescriptions/confirm-prescription-details',
-  '/appointments'];
+  '/prescriptions/confirm-prescription-details'];
 
 describe('ConnectionError.vue', () => {
   each(testDataSet).it('page %s will show correct message when the API fails times out with no response', (path) => {
@@ -58,7 +58,7 @@ describe('ConnectionError.vue', () => {
 
     expect(component.vm.header).toEqual('Connection error');
     expect(component.vm.subheader).toEqual('There\'s an issue with your internet connection');
-    expect(component.vm.message).toEqual('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.');
+    expect(component.vm.message).toEqual('Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.');
     expect(component.vm.retryButtonText).toEqual('Try again');
   });
 });

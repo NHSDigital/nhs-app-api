@@ -75,7 +75,7 @@ export default {
       pageHeader: 'Prescription data error',
       header: 'There\'s been a problem getting your prescription information',
       subheader: '',
-      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Try again',
       redirectUrl: '',

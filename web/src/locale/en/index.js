@@ -17,9 +17,9 @@ export default {
     errors: {
       pageTitle: 'Session error',
       pageHeader: 'Session error',
-      header: 'Session Error',
-      subheader: 'Sorry, there\'s been a problem loading this page',
-      message: 'Please go back to the homescreen and sign in again.\nIf the problem persists and you need to book an appointment or get a prescription now, contact your GP surgery directly. For immediate medical advice, call 111.',
+      header: 'Session error',
+      subheader: 'There\'s been a problem loading this page',
+      message: 'Go back to the homescreen and log in again.\nIf the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
       retryButtonText: 'Back to home',
       464: {
         pageHeader: 'Service unavailable',
@@ -106,7 +106,7 @@ export default {
     header: 'Connection error',
     subheader: 'There\'s an issue with your internet connection',
     retryButtonText: 'Try again',
-    message: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+    message: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
   },
   termsAndConditions: {
     title: 'Accept terms of use',
@@ -189,13 +189,13 @@ export default {
       info: 'If you need an appointment, please contact your GP.',
     },
     errors: {
-      pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your appointment history',
+      pageHeader: 'Appointment data error',
+      header: 'There\'s been a problem getting your appointment history',
       subheader: '',
-      message: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
+      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       504: {
-        subheader: 'Please try again',
-        message: 'If the problem persists and you need this information now, please contact your GP surgery directly.',
+        subheader: '',
+        message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
         retryButtonText: 'Try again',
       },
       403: {
@@ -355,7 +355,7 @@ export default {
         pageHeader: 'Prescription data error',
         header: 'There\'s been a problem getting your prescription information',
         subheader: '',
-        message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
         retryButtonText: 'Try again',
       },
     },
@@ -372,7 +372,7 @@ export default {
           pageHeader: 'Prescription data error',
           header: 'There\'s been a problem getting your prescription information',
           subheader: '',
-          message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+          message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
           retryButtonText: 'Try again',
         },
         403: {
@@ -397,16 +397,23 @@ export default {
   },
   my_record: {
     errors: {
-      pageHeader: 'Error retrieving data',
-      header: 'Sorry, there\'s been a problem getting your medical record',
-      subheader: 'Please try again later. If the problem persists and you need this information now, please contact your GP surgery directly.',
-      message: '',
+      pageHeader: 'Medical record error',
+      header: 'There\'s been a problem getting your medical record information',
+      subheader: '',
+      message: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
       retryButtonText: '',
+      502: {
+        pageHeader: 'Medical record error',
+        header: 'There\'s been a problem getting your medical record information',
+        subheader: 'Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
+        message: '',
+        retryButtonText: '',
+      },
       504: {
         pageHeader: 'Medical record error',
         header: 'There\'s been a problem getting your medical record information',
-        subheader: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-        message: '',
+        subheader: '',
+        message: 'Try again now. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
         retryButtonText: 'Try again',
       },
     },
@@ -486,10 +493,10 @@ export default {
       errors: {
         502: {
           pageTitle: 'Test result details data error',
-          pageHeader: 'Error retrieving data',
-          header: 'Sorry, there\'s been a problem getting details of your test results',
-          subheader: 'If the problem persists and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
-          message: '',
+          pageHeader: 'Test result details data error',
+          header: 'There\'s been a problem getting details of your test results',
+          subheader: '',
+          message: 'If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111.',
           retryButtonText: '',
         },
       },
@@ -634,7 +641,7 @@ export default {
       title: 'Prescriptions',
     },
     sessionExpired: {
-      title: 'For your security, you need to sign in again',
+      title: 'For your security, you need to log in again',
     },
     symptomsIcon: {
       title: 'Symptoms Checker',

@@ -39,7 +39,7 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     private val timeoutBanner = HybridPageElement(
             browserLocator = "//*[@data-purpose='session-timeout'][contains(text(), " +
-                             "'For your security, you need to sign in again')]",
+                             "'For your security, you need to log in again')]",
             androidLocator = null,
             page = this
     )

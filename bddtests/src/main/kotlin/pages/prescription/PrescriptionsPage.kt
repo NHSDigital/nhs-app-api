@@ -14,7 +14,7 @@ open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     val timeoutPageHeader = "Prescription data error"
     val timeoutHeader = "There's been a problem getting your prescription information"
     val timeoutSubHeader = ""
-    val timeoutMessage = "Try again later. If the problem continues and you need this information now," +
+    val timeoutMessage = "Try again now. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, call 111."
     val timeoutRetryButtonText = "Try again"
 
