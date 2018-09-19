@@ -651,7 +651,7 @@ export default {
     pageHeader: 'Check my symptoms',
     a_z: {
       subheader: 'A-Z of conditions and treatments',
-      subheaderAriaLabel: 'A to Z of conditions and treatments',
+      subheaderAriaLabel: 'A-to-Z of conditions and treatments',
       body: 'Search trusted information and advice on hundreds of conditions',
     },
     111: {

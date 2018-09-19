@@ -2,13 +2,13 @@
   <div v-if="showTemplate" :class="$style['no-padding']" data-purpose="">
     <ul :class="$style['list-menu']" role="list">
       <li role="link">
-        <analytics-tracked-tag id="btn_choices" :href="conditionsCheckerUrl"
-                               :class="$style['no-decoration']"
-                               :text="$t('sy01.a_z.subheader')"
-                               :aria-label="`
-                               ${$t('sy01.a_z.subheaderAriaLabel')}. ${$t('sy01.a_z.body')}`"
-                               tag="a" target="_blank">
-          <h2>{{ $t('sy01.a_z.subheader') }}</h2>
+        <analytics-tracked-tag
+          id="btn_choices" :href="conditionsCheckerUrl"
+          :class="$style['no-decoration']"
+          :text="$t('sy01.a_z.subheader')"
+          :aria-label="`${$t('sy01.a_z.subheaderAriaLabel')}. ${$t('sy01.a_z.body')}`"
+          tag="a" target="_blank">
+          <h2 :aria-label="$t('sy01.a_z.subheaderAriaLabel')">{{ $t('sy01.a_z.subheader') }}</h2>
           <p>{{ $t('sy01.a_z.body') }}</p>
         </analytics-tracked-tag>
       </li>
