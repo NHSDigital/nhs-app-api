@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <home-header />
     <main :class="this.$style.homeMain">
       <connection-error />
       <api-error />
