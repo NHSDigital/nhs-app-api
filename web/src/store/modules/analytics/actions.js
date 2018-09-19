@@ -15,7 +15,7 @@ export default {
   track({ commit }, action) {
     commit(TRACK_ACTION, action);
   },
-  trackError(ctx, error) {
+  trackError(_, error) {
     if (process.client) {
       error.messages.forEach((message) => {
         window.digitalData.error = {
@@ -38,7 +38,7 @@ export default {
       this.dispatch('analytics/satelliteTrack', 'click_link');
     }
   },
-  satelliteTrack(nameOfCall) {
+  satelliteTrack(_, nameOfCall) {
     // Put track call in try-catch, as it likely called under error, so no internet connection.
     if (process.client) {
       /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
