@@ -8,6 +8,7 @@ import {
   APPOINTMENT_CONFIRMATIONS,
   AUTH_RETURN,
   LOGIN,
+  BEGINLOGIN,
   MYRECORD,
   MYRECORDTESTRESULT,
   PRESCRIPTIONS,
@@ -53,6 +54,12 @@ export default {
     },
     {
       route: AUTH_RETURN.path,
+      redirectUrl: {
+        default: LOGIN.path,
+      },
+    },
+    {
+      route: BEGINLOGIN.path,
       redirectUrl: {
         default: LOGIN.path,
       },

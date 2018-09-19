@@ -11,6 +11,7 @@ import {
   DATA_SHARING_PREFERENCES,
   INDEX,
   LOGIN,
+  BEGINLOGIN,
   MORE,
   MYRECORD,
   MYRECORDNOACCESS,
@@ -45,6 +46,11 @@ export default function ({ route, store, app }) {
       route.meta.pageTitleKey = 'pageTitles.home';
       break;
     case LOGIN.name:
+      store.dispatch('navigation/clearPreviousSelectedMenuItem');
+      route.meta.headerKey = '';
+      route.meta.pageTitleKey = '';
+      break;
+    case BEGINLOGIN.name:
       store.dispatch('navigation/clearPreviousSelectedMenuItem');
       route.meta.headerKey = '';
       route.meta.pageTitleKey = '';

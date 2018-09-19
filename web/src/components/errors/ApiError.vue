@@ -35,6 +35,7 @@
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import HeaderSlim from '@/components/HeaderSlim';
+import { Sources } from '@/lib/sources';
 
 export default {
   components: {
@@ -117,7 +118,7 @@ export default {
       if (url === '') {
         this.$router.go();
       } else if (url === '/login' &&
-         (sourceDevice === 'android' || sourceDevice === 'ios')) {
+         (sourceDevice === Sources.Android || sourceDevice === Sources.iOS)) {
         this.$router.push({
           path: url,
           query: { source: sourceDevice } });

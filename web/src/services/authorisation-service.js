@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { Sources } from '@/lib/sources';
 
 const base64URLEncode = value =>
   value
@@ -22,15 +23,16 @@ class AuthorisationService {
     this.cidAuthEndpoint = environment.CID_AUTH_ENDPOINT;
   }
 
-  generateLoginValues(state) {
+  generateLoginValues(source, cookies) {
     const verifier = createVerifier();
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
+    const redirectUri = this.getRedirectUri(source || Sources.Web);
 
     const request = {
       scope: 'openid',
       clientId: this.cidClientId,
-      redirectUri: this.getRedirectUri(state),
+      redirectUri,
       responseType: 'code',
       state: myState,
       codeVerifier: verifier,
@@ -39,12 +41,16 @@ class AuthorisationService {
       authoriseUrl: this.cidAuthEndpoint,
     };
 
+    cookies.set('nhso.auth', {
+      redirectUri,
+      codeVerifier: verifier,
+    });
+
     return request;
   }
 
-  getRedirectUri(state) {
-    const device = state.device.source;
-    if (device === 'android' || device === 'ios') {
+  getRedirectUri(device) {
+    if (device === Sources.Android || device === Sources.iOS) {
       return this.nativeCidRedirectUri;
     }
 

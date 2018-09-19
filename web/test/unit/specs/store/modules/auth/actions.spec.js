@@ -2,6 +2,7 @@ import { find } from 'lodash/fp';
 import actions from '@/store/modules/auth/actions';
 import { AUTH_RESPONSE, UPDATE_CONFIG } from '@/store/modules/auth/mutation-types';
 import { mockCookies } from '../../../../helpers';
+import { Sources } from '../../../../../../src/lib/sources';
 
 describe('actions', () => {
   const name = 'Montel';
@@ -30,7 +31,7 @@ describe('actions', () => {
       },
       store: {
         state: {
-          device: { source: 'web' },
+          device: { source: Sources.Web },
         },
       },
     };

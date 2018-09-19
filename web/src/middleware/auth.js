@@ -1,9 +1,20 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/extensions */
-import { isAnonymous } from '@/lib/routes';
+import AuthorisationService from '@/services/authorisation-service';
+import { isAnonymous, BEGINLOGIN } from '@/lib/routes';
 
-export default function ({ store, redirect, route }) {
+export default function ({ app, store, redirect, route }) {
   if (!isAnonymous(route.name) && !store.getters['session/isLoggedIn']()) {
     redirect('/login');
+  }
+
+  if (route.name === BEGINLOGIN.name) {
+    const authorisationService = new AuthorisationService(app.$env);
+    const loginValues = authorisationService.generateLoginValues(
+      route.query.source,
+      store.$cookies,
+    );
+
+    redirect(`${loginValues.authoriseUrl}?scope=${loginValues.scope}&client_id=nhs-online&code_challenge=${loginValues.codeChallenge}&code_challenge_method=${loginValues.codeChallengeMethod}&redirect_uri=${encodeURIComponent(loginValues.redirectUri)}&state=${loginValues.state}&response_type=${loginValues.responseType}`);
   }
 }

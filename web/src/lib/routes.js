@@ -43,6 +43,11 @@ const routes = {
     name: 'index',
     path: '/',
   },
+  BEGINLOGIN: {
+    name: 'begin-login',
+    path: '/begin-login',
+    isAnonymous: true,
+  },
   LOGIN: {
     name: 'Login',
     path: '/login',
@@ -115,6 +120,7 @@ export const {
   INDEX,
   LOGIN,
   LOGOUT,
+  BEGINLOGIN,
   MORE,
   MYRECORD,
   MYRECORDWARNING,

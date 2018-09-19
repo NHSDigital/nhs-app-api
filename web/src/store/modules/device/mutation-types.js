@@ -1,6 +1,8 @@
+import { Sources } from '@/lib/sources';
+
 export const initialState = () => ({
   isNativeApp: false,
-  source: 'web',
+  source: Sources.Web,
 });
 export const UPDATE_IS_NATIVE_APP = 'UPDATE_IS_NATIVE_APP';
 export const SET_SOURCE_DEVICE = 'SET_SOURCE_DEVICE';

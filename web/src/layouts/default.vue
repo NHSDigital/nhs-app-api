@@ -26,6 +26,7 @@ import FlashMessage from '@/components/widgets/FlashMessage';
 import SurveyBar from '@/components/SurveyBar';
 import HotJar from '@/components/widgets/HotJar';
 import { INDEX, LOGIN } from '@/lib/routes';
+import { Sources } from '@/lib/sources';
 
 export default {
   components: {
@@ -90,7 +91,7 @@ export default {
     },
   },
   created() {
-    if (this.$route.query.source === 'android' || this.$route.query.source === 'ios') {
+    if (this.$route.query.source === Sources.Android || this.$route.query.source === Sources.iOS) {
       this.$store.dispatch('device/updateIsNativeApp', true);
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);

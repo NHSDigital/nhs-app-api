@@ -16,6 +16,7 @@
 <script>
 import AuthorisationService from '@/services/authorisation-service';
 import LoginButton from '@/components/LoginButton';
+import { BEGINLOGIN } from '@/lib/routes';
 
 export default {
   head() {
@@ -27,23 +28,37 @@ export default {
   components: {
     LoginButton,
   },
-  asyncData({ env, app: { $cookies: cookies }, route: { query } }) {
-    const authorisationService = new AuthorisationService(env);
-    const source = query.source || 'web';
-
-    const loginValues = authorisationService.generateLoginValues({ device: { source } });
-
-    cookies.set('nhso.auth', {
-      redirectUri: loginValues.redirectUri,
-      codeVerifier: loginValues.codeVerifier,
-    });
-
-    return Promise.resolve(loginValues);
+  data() {
+    return {
+      authoriseUrl: BEGINLOGIN.path,
+      scope: '',
+      codeChallenge: '',
+      codeChallengeMethod: '',
+      redirectUri: '',
+      state: '',
+      responseType: '',
+      clientId: '',
+    };
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
       window.nativeApp.hideHeader();
     }
+
+    const authorisationService = new AuthorisationService(this.$env);
+    const loginValues = authorisationService.generateLoginValues(
+      this.$route.query.source,
+      this.$cookies,
+    );
+
+    this.authoriseUrl = loginValues.authoriseUrl;
+    this.scope = loginValues.scope;
+    this.codeChallenge = loginValues.codeChallenge;
+    this.codeChallengeMethod = loginValues.codeChallengeMethod;
+    this.redirectUri = loginValues.redirectUri;
+    this.state = loginValues.state;
+    this.responseType = loginValues.responseType;
+    this.clientId = loginValues.clientId;
   },
 };
 </script>

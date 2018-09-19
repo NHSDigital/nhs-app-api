@@ -1,4 +1,4 @@
-import { APPOINTMENTS, LOGIN, isAnonymous } from '@/lib/routes';
+import { APPOINTMENTS, LOGIN, BEGINLOGIN, isAnonymous } from '@/lib/routes';
 
 describe('routes', () => {
   describe('isAnonymous', () => {
@@ -8,6 +8,14 @@ describe('routes', () => {
 
     it('will be true for an anonymous route name', () => {
       expect(isAnonymous(LOGIN.name)).toBe(true);
+    });
+
+    it('will be true for an anonymous route', () => {
+      expect(isAnonymous(BEGINLOGIN)).toBe(true);
+    });
+
+    it('will be true for an anonymous route name', () => {
+      expect(isAnonymous(BEGINLOGIN.name)).toBe(true);
     });
 
     it('will be false for a non-anonymous route', () => {

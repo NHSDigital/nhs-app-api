@@ -1,3 +1,4 @@
+import { Sources } from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 
@@ -22,7 +23,7 @@ const final = ({ self, commit }) => {
   self.dispatch('flashMessage/init');
   self.dispatch('termsAndConditions/init');
 
-  if (sourceValue === 'web') {
+  if (sourceValue === Sources.Web) {
     self.app.router.push(LOGIN.name);
   } else {
     self.app.router.push({

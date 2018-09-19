@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 import { find } from 'lodash/fp';
 import actions from '../../../../../../src/store/modules/auth/actions';
+import { Sources } from '../../../../../../src/lib/sources';
 
 describe('actions', () => {
   const name = 'Fozzy Bear';
@@ -27,7 +28,7 @@ describe('actions', () => {
       },
       store: {
         state: {
-          device: { source: 'web' },
+          device: { source: Sources.Web },
         },
       },
     };

@@ -1,3 +1,4 @@
+import { Sources } from '@/lib/sources';
 import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, GO_TO_CHECK_SYMPTOMS } from './mutation-types';
 
 export default {
@@ -10,7 +11,7 @@ export default {
   goToCheckSymptoms({ commit }) {
     commit(GO_TO_CHECK_SYMPTOMS);
   },
-  setSourceDevice({ commit }, source = 'web') {
+  setSourceDevice({ commit }, source = Sources.Web) {
     commit(SET_SOURCE_DEVICE, source);
   },
 };
