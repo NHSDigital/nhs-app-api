@@ -71,7 +71,7 @@ class MenuBar @JvmOverloads constructor(
         }
 
         selectedPosition.ifEmpty {
-            selectMenuItem(position)
+            selectMenuItem(position, shouldInvokeListener)
         }
     }
 

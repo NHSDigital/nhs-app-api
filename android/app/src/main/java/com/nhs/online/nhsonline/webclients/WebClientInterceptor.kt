@@ -62,13 +62,14 @@ class WebClientInterceptor(
             return
         }
 
+        updateHeaderAndNavMenu(url)
+
         if (hasMissingQueryString(url)) {
             view?.stopLoading()
             url?.let { uiInteractor.loadPage(it) }
             return
         }
 
-        updateHeaderAndNavMenu(url)
         if (shouldHandleUnavailability(url)) {
             trackWebRequestResponse(view, url)
         }
