@@ -79,6 +79,14 @@ class KnownServices(private val context: Context) {
             unavailabilityErrorMessage,
             nativeHeader = context.resources.getString(R.string.my_record_header),
             shouldValidateSession = true))
+        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(R.string.myAccountPath))),
+            unavailabilityErrorMessage,
+            nativeHeader = context.resources.getString(R.string.my_account_header),
+            shouldValidateSession = true))
+        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(R.string.morePath))),
+            unavailabilityErrorMessage,
+            nativeHeader = context.resources.getString(R.string.more),
+            shouldValidateSession = true))
     }
 
     fun shouldURLOpenExternally(url: URL) : Boolean {

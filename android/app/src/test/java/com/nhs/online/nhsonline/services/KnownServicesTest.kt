@@ -43,6 +43,8 @@ class KnownServicesTest {
             on { getString(R.string.appointmentsPath) } doReturn "/appointments"
             on { getString(R.string.prescriptionsPath) } doReturn "/prescriptions"
             on { getString(R.string.myRecordPath) } doReturn "/my-record-warning"
+            on { getString(R.string.myAccountPath) } doReturn "/account"
+            on { getString(R.string.morePath) } doReturn "/more"
         }
 
         return mock { on { resources } doReturn mockresource }

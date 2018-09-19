@@ -3,10 +3,15 @@ package com.nhs.online.nhsonline.services
 import android.net.Uri
 import android.webkit.URLUtil
 import android.webkit.WebView
+import com.nhs.online.nhsonline.network.Reachability
+import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
+import android.content.Context
+
 
 class UrlLoader (
         var webView: WebView,
+        var wc: WebClientInterceptor,
         var appWebInterface: AppWebInterface,
         var knownServices: KnownServices,
         val baseURL:String
@@ -15,15 +20,24 @@ class UrlLoader (
     var reloadUrl: String? = null
     var usingAbsoluteUri: Boolean = true
 
-
-    fun loadUrl(pageEndPoint: String) {
-
-        var uriToUse = pageEndPoint
+    private fun getValidUrl(url: String): String {
+        var uriToUse = url
         var validUri = URLUtil.isValidUrl(uriToUse)
 
         if(!validUri) {
             uriToUse = baseURL + uriToUse
         }
+    return uriToUse
+}
+    fun loadUrl(pageEndPoint: String) {
+        if (!wc.isConnectedToInternet()) {
+            reloadUrl = getValidUrl(pageEndPoint)
+            wc.stopLoadingWebviewAndShowNoConnectionError(webView)
+            return
+        }
+
+        var uriToUse = getValidUrl(pageEndPoint)
+
 
         if (usingAbsoluteUri) {
             loadPage(uriToUse)
@@ -32,7 +46,7 @@ class UrlLoader (
             appWebInterface.loadSpaPage(pageEndPoint, baseURL)
         }
         else {
-            if(validUri) {
+            if(URLUtil.isValidUrl(uriToUse)) {
                 loadExternalPage(uriToUse)
             } else {
                 loadPage(uriToUse)

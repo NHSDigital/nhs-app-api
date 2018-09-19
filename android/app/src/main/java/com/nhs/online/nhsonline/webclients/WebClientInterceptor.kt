@@ -134,7 +134,7 @@ class WebClientInterceptor(
         return false
     }
 
-    private fun isConnectedToInternet(): Boolean {
+    fun isConnectedToInternet(): Boolean {
         return Reachability.isConnectedToNetwork(context)
     }
 
@@ -144,7 +144,7 @@ class WebClientInterceptor(
         return knownServices.findMatchingKnownService(url)?.hasMissingQueryString(url) ?: false
     }
 
-    private fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
+    fun stopLoadingWebviewAndShowNoConnectionError(view: WebView?) {
         handleUnavailability(view?.url)
         view?.stopLoading()
         uiInteractor.setHeaderText(context.resources.getString(R.string.connection_error_header))

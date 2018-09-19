@@ -31,7 +31,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if(!Reachability.isConnectedToNetwork()) {
             decisionHandler(.cancel)
             let urlNavigatingTo = navigationAction.request.url?.absoluteString
-            showNoConnectionErrorView(urlNavigatingTo: urlNavigatingTo!, currentWebviewUrl: webView.url!)
+            showNoConnectionErrorView(urlNavigatingTo: urlNavigatingTo!)
             return
         }
 
@@ -70,7 +70,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         decisionHandler(.allow)
     }
 
-    func showNoConnectionErrorView(urlNavigatingTo: String, currentWebviewUrl: URL) {
+    func showNoConnectionErrorView(urlNavigatingTo: String) {
 
         self.failedUrl = URL(string: urlNavigatingTo)
         var myErrorMessage = knownServices.getServiceUnavailableErrorMessage()
@@ -200,7 +200,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if (message.name == "updateHeaderText") {
                 if(!Reachability.isConnectedToNetwork()) {
-                    showNoConnectionErrorView(urlNavigatingTo: (url?.absoluteString)!, currentWebviewUrl: url!)
+                    showNoConnectionErrorView(urlNavigatingTo: (url?.absoluteString)!)
                     return
                 }
                 viewController.updateHeaderText(headerText: String(describing: message.body))

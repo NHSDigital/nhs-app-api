@@ -1,11 +1,7 @@
 <template>
   <div :class="[getHeaderState(), 'pull-content']">
     <header-slim :show-in-native="true"> {{ $t('termsAndConditions.title') }} </header-slim>
-    <body>
-      <div>
-        <terms-conditions/>
-      </div>
-    </body>
+    <terms-conditions/>
   </div>
 </template>
 <script>

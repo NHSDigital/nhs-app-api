@@ -62,6 +62,11 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
 
     func loadPage(url: String) {
+        if(!Reachability.isConnectedToNetwork()) {
+            webViewDelegate?.showNoConnectionErrorView(urlNavigatingTo: url)
+            return
+        }
+        
         var urlToNavigateTo = url        
         let urlIsValid = verifyUrl(urlString: urlToNavigateTo)
         self.webViewDelegate?.updateHeaderAndNavigationMenu(url: URL(string: url))

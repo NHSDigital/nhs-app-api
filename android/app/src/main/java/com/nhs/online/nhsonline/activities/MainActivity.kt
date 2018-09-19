@@ -16,6 +16,7 @@ import android.webkit.WebSettings
 import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.R.id.menuBar
+import com.nhs.online.nhsonline.R.id.webview
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -61,8 +62,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
         appWebInterface= AppWebInterface(this)
 
         configureWebView()
-
-        urlLoader = UrlLoader(webview, appWebInterface, knownServices, resources.getString(R.string.baseURL))
+        var wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
+        webview.webViewClient = wvClient
+        urlLoader = UrlLoader(webview, wvClient, appWebInterface, knownServices, resources.getString(R.string.baseURL))
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         retryButton.setOnClickListener { urlLoader.reloadRequest() }
@@ -156,8 +158,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         chromeClient = ChromeClientLocationHandler(this)
         webview.webChromeClient = chromeClient
-
-        webview.webViewClient = WebClientInterceptor(this, knownServices, createActivities(), this)
 
         webview.addJavascriptInterface(WebAppInterface(this), "nativeApp")
 
