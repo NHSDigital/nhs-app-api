@@ -1,3 +1,5 @@
+@import "./colours";
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -7,4 +9,23 @@
     overflow: hidden;
     clip: rect(0,0,0,0);
     border: 0;
+}
+
+a:focus,
+area[href]:focus,
+input:focus,
+select:focus,
+textarea:focus,
+button:focus,
+iframe:focus,
+[tabindex]:focus,
+[contentEditable=true]:focus,
+.addFocus {
+    outline-width: 2px !important;
+    outline-style: solid !important;
+    outline-color: $dark_blue !important;
+
+    &.altFocus {
+        outline-color: $focus_orange !important;
+    }
 }

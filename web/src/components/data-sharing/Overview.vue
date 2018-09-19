@@ -10,7 +10,8 @@
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.yourChoice.title') }}</h2>
     <p>{{ $t('ds01.pages.p1.yourChoice.paragraph') }}</p>
-    <a :title="$t('ds01.pages.p1.yourChoice.manageChoiceLink')" @click="goToManageChoices($event)">
+    <a :title="$t('ds01.pages.p1.yourChoice.manageChoiceLink')" tabindex="0"
+       @click="goToManageChoices($event)" @keypress="keyPressed($event)">
       {{ $t('ds01.pages.p1.yourChoice.manageChoiceLink') }}
     </a>
 
@@ -44,9 +45,15 @@ export default {
   },
   methods: {
     goToManageChoices(event) {
-      event.preventDefault();
+      if (event) event.preventDefault();
       this.$store.app.$analytics.trackButtonClick(`${DATA_SHARING_PREFERENCES.name}-overview:text_link:${DATA_SHARING_PREFERENCES.name}-manage-your-choice`);
       this.$emit('manage-choices');
+    },
+    keyPressed(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        this.goToManageChoices();
+      }
     },
   },
 };

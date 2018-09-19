@@ -4,6 +4,7 @@ import {
   INIT_REPEAT_PRESCRIPTIONS,
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
+  FOCUS_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
   initialState,
 } from './mutation-types';
@@ -21,6 +22,7 @@ export default {
     state.repeatPrescriptionCourses = map((course) => {
       const result = assign({}, course);
       result.selected = false;
+      result.focused = false;
       return result;
     })(state.courses);
     state.hasLoaded = true;
@@ -42,6 +44,14 @@ export default {
     state.repeatPrescriptionCourses = state.repeatPrescriptionCourses.map((course) => {
       if (course.id === id) {
         course.selected = !course.selected;
+      }
+      return course;
+    });
+  },
+  [FOCUS_REPEAT_PRESCRIPTION](state, { id, focused }) {
+    state.repeatPrescriptionCourses = state.repeatPrescriptionCourses.map((course) => {
+      if (course.id === id) {
+        course.focused = focused;
       }
       return course;
     });

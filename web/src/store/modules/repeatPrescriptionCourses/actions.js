@@ -4,6 +4,7 @@ import {
   INIT_REPEAT_PRESCRIPTIONS,
   REPEAT_PRESCRIPTION_VALIDATED,
   SELECT_REPEAT_PRESCRIPTION,
+  FOCUS_REPEAT_PRESCRIPTION,
   REPEAT_PRESCRIPTION_UPDATE_ADDITIONAL_INFO,
 } from './mutation-types';
 
@@ -21,6 +22,9 @@ export default {
   },
   select({ commit }, id) {
     commit(SELECT_REPEAT_PRESCRIPTION, id);
+  },
+  focus({ commit }, focusObject) {
+    commit(FOCUS_REPEAT_PRESCRIPTION, focusObject);
   },
   orderRepeatPrescription({ commit }, repeatPrescriptionOrder) {
     const param = {

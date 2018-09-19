@@ -40,11 +40,11 @@ ul.list-menu {
 	li {
 		box-sizing: border-box;
 		background: $background url(/assets/icon_arrow_left.svg) no-repeat center right;
-		background-position: right 1em center;
+		background-position: right 2em center;
 		position: relative;
 		margin-bottom: 0em;
 		margin-left: 0em;
-		padding: 0.250em 0em 0.250em 1em;
+		padding: 0.250em 1em 0.250em 1em;
 		border-bottom: 1px $border_grey solid;
 
 		a {

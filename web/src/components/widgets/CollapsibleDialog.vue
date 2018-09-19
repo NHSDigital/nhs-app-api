@@ -1,6 +1,6 @@
 <template>
   <div :class="$style['info-message']" data-purpose="info-msg">
-    <div :class="$style['info-header']" @click="toggle">
+    <div :class="$style['info-header']" tabindex="0" @click="toggle" @keypress="keyPress($event)">
       <plus-minus-icon :icon-plus="!showContent" />
       <h2 :class="$style['info-message-title']">
         <slot name="header" />
@@ -29,6 +29,12 @@ export default {
   methods: {
     toggle() {
       this.showContent = !this.showContent;
+    },
+    keyPress(event) {
+      if (event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault();
+        this.toggle();
+      }
     },
   },
 };

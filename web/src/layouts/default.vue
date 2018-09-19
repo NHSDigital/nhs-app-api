@@ -133,6 +133,7 @@ export default {
 @import "../style/main";
 @import "../style/pulltorefresh";
 @import "../style/elements";
+@import "../style/accessibility";
 </style>
 
 <style module lang="scss" scoped>

@@ -1,5 +1,6 @@
 <template>
-  <component :is="tag" @click="trackClick($event);">
+  <component :is="tag" @click="trackClick($event);" @focus="focus($event)"
+             @keypress="keyPress($event)">
     <slot/>
   </component>
 </template>
@@ -17,6 +18,18 @@ export default {
       default: 'DIV',
     },
     text: {
+      type: String,
+      default: undefined,
+    },
+    focusFunc: {
+      type: Function,
+      default: undefined,
+    },
+    keyPressFunc: {
+      type: Function,
+      default: undefined,
+    },
+    keyPressParam: {
       type: String,
       default: undefined,
     },
@@ -50,6 +63,17 @@ export default {
         case 'A': return 'text_link'; break;
         case 'H2': return 'accordion'; break;
         default: return `unhandled_tag:${tagName}`; break;
+      }
+    },
+    focus(evt) {
+      if (this.focusFunc) {
+        this.focusFunc(evt);
+      }
+    },
+    keyPress(evt) {
+      if (evt.key === 'Enter' && this.keyPressFunc) {
+        evt.preventDefault();
+        this.keyPressFunc(this.keyPressParam);
       }
     },
   },

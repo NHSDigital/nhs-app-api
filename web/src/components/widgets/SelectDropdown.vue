@@ -8,7 +8,7 @@
               $style['custom-dropdown__select--white']
             ]"
             required=""
-            tabindex="-1">
+            tabindex="0">
       <slot/>
     </select>
   </span>

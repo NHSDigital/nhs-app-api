@@ -18,9 +18,14 @@ a.button {
 	box-shadow: 0em 0.125em 0em 0em $dark_blue;
 	margin-bottom: 1.250em;
 	outline: none;
-	transition: all ease 0.5s;
+	transition: -webkit-filter ease 0.5s;
+	transition: filter ease 0.5s;
 	white-space: normal;
 	cursor: pointer;
+
+	&:focus {
+		outline-color: $focus_orange !important;
+	}
 
 	&.green {
 		background-color: $light_green;
