@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.LinearLayout
 import com.nhs.online.nhsonline.support.Optional
 
@@ -65,8 +66,8 @@ class MenuBar @JvmOverloads constructor(
     private fun onMenuItemClicked(position: Int, shouldInvokeListener: Boolean = true) {
         selectedPosition.ifPresent { selectedPosition ->
 
-                getMenuBarItemAt(selectedPosition).deselectItem()
-                selectMenuItem(position, shouldInvokeListener)
+            getMenuBarItemAt(selectedPosition).deselectItem()
+            selectMenuItem(position, shouldInvokeListener)
 
         }
 
@@ -102,6 +103,18 @@ class MenuBar @JvmOverloads constructor(
         return SavedState(superState, selectedPosition)
     }
 
+    override fun getAccessibilityClassName(): CharSequence {
+        return this::javaClass.name
+    }
+
+    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo?) {
+        val collectionInfo = AccessibilityNodeInfo.CollectionInfo
+            .obtain(childCount, 0, false)
+        info?.collectionInfo = collectionInfo
+        super.onInitializeAccessibilityNodeInfo(info)
+    }
+
+
     internal class SavedState : View.BaseSavedState {
 
         val selectedPosition: Optional<Int>
@@ -123,6 +136,7 @@ class MenuBar @JvmOverloads constructor(
             super.writeToParcel(parcel, flags)
             parcel.writeInt(selectedPosition.orElse(UNSELECTED_POSITION))
         }
+
 
         companion object CREATOR : Parcelable.Creator<SavedState> {
             private const val UNSELECTED_POSITION = -1

@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,8 +22,10 @@ class MenuBarItem @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), View.OnClickListener {
-    @DrawableRes private var inactiveIconResId: Int = 0
-    @DrawableRes private var activeIconResId: Int = 0
+    @DrawableRes
+    private var inactiveIconResId: Int = 0
+    @DrawableRes
+    private var activeIconResId: Int = 0
     private var isActive: Boolean = false
     private lateinit var title: String
     private lateinit var viewTitle: TextView
@@ -88,8 +91,8 @@ class MenuBarItem @JvmOverloads constructor(
 
     private fun initialiseMenuTitle() {
         val params = LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         )
         params.gravity = Gravity.CENTER
 
@@ -125,6 +128,20 @@ class MenuBarItem @JvmOverloads constructor(
 
     fun setItemPosition(itemPosition: Int) {
         this.itemPosition = itemPosition
+    }
+
+    override fun getAccessibilityClassName(): CharSequence {
+        return this::javaClass.name
+    }
+
+    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo?) {
+        val description = if (isActive) "selected. $title" else title
+        contentDescription = "$description. ${itemPosition + 1} of 5"
+
+        val collectionItemInfo = AccessibilityNodeInfo.CollectionItemInfo
+            .obtain(itemPosition, 1, 0, 1, false, isActive)
+        info?.collectionItemInfo = collectionItemInfo
+        super.onInitializeAccessibilityNodeInfo(info)
     }
 
     override fun onClick(view: View) {

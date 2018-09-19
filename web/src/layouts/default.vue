@@ -6,7 +6,7 @@
       <connection-error />
       <api-error />
       <flash-message />
-      <nuxt />
+      <nuxt/>
     </main>
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>

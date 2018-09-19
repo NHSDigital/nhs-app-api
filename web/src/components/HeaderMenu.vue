@@ -11,6 +11,10 @@
     </nuxt-link>
     <hr :class="$style.rule">
     <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
+    <div :class="$style['sr-only']" role="presentation"
+         aria-live="polite" aria-relevant="additions" aria-atomic="false">
+      {{ $store.state.pageTitle.pageTitle + ' page' }}
+    </div>
   </header>
 </template>
 
@@ -60,6 +64,7 @@ export default {
 <style module lang="scss" scoped>
 @import "../style/colours";
 @import "../style/textstyles";
+@import "../style/accessibility";
 
 .header {
   background: $nhs_blue;

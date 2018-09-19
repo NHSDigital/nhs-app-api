@@ -1,48 +1,63 @@
 <template>
   <nav :class="$style.menu">
-    <ul>
+    <ul role="tablist">
       <li :class="[isMenuItemSelected(0) ? $style.active : undefined]"
-          :data-selected="[isMenuItemSelected(0) ? true : false]">
-        <a href="/symptoms"
+          :data-selected="isMenuItemSelected(0) ? true : false"
+          role="presentation">
+        <a :aria-selected="isMenuItemSelected(0) ? 'true' : 'false'"
+           :href="symptomsPath"
            data-sid="symptoms-menu-item"
+           role="tab"
            @click="setMenuitemState($event)">
-          <symptoms-icon :selected="isMenuItemSelected(0)"/>
+          <symptoms-icon :selected="isMenuItemSelected(0)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
         </a>
       </li>
       <li :class="[isMenuItemSelected(1) ? $style.active : undefined]"
-          :data-selected="[isMenuItemSelected(1) ? true : false]">
-        <a href="/appointments"
+          :data-selected="isMenuItemSelected(1) ? true : false"
+          role="presentation">
+        <a :aria-selected="isMenuItemSelected(1) ? 'true' : 'false'"
+           :href="appointmentsPath"
            data-sid="appointments-menu-item"
+           role="tab"
            @click="setMenuitemState($event)">
-          <appointments-icon :selected="isMenuItemSelected(1)"/>
+          <appointments-icon :selected="isMenuItemSelected(1)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
         </a>
       </li>
       <li :class="[isMenuItemSelected(2) ? $style.active : undefined]"
-          :data-selected="[isMenuItemSelected(2) ? true : false]">
-        <a href="/prescriptions"
+          :data-selected="isMenuItemSelected(2) ? true : false"
+          role="presentation">
+        <a :aria-selected="isMenuItemSelected(2) ? 'true' : 'false'"
+           :href="prescriptionsPath"
            data-sid="prescriptions-menu-item"
+           role="tab"
            @click="setMenuitemState($event)">
-          <prescriptions-icon :selected="isMenuItemSelected(2)"/>
+          <prescriptions-icon :selected="isMenuItemSelected(2)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
         </a>
       </li>
       <li :class="[isMenuItemSelected(3) ? $style.active : undefined]"
-          :data-selected="[isMenuItemSelected(3) ? true : false]">
-        <a href="/my-record-warning"
+          :data-selected="isMenuItemSelected(3) ? true : false"
+          role="presentation">
+        <a :aria-selected="isMenuItemSelected(3) ? 'true' : 'false'"
+           :href="recordWarningPath"
            data-sid="myrecord-menu-item"
+           role="tab"
            @click="setMenuitemState($event)">
-          <record-icon :selected="isMenuItemSelected(3)"/>
+          <record-icon :selected="isMenuItemSelected(3)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
         </a>
       </li>
       <li :class="[isMenuItemSelected(4) ? $style.active : undefined]"
-          :data-selected="[isMenuItemSelected(4) ? true : false]">
-        <a href="/more"
+          :data-selected="isMenuItemSelected(4) ? true : false"
+          role="presentation">
+        <a :aria-selected="isMenuItemSelected(4) ? 'true' : 'false'"
+           :href="morePath"
            data-sid="more-menu-item"
+           role="tab"
            @click="setMenuitemState($event)">
-          <more-icon :selected="isMenuItemSelected(4)"/>
+          <more-icon :selected="isMenuItemSelected(4)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.moreLabel') }}</span>
         </a>
       </li>
@@ -56,6 +71,7 @@ import AppointmentsIcon from '@/components/icons/AppointmentsIcon';
 import PrescriptionsIcon from '@/components/icons/PrescriptionsIcon';
 import RecordIcon from '@/components/icons/MyRecordIcon';
 import MoreIcon from '@/components/icons/MoreIcon';
+import { SYMPTOMS, APPOINTMENTS, PRESCRIPTIONS, MYRECORDWARNING, MORE } from '@/lib/routes';
 
 export default {
   components: {
@@ -64,6 +80,15 @@ export default {
     PrescriptionsIcon,
     RecordIcon,
     MoreIcon,
+  },
+  data() {
+    return {
+      symptomsPath: SYMPTOMS.path,
+      appointmentsPath: APPOINTMENTS.path,
+      prescriptionsPath: PRESCRIPTIONS.path,
+      recordWarningPath: MYRECORDWARNING.path,
+      morePath: MORE.path,
+    };
   },
   methods: {
     isMenuItemSelected(menuItemIndex) {
