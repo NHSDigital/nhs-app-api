@@ -204,8 +204,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPrescriptionService());
             prescriptionService.Verify(x => x.OrderPrescription(_userSession, It.IsAny<RepeatPrescriptionRequest>()));
-            var createdresult = result as CreatedResult;
-            Assert.IsTrue(createdresult.StatusCode == 201);
+            result.Should().BeAssignableTo<CreatedResult>();
             
             _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, "Attempting to create a prescription request with course ids: {0}", courseId));
             _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Repeat prescription request successfully created with course ids: {0}", courseId));
@@ -251,8 +250,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var result = await _systemUnderTest.Post(requestModel);
 
             // Assert
-            var statusCodeResult = result as StatusCodeResult;
-            Assert.IsTrue(statusCodeResult.StatusCode == 400);
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             
             _mockAuditor.Verify(x => x.Audit(PostRequestAuditType, "Attempting to create a prescription request with course ids: {0}", $"{firstGuid},{secondGuid}"));
             _mockAuditor.Verify(x => x.Audit(PostResponseAuditType, "Error creating prescription request: Bad Request with course ids: {0}", $"{firstGuid},{secondGuid}"));

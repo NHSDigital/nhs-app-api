@@ -60,10 +60,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.RecordConsent(_userSession.NhsNumber, request));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as TermsAndConditionsRecordConsentResult.ConsentRecorded;
-            Assert.IsNotNull(value);
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsRecordConsentResult.ConsentRecorded>();
         }
 
         [TestMethod]
@@ -96,12 +94,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as TermsAndConditionsFetchConsentResult.Success;
-            Assert.IsNotNull(value);
-            var fetchedConsent = value.Response;
-            Assert.AreEqual(consentRecord.ConsentGiven, fetchedConsent.ConsentGiven);
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            var value = okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.Success>()
+                .Subject;
+            value.Response.ConsentGiven.Should().Be(consentRecord.ConsentGiven);
         }
 
         [TestMethod]
@@ -116,10 +112,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.TermsAndConditions
 
             // Assert
             _termsAndConditionsService.Verify(x => x.FetchConsent(_userSession.NhsNumber));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as TermsAndConditionsFetchConsentResult.NoConsentFound;
-            Assert.IsNotNull(value);
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo<TermsAndConditionsFetchConsentResult.NoConsentFound>();
         }
 
         [TestMethod]

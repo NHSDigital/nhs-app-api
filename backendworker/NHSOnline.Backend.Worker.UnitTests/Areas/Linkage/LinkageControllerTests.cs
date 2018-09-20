@@ -88,8 +88,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
-            var resultAsStatusCodeResult = result as StatusCodeResult;
-            resultAsStatusCodeResult.Should().NotBeNull();
+            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
         }
 
@@ -220,8 +219,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Linkage
             var result = await _linkageController.Get(DefaultNhsNumber, DefaultOdsCode, DefaultIdentityToken);
 
             // Assert
-            var resultAsStatusCodeResult = result as StatusCodeResult;
-            resultAsStatusCodeResult.Should().NotBeNull();
+            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
         }
 

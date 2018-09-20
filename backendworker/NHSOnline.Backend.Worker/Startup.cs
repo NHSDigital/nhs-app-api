@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker
     {
         private readonly IHostingEnvironment _env;
         private readonly ILoggerFactory _loggerFactory;
-        private RunMode _runMode;
+        private readonly RunMode _runMode;
         private IConfiguration Configuration { get; }
 
         private readonly ModularStartup _modularStartup;
@@ -44,7 +44,6 @@ namespace NHSOnline.Backend.Worker
             Configuration = configuration;
             _env = env;
             _loggerFactory = loggerFactory;
-
             _runMode = GetRunMode(configuration);
 
             if (env.IsDevelopment())

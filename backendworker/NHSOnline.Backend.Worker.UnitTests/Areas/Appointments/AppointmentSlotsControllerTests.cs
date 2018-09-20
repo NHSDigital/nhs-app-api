@@ -108,10 +108,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
                 It.Is<AppointmentSlotsDateRange>(d =>
                     d.FromDate.Equals(fromDate) &&
                     d.ToDate.Equals(toDate))));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value;
-            value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo(typeof(AppointmentSlotsResponse));
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, RequestAuditMessage));
             _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Available appointment slots successfully viewed"));
         }

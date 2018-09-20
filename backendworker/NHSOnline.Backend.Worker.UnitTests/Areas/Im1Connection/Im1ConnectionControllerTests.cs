@@ -142,16 +142,18 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         [TestMethod]
         public async Task Get_UnknownOdsCode_Returns501NotImplemented()
         {
+            // Arrange
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
             mockOdsCodeLookup.Setup(x => x.LookupSupplier(DefaultOdsCode))
                 .Returns(Task.FromResult(Option.None<Supplier>()));
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
+            // Act
             var result = await _im1ConnectionController.Get(DefaultConnectionToken, DefaultOdsCode);
 
-            var resultAsStatusCodeResult = result as StatusCodeResult;
-            resultAsStatusCodeResult.Should().NotBeNull();
+            // Assert
+            var resultAsStatusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
             resultAsStatusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
             _auditor.VerifyNoOtherCalls();
         }
@@ -160,6 +162,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
         [TestMethod]
         public async Task Post_UnknownOdsCode_Returns501NotImplemented()
         {
+            // Arrange
             var request = _fixture.Create<PatientIm1ConnectionRequest>();
 
             var mockOdsCodeLookup = new Mock<IOdsCodeLookup>();
@@ -168,10 +171,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Im1Connection
 
             _im1ConnectionController = CreateIm1ConnectionController(mockOdsCodeLookup);
 
-            var result = await _im1ConnectionController.Post(request) as StatusCodeResult;
+            // Act
+            var result = await _im1ConnectionController.Post(request);
 
-            result.Should().NotBeNull();
-            result.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
+            // Assert
+            var statusCodeResult = result.Should().BeAssignableTo<StatusCodeResult>().Subject;
+            statusCodeResult.StatusCode.Should().Be(StatusCodes.Status501NotImplemented);
             _auditor.VerifyNoOtherCalls();
         }
 

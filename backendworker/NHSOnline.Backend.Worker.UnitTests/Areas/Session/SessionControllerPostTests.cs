@@ -46,7 +46,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
         private const string DATE_FORMAT = "yyyy-MM-dd";
 
-
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
         private string _apiSessionId;

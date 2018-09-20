@@ -74,9 +74,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Demographics
             mockGpSystem.Verify(x => x.GetDemographicsService());
             demographicsService.Verify(x => x.GetDemographics(_userSession));
             var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetDemographicsResult.SuccessfullyRetrieved;
-            Assert.IsNotNull(value);
+            okObjectResult.Value.Should().BeAssignableTo<GetDemographicsResult.SuccessfullyRetrieved>();
         }
         
         [TestMethod]

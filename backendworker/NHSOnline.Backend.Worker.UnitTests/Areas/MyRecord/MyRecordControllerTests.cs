@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -71,10 +72,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetMyRecordResult.SuccessfullyRetrieved;
-            Assert.IsNotNull(value);
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
         }
         
         [TestMethod]
@@ -101,10 +100,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetMyRecordResult.SuccessfullyRetrieved;
-            Assert.IsNotNull(value);
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
         }
         
         [TestMethod]
@@ -131,10 +128,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.MyRecord
             _mockGpSystemFactory.Verify(x => x.CreateGpSystem(_userSession.Supplier));
             mockGpSystem.Verify(x => x.GetPatientRecordService());
             patientRecordService.Verify(x => x.GetMyRecord(_userSession));
-            var okObjectResult = result as OkObjectResult;
-            Assert.IsNotNull(okObjectResult);
-            var value = okObjectResult.Value as GetMyRecordResult.SuccessfullyRetrieved;
-            Assert.IsNotNull(value);
+            var okObjectResult = result.Should().BeAssignableTo<OkObjectResult>().Subject;
+            okObjectResult.Value.Should().BeAssignableTo<GetMyRecordResult.SuccessfullyRetrieved>();
         }
     }
 }
