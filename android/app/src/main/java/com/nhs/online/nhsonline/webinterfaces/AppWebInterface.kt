@@ -1,8 +1,5 @@
 package com.nhs.online.nhsonline.webinterfaces
 
-import android.view.View
-import android.webkit.ValueCallback
-import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.activities.MainActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -19,9 +16,13 @@ class AppWebInterface(private val context: MainActivity) {
         var spaPath = path.replace(baseUrl, "/")
 
         if(!spaPath.startsWith("/")) {
-            spaPath = "/" + spaPath;
+            spaPath = "/$spaPath"
         }
         context.setReloadUrl("$baseUrl$path")
-        context.webview.evaluateJavascript("window.\$nuxt.\$router.push('$spaPath');", null)
+        context.evaluateWebviewJavascript("window.\$nuxt.\$router.push('$spaPath')")
+    }
+
+    fun loadDispatchEvent(event: String) {
+        context.evaluateWebviewJavascript("window.\$nuxt.\$store.dispatch('$event')")
     }
 }

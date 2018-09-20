@@ -39,6 +39,10 @@
     <string name="tryLaterText">Please try again later.</string>
     <string name="nhsAppHome">NHS App Home</string>
 
+    <string name="logoutWarning">Are you sure you want to log out?</string>
+    <string name="logout">Log out</string>
+    <string name="cancel">Cancel</string>
+
     <string name="locale_language">en</string>
     <string name="locale_region">GB</string>
     <!-- Icon Content description texts-->

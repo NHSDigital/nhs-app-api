@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.util.Log
@@ -59,7 +60,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
 
         knownServices = KnownServices(this)
-        appWebInterface= AppWebInterface(this)
+        appWebInterface = AppWebInterface(this)
 
         configureWebView()
         var wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
@@ -106,10 +107,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun reloadIfAppWasInBackground() {
         var app = application as Application
 
-        if(app.wasInBackground) {
+        if (app.wasInBackground) {
             urlLoader.reloadRequest()
         }
-        if(app.sessionExpired) {
+        if (app.sessionExpired) {
             this.loggedOut()
         }
 
@@ -241,6 +242,25 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (isLoggedIn) {
+            showExitDialog()
+        }
+    }
+
+    private fun showExitDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+
+        builder.setMessage(resources.getString(R.string.logoutWarning))
+                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                    appWebInterface.loadDispatchEvent(resources.getString(R.string.authLogout))
+                }
+            .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
+
+        var dialog: AlertDialog = builder.create()
+        dialog.show()
+    }
+
     override fun showProgressDialog() {
         if (progressBarLayout.visibility == View.GONE)
             progressBarLayout.visibility = View.VISIBLE
@@ -280,7 +300,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         errorViewLayout.visibility = View.GONE
         webview.visibility = View.VISIBLE
 
-        if(isLoggedIn) {
+        if (isLoggedIn) {
             urlLoader.usingAbsoluteUri = false
         }
     }
@@ -323,7 +343,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     fun loggedIn() {
-        if(isLoggedIn) return
+        if (isLoggedIn) return
 
         showMenuBar()
         showHeader()
@@ -359,5 +379,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     fun hideBlankScreen() {
         viewSwitcher.visibility = View.VISIBLE
         blankScreen.visibility = View.GONE
+    }
+
+    fun evaluateWebviewJavascript(javascriptText: String) {
+        webview.evaluateJavascript(javascriptText, null)
     }
 }
