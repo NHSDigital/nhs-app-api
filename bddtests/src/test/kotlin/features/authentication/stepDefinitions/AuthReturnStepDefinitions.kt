@@ -58,14 +58,16 @@ class AuthReturnStepDefinitions : AbstractSteps() {
 
         val header = authReturnPage.errorH1
         val subHeader = authReturnPage.errorH2
-        val message = authReturnPage.errorParagraph
+        val message = authReturnPage.errorParagraph1
+        val errorDetail = authReturnPage.errorParagraph2
         val retryButtonText = authReturnPage.errorCtaText
 
         errorPage.assertCorrectErrorMessageShown(
                 headerText = header,
                 subHeaderText = subHeader,
                 messageText = message,
-                retryButtonText = retryButtonText
+                retryButtonText = retryButtonText,
+                errorDetailText = errorDetail
         )
     }
 

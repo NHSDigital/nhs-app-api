@@ -27,5 +27,6 @@ testData[460] = [[...AppointmentsConfirmation[460]]];
 testData[461] = [[...AppointmentsCancel[461]]];
 testData[464] = [[...AuthReturn[464]]];
 testData[465] = [[...AuthReturn[465]]];
+testData[500] = [[...AuthReturn[500]]];
 
 export default testData;

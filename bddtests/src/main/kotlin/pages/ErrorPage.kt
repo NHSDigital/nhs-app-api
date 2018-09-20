@@ -43,11 +43,13 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             headerText: String,
             subHeaderText: String,
             messageText: String? = null,
-            retryButtonText: String? = null
+            retryButtonText: String? = null,
+            errorDetailText: String? = null
     ) {
         assertEquals("Content header incorrect. ", headerText, heading.element.text)
         if (!subHeaderText.isNullOrEmpty()) assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.element.text)
         if (!messageText.isNullOrEmpty()) assertEquals("Content message incorrect. ", messageText, errorText1.element.text)
+        if (!errorDetailText.isNullOrEmpty()) assertEquals("Content message incorrect. ", errorDetailText, errorText2.element.text)
         if (retryButtonText.isNullOrEmpty()) {
             button.assertElementNotPresent()
         } else {
