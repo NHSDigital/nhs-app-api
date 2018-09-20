@@ -39,7 +39,7 @@ class UrlLoader (
         var uriToUse = getValidUrl(pageEndPoint)
 
 
-        if (usingAbsoluteUri) {
+        if (usingAbsoluteUri || uriToUse.contains(baseURL)) {
             loadPage(uriToUse)
         }
         else if (webView.url != null && (webView.url.contains(baseURL))) {

@@ -54,7 +54,7 @@ class UrlLoaderTests {
 
         urlLoader.loadUrl(spaPagePath)
 
-        verify(appWebInterfaceMock).loadSpaPage("/page-one", baseUrl)
+        verify(webviewMock).loadUrl(baseUrl + "/page-one")
     }
 
     @Test
