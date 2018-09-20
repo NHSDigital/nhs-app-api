@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.TermsAndConditions
     {
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ITermsAndConditionsService, TermsAndConditionsService>();
+            services.AddSingleton<ITermsAndConditionsService, TermsAndConditionsService>();
             services.AddSingleton<ITermsAndConditionsConfig, TermsAndConditionsConfig>();
 
             base.ConfigureServices(services, configuration);
