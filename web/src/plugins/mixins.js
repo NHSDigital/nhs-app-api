@@ -5,7 +5,8 @@ import { MedicationCourseStatus } from '@/lib/medication-course-status';
 Vue.mixin({
   computed: {
     showTemplate() {
-      return !this.$store.getters['errors/showApiError'];
+      const hasConnectionError = this.$store.state.errors.hasConnectionProblem;
+      return !this.$store.getters['errors/showApiError'] && !hasConnectionError;
     },
   },
   methods: {
