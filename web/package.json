@@ -55,6 +55,7 @@
     "babel-preset-stage-2": "6.24.1",
     "babel-register": "6.22.0",
     "circular-json": "0.5.3",
+    "consola": "^1.4.3",
     "cookie": "0.3.1",
     "cookie-universal": "^2.0.5",
     "cookie-universal-nuxt": "2.0.3",

@@ -109,6 +109,13 @@ class {{&className}} {
       if(store && store.dispatch) store.dispatch('http/addCancelRequestHandler', cancel);
     };
 
+    let consola = {};
+
+    if (process.server) {
+      consola = require('consola');
+      consola.info(`Begin request: ${method} ${urlWithParams}`);
+    }
+    
     axios({
       cancelToken: new CancelToken(function executor(c) {
         // An executor function receives a cancel function as a parameter
@@ -121,6 +128,9 @@ class {{&className}} {
       crossDomain: true,
       data: JSON.stringify(body)
     }).then((response) => {
+      if (process.server && response) {
+        consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}`);
+      }
       if (process.server && response.headers['set-cookie']) {
         this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
       }
@@ -130,6 +140,9 @@ class {{&className}} {
       this.store.dispatch('http/loadingCompleted');
       resolve({ deferred, result: body, store: this.store });
     }).catch((error) => {
+      if (process.server && error) {
+        consola.error(new Error(`Error sending request: ${method} ${urlWithParams}, response: ${error.status}`));
+      }
       this.store.dispatch('http/loadingCompleted');
       if (!axios.isCancel(error)) {
         if (error.response !== undefined && 401 === error.response.status) {

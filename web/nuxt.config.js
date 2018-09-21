@@ -17,6 +17,7 @@ module.exports = {
     '~/plugins/filters.js',
     '~/plugins/mixins.js',
     '~/plugins/analytics.js',
+    '~/plugins/logging.js',
   ],
   serverMiddleware: [
     './handler.js',
