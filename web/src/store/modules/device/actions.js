@@ -13,5 +13,4 @@ export default {
   setSourceDevice({ commit }, source = 'web') {
     commit(SET_SOURCE_DEVICE, source);
   },
-
 };

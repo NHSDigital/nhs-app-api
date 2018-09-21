@@ -18,7 +18,7 @@ export default {
     state.source = source;
   },
   [INIT_DEVICE](state) {
-    const { source } = state;
-    state = Object.assign({}, initialState, { source });
+    const { isNativeApp, source } = state;
+    state = Object.assign({}, initialState, { isNativeApp, source });
   },
 };

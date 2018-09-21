@@ -7,7 +7,6 @@ import {
   SET_INFO,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
-  START_VALIDATION_CHECKING,
 } from '@/store/modules/session/mutation-types';
 
 describe('actions', () => {
@@ -64,14 +63,6 @@ describe('actions', () => {
     describe('start validation checking', () => {
       it('will have a startValidationChecking function', () =>
         expect(actions.startValidationChecking).toBeInstanceOf(Function));
-      it(
-        'will call commit for the START_VALIDATION_CHECKING passing an interval when there is no validationInterval',
-        () => {
-          actions.startValidationChecking(mutation);
-          expect(mutation.commit.mock.calls[0][0]).toEqual(START_VALIDATION_CHECKING);
-          expect(mutation.commit.mock.calls[0][1]).toBeGreaterThan(0);
-        },
-      );
 
       it(
         'will not call commit for the START_VALIDATION_CHECKING there is a validationInterval',
@@ -183,16 +174,6 @@ describe('actions', () => {
     describe('is not valid', () => {
       beforeEach(() => {
         store.getters.isValid = () => false;
-      });
-
-      it('will call global dispatch with the logout action', () => {
-        app.validate(store);
-        expect(app.dispatch).toHaveBeenCalledWith('auth/logoutWhenExpired');
-      });
-
-      it('will call the endValidationChecking action', () => {
-        app.validate(store);
-        expect(app.dispatch).toHaveBeenCalledWith('session/endValidationChecking');
       });
 
       it('will return false', () => {

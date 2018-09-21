@@ -28,6 +28,11 @@ describe('actions', () => {
         go: jest.fn(),
         push: jest.fn(),
       },
+      store: {
+        state: {
+          device: { source: 'web' },
+        },
+      },
     };
 
     commit = jest.fn();

@@ -4,6 +4,8 @@ import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-type
 const MAX_TRIES = 10;
 
 const final = ({ self, commit }) => {
+  const sourceValue = self.app.store.state.device.source;
+
   commit(LOGOUT, true);
   self.dispatch('analytics/init');
   self.dispatch('availableAppointments/init');
@@ -19,7 +21,14 @@ const final = ({ self, commit }) => {
   self.dispatch('session/setInfo');
   self.dispatch('flashMessage/init');
 
-  self.app.router.push(LOGIN.name);
+  if (sourceValue === 'web') {
+    self.app.router.push(LOGIN.name);
+  } else {
+    self.app.router.push({
+      path: LOGIN.path,
+      query: { source: sourceValue },
+    });
+  }
 };
 
 export default {

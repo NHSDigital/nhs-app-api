@@ -25,6 +25,11 @@ describe('actions', () => {
       $cookies: {
         remove: jest.fn(),
       },
+      store: {
+        state: {
+          device: { source: 'web' },
+        },
+      },
     };
 
     commit = jest.fn();

@@ -5,7 +5,6 @@ import {
   SET_INFO,
   SET_LAST_CALLED_AT,
   SHOW_EXPIRY_MESSAGE,
-  START_VALIDATION_CHECKING,
 } from './mutation-types';
 
 const setCookie = ({ key, value, cookies }) => {
@@ -61,16 +60,7 @@ export default {
 
     commit(SET_INFO, info);
   },
-  startValidationChecking({ commit, dispatch, state }) {
-    if (process.server) return;
-    if (!state.csrfToken) return;
-    if (state.validationInterval) return;
-
-    const interval = setInterval(() => {
-      dispatch('validate');
-    }, 10000);
-
-    commit(START_VALIDATION_CHECKING, interval);
+  startValidationChecking() {
   },
   endValidationChecking: ({ commit, state }) => {
     clearInterval(state.validationInterval);
@@ -78,8 +68,6 @@ export default {
   },
   validate({ getters }) {
     if (getters.isValid()) return true;
-    this.dispatch('session/endValidationChecking');
-    this.dispatch('auth/logoutWhenExpired');
     return false;
   },
 };

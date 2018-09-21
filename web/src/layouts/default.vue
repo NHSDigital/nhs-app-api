@@ -107,7 +107,10 @@ export default {
       if (this.loggedIn) {
         this.$store.dispatch('session/startValidationChecking');
         window.validateSession =
-          window.validateSession || (() => this.$store.dispatch('session/validate'));
+          window.validateSession || (() => {
+            this.$store.dispatch('session/validate');
+          }
+          );
 
         this.$store.dispatch('auth/nativeLogin');
       }
