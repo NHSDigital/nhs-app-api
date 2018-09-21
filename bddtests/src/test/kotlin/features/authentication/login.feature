@@ -35,6 +35,24 @@ Feature: Login
       | TPP       |
 
   @NHSO-125
+  Scenario Outline: A <GP System> user can log in, log out, and log in again
+    Given I am logged in as a <GP System> user
+    Then I see the home page
+    When I log out
+    Then I see the login page
+    When I log in again
+    Then I see the home page
+    When I log out
+    Then I see the login page
+    When I log in again
+    Then I see the home page
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
+
+  @NHSO-125
   @manual
   # to enable survey link change SHOW_SURVEY env variable value
   Scenario Outline: A <GP System> user sees a survey link on the home page if enabled

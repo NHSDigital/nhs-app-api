@@ -376,10 +376,24 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         myAccount.signOut()
     }
 
+    @When("I log out")
+    fun iLogOut(){
+        navHeader.clickMyAccount()
+        myAccount.signOut()
+    }
+
     @Given("^I am logged in as a (.*) user$")
     fun iAmLoggedInTo(gpSystem: String) {
         this.patient = Patient.getDefault(gpSystem)
+        SerenityHelpers.setPatient(this.patient)
         setupAndLogIn(patient, gpSystem)
+    }
+
+    @When("I log in again")
+    fun iLogInAgain(){
+        val patient = SerenityHelpers.getPatient()
+        login.using(patient)
+        home.waitForLoginToComplete()
     }
 
     @Given("^I attempt to log in as a (.*) user without an NHS Number$")
