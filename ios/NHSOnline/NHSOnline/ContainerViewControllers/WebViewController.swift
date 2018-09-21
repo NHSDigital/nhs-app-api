@@ -52,8 +52,12 @@ class WebViewController: UIViewController, WKUIDelegate {
                 } else {
                     NSLog("An error occured when attempting to navigate to the page via Vue Router. Doing a full reload.")
                 }
-                
-                self.webView.loadPage(url: self.homeUrl + path)
+                let urlIsValid = self.verifyUrl(urlString: path)
+                if(urlIsValid){
+                    self.webView.loadPage(url: path)
+                } else {
+                    self.webView.loadPage(url: self.homeUrl + path)
+                }
             }
         }
         
