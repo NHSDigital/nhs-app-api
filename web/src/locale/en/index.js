@@ -109,7 +109,7 @@ export default {
     message: 'Check your connection and try again. If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
   },
   termsAndConditions: {
-    title: 'Accept terms of use',
+    title: 'Accept conditions of use',
     errorMsgHeader: 'There\'s a problem',
     errorMsgText: 'You cannot continue without agreeing',
     body1: 'To use the NHS App you must agree to our',
