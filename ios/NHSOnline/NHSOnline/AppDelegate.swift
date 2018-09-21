@@ -49,44 +49,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return webPageUrl
     }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        LogoutIfSessionExpired()
-    }
-
-    private func LogoutIfSessionExpired() {
-        let defaults = UserDefaults()
-
-        var sessionExpired = false
-
-        if(defaults.object(forKey: "TimeEnterBackground") != nil) {
-            let timeEnterBackground = UserDefaults().integer(forKey: "TimeEnterBackground")
-            let currentTime = Date().ticks
-
-            let timePassed = currentTime.advanced(by: -timeEnterBackground)
-            let date = Date(ticks: timePassed)
-
-            let minutesPassed = Calendar.current.component(.minute, from: date)
-
-            let sessionTimeout = config().SessionTimeout
-
-            if(minutesPassed >= sessionTimeout) {
-                sessionExpired = true
-            }
-        }
-
-        let vc = rootViewController?.childViewControllers.first as! HomeViewController
-
-        if(sessionExpired) {
-            vc.setVisibilityOfHeaderAndMenuBars(visible: false)
-            WebViewController.Properties.usingAbsoluteUri = true
-        }
-
-        vc.webViewController?.reloadWebView()
-    }
-
-    func applicationWillResignActive(_ application: UIApplication) {
-        let currentDateTime = Date().ticks
-        UserDefaults.standard.set(currentDateTime, forKey: "TimeEnterBackground")
-    }
 }
