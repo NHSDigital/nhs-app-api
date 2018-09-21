@@ -110,6 +110,13 @@ class KnownServices {
         return findServiceforURL(url: url, services: internalSerivceList)
     }
     
+    func isSameHostAsHomeUrl(url: URL?) -> Bool {
+        if let homeUrl = URL(string: config.HomeUrl) {
+            return homeUrl.host == url?.host
+        }
+        return false
+    }
+    
     func shouldAllowNativeInteraction(host:String?) -> Bool {
         if let knownService = findMatchingKnownServiceForHostname(hostname: host){
             return knownService.shouldAllowNativeInteraction

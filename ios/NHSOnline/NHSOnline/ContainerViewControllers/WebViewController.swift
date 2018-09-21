@@ -60,9 +60,15 @@ class WebViewController: UIViewController, WKUIDelegate {
                 }
             }
         }
-        
         webView.evaluateJavaScript("window.$nuxt.$router.push('\(spaPath)');", completionHandler: completionHandler)
         webViewDelegate?.viewController.showWebViewContainer()
+    }
+    
+    private func shouldLoadUrlAsSpaPage(urlToNavigateTo:String) -> Bool{
+        guard knownServices.isSameHostAsHomeUrl(url: webView.url) else {
+            return false
+        }
+        return knownServices.isSameHostAsHomeUrl(url: URL(string: urlToNavigateTo))
     }
 
     func loadPage(url: String) {
@@ -82,7 +88,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         if(WebViewController.Properties.usingAbsoluteUri) {
             webView.loadPage(url: urlToNavigateTo)
         }
-        else if(knownServices.findMatchingInternalServiceForURL(url: URL(string: urlToNavigateTo)) != nil) {
+        else if(shouldLoadUrlAsSpaPage(urlToNavigateTo: urlToNavigateTo)) {
             self.loadSpaPage(path: urlToNavigateTo)
         }
         else {
