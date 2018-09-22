@@ -62,7 +62,6 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
                     customTabsIntent.intent.setPackage(supportedCustomTabsPackages[0].activityInfo.packageName)
                 }
 
-                customTabsIntent.intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                 customTabsIntent.launchUrl(context, Uri.parse(url))
             } else {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
