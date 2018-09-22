@@ -1,8 +1,11 @@
-<template />
+<template>
+  <div />
+</template>
 <script>
 export default {
   head() {
     if (this.$env.HOTJAR_SITE_ID) {
+      /* eslint-disable prefer-template */
       const hotJar = '(function (h, o, t, j, a, r) {' +
                    'h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments); };' +
                    'h._hjSettings = { hjid: ' + this.$env.HOTJAR_SITE_ID + ', hjsv: 6 };' +
