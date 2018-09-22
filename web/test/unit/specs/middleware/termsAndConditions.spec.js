@@ -1,4 +1,4 @@
-import { TERMSANDCONDITIONS, PRESCRIPTIONS } from '@/lib/routes';
+import { TERMSANDCONDITIONS } from '@/lib/routes';
 import { initialState as sessionState } from '@/store/modules/session/mutation-types';
 import { initialState as termsAndConditionsState } from '@/store/modules/termsAndConditions/mutation-types';
 import getters from '@/store/modules/session/getters';
@@ -29,7 +29,7 @@ describe('middleware/termsAndConditions', () => {
           'session/isLoggedIn': isLoggedIn(state),
         },
       },
-      route: PRESCRIPTIONS,
+      route: TERMSANDCONDITIONS,
     };
 
     app.store.app = app;
@@ -45,44 +45,19 @@ describe('middleware/termsAndConditions', () => {
         app.store.state.termsAndConditions.areAccepted = false;
       });
 
-      it('will not redirect to /terms-and-conditions if the route is an anonymous route', async () => {
-        app.route = TERMSANDCONDITIONS;
-        await termsAndConditions(app);
-        expect(app.redirect).not.toBeCalled();
-      });
-
-      it('will redirect to /terms-and-conditions if the route is not an anonymous route', async () => {
-        app.route = PRESCRIPTIONS;
-        await termsAndConditions(app);
-        expect(app.redirect).toBeCalledWith('/terms-and-conditions');
-      });
-
       it('will check the server if the terms and conditions are not accepted on the state', async () => {
+        app.route = TERMSANDCONDITIONS;
         await termsAndConditions(app);
         expect(app.store.dispatch).toBeCalledWith('termsAndConditions/checkAcceptance');
       });
 
-      it('will not redirect to "/terms-and-conditions" if the dispatch says they have been accepted', async () => {
+      it('will redirect to "/" if the dispatch says they have been accepted', async () => {
         app.store.dispatch = jest.fn(() => new Promise((resolve) => {
           app.store.state.termsAndConditions.areAccepted = true;
           resolve();
         }));
         await termsAndConditions(app);
-        expect(app.redirect).not.toBeCalledWith('/terms-and-conditions');
-      });
-
-      it('will redirect to "/terms-and-conditions" if the server says they have not been accepted', async () => {
-        app.store.dispatch = jest.fn(() => new Promise((resolve) => {
-          app.store.state.termsAndConditions.areAccepted = false;
-          resolve();
-        }));
-        await termsAndConditions(app);
-        expect(app.redirect).toBeCalledWith('/terms-and-conditions');
-      });
-
-      it('will redirect to "/terms-and-conditions" if the terms have not been accepted', async () => {
-        await termsAndConditions(app);
-        expect(app.redirect).toBeCalledWith('/terms-and-conditions');
+        expect(app.redirect).toBeCalledWith('/');
       });
     });
 
@@ -92,42 +67,9 @@ describe('middleware/termsAndConditions', () => {
         await termsAndConditions(app);
       });
 
-      it('will not redirect to "/terms-and-conditions" if the terms have been accepted', async () => {
-        expect(app.redirect).not.toBeCalledWith('/terms-and-conditions');
+      it('will redirect to "/" if the terms have been accepted', async () => {
+        expect(app.redirect).toBeCalledWith('/');
       });
-    });
-
-    describe('terms accepted in cookie', () => {
-      beforeEach(async () => {
-        app.store.state.termsAndConditions.areAccepted = false;
-        app.$cookies.get.mockReturnValue({ termsAccepted: true });
-        await termsAndConditions(app);
-      });
-
-      it('will not redirect to "/terms-and-conditions" if the terms have been accepted', () => {
-        expect(app.redirect).not.toBeCalledWith('/terms-and-conditions');
-      });
-
-      it('will set the flag in the state if it is found in the cookie', () => {
-        expect(app.store.dispatch).toBeCalledWith('termsAndConditions/setAcceptance', true);
-      });
-    });
-  });
-
-  describe('is not logged in', () => {
-    beforeEach(() => {
-      app.store.state.session.csrfToken = undefined;
-    });
-
-    it('will not redirect to "/terms-and-conditions" if the terms have not been accepted', async () => {
-      await termsAndConditions(app);
-      expect(app.redirect).not.toBeCalled();
-    });
-
-    it('will not redirect to "/terms-and-conditions" if the terms have been accepted', async () => {
-      app.store.state.termsAndConditions.areAccepted = true;
-      await termsAndConditions(app);
-      expect(app.redirect).not.toBeCalled();
     });
   });
 });

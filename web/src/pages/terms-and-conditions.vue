@@ -15,17 +15,6 @@ export default {
     HeaderSlim,
     TermsConditions,
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      if (!vm.$store.getters['session/isLoggedIn']()) {
-        next('/login');
-      } else if (!vm.$store.state.termsAndConditions.areAccepted) {
-        next();
-      } else {
-        next('/');
-      }
-    });
-  },
   methods: {
     getHeaderState() {
       return !this.$store.state.device.isNativeApp

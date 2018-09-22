@@ -87,7 +87,6 @@ const routes = {
   TERMSANDCONDITIONS: {
     name: 'terms-and-conditions',
     path: '/terms-and-conditions',
-    isAnonymous: true,
   },
 };
 

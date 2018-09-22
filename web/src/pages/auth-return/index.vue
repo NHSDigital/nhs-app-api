@@ -11,7 +11,7 @@ export default {
     if (process.server) {
       await context.store.dispatch('auth/handleAuthResponse', context.route.query.code);
       if (isEmpty(context.store.state.errors.apiErrors)) {
-        return context.redirect('/');
+        return context.redirect('/terms-and-conditions');
       }
     }
     return undefined;

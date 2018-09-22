@@ -21,6 +21,13 @@ describe('termsAndConditions/actions', () => {
         postV1PatientTermsAndConditionsConsent: jest.fn(() => Promise.resolve()),
       },
       router: [],
+      store: {
+        state: {
+          device: {
+            source: '',
+          },
+        },
+      },
     };
     actions.app = app;
   });
@@ -29,7 +36,7 @@ describe('termsAndConditions/actions', () => {
     let consentTerms;
 
     beforeEach(() => {
-      consentTerms = { consentTerms: 'boo' };
+      consentTerms = true;
     });
 
     it('will call postV1PatientTermsAndConditionsConsent with the received consent terms ', () => {
@@ -51,12 +58,8 @@ describe('termsAndConditions/actions', () => {
         expect(commit).toBeCalledWith(SET_ACCEPTANCE, true);
       });
 
-      it('will set `termsAccepted` in the `nhso.session` cookie', () => {
-        expect(app.$cookies.set).toBeCalledWith('nhso.session', { termsAccepted: true });
-      });
-
       it('will push `/` to the router when the post request completes successfully', async () => {
-        expect(app.router).toContain('/');
+        expect(app.router[0].path).toBe('/');
       });
     });
 
