@@ -54,7 +54,7 @@ Feature: Login
 
   @NHSO-125
   @manual
-  # to enable survey link change SHOW_SURVEY env variable value
+  # to enable survey link change HOTJAR_SURVEY_VISIBLE env variable value
   Scenario Outline: A <GP System> user sees a survey link on the home page if enabled
     Given I am logged in as a <GP System> user
     Then I see the home page

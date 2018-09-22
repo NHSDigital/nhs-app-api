@@ -24,7 +24,7 @@ export default {
   data(app) {
     return {
       open: true,
-      hotJarLinkUrl: app.$env.HOT_JAR_URL,
+      hotJarLinkUrl: app.$env.HOTJAR_SURVEY_URL,
     };
   },
   created() {

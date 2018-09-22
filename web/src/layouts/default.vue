@@ -2,14 +2,14 @@
   <div id="app">
     <header-menu v-if="showMenu"/>
     <main :class="mainClass">
-      <HotJar />
+      <hot-jar />
       <spinner />
       <connection-error />
       <api-error />
       <flash-message />
       <nuxt />
     </main>
-    <SurveyBar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
+    <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                @onBarStatusChanged="setSurveyBarStatus"/>
     <navigation-menu v-if="showMenu"/>
   </div>
@@ -66,7 +66,7 @@ export default {
       );
     },
     showSurvey() {
-      if (this.$env.SHOW_SURVEY) {
+      if (this.$env.HOTJAR_SURVEY_VISIBLE) {
         return this.$route.name === INDEX.name;
       }
 
@@ -80,7 +80,7 @@ export default {
       if (this.$store.state.device.isNativeApp) {
         clazzes.push('native');
       }
-      if (this.$env.SHOW_SURVEY && this.$route.name === INDEX.name) {
+      if (this.$env.HOTJAR_SURVEY_VISIBLE && this.$route.name === INDEX.name) {
         if (this.surveyBarOpen) {
           clazzes.push('survey-open');
         } else {

@@ -54,8 +54,10 @@ module.exports = {
     // Analytics
     ANALYTICS_SCRIPT_URL: '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
     ANALYTICS_ENVIRONMENT: 'development',
-    HOT_JAR_URL: 'https://in.hotjar.com/s?siteId=859152&surveyId=95785',
-    HOTJAR_ID: '',
+    // Feedback
+    HOTJAR_SITE_ID: '859152',
+    HOTJAR_SURVEY_URL: 'https://in.hotjar.com/s?siteId=859152&surveyId=95785',
+    HOTJAR_SURVEY_VISIBLE: false,
     // Legal
     TERMS_AND_CONDITIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/',
     PRIVACY_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/',
@@ -67,6 +69,5 @@ module.exports = {
     CLINICAL_ABBREVIATIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/medical-abbreviations/',
     // Terms and conditions
     STUB_TERMS_AND_CONDITIONS: true,
-    SHOW_SURVEY: false,
   },
 };
