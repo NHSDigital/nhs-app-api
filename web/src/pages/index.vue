@@ -30,6 +30,11 @@ export default {
       return `${message}, ${user}`;
     },
   },
+  created() {
+    if (process.browser) {
+      this.$store.dispatch('session/updateLastCalledAt');
+    }
+  },
 };
 </script>
 

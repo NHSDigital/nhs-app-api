@@ -19,6 +19,8 @@ const setCookie = ({ key, value, cookies }) => {
   }
 };
 
+let intervalId;
+
 export default {
   clear:
     ({ commit }) => commit(CLEAR),
@@ -28,6 +30,19 @@ export default {
     ({ commit }) => commit(SHOW_EXPIRY_MESSAGE),
   updateLastCalledAt({ commit }, lastCalledAt = new Date()) {
     const session = this.app.$cookies.get('nhso.session');
+
+    if (session && session.durationSeconds) {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      intervalId = setInterval(() => {
+        if (process.server) return;
+        this.dispatch('session/showExpiryMessage');
+        this.dispatch('auth/logout', { expired: true });
+        clearInterval(intervalId);
+      }, session.durationSeconds * 1000);
+    }
+
     if (session) {
       session.lastCalledAt = lastCalledAt;
       setCookie({
