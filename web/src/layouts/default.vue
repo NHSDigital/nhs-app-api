@@ -10,7 +10,7 @@
       <nuxt />
     </main>
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
-               @onBarStatusChanged="setSurveyBarStatus"/>
+                @onBarStatusChanged="setSurveyBarStatus"/>
     <navigation-menu v-if="showMenu"/>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
     ConnectionError,
     FlashMessage,
     SurveyBar,
-    HotJar
+    HotJar,
   },
   head() {
     const head = {
