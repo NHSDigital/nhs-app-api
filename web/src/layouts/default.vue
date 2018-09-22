@@ -2,6 +2,7 @@
   <div id="app">
     <header-menu v-if="showMenu"/>
     <main :class="mainClass">
+      <HotJar />
       <spinner />
       <connection-error />
       <api-error />
@@ -23,6 +24,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import SurveyBar from '@/components/SurveyBar';
+import HotJar from '@/components/widgets/HotJar';
 import { INDEX, LOGIN } from '@/lib/routes';
 
 export default {
@@ -34,6 +36,7 @@ export default {
     ConnectionError,
     FlashMessage,
     SurveyBar,
+    HotJar
   },
   head() {
     const head = {
@@ -47,10 +50,6 @@ export default {
         },
       ],
     };
-
-    if (this.$env.HOTJAR_FILENAME) {
-      head.script.push({ src: `hotjar/${this.$env.HOTJAR_FILENAME}.js` });
-    }
     return head;
   },
   data() {

@@ -54,8 +54,8 @@ module.exports = {
     // Analytics
     ANALYTICS_SCRIPT_URL: '//assets.adobedtm.com/launch-EN2bcb86c8edd64d5aa2abd8aabdcfb129-development.min.js',
     ANALYTICS_ENVIRONMENT: 'development',
-    HOTJAR_FILENAME: '',
     HOT_JAR_URL: 'https://in.hotjar.com/s?siteId=859152&surveyId=95785',
+    HOTJAR_ID: '',
     // Legal
     TERMS_AND_CONDITIONS_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/',
     PRIVACY_POLICY_URL: 'https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/',
