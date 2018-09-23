@@ -2,7 +2,6 @@
   <div id="app">
     <header-menu v-if="showMenu"/>
     <main :class="mainClass">
-      <hot-jar />
       <spinner />
       <connection-error />
       <api-error />
@@ -12,6 +11,7 @@
     <survey-bar v-if="showSurvey" :initial-bar-status-open="surveyBarOpen"
                 @onBarStatusChanged="setSurveyBarStatus"/>
     <navigation-menu v-if="showMenu"/>
+    <hot-jar />
   </div>
 </template>
 

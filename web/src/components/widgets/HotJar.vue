@@ -1,6 +1,5 @@
-<template>
-  <div />
-</template>
+<!-- eslint-disable vue/valid-template-root -->
+<template />
 <script>
 export default {
   head() {
