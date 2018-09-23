@@ -135,7 +135,11 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun selectSlot(date: String, time: String) {
-        timeSlotForDateAndTime(date, time).assertIsVisible().element.click()
+        val slot = timeSlotForDateAndTime(date, time)
+                .assertSingleElementPresent()
+                .assertIsVisible()
+                .scrollToElement()
+        slot.element.click()
     }
 
     fun getAppointmentTypeFilterContents(): ArrayList<String> {

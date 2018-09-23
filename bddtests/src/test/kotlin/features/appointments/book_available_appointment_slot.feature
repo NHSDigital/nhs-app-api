@@ -11,6 +11,7 @@ Feature: Book an available appointment slot
     And I am on the available appointments page
     And I have filtered such that there is one time displayed that represents multiple slots
     And I have selected a time when multiple slots are available
+    Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then the Appointment Booking confirmation screen is displayed
@@ -26,6 +27,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I click the 'Confirm and book appointment' button
     Then an error is displayed that "Describe your symptoms" is mandatory
     Examples:
@@ -40,6 +42,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms of 1 characters
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking confirmation screen is displayed
@@ -56,6 +59,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms of 150 characters
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking confirmation screen is displayed
@@ -71,6 +75,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms of 151 characters
     Then only the first 150 characters will be displayed
     And I click the 'Confirm and book appointment' button
@@ -87,6 +92,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I paste symptoms of 151 characters
     Then only the first 150 characters will be displayed
     Examples:
@@ -101,6 +107,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms of 151 characters
     And I click the 'Confirm and book appointment' button
     Then the Appointment Booking confirmation screen is displayed
@@ -116,6 +123,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then I see appropriate information message after 10 seconds when it times-out on appointment confirmation page
@@ -132,6 +140,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then I see appropriate information message when there is an error sending data on appointment confirmation page
@@ -148,6 +157,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I enter symptoms
     And  I click the 'Confirm and book appointment' button
     Then a message is displayed indicating that the slot has already been taken
@@ -163,6 +173,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     And I enter symptoms
     And  I click the 'Confirm and book appointment' button
     When I click the error page back button
@@ -179,6 +190,7 @@ Feature: Book an available appointment slot
     And I am logged in
     And I am on the available appointments page
     And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
     When I choose to change the appointment slot
     Then there is a filter for the appointment types
     And there is a filter for the appointment locations

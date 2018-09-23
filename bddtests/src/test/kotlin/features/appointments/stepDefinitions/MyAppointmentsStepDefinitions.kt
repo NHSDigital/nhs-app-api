@@ -15,6 +15,12 @@ class MyAppointmentsStepDefinitions {
     lateinit var myAppointmentsSteps: MyAppointmentsSteps
 
 
+    @Then("^the Appointment Slot page is displayed$")
+    fun theAppointmentSlotPageIsDisplayed() {
+        myAppointmentsSteps.myAppointmentsPage.waitForPageHeaderText("Confirm appointment")
+    }
+
+
     @Then("^the Appointment Booking confirmation screen is displayed$")
     fun appointmentBookingConfirmationScreenIsDisplayed() {
         myAppointmentsSteps.checkBookingSuccessMessage()

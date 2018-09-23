@@ -36,7 +36,12 @@ class HybridPageElement(
             }
         }
 
-    private fun WebElementFacade.scroll() {
+    fun scrollToElement() : HybridPageElement{
+        element.scroll()
+        return this
+    }
+
+    fun WebElementFacade.scroll() {
         val jsExecutor = page.driver as JavascriptExecutor
         try {
             jsExecutor.executeScript("arguments[0].scrollIntoView({block: \"center\"});", this)
