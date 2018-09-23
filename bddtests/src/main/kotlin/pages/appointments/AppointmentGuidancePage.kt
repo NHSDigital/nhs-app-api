@@ -9,6 +9,8 @@ import pages.HybridPageElement
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking-guidance")
 class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
+    private val mainXPath = "//*[@id='app']/main"
+
     val checkSymptomsButton = HybridPageElement(
             browserLocator = "//*[@id='btn_check_symptoms']",
             androidLocator = null,
@@ -21,15 +23,21 @@ class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP)
             page = this
     )
 
-    val content = HybridPageElement(
-            browserLocator = "//*[@id='app']/main/div",
+    private val main = HybridPageElement(
+            browserLocator = mainXPath,
+            androidLocator = null,
+            page = this
+    )
+
+    private val content = HybridPageElement(
+            browserLocator = "$mainXPath/div/div[@data-purpose='info']",
             androidLocator = null,
             page = this
     )
 
     fun isSubHeaderTextEqualTo(text: String, elementWasStale: Boolean = false): Boolean {
         return try {
-            content.element.findBy<WebElementFacade>("//h2[text()='$text']")
+            main.element.findBy<WebElementFacade>("//h2[text()='$text']")
             true
         } catch (e: StaleElementReferenceException) {
             if (!elementWasStale) {
@@ -44,7 +52,7 @@ class AppointmentGuidancePage : HybridPageObject(Companion.PageType.WEBVIEW_APP)
 
     fun getGuidanceBody(): List<Pair<String, Boolean>> {
         val list = arrayListOf<Pair<String, Boolean>>()
-        val listElements = content.element.thenFindAll("div/*")
+        val listElements = content.element.thenFindAll("*")
         listElements.forEach { listElement ->
             val guidanceLine = listElement.text
             val isLineInBold = listElement.tagName == "strong"
