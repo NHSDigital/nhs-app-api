@@ -32,9 +32,6 @@
 
     <string name="nhsOnlineRequiredQueries">\?source=android</string>
 
-    <integer name="BackgroundTimeout">2000</integer>
-    <integer name="SessionTimeout">1200000</integer>
-
     <string-array name="externalSiteUrls">
         <item>@string/hotjarLink</item>
         <item>@string/helpURL</item>

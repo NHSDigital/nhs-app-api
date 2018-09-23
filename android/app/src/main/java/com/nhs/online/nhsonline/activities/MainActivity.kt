@@ -94,8 +94,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        reloadIfAppWasInBackground()
-
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
                     appWebInterface, knownServices)
@@ -104,30 +102,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         lifeCycleObserver?.onMoveToForeground()
     }
 
-    private fun reloadIfAppWasInBackground() {
-        var app = application as Application
-
-        if (app.wasInBackground) {
-            urlLoader.reloadRequest()
-        }
-        if (app.sessionExpired) {
-            this.loggedOut()
-        }
-
-        app.stopActivityTransitionTimer()
-    }
-
     override fun onStop() {
         super.onStop()
 
-        startBackgroundTimer()
-
         lifeCycleObserver?.onMoveToBackground()
-    }
-
-    private fun startBackgroundTimer() {
-        var app = application as Application
-        app.startActivityTransitionTimer(isLoggedIn)
     }
 
     override fun onNewIntent(intent: Intent?) {
