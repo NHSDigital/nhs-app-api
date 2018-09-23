@@ -27,7 +27,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
+        
         if(!Reachability.isConnectedToNetwork()) {
             decisionHandler(.cancel)
             let urlNavigatingTo = navigationAction.request.url?.absoluteString
@@ -86,6 +86,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
+            self.activityIndicator.stopAnimating()
         }
         shouldHandleErrors = true
         timer = Timer.scheduledTimer(timeInterval: responseWaitingTime, target: self, selector: #selector(pageIsNotResponding), userInfo: nil, repeats: false)
@@ -300,7 +301,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
     }
     
-    private func clearTimer() {
+    func clearTimer() {
         if self.timer != nil {
             self.timer.invalidate()
             self.timer = nil

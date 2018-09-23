@@ -72,6 +72,9 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
 
     func loadPage(url: String) {
+        self.webViewDelegate?.clearTimer()
+        self.webViewDelegate?.activityIndicator.stopAnimating()
+        
         if(!Reachability.isConnectedToNetwork()) {
             webViewDelegate?.showNoConnectionErrorView(urlNavigatingTo: url)
             return
