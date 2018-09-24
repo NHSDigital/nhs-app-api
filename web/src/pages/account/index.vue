@@ -3,35 +3,35 @@
     <h2>About us</h2>
     <ul :class="$style['list-menu']">
       <li>
-        <analytics-tracked-tag id="btn_terms" :href="termsAndConditionsURL"
+        <analytics-tracked-tag id="btn_terms" :href="$store.app.$env.TERMS_AND_CONDITIONS_URL"
                                :text="$t('myAccount.termsAndConditions')"
                                tag="a" target="_blank">
           {{ $t('myAccount.termsAndConditions') }}
         </analytics-tracked-tag>
       </li>
       <li>
-        <analytics-tracked-tag id="btn_privacy" :href="privacyPolicyURL"
+        <analytics-tracked-tag id="btn_privacy" :href="$store.app.$env.PRIVACY_POLICY_URL"
                                :text="$t('myAccount.privacyPolicy')"
                                tag="a" target="_blank">
           {{ $t('myAccount.privacyPolicy') }}
         </analytics-tracked-tag>
       </li>
       <li>
-        <analytics-tracked-tag id="btn_cookies" :href="cookiesPolicyURL"
+        <analytics-tracked-tag id="btn_cookies" :href="$store.app.$env.COOKIES_POLICY_URL"
                                :text="$t('myAccount.cookiesPolicy')"
                                tag="a" target="_blank">
           {{ $t('myAccount.cookiesPolicy') }}
         </analytics-tracked-tag>
       </li>
       <li>
-        <analytics-tracked-tag id="btn_openSource" :href="openSourceLicensesURL"
+        <analytics-tracked-tag id="btn_openSource" :href="$store.app.$env.OPEN_SOURCE_LICENSES_URL"
                                :text="$t('myAccount.openSourceLicenses')"
                                tag="a" target="_blank">
           {{ $t('myAccount.openSourceLicenses') }}
         </analytics-tracked-tag>
       </li>
       <li>
-        <analytics-tracked-tag id="btn_help" :href="helpAndSupportURL"
+        <analytics-tracked-tag id="btn_help" :href="$store.app.$env.HELP_AND_SUPPORT_URL"
                                :text="$t('myAccount.helpAndSupport')"
                                tag="a" target="_blank">
           {{ $t('myAccount.helpAndSupport') }}
@@ -56,15 +56,6 @@ export default {
   components: {
     AnalyticsTrackedTag,
     FloatingButtonBottom,
-  },
-  data(app) {
-    return {
-      termsAndConditionsURL: app.$env.TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: app.$env.PRIVACY_POLICY_URL,
-      cookiesPolicyURL: app.$env.COOKIES_POLICY_URL,
-      openSourceLicensesURL: app.$env.OPEN_SOURCE_LICENSES_URL,
-      helpAndSupportURL: app.$env.HELP_AND_SUPPORT_URL,
-    };
   },
   methods: {
     signout() {
