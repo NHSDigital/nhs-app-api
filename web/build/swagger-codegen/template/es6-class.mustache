@@ -109,6 +109,8 @@ class {{&className}} {
       if(store && store.dispatch) store.dispatch('http/addCancelRequestHandler', cancel);
     };
 
+    const requestStartTime = new Date();
+
     let consola = {};
 
     if (process.server) {
@@ -130,8 +132,10 @@ class {{&className}} {
     }).then((response) => {
       if (process.server) {
         this.res.setHeader('Cache-Control', `${response.headers['cache-control']};`);
+        
         if (response) {
-          consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}`);
+          const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
+          consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}, duration: ${requestDurationMilliseconds}ms`);
         }
         if (response.headers['set-cookie']) {
           this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
@@ -143,8 +147,16 @@ class {{&className}} {
       this.store.dispatch('http/loadingCompleted');
       resolve({ deferred, result: body, store: this.store });
     }).catch((error) => {
-      if (process.server && error) {
-        consola.error(new Error(`Error sending request: ${method} ${urlWithParams}, response: ${error.status}`));
+      if (process.server) {
+        const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
+
+        if (error.response) {
+          consola.error(new Error(`Error response for request: ${method} ${urlWithParams}, response: ${error.response.status}, duration: ${requestDurationMilliseconds}ms}`));
+        } else if (error.request) {
+          consola.error(new Error(`Error sending request: ${method} ${urlWithParams}, duration: ${requestDurationMilliseconds}ms`));
+        } else {
+          consola.error(new Error(`Error setting up the request: ${method} ${urlWithParams}, error: ${error.message}, duration: ${requestDurationMilliseconds}ms`));
+        }
       }
       this.store.dispatch('http/loadingCompleted');
       if (!axios.isCancel(error)) {
