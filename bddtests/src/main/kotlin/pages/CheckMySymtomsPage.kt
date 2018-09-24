@@ -1,10 +1,5 @@
 package pages
 
-import net.thucydides.core.annotations.DefaultUrl
-import org.junit.Assert
-import pages.HybridPageObject
-import pages.HybridPageElement
-
 open class CheckMySymtomsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val conditionsHeader = HybridPageElement(

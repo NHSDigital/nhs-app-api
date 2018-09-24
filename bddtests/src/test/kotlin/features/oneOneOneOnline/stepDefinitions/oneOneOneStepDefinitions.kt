@@ -1,6 +1,7 @@
 package features.oneOneOneOnline.stepDefinitions
 
 import cucumber.api.java.en.And
+import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
 import features.oneOneOneOnline.Steps.CheckMySymptoms
@@ -31,5 +32,11 @@ open class OneOneOneStepDefinitions {
     fun checkMySymptomsPageIsDisplayed() {
         checkMySymptoms.assertConditionsHeaderVisible()
         checkMySymptoms.assertNhs111HeaderVisible()
+    }
+
+    @Then("^Check My symptoms page header and navigation menu are correct$")
+    fun checkMySymptomsPageHeaderAndNavigationMenuAreCorrect() {
+        navBar.header.assertIsVisible("Check my symptoms")
+        navBar.assertSelectedTab("Symptoms")
     }
 }

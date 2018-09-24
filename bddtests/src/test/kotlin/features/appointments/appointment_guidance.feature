@@ -9,7 +9,8 @@ Feature: Guidance prior to booking an appointment
     And I am logged in as a EMIS user
     And I am on the guidance page
     When I select Appointment Guidance Page Check symptoms button
-    Then a new tab opens https://111.nhs.uk/
+    Then Check My symptoms page is displayed
+    And Check My symptoms page header and navigation menu are correct
 
   @NHSO-420
   Scenario: A user with upcoming appointments is presented with guidance
@@ -21,7 +22,7 @@ Feature: Guidance prior to booking an appointment
 
   @NHSO-420
   Scenario: A user with no upcoming appointments is presented with guidance
-    Given I have upcoming appointments for EMIS
+    Given I have no upcoming appointments for EMIS
     And I am logged in as a EMIS user
     And I am on my appointments page
     When I select "Book new appointment" button

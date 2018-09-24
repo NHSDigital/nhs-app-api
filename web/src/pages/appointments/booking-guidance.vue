@@ -28,21 +28,12 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { APPOINTMENT_BOOKING } from '@/lib/routes';
+import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
 
 export default {
-  data(app) {
-    let symptomsCheckerUrl = app.$env.SYMPTOM_CHECKER_URL;
-    if (this.$store.state.device.isNativeApp) {
-      symptomsCheckerUrl += app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
-    }
-    return {
-      symptomsCheckerUrl,
-    };
-  },
   methods: {
     onCheckSymptomClicked() {
-      window.open(this.symptomsCheckerUrl, '_blank');
+      this.$router.push(SYMPTOMS.path);
     },
     onBookButtonClicked() {
       this.$router.push(APPOINTMENT_BOOKING.path);
