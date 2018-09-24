@@ -47,6 +47,7 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
     }
 
     private fun configureWebView() {
+        symptomsWebview.settings.javaScriptEnabled = true
         symptomsWebview.settings.domStorageEnabled = true
 
         chromeClient = ChromeClientLocationHandler(this)
