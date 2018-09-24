@@ -100,6 +100,10 @@ export default {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
     this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+
+    if (process.browser) {
+      this.$store.dispatch('session/updateLastCalledAt');
+    }
   },
   mounted() {
     if (process.client) {

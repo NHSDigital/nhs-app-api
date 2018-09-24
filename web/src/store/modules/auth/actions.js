@@ -76,7 +76,7 @@ export default {
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
 
-    this.app.$cookies.remove('nhso.auth');
+    this.app.$cookies.remove('nhso.session');
 
     return this
       .app
