@@ -171,6 +171,7 @@ namespace NHSOnline.Backend.Worker
             }
 
             UseSecurityHeaders(app);
+            app.UseResponseHeadersMiddleware();
 
             app.UsePathBase(new PathString("/v1"));
 

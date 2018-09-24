@@ -115,7 +115,7 @@ class {{&className}} {
       consola = require('consola');
       consola.info(`Begin request: ${method} ${urlWithParams}`);
     }
-    
+
     axios({
       cancelToken: new CancelToken(function executor(c) {
         // An executor function receives a cancel function as a parameter
@@ -128,11 +128,14 @@ class {{&className}} {
       crossDomain: true,
       data: JSON.stringify(body)
     }).then((response) => {
-      if (process.server && response) {
-        consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}`);
-      }
-      if (process.server && response.headers['set-cookie']) {
-        this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
+      if (process.server) {
+        this.res.setHeader('Cache-Control', `${response.headers['cache-control']};`);
+        if (response) {
+          consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}`);
+        }
+        if (response.headers['set-cookie']) {
+          this.res.setHeader('Set-Cookie', `${response.headers['set-cookie']}; SameSite=Lax`);
+        }
       }
 
       return response.data
