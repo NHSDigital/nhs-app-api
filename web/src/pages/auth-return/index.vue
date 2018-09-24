@@ -7,6 +7,7 @@ import { isEmpty } from 'lodash/fp';
 
 export default {
   name: '',
+  layout: 'authReturn',
   async fetch(context) {
     if (process.server) {
       await context.store.dispatch('auth/handleAuthResponse', context.route.query.code);

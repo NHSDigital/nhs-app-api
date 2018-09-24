@@ -1,18 +1,22 @@
 <template>
   <header :class="$style.header">
-    <nuxt-link :class="$style['anchor-icon']" to="/">
+    <nuxt-link :class="$style['anchor-icon']" :to="indexPath">
       <home-icon/>
     </nuxt-link>
     <a id="help_icon" :class="$style['anchor-icon']" :href="helpAndSupportURL" target="_blank">
       <help-icon/>
     </a>
-    <nuxt-link :class="$style['anchor-icon']" to="/account"><account-icon/></nuxt-link>
+    <nuxt-link v-if="showAccountIcon" :class="$style['anchor-icon']" :to="accountPath">
+      <account-icon/>
+    </nuxt-link>
     <hr :class="$style.rule">
     <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
   </header>
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
+import { ACCOUNT, INDEX } from '@/lib/routes';
 import AccountIcon from '../components/icons/AccountIcon';
 import HelpIcon from '../components/icons/HelpIcon';
 import HomeIcon from '../components/icons/HomeIcon';
@@ -31,10 +35,24 @@ export default {
       title: `${this.$store.state.pageTitle.pageTitle} - NHS App`,
     };
   },
+  props: {
+    showAccountIcon: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data(app) {
     return {
       helpAndSupportURL: app.$env.HELP_AND_SUPPORT_URL,
     };
+  },
+  computed: {
+    accountPath() {
+      return ACCOUNT.path;
+    },
+    indexPath() {
+      return INDEX.path;
+    },
   },
 };
 </script>
