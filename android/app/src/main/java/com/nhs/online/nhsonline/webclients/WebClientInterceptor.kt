@@ -104,6 +104,11 @@ class WebClientInterceptor(
         if (shouldHandleUnavailability(url)) {
             cancelTrackingWebRequestResponse()
         }
+
+        if (!shouldShowErrorPage) {
+            uiInteractor.showWebviewScreen()
+        }
+
         super.onPageFinished(view, url)
     }
 

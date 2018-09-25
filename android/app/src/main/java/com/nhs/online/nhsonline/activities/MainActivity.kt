@@ -61,13 +61,15 @@ class MainActivity : IInteractor, AppCompatActivity() {
         knownServices = KnownServices(this)
         appWebInterface = AppWebInterface(this)
 
+        dismissProgressDialog()
+
         configureWebView()
         var wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
         webview.webViewClient = wvClient
         urlLoader = UrlLoader(webview, wvClient, appWebInterface, knownServices, resources.getString(R.string.baseURL))
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
-        retryButton.setOnClickListener { urlLoader.reloadRequest() }
+        retryButton.setOnClickListener { onErrorRetryButton() }
         nhsOnlineLogoIcon.setOnClickListener { onNhsOnlineLogoIconSelected() }
         myAccountIcon.setOnClickListener { onMyAccountIconSelected() }
         helpIcon.setOnClickListener { onHelpIconSelected() }
@@ -88,6 +90,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 loadWelcomePage()
             }
         }
+    }
+
+    private fun onErrorRetryButton() {
+        showProgressDialog()
+        urlLoader.reloadRequest()
     }
 
     override fun onStart() {

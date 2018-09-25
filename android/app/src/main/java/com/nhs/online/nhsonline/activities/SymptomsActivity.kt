@@ -20,6 +20,7 @@ import com.nhs.online.nhsonline.webclients.UnsecureWebClient
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
 import kotlinx.android.synthetic.main.error_layout.*
+import kotlinx.android.synthetic.main.error_layout.view.*
 import kotlinx.android.synthetic.main.header_layout.*
 import java.net.URL
 
@@ -64,6 +65,7 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         symptomsWebview.loadUrl(urlWithMissingQueryStrings)
     }
     private fun reloadRequest() {
+        showProgressDialog()
         if (reloadUrl != null) {
             symptomsWebview.loadUrl(reloadUrl)
         } else {
