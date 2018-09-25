@@ -9,11 +9,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             base(configuration, logger)
         {
             var path = configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", logger);
+            var password = configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", logger);
             logger.LogInformation("EMIS_CERTIFICATE_PATH: {path}", path);
 
             if (ValidateParameters(path))
             {
-                AddCertificate(path);
+                AddCertificate(path, password);
             }
             else
             {
