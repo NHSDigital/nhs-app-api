@@ -1,23 +1,14 @@
 package com.nhs.online.nhsonline.browseractivities
 
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.os.Bundle
-import android.support.customtabs.CustomTabsClient
 import android.support.customtabs.CustomTabsIntent
-import android.support.customtabs.CustomTabsServiceConnection
-import android.support.customtabs.CustomTabsSession
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import java.net.URL
 import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
 import android.content.pm.ResolveInfo
-import android.content.pm.PackageManager
-import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.services.KnownServices
 
 class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInterface
@@ -48,7 +39,7 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
 
         var supportedCustomTabsPackages = getCustomTabsPackages(context, url)
 
-        val knownServices = KnownServices(context);
+        val knownServices = KnownServices(context)
 
             if (supportedCustomTabsPackages.count() > 0
                     && !knownServices.isHotJar(URL(url))) {
@@ -61,7 +52,6 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
                 } else {
                     customTabsIntent.intent.setPackage(supportedCustomTabsPackages[0].activityInfo.packageName)
                 }
-
                 customTabsIntent.launchUrl(context, Uri.parse(url))
             } else {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))

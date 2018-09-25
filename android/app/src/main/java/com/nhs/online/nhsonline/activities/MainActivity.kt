@@ -1,6 +1,7 @@
 package com.nhs.online.nhsonline.activities
 
 import android.content.Context
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -76,7 +77,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         if (isFirstTimeOpened) {
             val edit = prefs.edit()
             edit.putBoolean(getString(R.string.isFirstTimeOpened), java.lang.Boolean.FALSE)
-            edit.commit()
+            edit.apply()
             urlLoader.loadUrl(getString(R.string.appIntroPath))
         } else {
             val urlPath = intent?.data?.path
@@ -132,6 +133,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         return urlLoader.reloadUrl
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private fun configureWebView() {
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true

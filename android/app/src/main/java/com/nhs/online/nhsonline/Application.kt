@@ -1,10 +1,14 @@
 package com.nhs.online.nhsonline
 
 import android.app.Application
+import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
+import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.preference.PreferenceManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.*
+import android.view.WindowManager
 import android.webkit.WebView
 import java.util.*
 import kotlin.concurrent.schedule
