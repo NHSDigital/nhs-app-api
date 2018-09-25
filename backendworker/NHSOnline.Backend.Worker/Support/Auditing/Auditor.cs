@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using System.Threading;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.Support.Auditing
 {
@@ -37,14 +38,14 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             return supplier;
         }
 
-        public void Audit(string operation, string details, params object[] parameters)
+        public async Task Audit(string operation, string details, params object[] parameters)
         {
             try
             {
                 var nhsNumber = NhsNumber();
                 var supplier = Supplier();
 
-                AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
+                await AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
             }
             catch (Exception exception)
             {
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             }
         }
 
-        public void AuditWithExplicitNhsNumber(
+        public async Task AuditWithExplicitNhsNumber(
             string nhsNumber, 
             Supplier supplier, 
             string operation,
@@ -72,7 +73,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
 
             try
             {
-                AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
+                await AuditWithNoTryCatch(nhsNumber, supplier, operation, details, parameters);
             }
             catch (Exception exception)
             {
@@ -81,10 +82,10 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             }
         }
 
-        private void AuditWithNoTryCatch(string nhsNumber, Supplier supplier, string operation, string details,
+        private async Task AuditWithNoTryCatch(string nhsNumber, Supplier supplier, string operation, string details,
             params object[] parameters)
         {
-            _auditSink.WriteAudit(DateTime.UtcNow, nhsNumber, supplier, operation,
+            await _auditSink.WriteAudit(DateTime.UtcNow, nhsNumber, supplier, operation,
                 string.Format(CultureInfo.GetCultureInfo("en-GB"), details, parameters));
         }
 

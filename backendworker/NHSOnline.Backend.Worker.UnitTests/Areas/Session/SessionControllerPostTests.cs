@@ -61,7 +61,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _fixture = new Fixture()
                 .Customize(new AutoMoqCustomization())
                 .Customize(new ApiControllerAutoFixtureCustomization());
-            
+
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
             _userProfile.DateOfBirth = DateTime.Now.ToString(DATE_FORMAT, CultureInfo.InvariantCulture);
@@ -73,9 +73,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _configurationSettings
                 .Setup(x => x.Value)
                 .Returns(new ConfigurationSettings()
-                    {
-                        DefaultSessionExpiryMinutes = _sessionTimeoutMinutes,
-                    });
+                {
+                    DefaultSessionExpiryMinutes = _sessionTimeoutMinutes,
+                });
 
             _apiSessionId = _fixture.Create<string>();
 
@@ -87,7 +87,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 .Setup(x => x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(new GetUserProfileResult
                 {
-                    StatusCode = HttpStatusCode.OK, 
+                    StatusCode = HttpStatusCode.OK,
                     UserProfile = Option.Some(_userProfile)
                 }));
 
@@ -142,7 +142,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _mockMinimumAgeValidator
                 .Setup(x => x.IsValid(It.IsAny<DateTime>()))
                 .Returns(true);
-            
+
             serviceProviderMock
                 .Setup(x => x.GetService(typeof(IAuthenticationService)))
                 .Returns(_authenticationServiceMock.Object);
@@ -170,7 +170,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                     x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(new GetUserProfileResult
                 {
-                    StatusCode = HttpStatusCode.BadRequest, 
+                    StatusCode = HttpStatusCode.BadRequest,
                     UserProfile = Option.None<UserProfile>()
                 }))
                 .Verifiable();
@@ -184,7 +184,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             statusCodeResult.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
             _mockAuditor.VerifyNoOtherCalls();
         }
-        
+
         [TestMethod]
         public async Task Post_CIDUserProfileCallFails_WithBadGateway_ReturnsBadGateway()
         {
@@ -194,7 +194,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                     x.GetUserProfile(_userSessionRequest.AuthCode, _userSessionRequest.CodeVerifier, _userSessionRequest.RedirectUrl))
                 .Returns(Task.FromResult(new GetUserProfileResult
                 {
-                    StatusCode = HttpStatusCode.BadGateway, 
+                    StatusCode = HttpStatusCode.BadGateway,
                     UserProfile = Option.None<UserProfile>()
                 }))
                 .Verifiable();
@@ -321,7 +321,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         public async Task Post_HappyPath_VerifyAllExpectationsOnMocks()
         {
             // Arrange
-            _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse, It.IsAny<string>(), It.IsAny<object[]>()));
+            _mockAuditor.Setup(x => x.Audit(Constants.AuditingTitles.SessionCreateResponse, It.IsAny<string>(), It.IsAny<object[]>()))
+                        .Returns(Task.CompletedTask);
 
             // Act
             await _systemUnderTest.Post(_userSessionRequest);
@@ -336,7 +337,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             _authenticationServiceMock.VerifyAll();
             _mockAntiforgery.VerifyAll();
         }
-        
+
         [TestMethod]
         public async Task Post_Im1ConnectionTokenFailsMinimumAgeValidation_Returned465FailedAgeRequirement()
         {
@@ -354,7 +355,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
             _mockAuditor.VerifyNoOtherCalls();
         }
-        
+
         [TestMethod]
         public async Task Post_Im1ConnectionTokenFailsMinimumAgeValidation_NullDateOfBirth_Returned465FailedAgeRequirement()
         {
@@ -370,7 +371,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
             statusCodeResult.StatusCode.Should().Be(Constants.CustomHttpStatusCodes.Status465FailedAgeRequirement);
             _mockAuditor.VerifyNoOtherCalls();
         }
-        
+
         [TestMethod]
         public async Task Post_Im1ConnectionTokenNoNhsNumber_Returned464NoNhsNumber()
         {

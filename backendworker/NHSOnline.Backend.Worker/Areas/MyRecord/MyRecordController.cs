@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             var userSession = HttpContext.GetUserSession();
             
             // Audit attempt made to view patient record
-            _auditor.Audit(Constants.AuditingTitles.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
+            await _auditor.Audit(Constants.AuditingTitles.ViewPatientRecordAuditTypeRequest, "Viewing Patient Record");
  
             _logger.LogInformation("Fetching PatientRecordService for supplier: {0}", userSession.Supplier.ToString());           
             var patientRecordService = _gpSystemFactory

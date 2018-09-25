@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.Support.Auditing
 {
@@ -13,15 +14,15 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             _streamWriter = new StreamWriter(stream);
         }
 
-        public void WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details)
+        public async Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details)
         {
             if (_disposed)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
             
-            _streamWriter.WriteLine($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {supplier} | {operation} | {details} |");
-            _streamWriter.Flush();
+            await _streamWriter.WriteLineAsync($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {supplier} | {operation} | {details} |");
+            await _streamWriter.FlushAsync();
         }
 
         public void Dispose()

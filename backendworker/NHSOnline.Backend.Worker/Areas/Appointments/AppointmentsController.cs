@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             {
                 _logger.LogEnter(nameof(Delete));
                 
-                _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
+                await _auditor.Audit(Constants.AuditingTitles.CancelAppointmentAuditTypeRequest, "Attempting to cancel appointment with id: {0}",
                     model.AppointmentId);
 
                 var userSession = HttpContext.GetUserSession();
@@ -63,7 +63,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             {
                 _logger.LogEnter(nameof(Get));
                 
-                _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
+                await _auditor.Audit(Constants.AuditingTitles.ViewAppointmentAuditTypeRequest, "Attempting to view booked appointments");
 
                 var userSession = HttpContext.GetUserSession();
 
@@ -91,7 +91,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             {
                 _logger.LogEnter(nameof(Post));
                 
-                _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
+                await _auditor.Audit(Constants.AuditingTitles.BookAppointmentAuditTypeRequest,
                     "Attempting to book appointment with id: {0} and startTime: {1:O}", model.SlotId, model.StartTime);
 
                 var userSession = HttpContext.GetUserSession();

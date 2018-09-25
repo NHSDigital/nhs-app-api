@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                 var gpSystem = gpSystemOption.ValueOrFailure();
                 var linkageService = gpSystem.GetLinkageService();
 
-                _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
+                await _auditor.AuditWithExplicitNhsNumber(nhsNumber, gpSystem.Supplier,
                     Constants.AuditingTitles.GetLinkageDetailsAuditTypeRequest, "Attempting to get linkage details.");
 
                 var result = await linkageService.GetLinkageKey(nhsNumber, odsCode, identityToken);
@@ -95,7 +95,7 @@ namespace NHSOnline.Backend.Worker.Areas.Linkage
                 var gpSystem = gpSystemOption.ValueOrFailure();
                 var linkageService = gpSystem.GetLinkageService();
 
-                _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
+                await _auditor.AuditWithExplicitNhsNumber(createLinkageRequest.NhsNumber, gpSystem.Supplier,
                     Constants.AuditingTitles.CreateLinkageKeyAuditTypeRequest, "Attempting to create linkage key.");
 
                 var result = await linkageService.CreateLinkageKey(createLinkageRequest);

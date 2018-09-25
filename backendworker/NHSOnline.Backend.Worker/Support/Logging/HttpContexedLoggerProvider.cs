@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
 
         public HttpContexedLoggerProvider
         (
-            TextWriter logwriter, 
+            TextWriter logwriter,
             LogLevel minLogLevel,
             LogLevel maxLogLevelLimit = LogLevel.None,
             IEnumerable<LogCensorFilter> regexFilterList = null
@@ -64,10 +64,10 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
-            
+
             return new HttpContexedLogger(categoryName, _logwriter, _minLogLevel, _maxLogLevelLimit, _scopeProvider, _regexFilterList);
         }
-     
+
         private class HttpContexedLogger : ILogger
         {
             private readonly TextWriter _textWriter;
@@ -76,8 +76,6 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             private readonly LoggerExternalScopeProvider _scopeProvider;
             private readonly string _categoryName;
             private readonly IEnumerable<LogCensorFilter> _regexFilterList;
-
-            private static readonly object Locker = new object();
 
             public HttpContexedLogger(string categoryName, TextWriter logWriter, LogLevel minLogLevel, LogLevel maxLogLevelLimit, LoggerExternalScopeProvider scopeProvider, IEnumerable<LogCensorFilter> regexFilterList)
             {
@@ -93,17 +91,14 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             {
                 if (IsEnabled(logLevel))
                 {
-                    lock (Locker)
+                    var exceptionMessage = string.Empty;
+                    if (exception != null)
                     {
-                        var exceptionMessage = string.Empty;
-                        if (exception != null)
-                        {
-                            exceptionMessage = $"[Exception: {exception}] ";
-                        }
-
-                        _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {CensorLogMessage(formatter(state, exception))} {exceptionMessage}|");
-                        _textWriter.Flush();
+                        exceptionMessage = $"[Exception: {exception}] ";
                     }
+
+                    _textWriter.WriteLine($"| {DateTime.Now:yyyy-MM-dd HH:mm:ss:fff} | { GetScope(state) } | {_categoryName} | { logLevel } | {CensorLogMessage(formatter(state, exception))} {exceptionMessage}|");
+                    _textWriter.Flush();
                 }
             }
 
@@ -123,15 +118,15 @@ namespace NHSOnline.Backend.Worker.Support.Logging
             private string GetScope<TState>(TState state)
             {
                 var scope = new StringBuilder();
-                _scopeProvider.ForEachScope((s, scopeLevel) => 
+                _scopeProvider.ForEachScope((s, scopeLevel) =>
                 {
-                    if(scope.Length >0)
+                    if (scope.Length > 0)
                     {
                         scope.Append("=>");
                     }
                     scope.Append(s.ToString());
                 }, state);
-                
+
                 return CensorLogMessage(scope.ToString());
             }
 
@@ -146,7 +141,7 @@ namespace NHSOnline.Backend.Worker.Support.Logging
                 {
                     return _scopeProvider.Push(new HttpContextLoggerScope(state as HttpContext));
                 }
-                    
+
                 return _scopeProvider.Push(state);
             }
         }

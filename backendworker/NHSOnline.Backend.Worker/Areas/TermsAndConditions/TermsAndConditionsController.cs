@@ -49,7 +49,7 @@ namespace NHSOnline.Backend.Worker.Areas.TermsAndConditions
             var userSession = HttpContext.GetUserSession();
         
             // Audit attempt to record consent
-            _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsRecordConsentAuditTypeRequest,
+            await _auditor.Audit(Constants.AuditingTitles.TermsAndConditionsRecordConsentAuditTypeRequest,
                 "Attempting to record patient consent - ConsentGiven={0} at DateOfConsent={1:O}", model.ConsentGiven, model.DateOfConsent);
           
             _logger.LogDebug("Recording user consent");

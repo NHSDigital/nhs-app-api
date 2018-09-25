@@ -57,7 +57,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _logger.LogInformation($"Fetching prescriptions service implementation for supplier {userSession.Supplier}");
             var prescriptionService = gpSystem.GetPrescriptionService();
 
-            _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
+            await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewHistoryRequest, "Attempting to view prescriptions");
 
             _logger.LogInformation($"Calling prescription service to get prescriptions");
             var result = await prescriptionService.GetPrescriptions(userSession, fromDate, DateTimeOffset.Now);
@@ -77,7 +77,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 
             var courseIds = FormatCourseIds(repeatPrescriptionRequest.CourseIds);
             
-            _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
+            await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsOrderRepeatMedicationsRequest, "Attempting to create a prescription request with course ids: {0}", courseIds);
             
             _logger.LogInformation($"Fetching prescriptions validator for supplier {userSession.Supplier}");
             var prescriptionRequestValidationService = gpSystem.GetPrescriptionRequestValidationService();

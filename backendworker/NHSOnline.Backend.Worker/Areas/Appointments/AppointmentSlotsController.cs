@@ -39,7 +39,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments
             {
                 _logger.LogEnter(nameof(Get));
                 
-                _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
+                await _auditor.Audit(Constants.AuditingTitles.GetSlotsAuditTypeRequest, "Attempting to get available appointments");
 
                 if (!new DateRangeValidator(_dateTimeOffsetProvider).IsValid(queryParameters.FromDate,
                     queryParameters.ToDate))

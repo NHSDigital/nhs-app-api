@@ -70,19 +70,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
                 _nestedClass = nestedClass;
             }
 
-            public void BasicAudit()
+            public async Task BasicAudit()
             {
-                _auditor.Audit("Testing", "woke up.");
+                await _auditor.Audit("Testing", "woke up.");
             }
 
-            public void ClearTextAudit()
+            public async Task ClearTextAudit()
             {
                 var param0 = "eggs";
                 var param1 = 5;
-                _auditor.Audit("Testing", "Had breakfast of {0} and {1} sausages.", param0, param1);
+                await _auditor.Audit("Testing", "Had breakfast of {0} and {1} sausages.", param0, param1);
             }
 
-            public void NestedControllerMethod()
+            public async Task NestedControllerMethod()
             {
                 _nestedClass.PauseNestedExecution = true;
                 var awaiter = Task.Run(_nestedClass.TaskAsyncMethod);
@@ -92,17 +92,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
                 using (_auditor.BeginScope(dummyContext))
                 {
 
-                    _auditor.Audit("Testing", "Message with rubbish scope 1");
+                    await _auditor.Audit("Testing", "Message with rubbish scope 1");
                     _nestedClass.PauseNestedExecution = false;
-                    awaiter.Wait();
+                    await awaiter;
 
-                    _auditor.Audit("Testing", "Message with rubbish scope 2");
+                    await _auditor.Audit("Testing", "Message with rubbish scope 2");
                 }
             }
 
-            public void AuditWithScope(string nhsNumber, Supplier supplier)
+            public async Task AuditWithScope(string nhsNumber, Supplier supplier)
             {
-                _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
+                await _auditor.AuditWithExplicitNhsNumber(nhsNumber, supplier, "Test Audit", "SomeDetails '{0} {1}'", "with", "parameters");
             }
         }
 
@@ -129,11 +129,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
             _resultContext = new ResultExecutedContext(actionContext, new List<IFilterMetadata>(), new ObjectResult(1), _systemUnderTest);
         }
 
-        private void RunControllerMethod(Action controllerMethod)
+        private void RunControllerMethod(Func<Task> controllerMethod)
         {
             var attribute = _fixture.Create<HttpContextAuditActionFilterAttribute>();
             attribute.OnActionExecuting(_actionExecutingContext);
-            controllerMethod();
+            controllerMethod().Wait();
             attribute.OnActionExecuted(null);// Method should do nothing so can pass null in...
             attribute.OnResultExecuting(null);// Method should do nothing so can pass null in...
             attribute.OnResultExecuted(_resultContext);
@@ -173,15 +173,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public void TestThrowsExceptionIfAuditScopeNotSetUp()
+        public async Task TestThrowsExceptionIfAuditScopeNotSetUp()
         {
-            _systemUnderTest.BasicAudit();
+            await _systemUnderTest.BasicAudit();
         }
 
         [TestMethod]
-        public void TestAuditWithScopeProvidedInAuditMethod()
+        public async Task TestAuditWithScopeProvidedInAuditMethod()
         {
-            _systemUnderTest.AuditWithScope(NhsNumber, Supplier.Tpp);
+            await _systemUnderTest.AuditWithScope(NhsNumber, Supplier.Tpp);
 
             _stream.Position = 0;
             var streamReader = new StreamReader(_stream);
@@ -191,15 +191,15 @@ namespace NHSOnline.Backend.Worker.UnitTests.Support.Auditing
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public void TestThrowsExceptionIfNhsNumberIsNull()
+        public async Task TestThrowsExceptionIfNhsNumberIsNull()
         {
-            _systemUnderTest.AuditWithScope("", Supplier.Vision);
+            await _systemUnderTest.AuditWithScope("", Supplier.Vision);
         }
 
         [TestMethod, ExpectedException(typeof(NoAuditKeyException))]
-        public void TestThrowsExceptionIfSupplierIsDefault()
+        public async Task TestThrowsExceptionIfSupplierIsDefault()
         {
-            _systemUnderTest.AuditWithScope("1684156", Supplier.Unknown);
+            await _systemUnderTest.AuditWithScope("1684156", Supplier.Unknown);
         }
 
 

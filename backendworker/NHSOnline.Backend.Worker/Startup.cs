@@ -2,7 +2,6 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -143,13 +142,6 @@ namespace NHSOnline.Backend.Worker
 
             // Add functionality to inject IOptions<T>
             services.AddOptions();
-
-            var module = services.FirstOrDefault(t => t.ImplementationFactory?.GetType() == typeof(Func<IServiceProvider, DependencyTrackingTelemetryModule>));
-
-            if (module != null)
-            {
-                services.Remove(module);
-            }
 
             _modularStartup.ConfigureServices(services);
         }

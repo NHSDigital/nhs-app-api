@@ -15,20 +15,20 @@ namespace NHSOnline.Backend.Worker
     {
         Task<string> CreateUserSession(UserSession userSession);
         Task<Option<UserSession>> GetUserSession(string sessionId);
-        Task<bool> DeleteUserSession(string sessionId);        
+        Task<bool> DeleteUserSession(string sessionId);
     }
 
     public class SessionCacheService : ISessionCacheService
     {
         private readonly IConnectionMultiplexerFactory _connectionMultiplexerFactory;
-        private readonly ICipherService _cipherService;        
+        private readonly ICipherService _cipherService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly ConfigurationSettings _settings;
         private readonly ILogger<SessionCacheService> _logger;
 
         public SessionCacheService(
             IConnectionMultiplexerFactory connectionMultiplexerFactory,
-            ICipherService cipherService, 
+            ICipherService cipherService,
             IOptions<ConfigurationSettings> settings,
             ILogger<SessionCacheService> logger)
         {
@@ -53,19 +53,21 @@ namespace NHSOnline.Backend.Worker
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
                 var database = multiplexer.GetDatabase();
                 var sessionExpirationTime = TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes);
-                RedisValue sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
 
+                RedisValue sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
+                sessionObject = _cipherService.Encrypt(sessionObject);
                 RedisKey sessionKey = Guid.NewGuid().ToString();
 
-                sessionObject = _cipherService.Encrypt(sessionObject);
 
-                _logger.LogDebug("Adding session to Redis");
-                await database.StringSetAsync(sessionKey, sessionObject, sessionExpirationTime);
-                _logger.LogDebug("Added session to Redis");
+                using (_logger.WithTimer("Add session to Redis"))
+                {
+                    await database.StringSetAsync(sessionKey, sessionObject, sessionExpirationTime);
+                }
 
                 userSession.Key = sessionKey;
                 return sessionKey;
-            }finally
+            }
+            finally
             {
                 _logger.LogExit(nameof(CreateUserSession));
             }
@@ -78,12 +80,15 @@ namespace NHSOnline.Backend.Worker
                 _logger.LogEnter(nameof(GetUserSession));
 
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
+                
                 var database = multiplexer.GetDatabase();
                 RedisKey redisKey = sessionId;
 
-                _logger.LogDebug("Retrieving session from Redis");
-                var redisValue = await database.StringGetWithExpiryAsync(redisKey);
-                _logger.LogDebug("Retrieved session from Redis");
+                RedisValueWithExpiry redisValue;
+                using (_logger.WithTimer("Get session from Redis"))
+                {
+                    redisValue = await database.StringGetWithExpiryAsync(redisKey);
+                }
 
                 if (redisValue.Value.IsNull)
                 {
@@ -91,9 +96,11 @@ namespace NHSOnline.Backend.Worker
                     return Option.None<UserSession>();
                 }
 
-                _logger.LogDebug("Updating expiry for session in Redis");
-                await database.KeyExpireAsync(sessionId, TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes));
-                _logger.LogDebug("Updated expiry for session in Redis");
+                using (_logger.WithTimer("Update session expiry in Redis"))
+                {
+                    await database.KeyExpireAsync(sessionId, TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes));
+                }
+
 
                 var userSession = JsonConvert
                     .DeserializeObject<UserSession>(_cipherService.Decrypt(redisValue.Value), _serializerSettings);
@@ -118,11 +125,11 @@ namespace NHSOnline.Backend.Worker
                 var database = multiplexer.GetDatabase();
                 RedisKey redisKey = sessionId;
 
-                _logger.LogDebug("Deleting session from Redis");
-                var result = await database.KeyDeleteAsync(redisKey);
-                _logger.LogDebug("Deleted session from Redis");
 
-                return result;
+                using (_logger.WithTimer("Delete session in Redis"))
+                {
+                    return await database.KeyDeleteAsync(redisKey);
+                }
             }
             finally
             {

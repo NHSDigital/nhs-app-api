@@ -49,10 +49,11 @@ namespace NHSOnline.Backend.Worker
                 _logger.LogEnter(nameof(GetSupplierNameFromRedis));
                 var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.OdsCodeLookup);
                 var database = multiplexer.GetDatabase();
-                _logger.LogDebug("Retrieving Supplier Name from Redis");
-                var redisValue = await database.StringGetAsync(odsCode);
-                _logger.LogDebug("Retrieved Supplier Name from Redis");
-                return redisValue;
+
+                using (_logger.WithTimer("Retrieving supplier name from Redis"))
+                {
+                    return await database.StringGetAsync(odsCode);
+                }
             }
             finally
             {

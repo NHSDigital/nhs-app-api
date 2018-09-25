@@ -30,7 +30,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         {
             var userSession = HttpContext.GetUserSession();
 
-            _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
+            await _auditor.Audit(Constants.AuditingTitles.RepeatPrescriptionsViewRepeatMedicationsRequest, "Attempting to retrieve courses");
             _logger.LogInformation($"Fetching courses interface for supplier {userSession.Supplier}");
             
             var courseService = _gpSystemFactory
