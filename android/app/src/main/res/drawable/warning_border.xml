@@ -6,7 +6,7 @@
             <solid android:color="@color/error" />
         </shape>
     </item>
-    <item android:top="@dimen/_1sdp">
+    <item android:top="@dimen/_3sdp">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/white" />
         </shape>

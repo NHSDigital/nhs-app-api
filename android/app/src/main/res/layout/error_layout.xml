@@ -2,14 +2,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <TextView
-        style="@style/default_error_icon"
-        android:layout_width="@dimen/_55ssp"
-        android:layout_height="@dimen/_35sdp"
-        android:paddingTop="@dimen/_6sdp"
-        android:text="@string/errorIconText"/>
-
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            style="@style/default_error_icon"
+            android:layout_width="@dimen/_55ssp"
+            android:layout_height="@dimen/_35sdp"
+            android:paddingTop="@dimen/_6sdp"
+            android:text="@string/errorIconText"/>
+        <LinearLayout
+            android:id="@+id/default_warning_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:background="@drawable/warning_border"
+            android:orientation="horizontal" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -27,7 +27,7 @@
         <item name="android:padding">@dimen/_12sdp</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:layout_marginTop">0dp</item>
-        <item name="android:background">@drawable/warning_border</item>
+        <item name="android:background">@android:color/white</item>
     </style>
 
     <style name="blue_button" parent="Base.TextAppearance.AppCompat.Button">
