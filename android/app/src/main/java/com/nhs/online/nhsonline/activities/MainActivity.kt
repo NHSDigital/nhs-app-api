@@ -1,5 +1,6 @@
 package com.nhs.online.nhsonline.activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -7,17 +8,13 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.webkit.CookieManager
 import android.webkit.WebSettings
-import com.nhs.online.nhsonline.Application
 import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.R.id.menuBar
-import com.nhs.online.nhsonline.R.id.webview
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -37,6 +34,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import java.util.*
+import android.location.LocationManager
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -294,9 +292,18 @@ class MainActivity : IInteractor, AppCompatActivity() {
             permissions: Array<out String>,
             grantResults: IntArray
     ) {
+        val lm = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+       var gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                chromeClient.onLocationPermissionResponded(true)
+                if (gpsEnabled){
+                    chromeClient.onLocationPermissionResponded(true)}
+                else{
+                    val gpsOptionsIntent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                    startActivity(gpsOptionsIntent)
+                    chromeClient.onLocationPermissionResponded(true)
+                }
             } else {
                 chromeClient.onLocationPermissionResponded(false)
             }
