@@ -20,7 +20,7 @@ Feature: Display More Menu
     When I choose to set my organ donation preferences
     Then a new tab opens https://www.organdonation.nhs.uk/
 
-  Scenario:  A user can navigate to the 'Set health data sharing preferences' page
+  Scenario: A user can navigate to the 'Choose how the NHS uses your data' page
     Given a patient from EMIS is defined
     And I am logged in
     And I navigate to more

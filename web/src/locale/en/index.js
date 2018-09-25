@@ -572,8 +572,8 @@ export default {
       body: 'Help save thousands of lives in the UK every year by signing up to become a donor on the NHS Organ Donor Register.',
     },
     dataSharing: {
-      subheader: 'Manage your choice for sharing data',
-      body: 'Find out why your data matters and choose whether or not it can be used for research and planning.',
+      subheader: 'Choose how the NHS uses your data',
+      body: 'Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning.',
     },
   },
   navigationMenu: {
