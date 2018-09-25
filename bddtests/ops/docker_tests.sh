@@ -40,12 +40,13 @@ then
     BDD_CUCUMBER_OPTIONS="$SPECIFIC_TEST_TAGS"
 else
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    if [ "$RUN_AS_DEVELOP" == 1 ] || [ $CURRENT_BRANCH == "develop" ]
+    CURRENT_TAG=$(git name-rev --tags --name-only $CURRENT_BRANCH)
+    if [ "$RUN_AS_DEVELOP" == 1 ] || [ $CURRENT_BRANCH == "develop" ] || [ $CURRENT_TAG != "undefined" ]
     then
-        info "Develop Branch - Full BDD Test Run Configured"
+        info "Main Tranche - Full BDD Test Run Configured"
         BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS'"
     else
-        info "Non-Develop Branch - BDD Smoketest Run Configured"
+        info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
         not @long-running and @smoketest $SPECIFIC_TEST_TAGS'"
     fi
