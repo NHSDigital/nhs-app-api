@@ -66,11 +66,7 @@ export default {
       );
     },
     showSurvey() {
-      if (this.$env.HOTJAR_SURVEY_VISIBLE) {
-        return this.$route.name === INDEX.name;
-      }
-
-      return false;
+      return (this.isHotJarSurveyVisible() && this.$route.name === INDEX.name);
     },
     mainClass() {
       if (this.isLoginPage()) {
@@ -80,7 +76,7 @@ export default {
       if (this.$store.state.device.isNativeApp) {
         clazzes.push('native');
       }
-      if (this.$env.HOTJAR_SURVEY_VISIBLE && this.$route.name === INDEX.name) {
+      if (this.isHotJarSurveyVisible() && this.$route.name === INDEX.name) {
         if (this.surveyBarOpen) {
           clazzes.push('survey-open');
         } else {
@@ -125,6 +121,9 @@ export default {
     },
     setSurveyBarStatus(isBarOpen) {
       this.surveyBarOpen = isBarOpen;
+    },
+    isHotJarSurveyVisible() {
+      return this.$env.HOTJAR_SURVEY_VISIBLE === 'true' || this.$env.HOTJAR_SURVEY_VISIBLE === true;
     },
   },
 };
