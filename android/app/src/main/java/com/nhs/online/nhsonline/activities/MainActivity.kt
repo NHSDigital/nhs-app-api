@@ -130,6 +130,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         urlLoader.reloadUrl = url
     }
 
+    fun getReloadUrl() : String? {
+        return urlLoader.reloadUrl
+    }
+
     private fun configureWebView() {
         webview.settings.javaScriptEnabled = true
         webview.settings.domStorageEnabled = true
@@ -233,7 +237,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
                     appWebInterface.loadDispatchEvent(resources.getString(R.string.authLogout))
                 }
-            .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
+                .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
 
         var dialog: AlertDialog = builder.create()
         dialog.show()

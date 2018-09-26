@@ -12,13 +12,29 @@ class AppWebInterface(private val context: MainActivity) {
         }
     }
 
+    fun isRecoveringFromDroppedConnection(path: String, baseUrl: String) : Boolean {
+        var reloadUrl = createReloadUrl(path, baseUrl)
+        return (context.getReloadUrl() == reloadUrl)
+    }
+
+    private fun createReloadUrl(path: String, baseUrl: String) : String {
+        var reloadUrl = baseUrl + path
+        if (path.indexOf(baseUrl) > -1){
+            reloadUrl = path
+        }
+        return reloadUrl
+    }
+
     fun loadSpaPage(path: String, baseUrl: String) {
         var spaPath = path.replace(baseUrl, "/")
 
         if(!spaPath.startsWith("/")) {
             spaPath = "/$spaPath"
         }
-        context.setReloadUrl("$baseUrl$path")
+
+        var reloadUrl = createReloadUrl(path, baseUrl)
+
+        context.setReloadUrl("$reloadUrl")
         context.evaluateWebviewJavascript("window.\$nuxt.\$router.push('$spaPath')")
     }
 

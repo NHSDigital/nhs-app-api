@@ -27,8 +27,9 @@ class UrlLoader (
         if(!validUri) {
             uriToUse = baseURL + uriToUse
         }
-    return uriToUse
-}
+        return uriToUse
+    }
+
     fun loadUrl(pageEndPoint: String) {
         if (!wc.isConnectedToInternet()) {
             reloadUrl = getValidUrl(pageEndPoint)
@@ -38,12 +39,16 @@ class UrlLoader (
 
         var uriToUse = getValidUrl(pageEndPoint)
 
-
         if (usingAbsoluteUri) {
             loadPage(uriToUse)
         }
         else if (webView.url != null && (webView.url.contains(baseURL))) {
-            appWebInterface.loadSpaPage(pageEndPoint, baseURL)
+            if (appWebInterface.isRecoveringFromDroppedConnection(pageEndPoint, baseURL)) {
+                loadPage(uriToUse)
+            }
+            else {
+                appWebInterface.loadSpaPage(pageEndPoint, baseURL)
+            }
         }
         else {
             if(URLUtil.isValidUrl(uriToUse)) {
