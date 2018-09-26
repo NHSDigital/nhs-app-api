@@ -1,11 +1,11 @@
 /* eslint-disable */
 import NHSOnlineApi from '../services/nhsonlineapi';
 
-export default ({ app, store, res }) => {
+export default ({ app, store, res, req }) => {
   const api = new NHSOnlineApi({
-    domain: process.server ? app.$env.API_HOST_SERVER : app.$env.API_HOST,
     store,
     res,
+    req,
     cookies: app.$cookies,
   });
 

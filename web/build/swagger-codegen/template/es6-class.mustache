@@ -8,7 +8,8 @@
 /*global fetch, btoa */
 import $q from 'q';
 import axios from 'axios'
-import { isEmpty } from 'lodash/fp'
+import isEmpty from 'lodash/fp/isEmpty'
+import { resolveApiClient, resolveApiServer } from '@/middleware/urlResolution'
 
 /**
  * {{&description}}
@@ -22,13 +23,11 @@ import { isEmpty } from 'lodash/fp'
 class {{&className}} {
   constructor(options){
     this.store = options.store;
-    this.res = options.res
+    this.res = options.res;
+    this.req = options.req;
     this.cookies = options.cookies;
-    let domain = (typeof options === 'object') ? options.domain : options;
-    this.domain = domain ? domain : '{{&domain}}';
-    if(this.domain.length === 0) {
-      throw new Error('Domain parameter must be specified as a string.');
-    }
+    this.__domain = options.domain;
+
     {{#isSecure}}
     {{#isSecureToken}}
     this.token = (typeof options === 'object') ? (options.token ? options.token : {}) : {};
@@ -41,6 +40,13 @@ class {{&className}} {
     this.basic = (typeof options === 'object') ? (options.basic ? options.basic : {}) : {};
     {{/isSecureBasic}}
     {{/isSecure}}
+  }
+
+  get domain() {
+    const { app: { $env }  } = this.store;
+    return this.req
+      ? resolveApiServer({ req: this.req, env: $env })
+      : resolveApiClient({ host: this.req, env: $env });
   }
 
   serializeQueryParams(parameters) {
@@ -131,7 +137,7 @@ class {{&className}} {
       data: JSON.stringify(body)
     }).then((response) => {
       if (process.server) {
-        this.res.setHeader('Cache-Control', `${response.headers['cache-control']}`);
+        this.res.setHeader('Cache-Control', `${response.headers['cache-control']};`);
 
         if (response) {
           const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();

@@ -8,10 +8,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - API_HOST=http://api.local.bitraft.io:8082
-      - API_HOST_SERVER=http://api.local.bitraft.io:8082
-      - CID_REDIRECT_URI=http://web.local.bitraft.io:3000/auth-return
-      - NATIVE_CID_REDIRECT_URI=nhsapp://10.0.2.2:3000/auth-return
+      - URI_FORMAT_API_CLIENT=http://api.{host}:8082
+      - URI_FORMAT_API_SERVER=http://api.{host}:8082
+      - URI_FORMAT_CID_REDIRECT_WEB=http://web.{host}:3000/auth-return
+      - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:

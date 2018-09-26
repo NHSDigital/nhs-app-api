@@ -14,12 +14,12 @@ services:
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
-      - API_HOST=https://local.bitraft.io:444
-      - API_HOST_SERVER=http://api.local.bitraft.io:8082
-      - CID_REDIRECT_URI=https://local.bitraft.io/auth-return
-      - NATIVE_CID_REDIRECT_URI=nhsapp://local.bitraft.io/auth-return
+      - URI_FORMAT_API_CLIENT=https://{host}:444
+      - URI_FORMAT_API_SERVER=http://api.{host}:8082
+      - URI_FORMAT_CID_REDIRECT_WEB=https://{host}/auth-return
+      - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://{host}/auth-return
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
-      - NHS_WEB_APP_BASE_URL=https://local.bitraft.io/
+      - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io

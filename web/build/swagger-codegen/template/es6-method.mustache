@@ -12,8 +12,13 @@
       parameters = {};
     }
     let deferred = {{#isNode}}Q{{/isNode}}{{^isNode}}$q{{/isNode}}.defer();
-    let domain = this.domain,  path = '{{&path}}';
-    let body = {}, queryParameters = {}, headers = {}, form = {};
+    let domain = this.domain;
+    let path = '{{&path}}';
+    let body = {};
+    let headers = {};
+    let form = {};
+
+    let queryParameters = {};
 
     {{#isSecure}}
     headers = this.setAuthHeaders(headers);

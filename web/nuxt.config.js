@@ -34,7 +34,7 @@ module.exports = {
     './responseHeaders.js',
   ],
   router: {
-    middleware: ['auth', 'meta', 'analytics', 'termsAndConditions'],
+    middleware: ['auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],
   },
   link: [
     {
@@ -44,15 +44,16 @@ module.exports = {
     },
   ],
   env: {
+    // URL Formats
+    URI_FORMAT_API_CLIENT: 'http://api.{host}:8082',
+    URI_FORMAT_API_SERVER: 'http://api.{host}:8082',
+    URI_FORMAT_CID_REDIRECT_WEB: 'http://web.{host}:8082',
+    URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web.{host}:8082',
     // Core
-    API_HOST: 'http://api.local.bitraft.io:8082',
-    API_HOST_SERVER: 'http://api.local.bitraft.io:8082',
     COOKIE_DOMAIN: '.bitraft.io',
     // Citizen ID
     CID_CLIENT_ID: 'nhs-online',
     CID_AUTH_ENDPOINT: 'https://auth.ext.signin.nhs.uk/authorize',
-    CID_REDIRECT_URI: 'http://web.local.bitraft.io:3000/auth-return',
-    NATIVE_CID_REDIRECT_URI: 'nhsapp://android.local.bitraft.io:3000/auth-return',
     // Organ Donation
     ORGAN_DONATION_URL: 'https://www.organdonation.nhs.uk/',
     // Data Opt-Out

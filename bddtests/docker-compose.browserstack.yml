@@ -3,10 +3,11 @@ services:
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
-      - API_HOST=http://bs-local.com:8082
-      - CID_REDIRECT_URI=http://bs-local.com:3000/auth-return
       - CID_AUTH_ENDPOINT=http://bs-local.com:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
-      - CID_REGISTER_ENDPOINT=http://bs-local.com:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/registrations
+      - URI_FORMAT_API_CLIENT=http://bs-local.com:8082
+      - URI_FORMAT_API_SERVER=http://api.{host}:8082
+      - URI_FORMAT_CID_REDIRECT_WEB=http://bs-local.com:3000/auth-return
+      - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
