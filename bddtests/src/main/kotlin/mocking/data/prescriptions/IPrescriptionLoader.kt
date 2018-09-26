@@ -20,7 +20,7 @@ interface IPrescriptionLoader<T> {
     }
 
     private fun getStringValue(list: List<String>): String {
-        return list.get(getRandomNumber(getMedicationCourseNames().size))
+        return list[getRandomNumber(getMedicationCourseNames().size)]
     }
 
     private fun getMedicationCourseNames(): List<String> {

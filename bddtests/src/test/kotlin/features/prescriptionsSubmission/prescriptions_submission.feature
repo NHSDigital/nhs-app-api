@@ -40,5 +40,3 @@ Scenario Outline: The <GP System> user orders a repeat prescription with 5 entri
     | GP System |
     | EMIS      |
     | TPP       |
-
-
