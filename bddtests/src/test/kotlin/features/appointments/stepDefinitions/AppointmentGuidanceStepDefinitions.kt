@@ -18,9 +18,9 @@ class AppointmentGuidanceStepDefinitions {
         appointmentGuidanceSteps.checkGuidanceItemsHeadersAreCorrect()
     }
 
-    @When("^I select Appointment Guidance Page Check your symptoms button$")
+    @When("^I select Appointment Guidance Page Check symptoms button$")
     @Throws(Exception::class)
-    fun i_select_Appointment_Guidance_Page_Check_your_symptoms_button() {
+    fun i_select_Appointment_Guidance_Page_Check_symptoms_button() {
         appointmentGuidanceSteps.clickCheckSymptomsButton()
     }
 }

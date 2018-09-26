@@ -181,7 +181,7 @@ export default {
         header: 'Get advice from a pharmacist​',
         text: 'They\'re highly skilled healthcare professionals who can offer valuable advice​',
       },
-      symptomButttonText: 'Check your symptoms',
+      symptomButttonText: 'Check symptoms',
       bookButtonText: 'Book new appointment',
     },
     noSlotErrorMessage: {

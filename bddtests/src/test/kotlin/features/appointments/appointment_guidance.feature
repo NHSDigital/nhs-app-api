@@ -8,7 +8,7 @@ Feature: Guidance prior to booking an appointment
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user
     And I am on the guidance page
-    When I select Appointment Guidance Page Check your symptoms button
+    When I select Appointment Guidance Page Check symptoms button
     Then a new tab opens https://111.nhs.uk/
 
   @NHSO-420
