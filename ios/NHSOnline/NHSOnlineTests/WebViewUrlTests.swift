@@ -63,7 +63,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_OrganDonationServiceIsUnavailable_Then_DisplaysCorrectErrorMessage() {
         let urlString = config().OrganDonationUrl
         let webViewUrl = URL(string: urlString)
-        let errorMessage = knownServices?.getUnavailabilityErrorMessageForService(url: webViewUrl!)
+        let errorMessage = knownServices?.getUnavailabilityErrorMessageForService(webViewUrl!)
         
         XCTAssertEqual(errorMessage?.title, NSLocalizedString("ConnectionErrorTitle", comment: ""))
     }

@@ -76,7 +76,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         self.webViewDelegate?.activityIndicator.stopAnimating()
         
         if(!Reachability.isConnectedToNetwork()) {
-            webViewDelegate?.showNoConnectionErrorView(urlNavigatingTo: url)
+            webViewDelegate?.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
             return
         }
         

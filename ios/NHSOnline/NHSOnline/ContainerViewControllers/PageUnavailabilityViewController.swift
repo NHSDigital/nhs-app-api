@@ -27,7 +27,11 @@ class PageUnavailabilityViewController: UIViewController {
             self.tryAgainLabel.showView()
         }
         errorTextView.setServiceError(title: errorMessage.title, message: errorMessage.message)
-        errorTextView.accessibilityValue = errorMessage.title + ". " + errorMessage.accessibleMessage!
+        var accessibilityText = errorMessage.title
+        if let extraAccessibilityText = errorMessage.accessibleMessage {
+            accessibilityText.append(". " + extraAccessibilityText)
+        }
+        errorTextView.accessibilityValue = accessibilityText
     }
     
     func configureNavBar() {

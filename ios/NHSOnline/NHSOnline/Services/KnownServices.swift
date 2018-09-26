@@ -80,12 +80,23 @@ class KnownServices {
         return false
     }
     
-    func getUnavailabilityErrorMessageForService(url:URL) -> ErrorMessage? {
-        return ((findMatchingKnownServiceForHostname(hostname: url.host))?.serviceErrorMessage)!
+    func getUnavailabilityErrorMessageForService(_ url: URL?) -> ErrorMessage {
+        if let myUrl = url {
+            if let host = myUrl.host {
+                if let knownService = findMatchingKnownServiceForHostname(hostname: host) {
+                    return knownService.serviceErrorMessage
+                }
+            }
+        }
+        return self.getServiceUnavailableErrorMessage()
     }
     
     func getServiceUnavailableErrorMessage() -> ErrorMessage {
         return ErrorMessage(title: serviceUnavailableErrorMessage)
+    }
+    
+    func getNoInternetConnectionErrorMessage() -> ErrorMessage {
+        return ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
     }
     
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {

@@ -109,12 +109,12 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
                     if let url = info["NSErrorFailingURLKey"] as? URL {
                         
                         failedUrl = url
-                        errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: url)
+                        errorMessage = knownServices.getUnavailabilityErrorMessageForService(url)
                         self.showNativeViewContainer(errorMessage: errorMessage!)
                     }
                 }
             } else {
-                errorMessage = knownServices.getUnavailabilityErrorMessageForService(url: webView.url!)
+                errorMessage = knownServices.getUnavailabilityErrorMessageForService(webView.url)
                 failedUrl = webView.url
                 self.showNativeViewContainer(errorMessage: errorMessage!)
             }
