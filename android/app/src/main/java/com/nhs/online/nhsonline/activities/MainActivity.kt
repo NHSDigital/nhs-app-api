@@ -227,6 +227,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onBackPressed() {
         if (isLoggedIn) {
             showExitDialog()
+        } else {
+            this.finishAndRemoveTask()
         }
     }
 
@@ -235,7 +237,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         builder.setMessage(resources.getString(R.string.logoutWarning))
                 .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    appWebInterface.loadDispatchEvent(resources.getString(R.string.authLogout))
+                    urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
                 }
                 .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
 

@@ -48,6 +48,10 @@ const routes = {
     path: '/login',
     isAnonymous: true,
   },
+  LOGOUT: {
+    name: 'logout',
+    path: '/logout',
+  },
   MORE: {
     name: 'more',
     path: '/more',
@@ -110,6 +114,7 @@ export const {
   DATA_SHARING_PREFERENCES,
   INDEX,
   LOGIN,
+  LOGOUT,
   MORE,
   MYRECORD,
   MYRECORDWARNING,

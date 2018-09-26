@@ -20,7 +20,7 @@
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
     <string name="dataPreferencesRedirect">https://ndopapp-int1.thunderbird.service.nhs.uk/preferences</string>
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
-    <string name="authLogout">auth/logout</string>
+    <string name="logoutPath">logout</string>
 
     <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/</string>
