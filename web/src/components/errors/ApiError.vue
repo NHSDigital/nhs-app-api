@@ -107,19 +107,9 @@ export default {
     },
     onRetryButtonClicked() {
       const url = this.getRedirectUrl();
-      const sourceDevice = this.$store.state.device.source;
-
-      if (url === '/login') {
-        this.app.$cookies.remove('nhso.session');
-      }
 
       if (url === '') {
         this.$router.go();
-      } else if (url === '/login' &&
-         (sourceDevice === 'android' || sourceDevice === 'ios')) {
-        this.$router.push({
-          path: url,
-          query: { source: sourceDevice } });
       } else {
         this.$router.push(url);
       }
