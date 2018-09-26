@@ -39,6 +39,7 @@ export default {
     },
     {
       route: APPOINTMENT_CONFIRMATIONS.path,
+      errorOverrideStyles: { 460: 'plain' },
       redirectUrl: {
         409: APPOINTMENT_BOOKING.path,
         default: APPOINTMENTS.path,
