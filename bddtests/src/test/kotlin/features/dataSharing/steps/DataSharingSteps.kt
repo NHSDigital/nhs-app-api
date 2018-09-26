@@ -32,6 +32,31 @@ open class DataSharingSteps {
     }
 
     @Step
+    fun clickOverviewContentsLink() {
+        datasharing.clickOverviewContentsLink();
+    }
+
+    @Step
+    fun clickBenefitsContentsLink() {
+        datasharing.clickBenefitsContentsLink();
+    }
+
+    @Step
+    fun clickDataUseContentsLink() {
+        datasharing.clickDataUseContentsLink();
+    }
+
+    @Step
+    fun clickWhereOptOutDoesntApplyContentsLink() {
+        datasharing.clickWhereOptOutDoesntApplyContentsLink();
+    }
+
+    @Step
+    fun clickManageYourChoiceContentsLink() {
+        datasharing.clickManageYourChoiceContentsLink();
+    }
+
+    @Step
     fun clickManageYourChoiceLink() {
         datasharing.clickManageYourChoice()
     }

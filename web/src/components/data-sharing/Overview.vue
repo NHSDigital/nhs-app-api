@@ -10,8 +10,8 @@
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.yourChoice.title') }}</h2>
     <p>{{ $t('ds01.pages.p1.yourChoice.paragraph') }}</p>
-    <a :title="$t('ds01.pages.p1.yourChoice.manageChoiceLink')" tabindex="0"
-       @click="goToManageChoices($event)" @keypress="keyPressed($event)">
+    <a id="manage-choice-link" :title="$t('ds01.pages.p1.yourChoice.manageChoiceLink')"
+       tabindex="0" @click="goToManageChoices($event)" @keypress="keyPressed($event)">
       {{ $t('ds01.pages.p1.yourChoice.manageChoiceLink') }}
     </a>
 

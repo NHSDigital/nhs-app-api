@@ -795,7 +795,6 @@ export default {
         paragraphs: [
           'If you decide to opt out, this will be respected and applied by NHS Digital and Public Health England. These organisations collect, process and release health and adult social care data on a national basis. Your decision will also be respected and applied by all other organisations that are responsible for health and care information by March 2020.',
           'An opt-out will only apply to the health and care system in England. This does not apply to your health data where you have accessed health or care services outside of England, such as in Scotland and Wales.',
-          'If you choose to opt out, your data may still be used during some specific situations. For example, during an epidemic where there might be a risk to other people\'s health.',
         ],
       },
     },

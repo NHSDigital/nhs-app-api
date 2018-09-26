@@ -20,6 +20,12 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Steps
     lateinit var browser: BrowserSteps
 
+    private val overviewId = "Overview"
+    private val benefitsId = "Benefits"
+    private val dataUseId = "Data Use"
+    private val optOutId = "Where Opt Out Doesn't Apply"
+    private val manageChoiceId = "Manage Your Choice"
+
     @Given("^I am on the Data Sharing page$")
     fun iAmOnTheDataSharingPage() {
         dataSharing.assertIsDisplayed()
@@ -28,12 +34,24 @@ class DataSharingStepDefinitions: AbstractDemographicsStepDefinitions() {
     @Given("^I am on the Data Sharing (.*) page$")
     fun iAmOnTheDataSharingXPage(page: String) {
         when(page) {
-            "Overview" -> { assert(dataSharing.isOverviewTitleVisible()) }
-            "Benefits" -> { assert(dataSharing.isBenefitsTitleVisible()) }
-            "Data Use" -> { assert(dataSharing.isDataUseTitleVisible()) }
-            "Where Opt Out Doesn't Apply" -> { assert(dataSharing.isWhereOptOutDoesntApplyTitleVisible()) }
-            "Manage Your Choice" -> { assert(dataSharing.isManageYourChoiceTitleVisible()) }
+            overviewId -> { assert(dataSharing.isOverviewTitleVisible()) }
+            benefitsId -> { assert(dataSharing.isBenefitsTitleVisible()) }
+            dataUseId -> { assert(dataSharing.isDataUseTitleVisible()) }
+            optOutId -> { assert(dataSharing.isWhereOptOutDoesntApplyTitleVisible()) }
+            manageChoiceId -> { assert(dataSharing.isManageYourChoiceTitleVisible()) }
             else -> throw IllegalArgumentException("$page is not a valid page name.")
+        }
+    }
+
+    @Given("^I click the (.*) contents link$")
+    fun iClickTheXContentsLink(link: String) {
+        when(link) {
+            overviewId -> { dataSharing.clickOverviewContentsLink() }
+            benefitsId -> { dataSharing.clickBenefitsContentsLink() }
+            dataUseId -> { dataSharing.clickDataUseContentsLink() }
+            optOutId -> { dataSharing.clickWhereOptOutDoesntApplyContentsLink() }
+            manageChoiceId -> { dataSharing.clickManageYourChoiceContentsLink() }
+            else -> throw IllegalArgumentException("$link is not a valid link name.")
         }
     }
 

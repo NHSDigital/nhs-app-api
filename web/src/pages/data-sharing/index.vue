@@ -2,7 +2,13 @@
   <div class="content">
     <div :class="$style['page']">
       <h1 :class="$style['pageTitle']">{{ $t('ds01.titles.' + pageId) }}</h1>
-      <Overview v-if="pageId === 'p1'" @manage-choices="goToManageChoices"/>
+      <ul id="contents" :class="$style['list-menu']">
+        <li v-for="pageId in pageIds" :key="pageId">
+          <a :class="isLinkActive(pageId)" tabindex="0" @click="goToPage(pageId)"
+             @keypress="contentsKeyPressed($event, pageId)">{{ $t('ds01.titles.' + pageId) }}</a>
+        </li>
+      </ul>
+      <Overview v-if="pageId === 'p1'" @manage-choices="goToPage('p5')"/>
       <Benefits v-if="pageId === 'p2'"/>
       <DataUse v-if="pageId === 'p3'"/>
       <OptOutNotApply v-if="pageId === 'p4'"/>
@@ -65,8 +71,8 @@ export default {
       window.scrollTo(0, 0);
       this.pageIndex = index;
     },
-    goToManageChoices() {
-      this.changePage(_.indexOf(this.pageIds, 'p5'));
+    goToPage(pageId) {
+      this.changePage(_.indexOf(this.pageIds, pageId));
     },
     startNowClicked(event) {
       event.preventDefault();
@@ -88,11 +94,21 @@ export default {
         }
       });
     },
+    isLinkActive(pageId) {
+      return pageId === this.pageIds[this.pageIndex] ? this.$style.active : undefined;
+    },
+    contentsKeyPressed(event, pageId) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        this.goToPage(pageId);
+      }
+    },
   },
 };
 </script>
 
 <style module lang='scss'>
+@import '../../style/listmenu';
 @import '../../style/buttons';
 @import '../../style/datasharing';
 </style>

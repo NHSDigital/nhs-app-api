@@ -10,7 +10,7 @@ Feature: Data Sharing
     When I choose to set my data sharing preferences
 
   @NHSO-2437
-  Scenario Outline: A user navigates through Data Sharing Preferences pages
+  Scenario Outline: A user navigates through Data Sharing Preferences pages via the Next/Previous buttons
     Given I am on the Data Sharing <StartingPage> page
     When I click the Next button <Clicks> times
     Then I am on the Data Sharing <TargetPage> page
@@ -22,6 +22,19 @@ Feature: Data Sharing
   |Overview    |2     |Data Use                   |
   |Overview    |3     |Where Opt Out Doesn't Apply|
   |Overview    |4     |Manage Your Choice         |
+
+  @NHSO-2627
+  Scenario Outline: A use navigates through the Data Sharing Preferences pages via the Contents links
+    Given I am on the Data Sharing <StartingPage> page
+    When I click the <ContentsLink> contents link
+    Then I am on the Data Sharing <TargetPage> page
+  Examples:
+  |StartingPage|ContentsLink               |TargetPage                 |
+  |Overview    |Overview                   |Overview                   |
+  |Overview    |Benefits                   |Benefits                   |
+  |Overview    |Data Use                   |Data Use                   |
+  |Overview    |Where Opt Out Doesn't Apply|Where Opt Out Doesn't Apply|
+  |Overview    |Manage Your Choice         |Manage Your Choice         |
 
   @NHSO-2437
   Scenario: A user navigates to Data Sharing Manage Your Choice page directly from Overview

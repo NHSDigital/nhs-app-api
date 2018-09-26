@@ -13,7 +13,12 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     private val titleDataUse = createBrowserElement("//h1[contains(text(),'How your data is used')]")
     private val titleWhereOptOutDoesntApply = createBrowserElement("//h1[contains(text(),\"Where an opt-out doesn't apply\")]")
     private val titleManageYourChoice = createBrowserElement("//h1[contains(text(),'Manage your choice')]")
-    private val linkManageYourChoice = createBrowserElement("//a[contains(text(), 'Manage your choice')]")
+    private val linkContentsOverview = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Overview')]")
+    private val linkContentsBenefits = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Benefits of data sharing')]")
+    private val linkContentsDataUse = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'How your data is used')]")
+    private val linkContentsWhereOptOutDoesntApply = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), \"Where an opt-out doesn't apply\")]")
+    private val linkContentsManageYourChoice = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Manage your choice')]")
+    private val linkManageYourChoice = createBrowserElement("//a[@id='manage-choice-link'][contains(text(), 'Manage your choice')]")
     private val linkDataSharingMoreInfo = createBrowserElement("//a[contains(text(), 'NHS website')]")
 
     // Actions
@@ -36,6 +41,26 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun clickStartNow() {
         btnStartNow.element.click()
+    }
+
+    fun clickOverviewContentsLink() {
+        linkContentsOverview.element.click()
+    }
+
+    fun clickBenefitsContentsLink() {
+        linkContentsBenefits.element.click()
+    }
+
+    fun clickDataUseContentsLink(){
+        linkContentsDataUse.element.click()
+    }
+
+    fun clickWhereOptOutDoesntApplyContentsLink(){
+        linkContentsWhereOptOutDoesntApply.element.click()
+    }
+
+    fun clickManageYourChoiceContentsLink() {
+        linkContentsManageYourChoice.element.click()
     }
 
     // Asserts
