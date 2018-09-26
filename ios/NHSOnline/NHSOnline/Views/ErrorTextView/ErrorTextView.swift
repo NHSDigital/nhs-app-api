@@ -21,7 +21,7 @@ class ErrorTextView: UITextView {
     }
     
     func resizeErrorTextView() {
-        self.textContainerInset = UIEdgeInsetsMake(10, 12, 10, 12)
+        self.textContainerInset = UIEdgeInsetsMake(30, 12, 10, 12)
         let size = CGSize(width: self.bounds.width, height: .infinity)
         let estimatedSize = self.sizeThatFits(size)
         self.constraints.forEach{(constraint) in
