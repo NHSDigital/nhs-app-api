@@ -33,13 +33,13 @@ Feature: View prescriptions error cases
       | EMIS      |
 
   @NHSO-498
-  @pending @sessionexpiryfix
   Scenario: A user navigates to the prescriptions page and the session times out
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I am using EMIS GP System
-    And I am logged in
-    And I navigate to prescriptions
-    When My session has expired
+    And I have 3 past repeat prescriptions
+    And each repeat prescription contains 1 courses of which 1 are repeats
+    When I am on the prescriptions page
+    And My session has expired
     Then I see the login page with the session expiry notification
 
   @NHSO-513
