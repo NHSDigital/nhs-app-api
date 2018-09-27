@@ -131,8 +131,8 @@ class {{&className}} {
       data: JSON.stringify(body)
     }).then((response) => {
       if (process.server) {
-        this.res.setHeader('Cache-Control', `${response.headers['cache-control']};`);
-        
+        this.res.setHeader('Cache-Control', `${response.headers['cache-control']}`);
+
         if (response) {
           const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();
           consola.info(`End request: ${method} ${urlWithParams}, response: ${response.status}, duration: ${requestDurationMilliseconds}ms`);

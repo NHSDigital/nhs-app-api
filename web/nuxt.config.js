@@ -21,6 +21,7 @@ module.exports = {
   ],
   serverMiddleware: [
     './handler.js',
+    './responseHeaders.js',
   ],
   router: {
     middleware: ['auth', 'meta', 'analytics', 'termsAndConditions'],
