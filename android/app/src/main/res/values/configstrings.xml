@@ -18,7 +18,7 @@
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>
     <string name="dataSharing">https://www.nhs.uk/your-nhs-data-matters/benefits-of-data-sharing/</string>
     <string name="appIntroPath">file:///android_asset/appintro.html</string>
-    <string name="dataPreferencesRedirect">https://ndopapp-int1.thunderbird.service.nhs.uk/preferences</string>
+    <string name="dataPreferencesBaseUrl">https://app.your-data-matters.service.nhs.uk/</string>
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
     <string name="logoutPath">logout</string>
 

@@ -5,10 +5,6 @@ import android.os.Handler
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.content.Context
-import android.content.Intent
-import android.net.ConnectivityManager
-import android.net.Uri
-import android.support.v4.content.ContextCompat
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
@@ -39,7 +35,7 @@ class WebClientInterceptor(
 
     @Suppress("OverridingDeprecatedMember")
     override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-        if (url.equals(context.getString(R.string.dataPreferencesRedirect))) {
+        if (URL(url).host?.equals(URL(context.getString(R.string.dataPreferencesBaseUrl)).host)!!) {
             view.loadUrl(url)
             return false
         }

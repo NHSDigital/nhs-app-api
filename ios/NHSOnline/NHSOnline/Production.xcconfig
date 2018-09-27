@@ -25,5 +25,5 @@ TERMS_AND_CONDITIONS_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/ter
 PRIVACY_POLICY = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/privacy-policy/
 COOKIES_POLICY_URL= www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
 OPEN_SOURCE_LICENSE_URL = www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/open-source-licences/
-DATA_PREFERENCES_URL = ndopapp-int1.thunderbird.service.nhs.uk/createsession
+DATA_PREFERENCES_URL = app.your-data-matters.service.nhs.uk/createsession
 RESPONSE_WAITING_TIME = 20
