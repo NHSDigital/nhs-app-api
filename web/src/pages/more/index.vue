@@ -3,7 +3,7 @@
 
     <ul :class="$style['list-menu']">
       <li>
-        <analytics-tracked-tag id="btn_organ_donation" :href="organDonationUrl"
+        <analytics-tracked-tag id="btn_organ_donation" :href="$store.app.$env.ORGAN_DONATION_URL"
                                :class="$style['no-decoration']"
                                :text="$t('sc04.organDonation.subheader')"
                                tag="a" target="_blank">
@@ -33,11 +33,6 @@ import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 export default {
   components: {
     AnalyticsTrackedTag,
-  },
-  data(app) {
-    return {
-      organDonationUrl: app.$env.ORGAN_DONATION_URL,
-    };
   },
   methods: {
     navigate(event) {
