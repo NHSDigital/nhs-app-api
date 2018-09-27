@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5"
-        android:paddingTop="@dimen/_12sdp"
-        android:paddingBottom="@dimen/_12sdp">
+        android:paddingBottom="@dimen/_8sdp"
+        android:paddingTop="@dimen/_8sdp">
 
         <ImageView
             android:id="@+id/nhsOnlineLogoIcon"
@@ -22,6 +22,7 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:contentDescription="@string/nhsAppHome"
+            android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_nhs_logo" />
 
         <ImageView
@@ -33,6 +34,9 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/header_icon_account"
             android:focusable="true"
+            android:paddingEnd="0dp"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_account" />
 
         <ImageView
@@ -41,11 +45,14 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@id/myAccountIcon"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_3sdp"
             android:layout_toStartOf="@id/myAccountIcon"
             android:adjustViewBounds="true"
             android:contentDescription="@string/header_icon_help"
             android:focusable="true"
+            android:paddingEnd="@dimen/_5sdp"
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_help" />
 
     </RelativeLayout>
@@ -55,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5">
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
