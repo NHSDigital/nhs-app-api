@@ -1,10 +1,14 @@
 import getOr from 'lodash/fp/getOr';
 import { INDEX } from '@/lib/routes';
 import { SET_ACCEPTANCE } from '@/store/modules/termsAndConditions/mutation-types';
+import {INIT_ACCEPTANCE} from '@/store/modules/termsAndConditions/mutation-types';
 
 const extractConsentGiven = getOr(false, 'response.consentGiven');
 
 export default {
+  init({ commit }) {
+    commit(INIT_ACCEPTANCE);
+  },
   async acceptTerms({ commit }, consentTerms) {
     return this
       .app

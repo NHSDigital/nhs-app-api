@@ -20,6 +20,7 @@ const final = ({ self, commit }) => {
   self.dispatch('errors/clearAllApiErrors');
   self.dispatch('session/setInfo');
   self.dispatch('flashMessage/init');
+  self.dispatch('termsAndConditions/init');
 
   if (sourceValue === 'web') {
     self.app.router.push(LOGIN.name);
