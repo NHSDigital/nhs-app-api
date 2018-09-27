@@ -2,7 +2,7 @@
 
   <div v-if="showTemplate" :class="[$style['above-float-button'], 'pull-content']" >
 
-    <glossary-header />
+    <glossary-header v-if="hasLoaded"/>
 
     <div v-if="showNoPrescriptions" :class="$style.info" data-purpose="no-prescriptions-error">
       <h2>{{ $t('rp01.empty.subHeader') }}</h2>
