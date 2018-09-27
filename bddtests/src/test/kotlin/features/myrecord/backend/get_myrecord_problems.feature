@@ -1,3 +1,4 @@
+@my-record
 Feature: Get patient problems data
 
   A user can get their patient problems information

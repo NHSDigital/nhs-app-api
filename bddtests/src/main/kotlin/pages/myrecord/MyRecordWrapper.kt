@@ -14,7 +14,8 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
             HybridPageElement(
                     browserLocator = headerPath,
                     androidLocator = null,
-                    page = pageObject)
+                    page = pageObject,
+                    helpfulName = "Section Header '$header'")
 
     val msg =
             HybridPageElement(
@@ -39,7 +40,7 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
     val firstElement by lazy {recordItemElements.element}
 
     fun toggleShrub() {
-        header.element.click()
+        header.assertSingleElementPresent().element.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 

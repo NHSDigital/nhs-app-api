@@ -1,3 +1,4 @@
+@my-record
 Feature: Get Immunisations Data
 
   A user can get their immunisation information

@@ -1,6 +1,6 @@
 @my-record
 @smoketest
-Feature: View My Medical Record Information
+Feature: View My Medical Record Information - Combined
 
   Scenario Outline: A <Service> user can view allergies, consultations, demographics and test results
     Given the my record wiremocks are initialised for <Service>
@@ -14,11 +14,11 @@ Feature: View My Medical Record Information
     When I click agree and continue
     Then I see the my medical record page
 
-    When I click the Allergies and Adverse Reactions section
+    When I click the Allergies and adverse reactions section on My Record
     Then I see one or more drug type allergies record displayed
 
-    When I click the Consultations section <Service>
-    Then I see Consultations records displayed <Service>
+    When I click the Consultations section on My Record
+    Then I see Consultations records displayed
 
     When I click the test result section
     Then I see test result information
@@ -35,13 +35,13 @@ Feature: View My Medical Record Information
     And the GP Practice has enabled medications functionality for <Service>
     And I am on my record information page
 
-    When I click acute medications
+    When I click the Acute (short-term) medications section on My Record
     Then I see acute medication information
 
-    When I click current repeat medications
+    When I click the Repeat medications: current section on My Record
     Then I see current repeat medication information
 
-    When I click discontinued repeat medications
+    When I click the Repeat medications: discontinued section on My Record
     Then I see discontinued repeat medication information
 
     Examples:
@@ -57,10 +57,10 @@ Feature: View My Medical Record Information
     And the GP Practice has enabled problems functionality for <Service>
     And I am on my record information page
 
-    When I click the Immunisations section
+    When I click the Immunisations section on My Record
     Then I see immunisation records displayed
 
-    When I click the Problems section
+    When I click the Problems section on My Record
     Then I see Problems records displayed
 
     Examples:

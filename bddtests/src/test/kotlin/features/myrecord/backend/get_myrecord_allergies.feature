@@ -1,3 +1,4 @@
+@my-record
 Feature: Get Allergies data
 
   A user can get their patient allergy information

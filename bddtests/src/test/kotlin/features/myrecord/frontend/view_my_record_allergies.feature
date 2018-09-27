@@ -7,8 +7,8 @@ Feature: View My Medical Record Information - Allergies
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
     And I am on my record information page
-    Then I see the Allergies and Adverse Reactions heading
-    And I see the Allergies and Adverse Reactions section collapsed
+    Then I see the Allergies and adverse reactions heading on My Record
+    And I see the Allergies and adverse reactions section collapsed on My Record
 
     Examples:
       |Service|
@@ -37,8 +37,8 @@ Feature: View My Medical Record Information - Allergies
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and the patient has "0" allergies for <Service>
     And I am on my record information page
-    When I click the Allergies and Adverse Reactions section
-    Then I see a message indicating I have no allergies
+    When I click the Allergies and adverse reactions section on My Record
+    Then I see a message indicating that I have no information recorded for Allergies and adverse reactions on My Record
 
     Examples:
       |Service|
@@ -52,7 +52,7 @@ Feature: View My Medical Record Information - Allergies
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and the patient has "2" allergies for <Service>
     And I am on my record information page
-    When I click the Allergies and Adverse Reactions section
+    When I click the Allergies and adverse reactions section on My Record
     And I see one or more drug type allergies record displayed
 
     Examples:
@@ -67,7 +67,7 @@ Feature: View My Medical Record Information - Allergies
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled allergies functionality and has 5 different allergies with different date formats for <Service>
     And I am on my record information page
-    When I click the Allergies and Adverse Reactions section
+    When I click the Allergies and adverse reactions section on My Record
     And I see 5 allergies with different date formats
 
     Examples:

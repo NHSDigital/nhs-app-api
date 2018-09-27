@@ -8,8 +8,8 @@ Feature: View My Medical Record Information - Immunisations
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled immunisations functionality and multiple immunisation records exist for <Service>
     And I am on my record information page
-    And I see heading Immunisations
-    When I click the Immunisations section
+    Then I see the Immunisations heading on My Record
+    When I click the Immunisations section on My Record
     Then I see immunisation records displayed
 
   Examples:
@@ -22,9 +22,9 @@ Feature: View My Medical Record Information - Immunisations
     And the GP Practice has enabled demographics functionality for <Service>
     And no immunisation records exist for the patient for <Service>
     And I am on my record information page
-    And I see heading Immunisations
-    When I click the Immunisations section
-    Then I see message No information recorded for this section
+    Then I see the Immunisations heading on My Record
+    When I click the Immunisations section on My Record
+    Then I see a message indicating that I have no information recorded for Immunisations on My Record
 
   Examples:
   |Service|
@@ -36,9 +36,9 @@ Feature: View My Medical Record Information - Immunisations
     And the GP Practice has enabled demographics functionality for <Service>
     And the user does not have access to view immunisations for <Service>
     And I am on my record information page
-    And I see heading Immunisations
-    When I click the Immunisations section
-    Then I see message You do not have access to this section
+    Then I see the Immunisations heading on My Record
+    When I click the Immunisations section on My Record
+    Then I see a message indicating that I have no access to view Immunisations on My Record
 
   Examples:
   |Service|
@@ -50,9 +50,9 @@ Feature: View My Medical Record Information - Immunisations
     And the GP Practice has enabled demographics functionality for <Service>
     And there is an error retrieving immunisations data for <Service>
     And I am on my record information page
-    And I see heading Immunisations
-    When I click the Immunisations section
-    Then I see message An error has occurred trying to retrieve this data
+    Then I see the Immunisations heading on My Record
+    When I click the Immunisations section on My Record
+    Then I see an error occurred message with Immunisations on My Record
 
   Examples:
   |Service|

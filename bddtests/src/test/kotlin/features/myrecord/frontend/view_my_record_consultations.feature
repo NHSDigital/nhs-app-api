@@ -1,5 +1,5 @@
 @my-record
-Feature: View My Medical Record Information
+Feature: View My Medical Record Information - Consultations
 
   @NHSO-1096
   Scenario Outline: An <Service> user has Consultations on their record
@@ -7,9 +7,9 @@ Feature: View My Medical Record Information
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has multiple consultations for <Service>
     And I am on my record information page
-    And I see heading Consultations <Service>
-    When I click the Consultations section <Service>
-    Then I see Consultations records displayed <Service>
+    Then I see the Consultations heading on My Record
+    When I click the Consultations section on My Record
+    Then I see Consultations records displayed
 
     Examples:
       |Service|
@@ -22,9 +22,9 @@ Feature: View My Medical Record Information
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has no consultations for <Service>
     And I am on my record information page
-    And I see heading Consultations <Service>
-    When I click the Consultations section <Service>
-    Then I see a message indicating that I have no information recorded for Consultations <Service>
+    Then I see the Consultations heading on My Record
+    When I click the Consultations section on My Record
+    Then I see a message indicating that I have no information recorded for Consultations on My Record
 
     Examples:
       |Service|
@@ -37,9 +37,9 @@ Feature: View My Medical Record Information
     And the GP Practice has enabled demographics functionality for <Service>
     And the Patient has no access to consultations for <Service>
     And I am on my record information page
-    And I see heading Consultations <Service>
-    When I click the Consultations section <Service>
-    Then I see a message indicating that I have no access to view Consultations <Service>
+    Then I see the Consultations heading on My Record
+    When I click the Consultations section on My Record
+    Then I see a message indicating that I have no access to view Consultations on My Record
 
     Examples:
       |Service|
@@ -53,9 +53,9 @@ Feature: View My Medical Record Information
     And the GP Practice has enabled demographics functionality for <Service>
     And an error occurred retrieving the consultations for <Service>
     And I am on my record information page
-    And I see heading Consultations <Service>
-    When I click the Consultations section <Service>
-    Then I see an error occurred message with Consultations <Service>
+    Then I see the Consultations heading on My Record
+    When I click the Consultations section on My Record
+    Then I see an error occurred message with Consultations on My Record
 
     Examples:
       |Service|

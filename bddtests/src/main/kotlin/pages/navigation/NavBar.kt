@@ -39,8 +39,9 @@ open class NavBar : HybridPageObject(Companion.PageType.NATIVE) {
         return containsElements("${type.browserLocator}/ancestor::li[@data-selected='true']")
     }
 
-    fun hasAnActiveSelection() : Boolean {
-        return containsElements( "//nav[descendant::li[@data-selected='true']]")
+    fun hasSingleSelection(): Boolean {
+        val selected = findAll("//nav[descendant::li[@data-selected='true']]")
+        return selected.count() == 1
     }
 
     fun isVisible(type: NavBarType): Boolean {

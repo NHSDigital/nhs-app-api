@@ -23,7 +23,7 @@ open class NavigationSteps {
 
     @Step
     fun hasAnyTabSelected() : Boolean {
-        return navBar.hasAnActiveSelection()
+        return navBar.hasSingleSelection()
     }
 
     @Step

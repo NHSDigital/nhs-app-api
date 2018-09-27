@@ -1,3 +1,4 @@
+@my-record
 Feature: Get Test Results Data
 
   A user can get their test results information

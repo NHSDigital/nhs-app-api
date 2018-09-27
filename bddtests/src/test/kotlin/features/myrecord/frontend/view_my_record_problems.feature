@@ -7,8 +7,8 @@ Feature: View My Medical Record Information - Problems
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled problems functionality for <Service>
     And I am on my record information page
-    And I see heading Problems
-    When I click the Problems section
+    Then I see the Problems heading on My Record
+    When I click the Problems section on My Record
     Then I see Problems records displayed
 
     Examples:
@@ -22,9 +22,9 @@ Feature: View My Medical Record Information - Problems
     And the GP Practice has enabled demographics functionality for <Service>
     And no Problems records exist for the patient for <Service>
     And I am on my record information page
-    And I see heading Problems
-    When I click the Problems section
-    Then I see a message indicating that I have no information recorded for problems
+    Then I see the Problems heading on My Record
+    When I click the Problems section on My Record
+    Then I see a message indicating that I have no information recorded for Problems on My Record
 
     Examples:
       |Service|
@@ -36,9 +36,9 @@ Feature: View My Medical Record Information - Problems
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has disabled problems functionality for <Service>
     And I am on my record information page
-    And I see heading Problems
-    When I click the Problems section
-    Then I see a message indicating that I have no access to view problems
+    Then I see the Problems heading on My Record
+    When I click the Problems section on My Record
+    Then I see a message indicating that I have no access to view Problems on My Record
 
     Examples:
       |Service|
@@ -50,9 +50,9 @@ Feature: View My Medical Record Information - Problems
     And the GP Practice has enabled demographics functionality for <Service>
     And there is an error retrieving Problems data for <Service>
     And I am on my record information page
-    And I see heading Problems
-    When I click the Problems section
-    Then I see an error occured message with problems
+    Then I see the Problems heading on My Record
+    When I click the Problems section on My Record
+    Then I see an error occurred message with Problems on My Record
 
     Examples:
       |Service|

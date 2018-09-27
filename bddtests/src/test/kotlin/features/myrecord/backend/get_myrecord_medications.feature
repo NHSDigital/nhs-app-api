@@ -1,3 +1,4 @@
+@my-record
 Feature: Get medications data
 
   A user can get their medication information

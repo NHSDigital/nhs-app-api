@@ -1,3 +1,4 @@
+@my-record
 Feature: Get demographic data
 
   A user can get their demographic information

@@ -21,7 +21,7 @@ Feature: View My Medical Record Information - Demographics
     And I am on the record warning page
     Then I click agree and continue
     And I see header text is My medical record
-    And I see heading My details
+    Then I see the My details heading on My Record
     And I see the patient information details
     And I see my record button on the nav bar is highlighted
 

@@ -1,3 +1,4 @@
+@my-record
 Feature: Get TPP Dcr Event Data
 
   A user can get their Tpp Dcr Event information

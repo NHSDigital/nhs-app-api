@@ -6,26 +6,20 @@ import pages.navigation.Header
 
 class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    val lblHeader = HybridPageElement(
-            browserLocator = "//*[@id='app']/header/h1",
-            androidLocator = null,
-            page = this
-    )
-
-    val txtWarning = HybridPageElement(
+    private val txtWarning = HybridPageElement(
             browserLocator = "//div[@data-purpose='warning']",
             androidLocator = null,
             page = this
     )
 
-    val btnAgree = HybridPageElement(
+    private val btnAgree = HybridPageElement(
             browserLocator = "//main/div/button[contains(text(),'Agree and continue')]",
             //*[@id="mainDiv"]/main/div[2]/button[1]
             androidLocator = null,
             page = this
     )
 
-    val btnBack2Home = HybridPageElement(
+    private val btnBack2Home = HybridPageElement(
             browserLocator = "//button[contains(text(),'Back to home')]",
             androidLocator = null,
             page = this
@@ -42,10 +36,6 @@ class MyRecordWarningPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     fun warningText(): String {
         return txtWarning.element.text
-    }
-
-    fun isWarningMsgHighlighted(): String {
-        return txtWarning.element.getCssValue("background-color")
     }
 
     fun clickAgreeAndContinue() {

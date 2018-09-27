@@ -3,7 +3,7 @@ package features.authentication.stepDefinitions
 import cucumber.api.java.en.Then
 import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.HomeSteps
-import features.myrecord.steps.MyRecordSteps
+import features.myrecord.stepDefinitions.MyRecordStepDefinitions
 import features.oneOneOneOnline.Steps.CheckMySymptoms
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
@@ -20,21 +20,21 @@ private const val organDonationUrl = "https://www.organdonation.nhs.uk/"
 class HomePageDefinitions : AbstractSteps() {
 
     @Steps
-    lateinit var browser: BrowserSteps
+    private lateinit var browser: BrowserSteps
     @Steps
-    lateinit var navBar: NavBar
+    private lateinit var navBar: NavBar
     @Steps
-    lateinit var navHeader: NavigationSteps
+    private lateinit var navHeader: NavigationSteps
     @Steps
-    lateinit var homeSteps: HomeSteps
+    private lateinit var homeSteps: HomeSteps
     @Steps
-    lateinit var checkMySymptoms: CheckMySymptoms
+    private lateinit var checkMySymptoms: CheckMySymptoms
     @Steps
-    lateinit var myAppointmentsSteps: MyAppointmentsSteps
+    private lateinit var myAppointmentsSteps: MyAppointmentsSteps
     @Steps
-    lateinit var prescriptions: PrescriptionsSteps
+    private lateinit var prescriptions: PrescriptionsSteps
     @Steps
-    lateinit var recordSteps: MyRecordSteps
+    private lateinit var recordSteps: MyRecordStepDefinitions
 
     @Then("^I see the beta banner$")
     fun iSeeTheBetaBanner() {
@@ -103,10 +103,9 @@ class HomePageDefinitions : AbstractSteps() {
 
     private fun followMedicalRecordLink() {
         homeSteps.homePage.viewMedicalRecordLink.element.click()
-        recordSteps.assertWarningPageIsLoaded()
+        recordSteps.i_see_record_warning_page_opened()
         navBar.isHighlighted(NavBar.NavBarType.MY_RECORD)
     }
-
     private fun followOrganDonationLink() {
         homeSteps.homePage.organDonationLink.element.click()
         browser.changeTab(URL(organDonationUrl))

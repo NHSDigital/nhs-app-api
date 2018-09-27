@@ -35,7 +35,7 @@ Feature: View My Medical Record Information - Test Results
     And I do not have access to test results for <Service>
     And I am on my record information page
     When I click the test result section
-    Then I see a message indicating that I have no access to view test result
+    Then I see a message indicating that I have no access to view Test results on My Record
 
     Examples:
       | Service |
@@ -49,7 +49,7 @@ Feature: View My Medical Record Information - Test Results
     And I have no test results for <Service>
     And I am on my record information page
     When I click the test result section
-    Then I see a message indicating that I have no information recorded for this section
+    Then I see a message indicating that I have no information recorded for Test results on My Record
 
     Examples:
       | Service |
@@ -63,7 +63,7 @@ Feature: View My Medical Record Information - Test Results
     And an error occurred retrieving the test results from <Service>
     And I am on my record information page
     When I click the test result section
-    Then I see an error occured message
+    Then I see an error occurred message with Test results on My Record
 
     Examples:
       | Service |

@@ -7,8 +7,8 @@ Feature: View My Medical Record Information - Medications
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medications functionality for <Service>
     And I am on my record information page
-    And I see heading Acute medications
-    When I click acute medications
+    Then I see the Acute (short-term) medications heading on My Record
+    When I click the Acute (short-term) medications section on My Record
     Then I see acute medication information
 
     Examples:
@@ -22,7 +22,7 @@ Feature: View My Medical Record Information - Medications
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medications functionality for <Service>
     And I am on my record information page
-    When I click current repeat medications
+    When I click the Repeat medications: current section on My Record
     Then I see current repeat medication information
 
     Examples:
@@ -36,7 +36,7 @@ Feature: View My Medical Record Information - Medications
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medications functionality for <Service>
     And I am on my record information page
-    When I click discontinued repeat medications
+    When I click the Repeat medications: discontinued section on My Record
     Then I see discontinued repeat medication information
 
     Examples:
@@ -50,8 +50,8 @@ Feature: View My Medical Record Information - Medications
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medication functionality and the patient has no medications for <Service>
     And I am on my record information page
-    When I click acute medications
-    Then I see a message indicating that I have no "acute" medications
+    When I click the Acute (short-term) medications section on My Record
+    Then I see a message indicating that I have no information recorded for Acute (short-term) medications on My Record
 
     Examples:
       | Service |
@@ -64,8 +64,8 @@ Feature: View My Medical Record Information - Medications
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medication functionality and the patient has no medications for <Service>
     And I am on my record information page
-    When I click current repeat medications
-    Then I see a message indicating that I have no "current repeat" medications
+    When I click the Repeat medications: current section on My Record
+    Then I see a message indicating that I have no information recorded for Repeat medications: current on My Record
 
     Examples:
       | Service |
@@ -78,8 +78,8 @@ Feature: View My Medical Record Information - Medications
     And the GP Practice has enabled demographics functionality for <Service>
     And the GP Practice has enabled medication functionality and the patient has no medications for <Service>
     And I am on my record information page
-    When I click discontinued repeat medications
-    Then I see a message indicating that I have no "discontinued repeat" medications
+    When I click the Repeat medications: discontinued section on My Record
+    Then I see a message indicating that I have no information recorded for Repeat medications: discontinued on My Record
 
     Examples:
       | Service |
