@@ -28,9 +28,9 @@
     </string>
 
     <string name="Accessible_connection_error_message">
-        Please check your connection and try again.
-        \n\nIf the problem persists and you need to book an appointment or get a prescription now,
-        contact your GP surgery directly. For immediate medical advice, call one. one. one..
+        Check your connection and try again.
+        \n\nIf the problem continues and you need to book an appointment or get a prescription now,
+        contact your GP surgery directly. For urgent medical advice, call one. one. one..
     </string>
     <string name="service_unavailable">Service unavailable</string>
 
