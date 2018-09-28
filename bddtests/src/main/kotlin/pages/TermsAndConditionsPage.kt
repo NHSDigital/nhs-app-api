@@ -2,6 +2,7 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 
+@Suppress("TooManyFunctions")
 @DefaultUrl("http://web.local.bitraft.io:3000/terms-and-conditions")
 class TermsAndConditionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 

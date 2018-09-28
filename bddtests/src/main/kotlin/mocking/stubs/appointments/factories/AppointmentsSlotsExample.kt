@@ -12,11 +12,16 @@ class AppointmentsSlotsExample {
 
     companion object {
 
-        private val dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+        private val dateFormatter = DateTimeFormatter.ofPattern(
+                AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
         private val tomorrowDate = LocalDateTime.now().plusDays(1)
 
         private const val clinic = "Clinic"
         private const val clinicSlot = "Clinic - Slot"
+        private const val firstSessionId = 301
+        private const val secondSessionId = 302
+        private const val firstSlotId = 301
+        private const val secondSlotId = 302
 
         private val locationLeeds = IdValue (1, "Leeds")
         private val locationSheffield = IdValue (2, "Sheffield")
@@ -30,18 +35,18 @@ class AppointmentsSlotsExample {
         private var endDateAppointment2 = tomorrowDate.withHour(15).withMinute(30).format(dateFormatter)
 
         private val appointmentSessions = arrayListOf(AppointmentSessionFacadeBuilder()
-                .sessionId(301)
+                .sessionId(firstSessionId)
                 .sessionType(clinic)
                 .staffDetails(staffDrWho)
                 .location(locationLeeds)
                 .slots {
                     addAppointment {
-                        slotId(301)
+                        slotId(firstSlotId)
                                 .startDate(startDateAppointment1)
                                 .endDate(endDateAppointment1)
                     }
                             .addAppointment {
-                                slotId(302)
+                                slotId(secondSlotId)
                                         .startDate(startDateAppointment2)
                                         .endDate(endDateAppointment2)
                             }
@@ -121,13 +126,13 @@ class AppointmentsSlotsExample {
         fun singleSlotExample(): AppointmentSlotsResponseFacade {
             return AppointmentsSlotsExampleBuilder()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
-                            .sessionId(301)
+                            .sessionId(firstSessionId)
                             .sessionType(clinic)
                             .staffDetails(staffDrWho)
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
-                                    slotId(301)
+                                    slotId(firstSlotId)
                                             .startDate(startDateAppointment1)
                                             .endDate(endDateAppointment1)
                                 }
@@ -155,25 +160,25 @@ class AppointmentsSlotsExample {
         fun multipleSlotsOneLocation(): AppointmentSlotsResponseFacade {
             return AppointmentsSlotsExampleBuilder()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
-                            .sessionId(301)
+                            .sessionId(firstSessionId)
                             .sessionType(clinic)
                             .staffDetails(staffDrWho)
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
-                                    slotId(301)
+                                    slotId(firstSlotId)
                                             .startDate(startDateAppointment1)
                                             .endDate(endDateAppointment1)
                                 }
                             }.build(),
                             AppointmentSessionFacadeBuilder()
-                                    .sessionId(302)
+                                    .sessionId(secondSessionId)
                                     .sessionType(clinic)
                                     .staffDetails(staffDrScott)
                                     .location(locationLeeds)
                                     .slots {
                                         addAppointment {
-                                            slotId(302)
+                                            slotId(secondSlotId)
                                                     .startDate(startDateAppointment2)
                                                     .endDate(endDateAppointment2)
                                         }
@@ -208,25 +213,25 @@ class AppointmentsSlotsExample {
         fun multipleSlotsOneTime(): AppointmentSlotsResponseFacade {
             return AppointmentsSlotsExampleBuilder()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
-                            .sessionId(301)
+                            .sessionId(firstSessionId)
                             .sessionType(clinic)
                             .staffDetails(staffDrWho)
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
-                                    slotId(301)
+                                    slotId(firstSlotId)
                                             .startDate(startDateAppointment1)
                                             .endDate(endDateAppointment1)
                                 }
                             }.build(),
                             AppointmentSessionFacadeBuilder()
-                                    .sessionId(302)
+                                    .sessionId(secondSessionId)
                                     .sessionType(clinic)
                                     .staffDetails(staffDrScott)
                                     .location(locationLeeds)
                                     .slots {
                                         addAppointment {
-                                            slotId(302)
+                                            slotId(secondSlotId)
                                                     .startDate(startDateAppointment1)
                                                     .endDate(endDateAppointment1)
                                         }

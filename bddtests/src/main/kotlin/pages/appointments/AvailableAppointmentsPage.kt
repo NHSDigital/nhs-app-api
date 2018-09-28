@@ -15,9 +15,12 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     private val dateHeadingXpath = "//form//h2"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
     private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li%s"
-    private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat, containsTextXpathSubstring, containsTextXpathSubstring)
+    private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat,
+                                                           containsTextXpathSubstring,
+                                                           containsTextXpathSubstring)
     private val timeSlotsXpath = String.format(timeSlotXpathFormat, "", "")
-    private val noAppointmentsAvailableForDateTextByDateXpathFormat = "$dateHeadingByTextXpathFormat/following-sibling::p"
+    private val noAppointmentsAvailableForDateTextByDateXpathFormat =
+            "$dateHeadingByTextXpathFormat/following-sibling::p"
 
     private val appointmentSlotGuidance = HybridPageElement(
             browserLocator = guidanceParentXpath,
@@ -221,7 +224,9 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
     }
 
     fun assertTimeSlotPresent(expectedDateHeading: String, expectedTimeOnSlot: String) {
-        assertTrue("No timeslot present. ", timeSlotForDateAndTime(expectedDateHeading, expectedTimeOnSlot).element.isPresent)
+        assertTrue("No timeslot present. ",
+                   timeSlotForDateAndTime(expectedDateHeading,
+                                          expectedTimeOnSlot).element.isPresent)
     }
 
     fun numberOfTimeSlotsPresentForSpecificTime(expectedDateHeading: String, expectedTimeOnSlot: String): Int {

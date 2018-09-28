@@ -1,6 +1,6 @@
 package mocking.stubs.appointments
 
-class appointmentMatchers {
+class AppointmentMatchers {
     companion object {
         const val appointmentBookingSlotForMatcher = 301
         const val cancellationSlotMatcher = 1

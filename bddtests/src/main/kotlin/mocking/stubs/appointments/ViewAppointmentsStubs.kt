@@ -14,7 +14,8 @@ import java.time.Duration
 
 class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
     fun generateEMISStubs() {
-        val appointmentsBody = JSonXmlConverter.toJsonWithUpperCamelCase(EmisAppointmentData.instance.createGetAppointmentsResponse())
+        val appointmentsBody = JSonXmlConverter.toJsonWithUpperCamelCase(
+                EmisAppointmentData.instance.createGetAppointmentsResponse())
 
         val mapViewAppointmentStubs =
                 InputResponse<Patient, IMyAppointmentsBuilder>()

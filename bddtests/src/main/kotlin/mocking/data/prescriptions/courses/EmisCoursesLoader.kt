@@ -58,9 +58,16 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
     }
 
     override fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
-        var coursesDataFiltered = data.filter { medicationCourse -> medicationCourse.canBeRequested!! }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
+        var coursesDataFiltered = data
+                .filter { medicationCourse -> medicationCourse.canBeRequested!! }
+                .toMutableList()
+        coursesDataFiltered =
+                coursesDataFiltered
+                        .filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }
+                        .toMutableList()
+        coursesDataFiltered = coursesDataFiltered
+                .sortedBy { medicationCourse -> medicationCourse.name }
+                .toMutableList()
         coursesDataFiltered = coursesDataFiltered.take(COURSES_NUMBER).toMutableList()
 
         return coursesDataFiltered

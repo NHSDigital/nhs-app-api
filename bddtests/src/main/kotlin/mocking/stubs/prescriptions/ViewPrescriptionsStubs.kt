@@ -13,6 +13,12 @@ import models.Patient
 import java.time.Duration
 
 class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
+
+    companion object {
+        private const val NUMBER_OF_PRESCRIPTIONS = 5
+        private const val NUMBER_OF_COURSES = 5
+        private const val NUMBER_OF_REPEAT_PRESCRIPTIONS = 5
+    }
     fun generateEMISStubs() {
         val loadEMISPrescriptions = prescriptionLoaderEMIS()
         val mapEMISViewPrescriptionRequestStubs =
@@ -42,9 +48,6 @@ class ViewPrescriptionsStubs(private val mockingClient: MockingClient) {
 
     private fun prescriptionLoaderEMIS(): PrescriptionRequestsGetResponse {
         val prescriptionLoader = EmisPrescriptionLoader
-        val NUMBER_OF_PRESCRIPTIONS = 5
-        val NUMBER_OF_COURSES = 5
-        val NUMBER_OF_REPEAT_PRESCRIPTIONS = 5
         prescriptionLoader.loadData(
                 noPrescriptions = NUMBER_OF_PRESCRIPTIONS,
                 noCourses = NUMBER_OF_COURSES,

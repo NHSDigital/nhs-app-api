@@ -11,8 +11,10 @@ class StubsPatientFactory {
 
         val goodPatientEMIS = generateEMISPatientData("1", "goodpatient", CONNECTION_TOKEN_SUFFIX_LENGTH)
         val timeoutPatientEMIS = generateEMISPatientData("2", "timeoutpatient", CONNECTION_TOKEN_SUFFIX_LENGTH)
-        val serviceNotEnabledPatientEMIS = generateEMISPatientData("3", "servicennotenabledpatient", CONNECTION_TOKEN_SUFFIX_LENGTH)
-        val sessionErrorPatientEMIS = generateEMISPatientData("4", "sessionerrorpatient", CONNECTION_TOKEN_SUFFIX_INVALIDLENGTH)
+        val serviceNotEnabledPatientEMIS = generateEMISPatientData("3", "servicennotenabledpatient",
+                                                                   CONNECTION_TOKEN_SUFFIX_LENGTH)
+        val sessionErrorPatientEMIS = generateEMISPatientData("4", "sessionerrorpatient",
+                                                              CONNECTION_TOKEN_SUFFIX_INVALIDLENGTH)
         val serverErrorPatientEMIS = generateEMISPatientData("5", "servererrorpatient", CONNECTION_TOKEN_SUFFIX_LENGTH)
 
         val EMISPatientList = listOf(

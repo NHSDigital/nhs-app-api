@@ -1,6 +1,6 @@
 package mocking.stubs.prescriptions
 
-class prescriptionMatchers {
+class PrescriptionMatchers {
     companion object {
         const val timeoutMatcher = "give me a time out response"
         const val prescriptionNotEnabledMatcher = "give me a prescription not enabled response"

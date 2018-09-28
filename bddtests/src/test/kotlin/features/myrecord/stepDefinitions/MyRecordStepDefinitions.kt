@@ -228,7 +228,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun iSeePatientInformationDetails() {
         // populated with correct information
         val name = "${this.patient.title} ${this.patient.firstName} ${this.patient.surname}";
-        val dob = DateConverter.ConvertDateToDateTimeFormat(this.patient.dateOfBirth, AppointmentDateTimeFormat.mockDataDobFormat, AppointmentDateTimeFormat.frontendDobDateFormat)
+        val dob = DateConverter.convertDateToDateTimeFormat(this.patient.dateOfBirth, AppointmentDateTimeFormat.mockDataDobFormat, AppointmentDateTimeFormat.frontendDobDateFormat)
         val sex = this.patient.sex.name;
         val address = "${this.patient.address.houseNameFlatNumber}, ${this.patient.address.numberStreet}, ${this.patient.address.village}, ${this.patient.address.town}, ${this.patient.address.county}, ${this.patient.address.postcode}";
         val nhsNumbers = StringBuilder(this.patient.nhsNumbers.first()).insert(6, " ").insert(3, " ").toString();

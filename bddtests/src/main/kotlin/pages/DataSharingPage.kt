@@ -2,6 +2,7 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 
+@Suppress("TooManyFunctions")
 @DefaultUrl("http://web.local.bitraft.io:3000/data-sharing")
 open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
@@ -11,14 +12,20 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     private val titleOverview = createBrowserElement("//h1[contains(text(),'Overview')]")
     private val titleBenefits = createBrowserElement("//h1[contains(text(),'Benefits of data sharing')]")
     private val titleDataUse = createBrowserElement("//h1[contains(text(),'How your data is used')]")
-    private val titleWhereOptOutDoesntApply = createBrowserElement("//h1[contains(text(),\"Where an opt-out doesn't apply\")]")
+    private val titleWhereOptOutDoesntApply = createBrowserElement(
+            "//h1[contains(text(),\"Where an opt-out doesn't apply\")]")
     private val titleManageYourChoice = createBrowserElement("//h1[contains(text(),'Manage your choice')]")
     private val linkContentsOverview = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Overview')]")
-    private val linkContentsBenefits = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Benefits of data sharing')]")
-    private val linkContentsDataUse = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'How your data is used')]")
-    private val linkContentsWhereOptOutDoesntApply = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), \"Where an opt-out doesn't apply\")]")
-    private val linkContentsManageYourChoice = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Manage your choice')]")
-    private val linkManageYourChoice = createBrowserElement("//a[@id='manage-choice-link'][contains(text(), 'Manage your choice')]")
+    private val linkContentsBenefits = createBrowserElement(
+            "//ul[@id='contents']/li/a[contains(text(), 'Benefits of data sharing')]")
+    private val linkContentsDataUse = createBrowserElement(
+            "//ul[@id='contents']/li/a[contains(text(), 'How your data is used')]")
+    private val linkContentsWhereOptOutDoesntApply = createBrowserElement(
+            "//ul[@id='contents']/li/a[contains(text(), \"Where an opt-out doesn't apply\")]")
+    private val linkContentsManageYourChoice = createBrowserElement(
+            "//ul[@id='contents']/li/a[contains(text(), 'Manage your choice')]")
+    private val linkManageYourChoice = createBrowserElement(
+            "//a[@id='manage-choice-link'][contains(text(), 'Manage your choice')]")
     private val linkDataSharingMoreInfo = createBrowserElement("//a[contains(text(), 'NHS website')]")
 
     // Actions

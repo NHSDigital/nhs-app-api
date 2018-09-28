@@ -5,7 +5,7 @@ import mocking.citizenId.models.signingKeys.SuceededResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-class SigningKeysRequestBuilder()
+class SigningKeysRequestBuilder
     : CitizenIdMappingBuilder("GET", "/.well-known/jwks.json") {
 
     fun respondWithSuccess(

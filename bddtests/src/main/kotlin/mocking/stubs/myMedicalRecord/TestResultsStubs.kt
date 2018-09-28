@@ -12,9 +12,13 @@ import models.Patient
 import java.time.Duration
 
 class TestResultsStubs(private val mockingClient: MockingClient) {
+
+    companion object {
+       private const val EMIS_RESULT_COUNT = 6
+    }
+
     fun generateEMISStubs() {
 
-        val EMIS_RESULT_COUNT = 6
         val testResultsLoader = TestResultsData.getTestResultsForEmis(EMIS_RESULT_COUNT)
         val mapEMISTestResultsStubs =
                 InputResponse<Patient, EmisTestResultsBuilder>()

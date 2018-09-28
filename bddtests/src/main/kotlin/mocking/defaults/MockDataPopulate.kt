@@ -15,7 +15,7 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionJournies
 import mocking.emis.models.CourseRequestsGetResponse
-import mocking.stubs.*
+import mocking.stubs.StubbedEnvironment
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import mockingFacade.appointments.CancelAppointmentSlotFacade
 import models.Patient
@@ -269,6 +269,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         return getFileContents(relativePath, BASE_NFT_DATA_DIR)
     }
 
+    @Suppress("TooGenericExceptionCaught")
     private fun getPatientsFromCsv(filePath: String): List<Patient> {
         val patients = ArrayList<Patient>()
 

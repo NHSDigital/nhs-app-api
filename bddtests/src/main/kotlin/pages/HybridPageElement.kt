@@ -14,6 +14,7 @@ private const val HEADER_HEIGHT_PX = 100
 private const val FLOATING_BUTTON_HEIGHT_PX = 78.5
 private const val NAVBAR_HEIGHT_PX = 70
 
+@Suppress("TooManyFunctions")
 class HybridPageElement(
         private var browserLocator: String,
         private var androidLocator: String?,

@@ -101,7 +101,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
     private fun getRepeatPrescription(courseToSelect: MedicationCourse):HybridPageElement {
         return HybridPageElement(
-                browserLocator = "//label[contains(.,'${courseToSelect.getInstructionsText()}') and contains(.,'${courseToSelect.name}')]",
+                browserLocator = "//label[contains(.," +
+                                 "'${courseToSelect.getInstructionsText()}') " +
+                                 "and contains(.,'${courseToSelect.name}')]",
                 androidLocator = null,
                 page = this
         )
@@ -119,7 +121,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
                     && medicationCourse.getInstructionsText() == instructionsOnScreen.text
                     && medicationCourse.medicationCourseGuid == inputElement.getAttribute("value")
             ) {
-                Assert.assertTrue("${medicationCourse.name}-${medicationCourse.getInstructionsText()} is not selected and should be",inputElement.isSelected())
+                Assert.assertTrue("${medicationCourse.name}-" +
+                                  "${medicationCourse.getInstructionsText()} is not " +
+                                  "selected and should be",inputElement.isSelected())
                 return
             }
         }

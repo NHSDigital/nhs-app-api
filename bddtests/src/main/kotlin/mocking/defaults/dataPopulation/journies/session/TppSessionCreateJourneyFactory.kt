@@ -3,7 +3,13 @@ package mocking.defaults.dataPopulation.journies.session
 import constants.TppConstants
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.tpp.models.*
+import mocking.tpp.models.Application
+import mocking.tpp.models.Authenticate
+import mocking.tpp.models.AuthenticateReply
+import mocking.tpp.models.NationalId
+import mocking.tpp.models.Person
+import mocking.tpp.models.PersonName
+import mocking.tpp.models.User
 import models.Patient
 
 class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJourneyFactory() {

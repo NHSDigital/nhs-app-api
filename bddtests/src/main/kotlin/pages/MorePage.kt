@@ -13,7 +13,8 @@ open class MorePage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             " to become a donor on the NHS Organ Donor Register."
     private val dataSharingTitle = "Choose how the NHS uses your data"
     private val dataSharingDescription =
-            "Find out how the NHS uses your confidential patient information and choose whether or not it can be used for research and planning."
+            "Find out how the NHS uses your confidential patient " +
+            "information and choose whether or not it can be used for research and planning."
 
     private fun listOfLinks(): HybridPageElement {
         return HybridPageElement(
