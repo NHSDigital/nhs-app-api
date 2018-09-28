@@ -1,4 +1,6 @@
-﻿using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+﻿using System.Linq;
+using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.Support.Auditing;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
@@ -16,7 +18,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         
         public object Visit(PrescriptionResult.SuccessfulGet result)
         {
-            _auditor.Audit(AuditType, "Prescriptions successfully retrieved");
+            _auditor.Audit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses).Count() } courses");
             return null;
         }
 
