@@ -69,6 +69,7 @@ services:
   nhsonline.redis-data.sds:
     image: nhsapp.azurecr.io/nhsonline-redis-data:${REDIS_DATA_TAG}
     environment:
+      - MODE=development
       - REDIS_HOST=nhsonline.redis.sds
     depends_on:
       - nhsonline.redis.sds
