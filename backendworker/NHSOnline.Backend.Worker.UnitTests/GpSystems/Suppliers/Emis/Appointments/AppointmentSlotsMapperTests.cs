@@ -304,6 +304,90 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
+        [TestMethod]
+        public void Map_ReturnsNoClinicians_WhenNoneMatched()
+        {
+            // Arrange
+            var appointmentSlotSession1 =
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+
+            var slotSessions = new[] { appointmentSlotSession1 };
+
+            var location = CreateLocation(23, "Leeds");
+            var sessionHolder = CreateSessionHolder(55, "Dr House");
+            var session = CreateSession(new[] { 66 }, location.LocationId, 9, "Unknown");
+
+            var locations = new[] { location };
+            var sessionHolders = new[] { sessionHolder };
+            var sessions = new[] { session };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
+
+            // Assert
+            var slot = new Slot
+            {
+                Id = "901",
+                Clinicians = new List<string>(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Type = "Emergency"
+            };
+
+            var expectedResponse = new[] { slot };
+
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        [TestMethod]
+        public void Map_ReturnsNoClinicians_WhenSessionHoldersIsNull()
+        {
+            // Arrange
+
+            var appointmentSlotSession1 =
+                CreateAppointmentsSlotSession(900, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+
+            var appointmentSlotSession2 =
+                CreateAppointmentsSlotSession(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", null);
+
+            var slotSessions = new[] { appointmentSlotSession1, appointmentSlotSession2 };
+
+            var location = CreateLocation(23, "Leeds");
+            var session = CreateSession(new[] { 11 }, location.LocationId, 9, "Unknown", "GP Session");
+
+            var locations = new[] { location };
+            var sessions = new[] { session };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions, locations, null, sessions);
+
+            // Assert
+            var slot1 = new Slot
+            {
+                Id = "900",
+                Clinicians = new List<string>(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Type = "GP Session - Emergency"
+            };
+
+            var slot2 = new Slot
+            {
+                Id = "901",
+                Clinicians = new List<string>(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Type = "GP Session"
+            };
+
+            var expectedResponse = new[] { slot1, slot2};
+
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
         private AppointmentSlotSession CreateAppointmentsSlotSession(int slotId, int sessionId, string startTime, string endTime, string slotTypeName)
         {
             var appointmentSlot = new AppointmentSlot()

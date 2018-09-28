@@ -265,6 +265,42 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
+        [TestMethod]
+        public void Map_ReturnsNoClinicians_WhenNoneMatched()
+        {
+            // Arrange
+            var appointmentSlotSession1 =
+                CreateAppointment(901, 9, "2018-07-12T10:59:19", "2018-07-12T10:59:19", "Emergency");
+
+            var slotSessions = new[] { appointmentSlotSession1 };
+
+            var location = CreateLocation(23, "Leeds");
+            var sessionHolder = CreateSessionHolder(55, "Dr House");
+            var session = CreateSession(new[] { 66 }, location.LocationId, 9, "Unknown");
+
+            var locations = new[] { location };
+            var sessionHolders = new[] { sessionHolder };
+            var sessions = new[] { session };
+
+            // Act
+            var actualResponse = _systemUnderTest.Map(slotSessions, locations, sessionHolders, sessions);
+
+            // Assert
+            var expectedAppointment = new Worker.Areas.Appointments.Models.Appointment
+            {
+                Id = "901",
+                Clinicians = new List<string>(),
+                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Location = "Leeds",
+                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-07-12T10:59:19"),
+                Type = "Emergency"
+            };
+
+            var expectedResponse = new[] { expectedAppointment };
+
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
         private static Appointment CreateAppointment(int slotId, int sessionId, string startTime, string endTime, string slotTypeName)
         {
             var appointment = new Appointment

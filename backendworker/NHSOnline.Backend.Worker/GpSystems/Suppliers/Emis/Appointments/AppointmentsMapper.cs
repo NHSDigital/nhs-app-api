@@ -49,41 +49,29 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 return appointments;
             }
 
+            var keyedSessions = sessions.ToDictionary(session => session.SessionId);
+
             foreach (var sourceAppointment in sourceAppointments)
             {
-                DateTimeOffset startTime;
+                var startTime = ParseSlotTime(sourceAppointment.StartTime, "Start");
 
-                try
+                if (startTime == null)
                 {
-                    startTime = _dateTimeOffsetProvider.CreateDateTimeOffset(sourceAppointment.StartTime);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Unable to parse EMIS Appointment Start Time of '{}'", sourceAppointment.StartTime);
                     continue;
                 }
 
-                DateTimeOffset? endTime;
-                try
-                {
-                    endTime = _dateTimeOffsetProvider.CreateDateTimeOffset(sourceAppointment.EndTime);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Unable to parse EMIS Appointment End Time of '{}'", sourceAppointment.StartTime);
-                    endTime = null;
-                }
+                var endTime = ParseSlotTime(sourceAppointment.EndTime, "End");
 
                 var sessionId = sourceAppointment.SessionId;
 
                 var appointment = new Appointment
                 {
                     Id = sourceAppointment.SlotId.ToString(CultureInfo.InvariantCulture),
-                    StartTime = startTime,
+                    StartTime = startTime.Value,
                     EndTime = endTime,
-                    Clinicians = FindCliniciansForSession(sessionId, sessions, sessionHolders),
-                    Location = FindLocationForSession(sessionId, sessions, locations),
-                    Type = CreateTypeFromAppointmentAndSession(sourceAppointment, sessions.FirstOrDefault(x=>x.SessionId==sourceAppointment.SessionId))
+                    Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders),
+                    Location = FindLocationForSession(sessionId, keyedSessions, locations),
+                    Type = CreateTypeFromAppointmentAndSession(sourceAppointment, FindSession(sessionId, keyedSessions))
                 };
 
                 appointments.Add(appointment);
@@ -98,17 +86,42 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             return $"{session?.SessionName}{(hasOnlyAppointmentSlotTypeOrSessionName ? string.Empty : SessionTypeSeparator)}{appointment.SlotTypeName}";
         }
 
-        private static string[] FindCliniciansForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<SessionHolder> sessionHolders)
+        private static IEnumerable<string> FindCliniciansForSession(
+            int sessionId, 
+            IReadOnlyDictionary<int, Models.Session> sessions,
+            IEnumerable<SessionHolder> sessionHolders
+            )
         {
-            var session = sessions.FirstOrDefault(x => x.SessionId == sessionId);
-            return session?.ClinicianIds == null ? Array.Empty<string>() : session.ClinicianIds.Select(x => sessionHolders?.FirstOrDefault(s => s.ClinicianId == x).DisplayName).ToArray();
+            var session = FindSession(sessionId, sessions);
+            var clinicianIds = session?.ClinicianIds ?? Array.Empty<int>();
+            return sessionHolders?.Where(s => clinicianIds.Contains(s.ClinicianId))
+                       .Select(s => s.DisplayName) ?? Array.Empty<string>();
         }
 
-        private static string FindLocationForSession(int sessionId, IEnumerable<Models.Session> sessions, IEnumerable<Location> locations)
+        private static string FindLocationForSession(
+            int sessionId,
+            IReadOnlyDictionary<int, Models.Session> sessions,
+            IEnumerable<Location> locations)
         {
-            var session = sessions.FirstOrDefault(x => x.SessionId == sessionId);
+            var session = FindSession(sessionId, sessions);
             var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);
-            return location == null ? string.Empty : location.LocationName;
+            return location?.LocationName ?? string.Empty;
+        }
+
+        private static Models.Session FindSession(int sessionId, IReadOnlyDictionary<int, Models.Session> sessions) =>
+            sessions.ContainsKey(sessionId) ? sessions[sessionId] : null;
+
+        private DateTimeOffset? ParseSlotTime(string time, string usage)
+        {
+            try
+            {
+                return _dateTimeOffsetProvider.CreateDateTimeOffset(time);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
+                return null;
+            }
         }
     }
 }
