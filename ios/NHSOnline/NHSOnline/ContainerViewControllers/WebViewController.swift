@@ -72,6 +72,7 @@ class WebViewController: UIViewController, WKUIDelegate {
     }
 
     func loadPage(url: String) {
+        self.webViewDelegate?.failedUrl = URL(string: url)
         self.webViewDelegate?.clearTimer()
         self.webViewDelegate?.activityIndicator.stopAnimating()
         
