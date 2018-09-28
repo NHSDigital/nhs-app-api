@@ -275,6 +275,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun showErrorScreen() {
+        hideBlankScreen()
         errorViewLayout.visibility = View.VISIBLE
         webview.visibility = View.GONE
 
@@ -282,6 +283,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun showWebviewScreen() {
+        hideBlankScreen()
         errorViewLayout.visibility = View.GONE
         webview.visibility = View.VISIBLE
 
