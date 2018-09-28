@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" :class="[$style['no-padding'], 'pull-content']">
     <beta-banner data-sid="beta-flag"/>
-    <hr :class="$style.rule">
+    <hr :class="$style.rule" aria-hidden="true">
     <h2 :class="$style.header" data-purpose="greeting">{{ greetingMessage }}</h2>
     <welcome-section />
     <navigation-list-menu
