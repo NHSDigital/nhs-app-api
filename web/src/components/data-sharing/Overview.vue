@@ -10,13 +10,17 @@
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.yourChoice.title') }}</h2>
     <p>{{ $t('ds01.pages.p1.yourChoice.paragraph') }}</p>
+
     <a id="manage-choice-link" :title="$t('ds01.pages.p1.yourChoice.manageChoiceLink')"
-       @click="goToManageChoices($event)">
+       role="link" @click="goToManageChoices($event)">
       {{ $t('ds01.pages.p1.yourChoice.manageChoiceLink') }}
     </a>
 
     <h2 :class="$style['title']">{{ $t('ds01.pages.p1.moreOptions.title') }}</h2>
-    <p>{{ $t('ds01.pages.p1.moreOptions.paragraph.part1') }}
+    <p :aria-label="$t('ds01.pages.p1.moreOptions.paragraph.part1') +
+      $t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink') +
+    $t('ds01.pages.p1.moreOptions.paragraph.part3')">
+      {{ $t('ds01.pages.p1.moreOptions.paragraph.part1') }}
       <analytics-tracked-tag :href="yourDataMattersUrl"
                              :class="$style['paragraph-link']"
                              :text="$t('ds01.pages.p1.moreOptions.paragraph.nhsWebsiteLink')"

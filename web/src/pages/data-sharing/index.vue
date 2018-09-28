@@ -1,10 +1,12 @@
 <template>
   <div class="content">
     <div :class="$style['page']">
-      <h1 :class="$style['pageTitle']">{{ $t('ds01.titles.' + pageId) }}</h1>
+      <h1 :class="$style['pageTitle']" :key="`${pageId}header`">
+        {{ $t('ds01.titles.' + pageId) }}
+      </h1>
       <ul id="contents" :class="$style['list-menu']">
         <li v-for="pageId in pageIds" :key="pageId">
-          <a :class="isLinkActive(pageId)" tabindex="0" @click="goToPage(pageId)"
+          <a :class="isLinkActive(pageId)" tabindex="0" role="link" @click="goToPage(pageId)"
              @keypress="contentsKeyPressed($event, pageId)">{{ $t('ds01.titles.' + pageId) }}</a>
         </li>
       </ul>
