@@ -19,7 +19,7 @@ object PrescriptionsData {
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()
         var medicationCourses = mutableListOf<MedicationCourse>()
 
-        if(noPrescriptions != 0) {
+        if (noPrescriptions != 0) {
 
             // Create courses first as these will be used in the prescriptions
             medicationCourses = CoursesData.getCourseData(
@@ -66,8 +66,7 @@ object PrescriptionsData {
                 } else if (prescriptionNum < maxPrescriptions && courseNum == -1) {
                     prescriptionNum++
                     courseNum = medicationCourses.count().minus(1)
-                }
-                else{
+                } else {
                     prescriptionNum++
                 }
             }
@@ -84,11 +83,11 @@ object PrescriptionsData {
         return getStringValue(getDosages())
     }
 
-    fun getStringValue(list: List<String>): String {
+    private fun getStringValue(list: List<String>): String {
         return list.get(getRandomNumber(getMedicationCourseNames().size))
     }
 
-    fun getMedicationCourseNames(): List<String> {
+    private fun getMedicationCourseNames(): List<String> {
         return listOf(
                 "Ranitidine 150mg effervescent tablets",
                 "Codine 200mg tablets",
@@ -98,7 +97,7 @@ object PrescriptionsData {
         )
     }
 
-    fun getDosages(): List<String> {
+    private fun getDosages(): List<String> {
         return listOf(
                 "One To Be Taken Twice A Day",
                 "One To Be Taken Three Times A Day",
@@ -108,8 +107,7 @@ object PrescriptionsData {
         )
     }
 
-    fun getQuantity(): String {
-        val quantity = getRandomNumber(MAX_PRESCRIPTIONS_NUMBER)
+    fun getQuantity(quantity: Int): String {
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",
@@ -124,7 +122,7 @@ object PrescriptionsData {
 
         var localMaxNum = maxNum
 
-        if(localMaxNum == 1){
+        if (localMaxNum == 1) {
             localMaxNum += 1
         }
 
@@ -133,7 +131,7 @@ object PrescriptionsData {
 
     fun addResponses(list: List<PrescriptionRequestsGetResponse>): PrescriptionRequestsGetResponse {
 
-        val returnPrescriptions = mutableListOf<PrescriptionRequest> ()
+        val returnPrescriptions = mutableListOf<PrescriptionRequest>()
         val returnCourses = mutableSetOf<MedicationCourse>()
 
         list.forEach { el ->

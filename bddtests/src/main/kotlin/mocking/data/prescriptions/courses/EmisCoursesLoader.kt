@@ -7,7 +7,7 @@ import models.prescriptions.MedicationCourse
 import java.util.UUID
 
 object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
-    override lateinit var data:MutableList<MedicationCourse>
+    override lateinit var data: MutableList<MedicationCourse>
 
     private const val CONSTITUENTS_NUMBER = 5
     private const val COURSES_NUMBER = 100
@@ -34,19 +34,19 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
             val createdCourse = MedicationCourse(UUID.randomUUID().toString(),
                     EmisPrescriptionLoader.getCourseName(),
                     if (includeDosage) EmisPrescriptionLoader.getDosage() else null,
-                    if (includeQuantity) EmisPrescriptionLoader.getQuantity() else null,
+                    if (includeQuantity) EmisPrescriptionLoader.getQuantity(course) else null,
                     PrescriptionType.Acute,
                     constituents,
                     false)
 
             // Check if the course needs to be set to repeat
-            if(numberOfRepeats != 0) {
+            if (numberOfRepeats != 0) {
                 createdCourse.prescriptionType = PrescriptionType.Repeat
                 numberOfRepeats--
             }
 
             // Check if the course needs to be true for canBeRequested
-            if(numberCanBeRequested != 0) {
+            if (numberCanBeRequested != 0) {
                 createdCourse.canBeRequested = true
                 numberCanBeRequested--
             }
@@ -59,8 +59,7 @@ object EmisCoursesLoader: ICoursesLoader<MutableList<MedicationCourse>> {
 
     override fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
         var coursesDataFiltered = data.filter { medicationCourse -> medicationCourse.canBeRequested!! }.toMutableList()
-        coursesDataFiltered = coursesDataFiltered.filter {
-            medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
+        coursesDataFiltered = coursesDataFiltered.filter { medicationCourse -> medicationCourse.prescriptionType == PrescriptionType.Repeat }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.sortedBy { medicationCourse -> medicationCourse.name }.toMutableList()
         coursesDataFiltered = coursesDataFiltered.take(COURSES_NUMBER).toMutableList()
 

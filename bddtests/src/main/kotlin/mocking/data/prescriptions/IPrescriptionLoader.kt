@@ -43,8 +43,7 @@ interface IPrescriptionLoader<T> {
         )
     }
 
-    fun getQuantity(): String {
-        val quantity = getRandomNumber(MAX_QUANTITY_NUMBER)
+    fun getQuantity(quantity: Int): String {
         val list = listOf(
                 "$quantity gram",
                 "$quantity tablet",
@@ -58,7 +57,7 @@ interface IPrescriptionLoader<T> {
         val minNum = 1
         var localMaxNum = maxNum
 
-        if(localMaxNum == 1) {
+        if (localMaxNum == 1) {
             localMaxNum += 1
         }
 

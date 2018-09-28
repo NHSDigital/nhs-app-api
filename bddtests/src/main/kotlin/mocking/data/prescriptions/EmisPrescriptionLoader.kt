@@ -13,8 +13,10 @@ object EmisPrescriptionLoader : IPrescriptionLoader<PrescriptionRequestsGetRespo
 
     private const val MAX_RANDOM_NUMBER = 6
 
-    override fun loadData(noPrescriptions: Int, noCourses: Int,
-                          noRepeats: Int, showDosage: Boolean,
+    override fun loadData(noPrescriptions: Int,
+                          noCourses: Int,
+                          noRepeats: Int,
+                          showDosage: Boolean,
                           showQuantity: Boolean) {
 
         val prescriptionRequests = mutableListOf<PrescriptionRequest>()

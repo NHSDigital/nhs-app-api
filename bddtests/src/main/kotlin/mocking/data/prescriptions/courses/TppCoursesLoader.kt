@@ -15,7 +15,7 @@ object TppCoursesLoader: ICoursesLoader<ListRepeatMedicationReply> {
                           includeDosage: Boolean,
                           includeQuantity: Boolean) {
 
-        TppPrescriptionLoader.loadData(maxCourses, numCanBeRequested, numOfRepeats, includeDosage, includeQuantity  )
+        TppPrescriptionLoader.loadData(maxCourses, numCanBeRequested, numOfRepeats, includeDosage, includeQuantity)
         data = TppPrescriptionLoader.data
     }
 
@@ -23,7 +23,7 @@ object TppCoursesLoader: ICoursesLoader<ListRepeatMedicationReply> {
         var coursesDataFiltered = data.Medication.filter { mc ->
             mc.requestable.toLowerCase() == "y"
         }
-        coursesDataFiltered = coursesDataFiltered.sortedBy{ m -> m.drug }
+        coursesDataFiltered = coursesDataFiltered.sortedBy { m -> m.drug }
         coursesDataFiltered = coursesDataFiltered.take(COURSES_NUMBER).toMutableList()
 
         return coursesDataFiltered.map { m -> MedicationCourse(m.drugId, m.drug, m.details) }

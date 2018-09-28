@@ -15,7 +15,7 @@ object CoursesData {
                       numCanBeRequested: Int,
                       medicationCourses: MutableList<MedicationCourse>,
                       includeDosage: Boolean,
-                      includeQuantity: Boolean) : MutableList<MedicationCourse> {
+                      includeQuantity: Boolean): MutableList<MedicationCourse> {
 
         var numberOfRepeats = numOfRepeats
         var numberCanBerequested = numCanBeRequested
@@ -39,19 +39,19 @@ object CoursesData {
             val createdCourse = MedicationCourse(UUID.randomUUID().toString(),
                     prefix + PrescriptionsData.getCourseName(),
                     if (includeDosage) PrescriptionsData.getDosage() else null,
-                    if (includeQuantity) PrescriptionsData.getQuantity() else null,
+                    if (includeQuantity) PrescriptionsData.getQuantity(course) else null,
                     PrescriptionType.Acute,
                     constituents,
                     false)
 
             // Check if the course needs to be set to repeat
-            if(numberOfRepeats != 0){
+            if (numberOfRepeats != 0) {
                 createdCourse.prescriptionType = PrescriptionType.Repeat
                 numberOfRepeats--
             }
 
             // Check if the course needs to be true for canBeRequested
-            if(numberCanBerequested != 0){
+            if (numberCanBerequested != 0) {
                 createdCourse.canBeRequested = true
                 numberCanBerequested--
             }

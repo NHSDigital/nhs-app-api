@@ -479,7 +479,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     }
 
-    private fun setupWiremockAndData(fromdate: OffsetDateTime, numOfCourses: Int = this.numOfCourses, numOfRepeats: Int = this.numOfRepeats) {
+    private fun setupWiremockAndData(fromdate: OffsetDateTime,
+                                     numOfCourses: Int = this.numOfCourses,
+                                     numOfRepeats: Int = this.numOfRepeats) {
 
         if (!::prescriptionLoader.isInitialized) {
             val gpSystem = Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM)

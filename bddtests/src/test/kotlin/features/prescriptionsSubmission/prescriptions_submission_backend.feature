@@ -1,8 +1,10 @@
+@prescription
+@backend
 Feature: View prescriptions
 
   A user can view information about their prescriptions after logging in
 
-  @backend
+  
   @NHSO-945
   Scenario: Repeat prescription request with null body
     Given I have an empty repeat prescription request
@@ -10,7 +12,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Bad Request" error
 
-  @backend
+  
   @NHSO-945
   Scenario: Repeat prescription request for valid courses
     Given I have a repeat prescription request with 1 courses
@@ -19,7 +21,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Created" success code
 
-  @backend
+  
   @NHSO-945
   Scenario: Repeat prescription request with 0 courses
     Given I have a repeat prescription request with 0 courses
@@ -27,7 +29,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Bad Request" error
 
-  @backend
+  
   @NHSO-945
   Scenario: Repeat prescription request with an invalid course id format
     Given I have a repeat prescription request with 100 courses
@@ -36,7 +38,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Bad Request" error
 
-  @backend
+  
   @NHSO-945
   Scenario: Repeat prescription request with an invalid course id
     Given I have a repeat prescription request with 1 courses
@@ -45,7 +47,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Bad Request" error
 
-  @backend
+  
   @NHSO-945
   Scenario: Repeat prescription request with a course which has been ordered within the last 30 days
     Given I have a repeat prescription request with 1 courses
@@ -54,7 +56,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Conflict" error
 
-  @backend
+  
   @NHSO-945
   Scenario: Session expired (redis)
     Given I have a repeat prescription request with 1 courses
@@ -63,7 +65,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Unauthorized" error
 
-  @backend
+  
   @NHSO-945
   Scenario: GP practice has disabled prescriptions functionality
     Given I have a repeat prescription request with 1 courses
@@ -72,7 +74,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Forbidden" error
 
-  @backend
+  
   @NHSO-945
   Scenario: GP system returns unknown error
     Given I have a repeat prescription request with 1 courses
@@ -81,7 +83,7 @@ Feature: View prescriptions
     When I submit the repeat prescription
     Then I receive a "Bad Gateway" error
 
-  @backend
+
   @NHSO-945
   Scenario: GP system fails to return in a timely fashion
     Given I have a repeat prescription request with 1 courses
