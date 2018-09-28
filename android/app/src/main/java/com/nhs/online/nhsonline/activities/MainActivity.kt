@@ -117,7 +117,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
                 val url = data.buildUpon()
                         .scheme(getString(R.string.baseScheme))
                         .toString()
-
+                showBlankScreen()
+                showHeader()
                 loadPage(url)
             } else {
                 loadPage(data.toString())
@@ -340,6 +341,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         showMenuBar()
         showHeader()
+        hideBlankScreen()
         urlLoader.usingAbsoluteUri = false
         isLoggedIn = true
     }

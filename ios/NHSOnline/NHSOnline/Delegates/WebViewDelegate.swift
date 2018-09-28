@@ -178,6 +178,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             if (message.name == "onLogin") {
+                UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
                 WebViewController.Properties.usingAbsoluteUri = false
             }

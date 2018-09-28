@@ -18,20 +18,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         let webPageUrl = userActivity.webpageURL?.absoluteString
-        let vc = rootViewController?.childViewControllers.first as! HomeViewController
-        vc.webViewController?.loadPage(url: webPageUrl!)
-        vc.webViewController?.dismissSafariViewController()
-
+        self.finishLoginToApp(webPageUrl!)
         return true
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         let webPageUrl = resolveAppScheme(url: url)
-        let vc = rootViewController?.childViewControllers.first as! HomeViewController
-        vc.webViewController?.loadPage(url: webPageUrl)
-        vc.webViewController?.dismissSafariViewController()
-
+        self.finishLoginToApp(webPageUrl)
         return true
+    }
+    
+    private func finishLoginToApp(_ url: String) {
+        let vc = rootViewController?.childViewControllers.first as! HomeViewController
+        vc.webViewController?.loadPage(url: url)
+        vc.webViewController?.dismissSafariViewController()
+        vc.setVisibilityOfHeaderAndMenuBars(visible: true)
+        let theWebview = vc.webViewController?.webView
+        let v = UIView(frame: (theWebview?.frame)!)
+        v.backgroundColor = UIColor.white
+        v.tag = 2
+        theWebview?.addSubview(v);
     }
     
     func setLocale() {

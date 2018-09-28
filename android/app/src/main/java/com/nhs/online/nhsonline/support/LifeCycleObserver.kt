@@ -16,6 +16,8 @@ class LifeCycleObserver(
     fun onMoveToForeground() {
         val currentUrl: String? = context.webview.url
         currentUrl?.let {
+            if (currentUrl.contains("auth-return")) return
+
             var knownService = knownServices.findMatchingKnownService(it)
 
             if (knownService != null && knownService.shouldValidateSession) {
