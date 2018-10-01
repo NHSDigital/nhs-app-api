@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Prescriptions;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
@@ -29,16 +30,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
                     _logger);
                 var timeout = int.Parse(configValue, CultureInfo.InvariantCulture);
 
+                var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
                 services.AddSingleton<TppHttpClientHandler>();
 
-                services.AddHttpClient<TppHttpClient>(client =>
-                    {
-                        client.Timeout = TimeSpan.FromSeconds(timeout);
-                    })
-                    .ConfigurePrimaryHttpMessageHandler(() =>
-                    {
-                        return new TppHttpClientHandler(configuration, _loggerFactory.CreateLogger<TppHttpClientHandler>());
-                    });
+                services.AddHttpClient<TppHttpClient>(client => { client.Timeout = TimeSpan.FromSeconds(timeout); })
+                    .ConfigurePrimaryHttpMessageHandler(
+                        () => new TppHttpClientHandler(
+                            configuration,
+                            _loggerFactory.CreateLogger<TppHttpClientHandler>(),
+                            certificateService));
 
                 services.AddSingleton<IGpSystem, TppGpSystem>();
                 services.AddSingleton<ITppClient, TppClient>();

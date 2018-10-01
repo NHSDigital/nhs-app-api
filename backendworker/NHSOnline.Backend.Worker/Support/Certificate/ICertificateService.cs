@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate
+namespace NHSOnline.Backend.Worker.Support.Certificate
 {
     public interface ICertificateService
     {

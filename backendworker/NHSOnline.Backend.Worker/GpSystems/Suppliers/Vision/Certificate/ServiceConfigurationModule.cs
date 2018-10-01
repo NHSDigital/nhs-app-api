@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate
 {

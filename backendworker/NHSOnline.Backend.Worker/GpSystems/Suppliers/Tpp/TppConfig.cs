@@ -11,7 +11,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
         public string ApplicationName { get; set; }
         public string ApplicationVersion { get; set; }
         public string ApplicationProviderId { get; set; }
-        public string ApplicationDeviceType { get; set; }                
+        public string ApplicationDeviceType { get; set; }
+        public string CertificatePath { get; }
+        public string CertificatePassphrase { get; }
 
         public TppConfig(IConfiguration configuration, ILogger<TppConfig> logger)
         {           
@@ -26,6 +28,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
             ApplicationVersion = configuration.GetOrWarn("TPP_APPLICATION_VERSION", logger);
             ApplicationProviderId = configuration.GetOrWarn("TPP_APPLICATION_PROVIDER_ID", logger);
             ApplicationDeviceType = configuration.GetOrWarn("TPP_APPLICATION_DEVICE_TYPE", logger);
+            CertificatePath = configuration.GetOrWarn("TPP_CERTIFICATE_PATH", logger);
+            CertificatePassphrase = configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", logger);
         }
         
         public Guid CreateGuid()

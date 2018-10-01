@@ -1,8 +1,9 @@
 ﻿using System;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
-    public interface ITppConfig
+    public interface ITppConfig: ICertificateConfig
     {
         Uri ApiUrl { get; set; }
         string ApiVersion { get; set; }

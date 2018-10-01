@@ -11,10 +11,11 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.ResponseParsers;
+using NHSOnline.Backend.Worker.Support;
+using NHSOnline.Backend.Worker.Support.Certificate;
 using RichardSzalay.MockHttp;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision

@@ -1,9 +1,11 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
-    public interface IEmisConfig
+    public interface IEmisConfig : ICertificateConfig
     {
         Uri BaseUrl { get; set; }
         string ApplicationId { get; set; }
@@ -15,12 +17,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
         public Uri BaseUrl { get; set; }
         public string ApplicationId { get; set; }
         public string Version { get; set; }
+        public string CertificatePath { get; }
+        public string CertificatePassphrase { get; }
 
-        public EmisConfig(IConfiguration configuration)
+        public EmisConfig(IConfiguration configuration, ILogger<EmisConfig> logger)
         {
-            BaseUrl = new Uri(configuration["EMIS_BASE_URL"]);
-            ApplicationId = configuration["EMIS_APPLICATION_ID"];
-            Version = configuration["EMIS_VERSION"];
+             var baseUrlstring = configuration.GetOrWarn("EMIS_BASE_URL", logger);
+            if (!string.IsNullOrEmpty(baseUrlstring))
+            {
+                BaseUrl = new Uri(baseUrlstring, UriKind.Absolute);
+            }
+            ApplicationId = configuration.GetOrWarn("EMIS_APPLICATION_ID", logger);
+            Version = configuration.GetOrWarn("EMIS_VERSION", logger);
+            CertificatePath = configuration.GetOrWarn("EMIS_CERTIFICATE_PATH", logger);
+            CertificatePassphrase = configuration.GetOrWarn("EMIS_CERTIFICATE_PASSWORD", logger);
         }
     }
 }

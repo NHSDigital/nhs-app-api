@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 {
@@ -22,22 +23,24 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_EMIS", _logger), out bool enabled) && enabled)
+            if (bool.TryParse(configuration.GetOrWarn("GP_PROVIDER_ENABLED_EMIS", _logger), out bool enabled) &&
+                enabled)
             {
-                var defaultHttpTimeoutSeconds = configuration.ConfigurationSettings().GetOrWarn("DefaultHttpTimeoutSeconds",
-                _logger);
+                var defaultHttpTimeoutSeconds = configuration.ConfigurationSettings().GetOrWarn(
+                    "DefaultHttpTimeoutSeconds",
+                    _logger);
 
                 services.AddSingleton<EmisHttpClientHandler>();
-                
+                var certificateService = services.BuildServiceProvider().GetRequiredService<ICertificateService>();
+
                 services.AddHttpClient<EmisHttpClient>(client =>
                 {
                     client.Timeout =
                         TimeSpan.FromSeconds(int.Parse(defaultHttpTimeoutSeconds, CultureInfo.InvariantCulture));
                 }).ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    return new EmisHttpClientHandler(configuration,
-                        _loggerFactory.CreateLogger<EmisHttpClientHandler>());
-                });
+                    new EmisHttpClientHandler(configuration,
+                        _loggerFactory.CreateLogger<EmisHttpClientHandler>(),
+                        certificateService));
 
                 services.AddSingleton<IGpSystem, EmisGpSystem>();
                 services.AddSingleton<IEmisClient, EmisClient>();

@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -26,7 +26,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
         private const string MediaType = "text/xml";
 
-        public VisionClient(IVisionConfig visionConfig, ILoggerFactory loggerFactory, ICertificateService certificateService, IEnvelopeService envelopeService, VisionHttpClient httpClient)
+        public VisionClient(IVisionConfig visionConfig,
+            ILoggerFactory loggerFactory,
+            ICertificateService certificateService,
+            IEnvelopeService envelopeService,
+            VisionHttpClient httpClient)
         {
             _targetUri = visionConfig.ApiUrl;
             _requestUsername = visionConfig.RequestUsername;
@@ -35,7 +39,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             _envelopeService = envelopeService;
             _httpClient = httpClient;
             _certificate =
-            certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
+                certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
         }
 
         public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(VisionConnectionToken token, string odsCode)

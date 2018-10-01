@@ -1,24 +1,32 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp
 {
-    public class TppHttpClientHandler : HttpClientCertificateHandler<TppHttpClientHandler>
+    public class TppHttpClientHandler : HttpClientHandler
     {
-        public TppHttpClientHandler(IConfiguration configuration, ILogger<TppHttpClientHandler> logger) :
-            base(configuration, logger)
+        public TppHttpClientHandler(
+            IConfiguration configuration,
+            ILogger<TppHttpClientHandler> logger,
+            ICertificateService certificateService)
         {
+            if (!"Production".Equals(configuration["ASPNETCORE_ENVIRONMENT"], StringComparison.OrdinalIgnoreCase))
+            {
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+            }
+
             var path = configuration.GetOrWarn("TPP_CERTIFICATE_PATH", logger);
             var password = configuration.GetOrWarn("TPP_CERTIFICATE_PASSWORD", logger);
-            logger.LogInformation("TPP_CERTIFICATE_PATH: {path}", path);
+            logger.LogInformation($"TPP_CERTIFICATE_PATH: {path}");
 
-            if (ValidateParameters(path, password))
+            var certificate = certificateService.GetCertificate(path, password);
+
+            if (certificate != null)
             {
-                AddCertificate(path, password);
-            }
-            else
-            {
-                logger.LogWarning("Could not add TPP client certificate due to missing certificate path or password.");
+                ClientCertificates.Add(certificate);
             }
         }
     }

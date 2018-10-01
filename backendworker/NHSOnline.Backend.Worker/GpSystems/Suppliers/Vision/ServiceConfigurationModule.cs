@@ -3,7 +3,7 @@ using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Certificate;
+using NHSOnline.Backend.Worker.Support.Certificate;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -39,11 +39,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                     {
                         client.Timeout = TimeSpan.FromSeconds(timeout);
                     })
-                    .ConfigurePrimaryHttpMessageHandler((() =>
+                    .ConfigurePrimaryHttpMessageHandler(() =>
                             new VisionHttpClientHandler(configuration,
                                 _loggerFactory.CreateLogger<VisionHttpClientHandler>(),
                                 certificateService)
-                        ));
+                        );
 
                 logger.LogDebug("Vision GP Service was successfully configured");
             }
