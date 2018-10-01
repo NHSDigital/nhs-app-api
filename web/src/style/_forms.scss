@@ -27,6 +27,7 @@
 		padding: 1em;
 		border: 0.063em $light_grey solid;
 		outline: none;
+    transition: all ease 0.5s;
 		@include default_text;
 
 		&.error {

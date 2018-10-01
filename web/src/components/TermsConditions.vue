@@ -28,7 +28,7 @@
         {{ $t('termsAndConditions.cookiesText2') }}
       </p>
     </div>
-    <div :class="$style[{validationBorderLeft: getErrorState(), addFocus: agreeCheckboxFocused}]">
+    <div :class="getErrorState()">
       <error-message v-if="hasTriedToContinue && !areTermsAccepted"
                      id="error_txt"
                      :class="$style.validationText">
@@ -45,9 +45,7 @@
           :checked="check"
           v-model="areTermsAccepted"
           type="checkbox"
-          name="termsAndConditions"
-          @focus="focus"
-          @blur="blur">
+          name="termsAndConditions">
         <label for="hiddenCheckbox" @click="check">
           {{ $t('termsAndConditions.checkBoxText') }}
           <a :href="cookiesPolicyURL" style="display: inline-block;">
@@ -84,7 +82,6 @@ export default {
       cookiesPolicyURL: app.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
       hasTriedToContinue: false,
-      agreeCheckboxFocused: false,
     };
   },
   methods: {
@@ -102,14 +99,11 @@ export default {
         this.$store.dispatch('termsAndConditions/acceptTerms', { consentRequest });
       }
     },
-    focus() {
-      this.agreeCheckboxFocused = true;
-    },
-    blur() {
-      this.agreeCheckboxFocused = false;
-    },
     getErrorState() {
-      return this.hasTriedToContinue && !this.areTermsAccepted;
+      if (this.hasTriedToContinue && !this.areTermsAccepted) {
+        return this.$style.validationBorderLeft;
+      }
+      return null;
     },
   },
 };
@@ -119,7 +113,6 @@ export default {
   @import "../style/buttons";
   @import "../style/forms";
   @import "../style/home";
-  @import "../style/accessibility";
 
   p {
     padding-bottom: 0.5em;

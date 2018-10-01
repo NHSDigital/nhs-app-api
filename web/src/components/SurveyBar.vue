@@ -7,7 +7,7 @@
     <div :class="[$style.surveyContent, !open ? $style.closed : undefined]"
          data-purpose="content">
       <p data-purpose="info" >{{ $t('surveyBar.barText') }}
-        <a :href="hotJarLinkUrl" :class="$style['altFocus']" data-purpose="link" target="_blank">
+        <a :href="hotJarLinkUrl" data-purpose="link" target="_blank">
           {{ $t('surveyBar.linkText') }}</a>
       </p>
     </div>
@@ -46,5 +46,4 @@ export default {
 </script>
 <style lang="scss" module scoped>
   @import "../style/surveybar";
-  @import "../style/accessibility";
 </style>

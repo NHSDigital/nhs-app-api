@@ -5,8 +5,7 @@
       <ul v-if="hasAppointments(daySlots)"
           :class="[$style['selector-list'], $style.appointmentTimeSelector]">
         <time-slot v-for="slot in daySlots[1]" :key="slot.ref" :ref="slot.ref"
-                   :time-slot="slot" tabindex="0" @click.native="select(slot.ref)"
-                   @keypress.native="keyPressed($event, slot.ref)"/>
+                   :time-slot="slot" @click.native="select(slot.ref)" />
       </ul>
       <p v-else :class="$style.noAppointments">{{ $t('appointments.booking.noSlots') }}</p>
     </span>
@@ -38,12 +37,6 @@ export default {
     hasAppointments(daySlots) {
       return daySlots[1].length > 0;
     },
-    keyPressed(event, ref) {
-      if (event.key === ' ' || event.key === 'Spacebar') {
-        event.preventDefault();
-        this.select(ref);
-      }
-    },
   },
 };
 </script>
@@ -52,7 +45,6 @@ export default {
 @import "../../../style/selectors";
 @import "../../../style/errorvalidation";
 @import "../../../style/appointmentsnew";
-@import "../../../style/accessibility";
 
   .noAppointments {
     margin-bottom: 1.2em;

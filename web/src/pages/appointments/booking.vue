@@ -32,7 +32,7 @@
 
     <slot-list ref="slot_list" :available-slots="availableSlots" />
 
-    <div ref="noMatching">
+    <div ref="noMatching" tabindex="-1">
       <message-dialog v-if="showNoMatchingWarning"
                       :icon-text="$t('appointments.booking.adjustSearch.title')"
                       message-type="warning">

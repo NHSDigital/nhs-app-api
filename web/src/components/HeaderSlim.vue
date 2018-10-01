@@ -1,9 +1,8 @@
 <template>
   <header v-if="showHeader" :class="[$style.slim]">
     <h1 :class="[$style.h1]"><slot/></h1>
-    <a :class="$style['focus-child-svg']" tabindex="0" @click="performLogout()"
-       @focus="focus" @blur="blur">
-      <back-icon :class="backButtonFocus"/>
+    <a @click="performLogout()">
+      <back-icon/>
     </a>
   </header>
 </template>
@@ -23,11 +22,6 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      backButtonFocused: false,
-    };
-  },
   computed: {
     showHeader() {
       if (this.showInNative) {
@@ -35,19 +29,10 @@ export default {
       }
       return !this.$store.state.device.isNativeApp;
     },
-    backButtonFocus() {
-      return { addFocus: this.backButtonFocused, altFocus: true };
-    },
   },
   methods: {
     performLogout() {
       this.$store.dispatch('auth/logout');
-    },
-    focus() {
-      this.backButtonFocused = true;
-    },
-    blur() {
-      this.backButtonFocused = false;
     },
   },
 };
@@ -55,6 +40,5 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../style/headerslim";
-@import "../style/accessibility";
 
 </style>
