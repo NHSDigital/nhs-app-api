@@ -11,7 +11,8 @@
         <message-text data-purpose="msg-text">
           {{ message }}
         </message-text>
-        <message-text v-if="hasAdditionalInfo" data-purpose="msg-extratext">
+        <message-text v-if="hasAdditionalInfo" :class="$style['additionalInfomation']"
+                      data-purpose="msg-extratext">
           {{ additionalInfo }}
         </message-text >
       </message-dialog>
@@ -214,5 +215,8 @@ export default {
       p {
         margin-top: 0.5em
       }
+  }
+    .additionalInfomation {
+     margin-bottom: 1em
   }
 </style>
