@@ -18,7 +18,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
         
         public object Visit(PrescriptionResult.SuccessfulGet result)
         {
-            _auditor.Audit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses).Count() } courses");
+            _auditor.Audit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses.Count()).Sum() } courses");
             return null;
         }
 

@@ -61,7 +61,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             var mockGpSystem = new Mock<IGpSystem>();
             var courseService = new Mock<ICourseService>();
 
-            var coursesGetResponse = new CourseListResponse();
+            var coursesGetResponse = new CourseListResponse
+            {
+                Courses = new List<Course>
+                {
+                    new Course(),
+                    new Course(),
+                }
+            };
 
             var getCoursesResult = new GetCoursesResult.SuccessfullyRetrieved(coursesGetResponse);
 
@@ -85,7 +92,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             value.Should().BeEquivalentTo(coursesGetResponse);
             
             _mockAuditor.Verify(x => x.Audit(RequestAuditType, "Attempting to retrieve courses", It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Courses successfully retrieved", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.Audit(ResponseAuditType, "Courses successfully retrieved - 2 courses", It.IsAny<object[]>()));
         }
     }
 }
