@@ -1,5 +1,5 @@
 <template>
-  <div :class="{addFocus: focused}" data-purpose="repeat-prescription">
+  <div data-purpose="repeat-prescription">
     <div :class="$style['checkbox-panel']">
       <div class="clickme" @click="check">
         <checked-icon :selected="selected" :id="prescriptionDetails.id" />
@@ -11,8 +11,6 @@
         v-model="selected"
         type="checkbox"
         name="prescription"
-        @focus="focus"
-        @blur="blur"
         @change="check">
       <label :for="'prescription-' + prescriptionDetails.id">
         <span data-label="prescription-name">
@@ -44,11 +42,6 @@ export default{
     ...mapGetters({
       isValid: 'repeatPrescriptionCourses/isValid',
     }),
-    focused: {
-      get() {
-        return this.prescriptionDetails.focused;
-      },
-    },
     selected: {
       get() {
         return this.prescriptionDetails.selected;
@@ -62,12 +55,6 @@ export default{
     check() {
       this.$store.dispatch('repeatPrescriptionCourses/select', this.prescriptionDetails.id);
       this.$store.dispatch('repeatPrescriptionCourses/validate', { isValid: this.isValid });
-    },
-    focus() {
-      this.$store.dispatch('repeatPrescriptionCourses/focus', { id: this.prescriptionDetails.id, focused: true });
-    },
-    blur() {
-      this.$store.dispatch('repeatPrescriptionCourses/focus', { id: this.prescriptionDetails.id, focused: false });
     },
   },
 };

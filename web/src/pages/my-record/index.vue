@@ -6,9 +6,6 @@
                            :click-func="myRecordSectionClick"
                            :click-param="PATIENTDETAILS"
                            :text="$t('my_record.patientInfo.sectionHeader')"
-                           :tabindex="0"
-                           :key-press-func="myRecordSectionClick"
-                           :key-press-param="PATIENTDETAILS"
                            data-purpose="accordion"
                            tag="h2">
       {{ $t('my_record.patientInfo.sectionHeader') }}
@@ -22,9 +19,6 @@
                              :click-func="myRecordSectionClick"
                              :click-param="ALLERGIESANDADVERSEREACTIONS"
                              :text="$t('my_record.allergiesAndAdverseReactions.sectionHeader')"
-                             :tabindex="0"
-                             :key-press-func="myRecordSectionClick"
-                             :key-press-param="ALLERGIESANDADVERSEREACTIONS"
                              data-purpose="accordion"
                              tag="h2">
         {{ $t('my_record.allergiesAndAdverseReactions.sectionHeader') }}
@@ -37,9 +31,6 @@
                              :click-func="myRecordSectionClick"
                              :click-param="ACUTEMEDICATIONS"
                              :text="$t('my_record.acuteMedications.sectionHeader')"
-                             :tabindex="0"
-                             :key-press-func="myRecordSectionClick"
-                             :key-press-param="ACUTEMEDICATIONS"
                              data-purpose="accordion"
                              tag="h2">
         {{ $t('my_record.acuteMedications.sectionHeader') }}
@@ -53,9 +44,6 @@
                              :click-func="myRecordSectionClick"
                              :click-param="CURRENTREPEATMEDICATIONS"
                              :text="$t('my_record.currentRepeatMedications.sectionHeader')"
-                             :tabindex="0"
-                             :key-press-func="myRecordSectionClick"
-                             :key-press-param="CURRENTREPEATMEDICATIONS"
                              data-purpose="accordion"
                              tag="h2">
         {{ $t('my_record.currentRepeatMedications.sectionHeader') }}
@@ -69,9 +57,6 @@
                              :click-func="myRecordSectionClick"
                              :click-param="DISCONTINUEDREPEATMEDICATIONS"
                              :text="$t('my_record.discontinuedRepeatMedications.sectionHeader')"
-                             :tabindex="0"
-                             :key-press-func="myRecordSectionClick"
-                             :key-press-param="DISCONTINUEDREPEATMEDICATIONS"
                              data-purpose="accordion"
                              tag="h2">
         {{ $t('my_record.discontinuedRepeatMedications.sectionHeader') }}
@@ -87,9 +72,6 @@
                                  :click-func="myRecordSectionClick"
                                  :click-param="IMMUNISATIONS"
                                  :text="$t('my_record.immunisations.sectionHeader')"
-                                 :tabindex="0"
-                                 :key-press-func="myRecordSectionClick"
-                                 :key-press-param="IMMUNISATIONS"
                                  data-purpose="accordion"
                                  tag="h2">
             {{ $t('my_record.immunisations.sectionHeader') }}
@@ -101,9 +83,6 @@
                                  :click-func="myRecordSectionClick"
                                  :click-param="PROBLEMS"
                                  :text="$t('my_record.problems.sectionHeader')"
-                                 :tabindex="0"
-                                 :key-press-func="myRecordSectionClick"
-                                 :key-press-param="PROBLEMS"
                                  data-purpose="accordion"
                                  tag="h2">
             {{ $t('my_record.problems.sectionHeader') }}
@@ -115,9 +94,6 @@
                                  :click-func="myRecordSectionClick"
                                  :click-param="CONSULTATIONS"
                                  :text="$t('my_record.consultations.sectionHeader')"
-                                 :tabindex="0"
-                                 :key-press-func="myRecordSectionClick"
-                                 :key-press-param="CONSULTATIONS"
                                  data-purpose="accordion"
                                  tag="h2">
             {{ $t('my_record.consultations.sectionHeader') }}
@@ -132,9 +108,6 @@
                                  :click-func="myRecordSectionClick"
                                  :click-param="EVENTS"
                                  :text="$t('my_record.events.sectionHeader')"
-                                 :tabindex="0"
-                                 :key-press-func="myRecordSectionClick"
-                                 :key-press-param="EVENTS"
                                  data-purpose="accordion"
                                  tag="h2">
             {{ $t('my_record.events.sectionHeader') }}
@@ -147,9 +120,6 @@
                                :click-func="myRecordSectionClick"
                                :click-param="TESTRESULTS"
                                :text="getTestResultSectionHeader(myRecord.supplier)"
-                               :tabindex="0"
-                               :key-press-func="myRecordSectionClick"
-                               :key-press-param="TESTRESULTS"
                                data-purpose="accordion"
                                tag="h2">
           {{ getTestResultSectionHeader(myRecord.supplier) }}

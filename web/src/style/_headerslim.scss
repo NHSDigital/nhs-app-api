@@ -11,7 +11,7 @@ header.slim {
 	height: 3.125em;
 	box-shadow: 0em 0em 0.313em rgba(0, 0, 0, .5);
 	z-index: 1000;
-	
+
 	h1 {
 		@include screen_title;
 		text-align: center;
@@ -19,19 +19,12 @@ header.slim {
 		margin-right: 1.875em;
 		margin-left: 1.875em;
 	}
-
-	a[tabindex]:focus {
-		outline-color: transparent !important;
-		outline-width: 0px !important;
-		outline-style: none !important;
-	}
-
 	svg {
 		float: left;
 		position: fixed;
     	top: 0em;
 	}
-	
+
 	&.cid {
 		background-color: #eee;
 	}

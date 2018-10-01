@@ -9,9 +9,7 @@
   border-radius: 0.313em;
   padding: 1em;
   margin: 0.5em;
-  transition: background-color ease 0.5s;
-  transition: border ease 0.5s;
-  transition: color ease 0.5s;
+  transition: all ease 0.5s;
   flex-grow: 1;
   flex-shrink: 1;
   text-align: center;
