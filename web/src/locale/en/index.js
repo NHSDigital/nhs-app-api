@@ -740,7 +740,7 @@ export default {
         thoseWhoCant: {
           title: 'Who can\'t use your data',
           paragraphs: [
-            'Confidential patient information is used to support the delivery of health and social care.',
+            'There are very strict rules on how your data can and cannot be used, and you have clear data rights.',
             {
               part1: 'Access to confidential patient information will ',
               emphasised: 'not',
