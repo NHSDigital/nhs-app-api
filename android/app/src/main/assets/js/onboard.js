@@ -28,8 +28,9 @@ $(document).ready(function() {
     var firstSlide = $('.carousel').slick('slickCurrentSlide');
     if (firstSlide == 0) {
         $('.left').css({
-            'opacity': '0.3'
-        });
+           'opacity': '0.3'
+        }).children('button').prop('disabled', true);
+
         $('.right').click(function() {
             $('.carousel').slick('slickNext');
         });
@@ -40,17 +41,19 @@ $(document).ready(function() {
         if (currentSlide > 0) {
             $('.left').css({
                 'opacity': '1'
-            });
+            }).children('button').prop('disabled', false);
 
             if(currentSlide == 4) {
-                $('.right a').text("Start")
+                $('.right button').text("Start")
             } else {
-                $('.right a').text("Next")
+                $('.right button').text("Next")
             }
         } else {
             $('.left').css({
-                'opacity': '0.3'
-            });
+               'opacity': '0.3'
+            }).children('button').prop('disabled', true);
+
+            $('.right button').text("Next")
         }
     });
 

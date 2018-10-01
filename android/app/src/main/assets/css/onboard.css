@@ -198,11 +198,18 @@ nav.onboard-nav {
   display: flex;
   justify-content: space-between;
 }
-nav.onboard-nav a {
+nav.onboard-nav button {
   cursor: pointer;
   text-decoration: none;
   color: #ffffff;
   line-height: normal;
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  font-size: 1em;
 }
 nav.onboard-nav .left,
 nav.onboard-nav .right {
