@@ -31,6 +31,8 @@ class HeaderBar: UIView {
         if #available(iOS 10.0, *) {
             self.headerTitle.adjustsFontForContentSizeCategory = true
         }
+        // specifies the elements in the header which should be read out when using talkback (and the order which they're read out)
+        headerBarView.accessibilityElements = [NHSHomeLogo, helpIcon, myAccountIcon, headerTitle]
         addSubview(headerBarView)
     }
     
