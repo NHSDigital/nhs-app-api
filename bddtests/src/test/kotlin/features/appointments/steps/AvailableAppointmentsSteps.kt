@@ -185,7 +185,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun errorMessageForNotFindingResultSlot(targetKey: String, actualKeys: MutableSet<String>): String {
-        val keys = actualKeys.joinToString(", ")
+        val keys = actualKeys.joinToString()
         return "Result Slot Id not Expected. Actual '$targetKey', Expected '$keys'"
     }
 
@@ -305,7 +305,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun verifyThatNoSpecificClinicianIsSelected() {
         assertEquals(
-                "Incorrect clinician option currently selected. ",
+                "Incorrect clinicians option currently selected. ",
                 clinicianDefaultOption,
                 availableAppointments.getSelectedClinician()
         )

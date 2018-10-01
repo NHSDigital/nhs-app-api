@@ -9,7 +9,6 @@ Feature: My appointments
     When the API retrieves upcoming appointments
     Then I will only receive upcoming appointments
     And a list of cancellation reasons if the GP Service provides the list
-
     Examples:
       | GP System |
       | EMIS      |

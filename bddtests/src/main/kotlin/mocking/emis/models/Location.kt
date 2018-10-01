@@ -7,4 +7,5 @@ data class Location(
         var numberAndStreet: String? = null,
         var village: String? = null,
         var town: String? = null,
-        var postcode: String? = null)
+        var postcode: String? = null
+)

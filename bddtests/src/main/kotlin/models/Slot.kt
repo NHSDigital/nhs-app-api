@@ -5,5 +5,6 @@ data class Slot(
         var time: String = "",
         var session: String = "",
         var location: String = "",
-        var clinician: ArrayList<String> = ArrayList()
+        var clinicians: Set<String> = HashSet(),
+        var id: Int? = null
 )

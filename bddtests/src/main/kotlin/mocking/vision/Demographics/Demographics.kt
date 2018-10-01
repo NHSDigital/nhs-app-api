@@ -19,4 +19,5 @@ data class Demographics(
         @XmlElement(namespace = "urn:vision", name="usualGP")
         var usualGP: String? = null,
         @XmlElement(namespace = "urn:vision", name="surgeryAttended")
-        var surgeryAttended: String? = null)
+        var surgeryAttended: String? = null
+)

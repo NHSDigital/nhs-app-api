@@ -1,10 +1,14 @@
 package mocking.tpp.appointments
 
+import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.data.TppConfig
+import mocking.tpp.models.Appointment
+import mocking.tpp.models.ViewAppointmentsReply
+import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
+
 
 class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyAppointmentsBuilder {
 
@@ -18,17 +22,46 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
                                 "@onlineUserId='${patient.onlineUserId}']")
     }
 
-    override fun respondWithSuccess(body: String): Mapping {
-        return respondWithBody(body)
+    override fun respondWithExceptionWhenNotEnabled(): Mapping {
+        return responseErrorWhenGPDisabledAppointmentsService()
     }
 
     override fun respondWithUnknownException(): Mapping {
         throw UnsupportedOperationException(
                 "Test Setup Incorrect: respondWithUnknownException() is not yet implemented in " +
-                "MyAppointmentsBuilderTpp")
+                        "MyAppointmentsBuilderTpp")
     }
 
-    override fun respondWithExceptionWhenNotEnabled(): Mapping {
-        return responseErrorWhenGPDisabledAppointmentsService()
+    override fun respondWithSuccess(facade: MyAppointmentsFacade): Mapping {
+        val viewAppointmentsReply = viewAppointmentsReplyBase()
+        if (facade.slots != null) {
+            viewAppointmentsReply.Appointment = extractAppointmentsFromFacade(facade)
+        }
+        return respondWithSuccess(JSonXmlConverter.toXML(viewAppointmentsReply))
+    }
+
+    private fun viewAppointmentsReplyBase(): ViewAppointmentsReply {
+        return ViewAppointmentsReply(
+                patientId = patient.patientId,
+                onlineUserId = patient.onlineUserId,
+                uuid = TppConfig.uuid)
+    }
+
+    override fun respondWithSuccess(body: String): Mapping {
+        return respondWithBody(body)
+    }
+
+    private fun extractAppointmentsFromFacade(facade: MyAppointmentsFacade): List<Appointment> {
+        return facade.slots?.sessions?.flatMap { session ->
+            session.slots.map { slot ->
+                Appointment(
+                        slot.slotId!!.toString(),
+                        slot.startTime!!,
+                        slot.endTime!!,
+                        session.sessionDetails!!,
+                        session.location!!
+                )
+            }
+        } ?: emptyList()
     }
 }

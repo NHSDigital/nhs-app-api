@@ -10,7 +10,7 @@ abstract class MockingClientAppointmentMappingFactory {
 
     var mockingClient = MockingClient.instance
 
-    abstract fun requestMapping(mapper: IAppointmentMappingBuilder.() -> Mapping): Unit
+    abstract fun requestMapping(mapper: IAppointmentMappingBuilder.() -> Mapping)
 
     companion object : SupplierSpecificFactory<MockingClientAppointmentMappingFactory>() {
 

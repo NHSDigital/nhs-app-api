@@ -11,12 +11,6 @@ import worker.models.appointments.CancelAppointmentRequest
 
 abstract class AppointmentsCancellingFactory(gpSystem: String):AppointmentsFactory(gpSystem) {
 
-    fun defaultAppointmentCancellingSetupWithResult(builder: (ICancelAppointmentsBuilder) -> Mapping) {
-        var request = defaultRequest(patient)
-        appointmentMapper.requestMapping { builder(cancelAppointmentRequest(patient, request)) }
-        setAppointmentToBeCancelled(request)
-    }
-
     abstract fun defaultRequest(patient: Patient,
                                 appointmentId: Int? = null,
                                 cancellationReason: String? = null): CancelAppointmentSlotFacade

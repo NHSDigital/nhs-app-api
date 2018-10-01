@@ -24,9 +24,9 @@ abstract class MappingBuilder(method: String, url: String) {
         return Mapping(requestBuilder.build(), responseBuilder.build())
     }
 
-    fun respondWithSuccessJson(jsonBody: String): Mapping {
+    fun respondWithSuccessJson(jsonBody: Any): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andBody(jsonBody, contentType = "application/json")
+            andJsonBody(jsonBody, GsonFactory.asPascal)
         }
     }
 

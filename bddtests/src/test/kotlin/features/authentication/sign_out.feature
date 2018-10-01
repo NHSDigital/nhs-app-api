@@ -17,8 +17,8 @@ Feature: Sign out of mobile web
       | TPP         |
   @pending @NHSO-2522
     Examples:
-      | GP System |
-      | VISION    |
+      | GP Supplier |
+      | VISION      |
 
   @manual
   Scenario Outline: A spinner is shown if there is a delay in the action of the "Sign out" button for a <GP Supplier> user
@@ -32,7 +32,7 @@ Feature: Sign out of mobile web
 
   @manual
   Scenario: The nsho cookie should be clear of session and user information if server side sign out fails
-    # Cannot enduce session signout failure.
+    # Cannot induce session sign-out failure.
     Given I am logged in
     When I sign out
     And session fails to clear

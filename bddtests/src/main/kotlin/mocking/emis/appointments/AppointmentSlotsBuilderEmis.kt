@@ -5,6 +5,8 @@ import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
+import mocking.emis.models.AppointmentSession
+import mocking.emis.models.AppointmentSlot
 import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -14,7 +16,7 @@ import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
 
-private const val UNKNOWN_HTTP_STATUS_CODE:Long = -9999
+private const val UNKNOWN_HTTP_STATUS_CODE: Long = -9999
 
 class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                                   patient: Patient,
@@ -38,13 +40,35 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                 name = "userPatientLinkToken", value = linkToken)
     }
 
-    override fun withDelay(delayMilliseconds : Duration):AppointmentSlotsBuilderEmis{
+    override fun withDelay(delayMilliseconds: Duration): AppointmentSlotsBuilderEmis {
         delayMillisecs = delayMilliseconds.toMillis().toInt()
         return this
     }
 
-    override fun respondWithSuccess(model: AppointmentSlotsResponseFacade): Mapping {
-        return respondWithBody(model)
+    override fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping {
+        return respondWithBody(
+                GetAppointmentSlotsResponseModel(
+                        extractSessionsFromFacade(facade)
+                )
+        )
+    }
+
+    private fun extractSessionsFromFacade(facade: AppointmentSlotsResponseFacade): List<AppointmentSession> {
+        return facade.sessions.map { session ->
+            val slots = session.slots.map { slot ->
+                AppointmentSlot(
+                        slot.slotId!!,
+                        slot.startTime,
+                        slot.endTime,
+                        slot.slotTypeName
+                )
+            }
+            AppointmentSession(
+                    session.sessionDate,
+                    session.sessionId,
+                    slots
+            )
+        }
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {

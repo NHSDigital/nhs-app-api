@@ -5,7 +5,6 @@ import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.data.TppConfig
 import mocking.tpp.models.Error
 import mocking.tpp.models.ListSlotsReply
 import mocking.tpp.models.Session
@@ -22,10 +21,11 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-class AppointmentSlotsBuilderTpp(val tppUserSession: TppUserSession,
-                                 startDate: String? = null,
-                                 endDate: String? = null) :
-        TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
+class AppointmentSlotsBuilderTpp(
+        val tppUserSession: TppUserSession,
+        startDate: String? = null,
+        endDate: String? = null
+) : TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
 
     init {
         val typeHeader = "type"
@@ -76,11 +76,11 @@ class AppointmentSlotsBuilderTpp(val tppUserSession: TppUserSession,
     }
 
     override fun respondWithUnknownException(): Mapping {
-        TODO("not implemented")
+        throw NotImplementedError("Not Implemented. ")
     }
 
-    override fun respondWithSuccess(model: AppointmentSlotsResponseFacade): Mapping {
-        return respondWithSuccess(listSlotsReplyConverter(model))
+    override fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping {
+        return respondWithSuccess(listSlotsReplyConverter(facade))
     }
 
     private fun respondWithSuccess(listSlotsReply: ListSlotsReply): Mapping {
@@ -113,7 +113,7 @@ class AppointmentSlotsBuilderTpp(val tppUserSession: TppUserSession,
         return Session(
                 sessionId = getValueOrTestSetupIncorrectly(slot.slotId, "sessionId"),
                 type = getValueOrTestSetupIncorrectly(session.sessionType, "sessionType"),
-                staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails, "staffDetails"),
+                staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails.first().staffName, "staffName"),
                 location = getValueOrTestSetupIncorrectly(session.location, "location"),
                 Slot = mutableListOf(Slot(
                         startDate = "${slot.startTime!!}.0Z",

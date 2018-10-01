@@ -137,7 +137,7 @@ class PatientVerificationSteps : AbstractSteps() {
         setDefaultNationalPracticeCodeSessionVariable(gpSystem)
     }
 
-    private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String){
+    private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String) {
         when (gpSystem) {
             TPP -> {
                 setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_TPP)
@@ -227,12 +227,12 @@ class PatientVerificationSteps : AbstractSteps() {
 
                 setSessionVariable("ConnectionToken").to(patient.connectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-                setSessionVariable("NhsNumbers").to(arrayOf(PatientIdentifier(patient.nhsNumbers[0],IdentifierType.NhsNumber)))
+                setSessionVariable("NhsNumbers").to(arrayOf(PatientIdentifier(patient.nhsNumbers[0], IdentifierType.NhsNumber)))
 
             }
             EMIS -> {
                 emisValidCredentialsWithNHSNumbers(listOf("NHS_number"))
-                }
+            }
             VISION -> {
                 val patient = MockDefaults.patientVision
                 visionValidCredentialsWithNHSNumbers(arrayOf(patient.nhsNumbers[0]))
@@ -245,10 +245,10 @@ class PatientVerificationSteps : AbstractSteps() {
         when (gpSystem) {
             EMIS -> {
                 emisValidCredentialsWithNHSNumbers(listOf("NHS_number1", "NHS_number2"))
-             }
+            }
             VISION -> {
                 val patient = MockDefaults.patientVision
-                val nhsNumbers =arrayOf( patient.nhsNumbers[0] , "5785445866")
+                val nhsNumbers = arrayOf(patient.nhsNumbers[0], "5785445866")
                 visionValidCredentialsWithNHSNumbers(nhsNumbers)
             }
         }
@@ -267,7 +267,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 nhsNumbers = numbers,
                 dateOfBirth = "1985-05-29T00:00:00.0Z")
 
-        val nhsNumbers = numbers.map { number-> PatientIdentifier(number, identifierType = IdentifierType.NhsNumber)}.toTypedArray()
+        val nhsNumbers = numbers.map { number -> PatientIdentifier(number, identifierType = IdentifierType.NhsNumber) }.toTypedArray()
 
         mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
@@ -279,7 +279,7 @@ class PatientVerificationSteps : AbstractSteps() {
 
     }
 
-    private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>){
+    private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>) {
         val patient = MockDefaults.patientVision
         mockingClient
                 .forVision {
@@ -305,7 +305,7 @@ class PatientVerificationSteps : AbstractSteps() {
     fun givenIHaveValidCredentialsForAPatientWithNoNhsNumber(gpSystem: String) {
         when (gpSystem) {
             EMIS -> {
-              emisValidCredentialsWithNHSNumbers(arrayListOf())
+                emisValidCredentialsWithNHSNumbers(arrayListOf())
             }
             VISION -> {
                 val patient = MockDefaults.patientVision
@@ -349,10 +349,10 @@ class PatientVerificationSteps : AbstractSteps() {
         val nhsNumbers = sessionVariableCalled<Array<PatientIdentifier>>("NhsNumbers")
         val connectionToken = sessionVariableCalled<String>("ConnectionToken")
         Assert.assertNotNull(result)
-        var resultNhsNumbers = result.nhsNumbers!!.map { number->number.nhsNumber }.toTypedArray()
-        var expectedNhsNumbers = nhsNumbers.map { number->formatNhsNumber(number.identifierValue!!) }.toTypedArray()
+        val resultNhsNumbers = result.nhsNumbers!!.map { number -> number.nhsNumber }.toTypedArray()
+        val expectedNhsNumbers = nhsNumbers.map { number -> formatNhsNumber(number.identifierValue!!) }.toTypedArray()
         Assert.assertEquals(resultNhsNumbers.count(), nhsNumbers.count())
-        Assert.assertArrayEquals("Expected NHS Numbers", expectedNhsNumbers, resultNhsNumbers )
+        Assert.assertArrayEquals("Expected NHS Numbers", expectedNhsNumbers, resultNhsNumbers)
         Assert.assertEquals(result.connectionToken, connectionToken)
     }
 

@@ -110,42 +110,6 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
 
     private val appointments: ArrayList<Appointment> = arrayListOf()
 
-    fun createAppointmentSessions(): ArrayList<AppointmentSessionFacade> {
-        val baseTime = Calendar.getInstance(timeZone)
-
-        var startTime = copyCalendarDate(baseTime = baseTime, addDays = 1)
-        var sessionDate = dateTimeFormat.format(startTime.time)
-        val slot1 = createAppointmentSlot(sessionId = 1, startTime = startTime, durationInMinutes = 15)
-        startTime.addDays(1).addMinutes(minutes = 15)
-        val slot2 = createAppointmentSlot(sessionId = 2, startTime = startTime, durationInMinutes = 1)
-        val footClinicSession = AppointmentSessionFacade(
-                sessionId = SESSION_ID_FOOTCLINIC,
-                sessionDate = sessionDate,
-                slots = arrayListOf(slot1, slot2)
-        )
-
-        startTime = copyCalendarDate(baseTime = baseTime, addDays = 2)
-        sessionDate = dateTimeFormat.format(startTime.time)
-        val slot3 = createAppointmentSlot(sessionId = 3, startTime = startTime, durationInMinutes = 15)
-        startTime.addDays(1)
-        val slot4 = createAppointmentSlot(sessionId = 4, startTime = startTime, durationInMinutes = 20)
-        val eyeClinicSession = AppointmentSessionFacade(
-                sessionId = SESSION_ID_EYECLINIC,
-                sessionDate = sessionDate,
-                slots = arrayListOf(slot3, slot4)
-        )
-
-        startTime = copyCalendarDate(baseTime = baseTime, addDays = 4)
-        sessionDate = dateTimeFormat.format(startTime.time)
-        val slot5 = createAppointmentSlot(sessionId = 3, startTime = startTime, durationInMinutes = 15)
-        val earClinicSession = AppointmentSessionFacade(
-                sessionId = SESSION_ID_EYECLINIC,
-                sessionDate = sessionDate,
-                slots = arrayListOf(slot5)
-        )
-        return arrayListOf(footClinicSession, eyeClinicSession, earClinicSession)
-    }
-
     fun createGetAppointmentsResponse(): GetAppointmentsResponseModel {
         val baseDate = Calendar.getInstance(timeZone)
 
@@ -173,44 +137,6 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
                                             locations, sessionHolders, sessions)
     }
 
-    fun createGetAppointmentsResponseForNoUpcomingAppointments(): GetAppointmentsResponseModel {
-        val baseDate = Calendar.getInstance(timeZone)
-        val appointmentsFromDate = dateTimeFormat.format(baseDate.time)
-
-        appointments.clear()
-        return GetAppointmentsResponseModel(appointmentsFromDate)
-    }
-
-    override fun generateExpectedMyAppointments(): ArrayList<Slot> {
-        val expectedTempMyAppointments = arrayListOf<Slot>()
-        val slotDateFormat = SimpleDateFormat(frontendDateFormat)
-        slotDateFormat.timeZone = timeZone
-        val slotTimeFormat = SimpleDateFormat(frontendTimeFormat)
-        slotTimeFormat.timeZone = timeZone
-        appointments.forEach { appointment ->
-            val startDate = dateTimeFormat.parse(appointment.startTime)
-            val date = slotDateFormat.format(startDate)
-            val time = slotTimeFormat.format(startDate).toLowerCase()
-            val session = sessions.find { appointment.sessionId == it.sessionId }!!
-            val location = locations.find { session.locationId == it.locationId }!!
-
-            val cliniciansNames: ArrayList<String> = ArrayList()
-            session.clinicianIds.forEach { clinicianId ->
-                cliniciansNames.add(sessionHolders[clinicianId - 1].displayName!!)
-            }
-            expectedTempMyAppointments.add(expectedMyAppointment.copy(
-                    date = date,
-                    time = time,
-                    session = "${session.sessionName} - ${appointment.slotTypeName}",
-                    location = location.locationName,
-                    clinician = cliniciansNames
-            ))
-        }
-
-        return expectedTempMyAppointments
-    }
-
-
     override fun getAppointmentCancellationReasons(): List<AppointmentCancellationReason> {
         return arrayListOf(emisCancellationReason1, emisCancellationReason2)
     }
@@ -222,13 +148,6 @@ class EmisAppointmentData private constructor() : BaseAppointmentData() {
         appointment.startTime = dateTimeFormat.format(startDate.time)
         appointment.endTime = dateTimeFormat.format(startDate.addMinutes(durationInMinutes).time)
         return appointment
-    }
-
-    private fun createAppointmentSlot(sessionId: Int, startTime: Calendar,
-                                      durationInMinutes: Int): AppointmentSlotFacade {
-        val startSession = dateTimeFormat.format(startTime.time)
-        val endSession = dateTimeFormat.format(startTime.addMinutes(durationInMinutes).time)
-        return AppointmentSlotFacade(sessionId, startSession, endSession)
     }
 
     private class AppointmentDataHolder {

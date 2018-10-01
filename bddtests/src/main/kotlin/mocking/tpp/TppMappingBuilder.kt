@@ -91,7 +91,7 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
 
     protected inline fun <reified T : Any> respondWith(response: T): Mapping {
 
-        var xmlBody = JSonXmlConverter.toXML(response)
+        val xmlBody = JSonXmlConverter.toXML(response)
 
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(xmlBody)

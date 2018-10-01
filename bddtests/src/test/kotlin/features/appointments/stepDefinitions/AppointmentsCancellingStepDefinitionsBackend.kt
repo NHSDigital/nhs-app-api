@@ -4,10 +4,12 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.appointments.factories.AppointmentsCancellingFactory
-import features.appointments.factories.ViewAppointmentsFactory
+import features.appointments.factories.UpcomingAppointmentsFactory
+import features.appointments.steps.CancelAppointmentSteps
 import features.sharedStepDefinitions.backend.CommonSteps
 import mocking.MockingClient
 import models.Patient
+import models.Slot
 import net.serenitybdd.core.Serenity
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -22,8 +24,8 @@ class AppointmentsCancellingStepDefinitionsBackend {
     val mockingClient = MockingClient.instance
 
     private val commonSteps: CommonSteps = CommonSteps()
+    private val cancelAppointmentSteps = CancelAppointmentSteps()
 
-    private val SLOT_ID = 1
     val HTTP_EXCEPTION = "HttpException"
     val HTTP_RESPONSE = "HttpResponse"
 
@@ -47,15 +49,16 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
         val patient = Patient.getDefault(gpSystem)
 
-        val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(gpSystem)
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
         Serenity.setSessionVariable(Patient::class).to(patient)
-        val response = viewAppointmentFactory.createUpcomingAppointments(patient)
-        viewAppointmentFactory.setUpViewAppointmentsWithResult(gpSystem) { builder ->
-            builder.respondWithSuccess(response)
-        }
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
 
         val factory = AppointmentsCancellingFactory.getForSupplier(gpSystem)
-        val request = factory.defaultRequest(patient, SLOT_ID, reason)
+        val request = factory.defaultRequest(
+                patient,
+                retrieveSlotIdOfAppointmentToCancel(),
+                reason
+        )
 
         factory.setupRequestAndResponse(request) { cancelAppointmentRequest(patient, request).respondWithSuccess() }
     }
@@ -69,7 +72,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
             id = reasons.first().id
 
         }
-        val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), id)
+        val body = worker.models.appointments.CancelAppointmentRequest(
+                retrieveSlotIdOfAppointmentToCancel().toString(),
+                id
+        )
 
         try {
             val response = Serenity
@@ -85,7 +91,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @When("^I send a cancellation request to the API without a cancellation reason$")
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_without_a_cancellation_reason() {
-        val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), "")
+        val body = worker.models.appointments.CancelAppointmentRequest(
+                retrieveSlotIdOfAppointmentToCancel().toString(),
+                ""
+        )
 
         try {
             val response = Serenity
@@ -101,7 +110,10 @@ class AppointmentsCancellingStepDefinitionsBackend {
     @When("^I send a cancellation request to the API with an invalid cancellation reason$")
     @Throws(Exception::class)
     fun i_send_a_cancellation_request_to_the_API_with_an_invalid_cancellation_reason() {
-        val body = worker.models.appointments.CancelAppointmentRequest(SLOT_ID.toString(), "NOT_EXISTING_REASON_ID")
+        val body = worker.models.appointments.CancelAppointmentRequest(
+                retrieveSlotIdOfAppointmentToCancel().toString(),
+                "NOT_EXISTING_REASON_ID"
+        )
 
         try {
             val response = Serenity
@@ -126,5 +138,9 @@ class AppointmentsCancellingStepDefinitionsBackend {
                 .getMyAppointments(LocalDateTime.now().toString())
 
         return result.cancellationReasons
+    }
+
+    private fun retrieveSlotIdOfAppointmentToCancel(): Int {
+        return cancelAppointmentSteps.retrieveSlotOfAppointmentToCancel().id!!
     }
 }

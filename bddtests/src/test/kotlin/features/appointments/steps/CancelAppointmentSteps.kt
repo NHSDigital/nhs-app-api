@@ -28,14 +28,12 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheCorrectAppointmentDetailsAreDisplayed() {
-        val expectedSlot = Serenity.sessionVariableCalled<Slot>(Slot::class.java)
+        val expectedSlot = retrieveSlotOfAppointmentToCancel()
         assertEquals(expectedSlot.date, cancelAppointmentPage.getSelectedAppointmentDateText())
         assertEquals(expectedSlot.time, cancelAppointmentPage.getSelectedAppointmentTimeText())
         assertEquals(expectedSlot.session, cancelAppointmentPage.getSelectedAppointmentSessionNameText())
         assertEquals(expectedSlot.location, cancelAppointmentPage.getSelectedAppointmentLocationText())
-        for (i in 0 until expectedSlot.clinician.size) {
-            assertEquals(expectedSlot.clinician[i], cancelAppointmentPage.getSelectedAppointmentClinicianTextAtPosition(i + 1))
-        }
+        assertEquals(expectedSlot.clinicians, cancelAppointmentPage.getSelectedAppointmentClinicianText())
     }
 
     @Step
@@ -63,5 +61,10 @@ open class CancelAppointmentSteps {
     @Step
     fun selectReason(reason: String) {
         assertTrue("$reason is not available as a Cancellation Reason. ", cancelAppointmentPage.selectReason(reason))
+    }
+
+    @Step
+    fun retrieveSlotOfAppointmentToCancel(): Slot {
+        return Serenity.sessionVariableCalled<List<Slot>>(Slot::class).first()
     }
 }

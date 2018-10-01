@@ -34,7 +34,7 @@ If you want to run backendworker from Visual Studio or Rider then the following 
 
 * VISION_APPLICATION_PROVIDER_ID: nhson001
 * VISION_CERT_PASSPHRASE: *from Keybase*
-* VISION_CERT_PATH: *path-to-backendworker*/NHSOnline.Backend/Worker/certs/vps_nhson001.pfx
+* VISION_CERT_PATH: *path-to-backendworker*/NHSOnline.Backend.Worker/certs/vps_nhson001.pfx
 * VISION_URI: https://vs002-test.inps.co.uk/PatientFacingServices
 * VISION_USERNAME: vps-nhson001
 

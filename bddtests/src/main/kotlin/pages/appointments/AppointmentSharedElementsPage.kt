@@ -18,7 +18,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentTimeXpath = "[@data-label='start time']"
     private val appointmentSessionNameXpath = "[@data-label='session name']"
     private val appointmentLocationXpath = "[@data-label='location']"
-    private val appointmentClinicianXPath = "[@data-label='clinician %d']"
+    private val appointmentCliniciansXPath = "[contains(@data-label, 'clinician')]"
 
     val inLineError = HybridPageElement(
             browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
@@ -70,8 +70,8 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
         return convertToSlotObject(appointmentSlotDiv)
     }
 
-    fun getSelectedAppointmentClinicianTextAtPosition(position: Int): String {
-        return findByXpath(String.format(xPathRoot + appointmentClinicianXPath, position)).text
+    fun getSelectedAppointmentClinicianText(): Set<String> {
+        return findAllByXpath(xPathRoot + appointmentCliniciansXPath).map { element -> element.text }.toSet()
     }
 
     private fun convertToSlotObject(parentContainer: WebElementFacade,
@@ -106,13 +106,13 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String) {
         val cliniciansPresent = driver.findElements(
-                By.xpath("$xPathRoot//span[contains(@data-label, 'clinician')]")).size > 0
+                By.xpath("$xPathRoot//span$appointmentCliniciansXPath")).size > 0
         if (!cliniciansPresent) return
 
-        val clinicians = findAllByXpath(parentContainer, "$relativePath//span[contains(@data-label, 'clinician')]")
+        val clinicians = findAllByXpath(parentContainer, "$relativePath//span$appointmentCliniciansXPath")
 
         clinicians.forEach { clinician ->
-            slot.clinician.add(clinician.text)
+            slot.clinicians = slot.clinicians.plus(clinician.text)
         }
     }
 }

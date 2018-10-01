@@ -2,17 +2,14 @@ package mocking.stubs.appointments
 
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
+import mockingFacade.appointments.StaffDetailsFacade
 import java.util.*
 
 class AppointmentSessionFacadeBuilder {
 
-    private var session = AppointmentSessionFacade(
-            sessionId = 1,
-            sessionType = "Clinic",
-            staffDetails = "Dr. Who",
-            location = "Leeds",
-            slots = arrayListOf()
-    )
+    private val sessionDetails = "Clinic - Slot, Clinician: %s"
+
+    private var session = AppointmentSessionFacade()
 
     fun sessionId(value: Int): AppointmentSessionFacadeBuilder {
         session.sessionId = value
@@ -25,8 +22,16 @@ class AppointmentSessionFacadeBuilder {
     }
 
     fun staffDetails(staff: IdValue): AppointmentSessionFacadeBuilder {
-        session.staffDetails = staff.value
-        session.staffDetailsid = staff.id
+        return staffDetails(arrayListOf(staff))
+    }
+
+    fun staffDetails(staff: ArrayList<IdValue>): AppointmentSessionFacadeBuilder {
+        session.staffDetails = (staff.map { clinician -> StaffDetailsFacade(clinician.value, clinician.id) })
+        session.sessionDetails =
+                String.format(
+                        sessionDetails,
+                        staff.joinToString { clinician -> clinician.value }
+                )
         return this
     }
 
@@ -36,7 +41,7 @@ class AppointmentSessionFacadeBuilder {
         return this
     }
 
-    fun slots(value: (AppointmentSlotFacadeArrayBuilder.()-> AppointmentSlotFacadeArrayBuilder))
+    fun slots(value: (AppointmentSlotFacadeArrayBuilder.() -> AppointmentSlotFacadeArrayBuilder))
             : AppointmentSessionFacadeBuilder {
 
         val builder = AppointmentSlotFacadeArrayBuilder()
@@ -55,9 +60,8 @@ class AppointmentSlotFacadeArrayBuilder {
     private var nextSlotId = 1
     private var appointmentSlots: ArrayList<AppointmentSlotFacade> = arrayListOf()
 
-    fun addAppointment(appointment: AppointmentSlotFacadeBuilder.()-> AppointmentSlotFacadeBuilder)
-            : AppointmentSlotFacadeArrayBuilder
-    {
+    fun addAppointment(appointment: AppointmentSlotFacadeBuilder.() -> AppointmentSlotFacadeBuilder)
+            : AppointmentSlotFacadeArrayBuilder {
         val builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
         val appointmentBuilder = appointment.invoke(builder)
         appointmentSlots.add(appointmentBuilder.build())

@@ -1,3 +1,6 @@
 package mockingFacade.appointments
 
-class MyAppointmentsFacade (val userPatientLinkToken: String)
+class MyAppointmentsFacade (
+        var appointmentsFromDateTime: String,
+        val slots: AppointmentSlotsResponseFacade? = null
+)

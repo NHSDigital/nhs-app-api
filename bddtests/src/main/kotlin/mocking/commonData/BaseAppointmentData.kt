@@ -14,8 +14,6 @@ abstract class BaseAppointmentData {
     abstract val dateTimeFormat: SimpleDateFormat
     abstract val defaultPatient: Patient
 
-    abstract fun generateExpectedMyAppointments(): ArrayList<Slot>
-
     abstract fun getAppointmentCancellationReasons(): List<AppointmentCancellationReason>?
 
     protected fun copyCalendarDate(baseTime: Calendar, addDays: Int = 0,

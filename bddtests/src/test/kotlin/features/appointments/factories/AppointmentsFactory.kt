@@ -9,12 +9,11 @@ import models.Patient
 abstract class AppointmentsFactory(gpSupplier: String) {
 
     val mockingClient = MockingClient.instance
-    var patient: Patient
-    protected var supplier: String = gpSupplier
-    protected var appointmentMapper: MockingClientAppointmentMappingFactory
+    val patient: Patient = SerenityHelpers.getPatientOrNull() ?: Patient.getDefault(gpSupplier)
+    protected val supplier: String = gpSupplier
+    protected val appointmentMapper: MockingClientAppointmentMappingFactory
 
     init {
-        patient = SerenityHelpers.getPatientOrNull()?: Patient.getDefault(gpSupplier)
         SerenityHelpers.setPatient(patient)
         appointmentMapper = MockingClientAppointmentMappingFactory.getForSupplier(supplier)
     }
@@ -26,10 +25,8 @@ abstract class AppointmentsFactory(gpSupplier: String) {
     }
 
     private fun createGetEmptyAppointmentList() {
-        val viewAppointmentFactory = ViewAppointmentsFactory.getForSupplier(supplier)
-        val getResponse = viewAppointmentFactory.createEmptyUpcomingAppointmentResponse(patient)
-        appointmentMapper
-                .requestMapping { viewMyAppointmentsRequest(patient).respondWithSuccess(getResponse) }
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(supplier)
+        viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse()
     }
 
     companion object {

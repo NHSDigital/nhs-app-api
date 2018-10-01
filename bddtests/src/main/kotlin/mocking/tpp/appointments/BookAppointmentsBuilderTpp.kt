@@ -4,7 +4,6 @@ package mocking.tpp.appointments
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
-import mocking.tpp.data.TppConfig
 import mocking.tpp.models.BookAppointmentReply
 import mocking.tpp.models.Error
 import mockingFacade.appointments.BookAppointmentSlotFacade

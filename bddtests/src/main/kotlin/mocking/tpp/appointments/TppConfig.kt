@@ -1,4 +1,4 @@
-package mocking.tpp.data
+package mocking.tpp.appointments
 
 import mocking.defaults.MockDefaults.Companion.DEFAULT_ODS_CODE_TPP
 import mocking.defaults.MockDefaults.Companion.DEFAULT_TPP_UUID

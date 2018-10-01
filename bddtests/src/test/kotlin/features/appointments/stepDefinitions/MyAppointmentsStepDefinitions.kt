@@ -3,6 +3,7 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.MyAppointmentsSteps
 import org.junit.Assert
 import net.serenitybdd.core.Serenity
@@ -49,12 +50,14 @@ class MyAppointmentsStepDefinitions {
 
     @Given("^I have no upcoming appointments for (.*)$")
     fun i_have_no_upcoming_appointments(gpService: String) {
-        myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService, true)
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse()
     }
 
     @Given("^I have upcoming appointments for (.*)$")
     fun i_have_upcoming_appointments(gpService: String) {
-        myAppointmentsSteps.mockGPServiceMyAppointmentResponse(gpService)
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
     }
 
     @Given("^the (.*) does not offer online booking to my patient$")
@@ -110,7 +113,6 @@ class MyAppointmentsStepDefinitions {
 
     @When("^I select a \"Cancel appointment\" link$")
     fun iSelectACancelLink() {
-        myAppointmentsSteps.storeDetailsOfFirstAppointment()
         myAppointmentsSteps.clickFirstCancelLink()
     }
 

@@ -16,11 +16,11 @@ class AppointmentsSlotsExample {
         val remainingDatesForThisWeek = setWeek()
         val datesForNextWeek = setWeek()
 
-        private const val defaultDuration = 10
         private val tomorrowDate = LocalDateTime.now().plusDays(1)
 
-        private const val clinic = "Clinic"
+        private const val clinicSessionType = "Clinic"
         private const val clinicSlot = "Clinic - Slot"
+        private const val sessionDetails = "$clinicSlot, Clinician: %s"
 
         private val locationLeeds = IdValue(1, "Leeds")
         private val locationSheffield = IdValue(2, "Sheffield")
@@ -36,8 +36,8 @@ class AppointmentsSlotsExample {
         private val appointmentSessions = arrayListOf(
                 AppointmentSessionFacadeBuilder()
                         .sessionId(301)
-                        .sessionType(clinic)
-                        .staffDetails(staffDrWho)
+                        .sessionType(clinicSessionType)
+                        .staffDetails(arrayListOf(staffDrWho))
                         .location(locationLeeds)
                         .slots {
                             addAppointment {
@@ -53,8 +53,8 @@ class AppointmentsSlotsExample {
                         }.build(),
                 AppointmentSessionFacadeBuilder()
                         .sessionId(402)
-                        .sessionType(clinic)
-                        .staffDetails(staffDrScott)
+                        .sessionType(clinicSessionType)
+                        .staffDetails(arrayListOf(staffDrScott))
                         .location(locationSheffield)
                         .slots {
                             addAppointment {
@@ -132,8 +132,8 @@ class AppointmentsSlotsExample {
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
-                            .sessionType(clinic)
-                            .staffDetails(staffDrWho)
+                            .sessionType(clinicSessionType)
+                            .staffDetails(arrayListOf(staffDrWho))
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
@@ -141,7 +141,8 @@ class AppointmentsSlotsExample {
                                             .startDate(startDate.dateTimeAsBackendString)
                                             .endDate(endDate.dateTimeAsBackendString)
                                 }
-                            }.build()))
+                            }
+                            .build()))
                     .filterValues(AppointmentFilterFacade(
                             type = clinicSlot,
                             doctor = staffDrWho.value,
@@ -169,8 +170,8 @@ class AppointmentsSlotsExample {
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
-                            .sessionType(clinic)
-                            .staffDetails(staffDrWho)
+                            .sessionType(clinicSessionType)
+                            .staffDetails(arrayListOf(staffDrWho))
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
@@ -181,8 +182,8 @@ class AppointmentsSlotsExample {
                             }.build(),
                             AppointmentSessionFacadeBuilder()
                                     .sessionId(302)
-                                    .sessionType(clinic)
-                                    .staffDetails(staffDrScott)
+                                    .sessionType(clinicSessionType)
+                                    .staffDetails(arrayListOf(staffDrScott))
                                     .location(locationLeeds)
                                     .slots {
                                         addAppointment {
@@ -225,8 +226,8 @@ class AppointmentsSlotsExample {
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
-                            .sessionType(clinic)
-                            .staffDetails(staffDrWho)
+                            .sessionType(clinicSessionType)
+                            .staffDetails(arrayListOf(staffDrWho))
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
@@ -237,8 +238,8 @@ class AppointmentsSlotsExample {
                             }.build(),
                             AppointmentSessionFacadeBuilder()
                                     .sessionId(302)
-                                    .sessionType(clinic)
-                                    .staffDetails(staffDrScott)
+                                    .sessionType(clinicSessionType)
+                                    .staffDetails(arrayListOf(staffDrScott))
                                     .location(locationLeeds)
                                     .slots {
                                         addAppointment {

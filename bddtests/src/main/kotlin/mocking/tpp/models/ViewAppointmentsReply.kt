@@ -12,5 +12,5 @@ data class ViewAppointmentsReply (
     @XmlAttribute var patientId: String = "default patientId",
     @XmlAttribute var onlineUserId: String = "default onlineUserId",
     @XmlAttribute var uuid: String = "default uuid",
-    @XmlElement var Appointment: MutableCollection<Appointment> = mutableListOf()
+    @XmlElement var Appointment: List<Appointment> = listOf()
     )

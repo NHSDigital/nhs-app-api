@@ -127,7 +127,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Given("^EMIS doesn't respond a timely fashion for available appointment slots$")
     fun emis_doesn_t_respond_a_timely_fashion_for_available_appointment_slots() {
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateExample() {
+        factory.generateExample {
             respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
                     .delayedBy(Duration.ofSeconds(90))
         }
@@ -136,7 +136,7 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
     @Given("^there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them$")
     fun slightDelayForRetrievingAvailableAppointmentSlots() {
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateExample() {
+        factory.generateExample {
             respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
                     .delayedBy(Duration.ofSeconds(1))
         }

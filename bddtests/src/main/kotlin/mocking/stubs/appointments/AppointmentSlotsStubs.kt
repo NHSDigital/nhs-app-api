@@ -76,7 +76,7 @@ class AppointmentSlotsStubs (private val mockingClient: MockingClient) {
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(firstSessionId)
                             .sessionType(clinic)
-                            .staffDetails(staffDrWho)
+                            .staffDetails(arrayListOf(staffDrWho))
                             .location(locationLeeds)
                             .slots {
                                 addAppointment {
@@ -88,7 +88,7 @@ class AppointmentSlotsStubs (private val mockingClient: MockingClient) {
                             AppointmentSessionFacadeBuilder()
                                     .sessionId(secondSessionId)
                                     .sessionType(clinic)
-                                    .staffDetails(staffDrScott)
+                                    .staffDetails(arrayListOf(staffDrScott))
                                     .location(locationLeeds)
                                     .slots {
                                         addAppointment {
