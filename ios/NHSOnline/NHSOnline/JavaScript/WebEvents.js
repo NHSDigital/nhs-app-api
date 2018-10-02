@@ -8,18 +8,36 @@ window.nativeApp.onLogout = function() {
     window.webkit.messageHandlers.onLogout.postMessage(null);
 };
 
+window.nativeApp.hideHeader = function() {
+    window.webkit.messageHandlers.hideHeader.postMessage(null);
+};
+
+window.nativeApp.hideWhiteScreen = function() {
+    window.webkit.messageHandlers.hideWhiteScreen.postMessage(null);
+};
+
+window.nativeApp.showHeader = function() {
+    window.webkit.messageHandlers.showHeader.postMessage(null);
+};
+
 window.nativeApp.updateHeaderText = function(header) {
     window.webkit.messageHandlers.updateHeaderText.postMessage(header);
 };
+
 window.nativeApp.postNdopToken = function(token) {
     window.webkit.messageHandlers.postNdopToken.postMessage(token);
-}
+};
+
 window.nativeApp.clearMenuBarItem = function(header) {
     window.webkit.messageHandlers.clearMenuBarItem.postMessage(null);
 };
+
 window.nativeApp.checkSymptoms = function(header) {
     window.webkit.messageHandlers.checkSymptoms.postMessage(null);
 };
+
 window.nativeApp.completeAppIntro = function() {
     window.webkit.messageHandlers.completeAppIntro.postMessage(null);
 };
+
+

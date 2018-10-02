@@ -32,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = rootViewController?.childViewControllers.first as! HomeViewController
         vc.webViewController?.loadPage(url: url)
         vc.webViewController?.dismissSafariViewController()
-        vc.setVisibilityOfHeaderAndMenuBars(visible: true)
         let theWebview = vc.webViewController?.webView
         let v = UIView(frame: (theWebview?.frame)!)
         v.backgroundColor = UIColor.white

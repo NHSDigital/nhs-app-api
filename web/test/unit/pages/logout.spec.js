@@ -12,6 +12,11 @@ describe('logout.vue', () => {
   it('will call auth/logout', () => {
     const $store = {
       dispatch: jest.fn(),
+      state: {
+        device: {
+          source: '',
+        },
+      },
     };
 
     createLogoutPage($store);

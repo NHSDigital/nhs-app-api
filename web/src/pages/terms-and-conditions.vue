@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$style.webHeader, 'pull-content']">
+  <div v-if="showTemplate" :class="[$style.webHeader, 'pull-content']">
     <header-slim :show-in-native="true"> {{ $t('termsAndConditions.title') }} </header-slim>
     <terms-conditions/>
   </div>
@@ -14,6 +14,12 @@ export default {
   components: {
     HeaderSlim,
     TermsConditions,
+  },
+  mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      window.nativeApp.hideHeader();
+      window.nativeApp.hideWhiteScreen();
+    }
   },
   methods: {
     getHeaderState() {

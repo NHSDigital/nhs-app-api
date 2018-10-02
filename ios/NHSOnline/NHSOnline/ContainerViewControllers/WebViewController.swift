@@ -8,8 +8,20 @@ class WebViewController: UIViewController, WKUIDelegate {
     
     override func loadView() {
         super.loadView()
-        let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
+        
+        let fileReader = FileReader();
+        let webEventsJSLocation = Bundle.main.path(forResource: "WebEvents", ofType: "js")!
+        let javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
+        
+        let contentController = WKUserContentController()
+        let script = WKUserScript(source: javascript, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        contentController.addUserScript(script)
+        
+        let config = WKWebViewConfiguration()
+        config.userContentController = contentController
+        
+
+        webView = WKWebView(frame: .zero, configuration: config)
         webView.uiDelegate = self
         view = webView
     }
@@ -34,6 +46,9 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "onLogout")
         webView.configuration.userContentController.add(delegate, name: "checkSymptoms")
         webView.configuration.userContentController.add(delegate, name: "completeAppIntro")
+        webView.configuration.userContentController.add(delegate, name: "showHeader")
+        webView.configuration.userContentController.add(delegate, name: "hideHeader")
+        webView.configuration.userContentController.add(delegate, name: "hideWhiteScreen")
     }
     
     private func loadSpaPage(path: String)  {
@@ -70,7 +85,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         }
         return knownServices.isSameHostAsHomeUrl(url: URL(string: urlToNavigateTo))
     }
-
+    
     func loadPage(url: String) {
         self.webViewDelegate?.failedUrl = URL(string: url)
         self.webViewDelegate?.clearTimer()
@@ -114,6 +129,8 @@ class WebViewController: UIViewController, WKUIDelegate {
             webView.load(URLRequest(url: failedUrl))
         } else {
             webView.load(URLRequest(url: URL(string: config().HomeUrl)!))
+          let vc = webViewDelegate?.viewController
+            vc!.tabBar.selectedItem = nil
         }
     }
     

@@ -118,7 +118,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
                         .scheme(getString(R.string.baseScheme))
                         .toString()
                 showBlankScreen()
-                showHeader()
                 loadPage(url)
             } else {
                 loadPage(data.toString())
@@ -332,7 +331,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
-    private fun hideHeader() {
+    fun hideHeader() {
         runOnUiThread {
             header.visibility = GONE
         }
@@ -343,7 +342,6 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         showMenuBar()
         showHeader()
-        hideBlankScreen()
         urlLoader.usingAbsoluteUri = false
         isLoggedIn = true
     }
@@ -362,7 +360,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         }
     }
 
-    private fun showHeader() {
+    fun showHeader() {
         runOnUiThread {
             header.visibility = VISIBLE
         }
