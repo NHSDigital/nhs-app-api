@@ -34,10 +34,8 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
             page = this
     )
 
-    val serverErrorPageTitle = "Prescription order error"
     val serverErrorPageHeader = "Error sending order"
     val serverErrorHeader = "There's been a problem sending your order"
-    val serverErrorSubHeader = ""
     val serverErrorMessage = "Go back and try again. If the problem continues and you need to order" +
             " a repeat prescription now, contact your GP surgery directly. For urgent medical advice, call 111."
     val serverErrorRetryButtonText = "Back to my repeat prescriptions"

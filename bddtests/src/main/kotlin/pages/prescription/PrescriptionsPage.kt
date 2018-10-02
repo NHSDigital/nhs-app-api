@@ -10,21 +10,16 @@ import pages.HybridPageObject.Companion.PageType
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions")
 open class PrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
-    val timeoutPageTitle = "Prescription data error"
     val timeoutPageHeader = "Prescription data error"
     val timeoutHeader = "There's been a problem getting your prescription information"
-    val timeoutSubHeader = ""
     val timeoutMessage = "Try again now. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, call 111."
     val timeoutRetryButtonText = "Try again"
 
-    val serverErrorPageTitle = "Prescription data error"
     val serverErrorPageHeader = "Prescription data error"
     val serverErrorHeader = "There\'s been a problem getting your prescription information"
-    val serverErrorSubHeader = ""
     val serverErrorMessage = "Try again later. If the problem continues and you need this information now," +
             " contact your GP surgery directly. For urgent medical advice, call 111."
-    val serverErrorretryButtonText = ""
 
     private val orderARepeatPrescriptionButtonLocator = "//button[contains(text(), " +
                                                         "'Order new repeat prescription')]"

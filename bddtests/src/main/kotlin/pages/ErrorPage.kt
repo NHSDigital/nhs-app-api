@@ -38,28 +38,38 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         }
     }
 
-    fun assertCorrectErrorMessageShown(
-            pageHeaderText: String? = null,
-            headerText: String,
-            subHeaderText: String,
-            messageText: String? = null,
-            retryButtonText: String? = null,
-            errorDetailText: String? = null
-    ) {
+    fun assertPageHeader(pageHeaderText: String): ErrorPage {
+        waitForPageHeaderText(pageHeaderText)
+        return this
+    }
+
+    fun assertHeaderText(headerText: String): ErrorPage {
         assertEquals("Content header incorrect. ", headerText, heading.element.text)
-        if (!subHeaderText.isNullOrEmpty()) assertEquals("Content sub-header incorrect. ",
-                                                         subHeaderText, subHeading.element.text)
-        if (!messageText.isNullOrEmpty()) assertEquals("Content message incorrect. ",
-                                                       messageText, errorText1.element.text)
-        if (!errorDetailText.isNullOrEmpty()) assertEquals("Content message incorrect. ", 
-														errorDetailText, 
-														errorText2.element.text)
-        if (retryButtonText.isNullOrEmpty()) {
-            button.assertElementNotPresent()
-        } else {
-            assertEquals("Retry button text incorrect. ", retryButtonText, button.element.text)
-        }
-        // Asserting page header last, as it's generic, whereas the content header and subheader are specific to errors
-        if (!pageHeaderText.isNullOrEmpty()) waitForPageHeaderText(pageHeaderText!!)
+        return this
+    }
+
+    fun assertSubHeaderText(subHeaderText: String): ErrorPage {
+        assertEquals("Content sub-header incorrect. ", subHeaderText, subHeading.element.text)
+        return this
+    }
+
+    fun assertMessageText(messageText: String): ErrorPage {
+        assertEquals("Content message incorrect. ", messageText, errorText1.element.text)
+        return this
+    }
+
+    fun assertRetryButtonText(retryButtonText: String): ErrorPage {
+        assertEquals("Retry button text incorrect. ", retryButtonText, button.element.text)
+        return this
+    }
+
+    fun assertNoRetryButton(): ErrorPage{
+        button.assertElementNotPresent()
+        return this
+    }
+
+    fun assertErrorDetailText(errorDetailText: String): ErrorPage {
+        assertEquals("Content message incorrect. ", errorDetailText, errorText2.element.text)
+        return this
     }
 }

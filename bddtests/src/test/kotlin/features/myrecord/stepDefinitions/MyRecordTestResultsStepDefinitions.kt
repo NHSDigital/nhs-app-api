@@ -291,9 +291,12 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
 
         val pageHeader = myRecordDetailedTestResultPage.serverErrorPageHeader
         val header = myRecordDetailedTestResultPage.serverErrorHeader
-        val subHeader = myRecordDetailedTestResultPage.serverErrorSubHeader
+        val message = myRecordDetailedTestResultPage.serverErrorMessage
 
-        errorPage.assertCorrectErrorMessageShown(pageHeader, header, subHeader)
+        errorPage.assertHeaderText(header)
+                .assertMessageText(message)
+                .assertPageHeader(pageHeader)
+                .assertNoRetryButton()
     }
 }
 

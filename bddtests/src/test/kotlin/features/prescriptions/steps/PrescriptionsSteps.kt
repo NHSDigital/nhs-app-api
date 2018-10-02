@@ -39,15 +39,6 @@ open class PrescriptionsSteps {
     }
 
     @Step
-    fun assertCorrectErrorMessageShown(pageHeaderText: String,
-                                       headerText: String,
-                                       subHeaderText: String,
-                                       messageText: String,
-                                       retryButtonText: String? = null){
-        errorPage.assertCorrectErrorMessageShown(pageHeaderText, headerText, subHeaderText, messageText, retryButtonText)
-    }
-
-    @Step
     fun selectSubscriptionsToOrder(howMany: Int){
         repeatPrescriptions.selectXPrescriptionsToOrder(howMany)
     }

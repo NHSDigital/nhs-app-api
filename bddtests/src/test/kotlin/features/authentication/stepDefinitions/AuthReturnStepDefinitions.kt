@@ -62,13 +62,12 @@ class AuthReturnStepDefinitions : AbstractSteps() {
         val errorDetail = authReturnPage.errorParagraph2
         val retryButtonText = authReturnPage.errorCtaText
 
-        errorPage.assertCorrectErrorMessageShown(
-                headerText = header,
-                subHeaderText = subHeader,
-                messageText = message,
-                retryButtonText = retryButtonText,
-                errorDetailText = errorDetail
-        )
+        errorPage.assertHeaderText(header)
+                .assertSubHeaderText(subHeader)
+                .assertMessageText(message)
+                .assertRetryButtonText(retryButtonText)
+                .assertErrorDetailText(errorDetail)
+
     }
 
     @Then("I click on the navigation button")

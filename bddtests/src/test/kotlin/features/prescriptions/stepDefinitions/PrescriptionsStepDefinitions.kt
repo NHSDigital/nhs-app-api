@@ -400,17 +400,18 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
     }
 
-
     @Then("I see the appropriate error message for a prescription timeout")
     fun thenISeeTheAppropriateErrorMessageForAPrescriptionTimeout() {
 
         val pageHeader = prescriptionsPage.timeoutPageHeader
         val header = prescriptionsPage.timeoutHeader
-        val subHeader = prescriptionsPage.timeoutSubHeader
         val message = prescriptionsPage.timeoutMessage
         val retryButtonText = prescriptionsPage.timeoutRetryButtonText
 
-        prescriptions.assertCorrectErrorMessageShown(pageHeader, header, subHeader, message, retryButtonText)
+        errorPage.assertHeaderText(header)
+                .assertMessageText(message)
+                .assertRetryButtonText(retryButtonText)
+                .assertPageHeader(pageHeader)
     }
 
     @Then("I see the appropriate error message for a prescription server error")
@@ -418,10 +419,12 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         val pageHeader = prescriptionsPage.serverErrorPageHeader
         val header = prescriptionsPage.serverErrorHeader
-        val subHeader = prescriptionsPage.serverErrorSubHeader
         val message = prescriptionsPage.serverErrorMessage
 
-        prescriptions.assertCorrectErrorMessageShown(pageHeader, header, subHeader, message)
+        errorPage.assertHeaderText(header)
+                .assertMessageText(message)
+                .assertNoRetryButton()
+                .assertPageHeader(pageHeader)
     }
 
     @Then("I see the appropriate error message for a course request error")
@@ -429,11 +432,13 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         
         val pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
         val header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
-        val subHeader = confirmRepeatPrescriptionsOrderPage.serverErrorSubHeader
         val message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
         val retryButtonText = confirmRepeatPrescriptionsOrderPage.serverErrorRetryButtonText
 
-        prescriptions.assertCorrectErrorMessageShown(pageHeader, header, subHeader, message, retryButtonText)
+        errorPage.assertHeaderText(header)
+                .assertMessageText(message)
+                .assertRetryButtonText(retryButtonText)
+                .assertPageHeader(pageHeader)
     }
 
     @Then("I select (\\d+) prescription to order")
