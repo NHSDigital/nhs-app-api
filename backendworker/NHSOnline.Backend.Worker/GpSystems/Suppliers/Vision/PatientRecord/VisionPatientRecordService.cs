@@ -31,7 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 var visionConnectionToken = new VisionConnectionToken
                 {
                     RosuAccountId = visionUserSession.RosuAccountId,
-                    ApiKey = visionUserSession.ApiKey
+                    ApiKey = visionUserSession.Key
                 };
 
                 var response = await _visionClient.GetConfiguration(visionConnectionToken, visionUserSession.OdsCode);

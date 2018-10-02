@@ -5,7 +5,11 @@
         public override Supplier Supplier => Supplier.Vision;
 
         public string RosuAccountId { get; set; }
+        
         public string OdsCode { get; set; }
-        public string ApiKey { get; set; }
+        
+        public string PatientId { get; set; }
+        
+        // Vision ApiKey is stored on the Key property of the parent
     }
 }

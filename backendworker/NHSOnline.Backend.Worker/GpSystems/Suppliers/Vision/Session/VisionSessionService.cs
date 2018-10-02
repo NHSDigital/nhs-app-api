@@ -20,7 +20,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
             try
             {
                 var visionConnectionToken = connectionToken.DeserializeJson<VisionConnectionToken>();
-                
+
                 var response = await _visionClient.GetConfiguration(visionConnectionToken, odsCode);
 
                 if (!response.HasErrorResponse)
@@ -32,7 +32,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                             RosuAccountId = visionConnectionToken.RosuAccountId,
                             OdsCode = odsCode,
                             Key = visionConnectionToken.ApiKey,
-                            NhsNumber = nhsNumber
+                            NhsNumber = nhsNumber,
+                            PatientId = response.Body.Account.PatientId,
                         }
                     );
                 }
@@ -44,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 return new SessionCreateResult.SupplierSystemUnavailable();
             }
         }
-        
+
         // Vision does not have a logoff endpoint, returning successfully deleted
         public Task<SessionLogoffResult> Logoff(UserSession userSession)
         {

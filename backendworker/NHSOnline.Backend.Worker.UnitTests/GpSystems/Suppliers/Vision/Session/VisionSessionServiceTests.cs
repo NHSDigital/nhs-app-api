@@ -16,8 +16,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
     [TestClass]
     public class VisionSessionServiceTests
     {
-        private const string DefaultConnectionToken = "{\"rosuAccountId\":\"account_id\",\"apiKey\":\"key\"}";
+        private const string DefaultConnectionToken = "{\"rosuAccountId\": \"104969\", \"" +
+                                                      "apiKey\":\"h4h9869kj3ytz6427y7" +
+                                                      "rctkdy3zkpxcncnhvfph76g2h6p9" +
+                                                      "gywjq484c9ghan8tt\"}";
         private const string DefaultOdsCode = "token";
+        private const string DefaultApiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnhvfph76g2h6p9gywjq484c9ghan8tt";
+        private const string DefaultRosuAccountId = "104969";
+
         private string _nhsNumber;
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
@@ -37,6 +43,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             // Arrange
             var accountName = _fixture.Create<string>();
             var patientNumber = _fixture.Create<PatientNumber>();
+            var patientId = _fixture.Create<string>();
             patientNumber.NumberType = "NHS";
 
             _mockVisionClient.Setup(x =>
@@ -57,7 +64,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                             Account = new Account
                                             {
                                                 Name = accountName,
-                                                PatientNumbers = new List<PatientNumber> {patientNumber}
+                                                PatientNumbers = new List<PatientNumber> {patientNumber},
+                                                PatientId = patientId 
                                             }
                                         }
                                     }
@@ -66,15 +74,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                         },
                     }));
             
+            var expectedResult = new SessionCreateResult.SuccessfullyCreated(accountName, 
+                new VisionUserSession()
+                {
+                    NhsNumber = _nhsNumber, 
+                    PatientId = patientId, 
+                    OdsCode =  DefaultOdsCode,
+                    Key = DefaultApiKey,
+                    RosuAccountId = DefaultRosuAccountId              
+                });
+            
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);
 
             // Act
             var result = await systemUnderTest.Create(DefaultConnectionToken, DefaultOdsCode, _nhsNumber);
 
             // Assert
-            var successResult = result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>().Subject;
-            successResult.Name.Should().Be(accountName);
-            successResult.UserSession.NhsNumber.Should().Be(_nhsNumber);
+            _mockVisionClient.VerifyAll();
+            
+            var createdResult = result.Should().BeAssignableTo<SessionCreateResult.SuccessfullyCreated>().Subject;
+            
+            createdResult.Should().BeEquivalentTo(expectedResult);
+
         }
 
         [TestMethod]
