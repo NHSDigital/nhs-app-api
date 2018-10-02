@@ -7,8 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Worker.Support.Certificate;
 
@@ -52,6 +55,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return await SendRequestAndParseResponse<PatientConfigurationResponse, VisionRequest<Object>>(visionRequest);
         }
 
+        public async Task<VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(VisionUserSession userSession, PrescriptionRequest prescriptionRequest)
+        {
+            IVisionServiceDefinition visionServiceDefinition = new PrescriptionHistoryServiceDefinition();
+            
+            var visionRequest = new VisionRequest<PrescriptionRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, prescriptionRequest);
+
+            return await SendRequestAndParseResponse<PrescriptionHistoryResponse, VisionRequest<PrescriptionRequest>>(visionRequest);
+        }
+
         public async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
         {
             var envelope = _envelopeService.BuildEnvelope(_certificate, request, _requestUsername);
@@ -81,13 +94,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 _logger.LogInformation($"{nameof(VisionClient)} sending request");
 
                 var responseMessage = await _httpClient.Client.SendAsync(request);
-
+                
                 var response = new VisionApiObjectResponse<TResponse>(responseMessage.StatusCode);
 
                 var stringResponse = responseMessage.Content != null
                     ? await responseMessage.Content.ReadAsStringAsync()
                     : null;
-
+                
                 if (string.IsNullOrEmpty(stringResponse)) return response;
 
                 try
@@ -150,6 +163,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                     return !StatusCodeIndicatesSuccess
                         || RawResponse?.Body?.Fault != null
                         || bool.FalseString.Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Successful, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+
+            public string ErrorContent
+            {
+                get
+                {
+                    return 
+                        $"fault: { JsonConvert.SerializeObject(RawResponse?.Body?.Fault) }, " +
+                        $"error: { JsonConvert.SerializeObject(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error) }";
                 }
             }
 

@@ -38,6 +38,7 @@ abstract class ViewAppointmentsFactory {
 
         override val map: HashMap<String, (() -> (ViewAppointmentsFactory))> by lazy{ hashMapOf(
                 "EMIS" to {ViewAppointmentsFactoryEmis()},
-                "TPP" to {ViewAppointmentsFactoryTpp()})}
+                "TPP" to {ViewAppointmentsFactoryTpp()},
+                "VISION" to {ViewAppointmentsFactoryVision()})}
     }
 }

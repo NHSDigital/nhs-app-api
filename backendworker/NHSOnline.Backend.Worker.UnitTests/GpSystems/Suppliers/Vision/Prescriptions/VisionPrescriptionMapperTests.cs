@@ -1,0 +1,250 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoFixture;
+using AutoFixture.AutoMoq;
+using FluentAssertions;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
+
+namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescriptions
+{
+    [TestClass]
+    public class VisionPrescriptionMapperTests
+    {
+        private IFixture _fixture;
+        private IVisionPrescriptionMapper _mapper;
+        private ILogger<VisionPrescriptionMapper> _logger;
+        
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            _logger = Mock.Of<ILogger<VisionPrescriptionMapper>>();
+            _mapper = new VisionPrescriptionMapper(_logger);
+
+            _fixture = new Fixture()
+                .Customize(new AutoMoqCustomization());
+        }
+
+        [TestMethod]
+        public void MapPrescriptionHistoryToPrescriptionListResponse_WhenPassingNull_ThrowsNullReferenceException()
+        {
+            Action act = () => _mapper.Map(null);
+            
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("prescriptionGetResponse");
+        }
+
+        [TestMethod]
+        public void MapPrescriptionHistoryToPrescriptionListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
+        {
+            // Arrange
+            var item = new PrescriptionHistory();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Prescriptions.Should().BeEmpty();
+            result.Courses.Should().BeEmpty();
+        }
+        
+        [TestMethod]
+        public void MapPrescriptionHistoryToPrescriptionListResponse_WithValues_ReturnsResultValues()
+        {
+            // Arrange
+            var item = new PrescriptionHistory
+            {
+                Requests = new List<Request>
+                {
+                    new Request
+                    {
+                        Date = _fixture.Create<DateTime>(),
+                        Status = new Worker.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
+                        {
+                            Code = PrescriptionRepeatStatusCode.Processed,
+                            Text = "Processed",
+                        },
+                        Repeats = new List<GetPrescriptionRepeat>
+                        {
+                            new GetPrescriptionRepeat
+                            {
+                                Drug = _fixture.Create<string>(),
+                                Dosage = _fixture.Create<string>(),
+                                Quantity = _fixture.Create<string>(),
+                            },
+                            new GetPrescriptionRepeat
+                            {
+                                // only dosage, no quantity
+                                Drug = _fixture.Create<string>(),
+                                Dosage = _fixture.Create<string>(),
+                            },
+                        },
+                    },
+                    new Request
+                    {
+                        Date = _fixture.Create<DateTime>(),
+                        Status = new Worker.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
+                        {
+                            Code = PrescriptionRepeatStatusCode.Rejected,
+                            Text = "Rejected",
+                        },
+                        Repeats = new List<GetPrescriptionRepeat>
+                        {
+                            new GetPrescriptionRepeat
+                            {
+                                // only quantity, no dosage
+                                Drug = _fixture.Create<string>(),
+                                Quantity = _fixture.Create<string>(),
+                            },
+                           new GetPrescriptionRepeat
+                            {
+                                // no dosage or quantity
+                                Drug = _fixture.Create<string>(),
+                            },
+                        },
+                    },
+                    new Request
+                    {
+                        Date = _fixture.Create<DateTime>(),
+                        Status = new Worker.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
+                        {
+                            Code = PrescriptionRepeatStatusCode.InProgress,
+                            Text = "In Progress",
+                        },
+                        Repeats = new List<GetPrescriptionRepeat>
+                        {
+                            new GetPrescriptionRepeat(),
+                        },
+                    },
+                    new Request
+                    {
+                        Date = _fixture.Create<DateTime>(),
+                        Status = new Worker.GpSystems.Suppliers.Vision.Models.Prescriptions.Status
+                        {
+                            Code = PrescriptionRepeatStatusCode.NotProcessed,
+                            Text = "Not Processed",
+                        },
+                        Repeats = new List<GetPrescriptionRepeat>
+                        {
+                            new GetPrescriptionRepeat(),
+                        },
+                    },
+                },
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Prescriptions.Should().HaveCount(item.Requests.Count());
+            result.Courses.Should().HaveCount(item.Requests.SelectMany(x => x.Repeats).Count());
+
+            var expectedResult = new PrescriptionListResponse
+            {
+                Prescriptions = new List<PrescriptionItem>
+                {
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.Requests.ElementAt(0).Date.Date,
+                        Status = Worker.Areas.Prescriptions.Models.Status.Approved,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = result.Courses.ElementAt(0).Id, // id is generated by mapper so use value from result
+                            },
+                            new CourseEntry
+                            {
+                                CourseId = result.Courses.ElementAt(1).Id, // id is generated by mapper so use value from result
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.Requests.ElementAt(1).Date.Date,
+                        Status = Worker.Areas.Prescriptions.Models.Status.Rejected,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = result.Courses.ElementAt(2).Id, // id is generated by mapper so use value from result
+                            },
+                            new CourseEntry
+                            {
+                                CourseId = result.Courses.ElementAt(3).Id, // id is generated by mapper so use value from result
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.Requests.ElementAt(2).Date.Date,
+                        Status = Worker.Areas.Prescriptions.Models.Status.Requested,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = result.Courses.ElementAt(4).Id, // id is generated by mapper so use value from result
+                            },
+                        }
+                    },
+                    new PrescriptionItem
+                    {
+                        OrderDate = item.Requests.ElementAt(3).Date.Date,
+                        Status = Worker.Areas.Prescriptions.Models.Status.Unknown,
+                        Courses = new List<CourseEntry>
+                        {
+                            new CourseEntry
+                            {
+                                CourseId = result.Courses.ElementAt(5).Id, // id is generated by mapper so use value from result
+                            },
+                        }
+                    },
+                },
+                Courses = new List<Course>
+                {
+                    new Course
+                    {
+                        Details = $"{item.Requests.ElementAt(0).Repeats.ElementAt(0).Dosage} ‐ {item.Requests.ElementAt(0).Repeats.ElementAt(0).Quantity}",
+                        Id = result.Courses.ElementAt(0).Id, // id is generated by mapper so use value from result
+                        Name = item.Requests.ElementAt(0).Repeats.ElementAt(0).Drug,
+                    },
+                    new Course
+                    {
+                        Details = $"{item.Requests.ElementAt(0).Repeats.ElementAt(1).Dosage}",
+                        Id = result.Courses.ElementAt(1).Id, // id is generated by mapper so use value from result
+                        Name = item.Requests.ElementAt(0).Repeats.ElementAt(1).Drug,
+                    },
+                    new Course
+                    {
+                        Details = $"{item.Requests.ElementAt(1).Repeats.ElementAt(0).Quantity}",
+                        Id = result.Courses.ElementAt(2).Id, // id is generated by mapper so use value from result
+                        Name = item.Requests.ElementAt(1).Repeats.ElementAt(0).Drug,
+                    },
+                    new Course
+                    {
+                        Details = null,
+                        Id = result.Courses.ElementAt(3).Id, // id is generated by mapper so use value from result
+                        Name = item.Requests.ElementAt(1).Repeats.ElementAt(1).Drug,
+                    },
+                    new Course
+                    {
+                        Id = result.Courses.ElementAt(4).Id, // id is generated by mapper so use value from result
+                    },
+                    new Course
+                    {
+                        Id = result.Courses.ElementAt(5).Id, // id is generated by mapper so use value from result
+                    },
+                }
+            };
+
+            // Exclude missing members as CourseId is generated so can't setup expectation for it.
+            expectedResult.Should().BeEquivalentTo(result);
+        }
+    }
+}

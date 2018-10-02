@@ -249,7 +249,8 @@ data class Patient(
                                   "gywjq484c9ghan8tt\"}",
                 rosuAccountId = "104969",
                 apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
-                         "vfph76g2h6p9gywjq484c9ghan8tt"
+                         "vfph76g2h6p9gywjq484c9ghan8tt",
+                patientId = "1017"
         )
     }
 }

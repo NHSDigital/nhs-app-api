@@ -21,10 +21,12 @@ open class PrescriptionsSteps {
     }
 
     @Step
-    fun assertPrescriptionsMatch(list : List<HistoricPrescription>, expectedPrescriptions : Int, isEmis: Boolean = true) {
+    fun assertPrescriptionsMatch(list : List<HistoricPrescription>,
+                                 expectedPrescriptions : Int,
+                                 providerHasAllPrescriptionFields: Boolean = true) {
 
         val gson = GsonBuilder().setPrettyPrinting().create()
-        val p = prescriptions.getAllPrescriptions(isEmis)
+        val p = prescriptions.getAllPrescriptions(providerHasAllPrescriptionFields)
 
         val actualJson = gson.toJson(p).toString()
         val expectedJson = gson.toJson(list).toString()

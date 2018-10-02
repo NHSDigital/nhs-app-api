@@ -14,4 +14,9 @@ open class VisionMappingBuilder(private val method: String) : MappingBuilder(met
     fun getConfigurationRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
             = VisionGetConfigurationBuilder(visionUserSession, serviceDefinition)
 
+    fun getPrescriptionHistoryRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
+            = VisionGetHistoricPrescriptionsBuilder(visionUserSession, serviceDefinition)
+
+    fun getEligibleRepeatsRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
+            = VisionEligibleRepeatsBuilder(visionUserSession, serviceDefinition)
 }

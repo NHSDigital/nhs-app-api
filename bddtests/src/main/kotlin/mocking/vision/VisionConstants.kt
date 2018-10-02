@@ -8,6 +8,12 @@ object VisionConstants {
     var configurationName: String = "VOS.GetConfiguration"
     var configurationVersion: String = "2.3.0"
 
+    var prescriptionHistory: String = "VONREP.GetHistory"
+    var prescriptionHistoryVersion: String = "2.0.0"
+
+    var eligibleRepeats: String = "VONREP.GetEligibleRepeats"
+    var eligibleRepeatsVersion: String = "2.0.0"
+
     // Vision Response
     fun getVisionResponse(serviceContent: String, serviceDefinition: mocking.vision.models.ServiceDefinition): String {
 

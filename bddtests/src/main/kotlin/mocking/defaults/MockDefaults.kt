@@ -141,11 +141,21 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
         val visionUserSession = VisionUserSession(
                 Patient.aderynCanon.rosuAccountId,
                 Patient.aderynCanon.apiKey,
-                Patient.aderynCanon.odsCode)
+                Patient.aderynCanon.odsCode,
+                Patient.aderynCanon.patientId
+        )
 
         val visionGetConfiguration = ServiceDefinition(
                 VisionConstants.configurationName,
                 VisionConstants.configurationVersion)
+
+        val visionGetHistory = ServiceDefinition(
+                VisionConstants.prescriptionHistory,
+                VisionConstants.prescriptionHistoryVersion)
+
+        val visionGetEligibleRepeats = ServiceDefinition(
+                VisionConstants.eligibleRepeats,
+                VisionConstants.eligibleRepeatsVersion)
 
         val visionConfigurationResponse = Configuration(account = Account(patientVision.patientId,
                 patientNumber = listOf(PatientNumber(number = patientVision.nhsNumbers[0])),

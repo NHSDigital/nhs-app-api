@@ -27,6 +27,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: <GP System> patient with no past repeat prescriptions
     Given a patient from <GP System> is defined
@@ -41,6 +42,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: <GP System> patient who has prescriptions totalling more than one hundred courses
     Given a patient from <GP System> is defined
@@ -54,6 +56,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @smoketest
   Scenario Outline: <GP System> patient who has multiple prescription each containing one course
@@ -68,6 +71,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
 
   Scenario Outline: <GP System> patient who has multiple prescription each containing the same repeat prescription
@@ -82,6 +86,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: <GP System> patient who has only one prescription containing multiple courses
     Given a patient from <GP System> is defined
@@ -116,7 +121,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
-
+    
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -130,6 +135,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
     Given a patient from <GP System> is defined
@@ -144,6 +150,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
     Given a patient from <GP System> is defined
@@ -158,6 +165,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
 
   Scenario: A user who has multiple prescriptions but medication status should not be displayed
@@ -186,6 +194,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @backend
   Scenario Outline: <GP System> patient with repeat prescriptions in the last 6 months and no fromDate
@@ -200,6 +209,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate in the future
@@ -213,6 +223,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate greater than 6 months ago
@@ -226,6 +237,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate not in the expected format
@@ -239,6 +251,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @backend
   Scenario: Requesting prescriptions with a missing cookie
@@ -265,6 +278,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @backend
   Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
@@ -290,3 +304,4 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |

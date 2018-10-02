@@ -9,7 +9,7 @@
         public string OdsCode { get; set; }
         
         public string PatientId { get; set; }
-        
+
         public string ApiKey { get; set; }
     }
 }

@@ -24,7 +24,9 @@ import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
+import mocking.vision.models.EligableRepeats
 
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
@@ -243,6 +245,15 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
                 mockingClient.forTpp {
                     listRepeatMedication(currentPatient)
                             .respondWithSuccess(coursesLoader.data as ListRepeatMedicationReply)
+                }
+            }
+            ProviderTypes.VISION -> {
+                coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
+                        showDosage, showQuantity)
+
+                mockingClient.forVision {
+                    getEligibleRepeatsRequest(MockDefaults.visionUserSession, MockDefaults.visionGetEligibleRepeats)
+                            .respondWithSuccess(coursesLoader.data as EligableRepeats)
                 }
             }
         }

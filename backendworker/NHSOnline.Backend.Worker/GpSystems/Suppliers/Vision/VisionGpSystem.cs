@@ -10,6 +10,7 @@ using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
@@ -62,7 +63,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             Justification = "Remove this suppression when method has been implemented.")]
         public IPrescriptionService GetPrescriptionService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionPrescriptionService>();
         }
 
         public ISessionService GetSessionService()
@@ -91,7 +92,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             Justification = "Remove this suppression when method has been implemented.")]
         public IPrescriptionRequestValidationService GetPrescriptionRequestValidationService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionPrescriptionRequestValidationService>();
         }
     }
 }

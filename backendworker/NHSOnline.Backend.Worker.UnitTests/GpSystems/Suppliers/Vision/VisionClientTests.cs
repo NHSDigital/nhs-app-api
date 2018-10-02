@@ -10,9 +10,12 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.ResponseParsers;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Certificate;
@@ -29,6 +32,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         private IFixture _fixture;
         private VisionConnectionToken _connectionToken;
         private string _odsCode;
+        private VisionUserSession _visionUserSession;
         private VisionHttpClient _httpClient;
         
         private const string RequestUserName = "username";
@@ -56,6 +60,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             _mockEnvelopeService = _fixture.Freeze<Mock<IEnvelopeService>>();
             _connectionToken = _fixture.Create<VisionConnectionToken>();
             _odsCode = _fixture.Create<string>();
+            _visionUserSession = _fixture.Create<VisionUserSession>();
             
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(VisionConstants.GetVisionRequestXml);
@@ -167,6 +172,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             
             // Act
             var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        [TestMethod]
+        public async Task GetHistoricPrescriptions_ReturnsPrescriptionHistory_WhenValidRequested()
+        {
+            // Arrange
+            var request = _fixture.Create<PrescriptionRequest>();
+
+            var bodyResponse = _fixture.Create<VisionResponseEnvelope<PrescriptionHistoryResponse>>();
+
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
+                It.IsAny<X509Certificate2>(),
+                It.Is<VisionRequest<PrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
+                It.IsAny<string>())).Returns("requestXml");
+
+            try
+            {
+                var responseContent = new StringContent(bodyResponse.SerializeXml());
+                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                    .WithContent("requestXml")
+                    .Respond(HttpStatusCode.OK, responseContent);
+            }
+            catch (Exception e)
+            {
+                var ex = e;
+            }
+
+            // Act
+            var response = await _sut.GetHistoricPrescriptions(_visionUserSession, request);
 
             // Assert
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);

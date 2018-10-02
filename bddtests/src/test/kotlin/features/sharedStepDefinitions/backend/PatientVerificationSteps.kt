@@ -65,7 +65,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                     visionUserSession = VisionUserSession(
                                             "999999999",
                                             "nonexistingapikey",
-                                            Patient.aderynCanon.odsCode),
+                                            Patient.aderynCanon.odsCode, patientId =  Patient.aderynCanon.patientId),
                                     serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
                                     .respondWitInvalidUserCredentials()
                         }
@@ -93,7 +93,8 @@ class PatientVerificationSteps : AbstractSteps() {
                             visionUserSession = VisionUserSession(
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,
-                                    Patient.aderynCanon.odsCode),
+                                    Patient.aderynCanon.odsCode,
+                                    Patient.aderynCanon.patientId),
                             serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
                             .respondWithSecurityHeaderError()
                 }
@@ -110,7 +111,8 @@ class PatientVerificationSteps : AbstractSteps() {
                             visionUserSession = VisionUserSession(
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,
-                                    Patient.aderynCanon.odsCode),
+                                    Patient.aderynCanon.odsCode,
+                                    Patient.aderynCanon.patientId),
                             serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
                             .respondWithInvalidRequest()
                 }
@@ -285,7 +287,8 @@ class PatientVerificationSteps : AbstractSteps() {
                             visionUserSession = VisionUserSession(
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,
-                                    Patient.aderynCanon.odsCode),
+                                    Patient.aderynCanon.odsCode,
+                                    Patient.aderynCanon.patientId),
                             serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
                             .respondWithSuccess(configuration = Configuration(
                                     account = Account(patient.patientId,
@@ -313,7 +316,8 @@ class PatientVerificationSteps : AbstractSteps() {
                                     visionUserSession = VisionUserSession(
                                             Patient.aderynCanon.rosuAccountId,
                                             Patient.aderynCanon.apiKey,
-                                            Patient.aderynCanon.odsCode),
+                                            Patient.aderynCanon.odsCode,
+                                            Patient.aderynCanon.patientId),
                                     serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
                                     .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
                                             patientNumber = null, name = MockDefaults.getFullPatientName(patient))

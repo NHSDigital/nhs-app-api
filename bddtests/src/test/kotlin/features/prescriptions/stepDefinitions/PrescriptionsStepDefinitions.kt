@@ -8,6 +8,7 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
+import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.backend.CommonSteps
@@ -34,8 +35,10 @@ import java.time.ZonedDateTime
 import java.util.*
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedSteps.SerenityHelpers
+import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.tpp.models.Error
 import mocking.defaults.MockDefaults.Companion.patient
+import mocking.vision.models.PrescriptionHistory
 import models.Patient
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
@@ -162,6 +165,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.TPP -> {
                 assertEquals(count, PrescriptionsListResponse.courses.count())
             }
+            ProviderTypes.VISION -> {
+                assertEquals(count, PrescriptionsListResponse.courses.count())
+            }
             else -> {
                 throw Exception("Invalid GP System")
             }
@@ -192,7 +198,11 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 .assertPrescriptionsMatch(
                         getResponseToExpectedPrescriptionFormat(),
                         numPrescriptions,
-                        currentProvider == ProviderTypes.EMIS)
+                        providerHasAllPrescriptionFields())
+    }
+
+    private fun providerHasAllPrescriptionFields(): Boolean {
+        return currentProvider == ProviderTypes.EMIS || currentProvider == ProviderTypes.VISION
     }
 
     @And("^I have a patient$")
@@ -472,11 +482,18 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             }
             ProviderTypes.TPP -> {
 
-
                 mockingClient
                         .forTpp {
                             listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
+                        }
+            }
+            ProviderTypes.VISION -> {
+
+                mockingClient
+                        .forVision {
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetEligibleRepeats)
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
         }
@@ -516,6 +533,13 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         }
 
             }
+            ProviderTypes.VISION -> {
+                mockingClient
+                        .forVision {
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetHistory)
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
+                        }
+            }
         }
     }
 
@@ -527,6 +551,9 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             }
             ProviderTypes.TPP -> {
                 return TppPrescriptionMapper.Map(prescriptionLoader.data as ListRepeatMedicationReply)
+            }
+            ProviderTypes.VISION -> {
+                return VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory)
             }
         }
         return ArrayList()
@@ -562,6 +589,14 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                         .forTpp {
                             listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply).delayedBy(Duration.ofSeconds(delay))
+                        }
+            }
+            ProviderTypes.VISION -> {
+
+                mockingClient
+                        .forVision {
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetHistory)
+                                    .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory).delayedBy(Duration.ofSeconds(delay))
                         }
             }
         }
@@ -603,6 +638,10 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.TPP -> {
                 currentPatient = TPP_PATIENT
                 prescriptionLoader = TppPrescriptionLoader
+            }
+            ProviderTypes.VISION -> {
+                currentPatient = VISION_PATIENT
+                prescriptionLoader = VisionPrescriptionLoader
             }
         }
     }
