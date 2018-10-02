@@ -17,6 +17,12 @@ export default {
     }
     return undefined;
   },
+  mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      window.nativeApp.hideHeader();
+      window.nativeApp.hideWhiteScreen();
+    }
+  },
   created() {
   },
 };

@@ -40,6 +40,11 @@ export default {
 
     return Promise.resolve(loginValues);
   },
+  mounted() {
+    if (this.$store.state.device.isNativeApp) {
+      window.nativeApp.hideHeader();
+    }
+  },
 };
 </script>
 <style module lang="scss" scoped>

@@ -31,19 +31,20 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         shouldHandleErrors = false
 
         if let url = navigationAction.request.url {
-
-            if(!Reachability.isConnectedToNetwork()) {
-                decisionHandler(.cancel)
-                self.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
-                return
-            }
             
             guard navigationAction.targetFrame?.isMainFrame != false else {
                 decisionHandler(.allow)
                 return
             }
-
+            
             self.failedUrl = url
+            
+            if(!Reachability.isConnectedToNetwork()) {
+                decisionHandler(.cancel)
+                self.showNativeViewContainerWithError(knownServices.getNoInternetConnectionErrorMessage())
+                return
+            }
+
             if knownServices.shouldURLOpenExternally(url: url) {
                 decisionHandler(.cancel)
                 openInSafari(url: url)
@@ -87,21 +88,6 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
-        
-        var isIntroPage = false
-        
-        let url = webView.url
-        if(url?.absoluteString.contains(config().CarouselFileName))! {
-            isIntroPage = true
-        }
-
-        if knownServices.shouldAllowNativeInteraction(host: webView.url?.host) || isIntroPage {
-            let fileReader = FileReader();
-            let webEventsJSLocation = Bundle.main.path(forResource: "WebEvents", ofType: "js")!
-            javascript = fileReader.readContentFromLocation(fileLocation: webEventsJSLocation)
-            webView.evaluateJavaScript(javascript!, completionHandler: nil)
-        }
-        self.failedUrl = nil
         self.showWebViewContainer()
     }
     
@@ -179,13 +165,23 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         if  knownServices.shouldAllowNativeInteraction(host: message.frameInfo.securityOrigin.host) || shouldAllowNativeInteraction {
             if (message.name == "onLogin") {
                 UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
                 WebViewController.Properties.usingAbsoluteUri = false
             }
             
             if (message.name == "onLogout") {
-                viewController.setVisibilityOfHeaderAndMenuBars(visible: false)
                 WebViewController.Properties.usingAbsoluteUri = true
+            }
+            
+            if (message.name == "hideHeader") {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: false)
+            }
+            
+            if (message.name == "hideWhiteScreen") {
+                UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
+            }
+            
+            if (message.name == "showHeader") {
+                viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
             }
             
             if (message.name == "updateHeaderText") {
@@ -280,6 +276,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func showNativeViewContainerWithError(_ errorMessage: ErrorMessage) {
+        UIApplication.shared.keyWindow?.viewWithTag(2)?.removeFromSuperview()
         clearTimer()
         self.activityIndicator.stopAnimating()
         self.viewController.showNativeViewContainer(errorMessage: errorMessage)

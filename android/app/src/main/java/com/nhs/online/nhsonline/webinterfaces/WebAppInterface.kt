@@ -36,6 +36,21 @@ class WebAppInterface(private val context: MainActivity) {
     }
 
     @JavascriptInterface
+    fun hideHeader() {
+        context.hideHeader()
+    }
+
+    @JavascriptInterface
+    fun showHeader() {
+        context.showHeader()
+    }
+
+    @JavascriptInterface
+    fun hideWhiteScreen() {
+        context.hideBlankScreen()
+    }
+
+    @JavascriptInterface
     fun completeAppIntro() {
         context.webview.post(Runnable {
             context.webview.loadUrl(context.resources.getString(

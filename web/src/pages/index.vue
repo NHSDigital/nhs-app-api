@@ -32,6 +32,10 @@ export default {
   },
   mounted() {
     window.scrollTo(0, 0);
+    if (this.$store.state.device.isNativeApp) {
+      window.nativeApp.showHeader();
+      window.nativeApp.hideWhiteScreen();
+    }
   },
 };
 </script>
