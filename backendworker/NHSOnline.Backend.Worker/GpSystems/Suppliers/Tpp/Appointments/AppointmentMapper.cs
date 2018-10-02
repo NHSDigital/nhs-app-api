@@ -1,5 +1,4 @@
 ﻿using NHSOnline.Backend.Worker.Areas.Appointments.Models;
-using System;
 using System.Collections.Generic;
 using NHSOnline.Backend.Worker.Support.Temporal;
 
@@ -27,34 +26,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
 
             foreach (var appointment in appointments)
             {
-                DateTimeOffset startTime;
-                DateTimeOffset? endTime;
+                var startTimeSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(appointment.StartDate?.TrimEnd('Z'),
+                    out var startTime);
 
-                try
-                {
-                    startTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointment.StartDate.TrimEnd('Z'));
-                }
-                catch
-                {
-                    continue;
-                }
-
-                if (now > startTime)
+                if (!startTimeSuccess || now > startTime)
                     continue;
 
-                try
-                {
-                    endTime = _dateTimeOffsetProvider.CreateDateTimeOffset(appointment.EndDate.TrimEnd('Z'));
-                }
-                catch
-                {
-                    endTime=null;
-                }
-                
+                _dateTimeOffsetProvider.TryCreateDateTimeOffset(appointment.EndDate?.TrimEnd('Z'), out var endTime);
+
                 yield return new Appointment
                 {
                     Id = appointment.ApptId,
-                    StartTime = startTime,
+                    StartTime = startTime.GetValueOrDefault(),
                     EndTime = endTime,
                     Location = appointment.SiteName,
                     Type = appointment.Details

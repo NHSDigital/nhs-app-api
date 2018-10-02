@@ -54,20 +54,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             foreach (var sourceAppointment in sourceAppointments)
             {
                 var startTime = ParseSlotTime(sourceAppointment.StartTime, "Start");
-
                 if (startTime == null)
                 {
                     continue;
                 }
 
                 var endTime = ParseSlotTime(sourceAppointment.EndTime, "End");
-
                 var sessionId = sourceAppointment.SessionId;
 
                 var appointment = new Appointment
                 {
                     Id = sourceAppointment.SlotId.ToString(CultureInfo.InvariantCulture),
-                    StartTime = startTime.Value,
+                    StartTime = startTime.GetValueOrDefault(),
                     EndTime = endTime,
                     Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders),
                     Location = FindLocationForSession(sessionId, keyedSessions, locations),
@@ -107,21 +105,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);
             return location?.LocationName ?? string.Empty;
         }
-
         private static Models.Session FindSession(int sessionId, IReadOnlyDictionary<int, Models.Session> sessions) =>
             sessions.ContainsKey(sessionId) ? sessions[sessionId] : null;
 
         private DateTimeOffset? ParseSlotTime(string time, string usage)
         {
-            try
+            var success = _dateTimeOffsetProvider.TryCreateDateTimeOffset(time, out var parsedTime);
+            if (!success)
             {
-                return _dateTimeOffsetProvider.CreateDateTimeOffset(time);
+                _logger.LogError($"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
-                return null;
-            }
+            return parsedTime;
         }
     }
 }

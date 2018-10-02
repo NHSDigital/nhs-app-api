@@ -202,7 +202,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
         private DateTimeOffset Tomorrow()
         {
-            return _dateTimeOffsetProvider.CreateDateTimeOffset(DateTime.Today).AddDays(1);
+            return _dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(1);
         }
         
         private static Appointment CreateAppointment(string apptId, string startDate, string endDate, string details, string siteName) =>
@@ -223,7 +223,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             Start = start;
             End = start.AddMinutes(10);
         }
-
+        
         public DateTimeOffset Start { get; }
         public DateTimeOffset End { get; }
     }

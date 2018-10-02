@@ -62,8 +62,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments
         [TestMethod]
         public void IsValid_ReturnsFalse_WhenFromdateAndToDateAreInThePast()
         {
-            var fromdate = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 3, 20));
-            var toDate = _dateTimeOffsetProvider.CreateDateTimeOffset(new DateTime(2018, 3, 29));
+            
+            var fromdate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-03-20T10:00:00");
+            var toDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-03-29T10:00:00");
             
             _dateRangeValidator.IsValid(fromdate, toDate).Should().BeFalse();
         }

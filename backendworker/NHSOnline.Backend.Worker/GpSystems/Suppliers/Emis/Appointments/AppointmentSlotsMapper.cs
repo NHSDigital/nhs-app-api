@@ -50,19 +50,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 foreach (var sourceSlot in sourceSlotSession.Slots)
                 {
                     var startTime = ParseSlotTime(sourceSlot.StartTime, "Start");
-
                     if (startTime == null)
                     {
                         continue;
                     }
-
                     var endTime = ParseSlotTime(sourceSlot.EndTime, "End");
                     
                     var sessionId = sourceSlotSession.SessionId;
                     var slot = new Slot
                     {
                         Id = sourceSlot.SlotId.ToString(CultureInfo.InvariantCulture),
-                        StartTime = startTime.Value,
+                        StartTime = startTime.GetValueOrDefault(),
                         EndTime = endTime,
                         Clinicians = FindCliniciansForSession(sessionId, keyedSessions, sessionHolders),
                         Location = FindLocationForSession(sessionId, keyedSessions, locations),
@@ -92,10 +90,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 .Select(s => s.DisplayName) ?? Array.Empty<string>();
         }
 
-        private static string FindLocationForSession(
-            int sessionId,
-            IReadOnlyDictionary<int, Models.Session> sessions,
-            IEnumerable<Location> locations)
+        private static string FindLocationForSession(int sessionId, IReadOnlyDictionary<int, Models.Session> sessions, IEnumerable<Location> locations)
         {
             var session = FindSession(sessionId, sessions);
             var location = locations.FirstOrDefault(x => x.LocationId == session?.LocationId);
@@ -107,15 +102,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
 
         private DateTimeOffset? ParseSlotTime(string time, string usage)
         {
-            try
+            var success = _dateTimeOffsetProvider.TryCreateDateTimeOffset(time, out var parsedTime);
+            if (!success)
             {
-                return _dateTimeOffsetProvider.CreateDateTimeOffset(time);
+                _logger.LogError($"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Unable to parse EMIS Appointment Slot {usage} Time of '{time}'");
-                return null;
-            }
+            return parsedTime;
         }
     }
 }

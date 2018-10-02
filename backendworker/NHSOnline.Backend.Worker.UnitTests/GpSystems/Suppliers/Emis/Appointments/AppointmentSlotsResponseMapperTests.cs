@@ -218,8 +218,8 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
                 Id = "1",
                 Clinicians = Array.Empty<string>(),
                 Location = "",
-                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 Type = "General Session Appointment - Emergency"
             };
             
@@ -273,8 +273,8 @@ Messages = new PracticeSettingsMessages { AppointmentsMessage = "Please do not b
                 Id = "1",
                 Clinicians = Array.Empty<string>(),
                 Location = "",
-                EndTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
-                StartTime = _dateTimeOffsetProvider.CreateDateTimeOffset("2018-05-09T10:59:19"),
+                EndTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
+                StartTime = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-09T10:59:19"),
                 Type = "General Session Appointment - Emergency"
             };
             

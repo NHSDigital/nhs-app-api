@@ -5,13 +5,12 @@ namespace NHSOnline.Backend.Worker.Support.Temporal
 {
     public interface IDateTimeOffsetProvider
     {
-        DateTimeOffset CreateDateTimeOffset(string dateTime);
-        DateTimeOffset CreateDateTimeOffset(DateTime dateTime);
         DateTimeOffset CreateDateTimeOffset();
         DateTimeOffset ConvertToLocalTime(DateTimeOffset dateTimeOffset);
+        bool TryCreateDateTimeOffset(string dateTime, out DateTimeOffset? dateTimeOffset);
     }
-    
-    public class DateTimeOffsetProvider: IDateTimeOffsetProvider
+
+    public class DateTimeOffsetProvider : IDateTimeOffsetProvider
     {
         private readonly TimeZoneInfo _localTimeZone;
 
@@ -20,21 +19,25 @@ namespace NHSOnline.Backend.Worker.Support.Temporal
             _localTimeZone = timeZoneInfoProvider.TimeZone;
         }
 
-        public DateTimeOffset CreateDateTimeOffset(string dateTime)
+        public bool TryCreateDateTimeOffset(string dateTime, out DateTimeOffset? dateTimeOffset)
         {
-            var parsedDateTime = DateTime.Parse(dateTime, CultureInfo.InvariantCulture, DateTimeStyles.None);
-            var offSet = _localTimeZone.GetUtcOffset(parsedDateTime);
-            return new DateTimeOffset(parsedDateTime, offSet);
+            var success = DateTime.TryParse(dateTime,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var parsedDateTime);
+
+            dateTimeOffset = success
+                ? new DateTimeOffset(parsedDateTime, _localTimeZone.GetUtcOffset(parsedDateTime))
+                : (DateTimeOffset?) null;
+
+            return success;
         }
-        public DateTimeOffset CreateDateTimeOffset(DateTime dateTime)
-        {
-            dateTime = TimeZoneInfo.ConvertTime(dateTime, _localTimeZone);
-            var offSet = _localTimeZone.GetUtcOffset(dateTime);
-            return new DateTimeOffset(dateTime, offSet);
-        }
+
         public DateTimeOffset CreateDateTimeOffset()
         {
-            return CreateDateTimeOffset(DateTime.UtcNow);
+            var dateTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, _localTimeZone);
+            var offSet = _localTimeZone.GetUtcOffset(dateTime);
+            return new DateTimeOffset(dateTime, offSet);
         }
 
         public DateTimeOffset ConvertToLocalTime(DateTimeOffset dateTimeOffset)

@@ -23,40 +23,29 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
             _logger = logger;
         }
-        
+
         public IEnumerable<Areas.Appointments.Models.Slot> Map(IEnumerable<Models.Appointments.Session> sessions)
         {
             if (sessions == null)
                 yield break;
 
-            foreach(var session in sessions.Where(s => s.Slots!=null))
+            foreach (var session in sessions.Where(s => s.Slots != null))
             {
-                foreach(var slot in session.Slots)
+                foreach (var slot in session.Slots)
                 {
-                    DateTimeOffset startDate;
-
-                    try
-                    {
-                        startDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.StartDate.TrimEnd('Z'));
-                    }
-                    catch
+                    var startDateSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.StartDate?.TrimEnd('Z'),
+                        out var startDate);
+                    if (!startDateSuccess)
                     {
                         continue;
                     }
 
-                    DateTimeOffset? endDate = null;
-                    if (!string.IsNullOrEmpty(slot.EndDate))
+                    var endDateSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.EndDate?.TrimEnd('Z'),
+                        out var endDate);
+
+                    if (!endDateSuccess)
                     {
-                        try
-                        {
-                            endDate = _dateTimeOffsetProvider.CreateDateTimeOffset(slot.EndDate.TrimEnd('Z'));
-                        }
-                        catch (Exception ex)
-                        {
-                            _logger.LogWarning(ex, "Unable to create DateTimeOffset from slot EndDate '{0}'.",
-                                slot.EndDate);
-                            endDate = null;
-                        }
+                        _logger.LogWarning($"Unable to create DateTimeOffset from slot EndDate '{slot.EndDate}'.");
                     }
 
                     yield return new Areas.Appointments.Models.Slot
@@ -65,7 +54,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                         EndTime = endDate,
                         Id = session.SessionId,
                         Location = session.Location,
-                        StartTime = startDate,
+                        StartTime = startDate.GetValueOrDefault(),
                         Type = CreateTypeFromSlotAndSession(slot, session)
                     };
                 }
