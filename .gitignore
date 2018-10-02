@@ -8,3 +8,5 @@ audit.txt
 # Chromedriver#
 ######################
 chromedriver_win32/
+
+bddtests/target/site/

@@ -1,4 +1,14 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+const webpack = require('webpack');
+
 module.exports = {
+  build: {
+    plugins: [
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 4,
+      }),
+    ],
+  },
   head: {
     meta: [
       { charset: 'utf-8' },
