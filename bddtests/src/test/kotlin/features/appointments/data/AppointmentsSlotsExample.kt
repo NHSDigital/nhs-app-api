@@ -1,7 +1,7 @@
 package features.appointments.data
 
-import features.appointments.factories.AppointmentSessionFacadeBuilder
-import features.appointments.factories.IdValue
+import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
+import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import worker.models.appointments.SlotResponseObject
@@ -116,7 +116,7 @@ class AppointmentsSlotsExample {
         )
 
         fun getGenericExample(): AppointmentSlotsResponseFacade {
-            return AppointmentsSlotsExampleBuilder()
+            return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(appointmentSessions)
                     .filterValues(filter)
                     .appointmentTypesList(arrayListOf(clinicSlot))
@@ -129,7 +129,7 @@ class AppointmentsSlotsExample {
         fun singleSlotExample(startDate: DateTimeWrapper = startDateAppointment1,
                               endDate: DateTimeWrapper = endDateAppointment1)
                 : AppointmentSlotsResponseFacade {
-            return AppointmentsSlotsExampleBuilder()
+            return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
                             .sessionType(clinic)
@@ -166,7 +166,7 @@ class AppointmentsSlotsExample {
         }
 
         fun multipleSlotsOneLocation(): AppointmentSlotsResponseFacade {
-            return AppointmentsSlotsExampleBuilder()
+            return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
                             .sessionType(clinic)
@@ -222,7 +222,7 @@ class AppointmentsSlotsExample {
         }
 
         fun multipleSlotsOneTime(): AppointmentSlotsResponseFacade {
-            return AppointmentsSlotsExampleBuilder()
+            return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(arrayListOf(AppointmentSessionFacadeBuilder()
                             .sessionId(301)
                             .sessionType(clinic)

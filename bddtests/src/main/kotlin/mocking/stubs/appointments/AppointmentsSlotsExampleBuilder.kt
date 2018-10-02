@@ -2,19 +2,18 @@ package mocking.stubs.appointments
 
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
-import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import worker.models.appointments.SlotResponseObject
 import java.util.*
 
-class AppointmentsSlotsExampleBuilder {
+open class AppointmentsSlotsExampleBuilder {
 
-    private var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
-    private var filter: AppointmentFilterFacade = AppointmentFilterFacade()
-    private var expectedResponseSlots: ArrayList<SlotResponseObject> = arrayListOf()
-    private var appointmentTypesList: ArrayList<String> = arrayListOf()
-    private var locationsList: ArrayList<String> = arrayListOf()
-    private var cliniciansList: ArrayList<String> = arrayListOf()
+    protected var appointmentSessions: ArrayList<AppointmentSessionFacade> = arrayListOf()
+    protected var filter: AppointmentFilterFacade = AppointmentFilterFacade()
+    protected var expectedResponseSlots: ArrayList<SlotResponseObject> = arrayListOf()
+    protected var appointmentTypesList: ArrayList<String> = arrayListOf()
+    protected var locationsList: ArrayList<String> = arrayListOf()
+    protected var cliniciansList: ArrayList<String> = arrayListOf()
 
     fun appointmentSessions(value: ArrayList<AppointmentSessionFacade>): AppointmentsSlotsExampleBuilder {
         appointmentSessions = value
@@ -46,23 +45,11 @@ class AppointmentsSlotsExampleBuilder {
         return this
     }
 
-    fun build(): AppointmentSlotsResponseFacade {
+    open fun build(): AppointmentSlotsResponseFacade {
         return getExample()
     }
 
     private fun getExample(): AppointmentSlotsResponseFacade {
-
-        val getAppointmentSlotsResponseModel = AppointmentSlotsResponseFacade(appointmentSessions, "1")
-        setExpectations(appointmentSessions)
-        return getAppointmentSlotsResponseModel
+        return AppointmentSlotsResponseFacade(appointmentSessions, "1")
     }
-
-
-    private fun setExpectations(appointmentSessions: ArrayList<AppointmentSessionFacade>) {
-        val appointmentSlots = arrayListOf<AppointmentSlotFacade>()
-        appointmentSlots.addAll(appointmentSessions.flatMap { session -> session.slots })
-
-    }
-
-
 }

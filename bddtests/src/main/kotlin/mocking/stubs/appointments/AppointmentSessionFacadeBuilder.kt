@@ -1,4 +1,4 @@
-package mocking.stubs.appointments.factories
+package mocking.stubs.appointments
 
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -24,7 +24,7 @@ class AppointmentSessionFacadeBuilder {
         return this
     }
 
-    fun staffDetails(staff:IdValue): AppointmentSessionFacadeBuilder {
+    fun staffDetails(staff: IdValue): AppointmentSessionFacadeBuilder {
         session.staffDetails = staff.value
         session.staffDetailsid = staff.id
         return this
@@ -49,6 +49,7 @@ class AppointmentSessionFacadeBuilder {
         return session
     }
 }
+
 class AppointmentSlotFacadeArrayBuilder {
 
     private var nextSlotId = 1
@@ -58,7 +59,7 @@ class AppointmentSlotFacadeArrayBuilder {
             : AppointmentSlotFacadeArrayBuilder
     {
         val builder = AppointmentSlotFacadeBuilder().slotId(nextSlotId++)
-        val appointmentBuilder= appointment.invoke(builder)
+        val appointmentBuilder = appointment.invoke(builder)
         appointmentSlots.add(appointmentBuilder.build())
         return this
     }
@@ -105,4 +106,4 @@ class AppointmentSlotFacadeBuilder {
     }
 }
 
-data class IdValue(val id : Int, val value: String)
+data class IdValue(val id: Int, val value: String)

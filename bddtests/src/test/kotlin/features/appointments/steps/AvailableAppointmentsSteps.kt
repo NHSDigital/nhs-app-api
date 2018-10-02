@@ -3,8 +3,7 @@ package features.appointments.steps
 import constants.AppointmentDateTimeFormat
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.data.AppointmentsBookingData
-import features.appointments.data.AppointmentsSlotsExample
-import features.appointments.data.AppointmentsSlotsExampleBuilder.AppointmentSlotExpectations.*
+import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
 import features.appointments.factories.AppointmentsFactory
 import mockingFacade.appointments.AppointmentFilterFacade
 import net.serenitybdd.core.Serenity
@@ -12,7 +11,10 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.thucydides.core.annotations.Step
 import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.appointments.AvailableAppointmentsPage
 import worker.NhsoHttpException
@@ -21,7 +23,7 @@ import worker.models.appointments.AppointmentSlotsResponse
 import worker.models.appointments.SlotResponseObject
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.TimeZone
 import javax.servlet.http.Cookie
 
 open class AvailableAppointmentsSteps : AppointmentsBookingData() {
@@ -188,7 +190,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     private fun getExpectedResponseSlots(): HashMap<String, SlotResponseObject> {
-        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(EXPECTED_RESPONSE_SLOTS_KEY)
+        val expectedResponseSlots = sessionVariableCalled<ArrayList<SlotResponseObject>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_RESPONSE_SLOTS_KEY)
         val unmatchedExpectedSlots = HashMap<String, SlotResponseObject>()
         expectedResponseSlots.forEach { slot -> unmatchedExpectedSlots[slot.id] = slot }
         return unmatchedExpectedSlots
@@ -216,7 +218,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         val actualAppointmentTypeOptions = availableAppointments.getAppointmentTypeFilterContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
-        val expected = Serenity.sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_TYPE_KEY)
+        val expected = Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_TYPE_KEY)
 
         expected.forEach { expectedAppointmentType -> assertOptionExists(expectedAppointmentType, actualAppointmentTypeOptions) }
 
@@ -227,7 +229,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
         val actualLocationOptions = availableAppointments.getLocationFilterContents()
         val expectedLocations =
-                Serenity.sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_LOCATIONS_KEY)
+                Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_LOCATIONS_KEY)
 
         for (expectedLocation in expectedLocations) {
             assertOptionExists(expectedLocation, actualLocationOptions)
@@ -246,7 +248,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
-                sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_CLINICIANS_KEY)
+                sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_CLINICIANS_KEY)
 
         Assert.assertNotNull("Expected session variable 'EXPECTED_APPOINTMENT_CLINICIANS_KEY' to have value", expectedClinicians)
 
@@ -291,7 +293,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatLocationIsSelected() {
-        val locations = Serenity.sessionVariableCalled<ArrayList<String>>(EXPECTED_APPOINTMENT_LOCATIONS_KEY)
+        val locations = Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_LOCATIONS_KEY)
         assertEquals("Test setup incorrect, expected only one location", 1, locations.count())
         assertEquals(
                 "Incorrect location option currently selected. ",
@@ -360,7 +362,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun selectFilterOptionsToRevealSlots() {
-        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
+        val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
         if (!filterValues.type.isNullOrEmpty()) availableAppointments.selectAppointmentTypeByText(filterValues.type!!)
         if (!filterValues.location.isNullOrEmpty()) availableAppointments.selectLocationByText(filterValues.location!!)
         if (!filterValues.doctor.isNullOrEmpty()) availableAppointments.selectClinicianByText(filterValues.doctor!!)
