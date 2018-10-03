@@ -23,7 +23,7 @@ const val POOLING_FREQUENCY: Long = 100
 @Suppress("TooManyFunctions")
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
-    protected val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
+    val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
 
     val errorBanner by lazy { ErrorBannerPageObject(this) }
 

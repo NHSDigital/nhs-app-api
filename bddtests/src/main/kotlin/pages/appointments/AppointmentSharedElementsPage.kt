@@ -10,7 +10,6 @@ import pages.HybridPageElement
 import java.text.SimpleDateFormat
 import java.util.ArrayList
 
-@Suppress("TooManyFunctions")
 open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     private val xPathRoot = "//*"
     private val relativeToParentXPath = ".//*"
@@ -27,21 +26,29 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
             helpfulName = "Inline Error"
     )
 
-    fun getSelectedAppointmentDateText(): String {
-        return findByXpath(xPathRoot + appointmentDateXpath).text
-    }
+    val selectedAppointmentDate = HybridPageElement(
+            browserLocator = xPathRoot + appointmentDateXpath,
+            androidLocator = null,
+            page = this
+    )
 
-    fun getSelectedAppointmentTimeText(): String {
-        return findByXpath(xPathRoot + appointmentTimeXpath).text
-    }
+    val selectedAppointmentTime = HybridPageElement(
+            browserLocator = xPathRoot + appointmentTimeXpath,
+            androidLocator = null,
+            page = this
+    )
 
-    fun getSelectedAppointmentSessionNameText(): String {
-        return findByXpath(xPathRoot + appointmentSessionNameXpath).text
-    }
+    val selectedAppointmentSessionName = HybridPageElement(
+            browserLocator = xPathRoot + appointmentSessionNameXpath,
+            androidLocator = null,
+            page = this
+    )
 
-    fun getSelectedAppointmentLocationText(): String {
-        return findByXpath(xPathRoot + appointmentLocationXpath).text
-    }
+    val selectedAppointmentLocation = HybridPageElement(
+            browserLocator = xPathRoot + appointmentLocationXpath,
+            androidLocator = null,
+            page = this
+    )
 
     fun getDateTimestampsOfSlots(appointmentListParentXpath: String): List<Long> {
         val slotTimestamps = arrayListOf<Long>()
@@ -63,11 +70,6 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
             slotList.add(slot)
         }
         return slotList
-    }
-
-    fun getSlotAtIndex(appointmentListParentXpath: String, index: Int): Slot {
-        val appointmentSlotDiv = retrieveAppointmentSlotDivAtPosition(appointmentListParentXpath, index + 1)
-        return convertToSlotObject(appointmentSlotDiv)
     }
 
     fun getSelectedAppointmentClinicianText(): Set<String> {
@@ -97,11 +99,7 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     }
 
     private fun retrieveAppointmentSlotDivs(containerDivXpath: String): List<WebElementFacade> {
-        return findAllByXpath("$containerDivXpath")
-    }
-
-    private fun retrieveAppointmentSlotDivAtPosition(containerDivXpath: String, index: Int): WebElementFacade {
-        return findByXpath("$containerDivXpath[$index]")
+        return findAllByXpath(containerDivXpath)
     }
 
     private fun retrieveClinicianAndAddToSlot(slot: Slot, parentContainer: WebElementFacade, relativePath: String) {

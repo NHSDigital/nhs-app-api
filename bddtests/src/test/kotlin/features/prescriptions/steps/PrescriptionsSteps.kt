@@ -47,7 +47,7 @@ open class PrescriptionsSteps {
 
     @Step
     fun clickContinue() {
-        repeatPrescriptions.clickContinueButton()
+        repeatPrescriptions.orderRepeatPrescriptionButton.element.click()
     }
 
     @Step

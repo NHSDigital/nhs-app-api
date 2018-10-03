@@ -17,19 +17,13 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
                     page = pageObject,
                     helpfulName = "Section Header '$header'")
 
-    val msg =
-            HybridPageElement(
-                    browserLocator = bodyPath,
-                    androidLocator = null,
-                    page = pageObject)
-
     private val paragraphElements =
             HybridPageElement(
                     browserLocator = "$bodyPath//p",
                     androidLocator = null,
                     page = pageObject)
 
-    val firstParagraph by lazy {paragraphElements.element}
+    val firstParagraph by lazy { paragraphElements.element }
 
     private val recordItemElements =
             HybridPageElement(
@@ -37,26 +31,37 @@ class MyRecordWrapper(header:String , pageObject: HybridPageObject) {
                     androidLocator = null,
                     page = pageObject)
 
-    val firstElement by lazy {recordItemElements.element}
+    val firstElement by lazy { recordItemElements.element }
 
     fun toggleShrub() {
         header.assertSingleElementPresent().element.click()
         Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 
-    fun allRecordItems(): List<WebElementFacade> {
-        return recordItemElements.elements
+    fun allRecordItems(): List<RecordItem> {
+        return recordItemElements.elements.map { element -> RecordItem(element) }
     }
 
-    fun allRecordItemLabels(): MutableList<WebElementFacade> {
-        return msg.element.thenFindAll(By.tagName("span"))
+    fun allRecordItemLabels(): List<String> {
+        return allRecordItems().map { recordItem -> recordItem.label }
     }
 
-    fun allRecordItemBodies(): MutableList<WebElementFacade> {
-        return msg.element.thenFindAll(By.tagName("p"))
+    fun allRecordItemBodies(): List<String> {
+        return allRecordItems().flatMap { recordItem -> recordItem.bodyElements }
     }
 
     fun clickFirst() {
         firstElement.click()
+    }
+}
+
+class RecordItem(recordItem: WebElementFacade){
+
+    val element = recordItem
+
+    val label = recordItem.find<WebElementFacade>(By.tagName("span")).text
+
+    val bodyElements = recordItem.thenFindAll(By.tagName("p")).map {
+        element->element.text
     }
 }

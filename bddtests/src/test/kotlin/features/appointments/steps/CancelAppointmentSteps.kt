@@ -29,10 +29,12 @@ open class CancelAppointmentSteps {
     @Step
     fun verifyTheCorrectAppointmentDetailsAreDisplayed() {
         val expectedSlot = retrieveSlotOfAppointmentToCancel()
-        assertEquals(expectedSlot.date, cancelAppointmentPage.getSelectedAppointmentDateText())
-        assertEquals(expectedSlot.time, cancelAppointmentPage.getSelectedAppointmentTimeText())
-        assertEquals(expectedSlot.session, cancelAppointmentPage.getSelectedAppointmentSessionNameText())
-        assertEquals(expectedSlot.location, cancelAppointmentPage.getSelectedAppointmentLocationText())
+        assertEquals("Date", expectedSlot.date, cancelAppointmentPage.selectedAppointmentDate.element.text)
+        assertEquals("Time", expectedSlot.time, cancelAppointmentPage.selectedAppointmentTime.element.text)
+        assertEquals("Session Name", expectedSlot.session,
+                cancelAppointmentPage.selectedAppointmentSessionName.element.text)
+        assertEquals("location", expectedSlot.location,
+                cancelAppointmentPage.selectedAppointmentLocation.element.text)
         assertEquals(expectedSlot.clinicians, cancelAppointmentPage.getSelectedAppointmentClinicianText())
     }
 

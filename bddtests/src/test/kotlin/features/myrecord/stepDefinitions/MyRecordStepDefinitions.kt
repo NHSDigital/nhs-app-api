@@ -103,14 +103,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
             "VISION" -> {
                 mockingClient.forVision {
                     allergiesRequest(
-                        visionUserSession = VisionUserSession(
-                            patient.rosuAccountId,
-                            patient.apiKey,
-                            patient.odsCode,
-                            patient.patientId),
-                        serviceDefinition = ServiceDefinition(
-                            name = VisionConstants.patientDataName,
-                            version = VisionConstants.patientDataVersion)
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
                     ).respondWithSuccess(AllergiesData.getVisionAllergiesData(0))
 
                 }
@@ -143,14 +143,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
             "VISION" -> {
                 mockingClient.forVision {
                     allergiesRequest(
-                        visionUserSession = VisionUserSession(
-                            patient.rosuAccountId,
-                            patient.apiKey,
-                            patient.odsCode,
-                            patient.patientId),
-                        serviceDefinition = ServiceDefinition(
-                            name = VisionConstants.patientDataName,
-                            version = VisionConstants.patientDataVersion)
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
                     ).respondWithUnknownError()
                 }
             }
@@ -159,7 +159,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @When("I click a test result$")
     fun i_click_a_test_result() {
-        myRecordInfoPage.clickTestResult()
+        myRecordInfoPage.testResults.clickFirst()
     }
 
     @When("^I click my record button on menu bar$")
@@ -179,6 +179,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         i_see_agree_and_continue_button()
         i_see_back_to_home_button()
     }
+
     @Then("^I see the my record warning page")
     fun iSeeTheMyRecordWarningPage() {
         i_see_record_warning_page_opened()
@@ -290,12 +291,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         nav.select("MY_RECORD")
         myRecordWarningPage.clickAgreeAndContinue()
         myRecordInfoPage.myDetails.header.assertSingleElementPresent().assertIsVisible()
-        assertTrue(myRecordInfoPage.canSeeClinicalAbbreviationsLink())
+        myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 
     @Then("^I can see the clinical abbreviations link$")
     fun i_can_see_the_clinical_abbreviations_link() {
-        assertTrue(myRecordInfoPage.canSeeClinicalAbbreviationsLink())
+        myRecordInfoPage.clinicalAbbreviationsLink.assertIsVisible()
     }
 
     @Then("^I click the clinical abbreviations link$")
@@ -332,62 +333,75 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see one or more drug type allergies record displayed$")
     fun i_see_one_or_more_drug_type_allergies_record_displayed() {
-        assertEquals(2, myRecordInfoPage.getAllergyCount())
+        assertEquals(2, myRecordInfoPage.allergies.allRecordItems().count())
         val expected = ArrayList<String>()
         for (i in 1..2) {
             expected.add(AllergiesData.TERM)
         }
 
-        assertArrayEquals(expected.toArray(), myRecordInfoPage.getAllergyMessages().toTypedArray())
+        assertArrayEquals(expected.toArray(), myRecordInfoPage.allergies.allRecordItemBodies()
+                .toTypedArray())
     }
 
     @Then("^I see 5 allergies with different date formats$")
     fun i_see_five_allergies_with_different_date_formats() {
 
-        assertEquals(5, myRecordInfoPage.getAllergyCount())
-        assertTrue(myRecordInfoPage.getAllergyDates().contains("15 May 2018"))
-        assertTrue(myRecordInfoPage.getAllergyDates().contains("May 2018"))
-        assertTrue(myRecordInfoPage.getAllergyDates().contains("2018"))
-        assertTrue(myRecordInfoPage.getAllergyDates().contains("15 May 2018 09:52"))
+        assertEquals(5, myRecordInfoPage.allergies.allRecordItems().count())
+        val dates = myRecordInfoPage.allergies.allRecordItemLabels()
+
+        assertContains(dates, "15 May 2018")
+        assertContains(dates, "15 May 2018")
+        assertContains(dates, "May 2018")
+        assertContains(dates, "2018")
+        assertContains(dates, "15 May 2018 09:52")
     }
 
-    @Then("^I see one or more non drug type allergies record displayed$")
-    fun i_see_one_or_more_non_drug_type_allergies_record_displayed() {
-        assertEquals("non Drug Allergy", myRecordInfoPage.allergies.msg.element.text)
+    private fun assertContains(actualDates: List<String>, expected: String) {
+
+        assertTrue("Expected to contain $expected, but was ${actualDates.joinToString()}",
+                actualDates.contains(expected))
     }
 
     @Then("^I see acute medication information$")
     fun i_see_acute_medication_information() {
-        assertTrue(myRecordInfoPage.isAcuteMedicationsAvailable())
+        assertTrue(myRecordInfoPage.acuteMedications.firstElement.isVisible)
     }
 
     @When("^I click the test result section$")
     fun i_click_the_test_result_section() {
-        myRecordInfoPage.clickTestResultsSection()
+        myRecordInfoPage.testResults.toggleShrub()
     }
 
     @Then("^I see one test result with one value$")
     fun i_see_one_test_result_with_one_value() {
-        assertEquals(1, myRecordInfoPage.getTestResultCount())
-        assertEquals(1, myRecordInfoPage.getTestResultChildCount())
+        assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
+        assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
     }
 
     @Then("^I see one test result with one value and a range$")
     fun i_see_one_test_result_with_one_value_and_a_range() {
-        assertEquals(1, myRecordInfoPage.getTestResultCount())
-        assertEquals(1, myRecordInfoPage.getTestResultChildCount())
+        assertEquals("Expected test result", 1, myRecordInfoPage.testResults.allRecordItems().size)
+        assertEquals("Expected child test result", 1, myRecordInfoPage.getTestResultChildCount())
     }
 
     @Then("^I see one test result with multiple child values$")
     fun i_see_one_test_result_with_multiple_child_values() {
-        assertTrue(myRecordInfoPage.getTestResultCount() >= 1)
-        assertTrue(myRecordInfoPage.getTestResultChildCount() > 1)
+        assertTrue("Expected test result equal to or less than 1, but was" +
+                "${myRecordInfoPage.testResults.allRecordItems().size}",
+                myRecordInfoPage.testResults.allRecordItems().size >= 1)
+        assertTrue("Expected child test result equal to or less than 1, but was " +
+                "${myRecordInfoPage.getTestResultChildCount()}",
+                myRecordInfoPage.getTestResultChildCount() > 1)
     }
 
     @Then("^I see test results with multiple child values some of which have ranges$")
     fun i_see_test_results_with_multiple_child_values_some_of_which_ave_ranges() {
-        assertTrue(myRecordInfoPage.getTestResultCount() >= 1)
-        assertTrue(myRecordInfoPage.getTestResultChildCount() > 1)
+        assertTrue("Expected test result equal to or greater than 1, but was" +
+                "${myRecordInfoPage.testResults.allRecordItems().size}"
+                , myRecordInfoPage.testResults.allRecordItems().size >= 1)
+        assertTrue("Expected child test result equal to or greater than 1, but was " +
+                "${myRecordInfoPage.getTestResultChildCount()}",
+                myRecordInfoPage.getTestResultChildCount() > 1)
     }
 
     @Then("^I see the (.*) heading on My Record$")
@@ -431,12 +445,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see current repeat medication information$")
     fun i_see_current_repeat_medication_information() {
-        assertTrue(myRecordInfoPage.isRepeatMedicationsAvailable())
+        assertTrue(myRecordInfoPage.repeatMedications.firstElement.isVisible)
     }
 
     @Then("^I see discontinued repeat medication information$")
     fun i_see_discontinued_repeat_medication_information() {
-        assertTrue(myRecordInfoPage.isDiscontinuedMedicationsAvailable())
+        assertTrue(myRecordInfoPage.discontinuedRepeatMedications.firstElement.isVisible)
     }
 
     @Then("^I see a message indicating that I have no access to view my summary care record$")
@@ -447,22 +461,22 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see immunisation records displayed$")
     fun i_see_immunisation_records_displayed() {
-        assertEquals(2, myRecordInfoPage.getImmunisationRecordCount())
+        assertEquals(2, myRecordInfoPage.immunisations.allRecordItems().count())
     }
 
     @Then("^I see Problems records displayed$")
     fun i_see_Problems_records_displayed() {
-        assertEquals(3, myRecordInfoPage.getProblemsRecordCount())
+        assertEquals(3, myRecordInfoPage.problems.allRecordItems().count())
     }
 
     @Then("^I see Consultations records displayed$")
     fun i_see_consultations_records_displayed() {
-        assertEquals(2, myRecordInfoPage.getConsultationsRecordCount())
+        assertEquals(2, myRecordInfoPage.consultations.allRecordItems().count())
     }
 
     @Then("^I see (.*) test results$")
     fun thenISeeMultipleTestResults(count: Int) {
-        assertEquals(count, myRecordInfoPage.getTestResultCount())
+        assertEquals("Expected test results", count, myRecordInfoPage.testResults.allRecordItems().count())
     }
 
     @Then("^I see a message indicating that I have no access to view (.*) on My Record$")
@@ -494,14 +508,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see a drug and non drug allergy record from VISION$")
     fun i_see_a_drug_and_non_drug_allergy_record_from_vision() {
-        val allergyMessages = myRecordInfoPage.getAllergyMessages()
+        val allergyMessages = myRecordInfoPage.allergies.allRecordItemBodies()
         val expectedMessages = listOf(
                 "H/O: drug allergy",
                 "Paracetamol 500mg capsules",
                 "Leg swelling",
                 "Pollen"
         )
-        assertTrue(allergyMessages.size == expectedMessages.size)
+        assertTrue("Expected records",allergyMessages.size == expectedMessages.size)
         allergyMessages.forEachIndexed { i, message -> assertTrue(message == expectedMessages[i]) }
     }
 }

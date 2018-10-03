@@ -8,10 +8,9 @@ import pages.HybridPageObject
 
 const val SHRUB_ANIMATION_DURATION_MILLIS: Long = 500
 
-@Suppress("TooManyFunctions")
 class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    private val clinicalAbbreviationsLink =
+    val clinicalAbbreviationsLink =
             HybridPageElement(
                     browserLocator = "//a[contains(text(),'Help with abbreviations')]",
                     androidLocator = null,
@@ -79,52 +78,13 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return getValueFromField("Name").element.isCurrentlyVisible
     }
 
-    fun canSeeClinicalAbbreviationsLink(): Boolean {
-        return clinicalAbbreviationsLink.element.isPresent
-    }
-
     fun clickClinicalAbbreviationsLink() {
-        toggleShrub(clinicalAbbreviationsLink)
-    }
-
-    fun getAllergyCount(): Int {
-        return allergies.allRecordItems().count()
-    }
-
-    fun getAllergyMessages(): List<String> {
-        return allergies.allRecordItemBodies().map { item -> item.text }
-    }
-
-    fun getAllergyDates(): List<String> {
-        return allergies.allRecordItemLabels().map { msg -> msg.text }
-    }
-
-    fun isAcuteMedicationsAvailable(): Boolean {
-        return acuteMedications.firstElement.isPresent
-    }
-
-    fun isRepeatMedicationsAvailable(): Boolean {
-        return repeatMedications.firstElement.isPresent
-    }
-
-    fun isDiscontinuedMedicationsAvailable(): Boolean {
-        return discontinuedRepeatMedications.firstElement.isPresent
-    }
-
-    fun clickTestResultsSection() {
-        testResults.toggleShrub()
-    }
-
-    fun getImmunisationRecordCount(): Int {
-        return immunisations.allRecordItems().count()
-    }
-
-    fun getTestResultCount(): Int {
-        return testResults.allRecordItems().size
+        clinicalAbbreviationsLink.element.click()
+        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 
     fun getTestResultChildCount(): Int {
-        return testResults.allRecordItems().get(0).findBy<WebElementFacade>(
+        return testResults.allRecordItems().first().element.findBy<WebElementFacade>(
                 By.xpath("..")).thenFindAll(By.tagName("li")).size
     }
 
@@ -132,24 +92,7 @@ class MyRecordInfoPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         return testResults.firstParagraph.isCurrentlyVisible
     }
 
-    fun getProblemsRecordCount(): Int {
-        return problems.allRecordItemLabels().count()
-    }
-
-    fun getConsultationsRecordCount(): Int {
-        return consultations.allRecordItemLabels().count()
-    }
-
     fun getSummaryCareNoAccessMessage(): String {
         return noSummaryCareAccessMessage.element.text
-    }
-
-    fun clickTestResult() {
-        testResults.clickFirst()
-    }
-
-    private fun toggleShrub(shrub: HybridPageElement) {
-        shrub.element.click()
-        Thread.sleep(SHRUB_ANIMATION_DURATION_MILLIS)
     }
 }

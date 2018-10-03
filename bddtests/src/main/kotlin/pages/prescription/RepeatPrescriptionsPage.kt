@@ -12,21 +12,19 @@ import pages.HybridPageElement
 
 const val DELAY_FOR_ELEMENT_SELECTION: Long = 50
 
-@Suppress("ReturnCount")
 fun resolveDetailsField(dosage: String?, quantity: String?): String {
-    if (dosage != null && quantity != null) {
-        return dosage + " ‐ " + quantity.replace("  ", " ")
+    val values = arrayListOf<String>()
+    if (dosage != null) {
+        values.add(dosage)
     }
-    else if (dosage != null) {
-        return dosage
+    if (quantity != null) {
+        values.add(quantity.replace("  ", " "))
     }
-    else if (quantity != null) {
-        return quantity
-    }
-    return ""
+
+    return values.joinToString(" ‐ ")
 }
 
-@Suppress("TooManyFunctions")
+
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
@@ -90,10 +88,10 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun selectRepeatPrescription(courseToSelect: MedicationCourse) {
-        var prescription = getRepeatPrescription(courseToSelect)
+        val prescription = getRepeatPrescription(courseToSelect)
         Assert.assertNotNull("Didn't find medication course with: \nname: " +
-                             "${courseToSelect.name} \ndosage: " +
-                             "${courseToSelect.getInstructionsText()}", prescription)
+                "${courseToSelect.name} \ndosage: " +
+                courseToSelect.getInstructionsText(), prescription)
         prescription.element.click()
         Thread.sleep(DELAY_FOR_ELEMENT_SELECTION) //In order to ensure each prescription is selected
         verifyPrescriptionIsSelected(courseToSelect)
@@ -130,10 +128,6 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
 
         Assert.fail("Didn't find medication course with: \nname: ${medicationCourse.name} " +
                     "\ndosage: ${medicationCourse.getInstructionsText()}")
-    }
-
-    fun clickContinueButton() {
-        orderRepeatPrescriptionButton.element.click()
     }
 
     fun typeTextIntoSpecialRequestTextArea(text: String) {

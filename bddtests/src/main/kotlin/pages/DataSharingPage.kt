@@ -8,7 +8,7 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
     val btnNext = createBrowserElement("//button[contains(text(), 'Next')]")
     val btnPrevious = createBrowserElement("//button[contains(text(), 'Previous')]")
-    val btnStartNow = createBrowserElement("//button[contains(text(),'Start now')]")
+    val btnStartNow = createBrowserElement("//button[contains(text(), 'Start now')]")
 
     private val titleOverview = "Overview"
     private val titleBenefits = "Benefits of data sharing"

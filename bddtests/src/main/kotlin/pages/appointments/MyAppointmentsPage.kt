@@ -50,10 +50,6 @@ class MyAppointmentsPage : AppointmentSharedElementsPage() {
         return findAllByXpath("$upcomingAppointmentParentXpath")
     }
 
-    fun getSlotAtIndex(index: Int): Slot {
-        return getSlotAtIndex(upcomingAppointmentParentXpath, index)
-    }
-
     fun clickFirstCancelAppointmentLink() {
         cancelAppointmentLink.element.click()
     }

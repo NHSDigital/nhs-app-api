@@ -46,7 +46,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun assertTimeSlotPresent(expectedDateHeading: String, expectedTimeSlot: String) {
         availableAppointments.assertDateHeadingPresent(expectedDateHeading)
-        availableAppointments.assertTimeSlotPresent(expectedDateHeading, expectedTimeSlot)
+        availableAppointments.timeSlotForDateAndTime(expectedDateHeading, expectedTimeSlot).assertIsVisible()
     }
 
     @Step
@@ -59,7 +59,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect number of time-slots present",
                 1,
-                availableAppointments.numberOfTimeSlotsPresentForSpecificTime(expectedDateHeading, expectedTimeSlot)
+                availableAppointments.timeSlotForDateAndTime(expectedDateHeading, expectedTimeSlot).elements.count()
         )
     }
 
@@ -215,7 +215,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatAppointmentTypesFilterExistsAndIsCorrectlyPopulated() {
-        val actualAppointmentTypeOptions = availableAppointments.getAppointmentTypeFilterContents()
+        val actualAppointmentTypeOptions = availableAppointments.appointmentTypeFilter.getFilterContents()
         assertOptionExists(appointmentTypeDefaultOption, actualAppointmentTypeOptions, "default")
 
         val expected = Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_TYPE_KEY)
@@ -227,7 +227,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatLocationsFilterExistsAndIsCorrectlyPopulated() {
-        val actualLocationOptions = availableAppointments.getLocationFilterContents()
+        val actualLocationOptions = availableAppointments.locationFilter.getFilterContents()
         val expectedLocations =
                 Serenity.sessionVariableCalled<ArrayList<String>>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_LOCATIONS_KEY)
 
@@ -238,13 +238,13 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect location option currently selected. ",
                 locationDefaultOption,
-                availableAppointments.getSelectedLocation()
+                availableAppointments.locationFilter.getSelectedValue()
         )
     }
 
     @Step
     fun verifyThatCliniciansFilterExistsAndIsCorrectlyPopulated() {
-        val actualClinicianOptions = availableAppointments.getClinicianFilterContents()
+        val actualClinicianOptions = availableAppointments.clinicianFilter.getFilterContents()
         assertOptionExists(clinicianDefaultOption, actualClinicianOptions, "default")
 
         val expectedClinicians =
@@ -261,7 +261,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun verifyThatTimePeriodFilterExistsAndIsCorrectlyPopulated() {
-        val actualTimePeriodOptions = availableAppointments.getTimePeriodFilterContents()
+        val actualTimePeriodOptions = availableAppointments.timePeriodFilter.getFilterContents()
         assertOptionExists(TODAY_OPTION, actualTimePeriodOptions)
         assertOptionExists(TOMORROW_OPTION, actualTimePeriodOptions)
         assertOptionExists(THIS_WEEK_OPTION, actualTimePeriodOptions)
@@ -271,10 +271,10 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     fun verifyThatTheFiltersAreNotDisplayed() {
-        assertFalse("Appointment Type filter is displayed. ", availableAppointments.isTypeFilterPresent())
-        assertFalse("Appointment Location filter is displayed. ", availableAppointments.isLocationsFilterPresent())
-        assertFalse("Appointment Clinicians filter is displayed. ", availableAppointments.isCliniciansFilterPresent())
-        assertFalse("Appointment Time Period filter is displayed. ", availableAppointments.isTimePeriodFilterPresent())
+        availableAppointments.appointmentTypeFilter.assertNotPresent()
+        availableAppointments.locationFilter.assertNotPresent()
+        availableAppointments.clinicianFilter.assertNotPresent()
+        availableAppointments.timePeriodFilter.assertNotPresent()
     }
 
     @Step
@@ -287,7 +287,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect appointment type option currently selected. ",
                 appointmentTypeDefaultOption,
-                availableAppointments.getSelectedAppointmentType()
+                availableAppointments.appointmentTypeFilter.getSelectedValue()
         )
     }
 
@@ -298,7 +298,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect location option currently selected. ",
                 locations.first(),
-                availableAppointments.getSelectedLocation()
+                availableAppointments.locationFilter.getSelectedValue()
         )
     }
 
@@ -307,7 +307,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect clinicians option currently selected. ",
                 clinicianDefaultOption,
-                availableAppointments.getSelectedClinician()
+                availableAppointments.clinicianFilter.getSelectedValue()
         )
     }
 
@@ -316,7 +316,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         assertEquals(
                 "Incorrect time period option currently selected. ",
                 THIS_WEEK_OPTION,
-                availableAppointments.getSelectedTimePeriod()
+                availableAppointments.timePeriodFilter.getSelectedValue()
         )
     }
 
@@ -334,38 +334,28 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
-    fun selectAnAppointmentType() {
-        availableAppointments.selectAnAppointmentType()
-    }
-
-    @Step
-    fun selectALocation() {
-        availableAppointments.selectALocation()
-    }
-
-    @Step
     fun selectOptionsToRevealSlots() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(ALL_OPTION)
+        availableAppointments.timePeriodFilter.selectByText(ALL_OPTION)
     }
 
     @Step
     fun selectOptionsToRevealNoResults() {
         selectFilterOptionsToRevealSlots()
-        availableAppointments.selectTimePeriodByText(TODAY_OPTION)
+        availableAppointments.timePeriodFilter.selectByText(TODAY_OPTION)
     }
 
     @Step
     fun selectTimePeriodOption(timePeriod: String) {
-        availableAppointments.selectTimePeriodByText(timePeriod)
+        availableAppointments.timePeriodFilter.selectByText(timePeriod)
     }
 
     @Step
     fun selectFilterOptionsToRevealSlots() {
         val filterValues = sessionVariableCalled<AppointmentFilterFacade>(AppointmentsSlotsExampleBuilderWithExpectations.AppointmentSlotExpectations.EXPECTED_APPOINTMENT_FILTER_FACADE_KEY)
-        if (!filterValues.type.isNullOrEmpty()) availableAppointments.selectAppointmentTypeByText(filterValues.type!!)
-        if (!filterValues.location.isNullOrEmpty()) availableAppointments.selectLocationByText(filterValues.location!!)
-        if (!filterValues.doctor.isNullOrEmpty()) availableAppointments.selectClinicianByText(filterValues.doctor!!)
+        if (!filterValues.type.isNullOrEmpty()) availableAppointments.appointmentTypeFilter.selectByText(filterValues.type!!)
+        if (!filterValues.location.isNullOrEmpty()) availableAppointments.locationFilter.selectByText(filterValues.location!!)
+        if (!filterValues.doctor.isNullOrEmpty()) availableAppointments.clinicianFilter.selectByText(filterValues.doctor!!)
     }
 
     @Step
@@ -386,41 +376,43 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun expandAppointmentSlotGuidance() {
-        availableAppointments.expandGuidance()
+        availableAppointments.guidance.expand.element.click()
     }
 
     @Step
     fun collapseAppointmentSlotGuidance() {
-        availableAppointments.collapseGuidance()
+        availableAppointments.guidance.collapse.element.click()
     }
 
     @Step
     fun verifyGuidanceIsDisplayed() {
-        availableAppointments.assertGuidancePresent()
+        availableAppointments.guidance.appointmentSlotGuidance.assertIsVisible()
     }
 
     @Step
     fun verifyTheLabelIsCorrect() {
         assertEquals("Appointment guidance help text is incorrect. ",
                 "Which type of appointment do I need?",
-                availableAppointments.getGuidanceLabelText()
+                availableAppointments.guidance.label.element.text
         )
     }
 
     @Step
     fun verifyThatAppointmentGuidanceContentIsDisplayed() {
         val expectedGuidanceContent = sessionVariableCalled<String>(AppointmentSessionVariableKeys.EXPECTED_GUIDANCE_CONTENT_KEY)
-        assertEquals("Guidance content not displayed correctly. ", expectedGuidanceContent, availableAppointments.getGuidanceContent())
+        assertEquals("Guidance content not displayed correctly. ",
+                expectedGuidanceContent,
+                availableAppointments.guidance.content.element.text)
     }
 
     @Step
     fun verifyGuidanceContentIsNotDisplayed() {
-        availableAppointments.assertGuidanceContentNotVisible()
+        availableAppointments.guidance.content.assertElementNotPresent()
     }
 
     @Step
     fun verifyThatAppointmentGuidanceIsNotDisplayedAtAll() {
-        availableAppointments.assertGuidanceNotPresent()
+        availableAppointments.guidance.content.assertElementNotPresent()
     }
 
     private fun assertOptionExists(defaultOption: String, actualOptions: ArrayList<String>, optionType: String = "an") {
