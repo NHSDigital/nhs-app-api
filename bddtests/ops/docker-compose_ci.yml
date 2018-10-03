@@ -20,11 +20,13 @@ services:
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
-      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PASSPHRASE=GnewUt4z3y
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
     volumes:
-      - ../src/main/kotlin/mocking/ndop:/app/bddcerts
+      - ../src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
     image: nhsapp.azurecr.io/nhsonline-backendworker:${BACKEND_TAG}
     depends_on:
@@ -39,10 +41,12 @@ services:
       - ASPNETCORE_URLS=http://*:8084
       - PORT=8084
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
-      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PASSPHRASE=GnewUt4z3y
       - STUB_TERMS_AND_CONDITIONS=true
     volumes:
-      - ../src/main/kotlin/mocking/ndop:/app/bddcerts
+      - ../src/main/kotlin/mocking/dummycerts:/app/bddcerts
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:${WIREMOCK_TAG}
     command: --local-response-templating

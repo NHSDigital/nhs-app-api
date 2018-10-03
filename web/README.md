@@ -11,7 +11,6 @@ git clone https://git.nhschoices.net/nhsonline/nhsonline-web
 2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
   - backendworker folder
   - web folder
-  - bddtests folder
   
 ## Setup
 Before running the web locally, some entries need to be added to your machine's `hosts` file (`/etc/hosts` on Mac or `C:\windows\system32\drivers\etc\hosts` on Windows) to add the following entries:

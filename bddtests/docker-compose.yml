@@ -25,14 +25,15 @@ services:
       - ConfigurationSettings__DefaultSessionExpiryMinutes=1
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
-      - VISION_URI=http://stubs.local.bitraft.io:8080/vision
-      - VISION_CERT_PASSPHRASE
+      - VISION_URI=http://stubs.local.bitraft.io:8080/vision/
+      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PASSPHRASE=GnewUt4z3y
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true
       - GP_PROVIDER_ENABLED_MICROTEST=true
       - NDOP_CERTIFICATE_PASSWORD=GnewUt4z3y
-      - NDOP_CERTIFICATE_PATH=/app/bddcerts/ndopJwtTest.pfx
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - EMIS_LINKAGE_USE_STUBBED_DATA=false
@@ -43,7 +44,7 @@ services:
     ports:
       - "8082:8082"
     volumes:
-      - ./src/main/kotlin/mocking/ndop:/app/bddcerts
+      - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
   cid.local.bitraft.io:
     image: nhsonline.backend.worker
     depends_on:
@@ -57,20 +58,24 @@ services:
       - CORS_AUTHORITY=*
       - CITIZEN_ID_BASE_URL=http://stubs.local.bitraft.io:8080/citizenid/
       - EMIS_BASE_URL=http://stubs.local.bitraft.io:8080/emis/
+      - VISION_URI=http://stubs.local.bitraft.io:8080/vision/
       - TPP_CERTIFICATE_PASSWORD
       - TPP_CERTIFICATE_PATH=./certs/TppNhsTest.pfx
-      - VISION_CERT_PASSPHRASE
+      - VISION_CERT_PATH=/app/bddcerts/TestCert.pfx
+      - VISION_CERT_PASSPHRASE=GnewUt4z3y
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
-      - GP_PROVIDER_ENABLED_VISION=false
+      - GP_PROVIDER_ENABLED_VISION=true
       - GP_PROVIDER_ENABLED_MICROTEST=false
       - NDOP_CERTIFICATE_PASSWORD
-      - NDOP_CERTIFICATE_PATH=./certs/ndopJwtTest.pfx
+      - NDOP_CERTIFICATE_PATH=/app/bddcerts/TestCert.pfx
       - NDOP_CLAIM_AUDIENCE=https://ndopapp-int1.thunderbird.service.nhs.uk
       - NDOP_CLAIM_ISSUER=https://www-preview.devuks1.nonlive.nhsapp.service.nhs.uk
       - STUB_TERMS_AND_CONDITIONS=true
     ports:
-    - "8084:8084"
+      - "8084:8084"
+    volumes:
+      - ./src/main/kotlin/mocking/dummycerts:/app/bddcerts
   stubs.local.bitraft.io:
     image: nhsapp.azurecr.io/wiremock:2.17.0-alpine
     command: --local-response-templating

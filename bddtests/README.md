@@ -12,7 +12,6 @@ This repo houses the BDD-style acceptance tests for the project.
 Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
    - backendworker folder
    - web folder
-   - bddtests folder
 
 Start the app
 

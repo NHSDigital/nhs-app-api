@@ -18,9 +18,9 @@ object VisionConstants {
                 .replace("vision:/", "/")
 
 
-        return "<soapenv:Envelope xmlns:urn=\"urn:vision\" " +
-               "xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                "    <soapenv:body>\n" +
+        return "<soap:Envelope xmlns:urn=\"urn:vision\" " +
+               "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+                "    <soap:Body>\n" +
                 "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "            <vision:serviceDefinition>\n" +
                 "                <vision:name>${serviceDefinition.name}</vision:name>\n" +
@@ -34,8 +34,8 @@ object VisionConstants {
                 "            <vision:serviceContent>\n" + response +
                 "            </vision:serviceContent>\n" +
                 "        </vision:visionResponse>\n" +
-                "    </soapenv:body>\n" +
-                "</soapenv:Envelope>"
+                "    </soap:Body>\n" +
+                "</soap:Envelope>"
     }
 
     // Common API Scenarios
@@ -44,7 +44,7 @@ object VisionConstants {
         return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "   <soap:Header>\n" +
                 "   </soap:Header>\n" +
-                "   <soap:body>\n" +
+                "   <soap:Body>\n" +
                 "      <soap:Fault xmlns:vision=\"urn:vision\">\n" +
                 "         <faultcode>soap:Server</faultcode>\n" +
                 "         <faultstring>-90001</faultstring>\n" +
@@ -62,27 +62,27 @@ object VisionConstants {
                 "            </vision:visionFault>\n" +
                 "         </detail>\n" +
                 "      </soap:Fault>\n" +
-                "   </soap:body>\n" +
+                "   </soap:Body>\n" +
                 "</soap:Envelope>"
     }
 
     val securityHeaderErrorResponse =
             "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                    "   <soap:body>\n" +
+                    "   <soap:Body>\n" +
                     "      <soap:Fault>\n" +
                     "         <faultcode xmlns:ns1=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-" +
                     "wssecurity-secext-1.0.xsd\">ns1:InvalidSecurity</faultcode>\n" +
                     "         <faultstring>An error was discovered processing the &lt;wsse:Security> " +
                     "header</faultstring>\n" +
                     "      </soap:Fault>\n" +
-                    "   </soap:body>\n" +
+                    "   </soap:Body>\n" +
                     "</soap:Envelope>"
 
     fun getUnkownError(serviceDefinition: ServiceDefinition): String {
         return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "  <soap:Header>\n" +
                 "  </soap:Header>\n" +
-                "  <soap:body>\n" +
+                "  <soap:Body>\n" +
                 "     <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "        <vision:serviceDefinition>\n" +
                 "           <vision:name>${serviceDefinition.name}</vision:name>\n" +
@@ -98,7 +98,7 @@ object VisionConstants {
                 "           </vision:outcome>\n" +
                 "        </vision:serviceHeader>\n" +
                 "     </vision:visionResponse>\n" +
-                "  </soap:body>\n" +
+                "  </soap:Body>\n" +
                 "</soap:Envelope>"
     }
 
@@ -115,7 +115,7 @@ object VisionConstants {
                 "      <RelatesTo xmlns=\"http://www.w3.org/2005/08/addressing\">" +
                 "uuid:bd81e6a9-c971-4b48-9306-28b2d8cd9a50</RelatesTo>\n" +
                 "   </soap:Header>\n" +
-                "   <soap:body>\n" +
+                "   <soap:Body>\n" +
                 "      <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "         <vision:serviceDefinition>\n" +
                 "            <vision:name>${serviceDefinition.name}</vision:name>\n" +
@@ -131,7 +131,7 @@ object VisionConstants {
                 "            </vision:outcome>\n" +
                 "         </vision:serviceHeader>\n" +
                 "      </vision:visionResponse>\n" +
-                "   </soap:body>\n" +
+                "   </soap:Body>\n" +
                 "</soap:Envelope>"
     }
 

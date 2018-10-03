@@ -29,7 +29,6 @@ Steps to follow:
 2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
    - backendworker folder
    - web folder
-   - bddtests folder
    
 If you want to run backendworker from Visual Studio or Rider then the following environmental variables need to be set:
 

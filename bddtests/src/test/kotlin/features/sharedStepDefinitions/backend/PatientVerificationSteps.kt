@@ -12,8 +12,7 @@ import mocking.tpp.models.*
 import mocking.vision.VisionConstants
 import mocking.vision.models.*
 import models.Patient
-import net.serenitybdd.core.Serenity.sessionVariableCalled
-import net.serenitybdd.core.Serenity.setSessionVariable
+import net.serenitybdd.core.Serenity.*
 
 import org.junit.Assert
 import worker.NhsoHttpException
@@ -296,7 +295,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 }
         setSessionVariable("ConnectionToken").to(patient.connectionToken)
         setSessionVariable("NationalPracticeCode").to(patient.odsCode)
-        setSessionVariable("NhsNumbers").to(nhsNumbers.map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) })
+        setSessionVariable("NhsNumbers").to(nhsNumbers.map { number -> PatientIdentifier(number, IdentifierType.NhsNumber) }.toTypedArray())
     }
 
     @Given("I have valid credentials for a (.*) patient with no NHS Number")

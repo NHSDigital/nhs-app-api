@@ -12,7 +12,6 @@ git clone https://git.nhschoices.net/nhsonline/nhsonline-app.git
 2. Copy docker-compose.override.yml (sets VISION_CERT_PASSPHRASE env variable) from keybase root folder into:
   - backendworker folder
   - web folder
-  - bddtests folder
 
 ## Pipeline Tests
 **NOTE:**
