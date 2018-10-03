@@ -78,7 +78,7 @@ detekt {
         input = file("src/main")
         config = file("default-detekt-config.yml")
         filters = ".*/resources/.*,.*/tmp/.*"
-        output = file("reports")
+        output = file("target/site/detekt")
         outputName = "detekt-report"
         baseline = file("reports/baseline.xml")
     }
@@ -95,16 +95,16 @@ task mock(type: JavaExec) {
     }
 }
 task frameworkUnitTests(type: Test) {
-    dependsOn compileTestKotlin
+    test.ignoreFailures = true
     useJUnit {
         includeCategories 'pages.PageObjectTests'
     }
 }
 test {
-    dependsOn frameworkUnitTests
+    dependsOn compileTestKotlin, detektCheck, frameworkUnitTests
     testLogging.showStandardStreams = true
     /* Assign all env variables passed to gradle as system properties.  Serenity only picks up on properties (not env variables) */
     systemProperties System.getProperties()
 }
-gradle.startParameter.continueOnFailure = true
+gradle.startParameter.continueOnFailure = false
 test.finalizedBy(aggregate)
