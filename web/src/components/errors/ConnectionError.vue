@@ -5,20 +5,22 @@
       <message-text>{{ subheader }}</message-text>
       <message-text>{{ message }}</message-text>
     </message-dialog>
-    <button :class="$style.button" @click="onRetryButtonClicked">
+    <generic-button :class="$style.button" @click="onRetryButtonClicked">
       {{ retryButtonText }}
-    </button>
+    </generic-button>
   </div>
 </template>
 <script>
 /* eslint-disable import/extensions */
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
+import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
   components: {
     MessageDialog,
     MessageText,
+    GenericButton,
   },
   computed: {
     isVisible() {

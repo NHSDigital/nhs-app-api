@@ -17,6 +17,10 @@
   width: calc(100% * (1/3) - 1.063em);
   max-width: calc(100% * (1/3) - 1.063em);
   min-width: 5.375em;
+  outline-style: none;
+  &.tabFocus{
+    border: 0.063em $focus_highlight solid;
+  }
   &.error {
     border: 0.063em $error solid;
     color: $error;

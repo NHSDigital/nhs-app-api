@@ -1,18 +1,24 @@
 <template>
   <div class="content">
-    <button id="signout-button" :class="[$style.button, $style.grey]" @click="signoutClicked()">
+    <generic-button id="signout-button"
+                    :class="[$style.button, $style.grey]" @click="signoutClicked()">
       {{ $t('signOutButton.signOut') }}
-    </button>
+    </generic-button>
   </div>
 </template>
 
 <script>
+
+import GenericButton from '@/components/widgets/GenericButton';
 
 function signoutClicked() {
   this.$store.dispatch('auth/logout');
 }
 
 export default {
+  components: {
+    GenericButton,
+  },
   methods: {
     signoutClicked,
   },

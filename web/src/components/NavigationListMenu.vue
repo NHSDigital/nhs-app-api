@@ -67,6 +67,7 @@ export default {
 </script>
 
 <style module lang="scss">
+@import "../style/colours";
   .listMenu {
     border-top: 1px #D8DDE0 solid;
     list-style: none;
@@ -88,6 +89,9 @@ export default {
     font-weight: normal;
     line-height: 1.5em;
     color: #212B32;
+    :focus {
+      outline-color: $focus_highlight;
+    }
   }
   .listMenuAnchor {
     font-size: 1em;

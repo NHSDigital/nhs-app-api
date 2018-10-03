@@ -10,6 +10,7 @@ h2.title {
 a.paragraph-link {
     display: inline-block;
     margin-top: -0.125em;
+    outline-color: $focus_highlight;
 }
 
 p, p+a{

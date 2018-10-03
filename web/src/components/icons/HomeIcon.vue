@@ -1,5 +1,5 @@
 <template>
-  <svg :class="$style['nhs_logo']" viewBox="0 0 79 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <tab-focused-icon :icon-classes="[$style['nhs_logo']]" view-box="0 0 79 32" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>{{ $t('icons.homeIcon.title') }}</title>
     <defs/>
     <g id="nhs_logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -12,8 +12,20 @@
       <!--eslint-disable-next-line -->
             <path d="M73.3580682,8.81975327 C72.0492947,8.20122032 70.2677422,7.65474946 67.7597584,7.65474946 C65.0703968,7.65474946 62.8874196,8.05293871 62.8874196,10.0993173 C62.8874196,13.708889 72.7421206,12.3618822 72.7421206,20.0983944 C72.7421206,27.1396923 66.2309378,28.9661891 60.3412267,28.9661891 C57.7232193,28.9661891 54.7042475,28.3430368 52.4881252,27.6478224 L54.0883,22.4662809 C55.430679,23.3434982 58.1246441,23.9283098 60.3412267,23.9283098 C62.4523894,23.9283098 65.7581589,23.5255012 65.7581589,20.8989304 C65.7581589,16.8103306 55.9034579,18.3439597 55.9034579,11.1585377 C55.9034579,4.58702928 61.6500003,2.61733211 67.2151649,2.61733211 C70.3436999,2.61733211 73.286714,2.94807863 74.9964519,3.74815262 L73.3580682,8.81975327" id="Fill-4" fill="#005EB8"></path>
     </g>
-  </svg>
+  </tab-focused-icon>
 </template>
+
+<script>
+
+import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
+
+export default {
+  components: {
+    TabFocusedIcon,
+  },
+};
+
+</script>
 
 <style module lang="scss" scoped>
 @import "../../style/icons";

@@ -1,5 +1,5 @@
 <template>
-  <svg id="helpIcon" :class="$style.help" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 112" >
+  <tab-focused-icon id="helpIcon" :icon-classes="[$style.help]" view-box="0 0 112 112" >
     <title>{{ $t('icons.helpIcon.title') }}</title>
     <desc>{{ $t('icons.helpIcon.desc') }}</desc>
     <g>
@@ -8,8 +8,20 @@
       <rect :class="$style.b" x="51.63" y="82.16" width="8.78" height="8.78"/>
       <circle :class="$style.c" cx="56" cy="56" r="52.5"/>
     </g>
-  </svg>
+  </tab-focused-icon>
 </template>
+
+<script>
+
+import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
+
+export default {
+  components: {
+    TabFocusedIcon,
+  },
+};
+
+</script>
 
 <style module lang="scss" scoped>
 @import "../../style/colours";
@@ -22,6 +34,7 @@
   right: 2.4em;
   top: 0em;
   cursor: pointer;
+  outline-style:none;
 }
 .a, .b {
   fill: #fff;

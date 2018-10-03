@@ -45,11 +45,12 @@
       </message-dialog>
     </div>
 
-    <nuxt-link v-if="loadComplete"
-               :class="[$style.button, $style.grey]"
-               :to="backButtonPath" tag="button" >
+    <generic-button v-if="loadComplete"
+                    id="back-to-appointments"
+                    :class="[$style.button, $style.grey]"
+                    @click="$router.push(backButtonPath)">
       {{ $t('appointments.booking.backButtonText') }}
-    </nuxt-link>
+    </generic-button>
   </div>
 </template>
 
@@ -58,6 +59,7 @@
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
+import GenericButton from '@/components/widgets/GenericButton';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import Filters from '@/components/appointments/booking/Filters';
 import SlotList from '@/components/appointments/booking/SlotList';
@@ -73,6 +75,7 @@ export default {
     Filters,
     SlotList,
     VueScrollTo,
+    GenericButton,
   },
   data() {
     return {

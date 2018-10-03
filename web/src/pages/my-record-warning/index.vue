@@ -20,10 +20,10 @@
         {{ $t('my_record.myRecordWarning.agreementText') }}
       </p>
     </div>
-    <generic-button :button-classes="['green']" @on-click="onContinueButtonClicked()">
+    <generic-button :button-classes="['green']" @click="onContinueButtonClicked()">
       {{ $t('my_record.myRecordWarning.agreeButtonText') }}
     </generic-button>
-    <generic-button :button-classes="['grey']" @on-click="onBackButtonClicked()">
+    <generic-button :button-classes="['grey']" @click="onBackButtonClicked()">
       {{ $t('my_record.myRecordWarning.backButtonText') }}
     </generic-button>
   </div>

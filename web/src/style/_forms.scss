@@ -33,6 +33,15 @@
 		&.error {
 			border: 0.063em $error solid;
 		}
+
+		&.tabFocus {
+			border: 0.063em $focus_highlight solid;
+			outline-color: $focus_highlight !important;
+			outline-width: 2px !important;
+			outline-style: solid !important;
+			-webkit-filter: brightness(120%);
+			filter: brightness(120%);
+		}
 	}
 	input[type=text] {
 		height: 3.125em;
@@ -46,6 +55,13 @@
 .checkbox-panel {
 	display: flex;
 	margin-top: 1em;
+	&.tabFocus {
+		outline-color: $focus_highlight !important;
+		outline-width: 2px !important;
+		outline-style: solid !important;
+		-webkit-filter: brightness(120%);
+		filter: brightness(120%);
+	}
 	.checkbox {
 		margin-right: 1em;
 		flex: 0 0 1.5em;

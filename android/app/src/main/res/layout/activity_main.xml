@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -7,7 +8,8 @@
     android:layout_height="match_parent"
     tools:context="com.nhs.online.nhsonline.activities.MainActivity">
 
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+  <android.support.v7.widget.Toolbar
+      xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,7 +46,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="0dp"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:nextFocusUp="@id/nhsOnlineLogoIcon"
+            android:nextFocusDown="@id/symptoms"/>
 
         <ScrollView
             android:id="@+id/errorViewLayout"
@@ -85,5 +89,6 @@
 
         <include layout="@layout/navigation_menu_layout" />
     </com.nhs.online.nhsonline.navigation.MenuBar>
+
 
 </android.support.constraint.ConstraintLayout>

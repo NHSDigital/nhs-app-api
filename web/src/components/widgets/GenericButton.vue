@@ -1,16 +1,28 @@
 <template>
-  <button :class="buttonStylingClasses" @click="$emit('on-click')">
+  <button v-tabbing="buttonStylingClasses" :id="id"
+          :class="getStyleClasses"
+          @click="clicked($event)">
     <slot/>
   </button>
 </template>
 
 <script>
 
+import TabFocusMixin from './TabFocusMixin';
+
 export default {
+  components: {
+    TabFocusMixin,
+  },
+  mixins: [TabFocusMixin.tabMixin],
   props: {
     buttonClasses: {
       type: Array,
       default: () => [],
+    },
+    id: {
+      type: String,
+      default: '',
     },
   },
   computed: {
@@ -22,10 +34,15 @@ export default {
       return classes;
     },
   },
+  methods: {
+    clicked(event) {
+      this.$emit('click', event);
+    },
+  },
 };
 
 </script>
-<style module lang="scss" scoped>
-  @import '../../style/buttons';
 
+<style module lang="scss" scoped>
+@import '../../style/buttons';
 </style>

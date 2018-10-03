@@ -1,6 +1,9 @@
 <template>
-  <span :class="dropdownClass">
-    <select v-model="selectedValue" :id="selectId" :name="selectName"
+  <span :class="getStyleClasses">
+    <select v-tabbing="dropdownClass"
+            v-model="selectedValue"
+            :id="selectId"
+            :name="selectName"
             :aria-labelledby="aLabelledBy"
             :class="[
               $style['custom-dropdown__select'],
@@ -8,13 +11,21 @@
               $style['custom-dropdown__select--white']
             ]"
             required=""
-            tabindex="-1">
+            tabindex="0">
       <slot/>
     </select>
   </span>
 </template>
 
-<script>export default {
+<script>
+
+import TabFocusMixin from './TabFocusMixin';
+
+export default {
+  components: {
+    TabFocusMixin,
+  },
+  mixins: [TabFocusMixin.tabMixin],
   props: {
     value: {
       type: String,
@@ -47,7 +58,7 @@
       },
     },
     dropdownClass() {
-      const dropdownClass = [this.$style.form, this.$style['custom-dropdown']];
+      const dropdownClass = [this.$style.form, this.$style['custom-dropdown'], this.$style.tabFocus];
       if (this.errorBorder) {
         dropdownClass.push(this.$style['validation-select-border']);
       }

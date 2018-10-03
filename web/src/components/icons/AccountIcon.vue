@@ -1,6 +1,5 @@
 <template>
-  <svg id="accountIcon" :class="$style.account" xmlns="http://www.w3.org/2000/svg"
-       viewBox="0 0 94.77 113" >
+  <tab-focused-icon id="accountIcon" :icon-classes="[$style.account]" view-box="0 0 94.77 113">
     <title>{{ $t('icons.accountIcon.title') }}</title>
     <desc>{{ $t('icons.accountIcon.desc') }}</desc>
     <!--eslint-disable-next-line -->
@@ -8,8 +7,20 @@
     <!--eslint-disable-next-line -->
     <path :class="$style.a" d="M94.76,90.05V90c0-.18,0-.37,0-.58-.14-4.57-.44-15.28-10.45-18.7l-.23-.07A66.24,66.24,0,0,1,64.91,61.9,3.12,3.12,0,0,0,61.33,67,71.89,71.89,0,0,0,82.4,76.64c5.37,1.92,6,7.68,6.13,13a3.44,3.44,0,0,0,0,.57,42.28,42.28,0,0,1-.49,7.15c-3.74,2.12-18.39,9.47-40.67,9.47s-36.94-7.37-40.7-9.5a40.25,40.25,0,0,1-.49-7.14c0-.18,0-.37,0-.58.16-5.27.76-11,6.13-12.94A72.36,72.36,0,0,0,33.44,67a3.12,3.12,0,1,0-3.58-5.1,66.2,66.2,0,0,1-19.15,8.73l-.23.07C.47,74.12.17,84.83,0,89.38A5.43,5.43,0,0,1,0,90V90c0,1.2,0,7.37,1.17,10.47A2.94,2.94,0,0,0,2.38,102c.69.46,17.28,11,45,11s44.34-10.61,45-11a3.11,3.11,0,0,0,1.2-1.45C94.81,97.42,94.79,91.25,94.76,90.05Z"></path>
 
-  </svg>
+  </tab-focused-icon>
 </template>
+
+<script>
+
+import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
+
+export default {
+  components: {
+    TabFocusedIcon,
+  },
+};
+
+</script>
 
 <style module lang="scss" scoped>
 @import "../../style/colours";

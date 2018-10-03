@@ -34,47 +34,43 @@
                      :class="$style.validationText">
         {{ $t('termsAndConditions.checkBoxError') }}
       </error-message>
-      <div :class="$style['checkbox-panel']">
-        <div id="agree_checkbox" class="clickme" @click="check">
-          <checked-icon :selected="areTermsAccepted"/>
-        </div>
-        <input
-          id="hiddenCheckbox"
-          :value="areTermsAccepted"
-          :class="$style.hideDefaultCheckbox"
-          :checked="check"
-          v-model="areTermsAccepted"
-          type="checkbox"
-          name="termsAndConditions">
+      <generic-checkbox :selected="areTermsAccepted"
+                        :check-box-classes="[$style.hideDefaultCheckbox]"
+                        v-model="areTermsAccepted"
+                        checkbox-id="agree_checkbox"
+                        name="termsAndConditions"
+                        @click="check">
         <label for="hiddenCheckbox" @click="check">
           {{ $t('termsAndConditions.checkBoxText') }}
           <a :href="cookiesPolicyURL" style="display: inline-block;"
              target="_blank" @click="stopProp($event)" >
             {{ $t('termsAndConditions.link3') }}</a>
         </label>
-      </div>
+      </generic-checkbox>
     </div>
-    <button id="btn_accept" :class="[$style.button, $style.green]"
-            @click="onConfirmButtonClicked">
+    <generic-button id="btn_accept" :class="[$style.button, $style.green]"
+                    @click="onConfirmButtonClicked">
       {{ $t('termsAndConditions.btnAccept') }}
-    </button>
+    </generic-button>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import moment from 'moment';
-import CheckedIcon from '../components/icons/CheckedIcon';
-import GenericButton from '../components/widgets/GenericButton';
-import ErrorMessage from './widgets/ErrorMessage';
-import MessageDialog from '../components/widgets/MessageDialog';
+import CheckedIcon from '@/components/icons/CheckedIcon';
+import ErrorMessage from '@/components/widgets/ErrorMessage';
+import MessageDialog from '@/components/widgets/MessageDialog';
+import GenericButton from '@/components/widgets/GenericButton';
+import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 
 export default {
   components: {
+    GenericButton,
     ErrorMessage,
     CheckedIcon,
-    GenericButton,
     MessageDialog,
+    GenericCheckbox,
   },
   data(app) {
     return {
@@ -124,6 +120,7 @@ export default {
     display: block;
     font-weight: normal;
     line-height: 1.5em;
+    outline-color: $focus_highlight;
   }
   a {
     color: #005EB8;
@@ -132,6 +129,7 @@ export default {
     font-weight: bold;
     text-decoration: none;
     vertical-align: middle;
+      outline-color: $focus_highlight;
   }
   strong {
     display: inline-block;

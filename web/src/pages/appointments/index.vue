@@ -10,10 +10,9 @@
 
     <upcoming-appointments v-if="showUpcomingAppointments" :appointments = "upcomingAppointments" />
 
-    <floating-button-bottom
-      v-if="showBookAppointmentButton"
-      id="book-appointments-button"
-      @on-click="onBookButtonClicked">
+    <floating-button-bottom v-if="showBookAppointmentButton"
+                            id="book-appointments-button"
+                            @click="onBookButtonClicked">
       {{ $t('appointments.index.bookButtonText') }}
     </floating-button-bottom>
   </div>

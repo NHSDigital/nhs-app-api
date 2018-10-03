@@ -14,6 +14,7 @@
 
     <color name="background">#F0F4F5</color>
     <color name="error">#DA291C</color>
+    <color name="focusHighlight">#ffb81c</color>
     <color name="nhsBlue">#005EB8</color>
     <color name="darkBlue">#003087</color>
     <color name="lightGreen">#007F3B</color>

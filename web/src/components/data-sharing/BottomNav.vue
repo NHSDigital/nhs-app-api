@@ -1,19 +1,24 @@
 <template>
   <div>
-    <button v-if="showNext" id="next-button" :class="[$style.button]" @click="nextClicked">
+    <generic-button v-if="showNext" id="next-button" :class="[$style.button]" @click="nextClicked">
       {{ $t('ds01.nextButton') }}
-    </button>
-    <button v-if="showPrevious" id="previous-button" :class="[$style.button, $style.grey]"
-            @click="previousClicked">
+    </generic-button>
+    <generic-button v-if="showPrevious" id="previous-button" :class="[$style.button, $style.grey]"
+                    @click="previousClicked">
       {{ $t('ds01.previousButton') }}
-    </button>
+    </generic-button>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
 
+import GenericButton from '@/components/widgets/GenericButton';
+
 export default {
+  components: {
+    GenericButton,
+  },
   props: {
     currentPage: {
       type: String,

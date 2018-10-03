@@ -44,7 +44,7 @@
       </li>
     </ul>
     <analytics-tracked-tag :text="$t('signOutButton.signOut')" data-purpose="button">
-      <floating-button-bottom id="signout-button" :button-classes="['grey']" @on-click="signout()">
+      <floating-button-bottom id="signout-button" :button-classes="['grey']" @click="signout()">
         {{ $t('signOutButton.signOut') }}
       </floating-button-bottom>
     </analytics-tracked-tag>

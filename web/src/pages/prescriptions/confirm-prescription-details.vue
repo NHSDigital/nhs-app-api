@@ -26,22 +26,28 @@
         </p>
       </div>
     </div>
-    <button id="btn_confirm_and_order_prescription" :class="[$style.button, $style.green]"
-            @click="onConfirmButtonClicked">
+    <generic-button id="btn_confirm_and_order_prescription" :class="[$style.button, $style.green]"
+                    @click="onConfirmButtonClicked">
       {{ $t('rp04.confirmButton') }}
-    </button>
-    <nuxt-link :class="[$style.button, $style.grey]" to="/prescriptions/repeat-courses"
-               tag="button" type="submit">
+    </generic-button>
+
+    <generic-button id="back-to-prescriptions"
+                    :class="[$style.button, $style.grey]"
+                    @click="$router.push('/prescriptions/repeat-courses')">
       {{ $t('rp04.backButton') }}
-    </nuxt-link>
+    </generic-button>
   </div>
 </template>
 
 <script>
 /* eslint-disable import/extensions */
 import { PRESCRIPTIONS } from '@/lib/routes';
+import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
+  components: {
+    GenericButton,
+  },
   data() {
     return {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
@@ -50,7 +56,7 @@ export default {
   },
   created() {
     if (this.selectedPrescriptions === null || this.selectedPrescriptions.length === 0) {
-      this.$router.push('/prescriptions');
+      this.$router.push(PRESCRIPTIONS.path);
     }
   },
   methods: {

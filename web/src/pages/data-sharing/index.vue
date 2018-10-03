@@ -18,10 +18,11 @@
     </div>
     <form id="ndop-token-form" :action="dataPreferencesUrl" :target="formTarget" method="POST"
           name="ndopTokenForm">
-      <button v-if="pageId === 'p5'" id="start-now-button" :class="[$style.button, $style.green]"
-              @click="startNowClicked($event)">
+      <generic-button v-if="pageId === 'p5'" id="start-now-button"
+                      :class="[$style.button, $style.green]"
+                      @click="startNowClicked($event)">
         {{ $t('ds01.startNowButton') }}
-      </button>
+      </generic-button>
     </form>
     <BottomNav :class="$style['bottom-nav']" :current-page="pageId"
                @next-page="changePage(++pageIndex)" @previous-page="changePage(--pageIndex)"/>
@@ -36,11 +37,13 @@ import Benefits from '@/components/data-sharing/Benefits';
 import DataUse from '@/components/data-sharing/DataUse';
 import OptOutNotApply from '@/components/data-sharing/OptOutNotApply';
 import ManageChoice from '@/components/data-sharing/ManageChoice';
+import GenericButton from '@/components/widgets/GenericButton';
 
 import _ from 'lodash';
 
 export default {
   components: {
+    GenericButton,
     BottomNav,
     Overview,
     Benefits,

@@ -22,6 +22,14 @@ a.button {
 	white-space: normal;
 	cursor: pointer;
 
+	&.tabFocus {
+		outline-color: $focus_highlight !important;
+		outline-width: 2px !important;
+		outline-style: solid !important;
+		-webkit-filter: brightness(120%);
+		filter: brightness(120%);
+	}
+
 	&.green {
 		background-color: $light_green;
 		box-shadow: 0em 0.125em 0em 0em $dark_green;

@@ -1,14 +1,20 @@
 <template>
   <div :class="$style.symptomBanner">
     <h2>{{ $t('symptomBanner.howAreYouFeeling') }}</h2>
-    <button id="btn_home_symptoms" :class="[$style.button, $style.white]"
-            @click="checkSymptomsButtonClicked()">
+    <generic-button id="btn_home_symptoms" :class="[$style.button, $style.white]"
+                    @click="checkSymptomsButtonClicked()">
       {{ $t('symptomBanner.checker') }}
-    </button>
+    </generic-button>
   </div>
 </template>
 <script>
+
+import GenericButton from '@/components/widgets/GenericButton';
+
 export default {
+  components: {
+    GenericButton,
+  },
   methods: {
     checkSymptomsButtonClicked() {
       this.$store.dispatch('device/goToCheckSymptoms');

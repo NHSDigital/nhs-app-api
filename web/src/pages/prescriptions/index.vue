@@ -32,7 +32,7 @@
     <floating-button-bottom
       v-if="hasLoaded"
       id="order-prescription-button"
-      @on-click="onRepeatPrescriptionButtonClicked">
+      @click="onRepeatPrescriptionButtonClicked">
       {{ $t('rp01.orderPrescriptionButton') }}
     </floating-button-bottom>
   </div>

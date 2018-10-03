@@ -1,17 +1,11 @@
 <template>
   <div data-purpose="repeat-prescription">
-    <div :class="$style['checkbox-panel']">
-      <div class="clickme" @click="check">
-        <checked-icon :selected="selected" :id="prescriptionDetails.id" />
-      </div>
-      <input
-        :value="prescriptionDetails.id"
-        :class="$style['sr-only']"
-        :id="'prescription-' + prescriptionDetails.id"
-        v-model="selected"
-        type="checkbox"
-        name="prescription"
-        @change="check">
+    <generic-checkbox :checkbox-id="prescriptionDetails.id"
+                      :selected="selected"
+                      v-model="selected"
+                      name="prescription"
+                      @click="check">
+
       <label :for="'prescription-' + prescriptionDetails.id">
         <span data-label="prescription-name">
           {{ prescriptionDetails.name }}
@@ -20,17 +14,18 @@
           {{ prescriptionDetails.details }}
         </p>
       </label>
-    </div>
+
+    </generic-checkbox>
   </div>
 </template>
 <script>
 import { mapGetters } from 'vuex';
-import CheckedIcon from '../components/icons/CheckedIcon';
+import GenericCheckbox from '@/components/widgets/GenericCheckbox';
 
 export default{
   name: 'RepeatPrescription',
   components: {
-    CheckedIcon,
+    GenericCheckbox,
   },
   props: {
     prescriptionDetails: {

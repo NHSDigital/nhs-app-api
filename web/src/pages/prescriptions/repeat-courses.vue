@@ -18,46 +18,41 @@
     </div>
 
     <div v-if="showRepeatCourses">
-      <form @submit.prevent="validate">
-        <div :class="$style.panel">
-          <div :class="{
-            [$style['validation-inline']]: error,
-            [$style['validation-border-left']]: error}">
-            <error-message v-if="error" id="error-type">
-              {{ $t('rp03.noMedicinesSelected') }}
-            </error-message>
-            <repeat-prescription
-              v-for="repeatPrescription in repeatPrescriptionCourses"
-              :key="repeatPrescription.id"
-              :selected="repeatPrescription.selected"
-              :prescription-details="repeatPrescription" />
-          </div>
+      <div :class="$style.panel">
+        <div :class="{
+          [$style['validation-inline']]: error,
+          [$style['validation-border-left']]: error}">
+          <error-message v-if="error" id="error-type">
+            {{ $t('rp03.noMedicinesSelected') }}
+          </error-message>
+          <repeat-prescription
+            v-for="repeatPrescription in repeatPrescriptionCourses"
+            :key="repeatPrescription.id"
+            :selected="repeatPrescription.selected"
+            :prescription-details="repeatPrescription" />
         </div>
-        <div :class="$style.form" role="form">
-          <label for="specialRequest">
-            {{ $t('rp03.specialRequestsLabel') }}
-          </label>
-          <textarea
-            id="specialRequest"
-            ref="specialRequest"
-            v-model="specialRequest"
-            maxlength="1000"
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"/>
-          <p id="maxSpecialRequest" class="char">{{ $t('rp03.maxSpecialRequest') }}</p>
-          <p id="disclaimer">{{ $t('rp03.disclaimer') }}</p>
-        </div>
-        <div :class="$style['info']">
-          <p>
-            {{ $t('rp03.changePharmacyText') }}
-          </p>
-        </div>
-        <button id="btn_order_prescription" :class="[$style.button, $style.green]">
-          {{ $t('rp03.continueButton') }}
-        </button>
-      </form>
+      </div>
+      <div :class="$style.form" role="form">
+        <label for="specialRequest">
+          {{ $t('rp03.specialRequestsLabel') }}
+        </label>
+        <generic-text-area id="specialRequest"
+                           v-model="specialRequest"
+                           :initial-contents="specialRequest"
+                           text-area-ref="specialRequest"
+                           maxlength="1000"/>
+        <p id="maxSpecialRequest" class="char">{{ $t('rp03.maxSpecialRequest') }}</p>
+        <p id="disclaimer">{{ $t('rp03.disclaimer') }}</p>
+      </div>
+      <div :class="$style['info']">
+        <p>
+          {{ $t('rp03.changePharmacyText') }}
+        </p>
+      </div>
+      <generic-button id="btn_order_prescription" :class="[$style.button, $style.green]"
+                      @click.prevent="validate">
+        {{ $t('rp03.continueButton') }}
+      </generic-button>
     </div>
 
     <div v-if="showNoRepeatCourses" :class="$style.info">
@@ -66,15 +61,12 @@
         {{ $t('rp06.empty.body') }}
       </p>
     </div>
-
-    <nuxt-link
-      v-if="hasLoaded"
-      :class="[$style.button, $style.grey]"
-      to="/prescriptions"
-      tag="button"
-      type="submit">
+    <generic-button v-if="hasLoaded"
+                    id="back-to-prescriptions"
+                    :class="[$style.button, $style.grey]"
+                    @click="$router.push('/prescriptions')">
       {{ $t('rp03.backButton') }}
-    </nuxt-link>
+    </generic-button>
   </div>
 </template>
 
@@ -87,9 +79,12 @@ import Spinner from '@/components/widgets/Spinner';
 import RepeatPrescription from '@/components/RepeatPrescription';
 import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GlossaryHeader from '@/components/GlossaryHeader';
+import GenericButton from '@/components/widgets/GenericButton';
+import GenericTextArea from '@/components/widgets/GenericTextArea';
 
 export default {
   components: {
+    GenericButton,
     Spinner,
     RepeatPrescription,
     MessageDialog,
@@ -97,6 +92,7 @@ export default {
     MessageList,
     ErrorMessage,
     GlossaryHeader,
+    GenericTextArea,
   },
   data() {
     return {

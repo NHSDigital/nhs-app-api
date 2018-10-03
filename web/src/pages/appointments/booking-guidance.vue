@@ -15,13 +15,13 @@
       <p>{{ $t('appointments.guidance.li3.text') }}</p>
     </div>
 
-    <button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
+    <generic-button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
       {{ $t('appointments.guidance.symptomButttonText') }}
-    </button>
-    <button id="btn_appointment" :class="[$style.button, $style.green]"
-            @click="onBookButtonClicked">
+    </generic-button>
+    <generic-button id="btn_appointment" :class="[$style.button, $style.green]"
+                    @click="onBookButtonClicked">
       {{ $t('appointments.guidance.bookButtonText') }}
-    </button>
+    </generic-button>
   </div>
 
 </template>
@@ -29,8 +29,12 @@
 <script>
 /* eslint-disable import/extensions */
 import { APPOINTMENT_BOOKING, SYMPTOMS } from '@/lib/routes';
+import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
+  components: {
+    GenericButton,
+  },
   methods: {
     onCheckSymptomClicked() {
       this.$router.push(SYMPTOMS.path);

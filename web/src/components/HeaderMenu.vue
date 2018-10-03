@@ -1,12 +1,14 @@
 <template>
   <header :class="$style.header">
-    <nuxt-link :class="$style['anchor-icon']" :to="indexPath">
+    <nuxt-link :class="$style['anchor-icon']" :to="indexPath" tabindex="-1">
       <home-icon/>
     </nuxt-link>
-    <a id="help_icon" :class="$style['anchor-icon']" :href="helpAndSupportURL" target="_blank">
+    <a id="help_icon" :class="$style['anchor-icon']" :href="helpAndSupportURL" target="_blank"
+       tabindex="-1">
       <help-icon/>
     </a>
-    <nuxt-link v-if="showAccountIcon" :class="$style['anchor-icon']" :to="accountPath">
+    <nuxt-link v-if="showAccountIcon" :class="$style['anchor-icon']" :to="accountPath"
+               tabindex="-1">
       <account-icon/>
     </nuxt-link>
     <hr :class="$style.rule">

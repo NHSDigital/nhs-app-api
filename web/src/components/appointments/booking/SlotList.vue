@@ -5,7 +5,7 @@
       <ul v-if="hasAppointments(daySlots)"
           :class="[$style['selector-list'], $style.appointmentTimeSelector]">
         <time-slot v-for="slot in daySlots[1]" :key="slot.ref" :ref="slot.ref"
-                   :time-slot="slot" @click.native="select(slot.ref)" />
+                   :time-slot="slot" @click.native="select(slot.ref)" @select="select($event)" />
       </ul>
       <p v-else :class="$style.noAppointments">{{ $t('appointments.booking.noSlots') }}</p>
     </span>

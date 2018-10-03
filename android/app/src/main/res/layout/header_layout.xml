@@ -11,20 +11,51 @@
     <RelativeLayout
         android:id="@+id/top_header"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="2dp"
         android:layout_weight="0.5"
         android:paddingBottom="@dimen/_8sdp"
         android:paddingTop="@dimen/_8sdp">
 
-        <ImageView
-            android:id="@+id/nhsOnlineLogoIcon"
+      <ImageView
+          android:id="@+id/nhsOnlineLogoIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:contentDescription="@string/nhsAppHome"
             android:paddingTop="@dimen/_8sdp"
-            android:src="@drawable/icon_drawable_nhs_logo" />
+            android:src="@drawable/icon_drawable_nhs_logo"
+			android:focusable="true"
+            android:nextFocusForward="@id/helpIcon"
+            android:nextFocusLeft="@id/more"
+            android:nextFocusUp="@id/more"
+            android:nextFocusDown="@id/webview"
+            android:focusedByDefault="true"
+            android:background="@drawable/icon_drawable_boarder_focusable"
+            android:padding="@dimen/_2sdp"
+        />
+
+        <ImageView
+            android:id="@+id/helpIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/myAccountIcon"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_3ssp"
+            android:layout_toStartOf="@id/myAccountIcon"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/header_icon_help"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:src="@drawable/icon_drawable_help"
+            android:nextFocusUp="@id/more"
+            android:nextFocusForward="@id/myAccountIcon"
+            android:nextFocusDown="@id/webview"
+            android:background="@drawable/icon_drawable_boarder_focusable"
+            android:padding="@dimen/_2sdp"
+			android:paddingEnd="@dimen/_5sdp"
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingTop="@dimen/_8sdp"/>
 
         <ImageView
             android:id="@+id/myAccountIcon"
@@ -35,26 +66,19 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/header_icon_account"
             android:focusable="true"
-            android:paddingEnd="0dp"
-            android:paddingStart="@dimen/_10sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:src="@drawable/icon_drawable_account" />
-
-        <ImageView
-            android:id="@+id/helpIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/myAccountIcon"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/_3sdp"
-            android:layout_toStartOf="@id/myAccountIcon"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/header_icon_help"
-            android:focusable="true"
+            android:focusableInTouchMode="false"
             android:paddingEnd="@dimen/_5sdp"
             android:paddingStart="@dimen/_5sdp"
-            android:paddingTop="@dimen/_8sdp"
-            android:src="@drawable/icon_drawable_help" />
+            android:paddingTop="@dimen/_3sdp"
+            android:paddingBottom="@dimen/_3sdp"
+            android:src="@drawable/icon_drawable_account"
+            android:background="@drawable/icon_drawable_boarder_focusable"
+            android:nextFocusUp="@id/more"
+            android:nextFocusForward="@id/webview"
+            android:nextFocusRight="@id/webview"
+            android:nextFocusDown="@id/webview"
+			android:layout_marginEnd="@dimen/_3ssp" />
+
 
     </RelativeLayout>
 
@@ -63,7 +87,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5">
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

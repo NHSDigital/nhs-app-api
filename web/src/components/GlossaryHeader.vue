@@ -29,13 +29,18 @@ export default {
 </script>
 
 <style module scoped lang="scss">
-    .info {
-      margin-bottom: 0.5em;
-      padding: 0.5em 1em 0em 1em;
+@import '../style/colours';
 
-        p, a, analytics-tracked-tag {
-            padding-bottom: 0.5em;
-            padding-top: 0.5em;
-        }
-    }
+.info {
+  margin-bottom: 0.5em;
+  padding: 0.5em 1em 0em 1em;
+  :focus {
+    outline-color: $focus_highlight;
+  }
+
+  p, a, analytics-tracked-tag {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+  }
+}
 </style>

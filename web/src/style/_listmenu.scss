@@ -9,6 +9,9 @@
 		padding-top: 0.250em;
 	}
 	li {
+    :focus {
+      outline-color: $focus_highlight;
+    }
 		p {
 			padding-bottom: 0.5em;
 			padding-top: 0.5em;

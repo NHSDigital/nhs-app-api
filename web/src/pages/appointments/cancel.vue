@@ -35,16 +35,16 @@
       </select-dropdown>
     </div>
 
-    <button id="btn_cancel_appointment"
-            :class="[$style.button, $style.green]"
-            @click="onCancelButtonClicked">
+    <generic-button id="btn_cancel_appointment"
+                    :class="[$style.button, $style.green]"
+                    @click="onCancelButtonClicked">
       {{ $t('appointments.cancel.cancelButtonText') }}
-    </button>
-    <button id="btn_back_appointment"
-            :class="[$style.button, $style.grey]"
-            @click="onBackButtonClicked">
+    </generic-button>
+    <generic-button id="btn_back_appointment"
+                    :class="[$style.button, $style.grey]"
+                    @click="onBackButtonClicked">
       {{ $t('appointments.cancel.backButtonText') }}
-    </button>
+    </generic-button>
   </div>
 </template>
 
@@ -55,10 +55,12 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
 import SelectDropdown from '@/components/widgets/SelectDropdown';
+import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS } from '@/lib/routes';
 
 export default {
   components: {
+    GenericButton,
     Appointment,
     MessageDialog,
     MessageText,

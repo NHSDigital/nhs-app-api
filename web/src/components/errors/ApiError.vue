@@ -16,10 +16,10 @@
           {{ additionalInfo }}
         </message-text >
       </message-dialog>
-      <button v-if="retryButtonText" :class="buttonClasses"
-              data-purpose="retry-or-back-button" @click="onRetryButtonClicked">
+      <generic-button v-if="retryButtonText" :class="buttonClasses"
+                      data-purpose="retry-or-back-button" @click="onRetryButtonClicked">
         {{ retryButtonText }}
-      </button>
+      </generic-button>
     </div>
     <div v-else>
       <header-slim>{{ header }}</header-slim>
@@ -35,6 +35,7 @@
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import HeaderSlim from '@/components/HeaderSlim';
+import GenericButton from '@/components/widgets/GenericButton';
 import Sources from '@/lib/sources';
 
 export default {
@@ -42,6 +43,7 @@ export default {
     MessageDialog,
     MessageText,
     HeaderSlim,
+    GenericButton,
   },
   computed: {
     isVisible() {

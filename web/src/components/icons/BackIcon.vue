@@ -1,7 +1,8 @@
 <template>
-  <svg :class="$style.back" width="11px" height="20px" viewBox="0 0 11 20" version="1.1"
-       xmlns="http://www.w3.org/2000/svg"
-       xmlns:xlink="http://www.w3.org/1999/xlink">
+  <tab-focused-icon id="backIcon" :icon-classes="[$style.back]" view-box="0 0 11 20"
+                    height="20px"
+                    version="1.1"
+                    xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>Back</title>
     <desc/>
     <defs/>
@@ -19,8 +20,20 @@
         10.5 L9.76205788,19.7931034 Z" />
       </g>
     </g>
-  </svg>
+  </tab-focused-icon>
 </template>
+
+<script>
+
+import TabFocusedIcon from '@/components/widgets/TabFocusedIcon';
+
+export default {
+  components: {
+    TabFocusedIcon,
+  },
+};
+
+</script>
 
 <style module lang="scss" scoped>
 @import "../../style/colours";
@@ -28,9 +41,7 @@ svg.back {
   margin: 1em;
   margin-top: 0.875em;
   height: 1.375em;
+  outline-style:none;
 }
 
 </style>
-
-// The script tag and export default are both needed for the unit tests to run
-<script>export default {}; </script>

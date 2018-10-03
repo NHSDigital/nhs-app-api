@@ -26,6 +26,9 @@ nav.menu {
         display: flex;
         flex-grow: 1;
         list-style: none;
+        :focus {
+          outline-color: $focus_highlight;
+        }
         a {
         display: flex;
         flex-grow: 1;

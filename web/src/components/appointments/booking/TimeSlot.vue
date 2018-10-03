@@ -1,7 +1,9 @@
 <template>
   <li
-    :class="[isSelected?$style.selected:undefined, $style.selector]"
-    :aria-label="isSelected?'selected-slot':undefined" >
+    v-tabbing="timeSlotStylingClasses"
+    :class="getStyleClasses"
+    :aria-label="isSelected?'selected-slot':undefined" tabindex="0"
+    @keypress="onKeyDown">
     {{ formatTime(timeSlot.startTime) }}
   </li>
 </template>
@@ -9,8 +11,13 @@
 <script>
 /* eslint-disable import/extensions */
 import DateProvider from '@/services/DateProvider';
+import TabFocusMixin from '@/components/widgets/TabFocusMixin';
 
 export default {
+  components: {
+    TabFocusMixin,
+  },
+  mixins: [TabFocusMixin.tabMixin],
   props: {
     timeSlot: {
       type: Object,
@@ -23,6 +30,11 @@ export default {
       isSelected: false,
     };
   },
+  computed: {
+    timeSlotStylingClasses() {
+      return [this.isSelected ? this.$style.selected : undefined, this.$style.selector];
+    },
+  },
   methods: {
     formatTime: dateTime => DateProvider.create(dateTime).format('h:mma'),
     select() {
@@ -33,13 +45,16 @@ export default {
       this.isSelected = false;
       this.$store.dispatch('availableAppointments/deselect');
     },
+    onKeyDown(e) {
+      if (e.keyCode === 13) {
+        this.$emit('select', this.timeSlot.ref);
+      }
+    },
   },
 };
 </script>
 
 <style module lang="scss" scoped>
 @import "../../../style/selectors";
-.selector {
-  user-select: none;
-}
+
 </style>

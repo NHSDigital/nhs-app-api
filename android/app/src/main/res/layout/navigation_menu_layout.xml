@@ -7,7 +7,14 @@
         android:layout_height="wrap_content"
         app:activeIcon="@drawable/icon_drawable__symptoms_active"
         app:inactiveIcon="@drawable/icon_drawable_symptoms"
-        app:menuTitle="@string/symptoms" />
+        app:menuTitle="@string/symptoms"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:nextFocusLeft="@id/webview"
+        android:nextFocusForward="@id/appointments"
+        android:nextFocusDown="@id/nhsOnlineLogoIcon"
+        android:focusedByDefault="true"
+        android:background="@drawable/icon_drawable_boarder_focusable" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/appointments"
@@ -15,7 +22,12 @@
         android:layout_height="wrap_content"
         app:activeIcon="@drawable/icon_drawable_appointment_active"
         app:inactiveIcon="@drawable/icon_drawable_appointment"
-        app:menuTitle="@string/appointment" />
+        app:menuTitle="@string/appointment"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:nextFocusForward="@id/prescriptions"
+        android:nextFocusDown="@id/nhsOnlineLogoIcon"
+        android:background="@drawable/icon_drawable_boarder_focusable" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/prescriptions"
@@ -23,7 +35,12 @@
         android:layout_height="wrap_content"
         app:activeIcon="@drawable/icon_drawable_prescription_active"
         app:inactiveIcon="@drawable/icon_drawable_prescription"
-        app:menuTitle="@string/prescription" />
+        app:menuTitle="@string/prescription"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:nextFocusForward="@id/myRecord"
+        android:nextFocusDown="@id/nhsOnlineLogoIcon"
+        android:background="@drawable/icon_drawable_boarder_focusable" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/myRecord"
@@ -31,7 +48,12 @@
         android:layout_height="wrap_content"
         app:activeIcon="@drawable/icon_drawable_record_active"
         app:inactiveIcon="@drawable/icon_drawable_record"
-        app:menuTitle="@string/my_record" />
+        app:menuTitle="@string/my_record"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:nextFocusForward="@id/more"
+        android:nextFocusDown="@id/nhsOnlineLogoIcon"
+        android:background="@drawable/icon_drawable_boarder_focusable" />
 
     <com.nhs.online.nhsonline.navigation.MenuBarItem
         android:id="@+id/more"
@@ -39,6 +61,11 @@
         android:layout_height="wrap_content"
         app:activeIcon="@drawable/icon_drawable_more_active"
         app:inactiveIcon="@drawable/icon_drawable_more"
-        app:menuTitle="@string/more" />
+        app:menuTitle="@string/more"
+        android:focusable="true"
+        android:focusableInTouchMode="false"
+        android:nextFocusRight="@id/nhsOnlineLogoIcon"
+        android:nextFocusDown="@id/nhsOnlineLogoIcon"
+        android:background="@drawable/icon_drawable_boarder_focusable" />
 
 </merge>

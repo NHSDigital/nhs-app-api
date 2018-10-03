@@ -24,10 +24,14 @@
       <error-message v-if="showValidationError" id="error-label">
         {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
-      <textarea id="reasonText" ref="reason" v-model="symptoms"
-                :aria-labelledby="reasonBoxAriaLabelledBy"
-                :class="textareaClass" maxlength="150" autocomplete="off"
-                autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <generic-text-area id="reasonText"
+                         ref="reason"
+                         :a-labelled-by="reasonBoxAriaLabelledBy"
+                         :initial-contents="symptoms"
+                         :text-area-classes="textareaClass"
+                         v-model="symptoms"
+                         maxlength="150" />
+
       <p id="max-reason-desc" :class="$style.char">
         {{ $t('appointments.confirmation.reasonDesc.line1') }}
       </p>
@@ -38,14 +42,14 @@
       </p>
     </div>
 
-    <button id="btn_book_appointment" :class="[$style.button, $style.green]"
-            @click="onConfirmButtonClicked">
+    <generic-button id="btn_book_appointment" :class="[$style.button, $style.green]"
+                    @click="onConfirmButtonClicked">
       {{ $t('appointments.confirmation.confirmButtonText') }}
-    </button>
-    <button id="btn_cancel_appointment" :class="[$style.button,$style.grey]"
-            @click="onCancelButtonClicked">
+    </generic-button>
+    <generic-button id="btn_cancel_appointment" :class="[$style.button,$style.grey]"
+                    @click="onCancelButtonClicked">
       {{ $t('appointments.confirmation.changeButtonText') }}
-    </button>
+    </generic-button>
   </div>
 </template>
 
@@ -56,6 +60,8 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import MessageList from '@/components/widgets/MessageList';
+import GenericTextArea from '@/components/widgets/GenericTextArea';
+import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
 
 export default {
@@ -65,6 +71,8 @@ export default {
     MessageList,
     AppointmentSlot,
     ErrorMessage,
+    GenericTextArea,
+    GenericButton,
   },
   data() {
     return {
@@ -78,7 +86,7 @@ export default {
       return this.showValidationError ? 'error-label max-reason-desc' : 'max-reason-desc';
     },
     textareaClass() {
-      return this.showValidationError ? this.$style.error : undefined;
+      return this.showValidationError ? [this.$style.error] : undefined;
     },
   },
   watch: {

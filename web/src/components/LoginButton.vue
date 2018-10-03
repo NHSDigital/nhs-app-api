@@ -1,11 +1,18 @@
 <template>
-  <button :class="[$style.button, $style.green]" data-id="login-button" @click="loginClicked">
+  <generic-button :class="[$style.button, $style.green]" data-id="login-button"
+                  @click="loginClicked" >
     {{ $t('loginButton.login') }}
-  </button>
+  </generic-button>
 </template>
 
 <script>
+
+import GenericButton from '@/components/widgets/GenericButton';
+
 export default {
+  components: {
+    GenericButton,
+  },
   methods: {
     async loginClicked() {
       if (process.client) {

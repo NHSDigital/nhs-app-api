@@ -1,15 +1,22 @@
 <template>
   <div :class="stylingClass">
-    <!--eslint-disable-next-line -->
-    <button :class="buttonStylingClasses" :style="{ 'margin-bottom': 0}" :id="this.id" :disabled="isButtonDisabled" @click="$emit('on-click')">
+    <generic-button :button-classes="buttonStylingClasses" :id="id"
+                    :style="{ 'margin-bottom': 0}"
+                    :disabled="isButtonDisabled"
+                    @click="$emit('click')">
       <slot/>
-    </button>
+    </generic-button>
   </div>
 </template>
 
-
 <script>
+
+import GenericButton from '@/components/widgets/GenericButton';
+
 export default {
+  components: {
+    GenericButton,
+  },
   props: {
     clickable: {
       type: Boolean,
@@ -35,10 +42,7 @@ export default {
     },
 
     buttonStylingClasses() {
-      const classes = [this.$style.button];
-      this.buttonClasses.forEach((element) => {
-        classes.push(this.$style[element]);
-      });
+      const classes = this.buttonClasses;
       if (!this.clickable) {
         classes.push(this.$style.disabled);
       }
