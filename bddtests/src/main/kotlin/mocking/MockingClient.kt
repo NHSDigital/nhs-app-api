@@ -11,22 +11,13 @@ import mocking.models.Mapping
 import mocking.ndop.NdopMappingBuilder
 import mocking.tpp.TppMappingBuilder
 import mocking.vision.VisionMappingBuilder
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.rest.SerenityRest
-import org.apache.http.HttpException
 import org.apache.http.HttpStatus
 import org.apache.http.HttpStatus.SC_OK
 import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.client.methods.HttpDelete
-import org.apache.http.client.methods.HttpGet
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.ContentType
-import org.apache.http.entity.StringEntity
 import org.apache.http.impl.client.HttpClients
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
-@Suppress("TooManyFunctions")
 class MockingClient(private val configuration: MockingConfiguration) {
 
     private val gson = Gson()
@@ -76,15 +67,6 @@ class MockingClient(private val configuration: MockingConfiguration) {
                 .expect().statusCode(HttpStatus.SC_CREATED)
                 .`when`()
                 .post("${configuration.wiremockAdminUrl}/mappings")
-    }
-
-    fun getRequests(): String {
-        val getMethod = HttpGet("${configuration.wiremockAdminUrl}/requests")
-        val response = HttpClients.createDefault().execute(getMethod)
-        val rd = BufferedReader(InputStreamReader(response.entity.content))
-        val result = rd.use { it.readText() }
-        getMethod.releaseConnection()
-        return result
     }
 
     fun clearWiremock() {

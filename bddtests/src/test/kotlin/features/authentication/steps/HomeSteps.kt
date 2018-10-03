@@ -17,16 +17,8 @@ open class HomeSteps {
 
     fun getExpectedDetails(patient:Patient): ArrayList<String> {
         return arrayListOf(
-                "Date of birth: ${formatDOB(patient.dateOfBirth)}",
-                "NHS number: ${formatNHSNumber(patient.nhsNumbers.first())}")
-    }
-
-    private fun formatDOB(dob: String):String{
-        return DateTime.parse(dob).toString("d MMM yyyy")
-    }
-
-    private fun formatNHSNumber(number : String):String{
-        return "${number.substring(0, 3)} ${number.substring(3, 6)} ${number.substring(6, 10)}"
+                "Date of birth: ${patient.formattedDateOfBirthShort()}",
+                "NHS number: ${patient.formattedNHSNumber()}")
     }
 
     @Step

@@ -226,18 +226,14 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
     @Then("^I see the patient information details$")
     fun iSeePatientInformationDetails() {
-        // populated with correct information
-        val name = "${this.patient.title} ${this.patient.firstName} ${this.patient.surname}";
-        val dob = DateConverter.convertDateToDateTimeFormat(this.patient.dateOfBirth, AppointmentDateTimeFormat.mockDataDobFormat, AppointmentDateTimeFormat.frontendDobDateFormat)
         val sex = this.patient.sex.name;
         val address = "${this.patient.address.houseNameFlatNumber}, ${this.patient.address.numberStreet}, ${this.patient.address.village}, ${this.patient.address.town}, ${this.patient.address.county}, ${this.patient.address.postcode}";
-        val nhsNumbers = StringBuilder(this.patient.nhsNumbers.first()).insert(6, " ").insert(3, " ").toString();
 
-        myRecordInfoPage.assertLabelAndValue("Name", name)
-        myRecordInfoPage.assertLabelAndValue("Date of birth", dob)
+        myRecordInfoPage.assertLabelAndValue("Name", patient.formattedFullName())
+        myRecordInfoPage.assertLabelAndValue("Date of birth", patient.formattedDateOfBirth())
         myRecordInfoPage.assertLabelAndValue("Sex", sex)
         myRecordInfoPage.assertLabelAndValue("Address", address)
-        myRecordInfoPage.assertLabelAndValue("NHS number", nhsNumbers)
+        myRecordInfoPage.assertLabelAndValue("NHS number", patient.formattedNHSNumber())
     }
 
     @Given("^I am on my record information page$")

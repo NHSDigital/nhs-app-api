@@ -3,11 +3,12 @@ package features.more.stepDefinitions
 import config.Config
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.dataSharing.steps.DataSharingSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import mocking.MockingClient
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert
+import pages.DataSharingPage
 import pages.MorePage
 import pages.navigation.Header
 import pages.navigation.NavBar
@@ -18,12 +19,13 @@ class MoreStepDefinitions {
     @Steps
     lateinit var browser: BrowserSteps
     @Steps
-    lateinit var dataSharing: DataSharingSteps
+    lateinit var dataSharing: DataSharingPage
     @Steps
     lateinit var nav: NavigationSteps
 
     lateinit var headerBar: Header
     lateinit var morePage: MorePage
+    val mockingClient = MockingClient.instance
 
 
     @When("^I choose to set my organ donation preferences")
@@ -33,6 +35,10 @@ class MoreStepDefinitions {
 
     @When("^I choose to set my data sharing preferences")
     fun setDataSharingPreferences() {
+        mockingClient.forNdop {
+            postTokenToNdop()
+                    .respondWithNdopMockPage()
+        }
         morePage.btnDataSharing.element.click()
     }
 
@@ -74,7 +80,8 @@ class MoreStepDefinitions {
 
     private fun followDataSharingLink() {
         morePage.btnDataSharing.element.click()
-        dataSharing.assertIsDisplayed()
+        dataSharing.waitForPageHeaderText("Sharing health data preferences")
+        nav.assertSelectedTab("MORE")
     }
 
     private fun followOrganDonationLink() {

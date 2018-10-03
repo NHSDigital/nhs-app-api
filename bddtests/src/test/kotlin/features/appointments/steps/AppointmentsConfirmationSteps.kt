@@ -32,7 +32,7 @@ open class AppointmentsConfirmationSteps {
 
     @Step
     fun checkValidationErrorMessage() {
-        val message = appointmentsConfirmation.getInlineValidationError()
+        val message = appointmentsConfirmation.inLineError.element.text
         assertEquals("Enter a reason for this appointment", message)
     }
 

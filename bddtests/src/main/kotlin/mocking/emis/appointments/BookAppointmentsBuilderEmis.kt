@@ -17,7 +17,6 @@ import org.apache.http.HttpStatus
 import worker.models.appointments.BookAppointmentSlotResponse
 import java.time.Duration
 
-@Suppress("TooManyFunctions")
 class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
                                   apiEndUserSessionId: String,
                                   apiSessionId: String,
@@ -45,19 +44,19 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
     override fun respondWithUnavailableException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Unavailable Exception")
-        return respondWithException(exceptionResponse, HttpStatus.SC_SERVICE_UNAVAILABLE)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_SERVICE_UNAVAILABLE)
     }
 
     override fun respondWithConflictException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Conflict Exception")
-        return respondWithException(exceptionResponse, HttpStatus.SC_CONFLICT)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_CONFLICT)
     }
 
     override fun respondWithUnknownException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Unknown Exception")
-        return respondWithException(exceptionResponse)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
@@ -66,24 +65,12 @@ class BookAppointmentsBuilderEmis(configuration: EmisConfiguration,
 
     override fun respondWithExceptionWhenNotAvailable(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.NOT_AVAILABLE.toInt())
-        return respondWithError(errorResponse, HttpStatus.SC_NOT_FOUND)
+        return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     override fun respondWithExceptionWhenInThePast(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.REQUESTED_APPOINTMENT_SLOT_IN_PAST.toInt())
-        return respondWithError(errorResponse, HttpStatus.SC_BAD_REQUEST)
-    }
-
-    private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {
-        return respondWithException(exceptionResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
-    }
-
-    private fun respondWithException(exceptionResponse: ExceptionResponse, httpStatus: Int): Mapping {
-        return respondWithBody(exceptionResponse, httpStatus)
-    }
-
-    private fun respondWithError(exceptionResponse: ErrorResponse, httpStatus: Int): Mapping {
-        return respondWithBody(exceptionResponse, httpStatus)
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {

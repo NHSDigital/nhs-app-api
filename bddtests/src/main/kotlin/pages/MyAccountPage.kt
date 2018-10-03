@@ -3,7 +3,6 @@ package pages
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 
-@Suppress("TooManyFunctions")
 @DefaultUrl("http://web.local.bitraft.io:3000/account")
 class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
@@ -52,45 +51,26 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                 helpfulName = "$text Link")
     }
 
-    private val termsOfUseLink = getLink("Terms of use")
-    private val privacyPolicyLink = getLink("Privacy policy")
-    private val cookiesPolicyLink = getLink("Cookies policy")
-    private val openSourceLicensesLink = getLink("Open source licenses")
-    private val helpAndSupportLink = getLink("Help and support")
+    val termsOfUseLink = getLink("Terms of use")
+    val privacyPolicyLink = getLink("Privacy policy")
+    val cookiesPolicyLink = getLink("Cookies policy")
+    val openSourceLicensesLink = getLink("Open source licenses")
+    val helpAndSupportLink = getLink("Help and support")
 
-    fun arePersonalDetailsVisible(userName: String, dateOfBirth: String, nhsNumber: String): Boolean {
+    fun assertPersonalDetailsVisible(expectedUsername: String,
+                                     expectedDateOfBirth: String,
+                                     expectedNhsNumber: String) {
+        usernameText.assertIsVisible()
+        dateOfBirthText.assertIsVisible()
+        nhsNumberText.assertIsVisible()
 
-        var detailsVisible = true
+        val actualUsername = usernameText.element.text.trim().toLowerCase()
+        val actualDateOfBirth = dateOfBirthText.element.text.trim().toLowerCase()
+        val actualNhsNumber = nhsNumberText.element.text.trim()
 
-        if(!usernameText.element.isVisible || !dateOfBirthText.element.isVisible || !nhsNumberText.element.isVisible) {
-            detailsVisible = false
-        }
-
-        var expectedUsername = userName.trim().toLowerCase()
-        var expectedDateOfBirth = dateOfBirth.trim().toLowerCase()
-        var expectedNhsNumber = nhsNumber.trim().toLowerCase().replace(" ", "")
-
-        var actualUsername = usernameText.element.text.trim().toLowerCase()
-        var actualDateOfBirth = dateOfBirthText.element.text.trim().toLowerCase()
-        var actualNhsNumber = nhsNumberText.element.text.trim().toLowerCase().replace(" ", "")
-
-        if(expectedUsername != actualUsername) {
-            detailsVisible = false
-        }
-
-        if(expectedDateOfBirth != actualDateOfBirth) {
-            detailsVisible = false
-        }
-
-        if(expectedNhsNumber != actualNhsNumber) {
-            detailsVisible = false
-        }
-
-        return detailsVisible
-    }
-
-    fun isSignOutButtonVisible(): Boolean {
-        return signOutButton.element.isVisible
+        Assert.assertEquals("Username", expectedUsername.toLowerCase(), actualUsername)
+        Assert.assertEquals("Date Of Birth", expectedDateOfBirth.toLowerCase(), actualDateOfBirth)
+        Assert.assertEquals("NHS Number", expectedNhsNumber, actualNhsNumber)
     }
 
     fun isAboutUsHeaderVisible(): Boolean {
@@ -107,25 +87,5 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
         Assert.assertEquals("Expected Number of Links", expectedLinks.count(), getLink().elements.count())
         expectedLinks.forEach { link -> link.assertSingleElementPresent().assertIsVisible() }
-    }
-
-    fun clickTermsOfUseLink() {
-        termsOfUseLink.element.click()
-    }
-
-    fun clickPrivacyPolicyLink() {
-        privacyPolicyLink.element.click()
-    }
-
-    fun clickCookiesPolicyLink() {
-        cookiesPolicyLink.element.click()
-    }
-
-    fun clickOpenSourceLicensesLink() {
-        openSourceLicensesLink.element.click()
-    }
-
-    fun clickHelpAndSupportLink() {
-        helpAndSupportLink.element.click()
     }
 }

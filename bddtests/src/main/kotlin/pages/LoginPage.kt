@@ -7,7 +7,6 @@ import org.junit.Assert
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
-@Suppress("TooManyFunctions")
 @DefaultUrl("http://web.local.bitraft.io:3000/login")
 class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
@@ -44,10 +43,6 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
             page = this
     )
 
-    fun checkMySymptoms() {
-        symptomsButton.element.click()
-    }
-
     fun signIn(patient: Patient = MockDefaults.patient) {
         loginOrCreateAccountButton.element.click()
         findByXpath("//input[@name='mock_patient']").sendKeys(patient.hashCode().toString())
@@ -55,16 +50,12 @@ class LoginPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     }
 
     fun createAccount(patient: Patient) {
-        clickCreateAccountButton()
+        loginOrCreateAccountButton.element.click()
         accountCreationPage.completeAccountCreation(patient)
     }
 
     fun isCreateAccountButtonVisible(): Boolean {
         return loginOrCreateAccountButton.element.isVisible
-    }
-
-    fun clickCreateAccountButton() {
-        loginOrCreateAccountButton.element.click()
     }
 
     override fun shouldBeDisplayed() {

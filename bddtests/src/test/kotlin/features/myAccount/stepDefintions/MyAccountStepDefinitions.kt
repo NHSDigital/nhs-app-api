@@ -1,53 +1,56 @@
 package features.myAccount.stepDefintions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
-import features.myAccount.steps.MyAccountSteps
-import features.sharedStepDefinitions.SharedStepDefinitions
-import net.thucydides.core.annotations.Steps
-import org.junit.Assert
+import features.sharedSteps.SerenityHelpers
+import pages.MyAccountPage
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.*
 
 
 class MyAccountStepDefinitions {
 
-    @Steps
-    lateinit var myAccount: MyAccountSteps
-
-    @Then("^I am on the My Account page$")
-    fun iAmOnTheMyAccountPage() {
-        myAccount.assertSignoutButtonVisible()
-        myAccount.assertAboutUsHeaderVisible()
-        myAccount.myAccountPage.assertAllLinksVisible()
-    }
+    lateinit var myAccount: MyAccountPage
 
     @When("^I click the Terms of use link$")
     fun iClickTheTermsAndConditionsLink() {
-        myAccount.goToTermsOfUse()
+        myAccount.termsOfUseLink.element.click()
     }
 
     @When("^I click the Privacy policy link$")
     fun iClickThePrivacyPolicyLink() {
-        myAccount.goToPrivacyPolicy()
+        myAccount.privacyPolicyLink.element.click()
     }
 
     @When("^I click the Cookies policy link$")
     fun iClickTheCookiesPolicyLink() {
-        myAccount.goToCookiesPolicy()
+        myAccount.cookiesPolicyLink.element.click()
     }
 
     @When("^I click the Open source licenses link$")
     fun iClickTheOpenSourceLicensesLink() {
-        myAccount.goToOpenSourceLicenses()
+        myAccount.openSourceLicensesLink.element.click()
     }
 
     @When("^I click the Help and support link$")
     fun iClickTheHelpAndSupportLink() {
-        myAccount.goToHelpAndSupport()
+        myAccount.helpAndSupportLink.element.click()
+    }
+
+    @Then("^I am on the My Account page$")
+    fun iAmOnTheMyAccountPage() {
+        myAccount.signOutButton.assertIsVisible()
+        myAccount.isAboutUsHeaderVisible()
+        myAccount.assertAllLinksVisible()
     }
 
     @Then("^I see my personal details")
     fun iSeeMyPersonalDetails() {
-        myAccount.checkAccountDetailsShowing()
+
+        val patient = SerenityHelpers.getPatient()
+        myAccount.assertPersonalDetailsVisible(patient.formattedFullName(),
+                patient.formattedDateOfBirthShort(),
+                patient.formattedNHSNumber())
     }
 }

@@ -1,11 +1,14 @@
 package models
 
 import config.Config
+import constants.AppointmentDateTimeFormat
 import mocking.citizenId.models.IdTokenBuilder
 import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
+import org.joda.time.DateTime
+import utils.DateConverter
 import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
 data class Patient(
@@ -40,6 +43,27 @@ data class Patient(
         val accessToken: String ="access_token",
         val tppUserSession: TppUserSession? = null
 ) {
+
+    fun formattedDateOfBirth(): String {
+        return DateConverter.convertDateToDateTimeFormat(
+                dateOfBirth,
+                AppointmentDateTimeFormat.mockDataDobFormat,
+                AppointmentDateTimeFormat.frontendDobDateFormat)
+    }
+
+    fun formattedDateOfBirthShort(): String {
+        return DateTime.parse(dateOfBirth).toString("d MMM yyyy")
+    }
+
+    fun formattedFullName(): String {
+        val fullName = "$title $firstName $surname";
+        return fullName.trim()
+    }
+
+    fun formattedNHSNumber(): String {
+        return formatNHSNumber(nhsNumbers.first())
+    }
+
     companion object {
 
         private val defaultAddress = Address(
@@ -67,7 +91,7 @@ data class Patient(
         }
 
         fun getDefault(gpSystem: String): Patient {
-            return when(gpSystem.toUpperCase()) {
+            return when (gpSystem.toUpperCase()) {
                 "EMIS" -> montelFrye
                 "TPP" -> kevinBarry
                 "VISION" -> aderynCanon
@@ -83,7 +107,7 @@ data class Patient(
                 surname = "Smith",
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
-                dateOfBirth =  "1972-04-12",
+                dateOfBirth = "1972-04-12",
                 sessionId = MockDefaults.DEFAULT_SESSION_ID,
                 connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -93,7 +117,7 @@ data class Patient(
                 title = "Mr",
                 firstName = "Jack",
                 surname = "Jackson",
-                dateOfBirth =  "1972-04-12",
+                dateOfBirth = "1972-04-12",
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 sessionId = "gY39SJJMEEg7rNbcsfF8",
                 connectionToken = "efa22020-9221-46a6-a0f0-6c0340b8f44d",
@@ -105,7 +129,7 @@ data class Patient(
                 title = "Mr",
                 firstName = "Alan",
                 surname = "Cook",
-                dateOfBirth =  "1972-04-12",
+                dateOfBirth = "1972-04-12",
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
@@ -129,37 +153,37 @@ data class Patient(
         )
 
         val montelFrye = Patient(
-                title =  "Mr",
-                firstName =  "Montel",
-                surname =  "Frye",
-                dateOfBirth =  "1972-04-12",
+                title = "Mr",
+                firstName = "Montel",
+                surname = "Frye",
+                dateOfBirth = "1972-04-12",
                 address = defaultAddress,
                 contactDetails = defaultContactDetails,
-                odsCode =  MockDefaults.DEFAULT_ODS_CODE,
-                sessionId =  "2jM47sZ0ic4FIAcVogI4WI",
-                connectionToken =  "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc",
-                endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
-                nhsNumbers =  listOf("0968764215"),
-                accountId =  "4140044939",
-                linkageKey =  "vVGO8bgV6fvPb",
-                userPatientLinkToken =  "gpSWtREiH9499bPzix8v5b"
+                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                sessionId = "2jM47sZ0ic4FIAcVogI4WI",
+                connectionToken = "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc",
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                nhsNumbers = listOf("0968764215"),
+                accountId = "4140044939",
+                linkageKey = "vVGO8bgV6fvPb",
+                userPatientLinkToken = "gpSWtREiH9499bPzix8v5b"
         )
 
         val picaJones = Patient(
-                title =  "",
-                firstName =  "Pica",
-                surname =  "Jones",
-                dateOfBirth =  "1972-04-12",
+                title = "",
+                firstName = "Pica",
+                surname = "Jones",
+                dateOfBirth = "1972-04-12",
                 address = defaultAddress,
                 contactDetails = defaultContactDetails,
-                odsCode =  MockDefaults.DEFAULT_ODS_CODE,
-                sessionId =  "4FIAcVogI4WI2jM47sZ0ic",
-                connectionToken =  "7a3a3cf8-4fcc-a797-a4b9-629cdbe104fc",
-                endUserSessionId =  "SY1iAcXGG8ZU7YjG1LYkOk",
-                nhsNumbers =  listOf("6421509687"),
-                accountId =  "4493941400",
-                linkageKey =  "V6fvPbvVGO8bg",
-                userPatientLinkToken =  "8v5bgpSW9bPzixtREiH949"
+                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                sessionId = "4FIAcVogI4WI2jM47sZ0ic",
+                connectionToken = "7a3a3cf8-4fcc-a797-a4b9-629cdbe104fc",
+                endUserSessionId = "SY1iAcXGG8ZU7YjG1LYkOk",
+                nhsNumbers = listOf("6421509687"),
+                accountId = "4493941400",
+                linkageKey = "V6fvPbvVGO8bg",
+                userPatientLinkToken = "8v5bgpSW9bPzixtREiH949"
         )
 
         val johnSmith = Patient(
@@ -180,10 +204,10 @@ data class Patient(
         ////////// TPP PATIENTS /////////////
 
         val kevinBarry = Patient(
-                title =  "Mr",
-                firstName =  "Kevin",
-                surname =  "Barry",
-                dateOfBirth =  "1985-05-29",
+                title = "Mr",
+                firstName = "Kevin",
+                surname = "Barry",
+                dateOfBirth = "1985-05-29",
                 sex = Sex.Male,
                 address = Address(
                         houseNameFlatNumber = "28 Central Path",
@@ -194,34 +218,34 @@ data class Patient(
                         postcode = "LS18 5TN"
                 ),
                 contactDetails = defaultContactDetails,
-                odsCode =  MockDefaults.DEFAULT_ODS_CODE_TPP,
-                nhsNumbers =  listOf("5785445875"),
+                odsCode = MockDefaults.DEFAULT_ODS_CODE_TPP,
+                nhsNumbers = listOf("5785445875"),
                 linkageKey = "?2sY3qyZp5gRB8*b",
-                accountId =  "520993083",
+                accountId = "520993083",
                 patientId = "84df400000000000",
                 onlineUserId = "84df400000000000",
                 passphrase = "c2axhQ9VWB2/62XFxvKrNKh9JwgL" +
-                             "k0NFY15hIdI6aRytptqiBs6r/k+0Ov" +
-                             "GEZfcEdMLJEMp/J4pkOGm2ViaSLca" +
-                             "49ODQzz4y+Cu2xOxLaehq/SjEIwfls" +
-                             "WeSwCvCAxroId1bXejTdNsV17fOAD0" +
-                             "M5nAZF6X9TysOfRR/j5tuR+o=",
-                connectionToken =  "{\"accountId\":\"52099308" +
-                                   "3\",\"passphrase\":\"c2ax" +
-                                   "hQ9VWB2/62XFxvKrNKh9JwgLk0" +
-                                   "NFY15hIdI6aRytptqiBs6r/k+0O" +
-                                   "vGEZfcEdMLJEMp/J4pkOGm2ViaSL" +
-                                   "ca49ODQzz4y+Cu2xOxLaehq/SjEI" +
-                                   "wflsWeSwCvCAxroId1bXejTdNsV17" +
-                                   "fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
-                endUserSessionId =  MockDefaults.DEFAULT_END_USER_SESSION_ID,
+                        "k0NFY15hIdI6aRytptqiBs6r/k+0Ov" +
+                        "GEZfcEdMLJEMp/J4pkOGm2ViaSLca" +
+                        "49ODQzz4y+Cu2xOxLaehq/SjEIwfls" +
+                        "WeSwCvCAxroId1bXejTdNsV17fOAD0" +
+                        "M5nAZF6X9TysOfRR/j5tuR+o=",
+                connectionToken = "{\"accountId\":\"52099308" +
+                        "3\",\"passphrase\":\"c2ax" +
+                        "hQ9VWB2/62XFxvKrNKh9JwgLk0" +
+                        "NFY15hIdI6aRytptqiBs6r/k+0O" +
+                        "vGEZfcEdMLJEMp/J4pkOGm2ViaSL" +
+                        "ca49ODQzz4y+Cu2xOxLaehq/SjEI" +
+                        "wflsWeSwCvCAxroId1bXejTdNsV17" +
+                        "fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
+                endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 tppUserSession = TppUserSession("ZT8wLjK6beFO" +
-                                                "dXoiNIHbD+TbPrl0Y3Km" +
-                                                "VXy4GYM253hQlxwp2qMKW" +
-                                                "7zgbjgTWJzCvTcZxb2BZN" +
-                                                "W5IdGtaWtahGkv" +
+                        "dXoiNIHbD+TbPrl0Y3Km" +
+                        "VXy4GYM253hQlxwp2qMKW" +
+                        "7zgbjgTWJzCvTcZxb2BZN" +
+                        "W5IdGtaWtahGkv" +
                         "qW6jK5QnkU2npQjTxAN9zVHgDp4raIxXc0gY+SB1hm/7XMgD" +
-                                                "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
+                        "4YHnmtlYK3WINs3gcAfC2l5B42vpSWULpCA=",
                         "84df400000000000", "KGPD", "84df400000000000")
         )
 
@@ -244,13 +268,26 @@ data class Patient(
                 odsCode = MockDefaults.DEFAULT_ODS_CODE_VISION,
                 nhsNumbers = listOf("5785445875"),
                 connectionToken = "{\"rosuAccountId\": \"104969\", \"" +
-                                  "apiKey\":\"h4h9869kj3ytz6427y7" +
-                                  "rctkdy3zkpxcncnhvfph76g2h6p9" +
-                                  "gywjq484c9ghan8tt\"}",
+                        "apiKey\":\"h4h9869kj3ytz6427y7" +
+                        "rctkdy3zkpxcncnhvfph76g2h6p9" +
+                        "gywjq484c9ghan8tt\"}",
                 rosuAccountId = "104969",
                 apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
-                         "vfph76g2h6p9gywjq484c9ghan8tt",
+                        "vfph76g2h6p9gywjq484c9ghan8tt",
                 patientId = "1017"
         )
+
+        private fun formatNHSNumber(nhsNumber: String): String {
+            val number = nhsNumber.trim().replace(" ", "")
+            return "${number.substring(firstNHSNumberIndex, firstNHSNumberFormattingBreak)} " +
+                    "${number.substring(firstNHSNumberFormattingBreak, secondNHSNumberFormattingBreak)} " +
+                    number.substring(secondNHSNumberFormattingBreak, finalNHSNumberBreak)
+        }
+
+        private const val firstNHSNumberIndex = 0
+        private const val firstNHSNumberFormattingBreak = 3
+        private const val secondNHSNumberFormattingBreak = 6
+        private const val finalNHSNumberBreak = 10
+
     }
 }

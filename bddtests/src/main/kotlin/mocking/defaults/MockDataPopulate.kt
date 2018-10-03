@@ -42,7 +42,7 @@ const val NFT_ODS_IDX = 3
 const val NFT_IM1_CONNECTION_IDX = 4
 const val NFT_NHS_NUMBER_IDX = 5
 
-@Suppress("TooManyFunctions", "LargeClass", "LongMethod")
+@Suppress( "LargeClass", "LongMethod")
 open class MockDataPopulate(private val mockingClient: MockingClient) {
 
     companion object {

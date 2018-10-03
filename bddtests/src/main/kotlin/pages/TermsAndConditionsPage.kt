@@ -2,7 +2,6 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 
-@Suppress("TooManyFunctions")
 @DefaultUrl("http://web.local.bitraft.io:3000/terms-and-conditions")
 class TermsAndConditionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
@@ -86,25 +85,4 @@ class TermsAndConditionsPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) 
     fun isContinueButtonVisible() : Boolean {
         return continueButton.element.isVisible
     }
-
-    fun clickTermsOfUseLink() {
-        termsOfUseLink.element.click()
-    }
-
-    fun clickPrivacyPolicyLink() {
-        privacyPolicyLink.element.click()
-    }
-
-    fun clickCookiesPolicyLink() {
-        cookiesPolicyLink.element.click()
-    }
-
-    fun clickTcCheckbox() {
-        tcCheckBox.element.click()
-    }
-
-    fun clickContinueButton() {
-        continueButton.element.click()
-    }
-
 }

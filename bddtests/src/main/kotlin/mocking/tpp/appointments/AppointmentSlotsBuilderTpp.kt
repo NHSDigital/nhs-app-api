@@ -22,11 +22,10 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
 
-@Suppress("TooManyFunctions")
-class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: String? = null, endDate: String? = null) :
+class AppointmentSlotsBuilderTpp(val tppUserSession: TppUserSession,
+                                 startDate: String? = null,
+                                 endDate: String? = null) :
         TppMappingBuilder("POST", "/tpp/"), IAppointmentSlotsBuilder {
-
-    val tppUserSession: TppUserSession = tppUserSession
 
     init {
         val typeHeader = "type"
@@ -50,7 +49,7 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: Stri
                 .andBodyMatchingXpath(path.toString())
     }
 
-    fun getNumberOfDays(startDate: String, endDate: String? = null): Long {
+    private fun getNumberOfDays(startDate: String, endDate: String? = null): Long {
 
         if (endDate != null) {
             val format = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
@@ -69,8 +68,10 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: Stri
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {
         val errorMsg = "You don't have access to this online service"
-        val disabledTppError = Error(errorCode = "6",
-                userFriendlyMessage = errorMsg, uuid = UUID.randomUUID().toString())
+        val disabledTppError = Error(
+                errorCode = "6",
+                userFriendlyMessage = errorMsg,
+                uuid = UUID.randomUUID().toString())
         return respondWith(disabledTppError)
     }
 
@@ -93,22 +94,18 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: Stri
     }
 
     private fun listSlotsReplyConverter(model: AppointmentSlotsResponseFacade): ListSlotsReply {
+
+        val sessionsList: MutableCollection<Session> = mutableListOf()
+        model.sessions.forEach { session ->
+            sessionsList.addAll(
+                    session.slots.map { slot -> slotConverter(session, slot) })
+        }
+
         return ListSlotsReply(patientId = tppUserSession.patientId,
                 onlineUserId = tppUserSession.onlineUserId,
                 uuid = TppConfig.uuid,
                 bookableDays = model.bookableDays!!,
-                Session = sessionsConverter(model.sessions))
-    }
-
-    private fun sessionsConverter(sessions: ArrayList<AppointmentSessionFacade>): MutableCollection<Session> {
-
-        val sessionsList: MutableCollection<Session> = mutableListOf()
-        sessions.forEach { session -> sessionsList.addAll(sessionConverter(session)) }
-        return sessionsList
-    }
-
-    private fun sessionConverter(session: AppointmentSessionFacade): List<Session> {
-        return session.slots.map { slot -> slotConverter(session, slot) }
+                Session = sessionsList)
     }
 
     private fun slotConverter(session: AppointmentSessionFacade, slot: AppointmentSlotFacade): Session {
@@ -117,7 +114,7 @@ class AppointmentSlotsBuilderTpp(tppUserSession: TppUserSession, startDate: Stri
                 sessionId = getValueOrTestSetupIncorrectly(slot.slotId, "sessionId"),
                 type = getValueOrTestSetupIncorrectly(session.sessionType, "sessionType"),
                 staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails, "staffDetails"),
-                location = getValueOrTestSetupIncorrectly(session.location!!, "location"),
+                location = getValueOrTestSetupIncorrectly(session.location, "location"),
                 Slot = mutableListOf(Slot(
                         startDate = "${slot.startTime!!}.0Z",
                         endDate = "${slot.endTime!!}.0Z",

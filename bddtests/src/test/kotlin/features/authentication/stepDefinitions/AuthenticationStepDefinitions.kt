@@ -9,7 +9,6 @@ import cucumber.api.java.en.When
 import features.authentication.steps.CIDAccountCreationSteps
 import features.authentication.steps.HomeSteps
 import features.authentication.steps.LoginSteps
-import features.myAccount.steps.MyAccountSteps
 import features.navigation.steps.NavHeaderSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
@@ -33,6 +32,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.http.HttpStatus
 import org.junit.Assert
 import pages.AuthReturnPage
+import pages.MyAccountPage
 import pages.ServiceUnavailablePage
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -59,8 +59,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     lateinit var navHeader: NavHeaderSteps
     @Steps
     lateinit var accountCreation: CIDAccountCreationSteps
-    @Steps
-    lateinit var myAccount: MyAccountSteps
+
+    lateinit var myAccount: MyAccountPage
 
     lateinit var authReturnPage: AuthReturnPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
@@ -373,13 +373,13 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         browser.goToApp()
         login.asDefault()
         navHeader.clickMyAccount()
-        myAccount.signOut()
+        myAccount.signOutButton.element.click()
     }
 
     @When("I log out")
     fun iLogOut(){
         navHeader.clickMyAccount()
-        myAccount.signOut()
+        myAccount.signOutButton.element.click()
     }
 
     @Given("^I am logged in as a (.*) user$")
@@ -509,7 +509,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Throws(Exception::class)
     fun iClickTheSignOutButton() {
         navHeader.clickMyAccount()
-        myAccount.signOut()
+        myAccount.signOutButton.element.click()
         browser.waitUntilSignoutCompletes()
     }
 
@@ -521,7 +521,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see the sign out button$")
     fun iSeeTheSignOutButton() {
-        myAccount.assertSignoutButtonVisible()
+        myAccount.signOutButton.assertSingleElementPresent().assertIsVisible()
     }
 
     @Then("^the user login details are cleared from cookies$")

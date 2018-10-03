@@ -20,10 +20,11 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
     private val appointmentLocationXpath = "[@data-label='location']"
     private val appointmentClinicianXPath = "[@data-label='clinician %d']"
 
-    private val inLineError = HybridPageElement(
+    val inLineError = HybridPageElement(
             browserLocator = "//*[@id='error-label']//*[@data-purpose='error']",
             androidLocator = null,
-            page = this
+            page = this,
+            helpfulName = "Inline Error"
     )
 
     fun getSelectedAppointmentDateText(): String {
@@ -71,10 +72,6 @@ open class AppointmentSharedElementsPage : HybridPageObject(Companion.PageType.W
 
     fun getSelectedAppointmentClinicianTextAtPosition(position: Int): String {
         return findByXpath(String.format(xPathRoot + appointmentClinicianXPath, position)).text
-    }
-
-    fun getInlineValidationError(): String {
-        return inLineError.element.text
     }
 
     private fun convertToSlotObject(parentContainer: WebElementFacade,

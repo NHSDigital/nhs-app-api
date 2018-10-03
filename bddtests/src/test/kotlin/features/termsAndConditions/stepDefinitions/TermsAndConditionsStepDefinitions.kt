@@ -1,44 +1,40 @@
 package features.termsAndConditions.stepDefinitions
 
-import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.termsAndConditions.steps.TermsAndConditionsSteps
-import features.sharedSteps.BrowserSteps
 import net.thucydides.core.annotations.Steps
 
 
 class TermsAndConditionsStepDefinitions {
 
     @Steps
-    lateinit var browser: BrowserSteps
-    @Steps
     lateinit var termsAndConditions: TermsAndConditionsSteps
 
     @When("^I click the continue button")
     fun iClickTheContinueButton() {
-        termsAndConditions.continueWithTermsAndConditions()
+        termsAndConditions.termsAndConditions.continueButton.element.click()
     }
 
     @When("^I check the agree to terms and conditions checkbox")
     fun iCheckTheAgreeTermsCheckbox() {
-        termsAndConditions.agreeToTermsAndConditions()
+        termsAndConditions.termsAndConditions.tcCheckBox.element.click()
     }
 
     @When("^I click on Privacy policy")
     fun iClickOnPrivacyPolicy() {
-        termsAndConditions.viewPrivacyPolicy()
+        termsAndConditions.termsAndConditions.privacyPolicyLink.element.click()
     }
 
     @When("^I click on Cookies policy")
     fun iClickOnCookiesPolicy() {
-        termsAndConditions.viewCookiesPolicy()
+        termsAndConditions.termsAndConditions.cookiesPolicyLink.element.click()
     }
 
     @When("^I click on Terms of use")
     fun iClickOnTermsOfUsePolicy() {
-        termsAndConditions.viewTermsOfUse()
+        termsAndConditions.termsAndConditions.termsOfUseLink.element.click()
     }
 
     @Then("^I see error messages indicating I have not yet accepted the terms and conditions")

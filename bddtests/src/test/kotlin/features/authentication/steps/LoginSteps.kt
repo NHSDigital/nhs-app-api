@@ -12,7 +12,7 @@ open class LoginSteps {
 
     @Step
     fun checkMySymptoms() {
-        loginPage.checkMySymptoms()
+        loginPage.symptomsButton.element.click()
     }
 
     @Step
@@ -34,7 +34,7 @@ open class LoginSteps {
     @Step
     fun clickCreateAccountButton()
     {
-        loginPage.clickCreateAccountButton()
+        loginPage.loginOrCreateAccountButton.element.click()
     }
 
     @Step

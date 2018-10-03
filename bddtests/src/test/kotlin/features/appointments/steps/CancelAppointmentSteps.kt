@@ -57,7 +57,7 @@ open class CancelAppointmentSteps {
 
     @Step
     fun verifyTheInlineReasonValidationError() {
-        assertEquals("Select a reason for cancelling", cancelAppointmentPage.getInlineValidationError())
+        assertEquals("Select a reason for cancelling", cancelAppointmentPage.inLineError.element.text)
     }
 
     @Step

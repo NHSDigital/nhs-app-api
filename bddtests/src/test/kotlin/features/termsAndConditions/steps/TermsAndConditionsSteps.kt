@@ -2,33 +2,11 @@ package features.termsAndConditions.steps
 
 import net.thucydides.core.annotations.Step
 import pages.TermsAndConditionsPage
-import pages.navigation.Header
-import pages.navigation.NavBar
 
 open class TermsAndConditionsSteps {
 
     lateinit var termsAndConditions: TermsAndConditionsPage
 
-    @Step
-    fun viewTermsOfUse() {
-        termsAndConditions.clickTermsOfUseLink()
-    }
-    @Step
-    fun viewPrivacyPolicy() {
-        termsAndConditions.clickPrivacyPolicyLink()
-    }
-    @Step
-    fun viewCookiesPolicy() {
-        termsAndConditions.clickCookiesPolicyLink()
-    }
-    @Step
-    fun agreeToTermsAndConditions() {
-        termsAndConditions.clickTcCheckbox()
-    }
-    @Step
-    fun continueWithTermsAndConditions() {
-        termsAndConditions.clickContinueButton()
-    }
     @Step
     fun mainErrorMessageVisible() : Boolean {
         return termsAndConditions.isMainErrorMessageVisible()

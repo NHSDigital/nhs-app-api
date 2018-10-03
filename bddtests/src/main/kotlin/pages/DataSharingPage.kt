@@ -2,94 +2,54 @@ package pages
 
 import net.thucydides.core.annotations.DefaultUrl
 
-@Suppress("TooManyFunctions")
+
 @DefaultUrl("http://web.local.bitraft.io:3000/data-sharing")
 open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
 
-    private val btnNext = createBrowserElement("//button[contains(text(), 'Next')]")
-    private val btnPrevious = createBrowserElement("//button[contains(text(), 'Previous')]")
-    private val btnStartNow = createBrowserElement("//button[contains(text(),'Start now')]")
-    private val titleOverview = createBrowserElement("//h1[contains(text(),'Overview')]")
-    private val titleBenefits = createBrowserElement("//h1[contains(text(),'Benefits of data sharing')]")
-    private val titleDataUse = createBrowserElement("//h1[contains(text(),'How your data is used')]")
-    private val titleWhereOptOutDoesntApply = createBrowserElement(
-            "//h1[contains(text(),\"Where an opt-out doesn't apply\")]")
-    private val titleManageYourChoice = createBrowserElement("//h1[contains(text(),'Manage your choice')]")
-    private val linkContentsOverview = createBrowserElement("//ul[@id='contents']/li/a[contains(text(), 'Overview')]")
-    private val linkContentsBenefits = createBrowserElement(
-            "//ul[@id='contents']/li/a[contains(text(), 'Benefits of data sharing')]")
-    private val linkContentsDataUse = createBrowserElement(
-            "//ul[@id='contents']/li/a[contains(text(), 'How your data is used')]")
-    private val linkContentsWhereOptOutDoesntApply = createBrowserElement(
-            "//ul[@id='contents']/li/a[contains(text(), \"Where an opt-out doesn't apply\")]")
-    private val linkContentsManageYourChoice = createBrowserElement(
-            "//ul[@id='contents']/li/a[contains(text(), 'Manage your choice')]")
-    private val linkManageYourChoice = createBrowserElement(
+    val btnNext = createBrowserElement("//button[contains(text(), 'Next')]")
+    val btnPrevious = createBrowserElement("//button[contains(text(), 'Previous')]")
+    val btnStartNow = createBrowserElement("//button[contains(text(),'Start now')]")
+
+    private val titleOverview = "Overview"
+    private val titleBenefits = "Benefits of data sharing"
+    private val titleDataUse = "How your data is used"
+    private val titleWhereOptOutDoesntApply = "Where an opt-out doesn't apply"
+    private val titleManageYourChoice = "Manage your choice"
+
+    val linkContentsOverview = contentsLink(titleOverview)
+    val linkContentsBenefits = contentsLink(titleBenefits)
+    val linkContentsDataUse = contentsLink(titleDataUse)
+    val linkContentsWhereOptOutDoesntApply = contentsLink(titleWhereOptOutDoesntApply)
+    val linkContentsManageYourChoice = contentsLink(titleManageYourChoice)
+
+    val linkManageYourChoice = createBrowserElement(
             "//a[@id='manage-choice-link'][contains(text(), 'Manage your choice')]")
-    private val linkDataSharingMoreInfo = createBrowserElement("//a[contains(text(), 'NHS website')]")
-
-    // Actions
-
-    fun clickManageYourChoice() {
-        linkManageYourChoice.element.click()
-    }
-
-    fun clickDataSharingMoreInfoLink() {
-        linkDataSharingMoreInfo.element.click()
-    }
-
-    fun clickNext() {
-        btnNext.element.click()
-    }
-
-    fun clickPrevious() {
-        btnPrevious.element.click()
-    }
-
-    fun clickStartNow() {
-        btnStartNow.element.click()
-    }
-
-    fun clickOverviewContentsLink() {
-        linkContentsOverview.element.click()
-    }
-
-    fun clickBenefitsContentsLink() {
-        linkContentsBenefits.element.click()
-    }
-
-    fun clickDataUseContentsLink(){
-        linkContentsDataUse.element.click()
-    }
-
-    fun clickWhereOptOutDoesntApplyContentsLink(){
-        linkContentsWhereOptOutDoesntApply.element.click()
-    }
-
-    fun clickManageYourChoiceContentsLink() {
-        linkContentsManageYourChoice.element.click()
-    }
+    val linkDataSharingMoreInfo = createBrowserElement(
+            "//a[contains(text(), 'NHS website')]")
 
     // Asserts
-
-    fun onOverviewPage(): Boolean {
-        return titleOverview.element.isCurrentlyVisible
+    private fun titleElement(title: String): HybridPageElement {
+        return createBrowserElement("//h1[contains(text(),\"$title\")]")
     }
 
-    fun onBenefitsPage(): Boolean {
-        return titleBenefits.element.isCurrentlyVisible
+    fun onOverviewPage() {
+        titleElement(titleOverview).assertSingleElementPresent()
     }
 
-    fun onDataUsePage(): Boolean {
-        return titleDataUse.element.isCurrentlyVisible
+    fun onBenefitsPage() {
+        titleElement(titleBenefits).assertSingleElementPresent()
     }
 
-    fun onWhereOptOutDoesntApplyPage(): Boolean {
-        return titleWhereOptOutDoesntApply.element.isCurrentlyVisible
+    fun onDataUsePage() {
+        titleElement(titleDataUse).assertSingleElementPresent()
     }
 
-    fun onManageYourChoicePage(): Boolean {
-        return titleManageYourChoice.element.isCurrentlyVisible
+    fun onWhereOptOutDoesntApplyPage() {
+        titleElement(titleWhereOptOutDoesntApply).assertSingleElementPresent()
+    }
+
+    fun onManageYourChoicePage() {
+        titleElement(titleManageYourChoice).assertSingleElementPresent()
     }
 
     private fun createBrowserElement(locator: String): HybridPageElement {
@@ -100,4 +60,12 @@ open class DataSharingPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         )
     }
 
+    private fun contentsLink(linkText: String): HybridPageElement {
+        return HybridPageElement(
+                browserLocator = "//ul[@id='contents']/li/a[contains(text(), \"$linkText\")]",
+                androidLocator = null,
+                page = this,
+                helpfulName = "$'linkText' Link in Contents Element"
+        )
+    }
 }
