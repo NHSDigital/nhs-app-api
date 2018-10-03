@@ -13,5 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
         public string PatientId { get; set; }
 
         public string ApiKey { get; set; }
+        
+        public bool IsRepeatPrescriptionsEnabled { get; set; }
     }
 }

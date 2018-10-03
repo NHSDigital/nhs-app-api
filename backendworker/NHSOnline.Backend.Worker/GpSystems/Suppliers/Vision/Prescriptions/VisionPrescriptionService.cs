@@ -37,6 +37,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         {
             var visionUserSession = (VisionUserSession)userSession;
 
+            if (!visionUserSession.IsRepeatPrescriptionsEnabled)
+            {
+                _logger.LogError("The Vision repeat prescriptions service is not enabled");
+                return new PrescriptionResult.SupplierNotEnabled();
+            }
+
             try
             {
                 _logger.LogDebug("Beginning fetch prescriptions for user from Vision");
@@ -96,6 +102,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
             var visionUserSession = (VisionUserSession)userSession;
+
+            if (!visionUserSession.IsRepeatPrescriptionsEnabled)
+            {
+                _logger.LogError("The Vision repeat prescriptions service is not enabled");
+                return new PrescriptionResult.SupplierNotEnabled();
+            }
 
             var postRequest = new OrderNewPrescriptionRequest
             {

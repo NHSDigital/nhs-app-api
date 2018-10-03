@@ -222,7 +222,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
         if (currentProvider == ProviderTypes.VISION) {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
-
         }
     }
 

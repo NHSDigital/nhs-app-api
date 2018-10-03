@@ -190,15 +190,19 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
-    Given a patient from EMIS is defined
+  Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
+    Given a patient from <GP System> is defined
+    And I am using <GP System> GP System
+    And prescriptions is disabled at a GP Practice level
     And I have historic prescriptions
     And I am logged in
     And I navigate to prescriptions
-    And I am using EMIS GP System
-    And prescriptions is disabled at a GP Practice level
     When I browse to the page at /prescriptions/repeat-courses
     Then I see a message informing me that I don't currently have access to this service
+      Examples:
+        | GP System |
+        | EMIS      |
+        | VISION    |
 
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined

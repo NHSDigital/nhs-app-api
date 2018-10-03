@@ -40,12 +40,27 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _visionPrescriptionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
             _userSession = _fixture.Freeze<VisionUserSession>();
+            _userSession.IsRepeatPrescriptionsEnabled = true;
             _options = Options.Create(new ConfigurationSettings
             {
                 PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
             });
             _fixture.Inject(_options);
             _systemUnderTest = _fixture.Create<VisionPrescriptionService>();
+        }
+
+        [TestMethod]
+        public async Task Get_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        {
+            // Arrange
+            _userSession.IsRepeatPrescriptionsEnabled = false;
+
+            // Act
+            var result = await _systemUnderTest.GetPrescriptions(_userSession, null, null);
+
+            // Assert
+            _visionClient.VerifyNoOtherCalls();
+            result.Should().BeOfType<PrescriptionResult.SupplierNotEnabled>();
         }
 
         [TestMethod]
@@ -469,6 +484,26 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             _visionClient.Verify(x => x.OrderNewPrescription(_userSession, capturedRequest));
             result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
             ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        {
+            // Arrange
+            _userSession.IsRepeatPrescriptionsEnabled = false;
+
+            var request = new RepeatPrescriptionRequest
+            {
+                CourseIds = new[] { "2", "5", "7" },
+                SpecialRequest = "quick please",
+            };
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _visionClient.VerifyNoOtherCalls();
+            result.Should().BeOfType<PrescriptionResult.SupplierNotEnabled>();
         }
 
         [TestMethod]

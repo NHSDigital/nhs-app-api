@@ -66,7 +66,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                                 Name = accountName,
                                                 PatientNumbers = new List<PatientNumber> {patientNumber},
                                                 PatientId = patientId 
-                                            }
+                                            },
+                                            Prescriptions = new PrescriptionsConfiguration()
+                                            {
+                                                RepeatEnabled = true,
+                                            },
                                         }
                                     }
                                 }
@@ -81,7 +85,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                     PatientId = patientId, 
                     OdsCode =  DefaultOdsCode,
                     ApiKey = DefaultApiKey,
-                    RosuAccountId = DefaultRosuAccountId              
+                    RosuAccountId = DefaultRosuAccountId,
+                    IsRepeatPrescriptionsEnabled = true,
                 });
             
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);

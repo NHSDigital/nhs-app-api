@@ -4,7 +4,8 @@ data class VisionUserSession(
         var rosuAccountId: String,
         var apiKey: String,
         var odsCode: String,
-        var patientId: String) {
+        var patientId: String,
+        var isRepeatPrescriptionsEnabled: Boolean = true) {
     var provider: String
     var accountId: String
 

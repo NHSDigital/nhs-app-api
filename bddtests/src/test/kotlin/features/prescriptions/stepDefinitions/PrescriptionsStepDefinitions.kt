@@ -314,20 +314,36 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Given("prescriptions is disabled at a GP Practice level")
     fun prescriptionsIsDisabledAtAGPLevel() {
-        mockingClient
-                .forEmis {
-                    prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                }
+        when (currentProvider) {
+            ProviderTypes.EMIS -> {
+                mockingClient
+                        .forEmis {
+                            prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                        }
 
-        mockingClient
-                .forEmis {
-                    coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
-                }
-
-        mockingClient
-                .forTpp {
-                    listRepeatMedication(currentPatient).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
-                }
+                mockingClient
+                        .forEmis {
+                            coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                        }
+            }
+            ProviderTypes.TPP -> {
+                mockingClient
+                        .forTpp {
+                            listRepeatMedication(currentPatient).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                        }
+            }
+            ProviderTypes.VISION -> {
+                mockingClient
+                        .forVision {
+                            getConfigurationRequest(
+                                    MockDefaults.visionUserSessionPrescriptionDisabled)
+                                    .respondWithSuccess(MockDefaults.visionConfigurationResponsePrescriptionsDisabled)
+                        }
+            }
+            else -> {
+                throw Exception("Invalid GP System")
+            }
+        }
     }
 
     @Then("I see a message informing me that I don't currently have access to this service")

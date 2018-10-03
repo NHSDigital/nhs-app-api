@@ -44,6 +44,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             _visionClient = _fixture.Freeze<Mock<IVisionClient>>();
             _userSession = _fixture.Freeze<VisionUserSession>();
+            _userSession.IsRepeatPrescriptionsEnabled = true;
             _visionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
             _options = Options.Create(new ConfigurationSettings
             {
@@ -104,6 +105,20 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             _visionClient.Verify(x => x.GetEligibleRepeats(_userSession));
             result.Should().BeAssignableTo<GetCoursesResult.SuccessfullyRetrieved>();
             ((GetCoursesResult.SuccessfullyRetrieved) result).Response.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task GetCourses_ReturnsSupplierNotEnabled_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        {
+            // Arrange
+            _userSession.IsRepeatPrescriptionsEnabled = false;
+            
+            // Act
+            var result = await _systemUnderTest.GetCourses(_userSession);
+
+            // Assert
+            _visionClient.VerifyNoOtherCalls();
+            result.Should().BeOfType<GetCoursesResult.SupplierNotEnabled>();
         }
 
         [DataTestMethod]

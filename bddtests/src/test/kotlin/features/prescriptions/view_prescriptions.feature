@@ -121,6 +121,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
     
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given a patient from <GP System> is defined

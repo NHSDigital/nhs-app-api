@@ -20,9 +20,9 @@ import mocking.vision.VisionConstants
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber
+import mocking.vision.models.Prescriptions
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
-
 import models.Patient
 
 class MockDefaults(val config: Config, val mockingClient: MockingClient = MockingClient.instance) {
@@ -148,6 +148,14 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 Patient.aderynCanon.patientId
         )
 
+        val visionUserSessionPrescriptionDisabled = VisionUserSession(
+                Patient.aderynCanon.rosuAccountId,
+                Patient.aderynCanon.apiKey,
+                Patient.aderynCanon.odsCode,
+                Patient.aderynCanon.patientId,
+                isRepeatPrescriptionsEnabled = false
+        )
+
         val visionGetConfiguration = ServiceDefinition(
                 VisionConstants.configurationName,
                 VisionConstants.configurationVersion)
@@ -182,6 +190,13 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                         county = patientVision.address.county,
                         postcode = patientVision.address.postcode)
                 )
+
+        val visionConfigurationResponsePrescriptionsDisabled = Configuration(account = Account(patientVision.patientId,
+                patientNumber = listOf(
+                        PatientNumber(number = patientVision.nhsNumbers[0])
+                ),
+                name = getFullPatientName(patientVision)),
+                prescriptions = Prescriptions(false))
 
         fun getFullPatientName(patient: Patient): String{
           return "${patient.title} ${patient.firstName} ${patient.surname}"

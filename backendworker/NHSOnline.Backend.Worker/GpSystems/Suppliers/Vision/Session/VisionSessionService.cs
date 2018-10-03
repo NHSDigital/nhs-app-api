@@ -34,6 +34,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                             ApiKey = visionConnectionToken.ApiKey,
                             NhsNumber = nhsNumber,
                             PatientId = response.Body.Configuration.Account.PatientId,
+                            IsRepeatPrescriptionsEnabled = response.Body.Configuration.Prescriptions.RepeatEnabled,
                         }
                     );
                 }

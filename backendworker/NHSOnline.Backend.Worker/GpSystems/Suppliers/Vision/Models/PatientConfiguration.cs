@@ -6,8 +6,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
     {
         [XmlElement(ElementName = "account", Namespace = "urn:vision")]
         public Account Account { get; set; }
-
-        [XmlAttribute(AttributeName = "mb", Namespace = "http://www.w3.org/2000/xmlns/")]
-        public string Mb { get; set; }
+        
+        [XmlElement(ElementName = "prescriptions", Namespace = "urn:vision")]
+        public PrescriptionsConfiguration Prescriptions { get; set; }
     }
 }

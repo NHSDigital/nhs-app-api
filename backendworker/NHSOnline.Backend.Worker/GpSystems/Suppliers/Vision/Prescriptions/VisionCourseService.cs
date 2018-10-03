@@ -31,6 +31,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         {
             var visionUserSession = (VisionUserSession) userSession;
             
+            if (!visionUserSession.IsRepeatPrescriptionsEnabled)
+            {
+                _logger.LogError("The Vision repeat prescriptions service is not enabled");
+                return new GetCoursesResult.SupplierNotEnabled();
+            }
+
             try
             {
                 _logger.LogDebug("Beginning Fetch Courses for user");
