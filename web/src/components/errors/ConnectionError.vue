@@ -39,6 +39,7 @@ export default {
   },
   updated() {
     this.$store.dispatch('errors/setConnectionProblem', !navigator.onLine);
+    this.$store.dispatch('header/updateHeaderText', this.getMessage('header'));
   },
   methods: {
     onRetryButtonClicked() {
