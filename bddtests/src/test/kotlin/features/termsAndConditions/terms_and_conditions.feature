@@ -1,3 +1,4 @@
+@terms-and-conditions
 Feature: Use Terms and conditions page
 
   Background:

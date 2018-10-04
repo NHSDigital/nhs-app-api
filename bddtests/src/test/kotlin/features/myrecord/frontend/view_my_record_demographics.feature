@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Demographics
 
-  @NHSO-361
   Scenario Outline: A <Service> user with access navigates to the patient record information page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -14,7 +13,6 @@ Feature: View My Medical Record Information - Demographics
       | EMIS    |
       | TPP     |
 
-  @NHSO-361
   Scenario Outline: A <Service> user navigates to patient information page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -30,7 +28,6 @@ Feature: View My Medical Record Information - Demographics
       | EMIS    |
       | TPP     |
 
-  @NHSO-361
   Scenario Outline: A <Service> user collapses the patient details section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

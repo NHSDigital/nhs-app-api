@@ -1,10 +1,10 @@
 @authentication
+@authentication-session
 Feature: Session Expiry
 
   Background:
     Given EMIS is initialised
 
-  @NHSO-1704
   @long-running
   Scenario: On session expiry, a user on a secure screen is automatically signed out
     Given I am logged in
@@ -14,7 +14,6 @@ Feature: Session Expiry
     And the user login details are cleared from cookies
 
   @manual
-  @NHSO-1704
   Scenario: On session expiry, a user on a non secure screen is signed out on navigating back to a secure screen
     Given I am logged in
     And I am on the symptoms page
@@ -35,7 +34,6 @@ Feature: Session Expiry
     And the user login details are cleared from cookies
 
   @manual
-  @NHSO-1704
   Scenario: On session expiry, a user without an active internet connection is automatically signed out
     Given I am logged in
     And I am on the home page

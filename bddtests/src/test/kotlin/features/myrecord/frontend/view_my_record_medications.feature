@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Medications
 
-  @NHSO-678
   Scenario Outline: A <Service> user views acute medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -16,7 +15,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @NHSO-678
   Scenario Outline: A <Service> user views current repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -30,7 +28,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @NHSO-678
   Scenario Outline: A <Service> user views discontinued repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -44,7 +41,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @NHSO-678
   Scenario Outline: A <Service> user has no acute medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -58,7 +54,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @NHSO-678
   Scenario Outline: A <Service> user has no current repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -72,7 +67,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @NHSO-678
   Scenario Outline: A <Service> user has no discontinued repeat medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -86,7 +80,6 @@ Feature: View My Medical Record Information - Medications
       | EMIS    |
       | TPP     |
 
-  @NHSO-678
   Scenario Outline: A <Service> user has no access to view medications
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

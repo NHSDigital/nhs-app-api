@@ -1,8 +1,8 @@
+@authentication
+@authentication-crsfTokenValidation
 Feature: CRSF Token Validation
-
     Tests authentication failure when the CRSF token is not sent correctly.
 
-  @NHSO-406
   @backend
   Scenario: API fails with no csrf token
     Given I have upcoming appointments for EMIS
@@ -10,7 +10,6 @@ Feature: CRSF Token Validation
     Then the "Emis" API call fails with csrf token of ""
 
 
-  @NHSO-406
   @backend
   Scenario: API fails with invalid csrf token
     Given I have upcoming appointments for EMIS

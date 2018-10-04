@@ -1,10 +1,8 @@
 @my-record
+@backend
 Feature: Get Consultations Data
-
   A user can get their consultation information
 
-  @NHSO-1094
-  @backend
   Scenario Outline: Requesting multiple consultations results returns multiple consultations data
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -16,8 +14,6 @@ Feature: Get Consultations Data
       |Service|
       |EMIS|
 
-  @NHSO-1094
-  @backend
   Scenario Outline: Patient has no consultations
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -29,8 +25,6 @@ Feature: Get Consultations Data
       |Service|
       |EMIS|
 
-  @NHSO-1094
-  @backend
   Scenario Outline: Patient does not have access to consultations
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -42,8 +36,6 @@ Feature: Get Consultations Data
       |Service|
       |EMIS   |
 
-  @NHSO-1094
-  @backend
   Scenario Outline: Error occurs getting consultations
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

@@ -1,7 +1,6 @@
 @appointment
 Feature: Ability to cancel an TPP appointment
 
-  @NHSO-876
   Scenario: A TPP user is presented with the cancel appointment screen
     Given I have upcoming appointments for TPP
     And I am logged in as a TPP user
@@ -11,7 +10,6 @@ Feature: Ability to cancel an TPP appointment
     And I am presented with the appointment details
     And cancellation reasons drop-down is hidden
 
-  @NHSO-1026
   @smoketest
   Scenario: A TPP user can cancel an appointment
     Given TPP is available to cancel a previously booked appointment

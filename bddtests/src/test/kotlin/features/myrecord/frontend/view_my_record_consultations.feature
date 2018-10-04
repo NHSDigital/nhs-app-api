@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Consultations
 
-  @NHSO-1096
   Scenario Outline: An <Service> user has Consultations on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -16,7 +15,6 @@ Feature: View My Medical Record Information - Consultations
       |EMIS|
       |TPP|
 
-  @NHSO-1096
   Scenario Outline: An <Service> user has no Consultations on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -31,7 +29,6 @@ Feature: View My Medical Record Information - Consultations
       |EMIS|
       |TPP|
 
-  @NHSO-1096
   Scenario Outline: An <Service> user does not have access to Consultations
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -47,7 +44,6 @@ Feature: View My Medical Record Information - Consultations
 
 
 
-  @NHSO-1096
   Scenario Outline: An Error occurs retrieving Consultations data <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

@@ -1,10 +1,9 @@
 @my-record
+@backend
 Feature: Get Test Results Data
 
   A user can get their test results information
 
-  @NHSO-1508
-  @backend
   Scenario Outline: Requesting multiple test results returns multiple test results data for <Service>
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -18,7 +17,6 @@ Feature: Get Test Results Data
       | EMIS    |
       | TPP     |
 
-  @backend
   Scenario Outline: Requesting single test result with child values with no ranges for EMIS
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -33,7 +31,6 @@ Feature: Get Test Results Data
       | Service |
       | EMIS    |
 
-  @backend
   Scenario Outline: Requesting single test result with child values with ranges for EMIS
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -48,7 +45,6 @@ Feature: Get Test Results Data
       | Service |
       | EMIS    |
 
-  @backend
   Scenario Outline: Requesting single test result with no child items or range for EMIS
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -61,7 +57,6 @@ Feature: Get Test Results Data
       | Service |
       | EMIS    |
 
-  @backend
   Scenario Outline: Requesting single test result with no child items and a range for EMIS
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -74,8 +69,6 @@ Feature: Get Test Results Data
       | Service |
       | EMIS    |
 
-  @NHSO-1508
-  @backend
   Scenario Outline: GP Practice has disabled test results functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -90,8 +83,6 @@ Feature: Get Test Results Data
       | EMIS    |
       | TPP     |
 
-  @NHSO-1508
-  @backend
   Scenario Outline: Error occurs getting test results
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

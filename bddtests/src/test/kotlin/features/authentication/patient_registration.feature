@@ -1,6 +1,5 @@
 @authentication
 Feature: Registration
-
   A user can create a new NHS account from the login page, allowing them to access the app
 
   @backend
@@ -63,8 +62,6 @@ Feature: Registration
     |TPP       |
 
   @backend
-  @NHSO-222
-  @NHSO-1626
   Scenario: User's account has already been associated with the application
     Given I have data for an EMIS patient that has already been associated with the application in the GP system
     When I register the user's IM1 credentials
@@ -161,7 +158,6 @@ Feature: Registration
     |TPP       |Bad Request |
 
   @backend
-  @NHS-2383
   Scenario: Targeting the IM1 endpoint does not expose the Patient Facing Services endpoint
     Given I target the IM1 endpoint
     And I have an IM1 request and a Patient Facing Request
@@ -170,14 +166,12 @@ Feature: Registration
 
 
   @backend
-  @NHS-2383
   Scenario: Targeting the Patient Facing Services endpoint does not expose the IM1 endpoint
     Given I target the Patient Facing Services endpoint
     And I have an IM1 request and a Patient Facing Request
     Then I receive a response from the Patient Facing request
     And I receive a Not Found response from the IM1 request
 
-  @NHSO-313
   Scenario Outline: <GP System> User launches the create account CitizenID journey
     Given I want to register for a <GP System> account
     When I select to create an account
@@ -188,7 +182,6 @@ Feature: Registration
       |EMIS      |
       |TPP       |
 
-  @NHSO-313
   @smoketest
   Scenario Outline: <GP System> User launches and completes account creation from web
     Given I have completed <GP System> account creation

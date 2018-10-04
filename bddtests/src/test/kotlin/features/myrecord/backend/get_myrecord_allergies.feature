@@ -1,10 +1,8 @@
 @my-record
+@backend
 Feature: Get Allergies data
-
   A user can get their patient allergy information
 
-  @NHSO-690
-  @backend
   Scenario Outline: GP practice has enabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -20,8 +18,6 @@ Feature: Get Allergies data
       |EMIS|
       |TPP|
 
-  @NHSO-690
-  @backend
   Scenario Outline: GP practice has disabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

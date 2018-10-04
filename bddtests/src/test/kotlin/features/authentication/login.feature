@@ -1,9 +1,10 @@
+@authentication
+@authentication-login
 Feature: Login
   Logging into the service is handled via the CitizenID service.
   A user will be shown personalised welcome messages upon successful login.
 
 
-  @NHSO-125
   @smoketest
   Scenario Outline: A <GP System> user sees the home page after logging in
     Given I have no upcoming appointments for <GP System>
@@ -24,7 +25,6 @@ Feature: Login
       | VISION    |
 
 
-  @NHSO-125
   Scenario Outline: A <GP System> user sees a beta banner on the home page
     Given I am logged in as a <GP System> user
     Then I see the home page
@@ -34,7 +34,6 @@ Feature: Login
       | EMIS      |
       | TPP       |
 
-  @NHSO-125
   Scenario Outline: A <GP System> user can log in, log out, and log in again
     Given I am logged in as a <GP System> user
     Then I see the home page
@@ -52,7 +51,6 @@ Feature: Login
       | TPP       |
 
 
-  @NHSO-125
   @manual
   # to enable survey link change HOTJAR_SURVEY_VISIBLE env variable value
   Scenario Outline: A <GP System> user sees a survey link on the home page if enabled

@@ -1,9 +1,7 @@
 @appointment
 Feature: My appointments
-
   Users can view their upcoming and past appointments in the My Appointments screen.
 
-  @NHSO-524
   @backend
   Scenario Outline: API appropriately filters for upcoming appointments
     Given I have upcoming appointments for <GP System>
@@ -17,8 +15,6 @@ Feature: My appointments
       | EMIS      |
       | TPP       |
 
-  @NHSO-470
-  @NHSO-878
   @backend
   Scenario Outline: Online appointment booking is not available to a particular patient
     Given I have logged into <GP System> and have a valid session cookie
@@ -30,7 +26,6 @@ Feature: My appointments
       | EMIS      |
       | TPP       |
 
-  @NHSO-524
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
@@ -43,9 +38,6 @@ Feature: My appointments
       | EMIS      |
       | TPP       |
 
-  @NHSO-196
-  @NHSO-663
-  @NHSO-1591
   @smoketest
   Scenario Outline: A <GP System> user can see their upcoming appointments
     Given I have upcoming appointments for <GP System>

@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Problems
 
-  @NHSO-1095
   Scenario Outline: A <Service> user has Problems on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -16,7 +15,6 @@ Feature: View My Medical Record Information - Problems
       |EMIS|
 
 
-  @NHSO-1095
   Scenario Outline: A <Service> user has no Problems on their record
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -30,7 +28,6 @@ Feature: View My Medical Record Information - Problems
       |Service|
       |EMIS|
 
-  @NHSO-1095
   Scenario Outline: A <Service> user does not have access to Problems
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -44,7 +41,6 @@ Feature: View My Medical Record Information - Problems
       |Service|
       |EMIS|
 
-  @NHSO-1095
   Scenario Outline: An Error occurs retrieving Problems data for <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

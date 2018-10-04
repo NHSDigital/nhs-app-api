@@ -1,9 +1,7 @@
 @prescription
 Feature: View prescriptions
-
   A user can view information about their prescriptions after logging in
 
-  @NHSO-497
   Scenario Outline: A <GP System> user can see the prescriptions menu button
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -107,8 +105,6 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see 2 prescriptions
 
-  @NHSO-858
-  @NHSO-556
   Scenario Outline: The <GP System> User clicks on the Prescriptions button and the service is disabled at a GP Practice level
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -120,8 +116,6 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
-
-  @NHSO-1509
 
   Scenario Outline: A <GP System> user with historic prescriptions with missing quantity info
     Given a patient from <GP System> is defined
@@ -137,8 +131,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-1509
-
   Scenario Outline: A <GP System> user with historic prescriptions with missing dosage info
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -152,8 +144,6 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
-
-  @NHSO-1509
 
   Scenario Outline: <GP System> user with historic prescriptions with missing dosage and quantity info
     Given a patient from <GP System> is defined
@@ -185,7 +175,6 @@ Feature: View prescriptions
     When I am on the prescriptions page
     Then I see 4 prescriptions
 
-  @NHSO-599
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with correct data returns a list of prescriptions when a patient had repeat prescriptions in the last 6 months (Date 6 months ago provided)
     Given I have logged into <GP System> and have a valid session cookie
@@ -198,7 +187,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-946
   @backend
   Scenario Outline: <GP System> patient with repeat prescriptions in the last 6 months and no fromDate
     Given I have logged into <GP System> and have a valid session cookie
@@ -213,7 +201,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-946
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate in the future
     Given I have logged into <GP System> and have a valid session cookie
@@ -227,7 +214,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-946
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate greater than 6 months ago
     Given I have logged into <GP System> and have a valid session cookie
@@ -241,7 +227,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-946
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate not in the expected format
     Given I have logged into <GP System> and have a valid session cookie
@@ -255,7 +240,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-946
   @backend
   Scenario: Requesting prescriptions with a missing cookie
     Given I have a patient
@@ -263,14 +247,12 @@ Feature: View prescriptions
     When I request prescriptions for the last 6 months
     Then I receive a "Unauthorized" error
 
-  @NHSO-946
   @backend
   Scenario: Patient requesting prescriptions with a NHSO-Session-Id not in the expected format
     Given I have a patient
     When I request prescriptions for the last 6 months with an invalid cookie
     Then I receive a "Unauthorized" error
 
-  @NHSO-946
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with when their session has expired
     Given I have logged into <GP System> and have a valid session cookie
@@ -284,7 +266,6 @@ Feature: View prescriptions
       | EMIS      |
       | TPP       |
 
-  @NHSO-858
   @backend
   Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
     Given I have logged into <GP System> and have a valid session cookie
@@ -297,7 +278,6 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
 
-  @NHSO-946
   @backend
   Scenario Outline: <GP System> GP system fails to return in a timely fashion
     Given I have logged into <GP System> and have a valid session cookie

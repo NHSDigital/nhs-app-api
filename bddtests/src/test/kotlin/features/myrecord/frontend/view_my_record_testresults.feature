@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Test Results
 
-  @NHSO-686
   Scenario Outline: A <Service> user can view test result section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -14,7 +13,6 @@ Feature: View My Medical Record Information - Test Results
       | EMIS    |
       | TPP     |
 
-  @NHSO-686
   Scenario Outline: A <Service> user can view test result information
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -28,7 +26,6 @@ Feature: View My Medical Record Information - Test Results
       | EMIS    |
       | TPP     |
 
-  @NHSO-686
   Scenario Outline: A <Service> user has no access to test result section
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -42,7 +39,6 @@ Feature: View My Medical Record Information - Test Results
       | EMIS    |
       | TPP     |
 
-  @NHSO-686
   Scenario Outline: A <Service> user has no test results
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -56,7 +52,6 @@ Feature: View My Medical Record Information - Test Results
       | EMIS    |
       | TPP     |
 
-  @NHSO-686
   Scenario Outline: An error occurs when trying to retrieve test result data from <Service>
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -70,7 +65,6 @@ Feature: View My Medical Record Information - Test Results
       | EMIS    |
       | TPP     |
 
-  @NHSO-686
   Scenario Outline: A <Service> user has one test result with one value
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -83,7 +77,6 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
 
-  @NHSO-686
   Scenario Outline: A <Service> user has one test result with one value and a range
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -96,7 +89,6 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
 
-  @NHSO-686
   Scenario Outline: A <Service> user has one test result with multiple child values
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -109,7 +101,6 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | EMIS    |
 
-  @NHSO-686
   Scenario Outline: A <Service> user has test results with multiple child values which have ranges
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

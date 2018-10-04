@@ -1,10 +1,8 @@
 @my-record
+@backend
 Feature: Get medications data
-
   A user can get their medication information
 
-  @NHSO-689
-  @backend
   Scenario Outline: Requesting medications returns medications data
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -20,8 +18,6 @@ Feature: Get medications data
       |EMIS|
       |TPP|
 
-  @NHSO-689
-  @backend
   Scenario Outline: GP practice has disabled medications functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

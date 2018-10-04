@@ -1,10 +1,8 @@
 @my-record
+@backend
 Feature: Get demographic data
-
   A user can get their demographic information
 
-  @NHSO-691
-  @backend
   Scenario Outline: Requesting demographics returns demographic data
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -17,8 +15,6 @@ Feature: Get demographic data
       | EMIS    |
       | TPP     |
 
-  @NHSO-691
-  @backend
   Scenario Outline: GP practice has disabled demographics functionality
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -32,7 +28,6 @@ Feature: Get demographic data
       | TPP     |
 
   @NHSO-2549 @tech-debt
-  @backend
   Scenario Outline: GP System Unavailable
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -46,7 +41,6 @@ Feature: Get demographic data
       | TPP     |
 
   @NHSO-2549 @tech-debt
-  @backend
   Scenario Outline: GP System Times Out
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

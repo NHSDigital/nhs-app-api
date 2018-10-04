@@ -1,9 +1,8 @@
 @my-record
+@backen
 Feature: Get Immunisations Data
-
   A user can get their immunisation information
 
-  @backend
   Scenario Outline: Requesting immunisations returns immunisations data
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie
@@ -16,7 +15,7 @@ Feature: Get Immunisations Data
   |Service|
   |EMIS|
 
-  @backend
+
   Scenario Outline: Requesting immunisations returns immunisations data
     Given the my record wiremocks are initialised for <Service>
     And I have logged into <Service> and have a valid session cookie

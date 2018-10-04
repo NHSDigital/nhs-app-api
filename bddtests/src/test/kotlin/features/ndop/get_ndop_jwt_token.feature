@@ -1,8 +1,8 @@
+@ndop
 Feature: Get Ndop Token
 
   A user can get an Ndop JWT Token
 
-  @NHSO-2229
   @backend
   @smoketest
   Scenario Outline: User requests Ndop JWT Token

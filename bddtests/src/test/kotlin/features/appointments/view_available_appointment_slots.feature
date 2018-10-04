@@ -1,6 +1,5 @@
 @appointment
 Feature: View available appointment slots
-
   Users can view available appointments from the available appointments Page.
 
     #    GP System agnostic scenario, so only need to test with EMIS
@@ -10,8 +9,6 @@ Feature: View available appointment slots
     And I am on the available appointments page
     Then the appointments menu button is highlighted
 
-  @NHSO-71
-  @NHSO-870
   Scenario Outline: A <GP System> user enters the available appointments page
     Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
@@ -26,7 +23,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-664
   Scenario: A user can expand, view and collapse guidance provided by EMIS
     Given there are available appointment slots with different criteria for EMIS
     And I am logged in
@@ -35,21 +31,18 @@ Feature: View available appointment slots
     Then the appointment slot guidance content is displayed
     And the appointment slot guidance is collapsible
 
-  @NHSO-664
   Scenario: A user does not see guidance if none is provided by EMIS
     Given there are available appointment slots with different criteria for EMIS when no appointment slot guidance is provided
     And I am logged in
     When I am on the available appointments page
     Then I cannot see any appointment slot guidance
 
-  @NHSO-664
   Scenario: A user does not see any guidance provided by TPP
     Given there are available appointment slots with different criteria for TPP
     And I am logged in
     When I am on the available appointments page
     Then I cannot see any appointment slot guidance
 
-  @NHSO-664
   Scenario: A user does not see any guidance when it cannot be retrieved from EMIS, but can still progress
     Given there are available appointment slots with different criteria for EMIS when guidance cannot be retrieved
     And I am logged in
@@ -57,8 +50,6 @@ Feature: View available appointment slots
     Then I cannot see any appointment slot guidance
     And I am able to filter on available slots
 
-  @NHSO-71
-  @NHSO-870
   Scenario Outline: A <GP System> user enters the available appointments page, but only 1 appointment is available
     Given there is 1 available appointment slot for <GP System>
     And I am logged in
@@ -73,8 +64,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-71
-  @NHSO-870
   Scenario Outline: A <GP System> user enters the available appointments page, but appointments only available at 1 location
     Given there are available appointment slots for <GP System> for 1 location
     And I am logged in
@@ -85,8 +74,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-71
-  @NHSO-870
   Scenario Outline: A <GP System> user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
     And I am logged in
@@ -97,8 +84,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-71
-  @NHSO-870
   Scenario Outline: A <GP System> user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
     And I am logged in
@@ -110,9 +95,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-71
-  @NHSO-870
-  @NHSO-2079
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by today but no appointments are available
     Given there are available appointment slots with different criteria for <GP System>
     And I am logged in
@@ -124,9 +106,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-71
-  @NHSO-870
-  @NHSO-2079
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by tomorrow but no appointments are available
     Given there are appointment slots on some days other than tomorrow, provided by <GP System>
     And I am logged in
@@ -139,7 +118,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-2079
   Scenario Outline: A <GP System> user still sees the remainder of the current week, if filtering by this week but no appointments are available for some days
     Given there are appointment slots on some days this week but not others, provided by <GP System>
     And I am logged in
@@ -152,7 +130,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-2079
   Scenario Outline: A <GP System> user still sees the whole of week, if filtering by next week but no appointments are available for some days
     Given there are appointment slots on some days next week but not others, provided by <GP System>
     And I am logged in
@@ -165,7 +142,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-2079
   Scenario Outline: A <GP System> user only sees days with available slots, if filtering by "All available" but no appointments are available for some days
     Given there are appointment slots on some days in the next few weeks but not others, provided by <GP System>
     And I am logged in
@@ -178,7 +154,6 @@ Feature: View available appointment slots
       | EMIS      |
       | TPP       |
 
-  @NHSO-71
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
     Given there are available appointment slots with different criteria for EMIS
@@ -187,8 +162,6 @@ Feature: View available appointment slots
     When I decide I don't want to select an appointment and go back
     Then I will be on the My appointments screen
 
-  @NHSO-616
-  @NHSO-870
   Scenario: A user sees appropriate information message when there is a timeout
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
@@ -197,8 +170,6 @@ Feature: View available appointment slots
     Then I see appropriate information message for time-outs
     And there should be a button to try again
 
-  @NHSO-616
-  @NHSO-870
   Scenario: A user tries again after a timeout and it times-out again
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
@@ -208,8 +179,6 @@ Feature: View available appointment slots
     Then I see appropriate information message for time-outs
     And there should be a button to try again
 
-  @NHSO-616
-  @NHSO-870
   Scenario: A user tries again after a timeout and it is now successful
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS doesn't respond a timely fashion for available appointment slots
@@ -220,8 +189,6 @@ Feature: View available appointment slots
     And I click try again button on appointment page
     Then I am able to filter on available slots
 
-  @NHSO-616
-  @NHSO-870
   Scenario: A user sees appropriate information message when GP system is unavailable
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS is unavailable for available appointment slots
@@ -230,8 +197,6 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
-  @NHSO-616
-  @NHSO-870
   Scenario: A user sees appropriate information message when EMIS returns corrupt data
     #    GP System agnostic scenario, so only need to test with EMIS
     Given EMIS returns corrupt data for appointment slots
@@ -240,7 +205,6 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
-  @NHSO-616
   @native
   @manual
   Scenario: A user sees appropriate information message when internet connection has been lost
@@ -251,7 +215,6 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is no internet connection
     And there should be a button to try again
 
-  @NHSO-1168
   Scenario: A user has problems with prescriptions and selects appointments and prescriptions in quick succession
     #    GP System agnostic scenario, so only need to test with EMIS
     Given there are available EMIS appointment slots with different criteria but there is a slight delay in retrieving them

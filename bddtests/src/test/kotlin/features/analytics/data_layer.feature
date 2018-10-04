@@ -1,3 +1,4 @@
+@analytics
 Feature: Analytics
 
   A user's analytics tracking information is available

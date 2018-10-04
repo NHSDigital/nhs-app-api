@@ -4,7 +4,6 @@ Feature: Book an available appointment slot
   As a logged in user
   I want to be able to select, confirm and book selected appointment
 
-  @NHSO-2133
   Scenario Outline: Only one appointment slot time is displayed when multiple are available for <GP System>
     Given there are multiple appointment slots at the same time, provided by <GP System>
     And I am logged in
@@ -20,8 +19,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-72
-  @NHSO-872
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in
@@ -35,8 +32,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-72
-  @NHSO-872
   Scenario Outline: A <GP System> user can book an appointment describing symptoms at least 1 character
     Given there are <GP System> appointments available to book with a reason of 1 character
     And I am logged in
@@ -51,8 +46,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-72
-  @NHSO-872
   @smoketest
   Scenario Outline: A <GP System> user can book an appointment describing symptoms no more 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 character
@@ -68,8 +61,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-72
-  @NHSO-872
   Scenario Outline: A <GP System> user cannot enter symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
@@ -85,8 +76,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-72
-  @NHSO-872
   Scenario Outline: A <GP System> user cannot paste symptoms with over 150 characters
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
@@ -100,8 +89,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-72
-  @NHSO-872
   Scenario Outline: A <GP System> user who books successfully, but only the first 150 characters of the symptoms are sent
     Given there are <GP System> appointments available to book with a reason of 150 characters but user attempts to enter 151 characters
     And I am logged in
@@ -116,8 +103,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-517
-  @NHSO-872
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in
@@ -133,8 +118,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-517
-  @NHSO-872
   Scenario Outline: A <GP System> user sees appropriate information message when GP system is unavailable
     Given there are <GP System> appointments available to book, but the GP system is unavailable
     And I am logged in
@@ -150,8 +133,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-517
-  @NHSO-872
   Scenario Outline: A <GP System> user sees appropriate information error message when appointment has already been booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
@@ -166,8 +147,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-517
-  @NHSO-872
   Scenario Outline: A <GP System> user can return directly back to their appointments after trying to book one already booked
     Given there are <GP System> appointments available to book, but the appointment slot has already been booked by somebody else
     And I am logged in
@@ -183,8 +162,6 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
-  @NHSO-528
-  @NHSO-872
   Scenario Outline: A <GP System> user is navigated back to the 'Book this appointment' screen when 'Change this appointment' button selected.
     Given there are <GP System> appointments available to book
     And I am logged in

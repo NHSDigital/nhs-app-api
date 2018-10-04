@@ -1,7 +1,6 @@
 @courses
 @prescription
 Feature: View courses
-
   In order to view courses associated with a user
   As a logged in user
   I want to see a list of repeat courses that I can order
@@ -103,7 +102,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @NHSO-502
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -117,7 +115,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @NHSO-502
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -131,7 +128,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @NHSO-502
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -145,7 +141,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @NHSO-502
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -161,7 +156,6 @@ Feature: View courses
       | TPP       |
 
   @smoketest
-  @NHSO-502 @NHSO-655
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -183,7 +177,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @NHSO-655
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
     Given a patient from <GP System> is defined
     And I have historic prescriptions
@@ -197,7 +190,6 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
-  @NHSO-556
   Scenario: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -208,7 +200,6 @@ Feature: View courses
     When I browse to the page at /prescriptions/repeat-courses
     Then I see a message informing me that I don't currently have access to this service
 
-  @NHSO-556
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -219,7 +210,6 @@ Feature: View courses
     When I browse to the page at /prescriptions/confirm-prescription-details
     Then I see a message informing me that I don't currently have access to this service
 
-  @NHSO-1509
   Scenario: The user has 1 repeatable prescription with missing quantity info
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -231,7 +221,6 @@ Feature: View courses
     When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
 
-  @NHSO-1509
   Scenario: The user has 1 repeatable prescription with missing dosage info
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -243,7 +232,6 @@ Feature: View courses
     When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
 
-  @NHSO-1509
   Scenario: The user has 1 repeatable prescription with missing dosage and quantity info
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -255,7 +243,6 @@ Feature: View courses
     When I click 'Order a new repeat prescription'
     Then I see the available repeatable prescriptions
 
-  @NHSO-1509
   Scenario: The User has selected repeat prescriptions to order with missing quantity info
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -265,7 +252,6 @@ Feature: View courses
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
-  @NHSO-1509
   Scenario: The User has selected repeat prescriptions to order with missing dosage info
     Given a patient from EMIS is defined
     And I have historic prescriptions
@@ -275,7 +261,6 @@ Feature: View courses
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
 
-  @NHSO-1509
   Scenario: The User has selected repeat prescriptions to order with missing dosage and quantity info
     Given a patient from EMIS is defined
     And I have historic prescriptions

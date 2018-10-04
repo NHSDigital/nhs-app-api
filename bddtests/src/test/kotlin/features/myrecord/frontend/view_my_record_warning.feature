@@ -1,7 +1,6 @@
 @my-record
 Feature: View My Medical Record Information - Warning
 
-  @NHSO-359
   Scenario Outline: A user navigates to my record warning page
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -18,7 +17,6 @@ Feature: View My Medical Record Information - Warning
       |Service|
       |EMIS|
 
-  @NHSO-359
   Scenario Outline: A user navigates back to home
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>
@@ -31,7 +29,6 @@ Feature: View My Medical Record Information - Warning
       |Service|
       |EMIS|
 
-   @NHSO-1613
    Scenario Outline: A user tries to navigate directly to my record through url
      Given the my record wiremocks are initialised for <Service>
      And the GP Practice has enabled demographics functionality for <Service>

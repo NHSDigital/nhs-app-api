@@ -2,7 +2,6 @@
 Feature: Guidance prior to booking an appointment
   Users are given guidance before booking a new appointment.
 
-  @NHSO-420
   @smoketest
   Scenario: A user is presented with guidance when booking an appointment and can proceed to check their symptoms
     Given I have upcoming appointments for EMIS
@@ -12,7 +11,6 @@ Feature: Guidance prior to booking an appointment
     Then Check My symptoms page is displayed
     And Check My symptoms page header and navigation menu are correct
 
-  @NHSO-420
   Scenario: A user with upcoming appointments is presented with guidance
     Given I have upcoming appointments for EMIS
     And I am logged in as a EMIS user
@@ -20,7 +18,6 @@ Feature: Guidance prior to booking an appointment
     When I select "Book new appointment" button
     Then I am given guidance as to my options before booking an appointment
 
-  @NHSO-420
   Scenario: A user with no upcoming appointments is presented with guidance
     Given I have no upcoming appointments for EMIS
     And I am logged in as a EMIS user
