@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             // Arrage
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
             
-            var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfiguration>>();
+            var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfigurationResponse>>();
 
             try
             {
@@ -168,7 +168,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
 
             // Assert
-            response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent.Payload);
+            response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 

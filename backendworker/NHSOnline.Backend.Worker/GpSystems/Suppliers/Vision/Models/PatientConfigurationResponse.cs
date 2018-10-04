@@ -2,10 +2,9 @@
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 {
-    [XmlRoot(ElementName = "serviceContent", Namespace = "urn:vision")]
-    public class ServiceContentResponse<T>
+    public class PatientConfigurationResponse
     {
         [XmlElement(ElementName = "configuration", Namespace = "urn:vision")]
-        public T Payload { get; set; }
+        public PatientConfiguration Configuration { get; set; }
     }
 }

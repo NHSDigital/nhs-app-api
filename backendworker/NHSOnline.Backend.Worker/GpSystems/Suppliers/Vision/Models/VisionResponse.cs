@@ -12,7 +12,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
         public ServiceHeaderResponse ServiceHeader { get; set; }
 
         [XmlElement(ElementName = "serviceContent", Namespace = "urn:vision")]
-        public ServiceContentResponse<T> ServiceContent { get; set; }
+        public T ServiceContent { get; set; }
 
         [XmlAttribute(AttributeName = "vision", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Vision { get; set; }

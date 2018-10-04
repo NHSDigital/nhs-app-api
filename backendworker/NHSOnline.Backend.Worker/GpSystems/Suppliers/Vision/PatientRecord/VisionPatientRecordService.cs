@@ -31,14 +31,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 var visionConnectionToken = new VisionConnectionToken
                 {
                     RosuAccountId = visionUserSession.RosuAccountId,
-                    ApiKey = visionUserSession.Key
+                    ApiKey = visionUserSession.ApiKey,
                 };
 
                 var response = await _visionClient.GetConfiguration(visionConnectionToken, visionUserSession.OdsCode);
 
                 if (!response.HasErrorResponse)
                 {
-                    var myRecordResponse = _visionMyRecordMapper.Map(response.Body);
+                    var myRecordResponse = _visionMyRecordMapper.Map(response.Body.Configuration);
 
                     return new GetMyRecordResult.SuccessfullyRetrieved(myRecordResponse);
                 }

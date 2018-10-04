@@ -34,7 +34,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                     return GetCorrectErrorResult(getConfigurationReply);
                 }
 
-                var formattedNhsNumbers = getConfigurationReply.Body.Account.PatientNumbers
+                var formattedNhsNumbers = getConfigurationReply.Body.Configuration.Account.PatientNumbers
                     .Select(x => new PatientNhsNumber
                     {
                         NhsNumber = x.Number.FormatToNhsNumber()

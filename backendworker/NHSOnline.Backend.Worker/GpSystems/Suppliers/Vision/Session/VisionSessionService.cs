@@ -26,14 +26,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 if (!response.HasErrorResponse)
                 {
                     return new SessionCreateResult.SuccessfullyCreated(
-                        response.Body.Account.Name,
+                        response.Body.Configuration.Account.Name,
                         new VisionUserSession
                         {
                             RosuAccountId = visionConnectionToken.RosuAccountId,
                             OdsCode = odsCode,
-                            Key = visionConnectionToken.ApiKey,
+                            ApiKey = visionConnectionToken.ApiKey,
                             NhsNumber = nhsNumber,
-                            PatientId = response.Body.Account.PatientId,
+                            PatientId = response.Body.Configuration.Account.PatientId,
                         }
                     );
                 }

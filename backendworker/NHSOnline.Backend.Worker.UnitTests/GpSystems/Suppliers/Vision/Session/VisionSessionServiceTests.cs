@@ -49,17 +49,17 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PatientConfiguration>(HttpStatusCode.OK)
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfiguration>
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfiguration>
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
                             {
-                                VisionResponse = new VisionResponse<PatientConfiguration>
+                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
                                 {
-                                    ServiceContent = new ServiceContentResponse<PatientConfiguration>
+                                    ServiceContent = new PatientConfigurationResponse
                                     {
-                                        Payload = new PatientConfiguration
+                                        Configuration = new PatientConfiguration
                                         {
                                             Account = new Account
                                             {
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                     NhsNumber = _nhsNumber, 
                     PatientId = patientId, 
                     OdsCode =  DefaultOdsCode,
-                    Key = DefaultApiKey,
+                    ApiKey = DefaultApiKey,
                     RosuAccountId = DefaultRosuAccountId              
                 });
             
@@ -105,11 +105,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PatientConfiguration>(HttpStatusCode.OK)
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfiguration>
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfiguration>
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
                             {
                                 Fault = new Fault
                                 {
@@ -144,13 +144,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PatientConfiguration>(HttpStatusCode.OK)
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfiguration>
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfiguration>
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
                             {
-                                VisionResponse = new VisionResponse<PatientConfiguration>
+                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
                                 {
                                     ServiceHeader = new ServiceHeaderResponse
                                     {
@@ -184,11 +184,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PatientConfiguration>(HttpStatusCode.OK)
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfiguration>
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfiguration>
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
                             {
                                 Fault = new Fault
                                 {
@@ -214,13 +214,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PatientConfiguration>(HttpStatusCode.OK)
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfiguration>
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfiguration>
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
                             {
-                                VisionResponse = new VisionResponse<PatientConfiguration>
+                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
                                 {
                                     ServiceHeader = new ServiceHeaderResponse
                                     {
@@ -254,11 +254,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
             _mockVisionClient.Setup(x =>
                     x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(
-                    new VisionClient.VisionApiObjectResponse<PatientConfiguration>(HttpStatusCode.OK)
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
                     {
-                        RawResponse = new VisionResponseEnvelope<PatientConfiguration>
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
                         {
-                            Body = new VisionResponseBody<PatientConfiguration>
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
                             {
                                 Fault = new Fault(), // fault but no code
                             },

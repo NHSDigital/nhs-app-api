@@ -38,14 +38,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
         }
 
-        public async Task<VisionApiObjectResponse<PatientConfiguration>> GetConfiguration(VisionConnectionToken token, string odsCode)
+        public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(VisionConnectionToken token, string odsCode)
         {
             IVisionServiceDefinition visionServiceDefinition = new ConfigurationServiceDefinition();
 
             var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 token.RosuAccountId, token.ApiKey, odsCode, _providerId, null);
 
-            return await SendRequestAndParseResponse<PatientConfiguration, VisionRequest<Object>>(visionRequest);
+            return await SendRequestAndParseResponse<PatientConfigurationResponse, VisionRequest<Object>>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
@@ -137,7 +137,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             public VisionResponseEnvelope<TBody> RawResponse { get; set; }
 
-            public TBody Body => RawResponse.Body.VisionResponse.ServiceContent.Payload;
+            public TBody Body => RawResponse.Body.VisionResponse.ServiceContent;
             
             public bool HasErrorResponse
             {
