@@ -1,9 +1,9 @@
 package mocking.vision.Demographics
 
 import mocking.models.Mapping
-import mocking.vision.VisionConstants.getAccessDeniedError
-import mocking.vision.VisionConstants.getUnknownError
 import mocking.vision.VisionConstants.getVisionDemographicsResponse
+import mocking.vision.VisionErrorResponses.getAccessDeniedError
+import mocking.vision.VisionErrorResponses.getUnknownError
 import mocking.vision.VisionMappingBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession

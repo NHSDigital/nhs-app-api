@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -20,7 +21,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
     {
         private const string DefaultConnectionToken = "{\"rosuAccountId\":\"account_id\",\"apiKey\":\"key\"}";
         private const string DefaultOdsCode = "token";
-
+        private const string accountId = "account_id";
+        private const string surname = "surname";
+        private const string linkageKey = "key";
+        
+        private  DateTime dob = System.DateTime.Now;
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
         private ILogger<VisionIm1ConnectionService> _logger;
@@ -246,6 +251,170 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
 
             // Assert
             result.Should().BeAssignableTo<Im1ConnectionVerifyResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Register_SuccessfulRegister_ObtainNHSnumber()
+        {
+            var serviceContentAuthenticationRef = _fixture.Create<ServiceContentAuthenticationRef>();
+            _mockVisionClient.Setup(x =>
+                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
+                        {
+                            Body = new VisionResponseBody<ServiceContentRegisterResponse>
+                            {
+                                VisionResponse = new VisionResponse<ServiceContentRegisterResponse>
+                                {
+                                    ServiceContent = new ServiceContentRegisterResponse
+                                    {
+                                        AuthenticationRef = serviceContentAuthenticationRef,
+                                    },
+                                },
+                            },
+                        },
+                    }));
+            var patientConfiguration = _fixture.Create<PatientConfiguration>();
+            _mockVisionClient.Setup(x =>
+                    x.GetConfiguration(It.IsAny<VisionConnectionToken>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionClient.VisionApiObjectResponse<PatientConfigurationResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new VisionResponseEnvelope<PatientConfigurationResponse>
+                        {
+                            Body = new VisionResponseBody<PatientConfigurationResponse>
+                            {
+                                VisionResponse = new VisionResponse<PatientConfigurationResponse>
+                                {
+                                    ServiceContent = new PatientConfigurationResponse
+                                    {
+                                        Configuration = patientConfiguration,
+                                    },
+                                },
+                            },
+                        },
+                    }));
+            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = accountId,
+                DateOfBirth  = dob,
+                LinkageKey = linkageKey,
+                Surname = surname
+            };
+            var result = await systemUnderTest.Register(request);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
+        }
+        
+        [TestMethod]
+        public async Task Register_UserAccountLocked()
+        {
+            const string errorCode = "-15";
+            const string errorDescription = "Record currently unavailable - please try again later or contact your Practice: VOSUsers record is locked, is patient selected in registration?";
+            _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
+            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = accountId,
+                DateOfBirth  = dob,
+                LinkageKey = linkageKey,
+                Surname = surname
+            };
+            var result = await systemUnderTest.Register(request);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
+        }
+        
+        [TestMethod]
+        public async Task Register_UserAlreadyRegistered()
+        {
+            const string errorCode = "-2";
+            const string errorDescription = "User has already been registered";
+            _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
+            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = accountId,
+                DateOfBirth  = dob,
+                LinkageKey = linkageKey,
+                Surname = surname
+            };
+            var result = await systemUnderTest.Register(request);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
+        }
+        
+        [TestMethod]
+        public async Task Register_IncorrectDetailsProvided()
+        {
+            const string errorCode = "-33";
+            const string errorDescription = "No Match: couldn't link account with detail provided";
+            _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
+            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = accountId,
+                DateOfBirth  = dob,
+                LinkageKey = linkageKey,
+                Surname = surname
+            };
+            var result = await systemUnderTest.Register(request);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
+        }
+
+        [TestMethod]
+        public async Task Register_IncorrectParametersProvided()
+        {
+            const string errorCode = "-31";
+            const string errorDescription = "Invalid parameter provided";
+            _mockVisionClient = PostLinkMockError(errorCode, errorDescription);
+            var systemUnderTest = new VisionIm1ConnectionService(_mockVisionClient.Object, _logger);
+            var request = new PatientIm1ConnectionRequest
+            {
+                OdsCode = DefaultOdsCode,
+                AccountId = accountId,
+                DateOfBirth  = dob,
+                LinkageKey = linkageKey,
+                Surname = surname
+            };
+            var result = await systemUnderTest.Register(request);
+            result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();
+        }
+        
+        private Mock<IVisionClient> PostLinkMockError(string errorCode, string errorDescription)
+        {
+            _mockVisionClient.Setup(x =>
+                    x.PostLinkAccount(It.IsAny<string>(), It.IsAny<PatientIm1ConnectionRequest>(), It.IsAny<string>()))
+                .Returns(Task.FromResult(
+                    new VisionClient.VisionApiObjectResponse<ServiceContentRegisterResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = new VisionResponseEnvelope<ServiceContentRegisterResponse>
+                        {
+                            Body = new VisionResponseBody<ServiceContentRegisterResponse>
+                            {
+                                VisionResponse = new VisionResponse<ServiceContentRegisterResponse>
+                                {
+                                    ServiceHeader = new ServiceHeaderResponse()
+                                    {
+                                        Outcome = new Outcome
+                                        {
+                                            Successful = "false",
+                                            Error = new OutcomeError()
+                                            {
+                                                Code = errorCode,
+                                                Description = errorDescription
+                                            }
+                                        }
+                                    }
+                                },
+                            },
+                        },
+                    }));
+            return _mockVisionClient;
         }
     }
 }

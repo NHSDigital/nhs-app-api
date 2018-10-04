@@ -10,6 +10,7 @@ import mocking.emis.demographics.Sex
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import mocking.tpp.models.*
+import mocking.vision.VisionMockDefaults
 import mocking.vision.models.*
 import models.Patient
 import net.serenitybdd.core.Serenity.*
@@ -64,7 +65,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
             }
             VISION -> {
-                val patient = MockDefaults.patientVision
+                val patient = VisionMockDefaults.patientVision
                 var nonExistingConnectionToken = "{\"rosuAccountid\":\"999999999\",\"apiKey\":\"nonexistingapikey\"}"
 
                 mockingClient
@@ -91,7 +92,7 @@ class PatientVerificationSteps : AbstractSteps() {
 
     @Given("Vision responds with a security header error")
     fun visionRespondsWithASecurityHeaderError() {
-        setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
+        setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
         setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
 
         mockingClient
@@ -108,7 +109,7 @@ class PatientVerificationSteps : AbstractSteps() {
 
     @Given("Vision responds with an invalid request error")
     fun visionRespondsWithAInvalidRequestError() {
-        setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
+        setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
         setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
 
         mockingClient
@@ -125,12 +126,12 @@ class PatientVerificationSteps : AbstractSteps() {
 
     @Given("Vision responds with an unknown error")
     fun visionRespondsWithAnUnknownError() {
-        setSessionVariable("ConnectionToken").to(MockDefaults.patientVision.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(MockDefaults.patientVision.odsCode)
+        setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
+        setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.patientVision.odsCode)
         mockingClient
                 .forVision {
                     getConfigurationRequest(
-                            MockDefaults.visionUserSession)
+                            VisionMockDefaults.getVisionUserSession(Patient.aderynCanon))
                             .respondWithUnknownError()
                 }
     }
@@ -238,7 +239,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 emisValidCredentialsWithNHSNumbers(listOf("NHS_number"))
             }
             VISION -> {
-                val patient = MockDefaults.patientVision
+                val patient = VisionMockDefaults.patientVision
                 visionValidCredentialsWithNHSNumbers(arrayOf(patient.nhsNumbers[0]))
             }
         }
@@ -251,8 +252,8 @@ class PatientVerificationSteps : AbstractSteps() {
                 emisValidCredentialsWithNHSNumbers(listOf("NHS_number1", "NHS_number2"))
             }
             VISION -> {
-                val patient = MockDefaults.patientVision
-                val nhsNumbers = arrayOf(patient.nhsNumbers[0], "5785445866")
+                val patient = VisionMockDefaults.patientVision
+                val nhsNumbers =arrayOf( patient.nhsNumbers[0] , "5785445866")
                 visionValidCredentialsWithNHSNumbers(nhsNumbers)
             }
         }
@@ -283,8 +284,8 @@ class PatientVerificationSteps : AbstractSteps() {
 
     }
 
-    private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>) {
-        val patient = MockDefaults.patientVision
+    private fun visionValidCredentialsWithNHSNumbers(nhsNumbers: Array<String>){
+        val patient = VisionMockDefaults.patientVision
         mockingClient
                 .forVision {
                     getConfigurationRequest(
@@ -296,7 +297,7 @@ class PatientVerificationSteps : AbstractSteps() {
                             .respondWithSuccess(configuration = Configuration(
                                     account = Account(patient.patientId,
                                             patientNumber = nhsNumbers.map { number -> PatientNumber(number = number) },
-                                            name = MockDefaults.getFullPatientName(patient)
+                                            name = patient.formattedFullName()
                                     )))
                 }
         setSessionVariable("ConnectionToken").to(patient.connectionToken)
@@ -311,7 +312,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 emisValidCredentialsWithNHSNumbers(arrayListOf())
             }
             VISION -> {
-                val patient = MockDefaults.patientVision
+                val patient =  VisionMockDefaults.patientVision
 
                 mockingClient
                         .forVision {
@@ -322,7 +323,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                             Patient.aderynCanon.odsCode,
                                             Patient.aderynCanon.patientId))
                                     .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
-                                            patientNumber = null, name = MockDefaults.getFullPatientName(patient))
+                                            patientNumber = null, name = patient.formattedFullName())
                                     ))
                         }
                 setSessionVariable("ConnectionToken").to(patient.connectionToken)

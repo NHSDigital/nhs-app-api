@@ -16,6 +16,10 @@ Feature: Registration
     |EMIS      |"one"       |
     |EMIS      |"one","two" |
     |TPP       |"one"       |
+  @NHS0-357
+    Examples:
+      |GP System |NHS Numbers |
+      |VISION    |"one"       |
 
   @backend
   Scenario Outline: <GP System> Account ID doesn't match a user
@@ -27,6 +31,10 @@ Feature: Registration
     |GP System |
     |EMIS      |
     |TPP       |
+  @NHS0-357
+    Examples:
+      |GP System |
+      |VISION    |
 
   @backend
   Scenario Outline: Incorrect <GP System> Linkage Key
@@ -38,6 +46,10 @@ Feature: Registration
     |GP System |
     |EMIS      |
     |TPP       |
+  @NHS0-357
+    Examples:
+      |GP System |
+      |VISION    |
 
   @backend
   Scenario Outline: <GP System> - Incorrect Surname
@@ -49,6 +61,10 @@ Feature: Registration
     |GP System |
     |EMIS      |
     |TPP       |
+  @NHS0-357
+    Examples:
+      |GP System |
+      |VISION    |
 
   @backend
   Scenario Outline: <GP System> - Incorrect Date of Birth
@@ -60,12 +76,30 @@ Feature: Registration
     |GP System |
     |EMIS      |
     |TPP       |
+  @NHS0-357
+    Examples:
+      |GP System |
+      |VISION    |
 
   @backend
-  Scenario: User's account has already been associated with the application
+  Scenario: Registering an EMIS patient who is already registered creates a Conflict response
     Given I have data for an EMIS patient that has already been associated with the application in the GP system
     When I register the user's IM1 credentials
     Then I get a "Conflict" error
+
+  @backend
+  @NHS0-357
+  Scenario: Registering a VISION patient who is already registered creates a Conflict response
+    Given I have data for a Vision patient that has already been associated with the application in the GP system
+    When I register the user's IM1 credentials
+    Then I get a "Conflict" error
+
+  @backend
+  @NHS0-357
+  Scenario: Registering a patient which has been locked by VISION creates a Bad Gateway response
+    Given I have data for a Vision patient with a locked account as the account is opened in the Vision application
+    When I register the user's IM1 credentials
+    Then I get a "bad gateway" error
 
 
   @backend
@@ -84,6 +118,10 @@ Feature: Registration
     |GP System |Response    |
     |EMIS      |Bad Request |
     |TPP       |Not Found   |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Not Found   |
 
   @backend
   Scenario Outline: <GP System> - Account ID not in the expected format
@@ -95,6 +133,10 @@ Feature: Registration
       |GP System |Response    |
       |EMIS      |Bad Request |
       |TPP       |Not Found   |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Bad Request |
 
   @backend
   Scenario Outline: <GP System> - Linkage Key not in the expected format
@@ -106,6 +148,10 @@ Feature: Registration
     |GP System |Response    |
     |EMIS      |Bad Request |
     |TPP       |Not Found   |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Bad Request |
 
   @backend
   Scenario Outline: <GP System> - Date Of Birth not in the expected format
@@ -117,6 +163,10 @@ Feature: Registration
     |GP System |Response    |
     |EMIS      |Bad Request |
     |TPP       |Bad Request |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Bad Request |
 
   @backend
   Scenario: Missing ODS Code
@@ -134,6 +184,10 @@ Feature: Registration
     |GP System |Response    |
     |EMIS      |Bad Request |
     |TPP       |Bad Request |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Bad Request |
 
   @backend
   Scenario Outline: <GP System> - Missing Account ID
@@ -145,6 +199,10 @@ Feature: Registration
     |GP System |Response    |
     |EMIS      |Bad Request |
     |TPP       |Bad Request |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Bad Request |
 
   @backend
   Scenario Outline: <GP System> - Missing Linkage Key
@@ -156,6 +214,10 @@ Feature: Registration
     |GP System |Response    |
     |EMIS      |Bad Request |
     |TPP       |Bad Request |
+  @NHS0-357
+    Examples:
+      |GP System |Response    |
+      |VISION    |Bad Request |
 
   @backend
   Scenario: Targeting the IM1 endpoint does not expose the Patient Facing Services endpoint
@@ -181,6 +243,10 @@ Feature: Registration
       |GP System |
       |EMIS      |
       |TPP       |
+  @NHS0-357
+    Examples:
+      |GP System |
+      |VISION    |
 
   @smoketest
   Scenario Outline: <GP System> User launches and completes account creation from web
@@ -194,3 +260,7 @@ Feature: Registration
     |GP System |
     |EMIS      |
     |TPP       |
+  @NHS0-357
+    Examples:
+      |GP System |
+      |VISION    |

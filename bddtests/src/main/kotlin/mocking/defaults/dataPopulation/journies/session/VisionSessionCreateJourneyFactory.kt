@@ -1,7 +1,7 @@
 package mocking.defaults.dataPopulation.journies.session
 
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.vision.VisionMockDefaults
 import models.Patient
 
 class VisionSessionCreateJourneyFactory(val client: MockingClient): SessionCreateJourneyFactory() {
@@ -9,8 +9,9 @@ class VisionSessionCreateJourneyFactory(val client: MockingClient): SessionCreat
     override fun createFor(patient: Patient) {
         client
                 .forVision {
-                    getConfigurationRequest(MockDefaults.visionUserSession)
-                            .respondWithSuccess(MockDefaults.visionConfigurationResponse)
+                    getConfigurationRequest(
+                                    VisionMockDefaults.getVisionUserSession(patient))
+                            .respondWithSuccess(VisionMockDefaults.visionConfigurationResponse)
                 }
     }
 }

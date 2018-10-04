@@ -2,7 +2,7 @@
 {
     public class RegisterServiceDefinition : IVisionServiceDefinition
     {
-        public string Name => "VOS.GetConfiguration";
-        public string Version => "2.3.0";
+        public string Name => "VOS.LinkAccount";
+        public string Version => "1.0.0";
     }
 }

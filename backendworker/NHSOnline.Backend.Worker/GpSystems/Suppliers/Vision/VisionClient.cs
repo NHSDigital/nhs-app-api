@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
@@ -58,7 +59,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             
             return await SendRequestAndParseResponse<VisionDemographicsResponse, VisionRequest<DemographicsRequest>>(visionRequest);   
         }
-
+        
         public async Task<VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
             VisionUserSession visionUserSession, PatientDataRequest requestContent)
         {
@@ -97,8 +98,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return await SendRequestAndParseResponse<EligibleRepeatsResponse, VisionRequest<CoursesRequest>>(
                 visionRequest);
         }
-
-
+        
         public async Task<VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(VisionUserSession userSession, PrescriptionRequest prescriptionRequest)
         {
             IVisionServiceDefinition visionServiceDefinition = new PrescriptionHistoryServiceDefinition();
@@ -133,10 +133,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return await SendRequestAndParseResponse<BookedAppointmentsResponse, VisionRequest<PatientId>>(visionRequest);
         }
 
+        public async Task<VisionApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
+            PatientIm1ConnectionRequest request, string dob)
+        {
+            IVisionServiceDefinition visionServiceDefinition = new RegisterServiceDefinition();
+            
+            var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                odsCode, _providerId, request.AccountId, request.LinkageKey, request.Surname, dob);
+
+            
+            return await SendRequestAndParseResponse<ServiceContentRegisterResponse, VisionRequest<Object>>(visionRequest);
+        }
+
         public async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
         {
             var envelope = _envelopeService.BuildEnvelope(_certificate, request, _requestUsername);
-
             var response = await TransmitAsync<TResponse>(envelope);
 
             return response;
@@ -264,8 +275,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             public bool IsInvalidUserCredentialsError => "-30".Equals(
                 RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
 
-            public bool IsInvalidSecurtyHeaderError =>
-                (RawResponse?.Body?.Fault?.FaultCode ?? "").Contains("InvalidSecurity", StringComparison.Ordinal);
+            public bool IsInvalidSecurityHeaderError => (RawResponse?.Body?.Fault?.FaultCode ?? "").Contains("InvalidSecurity", StringComparison.Ordinal);
+
+            public bool IsAccountLockedError => VisionApiErrorCodes.AccountLocked.Equals(
+                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
+
+            public bool IsAlreadyRegisteredError => VisionApiErrorCodes.AccountAlreadyRegistered.Equals(
+                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
+
+            public bool IsInvalidDetailsError => VisionApiErrorCodes.InvalidDetails.Equals(
+                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
+            
+            public bool IsInvalidParameterError => VisionApiErrorCodes.InvalidParameter.Equals(
+                RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code, StringComparison.Ordinal);
 
             public bool IsUnknownError =>
                 "-100".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,

@@ -94,13 +94,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
         {
             throw new NotImplementedException();
         }
-
+        
         private static class ResponseFormats {
             public const string HTML = "HTML";
             public const string XML = "XML";
         }
 
-        private static class Views {
+        private static class Views
+        {
             public const string VPS_ALLERGIES = "VPS_ALLERGIES";
             public const string VPS_MEDICATIONS = "VPS_MEDICATIONS";
             public const string PROBLEMS = "PROBLEMS";
@@ -111,6 +112,31 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             public const string TEST_RESULTS = "TEST RESULTS";
             public const string EXAM_FINDINGS = "EXAM FINDINGS";
             public const string VPS_EVENT_HISTORY = "VPS_EVENT_HISTORY";
+        }
+
+        private static GetMyRecordResult GetCorrectErrorResult<T>(VisionClient.VisionApiObjectResponse<T> response)
+        {
+            if (response.IsInvalidRequestError)
+            {
+                return new GetMyRecordResult.InvalidRequest();
+            }
+
+            if (response.IsInvalidUserCredentialsError)
+            {
+                return new GetMyRecordResult.InvalidUserCredentials();
+            }
+
+            if (response.IsInvalidSecurityHeaderError)
+            {
+                return new GetMyRecordResult.ErrorProcessingSecurityHeader();
+            }
+
+            if (response.IsUnknownError)
+            {
+                return new GetMyRecordResult.UnknownError();
+            }
+
+            return new GetMyRecordResult.Unsuccessful();
         }
     }
 }

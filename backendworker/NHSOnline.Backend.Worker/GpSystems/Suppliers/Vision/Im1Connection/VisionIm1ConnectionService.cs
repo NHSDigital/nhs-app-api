@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
 using NHSOnline.Backend.Worker.GpSystems.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Extensions;
+using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
 {
@@ -31,15 +31,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
 
                 if (getConfigurationReply.HasErrorResponse)
                 {
-                    return GetCorrectErrorResult(getConfigurationReply);
+                    return GetCorrectVerifyErrorResult(getConfigurationReply);
                 }
 
-                var formattedNhsNumbers = getConfigurationReply.Body.Configuration.Account.PatientNumbers
-                    .Select(x => new PatientNhsNumber
-                    {
-                        NhsNumber = x.Number.FormatToNhsNumber()
-                    });
-
+                var formattedNhsNumbers = getConfigurationReply.ExtractNhsNumbers();
                 var response = new PatientIm1ConnectionResponse
                 {
                     ConnectionToken = connectionToken,
@@ -56,13 +51,54 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
             }
         }
 
-        public Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
+        public async Task<Im1ConnectionRegisterResult> Register(PatientIm1ConnectionRequest request)
         {
-            _logger.LogCritical("Vision IM1 Registration not yet implemented!");
-            throw new NotImplementedException();
+            try
+            {
+                _logger.LogEnter(nameof(Register));
+                var dob = request.DateOfBirth.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var linkAccountRes = await _visionClient.PostLinkAccount(request.OdsCode, request, dob);
+                if (linkAccountRes.HasErrorResponse)
+                {
+                    return GetCorrectRegisterErrorResult(linkAccountRes);
+                }
+                var apiToken = linkAccountRes.Body.AuthenticationRef.ApiToken;
+                var visionConnectionToken = new VisionConnectionToken
+                {
+                    RosuAccountId = request.AccountId,
+                    ApiKey = apiToken,
+                };
+                var configResponse = await _visionClient.GetConfiguration(visionConnectionToken, request.OdsCode);
+                if (configResponse.HasErrorResponse)
+                {
+                    _logger.LogError("Error occurred when trying to obtain nhs number from get configuration. " +
+                             $"Error Code: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Code}. " + 
+                             $"Error description: {configResponse.RawResponse.Body.VisionResponse.ServiceHeader.Outcome.Error.Description}.");
+                    return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+                }
+
+                var nhsNumbers = configResponse.ExtractNhsNumbers();
+                var response = new PatientIm1ConnectionResponse
+                {
+                    ConnectionToken = visionConnectionToken.SerializeJson(),
+                    NhsNumbers = nhsNumbers
+                };
+                 _logger.LogDebug("VisionIm1ConnectionService Register successfully completed");
+                return new Im1ConnectionRegisterResult.SuccessfullyRegistered(response);
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogCritical("Critical Error sending register request to vision");
+                _logger.LogCritical(e.ToString());
+                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+            }
+            finally
+            {
+                _logger.LogExit(nameof(Register));
+            }
         }
 
-        private Im1ConnectionVerifyResult GetCorrectErrorResult<T>(VisionApiObjectResponse<T> response)
+        private Im1ConnectionVerifyResult GetCorrectVerifyErrorResult<T>(VisionClient.VisionApiObjectResponse<T> response)
         {
             if (response.IsInvalidRequestError)
             {
@@ -76,7 +112,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                 return new Im1ConnectionVerifyResult.InvalidUserCredentials();
             }
 
-            if (response.IsInvalidSecurtyHeaderError)
+            if (response.IsInvalidSecurityHeaderError)
             {
                 LogError<T>("Invalid Security Error");
                 return new Im1ConnectionVerifyResult.ErrorProcessingSecurityHeader();
@@ -87,14 +123,49 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
                 LogError<T>("Unknown Error");
                 return new Im1ConnectionVerifyResult.UnknownError();
             }
-            
             LogError<T>("Other Error");
             return new Im1ConnectionVerifyResult.SupplierSystemUnavailable();
         }
+        
+        private Im1ConnectionRegisterResult GetCorrectRegisterErrorResult<T>(VisionClient.VisionApiObjectResponse<T> response)
+        {
+            if (response.IsAccountLockedError)
+            {
+                LogError<T>("User account locked");
+                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+            }
+            
+            if (response.IsAlreadyRegisteredError)
+            {
+                LogError<T>("User already registered");
+                return new Im1ConnectionRegisterResult.AccountAlreadyExists();
+            }
+            
+            if (response.IsInvalidDetailsError)
+            {
+                LogError<T>("Invalid supplied details");
+                return new Im1ConnectionRegisterResult.NotFound();
+            }
+            
+            if (response.IsInvalidParameterError)
+            {
+                LogError<T>("Invalid supplied details");
+                return new Im1ConnectionRegisterResult.BadRequest();
+            }
 
+            if (response.IsUnknownError)
+            {
+                LogError<T>("Unknown error");
+                return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+            }
+
+            LogError<T>("Other Error");
+            return new Im1ConnectionRegisterResult.SupplierSystemUnavailable();
+       }
+        
         private void LogError<T>(string errorType)
         {
-            _logger.LogError($"Vision IM1 Login - {errorType}");
+            _logger.LogError("Vision Im1Connection error of type '" + errorType + "'. ");
         }
     }
 }

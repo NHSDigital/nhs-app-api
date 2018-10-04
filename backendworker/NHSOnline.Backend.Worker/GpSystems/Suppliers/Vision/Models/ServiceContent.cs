@@ -7,5 +7,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
     {
         [XmlElement(ElementName = "vos", Namespace = "urn:vision")]
         public T ServiceContentBody { get; set; }
+        
+        [XmlElement(ElementName = "register", Namespace = "urn:vision")]
+        public ServiceContentRegister Register { get; set; }
+        
+        [XmlElement(ElementName = "authenticationRef", Namespace = "urn:vision")]
+        public ServiceContentAuthenticationRef AuthenticationRef { get; set; }
+        
+        
     }
 }

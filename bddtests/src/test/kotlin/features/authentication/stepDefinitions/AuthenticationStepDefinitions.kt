@@ -19,11 +19,9 @@ import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistra
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
-import mocking.emis.me.EmisMeApplicationsBuilder
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
 import mocking.emis.models.AssociationType
-import mocking.models.Mapping
 import models.Patient
 import net.serenitybdd.core.Serenity.setSessionVariable
 import net.serenitybdd.rest.SerenityRest
@@ -159,45 +157,37 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have data for a (.+) patient that does not exist$")
     fun iHaveDataForAPatientThatDoesNotExist(gpSystem: String) {
+
         this.patient = Patient.getDefault(gpSystem).copy(nhsNumbers = arrayListOf("nonExistingNhsNumber"))
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithNoOnlineUserFound() }
+        AuthenticationFactory.getForSupplier(gpSystem).patientDoesNotExist(this.patient)
+
         setIm1Request()
-    }
-
-
-    private fun createInvalidLinkageTest(gpSystem: String, patient: Patient, emisResponse: (EmisMeApplicationsBuilder.() -> Mapping)) {
-
-        when (gpSystem) {
-            "EMIS" -> {
-                mockingClient.forEmis { emisResponse(authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
-                mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-            }
-            "TPP" -> {
-                mockingClient.forTpp {
-                    authentication.linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
-                }
-            }
-        }
     }
 
     @Given("^I have data for a (.+) patient with incorrect linkage key$")
     fun iHaveDataForAPatientWithIncorrectLinkageKey(gpSystem: String) {
+
         this.patient = Patient.getDefault(gpSystem).copy(linkageKey = "incorrectLinkageKey")
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithLinkageKeyDoesNotMatch() }
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncorrectLinkageKey(this.patient)
+
         setIm1Request()
     }
 
     @Given("^I have data for a (.+) patient with incorrect surname$")
     fun iHaveDataForAPatientWithIncorrectSurname(gpSystem: String) {
+
         this.patient = Patient.getDefault(gpSystem).copy(surname = "incorrectSurname")
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithIncorrectSurnameOrDateOfBirth() }
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncorrectSurname(this.patient)
+
         setIm1Request()
     }
 
     @Given("^I have data for a (.+) patient with incorrect date of birth$")
     fun iHaveDataForAPatientWithIncorrectDateOfBirth(gpSystem: String) {
-        this.patient = Patient.getDefault(gpSystem)
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithIncorrectSurnameOrDateOfBirth() }
+
+        this.patient = Patient.getDefault(gpSystem).copy(surname = "1900-01-01")
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithIncorrectDOB(this.patient)
+
         setIm1Request()
     }
 
@@ -209,28 +199,42 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have a (.+) user's IM1 credentials with a Surname not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithASurnameNotInTheExpectedFormat(gpSystem: String) {
+
         this.patient = Patient.getDefault(gpSystem).copy(surname = INVALID_VALUE)
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithBadRequest("The request is invalid.", "Surname") }
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithSurnameInWrongFormat(this.patient)
+
         setIm1Request()
     }
 
     @Given("^I have a (.+) user's IM1 credentials with an Account ID not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithAnAccountIdNotInTheExpectedFormat(gpSystem: String) {
-        this.patient = Patient.getDefault(gpSystem).copy(accountId = INVALID_VALUE)
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithBadRequest("The request is invalid.", "LinkageDetails.AccountId") }
+
+        if(gpSystem == "VISION") {
+            this.patient = Patient.getDefault(gpSystem).copy(rosuAccountId = "10496")
+        }
+        else {
+            this.patient = Patient.getDefault(gpSystem).copy(accountId = INVALID_VALUE)
+        }
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithAccountIDInWrongFormat(this.patient)
+
         setIm1Request()
     }
 
     @Given("^I have a (.+) user's IM1 credentials with a Linkage Key not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithALinkageKeyNotInTheExpectedFormat(gpSystem: String) {
+
         this.patient = Patient.getDefault(gpSystem).copy(linkageKey = INVALID_VALUE)
-        createInvalidLinkageTest(gpSystem, this.patient) { respondWithBadRequest("The request is invalid.", "LinkageDetails.LinkageKey") }
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithLinkageKeyInWrongFormat(this.patient)
+
         setIm1Request()
     }
 
     @Given("^I have a (.+) user's IM1 credentials with a Date Of Birth not in the expected format$")
     fun iHaveAnEMISUsersIMCredentialsWithADateOfBirthNotInTheExpectedFormat(gpSystem: String) {
+
         this.patient = Patient.getDefault(gpSystem).copy(dateOfBirth = INVALID_VALUE)
+        AuthenticationFactory.getForSupplier(gpSystem).patientWithDOBInWrongFormat(patient)
+
         setIm1Request()
     }
 
@@ -291,6 +295,27 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         mockingClient.forEmis {
             authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithAlreadyLinked()
         }
+
+        setIm1Request()
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
+
+    @Given("^I have data for a Vision patient that has already been associated with the application in the GP system$")
+    fun iHaveDataForAVisionPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
+
+        this.patient = Patient.getDefault("VISION")
+        AuthenticationFactoryVision.patientIsAlreadyRegistered(this.patient)
+
+        setIm1Request()
+        setSessionVariable("HttpExceptionExpected").to(true)
+    }
+
+    @Given("^I have data for a Vision patient with a locked account as the account is opened in the Vision application$")
+    fun iHaveDataForAVisionPatientThatHasALockedAccount() {
+
+        this.patient = Patient.getDefault("VISION")
+        AuthenticationFactoryVision.patientHasALockedAccount(this.patient)
 
         setIm1Request()
         setSessionVariable("HttpExceptionExpected").to(true)

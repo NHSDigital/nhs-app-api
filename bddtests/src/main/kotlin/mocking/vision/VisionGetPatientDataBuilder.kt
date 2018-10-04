@@ -1,9 +1,7 @@
 package mocking.vision
 
 import mocking.models.Mapping
-import mocking.vision.VisionConstants
 import mocking.vision.VisionConstants.getClinicalDataResponse
-import mocking.vision.VisionMappingBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import org.apache.http.HttpStatus
@@ -36,13 +34,13 @@ ServiceDefinition, private val view: String, private val responseFormat: String)
 
     fun respondWithAccessDeniedError(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstants.getAccessDeniedError(serviceDefinition))
+            andXmlBody(VisionErrorResponses.getAccessDeniedError(serviceDefinition))
         }
     }
 
     fun respondWithUnknownError(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstants.getUnknownError(serviceDefinition))
+            andXmlBody(VisionErrorResponses.getUnknownError(serviceDefinition))
         }
     }
 

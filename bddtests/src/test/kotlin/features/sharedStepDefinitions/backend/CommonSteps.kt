@@ -8,7 +8,6 @@ import cucumber.api.java.en.Then
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.tpp.models.Authenticate
@@ -23,8 +22,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import worker.NhsoHttpException
 import worker.WorkerClient
-import java.util.*
 import java.util.concurrent.TimeUnit
+import mocking.vision.VisionMockDefaults
 
 
 class CommonSteps : AbstractSteps() {
@@ -70,7 +69,8 @@ class CommonSteps : AbstractSteps() {
             }
             VISION -> {
                 mockingClient.forVision {
-                    getConfigurationRequest(MockDefaults.visionUserSession)
+                    getConfigurationRequest(
+                            VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithServiceUnavailable()
                 }
             }

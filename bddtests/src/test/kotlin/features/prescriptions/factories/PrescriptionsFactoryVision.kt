@@ -3,8 +3,8 @@ package features.prescriptions.factories
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.data.prescriptions.courses.VisionCoursesLoader
-import mocking.defaults.MockDefaults
 import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.vision.VisionMockDefaults
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.NewPrescriptionRepeat
 import mocking.vision.models.OrderNewPrescriptionRequest
@@ -31,7 +31,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
                 "")
 
         mockingClient.forVision {
-            orderNewPrescriptionRequest(MockDefaults.visionUserSession, request)
+            orderNewPrescriptionRequest(VisionMockDefaults.visionUserSession, request)
                     .respondWithSuccess(OrderNewPrescriptionResponse.Ok)
                     .inScenario(scenarioTitle)
                     .whenScenarioStateIs(initialScenarioState)

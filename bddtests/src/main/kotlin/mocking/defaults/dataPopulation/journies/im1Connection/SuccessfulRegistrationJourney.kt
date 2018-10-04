@@ -16,6 +16,12 @@ import mocking.tpp.models.User
 import mocking.tpp.models.NationalId
 import mocking.tpp.models.Person
 import mocking.tpp.models.PersonName
+import mocking.vision.VisionMockDefaults
+import mocking.vision.models.Account
+import mocking.vision.models.Configuration
+import mocking.vision.models.PatientNumber
+import mocking.vision.models.Register
+import mocking.vision.models.VisionUserSession
 import models.Patient
 
 class SuccessfulRegistrationJourney(private val client: MockingClient) {
@@ -24,6 +30,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
         when (gpSystem) {
             "EMIS" -> generateEmisMocks(patient)
             "TPP" -> generateTppMocks(patient)
+            "VISION" -> generateVisionMocks(patient)
             else -> throw IllegalArgumentException("$gpSystem not recognised as a supported GP System.")
         }
     }
@@ -115,6 +122,38 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                             )
                     )
         }
+    }
+
+    private fun generateVisionMocks(patient: Patient) {
+
+
+        client
+                .forVision {
+                    getRegisterRequest(
+                            VisionMockDefaults.getVisionUserSession(patient),
+                            patient)
+                            .respondWithSuccess(
+                                    Register(
+                                            rosuAccountId = patient.rosuAccountId,
+                                            apiToken = patient.apiKey)
+                            )
+                }
+
+        client
+                .forVision {
+                    getConfigurationRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId
+                            ))
+                            .respondWithSuccess(
+                                    configuration = Configuration(account = Account(patient.patientId,
+                                            patientNumber = listOf(PatientNumber(number = patient.nhsNumbers.first())),
+                                            name = patient.formattedFullName()))
+                            )
+                }
     }
 
     companion object {

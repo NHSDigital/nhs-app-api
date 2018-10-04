@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                 return new SessionCreateResult.InvalidUserCredentials();
             }
 
-            if (response.IsInvalidSecurtyHeaderError)
+            if (response.IsInvalidSecurityHeaderError)
             {
                 return new SessionCreateResult.ErrorProcessingSecurityHeader();
             }

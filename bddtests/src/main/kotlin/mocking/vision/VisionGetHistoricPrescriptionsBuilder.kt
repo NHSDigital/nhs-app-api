@@ -1,11 +1,11 @@
 package mocking.vision
 
 import mocking.models.Mapping
-import mocking.vision.VisionConstants.getInvalidRequestError
-import mocking.vision.VisionConstants.getInvalidUserCredentialsError
-import mocking.vision.VisionConstants.getUnknownError
 import mocking.vision.VisionConstants.getVisionResponse
-import mocking.vision.VisionConstants.securityHeaderErrorResponse
+import mocking.vision.VisionErrorResponses.getInvalidRequestError
+import mocking.vision.VisionErrorResponses.getInvalidUserCredentialsError
+import mocking.vision.VisionErrorResponses.getUnknownError
+import mocking.vision.VisionErrorResponses.securityHeaderErrorResponse
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession

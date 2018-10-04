@@ -2,7 +2,7 @@ package mocking.defaults.dataPopulation.journies.prescriptions
 
 import mocking.MockingClient
 import mocking.data.prescriptions.VisionPrescriptionLoader
-import mocking.defaults.MockDefaults
+import mocking.vision.VisionMockDefaults
 import models.Patient
 
 private const val SEVEN_PRESCRIPTIONS = 7
@@ -32,7 +32,7 @@ class PrescriptionsHistoryJourney(private val client: MockingClient) {
         VisionPrescriptionLoader.loadData(1,1,1)
         client
                 .forVision {
-                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                    getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(patient))
                             .respondWithSuccess(VisionPrescriptionLoader.data)
                 }
     }

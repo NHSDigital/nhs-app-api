@@ -24,7 +24,6 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.MockDefaults
-import mocking.defaults.MockDefaults.Companion.patient
 import mocking.defaults.TppMockDefaults
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
@@ -47,8 +46,8 @@ import worker.models.prescriptions.PrescriptionsListResponse
 import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
-import java.util.*
 import javax.servlet.http.Cookie
+import mocking.vision.VisionMockDefaults
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
@@ -342,8 +341,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                 mockingClient
                         .forVision {
                             getConfigurationRequest(
-                                    MockDefaults.visionUserSessionPrescriptionDisabled)
-                                    .respondWithSuccess(MockDefaults.visionConfigurationResponsePrescriptionsDisabled)
+                                    VisionMockDefaults.visionUserSessionPrescriptionDisabled)
+                                    .respondWithSuccess(VisionMockDefaults.visionConfigurationResponsePrescriptionsDisabled)
                         }
             }
             else -> {
@@ -445,7 +444,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @Then("I see the appropriate error message for a course request error")
     fun thenISeeTheAppropriateErrorMessageForACourseRequestError() {
-        
+
         val pageHeader = confirmRepeatPrescriptionsOrderPage.serverErrorPageHeader
         val header = confirmRepeatPrescriptionsOrderPage.serverErrorHeader
         val message = confirmRepeatPrescriptionsOrderPage.serverErrorMessage
@@ -482,7 +481,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forEmis {
-                            prescriptions.prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            prescriptions.prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
@@ -498,7 +497,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
@@ -540,7 +539,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.VISION -> {
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(VisionMockDefaults.patientVision))
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
@@ -599,7 +598,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            getPrescriptionHistoryRequest(VisionMockDefaults.getVisionUserSession(VisionMockDefaults.patientVision))
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory).delayedBy(Duration.ofSeconds(delay))
                         }
             }

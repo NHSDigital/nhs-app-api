@@ -16,20 +16,20 @@ import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
-import mocking.defaults.MockDefaults
-import mocking.emis.models.*
+import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.tpp.models.ListRepeatMedicationReply
-import mocking.vision.models.*
+import mocking.vision.VisionMockDefaults
+import mocking.vision.models.PrescriptionHistory
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import pages.prescription.PrescriptionsPage
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.prescriptionsSubmission.PrescriptionSubmissionRequest
 import java.time.Duration
-import java.util.*
+import java.util.UUID
 
 open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
 
@@ -203,7 +203,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
             }
             ProviderTypes.VISION -> {
                 mockingClient.forVision {
-                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                    getPrescriptionHistoryRequest(VisionMockDefaults.visionUserSession)
                             .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                 }
             }

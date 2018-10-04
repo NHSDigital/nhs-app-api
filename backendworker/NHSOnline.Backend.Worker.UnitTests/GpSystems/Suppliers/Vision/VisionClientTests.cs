@@ -114,7 +114,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 
             // Assert
             response.HasErrorResponse.Should().BeTrue();
-            response.IsInvalidSecurtyHeaderError.Should().BeTrue();
+            response.IsInvalidSecurityHeaderError.Should().BeTrue();
         }
 
         [TestMethod]

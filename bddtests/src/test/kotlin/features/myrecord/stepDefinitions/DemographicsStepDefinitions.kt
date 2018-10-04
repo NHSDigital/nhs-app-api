@@ -2,10 +2,8 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import mocking.data.myrecord.DemographicsData
-import mocking.defaults.MockDefaults
 import mocking.tpp.models.Error
-import mocking.vision.VisionConstants
-import mocking.vision.models.ServiceDefinition
+import mocking.vision.VisionMockDefaults
 import mocking.vision.models.VisionUserSession
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -46,8 +44,8 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                     demographicsRequest(visionUserSession = VisionUserSession(
                             this@DemographicsStepDefinitions.patient.rosuAccountId,
                             this@DemographicsStepDefinitions.patient.apiKey,
-                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
-                    ).respondWithSuccess(MockDefaults.visionDemographicsResponse)
+                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)).
+                    respondWithSuccess(VisionMockDefaults.visionDemographicsResponse)
 
                 }
             }

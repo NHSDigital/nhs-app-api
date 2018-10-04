@@ -263,14 +263,16 @@ data class Patient(
                 contactDetails = defaultContactDetails,
                 odsCode = MockDefaults.DEFAULT_ODS_CODE_VISION,
                 nhsNumbers = listOf("5785445875"),
-                connectionToken = "{\"rosuAccountId\": \"104969\", \"" +
-                        "apiKey\":\"h4h9869kj3ytz6427y7" +
+                connectionToken = "{\"RosuAccountId\":\"104969\",\"" +
+                        "ApiKey\":\"h4h9869kj3ytz6427y7" +
                         "rctkdy3zkpxcncnhvfph76g2h6p9" +
                         "gywjq484c9ghan8tt\"}",
                 rosuAccountId = "104969",
                 apiKey = "h4h9869kj3ytz6427y7rctkdy3zkpxcncnh" +
                         "vfph76g2h6p9gywjq484c9ghan8tt",
-                patientId = "1017"
+                patientId = "1017",
+                accountId = "104969",
+                linkageKey = "kWWG9kHfNMSjm"
         )
 
         private fun formatNHSNumber(nhsNumber: String): String {
