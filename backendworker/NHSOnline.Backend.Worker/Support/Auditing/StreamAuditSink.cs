@@ -14,15 +14,17 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             _streamWriter = new StreamWriter(stream);
         }
 
-        public async Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details)
+        public Task WriteAudit(DateTime timestamp, string nhsNumber, Supplier supplier, string operation, string details)
         {
             if (_disposed)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
             
-            await _streamWriter.WriteLineAsync($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {supplier} | {operation} | {details} |");
-            await _streamWriter.FlushAsync();
+            _streamWriter.WriteLine($" | {timestamp:yyyy-MM-dd HH:mm:ss.fff} | {nhsNumber} | {supplier} | {operation} | {details} |");
+            _streamWriter.Flush();
+
+            return Task.CompletedTask;
         }
 
         public void Dispose()
