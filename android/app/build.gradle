@@ -14,15 +14,25 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
+    signingConfigs {
+        release {
+            storeFile file(release_store_location)
+            storePassword release_store_password
+            keyAlias release_store_key_alias
+            keyPassword release_store_password
+        }
+    }
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [appName: "NHS App"]
+            signingConfig signingConfigs.release
         }
         demo {
             applicationIdSuffix ".demo"
             manifestPlaceholders = [appName: "NHS App Demo"]
+            signingConfig signingConfigs.release
         }
         preview {
             initWith debug
