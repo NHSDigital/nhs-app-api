@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 
 const base64URLEncode = value =>
   value
@@ -50,11 +50,7 @@ class AuthorisationService {
   }
 
   getRedirectUri(device) {
-    if (device === Sources.Android || device === Sources.iOS) {
-      return this.nativeCidRedirectUri;
-    }
-
-    return this.webCidRedirectUri;
+    return Sources.isNative(device) ? this.nativeCidRedirectUri : this.webCidRedirectUri;
   }
 
   /* eslint-disable class-methods-use-this */

@@ -1,6 +1,6 @@
 /* eslint-disable */
 import Vue from 'vue';
-import { MedicationCourseStatus } from '@/lib/medication-course-status';
+import MedicationCourseStatus from '@/lib/medication-course-status';
 
 Vue.mixin({
   computed: {

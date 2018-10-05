@@ -41,7 +41,7 @@
 <script>
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
-import { MedicationCourseStatus } from '@/lib/medication-course-status';
+import MedicationCourseStatus from '@/lib/medication-course-status';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import _ from 'lodash';
 

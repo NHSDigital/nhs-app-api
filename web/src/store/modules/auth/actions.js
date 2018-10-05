@@ -1,4 +1,4 @@
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
 

@@ -25,8 +25,7 @@
 </template>
 
 <script>
-import
-{ MedicationCourseStatus } from '@/lib/medication-course-status';
+import MedicationCourseStatus from '@/lib/medication-course-status';
 import ClockIcon from '@/components/icons/ClockIcon';
 import ReadyIcon from '@/components/icons/ReadyIcon';
 import InfoIcon from '@/components/icons/InfoIcon';

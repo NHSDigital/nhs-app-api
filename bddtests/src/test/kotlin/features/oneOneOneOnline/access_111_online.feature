@@ -11,7 +11,7 @@ Feature: Access 111 Online
 
   @smoketest
   Scenario: The user is logged in
-    Given EMIS is initialised
+    Given a patient from EMIS is defined
     And I am logged in
     When I navigate to Symptoms
     Then Check My symptoms page is displayed

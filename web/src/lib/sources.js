@@ -1,6 +1,11 @@
-/* eslint-disable import/prefer-default-export */
-export const Sources = {
-  Web: 'web',
-  iOS: 'ios',
-  Android: 'android',
+const Web = 'web';
+const iOS = 'ios';
+const Android = 'android';
+const isNative = source => source === iOS || source === Android;
+
+export default {
+  Web,
+  iOS,
+  Android,
+  isNative,
 };

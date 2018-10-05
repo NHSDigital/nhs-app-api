@@ -18,7 +18,7 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 
 export default {
   components: {
@@ -52,7 +52,7 @@ export default {
     },
   },
   created() {
-    if (this.$route.query.source === Sources.Android || this.$route.query.source === Sources.iOS) {
+    if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);

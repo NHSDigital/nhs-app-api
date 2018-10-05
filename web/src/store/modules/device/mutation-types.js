@@ -1,4 +1,4 @@
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 
 export const initialState = () => ({
   isNativeApp: false,

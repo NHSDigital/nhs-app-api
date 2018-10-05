@@ -1,7 +1,12 @@
 /* eslint-disable import/prefer-default-export */
-export const MedicationCourseStatus = {
-  Unknown: 'Unknown',
-  Rejected: 'Rejected',
-  Requested: 'Requested',
-  Approved: 'Approved',
+const Unknown = 'Unknown';
+const Rejected = 'Rejected';
+const Requested = 'Requested';
+const Approved = 'Approved';
+
+export default {
+  Unknown,
+  Rejected,
+  Requested,
+  Approved,
 };

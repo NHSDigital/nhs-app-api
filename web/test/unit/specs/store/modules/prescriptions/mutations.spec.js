@@ -2,7 +2,7 @@ import mutations from '@/store/modules/prescriptions/mutations';
 import { PRESCRIPTIONS_LOADED, PRESCRIPTIONS_CLEAR } from '@/store/modules/prescriptions/mutation-types';
 
 // For some reason this import doesn't work with the @ notation
-import { MedicationCourseStatus } from '../../../../../../src/lib/medication-course-status';
+import MedicationCourseStatus from '../../../../../../src/lib/medication-course-status';
 
 describe('PRESCRIPTIONS_LOADED', () => {
   it('will set the prescription courses on the state to the received data', () => {

@@ -21,7 +21,7 @@ import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import SessionExpiredBanner from '@/components/SessionExpiredBanner';
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 
 export default {
   components: {
@@ -55,7 +55,7 @@ export default {
       window.validateSession || (() => this.$store.dispatch('session/validate'));
   },
   created() {
-    if (this.$route.query.source === Sources.Android || this.$route.query.source === Sources.iOS) {
+    if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);

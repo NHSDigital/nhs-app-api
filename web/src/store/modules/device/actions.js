@@ -1,4 +1,4 @@
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, GO_TO_CHECK_SYMPTOMS } from './mutation-types';
 
 export default {
