@@ -11,9 +11,10 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Worker.Support.Certificate;
 
@@ -47,7 +48,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
         }
             
-        public async Task<VisionClient.VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(VisionUserSession visionUserSession,
+        public async Task<VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(VisionUserSession visionUserSession,
             DemographicsRequest requestContent)
         {
             IVisionServiceDefinition visionServiceDefinition = new DemographicsServiceDefinition();
@@ -93,6 +94,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, prescriptionRequest);
 
             return await SendRequestAndParseResponse<PrescriptionHistoryResponse, VisionRequest<PrescriptionRequest>>(visionRequest);
+        }
+        
+        public async Task<VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
+            VisionConnectionToken token, 
+            string odsCode, 
+            string patientId
+            )
+        {
+            IVisionServiceDefinition visionServiceDefinition = new GetExistingAppointmentsServiceDefinition();
+
+            var visionRequest = new VisionRequest<PatientId>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                token.RosuAccountId, token.ApiKey, odsCode, _providerId, new PatientId { Id = patientId });
+
+            return await SendRequestAndParseResponse<BookedAppointmentsResponse, VisionRequest<PatientId>>(visionRequest);
         }
 
         public async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)

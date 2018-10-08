@@ -9,6 +9,7 @@ using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
@@ -27,11 +28,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             _serviceProvider = serviceProvider;
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public IAppointmentsService GetAppointmentsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionAppointmentsService>();
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1024", 
