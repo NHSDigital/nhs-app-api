@@ -12,6 +12,7 @@ import java.util.Random
 object PrescriptionsData {
     private const val MAX_PRESCRIPTIONS_NUMBER = 100
 
+    @Suppress("ComplexMethod")
     fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?,
                               showDosage: Boolean = true, showQuantity: Boolean = true):
             PrescriptionRequestsGetResponse {
