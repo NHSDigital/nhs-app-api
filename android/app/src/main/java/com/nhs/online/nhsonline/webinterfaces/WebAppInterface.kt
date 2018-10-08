@@ -2,9 +2,7 @@ package com.nhs.online.nhsonline.webinterfaces
 
 import android.webkit.JavascriptInterface
 import com.nhs.online.nhsonline.activities.MainActivity
-import android.widget.Toast
 import com.nhs.online.nhsonline.R
-import android.webkit.WebView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -46,15 +44,20 @@ class WebAppInterface(private val context: MainActivity) {
     }
 
     @JavascriptInterface
+    fun resetPageFocus() {
+        context.resetFocusToNhsLogo()
+    }
+
+    @JavascriptInterface
     fun hideWhiteScreen() {
         context.hideBlankScreen()
     }
 
     @JavascriptInterface
     fun completeAppIntro() {
-        context.webview.post(Runnable {
+        context.webview.post {
             context.webview.loadUrl(context.resources.getString(
-                    R.string.baseURL))
-        })
+                R.string.baseURL))
+        }
     }
 }

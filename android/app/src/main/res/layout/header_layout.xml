@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/_96ssp"
     android:layout_marginLeft="@dimen/_16sdp"
     android:layout_marginRight="@dimen/_16sdp"
+    android:minHeight="@dimen/_96ssp"
     android:orientation="vertical"
     android:weightSum="1">
 
@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_weight="0.5"
-        android:paddingBottom="@dimen/_8sdp"
-        android:paddingTop="@dimen/_8sdp">
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp">
 
       <ImageView
           android:id="@+id/nhsOnlineLogoIcon"
@@ -23,6 +23,8 @@
             android:layout_centerVertical="true"
             android:adjustViewBounds="true"
             android:contentDescription="@string/nhsAppHome"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_nhs_logo"
 			android:focusable="true"

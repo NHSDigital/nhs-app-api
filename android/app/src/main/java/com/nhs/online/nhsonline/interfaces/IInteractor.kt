@@ -24,4 +24,6 @@ interface IInteractor {
     fun clearMenuBarItem()
 
     fun setReloadUrl(url: String?)
+
+    fun announcePageTitle(title: String?)
 }

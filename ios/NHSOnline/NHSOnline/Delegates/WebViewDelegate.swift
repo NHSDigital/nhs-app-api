@@ -89,6 +89,9 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     
     func webView(_ webView: WKWebView, didFinish: WKNavigation!) {
         self.showWebViewContainer()
+        if !knownServices.isSameHostAsHomeUrl(url: webView.url) && !viewController.headerBar.isHidden {
+            viewController.resetFocusAndAnnouncePageTitle(pageTitle: webView.title)
+        }
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation: WKNavigation!, withError: Error) {
@@ -182,6 +185,10 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             
             if (message.name == "showHeader") {
                 viewController.setVisibilityOfHeaderAndMenuBars(visible: true)
+            }
+            
+            if (message.name == "resetPageFocus") {
+                viewController.headerBar.setFocusToNhsLogo()
             }
             
             if (message.name == "updateHeaderText") {

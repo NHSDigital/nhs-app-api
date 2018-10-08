@@ -27,7 +27,7 @@ class HomeViewController : UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupNhsLogo()
         setupMyAccountIcon()
         setupHelpIcon()
@@ -72,7 +72,7 @@ class HomeViewController : UIViewController {
         } else {
             self.webViewController?.loadPage(url: pageUrl)
         }
-
+        
         lifecycleHandlers = LifecycleHandlers(knownServices: knownServices, webViewController: webViewController!)
     }
     
@@ -96,7 +96,13 @@ class HomeViewController : UIViewController {
         if (headerText != nil) {
             self.headerBar.headerTitle.text = headerText
         }
-            self.headerBar.headerTitle.accessibilityLabel = accessibilityLabel
+        self.headerBar.headerTitle.accessibilityLabel = accessibilityLabel
+        
+        if let a11yLabel = accessibilityLabel {
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, a11yLabel)
+        } else {
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, headerText)
+        }
     }
     
     func callCheckSymptoms() {
@@ -149,6 +155,13 @@ class HomeViewController : UIViewController {
         self.updateHeaderText(headerText: NSLocalizedString("ConnectionErrorHeader", comment: ""))
         self.cycleFromViewController(oldViewController: self.webViewController!, toViewController: self.nativeViewController!)
         UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.nativeViewController?.errorTextView)
+    }
+    
+    func resetFocusAndAnnouncePageTitle(pageTitle: String?) {
+        self.headerBar.setFocusToNhsLogo()
+        if let title = pageTitle {
+            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, title)
+        }
     }
     
     func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {

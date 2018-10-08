@@ -20,6 +20,10 @@ window.nativeApp.showHeader = function() {
     window.webkit.messageHandlers.showHeader.postMessage(null);
 };
 
+window.nativeApp.resetPageFocus = function() {
+    window.webkit.messageHandlers.resetPageFocus.postMessage(null);
+};
+
 window.nativeApp.updateHeaderText = function(header) {
     window.webkit.messageHandlers.updateHeaderText.postMessage(header);
 };

@@ -16,7 +16,7 @@ import java.net.URL
 import java.util.logging.Logger
 
 private const val DELAY_PROGRESS_SHOW_TIME_MILLISECONDS = 500L
-private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L 
+private const val REQUEST_TIMEOUT_MILLISECONDS = 20 * 1000L
 
 class WebClientInterceptor(
     private val uiInteractor: IInteractor,
@@ -109,12 +109,14 @@ class WebClientInterceptor(
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
-        if(shouldHandleUnavailability(url)){
+        if (shouldHandleUnavailability(url)) {
             uiInteractor.dismissProgressDialog()
         }
 
         if (!shouldShowErrorPage) {
             uiInteractor.showWebviewScreen()
+            if(!knownServices.isUrlHostSameAsHomeUrlHost(url))
+                uiInteractor.announcePageTitle(view?.title)
         }
         super.onPageCommitVisible(view, url)
     }
@@ -161,12 +163,18 @@ class WebClientInterceptor(
             val headerDescription = service?.nativeHeaderDescription
             if (header != null) {
                 when (header) {
-                    context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectNavigationMenuActive(R.id.symptoms)
-                    context.resources.getString(R.string.symptoms_header) -> uiInteractor.selectNavigationMenuActive(R.id.symptoms)
-                    context.resources.getString(R.string.appointments_header) -> uiInteractor.selectNavigationMenuActive(R.id.appointments)
-                    context.resources.getString(R.string.prescriptions_header) -> uiInteractor.selectNavigationMenuActive(R.id.prescriptions)
-                    context.resources.getString(R.string.my_record_header) -> uiInteractor.selectNavigationMenuActive(R.id.myRecord)
-                    context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectNavigationMenuActive(R.id.more)
+                    context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectNavigationMenuActive(
+                        R.id.symptoms)
+                    context.resources.getString(R.string.symptoms_header) -> uiInteractor.selectNavigationMenuActive(
+                        R.id.symptoms)
+                    context.resources.getString(R.string.appointments_header) -> uiInteractor.selectNavigationMenuActive(
+                        R.id.appointments)
+                    context.resources.getString(R.string.prescriptions_header) -> uiInteractor.selectNavigationMenuActive(
+                        R.id.prescriptions)
+                    context.resources.getString(R.string.my_record_header) -> uiInteractor.selectNavigationMenuActive(
+                        R.id.myRecord)
+                    context.resources.getString(R.string.organ_donation_register_header) -> uiInteractor.selectNavigationMenuActive(
+                        R.id.more)
                 }
 
                 uiInteractor.setHeaderText(header, headerDescription)

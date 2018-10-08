@@ -47,6 +47,7 @@ class WebViewController: UIViewController, WKUIDelegate {
         webView.configuration.userContentController.add(delegate, name: "checkSymptoms")
         webView.configuration.userContentController.add(delegate, name: "completeAppIntro")
         webView.configuration.userContentController.add(delegate, name: "showHeader")
+        webView.configuration.userContentController.add(delegate, name: "resetPageFocus")
         webView.configuration.userContentController.add(delegate, name: "hideHeader")
         webView.configuration.userContentController.add(delegate, name: "hideWhiteScreen")
     }

@@ -1,6 +1,6 @@
 <template>
   <header :class="$style.header">
-    <nuxt-link :class="$style['anchor-icon']" :to="indexPath" tabindex="-1">
+    <nuxt-link ref="homeLogoEl" :class="$style['anchor-icon']" :to="indexPath" tabindex="-1">
       <home-icon/>
     </nuxt-link>
     <a id="help_icon" :class="$style['anchor-icon']" :href="helpAndSupportURL" target="_blank"
@@ -13,10 +13,6 @@
     </nuxt-link>
     <hr :class="$style.rule">
     <h1 :class="$style.title">{{ $store.state.header.headerText }}</h1>
-    <div :class="$style['sr-only']" role="presentation"
-         aria-live="polite" aria-relevant="additions" aria-atomic="false">
-      {{ $store.state.pageTitle.pageTitle + ' page' }}
-    </div>
   </header>
 </template>
 
@@ -60,13 +56,17 @@ export default {
       return INDEX.path;
     },
   },
+  methods: {
+    resetFocusToNhsLogo() {
+      this.$refs.homeLogoEl.$el.focus();
+    },
+  },
 };
 </script>
 
 <style module lang="scss" scoped>
 @import "../style/colours";
 @import "../style/textstyles";
-@import "../style/accessibility";
 
 .header {
   background: $nhs_blue;

@@ -8,7 +8,7 @@
            :href="symptomsPath"
            data-sid="symptoms-menu-item"
            role="tab"
-           @click="setMenuitemState($event)">
+           @click.prevent="setMenuitemState($event)">
           <symptoms-icon :selected="isMenuItemSelected(0)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.symptomsLabel') }}</span>
         </a>
@@ -20,7 +20,7 @@
            :href="appointmentsPath"
            data-sid="appointments-menu-item"
            role="tab"
-           @click="setMenuitemState($event)">
+           @click.prevent="setMenuitemState($event)">
           <appointments-icon :selected="isMenuItemSelected(1)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.appointmentsLabel') }}</span>
         </a>
@@ -32,7 +32,7 @@
            :href="prescriptionsPath"
            data-sid="prescriptions-menu-item"
            role="tab"
-           @click="setMenuitemState($event)">
+           @click.prevent="setMenuitemState($event)">
           <prescriptions-icon :selected="isMenuItemSelected(2)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.prescriptionsLabel') }}</span>
         </a>
@@ -44,7 +44,7 @@
            :href="recordWarningPath"
            data-sid="myrecord-menu-item"
            role="tab"
-           @click="setMenuitemState($event)">
+           @click.prevent="setMenuitemState($event)">
           <record-icon :selected="isMenuItemSelected(3)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.myRecordLabel') }}</span>
         </a>
@@ -56,7 +56,7 @@
            :href="morePath"
            data-sid="more-menu-item"
            role="tab"
-           @click="setMenuitemState($event)">
+           @click.prevent="setMenuitemState($event)">
           <more-icon :selected="isMenuItemSelected(4)" aria-hidden="true"/>
           <span>{{ $t('navigationMenu.moreLabel') }}</span>
         </a>
@@ -102,8 +102,6 @@ export default {
       } else {
         this.$router.push(a.pathname);
       }
-
-      event.preventDefault();
     },
   },
 };

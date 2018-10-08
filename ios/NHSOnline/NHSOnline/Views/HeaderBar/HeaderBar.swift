@@ -43,4 +43,9 @@ class HeaderBar: UIView {
         self.layer.shadowRadius = 5
         self.layer.shadowOpacity = 0.5
     }
+    
+    func setFocusToNhsLogo() {
+        self.NHSHomeLogo.becomeFirstResponder()
+        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.NHSHomeLogo)
+    }
 }

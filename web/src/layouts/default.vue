@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-menu v-if="showMenu"/>
+    <header-menu v-if="showMenu" ref="headerMenu"/>
     <main :class="mainClass">
       <spinner />
       <connection-error />
@@ -12,11 +12,13 @@
                 @onBarStatusChanged="setSurveyBarStatus"/>
     <navigation-menu v-if="showMenu"/>
     <hot-jar />
+    <a11y-title-announcer v-if="!$store.state.device.isNativeApp" ref="a11yAnnouncer"/>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-underscore-dangle */
+import A11yTitleAnnouncer from '@/components/widgets/A11yTitleAnnouncer';
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/widgets/Spinner';
@@ -30,6 +32,7 @@ import Sources from '@/lib/sources';
 
 export default {
   components: {
+    A11yTitleAnnouncer,
     NavigationMenu,
     HeaderMenu,
     Spinner,
@@ -56,6 +59,8 @@ export default {
   data() {
     return {
       surveyBarOpen: true,
+      pathChanged: false,
+      resetTimeoutId: undefined,
     };
   },
   computed: {
@@ -90,6 +95,14 @@ export default {
       return !!this.$store.state.session.csrfToken;
     },
   },
+
+  watch: {
+    $route(from, to) {
+      if (from !== to) {
+        this.pathChanged = true;
+      }
+    },
+  },
   created() {
     if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
@@ -109,11 +122,16 @@ export default {
         window.validateSession =
           window.validateSession || (() => {
             this.$store.dispatch('session/validate');
-          }
-          );
-
+          });
         this.$store.dispatch('auth/nativeLogin');
+        this.resetFocus();
       }
+    }
+  },
+  updated() {
+    if (this.pathChanged) {
+      this.resetFocus();
+      this.pathChanged = false;
     }
   },
   methods: {
@@ -125,6 +143,24 @@ export default {
     },
     isHotJarSurveyVisible() {
       return this.$env.HOTJAR_SURVEY_VISIBLE === 'true' || this.$env.HOTJAR_SURVEY_VISIBLE === true;
+    },
+    resetFocus() {
+      if (!this.loggedIn) {
+        return;
+      }
+      if (this.resetTimeoutId) {
+        clearTimeout(this.resetTimeoutId);
+      }
+      this.resetTimeoutId = setTimeout(() => {
+        if (this.$store.state.device.isNativeApp) {
+          window.nativeApp.resetPageFocus();
+        } else {
+          const headerMenuCompt = this.$refs.headerMenu;
+          if (headerMenuCompt) {
+            headerMenuCompt.resetFocusToNhsLogo();
+          }
+        }
+      }, 2000);
     },
   },
 };

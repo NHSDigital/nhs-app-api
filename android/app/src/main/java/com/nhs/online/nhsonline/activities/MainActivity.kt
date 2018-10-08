@@ -34,8 +34,8 @@ import com.nhs.online.nhsonline.webinterfaces.WebAppInterface
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
-import java.util.*
 import android.location.LocationManager
+import android.view.accessibility.AccessibilityEvent
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -51,7 +51,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE)
         CookieManager.getInstance().removeAllCookies(null)
 
         setContentView(R.layout.activity_main)
@@ -66,7 +67,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
         configureWebView()
         var wvClient = WebClientInterceptor(this, knownServices, createActivities(), this)
         webview.webViewClient = wvClient
-        urlLoader = UrlLoader(webview, wvClient, appWebInterface, knownServices, resources.getString(R.string.baseURL))
+        urlLoader = UrlLoader(webview,
+            wvClient,
+            appWebInterface,
+            knownServices,
+            resources.getString(R.string.baseURL))
 
         menuBar.menuItemSelectedListener = { menuBarItem -> onMenuSelected(menuBarItem) }
         retryButton.setOnClickListener { onErrorRetryButton() }
@@ -102,7 +107,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
         if (lifeCycleObserver == null) {
             lifeCycleObserver = LifeCycleObserver(this,
-                    appWebInterface, knownServices)
+                appWebInterface, knownServices)
         }
 
         lifeCycleObserver?.onMoveToForeground()
@@ -122,8 +127,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
         if (data != null) {
             if (data.scheme == getString(R.string.appScheme)) {
                 val url = data.buildUpon()
-                        .scheme(getString(R.string.baseScheme))
-                        .toString()
+                    .scheme(getString(R.string.baseScheme))
+                    .toString()
                 showBlankScreen()
                 loadPage(url)
             } else {
@@ -136,7 +141,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         urlLoader.reloadUrl = url
     }
 
-    fun getReloadUrl() : String? {
+    fun getReloadUrl(): String? {
         return urlLoader.reloadUrl
     }
 
@@ -156,12 +161,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
     fun createActivities(): List<ActivityInterface> {
         val openBrowserActivity =
-                OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
+            OpenUrlInBrowserActivity(resources.getStringArray(R.array.nativeAppHosts))
         return listOf(openBrowserActivity)
     }
 
     private fun onMenuSelected(menuBarItem: MenuBarItem) {
-        var path:String
+        var path: String
 
         when (menuBarItem.id) {
             R.id.symptoms -> {
@@ -190,7 +195,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
         loadUrl(url)
     }
 
-    private fun loadUrl(path:String) {
+    private fun loadUrl(path: String) {
         var knownService: KnownService? = knownServices.findMatchingInternalService(path)
         if (knownService != null) {
             setHeaderText(knownService.nativeHeader!!)
@@ -223,11 +228,8 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun setHeaderText(text: String, description: String?) {
         runOnUiThread {
             header_text_view.text = text
-            if(!description.isNullOrEmpty()) {
-                header_text_view.contentDescription = description
-            }
-            webview.announceForAccessibility(text)
-            this.title = text
+            header_text_view.contentDescription = description
+            webview.announceForAccessibility(description ?: text)
         }
     }
 
@@ -243,10 +245,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
 
         builder.setMessage(resources.getString(R.string.logoutWarning))
-                .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
-                    urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
-                }
-                .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
+            .setPositiveButton(resources.getString(R.string.logout)) { _, _ ->
+                urlLoader.loadPage(resources.getString(R.string.baseURL) + resources.getString(R.string.logoutPath))
+            }
+            .setNegativeButton(resources.getString(R.string.cancel)) { _, _ -> }
 
         var dialog: AlertDialog = builder.create()
         dialog.show()
@@ -270,8 +272,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title,
-                unavailabilityErrorMessage.message)
-        errorTextView.contentDescription = unavailabilityErrorMessage.title + ". " + unavailabilityErrorMessage.accessibleMessage
+            unavailabilityErrorMessage.message)
+        errorTextView.contentDescription = unavailabilityErrorMessage.title + ". " +
+                unavailabilityErrorMessage.accessibleMessage
         if (unavailabilityErrorMessage.message != null) {
             tryAgainTextView.visibility = GONE
 
@@ -299,19 +302,20 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         val lm = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-       var gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        var gpsEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
         if (requestCode == LOCATION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (gpsEnabled){
-                    chromeClient.onLocationPermissionResponded(true)}
-                else{
-                    val gpsOptionsIntent = Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                if (gpsEnabled) {
+                    chromeClient.onLocationPermissionResponded(true)
+                } else {
+                    val gpsOptionsIntent =
+                        Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     startActivity(gpsOptionsIntent)
                     chromeClient.onLocationPermissionResponded(true)
                 }
@@ -330,6 +334,10 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun goToCheckSymptoms() {
         val intent = Intent(this, SymptomsActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun announcePageTitle(title: String?) {
+        title?.let { webview.announceForAccessibility(it) }
     }
 
     private fun hideMenuBar() {
@@ -376,6 +384,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
     fun showBlankScreen() {
         viewSwitcher.visibility = View.GONE
         blankScreen.visibility = View.VISIBLE
+    }
+
+    fun resetFocusToNhsLogo() {
+        nhsOnlineLogoIcon.requestFocus()
+        nhsOnlineLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
     }
 
     fun hideBlankScreen() {
