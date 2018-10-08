@@ -11,7 +11,7 @@ import java.time.OffsetDateTime
 
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertTrue
-import java.time.LocalDateTime
+import java.util.TimeZone
 
 class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
 
@@ -48,7 +48,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
         mockingClient.forEmis { mapping(appointmentSlotsMetaRequest(patient, startDate, endDate)) }
     }
 
-    override val zoneOffset= getOffset()
+    override val supplierAdjustTime= TimeZone.getTimeZone("Europe/London").toZoneId()
 
     private fun getOffset():ZoneOffset{
         val odt = OffsetDateTime.now(ZoneId.of("Europe/London"))

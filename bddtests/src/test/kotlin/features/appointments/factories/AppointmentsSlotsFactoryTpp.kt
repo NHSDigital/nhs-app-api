@@ -2,7 +2,7 @@ package features.appointments.factories
 
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
-import java.time.ZoneOffset
+import java.util.TimeZone
 
 class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
 
@@ -18,5 +18,5 @@ class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
         throw Exception("Test Setup Incorrect: Practice Settings are not relevant to TPP anyway. ")
     }
 
-    override val zoneOffset= ZoneOffset.UTC
+    override val supplierAdjustTime= TimeZone.getTimeZone("UTC").toZoneId()
 }

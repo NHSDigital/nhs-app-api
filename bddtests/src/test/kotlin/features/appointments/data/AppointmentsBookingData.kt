@@ -1,11 +1,10 @@
 package features.appointments.data
 
-import addDays
 import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
 import mocking.MockingClient
-import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 open class AppointmentsBookingData {
 
@@ -26,23 +25,16 @@ open class AppointmentsBookingData {
         private fun tomorrowMidnight() = midnightDayInTheFuture(1)
         private fun threeWeeksTomorrowMidnight() = midnightDayInTheFuture(22)
 
-        private fun midnightDayInTheFuture(daysToAdd: Int): LocalDateTime {
-            val baseTime = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-            val dayInTheFuture = baseTime.addDays(daysToAdd)
-            return toSpecificTimeZone(setAsTime(dayInTheFuture))
+        private fun midnightDayInTheFuture(daysToAdd: Int): ZonedDateTime {
+
+            val baseTime = ZonedDateTime.now(ZoneId.of("UTC"))
+            val dayInTheFuture = baseTime.plusDays(daysToAdd.toLong())
+            val midnightDate = setToMidnight(dayInTheFuture)
+            return midnightDate
         }
 
-        private fun toSpecificTimeZone(calendar: Calendar): LocalDateTime {
-            val timeZone = TimeZone.getTimeZone("Europe/London")
-            return LocalDateTime.ofInstant(calendar.toInstant(), timeZone.toZoneId())
-        }
-
-        private fun setAsTime(calendar: Calendar, hour: Int = 0, minute: Int = 0, second: Int = 0): Calendar {
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
-            calendar.set(Calendar.SECOND, second)
-
-            return calendar
+        private fun setToMidnight(date: ZonedDateTime): ZonedDateTime {
+            return date.withHour(0).withMinute(0).withSecond(0)
         }
     }
 }

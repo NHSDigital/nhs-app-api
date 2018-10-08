@@ -1,6 +1,6 @@
 package features.appointments.factories
 
-import features.appointments.data.AppointmentsBookingData
+import constants.AppointmentDateTimeFormat
 import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
 import features.sharedSteps.SupplierSpecificFactory
@@ -13,28 +13,23 @@ import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.time.ZoneOffset
-import java.util.Date
-import java.util.Locale
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.TimeZone
+import java.util.Date
 
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample(startDate: LocalDateTime? = null,
-                                                       endDate: LocalDateTime? = null,
+    fun generateDefaultAvailableAppointmentSlotExample(startDate: ZonedDateTime? = null,
+                                                       endDate: ZonedDateTime? = null,
                                                        guidanceMessage: Boolean = true) {
         generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate, endDate, guidanceMessage)
     }
 
-    fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage(
-            startDate: LocalDateTime? = null,
-            endDate: LocalDateTime? = null
-    ) {
+    fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage() {
         val example = generateDefaultUserDataAndRetrieveSlotsExample()
-        val startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
-        val endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
-
-        generateAppointmentSlotResponseWithoutGuidance(startDateToUse, endDateToUse) {
+        generateAppointmentSlotResponseWithoutGuidance(null, null) {
             respondWithSuccess(example)
         }
     }
@@ -47,18 +42,35 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     fun generateExample(
             example: AppointmentSlotsResponseFacade,
-            startDate: LocalDateTime? = null,
-            endDate: LocalDateTime? = null,
+            startDate: ZonedDateTime? = null,
+            endDate: ZonedDateTime? = null,
             guidanceMessage: Boolean = true) {
-        val startDateToUse = getFormattedDate(startDate, AppointmentStartTimeKey)
-        val endDateToUse = getFormattedDate(endDate, AppointmentEndTimeKey)
+
+        saveToSerenityVariableForRequest(startDate, AppointmentStartTimeKey)
+        saveToSerenityVariableForRequest(endDate, AppointmentEndTimeKey)
+
+        val startDateToUseForMockResponse = adjustAndFormatDate(startDate)
+        val endDateToUseForMockResponse = adjustAndFormatDate(endDate)
 
         generateDefaultUserData()
 
-        generateAppointmentSlotResponse(startDateToUse, endDateToUse, guidanceMessage) {
+        generateAppointmentSlotResponse(
+                startDateToUseForMockResponse,
+                endDateToUseForMockResponse,
+                guidanceMessage) {
             respondWithSuccess(example)
         }
     }
+
+    private fun adjustAndFormatDate(date: ZonedDateTime?): String? {
+        if (date != null) {
+            val adjustedDate = date.withZoneSameInstant(supplierAdjustTime)
+            return formatDate(adjustedDate)
+        }
+        return null
+    }
+
+    abstract val supplierAdjustTime: ZoneId
 
     private fun generateDefaultUserDataAndRetrieveSlotsExample(): AppointmentSlotsResponseFacade {
         generateDefaultUserData()
@@ -72,20 +84,17 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         generateAppointmentSlotResponse(null, null, true, mapping)
     }
 
-    private fun getFormattedDate(date: LocalDateTime?, key: String): String? {
+    private fun saveToSerenityVariableForRequest(date: ZonedDateTime?, key: String) {
         if (date != null) {
-            Serenity.setSessionVariable(key).to(getRequestDateTime(date))
-            return date.format(AppointmentsBookingData.dateTimeFormat)
+            val value = formatDate(date)
+            Serenity.setSessionVariable(key).to(value)
         }
-        return null
     }
 
-    abstract val zoneOffset: ZoneOffset
-
-    private fun getRequestDateTime(date: LocalDateTime): String {
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK)
-        sdf.timeZone = TimeZone.getTimeZone("UTC")
-        return sdf.format(Date.from(date.toInstant(zoneOffset)))
+    private fun formatDate(date: ZonedDateTime): String {
+        val dateFormatter = DateTimeFormatter.ofPattern(
+                AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+        return dateFormatter.format(date)
     }
 
     private fun storeUIDateAndTimeOfSlotToSelect() {
