@@ -25,5 +25,10 @@ namespace NHSOnline.Backend.Worker.Areas.Demographics
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+        
+        public IActionResult Visit(GetDemographicsResult.InternalServerError result)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 }

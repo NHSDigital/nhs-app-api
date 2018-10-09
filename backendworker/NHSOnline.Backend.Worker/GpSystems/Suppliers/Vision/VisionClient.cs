@@ -12,6 +12,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionServiceDefinition;
 using NHSOnline.Backend.Worker.Support.Certificate;
 
@@ -44,7 +45,18 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             _certificate =
                 certificateService.GetCertificate(visionConfig.CertificatePath, visionConfig.CertificatePassphrase);
         }
-
+            
+        public async Task<VisionClient.VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(VisionUserSession visionUserSession,
+            DemographicsRequest requestContent)
+        {
+            IVisionServiceDefinition visionServiceDefinition = new DemographicsServiceDefinition();
+              
+            var visionRequest = new VisionRequest<DemographicsRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId, requestContent);
+            
+            return await SendRequestAndParseResponse<VisionDemographicsResponse, VisionRequest<DemographicsRequest>>(visionRequest);   
+        }
+        
         public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(VisionConnectionToken token, string odsCode)
         {
             IVisionServiceDefinition visionServiceDefinition = new ConfigurationServiceDefinition();
@@ -176,6 +188,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                 }
             }
 
+            public bool HasForbiddenResponse => StatusCode == HttpStatusCode.Forbidden;
+            
             // Note
             // We don't know whether Vision always populates certain properties when there is an error.
             // So there are a lot of null checks below using the null conditional operator.
@@ -189,6 +203,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             public bool IsUnknownError =>
                 "-100".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
+                    StringComparison.Ordinal);
+            
+            public bool IsAccessDeniedError =>
+                "-35".Equals(RawResponse?.Body?.VisionResponse?.ServiceHeader?.Outcome?.Error?.Code,
                     StringComparison.Ordinal);
 
             private bool StatusCodeIndicatesSuccess => StatusCode == HttpStatusCode.OK;

@@ -48,5 +48,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Demographics
                 return visitor.Visit(this);
             }
         }
+        
+        public class InternalServerError : GetDemographicsResult
+        {
+            public override T Accept<T>(IDemographicsResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

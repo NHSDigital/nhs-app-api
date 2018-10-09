@@ -2,6 +2,7 @@
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -14,5 +15,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         Task<VisionClient.VisionApiObjectResponse<PrescriptionHistoryResponse>> GetHistoricPrescriptions(
             VisionUserSession userSession,
             PrescriptionRequest prescriptionRequest);
+        
+        Task<VisionClient.VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(
+            VisionUserSession visionUserSession,
+            DemographicsRequest requestContent);
     }
 }

@@ -14,6 +14,7 @@ Feature: Get demographic data
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: GP practice has disabled demographics functionality
     Given the my record wiremocks are initialised for <Service>
@@ -26,6 +27,7 @@ Feature: Get demographic data
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   @NHSO-2549 @tech-debt
   Scenario Outline: GP System Unavailable

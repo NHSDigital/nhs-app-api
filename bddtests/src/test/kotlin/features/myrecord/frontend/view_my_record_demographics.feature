@@ -12,6 +12,7 @@ Feature: View My Medical Record Information - Demographics
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: A <Service> user navigates to patient information page
     Given the my record wiremocks are initialised for <Service>
@@ -27,6 +28,7 @@ Feature: View My Medical Record Information - Demographics
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |
 
   Scenario Outline: A <Service> user collapses the patient details section
     Given the my record wiremocks are initialised for <Service>
@@ -39,3 +41,4 @@ Feature: View My Medical Record Information - Demographics
       | Service |
       | EMIS    |
       | TPP     |
+      | VISION  |

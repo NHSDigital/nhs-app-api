@@ -6,5 +6,6 @@
         T Visit(GetDemographicsResult.SuccessfullyRetrieved result);
         T Visit(GetDemographicsResult.SupplierSystemUnavailable supplierSystemUnavailable);
         T Visit(GetDemographicsResult.Unsuccessful result);
+        T Visit(GetDemographicsResult.InternalServerError result);
     }
 }

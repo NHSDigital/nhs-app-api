@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Bridges\**" />
+    <Compile Remove="GpSystems\Suppliers\Vision\PatientRecord\VisionPatientRecordServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Bridges\**" />

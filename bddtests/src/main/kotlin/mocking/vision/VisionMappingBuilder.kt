@@ -1,13 +1,10 @@
 package mocking.vision
 
 import mocking.MappingBuilder
-import mocking.tpp.models.Authenticate
-import mocking.tpp.patientSelected.TppPatientSelectedBuilder
-import mocking.tpp.session.TppSessionBuilder
-import mocking.tpp.viewPatientOverview.TppViewPatientOverviewBuilder
+import mocking.vision.Demographics.VisionDemographicsBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
-import worker.models.demographics.TppUserSession
+import models.Patient
 
 open class VisionMappingBuilder(private val method: String) : MappingBuilder(method, "/vision/") {
 
@@ -19,4 +16,9 @@ open class VisionMappingBuilder(private val method: String) : MappingBuilder(met
 
     fun getEligibleRepeatsRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
             = VisionEligibleRepeatsBuilder(visionUserSession, serviceDefinition)
+
+    fun demographicsRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
+            = VisionDemographicsBuilder(visionUserSession, serviceDefinition)
+
+
 }

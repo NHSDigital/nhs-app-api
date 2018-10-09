@@ -8,6 +8,7 @@ using NHSOnline.Backend.Worker.GpSystems.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Session;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Demographics;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
@@ -47,11 +48,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             throw new NotImplementedException();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public IDemographicsService GetDemographicsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionDemographicsService>();
         }
 
         public IIm1ConnectionService GetIm1ConnectionService()

@@ -28,6 +28,7 @@ class VisionGetConfigurationBuilder(var userSession: VisionUserSession,
                 .andBody(userSession.odsCode, "contains")
                 .andBody(userSession.accountId, "contains")
                 .andBody(userSession.provider, "contains")
+                .andBody(serviceDefinition.name, "contains")
     }
     fun respondWithSuccess(configuration: Configuration): Mapping {
         val jaxbContext = JAXBContext.newInstance(Configuration::class.java)

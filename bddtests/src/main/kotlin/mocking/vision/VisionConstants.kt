@@ -14,8 +14,25 @@ object VisionConstants {
     var eligibleRepeats: String = "VONREP.GetEligibleRepeats"
     var eligibleRepeatsVersion: String = "2.0.0"
 
+    var demographicsName: String = "VODEM.GetDemographics"
+    var demographicsVersion: String = "2.0.0"
+
+    // Vision Demographics
+    fun getVisionDemographicsResponse(serviceContent: String,
+                                      serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+
+        val response = serviceContent
+                .replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
+                .replace("<ns2:demographics xmlns:ns2=\"urn:vision\">",
+                        "<demographics xmlns=\"urn:vision\" xmlns:mb=\"urn:messagebus\">")
+                .replace("</ns2:demographics>", "</demographics>")
+
+        return getBaseVisionResponse(response, serviceDefinition)
+    }
+
     // Vision Response
-    fun getVisionResponse(serviceContent: String, serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+    fun getVisionResponse(serviceContent: String, serviceDefinition: mocking.vision.models.ServiceDefinition):
+            String {
 
         val response = serviceContent
                 .replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
@@ -23,9 +40,14 @@ object VisionConstants {
                 .replace("<", "<vision:")
                 .replace("vision:/", "/")
 
+        return getBaseVisionResponse(response, serviceDefinition)
+    }
+
+
+    fun getBaseVisionResponse(response: String, serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
 
         return "<soap:Envelope xmlns:urn=\"urn:vision\" " +
-               "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+                "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "    <soap:Body>\n" +
                 "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
                 "            <vision:serviceDefinition>\n" +
@@ -99,6 +121,30 @@ object VisionConstants {
                 "              <vision:successful>false</vision:successful>\n" +
                 "              <vision:error>\n" +
                 "                 <vision:code>-100</vision:code>\n" +
+                "                 <vision:description>Unknown Error</vision:description>\n" +
+                "              </vision:error>\n" +
+                "           </vision:outcome>\n" +
+                "        </vision:serviceHeader>\n" +
+                "     </vision:visionResponse>\n" +
+                "  </soap:Body>\n" +
+                "</soap:Envelope>"
+    }
+
+    fun getAccessDeniedError(serviceDefinition: ServiceDefinition): String {
+        return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+                "  <soap:Header>\n" +
+                "  </soap:Header>\n" +
+                "  <soap:Body>\n" +
+                "     <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
+                "        <vision:serviceDefinition>\n" +
+                "           <vision:name>${serviceDefinition.name}</vision:name>\n" +
+                "           <vision:version>${serviceDefinition.version}</vision:version>\n" +
+                "        </vision:serviceDefinition>\n" +
+                "        <vision:serviceHeader>\n" +
+                "           <vision:outcome>\n" +
+                "              <vision:successful>false</vision:successful>\n" +
+                "              <vision:error>\n" +
+                "                 <vision:code>-35</vision:code>\n" +
                 "                 <vision:description>Unknown Error</vision:description>\n" +
                 "              </vision:error>\n" +
                 "           </vision:outcome>\n" +

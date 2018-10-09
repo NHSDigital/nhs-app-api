@@ -5,6 +5,7 @@ import mocking.emis.EmisConfiguration
 import config.Config
 import constants.TppConstants
 import mocking.MockingConfiguration
+import mocking.data.myrecord.DemographicsData
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
@@ -13,6 +14,9 @@ import mocking.tpp.models.Person
 import mocking.tpp.models.NationalId
 import mocking.tpp.models.PersonName
 import mocking.tpp.models.Error
+import mocking.vision.Demographics.Demographics
+import mocking.vision.Demographics.Name
+import mocking.vision.Demographics.PrimaryAddress
 import mocking.vision.VisionConstants
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration
@@ -157,9 +161,24 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 VisionConstants.eligibleRepeats,
                 VisionConstants.eligibleRepeatsVersion)
 
+        val visionDemographicsConfiguration = ServiceDefinition(
+                VisionConstants.demographicsName,
+                VisionConstants.demographicsVersion)
+
         val visionConfigurationResponse = Configuration(account = Account(patientVision.patientId,
                 patientNumber = listOf(PatientNumber(number = patientVision.nhsNumbers[0])),
                 name = getFullPatientName(patientVision)))
+
+        val visionDemographicsResponse = Demographics(
+                name = Name(patientVision.title, patientVision.firstName, patientVision.surname),
+                gender = patientVision.sex.name,
+                dateOfBirth = patientVision.dateOfBirth,
+                primaryAddress = PrimaryAddress(houseName = patientVision.address.houseNameFlatNumber,
+                        street = patientVision.address.numberStreet,
+                        town  = patientVision.address.village + ", " + patientVision.address.town,
+                        county = patientVision.address.county,
+                        postcode = patientVision.address.postcode)
+                )
 
         fun getFullPatientName(patient: Patient): String{
           return "${patient.title} ${patient.firstName} ${patient.surname}"

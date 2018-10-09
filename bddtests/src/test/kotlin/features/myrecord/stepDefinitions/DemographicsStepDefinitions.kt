@@ -2,7 +2,12 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import mocking.data.myrecord.DemographicsData
+import mocking.defaults.MockDefaults
 import mocking.tpp.models.Error
+import mocking.vision.VisionConstants
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
+import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.NhsoHttpException
@@ -36,6 +41,34 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                     patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData(this@DemographicsStepDefinitions.patient))
                 }
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    demographicsRequest(visionUserSession = VisionUserSession(
+                            this@DemographicsStepDefinitions.patient.rosuAccountId,
+                            this@DemographicsStepDefinitions.patient.apiKey,
+                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId),
+                            serviceDefinition = ServiceDefinition(VisionConstants.demographicsName, VisionConstants.demographicsVersion)).
+                    respondWithSuccess(MockDefaults.visionDemographicsResponse)
+
+                }
+            }
+        }
+    }
+
+    @Given("^there is an error getting demographics for (.*)$")
+    fun thereIsAnErrorGettingTheDemographicsFor(getService:String) {
+        setPatientToDefaultFor(getService)
+        when (getService) {
+            "VISION" -> {
+                mockingClient.forVision {
+                    demographicsRequest(visionUserSession = VisionUserSession(
+                            this@DemographicsStepDefinitions.patient.rosuAccountId,
+                            this@DemographicsStepDefinitions.patient.apiKey,
+                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId),
+                            serviceDefinition = ServiceDefinition(VisionConstants.demographicsName, VisionConstants.demographicsVersion))
+                            .respondWithUnknownError()
+                }
+            }
         }
     }
 
@@ -56,6 +89,19 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                 try {
                     mockingClient.forTpp {
                         patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    }
+                } catch (httpException: NhsoHttpException) {
+                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+                }
+            }
+            "VISION" -> {
+                try {
+                    mockingClient.forVision {
+                            demographicsRequest(visionUserSession = VisionUserSession(
+                                    this@DemographicsStepDefinitions.patient.rosuAccountId,
+                                    this@DemographicsStepDefinitions.patient.apiKey,
+                                    Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId),
+                                    serviceDefinition = ServiceDefinition(VisionConstants.demographicsName, VisionConstants.demographicsVersion)).respondWithAccessDeniedError()
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

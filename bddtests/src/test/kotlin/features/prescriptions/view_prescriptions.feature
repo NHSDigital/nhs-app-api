@@ -163,8 +163,6 @@ Feature: View prescriptions
 
     Examples:
       | GP System |
-      | EMIS      |
-      | TPP       |
       | VISION    |
 
 
