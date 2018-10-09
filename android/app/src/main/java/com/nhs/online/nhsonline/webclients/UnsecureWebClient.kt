@@ -6,10 +6,7 @@ import android.net.ConnectivityManager
 import android.os.Handler
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.nhs.online.nhsonline.R
-import com.nhs.online.nhsonline.activities.SymptomsActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
-import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
 import com.nhs.online.nhsonline.services.KnownServices
 
@@ -17,9 +14,9 @@ private const val DELAY_PROGRESS_SHOW_TIME = 500L
 private const val REQUEST_TIMEOUT = 10 * 1000L
 
 class UnsecureWebClient(
-        private val uiInteractor: UnsecureInteractor,
-        private val knownServices: KnownServices,
-        private val context: Context
+    private val uiInteractor: UnsecureInteractor,
+    private val knownServices: KnownServices,
+    private val context: Context
 ) : WebViewClient() {
 
     private val handler = Handler()
@@ -28,12 +25,8 @@ class UnsecureWebClient(
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         uiInteractor.setReloadUrl(url)
-        val urlPath = context.resources.getString(R.string.baseURL)+context.resources.getString(R.string.checkYourSymptoms)+context.resources.getString(R.string.nhsOnlineRequiredQueries)
-        when(url) {
-            context.resources.getString(R.string.nhs111) -> uiInteractor.setHeaderText(context.resources.getString(R.string.nhs_111_header))
-            context.resources.getString(R.string.conditions) -> uiInteractor.setHeaderText(context.resources.getString(R.string.conditions_header))
-            urlPath -> uiInteractor.setHeaderText(context.resources.getString(R.string.symptoms_header))
-        }
+        updateHeaderText(url)
+
         if (!isConnectedToInternet()) {
             stopLoadingWebviewAndShowNoConnectionError(view)
             noConnectionHandled = true
@@ -45,6 +38,15 @@ class UnsecureWebClient(
 
         shouldShowErrorPage = false
         super.onPageStarted(view, url, favicon)
+    }
+
+    private fun updateHeaderText(url: String?) {
+        if (url != null && !url.isBlank()) {
+            val serviceInfo = knownServices.findMatchingServiceInfo(url)
+            serviceInfo?.header?.let { header ->
+                uiInteractor.setHeaderText(header)
+            }
+        }
     }
 
     override fun onLoadResource(view: WebView?, url: String?) {
@@ -61,10 +63,10 @@ class UnsecureWebClient(
 
     @Suppress("OverridingDeprecatedMember")
     override fun onReceivedError(
-            view: WebView?,
-            errorCode: Int,
-            description: String?,
-            failingUrl: String?
+        view: WebView?,
+        errorCode: Int,
+        description: String?,
+        failingUrl: String?
     ) {
         if (shouldHandleUnavailability(failingUrl)) {
             cancelTrackingWebRequestResponse()
@@ -85,15 +87,13 @@ class UnsecureWebClient(
     }
 
     private fun shouldHandleUnavailability(urlString: String?): Boolean {
-        if (urlString != null) {
-            val matchingKnownService =
-                    knownServices.findMatchingKnownService(urlString)
-
-            if (matchingKnownService != null) {
-                return true
-            }
+        if (urlString == null) {
+            return false
         }
-        return false
+        val matchingKnownServiceInfo =
+            knownServices.findMatchingServiceInfo(urlString)
+
+        return matchingKnownServiceInfo != null
     }
 
     private fun isConnectedToInternet(): Boolean {
@@ -108,7 +108,7 @@ class UnsecureWebClient(
     }
 
     override fun onPageCommitVisible(view: WebView?, url: String?) {
-        if(shouldHandleUnavailability(url)){
+        if (shouldHandleUnavailability(url)) {
             uiInteractor.dismissProgressDialog()
         }
 
@@ -128,7 +128,7 @@ class UnsecureWebClient(
         }
 
         handler.postDelayed(showDialogFn,
-                DELAY_PROGRESS_SHOW_TIME)
+            DELAY_PROGRESS_SHOW_TIME)
         handler.postDelayed(expireRequestFn, REQUEST_TIMEOUT)
     }
 
@@ -148,8 +148,8 @@ class UnsecureWebClient(
     }
 
     private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {
-        val service = knownServices.findMatchingKnownService(failingUrl.toString())
-        return service?.unavailabilityErrorMessage ?: knownServices.getServiceUnavailabilityError()
+        val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
+        return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
     }
 
 }

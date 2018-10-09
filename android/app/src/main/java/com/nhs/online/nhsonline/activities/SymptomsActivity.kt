@@ -1,28 +1,21 @@
 package com.nhs.online.nhsonline.activities
 
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebViewClient
 import android.widget.TextView
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.UnsecureInteractor
-import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.support.setServiceError
 import com.nhs.online.nhsonline.webclients.ChromeClientLocationHandler
 import com.nhs.online.nhsonline.webclients.UnsecureWebClient
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.check_my_symptoms_banner.*
 import kotlinx.android.synthetic.main.error_layout.*
-import kotlinx.android.synthetic.main.error_layout.view.*
-import kotlinx.android.synthetic.main.header_layout.*
-import java.net.URL
 
 class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
 
@@ -42,7 +35,9 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         retryButton.setOnClickListener { reloadRequest() }
         configureWebView()
-        val urlPath = resources.getString(R.string.baseURL)+resources.getString(R.string.checkYourSymptoms)+resources.getString(R.string.nhsOnlineRequiredQueries)
+        val urlPath =
+            resources.getString(R.string.baseURL) + resources.getString(R.string.checkYourSymptoms) + resources.getString(
+                R.string.nhsOnlineRequiredQueries)
 
         loadPage(urlPath)
     }
@@ -55,15 +50,16 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         symptomsWebview.webChromeClient = chromeClient
 
         knownServices = KnownServices(this)
-        symptomsWebview.webViewClient =  UnsecureWebClient(this,  knownServices, this)
+        symptomsWebview.webViewClient = UnsecureWebClient(this, knownServices, this)
     }
 
     private fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
-                knownServices.findKnownServiceAddMissingQueryFor(url)
+            knownServices.findKnownServiceAndAddMissingQueryFor(url)
 
         symptomsWebview.loadUrl(urlWithMissingQueryStrings)
     }
+
     private fun reloadRequest() {
         showProgressDialog()
         if (reloadUrl != null) {
@@ -92,7 +88,7 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         val headerText = toolbar.findViewById<View>(R.id.header_text_view) as TextView
         runOnUiThread {
             headerText.text = text
-            if(!description.isNullOrEmpty()) {
+            if (!description.isNullOrEmpty()) {
                 headerText.contentDescription = description
             }
             symptomsWebview.announceForAccessibility(text)
@@ -104,7 +100,9 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
             symptomsWebview.goBack()
         } else if (reloadUrl != null) {
             if (isCheckSymptomsUnsecureURL(reloadUrl!!)) {
-                val urlPath = resources.getString(R.string.baseURL) + resources.getString(R.string.checkYourSymptoms) + resources.getString(R.string.nhsOnlineRequiredQueries)
+                val urlPath =
+                    resources.getString(R.string.baseURL) + resources.getString(R.string.checkYourSymptoms) + resources.getString(
+                        R.string.nhsOnlineRequiredQueries)
                 reloadUrl = urlPath
                 loadPage(urlPath)
             } else {
@@ -116,14 +114,13 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
         return true
     }
 
-    fun isCheckSymptomsUnsecureURL(failedURL: String): Boolean  {
-        var unsecuredKnownService: KnownService? = knownServices.findMatchingKnownService(failedURL)
-        if (unsecuredKnownService != null) {
-            val nhs111Header: String = resources.getString(R.string.nhs_111_header)
-            val healthAZHeader: String = resources.getString(R.string.conditions_header)
-            val unsecureKnownServices: Array<String> = arrayOf(nhs111Header, healthAZHeader)
-            if(unsecureKnownServices.contains(unsecuredKnownService.nativeHeader)) {
-                        return true
+    fun isCheckSymptomsUnsecureURL(failedURL: String): Boolean {
+        var unsecuredKnownServiceInfo = knownServices.findMatchingServiceInfo(failedURL)
+        unsecuredKnownServiceInfo?.header?.let { nativeHeader ->
+            return when (nativeHeader) {
+                resources.getString(R.string.nhs_111_header),
+                resources.getString(R.string.conditions_header) -> true
+                else -> false
             }
         }
         return false
@@ -132,7 +129,7 @@ class SymptomsActivity : UnsecureInteractor, AppCompatActivity() {
     override fun showUnavailabilityError(unavailabilityErrorMessage: ErrorMessage) {
         showErrorScreen()
         errorTextView.setServiceError(unavailabilityErrorMessage.title,
-                unavailabilityErrorMessage.message)
+            unavailabilityErrorMessage.message)
         if (unavailabilityErrorMessage.message != null) {
             tryAgainTextView.visibility = View.GONE
         } else {

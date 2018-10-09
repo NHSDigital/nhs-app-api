@@ -17,6 +17,7 @@
     <string name="symptoms_header">Check my symptoms</string>
     <string name="appointments_header">My appointments</string>
     <string name="prescriptions_header">My repeat prescriptions</string>
+    <string name="more_header">More</string>
     <string name="home_header">Home</string>
 
     <string name="connection_error_header">Internet connection error</string>

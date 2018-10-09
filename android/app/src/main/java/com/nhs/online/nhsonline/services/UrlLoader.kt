@@ -3,18 +3,16 @@ package com.nhs.online.nhsonline.services
 import android.net.Uri
 import android.webkit.URLUtil
 import android.webkit.WebView
-import com.nhs.online.nhsonline.network.Reachability
 import com.nhs.online.nhsonline.webclients.WebClientInterceptor
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
-import android.content.Context
 
 
 class UrlLoader (
-        var webView: WebView,
-        var wc: WebClientInterceptor,
-        var appWebInterface: AppWebInterface,
-        var knownServices: KnownServices,
-        val baseURL:String
+    var webView: WebView,
+    var wc: WebClientInterceptor,
+    var appWebInterface: AppWebInterface,
+    var knownServices: KnownServices,
+    val baseURL:String
 ) {
 
     var reloadUrl: String? = null
@@ -70,7 +68,7 @@ class UrlLoader (
 
     fun loadPage(url: String) {
         val urlWithMissingQueryStrings =
-                knownServices.findKnownServiceAddMissingQueryFor(url)
+                knownServices.findKnownServiceAndAddMissingQueryFor(url)
 
         webView.loadUrl(urlWithMissingQueryStrings)
     }

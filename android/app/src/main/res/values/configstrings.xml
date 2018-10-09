@@ -13,6 +13,7 @@
     <string name="prescriptionsPath">prescriptions</string>
     <string name="myAccountPath">account</string>
     <string name="nhs111">https://111.nhs.uk/</string>
+    <string name="nhsUK">https://www.nhs.uk</string>
     <string name="conditions">https://www.nhs.uk/conditions/</string>
     <string name="nhs111Location">https://111.service.nhs.uk/</string>
     <string name="organDonation">https://www.organdonation.nhs.uk/</string>>

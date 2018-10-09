@@ -19,106 +19,43 @@ class KnownServices {
     private let dataPreferencesTitle = NSLocalizedString("DataPreferencesTitle", comment: "")
     private let serviceUnavailableErrorMessage = NSLocalizedString("ServiceUnavailableErrorMessage", comment: "")
     private let hotJarTitle = NSLocalizedString("HotJarTitle", comment: "")
+    private var genericError:ErrorMessage
     private var serviceList = Array<KnownService>()
     private var externalSites = Array<URL>()
-    private var internalSerivceList = Array<KnownService>()
     
     init(config:Config) {
         self.config = config
+        self.genericError = ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
+        self.buildExternalSites()
         self.buildKnownServices()
-        self.buildInternalServices()
-    }
-    
-    func buildKnownServices() {
-        serviceList.append(KnownService(urlStrings: [config.HomeUrl], serviceTitle: homeTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:true, urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.Nhs111Url, config.Nhs111LocationUrl], serviceTitle: nhs111Title, service: .NHS_111, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.OrganDonationUrl], serviceTitle: organDonationTitle, service: .ORGAN_DONATION, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [config.DataPreferencesURL], serviceTitle: dataPreferencesTitle, service: .DATA_PREFERENCES, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false))
-        serviceList.append(KnownService(urlStrings: [config.ConditionsUrlPath], serviceTitle: conditionsTitle, accessibleServiceTitle: accessibleConditionsTitle, service: .CONDITIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
-        serviceList.append(KnownService(urlStrings: [getCheckSymptomsUrl()], serviceTitle: symptomsTitle, service: .NHS_ONLINE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage), shouldAllowNativeInteraction:true, shouldValidateSession:false,urlQueryString: config.NhsOnlineRequiredQueryString))
-        
-        
-        let helpURL: URL = URL(string: config.HelpURL)!
-        let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
-        let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
-        let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
-        let openSourceLicencesURL: URL = URL(string: config.OpenSourceLicencesURL)!
-        let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
-        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicencesURL, medicalRecordAbbreviationsURL]
-    }
-    
-    func buildInternalServices() {
-        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.SymptomsUrlPath)], serviceTitle: symptomsTitle, service: .SYMPTOMS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
-        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.AppointmentsUrlPath)], serviceTitle: appointmentsTitle, service: .APPOINTMENTS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
-        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.PrescriptionsUrlPath)], serviceTitle: prescriptionsTitle, service: .PRESCRIPTIONS, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
-        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.MyRecordUrlPath)], serviceTitle: myRecordTitle, service: .MY_RECORD, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
-        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.MoreUrlPath)], serviceTitle: moreTitle, service: .MORE, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))
-        internalSerivceList.append(KnownService(urlStrings: [getFullInternalUrl(urlPath: config.MyAccountUrlPath)], serviceTitle: myAccountTitle, service: .ACCOUNT, serviceErrorMessage: ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage)))        
-    }
-    
-    func getCheckSymptomsUrl() -> String {
-        let homeUrl = URL(string: config.HomeUrl)
-        let url = URL(string: config.CheckSymptomsUrlPath, relativeTo: homeUrl)?.absoluteString
-        return url!
-    }
-    
-    private func getFullInternalUrl(urlPath: String) -> String {
-        let homeUrl = URL(string: config.HomeUrl)
-        let url = URL(string: urlPath, relativeTo: homeUrl)?.absoluteString
-        return url!
-    }
-    
-    func getAllKnownHosts() -> [String?] {
-        let knownHosts = self.serviceList.flatMap { $0.urls }.map { $0.url?.host }
-        return knownHosts
     }
     
     func shouldURLOpenExternally(url: URL) -> Bool {
-        if externalSites.contains(url) {
-            return true
-        }
-        return false
+        return externalSites.contains(url)
     }
     
     func getUnavailabilityErrorMessageForService(_ url: URL?) -> ErrorMessage {
-        if let myUrl = url {
-            if let host = myUrl.host {
-                if let knownService = findMatchingKnownServiceForHostname(hostname: host) {
-                    return knownService.serviceErrorMessage
-                }
-            }
+        guard let serviceInfo = findMatchingKnownServiceInfo(url: url) else {
+            return self.getServiceUnavailableErrorMessage()
         }
-        return self.getServiceUnavailableErrorMessage()
+        return serviceInfo.serviceMessage
     }
     
     func getServiceUnavailableErrorMessage() -> ErrorMessage {
-        return ErrorMessage(title: serviceUnavailableErrorMessage)
+        return genericError
     }
     
     func getNoInternetConnectionErrorMessage() -> ErrorMessage {
-        return ErrorMessage(title: nhsOnlineErrorTitle, message: nhsOnlineErrorMessage, accessibleMessage: accessibleNhsOnlineErrorMessage)
+        return genericError
     }
     
     func findMatchingKnownServiceForHostname(hostname: String?) -> KnownService? {
-        if hostname != nil {
+        if let theHost = hostname {
             for service in serviceList {
-                for url in service.urls {
-                    if (url.host == hostname) {
-                        return service
-                    }
-                }
+                if service.url.host == theHost { return service }
             }
         }
         return nil
-    }
-    
-    
-    func findMatchingKnownServiceForURL(url: URL?) -> KnownService? {
-        return findServiceforURL(url: url, services: serviceList)
-    }
-    
-    func findMatchingInternalServiceForURL(url: URL?) -> KnownService? {
-        return findServiceforURL(url: url, services: internalSerivceList)
     }
     
     func isSameHostAsHomeUrl(url: URL?) -> Bool {
@@ -130,32 +67,71 @@ class KnownServices {
     
     func shouldAllowNativeInteraction(host:String?) -> Bool {
         if let knownService = findMatchingKnownServiceForHostname(hostname: host){
-            return knownService.shouldAllowNativeInteraction
+            return knownService.defaultPathInfo.allowNativeInteraction
         }
         return false
     }
     
-    func shouldValidateSession(host:String?) -> Bool {
+    func shouldValidateSession(host: String?) -> Bool {
         if let knownService = findMatchingKnownServiceForHostname(hostname: host) {
-            return knownService.shouldValidateSession
+            return knownService.defaultPathInfo.validateSession
         }
         return true
     }
     
-    private func findServiceforURL(url: URL?, services: [KnownService]) -> KnownService? {
-        if url != nil {
-            for service in services {
-                for knownUrl in service.urls {
-                    if (knownUrl.url?.host == url?.host && (knownUrl.url?.path == "" || knownUrl.url?.host == "/" || knownUrl.url?.path == url?.path)) {
-                        return service
-                    }
-                }
-            }
+    func findMatchingKnownServiceInfo(url: URL?, withExactMatchingPath: Bool = false) -> KnownService.Info? {
+        guard let theUrl = url, let matchingService = findMatchingKnownService(url: url) else { return nil }
+        return matchingService.findMatchingServicePathInfo(urlString: theUrl.absoluteString)
+    }
+    
+    func findMatchingKnownService(url: URL?) -> KnownService? {
+        if let theUrl = url, let service = findMatchingKnownServiceForHostname(hostname: theUrl.host) {
+            return service
         }
         return nil
+    }
+    
+    private func buildExternalSites() {
+        let helpURL: URL = URL(string: config.HelpURL)!
+        let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
+        let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
+        let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
+        let openSourceLicensesURL: URL = URL(string: config.OpenSourceLicencesURL)!
+        let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
+        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL]
+    }
+    
+    private func buildKnownServices() {
+        let nhsoService = buildNhsoService()
+        let conditionService = KnownService(serviceUrl: config.ConditionsUrlPath, service: .CONDITIONS, serviceError: genericError,  title: conditionsTitle, accessibleTitle: accessibleConditionsTitle, validateSession: false, allowNativeInteraction: true)
+        let nhs111Service = KnownService(serviceUrl: config.Nhs111Url, service: .NHS_111, serviceError: genericError, title: nhs111Title, validateSession: false, allowNativeInteraction: false)
+        let nhs111LocationService = KnownService(serviceUrl: config.Nhs111LocationUrl, service: .NHS_111, serviceError: genericError, title: nhs111Title, validateSession: false, allowNativeInteraction: false)
+        let organDonationService = KnownService(serviceUrl: config.OrganDonationUrl, service: .ORGAN_DONATION, serviceError: genericError, title: organDonationTitle, validateSession: false, allowNativeInteraction: true)
+        let dataPrefService = KnownService(serviceUrl: config.DataPreferencesURL, service: .DATA_PREFERENCES, serviceError: genericError, title: dataPreferencesTitle, validateSession: false, allowNativeInteraction: true)
+        
+        self.serviceList.append(nhsoService)
+        self.serviceList.append(conditionService)
+        self.serviceList.append(nhs111Service)
+        self.serviceList.append(nhs111LocationService)
+        self.serviceList.append(organDonationService)
+        self.serviceList.append(dataPrefService)
+    }
+    
+    private func buildNhsoService()-> KnownService {
+        let nhsoService = KnownService(serviceUrl: config.HomeUrl, service: .NHS_ONLINE, serviceError: genericError, title: homeTitle, validateSession: true, allowNativeInteraction: true, urlQueryString: config.NhsOnlineRequiredQueryString)
+        nhsoService.addPathInfo(path: config.SymptomsUrlPath, service: .SYMPTOMS, validateSession: true, allowNativeInteraction: true, title: symptomsTitle)
+        nhsoService.addPathInfo(path: config.CheckSymptomsUrlPath, service: .NHS_ONLINE, validateSession: false,  allowNativeInteraction: false, title: symptomsTitle)
+        nhsoService.addPathInfo(path: config.AppointmentsUrlPath, service: .APPOINTMENTS,validateSession: true,  allowNativeInteraction: true, title: appointmentsTitle)
+        nhsoService.addPathInfo(path: config.PrescriptionsUrlPath, service: .PRESCRIPTIONS, validateSession: true, allowNativeInteraction: true, title: prescriptionsTitle)
+        nhsoService.addPathInfo(path: config.MyRecordUrlPath, service: .MY_RECORD,validateSession: true,  allowNativeInteraction: true, title: myRecordTitle)
+        nhsoService.addPathInfo(path: config.MoreUrlPath, service: .MORE, validateSession: true, allowNativeInteraction: true, title: moreTitle)
+        nhsoService.addPathInfo(path: config.MyAccountUrlPath, service: .ACCOUNT, validateSession: true, allowNativeInteraction: true, title: myAccountTitle)
+        return nhsoService
     }
     
     enum Service {
         case NHS_111, CONDITIONS, NHS_ONLINE, ORGAN_DONATION, DATA_PREFERENCES, HOT_JAR, OTHERS, APPOINTMENTS, PRESCRIPTIONS, MY_RECORD, SYMPTOMS, MORE, ACCOUNT;
     }
 }
+
+

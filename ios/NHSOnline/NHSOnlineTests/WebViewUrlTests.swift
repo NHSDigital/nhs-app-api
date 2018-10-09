@@ -22,7 +22,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceIsMissingQueryString_Then_ItsCorrectlyAdded() {
         let urlString = config().HomeUrl
         let webViewUrl = URL(string: urlString);
-        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        let knownService = knownServices?.findMatchingKnownService(url: webViewUrl)
         
         let correctUrl = knownService?.addingMissingQueryParameters(urlString: (webViewUrl?.absoluteString)!)
         
@@ -32,7 +32,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceHasFragment_Then_HasMissingQueryStringReturnsFalse() {
         let urlString = config().HomeUrl + "#test"
         let webViewUrl = URL(string: urlString);
-        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        let knownService = knownServices?.findMatchingKnownService(url: webViewUrl)
         
         let result = knownService?.hasMissingQueryString(urlString: webViewUrl!.absoluteString)
         
@@ -42,7 +42,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceHasFragment_Then_QueryStringIsNotAdded() {
         let urlString = config().HomeUrl + "#test"
         let webViewUrl = URL(string: urlString);
-        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        let knownService = knownServices?.findMatchingKnownService(url: webViewUrl)
         
         let resultUrl = knownService?.addingMissingQueryParameters(urlString: (webViewUrl?.absoluteString)!)
         
@@ -53,11 +53,11 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceContainsQueryString_Then_ItsNotAdded() {
         let urlString = config().HomeUrl + config().NhsOnlineRequiredQueryString
         let webViewUrl = URL(string: urlString)
-        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        let knownService = knownServices?.findMatchingKnownService(url: webViewUrl)
         
         let correctUrl = knownService?.addingMissingQueryParameters(urlString: (webViewUrl?.absoluteString)!)
         
-        XCTAssertTrue((correctUrl?.elementsEqual(urlString))!)
+        XCTAssertEqual(urlString, correctUrl)
     }
     
     func test_When_OrganDonationServiceIsUnavailable_Then_DisplaysCorrectErrorMessage() {
@@ -73,13 +73,12 @@ class WebViewUrlTests: XCTestCase {
         let urlString = "http://notknown.service.url/"
         let webViewUrl = URL(string: urlString)
         
-        let knownService = knownServices?.findMatchingKnownServiceForHostname(hostname: webViewUrl?.host)
+        let knownService = knownServices?.findMatchingKnownService(url: webViewUrl)
         
         XCTAssertNil(knownService)
     }
     
     func test_When_KnownServiceHeaderTitleIsRequested_ThenCorrectTitleForPathIsReturned() {
-        let knownServices = KnownServices(config: config())
         let serviceUrlTitleDictionary = [
             config().HomeUrl : NSLocalizedString("HomeTitle", comment: ""),
             config().Nhs111Url:NSLocalizedString("NHS111Title", comment: ""),
@@ -87,11 +86,11 @@ class WebViewUrlTests: XCTestCase {
         ]
         for (urlString, title) in serviceUrlTitleDictionary {
             let url = URL(string:urlString)
-            guard let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: url?.host) else {
+            guard let knownServiceInfo = knownServices?.findMatchingKnownServiceInfo(url: url) else {
                 assertionFailure("known service not found for \(urlString)")
                 return
             }
-            XCTAssertEqual(knownService.getTitleFor(urlHost: url?.host), title, "expected title \(title ) for url \(urlString) not found")
+            XCTAssertEqual( title,knownServiceInfo.title, "expected title \(title ) for url \(urlString) not found")
         }
     }
 }

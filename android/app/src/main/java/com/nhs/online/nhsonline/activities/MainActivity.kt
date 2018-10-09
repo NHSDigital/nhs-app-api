@@ -21,8 +21,6 @@ import com.nhs.online.nhsonline.browseractivities.OpenUrlInBrowserActivity
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.navigation.MenuBarItem
-import com.nhs.online.nhsonline.services.KnownService
-import com.nhs.online.nhsonline.services.KnownServices
 import com.nhs.online.nhsonline.services.UrlLoader
 import com.nhs.online.nhsonline.support.LifeCycleObserver
 import com.nhs.online.nhsonline.support.setServiceError
@@ -35,9 +33,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import android.location.LocationManager
-import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityManager
+import com.nhs.online.nhsonline.services.KnownServices
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -201,14 +199,12 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun loadUrl(path: String) {
-        var knownService: KnownService? = knownServices.findMatchingInternalService(path)
-        if (knownService != null) {
-            setHeaderText(knownService.nativeHeader!!)
-        } else {
-            knownService = knownServices.findMatchingKnownService(path)
-            if (knownService != null) {
-                setHeaderText(knownService.nativeHeader!!)
-            }
+        var knownService = knownServices.findNHSAppInternalServiceInfoByPath(path)
+        if (knownService == null) {
+            knownService = knownServices.findMatchingServiceInfo(path)
+        }
+        knownService?.header?.let { nativeHeader ->
+            setHeaderText(nativeHeader)
         }
         urlLoader.loadUrl(path)
     }

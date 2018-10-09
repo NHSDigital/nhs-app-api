@@ -19,10 +19,12 @@
 		C20578082028B94800CDBDC5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C20578062028B94800CDBDC5 /* Main.storyboard */; };
 		C205780A2028B94800CDBDC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C20578092028B94800CDBDC5 /* Assets.xcassets */; };
 		C205780D2028B94800CDBDC5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C205780B2028B94800CDBDC5 /* LaunchScreen.storyboard */; };
+		C21428212164B21300F00948 /* KnownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21428202164B21300F00948 /* KnownService.swift */; };
+		C2142823216512D200F00948 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2142822216512D200F00948 /* KnownServices.swift */; };
 		C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */; };
+		C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2357EB9216574F20033B98F /* KnownServiceTests.swift */; };
+		C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2357EBB216575460033B98F /* KnownServicesTests.swift */; };
 		C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2697F2820C66B8E001DD790 /* ErrorTextView.swift */; };
-		C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D555207669C500F3B1E5 /* KnownServices.swift */; };
-		C276D5582077842300F3B1E5 /* KnownService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D5572077842300F3B1E5 /* KnownService.swift */; };
 		C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C276D563207B638400F3B1E5 /* HeaderBar.swift */; };
 		C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */; };
 		C2BFD3BF20C935D800D3E361 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */; };
@@ -72,10 +74,12 @@
 		C205780E2028B94800CDBDC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C20578132028B94800CDBDC5 /* NHSOnlineTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NHSOnlineTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C20578172028B94800CDBDC5 /* SafariTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariTests.swift; sourceTree = "<group>"; };
+		C21428202164B21300F00948 /* KnownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
+		C2142822216512D200F00948 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
 		C22B8554206B9B0E00530354 /* CALayer_Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CALayer_Extensions.swift; sourceTree = "<group>"; };
+		C2357EB9216574F20033B98F /* KnownServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServiceTests.swift; sourceTree = "<group>"; };
+		C2357EBB216575460033B98F /* KnownServicesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServicesTests.swift; sourceTree = "<group>"; };
 		C2697F2820C66B8E001DD790 /* ErrorTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorTextView.swift; sourceTree = "<group>"; };
-		C276D555207669C500F3B1E5 /* KnownServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownServices.swift; sourceTree = "<group>"; };
-		C276D5572077842300F3B1E5 /* KnownService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KnownService.swift; sourceTree = "<group>"; };
 		C276D563207B638400F3B1E5 /* HeaderBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBar.swift; sourceTree = "<group>"; };
 		C2BEAEC420D10C9E00FB1D56 /* UIView_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView_Extension.swift; sourceTree = "<group>"; };
 		C2BFD3BE20C935D800D3E361 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 				C20578172028B94800CDBDC5 /* SafariTests.swift */,
 				F01745AA207B8F1A00877E4D /* WebViewUrlTests.swift */,
 				C2D9864020C7BE5900F19792 /* ErrorTextViewTests.swift */,
+				C2357EB9216574F20033B98F /* KnownServiceTests.swift */,
+				C2357EBB216575460033B98F /* KnownServicesTests.swift */,
 			);
 			path = NHSOnlineTests;
 			sourceTree = "<group>";
@@ -192,8 +198,8 @@
 		C276D5542076557400F3B1E5 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C276D555207669C500F3B1E5 /* KnownServices.swift */,
-				C276D5572077842300F3B1E5 /* KnownService.swift */,
+				C21428202164B21300F00948 /* KnownService.swift */,
+				C2142822216512D200F00948 /* KnownServices.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -397,8 +403,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C21428212164B21300F00948 /* KnownService.swift in Sources */,
 				F0F2A8B3205138C700394B2F /* PageUnavailabilityViewController.swift in Sources */,
-				C276D556207669C500F3B1E5 /* KnownServices.swift in Sources */,
 				C2697F2920C66B8E001DD790 /* ErrorTextView.swift in Sources */,
 				F026199B2050AFE100EDDFE0 /* WebViewController.swift in Sources */,
 				F07607F620B465E400069F7F /* FileReader.swift in Sources */,
@@ -411,13 +417,13 @@
 				C22B8555206B9B0E00530354 /* CALayer_Extensions.swift in Sources */,
 				13BA17E321232D1500DF724B /* UnsecureViewController.swift in Sources */,
 				13BA17E7212C4ED200DF724B /* UnsecureWebViewDelegate.swift in Sources */,
+				C2142823216512D200F00948 /* KnownServices.swift in Sources */,
 				F0D2E5D620501EAA0067DEC4 /* WebViewDelegate.swift in Sources */,
 				981E9E32214E5FB300DA80EB /* Config.swift in Sources */,
 				F065B3DA205FDFC6004EF388 /* TabBarDelegate.swift in Sources */,
 				C276D564207B638400F3B1E5 /* HeaderBar.swift in Sources */,
 				9200DC9F21428562009EFFEF /* Reachability.swift in Sources */,
 				C20578032028B94800CDBDC5 /* AppDelegate.swift in Sources */,
-				C276D5582077842300F3B1E5 /* KnownService.swift in Sources */,
 				C2BEAEC520D10C9E00FB1D56 /* UIView_Extension.swift in Sources */,
 				609C4E6B08DE341B11E42E7F /* DateTime_Extensions.swift in Sources */,
 			);
@@ -427,9 +433,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2357EBC216575460033B98F /* KnownServicesTests.swift in Sources */,
 				F01745AB207B8F1A00877E4D /* WebViewUrlTests.swift in Sources */,
 				F01745BB207BA39200877E4D /* SafariTests.swift in Sources */,
 				C2D9864120C7BE5900F19792 /* ErrorTextViewTests.swift in Sources */,
+				C2357EBA216574F20033B98F /* KnownServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -557,6 +565,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = NO;
 			};
 			name = Production;
 		};
@@ -579,7 +588,6 @@
 		};
 		C20578252028B94800CDBDC5 /* Development */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APP_DISPLAY_NAME = "NHS App Debug";
@@ -718,6 +726,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = YES;
 			};
 			name = Development;
 		};
@@ -740,11 +749,13 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TREAT_MISSING_BASELINES_AS_TEST_FAILURES = NO;
 			};
 			name = Demo;
 		};
 		C205782B2028B94800CDBDC5 /* Development */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 981E9E33214E8EA200DA80EB /* Development.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

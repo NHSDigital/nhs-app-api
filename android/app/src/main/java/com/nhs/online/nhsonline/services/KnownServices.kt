@@ -1,137 +1,133 @@
 package com.nhs.online.nhsonline.services
 
 import android.content.Context
-
 import com.nhs.online.nhsonline.R
 import com.nhs.online.nhsonline.data.ErrorMessage
+import java.net.MalformedURLException
 import java.net.URL
 
+
 class KnownServices(private val context: Context) {
-    private val serviceList = arrayListOf<KnownService>()
-    private val internalServiceList = arrayListOf<KnownService>()
     private val unavailabilityErrorMessage =
         ErrorMessage(context.resources.getString(R.string.connection_error_title),
             context.resources.getString(R.string.connection_error_message),
-            context.resources.getString(R.string.Accessible_connection_error_message))
-    private val externalSites = arrayListOf<URL>()
+            context.resources.getString(
+                R.string.Accessible_connection_error_message))
 
-    enum class ServiceName { NHS111, NHS_ONLINE, ORGAN_DONATION, UNKNOWN }
+    private val serviceList = buildKnownServices()
+    private val externalSites = buildExternalSites()
 
-    init {
-        buildKnownServices()
-        buildInternalServices()
-    }
-
-    private fun buildKnownServices() {
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.baseURL)),
-            queryString = context.resources.getString(R.string.nhsOnlineRequiredQueries),
-            unavailabilityErrorMessage = unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.home_header),
-            shouldValidateSession = true))
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.organDonation)),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.organ_donation_register_header),
-            shouldValidateSession = false))
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.dataSharing)),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.data_sharing_header),
-            shouldValidateSession = false))
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.nhs111)),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.nhs_111_header),
-            shouldValidateSession = false))
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.conditions)),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.conditions_header),
-            nativeHeaderDescription = context.resources.getString(R.string.conditions_header_description),
-            shouldValidateSession = false))
-        serviceList.add(KnownService(arrayOf(context.resources.getString(
-            R.string.dataPreferencesBaseUrl)),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.data_preferences_header),
-            shouldValidateSession = false))
-
-
-        val externalStrings = context.resources.getStringArray(R.array.externalSiteUrls)
-        for (i in externalStrings) {
-            externalSites.add(URL(i))
-        }
-    }
-
-    private fun buildInternalServices() {
-        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(
-            R.string.symptomsPath))),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.symptoms_header),
-            shouldValidateSession = true))
-        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(
-            R.string.appointmentsPath))),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.appointments_header),
-            shouldValidateSession = true))
-        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(
-            R.string.prescriptionsPath))),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.prescriptions_header),
-            shouldValidateSession = true))
-        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(
-            R.string.myRecordPath))),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.my_record_header),
-            shouldValidateSession = true))
-        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(
-            R.string.myAccountPath))),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.my_account_header),
-            shouldValidateSession = true))
-        internalServiceList.add(KnownService(arrayOf(getFullInternalUrl(context.resources.getString(
-            R.string.morePath))),
-            unavailabilityErrorMessage,
-            nativeHeader = context.resources.getString(R.string.more),
-            shouldValidateSession = true))
-    }
 
     fun shouldURLOpenExternally(url: URL): Boolean {
-        if (externalSites.contains(url)) {
-            return true
-        }
-        return false
+        return externalSites.contains(url)
     }
 
     fun isHotJar(url: URL): Boolean {
         val hotJarURL = URL(context.resources.getString(R.string.hotjarLink))
-        if (url == hotJarURL) {
-            return true
-        }
-        return false
+        return url == hotJarURL
+    }
+
+    fun findMatchingServiceInfo(
+        urlString: String,
+        withExactMatchingPath: Boolean = false
+    ): KnownService.Info? {
+        val matchingService = findMatchingKnownService(urlString) ?: return null
+        return matchingService.findMatchingServicePathInfo(urlString, withExactMatchingPath)
     }
 
     fun findMatchingKnownService(urlString: String): KnownService? {
-        return findMatchingService(urlString, serviceList)
-    }
-
-    fun findMatchingInternalService(urlString: String): KnownService? {
-        return findMatchingService(urlString, internalServiceList)
-    }
-
-    fun findKnownServiceAddMissingQueryFor(urlString: String): String {
-        val matchingKnownService = findMatchingKnownService(urlString)
-
-        return if (matchingKnownService != null && matchingKnownService.hasMissingQueryString(
-                urlString)) {
-            matchingKnownService.addMissingQueryStrings(urlString)
-        } else {
-            urlString
+        val url = try {
+            URL(urlString.toLowerCase())
+        } catch (e: MalformedURLException) {
+            return null
         }
+        serviceList.forEach { knownService ->
+            if (knownService.getUrl().host.equals(url.host, true)) {
+                return knownService
+            }
+        }
+        return null
+    }
+
+    fun findKnownServiceAndAddMissingQueryFor(urlString: String): String {
+        val matchingKnownService = findMatchingKnownService(urlString) ?: return urlString
+        return matchingKnownService.addMissingQueryStrings(urlString)
     }
 
     fun getServiceUnavailabilityError(): ErrorMessage {
         return unavailabilityErrorMessage
+    }
+
+    fun findNHSAppInternalServiceInfoByPath(path: String): KnownService.Info? {
+        val nhsService = findMatchingKnownService(fetchStringResource(R.string.baseURL))
+        return nhsService?.findMatchingServicePathInfoByPath(path)
+    }
+
+    private fun buildKnownServices(): ArrayList<KnownService> {
+        val services = arrayListOf<KnownService>()
+        val nhsAppService = buildNHSInternalAppService()
+        val organDonation = KnownService(fetchStringResource(R.string.organDonation),
+            unavailabilityErrorMessage,
+            fetchStringResource(R.string.organ_donation_register_header),
+            null,
+            false)
+
+        val nhsUK = KnownService(fetchStringResource(R.string.nhsUK),
+            unavailabilityErrorMessage)
+        nhsUK.addPathInfo(URL(fetchStringResource(R.string.dataSharing)).path,
+            false,
+            fetchStringResource(R.string.data_preferences_header))
+
+        nhsUK.addPathInfo(URL(fetchStringResource(R.string.conditions)).path,
+            false,
+            fetchStringResource(R.string.conditions_header))
+
+        val nhs111 = KnownService(fetchStringResource(R.string.nhs111),
+            unavailabilityErrorMessage,
+            fetchStringResource(R.string.nhs_111_header),
+            null,
+            false)
+        val dataPref = KnownService(fetchStringResource(R.string.dataPreferencesBaseUrl),
+            unavailabilityErrorMessage,
+            fetchStringResource(R.string.conditions_header),
+            fetchStringResource(R.string.conditions_header_description),
+            false)
+
+        services.add(nhsAppService)
+        services.add(organDonation)
+        services.add(nhsUK)
+        services.add(nhs111)
+        services.add(dataPref)
+
+        return services
+    }
+
+    private fun buildNHSInternalAppService(): KnownService {
+        val internalService = KnownService(fetchStringResource(R.string.baseURL),
+            unavailabilityErrorMessage, fetchStringResource(R.string.home_header),
+            queryStrings = fetchStringResource(R.string.nhsOnlineRequiredQueries))
+        internalService.addPathInfo(fetchStringResource(R.string.symptomsPath),
+            true,
+            fetchStringResource(R.string.symptoms_header))
+        internalService.addPathInfo(fetchStringResource(R.string.checkYourSymptoms),
+            false,
+            fetchStringResource(R.string.symptoms_header))
+        internalService.addPathInfo(fetchStringResource(R.string.appointmentsPath),
+            true,
+            fetchStringResource(R.string.appointments_header))
+        internalService.addPathInfo(fetchStringResource(R.string.prescriptionsPath),
+            true,
+            fetchStringResource(R.string.prescriptions_header))
+        internalService.addPathInfo(fetchStringResource(R.string.myRecordPath),
+            true,
+            fetchStringResource(R.string.my_record_header))
+        internalService.addPathInfo(fetchStringResource(R.string.morePath),
+            true,
+            fetchStringResource(R.string.more_header))
+        internalService.addPathInfo(fetchStringResource(R.string.myAccountPath),
+            true,
+            fetchStringResource(R.string.my_account_header))
+        return internalService
     }
 
     fun isUrlHostSameAsHomeUrlHost(urlString: String?): Boolean {
@@ -141,29 +137,17 @@ class KnownServices(private val context: Context) {
         val url = URL(urlString)
         return homeUrl.host == url.host
     }
-
-    private fun getFullInternalUrl(urlPath: String): String {
-        val baseUrl = context.resources.getString(R.string.baseURL)
-        return (baseUrl + urlPath)
+    private fun fetchStringResource(resourceId: Int): String {
+        return context.resources.getString(resourceId)
     }
 
-    private fun findMatchingService(
-        urlString: String,
-        services: ArrayList<KnownService>
-    ): KnownService? {
-        val url = try {
-            URL(urlString.toLowerCase())
-        } catch (e: java.net.MalformedURLException) {
-            return null
-        }
-        services.forEach { knownService ->
-            knownService.urlList.forEach { knownUrl ->
-                if (knownUrl.host == url.host &&
-                    (knownUrl.path == "" || knownUrl.path == "/" || knownUrl.path == url.path)) {
-                    return knownService
-                }
-            }
-        }
-        return null
+    private fun buildExternalSites(): List<URL> {
+        val eSites = arrayListOf<URL>()
+        val sitesFromResource: Array<String>? =
+            context.resources.getStringArray(R.array.externalSiteUrls)
+
+        sitesFromResource?.forEach { site -> eSites.add(URL(site)) }
+        return eSites
     }
+
 }

@@ -2,9 +2,8 @@ package com.nhs.online.nhsonline.support
 
 import com.nhs.online.nhsonline.webinterfaces.AppWebInterface
 import com.nhs.online.nhsonline.activities.MainActivity
-import com.nhs.online.nhsonline.services.KnownServices
 import kotlinx.android.synthetic.main.activity_main.*
-import android.view.View
+import com.nhs.online.nhsonline.services.KnownServices
 
 
 class LifeCycleObserver(
@@ -18,9 +17,9 @@ class LifeCycleObserver(
         currentUrl?.let {
             if (currentUrl.contains("auth-return")) return
 
-            var knownService = knownServices.findMatchingKnownService(it)
+            val knownServiceInfo = knownServices.findMatchingServiceInfo(it)
 
-            if (knownService != null && knownService.shouldValidateSession) {
+            if (knownServiceInfo != null && knownServiceInfo.shouldValidateSession) {
                 appWebInterface.validateSession()
             } else {
                 context.hideBlankScreen()

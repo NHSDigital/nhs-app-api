@@ -37,14 +37,13 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
                 decisionHandler(.allow)
                 return
             }
-            if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
-                if matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
-                    let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
-                    decisionHandler(.cancel)
-                    webView.loadPage(url: urlString)
-                    
-                    return
-                }
+            if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host),
+                matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
+                let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
+                decisionHandler(.cancel)
+                webView.loadPage(url: urlString)
+                
+                return
             }
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
@@ -136,17 +135,13 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
     }
     
     func shouldOpenInSafari(url: URL) -> Bool {
-        let currentHost = url.host
-        let knownHosts = self.knownServices.getAllKnownHosts()
         
         if(url.absoluteString.contains(config().CarouselFileName)) {
             return false
         }
         
-        for host in knownHosts {
-            if (host == currentHost) {
-                return false
-            }
+        if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
+            return false
         }
         
         return true
@@ -159,16 +154,15 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
     
     
     func callUpdateHeaderTextForURL(url: URL) {
-        let knownService = self.knownServices.findMatchingKnownServiceForURL(url: url)
-        if (knownService?.serviceTitle != "") {
-            self.callUpdateHeaderText(headerText: knownService?.serviceTitle)
+        if let serviceInfo = self.knownServices.findMatchingKnownServiceInfo(url: url), let title = serviceInfo.title, !title.isEmpty {
+            self.callUpdateHeaderText(headerText: title)
         }
     }
     
     func callUpdateHeaderText(headerText: String?) {
         viewController.title = headerText
     }
-
+    
     @objc func pageIsNotResponding() {
         if(self.viewController.webViewController?.webView.isLoading)! {
             if #available(iOS 10.0, *) {
@@ -176,11 +170,11 @@ class UnsecureWebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKS
             } else {
                 NSLog("Page is not responding for a long time, loading stoped.")
             }
-
+            
             self.viewController.webViewController?.webView.stopLoading()
             let url = self.viewController.webViewController?.webView.url
-            if let knownService = knownServices.findMatchingKnownServiceForHostname(hostname: url?.host){
-                self.showNativeViewContainer(errorMessage: knownService.serviceErrorMessage)
+            if let knownServiceInfo = knownServices.findMatchingKnownServiceInfo(url: url) {
+                self.showNativeViewContainer(errorMessage: knownServiceInfo.serviceMessage)
             } else {
                 self.showNativeViewContainer(errorMessage: knownServices.getServiceUnavailableErrorMessage())
             }

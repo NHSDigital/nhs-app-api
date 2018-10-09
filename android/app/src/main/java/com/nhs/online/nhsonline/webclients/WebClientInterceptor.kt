@@ -10,7 +10,6 @@ import com.nhs.online.nhsonline.browseractivities.ActivityInterface
 import com.nhs.online.nhsonline.data.ErrorMessage
 import com.nhs.online.nhsonline.interfaces.IInteractor
 import com.nhs.online.nhsonline.network.Reachability
-import com.nhs.online.nhsonline.services.KnownService
 import com.nhs.online.nhsonline.services.KnownServices
 import java.net.URL
 import java.util.logging.Logger
@@ -122,16 +121,13 @@ class WebClientInterceptor(
     }
 
     private fun shouldHandleUnavailability(urlString: String?): Boolean {
-        if (urlString != null) {
-            val matchingKnownService =
-                knownServices.findMatchingKnownService(urlString)
-
-            if (matchingKnownService != null) {
-                return true
-            }
+        if (urlString == null) {
+            return false
         }
+        val matchingKnownService =
+            knownServices.findMatchingKnownService(urlString)
 
-        return false
+        return matchingKnownService != null
     }
 
     fun isConnectedToInternet(): Boolean {
@@ -152,19 +148,15 @@ class WebClientInterceptor(
     }
 
     private fun updateHeaderAndNavMenu(url: String?) {
-        var service: KnownService?
         url?.let {
-            service = knownServices.findMatchingInternalService(it)
-            if (service == null) {
-                service = knownServices.findMatchingKnownService(it)
-            }
+            val serviceInfo = knownServices.findMatchingServiceInfo(it)
 
-            val header = service?.nativeHeader
-            val headerDescription = service?.nativeHeaderDescription
+            val header = serviceInfo?.header
+            val headerDescription = serviceInfo?.nativeHeaderDescription
             if (header != null) {
                 when (header) {
-                    context.resources.getString(R.string.nhs_111_header) -> uiInteractor.selectNavigationMenuActive(
-                        R.id.symptoms)
+                    context.resources.getString(R.string.nhs_111_header),
+                    context.resources.getString(R.string.conditions_header),
                     context.resources.getString(R.string.symptoms_header) -> uiInteractor.selectNavigationMenuActive(
                         R.id.symptoms)
                     context.resources.getString(R.string.appointments_header) -> uiInteractor.selectNavigationMenuActive(
@@ -213,7 +205,7 @@ class WebClientInterceptor(
     }
 
     private fun getUnavailabilityErrorMessageForService(failingUrl: String?): ErrorMessage {
-        val service = knownServices.findMatchingKnownService(failingUrl.toString())
-        return service?.unavailabilityErrorMessage ?: knownServices.getServiceUnavailabilityError()
+        val serviceInfo = knownServices.findMatchingServiceInfo(failingUrl.toString())
+        return serviceInfo?.errorMessage ?: knownServices.getServiceUnavailabilityError()
     }
 }

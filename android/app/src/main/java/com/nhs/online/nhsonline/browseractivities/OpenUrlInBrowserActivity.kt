@@ -11,19 +11,17 @@ import android.support.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTIO
 import android.content.pm.ResolveInfo
 import com.nhs.online.nhsonline.services.KnownServices
 
-class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInterface
-{
+class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInterface {
     private val CHROME_PACKAGE_NAME = "com.android.chrome"
 
-    override fun canStart(context: Context, url: String): Boolean
-    {
+    override fun canStart(context: Context, url: String): Boolean {
         val knownServices = KnownServices(context)
-        if (knownServices.shouldURLOpenExternally(URL(url))){
+        if (knownServices.shouldURLOpenExternally(URL(url))) {
             return true
         }
         val currentHost = URL(url).host
         nativeAppHosts.forEach { nativeAppHost ->
-            if (URL(nativeAppHost).host == currentHost) {
+            if (URL(nativeAppHost).host.equals(currentHost, true)) {
                 return false
             }
         }
@@ -31,8 +29,7 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
         return true
     }
 
-    override fun start(context: Context, url: String)
-    {
+    override fun start(context: Context, url: String) {
         if (!canStart(context, url)) {
             throw RuntimeException("Cannot open url in browser")
         }
@@ -41,23 +38,23 @@ class OpenUrlInBrowserActivity(val nativeAppHosts: Array<String>) : ActivityInte
 
         val knownServices = KnownServices(context)
 
-            if (supportedCustomTabsPackages.count() > 0
-                    && !knownServices.isHotJar(URL(url))) {
-                val customTabsIntent = CustomTabsIntent.Builder()
-                        .setToolbarColor(Color.BLUE)
-                        .build()
+        if (supportedCustomTabsPackages.count() > 0
+            && !knownServices.isHotJar(URL(url))) {
+            val customTabsIntent = CustomTabsIntent.Builder()
+                .setToolbarColor(Color.BLUE)
+                .build()
 
-                if (supportedCustomTabsPackages.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }) {
-                    customTabsIntent.intent.setPackage(CHROME_PACKAGE_NAME)
-                } else {
-                    customTabsIntent.intent.setPackage(supportedCustomTabsPackages[0].activityInfo.packageName)
-                }
-                customTabsIntent.launchUrl(context, Uri.parse(url))
+            if (supportedCustomTabsPackages.any { it.activityInfo.packageName == CHROME_PACKAGE_NAME }) {
+                customTabsIntent.intent.setPackage(CHROME_PACKAGE_NAME)
             } else {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-
-                ContextCompat.startActivity(context, intent, null)
+                customTabsIntent.intent.setPackage(supportedCustomTabsPackages[0].activityInfo.packageName)
             }
+            customTabsIntent.launchUrl(context, Uri.parse(url))
+        } else {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+
+            ContextCompat.startActivity(context, intent, null)
+        }
 
     }
 

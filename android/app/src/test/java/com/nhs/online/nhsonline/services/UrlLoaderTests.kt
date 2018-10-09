@@ -12,8 +12,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
-import org.mockito.Mockito
-
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -39,7 +37,7 @@ class UrlLoaderTests {
         }
 
         var knownServicesMock : KnownServices = mock {
-            on { findKnownServiceAddMissingQueryFor(appPageUrl) } doReturn appPageUrl
+            on { findKnownServiceAndAddMissingQueryFor(appPageUrl) } doReturn appPageUrl
         }
 
         this.urlLoader = UrlLoader(webviewMock, webClientMock, appWebInterfaceMock, knownServicesMock, baseUrl)

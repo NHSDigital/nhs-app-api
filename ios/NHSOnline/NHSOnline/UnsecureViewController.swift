@@ -60,15 +60,12 @@ class UnsecureViewController : UIViewController {
     }
     
     func isCheckSymptomsUnsecureURL(failedUrl: URL) -> Bool {
-        let foundService = self.knownServices.findMatchingKnownServiceForURL(url: failedUrl)
         let nhs111Title = NSLocalizedString("NHS111Title", comment: "")
         let conditionsTitle = NSLocalizedString("ConditionsTitle", comment: "")
         let unsecureServices = [nhs111Title, conditionsTitle]
-        if let x = foundService {
-            if let y = x.serviceTitle {
-                if (unsecureServices.contains(y)) {
-                    return true
-                }
+        if let foundServiceInfo = self.knownServices.findMatchingKnownServiceInfo(url: failedUrl), let title = foundServiceInfo.title {
+            if (unsecureServices.contains(title)) {
+                return true
             }
         }
         return false

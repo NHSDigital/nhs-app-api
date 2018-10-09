@@ -23,13 +23,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.viewController.view.addSubview(activityIndicator)
     }
     
-
+    
     func webView(_ webView: WKWebView,
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
+        
         shouldHandleErrors = false
-
+        
         if let url = navigationAction.request.url {
             
             guard navigationAction.targetFrame?.isMainFrame != false else {
@@ -50,14 +50,14 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
                 openInSafari(url: url)
                 return
             }
-            if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
-                if matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
-                    let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
-                    decisionHandler(.cancel)
-                    webView.loadPage(url: urlString)
-                    
-                    return
-                }
+            if let matchingKnownService = knownServices.findMatchingKnownServiceForHostname(hostname: url.host),
+                matchingKnownService.hasMissingQueryString(urlString: url.absoluteString) {
+                let urlString = matchingKnownService.addingMissingQueryParameters(urlString: url.absoluteString)
+                decisionHandler(.cancel)
+                webView.loadPage(url: urlString)
+                
+                return
+                
             }
             if shouldOpenInSafari(url: url) {
                 decisionHandler(.cancel)
@@ -69,13 +69,13 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
         self.updateHeaderAndNavigationMenu(url: navigationAction.request.url!)
         decisionHandler(.allow)
     }
-
+    
     func showNoConnectionErrorView(urlNavigatingTo: String) {
         self.failedUrl = URL(string: urlNavigatingTo)
         self.showNativeViewContainerWithError(knownServices.getUnavailabilityErrorMessageForService(self.failedUrl))
         return
     }
-
+    
     func webView(_ webView: WKWebView, didStartProvisionalNavigation: WKNavigation!) {
         if timer != nil {
             clearTimer()
@@ -134,18 +134,12 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func shouldOpenInSafari(url: URL) -> Bool {
-        let currentHost = url.host
-        let knownHosts = self.knownServices.getAllKnownHosts()
-       
-        
         if(url.absoluteString.contains(config().CarouselFileName)) {
             return false
         }
         
-        for host in knownHosts {
-            if (host == currentHost) {
-                return false
-            }
+        if let _ = knownServices.findMatchingKnownServiceForHostname(hostname: url.host) {
+            return false
         }
         
         return true
@@ -243,37 +237,32 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
     }
     
     func updateHeaderAndNavigationMenu(url: URL?) {
-        let service: KnownService
         if let tabBarDelegate = self.viewController.tabBarDelegate {
-                if let internalService = knownServices.findMatchingInternalServiceForURL(url: url) {
-                    service = internalService
-                } else if let knownService = knownServices.findMatchingKnownServiceForURL(url: url) {
-                    service = knownService
-                } else {
-                    return
-                }
-                switch service.service {
-                case .NHS_111, .SYMPTOMS:
-                    tabBarDelegate.selectMenu(menu: .Symptoms)
-                    break
-                case .APPOINTMENTS:
-                    tabBarDelegate.selectMenu(menu: .Appointments)
-                    break
-                case .PRESCRIPTIONS:
-                    tabBarDelegate.selectMenu(menu: .Prescriptions)
-                    break
-                case .MY_RECORD:
-                    tabBarDelegate.selectMenu(menu: .MyRecord)
-                    break
-                case .ORGAN_DONATION:
-                    tabBarDelegate.selectMenu(menu: .More)
-                default : break
-                }
-
-                if (service.serviceTitle != "") {
-                    viewController.updateHeaderText(headerText: service.serviceTitle, accessibilityLabel: service.accessibleServiceTitle)
-                }
+            guard let serviceInfo = knownServices.findMatchingKnownServiceInfo(url: url) else {
+                return
             }
+            switch serviceInfo.serviceName {
+            case .NHS_111, .SYMPTOMS:
+                tabBarDelegate.selectMenu(menu: .Symptoms)
+                break
+            case .APPOINTMENTS:
+                tabBarDelegate.selectMenu(menu: .Appointments)
+                break
+            case .PRESCRIPTIONS:
+                tabBarDelegate.selectMenu(menu: .Prescriptions)
+                break
+            case .MY_RECORD:
+                tabBarDelegate.selectMenu(menu: .MyRecord)
+                break
+            case .ORGAN_DONATION:
+                tabBarDelegate.selectMenu(menu: .More)
+            default : break
+            }
+            
+            if let serviceTitle = serviceInfo.title, !serviceTitle.isEmpty {
+                viewController.updateHeaderText(headerText: serviceTitle, accessibilityLabel: serviceInfo.accessibleTitle)
+            }
+        }
     }
     
     private func showWebViewContainer() {

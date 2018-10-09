@@ -19,7 +19,7 @@ struct Config: Decodable {
     let BaseScheme: String
     let HotJarLinkUrl: String
     let DataPreferencesURL: String
-
+    
     let MyRecordUrlPath: String
     let MoreUrlPath: String
     let ConditionsUrlPath: String
@@ -49,5 +49,5 @@ func config() -> Config {
     let url = Bundle.main.url(forResource: "Info", withExtension: "plist")!
     let data = try! Data(contentsOf: url)
     let decoder = PropertyListDecoder()
-    return try! decoder.decode(Config.self, from: data) 
+    return try! decoder.decode(Config.self, from: data)
 }
