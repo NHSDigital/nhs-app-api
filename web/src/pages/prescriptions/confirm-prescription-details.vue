@@ -15,7 +15,7 @@
         <p data-purpose="prescription-description">{{ selectedPrescription.details }}</p>
       </div>
       <hr>
-      <div>
+      <div v-if="specialRequestNecessity !== 'NotAllowed'">
         <b>{{ $t('rp04.specialRequestsLabel') }}</b>
         <p v-if="specialRequest"
            id="specialRequestText"
@@ -53,6 +53,12 @@ export default {
       selectedPrescriptions: this.$store.getters['repeatPrescriptionCourses/selectedPrescriptions'],
       specialRequest: this.$store.state.repeatPrescriptionCourses.specialRequest,
     };
+  },
+  computed: {
+    specialRequestNecessity() {
+      return this.$store.state.repeatPrescriptionCourses
+        .specialRequestNecessity;
+    },
   },
   created() {
     if (this.selectedPrescriptions === null || this.selectedPrescriptions.length === 0) {

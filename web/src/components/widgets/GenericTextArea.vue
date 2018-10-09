@@ -4,6 +4,7 @@
               ref="textArea"
               :class="getStyleClasses"
               :id="id"
+              :required="required"
               v-model="textValue"
               :aria-labelledby="aLabelledBy"
               :maxlength="maxlength"
@@ -43,6 +44,10 @@ export default {
     initialContents: {
       type: String,
       default: undefined,
+    },
+    required: {
+      type: Boolean,
+      default: false,
     },
   },
   data: function data() { return { model: undefined }; },

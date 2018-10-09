@@ -22,7 +22,7 @@ using NHSOnline.Backend.Worker.Support.Logging;
 
 namespace NHSOnline.Backend.Worker.Areas.Session
 {
-    [Route("session"),PfsSecurityMode]
+    [Route("session"), PfsSecurityMode]
     public class SessionController : Controller
     {
         private readonly ICitizenIdService _citizenIdService;

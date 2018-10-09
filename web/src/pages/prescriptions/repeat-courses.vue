@@ -8,8 +8,11 @@
       <message-text>
         {{ $t('rp12.reasonMissing.summarySubHeader') }}
       </message-text>
-      <message-list>
+      <message-list v-if="!courseSelectionValid">
         <li>{{ $t('rp03.noMedicinesSelected') }}</li>
+      </message-list>
+      <message-list v-if="!specialRequestValid">
+        <li>{{ $t('rp03.specialRequestRequired') }}</li>
       </message-list>
     </message-dialog>
 
@@ -20,9 +23,9 @@
     <div v-if="showRepeatCourses">
       <div :class="$style.panel">
         <div :class="{
-          [$style['validation-inline']]: error,
-          [$style['validation-border-left']]: error}">
-          <error-message v-if="error" id="error-type">
+          [$style['validation-inline']]: (error && !courseSelectionValid),
+          [$style['validation-border-left']]: (error && !courseSelectionValid)}">
+          <error-message v-if="error && !courseSelectionValid" id="error-type">
             {{ $t('rp03.noMedicinesSelected') }}
           </error-message>
           <repeat-prescription
@@ -32,13 +35,24 @@
             :prescription-details="repeatPrescription" />
         </div>
       </div>
-      <div :class="$style.form" role="form">
-        <label for="specialRequest">
-          {{ $t('rp03.specialRequestsLabel') }}
+      <div v-if="specialRequestNecessity !== 'NotAllowed'"
+           :class="[$style.form, {
+             [$style['validation-inline']]: (error && !specialRequestValid),
+             [$style['validation-border-left']]: (error && !specialRequestValid)}]"
+           role="form">
+        <error-message v-if="error && !specialRequestValid" id="error-type">
+          {{ $t('rp03.specialRequestRequired') }}
+        </error-message>
+        <label v-if="specialRequestNecessity === 'Optional'" for="specialRequest">
+          {{ $t('rp03.specialRequestsLabelOptional') }}
+        </label>
+        <label v-if="specialRequestNecessity === 'Mandatory'" for="specialRequest">
+          {{ $t('rp03.specialRequestsLabelMandatory') }}
         </label>
         <generic-text-area id="specialRequest"
                            v-model="specialRequest"
                            :initial-contents="specialRequest"
+                           :required="(specialRequestNecessity === 'Mandatory')"
                            text-area-ref="specialRequest"
                            maxlength="1000"/>
         <p id="maxSpecialRequest" class="char">{{ $t('rp03.maxSpecialRequest') }}</p>
@@ -109,7 +123,15 @@ export default {
 
         this.$store.app.$analytics.validationError(errors);
       }
-      return validated && !isValid;
+
+      if (validated && !isValid && !this.courseSelectionValid) {
+        return true;
+      }
+      if (validated && !isValid && !this.specialRequestValid) {
+        return true;
+      }
+
+      return false;
     },
     repeatPrescriptionCourses() {
       const { repeatPrescriptionCourses } = this.$store.state.repeatPrescriptionCourses;
@@ -129,6 +151,28 @@ export default {
     hasLoaded() {
       return this.$store.state.repeatPrescriptionCourses.hasLoaded;
     },
+    specialRequestNecessity() {
+      return this.$store.state.repeatPrescriptionCourses
+        .specialRequestNecessity;
+    },
+    courseSelectionValid() {
+      const selectedCourses = [];
+      this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses.forEach((course) => {
+        if (course.selected) {
+          selectedCourses.push(course);
+        }
+      });
+
+      return selectedCourses.length > 0;
+    },
+    specialRequestValid() {
+      if (this.specialRequestNecessity === 'Mandatory') {
+        if (!this.specialRequest || this.specialRequest === '') {
+          return false;
+        }
+      }
+      return true;
+    },
   },
   mounted() {
     if (!this.$store.state.repeatPrescriptionCourses.hasLoaded) {
@@ -137,13 +181,7 @@ export default {
   },
   methods: {
     validate() {
-      const selectedCourses = [];
-      this.$store.state.repeatPrescriptionCourses.repeatPrescriptionCourses.forEach((course) => {
-        if (course.selected) {
-          selectedCourses.push(course);
-        }
-      });
-      if (selectedCourses.length > 0) {
+      if (this.courseSelectionValid && this.specialRequestValid) {
         let specialRequest = null;
         if (this.specialRequest) {
           specialRequest = this.specialRequest.trim();
@@ -155,7 +193,7 @@ export default {
         this.$router.push('/prescriptions/confirm-prescription-details');
       } else {
         const validationObj = {
-          isValid: selectedCourses.length > 0,
+          isValid: this.courseSelectionValid && this.specialRequestValid,
           submitted: true,
         };
         this.$store.dispatch('repeatPrescriptionCourses/validate', validationObj);

@@ -24,16 +24,22 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
     return values.joinToString(" ‐ ")
 }
 
-
 @DefaultUrl("http://web.local.bitraft.io:3000/prescriptions/repeat-courses")
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
     val PrescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
     val PrescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
+    val SpecialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
             browserLocator = "//button[@id='btn_order_prescription']",
+            androidLocator = null,
+            page = this
+    )
+
+    val backButton = HybridPageElement(
+            browserLocator = "//button[contains(text(),'Back')]",
             androidLocator = null,
             page = this
     )
@@ -130,6 +136,10 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
                     "\ndosage: ${medicationCourse.getInstructionsText()}")
     }
 
+    fun clickBackButton() {
+        backButton.element.click()
+    }
+
     fun typeTextIntoSpecialRequestTextArea(text: String) {
         val element = findByXpath("//*[@id='specialRequest']")
         //Each letter sent individually, and then asserted in order to give chrome extra time.
@@ -138,5 +148,13 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
             element.sendKeys(letter.toString())
             Assert.assertEquals("Last letter not sent", letter, element.value.last())
         }
+        findByXpath(SpecialRequestTextAreaXpath).sendKeys(text)
+    }
+
+    fun isSpecialRequestTextAreaVisible() : Boolean {
+        var specialRequestTextArea = findByXpath(SpecialRequestTextAreaXpath)
+        var isVIsible = specialRequestTextArea.isVisible
+        return isVIsible
     }
 }
+

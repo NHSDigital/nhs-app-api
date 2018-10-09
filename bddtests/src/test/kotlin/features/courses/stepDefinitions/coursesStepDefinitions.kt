@@ -22,6 +22,11 @@ import worker.models.courses.CoursesListResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
+import mocking.emis.EmisConfiguration
+import mocking.emis.EmisMappingBuilderAppointments
+import mocking.vision.models.EligibleRepeats
+import mocking.emis.practices.SettingsResponseModel
+
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
@@ -48,6 +53,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     var numCanBeRequested: Int = 0
     var showQuantity: Boolean = true
     var showDosage: Boolean = true
+    var prescriptionCommentsAllowed: Boolean = true
 
 
     @Given("I have (\\d+) (.*) assigned prescriptions")
@@ -111,6 +117,38 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         configureWireMockForHistoricPrescriptions()
     }
 
+    @And("(.*) has enabled special request text")
+    fun gpProviderHasEnabledSpecialRequestText(gpSystem: String) {
+        initalize(gpSystem)
+        prescriptionCommentsAllowed = true
+        setupSpecialRequestConfigChanged(gpSystem)
+    }
+
+    @And("(.*) has disabled special request text")
+    fun gpProviderHasDisabledSpecialRequestText(gpSystem: String) {
+        initalize(gpSystem)
+        prescriptionCommentsAllowed = false
+        setupSpecialRequestConfigChanged(gpSystem)
+    }
+
+    private fun setupSpecialRequestConfigChanged(gpSystem: String) {
+        if(gpSystem == "EMIS") {
+            val response = SettingsResponseModel()
+
+            if (prescriptionCommentsAllowed) {
+                response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.REQUESTED_OPTIONAL
+            } else {
+                response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.NOT_REQUESTED
+            }
+
+            mockingClient.forEmis {
+                EmisMappingBuilderAppointments(EmisConfiguration("16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7", "2.1.0.0"))
+                        .practiceSettingsRequest(currentPatient)
+                        .respondWithSuccess(response)
+            }
+        }
+    }
+
     @When("I click 'Order a new repeat prescription'")
     fun iClickOrderARepeatPrescription() {
         prescriptionsSteps.prescriptions.clickOrderARepeatPrescriptionButton()
@@ -164,6 +202,11 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         courseSteps.repeatPrescriptions.orderRepeatPrescriptionButton.element.click()
     }
 
+    @When("I click Back on the Order a repeat prescription page")
+    fun iClickBackOnTheOrderARepeatPrescriptionsPage() {
+        courseSteps.repeatPrescriptions.clickBackButton()
+    }
+
     @When("I click 'Change this repeat prescription' on the Prescription confirmation page")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
         confirmRepeatPrescriptionOrderSteps.clickChangeThisPrescriptionButton()
@@ -179,6 +222,18 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     fun iSeeTheSpecialRequestText(value: String) {
         confirmRepeatPrescriptionOrderSteps.isLoaded()
         confirmRepeatPrescriptionOrderSteps.assertSpecialRequest(value)
+    }
+
+    @Then("I see the special request text area")
+    fun iSeeTheSpecialRequestTextbox() {
+        courseSteps.isLoaded()
+        courseSteps.assertSpecialRequestTextAreaShown()
+    }
+
+    @Then("I don't see the special request text area")
+    fun iDontSeeTheSpecialRequestTextbox() {
+        courseSteps.isLoaded()
+        courseSteps.assertSpecialRequestTextAreaNotShown()
     }
 
     @Then("I see my previously selected repeat prescriptions selected")

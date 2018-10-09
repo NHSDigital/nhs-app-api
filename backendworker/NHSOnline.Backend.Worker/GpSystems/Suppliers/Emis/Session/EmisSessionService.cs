@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 {
                     _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
                 }
-
+                
                 return new SessionCreateResult.SuccessfullyCreated(
                     FormatName(sessionResponse),
                     session

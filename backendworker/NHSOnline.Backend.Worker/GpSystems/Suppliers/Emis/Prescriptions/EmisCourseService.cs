@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
 
@@ -34,7 +35,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 _logger.LogDebug("Beginning Fetch Courses for user");
                 
-                var coursesResponse = await _emisClient.CoursesGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, emisUserSession.EndUserSessionId);
+                var coursesResponse = await _emisClient.CoursesGet(emisUserSession.UserPatientLinkToken, emisUserSession.SessionId, 
+                    emisUserSession.EndUserSessionId);
                 
                 _logger.LogDebug("Fetch Courses for user complete");
 
@@ -60,6 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                         _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
 
                         var courseListResponse = _emisPrescriptionMapper.Map(coursesResponse.Body);
+                        courseListResponse.SpecialRequestNecessity = emisUserSession.PrescriptionSpecialRequestNecessity;
 
                         return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
                     }

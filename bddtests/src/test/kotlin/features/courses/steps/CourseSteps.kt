@@ -39,4 +39,14 @@ open class CourseSteps {
     fun assertNoMedicationAvailableToOrderMessageShown() {
         Assert.assertTrue(repeatPrescriptions.isNoMedicationAvailableToOrderMessageVisible())
     }
+
+    @Step
+    fun assertSpecialRequestTextAreaShown() {
+        Assert.assertTrue(repeatPrescriptions.isSpecialRequestTextAreaVisible())
+    }
+
+    @Step
+    fun assertSpecialRequestTextAreaNotShown() {
+        Assert.assertFalse(repeatPrescriptions.isSpecialRequestTextAreaVisible())
+    }
 }

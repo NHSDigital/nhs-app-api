@@ -190,6 +190,36 @@ Feature: View courses
       | EMIS      |
       | TPP       |
 
+  Scenario Outline: The user can't see prescription special request when the gp system <GP System> has disabled it
+    Given a patient from <GP System> is defined
+    And <GP System> has disabled special request text
+    And I am logged in
+    And I have historic prescriptions
+    And I navigate to prescriptions
+    And I have 10 <GP System> assigned prescriptions
+    And 10 of my prescriptions are of type repeat
+    And 10 of my prescriptions can be requested
+    When I click 'Order a new repeat prescription'
+    Then I don't see the special request text area
+    Examples:
+      | GP System |
+      | EMIS      |
+
+  Scenario Outline: The user can see prescription special request when the gp system <GP System> has enabled it
+    Given a patient from <GP System> is defined
+    And <GP System> has enabled special request text
+    And I am logged in
+    And I have historic prescriptions
+    And I navigate to prescriptions
+    And I have 10 <GP System> assigned prescriptions
+    And 10 of my prescriptions are of type repeat
+    And 10 of my prescriptions can be requested
+    When I click 'Order a new repeat prescription'
+    Then I see the special request text area
+    Examples:
+      | GP System |
+      | EMIS      |
+
   Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from <GP System> is defined
     And I am using <GP System> GP System
@@ -199,10 +229,10 @@ Feature: View courses
     And I navigate to prescriptions
     When I browse to the page at /prescriptions/repeat-courses
     Then I see a message informing me that I don't currently have access to this service
-      Examples:
-        | GP System |
-        | EMIS      |
-        | VISION    |
+    Examples:
+      | GP System |
+      | EMIS      |
+      | VISION    |
 
   Scenario: The User manipulates the url to go to the confirm repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from EMIS is defined

@@ -109,7 +109,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             {
                 Id = course.MedicationCourseGuid,
                 Name = course.Name,
-                Details = details,
+                Details = details
             };
         }
     }

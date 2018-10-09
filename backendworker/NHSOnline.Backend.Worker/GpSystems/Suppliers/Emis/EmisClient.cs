@@ -153,12 +153,11 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             EmisHeaderParameters headerParameters, string practiceCode)
         {
             var path = string.Format(CultureInfo.InvariantCulture,
-PracticeSettingsPath,
-practiceCode);
+                                     PracticeSettingsPath,
+                                     practiceCode);
 
             var response = await Get<PracticeSettingsGetResponse>(path, headerParameters.EndUserSessionId, headerParameters.SessionId);
             return response;
-
         }
 
         public async Task<EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> AppointmentSlotsMetadataGet(
@@ -238,6 +237,8 @@ practiceCode);
                 addNhsUserRequest, UsersNhsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
 
+        
+        
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,
             string endUserSessionId = null, string sessionId = null)
         {

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Prescriptions;
 using NHSOnline.Backend.Worker.Settings;
@@ -61,7 +62,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                             mappedPrescriptionList.Prescriptions = mappedPrescriptionList.Prescriptions
                                 .Where(x => x.Status.HasValue && allowedStatuses.Contains(x.Status.Value));
                         }
-
+                        
                         return new PrescriptionResult.SuccessfulGet(mappedPrescriptionList);
                     }
                     catch (Exception e)
@@ -105,8 +106,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
 
                 var requestedMedicationCourses = prescription.RequestedMedicationCourses.ToList();
 
-                var repeatCoursesInPrescription = prescription
-                    .RequestedMedicationCourses
+                var repeatCoursesInPrescription = 
+                    requestedMedicationCourses
                     .Where(x => repeatCourseIdLookup.ContainsKey(x.RequestedMedicationCourseGuid))
                     .ToList();
 
