@@ -5,6 +5,7 @@ Feature: View available appointment slots backend
   As a logged user
   I want to see available appointment slots
 
+  @bug @NHSO-2795
   Scenario Outline: Requesting available <GP System> appointment slots with correct data returns lists of available slots
     Given there are available <GP System> appointment slots for an explicit date-time range
     And I have logged into <GP System> and have a valid session cookie
