@@ -21,6 +21,7 @@ import {
   PRESCRIPTION_CONFIRM_COURSES,
   PRESCRIPTION_REPEAT_COURSES,
   SYMPTOMS,
+  TERMSANDCONDITIONS,
 } from '@/lib/routes';
 
 function setPageTitle(route, store, app) {
@@ -126,6 +127,10 @@ export default function ({ route, store, app }) {
     case DATA_SHARING_PREFERENCES.name:
       route.meta.headerKey = 'pageHeaders.dataSharing';
       route.meta.pageTitleKey = 'pageTitles.dataSharing';
+      break;
+    case TERMSANDCONDITIONS.name:
+      route.meta.headerKey = 'pageHeaders.termsAndConditions';
+      route.meta.pageTitleKey = 'pageTitles.termsAndConditions';
       break;
     default:
       route.meta.headerKey = '';

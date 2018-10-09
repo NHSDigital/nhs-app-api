@@ -10,9 +10,9 @@
     </div>
     <div id="text_body" :class="$style.info">
       <p> {{ $t('termsAndConditions.body1') }}
-        <a :href="termsAndConditionsURL">{{ $t('termsAndConditions.link1') }}</a>,
-        <a :href="privacyPolicyURL">{{ $t('termsAndConditions.link2') }}</a> and
-        <a :href="cookiesPolicyURL">{{ $t('termsAndConditions.link3') }}</a>.
+        <a :href="termsAndConditionsURL" target="_blank">{{ $t('termsAndConditions.link1') }}</a>,
+        <a :href="privacyPolicyURL" target="_blank">{{ $t('termsAndConditions.link2') }}</a> and
+        <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link3') }}</a>.
         {{ $t('termsAndConditions.body2') }} </p>
       <p> {{ $t('termsAndConditions.body3') }} </p>
       <p><strong> {{ $t('termsAndConditions.listTitle') }} </strong></p>
@@ -24,7 +24,7 @@
       <h2>{{ $t('termsAndConditions.cookiesTitle') }}</h2>
       <p>
         {{ $t('termsAndConditions.cookiesText1') }}
-        <a :href="cookiesPolicyURL">{{ $t('termsAndConditions.link4') }}</a>
+        <a :href="cookiesPolicyURL" target="_blank">{{ $t('termsAndConditions.link4') }}</a>
         {{ $t('termsAndConditions.cookiesText2') }}
       </p>
     </div>
@@ -48,7 +48,8 @@
           name="termsAndConditions">
         <label for="hiddenCheckbox" @click="check">
           {{ $t('termsAndConditions.checkBoxText') }}
-          <a :href="cookiesPolicyURL" style="display: inline-block;">
+          <a :href="cookiesPolicyURL" style="display: inline-block;"
+             target="_blank" @click="stopProp($event)" >
             {{ $t('termsAndConditions.link3') }}</a>
         </label>
       </div>
@@ -87,6 +88,9 @@ export default {
   methods: {
     check() {
       this.areTermsAccepted = !this.areTermsAccepted;
+    },
+    stopProp(event) {
+      event.stopPropagation();
     },
     onConfirmButtonClicked() {
       this.hasTriedToContinue = true;

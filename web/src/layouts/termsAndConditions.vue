@@ -16,7 +16,7 @@ import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
-import { Sources } from '@/lib/sources';
+import Sources from '@/lib/sources';
 
 export default {
   components: {
@@ -31,7 +31,7 @@ export default {
       htmlAttrs: {
         lang: `${this.$t('language')}`,
       },
-      title: `${this.$store.state.header.headerText} screen`,
+      title: `${this.$store.state.header.headerText} - ${this.$t('appTitle')}`,
       script: [
         {
           src: this.$store.app.$env.ANALYTICS_SCRIPT_URL,
@@ -44,7 +44,7 @@ export default {
       window.validateSession || (() => this.$store.dispatch('session/validate'));
   },
   created() {
-    if (this.$route.query.source === Sources.Android || this.$route.query.source === Sources.iOS) {
+    if (Sources.isNative(this.$route.query.source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);

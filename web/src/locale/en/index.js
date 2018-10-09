@@ -1,5 +1,6 @@
 export default {
   language: 'en-GB',
+  appTitle: 'NHS App',
   errors: {
     pageHeader: 'Server error',
     header: 'We\'re experiencing technical difficulties',
@@ -541,6 +542,7 @@ export default {
     dataSharing: 'Sharing health data preferences',
     more: 'More',
     login: 'Login',
+    termsAndConditions: 'Accept conditions of use',
   },
   pageTitles: {
     home: 'Home',
@@ -559,6 +561,8 @@ export default {
     dataSharing: 'Sharing health data preferences',
     more: 'More',
     login: 'Login',
+    termsAndConditions: 'Accept conditions of use',
+
   },
   myAccount: {
     termsAndConditions: 'Terms of use',

@@ -40,6 +40,7 @@ export default {
   updated() {
     this.$store.dispatch('errors/setConnectionProblem', !navigator.onLine);
     this.$store.dispatch('header/updateHeaderText', this.getMessage('header'));
+    this.$store.dispatch('pageTitle/updatePageTitle', this.getMessage('header'));
   },
   methods: {
     onRetryButtonClicked() {
