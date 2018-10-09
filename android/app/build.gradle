@@ -48,6 +48,56 @@ android {
             debuggable true
             manifestPlaceholders = [appName: "NHS App Debug"]
         }
+        scratch1 {
+            initWith debug
+            applicationIdSuffix ".scratch1"
+            manifestPlaceholders = [appName: "NHS App Scratch 1"]
+        }
+        scratch2 {
+            initWith debug
+            applicationIdSuffix ".scratch2"
+            manifestPlaceholders = [appName: "NHS App Scratch 2"]
+        }
+        scratch3 {
+            initWith debug
+            applicationIdSuffix ".scratch3"
+            manifestPlaceholders = [appName: "NHS App Scratch 3"]
+        }
+        scratch4 {
+            initWith debug
+            applicationIdSuffix ".scratch4"
+            manifestPlaceholders = [appName: "NHS App Scratch 4"]
+        }
+        scratch5 {
+            initWith debug
+            applicationIdSuffix ".scratch5"
+            manifestPlaceholders = [appName: "NHS App Scratch 5"]
+        }
+        scratch6 {
+            initWith debug
+            applicationIdSuffix ".scratch6"
+            manifestPlaceholders = [appName: "NHS App Scratch 6"]
+        }
+        scratch7 {
+            initWith debug
+            applicationIdSuffix ".scratch7"
+            manifestPlaceholders = [appName: "NHS App Scratch 7"]
+        }
+        scratch8 {
+            initWith debug
+            applicationIdSuffix ".scratch8"
+            manifestPlaceholders = [appName: "NHS App Scratch 8"]
+        }
+        scratch9 {
+            initWith debug
+            applicationIdSuffix ".scratch9"
+            manifestPlaceholders = [appName: "NHS App Scratch 9"]
+        }
+        scratch10 {
+            initWith debug
+            applicationIdSuffix ".scratch10"
+            manifestPlaceholders = [appName: "NHS App Scratch 10"]
+        }
     }
     testOptions {
         unitTests {
