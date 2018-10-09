@@ -11,7 +11,7 @@ paths:
       tags:
         - demographics
       summary: Gets demographic information for the logged on user.
-      description: Returns users personal details and address details for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
+      description: Returns personal details and address details for the logged-in user. Requires NHSO-Session-Id cookie (obtained from session endpoint).
       produces:
         - application/json
       responses:
@@ -26,9 +26,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
  
 definitions:
   DemographicResponse:
@@ -36,17 +36,17 @@ definitions:
     properties:
       nhsNumber:
         type: string
-        description: The persons NHS number.
+        description: The patient's NHS number.
       patientName:
         type: string
-        description: The patients name.
+        description: The patient's name.
       dateOfBirth:
         type: string
         format: date-time
-        description: The persons date of birth.
+        description: The patient's date of birth.
       sex:
         type: string
-        description: The persons sex.
+        description: The patient's sex.
       address:
         type: string
-        description: The patients address.
+        description: The patient's address.

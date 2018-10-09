@@ -41,9 +41,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
   /appointments:
     delete:
       tags:
@@ -75,9 +75,9 @@ paths:
         500:
           description: An unexpected error occurred during the processing of the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
     get:
       tags:
         - appointments
@@ -111,9 +111,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
     post:
       tags:
         - appointments
@@ -144,9 +144,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
 definitions:
   AppointmentBookRequest:
     type: object

@@ -37,9 +37,9 @@ paths:
         500:
           description: An unexpected error occurred during the processing of the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
     delete:
       tags:
         - session
@@ -70,7 +70,7 @@ definitions:
         description: PKCE code verifier.
       redirectUrl:
         type: string
-        description: Redirect url provided when signing in to Citizen Id
+        description: Redirect url provided when signing in to Citizen ID
   UserSessionResponse:
     type: object
     properties:

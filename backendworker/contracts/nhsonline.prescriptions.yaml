@@ -26,9 +26,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
   /prescriptions:
     post:
       tags:
@@ -58,9 +58,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
     get:
       tags:
         - prescriptions
@@ -89,9 +89,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
 
 definitions:
   PrescriptionListResponse:

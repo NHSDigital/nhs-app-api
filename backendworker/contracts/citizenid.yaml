@@ -46,9 +46,9 @@ paths:
         501:
           description: No GP system was found for ODS Code.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
     post:
       tags:
         - im1-connection
@@ -81,9 +81,9 @@ paths:
         501:
           description: No GP system was found for ODS Code.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
 
   /v1/patient/linkage:
     get:
@@ -125,9 +125,9 @@ paths:
         501:
           description: No GP system was found for ODS Code.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
     post:
       summary: For a given patient's NHS Number and practice's ODS Code, will find a patient, create an account and return IM1 linkage details
       description: Will return a linkage key object for a given nhs number
@@ -158,9 +158,9 @@ paths:
         501:
           description: No GP system was found for ODS Code.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
 definitions:
   PatientIm1ConnectionRequest:
     type: object

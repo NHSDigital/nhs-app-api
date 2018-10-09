@@ -59,9 +59,9 @@ paths:
         500:
           description: An unexpected error occurred processing the request.
         502:
-          description: The GP system is currently unavailable.
+          description: Bad response received from upstream system.
         504:
-          description: The GP system did not respond in a timely fashion.
+          description: Timeout when calling upstream system.
   /users/nhs:
     post:
       summary: "Creates a restricted user account (OSU) that is associated with their own patient record"
@@ -161,4 +161,4 @@ definitions:
         description: Token of Citizen Identity
       AdditionalComment:
         type: string
-        description: Any addition text
+        description: Any additional text

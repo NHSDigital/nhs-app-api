@@ -76,9 +76,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
     /v1/patient/appointments: 
       delete: 
         tags: 
@@ -121,9 +121,9 @@
           500: 
             description: "An unexpected error occurred during the processing of the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
       get: 
         tags: 
           - "appointments"
@@ -200,9 +200,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
       post: 
         tags: 
           - "appointments"
@@ -255,15 +255,15 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
     /v1/patient/demographics: 
       get: 
         tags: 
           - "demographics"
         summary: "Gets demographic information for the logged on user."
-        description: "Returns users personal details and address details for the logged in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
+        description: "Returns personal details and address details for the logged-in user. Requires NHSO-Session-Id cookie (obtained from session endpoint)."
         produces: 
           - "application/json"
         responses: 
@@ -274,20 +274,20 @@
               properties: 
                 nhsNumber: 
                   type: "string"
-                  description: "The persons NHS number."
+                  description: "The patient's NHS number."
                 patientName: 
                   type: "string"
-                  description: "The patients name."
+                  description: "The patient's name."
                 dateOfBirth: 
                   type: "string"
                   format: "date-time"
-                  description: "The persons date of birth."
+                  description: "The patient's date of birth."
                 sex: 
                   type: "string"
-                  description: "The persons sex."
+                  description: "The patient's sex."
                 address: 
                   type: "string"
-                  description: "The patients address."
+                  description: "The patient's address."
           401: 
             description: "User session has expired."
           403: 
@@ -295,9 +295,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
     /v1/patient/my-record: 
       get: 
         tags: 
@@ -377,16 +377,6 @@
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/discontinuedRepeatMedications/items"
-                        currentRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/discontinuedRepeatMedications/items"
-                        discontinuedRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
                             type: "object"
                             properties: 
                               date: 
@@ -397,16 +387,17 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
-                                  type: "object"
-                                  properties: 
-                                    text: 
-                                      type: "string"
-                                      description: "When the record was entered."
-                                    lineItems: 
-                                      type: "array"
-                                      description: "An array of line items"
-                                      items: 
-                                        type: "string"
+                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
+                        currentRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
+                        discontinuedRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
                 immunisations: 
                   type: "object"
                   description: "An object containing all immunisation details."
@@ -502,7 +493,16 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
-                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items/properties/lineItems/items"
+                                  type: "object"
+                                  properties: 
+                                    text: 
+                                      type: "string"
+                                      description: "When the record was entered."
+                                    lineItems: 
+                                      type: "array"
+                                      description: "An array of line items"
+                                      items: 
+                                        type: "string"
                 tppDcrEvents: 
                   type: "object"
                   description: "An object containing all tpp dcr event details."
@@ -627,9 +627,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
     /v1/patient/terms-and-conditions/consent: 
       get: 
         tags: 
@@ -723,9 +723,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
       get: 
         tags: 
           - "prescriptions"
@@ -787,9 +787,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
     /v1/patient/courses: 
       get: 
         tags: 
@@ -826,9 +826,9 @@
           500: 
             description: "An unexpected error occurred processing the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
     /v1/patient/ndop: 
       get: 
         tags: 
@@ -877,7 +877,7 @@
                   description: "PKCE code verifier."
                 redirectUrl: 
                   type: "string"
-                  description: "Redirect url provided when signing in to Citizen Id"
+                  description: "Redirect url provided when signing in to Citizen ID"
         responses: 
           201: 
             description: "Successfully authenticated. The session ID is returned in a cookie name `NHSO-Session-Id`. This cookie should be included in subsequent requests."
@@ -907,9 +907,9 @@
           500: 
             description: "An unexpected error occurred during the processing of the request."
           502: 
-            description: "The GP system is currently unavailable."
+            description: "Bad response received from upstream system."
           504: 
-            description: "The GP system did not respond in a timely fashion."
+            description: "Timeout when calling upstream system."
       delete: 
         tags: 
           - "session"
