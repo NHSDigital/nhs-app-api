@@ -81,7 +81,7 @@ class WebViewUrlTests: XCTestCase {
     func test_When_KnownServiceHeaderTitleIsRequested_ThenCorrectTitleForPathIsReturned() {
         let knownServices = KnownServices(config: config())
         let serviceUrlTitleDictionary = [
-            config().HomeUrl : "",
+            config().HomeUrl : NSLocalizedString("HomeTitle", comment: ""),
             config().Nhs111Url:NSLocalizedString("NHS111Title", comment: ""),
             config().OrganDonationUrl: NSLocalizedString("OrganDonationTitle", comment: "")
         ]
