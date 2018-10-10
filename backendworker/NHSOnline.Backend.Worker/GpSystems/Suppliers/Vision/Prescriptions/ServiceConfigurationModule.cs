@@ -10,6 +10,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             services.AddTransient<VisionPrescriptionService>();
             services.AddTransient<VisionPrescriptionRequestValidationService>();
             services.AddTransient<IVisionPrescriptionMapper, VisionPrescriptionMapper>();
+            services.AddTransient<VisionCourseService>();
 
             base.ConfigureServices(services, configuration);
         }

@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             Justification = "Remove this suppression when method has been implemented.")]
         public ICourseService GetCourseService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionCourseService>();
         }
 
         public IDemographicsService GetDemographicsService()

@@ -17,5 +17,5 @@ data class Repeat(
                    @XmlElement(namespace= "urn:vision",name = "lastIssued")
                    var lastIssued: String?
 ) {
-    constructor() : this(null, null, null, null)
+    constructor() : this( null, null, null, null)
 }

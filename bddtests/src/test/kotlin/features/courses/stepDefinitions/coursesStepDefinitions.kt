@@ -24,10 +24,10 @@ import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import mocking.data.prescriptions.courses.VisionCoursesLoader
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
-import mocking.vision.models.EligableRepeats
-
+import mocking.vision.models.EligibleRepeats
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
@@ -219,6 +219,11 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
             PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
 
         }
+
+        if (currentProvider == ProviderTypes.VISION) {
+            PrescriptionsHistoryJourney(mockingClient).createFor(currentPatient)
+
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -253,7 +258,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
                 mockingClient.forVision {
                     getEligibleRepeatsRequest(MockDefaults.visionUserSession, MockDefaults.visionGetEligibleRepeats)
-                            .respondWithSuccess(coursesLoader.data as EligableRepeats)
+                            .respondWithSuccess(coursesLoader.data as EligibleRepeats)
                 }
             }
         }
@@ -272,6 +277,10 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
             ProviderTypes.TPP -> {
                 coursesLoader = TppCoursesLoader
                 currentPatient = TPP_PATIENT
+            }
+            ProviderTypes.VISION -> {
+                coursesLoader = VisionCoursesLoader
+                currentPatient = VISION_PATIENT
             }
         }
     }

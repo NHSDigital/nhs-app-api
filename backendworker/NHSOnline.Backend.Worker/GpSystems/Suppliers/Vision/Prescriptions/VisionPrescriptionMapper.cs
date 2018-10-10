@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Extensions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 {
@@ -51,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                         // collections. Simply create an id to link the two together (only used for display).
                         var customIdForCourse = $"nhsapp-{ Guid.NewGuid() }";
 
-                        allCourses.Add(MapRepeatCourseToCourse(customIdForCourse, course));
+                        allCourses.Add(MapPrescriptionRepeatToCourse(customIdForCourse, course));
 
                         var newCourseEntry = new CourseEntry
                         {
@@ -77,10 +79,50 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             return result;
         }
 
-        private static Course MapRepeatCourseToCourse(string id, GetPrescriptionRepeat course)
+        public CourseListResponse Map(List<Repeat> repeats)
+        {
+            if (repeats == null)
+            {
+                throw new ArgumentNullException(nameof(repeats));
+            }
+
+            var result = new CourseListResponse
+            {
+                Courses = (repeats.Any() ? repeats : Enumerable.Empty<Repeat>()).Select(MapRepeatToCourse),
+            };
+
+            return result;
+        }
+
+        
+        private static Course MapPrescriptionRepeatToCourse(string id, GetPrescriptionRepeat course)
+        {
+            var details = GetDetails(course);
+
+            return new Course
+            {
+                Id = id,
+                Name = course.Drug,
+                Details = details,
+            };
+        }
+        
+        private static Course MapRepeatToCourse(Repeat course)
+        {
+            var details = GetDetails(course);
+
+            return new Course
+            {
+                Id = course.Id,
+                Name = course.Drug,
+                Details = details,
+            };
+        }
+
+        private static string GetDetails(IRepeat course)
         {
             string details = null;
-
+            
             if (!string.IsNullOrEmpty(course.Dosage) && !string.IsNullOrEmpty(course.Quantity))
             {
                 details = $"{course.Dosage} ‐ {course.Quantity}";
@@ -94,12 +136,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                 details = course.Quantity;
             }
 
-            return new Course
-            {
-                Id = id,
-                Name = course.Drug,
-                Details = details,
-            };
+            return details;
         }
     }
 }

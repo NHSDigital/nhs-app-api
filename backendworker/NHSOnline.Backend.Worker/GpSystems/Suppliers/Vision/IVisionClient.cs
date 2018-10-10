@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 {
@@ -19,5 +20,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         Task<VisionClient.VisionApiObjectResponse<VisionDemographicsResponse>> GetDemographics(
             VisionUserSession visionUserSession,
             DemographicsRequest requestContent);
+        
+        Task<VisionClient.VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
+            VisionUserSession session);
     }
 }

@@ -38,7 +38,10 @@ import features.sharedSteps.SerenityHelpers
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.tpp.models.Error
 import mocking.defaults.MockDefaults.Companion.patient
+import mocking.vision.VisionConstants
+import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.PrescriptionHistory
+import mocking.vision.models.ServiceDefinition
 import models.Patient
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
@@ -492,7 +495,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetEligibleRepeats)
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetHistory)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }

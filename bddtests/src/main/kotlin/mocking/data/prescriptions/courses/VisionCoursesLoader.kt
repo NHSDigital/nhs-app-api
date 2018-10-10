@@ -1,24 +1,17 @@
 package mocking.data.prescriptions.courses
 
 import mocking.data.prescriptions.EmisPrescriptionLoader
-import mocking.emis.models.PrescriptionType
 import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
-import mocking.vision.models.EligableRepeats
-import mocking.vision.models.Repeat
+import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.RepeatCourse
 import mocking.vision.models.Settings
 import models.prescriptions.MedicationCourse
 import org.joda.time.DateTime
-import java.text.SimpleDateFormat
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-object VisionCoursesLoader: ICoursesLoader<EligableRepeats> {
-    override lateinit var data: EligableRepeats
-    private const val CONSTITUENTS_NUMBER = 5
-    private const val COURSES_NUMBER = 100
+object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
+    override lateinit var data: EligibleRepeats
     private const val COURSE_ID_MAX = 5000
 
     override fun loadData(maxCourses: Int,
@@ -30,9 +23,9 @@ object VisionCoursesLoader: ICoursesLoader<EligableRepeats> {
         var numberOfRepeats = numOfRepeats
 
 
-        var eligableRepeats = EligableRepeats()
+        var eligibleRepeats = EligibleRepeats()
 
-        eligableRepeats.settings = Settings(true)
+        eligibleRepeats.settings = Settings(true)
 
         val higherNumber: Int
 
@@ -42,7 +35,7 @@ object VisionCoursesLoader: ICoursesLoader<EligableRepeats> {
             numberOfRepeats
         }
 
-        var request = ArrayList<RepeatCourse>()
+        var repeats = ArrayList<RepeatCourse>()
 
         // Create courses first as these will be used in the prescriptions
         for (course in 1..higherNumber) {
@@ -56,10 +49,10 @@ object VisionCoursesLoader: ICoursesLoader<EligableRepeats> {
                     DateTime.now().minusDays(course).toLocalDateTime().toString()
                   )
 
-            request.add(createdCourse)
+            repeats.add(createdCourse)
         }
 
-        this.data = EligableRepeats(settings = Settings(true), request = request)
+        this.data = EligibleRepeats(settings = Settings(true), repeat = repeats)
     }
 
     fun IntRange.random() =

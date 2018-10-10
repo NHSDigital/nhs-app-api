@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
 
@@ -33,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         [TestMethod]
         public void MapPrescriptionHistoryToPrescriptionListResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapper.Map(null);
+            Action act = () => _mapper.Map((PrescriptionHistory)null);
             
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("prescriptionGetResponse");
         }
@@ -245,6 +246,79 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             // Exclude missing members as CourseId is generated so can't setup expectation for it.
             expectedResult.Should().BeEquivalentTo(result);
+        }
+        
+        [TestMethod]
+        public void MapListRepeatsResponse_WhenPassingNull_ThrowsNullReferenceException()
+        {
+            Action act = () => _mapper.Map((List<Repeat>)null);
+
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("repeats");
+        }
+
+        [TestMethod]
+        public void MapRepeatsToCourseListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
+        {
+            // Arrange
+            var item = new List<Repeat>();
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Courses.Should().BeEmpty();
+        }
+
+        [TestMethod]
+        public void MapRepeatsToCourseListResponse_WithValues_ReturnsResultValues()
+        {
+            // Arrange
+            var item = new List<Repeat>
+            {
+                new Repeat
+                {
+                    Drug = _fixture.Create<string>(),
+                    Id = _fixture.Create<string>(),
+                    Quantity = _fixture.Create<string>(),
+                    Dosage = _fixture.Create<string>(),
+                },
+                new Repeat
+                {
+                    Drug = _fixture.Create<string>(),
+                    Id = _fixture.Create<string>(),
+                    Quantity = _fixture.Create<string>(),
+                    Dosage = _fixture.Create<string>(),
+                },
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Courses.Should().HaveCount(item.Count());
+
+            var expectedResult = new CourseListResponse
+            {
+                Courses = new List<Course>
+                {
+                    new Course
+                    {
+                        Details = $"{item.ElementAt(0).Dosage} ‐ {item.ElementAt(0).Quantity}",
+                        Id = item.ElementAt(0).Id,
+                        Name = item.ElementAt(0).Drug,
+                    },
+                    new Course
+                    {
+                        Details = $"{item.ElementAt(1).Dosage} ‐ {item.ElementAt(1).Quantity}",
+                        Id = item.ElementAt(1).Id,
+                        Name = item.ElementAt(1).Drug,
+                    },
+                }
+            };
+
+            result.Should().BeEquivalentTo(expectedResult);
         }
     }
 }

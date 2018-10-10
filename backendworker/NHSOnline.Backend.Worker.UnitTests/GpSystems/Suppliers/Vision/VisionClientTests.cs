@@ -10,16 +10,16 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.ResponseParsers;
-using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Certificate;
 using RichardSzalay.MockHttp;
+
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 {
@@ -75,6 +75,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
 
             _fixture.Inject(_configMock);
             _fixture.Inject(_httpClient);
+            _fixture.Inject(_mockCertificateService);
+            _fixture.Inject(_mockEnvelopeService);
             
             _sut = _fixture.Create<VisionClient>();
         }
@@ -177,7 +179,64 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
+        
+        [TestMethod]
+        public async Task GetEligibleRepeatsPostRequest_ReturnsEligibleRepeats_WhenValidRequested()
+        {
+            // Arrage
+            _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
+            
+            var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfigurationResponse>>();
 
+            try
+            {
+                var responseContent = new StringContent(bodyResponse.SerializeXml());
+                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                    .Respond(HttpStatusCode.OK, responseContent);
+            }
+            catch(Exception e)
+            {
+                var ex = e;
+            }
+            
+            // Act
+            var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        
+        [TestMethod]
+        public async Task GetEligibleRepeats_ReturnsEligibleRepeats_WhenValidRequested()
+        {
+            // Arrange
+            var bodyResponse = _fixture.Create<VisionResponseEnvelope<EligibleRepeatsResponse>>(); 
+            
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
+                It.IsAny<X509Certificate2>(),
+                It.IsAny<VisionRequest<CoursesRequest>>(), 
+                It.IsAny<string>())).Returns("AnyString");
+
+            try
+            {
+                var responseContent = new StringContent(bodyResponse.SerializeXml());
+                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                    .Respond(HttpStatusCode.OK, responseContent);
+            }
+            catch (Exception e)
+            {
+                var ex = e;
+            }
+
+            // Act
+            var response = await _sut.GetEligibleRepeats(_visionUserSession);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        
         [TestMethod]
         public async Task GetHistoricPrescriptions_ReturnsPrescriptionHistory_WhenValidRequested()
         {

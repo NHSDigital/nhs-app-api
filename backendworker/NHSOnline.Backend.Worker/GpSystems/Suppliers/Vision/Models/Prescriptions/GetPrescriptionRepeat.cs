@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions
 {
-    public class GetPrescriptionRepeat
+    public class GetPrescriptionRepeat : IRepeat
     {
         [XmlElement(ElementName = "drug", Namespace = "urn:vision")]
         public string Drug { get; set; }

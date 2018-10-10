@@ -19,7 +19,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
-
+      | VISION    |
   
   Scenario Outline: The <GP System> User has 0 repeatable prescriptions
     Given a patient from <GP System> is defined
@@ -36,7 +36,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
-
+      | VISION    |
   
   Scenario Outline: The <GP System> user has 1 repeatable prescription
     Given a patient from <GP System> is defined
@@ -52,8 +52,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
-
-
+      | VISION    |
   
   Scenario Outline: The user <GP System> should only see max 100 repeatable prescriptions
     Given a patient from <GP System> is defined
@@ -69,7 +68,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
-
+      | VISION    |
   
   Scenario Outline: The <GP System> user has the max number of repeatable prescriptions
     Given a patient from <GP System> is defined
@@ -85,7 +84,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
-
+      | VISION    |
   
   Scenario Outline: The <GP System> user has over 5 repeat dispense prescriptions
     Given a patient from <GP System> is defined
@@ -101,6 +100,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: The <GP System> User has selected repeat prescriptions to order
     Given a patient from <GP System> is defined

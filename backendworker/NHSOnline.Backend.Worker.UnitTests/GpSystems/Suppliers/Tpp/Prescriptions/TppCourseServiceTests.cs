@@ -286,6 +286,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Prescriptio
 
             // Assert
             result.Should().BeAssignableTo<GetCoursesResult.SupplierNotEnabled>();
-    }
+        }
     }
 }

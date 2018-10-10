@@ -14,7 +14,7 @@ import java.time.OffsetDateTime
 private const val QUERY_PRESCRIPTION_FROM_DATE = "filterFromDate"
 private const val QUERY_PRESCRIPTION_TO_DATE = "filterToDate"
 
-class EmisPrescriptionsBuilder (configuration: EmisConfiguration,
+class  EmisPrescriptionsBuilder (configuration: EmisConfiguration,
                                 apiEndUserSessionId: String,
                                 apiSessionId: String,
                                 linkToken: String?,

@@ -1,12 +1,8 @@
 package mocking.vision
 
 import mocking.models.Mapping
-import mocking.vision.VisionConstants.getInvalidRequestError
-import mocking.vision.VisionConstants.getInvalidUserCredentialsError
-import mocking.vision.VisionConstants.getUnkownError
 import mocking.vision.VisionConstants.getVisionResponse
-import mocking.vision.VisionConstants.securityHeaderErrorResponse
-import mocking.vision.models.EligableRepeats
+import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import org.apache.http.HttpStatus
@@ -29,56 +25,23 @@ class VisionEligibleRepeatsBuilder(var userSession: VisionUserSession,
                 .andBody(userSession.accountId, "contains")
                 .andBody(userSession.provider, "contains")
                 .andBody(userSession.patientId, "contains")
+                .andBody(serviceDefinition.name, "contains")
+                .andBody(serviceDefinition.version, "contains")
     }
-    fun respondWithSuccess(eligableRepeats: EligableRepeats): Mapping {
-        val jaxbContext = JAXBContext.newInstance(EligableRepeats::class.java)
+    fun respondWithSuccess(EligibleRepeats: EligibleRepeats): Mapping {
+        val jaxbContext = JAXBContext.newInstance(EligibleRepeats::class.java)
         val marshaller = jaxbContext.createMarshaller()
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true)
 
         val stringWriter = StringWriter()
         stringWriter.use {
-            marshaller.marshal(eligableRepeats, stringWriter)
+            marshaller.marshal(EligibleRepeats, stringWriter)
         }
 
         var resp = respondWith(HttpStatus.SC_OK) {
             andXmlBody(getVisionResponse(stringWriter.toString(), serviceDefinition)).build()
         }
 
-        return resp
-    }
-
-    fun respondWithInvalidRequest(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getInvalidRequestError(serviceDefinition)).build()
-        }
-        return resp
-    }
-
-    fun respondWithSecurityHeaderError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(securityHeaderErrorResponse).build()
-        }
-        return resp
-    }
-
-    fun respondWithUnknownError(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getUnkownError(serviceDefinition)).build()
-        }
-        return resp
-    }
-
-    fun respondWithServiceUnavailable(): Mapping {
-        var resp = respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
-            andXmlBody("").build()
-        }
-        return resp
-    }
-
-    fun respondWitInvalidUserCredentials(): Mapping {
-        var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getInvalidUserCredentialsError(serviceDefinition)).build()
-        }
         return resp
     }
 }

@@ -32,7 +32,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
                     includeDosage = showDosage,
                     includeQuantity = showQuantity)
 
-            var repeatCourse = VisionCoursesLoader.data.request
+            var repeatCourse = VisionCoursesLoader.data.repeat
 
             var maxNumberOfPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false
@@ -76,7 +76,6 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
                     prescriptionNumber++
                 }
             }
-
         }
 
         data = PrescriptionHistory(prescriptions)
