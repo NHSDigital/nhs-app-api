@@ -117,8 +117,8 @@
 	<string>https://$(PRIVACY_POLICY)</string>
 	<key>CookiesPolicyURL</key>
 	<string>https://$(COOKIES_POLICY_URL)</string>
-	<key>OpenSourceLicensesURL</key>
-	<string>https://$(OPEN_SOURCE_LICENSE_URL)</string>
+	<key>OpenSourceLicencesURL</key>
+	<string>https://$(OPEN_SOURCE_LICENCE_URL)</string>
 	<key>DataPreferencesURL</key>
 	<string>https://$(DATA_PREFERENCES_URL)</string>
 	<key>ResponseWaitingTime</key>

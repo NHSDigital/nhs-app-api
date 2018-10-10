@@ -28,9 +28,9 @@ class MyAccountStepDefinitions {
         myAccount.cookiesPolicyLink.element.click()
     }
 
-    @When("^I click the Open source licenses link$")
-    fun iClickTheOpenSourceLicensesLink() {
-        myAccount.openSourceLicensesLink.element.click()
+    @When("^I click the Open source licences link$")
+    fun iClickTheOpenSourceLicencesLink() {
+        myAccount.openSourceLicencesLink.element.click()
     }
 
     @When("^I click the Help and support link$")

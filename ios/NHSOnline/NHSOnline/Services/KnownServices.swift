@@ -42,9 +42,9 @@ class KnownServices {
         let termsAndConditionsURL: URL = URL(string: config.TermsAndConditionsURL)!
         let privacyPolicyURL: URL = URL(string: config.PrivacyPolicyURL)!
         let cookiesPolicyURL: URL = URL(string: config.CookiesPolicyURL)!
-        let openSourceLicensesURL: URL = URL(string: config.OpenSourceLicensesURL)!
+        let openSourceLicencesURL: URL = URL(string: config.OpenSourceLicencesURL)!
         let medicalRecordAbbreviationsURL: URL = URL(string: config.MedicalRecordAbbreviationsURL)!
-        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicensesURL, medicalRecordAbbreviationsURL]
+        externalSites = [helpURL, termsAndConditionsURL, privacyPolicyURL, cookiesPolicyURL, openSourceLicencesURL, medicalRecordAbbreviationsURL]
     }
     
     func buildInternalServices() {

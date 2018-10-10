@@ -29,10 +29,10 @@
         </analytics-tracked-tag>
       </li>
       <li>
-        <analytics-tracked-tag id="btn_openSource" :href="$store.app.$env.OPEN_SOURCE_LICENSES_URL"
-                               :text="$t('myAccount.openSourceLicenses')"
+        <analytics-tracked-tag id="btn_openSource" :href="$store.app.$env.OPEN_SOURCE_LICENCES_URL"
+                               :text="$t('myAccount.openSourceLicences')"
                                tag="a" target="_blank">
-          {{ $t('myAccount.openSourceLicenses') }}
+          {{ $t('myAccount.openSourceLicences') }}
         </analytics-tracked-tag>
       </li>
       <li>

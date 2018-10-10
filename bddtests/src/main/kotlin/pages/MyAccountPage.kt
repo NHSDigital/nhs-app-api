@@ -54,7 +54,7 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
     val termsOfUseLink = getLink("Terms of use")
     val privacyPolicyLink = getLink("Privacy policy")
     val cookiesPolicyLink = getLink("Cookies policy")
-    val openSourceLicensesLink = getLink("Open source licenses")
+    val openSourceLicencesLink = getLink("Open source licences")
     val helpAndSupportLink = getLink("Help and support")
 
     fun assertPersonalDetailsVisible(expectedUsername: String,
@@ -82,7 +82,7 @@ class MyAccountPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
                 termsOfUseLink,
                 privacyPolicyLink,
                 cookiesPolicyLink,
-                openSourceLicensesLink,
+                openSourceLicencesLink,
                 helpAndSupportLink)
 
         Assert.assertEquals("Expected Number of Links", expectedLinks.count(), getLink().elements.count())

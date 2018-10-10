@@ -570,7 +570,7 @@ export default {
     termsAndConditions: 'Terms of use',
     privacyPolicy: 'Privacy policy',
     cookiesPolicy: 'Cookies policy',
-    openSourceLicenses: 'Open source licenses',
+    openSourceLicences: 'Open source licences',
     helpAndSupport: 'Help and support',
   },
   sc04: {

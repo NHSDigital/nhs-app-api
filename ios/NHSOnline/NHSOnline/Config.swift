@@ -7,7 +7,7 @@ struct Config: Decodable {
         case NhsOnlineRequiredQueryString
         case ResponseWaitingTime, SessionTimeout
         case IsFirstTimeOpened, CarouselDirectory, CarouselContentType, CarouselFileName
-        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicensesURL, MedicalRecordAbbreviationsURL
+        case HelpURL, TermsAndConditionsURL, PrivacyPolicyURL, CookiesPolicyURL, OpenSourceLicencesURL, MedicalRecordAbbreviationsURL
     }
     
     let HomeUrl: String
@@ -41,7 +41,7 @@ struct Config: Decodable {
     let TermsAndConditionsURL: String
     let PrivacyPolicyURL: String
     let CookiesPolicyURL: String
-    let OpenSourceLicensesURL: String
+    let OpenSourceLicencesURL: String
     let MedicalRecordAbbreviationsURL: String
 }
 
