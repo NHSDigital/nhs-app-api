@@ -9,7 +9,7 @@
         {{ $t('rp12.reasonMissing.summarySubHeader') }}
       </message-text>
       <message-list v-if="!courseSelectionValid">
-        <li>{{ $t('rp03.noMedicinesSelected') }}</li>
+        <li :class="$style['validation-text']">{{ $t('rp03.noMedicinesSelected') }}</li>
       </message-list>
       <message-list v-if="!specialRequestValid">
         <li>{{ $t('rp03.specialRequestRequired') }}</li>
