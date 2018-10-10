@@ -19,6 +19,10 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.myrecord.MyRecordResponse
 import mocking.tpp.models.Error
+import mocking.vision.VisionConstants
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
+import models.Patient
 import org.junit.Assert
 import org.junit.Assert.*
 import pages.myrecord.MyRecordInfoPage
@@ -89,6 +93,21 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                     testResultsViewRequest(patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    allergiesRequest(
+                        visionUserSession = VisionUserSession(
+                            patient.rosuAccountId,
+                            patient.apiKey,
+                            patient.odsCode,
+                            patient.patientId),
+                        serviceDefinition = ServiceDefinition(
+                            name = VisionConstants.patientDataName,
+                            version = VisionConstants.patientDataVersion)
+                    ).respondWithSuccess(AllergiesData.getVisionAllergiesData(0))
+
+                }
+            }
         }
     }
 
@@ -105,6 +124,27 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 mockingClient.forTpp {
                     viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
+        }
+    }
+
+    @Given("^there is an unknown error getting allergies for (.*)$")
+    fun thereIsAnUnknownErrorGettingAllergiesFor(service: String) {
+        setPatientToDefaultFor(service)
+        when (service) {
+            "VISION" -> {
+                mockingClient.forVision {
+                    allergiesRequest(
+                        visionUserSession = VisionUserSession(
+                            patient.rosuAccountId,
+                            patient.apiKey,
+                            patient.odsCode,
+                            patient.patientId),
+                        serviceDefinition = ServiceDefinition(
+                            name = VisionConstants.patientDataName,
+                            version = VisionConstants.patientDataVersion)
+                    ).respondWithUnknownError()
                 }
             }
         }
@@ -443,5 +483,18 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun thenTheFlagIndicatingSupplierIsSetTo(supplier: String) {
         val result = Serenity.sessionVariableCalled<MyRecordResponse>(MyRecordResponse::class)
         assertEquals(supplier, result.response.supplier)
+    }
+
+    @Then("^I see a drug and non drug allergy record from (.*)$")
+    fun i_see_a_drug_and_non_drug_allergy_record_from_vision(service: String) {
+        val allergyMessages = myRecordInfoPage.getAllergyMessages()
+        val expectedMessages = listOf(
+                "H/O: drug allergy",
+                "Paracetamol 500mg capsules",
+                "Leg swelling",
+                "Pollen"
+        )
+        assertTrue(allergyMessages.size == expectedMessages.size)
+        allergyMessages.forEachIndexed { i, message -> assertTrue(message == expectedMessages[i]) }
     }
 }

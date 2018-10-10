@@ -16,6 +16,8 @@
         {{ allergy.date.value | datePart(allergy.date.datePart) }}
       </span>
       <p>{{ allergy.name }}</p>
+      <p v-if="allergy.drug">{{ allergy.drug }}</p>
+      <p v-if="allergy.reaction">{{ allergy.reaction }}</p>
       <hr>
     </div>
   </div>

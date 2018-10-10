@@ -135,6 +135,12 @@ definitions:
         description: The name of the allergy.
       date:
         $ref: '#/definitions/Date'
+      drug:
+        type: string
+        description: The name of the drug responsible for the allergy.
+      reaction:
+        type: string
+        description: The allergic reaction.
 
   Medications:
     type: object

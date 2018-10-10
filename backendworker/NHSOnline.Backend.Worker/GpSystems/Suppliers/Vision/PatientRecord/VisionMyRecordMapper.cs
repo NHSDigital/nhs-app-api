@@ -1,15 +1,16 @@
-﻿using System;
-using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
+﻿using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 {
     public class VisionMyRecordMapper : IVisionMyRecordMapper
     {
-        public MyRecordResponse Map(PatientConfiguration patientConfiguration)
+        public MyRecordResponse Map(Allergies allergies)
         {
-            //todo: Map Patient Configuration to MyRecord
-            throw new NotImplementedException();
+            return new MyRecordResponse
+            {
+                Allergies = allergies,
+                HasSummaryRecordAccess = allergies?.HasAccess ?? false
+            };
         }
     }
 }

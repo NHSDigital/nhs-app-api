@@ -40,5 +40,10 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
         {
             return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
+
+        public IActionResult Visit(GetMyRecordResult.InternalServerError internalServerError)
+        {
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+        }
     }
 }

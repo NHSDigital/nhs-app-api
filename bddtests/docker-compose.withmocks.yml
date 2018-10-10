@@ -25,6 +25,10 @@ services:
       - TPP_BASE_URL=http://stubs.local.bitraft.io:8080/tpp/
       - VISION_URI=http://stubs.local.bitraft.io:8080/vision
       - VISION_CERT_PASSPHRASE
+      - VISION_SENDER_USERNAME=Username123123asdas
+      - VISION_SENDER_USERFULLNAME=Name
+      - VISION_SENDER_USERIDENTITY=65489761321654
+      - VISION_SENDER_USERROLE=ROSU
       - GP_PROVIDER_ENABLED_EMIS=true
       - GP_PROVIDER_ENABLED_TPP=true
       - GP_PROVIDER_ENABLED_VISION=true

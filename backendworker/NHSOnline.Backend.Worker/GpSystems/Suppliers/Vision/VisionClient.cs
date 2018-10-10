@@ -58,6 +58,19 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             
             return await SendRequestAndParseResponse<VisionDemographicsResponse, VisionRequest<DemographicsRequest>>(visionRequest);   
         }
+
+        public async Task<VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
+            VisionUserSession visionUserSession, PatientDataRequest requestContent)
+        {
+            IVisionServiceDefinition visionServiceDefinition = new PatientDataServiceDefinition();
+            var visionRequest = new VisionRequest<PatientDataRequest>(visionServiceDefinition.Name,
+                visionServiceDefinition.Version,
+                visionUserSession.RosuAccountId, visionUserSession.ApiKey, visionUserSession.OdsCode, _providerId,
+                requestContent);
+
+            return await SendRequestAndParseResponse<VisionPatientDataResponse, VisionRequest<PatientDataRequest>>(
+                visionRequest);
+        }
         
         public async Task<VisionApiObjectResponse<PatientConfigurationResponse>> GetConfiguration(
             VisionConnectionToken token, string odsCode)

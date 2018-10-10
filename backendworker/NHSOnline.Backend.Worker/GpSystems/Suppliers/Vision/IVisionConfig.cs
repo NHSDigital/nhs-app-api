@@ -8,5 +8,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         string ApplicationProviderId { get; }
         Uri ApiUrl { get; }
         string RequestUsername { get; }
+        string VisionSenderUserName { get; }
+        string VisionSenderUserFullName { get; }
+        string VisionSenderUserIdentity { get; }
+        string VisionSenderUserRole { get; }
     }
 }

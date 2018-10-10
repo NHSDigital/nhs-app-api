@@ -17,6 +17,7 @@ Feature: Get Allergies data
       |Service|
       |EMIS|
       |TPP|
+      |VISION|
 
   Scenario Outline: GP practice has disabled allergies functionality
     Given the my record wiremocks are initialised for <Service>
@@ -32,3 +33,4 @@ Feature: Get Allergies data
       |Service|
       |EMIS|
       |TPP|
+      |VISION|

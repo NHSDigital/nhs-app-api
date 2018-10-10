@@ -53,6 +53,9 @@
     <None Update="GpSystems\Suppliers\Emis\Resources\EMISTestCert.cer">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidAllergyResponseContent.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoAllergiesAllergyResponseContent.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidAllergyResponseContent.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />
@@ -80,5 +83,16 @@
     <Content Update="GpSystems\Suppliers\Vision\TestData\requestWasInvalidResponse.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidAllergyResponseContent.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoAllergiesAllergyResponseContent.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidAllergyResponseContent.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

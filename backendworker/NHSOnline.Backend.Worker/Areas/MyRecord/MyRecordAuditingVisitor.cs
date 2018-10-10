@@ -60,5 +60,11 @@ namespace NHSOnline.Backend.Worker.Areas.MyRecord
             _auditor.Audit(AuditType, "Error: Unknown error");
             return null;
         }
+
+        public object Visit(GetMyRecordResult.InternalServerError internalServerError)
+        {
+            _auditor.Audit(AuditType, "Error: Internal server error");
+            return null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package mocking.vision
 
 import mocking.MappingBuilder
 import mocking.vision.Demographics.VisionDemographicsBuilder
+import mocking.vision.allergies.VisionAllergiesBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import models.Patient
@@ -20,5 +21,7 @@ open class VisionMappingBuilder(private val method: String) : MappingBuilder(met
     fun demographicsRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
             = VisionDemographicsBuilder(visionUserSession, serviceDefinition)
 
+    fun allergiesRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
+            = VisionAllergiesBuilder(visionUserSession, serviceDefinition)
 
 }

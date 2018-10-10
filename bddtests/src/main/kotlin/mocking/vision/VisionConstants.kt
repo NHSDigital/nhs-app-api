@@ -17,6 +17,19 @@ object VisionConstants {
     var demographicsName: String = "VODEM.GetDemographics"
     var demographicsVersion: String = "2.0.0"
 
+    var patientDataName: String = "VOS.GetPatientData"
+    var patientDataVersion: String = "2.1.0"
+
+    val ALLERGIES_VIEW = "VPS_ALLERGIES"
+
+    val HTML_RESPONSE_FORMAT = "HTML"
+
+    // Vision Allergies
+    fun getVisionAllergiesResponse(serviceContent: String,
+                                   serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
+        return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
+    }
+
     // Vision Demographics
     fun getVisionDemographicsResponse(serviceContent: String,
                                       serviceDefinition: mocking.vision.models.ServiceDefinition): String {

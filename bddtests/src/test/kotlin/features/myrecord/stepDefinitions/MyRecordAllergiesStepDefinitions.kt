@@ -5,7 +5,12 @@ import cucumber.api.java.en.But
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.data.myrecord.AllergiesData
+import mocking.defaults.MockDefaults
 import mocking.tpp.models.Error
+import mocking.vision.VisionConstants
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
+import models.Patient
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.models.myrecord.MyRecordResponse
@@ -21,9 +26,46 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
                 mockingClient.forEmis {
                     allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergiesData(count))
                 }
-            "TPP" ->{
+            "TPP" -> {
                 mockingClient.forTpp {
                     viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithSuccess(AllergiesData.getTppAllergiesData(count))
+                }
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    allergiesRequest(
+                        visionUserSession = VisionUserSession(
+                            patient.rosuAccountId,
+                            patient.apiKey,
+                            patient.odsCode,
+                            patient.patientId),
+                        serviceDefinition = ServiceDefinition(
+                            name = VisionConstants.patientDataName,
+                            version = VisionConstants.patientDataVersion)
+                    ).respondWithSuccess(AllergiesData.getVisionAllergiesData(count))
+
+                }
+            }
+        }
+    }
+
+    @Given("^the GP Practice has enabled allergies functionality and the patient has a drug and non drug allergy " +
+            "record for (.*)$")
+    fun theGPPracticeHasEnabledAllergiesFunctionalityAndThePatientHasADrugAndNonDrugAllergyRecord(service: String) {
+        setPatientToDefaultFor(service)
+        when(service) {
+            "VISION" -> {
+                mockingClient.forVision {
+                    allergiesRequest(
+                        visionUserSession = VisionUserSession(
+                            patient.rosuAccountId,
+                            patient.apiKey,
+                            patient.odsCode,
+                            patient.patientId),
+                        serviceDefinition = ServiceDefinition(
+                            name = VisionConstants.patientDataName,
+                            version = VisionConstants.patientDataVersion)
+                    ).respondWithSuccess(AllergiesData.getVisionAllergiesDrugAndNonDrugData())
                 }
             }
         }
@@ -57,6 +99,20 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
             "TPP" -> {
                 mockingClient.forTpp {
                     viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                }
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    allergiesRequest(
+                        visionUserSession = VisionUserSession(
+                            patient.rosuAccountId,
+                            patient.apiKey,
+                            patient.odsCode,
+                            patient.patientId),
+                        serviceDefinition = ServiceDefinition(
+                            name = VisionConstants.patientDataName,
+                            version = VisionConstants.patientDataVersion)
+                    ).respondWithAccessDeniedError()
                 }
             }
         }

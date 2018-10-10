@@ -15,5 +15,7 @@
         T Visit(GetMyRecordResult.InvalidRequest invalidRequest);
 
         T Visit(GetMyRecordResult.UnknownError unknownError);
+
+        T Visit(GetMyRecordResult.InternalServerError internalServerError);
     }
 }

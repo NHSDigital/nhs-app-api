@@ -5,7 +5,6 @@ import mocking.emis.EmisConfiguration
 import config.Config
 import constants.TppConstants
 import mocking.MockingConfiguration
-import mocking.data.myrecord.DemographicsData
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply

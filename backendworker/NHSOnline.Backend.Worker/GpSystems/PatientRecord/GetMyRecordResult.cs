@@ -68,5 +68,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.PatientRecord
                 return visitor.Visit(this);
             }
         }
+        
+        public class InternalServerError : GetMyRecordResult
+        {
+            public override T Accept<T>(IMyRecordResultVisitor<T> visitor)
+            {
+                return visitor.Visit(this);
+            }
+        }
     }
 }

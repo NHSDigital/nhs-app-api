@@ -27,5 +27,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
         Task<VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
             VisionConnectionToken token, string odsCode, string patientId);
+            
+        Task<VisionClient.VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
+            VisionUserSession visionUserSession,
+            PatientDataRequest requestContent);
     }
 }

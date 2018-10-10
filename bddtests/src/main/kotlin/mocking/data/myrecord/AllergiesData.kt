@@ -81,4 +81,25 @@ object AllergiesData {
                 drugSensitivities = mutableListOf<ViewPatientOverviewItem>()
         )
     }
+
+    fun getVisionAllergiesData(count: Int): String {
+        val allergy = "<clinical eventdate=\"2007-05-12T00:00:00\" drug_term=\"Paracetamol" +
+                " 500mg capsules\" read_code=\"14L..00\" read_term=\"Hay Fever\" read_code2=\"1833" +
+                ".00\" read_term2=\"Leg swelling\"/>"
+
+        var response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        for(i in 1..count) {
+            response += allergy
+        }
+
+        return response + responseStringEnd
+    }
+
+    fun getVisionAllergiesDrugAndNonDrugData(): String {
+        return "<![CDATA[<root><patient><clinical eventdate=\"2007-05-12T00:00:00\" drug_term=\"Paracetamol 500mg " +
+            "capsules\" read_code=\"14L..00\" read_term=\"H/O: drug allergy\" read_code2=\"1833.00\" read_term2=\"Leg" +
+            " swelling\"/><clinical eventdate=\"2007-05-12T00:00:00\" read_term=\"Pollen\"/></patient></root>]]>"
+    }
 }

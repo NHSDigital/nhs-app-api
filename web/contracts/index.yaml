@@ -367,6 +367,12 @@
                                   - "YearMonth"
                                   - "YearMonthDay"
                                   - "YearMonthDayTime"
+                          drug: 
+                            type: "string"
+                            description: "The name of the drug responsible for the allergy."
+                          reaction: 
+                            type: "string"
+                            description: "The allergic reaction."
                 medications: 
                   type: "object"
                   description: "An object containing all medication details."
