@@ -34,14 +34,14 @@ export default {
   components: {
     AnalyticsTrackedTag,
   },
-  data(app) {
-    let symptomsCheckerUrl = app.$env.SYMPTOM_CHECKER_URL;
+  data() {
+    let symptomsCheckerUrl = this.$store.app.$env.SYMPTOM_CHECKER_URL;
     if (this.$store.state.device.isNativeApp) {
-      symptomsCheckerUrl += app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
+      symptomsCheckerUrl += this.$store.app.$env.SYMPTOM_CHECKER_NATIVE_QUERY_PARAMS;
     }
     return {
       symptomsCheckerUrl,
-      conditionsCheckerUrl: app.$env.CONDITIONS_CHECKER_URL,
+      conditionsCheckerUrl: this.$store.app.$env.CONDITIONS_CHECKER_URL,
     };
   },
 };

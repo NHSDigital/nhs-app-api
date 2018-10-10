@@ -21,10 +21,10 @@ export default {
       type: Boolean,
     },
   },
-  data(app) {
+  data() {
     return {
       open: true,
-      hotJarLinkUrl: app.$env.HOTJAR_SURVEY_URL,
+      hotJarLinkUrl: this.$store.app.$env.HOTJAR_SURVEY_URL,
     };
   },
   created() {

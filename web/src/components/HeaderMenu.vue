@@ -43,9 +43,9 @@ export default {
       default: true,
     },
   },
-  data(app) {
+  data() {
     return {
-      helpAndSupportURL: app.$env.HELP_AND_SUPPORT_URL,
+      helpAndSupportURL: this.$store.app.$env.HELP_AND_SUPPORT_URL,
     };
   },
   computed: {

@@ -210,7 +210,7 @@ export default {
       next('/my-record-warning');
     }
   },
-  data(app) {
+  data() {
     return {
       PATIENTDETAILS,
       ALLERGIESANDADVERSEREACTIONS,
@@ -235,7 +235,7 @@ export default {
       isEventsCollapsed: true,
       myRecord: {},
       patientDetails: {},
-      clinicalAbbreviationsUrl: app.$env.CLINICAL_ABBREVIATIONS_URL,
+      clinicalAbbreviationsUrl: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
   mounted() {

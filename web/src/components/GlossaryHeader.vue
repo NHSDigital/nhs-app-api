@@ -20,9 +20,9 @@ export default {
     AbbreviationsArrowRightIcon,
     AnalyticsTrackedTag,
   },
-  data(app) {
+  data() {
     return {
-      glossaryLinkURL: app.$env.CLINICAL_ABBREVIATIONS_URL,
+      glossaryLinkURL: this.$store.app.$env.CLINICAL_ABBREVIATIONS_URL,
     };
   },
 };

@@ -72,11 +72,11 @@ export default {
     MessageDialog,
     GenericCheckbox,
   },
-  data(app) {
+  data() {
     return {
-      termsAndConditionsURL: app.$env.TERMS_AND_CONDITIONS_URL,
-      privacyPolicyURL: app.$env.PRIVACY_POLICY_URL,
-      cookiesPolicyURL: app.$env.COOKIES_POLICY_URL,
+      termsAndConditionsURL: this.$store.app.$env.TERMS_AND_CONDITIONS_URL,
+      privacyPolicyURL: this.$store.app.$env.PRIVACY_POLICY_URL,
+      cookiesPolicyURL: this.$store.app.$env.COOKIES_POLICY_URL,
       areTermsAccepted: false,
       hasTriedToContinue: false,
     };

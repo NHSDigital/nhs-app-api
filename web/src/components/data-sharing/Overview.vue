@@ -42,9 +42,9 @@ export default {
   components: {
     AnalyticsTrackedTag,
   },
-  data(app) {
+  data() {
     return {
-      yourDataMattersUrl: app.$env.YOUR_NHS_DATA_MATTERS_URL,
+      yourDataMattersUrl: this.$store.app.$env.YOUR_NHS_DATA_MATTERS_URL,
     };
   },
   methods: {
