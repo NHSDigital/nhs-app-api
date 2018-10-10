@@ -1,7 +1,7 @@
 <template>
   <div :class="stylingClass">
     <!--eslint-disable-next-line -->
-    <button :class="buttonStylingClasses" :style="{ 'margin-bottom': 0}" :id="this.id" :disabled="isButtonDisabled" @click="$emit('on-click')">
+    <button :class="buttonStylingClasses" :style="{ 'margin-bottom': 0}" :id="this.id" :disabled="isButtonDisabled" @click="$emit('on-click', $event)">
       <slot/>
     </button>
   </div>

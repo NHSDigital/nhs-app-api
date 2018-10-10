@@ -6,6 +6,17 @@ import BookingPage from '@/pages/appointments/booking';
 const $t = key => `translate_${key}`;
 const $tc = key => `translate_${key}`;
 
+const createState = ({ filteredSlots = [], hasLoaded = false, slots = [] } = {}) => ({
+  availableAppointments: {
+    slots,
+    filteredSlots,
+    hasLoaded,
+  },
+  device: {
+    isNativeApp: jest.fn(),
+  },
+});
+
 const createBookingPage = ($store, data = []) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
@@ -36,13 +47,7 @@ describe('booking.vue - noAvailableAppointments', () => {
   it('will return true when slots has been loaded and are empty', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
-      },
+      state: createState({ hasLoaded: true }),
     };
 
     const page = createBookingPage($store, {});
@@ -53,13 +58,7 @@ describe('booking.vue - noAvailableAppointments', () => {
   it('will return false when slots has been loaded and are not empty', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [{}],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
-      },
+      state: createState({ hasLoaded: true, slots: [{}] }),
     };
 
     const page = createBookingPage($store, {});
@@ -70,13 +69,7 @@ describe('booking.vue - noAvailableAppointments', () => {
   it('will return false when slots has not been loaded', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: new Map(),
-          filteredSlots: [],
-          hasLoaded: false,
-        },
-      },
+      state: createState({ hasLoaded: true, slots: new Map() }),
     };
 
     const page = createBookingPage($store, {});
@@ -89,13 +82,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
   it('will return true when slots has been loaded and are not empty', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [{}],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
-      },
+      state: createState({ hasLoaded: true, slots: [{}] }),
     };
 
     const page = createBookingPage($store, {});
@@ -106,13 +93,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
   it('will return false when slots has been loaded and are empty', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          hasLoaded: true,
-        },
-      },
+      state: createState({ hasLoaded: true }),
     };
 
     const page = createBookingPage($store, {});
@@ -123,13 +104,7 @@ describe('booking.vue - showNoMatchingWarning', () => {
   it('will return false when slots has not been loaded', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-          hasLoaded: false,
-        },
-      },
+      state: createState(),
     };
 
     const page = createBookingPage($store, {});
@@ -142,12 +117,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
   it('will return false when filtered slots are not empty', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [{}],
-          filteredSlots: [[['2018-04-12'], [{}]]],
-        },
-      },
+      state: createState({ filteredSlots: [[['2018-04-12'], [{}]]], slots: [{}], hasLoaded: true }),
     };
 
     const page = createBookingPage($store, {});
@@ -158,12 +128,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
   it('will return false when filtered slots are empty and type has been selected', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
-      },
+      state: createState(),
     };
 
     const data = {
@@ -181,12 +146,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
   it('will return false when filtered slots are empty and location has been selected', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
-      },
+      state: createState(),
     };
 
     const data = {
@@ -204,12 +164,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
   it('will return false when filtered slots are empty and location and type have not been selected', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
-      },
+      state: createState(),
     };
 
     const data = {
@@ -227,12 +182,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
   it('will return true when filtered slots are empty and location and type have been selected', () => {
     const $store = {
       dispatch: jest.fn(),
-      state: {
-        availableAppointments: {
-          slots: [],
-          filteredSlots: [],
-        },
-      },
+      state: createState(),
       app: {
         $analytics: {
           logicError: jest.fn(),
