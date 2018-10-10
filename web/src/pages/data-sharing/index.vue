@@ -52,11 +52,11 @@ export default {
     OptOutNotApply,
     ManageChoice,
   },
-  data(app) {
+  data() {
     return {
       pageIds: _.keys(this.$t('ds01.titles')),
       pageIndex: 0,
-      dataPreferencesUrl: app.$env.DATA_PREFERENCES_URL,
+      dataPreferencesUrl: this.$store.app.$env.DATA_PREFERENCES_URL,
     };
   },
   computed: {
