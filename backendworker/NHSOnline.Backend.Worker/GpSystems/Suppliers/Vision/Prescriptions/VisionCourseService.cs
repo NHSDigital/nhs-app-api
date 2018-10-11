@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                 _logger.LogDebug("Beginning Fetch Courses for user");
                 
                 var coursesResponse = await _visionClient.GetEligibleRepeats(visionUserSession);
-                
+
                 _logger.LogDebug("Fetch Courses for user complete");
 
                 if (!coursesResponse.HasErrorResponse)

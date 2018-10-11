@@ -197,7 +197,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                     new PrescriptionItem
                     {
                         OrderDate = item.Requests.ElementAt(3).Date.Date,
-                        Status = Worker.Areas.Prescriptions.Models.Status.Unknown,
+                        Status = Worker.Areas.Prescriptions.Models.Status.Requested,
                         Courses = new List<CourseEntry>
                         {
                             new CourseEntry

@@ -14,10 +14,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Extensions
                 case PrescriptionRepeatStatusCode.Rejected:
                     return Areas.Prescriptions.Models.Status.Rejected;
 
+                case PrescriptionRepeatStatusCode.NotProcessed:
                 case PrescriptionRepeatStatusCode.InProgress:
                     return Areas.Prescriptions.Models.Status.Requested;
-
-                case PrescriptionRepeatStatusCode.NotProcessed:
+                
                 default:
                     return Areas.Prescriptions.Models.Status.Unknown;
             }
