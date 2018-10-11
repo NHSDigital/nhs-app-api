@@ -202,6 +202,10 @@ definitions:
       guidanceMessage:
         type: string
         description: Guidance message from GP practice explaining which appointment slot to book.
+      bookingReasonNecessity:
+        type: string
+        enum: [notAllowed, optional, mandatory]
+        description: Indicates whether the patient can supply a booking reason when making an appointment.
       slots:
         type: array
         description: Available Appointment Slots.
