@@ -11,7 +11,6 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
     private const val MAX_RANDOM_ID_VALUE = 999999
     private const val ITERATIONS_NUMBER = 100
 
-    @Suppress("ComplexMethod")
     override fun loadData(noPrescriptions: Int,
                           noCourses: Int,
                           noRepeats: Int,
@@ -27,21 +26,9 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
             return
         }
 
-        var totalPrescriptions: Int = noPrescriptions
-        var totalRequestable: Int = noCourses
-        var totalRepeats: Int = noRepeats
-
-        if (noPrescriptions > ITERATIONS_NUMBER) {
-            totalPrescriptions = ITERATIONS_NUMBER
-        }
-
-        if (noCourses > ITERATIONS_NUMBER) {
-            totalRequestable = ITERATIONS_NUMBER
-        }
-
-        if (noRepeats > ITERATIONS_NUMBER) {
-            totalRepeats = ITERATIONS_NUMBER
-        }
+        val totalPrescriptions = minOf(noPrescriptions, ITERATIONS_NUMBER)
+        val totalRequestable = minOf(noCourses, ITERATIONS_NUMBER)
+        val totalRepeats = minOf(noRepeats, ITERATIONS_NUMBER)
 
         val higherNumber: Int
 
@@ -51,25 +38,12 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
             totalRepeats
         }
 
-        for (i in 1..higherNumber) {
+        for (counter in 1..higherNumber) {
             val medication = Medication()
             medication.drugId = generateRandomId()
             medication.type = "Acute"
             medication.drug = getCourseName()
-
-            if (showDosage || showQuantity) {
-                if (showDosage && !showQuantity) {
-                    medication.details = getDosage()
-                }
-
-                if (showQuantity && !showDosage) {
-                    medication.details = getQuantity(i)
-                }
-
-                if (showQuantity && showDosage) {
-                    medication.details = getDosage() + " - " + EmisPrescriptionLoader.getQuantity(i)
-                }
-            }
+            medication.details = getMedicationDetails(showQuantity, showDosage, counter)
 
             medicationList.Medication.add(medication)
         }
@@ -91,5 +65,16 @@ object TppPrescriptionLoader : IPrescriptionLoader<ListRepeatMedicationReply> {
         val maxNum = MAX_RANDOM_ID_VALUE
 
         return (random.nextInt(maxNum - minNum) + minNum).toString()
+    }
+
+    private fun getMedicationDetails(showQuantity: Boolean, showDosage: Boolean, value: Int): String {
+        val medicationDetails = arrayListOf<String>()
+        if (showDosage) {
+            medicationDetails.add(getDosage())
+        }
+        if (showQuantity) {
+            medicationDetails.add(getQuantity(value))
+        }
+        return medicationDetails.joinToString(separator = "-")
     }
 }

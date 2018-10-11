@@ -9,7 +9,7 @@ object CoursesData {
 
     const val MAX_PRESCRIPTIONS_NUMBER = 5
 
-    @Suppress("LongParameterList", "ComplexMethod")
+    @Suppress("LongParameterList")
     fun getCourseData(maxCourses: Int,
                       numOfRepeats: Int,
                       numCanBeRequested: Int,
@@ -18,7 +18,7 @@ object CoursesData {
                       includeQuantity: Boolean): MutableList<MedicationCourse> {
 
         var numberOfRepeats = numOfRepeats
-        var numberCanBerequested = numCanBeRequested
+        var numberCanBeRequested = numCanBeRequested
 
         // Create courses first as these will be used in the prescriptions
         for (course in 1..maxCourses) {
@@ -27,13 +27,7 @@ object CoursesData {
                 constituents.add("Constituent" + constituentNo)
             }
 
-            var prefix = ""
-            if (!includeDosage) {
-                prefix += "no-dosage "
-            }
-            if (!includeQuantity) {
-                prefix += "no-quantity "
-            }
+          var prefix = getPrefix(includeDosage, includeQuantity)
 
             // Create a default course
             val createdCourse = MedicationCourse(UUID.randomUUID().toString(),
@@ -51,14 +45,25 @@ object CoursesData {
             }
 
             // Check if the course needs to be true for canBeRequested
-            if (numberCanBerequested != 0) {
+            if (numberCanBeRequested != 0) {
                 createdCourse.canBeRequested = true
-                numberCanBerequested--
+                numberCanBeRequested--
             }
 
             medicationCourses.add(createdCourse)
         }
 
         return medicationCourses
+    }
+
+    private fun getPrefix(includeDosage: Boolean, includeQuantity: Boolean): String {
+        var prefix = ""
+        if (!includeDosage) {
+            prefix += "no-dosage"
+        }
+        if (!includeQuantity) {
+            prefix += "no-quantity"
+        }
+        return prefix
     }
 }
