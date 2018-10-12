@@ -30,8 +30,9 @@ module.exports = {
     '~/plugins/logging.js',
   ],
   serverMiddleware: [
-    './handler.js',
-    './responseHeaders.js',
+    './middleware/server/handler.js',
+    './middleware/server/responseHeaders.js',
+    './middleware/server/noJsApi.js',
   ],
   router: {
     middleware: ['auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],

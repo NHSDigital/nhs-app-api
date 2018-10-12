@@ -28,7 +28,6 @@ class AuthorisationService {
     const challenge = createChallenge(verifier);
     const myState = this.newState(this.cryptoGenerateRandom);
     const redirectUri = this.getRedirectUri(source || Sources.Web);
-
     const request = {
       scope: 'openid profile nhs_app_credentials gp_integration_credentials',
       clientId: this.cidClientId,

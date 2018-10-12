@@ -1,5 +1,4 @@
 <script>
-
 const KeyCodes = {
   NoKey: 0,
   TabKey: 9,
@@ -34,8 +33,9 @@ export default {
           if (index > -1) {
             styleClasses.splice(index, 1);
           }
+        } else {
+          styleClasses.push(this.defaultClasses);
         }
-
 
         if (this.highlight) {
           styleClasses.push(this.$style.tabFocus);
@@ -66,5 +66,4 @@ export default {
     },
   },
 };
-
 </script>

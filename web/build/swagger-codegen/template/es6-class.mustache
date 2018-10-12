@@ -83,7 +83,7 @@ class {{&className}} {
    * @param {object} form - form data object
    * @param {object} deferred - promise object
    */
-  request(method, url, parameters, body, headers, queryParameters, form, deferred){
+  request({ method, url, parameters, body, headers, queryParameters, form, deferred }){
     const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null ;
     const urlWithParams = url + (queryParams ? '?' + queryParams : '');
 

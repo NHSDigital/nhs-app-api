@@ -1,6 +1,6 @@
 <template>
   <span :class="getStyleClasses">
-    <select v-tabbing="dropdownClass"
+    <select v-tabbing="defaultClasses"
             v-model="selectedValue"
             :id="selectId"
             :name="selectName"
@@ -10,7 +10,7 @@
               $style['custom-dropdown__select_element'],
               $style['custom-dropdown__select--white']
             ]"
-            required=""
+            :required="required"
             tabindex="0">
       <slot/>
     </select>
@@ -47,6 +47,10 @@ export default {
       type: String,
       default: undefined,
     },
+    required: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     selectedValue: {
@@ -57,8 +61,8 @@ export default {
         this.$emit('input', val);
       },
     },
-    dropdownClass() {
-      const dropdownClass = [this.$style.form, this.$style['custom-dropdown'], this.$style.tabFocus];
+    defaultClasses() {
+      const dropdownClass = [this.$style.form, this.$style['custom-dropdown']];
       if (this.errorBorder) {
         dropdownClass.push(this.$style['validation-select-border']);
       }
