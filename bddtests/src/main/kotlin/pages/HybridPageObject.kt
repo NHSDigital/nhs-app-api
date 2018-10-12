@@ -9,7 +9,6 @@ import net.thucydides.core.webdriver.SerenityWebdriverManager
 import net.thucydides.core.webdriver.WebDriverFacade
 import org.junit.Assert
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.StaleElementReferenceException
@@ -17,7 +16,6 @@ import org.openqa.selenium.TimeoutException
 import org.openqa.selenium.support.ui.FluentWait
 import pages.navigation.Header
 import java.time.Duration
-import java.time.LocalDateTime
 
 const val DEFAULT_SPINNER_WAIT: Long = 30
 const val POOLING_FREQUENCY: Long = 100
@@ -147,11 +145,16 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
     }
 
     private fun getAndroidDriver(): AndroidDriver<WebElementFacade> {
-        return if (driver is WebDriverFacade) {
-            ((driver as WebDriverFacade).proxiedDriver) as AndroidDriver<WebElementFacade>
-        } else {
-            driver as AndroidDriver<WebElementFacade>
-        }
+        val androidDriver =
+                if (driver is WebDriverFacade) {
+                    (driver as WebDriverFacade).proxiedDriver
+                } else {
+                    driver
+                }
+        @Suppress("UNCHECKED_CAST",
+                "Cast cannot be checked as a generic type is used, " +
+                        "see https://kotlinlang.org/docs/reference/typecasts.html")
+        return androidDriver as AndroidDriver<WebElementFacade>
     }
 
     private fun switchToDefaultWindow(originalDriver: AndroidDriver<WebElementFacade>) {

@@ -67,17 +67,13 @@ Feature: View My Medical Record Information - Allergies
       |Service|
       |EMIS|
 
-  Scenario Outline: A <Service> user has a drug and non drug allergy record
-    Given the my record wiremocks are initialised for <Service>
-    And the GP Practice has enabled demographics functionality for <Service>
-    And the GP Practice has enabled allergies functionality and the patient has a drug and non drug allergy record for <Service>
+  Scenario: A VISION user has a drug and non drug allergy record
+    Given the my record wiremocks are initialised for VISION
+    And the GP Practice has enabled demographics functionality for VISION
+    And the GP Practice has enabled allergies functionality and the patient has a drug and non drug allergy record for VISION
     And I am on my record information page
     When I click the Allergies and adverse reactions section on My Record
-    Then I see a drug and non drug allergy record from <Service>
-
-    Examples:
-      |Service|
-      |VISION |
+    Then I see a drug and non drug allergy record from VISION
 
   Scenario Outline: A <Service> user is shown an appropriate error message when an unknown error occurs retrieving their allergies
     Given the my record wiremocks are initialised for <Service>

@@ -1,28 +1,42 @@
 package features.prescriptions.stepDefinitions
 
 import cucumber.api.DataTable
-import cucumber.api.java.en.*
+import cucumber.api.java.en.And
+import cucumber.api.java.en.But
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import mocking.data.prescriptions.EmisPrescriptionLoader
-import mocking.data.prescriptions.IPrescriptionLoader
-import mocking.data.prescriptions.TppPrescriptionLoader
+import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
 import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
+import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.backend.CommonSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
+import mocking.data.prescriptions.EmisPrescriptionLoader
+import mocking.data.prescriptions.IPrescriptionLoader
+import mocking.data.prescriptions.TppPrescriptionLoader
+import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.MockDefaults
+import mocking.defaults.MockDefaults.Companion.patient
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
+import mocking.tpp.models.Error
 import mocking.tpp.models.ListRepeatMedicationReply
+import mocking.vision.models.PrescriptionHistory
+import models.Patient
 import models.prescriptions.HistoricPrescription
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import pages.ErrorPage
 import pages.prescription.ConfirmRepeatPrescriptionsOrderPage
 import pages.prescription.PrescriptionsPage
@@ -33,16 +47,7 @@ import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZonedDateTime
 import java.util.*
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedSteps.SerenityHelpers
-import mocking.data.prescriptions.VisionPrescriptionLoader
-import mocking.tpp.models.Error
-import mocking.defaults.MockDefaults.Companion.patient
-import mocking.vision.VisionConstants
-import mocking.vision.models.EligibleRepeats
-import mocking.vision.models.PrescriptionHistory
-import mocking.vision.models.ServiceDefinition
-import models.Patient
+import javax.servlet.http.Cookie
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
@@ -208,21 +213,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         return currentProvider == ProviderTypes.EMIS || currentProvider == ProviderTypes.VISION
     }
 
-    @And("^I have a patient$")
-    fun iHaveAPatient() {
-
-        //currentGPSystem = Serenity.getCurrentSession().get("GP_SYSTEM").toString()
-
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                currentPatient = EMIS_PATIENT
-            }
-            ProviderTypes.TPP -> {
-                currentPatient = TPP_PATIENT
-            }
-        }
-    }
-
     @And("^the patient has no prescriptions in the last 6 months")
     fun thePatientHasNoPrescriptionsInTheLastSixMonths() {
 
@@ -252,7 +242,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @When("^I request prescriptions for the last 6 months$")
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
-            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate)
+            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .getPrescriptionsConnection(fromDate)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -261,7 +252,20 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @When("^I request prescriptions for the last 6 months with an invalid cookie$")
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
         try {
-            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+        } catch (httpException: NhsoHttpException) {
+            Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+        }
+    }
+
+    @When("^I request prescriptions for the last 6 months with a missing cookie$")
+    fun iRequestPrescriptionsForTheLastSixMonthsWithAMissingCookie() {
+        Serenity.setSessionVariable(Cookie::class).to(null)
+
+        try {
+            PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -295,37 +299,13 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
         givenFromDateIsSixMonthsAgoAndIHaveTenPrescriptionsInTheLastSixMonths()
     }
 
-    @But("^no cookie$")
-    fun noCookie() {
-        // No implementation is needed
-    }
-
     @But("^the GP System has disabled prescriptions$")
     fun theGPSystemHasDisabledPrescriptions() {
-        val EXPECTED_DEFAULT_FROM_DATE = getDefaultPrescriptionsFromDate(TO_DATE)
-
         if (currentProvider == null) {
             initialize(Serenity.sessionVariableCalled<String>(CommonSteps.GP_SYSTEM))
         }
-
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                mockingClient
-                        .forEmis {
-                            prescriptionsRequest(currentPatient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
-                                    .respondWithPrescriptionsNotEnabled()
-                        }
-            }
-            ProviderTypes.TPP -> {
-                mockingClient
-                        .forTpp {
-                            listRepeatMedication(currentPatient)
-                                    .respondWith(403, 0, resolve = {})
-                        }
-            }
-        }
-
-
+        SerenityHelpers.setPatient(currentPatient)
+        PrescriptionsFactory.getForSupplier(currentProvider.toString()).disableAtGPLevel()
     }
 
     fun getDefaultPrescriptionsFromDate(dateNow: OffsetDateTime): OffsetDateTime {

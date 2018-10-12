@@ -197,7 +197,6 @@ Feature: View prescriptions
   @backend
   Scenario Outline: <GP System> patient with repeat prescriptions in the last 6 months and no fromDate
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
     And From date is 6 months ago and I have 10 prescriptions in the last 6 months
     But I do not request a fromDate
     When I request prescriptions for the last 6 months
@@ -212,7 +211,6 @@ Feature: View prescriptions
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate in the future
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
     But a fromDate in the future
     When I request prescriptions for the last 6 months
     Then I get a response with a list of prescriptions for the last 6 months
@@ -226,7 +224,6 @@ Feature: View prescriptions
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate greater than 6 months ago
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
     But a fromDate greater than 6 months ago
     When I request prescriptions for the last 6 months
     Then I get a response with a list of prescriptions for the last 6 months
@@ -240,7 +237,6 @@ Feature: View prescriptions
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with a fromDate not in the expected format
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
     But a fromDate in an unexpected format
     When I request prescriptions for the last 6 months
     Then I receive a "Bad request" error
@@ -253,21 +249,19 @@ Feature: View prescriptions
 
   @backend
   Scenario: Requesting prescriptions with a missing cookie
-    Given I have a patient
-    But no cookie
+    # Without logging in
     When I request prescriptions for the last 6 months
     Then I receive a "Unauthorized" error
 
   @backend
   Scenario: Patient requesting prescriptions with a NHSO-Session-Id not in the expected format
-    Given I have a patient
+    Given I have logged into EMIS and have a valid session cookie
     When I request prescriptions for the last 6 months with an invalid cookie
     Then I receive a "Unauthorized" error
 
   @backend
   Scenario Outline: <GP System> patient requesting prescriptions with when their session has expired
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
     But I allow my session to expire
     When I request prescriptions for the last 6 months
     Then I receive an "Unauthorized" error
@@ -281,8 +275,7 @@ Feature: View prescriptions
   @backend
   Scenario Outline: <GP System> GP practice has disabled prescriptions functionality
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
-    But the GP System has disabled prescriptions
+    And the GP System has disabled prescriptions
     When I request prescriptions for the last 6 months
     Then I receive a "Forbidden" error
 
@@ -293,7 +286,6 @@ Feature: View prescriptions
   @backend
   Scenario Outline: <GP System> GP system fails to return in a timely fashion
     Given I have logged into <GP System> and have a valid session cookie
-    And I have a patient
     But the GP System is too slow
     When I request prescriptions for the last 6 months
     Then I receive a "Gateway Timeout" error

@@ -1,7 +1,6 @@
 package features.myrecord.stepDefinitions
 
 import config.Config
-import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -9,26 +8,34 @@ import features.authentication.steps.LoginSteps
 import features.navigation.steps.NavHeaderSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
-import mocking.data.myrecord.*
+import mocking.data.myrecord.AllergiesData
+import mocking.data.myrecord.ConsultationsData
+import mocking.data.myrecord.ImmunisationsData
+import mocking.data.myrecord.MedicationsData
+import mocking.data.myrecord.ProblemsData
+import mocking.data.myrecord.TestResultsData
+import mocking.data.myrecord.TppDcrData
+import mocking.data.myrecord.ViewPatientOverviewData
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
-import worker.NhsoHttpException
-import worker.WorkerClient
-import worker.models.myrecord.MyRecordResponse
 import mocking.tpp.models.Error
 import mocking.vision.VisionConstants
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
-import models.Patient
+import net.serenitybdd.core.Serenity
+import net.thucydides.core.annotations.Steps
 import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertArrayEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordWarningPage
+import worker.NhsoHttpException
+import worker.WorkerClient
+import worker.models.myrecord.MyRecordResponse
 import java.time.OffsetDateTime
-import utils.DateConverter
 
 open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
 
@@ -485,8 +492,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertEquals(supplier, result.response.supplier)
     }
 
-    @Then("^I see a drug and non drug allergy record from (.*)$")
-    fun i_see_a_drug_and_non_drug_allergy_record_from_vision(service: String) {
+    @Then("^I see a drug and non drug allergy record from VISION$")
+    fun i_see_a_drug_and_non_drug_allergy_record_from_vision() {
         val allergyMessages = myRecordInfoPage.getAllergyMessages()
         val expectedMessages = listOf(
                 "H/O: drug allergy",

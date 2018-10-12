@@ -68,9 +68,11 @@ dependencies {
 }
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.allWarningsAsErrors = true
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.allWarningsAsErrors = true
 }
 detekt {
     version = "1.0.0.RC8"
