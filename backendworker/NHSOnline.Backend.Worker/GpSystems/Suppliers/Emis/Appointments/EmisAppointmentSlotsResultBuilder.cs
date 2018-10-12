@@ -15,10 +15,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> _metaTask;
         private readonly Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> _slotTask;
         private readonly Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> _practiceSettingsTask;
+        private readonly EmisUserSession _userSession;
 
         private EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse> MetaResponse => _metaTask.Result;
         private EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse> SlotResponse => _slotTask.Result;
-
         private EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse> PracticeSettingsResponse
             => _practiceSettingsTask.Status == TaskStatus.RanToCompletion ? _practiceSettingsTask.Result : null;
 
@@ -27,7 +27,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             IAppointmentSlotsResponseMapper appointmentSlotsResponseMapper,
             Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsMetadataGetResponse>> metaTask,
             Task<EmisClient.EmisApiObjectResponse<AppointmentSlotsGetResponse>> slotTask,
-            Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask
+            Task<EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>> practiceSettingsTask,
+            EmisUserSession userSession
             )
         {
             _logger = logger;
@@ -35,6 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             _metaTask = metaTask;
             _slotTask = slotTask;
             _practiceSettingsTask = practiceSettingsTask;
+            _userSession = userSession;
         }
 
         internal Option<AppointmentSlotsResult> Build()
@@ -113,7 +115,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             {
                 var result =
                     new AppointmentSlotsResult.SuccessfullyRetrieved(
-                        _appointmentSlotsResponseMapper.Map(SlotResponse.Body, MetaResponse.Body, PracticeSettingsResponse?.Body));
+                        _appointmentSlotsResponseMapper.Map(
+                            SlotResponse.Body,
+                            MetaResponse.Body,
+                            PracticeSettingsResponse?.Body,
+                            _userSession));
+
                 return Option.Some<AppointmentSlotsResult>(result);
             }
             catch (Exception e)

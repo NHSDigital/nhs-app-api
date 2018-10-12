@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NHSOnline.Backend.Worker.Support.Logging;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 
@@ -25,10 +26,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             try
             {
                 _logger.LogEnter(nameof(Book));
-            
+
+                if (BookingReasonInvalid(emisUserSession, request))
+                {
+                    return new AppointmentBookResult.BadRequest();
+                }
+
                 var postRequest = new BookAppointmentSlotPostRequest(emisUserSession, request);
                 var emisHeaders = new EmisHeaderParameters(emisUserSession);
-                
+
                 var response = await _emisClient.AppointmentsPost(emisHeaders, postRequest);
                 return InterpretAppointmentsPostResponse(response);
             }
@@ -42,7 +48,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogExit(nameof(Book));
             }
         }
-        
+
         private AppointmentBookResult InterpretAppointmentsPostResponse(
             EmisClient.EmisApiResponse response)
         {
@@ -124,6 +130,31 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 _logger.LogEmisErrorResponse(response);
             }
             return check;
+        }
+
+        private bool BookingReasonInvalid(EmisUserSession emisUserSession, AppointmentBookRequest request)
+            => ReasonWillNotBeAccepted(emisUserSession, request) || ReasonRequiredButNotProvided(emisUserSession, request);
+
+        private bool ReasonWillNotBeAccepted(EmisUserSession emisUserSession, AppointmentBookRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.BookingReason) &&
+                emisUserSession.AppointmentBookingReasonNecessity == Necessity.NotAllowed)
+            {
+                _logger.LogError($"Booking reason '{request.BookingReason}' provided but is not allowed");
+                return true;
+            }
+            return false;
+        }
+
+        private bool ReasonRequiredButNotProvided(EmisUserSession emisUserSession, AppointmentBookRequest request)
+        {
+            if (string.IsNullOrEmpty(request.BookingReason) &&
+                emisUserSession.AppointmentBookingReasonNecessity == Necessity.Mandatory)
+            {
+                _logger.LogError($"Booking reason not provided but is mandatory");
+                return true;
+            }
+            return false;
         }
     }
 }

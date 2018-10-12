@@ -46,7 +46,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 await Task.WhenAll(metaTask, slotTask);
                 _logger.LogInformation("Appointment slot requests completed");
 
-                // Wait for practice task to complete, but unlike the other tasks supress any errors such as timeout.
+                // Wait for practice task to complete, but unlike the other tasks suppress any errors such as timeout.
                 try
                 {
                     await Task.WhenAll(practiceTask);
@@ -57,7 +57,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
                 }
 
                 var result =
-                    new EmisAppointmentSlotsResultBuilder(_logger, _appointmentSlotsResponseMapper, metaTask, slotTask, practiceTask)
+                    new EmisAppointmentSlotsResultBuilder(
+                            _logger,
+                            _appointmentSlotsResponseMapper,
+                            metaTask,
+                            slotTask,
+                            practiceTask,
+                            emisUserSession)
                         .Build();
 
                 return result.ValueOrFailure();

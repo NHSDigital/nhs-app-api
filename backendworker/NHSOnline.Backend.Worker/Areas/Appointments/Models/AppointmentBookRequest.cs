@@ -8,9 +8,7 @@ namespace NHSOnline.Backend.Worker.Areas.Appointments.Models
         [Required]
         public string SlotId { get; set; }
 
-        [Required]
         [MaxLength(150)]
-        [MinLength(1)]
         public string BookingReason { get; set; }
         public DateTimeOffset? StartTime { get; set; }
         public DateTimeOffset? EndTime { get; set; }

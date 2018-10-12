@@ -55,6 +55,7 @@ export default {
     const result = mutation.execute(data);
 
     state.bookingGuidance = data.bookingGuidance;
+    state.bookingReasonNecessity = data.bookingReasonNecessity;
     state.hasLoaded = true;
     state.slots = result.slots;
     state.filtersOptions = result.filtersOptions;

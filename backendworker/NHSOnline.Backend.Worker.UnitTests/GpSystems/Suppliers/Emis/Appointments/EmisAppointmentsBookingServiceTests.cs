@@ -10,6 +10,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Appointments.Models;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments;
@@ -22,7 +23,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
     {
         private const string BookingReason = "I caught a cold!";
         private const string SlotId = "2862517";
-        
+        private const string UserPatientLinkToken = "USER_PATIENT_LINK_TOKEN";
+        private const string EndUserSessionId = "END_USER_SESSION_ID";
+        private const string SessionId = "SESSION_ID";
+
         private IFixture _fixture;
         private Mock<IEmisClient> _mockEmisClient;
         private IAppointmentsService _systemUnderTest;
@@ -35,7 +39,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
             _mockEmisClient = _fixture.Freeze<Mock<IEmisClient>>();
 
-            _userSession = _fixture.Create<EmisUserSession>();
+            _userSession = new EmisUserSession()
+            {
+                UserPatientLinkToken = UserPatientLinkToken,
+                EndUserSessionId = EndUserSessionId,
+                SessionId = SessionId,
+                OdsCode = "TestOds",
+                AppointmentBookingReasonNecessity = Necessity.Optional
+            };
 
             _systemUnderTest = _fixture.Create<EmisAppointmentsService>();
             
@@ -303,6 +314,37 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Appointmen
             // Assert
             _mockEmisClient.Verify();
             result.Should().BeAssignableTo<AppointmentBookResult.SupplierSystemUnavailable>();
+        }
+
+        [DataTestMethod]
+        [DataRow(null)]
+        [DataRow("")]
+        public async Task Book_BookingReasonMandatoryButNotProvided_ReturnsBadRequestResponse(string bookingReason)
+        {
+            // Arrange
+            _userSession.AppointmentBookingReasonNecessity = Necessity.Mandatory;
+            _request.BookingReason = bookingReason;
+
+            // Act
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
+        }
+
+        [TestMethod]
+        public async Task Book_BookingReasonNotAllowedButProvided_ReturnsBadRequestResponse()
+        {
+            // Arrange
+            _userSession.AppointmentBookingReasonNecessity = Necessity.NotAllowed;
+
+            // Act
+            var result = await _systemUnderTest.Book(_userSession, _request);
+
+            // Assert
+            _mockEmisClient.Verify();
+            result.Should().BeAssignableTo<AppointmentBookResult.BadRequest>();
         }
 
         private void MockEmisClientAppointmentPostMethod(EmisClient.EmisApiObjectResponse<BookAppointmentSlotPostResponse> response)

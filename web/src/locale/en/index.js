@@ -303,6 +303,7 @@ export default {
     },
     confirmation: {
       headerLabel: 'Reason for this appointment',
+      headerLabelSuffix: ' (Optional)',
       reasonDesc: {
         line1: 'Text must be shorter than 150 characters (about 25 words)',
         line2: 'This text may not be read by your GP or practice member until the day of your appointment.',

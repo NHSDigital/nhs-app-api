@@ -44,24 +44,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Appointments.Models
         }
 
         [DataTestMethod]
-        [DataRow(null)]
-        [DataRow("")]
-        [DataRow(" ")]
-        public void AppointmentBookRequest_BookingReason_Required(string bookingReason)
-        {
-            // Arrange
-            _systemUnderTest.BookingReason = bookingReason;
-
-            // Act
-            var valid = Validator.TryValidateObject(_systemUnderTest, _context, _validationResults, true);
-
-            // Assert
-            valid.Should().BeFalse();
-            _validationResults.Count.Should().Be(1);
-            _validationResults.Single().MemberNames.Should().BeEquivalentTo(nameof(AppointmentBookRequest.BookingReason));
-        }
-
-        [DataTestMethod]
         [DataRow(151)]
         [DataRow(152)]
         [DataRow(1000)]

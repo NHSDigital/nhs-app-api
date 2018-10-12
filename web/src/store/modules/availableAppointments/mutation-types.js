@@ -8,6 +8,7 @@ export const SET_SELECTED_OPTIONS = 'SET_SELECTED_OPTIONS';
 export const initialState = () => ({
   slots: new Map(),
   bookingGuidance: '',
+  bookingReasonNecessity: '',
   filteredSlots: [],
   hasLoaded: false,
   selectedSlot: null,

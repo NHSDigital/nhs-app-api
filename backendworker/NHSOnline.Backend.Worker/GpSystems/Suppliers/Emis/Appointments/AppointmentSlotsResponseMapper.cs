@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
     public interface IAppointmentSlotsResponseMapper
     {
         AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
-            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body);
+            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body, EmisUserSession userSession);
     }
 
     public class AppointmentSlotsResponseMapper : IAppointmentSlotsResponseMapper
@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
         }
 
         public AppointmentSlotsResponse Map(AppointmentSlotsGetResponse slotsResponse,
-            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body)
+            AppointmentSlotsMetadataGetResponse slotsMetadataResponse, PracticeSettingsGetResponse body, EmisUserSession userSession)
         {
             var slots = _slotMapper.Map(slotsResponse.Sessions, slotsMetadataResponse.Locations,
                 slotsMetadataResponse.SessionHolders, slotsMetadataResponse.Sessions);
@@ -27,7 +27,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             var response = new AppointmentSlotsResponse
             {
                 BookingGuidance = body?.Messages?.AppointmentsMessage ?? string.Empty,
-                Slots = slots
+                Slots = slots,
+                BookingReasonNecessity = userSession.AppointmentBookingReasonNecessity
             };
 
             return response;

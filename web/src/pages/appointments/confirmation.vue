@@ -16,9 +16,10 @@
 
     <appointment-slot v-if="slot" :appointment="slot" :show-cancellation-link="false"
                       aria-label="selected appointment" />
-    <div :class="[$style.form, $style.reasonForm]" role="form">
+    <div v-if="showBookingReason()" :class="[$style.form, $style.reasonForm]" role="form">
       <label :class="$style.textReasonLabel" for="reasonText">
         {{ $t('appointments.confirmation.headerLabel') }}
+        {{ bookingReasonOptional() ? $t('appointments.confirmation.headerLabelSuffix') : '' }}
       </label>
 
       <error-message v-if="showError" id="error-label">
@@ -63,6 +64,7 @@ import MessageList from '@/components/widgets/MessageList';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
 import GenericButton from '@/components/widgets/GenericButton';
 import { APPOINTMENTS, APPOINTMENT_BOOKING } from '@/lib/routes';
+import Necessity from '@/lib/necessity';
 
 export default {
   components: {
@@ -109,9 +111,16 @@ export default {
     this.$store.dispatch('availableAppointments/deselect');
   },
   methods: {
+    showBookingReason() {
+      return this.$store.state.availableAppointments.bookingReasonNecessity !== Necessity.NotAllowed;
+    },
+    bookingReasonOptional() {
+      return this.$store.state.availableAppointments.bookingReasonNecessity === Necessity.Optional;
+    },
     onConfirmButtonClicked() {
+      let isMandatory = this.$store.state.availableAppointments.bookingReasonNecessity === Necessity.Mandatory;
       this.symptoms = this.symptoms.trim();
-      if (this.symptoms.length === 0) {
+      if (this.symptoms.length === 0 && isMandatory) {
         this.submissionError = true;
         this.$refs.reason.focus();
         return;
