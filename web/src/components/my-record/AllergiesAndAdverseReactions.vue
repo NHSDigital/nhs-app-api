@@ -19,6 +19,7 @@
       <p v-if="allergy.drug">{{ allergy.drug }}</p>
       <p v-if="allergy.reaction">{{ allergy.reaction }}</p>
       <hr>
+      <hr aria-hidden="true">
     </div>
   </div>
 </template>

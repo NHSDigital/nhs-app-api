@@ -50,7 +50,7 @@
           </ul>
         </li>
       </ul>
-      <hr>
+      <hr aria-hidden="true">
     </div>
   </div>
 </template>

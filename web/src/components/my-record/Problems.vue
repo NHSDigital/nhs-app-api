@@ -29,7 +29,7 @@
           </li>
         </ul>
       </p>
-      <hr>
+      <hr aria-hidden="true">
     </div>
   </div>
 </template>

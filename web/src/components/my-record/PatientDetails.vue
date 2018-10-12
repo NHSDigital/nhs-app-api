@@ -2,20 +2,20 @@
   <div :class="[$style['record-content'], getCollapseState]" :aria-hidden="isCollapsed">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelName') }}</span>
     <p v-if="patientDetails">{{ patientDetails.patientName }}</p>
-    <hr>
+    <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelDOB') }}</span>
     <p v-if="patientDetails">{{ patientDetails.dateOfBirth | longDate }}</p>
-    <hr>
+    <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelSex') }}</span>
     <p v-if="patientDetails">{{ patientDetails.sex }}</p>
-    <hr>
+    <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelAddress') }}</span>
     <p v-if="patientDetails">
       {{ patientDetails.address }}</p>
-    <hr>
+    <hr aria-hidden="true">
     <span :class="$style.fieldName">{{ $t('my_record.patientInfo.fieldLabelNHS') }}</span>
     <p v-if="patientDetails">{{ patientDetails.nhsNumber }}</p>
-    <hr>
+    <hr aria-hidden="true">
   </div>
 </template>
 

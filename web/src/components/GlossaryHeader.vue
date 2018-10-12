@@ -6,7 +6,7 @@
       <abbreviations-arrow-right-icon />
       {{ $t('rp01.glossary.linkText') }}
     </analytics-tracked-tag>
-    <hr>
+    <hr aria-hidden="true">
   </div>
 </template>
 

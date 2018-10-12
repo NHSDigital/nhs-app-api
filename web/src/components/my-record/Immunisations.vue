@@ -19,7 +19,7 @@
         {{ item.effectiveDate.value | datePart(item.effectiveDate.datePart) }}
       </span>
       <p>{{ item.term }}</p>
-      <hr>
+      <hr aria-hidden="true">
     </div>
   </div>
 </template>
