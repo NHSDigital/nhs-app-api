@@ -128,7 +128,7 @@
                       :supplier="myRecord.supplier" />
       </div>
       <div v-else>
-        <p>
+        <p :class="$style.summaryRecordWarning">
           {{ $t('my_record.viewRestOfHealthRecordWarning') }}
         </p>
       </div>
@@ -346,5 +346,11 @@ export default {
     font-size: 1em;
     line-height: 1.5em;
     color: #212B32;
+  }
+
+  .summaryRecordWarning {
+    padding-left:1em;
+    padding-right:1em;
+    padding-top:0.5em;
   }
 </style>
