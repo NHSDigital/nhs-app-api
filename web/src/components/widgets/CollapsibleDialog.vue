@@ -10,11 +10,6 @@
          data-purpose="info-content">
       <slot />
     </div>
-    <noscript>
-      <div :class="$style['info-content']">
-      <slot />
-      </div>
-    </noscript>
   </div>
 </template>
 

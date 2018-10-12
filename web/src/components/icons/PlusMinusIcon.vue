@@ -1,6 +1,6 @@
 <template>
   <div :class="$style['info-message-icon']" data-purpose="icon">
-    <span v-if="js">{{ iconPlus ? '+' : '&minus;' }}</span>
+    {{ iconPlus?'+':'&minus;' }}
   </div>
 </template>
 
@@ -11,20 +11,6 @@ export default {
       type: Boolean,
       default: true,
     },
-  },
-  data() {
-    return {
-      js: false,
-    };
-  },
-  computed: {
-    icon() {
-      if (!this.fillIcon) return '';
-      return this.iconPlus ? '+' : '&minus;';
-    },
-  },
-  mounted() {
-    this.js = true;
   },
 };
 </script>

@@ -240,9 +240,6 @@ export default {
     booking: {
       backButtonText: 'Back to my appointments',
       noSlots: 'No appointments available',
-      nojs: {
-        findButton: 'Find available appointments',
-      },
       availableAppointmentsScreenReaderMessage: '0 appointments available | 1 appointment available | {appointmentsCount} appointments available',
       gpMessage: {
         header: 'Which type of appointment do I need?',

@@ -51,9 +51,6 @@ describe('booking.vue', () => {
           filteredSlots: [],
           hasLoaded: true,
         },
-        device: {
-          isNativeApp: jest.fn(),
-        },
       },
       app,
     };
@@ -72,9 +69,6 @@ describe('booking.vue', () => {
           slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
-        },
-        device: {
-          isNativeApp: jest.fn(),
         },
       },
       app,
