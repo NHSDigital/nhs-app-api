@@ -18,7 +18,7 @@
     </select-dropdown>
 
     <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
-    <select-dropdown v-model="location" select-id = "location" select-name="location">
+    <select-dropdown v-model="location" select-id="location" select-name="location">
       <option v-for="option in options.locations"
               :key="option.value"
               :value="option.value"
@@ -41,7 +41,7 @@
     <hr :class="$style.line" aria-hidden="true">
     <h2>{{ $t('appointments.booking.filters.date.header') }}</h2>
     <label for="time-period">{{ $t('appointments.booking.filters.date.label') }}</label>
-    <select-dropdown v-model="date" select-id = "time-period" select-name="time-period">
+    <select-dropdown v-model="date" select-id="time-period" select-name="time-period">
       <option v-for="option in options.dates" :key="option.value" :value="option.value">
         {{ displayName(option) }}
       </option>

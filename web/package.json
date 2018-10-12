@@ -21,7 +21,10 @@
   "jest": {
     "verbose": true,
     "collectCoverage": true,
-    "coverageReporters": ["teamcity", "html"],
+    "coverageReporters": [
+      "teamcity",
+      "html"
+    ],
     "coverageDirectory": "test/unit/coverage",
     "moduleFileExtensions": [
       "js",
