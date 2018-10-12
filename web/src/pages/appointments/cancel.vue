@@ -1,6 +1,6 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
-    <message-dialog v-if="showValidationError" message-type="error">
+    <message-dialog v-if="showError" message-type="error">
       <message-text data-purpose="error-heading">
         {{ $t('appointments.cancel.noReasonDialogError') }}
       </message-text>
@@ -19,12 +19,11 @@
         {{ $t('appointments.cancel.form_label') }}
       </label>
 
-      <error-message v-if="showValidationError" id="error-label" :class="$style.form">
+      <error-message v-if="showError" id="error-label" :class="$style.form">
         {{ $t('appointments.cancel.noReasonError') }}
       </error-message>
 
       <select-dropdown v-model="selectedReason" :a-labelled-by="labelledBy"
-                       :error-border="showValidationError"
                        select-id = "txt_reason" select-name="reason">
         <option disabled="" selected="" value="">
           {{ $t('appointments.cancel.dropdownDefaultOption') }}
@@ -72,11 +71,16 @@ export default {
     return {
       appointment: null,
       cancellationReasons: [],
-      showValidationError: false,
+      submissionError: false,
       isReasonRequired: true,
       selectedReason: '',
       labelledBy: undefined,
     };
+  },
+  computed: {
+    showError() {
+      return this.submissionError && !this.selectedReason;
+    },
   },
   mounted() {
     this.appointment = this.$store.state.myAppointments.selectedAppointment;
@@ -93,7 +97,7 @@ export default {
   methods: {
     onCancelButtonClicked() {
       if (this.cancellationReasons.length === 0 || this.selectedReason) {
-        this.showValidationError = false;
+        this.submissionError = false;
 
         const data = {
           appointmentId: this.appointment.id,
@@ -107,7 +111,7 @@ export default {
             this.$router.push(APPOINTMENTS.path);
           });
       } else {
-        this.showValidationError = true;
+        this.submissionError = true;
         document.getElementById('txt_reason').focus();
         this.labelledBy = 'error-label';
       }

@@ -31,6 +31,7 @@ import features.sharedSteps.SerenityHelpers
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
     val HTTP_EXCEPTION = "HttpException"
+    val IS_VISIBLE = "is"
 
     @Steps
     lateinit var login: LoginSteps
@@ -250,9 +251,9 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         courseSteps.assertCorrectRepeatPrescriptionsSelected(selectedCourses)
     }
 
-    @Then("A validation message is displayed indicating the user has not selected any repeat prescriptions")
-    fun aValidationMessageIsDisplayedIndicatingTheUserhasNotSelectedAnyRepeatPrescriptions() {
-        courseSteps.assertNoRepeatPrescriptionsSelectedMessageShown()
+    @Then("A validation message (.*) displayed indicating the user has not selected any repeat prescriptions")
+    fun aValidationMessageIsDisplayedIndicatingTheUserhasNotSelectedAnyRepeatPrescriptions(visibility: String) {
+        courseSteps.assertNoRepeatPrescriptionsSelectedMessageVisibility(visibility.toLowerCase() == IS_VISIBLE)
     }
 
     @When("I select (\\d+) additional repeat prescriptions")

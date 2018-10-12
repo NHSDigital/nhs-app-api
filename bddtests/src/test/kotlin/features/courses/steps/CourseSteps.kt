@@ -31,8 +31,8 @@ open class CourseSteps {
     }
 
     @Step
-    fun assertNoRepeatPrescriptionsSelectedMessageShown() {
-        Assert.assertTrue(repeatPrescriptions.isNoRepeatPrescriptionsSelectedMessageVisible())
+    fun assertNoRepeatPrescriptionsSelectedMessageVisibility(visibility: Boolean) {
+        Assert.assertTrue(repeatPrescriptions.isNoRepeatPrescriptionsSelectedMessageVisible() == visibility)
     }
 
     @Step

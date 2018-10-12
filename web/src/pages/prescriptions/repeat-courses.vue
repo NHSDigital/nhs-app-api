@@ -178,6 +178,9 @@ export default {
     if (!this.$store.state.repeatPrescriptionCourses.hasLoaded) {
       this.$store.dispatch('repeatPrescriptionCourses/load');
     }
+    if (this.$store.state.repeatPrescriptionCourses.validated) {
+      this.$store.dispatch('repeatPrescriptionCourses/validate', { submitted: false });
+    }
   },
   methods: {
     validate() {

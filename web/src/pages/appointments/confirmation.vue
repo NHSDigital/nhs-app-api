@@ -1,7 +1,7 @@
 <template>
   <div v-if="showTemplate" class="pull-content">
 
-    <message-dialog v-if="showValidationError" message-type="error">
+    <message-dialog v-if="showError" message-type="error">
       <message-text data-purpose="error-heading">
         {{ $t('appointments.confirmation.noReasonDialogError') }}
       </message-text>
@@ -21,7 +21,7 @@
         {{ $t('appointments.confirmation.headerLabel') }}
       </label>
 
-      <error-message v-if="showValidationError" id="error-label">
+      <error-message v-if="showError" id="error-label">
         {{ $t('appointments.confirmation.noReasonError') }}
       </error-message>
       <generic-text-area id="reasonText"
@@ -78,15 +78,18 @@ export default {
     return {
       slot: null,
       symptoms: '',
-      showValidationError: false,
+      submissionError: false,
     };
   },
   computed: {
     reasonBoxAriaLabelledBy() {
-      return this.showValidationError ? 'error-label max-reason-desc' : 'max-reason-desc';
+      return this.showError ? 'error-label max-reason-desc' : 'max-reason-desc';
     },
     textareaClass() {
-      return this.showValidationError ? [this.$style.error] : undefined;
+      return this.showError ? [this.$style.error] : undefined;
+    },
+    showError() {
+      return this.submissionError && !this.symptoms;
     },
   },
   watch: {
@@ -109,11 +112,11 @@ export default {
     onConfirmButtonClicked() {
       this.symptoms = this.symptoms.trim();
       if (this.symptoms.length === 0) {
-        this.showValidationError = true;
+        this.submissionError = true;
         this.$refs.reason.focus();
         return;
       }
-      this.showValidationError = false;
+      this.submissionError = false;
       this.confirmTheBook(this.slot, this.symptoms);
     },
     confirmTheBook(slot, reason) {

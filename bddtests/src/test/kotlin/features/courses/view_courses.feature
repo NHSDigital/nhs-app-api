@@ -136,6 +136,10 @@ Feature: View courses
     And I select 0 <GP System> repeatable prescriptions out of 5 available
     When I click Continue on the Order a repeat prescription page
     Then A validation message is displayed indicating the user has not selected any repeat prescriptions
+    When I navigate to prescriptions
+    And I click 'Order a new repeat prescription'
+    Then A validation message is not displayed indicating the user has not selected any repeat prescriptions
+
     Examples:
       | GP System |
       | EMIS      |

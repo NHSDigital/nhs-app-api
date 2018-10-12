@@ -33,9 +33,7 @@ export default {
     state.specialRequest = null;
   },
   [REPEAT_PRESCRIPTION_VALIDATED](state, validationObject) {
-    if (validationObject.submitted) {
-      state.validated = true;
-    }
+    state.validated = !!validationObject.submitted;
     state.isValid = validationObject.isValid;
   },
   [SELECT_REPEAT_PRESCRIPTION](state, id) {
