@@ -36,6 +36,7 @@ export default {
         } else {
           styleClasses.push(this.defaultClasses);
         }
+
         if (this.highlight) {
           styleClasses.push(this.$style.tabFocus);
         }

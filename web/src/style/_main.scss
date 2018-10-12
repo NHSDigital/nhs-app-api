@@ -8,6 +8,10 @@ html {
   font: $apple-system-body;
 }
 
+.__nuxt-error-page {
+  display: none !important;
+}
+
 body {
 	padding: 0em;
 	margin: 0em;
@@ -15,19 +19,19 @@ body {
 	@include default_text;
 	font-family: $default;
 	@include phoneOld {
-		font-size: 0.875em;	
+		font-size: 0.875em;
 	}
 	@include phone {
-		font-size: 1em;	
+		font-size: 1em;
 	}
 	@include tablet {
-		font-size: 1.225em;	
+		font-size: 1.225em;
 	}
 	@include iPadPro {
-		font-size: 1.6em;	
+		font-size: 1.6em;
 	}
 	@include desktop {
-		font-size: 1em;	
+		font-size: 1em;
 	}
 }
 * {
@@ -57,12 +61,12 @@ main.content {
 		&.survey-open {
 			padding-bottom: 1em + $survey_open;
 		}
-	
+
 		&.survey-closed {
 			padding-bottom: 1em + $survey_closed;
 		}
 	}
-	
+
 	&.slim {
 		padding: 4.125em 1em 4.688em 1em;
 	}

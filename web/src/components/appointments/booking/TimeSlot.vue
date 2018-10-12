@@ -1,6 +1,6 @@
 <template>
   <li
-    v-tabbing="timeSlotStylingClasses"
+    v-tabbing="defaultClasses"
     :class="getStyleClasses"
     :aria-label="isSelected?'selected-slot':undefined" tabindex="0"
     @keypress="onKeyDown">
@@ -31,7 +31,7 @@ export default {
     };
   },
   computed: {
-    timeSlotStylingClasses() {
+    defaultClasses() {
       return [this.isSelected ? this.$style.selected : undefined, this.$style.selector];
     },
   },

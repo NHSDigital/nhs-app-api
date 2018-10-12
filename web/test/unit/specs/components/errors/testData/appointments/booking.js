@@ -78,7 +78,7 @@ export default {
       message: 'Try again now. If the problem continues and you need to book an appointment now, contact your GP surgery directly. For urgent medical advice, call 111.',
       hasRetryButton: true,
       retryButtonText: 'Try again',
-      redirectUrl: '',
+      redirectUrl: '/appointments/booking',
     },
   ],
 };

@@ -69,6 +69,10 @@ describe('booking.vue', () => {
           slots: [{}],
           filteredSlots: [],
           hasLoaded: true,
+          selectedOptions: {
+            type: 'appointment',
+            location: 'my surgery',
+          },
         },
       },
       app,

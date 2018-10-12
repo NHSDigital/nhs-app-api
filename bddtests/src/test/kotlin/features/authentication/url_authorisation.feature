@@ -79,7 +79,8 @@ Feature: Authorisation occurs during each URL visit
       | /terms-and-conditions                       |
 
   Scenario: User browses to url when logged in
-    Given I am logged in
+    Given I am about to directly access every page
+    And I am logged in
     And I see the home page
     When I browse to the pages at the following urls I see the relevant page
       | /account                                    | /account                       |

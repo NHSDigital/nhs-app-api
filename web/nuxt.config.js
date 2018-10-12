@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 const webpack = require('webpack');
 
-module.exports = {
+const config = {
   build: {
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
@@ -30,8 +30,9 @@ module.exports = {
     '~/plugins/logging.js',
   ],
   serverMiddleware: [
-    './handler.js',
-    './responseHeaders.js',
+    './middleware/server/handler.js',
+    './middleware/server/responseHeaders.js',
+    './middleware/server/noJsApi.js',
   ],
   router: {
     middleware: ['auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],
@@ -87,3 +88,13 @@ module.exports = {
     VERSION_TAG: 'dev_web_npm',
   },
 };
+
+if (process.env.NODE_ENV !== 'production') {
+  config.vue = {
+    config: {
+      devtools: true,
+    },
+  };
+}
+
+module.exports = config;

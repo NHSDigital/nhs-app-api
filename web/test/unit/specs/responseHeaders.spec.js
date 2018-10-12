@@ -1,4 +1,4 @@
-import responseHeaders from '../../../src/responseHeaders';
+import responseHeaders from '@/middleware/server/responseHeaders';
 
 describe('responseHeaders', () => {
   it('will not set cache headers when url is login', () => {

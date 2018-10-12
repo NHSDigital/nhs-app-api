@@ -7,7 +7,7 @@ import pages.HybridPageElement
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
 class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
-    private val dateHeadingXpath = "//form//h2"
+    private val dateHeadingXpath = "//*[@data-purpose='appointment-day-heading']"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
     private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li%s"
     private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat,

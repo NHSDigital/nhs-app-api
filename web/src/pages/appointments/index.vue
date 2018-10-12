@@ -10,11 +10,13 @@
 
     <upcoming-appointments v-if="showUpcomingAppointments" :appointments = "upcomingAppointments" />
 
-    <floating-button-bottom v-if="showBookAppointmentButton"
-                            id="book-appointments-button"
-                            @click="onBookButtonClicked">
-      {{ $t('appointments.index.bookButtonText') }}
-    </floating-button-bottom>
+    <form method="get" action="/appointments/booking-guidance">
+      <floating-button-bottom v-if="showBookAppointmentButton"
+                              id="book-appointments-button"
+                              @click="onBookButtonClicked">
+        {{ $t('appointments.index.bookButtonText') }}
+      </floating-button-bottom>
+    </form>
   </div>
 </template>
 
@@ -50,17 +52,18 @@ export default {
       return this.$store.state.myAppointments.appointments;
     },
   },
-  mounted() {
-    this.$store.dispatch('myAppointments/clear');
-    this.$store.dispatch('myAppointments/load');
+  asyncData({ store }) {
+    store.dispatch('myAppointments/clear');
+    return store.dispatch('myAppointments/load');
   },
   beforeDestroy() {
     this.$store.dispatch('myAppointments/clearAppointments');
   },
   methods: {
-    onBookButtonClicked() {
+    onBookButtonClicked(e) {
       this.$store.app.$analytics.trackButtonClick(APPOINTMENT_BOOKING_GUIDANCE.path, true);
       this.$router.push(APPOINTMENT_BOOKING_GUIDANCE.path);
+      e.preventDefault();
     },
   },
 };

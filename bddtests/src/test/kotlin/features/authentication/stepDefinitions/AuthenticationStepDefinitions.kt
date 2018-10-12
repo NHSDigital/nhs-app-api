@@ -513,6 +513,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
             val fullUrl = Config.instance.url + row.get(0)
             browser.browseTo(fullUrl)
             this.currentUrl = fullUrl
+
             when (lowerPage) {
                 "login" -> {
                     login.loginPage.shouldBeDisplayed()

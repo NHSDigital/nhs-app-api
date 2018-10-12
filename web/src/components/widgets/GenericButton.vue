@@ -7,7 +7,6 @@
 </template>
 
 <script>
-
 import TabFocusMixin from './TabFocusMixin';
 
 export default {

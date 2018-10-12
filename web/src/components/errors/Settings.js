@@ -37,6 +37,9 @@ export default {
     {
       route: APPOINTMENT_BOOKING.path,
       errorOverrideStyles: { 403: 'plain' },
+      redirectUrl: {
+        504: APPOINTMENT_BOOKING.path,
+      },
     },
     {
       route: APPOINTMENT_CONFIRMATIONS.path,

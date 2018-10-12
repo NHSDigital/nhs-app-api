@@ -6,7 +6,7 @@ import BookingPage from '@/pages/appointments/booking';
 const $t = key => `translate_${key}`;
 const $tc = key => `translate_${key}`;
 
-const createBookingPage = ($store, data = []) => {
+const createBookingPage = ($store, data = {}) => {
   const $http = jest.fn();
   const localVue = createLocalVue();
   localVue.use(Vuex);
@@ -166,14 +166,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       },
     };
 
-    const data = {
-      filters: {
-        type: 'Emergency',
-        location: '',
-      },
-    };
-
-    const page = createBookingPage($store, data);
+    const page = createBookingPage($store);
     expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
@@ -189,14 +182,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       },
     };
 
-    const data = {
-      filters: {
-        type: '',
-        location: 'Leeds',
-      },
-    };
-
-    const page = createBookingPage($store, data);
+    const page = createBookingPage($store);
     expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
@@ -212,14 +198,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       },
     };
 
-    const data = {
-      filters: {
-        type: '',
-        location: '',
-      },
-    };
-
-    const page = createBookingPage($store, data);
+    const page = createBookingPage($store);
     expect(page.vm.showNoMatchingWarning).toBeDefined();
     expect(page.vm.showNoMatchingWarning).toBeFalsy();
   });
@@ -231,6 +210,10 @@ describe('booking.vue - notMatchSearchCriteria', () => {
         availableAppointments: {
           slots: [],
           filteredSlots: [],
+          selectedOptions: {
+            type: 'type',
+            location: 'location',
+          },
         },
       },
       app: {
@@ -240,14 +223,7 @@ describe('booking.vue - notMatchSearchCriteria', () => {
       },
     };
 
-    const data = {
-      filters: {
-        type: 'Emergency',
-        location: 'Leeds',
-      },
-    };
-
-    const page = createBookingPage($store, data);
+    const page = createBookingPage($store);
     page.vm.filterSlots();
 
     expect(page.vm.showNoMatchingWarning).toBeDefined();

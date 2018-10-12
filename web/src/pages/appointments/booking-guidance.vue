@@ -18,10 +18,12 @@
     <generic-button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
       {{ $t('appointments.guidance.symptomButttonText') }}
     </generic-button>
-    <generic-button id="btn_appointment" :class="[$style.button, $style.green]"
-                    @click="onBookButtonClicked">
-      {{ $t('appointments.guidance.bookButtonText') }}
-    </generic-button>
+    <form action="/appointments/booking" method="get">
+      <generic-button id="btn_appointment" :class="[$style.button, $style.green]"
+                      @click="onBookButtonClicked">
+        {{ $t('appointments.guidance.bookButtonText') }}
+      </generic-button>
+    </form>
   </div>
 
 </template>
@@ -39,8 +41,9 @@ export default {
     onCheckSymptomClicked() {
       this.$router.push(SYMPTOMS.path);
     },
-    onBookButtonClicked() {
+    onBookButtonClicked(e) {
       this.$router.push(APPOINTMENT_BOOKING.path);
+      e.preventDefault();
     },
   },
 };

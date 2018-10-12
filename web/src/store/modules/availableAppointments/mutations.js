@@ -50,9 +50,10 @@ export default {
   [SET_SELECTED_OPTIONS](state, selectedOptions) {
     state.selectedOptions = selectedOptions;
   },
-  [LOAD](state, data) {
+  [LOAD](state, d) {
+    const data = d || {};
     const mutation = new LoadMutation(DateProvider);
-    const result = mutation.execute(data);
+    const result = mutation.execute(data) || {};
 
     state.bookingGuidance = data.bookingGuidance;
     state.bookingReasonNecessity = data.bookingReasonNecessity;
