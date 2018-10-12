@@ -9,7 +9,7 @@
     <p v-if="dateOfBirth">
       <strong>Date of birth:</strong>
       <span data-sid="user-date-of-birth">
-        {{ dateOfBirth | shortDate }}
+        {{ dateOfBirth | longDate }}
       </span>
     </p>
     <p v-if="nhsNumber">

@@ -1,7 +1,7 @@
 package features.appointments.steps
 
 import com.google.common.collect.Ordering
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
+import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
 import features.appointments.factories.UpcomingAppointmentsFactory
 import mocking.MockingClient
 import mocking.emis.models.AppointmentCancellationReason

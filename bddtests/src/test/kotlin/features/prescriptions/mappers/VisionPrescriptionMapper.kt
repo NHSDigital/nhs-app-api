@@ -1,5 +1,6 @@
 package features.prescriptions.mappers
 
+import constants.DateTimeFormats
 import mocking.emis.models.VisionPrescriptionStatus
 import mocking.vision.models.PrescriptionHistory
 import models.prescriptions.HistoricPrescription
@@ -24,7 +25,8 @@ object VisionPrescriptionMapper {
                 break
             }
 
-            var prescriptionOrderDate = DateTime.parse(repeatPrescription.date).toString("d MMM yyyy")
+            var prescriptionOrderDate = DateTime.parse(repeatPrescription.date).toString(
+                    DateTimeFormats.frontendBasicDateFormat)
 
             for (course in repeatPrescription.repeat) {
                 var historicPrescription = HistoricPrescription(

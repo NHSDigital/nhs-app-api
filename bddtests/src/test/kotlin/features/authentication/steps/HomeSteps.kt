@@ -17,7 +17,7 @@ open class HomeSteps {
 
     fun getExpectedDetails(patient:Patient): ArrayList<String> {
         return arrayListOf(
-                "Date of birth: ${patient.formattedDateOfBirthShort()}",
+                "Date of birth: ${patient.formattedDateOfBirth()}",
                 "NHS number: ${patient.formattedNHSNumber()}")
     }
 

@@ -3,7 +3,7 @@
     <p v-if="prescriptionCourse.orderDate != null">
       <b>{{ $t('rp02.orderDate') }}:</b>
       <span data-label="order-date">
-        {{ prescriptionCourse.orderDate | shortDate }}
+        {{ prescriptionCourse.orderDate | longDate }}
       </span>
     </p>
     <hr v-if="prescriptionCourse.orderDate != null">

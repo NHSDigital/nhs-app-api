@@ -1,7 +1,7 @@
 package models
 
 import config.Config
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import mocking.citizenId.models.IdTokenBuilder
 import mocking.defaults.MockDefaults
 import mocking.emis.demographics.Address
@@ -47,12 +47,8 @@ data class Patient(
     fun formattedDateOfBirth(): String {
         return DateConverter.convertDateToDateTimeFormat(
                 dateOfBirth,
-                AppointmentDateTimeFormat.mockDataDobFormat,
-                AppointmentDateTimeFormat.frontendDobDateFormat)
-    }
-
-    fun formattedDateOfBirthShort(): String {
-        return DateTime.parse(dateOfBirth).toString("d MMM yyyy")
+                DateTimeFormats.mockDataDobFormat,
+                DateTimeFormats.frontendBasicDateFormat)
     }
 
     fun formattedFullName(): String {

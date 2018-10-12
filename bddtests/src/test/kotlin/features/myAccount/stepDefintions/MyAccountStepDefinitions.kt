@@ -50,7 +50,7 @@ class MyAccountStepDefinitions {
 
         val patient = SerenityHelpers.getPatient()
         myAccount.assertPersonalDetailsVisible(patient.formattedFullName(),
-                patient.formattedDateOfBirthShort(),
+                patient.formattedDateOfBirth(),
                 patient.formattedNHSNumber())
     }
 }

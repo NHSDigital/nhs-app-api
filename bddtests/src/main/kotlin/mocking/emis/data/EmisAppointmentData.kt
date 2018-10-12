@@ -2,9 +2,9 @@ package mocking.emis.data
 
 import addDays
 import addMinutes
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
-import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
-import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
+import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
+import constants.DateTimeFormats.Companion.frontendDateFormat
+import constants.DateTimeFormats.Companion.frontendTimeFormat
 import mocking.commonData.BaseAppointmentData
 import mocking.emis.appointments.GetAppointmentsResponseModel
 import mocking.emis.models.Location

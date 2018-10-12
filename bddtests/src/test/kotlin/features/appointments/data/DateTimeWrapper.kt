@@ -1,6 +1,6 @@
 package features.appointments.data
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -16,17 +16,17 @@ class DateTimeWrapper(private var dateAsLocalDateTime: LocalDateTime, hoursOverr
     val dateTimeAsBackendString = convertDateToBackendString()
 
     private fun convertDateToUIString(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.frontendDateFormat)
+        val dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.frontendDateFormat)
         return this.dateAsLocalDateTime.format(dateFormatter)
     }
 
     private fun convertTimeToUIString(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.frontendTimeFormat)
+        val dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.frontendTimeFormat)
         return this.dateAsLocalDateTime.format(dateFormatter).toLowerCase()
     }
 
     private fun convertDateToBackendString(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+        val dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         return this.dateAsLocalDateTime.format(dateFormatter)
     }
 }

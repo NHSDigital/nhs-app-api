@@ -1,8 +1,7 @@
 package features.appointments.factories
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import features.appointments.data.AppointmentsSlotsExample
-import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
@@ -48,7 +47,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
     }
 
     private fun createBackendDateTimeFormatWithoutTimezone(): SimpleDateFormat {
-        val sdf = SimpleDateFormat(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+        val sdf = SimpleDateFormat(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         sdf.timeZone = timeZone
 
         return sdf
@@ -59,13 +58,13 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
     }
 
     protected fun slotDateFormat(dateTimeToConvert: Date): String {
-        val slotDateFormat = SimpleDateFormat(AppointmentDateTimeFormat.frontendDateFormat)
+        val slotDateFormat = SimpleDateFormat(DateTimeFormats.frontendDateFormat)
         slotDateFormat.timeZone = timeZone
         return slotDateFormat.format(dateTimeToConvert)
     }
 
     protected fun slotTimeFormat(dateTimeToConvert: Date): String {
-        val slotTimeFormat = SimpleDateFormat(AppointmentDateTimeFormat.frontendTimeFormat)
+        val slotTimeFormat = SimpleDateFormat(DateTimeFormats.frontendTimeFormat)
         slotTimeFormat.timeZone = timeZone
         return slotTimeFormat.format(dateTimeToConvert).toLowerCase()
     }

@@ -1,6 +1,6 @@
 package features.appointments.factories
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
 import features.sharedSteps.SupplierSpecificFactory
@@ -93,7 +93,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     private fun formatDate(date: ZonedDateTime): String {
         val dateFormatter = DateTimeFormatter.ofPattern(
-                AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+                DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         return dateFormatter.format(date)
     }
 

@@ -1,6 +1,6 @@
 package mocking.data.myrecord
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import constants.TppConstants
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
@@ -33,8 +33,8 @@ object DemographicsData {
                 patientIdentifiers,
                 DateConverter.convertDateToDateTimeFormat(
                         patient.dateOfBirth,
-                        AppointmentDateTimeFormat.mockDataDobFormat,
-                        AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone),
+                        DateTimeFormats.mockDataDobFormat,
+                        DateTimeFormats.backendDateTimeFormatWithoutTimezone),
                 patient.sex,
                 ContactDetails(patient.contactDetails.telephoneNumber,
                         patient.contactDetails.mobileNumber,
@@ -56,8 +56,8 @@ object DemographicsData {
                 Person(patient.patientId,
                         DateConverter.convertDateToDateTimeFormat(
                                 patient.dateOfBirth,
-                                AppointmentDateTimeFormat.mockDataDobFormat,
-                                AppointmentDateTimeFormat.backendDateTimeFormat),
+                                DateTimeFormats.mockDataDobFormat,
+                                DateTimeFormats.backendDateTimeFormat),
                         patient.sex.name,
                         NationalId(type = TppConstants.NationalIdTypeNhs, value = patient.nhsNumbers.first()),
                         PersonName(patient.title + " " + patient.firstName + " " + patient.surname),

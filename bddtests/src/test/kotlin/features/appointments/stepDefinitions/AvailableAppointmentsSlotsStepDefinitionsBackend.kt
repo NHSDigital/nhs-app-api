@@ -1,7 +1,7 @@
 package features.appointments.stepDefinitions
 
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormat
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
+import constants.DateTimeFormats.Companion.backendDateTimeFormat
+import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When

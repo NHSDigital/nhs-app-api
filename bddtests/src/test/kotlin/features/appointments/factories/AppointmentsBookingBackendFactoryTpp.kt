@@ -1,6 +1,6 @@
 package features.appointments.factories
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import mockingFacade.appointments.BookAppointmentSlotFacade
 import models.Patient
 import java.time.LocalDateTime
@@ -11,7 +11,7 @@ class AppointmentsBookingBackendFactoryTpp : AppointmentsBookingBackendFactory("
     override fun defaultAppointmentRequest(patient: Patient,
                                            slotId: Int?,
                                            bookingReason: String?): BookAppointmentSlotFacade {
-        var dateFormatter = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+        var dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
 
         return BookAppointmentSlotFacade(
                 patient.patientId,

@@ -1,6 +1,6 @@
 package mocking.tpp.appointments
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -52,7 +52,7 @@ class AppointmentSlotsBuilderTpp(
     private fun getNumberOfDays(startDate: String, endDate: String? = null): Long {
 
         if (endDate != null) {
-            val format = DateTimeFormatter.ofPattern(AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone)
+            val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
             val firstDate = LocalDate.parse(startDate, format)
             val secondDate = LocalDate.parse(endDate, format)
 

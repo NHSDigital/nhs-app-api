@@ -1,5 +1,6 @@
 package features.prescriptions.mappers
 
+import constants.DateTimeFormats
 import models.prescriptions.MedicationCourse
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.PrescriptionType
@@ -39,7 +40,7 @@ object EmisPrescriptionMapper {
                 break
             }
 
-            var datetime = DateTime.parse(prescription.dateRequested).toString("d MMM yyyy")
+            var datetime = DateTime.parse(prescription.dateRequested).toString(DateTimeFormats.frontendBasicDateFormat)
 
             var filteredCoursesInPrescription = prescription.requestedMedicationCourses.filter {
                 it -> repeatCourseguids.contains(it.requestedMedicationCourseGuid)

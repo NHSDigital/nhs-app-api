@@ -2,11 +2,6 @@
 import Vue from 'vue';
 import moment from 'moment';
 
-Vue.filter(
-  'shortDate',
-  value => (value ? moment(value).format('D MMM YYYY') : ''),
-);
-
 Vue.filter('longDate',
   value => (value ? moment(value).format('D MMMM YYYY') : ''));
 

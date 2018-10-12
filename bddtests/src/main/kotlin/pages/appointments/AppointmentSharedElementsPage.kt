@@ -1,7 +1,7 @@
 package pages.appointments
 
-import constants.AppointmentDateTimeFormat.Companion.frontendDateFormat
-import constants.AppointmentDateTimeFormat.Companion.frontendTimeFormat
+import constants.DateTimeFormats.Companion.frontendDateFormat
+import constants.DateTimeFormats.Companion.frontendTimeFormat
 import models.Slot
 import net.serenitybdd.core.pages.WebElementFacade
 import org.openqa.selenium.By

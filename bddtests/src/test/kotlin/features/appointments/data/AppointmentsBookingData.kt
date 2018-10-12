@@ -1,6 +1,6 @@
 package features.appointments.data
 
-import constants.AppointmentDateTimeFormat.Companion.backendDateTimeFormatWithoutTimezone
+import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
 import mocking.MockingClient
 import java.time.ZoneId
 import java.time.ZonedDateTime

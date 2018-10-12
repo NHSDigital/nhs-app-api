@@ -1,6 +1,6 @@
 package mocking.stubs.appointments
 
-import constants.AppointmentDateTimeFormat
+import constants.DateTimeFormats
 import mocking.MockingClient
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.stubs.StubsPatientFactory.Companion.goodPatientEMIS
@@ -49,7 +49,7 @@ class AppointmentSlotsStubs (private val mockingClient: MockingClient) {
     companion object {
 
         private val dateFormatter = DateTimeFormatter.ofPattern(
-                AppointmentDateTimeFormat.backendDateTimeFormatWithoutTimezone
+                DateTimeFormats.backendDateTimeFormatWithoutTimezone
         )
         private val tomorrowDate = LocalDateTime.now().plusDays(1)
 
