@@ -38,10 +38,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Demographics
                     if (demographicsResponse.HasForbiddenResponse())
                     {
                         _logger.LogWarning("User does not have access to their patient record");
+                        _logger.LogEmisErrorResponse(demographicsResponse);
                         return new GetDemographicsResult.UserHasNoAccess();
                     }
 
                     _logger.LogError($"Unsuccessful request retrieving demographics. Status code: {(int)demographicsResponse.StatusCode}");
+                    _logger.LogEmisErrorResponse(demographicsResponse);
                     return new GetDemographicsResult.Unsuccessful();
                 }
                 

@@ -68,6 +68,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong building the Prescription History response");
+                        _logger.LogEmisErrorResponse(prescriptionsResponse);
                         return new PrescriptionResult.InternalServerError();
                     }
                 }
@@ -179,26 +180,26 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             if (HasAlreadyBeenOrderedLast30Days(response))
             {
                 _logger.LogError("The prescription request is invalid as the prescription has already been ordered in the last 30 days");
-
+                _logger.LogEmisErrorResponse(response);
                 return new PrescriptionResult.CannotReorderPrescription();
             }
 
             if (response.HasForbiddenResponse())
             {
                 _logger.LogError("The emis prescriptions service is not enabled");
-
+                _logger.LogEmisErrorResponse(response);
                 return new PrescriptionResult.SupplierNotEnabled();
             }
 
             if (IsBadRequest(response))
             {
                 _logger.LogError($"The prescription request is invalid with message {JsonConvert.SerializeObject(response.ErrorResponseBadRequest)}");
-
+                _logger.LogEmisErrorResponse(response);
                 return new PrescriptionResult.BadRequest();
             }
 
             _logger.LogError("Emis system is currently unavailable");
-
+            _logger.LogEmisErrorResponse(response);
             return new PrescriptionResult.SupplierSystemUnavailable();
         }
 

@@ -66,10 +66,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (response.HasForbiddenResponse())
             {
                 _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(response);
                 return new AppointmentBookResult.InsufficientPermissions();
             }
             
             _logger.LogEmisUnknownError(response);
+            _logger.LogEmisErrorResponse(response);
             return new AppointmentBookResult.SupplierSystemUnavailable();
         }
 
@@ -79,6 +81,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (check)
             {
                 _logger.LogError("Slot is not available for booking.");
+                _logger.LogEmisErrorResponse(response);
             }
             return check;
         }
@@ -90,6 +93,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (check)
             {
                 _logger.LogError("Slot not found.");
+                _logger.LogEmisErrorResponse(response);
             }
             return check;
         }
@@ -102,6 +106,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (check)
             {
                 _logger.LogError("Slot is in the past.");
+                _logger.LogEmisErrorResponse(response);
             }
             return check;
         }
@@ -116,6 +121,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (check)
             {
                 _logger.LogError("Slot is in the past.");
+                _logger.LogEmisErrorResponse(response);
             }
             return check;
         }

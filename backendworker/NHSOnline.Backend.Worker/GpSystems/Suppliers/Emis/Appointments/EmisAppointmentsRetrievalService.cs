@@ -73,10 +73,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Appointments
             if (response.HasForbiddenResponse())
             {
                 _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(response);
                 return new AppointmentsResult.CannotViewAppointments();
             }
 
             _logger.LogEmisUnknownError(response);
+            _logger.LogEmisErrorResponse(response);
             return new AppointmentsResult.SupplierSystemUnavailable();
         }
     }

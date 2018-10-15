@@ -34,6 +34,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
             if (!endUserSessionResponse.HasSuccessStatusCode)
             {
                 _logger.LogEmisResponseIsForbidden();
+                _logger.LogEmisErrorResponse(endUserSessionResponse);
                 throw new EmisSessionResponseErrorException(new SessionCreateResult.SupplierSystemUnavailable());
             }
 
@@ -54,10 +55,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                 if (InvalidTokenStatusCodes.Contains(sessionsResponse.StatusCode))
                 {
                     _logger.LogEmisResponseIsForbidden();
+                    _logger.LogEmisErrorResponse(sessionsResponse);
                     throw new EmisSessionResponseErrorException(new SessionCreateResult.InvalidIm1ConnectionToken());
                 }
 
                 _logger.LogEmisUnknownError(sessionsResponse);
+                _logger.LogEmisErrorResponse(sessionsResponse);
                 throw new EmisSessionResponseErrorException(new SessionCreateResult.SupplierSystemUnavailable());
             }
 

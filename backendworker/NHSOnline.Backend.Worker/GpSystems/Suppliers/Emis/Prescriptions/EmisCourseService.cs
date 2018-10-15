@@ -69,7 +69,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                     catch (Exception e)
                     {
                         _logger.LogError(e, $"Something went wrong while building the response");
-
+                        _logger.LogEmisErrorResponse(coursesResponse);
                         return new GetCoursesResult.InternalServerError();
                     }
                 }
@@ -90,12 +90,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
             if (response.HasForbiddenResponse())
             {
                 _logger.LogError("The emis prescriptions service is not enabled");
-                
+                _logger.LogEmisErrorResponse(response);
                 return new GetCoursesResult.SupplierNotEnabled();
             }
             
             _logger.LogError("Emis system is currently unavailable");
-
+            _logger.LogEmisErrorResponse(response);
             return new GetCoursesResult.SupplierSystemUnavailable();       
         }
     }
