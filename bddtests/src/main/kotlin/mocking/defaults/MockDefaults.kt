@@ -115,26 +115,6 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 application = DEFAULT_TPP_APPLICATION
         )
 
-        val tppAuthenticateReplyResponse = AuthenticateReply(
-                patientId = patientTpp.patientId,
-                onlineUserId = patientTpp.onlineUserId,
-                uuid = "af0a8175-e6c2-4c49-883e-020b2b3600f9",
-                user = User(
-                        person = Person(
-                                patientId = patientTpp.patientId,
-                                dateOfBirth = patientTpp.dateOfBirth,
-                                gender = patientTpp.sex.name,
-                                nationalId = NationalId(
-                                        type = TppConstants.NationalIdTypeNhs,
-                                        value = patientTpp.nhsNumbers.first()
-                                ),
-                                personName = PersonName(
-                                        name = "${patientTpp.title} ${patientTpp.firstName} ${patientTpp.surname}"
-                                )
-                        )
-                )
-        )
-
         val tppNonExistingAccountIdErrorResponse = Error(
                 errorCode = "9",
                 userFriendlyMessage = "There was a problem logging on",

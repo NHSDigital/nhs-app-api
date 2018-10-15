@@ -5,18 +5,52 @@ import models.prescriptions.MedicationCourse
 import mocking.emis.models.PrescriptionType
 import java.util.*
 
-object CoursesData {
+private const val MAX_PRESCRIPTIONS_NUMBER = 5
+class CoursesDataBuilder {
 
-    const val MAX_PRESCRIPTIONS_NUMBER = 5
+    private var maxCourses: Int = 0
+    private var numOfRepeats: Int = 0
+    private var numCanBeRequested: Int = 0
+    private var medicationCourses: MutableList<MedicationCourse> = mutableListOf()
+    private var includeDosage: Boolean = false
+    private var includeQuantity: Boolean = false
 
-    @Suppress("LongParameterList")
-    fun getCourseData(maxCourses: Int,
-                      numOfRepeats: Int,
-                      numCanBeRequested: Int,
-                      medicationCourses: MutableList<MedicationCourse>,
-                      includeDosage: Boolean,
-                      includeQuantity: Boolean): MutableList<MedicationCourse> {
+    fun maxCourses(value: Int): CoursesDataBuilder {
+        maxCourses = value
+        return this
+    }
 
+    fun numOfRepeats(value: Int): CoursesDataBuilder {
+        numOfRepeats = value
+        return this
+    }
+
+    fun numCanBeRequested(value: Int): CoursesDataBuilder {
+        numCanBeRequested = value
+        return this
+    }
+
+    fun medicationCourses(value: MutableList<MedicationCourse>): CoursesDataBuilder {
+        medicationCourses = value
+        return this
+    }
+
+    fun includeDosage(value: Boolean): CoursesDataBuilder {
+        includeDosage = value
+        return this
+    }
+
+    fun includeQuantity(value: Boolean): CoursesDataBuilder {
+        includeQuantity = value
+        return this
+    }
+
+    fun build(): MutableList<MedicationCourse> {
+        return createData()
+    }
+
+
+    private fun createData(): MutableList<MedicationCourse> {
         var numberOfRepeats = numOfRepeats
         var numberCanBeRequested = numCanBeRequested
 
@@ -27,7 +61,7 @@ object CoursesData {
                 constituents.add("Constituent" + constituentNo)
             }
 
-          var prefix = getPrefix(includeDosage, includeQuantity)
+            val prefix = getPrefix(includeDosage, includeQuantity)
 
             // Create a default course
             val createdCourse = MedicationCourse(UUID.randomUUID().toString(),

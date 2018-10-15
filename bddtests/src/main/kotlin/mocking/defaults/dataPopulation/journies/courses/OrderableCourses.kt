@@ -12,16 +12,20 @@ class OrderableCourses(private val client: MockingClient) {
 
     fun createFor(patient: Patient) {
 
+        val courses =
+                CoursesDataBuilder()
+                        .maxCourses(MAX_COURSES)
+                        .numOfRepeats(NUMBER_OF_REPEATS)
+                        .numCanBeRequested(NUMBER_CAN_BE_REQUESTED)
+                        .medicationCourses(mutableListOf())
+                        .includeDosage(true)
+                        .includeQuantity(true)
+                        .build()
         client
                 .forEmis {
                     prescriptions.coursesRequest(patient)
-                            .respondWithSuccess(CourseRequestsGetResponse(
-                                    CoursesData.getCourseData(
-                                            MAX_COURSES,
-                                            NUMBER_OF_REPEATS,
-                                            NUMBER_CAN_BE_REQUESTED,
-                                            mutableListOf(),
-                                            true, true)))
+                            .respondWithSuccess(CourseRequestsGetResponse(courses))
                 }
     }
 }
+

@@ -1,6 +1,6 @@
 package mocking.defaults.dataPopulation.journies.prescriptions
 
-import mocking.defaults.dataPopulation.journies.courses.CoursesData
+import mocking.defaults.dataPopulation.journies.courses.CoursesDataBuilder
 import mocking.emis.models.PrescriptionRequest
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourse
@@ -10,7 +10,6 @@ import java.time.OffsetDateTime
 import java.util.Random
 
 object PrescriptionsData {
-    private const val MAX_PRESCRIPTIONS_NUMBER = 100
 
     fun loadPrescriptionsData(noPrescriptions: Int, noCourses: Int, noRepeats: Int?,
                               showDosage: Boolean = true, showQuantity: Boolean = true):
@@ -20,14 +19,15 @@ object PrescriptionsData {
 
         if (noPrescriptions != 0) {
 
-            // Create courses first as these will be used in the prescriptions
-            medicationCourses = CoursesData.getCourseData(
-                    noCourses,
-                    noRepeats ?: noPrescriptions,
-                    noRepeats ?: noPrescriptions,
-                    medicationCourses,
-                    showDosage,
-                    showQuantity)
+            medicationCourses =
+                    CoursesDataBuilder()
+                            .maxCourses(noCourses)
+                            .numOfRepeats(noRepeats ?: noPrescriptions)
+                            .numCanBeRequested(noRepeats ?: noPrescriptions)
+                            .medicationCourses(medicationCourses)
+                            .includeDosage(showDosage)
+                            .includeQuantity(showQuantity)
+                            .build()
 
             var maxPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false

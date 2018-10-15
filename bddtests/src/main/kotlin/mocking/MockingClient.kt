@@ -74,14 +74,13 @@ class MockingClient(private val configuration: MockingConfiguration) {
         deleteWiremockDetails(endpoint = "requests")
     }
 
-    @Suppress("TooGenericExceptionThrown")
     private fun deleteWiremockDetails(endpoint: String) {
         val uri = "${configuration.wiremockAdminUrl}/$endpoint"
         val httpDelete = HttpDelete(uri)
         val response = HttpClients.createDefault().execute(httpDelete)
         if (response.statusLine.statusCode != SC_OK) {
             reportWiremockError(response)
-            throw Exception("Failed to delete mappings using URI: $uri")
+            throw IllegalStateException("Failed to delete mappings using URI: $uri")
         }
 
         httpDelete.releaseConnection()

@@ -36,62 +36,54 @@ class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     fun respondWithForbiddenException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Forbidden Exception")
-        return respondWithException(exceptionResponse, HttpStatus.SC_FORBIDDEN)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_FORBIDDEN)
     }
 
     fun respondWithNotImplementedException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Not Implemented")
-        return respondWithException(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_NOT_IMPLEMENTED)
     }
 
     fun respondWithBadGatewayException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Bad Gateway")
-        return respondWithException(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
-    }
-
-    private fun respondWithException(exceptionResponse: ExceptionResponse, httpStatus: Int): Mapping {
-        return respondWithBody(exceptionResponse, httpStatus)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
 
     fun respondWithInternalServerError(): Mapping {
         val errorResponse = ErrorResponse(0)
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
+        return respondWithBody(errorResponse, HttpStatus.SC_INTERNAL_SERVER_ERROR)
     }
 
     fun respondWithPatientNotRegisteredAtPractice(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_NOT_REGISTERED_AT_PRACTICE.toInt())
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_NOT_FOUND)
+        return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithNoRegisteredOnlineUserFound(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.NO_REGISTERED_ONLINE_USER_FOUND.toInt())
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_NOT_FOUND)
+        return respondWithBody(errorResponse, HttpStatus.SC_NOT_FOUND)
     }
 
     fun respondWithPracticeNotLive(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.PRACTICE_NOT_LIVE.toInt())
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientMarkedAsArchived(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_MARKED_AS_ARCHIVED.toInt())
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithPatientNonCompetentOrUnder16(): Mapping {
         val errorResponse = ErrorResponse(EmisResponseCode.PATIENT_NON_COMPETENT_OR_UNDER_16.toInt())
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     fun respondWithAccountStatusInvalid(): Mapping {
         val errorResponse = ErrorResponse(-EmisResponseCode.ACCOUNT_STATUS_INVALID.toInt())
-        return respondWithStandardErrorResponse(errorResponse, HttpStatus.SC_BAD_REQUEST)
-    }
-
-    private fun respondWithStandardErrorResponse(errorResponse: ErrorResponse, httpStatus: Int): Mapping {
-        return respondWithBody(errorResponse, httpStatus)
+        return respondWithBody(errorResponse, HttpStatus.SC_BAD_REQUEST)
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {

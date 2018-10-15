@@ -14,7 +14,6 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
 
     private const val MAX_RANDOM_NUMBER = 2
 
-    @Suppress("ComplexMethod")
     override fun loadData(noPrescriptions: Int,
                           noCourses: Int,
                           noRepeats: Int,

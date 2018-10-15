@@ -121,27 +121,28 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
     }
 
-    @Suppress("NestedBlockDepth")
     private fun switchContext(name: String): AndroidDriver<WebElementFacade> {
         val originalDriver = getAndroidDriver()
 
         if (originalDriver.context.contains(name, ignoreCase = true)) {
             println("Already in $name context: ${originalDriver.context}")
         } else {
-            for (context in originalDriver.contextHandles) {
-                if (context.contains(name, true)) {
-                    println("Switching context to $context... Currently on: ${originalDriver.context}")
-                    originalDriver.context(context)
-                    println("Switched context! Now on: ${originalDriver.context}")
-
-                    if (name.contains("chrome")) {
-                        switchToDefaultWindow(originalDriver)
-                    }
-                }
-            }
+            originalDriver.contextHandles.forEach { context-> switchContextIfNeeded(context, originalDriver, name) }
         }
         setDriver<HybridPageObject>(originalDriver)
         return originalDriver
+    }
+
+    private fun switchContextIfNeeded(context: String, originalDriver: AndroidDriver<WebElementFacade>, name: String) {
+        if (context.contains(name, true)) {
+            println("Switching context to $context... Currently on: ${originalDriver.context}")
+            originalDriver.context(context)
+            println("Switched context! Now on: ${originalDriver.context}")
+
+            if (name.contains("chrome")) {
+                switchToDefaultWindow(originalDriver)
+            }
+        }
     }
 
     private fun getAndroidDriver(): AndroidDriver<WebElementFacade> {

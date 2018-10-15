@@ -1,5 +1,6 @@
 package pages
 
+import org.junit.Assert
 import org.junit.Assert.assertEquals
 
 class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
@@ -29,13 +30,13 @@ class ErrorPage : HybridPageObject(Companion.PageType.WEBVIEW_APP) {
         )
     }
 
-    @Suppress("TooGenericExceptionCaught")
-    fun hasButton(text: String): Boolean {
-        return try {
-            button.element.text == text
-        } catch (e: Exception) {
-            false
-        }
+    fun assertNoButton(text: String) {
+        button.withText(text).assertElementNotPresent()
+    }
+
+    fun assertHasButton(expectedText: String) {
+        button.assertSingleElementPresent()
+        Assert.assertEquals("Expected button text", expectedText, button.element.text)
     }
 
     fun assertPageHeader(pageHeaderText: String): ErrorPage {

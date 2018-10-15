@@ -1,13 +1,75 @@
 package features.prescriptions.factories
 
+import com.github.tomakehurst.wiremock.stubbing.Scenario
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
+import mocking.data.prescriptions.courses.EmisCoursesLoader
+import mocking.emis.models.CourseRequestsGetResponse
+import mocking.emis.models.PrescriptionRequestsGetResponse
+import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import models.prescriptions.MedicationCourse
+import net.serenitybdd.core.Serenity
 
-class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS"){
+class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS") {
 
-    override val getPrescriptionsLoader: IPrescriptionLoader<*>
-        get() = EmisPrescriptionLoader
+    override val getCoursesLoader: ICoursesLoader<*> = EmisCoursesLoader
+    override val getPrescriptionsLoader: IPrescriptionLoader<*> = EmisPrescriptionLoader
 
+    override fun setupWireMockAndCreateDataGpSpecific() {
+        val response = CourseRequestsGetResponse(coursesData())
+        mockingClient.forEmis {
+            prescriptions.coursesRequest(patient).respondWithSuccess(response)
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST",
+            "Cast cannot be checked as a generic type is used, " +
+                    "see https://kotlinlang.org/docs/reference/typecasts.html")
+    private fun coursesData(): List<MedicationCourse> {
+        return getCoursesLoader.data as List<MedicationCourse>
+    }
+
+    override fun setupWireMockAndDataSetup(scenarioTitle: String,
+                                           initialScenarioState: String,
+                                           statusSubmitted: String,
+                                           initialHistoricPrescriptionsCount: Int,
+                                           amount: Int): String {
+
+        var currentScenarioState = initialScenarioState
+        val courses = coursesData()
+
+        mockingClient.forEmis {
+            prescriptions.coursesRequest(patient)
+                    .respondWithSuccess(CourseRequestsGetResponse(courses))
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+        }
+
+        mockingClient.forEmis {
+            prescriptions.repeatPrescriptionSubmissionRequest(patient)
+                    .respondWithCreated()
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+                    .willSetStateTo(statusSubmitted)
+        }
+
+        currentScenarioState = statusSubmitted
+
+        val emisPrescriptionMap = Serenity.sessionVariableCalled<MutableMap<String,
+                PrescriptionRequestsGetResponse>>("EmisPrescriptionsMap")
+        emisPrescriptionMap[currentScenarioState] = EmisPrescriptionLoader.orderCourses(
+                orderedCourses = courses.toMutableList(),
+                oldPrescriptions = emisPrescriptionMap[Scenario.STARTED]!!)
+
+        mockingClient.forEmis {
+            prescriptions.prescriptionsRequest(patient)
+                    .respondWithSuccess(emisPrescriptionMap[currentScenarioState]!!)
+                    .inScenario(scenarioTitle)
+                    .whenScenarioStateIs(currentScenarioState)
+        }
+
+        return currentScenarioState
+    }
 
     override fun disableAtGPLevel() {
         mockingClient

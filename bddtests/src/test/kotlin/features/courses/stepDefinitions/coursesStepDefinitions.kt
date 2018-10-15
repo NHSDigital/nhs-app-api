@@ -5,16 +5,13 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
-import mocking.data.prescriptions.courses.TppCoursesLoader
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
+import features.prescriptions.factories.PrescriptionsFactory
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import mocking.MockingClient
-import mocking.emis.models.*
-import mocking.tpp.models.ListRepeatMedicationReply
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -24,10 +21,7 @@ import worker.WorkerClient
 import worker.models.courses.CoursesListResponse
 import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import mocking.data.prescriptions.courses.VisionCoursesLoader
-import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
-import mocking.vision.models.EligibleRepeats
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
@@ -225,62 +219,28 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun setupWiremockandCreateData() {
 
         if (currentProvider == null) {
             initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
         }
 
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
-                        showDosage, showQuantity)
-
-                mockingClient.forEmis {
-                    prescriptions.coursesRequest(currentPatient)
-                            .respondWithSuccess(CourseRequestsGetResponse(coursesLoader.data as List<MedicationCourse>))
-                }
-            }
-            ProviderTypes.TPP -> {
-                coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
-                        showDosage, showQuantity)
-
-                mockingClient.forTpp {
-                    prescriptions.listRepeatMedication(currentPatient)
-                            .respondWithSuccess(coursesLoader.data as ListRepeatMedicationReply)
-                }
-            }
-            ProviderTypes.VISION -> {
-                coursesLoader.loadData(numOfCourses, numOfRepeats, numCanBeRequested,
-                        showDosage, showQuantity)
-
-                mockingClient.forVision {
-                    getEligibleRepeatsRequest(MockDefaults.visionUserSession)
-                            .respondWithSuccess(coursesLoader.data as EligibleRepeats)
-                }
-            }
-        }
+        PrescriptionsFactory.getForSupplier(currentProvider.toString()).setupWireMockAndCreateData(numOfCourses,
+                numOfRepeats,
+                numCanBeRequested,
+                showDosage,
+                showQuantity)
     }
 
     private fun initalize(gpSystem: String) {
+
+        val factory = PrescriptionsFactory.getForSupplier(gpSystem)
+
+        currentPatient = factory.patient
+        coursesLoader = factory.getCoursesLoader
+
         if (currentProvider == null) {
             currentProvider = ProviderTypes.valueOf(gpSystem)
-        }
-
-        when (currentProvider) {
-            ProviderTypes.EMIS -> {
-                coursesLoader = EmisCoursesLoader
-                currentPatient = EMIS_PATIENT
-            }
-            ProviderTypes.TPP -> {
-                coursesLoader = TppCoursesLoader
-                currentPatient = TPP_PATIENT
-            }
-            ProviderTypes.VISION -> {
-                coursesLoader = VisionCoursesLoader
-                currentPatient = VISION_PATIENT
-            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package mocking.citizenId.login
 
+import cucumber.deps.com.thoughtworks.xstream.InitializationException
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.login.token.SucceededResponse
@@ -24,7 +25,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
         requestBuilder.andBody(body, "matches")
     }
 
-    @Suppress("TooGenericExceptionThrown")
+
     private fun tokenRequestToQueryParams(tokenRequest: TokenRequest): String {
         val map = LinkedHashMap<String, String>()
         map["grant_type"] = tokenRequest.grantType
@@ -48,7 +49,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
                 stringBuilder.append("=")
                 stringBuilder.append(if (value != null) URLEncoder.encode(value, "UTF-8") else "")
             } catch (e: UnsupportedEncodingException) {
-                throw RuntimeException("This method requires UTF-8 encoding support", e)
+                throw InitializationException("This method requires UTF-8 encoding support", e)
             }
         }
 

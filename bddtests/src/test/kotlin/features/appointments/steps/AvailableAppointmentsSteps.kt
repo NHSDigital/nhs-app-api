@@ -105,18 +105,12 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     @Step
     fun checkIfTryAgainButtonDisplayed() {
-        val buttonExists = doesTryAgainButtonExist()
-        assertTrue("Try again button is not present. ", buttonExists)
+        errorPage.assertHasButton("Try again")
     }
 
     @Step
     fun checkIfTryAgainButtonIsNotDisplayed() {
-        val buttonExists = doesTryAgainButtonExist()
-        assertFalse("Try again button is present, but shouldn't be. ", buttonExists)
-    }
-
-    private fun doesTryAgainButtonExist(): Boolean {
-        return errorPage.hasButton("Try again")
+        errorPage.assertNoButton("Try again")
     }
 
     @Step

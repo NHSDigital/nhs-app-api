@@ -12,7 +12,6 @@ import mocking.emis.models.ExceptionResponse
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
 
-@Suppress("TooManyFunctions")
 class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     : EmisMappingBuilder(null, method = "POST", relativePath = "/users/nhs") {
 
@@ -63,11 +62,7 @@ class EmisLinkagePOSTBuilder(addNhsUserRequest: AddNhsUserRequest)
     fun respondWithBadGatewayException(): Mapping {
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Bad Gateway")
-        return respondWithException(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
-    }
-
-    private fun respondWithException(exceptionResponse: ExceptionResponse, httpStatus: Int): Mapping {
-        return respondWithBody(exceptionResponse, httpStatus)
+        return respondWithBody(exceptionResponse, HttpStatus.SC_BAD_GATEWAY)
     }
 
     private fun respondWithBody(body: Any, statusCode: Int = HttpStatus.SC_CREATED): Mapping {
