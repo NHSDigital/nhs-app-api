@@ -33,7 +33,6 @@
             android:nextFocusDown="@id/webview"
             android:focusedByDefault="true"
             android:background="@drawable/icon_drawable_boarder_focusable"
-            android:padding="@dimen/_2sdp"
         />
 
         <ImageView
@@ -53,7 +52,6 @@
             android:nextFocusForward="@id/myAccountIcon"
             android:nextFocusDown="@id/webview"
             android:background="@drawable/icon_drawable_boarder_focusable"
-            android:padding="@dimen/_2sdp"
 			android:paddingEnd="@dimen/_5sdp"
             android:paddingStart="@dimen/_5sdp"
             android:paddingTop="@dimen/_8sdp"/>
@@ -70,15 +68,13 @@
             android:focusableInTouchMode="false"
             android:paddingEnd="@dimen/_5sdp"
             android:paddingStart="@dimen/_5sdp"
-            android:paddingTop="@dimen/_3sdp"
-            android:paddingBottom="@dimen/_3sdp"
+            android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_account"
             android:background="@drawable/icon_drawable_boarder_focusable"
             android:nextFocusUp="@id/more"
             android:nextFocusForward="@id/webview"
             android:nextFocusRight="@id/webview"
-            android:nextFocusDown="@id/webview"
-			android:layout_marginEnd="@dimen/_3ssp" />
+            android:nextFocusDown="@id/webview" />
 
 
     </RelativeLayout>
