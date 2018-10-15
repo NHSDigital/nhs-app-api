@@ -13,6 +13,7 @@ import kotlin.collections.ArrayList
 object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
     override lateinit var data: EligibleRepeats
     private const val COURSE_ID_MAX = 5000
+    private const val COURSES_MAX = 100
 
     override fun loadData(maxCourses: Int,
                           numOfRepeats: Int,
@@ -60,6 +61,11 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
 
     override fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
 
-        return emptyList()
+        var courses = data.repeat!!
+
+        courses = courses.sortedBy { medicationCourse -> medicationCourse.drug }.toMutableList()
+        courses = courses.take(COURSES_MAX).toMutableList()
+
+        return courses.map { m -> MedicationCourse(m.getRepeatCourseId()!!, m.drug!!, m.dosage, m.quantity) }
     }
 }

@@ -6,7 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement
 
 @XmlRootElement(name = "repeat")
 data class RepeatCourse(
-        @XmlAttribute(name = "id") private var id: String?,
+        @XmlAttribute(name = "id")
+        private var id: String?,
 
         @XmlElement(namespace= "urn:vision",name = "drug")
         var drug: String?,
@@ -22,4 +23,8 @@ data class RepeatCourse(
 
 ) {
     constructor() : this( null, null, null, null, null)
+
+    fun getRepeatCourseId(): String? {
+        return this.id
+    }
 }

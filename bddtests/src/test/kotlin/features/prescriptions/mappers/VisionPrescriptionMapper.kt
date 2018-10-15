@@ -28,7 +28,7 @@ object VisionPrescriptionMapper {
 
             for (course in repeatPrescription.repeat) {
                 var historicPrescription = HistoricPrescription(
-                        course?.drug ?: "",
+                        course.drug ?: "",
                         pages.prescription.resolveDetailsField(course.dosage, course.quantity)
                 )
                 if (repeatPrescription.status != null) {

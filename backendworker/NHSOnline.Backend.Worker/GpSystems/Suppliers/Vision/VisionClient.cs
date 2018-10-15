@@ -108,6 +108,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             return await SendRequestAndParseResponse<PrescriptionHistoryResponse, VisionRequest<PrescriptionRequest>>(visionRequest);
         }
+
+        public async Task<VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(VisionUserSession userSession, OrderNewPrescriptionRequest newPrescriptionRequest)
+        {
+            IVisionServiceDefinition visionServiceDefinition = new NewPrescriptionServiceDefinition();
+
+            var visionRequest = new VisionRequest<OrderNewPrescriptionRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                userSession.RosuAccountId, userSession.ApiKey, userSession.OdsCode, _providerId, newPrescriptionRequest);
+
+            return await SendRequestAndParseResponse<OrderNewPrescriptionResponse, VisionRequest<OrderNewPrescriptionRequest>>(visionRequest);
+        }
         
         public async Task<VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
             VisionConnectionToken token, 
@@ -199,7 +209,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             return instance;
         }
-
         public class VisionApiResponse
         {
             protected VisionApiResponse(HttpStatusCode status)
@@ -269,14 +278,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             private bool StatusCodeIndicatesSuccess => StatusCode == HttpStatusCode.OK;
         }
         
-        private void serializer_UnknownNode(object sender, XmlNodeEventArgs e)  
-        {  
+        private void serializer_UnknownNode(object sender, XmlNodeEventArgs e)
+        {
            _logger.LogDebug("Unknown node while deserialising Vision response - Node name: {nodeName}",  e.Name);
-        }  
+        }
 
         private void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e)  
-        {   
+        {
             _logger.LogDebug("Unknown attribute while deserialising Vision response - Attribute name: {attrName}", e.Attr.Name);
-        }  
+        }
     }
 }

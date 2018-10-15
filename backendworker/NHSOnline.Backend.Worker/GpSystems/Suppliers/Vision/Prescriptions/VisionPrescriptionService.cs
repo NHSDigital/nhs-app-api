@@ -93,9 +93,49 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             }
         }
 
-        public Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
+        public async Task<PrescriptionResult> OrderPrescription(UserSession userSession, RepeatPrescriptionRequest repeatPrescriptionRequest)
         {
-            throw new NotImplementedException();
+            var visionUserSession = (VisionUserSession)userSession;
+
+            var postRequest = new OrderNewPrescriptionRequest
+            {
+                PatientId = visionUserSession.PatientId,
+                Repeats = repeatPrescriptionRequest.CourseIds.Select(x => new NewPrescriptionRepeat { Id = x }).ToList(),
+                Message = repeatPrescriptionRequest.SpecialRequest,
+            };
+
+            try
+            {
+                _logger.LogInformation($"Vision prescription order start. Ordering { postRequest.Repeats.Count } repeats");
+
+                var response = await _visionClient.OrderNewPrescription(visionUserSession, postRequest);
+
+                if (response.HasErrorResponse)
+                {
+                    _logger.LogError($"Vision response does not indicate a successful order: { response.ErrorContent }");
+                    return new PrescriptionResult.SupplierSystemUnavailable();
+                }
+
+                if (!string.Equals(
+                    response.RawResponse.Body.VisionResponse.ServiceContent.Result?.Trim(),
+                    OrderNewPrescriptionResponse.OkResponseText,
+                    StringComparison.Ordinal))
+                {
+                    _logger.LogError(
+                        $"Vision response service content, " +
+                        $"expected: { OrderNewPrescriptionResponse.OkResponseText }, " +
+                        $"actual: { response.RawResponse.Body.VisionResponse.ServiceContent.Result }");
+                    return new PrescriptionResult.SupplierSystemUnavailable();
+                }
+                
+                _logger.LogDebug("Vision prescription order placed successfully");
+                return new PrescriptionResult.SuccessfulPost();
+            }
+            catch (HttpRequestException e)
+            {
+                _logger.LogError($"Repeat prescription order failed with message { e.Message }");
+                return new PrescriptionResult.SupplierSystemUnavailable();
+            }
         }
 
         private void FilterAndSortPrescriptionHistoryRepeats(

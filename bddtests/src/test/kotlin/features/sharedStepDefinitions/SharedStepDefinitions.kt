@@ -63,7 +63,7 @@ open class SharedStepDefinitions {
         setSessionVariable(GLOBAL_PROVIDER_TYPE).to(gpSystem)
     }
 
-    @Given("(TPP|EMIS) is initialised")
+    @Given("(TPP|EMIS|VISION) is initialised")
     fun system(system: String) {
         SharedStepDefinitions.patient = Patient.getDefault(system)
         SerenityHelpers.setPatient(SharedStepDefinitions.patient)

@@ -46,9 +46,8 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                     demographicsRequest(visionUserSession = VisionUserSession(
                             this@DemographicsStepDefinitions.patient.rosuAccountId,
                             this@DemographicsStepDefinitions.patient.apiKey,
-                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId),
-                            serviceDefinition = ServiceDefinition(VisionConstants.demographicsName, VisionConstants.demographicsVersion)).
-                    respondWithSuccess(MockDefaults.visionDemographicsResponse)
+                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
+                    ).respondWithSuccess(MockDefaults.visionDemographicsResponse)
 
                 }
             }
@@ -64,9 +63,8 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                     demographicsRequest(visionUserSession = VisionUserSession(
                             this@DemographicsStepDefinitions.patient.rosuAccountId,
                             this@DemographicsStepDefinitions.patient.apiKey,
-                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId),
-                            serviceDefinition = ServiceDefinition(VisionConstants.demographicsName, VisionConstants.demographicsVersion))
-                            .respondWithUnknownError()
+                            Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
+                    ).respondWithUnknownError()
                 }
             }
         }
@@ -100,8 +98,8 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
                             demographicsRequest(visionUserSession = VisionUserSession(
                                     this@DemographicsStepDefinitions.patient.rosuAccountId,
                                     this@DemographicsStepDefinitions.patient.apiKey,
-                                    Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId),
-                                    serviceDefinition = ServiceDefinition(VisionConstants.demographicsName, VisionConstants.demographicsVersion)).respondWithAccessDeniedError()
+                                    Patient.aderynCanon.odsCode, this@DemographicsStepDefinitions.patient.patientId)
+                            ).respondWithAccessDeniedError()
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

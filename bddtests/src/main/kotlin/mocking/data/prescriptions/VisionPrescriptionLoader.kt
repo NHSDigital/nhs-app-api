@@ -60,7 +60,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
                     repeats.add(repeat)
 
                     prescriptions.get(
-                            prescriptionNumber).repeat?.addAll(repeats)
+                            prescriptionNumber).repeat.addAll(repeats)
                 }
 
                 courseNumber--

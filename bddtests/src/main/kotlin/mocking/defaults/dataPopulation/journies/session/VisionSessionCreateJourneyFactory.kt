@@ -9,9 +9,7 @@ class VisionSessionCreateJourneyFactory(val client: MockingClient): SessionCreat
     override fun createFor(patient: Patient) {
         client
                 .forVision {
-                    getConfigurationRequest(
-                                    MockDefaults.visionUserSession,
-                            MockDefaults.visionGetConfiguration)
+                    getConfigurationRequest(MockDefaults.visionUserSession)
                             .respondWithSuccess(MockDefaults.visionConfigurationResponse)
                 }
     }

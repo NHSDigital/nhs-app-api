@@ -160,6 +160,10 @@ class MockDefaults(val config: Config, val mockingClient: MockingClient = Mockin
                 VisionConstants.eligibleRepeats,
                 VisionConstants.eligibleRepeatsVersion)
 
+        val visionOrderNewPrescription = ServiceDefinition(
+                VisionConstants.newPrescription,
+                VisionConstants.newPrescriptionVersion)
+
         val visionDemographicsConfiguration = ServiceDefinition(
                 VisionConstants.demographicsName,
                 VisionConstants.demographicsVersion)

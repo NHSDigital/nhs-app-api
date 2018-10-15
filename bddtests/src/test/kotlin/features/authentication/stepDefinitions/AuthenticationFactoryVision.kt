@@ -8,7 +8,7 @@ class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
         mockingClient
                 .forVision {
-                    getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
+                    getConfigurationRequest(MockDefaults.visionUserSession)
                             .respondWithSuccess(MockDefaults.visionConfigurationResponse).delayedBy(Duration.ofSeconds(31))
                 }
     }
@@ -16,16 +16,14 @@ class AuthenticationFactoryVision  : AuthenticationFactory("VISION"){
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         mockingClient
                 .forVision {
-                    getConfigurationRequest(MockDefaults.visionUserSession, MockDefaults.visionGetConfiguration)
+                    getConfigurationRequest(MockDefaults.visionUserSession)
                             .respondWitInvalidUserCredentials()
                 }
     }
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forVision {
-            getConfigurationRequest(
-                    MockDefaults.visionUserSession,
-                    MockDefaults.visionGetConfiguration)
+            getConfigurationRequest(MockDefaults.visionUserSession)
                     .respondWithServiceUnavailable()
         }
     }

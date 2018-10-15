@@ -44,6 +44,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                             Status = prescription.Status.ToStatus(),
                             Courses = new List<CourseEntry>(),
                         };
+
+                        allPrescriptionsGrouped.Add(foundPrescriptionGroup);
                     }
                     
                     foreach (var course in prescription.Repeats)
@@ -62,8 +64,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
 
                         foundPrescriptionGroup.Courses.Add(newCourseEntry);
                     }
-
-                    allPrescriptionsGrouped.Add(foundPrescriptionGroup);
                 }
             }
             

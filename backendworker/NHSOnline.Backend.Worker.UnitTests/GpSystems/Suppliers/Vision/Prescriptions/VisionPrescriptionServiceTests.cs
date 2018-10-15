@@ -417,5 +417,126 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
             _visionClient.Verify();
         }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsSuccessfulResponseForHappyPath_WhenSuccessfulResponseFromVision()
+        {
+            // Arrange
+            var orderPrescriptionResponse = new VisionResponseEnvelope<OrderNewPrescriptionResponse>
+            {
+                Body = new VisionResponseBody<OrderNewPrescriptionResponse>
+                {
+                    VisionResponse = new VisionResponse<OrderNewPrescriptionResponse>
+                    {
+                        ServiceContent = new OrderNewPrescriptionResponse
+                        {
+                            Result = OrderNewPrescriptionResponse.OkResponseText,
+                        },
+                    },
+                },
+            };
+
+            var request = new RepeatPrescriptionRequest
+            {
+                CourseIds = new[] { "2", "5", "7" },
+                SpecialRequest = "quick please",
+            };
+
+            OrderNewPrescriptionRequest capturedRequest = null;
+
+            _visionClient.Setup(x => x.OrderNewPrescription(
+                _userSession,
+                It.IsAny<OrderNewPrescriptionRequest>()))
+                .Returns(Task.FromResult(
+                    new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = orderPrescriptionResponse,
+                    }))
+                    .Callback<VisionUserSession, OrderNewPrescriptionRequest>((visionUserSession, orderNewPrescriptionRequest) => capturedRequest = orderNewPrescriptionRequest);
+            
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            var expectedRequest = new OrderNewPrescriptionRequest
+            {
+                Repeats = request.CourseIds.Select(x => new NewPrescriptionRepeat { Id = x }).ToList(),
+                Message = request.SpecialRequest,
+                PatientId = _userSession.PatientId,
+            };
+
+            capturedRequest.Should().BeEquivalentTo(expectedRequest);
+            _visionClient.Verify(x => x.OrderNewPrescription(_userSession, capturedRequest));
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
+            ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsSupplierSystemUnavilable_WhenHttpStatusCodeIndicatesErrorFromVision()
+        {
+            // Arrange
+            _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>()))
+               .Returns(Task.FromResult(
+                   new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.InternalServerError)));
+
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsSupplierSystemUnavilable_WhenServiceContentIsNotEqualToOk()
+        {
+            // Arrange
+            var orderPrescriptionResponse = new VisionResponseEnvelope<OrderNewPrescriptionResponse>
+            {
+                Body = new VisionResponseBody<OrderNewPrescriptionResponse>
+                {
+                    VisionResponse = new VisionResponse<OrderNewPrescriptionResponse>
+                    {
+                        ServiceContent = new OrderNewPrescriptionResponse
+                        {
+                            Result = "text not equal to ok",
+                        },
+                    },
+                },
+            };
+
+            _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>()))
+               .Returns(Task.FromResult(
+                   new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
+                   {
+                       RawResponse = orderPrescriptionResponse,
+                   }));
+
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsSupplierSystemUnavailable_WhenHttpExceptionOccursCallingVision()
+        {
+            // Arrange
+            _visionClient.Setup(x => x.OrderNewPrescription(_userSession, It.IsAny<OrderNewPrescriptionRequest>())).Throws<HttpRequestException>()
+                .Verifiable();
+
+            var request = _fixture.Create<RepeatPrescriptionRequest>();
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            result.Should().BeAssignableTo<PrescriptionResult.SupplierSystemUnavailable>();
+            _visionClient.Verify();
+        }
     }
 }

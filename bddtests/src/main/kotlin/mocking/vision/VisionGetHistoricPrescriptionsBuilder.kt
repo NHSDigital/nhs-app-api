@@ -31,6 +31,7 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
                 .andBody(userSession.provider, "contains")
                 .andBody(userSession.patientId, "contains")
     }
+
     fun respondWithSuccess(prescriptionHistory: PrescriptionHistory): Mapping {
         val jaxbContext = JAXBContext.newInstance(PrescriptionHistory::class.java)
         val marshaller = jaxbContext.createMarshaller()

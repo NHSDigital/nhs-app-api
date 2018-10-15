@@ -10,6 +10,7 @@ import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import features.prescriptions.mappers.EmisPrescriptionMapper
 import features.prescriptions.mappers.TppPrescriptionMapper
+import features.prescriptions.mappers.VisionPrescriptionMapper
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedStepDefinitions.backend.CommonSteps
@@ -17,9 +18,12 @@ import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
+import mocking.data.prescriptions.VisionPrescriptionLoader
+import mocking.defaults.MockDefaults
 import mocking.emis.models.*
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
+import mocking.vision.models.*
 import models.Patient
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
@@ -167,6 +171,10 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                 currentPatient = TPP_PATIENT
                 prescriptionLoader = TppPrescriptionLoader
             }
+            BaseStepDefinition.Companion.ProviderTypes.VISION -> {
+                currentPatient = VISION_PATIENT
+                prescriptionLoader = VisionPrescriptionLoader
+            }
         }
     }
 
@@ -193,6 +201,12 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                             .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                 }
             }
+            ProviderTypes.VISION -> {
+                mockingClient.forVision {
+                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
+                }
+            }
         }
     }
 
@@ -215,6 +229,9 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                 prescriptionSteps.assertPrescriptionsMatch(EmisPrescriptionMapper.Map(
                         emisPrescriptionMap[currentScenarioState]!!), amount)
             }
+            ProviderTypes.VISION -> {
+                prescriptionSteps.assertPrescriptionsMatch(VisionPrescriptionMapper.map(prescriptionLoader.data as PrescriptionHistory), amount)
+            }
         }
     }
 
@@ -222,8 +239,10 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
     private fun prescriptionSubmissionWireMockAndDataSetup(amount: Int, gpSystem: String) {
         coursesStepDefinitions.iSelectXRepeatablePrescriptions(amount, gpSystem, amount)
 
-        when (gpSystem) {
-            TPP -> {
+        val gpSystemValue = ProviderTypes.valueOf(gpSystem);
+
+        when (gpSystemValue) {
+            ProviderTypes.TPP -> {
                 val test = coursesStepDefinitions.coursesLoader.data as ListRepeatMedicationReply
 
                 mockingClient.forTpp {
@@ -240,8 +259,8 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                 }
 
             }
-            
-            EMIS -> {
+
+            ProviderTypes.EMIS -> {
                 mockingClient.forEmis {
                     coursesRequest(currentPatient)
                             .respondWithSuccess(CourseRequestsGetResponse(coursesStepDefinitions.coursesLoader.data as List<MedicationCourse>))
@@ -267,6 +286,33 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
                             .respondWithSuccess(emisPrescriptionMap[currentScenarioState]!!)
                             .inScenario(scenarioTitle)
                             .whenScenarioStateIs(currentScenarioState)
+                }
+            }
+            ProviderTypes.VISION -> {
+
+                val test = coursesStepDefinitions.coursesLoader.data as EligibleRepeats
+
+                val request = OrderNewPrescriptionRequest(
+                        currentPatient.patientId,
+                        test.repeat!!.map { NewPrescriptionRepeat(it.getRepeatCourseId()!!) },
+                        "")
+
+                mockingClient.forVision {
+                    orderNewPrescriptionRequest(MockDefaults.visionUserSession, request)
+                            .respondWithSuccess(OrderNewPrescriptionResponse.Ok)
+                            .inScenario(scenarioTitle)
+                            .whenScenarioStateIs(currentScenarioState)
+                            .willSetStateTo(StatusSubmitted)
+                }
+
+                val numberOfPrescriptionsAfterSubmit = amount + initialHistoricPrescriptionsCount
+                prescriptionLoader.loadData(numberOfPrescriptionsAfterSubmit, numberOfPrescriptionsAfterSubmit, numberOfPrescriptionsAfterSubmit)
+                val newPrescriptions = prescriptionLoader.data as PrescriptionHistory
+                mockingClient.forVision {
+                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            .respondWithSuccess(newPrescriptions)
+                            .inScenario(scenarioTitle)
+                            .whenScenarioStateIs(StatusSubmitted)
                 }
             }
         }

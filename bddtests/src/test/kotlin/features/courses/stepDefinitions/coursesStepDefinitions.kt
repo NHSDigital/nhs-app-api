@@ -257,7 +257,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
                         showDosage, showQuantity)
 
                 mockingClient.forVision {
-                    getEligibleRepeatsRequest(MockDefaults.visionUserSession, MockDefaults.visionGetEligibleRepeats)
+                    getEligibleRepeatsRequest(MockDefaults.visionUserSession)
                             .respondWithSuccess(coursesLoader.data as EligibleRepeats)
                 }
             }

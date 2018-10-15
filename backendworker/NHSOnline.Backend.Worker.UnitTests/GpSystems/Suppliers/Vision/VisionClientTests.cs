@@ -270,6 +270,39 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
             response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
+        [TestMethod]
+        public async Task OrderNewPrescription_ReturnsSuccessfulResponse_WhenValidRequested()
+        {
+            // Arrange
+            var request = _fixture.Create<OrderNewPrescriptionRequest>();
+
+            var bodyResponse = _fixture.Create<VisionResponseEnvelope<OrderNewPrescriptionResponse>>();
+
+            _mockEnvelopeService.Setup(x => x.BuildEnvelope(
+                It.IsAny<X509Certificate2>(),
+                It.Is<VisionRequest<OrderNewPrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
+                It.IsAny<string>())).Returns("requestXml");
+
+            try
+            {
+                var responseContent = new StringContent(bodyResponse.SerializeXml());
+                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                    .WithContent("requestXml")
+                    .Respond(HttpStatusCode.OK, responseContent);
+            }
+            catch (Exception e)
+            {
+                var ex = e;
+            }
+
+            // Act
+            var response = await _sut.OrderNewPrescription(_visionUserSession, request);
+
+            // Assert
+            response.Body.Should().BeEquivalentTo(bodyResponse.Body.VisionResponse.ServiceContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
         public void Dispose()
         {
             _mockHttpHandler.Dispose();

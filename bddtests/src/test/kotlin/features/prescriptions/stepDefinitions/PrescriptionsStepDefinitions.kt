@@ -495,7 +495,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetHistory)
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
@@ -520,8 +520,6 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         when (currentProvider) {
             ProviderTypes.EMIS -> {
-
-
                 mockingClient
                         .forEmis {
                             prescriptionsRequest(currentPatient, fromdate, TO_DATE)
@@ -539,7 +537,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.VISION -> {
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetHistory)
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory)
                         }
             }
@@ -598,7 +596,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forVision {
-                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession, MockDefaults.visionGetHistory)
+                            getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionHistory).delayedBy(Duration.ofSeconds(delay))
                         }
             }

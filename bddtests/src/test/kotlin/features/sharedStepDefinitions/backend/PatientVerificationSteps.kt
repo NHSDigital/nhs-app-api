@@ -9,7 +9,6 @@ import mocking.emis.demographics.Sex
 import mocking.emis.models.AssociationType
 import mocking.emis.models.IdentifierType
 import mocking.tpp.models.*
-import mocking.vision.VisionConstants
 import mocking.vision.models.*
 import models.Patient
 import net.serenitybdd.core.Serenity.*
@@ -65,8 +64,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                     visionUserSession = VisionUserSession(
                                             "999999999",
                                             "nonexistingapikey",
-                                            Patient.aderynCanon.odsCode, patientId =  Patient.aderynCanon.patientId),
-                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                            Patient.aderynCanon.odsCode, patientId =  Patient.aderynCanon.patientId))
                                     .respondWitInvalidUserCredentials()
                         }
                 setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
@@ -94,8 +92,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,
                                     Patient.aderynCanon.odsCode,
-                                    Patient.aderynCanon.patientId),
-                            serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    Patient.aderynCanon.patientId))
                             .respondWithSecurityHeaderError()
                 }
     }
@@ -112,8 +109,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,
                                     Patient.aderynCanon.odsCode,
-                                    Patient.aderynCanon.patientId),
-                            serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    Patient.aderynCanon.patientId))
                             .respondWithInvalidRequest()
                 }
     }
@@ -125,8 +121,7 @@ class PatientVerificationSteps : AbstractSteps() {
         mockingClient
                 .forVision {
                     getConfigurationRequest(
-                            MockDefaults.visionUserSession,
-                            MockDefaults.visionGetConfiguration)
+                            MockDefaults.visionUserSession)
                             .respondWithUnknownError()
                 }
     }
@@ -288,8 +283,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                     Patient.aderynCanon.rosuAccountId,
                                     Patient.aderynCanon.apiKey,
                                     Patient.aderynCanon.odsCode,
-                                    Patient.aderynCanon.patientId),
-                            serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                    Patient.aderynCanon.patientId))
                             .respondWithSuccess(configuration = Configuration(
                                     account = Account(patient.patientId,
                                             patientNumber = nhsNumbers.map { number -> PatientNumber(number = number) },
@@ -317,8 +311,7 @@ class PatientVerificationSteps : AbstractSteps() {
                                             Patient.aderynCanon.rosuAccountId,
                                             Patient.aderynCanon.apiKey,
                                             Patient.aderynCanon.odsCode,
-                                            Patient.aderynCanon.patientId),
-                                    serviceDefinition = ServiceDefinition(VisionConstants.configurationName, VisionConstants.configurationVersion))
+                                            Patient.aderynCanon.patientId))
                                     .respondWithSuccess(configuration = Configuration(account = Account(patient.patientId,
                                             patientNumber = null, name = MockDefaults.getFullPatientName(patient))
                                     ))

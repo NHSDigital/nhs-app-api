@@ -14,6 +14,9 @@ object VisionConstants {
     var eligibleRepeats: String = "VONREP.GetEligibleRepeats"
     var eligibleRepeatsVersion: String = "2.0.0"
 
+    var newPrescription: String = "VONREP.NewPrescription"
+    var newPrescriptionVersion: String = "2.0.0"
+
     var demographicsName: String = "VODEM.GetDemographics"
     var demographicsVersion: String = "2.0.0"
 
@@ -72,8 +75,8 @@ object VisionConstants {
                 "                    <vision:successful>true</vision:successful>\n" +
                 "                </vision:outcome>\n" +
                 "            </vision:serviceHeader>\n" +
-                "            <vision:serviceContent>\n" + response +
-                "            </vision:serviceContent>\n" +
+                //           putting service content on one line as response can be raw text (avoiding new lines)
+                "            <vision:serviceContent>" + response + "</vision:serviceContent>" +
                 "        </vision:visionResponse>\n" +
                 "    </soap:Body>\n" +
                 "</soap:Envelope>"

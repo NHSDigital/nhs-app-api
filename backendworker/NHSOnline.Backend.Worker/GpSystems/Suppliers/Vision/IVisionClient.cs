@@ -25,6 +25,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         Task<VisionClient.VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
             VisionUserSession session);
 
+        Task<VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(
+            VisionUserSession userSession,
+            OrderNewPrescriptionRequest newPrescriptionRequest);
+
         Task<VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
             VisionConnectionToken token, string odsCode, string patientId);
             
