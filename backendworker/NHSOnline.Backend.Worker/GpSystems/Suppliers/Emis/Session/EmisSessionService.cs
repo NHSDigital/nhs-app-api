@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Models.Extensions;
@@ -14,14 +16,16 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
     {
         private readonly IEmisClient _emisClient;
         private readonly ILogger<EmisSessionService> _logger;
+        private readonly IEmisEnumMapper _emisEnumMapper;
 
         private static readonly HttpStatusCode[] InvalidTokenStatusCodes =
             { HttpStatusCode.Forbidden, HttpStatusCode.BadRequest };
 
-        public EmisSessionService(IEmisClient emisClient, ILogger<EmisSessionService> logger)
+        public EmisSessionService(IEmisClient emisClient, ILogger<EmisSessionService> logger, IEmisEnumMapper emisEnumMapper)
         {
             _emisClient = emisClient;
             _logger = logger;
+            _emisEnumMapper = emisEnumMapper;
         }
 
         public async Task<SessionsEndUserSessionPostResponse> SendSessionsEndUserSessionPost()
@@ -72,16 +76,37 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
                     await SendSessionsRequest(endUserSessionResponse.EndUserSessionId, connectionToken, odsCode);
 
                 _logger.LogDebug("Emis session successfully created");
+
+                var session = new EmisUserSession
+                {
+                    SessionId = sessionResponse.SessionId,
+                    EndUserSessionId = endUserSessionResponse.EndUserSessionId,
+                    UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken(),
+                    NhsNumber = nhsNumber,
+                    OdsCode = odsCode,
+                    AppointmentBookingReasonNecessity =  Necessity.Mandatory,
+                    PrescriptionSpecialRequestNecessity = Necessity.Optional
+                };
+
+                try
+                {
+                    var headerParams = new EmisHeaderParameters(session);
+                    var practiceResponse = await _emisClient.PracticeSettingsGet(headerParams, odsCode);
+
+                    session.AppointmentBookingReasonNecessity =
+                        _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.AppointmentBookingReason, Necessity.Mandatory);
+                    
+                    session.PrescriptionSpecialRequestNecessity =
+                        _emisEnumMapper.MapNecessity(practiceResponse?.Body?.InputRequirements?.PrescribingComment, Necessity.Optional);
+                }
+                catch (HttpRequestException e)
+                {
+                    _logger.LogError(e, "Failed request to retrieve practice settings, HttpRequestException has been thrown.");
+                }
+
                 return new SessionCreateResult.SuccessfullyCreated(
                     FormatName(sessionResponse),
-                    new EmisUserSession
-                    {
-                        SessionId = sessionResponse.SessionId,
-                        EndUserSessionId = endUserSessionResponse.EndUserSessionId,
-                        UserPatientLinkToken = sessionResponse.ExtractUserPatientLinkToken(),
-                        NhsNumber = nhsNumber,
-                        OdsCode = odsCode
-                    }
+                    session
                 );
             }
             catch (EmisSessionResponseErrorException responseError)

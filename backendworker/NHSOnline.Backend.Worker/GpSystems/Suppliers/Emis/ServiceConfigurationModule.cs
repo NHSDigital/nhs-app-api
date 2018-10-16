@@ -48,6 +48,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
                 services.AddSingleton<IEmisSessionService, EmisSessionService>();
                 services.AddSingleton<IRegistrationGuidKeyGenerator, EmisRegistrationGuidKeyGenerator>();
                 services.AddSingleton<IRegistrationCacheService, RegistrationCacheService>();
+                
+                services.AddTransient<IEmisEnumMapper, EmisEnumMapper>();
 
                 services.AddTransient<EmisTokenValidationService>();
 

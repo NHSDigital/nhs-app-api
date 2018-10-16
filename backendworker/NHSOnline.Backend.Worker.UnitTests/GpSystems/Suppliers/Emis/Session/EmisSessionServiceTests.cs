@@ -64,6 +64,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
                         ErrorResponseBadRequest = null
                     }));
 
+            _mockEmisClient.Setup(x => x.PracticeSettingsGet(
+                    It.IsAny<EmisHeaderParameters>(),
+                    It.IsAny<string>()))
+                .ReturnsAsync(new EmisClient.EmisApiObjectResponse<PracticeSettingsGetResponse>(HttpStatusCode.OK)
+                {
+                    Body = new PracticeSettingsGetResponse()
+                    {
+                        InputRequirements = new PracticeSettingsInputRequirements()
+                        {
+                            AppointmentBookingReason = "RequestedOptional",
+                            PrescribingComment = "RequestedOptional"
+                        }
+                    }
+                });
+
             _systemUnderTest = _fixture.Create<EmisSessionService>();
         }
 
@@ -219,7 +234,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Emis.Session
             _sessionsResponse.Title = title;
             _sessionsResponse.FirstName = firstname;
             _sessionsResponse.Surname = surname;
-            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger);
+            
+            var enumMapperLogger = _fixture.Create<ILoggerFactory>().CreateLogger<EmisEnumMapper>();
+            var enumMapper = new EmisEnumMapper(enumMapperLogger);
+
+            
+            var systemUnderTest = new EmisSessionService(_mockEmisClient.Object, _logger, enumMapper);
             
             // Act
             var result = await systemUnderTest.Create(_connectionToken, _odsCode, _nhsNumber);
