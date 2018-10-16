@@ -1,3 +1,4 @@
+import NativeCallbacks from '@/services/native-app';
 import {
   AUTH_RESPONSE,
   LOGOUT,
@@ -13,7 +14,7 @@ export default {
   },
   [LOGOUT]() {
     if (process.client && window.nativeApp) {
-      window.nativeApp.onLogout();
+      NativeCallbacks.onLogout();
     }
   },
   [INIT_AUTH](state) {

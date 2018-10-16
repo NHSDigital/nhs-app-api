@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
+import NativeCallbacks from '@/services/native-app';
 import { INIT_DEVICE, UPDATE_IS_NATIVE_APP, SET_SOURCE_DEVICE, GO_TO_CHECK_SYMPTOMS, initialState } from './mutation-types';
 
 export default {
@@ -9,7 +10,7 @@ export default {
   },
   [GO_TO_CHECK_SYMPTOMS](state) {
     if (state.isNativeApp === true) {
-      window.nativeApp.checkSymptoms();
+      NativeCallbacks.checkSymptoms();
     } else {
       this.$router.push('/check-your-symptoms');
     }

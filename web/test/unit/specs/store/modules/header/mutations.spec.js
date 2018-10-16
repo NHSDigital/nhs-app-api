@@ -10,6 +10,7 @@ describe('UPDATE_HEADER_TEXT', () => {
     process.client = true;
     const state = {
       headerText: '',
+      isNativeApp: true,
     };
     const newHeaderText = 'new page header';
 

@@ -14,6 +14,7 @@
 
 <script>
 /* eslint-disable import/extensions */
+import NativeCallbacks from '@/services/native-app';
 import BetaBanner from '../components/BetaBanner';
 import WelcomeSection from '../components/WelcomeSection';
 import NavigationListMenu from '../components/NavigationListMenu';
@@ -34,8 +35,8 @@ export default {
   mounted() {
     window.scrollTo(0, 0);
     if (this.$store.state.device.isNativeApp) {
-      window.nativeApp.showHeader();
-      window.nativeApp.hideWhiteScreen();
+      NativeCallbacks.showHeader();
+      NativeCallbacks.hideWhiteScreen();
     }
   },
 };

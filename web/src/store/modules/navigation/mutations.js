@@ -1,6 +1,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
+import NativeCallbacks from '@/services/native-app';
 import { CLEAR_SELECTED_MENUITEM, SET_NEWMENUITEM, INIT_NAVIGATION } from './mutation-types';
 
 /* eslint-disable no-shadow */
@@ -15,8 +16,8 @@ function clearPreviousSelectedMenuItem(state) {
 
 export default {
   [CLEAR_SELECTED_MENUITEM](state) {
-    if (process.client && typeof window.nativeApp !== 'undefined') {
-      window.nativeApp.clearMenuBarItem();
+    if (process.client && state.isNativeApp === true) {
+      NativeCallbacks.clearMenuBarItem();
     } else {
       clearPreviousSelectedMenuItem(state);
     }
