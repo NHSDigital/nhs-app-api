@@ -54,7 +54,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
     }
 
     private fun mockUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
-        appointmentMapper.requestMapping {  mapping(viewMyAppointmentsRequest(patient))}
+        appointmentMapper.requestMapping { mapping(viewMyAppointmentsRequest(patient)) }
     }
 
     protected fun slotDateFormat(dateTimeToConvert: Date): String {
@@ -78,7 +78,8 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         override val map: HashMap<String, (() -> (UpcomingAppointmentsFactory))> by lazy {
             hashMapOf(
                     "EMIS" to { UpcomingAppointmentsFactoryEmis() },
-                    "TPP" to { UpcomingAppointmentsFactoryTpp() }
+                    "TPP" to { UpcomingAppointmentsFactoryTpp() },
+                    "VISION" to { UpcomingAppointmentsFactoryVision() }
             )
         }
     }

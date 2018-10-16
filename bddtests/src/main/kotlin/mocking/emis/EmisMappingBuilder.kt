@@ -14,8 +14,8 @@ const val HEADER_API_SESSION_ID = "X-API-SessionId"
 const val HEADER_API_VERSION = "X-API-Version"
 const val QUERY_PARAM_USER_PATIENT_LINK_TOKEN = "userPatientLinkToken"
 
-open class EmisMappingBuilder(private var configuration: EmisConfiguration?,
-                              private val method: String, relativePath: String)
+open class EmisMappingBuilder(configuration: EmisConfiguration?,
+                              method: String, relativePath: String = "")
     : MappingBuilder(method, "/emis$relativePath") {
 
     protected var delayMillisecs = 0
@@ -23,8 +23,8 @@ open class EmisMappingBuilder(private var configuration: EmisConfiguration?,
     init {
         if (configuration != null) {
             requestBuilder
-                    .andHeader(HEADER_API_APPLICATION_ID, configuration!!.applicationId)
-                    .andHeader(HEADER_API_VERSION, configuration!!.version)
+                    .andHeader(HEADER_API_APPLICATION_ID, configuration.applicationId)
+                    .andHeader(HEADER_API_VERSION, configuration.version)
         }
     }
 

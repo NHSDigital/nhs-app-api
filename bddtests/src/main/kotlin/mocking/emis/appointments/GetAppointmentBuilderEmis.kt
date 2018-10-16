@@ -98,11 +98,13 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
     }
 
     private fun extractSessionsFromFacade(facade: MyAppointmentsFacade): List<Session> {
-        return facade.slots?.sessions?.map { session ->  Session(
-                session.sessionType!!,
-                session.sessionId!!,
-                session.locationid,
-                clinicianIds = session.staffDetails.map { staff->staff.staffDetailsid!! }
-        )} ?: emptyList()
+        return facade.slots?.sessions?.map { session ->
+            Session(
+                    session.sessionType!!,
+                    session.sessionId!!,
+                    session.locationid,
+                    clinicianIds = session.staffDetails.map { staff -> staff.staffDetailsid!! }
+            )
+        } ?: emptyList()
     }
 }

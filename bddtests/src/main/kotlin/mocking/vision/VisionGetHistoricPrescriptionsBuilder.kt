@@ -3,10 +3,9 @@ package mocking.vision
 import mocking.models.Mapping
 import mocking.vision.VisionConstants.getInvalidRequestError
 import mocking.vision.VisionConstants.getInvalidUserCredentialsError
-import mocking.vision.VisionConstants.getUnkownError
+import mocking.vision.VisionConstants.getUnknownError
 import mocking.vision.VisionConstants.getVisionResponse
 import mocking.vision.VisionConstants.securityHeaderErrorResponse
-import mocking.vision.models.Configuration
 import mocking.vision.models.PrescriptionHistory
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
@@ -65,7 +64,7 @@ class VisionGetHistoricPrescriptionsBuilder(var userSession: VisionUserSession,
 
     fun respondWithUnknownError(): Mapping {
         var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getUnkownError(serviceDefinition)).build()
+            andXmlBody(getUnknownError(serviceDefinition)).build()
         }
         return resp
     }

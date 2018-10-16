@@ -1,5 +1,8 @@
 package mocking.vision
 
+import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
+import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
+import mocking.vision.models.appointments.BookedAppointmentsResponse
 import mocking.vision.models.ServiceDefinition
 
 object VisionConstants {
@@ -23,9 +26,20 @@ object VisionConstants {
     var patientDataName: String = "VOS.GetPatientData"
     var patientDataVersion: String = "2.1.0"
 
+    var existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
+    var existingAppointmentsVersion: String = "2.0.0"
+
     val ALLERGIES_VIEW = "VPS_ALLERGIES"
 
     val HTML_RESPONSE_FORMAT = "HTML"
+
+    fun getVisionExistingAppointmentsResponse(serviceContent: String,
+                                              serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+
+        val response = setContextOnServiceContent(serviceContent, BookedAppointmentsResponse.name)
+
+        return getBaseVisionResponse(response, serviceDefinition)
+   }
 
     // Vision Allergies
     fun getVisionAllergiesResponse(serviceContent: String,
@@ -43,11 +57,7 @@ object VisionConstants {
     fun getVisionDemographicsResponse(serviceContent: String,
                                       serviceDefinition: mocking.vision.models.ServiceDefinition): String {
 
-        val response = serviceContent
-                .replace("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>", "")
-                .replace("<ns2:demographics xmlns:ns2=\"urn:vision\">",
-                        "<demographics xmlns=\"urn:vision\" xmlns:mb=\"urn:messagebus\">")
-                .replace("</ns2:demographics>", "</demographics>")
+        val response = setContextOnServiceContent(serviceContent, "demographics")
 
         return getBaseVisionResponse(response, serviceDefinition)
     }
@@ -63,29 +73,6 @@ object VisionConstants {
                 .replace("vision:/", "/")
 
         return getBaseVisionResponse(response, serviceDefinition)
-    }
-
-
-    fun getBaseVisionResponse(response: String, serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
-
-        return "<soap:Envelope xmlns:urn=\"urn:vision\" " +
-                "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                "    <soap:Body>\n" +
-                "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
-                "            <vision:serviceDefinition>\n" +
-                "                <vision:name>${serviceDefinition.name}</vision:name>\n" +
-                "                <vision:version>${serviceDefinition.version}</vision:version>\n" +
-                "            </vision:serviceDefinition>\n" +
-                "            <vision:serviceHeader>\n" +
-                "                <vision:outcome>\n" +
-                "                    <vision:successful>true</vision:successful>\n" +
-                "                </vision:outcome>\n" +
-                "            </vision:serviceHeader>\n" +
-                //           putting service content on one line as response can be raw text (avoiding new lines)
-                "            <vision:serviceContent>" + response + "</vision:serviceContent>" +
-                "        </vision:visionResponse>\n" +
-                "    </soap:Body>\n" +
-                "</soap:Envelope>"
     }
 
     // Common API Scenarios
@@ -128,7 +115,7 @@ object VisionConstants {
                     "   </soap:Body>\n" +
                     "</soap:Envelope>"
 
-    fun getUnkownError(serviceDefinition: ServiceDefinition): String {
+    fun getUnknownError(serviceDefinition: ServiceDefinition): String {
         return "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
                 "  <soap:Header>\n" +
                 "  </soap:Header>\n" +
@@ -185,7 +172,7 @@ object VisionConstants {
                 "      <MessageID xmlns=\"http://www.w3.org/2005/08/addressing\">" +
                 "FAEC4FE2-D8CE-4129-BCB4-F65154B1E60F</MessageID>\n" +
                 "      <To xmlns=\"http://www.w3.org/2005/08/addressing\">" +
-               "http://www.w3.org/2005/08/addressing/anonymous</To>\n" +
+                "http://www.w3.org/2005/08/addressing/anonymous</To>\n" +
                 "      <RelatesTo xmlns=\"http://www.w3.org/2005/08/addressing\">" +
                 "uuid:bd81e6a9-c971-4b48-9306-28b2d8cd9a50</RelatesTo>\n" +
                 "   </soap:Header>\n" +
@@ -208,7 +195,4 @@ object VisionConstants {
                 "   </soap:Body>\n" +
                 "</soap:Envelope>"
     }
-
-
-
 }

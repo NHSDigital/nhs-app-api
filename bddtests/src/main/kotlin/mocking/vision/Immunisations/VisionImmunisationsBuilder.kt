@@ -40,7 +40,7 @@ class VisionImmunisationsBuilder(private val userSession: VisionUserSession, pri
 
     fun respondWithUnknownError(): Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(VisionConstants.getUnkownError(serviceDefinition))
+            andXmlBody(VisionConstants.getUnknownError(serviceDefinition))
         }
     }
 

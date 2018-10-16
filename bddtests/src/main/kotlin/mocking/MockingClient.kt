@@ -23,14 +23,14 @@ class MockingClient(private val configuration: MockingConfiguration) {
     private val gson = Gson()
 
     fun forEmis(method: String = "GET", resolver: EmisMappingBuilder.() -> Mapping) {
-        val mappingBuilder = EmisMappingBuilder(configuration.emisConfiguration, method, "/emis")
+        val mappingBuilder = EmisMappingBuilder(configuration.emisConfiguration, method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)
     }
 
     fun forTpp(method: String = "POST", resolver: TppMappingBuilder.() -> Mapping) {
-        val mappingBuilder = TppMappingBuilder(method, "/tpp")
+        val mappingBuilder = TppMappingBuilder(method)
         val mapping: Mapping = mappingBuilder.resolver()
 
         this.postMapping(mapping)

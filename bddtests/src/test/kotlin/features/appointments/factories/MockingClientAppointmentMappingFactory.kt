@@ -17,7 +17,9 @@ abstract class MockingClientAppointmentMappingFactory {
         override val map: HashMap<String, (() -> MockingClientAppointmentMappingFactory)> by lazy {
             hashMapOf(
                     "EMIS" to { MockingClientAppointmentMappingFactoryEmis() },
-                    "TPP" to { MockingClientAppointmentMappingFactoryTpp() })
+                    "TPP" to { MockingClientAppointmentMappingFactoryTpp() },
+                    "VISION" to { MockingClientAppointmentMappingFactoryVision() }
+            )
         }
     }
 }

@@ -20,7 +20,6 @@ class AppointmentsSlotsExample {
 
         private const val clinicSessionType = "Clinic"
         private const val clinicSlot = "Clinic - Slot"
-        private const val sessionDetails = "$clinicSlot, Clinician: %s"
 
         private val locationLeeds = IdValue(1, "Leeds")
         private val locationSheffield = IdValue(2, "Sheffield")

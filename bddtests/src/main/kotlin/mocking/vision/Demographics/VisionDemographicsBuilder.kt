@@ -2,7 +2,7 @@ package mocking.vision.Demographics
 
 import mocking.models.Mapping
 import mocking.vision.VisionConstants.getAccessDeniedError
-import mocking.vision.VisionConstants.getUnkownError
+import mocking.vision.VisionConstants.getUnknownError
 import mocking.vision.VisionConstants.getVisionDemographicsResponse
 import mocking.vision.VisionMappingBuilder
 import mocking.vision.models.ServiceDefinition
@@ -50,7 +50,7 @@ class VisionDemographicsBuilder(var userSession: VisionUserSession,
 
     fun respondWithUnknownError(): Mapping {
         var resp = respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getUnkownError(serviceDefinition)).build()
+            andXmlBody(getUnknownError(serviceDefinition)).build()
         }
         return resp
     }
