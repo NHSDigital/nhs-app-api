@@ -126,6 +126,19 @@
         </analytics-tracked-tag>
         <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
                       :supplier="myRecord.supplier" />
+
+        <div v-if="myRecord.supplier === 'VISION'">
+          <analytics-tracked-tag :class="[$style['record-title'],
+                                          getCollapseState(isImmunisationsCollapsed)]"
+                                 :click-func="myRecordSectionClick"
+                                 :click-param="IMMUNISATIONS"
+                                 :text="$t('my_record.immunisations.sectionHeader')"
+                                 data-purpose="accordion"
+                                 tag="h2">
+            {{ $t('my_record.immunisations.sectionHeader') }}
+          </analytics-tracked-tag>
+          <immunisations :is-collapsed="isImmunisationsCollapsed" :data="myRecord.immunisations" />
+        </div>
       </div>
       <div v-else>
         <p :class="$style.summaryRecordWarning">

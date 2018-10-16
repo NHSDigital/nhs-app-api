@@ -32,4 +32,25 @@ object ImmunisationsData {
                 )
         )
     }
+
+    fun getVisionImmunisationsData(count: Int): String {
+        val immunisation = "<clinical eventdate=\"2018-10-10T00:00:00\" read_term=\"Lumpectomy NEC\"" +
+                " subgroup_code=\"Immunisation\"/>"
+
+        var response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        for(i in 1..count) {
+            response += immunisation
+        }
+
+        return response + responseStringEnd
+    }
+    fun getVisionImmunisationsDataWithNoImmunisations(): String {
+        var response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + responseStringEnd
+    }
+
 }

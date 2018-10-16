@@ -4,12 +4,14 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 {
     public class VisionMyRecordMapper : IVisionMyRecordMapper
     {
-        public MyRecordResponse Map(Allergies allergies)
+        public MyRecordResponse Map(Allergies allergies, Immunisations immunisations)
         {
             return new MyRecordResponse
             {
                 Allergies = allergies,
-                HasSummaryRecordAccess = allergies?.HasAccess ?? false
+                Immunisations = immunisations,
+                HasSummaryRecordAccess = allergies?.HasAccess ?? false,
+                HasDetailedRecordAccess = immunisations?.HasAccess ?? false
             };
         }
     }

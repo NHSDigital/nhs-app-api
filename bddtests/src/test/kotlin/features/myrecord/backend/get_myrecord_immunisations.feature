@@ -14,6 +14,7 @@ Feature: Get Immunisations Data
   Examples:
   |Service|
   |EMIS|
+  |VISION|
 
 
   Scenario Outline: Requesting immunisations returns immunisations data
@@ -27,4 +28,5 @@ Feature: Get Immunisations Data
   Examples:
   |Service|
   |EMIS|
+  |VISION|
 

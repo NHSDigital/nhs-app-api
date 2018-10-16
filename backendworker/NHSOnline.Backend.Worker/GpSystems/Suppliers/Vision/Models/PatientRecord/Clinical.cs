@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord
@@ -17,5 +17,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientReco
         public string ReadCode2 { get; set; }
         [XmlAttribute(AttributeName = "drug_term")]
         public string DrugTerm { get; set; }
+        [XmlAttribute(AttributeName = "subgroup_code")]
+        public string SubGroupCode { get; set; }
     }
 }

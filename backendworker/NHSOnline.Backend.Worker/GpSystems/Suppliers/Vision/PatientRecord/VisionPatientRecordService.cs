@@ -34,35 +34,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
 
             try
             {
-                var request = new PatientDataRequest
-                {
-                    PracticeIdentifier = visionUserSession.OdsCode,
-                    PatientIdentifier = visionUserSession.PatientId,
-                    Sender = new Sender
-                    {
-                        Name = new SenderName
-                        {
-                            UserName = _config.VisionSenderUserName,
-                            UserFullName = _config.VisionSenderUserFullName,
-                            UserIdentity = _config.VisionSenderUserIdentity,
-                            UserRole = _config.VisionSenderUserRole
-                        }
-                    }
-                };
-
-                request.ResponseFormat = ResponseFormats.HTML;
-                request.View = Views.VPS_ALLERGIES;
-
-                var allergiesTask = _visionClient.GetPatientData(visionUserSession, request);
-
-                await Task.WhenAll(allergiesTask);
+                var allergiesTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.VPS_ALLERGIES));
+                var immunisationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROCEDURES));
+                await Task.WhenAll(allergiesTask, immunisationsTask);
                 _logger.LogInformation("Patient record tasks completed");
 
                 try
                 {
                     var checkedAllergies = new VisionGetAllergyTaskChecker(_logger).Check(allergiesTask);
+                    var checkedImmunisations = new VisionGetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
 
-                    var response = _visionMyRecordMapper.Map(checkedAllergies);
+                    MyRecordResponse response = _visionMyRecordMapper.Map(checkedAllergies, checkedImmunisations);
                     response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
                     _logger.LogExit(nameof(GetMyRecord));
@@ -81,6 +63,27 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
                 return new GetMyRecordResult.Unsuccessful();
             }
         }
+
+        private PatientDataRequest CreatePatientDataRequest(VisionUserSession visionUserSession, string responseFormat, string visionView)
+       {
+           return new PatientDataRequest
+           {
+               PracticeIdentifier = visionUserSession.OdsCode,
+               PatientIdentifier = visionUserSession.PatientId,
+               Sender = new Sender
+               {
+                   Name = new SenderName
+                   {
+                       UserName = _config.VisionSenderUserName,
+                       UserFullName = _config.VisionSenderUserFullName,
+                       UserIdentity = _config.VisionSenderUserIdentity,
+                       UserRole = _config.VisionSenderUserRole
+                   }
+               },
+               ResponseFormat = responseFormat,
+               View = visionView,
+           };
+       }
 
         public Task<GetDetailedTestResult> GetDetailedTestResult(UserSession userSession, string testResultId)
         {

@@ -56,6 +56,9 @@
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidAllergyResponseContent.xml" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoAllergiesAllergyResponseContent.xml" />
     <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidAllergyResponseContent.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidImmunisationResponseContent.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoImmunisationResponseContent.xml" />
+    <None Remove="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidImmunisationsResponseContent.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="GpSystems\Suppliers\Vision\Resources\mycert.pfx" />
@@ -92,6 +95,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidAllergyResponseContent.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidImmunisationsResponseContent.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoImmunisationResponseContent.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidImmunisationResponseContent.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

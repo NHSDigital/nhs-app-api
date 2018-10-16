@@ -13,6 +13,8 @@ Feature: View My Medical Record Information - Immunisations
   Examples:
   |Service|
   |EMIS|
+  |VISION|
+
 
   Scenario Outline: A <Service> user has no immunisations on their record
     Given the my record wiremocks are initialised for <Service>
@@ -26,6 +28,7 @@ Feature: View My Medical Record Information - Immunisations
   Examples:
   |Service|
   |EMIS|
+  |VISION|
 
   Scenario Outline: A <Service> user does not have access to immunisations
     Given the my record wiremocks are initialised for <Service>
@@ -52,3 +55,4 @@ Feature: View My Medical Record Information - Immunisations
   Examples:
   |Service|
   |EMIS|
+  |VISION|

@@ -3,6 +3,7 @@ package mocking.vision
 import mocking.MappingBuilder
 import mocking.vision.Demographics.VisionDemographicsBuilder
 import mocking.vision.allergies.VisionAllergiesBuilder
+import mocking.vision.Immunisations.VisionImmunisationsBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.defaults.MockDefaults
@@ -32,5 +33,8 @@ open class VisionMappingBuilder(private val method: String) : MappingBuilder(met
 
     fun demographicsRequest(visionUserSession: VisionUserSession)
             = VisionDemographicsBuilder(visionUserSession, MockDefaults.visionDemographicsConfiguration)
-}
 
+    fun immunisationsRequest(visionUserSession: VisionUserSession, serviceDefinition: ServiceDefinition)
+            = VisionImmunisationsBuilder(visionUserSession, serviceDefinition)
+
+}

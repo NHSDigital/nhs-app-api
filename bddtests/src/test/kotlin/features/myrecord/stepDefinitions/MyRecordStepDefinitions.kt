@@ -114,6 +114,20 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                     ).respondWithSuccess(AllergiesData.getVisionAllergiesData(0))
 
                 }
+
+                mockingClient.forVision {
+                    immunisationsRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
+                    ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
+
+                }
             }
         }
     }

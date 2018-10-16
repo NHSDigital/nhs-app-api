@@ -83,6 +83,7 @@ definitions:
           - UNKNOWN
           - EMIS
           - TPP
+          - VISION
       allergies:
         type: object
         description: An object containing all allergy details.

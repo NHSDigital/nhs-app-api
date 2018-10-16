@@ -1,7 +1,11 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
+import mocking.data.myrecord.AllergiesData
 import mocking.data.myrecord.ImmunisationsData
+import mocking.vision.VisionConstants
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
 import worker.models.myrecord.MyRecordResponse
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
@@ -22,6 +26,21 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             "TPP" -> {
 
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    immunisationsRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
+                    ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsData(2))
+
+                }
+            }
         }
     }
 
@@ -37,6 +56,21 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             "TPP" -> {
 
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    allergiesRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
+                    ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
+                }
+            }
+
         }
     }
 
@@ -52,6 +86,20 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             "TPP" -> {
 
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    immunisationsRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
+                    ).respondWithAccessDeniedError()
+                }
+            }
         }
     }
 
@@ -66,6 +114,20 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             }
             "TPP" -> {
 
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    immunisationsRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion)
+                    ).respondWithUnknownError()
+                }
             }
         }
     }

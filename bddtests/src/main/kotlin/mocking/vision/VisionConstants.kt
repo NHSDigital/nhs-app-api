@@ -33,6 +33,12 @@ object VisionConstants {
         return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
     }
 
+    // Vision Immunisations
+    fun getVisionImmunisationsResponse(serviceContent: String,
+                                   serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
+        return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
+    }
+
     // Vision Demographics
     fun getVisionDemographicsResponse(serviceContent: String,
                                       serviceDefinition: mocking.vision.models.ServiceDefinition): String {

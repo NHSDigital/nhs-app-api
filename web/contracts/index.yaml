@@ -332,6 +332,7 @@
                     - "UNKNOWN"
                     - "EMIS"
                     - "TPP"
+                    - "VISION"
                 allergies: 
                   type: "object"
                   description: "An object containing all allergy details."
@@ -390,6 +391,16 @@
                           type: "array"
                           description: "Array of acuteMedications"
                           items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/discontinuedRepeatMedications/items"
+                        currentRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
+                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/discontinuedRepeatMedications/items"
+                        discontinuedRepeatMedications: 
+                          type: "array"
+                          description: "Array of acuteMedications"
+                          items: 
                             type: "object"
                             properties: 
                               date: 
@@ -400,17 +411,16 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
-                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/problems/properties/data/properties/problems/items/properties/lineItems/items"
-                        currentRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
-                        discontinuedRepeatMedications: 
-                          type: "array"
-                          description: "Array of acuteMedications"
-                          items: 
-                            $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items"
+                                  type: "object"
+                                  properties: 
+                                    text: 
+                                      type: "string"
+                                      description: "When the record was entered."
+                                    lineItems: 
+                                      type: "array"
+                                      description: "An array of line items"
+                                      items: 
+                                        type: "string"
                 immunisations: 
                   type: "object"
                   description: "An object containing all immunisation details."
@@ -506,16 +516,7 @@
                                 type: "array"
                                 description: "An array of line items."
                                 items: 
-                                  type: "object"
-                                  properties: 
-                                    text: 
-                                      type: "string"
-                                      description: "When the record was entered."
-                                    lineItems: 
-                                      type: "array"
-                                      description: "An array of line items"
-                                      items: 
-                                        type: "string"
+                                  $ref: "#/paths/~1v1~1patient~1my-record/get/responses/200/schema/properties/medications/properties/data/properties/acuteMedications/items/properties/lineItems/items"
                 tppDcrEvents: 
                   type: "object"
                   description: "An object containing all tpp dcr event details."
