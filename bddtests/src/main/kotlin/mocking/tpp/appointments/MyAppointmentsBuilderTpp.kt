@@ -8,6 +8,8 @@ import mocking.tpp.models.Appointment
 import mocking.tpp.models.ViewAppointmentsReply
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
+import org.apache.http.HttpStatus
+
 
 
 class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyAppointmentsBuilder {
@@ -63,5 +65,13 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
                 )
             }
         } ?: emptyList()
+    }
+
+    override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
+        var mapping = respondWithSuccess(facade)
+
+        return respondWith(HttpStatus.SC_OK) {
+            andBody(mapping.response!!.body!!.replace(">","|").replace("}","|"), contentType = "application/json")
+        }
     }
 }

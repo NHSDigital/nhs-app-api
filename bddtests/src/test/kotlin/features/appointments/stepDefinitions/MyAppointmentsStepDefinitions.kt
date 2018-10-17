@@ -65,6 +65,11 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.generateStubsForMyAppointmentsWhenUnavailableToPatient(provider)
     }
 
+    @Given("^(.*) returns corrupted response for my appointments")
+    fun corruptedResponseFromMyAppointments(provider: String) {
+        myAppointmentsSteps.generateCorruptedStubForMyAppointment(provider)
+    }
+
     @When("^I select \"([^\"]*)\" button$")
     fun i_select_button(buttonText: String) {
         myAppointmentsSteps.myAppointmentsPage.clickOnButtonContainingText(buttonText)

@@ -6,16 +6,15 @@ import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
+import mocking.emis.appointments.helpers.GetAppointmentHelper
 import mocking.emis.models.Appointment
 import mocking.emis.models.ExceptionResponse
-import mocking.emis.models.Location
-import mocking.emis.models.Session
-import mocking.emis.models.SessionHolder
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import org.apache.http.HttpStatus
+
 
 class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Patient,
                                 fetchPreviousAppointments: Boolean = false)
@@ -55,10 +54,10 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
         return respondWithBody(
                 GetAppointmentsResponseModel(
                         facade.appointmentsFromDateTime,
-                        extractListOfAppointmentsFromFacade(facade),
-                        extractLocationsFromFacade(facade),
-                        extractCliniciansFromFacade(facade),
-                        extractSessionsFromFacade(facade)
+                        GetAppointmentHelper.extractListOfAppointmentsFromFacade(facade),
+                        GetAppointmentHelper.extractLocationsFromFacade(facade),
+                        GetAppointmentHelper.extractCliniciansFromFacade(facade),
+                        GetAppointmentHelper.extractSessionsFromFacade(facade)
                 )
         )
     }
@@ -69,42 +68,11 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
         }
     }
 
-    private fun extractListOfAppointmentsFromFacade(facade: MyAppointmentsFacade): List<Appointment> {
-        return facade.slots?.sessions?.flatMap { session ->
-            session.slots.map { slot ->
-                Appointment(
-                        slot.slotId!!,
-                        session.sessionId!!,
-                        slot.startTime!!,
-                        slot.endTime!!,
-                        slotTypeName = slot.slotTypeName!!
-                )
-            }
-        } ?: emptyList()
-    }
+    override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
+        var mapping = respondWithSuccess(facade)
+        return respondWith(HttpStatus.SC_OK) {
+            andBody(mapping.response!!.body!!.replace(">", "|").replace("}", "|"), contentType = "application/json")
+        }
 
-    private fun extractLocationsFromFacade(facade: MyAppointmentsFacade): List<Location> {
-        return facade.slots?.sessions?.map { session -> Location(session.locationid!!, session.location!!) }
-                ?: emptyList()
-    }
-
-    private fun extractCliniciansFromFacade(facade: MyAppointmentsFacade): List<SessionHolder> {
-        val cliniciansAcrossAllSessions = facade.slots?.sessions?.flatMap { session ->
-            session.staffDetails.map { clinician ->
-                SessionHolder(clinician.staffDetailsid!!, clinician.staffName!!)
-            }
-        } ?: emptyList()
-        return cliniciansAcrossAllSessions.distinct()
-    }
-
-    private fun extractSessionsFromFacade(facade: MyAppointmentsFacade): List<Session> {
-        return facade.slots?.sessions?.map { session ->
-            Session(
-                    session.sessionType!!,
-                    session.sessionId!!,
-                    session.locationid,
-                    clinicianIds = session.staffDetails.map { staff -> staff.staffDetailsid!! }
-            )
-        } ?: emptyList()
     }
 }

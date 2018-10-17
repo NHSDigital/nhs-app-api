@@ -98,6 +98,12 @@ open class MyAppointmentsSteps {
     }
 
     @Step
+    fun generateCorruptedStubForMyAppointment(provider: String) {
+        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createCorruptedpcomingAppointmentsResponse()
+    }
+
+    @Step
     fun createSerenityMyAppointmentSessionVariable() {
         val timeZone = TimeZone.getTimeZone("Europe/London")
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)

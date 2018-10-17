@@ -32,6 +32,12 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         }
     }
 
+    fun createCorruptedpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
+        createUpcomingAppointments {
+            respondWithCorrupted(facade)
+        }
+    }
+
     fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockUpcomingAppointments(mapping)
         val facade = genericMyAppointmentsFacade()

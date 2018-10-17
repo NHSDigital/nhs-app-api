@@ -27,6 +27,18 @@ Feature: My appointments
       | EMIS      |
       | TPP       |
 
+  @backend
+  @bug  @NHSO-802
+  Scenario Outline: Appropriate error response, when <GP System> returns corrupted data
+    Given I have logged into <GP System> and have a valid session cookie
+    But <GP System> returns corrupted response for my appointments
+    When the API retrieves upcoming appointments
+    Then I receive a "Bad Gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   @NHSO-797
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>
