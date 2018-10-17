@@ -9,7 +9,7 @@ class RepeatPrescriptionsJourney(private val client: MockingClient) {
     fun createFor(patient: Patient) {
         client
                 .forEmis {
-                    repeatPrescriptionSubmissionRequest(patient)
+                    prescriptions.repeatPrescriptionSubmissionRequest(patient)
                             .respondWithCreated()
                 }
     }

@@ -16,7 +16,7 @@ private const val ONE_REPEAT = 1
 class PrescriptionsHistoryJourney(private val client: MockingClient) {
 
     fun createFor(patient: Patient) {
-        val prescriptions = listOf(
+        val prescriptionsToCreate = listOf(
                 PrescriptionsData.loadPrescriptionsData(SEVEN_PRESCRIPTIONS, SEVEN_COURSES, SEVEN_REPEATS),
                 PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, false),
                 PrescriptionsData.loadPrescriptionsData(ONE_PRESCRIPTION, ONE_COURSE, ONE_REPEAT, true, false),
@@ -25,10 +25,8 @@ class PrescriptionsHistoryJourney(private val client: MockingClient) {
 
         client
                 .forEmis {
-                    prescriptionsRequest(patient)
-                            .respondWithSuccess(
-                                    PrescriptionsData.addResponses(prescriptions)
-                            )
+                    prescriptions.prescriptionsRequest(patient)
+                            .respondWithSuccess(PrescriptionsData.addResponses(prescriptionsToCreate))
                 }
 
         VisionPrescriptionLoader.loadData(1,1,1)

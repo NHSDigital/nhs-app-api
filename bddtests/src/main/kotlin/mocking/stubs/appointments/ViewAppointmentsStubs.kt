@@ -30,7 +30,7 @@ class ViewAppointmentsStubs(private val mockingClient: MockingClient) {
                                         .delayedBy(Duration.ofSeconds(TIMEOUT_DELAY)) }
 
         mapViewAppointmentStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis{ scenario.getResponse(viewMyAppointmentsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis{ scenario.getResponse(appointments.viewMyAppointmentsRequest(scenario.forMatcher)) }
         }
     }
 }

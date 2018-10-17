@@ -4,18 +4,18 @@ import java.time.Duration
 
 class AuthenticationFactoryEmis  : AuthenticationFactory("EMIS"){
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId).delayedBy(Duration.ofSeconds(31)) }
+        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
     }
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithForbidden() }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithForbidden() }
     }
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
-        mockingClient.forEmis { endUserSessionRequest().respondWithServiceUnavailable() }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, associationType) }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServiceUnavailable() }
+        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, associationType) }
 
     }
 }

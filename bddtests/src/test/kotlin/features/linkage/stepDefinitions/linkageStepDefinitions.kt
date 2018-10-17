@@ -181,7 +181,7 @@ open class LinkageStepDefinitions {
 
             // end user session setup always required
             mockingClient.forEmis {
-                endUserSessionRequest()
+                authentication.endUserSessionRequest()
                         .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
             }
 
@@ -189,7 +189,7 @@ open class LinkageStepDefinitions {
                     linkageToGetRequestResponse.containsKey(linkageResult))
             val response = linkageToGetRequestResponse[linkageResult]!!
             mockingClient.forEmis {
-                response(linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken)))
+                response(authentication.linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken)))
             }
         }
 
@@ -203,7 +203,7 @@ open class LinkageStepDefinitions {
     private fun successfulPost(): (EmisLinkagePOSTBuilder) -> Mapping {
 
         mockingClient.forEmis {
-            linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
+            authentication.linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
                     .respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
         }
 
@@ -228,7 +228,7 @@ open class LinkageStepDefinitions {
         if (currentGPSystem == EMIS) {
             // end user session setup always required
             mockingClient.forEmis {
-                endUserSessionRequest()
+                authentication.endUserSessionRequest()
                         .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
             }
             Assert.assertTrue("Test Setup Incorrect, Mapping not set up for linkage $linkageResult",
@@ -236,7 +236,7 @@ open class LinkageStepDefinitions {
             val response = linkageToPostRequestResponse[linkageResult]
             if (response != null) {
                 mockingClient.forEmis {
-                    response(linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress)))
+                    response(authentication.linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress)))
                 }
             }
         }

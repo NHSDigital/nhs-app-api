@@ -29,15 +29,15 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
     }
 
     private fun generateEmisMocks(patient: Patient) {
-        client.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        client.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
 
         client.forEmis {
-            sessionRequest(patient)
+            authentication.sessionRequest(patient)
                     .respondWithSuccess(patient, associationType = AssociationType.Self)
         }
 
         client.forEmis {
-            demographicsRequest(patient)
+            myRecord.demographicsRequest(patient)
                     .respondWithSuccess(patient,
                             patientIdentifiers =
                             patient.nhsNumbers.map {
@@ -51,7 +51,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
 
         client
                 .forEmis {
-                    meApplicationsRequest(patient,
+                    authentication.meApplicationsRequest(patient,
                             LinkApplicationRequestModel(
                                     surname = patient.surname,
                                     dateOfBirth = patient.dateOfBirth.plus("T00:00:00"),
@@ -68,7 +68,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
     private fun generateTppMocks(patient: Patient) {
 
         client.forTpp {
-                linkAccountRequest(patient).respondWithSuccess(
+                authentication.linkAccountRequest(patient).respondWithSuccess(
                                 LinkAccountReply(
                                         passphrase = patient.passphrase,
                                         uuid = MockDefaults.DEFAULT_TPP_UUID
@@ -77,7 +77,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
         }
 
         client.forTpp {
-            authenticateRequest(
+            authentication.authenticateRequest(
                     Authenticate(
                             apiVersion = MockDefaults.TPP_API_VERSION,
                             accountId = patient.accountId,

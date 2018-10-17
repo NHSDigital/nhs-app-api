@@ -12,18 +12,18 @@ class EmisSessionCreateJourneyFactory(val client: MockingClient) : SessionCreate
     override fun createFor(patient: Patient) {
         client
                 .forEmis {
-                    endUserSessionRequest()
+                    authentication.endUserSessionRequest()
                             .respondWithSuccess(patient.endUserSessionId)
                 }
 
         client
                 .forEmis {
-                    sessionRequest(patient)
+                    authentication.sessionRequest(patient)
                             .respondWithSuccess(patient, AssociationType.Self)
                 }
         client
                 .forEmis {
-                    demographicsRequest(patient)
+                    myRecord.demographicsRequest(patient)
                             .respondWithSuccess(patient,
                                     patientIdentifiers = arrayOf(
                                             PatientIdentifier(

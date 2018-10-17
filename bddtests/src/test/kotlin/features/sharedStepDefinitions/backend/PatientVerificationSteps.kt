@@ -29,7 +29,7 @@ class PatientVerificationSteps : AbstractSteps() {
         when (gpSystem) {
             TPP -> {
                 var nonExistingConnectionToken = "{\"accountid\":\"999999999\",\"passphrase\":\"nonexistingpassword\"}"
-                mockingClient.forTpp { authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithError(MockDefaults.tppNonExistingAccountIdErrorResponse) }
+                mockingClient.forTpp { authentication.authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithError(MockDefaults.tppNonExistingAccountIdErrorResponse) }
 
                 setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_TPP)
                 setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
@@ -42,10 +42,10 @@ class PatientVerificationSteps : AbstractSteps() {
                         endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D"
                 )
 
-                mockingClient.forEmis { sessionRequest(patient).respondWithUserNotRegistered() }
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+                mockingClient.forEmis { authentication.sessionRequest(patient).respondWithUserNotRegistered() }
+                mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
                 mockingClient.forEmis {
-                    demographicsRequest(patient).respondWithSuccess(patient,
+                    myRecord.demographicsRequest(patient).respondWithSuccess(patient,
                             patientIdentifiers = arrayOf(
                                     PatientIdentifier(
                                             identifierType = IdentifierType.NhsNumber,
@@ -218,7 +218,7 @@ class PatientVerificationSteps : AbstractSteps() {
                         )
                 )
 
-                mockingClient.forTpp { authenticateRequest(authenticateRequest).respondWithSuccess(tppAuthenticateReplyResponse) }
+                mockingClient.forTpp { authentication.authenticateRequest(authenticateRequest).respondWithSuccess(tppAuthenticateReplyResponse) }
 
                 setSessionVariable("ConnectionToken").to(patient.connectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
@@ -264,9 +264,9 @@ class PatientVerificationSteps : AbstractSteps() {
 
         val nhsNumbers = numbers.map { number -> PatientIdentifier(number, identifierType = IdentifierType.NhsNumber) }.toTypedArray()
 
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
-        mockingClient.forEmis { demographicsRequest(patient).respondWithSuccess(patient, nhsNumbers) }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { authentication.sessionRequest(patient).respondWithSuccess(patient, AssociationType.Self) }
+        mockingClient.forEmis { myRecord.demographicsRequest(patient).respondWithSuccess(patient, nhsNumbers) }
 
         setSessionVariable("ConnectionToken").to(patient.connectionToken)
         setSessionVariable("NationalPracticeCode").to(patient.odsCode)

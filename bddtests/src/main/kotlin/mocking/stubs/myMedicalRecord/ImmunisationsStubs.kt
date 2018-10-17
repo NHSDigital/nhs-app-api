@@ -33,7 +33,7 @@ class ImmunisationsStubs(private val mockingClient: MockingClient) {
                         }
 
         mapEMISImmunisationResultsStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(immunisationsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis { scenario.getResponse(myRecord.immunisationsRequest(scenario.forMatcher)) }
         }
 
     }

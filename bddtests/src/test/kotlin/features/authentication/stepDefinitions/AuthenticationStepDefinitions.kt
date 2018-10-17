@@ -114,15 +114,15 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-        mockingClient.forEmis { endUserSessionRequest().respondWithServerError() }
-        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServerError() }
+        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
         CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
-        mockingClient.forEmis { sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
+        mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
     }
 
     @Given("^I have valid OAuth details and (.*) is not available$")
@@ -169,12 +169,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
         when (gpSystem) {
             "EMIS" -> {
-                mockingClient.forEmis { emisResponse(meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
-                mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+                mockingClient.forEmis { emisResponse(authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient))) }
+                mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
+                    authentication.linkAccountRequest(patient).respondWithInvalidLinkageCredentials()
                 }
             }
         }
@@ -287,9 +287,9 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     fun iHaveDataForAnEMISPatientThatHasAlreadyBeenAssociatedWithTheApplicationInTheGPSystem() {
         this.patient = Patient.getDefault("EMIS")
 
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
         mockingClient.forEmis {
-            meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithAlreadyLinked()
+            authentication.meApplicationsRequest(patient, createLinkApplicationRequestModel(patient)).respondWithAlreadyLinked()
         }
 
         setIm1Request()
@@ -447,7 +447,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         //Whereas the usual TppSessionCreateJourneyFactory.createFor includes the logOff request,
         //createAuthenticateRequest does not.
         TppSessionCreateJourneyFactory(mockingClient).createAuthenticateRequest(patient)
-        mockingClient.forTpp { logOffRequest().respondWithError() }
+        mockingClient.forTpp { authentication.logOffRequest().respondWithError() }
 
         browser.goToApp()
         login.using(this.patient)

@@ -23,12 +23,12 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
+                    myRecord.consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
                 }
             }
@@ -40,13 +40,13 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    consultationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.consultationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
-                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
                             .respondWithError(Error("6", "You don&apos;t have access to this online service. " +
                                     "You can request access to this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
                                     "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
@@ -61,13 +61,13 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
+                    myRecord.consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
                 }
             }
             "TPP" -> {
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
-                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
                             .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
 
                 }
@@ -81,13 +81,13 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    consultationsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+                    myRecord.consultationsRequest(MockDefaults.patient).respondWithNonDataAccessException()
                 }
             }
             "TPP" -> {
                 setPatientToDefaultFor("TPP")
                 mockingClient.forTpp {
-                    patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
+                    myRecord.patientRecordRequest(this@MyRecordConsultationStepDefinitions.patient.tppUserSession!!)
                             .respondWithServiceNotAvailableException()
                 }
 

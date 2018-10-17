@@ -11,7 +11,7 @@ class MyRecordJourney(private val client: MockingClient) {
     
     fun create() {
         client.forEmis {
-            demographicsRequest(patient)
+            myRecord.demographicsRequest(patient)
                     .respondWithSuccess(
                             EmisDemographicsResponse(
                                     firstName = patient.firstName,

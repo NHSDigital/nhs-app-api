@@ -10,7 +10,7 @@ class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
         mockingClient.forTpp {
-            authenticateRequest(MockDefaults.tppAuthenticateRequest)
+            authentication.authenticateRequest(MockDefaults.tppAuthenticateRequest)
                     .respondWithSuccess(AuthenticateReply())
                     .delayedBy(Duration.ofSeconds(31))
         }
@@ -18,7 +18,7 @@ class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
 
     override fun validOAuthDetailsCidConnectionTokenFailsToAuthenticate() {
         mockingClient.forTpp {
-            authenticateRequest(Authenticate())
+            authentication.authenticateRequest(Authenticate())
                     // respond with error.  Unconfirmed format.
                     .respondWithError(Error(errorCode = "9", userFriendlyMessage = "There was a problem logging on"))
 
@@ -26,7 +26,7 @@ class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
 
     override fun validOAuthDetailsAndGpSystemUnavailable() {
         mockingClient.forTpp {
-            authenticateRequest(Authenticate())
+            authentication.authenticateRequest(Authenticate())
                     // respond with error.  Unconfirmed format.
                     .respondWithError(Error(errorCode = "0", userFriendlyMessage = "Service Unavailable"))
         }

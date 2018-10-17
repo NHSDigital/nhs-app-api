@@ -15,7 +15,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     fun givenTheGpPracticeHasMultipleDcrEventsForTpp() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getMultipleDcrEventsForTpp())
         }
     }
@@ -24,7 +24,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     fun givenIHaveNoDcrEventsForTPP() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
                     .respondWithSuccess(TppDcrData.getDefaultTppDcrData())
 
         }
@@ -34,7 +34,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     fun givenThePatientDoesNotHaveAccessToDcrEventsForTPP() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
                     .respondWithError(Error("6", "You don&apos;t have access to this online service. " +
                             "You can request access to this service at Kainos GP Demo Unit by clicking Manage Online Services in the Account section.",
                             "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
@@ -45,7 +45,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     fun givenAnErrorOccurredRetrievingDcrEventsFromTPP() {
         setPatientToDefaultFor("TPP")
         mockingClient.forTpp {
-            patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
+            myRecord.patientRecordRequest(this@MyRecordTppDcrEventStepDefinitions.patient.tppUserSession!!)
                     .respondWithServiceNotAvailableException()
         }
     }

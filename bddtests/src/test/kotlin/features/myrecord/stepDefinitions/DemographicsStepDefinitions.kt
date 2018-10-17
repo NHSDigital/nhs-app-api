@@ -33,12 +33,12 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithSuccess(DemographicsData.getEmisDemographicData(this@DemographicsStepDefinitions.patient))
+                    myRecord.demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithSuccess(DemographicsData.getEmisDemographicData(this@DemographicsStepDefinitions.patient))
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData(this@DemographicsStepDefinitions.patient))
+                    myRecord.patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(DemographicsData.getTppDemographicsData(this@DemographicsStepDefinitions.patient))
                 }
             }
             "VISION" -> {
@@ -77,7 +77,7 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
             "EMIS" -> {
                 try {
                     mockingClient.forEmis {
-                        demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                        myRecord.demographicsRequest(this@DemographicsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
@@ -86,7 +86,8 @@ open class DemographicsStepDefinitions : AbstractDemographicsStepDefinitions() {
             "TPP" -> {
                 try {
                     mockingClient.forTpp {
-                        patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                        myRecord.patientSelectedPost(this@DemographicsStepDefinitions.patient.tppUserSession!!)
+                                .respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                     }
                 } catch (httpException: NhsoHttpException) {
                     Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)

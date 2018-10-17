@@ -38,7 +38,7 @@ class BookAppoinmentStubs(private val patient: Patient,
             var facade = BookAppointmentSlotFacade(patient.userPatientLinkToken,
                                                    appointmentBookingSlotForMatcher,
                                                    scenario.forMatcher)
-            mockingClient.forEmis { scenario.getResponse(bookAppointmentSlotRequest(patient, facade)) }
+            mockingClient.forEmis { scenario.getResponse(appointments.bookAppointmentSlotRequest(patient, facade)) }
         }
     }
 }

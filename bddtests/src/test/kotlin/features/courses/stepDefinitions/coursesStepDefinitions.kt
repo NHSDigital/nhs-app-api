@@ -238,7 +238,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
                         showDosage, showQuantity)
 
                 mockingClient.forEmis {
-                    coursesRequest(currentPatient)
+                    prescriptions.coursesRequest(currentPatient)
                             .respondWithSuccess(CourseRequestsGetResponse(coursesLoader.data as List<MedicationCourse>))
                 }
             }
@@ -247,7 +247,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
                         showDosage, showQuantity)
 
                 mockingClient.forTpp {
-                    listRepeatMedication(currentPatient)
+                    prescriptions.listRepeatMedication(currentPatient)
                             .respondWithSuccess(coursesLoader.data as ListRepeatMedicationReply)
                 }
             }

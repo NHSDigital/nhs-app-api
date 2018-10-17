@@ -20,7 +20,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getImmunisationsData())
+                    myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getImmunisationsData())
                 }
             }
             "TPP" -> {
@@ -50,7 +50,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                    myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
                 }
             }
             "TPP" -> {
@@ -80,7 +80,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.immunisationsRequest(patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
@@ -109,7 +109,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    immunisationsRequest(patient).respondWithNonDataAccessException()
+                    myRecord.immunisationsRequest(patient).respondWithNonDataAccessException()
                 }
             }
             "TPP" -> {

@@ -14,7 +14,7 @@ class OrderableCourses(private val client: MockingClient) {
 
         client
                 .forEmis {
-                    coursesRequest(patient)
+                    prescriptions.coursesRequest(patient)
                             .respondWithSuccess(CourseRequestsGetResponse(
                                     CoursesData.getCourseData(
                                             MAX_COURSES,

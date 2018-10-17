@@ -27,12 +27,12 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
+                    myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisMedicationData())
                 }
             }
             "TPP"->{
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppMedicationData())
+                    myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppMedicationData())
                 }
             }
         }
@@ -45,7 +45,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
             "EMIS" -> {
                 try {
                     mockingClient.forEmis {
-                        medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                        myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
                     }
 
                     val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
@@ -58,7 +58,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
             "TPP" -> {
                 try {
                     mockingClient.forTpp {
-                        viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
+                        myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
                 }
 
                 val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
@@ -79,12 +79,12 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
         }

@@ -318,18 +318,22 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.EMIS -> {
                 mockingClient
                         .forEmis {
-                            prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                            prescriptions.prescriptionsRequest(currentPatient).respondWithPrescriptionsNotEnabled()
                         }
 
                 mockingClient
                         .forEmis {
-                            coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
+                            prescriptions.coursesRequest(currentPatient).respondWithPrescriptionsNotEnabled()
                         }
             }
             ProviderTypes.TPP -> {
                 mockingClient
                         .forTpp {
-                            listRepeatMedication(currentPatient).respondWithError(Error("6", "Error Occurred", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                            prescriptions.listRepeatMedication(currentPatient)
+                                    .respondWithError(
+                                            Error("6",
+                                                    "Error Occurred",
+                                                    "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                         }
             }
             ProviderTypes.VISION -> {
@@ -356,7 +360,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun butThePrescriptionsEndpointIsTimingOut() {
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(currentPatient)
+                    prescriptions.prescriptionsRequest(currentPatient)
                             .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                 }
     }
@@ -366,7 +370,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun butThePrescriptionsEndpointIsThrowingAServerError() {
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(currentPatient)
+                    prescriptions.prescriptionsRequest(currentPatient)
                             .respondWith(500, resolve = {})
                 }
     }
@@ -374,7 +378,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
         mockingClient.forEmis {
-            coursesRequest(currentPatient)
+            prescriptions.coursesRequest(currentPatient)
                     .respondWith(504, resolve = {}, milliSecondDelay = 15000)
         }
     }
@@ -382,31 +386,31 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     @But("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
         mockingClient.forEmis {
-            coursesRequest(currentPatient)
+            prescriptions.coursesRequest(currentPatient)
                     .respondWith(500, resolve = {})
         }
     }
 
     @But("The prescription submission endpoint is timing out")
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
-        mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
+        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
 
-        mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWith(200, resolve = {}, milliSecondDelay = 15000) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(MockDefaults.patientTpp, null).respondWith(200, resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")
     fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
-        mockingClient.forEmis { repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(500, resolve = {}) }
+        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(500, resolve = {}) }
     }
 
     @But("The prescription submission endpoint is throwing an already ordered exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
-        mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "One of the medications requested is no longer available", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "One of the medications requested is no longer available", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
     }
 
     @But("The prescription submission endpoint is throwing an invalid guid exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
-        mockingClient.forTpp { prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
     }
 
     @Then("I see the appropriate error message for a prescription timeout")
@@ -475,7 +479,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forEmis {
-                            prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            prescriptions.prescriptionsRequest(patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
@@ -483,7 +487,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forTpp {
-                            listRepeatMedication(currentPatient)
+                            prescriptions.listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                         }
             }
@@ -518,14 +522,14 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
             ProviderTypes.EMIS -> {
                 mockingClient
                         .forEmis {
-                            prescriptionsRequest(currentPatient, fromdate, TO_DATE)
+                            prescriptions.prescriptionsRequest(currentPatient, fromdate, TO_DATE)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
             ProviderTypes.TPP -> {
                 mockingClient
                         .forTpp {
-                            listRepeatMedication(currentPatient)
+                            prescriptions.listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply)
                         }
 
@@ -576,7 +580,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forEmis {
-                            prescriptionsRequest(currentPatient, fromdate, TO_DATE)
+                            prescriptions.prescriptionsRequest(currentPatient, fromdate, TO_DATE)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse).delayedBy(Duration.ofSeconds(delay))
                         }
             }
@@ -584,7 +588,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forTpp {
-                            listRepeatMedication(currentPatient)
+                            prescriptions.listRepeatMedication(currentPatient)
                                     .respondWithSuccess(prescriptionLoader.data as ListRepeatMedicationReply).delayedBy(Duration.ofSeconds(delay))
                         }
             }
@@ -619,7 +623,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                    prescriptions.prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
                             .respondWithSuccess(prgr)
                 }
     }

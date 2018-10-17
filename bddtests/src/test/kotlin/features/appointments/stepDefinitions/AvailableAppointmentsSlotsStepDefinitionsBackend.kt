@@ -12,10 +12,7 @@ import features.appointments.data.AppointmentsBookingData.Companion.pastFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.pastToDate
 import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.factories.AppointmentsSlotsFactory
-import features.appointments.steps.AvailableAppointmentsSteps
-import features.sharedStepDefinitions.BaseStepDefinition
 import net.serenitybdd.core.Serenity
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -28,7 +25,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.servlet.http.Cookie
 
-class AvailableAppointmentsSlotsStepDefinitionsBackend : BaseStepDefinition() {
+class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
     @Given("^the system will time out when trying to retrieve appointment slots$")
     fun appointmentSlotsTimesOut() {

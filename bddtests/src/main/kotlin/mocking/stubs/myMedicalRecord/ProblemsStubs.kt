@@ -33,7 +33,7 @@ class ProblemsStubs(private val mockingClient: MockingClient) {
                         }
 
         mapEMISProblemsRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(problemsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis { scenario.getResponse(myRecord.problemsRequest(scenario.forMatcher)) }
         }
 
     }

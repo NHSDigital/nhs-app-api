@@ -13,7 +13,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     @Given("^the GP Practice has enabled problems functionality and the patient has 3 problems$")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityAndPatientHasSomeProblems() {
         mockingClient.forEmis {
-            problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemsData())
+            myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemsData())
         }
     }
 
@@ -23,7 +23,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemsData())
+                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemsData())
                 }
             }
             "TPP"->{
@@ -34,7 +34,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
     @Given("^the GP Practice has enabled problems functionality and has 3 different problems with different date formats$")
     fun givenTheGPPracticeHasEnabledProblemsFunctionalityAndHasThreeDifferentProblemsWithDifferentDateFormats() {
         mockingClient.forEmis {
-            problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemRecordsWithDifferentDateParts())
+            myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getProblemRecordsWithDifferentDateParts())
         }
     }
 
@@ -44,7 +44,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP"->{
@@ -57,7 +57,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
+                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
                 }
             }
             "TPP"->{
@@ -71,7 +71,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP"->{
@@ -85,7 +85,7 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
         when(getService){
             "EMIS"->{
                 mockingClient.forEmis {
-                    problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithNonDataAccessException()
+                    myRecord.problemsRequest(this@MyRecordProblemsStepDefinitions.patient).respondWithNonDataAccessException()
                 }
             }
             "TPP"->{

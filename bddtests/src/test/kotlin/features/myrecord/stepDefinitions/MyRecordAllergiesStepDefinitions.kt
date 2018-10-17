@@ -24,11 +24,12 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
             "EMIS" ->
 
                 mockingClient.forEmis {
-                    allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergiesData(count))
+                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergiesData(count))
                 }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithSuccess(AllergiesData.getTppAllergiesData(count))
+                    myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!)
+                            .respondWithSuccess(AllergiesData.getTppAllergiesData(count))
                 }
             }
             "VISION" -> {
@@ -77,11 +78,11 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
         when (getService) {
             "EMIS" ->
                 mockingClient.forEmis {
-                    allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
+                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithSuccess(AllergiesData.getEmisAllergyRecordsWithDifferentDateParts())
                 }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithSuccess(AllergiesData.getTppAllergiesData(5))
+                    myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithSuccess(AllergiesData.getTppAllergiesData(5))
                 }
             }
         }
@@ -93,12 +94,12 @@ open class MyRecordAllergiesStepDefinitions: AbstractDemographicsStepDefinitions
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.allergiesRequest(this@MyRecordAllergiesStepDefinitions.patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
+                    myRecord.viewPatientOverviewPost(this@MyRecordAllergiesStepDefinitions.patient.tppUserSession!!).respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
             "VISION" -> {

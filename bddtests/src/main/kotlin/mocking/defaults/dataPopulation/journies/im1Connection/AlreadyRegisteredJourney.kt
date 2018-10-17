@@ -14,13 +14,13 @@ class AlreadyRegisteredJourney(private val client: MockingClient) {
     fun create() {
         client
             .forEmis {
-                endUserSessionRequest()
+                authentication.endUserSessionRequest()
                         .respondWithSuccess(patient.endUserSessionId)
             }
 
         client
             .forEmis {
-                meApplicationsRequest(
+                authentication.meApplicationsRequest(
                         patient,
                         LinkApplicationRequestModel(
                                 surname = patient.surname,
@@ -36,14 +36,14 @@ class AlreadyRegisteredJourney(private val client: MockingClient) {
 
         client
             .forEmis {
-                sessionRequest(patient)
+                authentication.sessionRequest(patient)
                 .respondWithSuccess(patient,associationType = AssociationType.Self
                 )
             }
 
         client
             .forEmis {
-                demographicsRequest(patient)
+                myRecord.demographicsRequest(patient)
                 .respondWithSuccess(patient,
                         patientIdentifiers = arrayOf(
                                 PatientIdentifier(

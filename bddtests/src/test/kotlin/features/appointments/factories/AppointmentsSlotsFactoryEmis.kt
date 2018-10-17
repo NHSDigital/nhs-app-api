@@ -26,7 +26,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
         assertTrue("Appointment message incorrectly being stubbed: $appointmentsMessage.", guidanceMessage == appointmentsMessage.isNotEmpty())
 
         mockingClient.forEmis {
-            practiceSettingsRequest(patient)
+            appointments.practiceSettingsRequest(patient)
                     .respondWithSuccess(settingsResponse)
         }
 
@@ -40,7 +40,7 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
-        mockingClient.forEmis { mapping(appointmentSlotsMetaRequest(patient, startDate, endDate)) }
+        mockingClient.forEmis { mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate)) }
     }
 
     override val supplierAdjustTime = TimeZone.getTimeZone("Europe/London").toZoneId()

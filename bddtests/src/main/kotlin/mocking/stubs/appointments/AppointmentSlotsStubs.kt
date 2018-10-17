@@ -39,9 +39,9 @@ class AppointmentSlotsStubs (private val mockingClient: MockingClient) {
                         }
 
         mapAppointmentSlotsStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(appointmentSlotsRequest(scenario.forMatcher)) }
+            mockingClient.forEmis { scenario.getResponse(appointments.appointmentSlotsRequest(scenario.forMatcher)) }
             mockingClient.forEmis {
-                scenario.getResponse(appointmentSlotsMetaRequest(scenario.forMatcher))
+                scenario.getResponse(appointments.appointmentSlotsMetaRequest(scenario.forMatcher))
             }
         }
     }

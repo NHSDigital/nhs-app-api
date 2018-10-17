@@ -52,13 +52,13 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
 
     fun createAuthenticateRequest(patient: Patient) {
         client.forTpp {
-            authenticateRequest(authenticateRequest(patient))
+            authentication.authenticateRequest(authenticateRequest(patient))
                     .respondWithSuccess(authenticationReply(patient))
         }
     }
 
     override fun createFor(patient: Patient) {
         createAuthenticateRequest(patient)
-        client.forTpp { logOffRequest().respondWithSuccess() }
+        client.forTpp { authentication.logOffRequest().respondWithSuccess() }
     }
 }

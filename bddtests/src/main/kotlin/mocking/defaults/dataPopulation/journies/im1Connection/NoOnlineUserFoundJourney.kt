@@ -11,13 +11,13 @@ class NoOnlineUserFoundJourney(private val client: MockingClient) {
     fun create() {
         client
             .forEmis {
-                endUserSessionRequest()
+                authentication.endUserSessionRequest()
                         .respondWithSuccess(patient.endUserSessionId)
             }
 
         client
             .forEmis {
-                meApplicationsRequest(
+                authentication.meApplicationsRequest(
                         patient,
                         LinkApplicationRequestModel(
                                 surname = patient.surname,

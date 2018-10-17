@@ -61,43 +61,45 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    testResultsRequest(patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
+                    myRecord.testResultsRequest(patient).respondWithSuccess(TestResultsData.getDefaultTestResultsModel())
                 }
 
                 mockingClient.forEmis {
-                    immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
+                    myRecord.immunisationsRequest(patient).respondWithSuccess(ImmunisationsData.getDefaultImmunisationsModel())
                 }
 
                 mockingClient.forEmis {
-                    allergiesRequest(patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
+                    myRecord.allergiesRequest(patient).respondWithSuccess(AllergiesData.getEmisDefaultAllergyModel())
                 }
 
                 mockingClient.forEmis {
-                    medicationsRequest(patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
+                    myRecord.medicationsRequest(patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
                 }
 
                 mockingClient.forEmis {
-                    problemsRequest(patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
+                    myRecord.problemsRequest(patient).respondWithSuccess(ProblemsData.getDefaultProblemModel())
                 }
 
                 mockingClient.forEmis {
-                    consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
+                    myRecord.consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(patient.tppUserSession!!).respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
+                    myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
+                            .respondWithSuccess(ViewPatientOverviewData.getTppViewPatientOverviewData())
                 }
 
                 mockingClient.forTpp {
-                    patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
+                    myRecord.patientRecordRequest(patient.tppUserSession!!).respondWithSuccess(TppDcrData.getDefaultTppDcrData())
                 }
 
                 val startDate = OffsetDateTime.now()
                 val endDate = startDate.minusDays(60)
 
                 mockingClient.forTpp {
-                    testResultsViewRequest(patient.tppUserSession!!, startDate, endDate).respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
+                    myRecord.testResultsViewRequest(patient.tppUserSession!!, startDate, endDate)
+                            .respondWithSuccess(TestResultsData.getDefaultTppTestResultsData())
                 }
             }
             "VISION" -> {
@@ -138,12 +140,12 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.allergiesRequest(patient).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
                 mockingClient.forTpp {
-                    viewPatientOverviewPost(patient.tppUserSession!!)
+                    myRecord.viewPatientOverviewPost(patient.tppUserSession!!)
                             .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }

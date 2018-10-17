@@ -65,13 +65,13 @@ class CommonSteps : AbstractSteps() {
         when (gpSystem) {
             EMIS -> {
                 mockingClient.forEmis {
-                    endUserSessionRequest()
+                    authentication.endUserSessionRequest()
                             .respondWithServiceUnavailable()
                 }
             }
             TPP -> {
                 mockingClient.forTpp {
-                    authenticateRequest(Authenticate())
+                    authentication.authenticateRequest(Authenticate())
                             .respondWithServiceUnavailable()
                 }
             }

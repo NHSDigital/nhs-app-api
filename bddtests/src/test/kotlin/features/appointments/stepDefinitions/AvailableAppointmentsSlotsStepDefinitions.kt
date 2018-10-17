@@ -11,7 +11,6 @@ import features.appointments.factories.AppointmentsFactory.Companion.TargetAppoi
 import features.appointments.factories.AppointmentsSlotsFactory
 import features.appointments.steps.AvailableAppointmentsSteps
 import features.authentication.steps.LoginSteps
-import features.sharedStepDefinitions.BaseStepDefinition
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
@@ -32,7 +31,7 @@ import java.time.Duration
 import javax.servlet.http.Cookie
 
 
-class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
+class AvailableAppointmentsSlotsStepDefinitions  {
 
     @Steps
     lateinit var login: LoginSteps
@@ -156,14 +155,14 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         SerenityHelpers.setPatient(patient)
 
         mockingClient.forEmis {
-            appointmentSlotsMetaRequest(patient)
+            appointments.appointmentSlotsMetaRequest(patient)
                     .respondWith(SC_INTERNAL_SERVER_ERROR) {
                         andHtmlBody("Internal server Error")
                     }
         }
 
         mockingClient.forEmis {
-            appointmentSlotsRequest(patient)
+            appointments.appointmentSlotsRequest(patient)
                     .respondWith(SC_INTERNAL_SERVER_ERROR) {
                         andHtmlBody("Internal server Error")
                     }
@@ -179,14 +178,14 @@ class AvailableAppointmentsSlotsStepDefinitions : BaseStepDefinition() {
         SerenityHelpers.setPatient(patient)
 
         mockingClient.forEmis {
-            appointmentSlotsMetaRequest(patient)
+            appointments.appointmentSlotsMetaRequest(patient)
                     .respondWith(SC_OK, 0) {
                         andHtmlBody("appointment slots metadata")
                     }
         }
 
         mockingClient.forEmis {
-            appointmentSlotsRequest(patient)
+            appointments.appointmentSlotsRequest(patient)
                     .respondWith(SC_OK, 0) {
                         andHtmlBody("appointment slots")
                     }

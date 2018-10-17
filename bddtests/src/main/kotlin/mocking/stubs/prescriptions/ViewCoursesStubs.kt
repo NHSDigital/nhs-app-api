@@ -28,7 +28,7 @@ class ViewCoursesStubs(private val mockingClient: MockingClient) {
                                         .delayedBy(Duration.ofSeconds(TIMEOUT_DELAY)) }
 
         mapEMISViewCoursesRequestStubs.listResponse().forEach { scenario ->
-            mockingClient.forEmis { scenario.getResponse(coursesRequest(scenario.forMatcher)) }
+            mockingClient.forEmis { scenario.getResponse(prescriptions.coursesRequest(scenario.forMatcher)) }
 
         }
     }

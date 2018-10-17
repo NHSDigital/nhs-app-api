@@ -60,7 +60,9 @@ class OrderRepeatPrescriptionsStubs(private val patient: Patient,
 
         mapEMISBookRepeatPrescriptionRequestStubs.listResponse().forEach { scenario ->
             var facade = PrescriptionSubmissionRequest(uuid, scenario.forMatcher)
-            mockingClient.forEmis { scenario.getResponse(repeatPrescriptionSubmissionRequest(patient, facade)) }
+            mockingClient.forEmis {
+                scenario.getResponse(prescriptions.repeatPrescriptionSubmissionRequest(patient, facade))
+            }
         }
     }
 }

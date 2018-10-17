@@ -35,8 +35,8 @@ class PatientRegistrationSteps : AbstractSteps() {
                 linkageKey = "KjwzyFSEUAGj4"
         )
 
-        mockingClient.forEmis { endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
-        mockingClient.forEmis { meRequest(patient).respondWithInvalidLinkLevel() }
+        mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(patient.endUserSessionId) }
+        mockingClient.forEmis { authentication.meRequest(patient).respondWithInvalidLinkLevel() }
 
         val connectionRequest = Im1ConnectionRequest(
                 AccountId = patient.accountId,

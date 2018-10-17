@@ -20,7 +20,7 @@ class CancelAppointmentsStubs(private val patient: Patient,
             var facade = CancelAppointmentSlotFacade(patient.userPatientLinkToken,
                                                      cancellationSlotMatcher,
                                                      scenario.forMatcher)
-            mockingClient.forEmis { scenario.getResponse(cancelAppointmentRequest(patient, facade)) }
+            mockingClient.forEmis { scenario.getResponse(appointments.cancelAppointmentRequest(patient, facade)) }
         }
     }
 }

@@ -58,7 +58,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     "semistubbed" -> {
                         MockDataPopulate(client)
                                 .populateSemiStubbedEnvironment(
-                                        csvFileLocation = arguments.getOrElse(1) { NFT_EMIS_USER_CSV } )
+                                        csvFileLocation = arguments.getOrElse(1) { NFT_EMIS_USER_CSV })
                     }
                     "mockenvironment" -> {
                         StubbedEnvironment(client).generateEMISStubs()
@@ -122,7 +122,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             val settingsResponse = getFileContents("appointments/GetEmisSettings.json")
 
             mockingClient.forEmis {
-                practiceSettingsRequest(patient)
+                appointments.practiceSettingsRequest(patient)
                         .respondWithSuccessJson(settingsResponse)
             }
 
@@ -130,7 +130,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             val appointmentsBody = getFileContents("appointments/GetEmisAppointments.json")
 
             mockingClient.forEmis {
-                viewMyAppointmentsRequest(patient = patient)
+                appointments.viewMyAppointmentsRequest(patient = patient)
                         .respondWithSuccess(appointmentsBody)
             }
 
@@ -139,7 +139,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/GetEmisAppointmentSlotsMeta.json")
 
             mockingClient.forEmis {
-                appointmentSlotsMetaRequest(patient = patient)
+                appointments.appointmentSlotsMetaRequest(patient = patient)
                         .respondWithSuccessJson(getAppointmentSlotsMetaBody)
             }
 
@@ -148,7 +148,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/GetEmisAppointmentSlots.json")
 
             mockingClient.forEmis {
-                appointmentSlotsRequest(patient = patient)
+                appointments.appointmentSlotsRequest(patient = patient)
                         .respondWithSuccessJson(getAppointmentSlotsBody)
             }
 
@@ -157,8 +157,9 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/PostEmisAppointment.json")
 
             mockingClient.forEmis {
-                bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient.userPatientLinkToken,
-                                                                              1, "NFT Test Book Slot"))
+                appointments.bookAppointmentSlotRequest(patient, BookAppointmentSlotFacade(patient
+                        .userPatientLinkToken,
+                        1, "NFT Test Book Slot"))
                         .respondWithSuccessJson(postAppointmentRequestBody)
             }
 
@@ -167,8 +168,9 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     getFileContents("appointments/DeleteEmisAppointment.json")
 
             mockingClient.forEmis {
-                cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(patient.userPatientLinkToken,
-                                                                              1, "No longer required"))
+                appointments.cancelAppointmentRequest(patient, CancelAppointmentSlotFacade(patient
+                        .userPatientLinkToken,
+                        1, "No longer required"))
                         .respondWithSuccessJson(deleteAppointmentRequestBody)
             }
 
@@ -184,7 +186,7 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             )
 
             mockingClient.forEmis {
-                prescriptionsRequest(patient)
+                prescriptions.prescriptionsRequest(patient)
                         .respondWithSuccess(prescriptionsDataLoader.data)
                         .inScenario(pad)
                         .whenScenarioStateIs("Started")
@@ -200,12 +202,12 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                     includeQuantity = true)
 
             mockingClient.forEmis {
-                coursesRequest(patient)
+                prescriptions.coursesRequest(patient)
                         .respondWithSuccess(CourseRequestsGetResponse(coursesLoader.data as List<MedicationCourse>))
             }
 
             mockingClient.forEmis {
-                repeatPrescriptionSubmissionRequest(patient)
+                prescriptions.repeatPrescriptionSubmissionRequest(patient)
                         .respondWithCreated()
                         .inScenario(pad)
                         .whenScenarioStateIs("Started")
@@ -214,36 +216,38 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             // My medical Record
             // GET /emis/record (testResultsRequest)
             mockingClient.forEmis {
-                testResultsRequest(patient).respondWithSuccessJson(getFileContents("medicalRecords/TestResults.json"))
+                myRecord.testResultsRequest(patient).respondWithSuccessJson(getFileContents
+                ("medicalRecords/TestResults" +
+                        ".json"))
             }
 
             // GET /emis/record (immunisationsRequest)
             mockingClient.forEmis {
-                immunisationsRequest(patient).respondWithSuccessJson(getFileContents(
+                myRecord.immunisationsRequest(patient).respondWithSuccessJson(getFileContents(
                         "medicalRecords/Immunisations.json"))
             }
 
             // GET /emis/record (allergiesRequest)
             mockingClient.forEmis {
-                allergiesRequest(patient).respondWithSuccessJson(getFileContents(
+                myRecord.allergiesRequest(patient).respondWithSuccessJson(getFileContents(
                         "medicalRecords/Allergies.json"))
             }
 
             // GET /emis/record (medicationsRequest)
             mockingClient.forEmis {
-                medicationsRequest(patient).respondWithSuccessJson(getFileContents(
+                myRecord.medicationsRequest(patient).respondWithSuccessJson(getFileContents(
                         "medicalRecords/Medications.json"))
             }
 
             // GET /emis/record (problemsRequest)
             mockingClient.forEmis {
-                problemsRequest(patient).respondWithSuccessJson(getFileContents(
+                myRecord.problemsRequest(patient).respondWithSuccessJson(getFileContents(
                         "medicalRecords/Problems.json"))
             }
 
             // GET /emis/record (consultationsRequest)
             mockingClient.forEmis {
-                consultationsRequest(patient).respondWithSuccessJson(getFileContents(
+                myRecord.consultationsRequest(patient).respondWithSuccessJson(getFileContents(
                         "medicalRecords/Consultations.json"))
             }
 
@@ -294,13 +298,13 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
                 val entries = currentLine.split(",")
                 if (entries.isNotEmpty() && entries.size >= NFT_NUM_COLUMNS) {
                     patients.add(Patient(
-                            title =  "",
-                            firstName =  entries[NFT_FIRST_NAME_IDX],
-                            surname =  entries[NFT_LAST_NAME_IDX],
-                            dateOfBirth =  entries[NFT_DOB_IDX],
+                            title = "",
+                            firstName = entries[NFT_FIRST_NAME_IDX],
+                            surname = entries[NFT_LAST_NAME_IDX],
+                            dateOfBirth = entries[NFT_DOB_IDX],
                             odsCode = entries[NFT_ODS_IDX],
-                            connectionToken =  entries[NFT_IM1_CONNECTION_IDX],
-                            nhsNumbers =  listOf(entries[NFT_NHS_NUMBER_IDX]),
+                            connectionToken = entries[NFT_IM1_CONNECTION_IDX],
+                            nhsNumbers = listOf(entries[NFT_NHS_NUMBER_IDX]),
                             cidUserSession = UserSessionRequest(
                                     authCode = "authCode$userNumber",
                                     codeVerifier = "codeVerifier$userNumber",
@@ -312,11 +316,10 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
 
                 currentLine = fileReader.readLine()
             }
-        } catch(e: FileNotFoundException) {
+        } catch (e: FileNotFoundException) {
             println("Error, Could not find csv file: $filePath")
             e.printStackTrace()
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             println("Error when reading user csv!")
             e.printStackTrace()
         } finally {

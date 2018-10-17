@@ -11,7 +11,7 @@ class PrescriptionsFactoryTpp: PrescriptionsFactory("TPP"){
     override fun disableAtGPLevel() {
         mockingClient
                 .forTpp {
-                    listRepeatMedication(patient)
+                    prescriptions.listRepeatMedication(patient)
                             .respondWith(403, 0, resolve = {})
                 }
     }

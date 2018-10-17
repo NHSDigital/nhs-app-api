@@ -12,7 +12,7 @@ class PrescriptionsFactoryEmis: PrescriptionsFactory("EMIS"){
     override fun disableAtGPLevel() {
         mockingClient
                 .forEmis {
-                    prescriptionsRequest(patient)
+                    prescriptions.prescriptionsRequest(patient)
                             .respondWithPrescriptionsNotEnabled()
                 }
     }
