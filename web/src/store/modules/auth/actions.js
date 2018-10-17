@@ -78,6 +78,7 @@ export default {
     this.dispatch('session/clear');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
+    this.dispatch('navigation/clearPreviousSelectedMenuItem');
 
     this.app.$cookies.remove('nhso.session');
 
