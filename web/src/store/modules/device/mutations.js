@@ -9,7 +9,7 @@ export default {
     state.isNativeApp = isNativeApp;
   },
   [GO_TO_CHECK_SYMPTOMS](state) {
-    if (state.isNativeApp === true) {
+    if (window.nativeApp) {
       NativeCallbacks.checkSymptoms();
     } else {
       this.$router.push('/check-your-symptoms');

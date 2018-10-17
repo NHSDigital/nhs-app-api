@@ -5,7 +5,7 @@ import { UPDATE_HEADER_TEXT, INIT_HEADER } from './mutation-types';
 
 export default {
   [UPDATE_HEADER_TEXT](state, header) {
-    if (process.client && state.isNativeApp === true) {
+    if (process.client && window.nativeApp) {
       NativeCallbacks.updateHeaderText(header);
     } else {
       state.headerText = header;

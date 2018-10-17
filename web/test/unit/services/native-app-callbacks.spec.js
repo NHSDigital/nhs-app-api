@@ -19,7 +19,7 @@ describe('NATIVE CALLBACKS', () => {
       fn: 'postNdopToken',
       param: 'token',
     },
-  ]).it('will call the native app handle to update the page header', ({ fn, param }) => {
+  ]).it('will trigger native callback via window.nativeApp', ({ fn, param }) => {
     const mockFunction = jest.fn();
     window.nativeApp = {
       [fn]: mockFunction,

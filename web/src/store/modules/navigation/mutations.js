@@ -16,7 +16,7 @@ function clearPreviousSelectedMenuItem(state) {
 
 export default {
   [CLEAR_SELECTED_MENUITEM](state) {
-    if (process.client && state.isNativeApp === true) {
+    if (process.client && window.nativeApp) {
       NativeCallbacks.clearMenuBarItem();
     } else {
       clearPreviousSelectedMenuItem(state);
