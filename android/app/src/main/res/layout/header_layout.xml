@@ -27,7 +27,6 @@
             android:focusableInTouchMode="true"
             android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_nhs_logo"
-			android:focusable="true"
             android:nextFocusForward="@id/helpIcon"
             android:nextFocusLeft="@id/more"
             android:nextFocusUp="@id/more"
