@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using FluentAssertions;
@@ -33,8 +34,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         [TestMethod]
         public void Map_HappyPath_ReturnsAnArrayOfAppointments()
         {
-            var slotTime1 = new SlotTime(Tomorrow().At("14:20"));
-            var slotTime2 = new SlotTime(Tomorrow().At("14:40"));
+            var slotTime1 = new SlotTime(Tomorrow().At("14:20"), Tomorrow().At("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow().At("14:40"), Tomorrow().At("14:55"));
 
             var leeds = new Location
             {
@@ -86,7 +87,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 Location = leeds.Id,
                 Session = generalSession.Id,
                 Type = generalType.Id, 
-                Owner = owner1.Id
+                Owner = owner1.Id,
+                Duration = slotTime1.Duration
             };
 
             var slot2 = new BookedSlot
@@ -96,7 +98,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 Location = london.Id,
                 Session = generalSession.Id,
                 Type = emptyType.Id,
-                Owner = owner2.Id
+                Owner = owner2.Id,
+                Duration = slotTime2.Duration
             };
 
             var slots = new[] { slot1, slot2 }.ToList();
@@ -118,6 +121,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Type =  "General Session - General Type",
                     Location = "Leeds",
                     StartTime = slotTime1.Start, 
+                    EndTime = slotTime1.End,
                     Clinicians = new []{ "Owner1" }
                 },
                 new Worker.Areas.Appointments.Models.Appointment
@@ -126,6 +130,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Type =  "General Session",
                     Location = "London",
                     StartTime = slotTime2.Start,
+                    EndTime = slotTime2.End,
                     Clinicians = new []{ "Owner2" }
                 }
             };
@@ -162,109 +167,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             actualResponse.Should().BeEmpty();
         }
         
-        [TestMethod]
-        public void Map_ReturnsOnlySlotsThatHaveNotYetStarted()
-        {
-            var slotTime1 = new SlotTime(InThePast());
-            var slotTime2 = new SlotTime(Tomorrow().At("14:40"));
-
-            var leeds = new Location
-            {
-                Id = "LOCX01",
-                Name = "Leeds"
-            };
-            
-            var london = new Location
-            {
-                Id = "LOCX02",
-                Name = "London"
-            };
-
-            var generalSession = new SlotSession
-            {
-                Id = "SESSX01",
-                Description = "General Session",
-                Location = leeds.Id
-            };
-
-            var generalType = new SlotType
-            {
-                Id = "TYPEX01",
-                Description = "General Type"
-            };
-            
-            var emptyType = new SlotType
-            {
-                Id = "TYPEX02",
-                Description = ""
-            };
-
-            var owner1 = new Owner
-            {
-                Id = "OWN01",
-                Name = "Owner1"
-            };
-
-            var owner2 = new Owner
-            {
-                Id = "OWN02",
-                Name = "Owner2"
-            };
-
-            var slot1 = new BookedSlot
-            {
-                DateTime = slotTime1.Start.AsVisionDateTimeString(),
-                Id = "SLOTX01",
-                Location = leeds.Id,
-                Session = generalSession.Id,
-                Type = generalType.Id, 
-                Owner = owner1.Id
-            };
-            
-            var slot2 = new BookedSlot
-            {
-                DateTime = slotTime2.Start.AsVisionDateTimeString(),
-                Id = "SLOTX02",
-                Location = london.Id,
-                Session = generalSession.Id,
-                Type = emptyType.Id, 
-                Owner = owner2.Id
-            };
-
-            var slots = new[] { slot1, slot2 }.ToList();
-            var locations = new[] { leeds, london }.ToList();
-            var sessions = new[] { generalSession }.ToList();
-            var slotTypes = new[] { generalType, emptyType }.ToList();
-            var owners = new[] { owner1, owner2}.ToList();
-
-            var bookedAppointmentsResponse = CreateBookedAppointmentsResponse(slots, locations, sessions, slotTypes, owners);
-            
-            // Act
-            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse);
-
-            // Assert
-            var expectedResponse = new[] 
-            {
-                new Worker.Areas.Appointments.Models.Appointment
-                {
-                    Id = "SLOTX02",
-                    Type =  "General Session",
-                    Location = "London",
-                    StartTime = slotTime2.Start,
-                    Clinicians = new []{ "Owner2" }
-                }
-            };
-
-            actualResponse.Should().BeEquivalentTo(expectedResponse);
-        }
-        
         [DataTestMethod]
         [DataRow(null)]
         [DataRow("")]
         [DataRow("2018-05-09T9:59:19")]
         public void Map_ReturnsResponseWithoutSlotsAppointment_WhenStartTimeInSlotsAppointmentIsInInvalidFormat(string invalidStartTime)
         {
-            var slotTime2 = new SlotTime(Tomorrow().At("14:40"));
+            var slotTime2 = new SlotTime(Tomorrow().At("14:40"), Tomorrow().At("15:05"));
 
             var leeds = new Location
             {
@@ -326,7 +235,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 Location = london.Id,
                 Session = generalSession.Id,
                 Type = emptyType.Id,
-                Owner = owner2.Id
+                Owner = owner2.Id,
+                Duration = slotTime2.Duration
+
             };
 
             var slots = new[] { slot1, slot2 }.ToList();
@@ -349,7 +260,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                     Id = "SLOTX02",
                     Type =  "General Session",
                     Location = "London",
-                    StartTime = slotTime2.Start, 
+                    StartTime = slotTime2.Start,
+                    EndTime = slotTime2.End,
                     Clinicians = new[] { "Owner2" }
                 }
             };
@@ -396,12 +308,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
     
     public class SlotTime
     {
-        public SlotTime(DateTimeOffset start)
+        public SlotTime(DateTimeOffset start, DateTimeOffset end)
         {
             Start = start;
+            End = end;
         }
 
         public DateTimeOffset Start { get; }
+        public DateTimeOffset End { get; }
+
+        public string Duration => (End - Start).Minutes.ToString(CultureInfo.InvariantCulture);
     }
 
     public static class VisionAppointmentExtensions

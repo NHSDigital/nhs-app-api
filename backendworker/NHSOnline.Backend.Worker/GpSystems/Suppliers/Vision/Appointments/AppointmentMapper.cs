@@ -36,12 +36,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             
             foreach (var slot in appointmentsResponses.Appointments.Slots)
             {
-
-                var startTimeSuccess = _dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.DateTime, 
-                    out var startTime);
-
-                if (!startTimeSuccess || now > startTime)
+                if (!_dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.DateTime, out var startTime))
+                {
                     continue;
+                }
 
                 var location = locations.GetValueOrDefault(slot.Location, null);
                 var slotType = slotTypes.GetValueOrDefault(slot.Type, null);
@@ -51,7 +49,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 {
                     Id = slot.Id,
                     StartTime = startTime.GetValueOrDefault(),
-                    EndTime = null,
+                    EndTime = GetEndTime(startTime, slot),
                     Location = location,
                     Type = CreateTypeFromAppointmentAndSession(slotType, session),
                     Clinicians = GetClinician(slot.Owner, appointmentsResponses.Appointments?.References?.Owners)
@@ -98,6 +96,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 ? Array.Empty<string>()
                 : owners?.Where(owner => owner.Id.Equals(ownerId, StringComparison.Ordinal))
                       .Select(owner => owner.Name) ?? Array.Empty<string>();
+        }
+
+        private static DateTimeOffset? GetEndTime(DateTimeOffset? startTime, BookedSlot slot)
+        {
+            return startTime.HasValue && int.TryParse(slot.Duration, out var mins)
+                ? (DateTimeOffset?)startTime.Value.AddMinutes(mins)
+                : null;
         }
     }
 }
