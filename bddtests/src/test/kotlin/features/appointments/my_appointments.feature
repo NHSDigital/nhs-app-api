@@ -38,6 +38,7 @@ Feature: My appointments
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @NHSO-797
   Scenario Outline: A user has never booked an appointment
