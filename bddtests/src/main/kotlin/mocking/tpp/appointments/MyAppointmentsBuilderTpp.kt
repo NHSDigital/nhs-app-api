@@ -1,5 +1,6 @@
 package mocking.tpp.appointments
 
+import constants.DateTimeFormats
 import mocking.JSonXmlConverter
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
@@ -9,7 +10,10 @@ import mocking.tpp.models.ViewAppointmentsReply
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Patient
 import org.apache.http.HttpStatus
-
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 
 class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyAppointmentsBuilder {
@@ -64,8 +68,8 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
             session.slots.map { slot ->
                 Appointment(
                         slot.slotId!!.toString(),
-                        slot.startTime!!,
-                        slot.endTime!!,
+                        convertDateToTppTime(slot.startTime!!),
+                        convertDateToTppTime(slot.endTime!!),
                         session.sessionDetails!!,
                         session.location!!
                 )
@@ -73,8 +77,16 @@ class MyAppointmentsBuilderTpp(val patient: Patient) : TppMappingBuilder(), IMyA
         } ?: emptyList()
     }
 
+    private fun convertDateToTppTime(time: String): String {
+        val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+        val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
+        ("Europe/London"))
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.tppDateTimeFormat)
+        return queryDateFormat.format(dateToPass)
+    }
+
     override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
-        var mapping = respondWithSuccess(facade)
+        val mapping = respondWithSuccess(facade)
 
         return respondWith(HttpStatus.SC_OK) {
             andBody(mapping.response!!.body!!.replace(">","|").replace("}","|"), contentType = "application/json")

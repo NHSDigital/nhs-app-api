@@ -133,7 +133,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         assertTrue(response.statusLine.statusCode == SC_NO_CONTENT)
     }
 
-    private fun retrieveCancellationReasons(): ArrayList<GenericResponseObject> {
+    private fun retrieveCancellationReasons(): List<GenericResponseObject> {
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                 .appointments.getMyAppointments(LocalDateTime.now().toString())
 

@@ -17,6 +17,9 @@ import org.junit.Assert.fail
 import worker.models.demographics.TppUserSession
 import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -116,9 +119,17 @@ class AppointmentSlotsBuilderTpp(
                 staffDetails = getValueOrTestSetupIncorrectly(session.staffDetails.first().staffName, "staffName"),
                 location = getValueOrTestSetupIncorrectly(session.location, "location"),
                 Slot = mutableListOf(Slot(
-                        startDate = "${slot.startTime!!}.0Z",
-                        endDate = "${slot.endTime!!}.0Z",
+                        startDate = convertDateToTppTime(slot.startTime!!),
+                        endDate = convertDateToTppTime(slot.endTime!!),
                         type = slot.slotTypeName!!)))
+    }
+
+    private fun convertDateToTppTime(time: String): String {
+        val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+        val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
+        ("Europe/London"))
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.tppDateTimeFormat)
+        return queryDateFormat.format(dateToPass)
     }
 
     private fun getValueOrTestSetupIncorrectly(value: Int?, valueName: String): String {

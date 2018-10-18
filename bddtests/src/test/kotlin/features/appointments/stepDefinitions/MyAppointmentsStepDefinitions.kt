@@ -3,10 +3,11 @@ package features.appointments.stepDefinitions
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.factories.UpcomingAppointmentsFactory
 import features.appointments.steps.MyAppointmentsSteps
-import org.junit.Assert
 import net.serenitybdd.core.Serenity
+import org.junit.Assert
 import net.thucydides.core.annotations.Steps
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -51,18 +52,26 @@ class MyAppointmentsStepDefinitions {
     }
 
     @Given("^I have no upcoming appointments for (.*)$")
-    fun i_have_no_upcoming_appointments(gpService: String) {
+    fun iHaveNoUpcomingAppointments(gpService: String) {
         val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulEmptyUpcomingAppointmentResponse()
     }
 
-    @Given("^I have upcoming appointments for (.*)$")
-    fun i_have_upcoming_appointments(gpService: String) {
+    @Given("^I have upcoming appointments for (\\w+)$")
+    fun iHaveUpcomingAppointments(gpService: String) {
         val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
         viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse()
     }
 
-    @Given("^the (.*) does not offer online booking to my patient$")
+    @Given("^I have upcoming appointments for (\\w+), with one in the past$")
+    fun iHaveUpcomingAppointmentsAndOneInThePast(gpService: String) {
+        val viewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpService)
+        viewAppointmentFactory.createSuccessfulUpcomingAppointmentsResponse(
+                AppointmentsSlotsExample.getFacadeWithPastAppointment()
+        )
+    }
+
+    @Given("^(.*) does not offer online booking to my patient$")
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots(provider: String) {
         myAppointmentsSteps.generateStubsForMyAppointmentsWhenUnavailableToPatient(provider)
     }
@@ -97,7 +106,7 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.verifyThatThereIsACancelLinkForEachUpcomingAppointment()
     }
 
-    @When("^the API retrieves upcoming appointments$")
+    @When("^the upcoming appointments are requested$")
     fun the_API_retrieves_upcoming_appointments() {
         myAppointmentsSteps.createSerenityMyAppointmentSessionVariable()
     }
@@ -117,8 +126,13 @@ class MyAppointmentsStepDefinitions {
     }
 
     @Then("^I will only receive upcoming appointments$")
-    fun i_will_only_receive_upcoming_appointments() {
-        myAppointmentsSteps.checkMyAppointmentsAreAllUpcomingOnes()
+    fun iWillOnlyReceiveUpcomingAppointments() {
+        myAppointmentsSteps.checkMyAppointments()
+    }
+
+    @Then("^I will receive upcoming appointments with appointments in the past$")
+    fun iWillReceiveUpcomingAppointmentsInThePast() {
+        myAppointmentsSteps.checkMyAppointments()
     }
 
     @Then("^a list of cancellation reasons if the GP Service provides the list$")

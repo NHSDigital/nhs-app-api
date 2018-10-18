@@ -72,7 +72,7 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
     }
 
     override fun respondWithCorrupted(facade: MyAppointmentsFacade): Mapping {
-        var mapping = respondWithSuccess(facade)
+        val mapping = respondWithSuccess(facade)
         return respondWith(HttpStatus.SC_OK) {
             andBody(mapping.response!!.body!!.replace(">", "|").replace("}", "|"), contentType = "application/json")
         }

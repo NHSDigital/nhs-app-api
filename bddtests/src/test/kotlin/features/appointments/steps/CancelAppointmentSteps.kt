@@ -1,5 +1,6 @@
 package features.appointments.steps
 
+import features.appointments.factories.UpcomingAppointmentsFactory
 import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import models.Slot
@@ -67,6 +68,8 @@ open class CancelAppointmentSteps {
 
     @Step
     fun retrieveSlotOfAppointmentToCancel(): Slot {
-        return Serenity.sessionVariableCalled<List<Slot>>(Slot::class).first()
+        return Serenity.sessionVariableCalled<List<Slot>>(
+                UpcomingAppointmentsFactory.Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS
+        ).first()
     }
 }

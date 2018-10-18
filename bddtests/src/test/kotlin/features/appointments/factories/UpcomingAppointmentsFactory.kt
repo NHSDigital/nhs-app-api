@@ -5,64 +5,84 @@ import features.appointments.data.AppointmentsSlotsExample
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
+import mockingFacade.appointments.AppointmentSessionFacade
+import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
+import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
+import kotlin.collections.ArrayList
 
 abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     private val timeZone = TimeZone.getTimeZone("Europe/London")
-    protected val dateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
+    protected val gpDateTimeFormat = createBackendDateTimeFormatWithoutTimezone()
     private val baseDate = Calendar.getInstance(timeZone)
-    private val appointmentsFromDate = dateTimeFormat.format(baseDate.time)
+    private val appointmentsFromDate = gpDateTimeFormat.format(baseDate.time)
 
     fun createSuccessfulEmptyUpcomingAppointmentResponse() {
+        val facade = MyAppointmentsFacade(appointmentsFromDate)
         mockUpcomingAppointments {
-            respondWithSuccess(
-                    MyAppointmentsFacade(appointmentsFromDate)
-            )
-        }
-    }
-
-    fun createSuccessfulUpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
-        createUpcomingAppointments {
             respondWithSuccess(facade)
         }
+        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(facade)
+        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
+                .to(getExpectedUiRepresentationOfSlots(facade))
     }
 
-    fun createCorruptedUpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
+    fun createSuccessfulUpcomingAppointmentsResponse(
+            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
+            = AppointmentsSlotsExample.getGenericExample()
+    ) {
+        val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
-            respondWithCorrupted(facade)
+            respondWithSuccess(myAppointmentsFacade)
+        }
+        Serenity.setSessionVariable(MyAppointmentsFacade::class).to(myAppointmentsFacade)
+        Serenity.setSessionVariable(Expectations.EXPECTED_API_RESPONSE_OF_MY_UPCOMING_APPOINTMENTS)
+                .to(getExpectedApiResponse(myAppointmentsFacade.slots!!.sessions))
+        Serenity.setSessionVariable(Expectations.EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS)
+                .to(getExpectedUiRepresentationOfSlots(myAppointmentsFacade))
+    }
+
+    fun createCorruptedUpcomingAppointmentsResponse(
+            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade
+            = AppointmentsSlotsExample.getGenericExample()
+    ) {
+        val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
+        createUpcomingAppointments {
+            respondWithCorrupted(myAppointmentsFacade)
         }
     }
 
-    fun createTimeoutUpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
+    fun createTimeoutUpcomingAppointmentsResponse(
+            appointmentSlotsResponseFacade: AppointmentSlotsResponseFacade = AppointmentsSlotsExample
+            .getGenericExample()
+    ) {
+        val myAppointmentsFacade = convertToMyAppointmentsFacade(appointmentSlotsResponseFacade)
         createUpcomingAppointments {
-            respondWithSuccess(facade).delayedBy(Duration.ofSeconds(90))
+            respondWithSuccess(myAppointmentsFacade).delayedBy(Duration.ofSeconds(90))
         }
     }
 
     fun createUpcomingAppointments(mapping: (IMyAppointmentsBuilder.() -> Mapping)) {
         mockUpcomingAppointments(mapping)
-        val facade = genericMyAppointmentsFacade()
-        Serenity.setSessionVariable(Slot::class).to(getExpectedUiRepresentationOfSlots(facade))
         setCancellationReasons()
     }
 
-    private fun genericMyAppointmentsFacade(): MyAppointmentsFacade {
+    private fun convertToMyAppointmentsFacade(facade: AppointmentSlotsResponseFacade): MyAppointmentsFacade {
         return MyAppointmentsFacade(
                 appointmentsFromDate,
-                AppointmentsSlotsExample.getGenericExample()
+                facade
         )
     }
 
     private fun createBackendDateTimeFormatWithoutTimezone(): SimpleDateFormat {
         val sdf = SimpleDateFormat(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         sdf.timeZone = timeZone
-
         return sdf
     }
 
@@ -82,7 +102,12 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         return slotTimeFormat.format(dateTimeToConvert).toLowerCase()
     }
 
+    abstract fun getExpectedApiResponse(facade: ArrayList<AppointmentSessionFacade>): MyAppointmentsResponse
+
     abstract fun getExpectedUiRepresentationOfSlots(facade: MyAppointmentsFacade): List<Slot>
+
+    abstract fun filterUpcomingAppointmentsWhenAppropriate(facade: ArrayList<AppointmentSessionFacade>):
+            List<AppointmentSessionFacade>
 
     abstract fun setCancellationReasons()
 
@@ -96,4 +121,10 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
             )
         }
     }
+
+    enum class Expectations {
+        EXPECTED_UI_REPRESENTATION_OF_MY_UPCOMING_APPOINTMENTS,
+        EXPECTED_API_RESPONSE_OF_MY_UPCOMING_APPOINTMENTS
+    }
+
 }

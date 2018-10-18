@@ -2,13 +2,10 @@ package features.appointments.data
 
 import features.appointments.steps.AvailableAppointmentsSteps
 import mocking.stubs.appointments.AppointmentsSlotsExampleBuilder
-import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
-import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable
-import worker.models.appointments.SlotResponseObject
 import java.util.*
 
 class AppointmentsSlotsExampleBuilderWithExpectations: AppointmentsSlotsExampleBuilder() {

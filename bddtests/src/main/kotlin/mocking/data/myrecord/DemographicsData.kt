@@ -57,7 +57,7 @@ object DemographicsData {
                         DateConverter.convertDateToDateTimeFormat(
                                 patient.dateOfBirth,
                                 DateTimeFormats.mockDataDobFormat,
-                                DateTimeFormats.backendDateTimeFormat),
+                                DateTimeFormats.tppDateTimeFormat),
                         patient.sex.name,
                         NationalId(type = TppConstants.NationalIdTypeNhs, value = patient.nhsNumbers.first()),
                         PersonName(patient.title + " " + patient.firstName + " " + patient.surname),

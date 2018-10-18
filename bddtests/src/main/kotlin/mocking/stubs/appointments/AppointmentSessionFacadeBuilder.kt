@@ -79,6 +79,7 @@ class AppointmentSlotFacadeBuilder {
     private var startDate: String = ""
     private var endDate: String = ""
     private var slotTypeName: String = "Slot"
+    private var slotInThePast: Boolean = false
 
     fun slotId(value: Int): AppointmentSlotFacadeBuilder {
         slotId = value
@@ -100,12 +101,18 @@ class AppointmentSlotFacadeBuilder {
         return this
     }
 
+    fun setSlotInThePast(): AppointmentSlotFacadeBuilder {
+        slotInThePast = true
+        return this
+    }
+
     fun build(): AppointmentSlotFacade {
         return AppointmentSlotFacade(
                 slotId = slotId,
                 startTime = startDate,
                 endTime = endDate,
-                slotTypeName = slotTypeName
+                slotTypeName = slotTypeName,
+                slotInThePast = slotInThePast
         )
     }
 }

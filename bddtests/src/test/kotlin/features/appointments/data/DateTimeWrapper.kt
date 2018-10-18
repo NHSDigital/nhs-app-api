@@ -2,6 +2,7 @@ package features.appointments.data
 
 import constants.DateTimeFormats
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 class DateTimeWrapper(private var dateAsLocalDateTime: LocalDateTime, hoursOverride: Int? = null, minutesOverride: Int? = null) {
@@ -26,7 +27,10 @@ class DateTimeWrapper(private var dateAsLocalDateTime: LocalDateTime, hoursOverr
     }
 
     private fun convertDateToBackendString(): String {
-        val dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
-        return this.dateAsLocalDateTime.format(dateFormatter)
+        val dateFormatter = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+        val zonedDateTime = dateAsLocalDateTime.atZone(ZoneId.of("Europe/London"))
+        return zonedDateTime.format(dateFormatter)
     }
+
+
 }

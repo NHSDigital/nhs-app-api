@@ -432,7 +432,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     private fun toUTC(date: String?): String {
         val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
         val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat(DateTimeFormats.backendDateTimeFormat)
+        val queryDateFormat = SimpleDateFormat(DateTimeFormats.backendDateTimeFormatWithTimezone)
         queryDateFormat.timeZone = TimeZone.getTimeZone("UTC")
         return queryDateFormat.format(dateToPass).removeSuffix("00").plus(":00")
     }

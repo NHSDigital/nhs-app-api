@@ -1,10 +1,17 @@
 package mocking.emis.appointments.helpers
 
+import constants.DateTimeFormats
 import mocking.emis.models.Appointment
 import mocking.emis.models.Location
 import mocking.emis.models.Session
 import mocking.emis.models.SessionHolder
 import mockingFacade.appointments.MyAppointmentsFacade
+import java.text.ParsePosition
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class GetAppointmentHelper {
 
@@ -16,12 +23,20 @@ class GetAppointmentHelper {
                     Appointment(
                             slot.slotId!!,
                             session.sessionId!!,
-                            slot.startTime!!,
-                            slot.endTime!!,
+                            convertDateToEmisTime(slot.startTime!!),
+                            convertDateToEmisTime(slot.endTime!!),
                             slotTypeName = slot.slotTypeName!!
                     )
                 }
             } ?: emptyList()
+        }
+
+        private fun convertDateToEmisTime(time: String): String {
+            val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+            val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
+            ("Europe/London"))
+            val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+            return queryDateFormat.format(dateToPass)
         }
 
         fun extractLocationsFromFacade(facade: MyAppointmentsFacade): List<Location> {

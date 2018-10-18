@@ -1,5 +1,6 @@
 package mocking.emis.appointments
 
+import constants.DateTimeFormats
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilder
@@ -15,6 +16,10 @@ import models.Patient
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 private const val UNKNOWN_HTTP_STATUS_CODE: Long = -9999
 
@@ -58,8 +63,8 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
             val slots = session.slots.map { slot ->
                 AppointmentSlot(
                         slot.slotId!!,
-                        slot.startTime,
-                        slot.endTime,
+                        convertDateToEmisTime(slot.startTime!!),
+                        convertDateToEmisTime(slot.endTime!!),
                         slot.slotTypeName
                 )
             }
@@ -69,6 +74,14 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
                     slots
             )
         }
+    }
+
+    private fun convertDateToEmisTime(time: String): String {
+        val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
+        val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
+        ("Europe/London"))
+        val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+        return queryDateFormat.format(dateToPass)
     }
 
     override fun respondWithExceptionWhenNotEnabled(): Mapping {

@@ -1,13 +1,13 @@
 package features.appointments.factories
 
 import mocking.emis.models.AppointmentCancellationReason
-import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
-import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
 import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
+import worker.models.appointments.AppointmentResponseObject
+import worker.models.appointments.MyAppointmentsResponse
 
 class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
 
@@ -23,6 +23,33 @@ class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
         )
     }
 
+    override fun filterUpcomingAppointmentsWhenAppropriate(
+            facade: ArrayList<AppointmentSessionFacade>
+    ): ArrayList<AppointmentSessionFacade> {
+        // Don't need to filter for Emis
+        return facade
+    }
+
+    override fun getExpectedApiResponse(facade: ArrayList<AppointmentSessionFacade>): MyAppointmentsResponse {
+        val filteredFacade = filterUpcomingAppointmentsWhenAppropriate(facade)
+        return MyAppointmentsResponse(
+                filteredFacade.flatMap { session ->
+                    session.slots.map { slot ->
+                        AppointmentResponseObject(
+                                slot.slotId.toString(),
+                                "${session.sessionType} - ${slot.slotTypeName}",
+                                slot.startTime!!,
+                                slot.endTime!!,
+                                session.location!!,
+                                session.staffDetails.map { staff ->
+                                    staff.staffName!!
+                                }
+                        )
+                    }
+                }
+        )
+    }
+
     override fun getExpectedUiRepresentationOfSlots(facade: MyAppointmentsFacade): List<Slot> {
         return facade.slots?.sessions?.flatMap { session ->
             session.slots.map { slot ->
@@ -31,8 +58,10 @@ class UpcomingAppointmentsFactoryEmis : UpcomingAppointmentsFactory("EMIS") {
         } ?: emptyList()
     }
 
-    private fun getExpectedUiRepresentationOfSlot(slot: AppointmentSlotFacade, session: AppointmentSessionFacade): Slot {
-        val startDate = dateTimeFormat.parse(slot.startTime)
+    private fun getExpectedUiRepresentationOfSlot(
+            slot: AppointmentSlotFacade, session: AppointmentSessionFacade
+    ): Slot {
+        val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
         val sessionDetails = "${session.sessionType} - ${slot.slotTypeName}"

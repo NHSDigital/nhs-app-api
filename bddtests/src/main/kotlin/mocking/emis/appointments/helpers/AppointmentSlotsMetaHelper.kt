@@ -9,8 +9,7 @@ import mockingFacade.appointments.AppointmentSessionFacade
 class AppointmentSlotsMetaHelper {
 
     companion object {
-
-        private const val NUMBER_OF_SLOTS: Int = 1
+        
         private const val DEFAULT_DURATION: Int = 10
 
         fun getMetaSlotLocationsList(sessions: ArrayList<AppointmentSessionFacade>):
@@ -31,18 +30,16 @@ class AppointmentSlotsMetaHelper {
         fun getMetaSlotSessionsList(sessions: ArrayList<AppointmentSessionFacade>):
                 ArrayList<Session> {
             return ArrayList(
-                    sessions.flatMap { session ->
-                        session.slots.map { slot ->
-                            Session(session.sessionType!!,
-                                    slot.slotId!!,
-                                    session.locationid,
-                                    DEFAULT_DURATION,
-                                    SessionType.Timed,
-                                    NUMBER_OF_SLOTS,
-                                    getArrayListOfSessionHoldersFromSession(session).map { it -> it.clinicianId },
-                                    slot.startTime,
-                                    slot.endTime)
-                        }
+                    sessions.map { session ->
+                        Session(
+                                session.sessionType!!,
+                                session.sessionId!!,
+                                session.locationid,
+                                DEFAULT_DURATION,
+                                SessionType.Timed,
+                                session.slots.size,
+                                getArrayListOfSessionHoldersFromSession(session).map { it -> it.clinicianId }
+                        )
                     }
             )
         }

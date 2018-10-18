@@ -6,5 +6,6 @@ data class AppointmentSlotFacade(
         var endTime: String? = null,
         var sessionTypeName: String? = null,
         var slotTypeName: String? = "Slot",
-        var slotTypeId: Int? = 1
+        var slotTypeId: Int? = 1,
+        var slotInThePast: Boolean? = false
 )

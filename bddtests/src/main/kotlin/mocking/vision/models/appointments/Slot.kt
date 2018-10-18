@@ -11,6 +11,8 @@ data class Slot(
         @XmlElement(namespace = "urn:vision")
         var dateTime: String? = null,
         @XmlElement(namespace = "urn:vision")
+        var duration: Int? = null,
+        @XmlElement(namespace = "urn:vision")
         var owner: String? = null,
         @XmlElement(namespace = "urn:vision")
         var location: Int? = null,

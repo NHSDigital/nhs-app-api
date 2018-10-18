@@ -1,8 +1,10 @@
 package features.appointments.data
 
 import mocking.stubs.appointments.AppointmentSessionFacadeBuilder
+import mocking.stubs.appointments.AppointmentsSlotsExampleBuilder
 import mocking.stubs.appointments.IdValue
 import mockingFacade.appointments.AppointmentFilterFacade
+import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import worker.models.appointments.SlotResponseObject
 import java.time.DayOfWeek.*
@@ -26,6 +28,9 @@ class AppointmentsSlotsExample {
         private val staffDrWho = IdValue(101, "Dr. Who")
         private val staffDrScott = IdValue(102, "Dr. Scott")
 
+        private val startDateTimeForPastAppointment = DateTimeWrapper(LocalDateTime.now().minusMinutes(10))
+        private val endDateTimeForPastAppointment = DateTimeWrapper(LocalDateTime.now())
+
         private val startDateAppointment1 = DateTimeWrapper(tomorrowDate, 14, 0)
         private val endDateAppointment1 = DateTimeWrapper(tomorrowDate, 14, 10)
 
@@ -34,7 +39,7 @@ class AppointmentsSlotsExample {
 
         private val appointmentSessions = arrayListOf(
                 AppointmentSessionFacadeBuilder()
-                        .sessionId(301)
+                        .sessionId(102)
                         .sessionType(clinicSessionType)
                         .staffDetails(arrayListOf(staffDrWho))
                         .location(locationLeeds)
@@ -51,7 +56,7 @@ class AppointmentsSlotsExample {
                                     }
                         }.build(),
                 AppointmentSessionFacadeBuilder()
-                        .sessionId(402)
+                        .sessionId(103)
                         .sessionType(clinicSessionType)
                         .staffDetails(arrayListOf(staffDrScott))
                         .location(locationSheffield)
@@ -68,6 +73,20 @@ class AppointmentsSlotsExample {
                                     }
                         }.build()
         )
+
+        private val pastAppointmentSession = AppointmentSessionFacadeBuilder()
+                .sessionId(101)
+                .sessionType(clinicSessionType)
+                .staffDetails(arrayListOf(staffDrWho))
+                .location(locationLeeds)
+                .slots {
+                    addAppointment {
+                        slotId(201)
+                                .startDate(startDateTimeForPastAppointment.dateTimeAsBackendString)
+                                .endDate(endDateTimeForPastAppointment.dateTimeAsBackendString)
+                                .setSlotInThePast()
+                    }
+                }.build()
 
         private val filter =
                 AppointmentFilterFacade(
@@ -115,6 +134,20 @@ class AppointmentsSlotsExample {
         )
 
         fun getGenericExample(): AppointmentSlotsResponseFacade {
+            return getGenericExampleBuilder()
+                    .build()
+        }
+
+        fun getFacadeWithPastAppointment(): AppointmentSlotsResponseFacade {
+            return getGenericExampleBuilder()
+                    .appointmentSessions(
+                            arrayListOf(pastAppointmentSession).plus(appointmentSessions)
+                                    as java.util.ArrayList<AppointmentSessionFacade>
+                    )
+                    .build()
+        }
+
+        private fun getGenericExampleBuilder(): AppointmentsSlotsExampleBuilder {
             return AppointmentsSlotsExampleBuilderWithExpectations()
                     .appointmentSessions(appointmentSessions)
                     .filterValues(filter)
@@ -122,7 +155,6 @@ class AppointmentsSlotsExample {
                     .cliniciansList(arrayListOf(staffDrWho.value, staffDrScott.value))
                     .locationsList(arrayListOf(locationLeeds.value, locationSheffield.value))
                     .expectedResponseSlots(expectedResponseSlots)
-                    .build()
         }
 
         fun singleSlotExample(startDate: DateTimeWrapper = startDateAppointment1,
