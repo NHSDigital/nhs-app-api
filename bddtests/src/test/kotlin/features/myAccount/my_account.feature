@@ -10,12 +10,10 @@ Feature: View My Account Page
     Given I am on the My Account page
     And none of the menu buttons are highlighted
 
-  @NHSO-2412
   Scenario: My details are shown on the My Account page
     Given I am on the My Account page
     Then I see my personal details
 
-  @NHSO-1917
   Scenario: A patient can navigate to the Terms of use page
     Given I am on the My Account page
     When I click the Terms of use link
