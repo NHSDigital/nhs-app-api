@@ -131,6 +131,12 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun typeTextIntoSpecialRequestTextArea(text: String) {
-        findByXpath("//*[@id='specialRequest']").sendKeys(text)
+        val element = findByXpath("//*[@id='specialRequest']")
+        //Each letter sent individually, and then asserted in order to give chrome extra time.
+        //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
+        text.toCharArray().forEach { letter ->
+            element.sendKeys(letter.toString())
+            Assert.assertEquals("Last letter not sent", letter, element.value.last())
+        }
     }
 }
