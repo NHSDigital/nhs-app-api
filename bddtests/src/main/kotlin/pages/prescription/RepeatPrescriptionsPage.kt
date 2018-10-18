@@ -3,7 +3,6 @@ package pages.prescription
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
 import net.thucydides.core.annotations.DefaultUrl
-import net.thucydides.core.pages.WrongPageError
 import org.junit.Assert
 import pages.HybridPageObject
 import pages.navigation.Header
@@ -28,9 +27,10 @@ fun resolveDetailsField(dosage: String?, quantity: String?): String {
 open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
-    val PrescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
-    val PrescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
-    val SpecialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
+
+    private val PrescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
+    private val PrescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
+    private val SpecialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
             browserLocator = "//button[@id='btn_order_prescription']",
@@ -141,7 +141,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun typeTextIntoSpecialRequestTextArea(text: String) {
-        val element = findByXpath("//*[@id='specialRequest']")
+        val element = findByXpath(SpecialRequestTextAreaXpath)
         //Each letter sent individually, and then asserted in order to give chrome extra time.
         //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
         text.toCharArray().forEach { letter ->
@@ -152,9 +152,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun isSpecialRequestTextAreaVisible() : Boolean {
-        var specialRequestTextArea = findByXpath(SpecialRequestTextAreaXpath)
-        var isVIsible = specialRequestTextArea.isVisible
-        return isVIsible
+        return findByXpath(SpecialRequestTextAreaXpath).isVisible
     }
 }
 

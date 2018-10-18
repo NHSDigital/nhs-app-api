@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
+using NHSOnline.Backend.Worker.Areas.SharedModels;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Prescriptions;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions;
@@ -20,7 +21,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         private IFixture _fixture;
         private IVisionPrescriptionMapper _mapper;
         private ILogger<VisionPrescriptionMapper> _logger;
-        
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -35,7 +36,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public void MapPrescriptionHistoryToPrescriptionListResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
             Action act = () => _mapper.Map((PrescriptionHistory)null);
-            
+
             act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("prescriptionGetResponse");
         }
 
@@ -53,7 +54,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             result.Prescriptions.Should().BeEmpty();
             result.Courses.Should().BeEmpty();
         }
-        
+
         [TestMethod]
         public void MapPrescriptionHistoryToPrescriptionListResponse_WithValues_ReturnsResultValues()
         {
@@ -353,16 +354,16 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         [TestMethod]
         public void MapListRepeatsResponse_WhenPassingNull_ThrowsNullReferenceException()
         {
-            Action act = () => _mapper.Map((List<Repeat>)null);
+            Action act = () => _mapper.Map((EligibleRepeats)null);
 
-            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("repeats");
+            act.Should().Throw<ArgumentNullException>().And.ParamName.Should().Be("eligibleRepeatsResponse");
         }
 
         [TestMethod]
         public void MapRepeatsToCourseListResponse_WithEmptyValues_ReturnsResultWithEmptyValues()
         {
             // Arrange
-            var item = new List<Repeat>();
+            var item = new EligibleRepeats();
 
             // Act
             var result = _mapper.Map(item);
@@ -376,21 +377,28 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
         public void MapRepeatsToCourseListResponse_WithValues_ReturnsResultValues()
         {
             // Arrange
-            var item = new List<Repeat>
+            var item = new EligibleRepeats
             {
-                new Repeat
+                Repeats = new List<Repeat>
                 {
-                    Drug = _fixture.Create<string>(),
-                    Id = _fixture.Create<string>(),
-                    Quantity = _fixture.Create<string>(),
-                    Dosage = _fixture.Create<string>(),
+                    new Repeat
+                    {
+                        Drug = _fixture.Create<string>(),
+                        Id = _fixture.Create<string>(),
+                        Quantity = _fixture.Create<string>(),
+                        Dosage = _fixture.Create<string>(),
+                    },
+                    new Repeat
+                    {
+                        Drug = _fixture.Create<string>(),
+                        Id = _fixture.Create<string>(),
+                        Quantity = _fixture.Create<string>(),
+                        Dosage = _fixture.Create<string>(),
+                    },
                 },
-                new Repeat
+                Settings = new CourseSettings
                 {
-                    Drug = _fixture.Create<string>(),
-                    Id = _fixture.Create<string>(),
-                    Quantity = _fixture.Create<string>(),
-                    Dosage = _fixture.Create<string>(),
+                    AllowFreeText = true,
                 },
             };
 
@@ -399,7 +407,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
 
             // Assert
             result.Should().NotBeNull();
-            result.Courses.Should().HaveCount(item.Count());
+            result.Courses.Should().HaveCount(item.Repeats.Count());
 
             var expectedResult = new CourseListResponse
             {
@@ -407,20 +415,62 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
                 {
                     new Course
                     {
-                        Details = $"{item.ElementAt(0).Dosage} ‐ {item.ElementAt(0).Quantity}",
-                        Id = item.ElementAt(0).Id,
-                        Name = item.ElementAt(0).Drug,
+                        Details = $"{item.Repeats.ElementAt(0).Dosage} ‐ {item.Repeats.ElementAt(0).Quantity}",
+                        Id = item.Repeats.ElementAt(0).Id,
+                        Name = item.Repeats.ElementAt(0).Drug,
                     },
                     new Course
                     {
-                        Details = $"{item.ElementAt(1).Dosage} ‐ {item.ElementAt(1).Quantity}",
-                        Id = item.ElementAt(1).Id,
-                        Name = item.ElementAt(1).Drug,
+                        Details = $"{item.Repeats.ElementAt(1).Dosage} ‐ {item.Repeats.ElementAt(1).Quantity}",
+                        Id = item.Repeats.ElementAt(1).Id,
+                        Name = item.Repeats.ElementAt(1).Drug,
                     },
-                }
+                },
+                SpecialRequestNecessity = Necessity.Optional,
             };
 
             result.Should().BeEquivalentTo(expectedResult);
         }
+
+        [TestMethod]
+        public void MapRepeatsToCourseListResponse_WhenAllowFreeTextIsFalse_ReturnsResultWithNecessityAsNotAllowed()
+        {
+            // Arrange
+            var item = new EligibleRepeats
+            {
+                Settings = new CourseSettings
+                {
+                    AllowFreeText = false,
+                },
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SpecialRequestNecessity.Should().Be(Necessity.NotAllowed);
+        }
+
+        [TestMethod]
+        public void MapRepeatsToCourseListResponse_WhenAllowFreeTextIsTrue_ReturnsResultWithNecessityAsOptional()
+        {
+            // Arrange
+            var item = new EligibleRepeats
+            {
+                Settings = new CourseSettings
+                {
+                    AllowFreeText = true,
+                },
+            };
+
+            // Act
+            var result = _mapper.Map(item);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.SpecialRequestNecessity.Should().Be(Necessity.Optional);
+        }
+
     }
 }

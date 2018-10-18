@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
 {
     public class VisionUserSession : UserSession
     {
@@ -15,5 +13,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
         public string ApiKey { get; set; }
         
         public bool IsRepeatPrescriptionsEnabled { get; set; }
+
+        public bool AllowFreeTextPrescriptions { get; set; }
     }
 }

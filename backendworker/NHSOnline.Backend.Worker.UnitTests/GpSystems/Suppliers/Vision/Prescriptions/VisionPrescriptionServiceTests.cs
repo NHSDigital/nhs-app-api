@@ -41,6 +41,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             _visionPrescriptionMapper = _fixture.Freeze<Mock<IVisionPrescriptionMapper>>();
             _userSession = _fixture.Freeze<VisionUserSession>();
             _userSession.IsRepeatPrescriptionsEnabled = true;
+            _userSession.AllowFreeTextPrescriptions = true;
             _options = Options.Create(new ConfigurationSettings
             {
                 PrescriptionsMaxCoursesSoftLimit = PrescriptionsMaxCoursesSoftLimit
@@ -504,6 +505,82 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Prescrip
             // Assert
             _visionClient.VerifyNoOtherCalls();
             result.Should().BeOfType<PrescriptionResult.SupplierNotEnabled>();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_ReturnsBadRequest_WhenRepeatPrescriptionsIsDisabledInUserSession()
+        {
+            // Arrange
+            _userSession.AllowFreeTextPrescriptions = false;
+
+            var request = new RepeatPrescriptionRequest
+            {
+                CourseIds = new[] { "1" },
+                SpecialRequest = "special request text not allowed",
+            };
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            _visionClient.VerifyNoOtherCalls();
+            result.Should().BeOfType<PrescriptionResult.BadRequest>();
+        }
+
+        [TestMethod]
+        public async Task OrderPrescription_AllowsPrescriptionToBeSubmittedWithNullSpecialRequestText_WhenSpecialRequestTextIsDisabledInUserSession()
+        {
+            // Arrange
+            _userSession.AllowFreeTextPrescriptions = false;
+
+            var orderPrescriptionResponse = new VisionResponseEnvelope<OrderNewPrescriptionResponse>
+            {
+                Body = new VisionResponseBody<OrderNewPrescriptionResponse>
+                {
+                    VisionResponse = new VisionResponse<OrderNewPrescriptionResponse>
+                    {
+                        ServiceContent = new OrderNewPrescriptionResponse
+                        {
+                            Result = OrderNewPrescriptionResponse.OkResponseText,
+                        },
+                    },
+                },
+            };
+
+            var request = new RepeatPrescriptionRequest
+            {
+                CourseIds = new[] { "1" },
+                SpecialRequest = null,
+            };
+
+            // Act
+            OrderNewPrescriptionRequest capturedRequest = null;
+
+            _visionClient.Setup(x => x.OrderNewPrescription(
+                _userSession,
+                It.IsAny<OrderNewPrescriptionRequest>()))
+                .Returns(Task.FromResult(
+                    new VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>(HttpStatusCode.OK)
+                    {
+                        RawResponse = orderPrescriptionResponse,
+                    }))
+                    .Callback<VisionUserSession, OrderNewPrescriptionRequest>((visionUserSession, orderNewPrescriptionRequest) => capturedRequest = orderNewPrescriptionRequest);
+
+            // Act
+            var result = await _systemUnderTest.OrderPrescription(_userSession, request);
+
+            // Assert
+            var expectedRequest = new OrderNewPrescriptionRequest
+            {
+                Repeats = request.CourseIds.Select(x => new NewPrescriptionRepeat { Id = x }).ToList(),
+                Message = request.SpecialRequest,
+                PatientId = _userSession.PatientId,
+            };
+
+            capturedRequest.Should().BeEquivalentTo(expectedRequest);
+            _visionClient.Verify(x => x.OrderNewPrescription(_userSession, capturedRequest));
+            result.Should().BeAssignableTo<PrescriptionResult.SuccessfulPost>();
+            ((PrescriptionResult.SuccessfulPost)result).Should().NotBeNull();
         }
 
         [TestMethod]

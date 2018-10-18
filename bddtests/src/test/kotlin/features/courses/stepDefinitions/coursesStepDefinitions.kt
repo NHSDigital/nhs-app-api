@@ -24,9 +24,9 @@ import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
 import mocking.defaults.dataPopulation.journies.prescriptions.PrescriptionsHistoryJourney
 import mocking.emis.EmisConfiguration
 import mocking.emis.EmisMappingBuilderAppointments
-import mocking.vision.models.EligibleRepeats
 import mocking.emis.practices.SettingsResponseModel
 
+import features.sharedSteps.SerenityHelpers
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
@@ -55,7 +55,6 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     var showDosage: Boolean = true
     var prescriptionCommentsAllowed: Boolean = true
 
-
     @Given("I have (\\d+) (.*) assigned prescriptions")
     fun iHaveXAssignedPrescriptions(numberOfCourses: Int, gpSystem: String) {
         numOfCourses = numberOfCourses
@@ -78,9 +77,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     @And("(\\d+) of my prescriptions can be requested")
     fun xOfMyPrescriptionCanBeRequested(numberCanBeRequested: Int) {
         numCanBeRequested = numberCanBeRequested
-
         setupWiremockandCreateData()
-
     }
 
     @When("I get the users courses with a valid cookie")
@@ -120,32 +117,37 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     @And("(.*) has enabled special request text")
     fun gpProviderHasEnabledSpecialRequestText(gpSystem: String) {
         initalize(gpSystem)
-        prescriptionCommentsAllowed = true
-        setupSpecialRequestConfigChanged(gpSystem)
+
+        SerenityHelpers.setPrescriptionCommentsAllowed(true)
+
+        if (currentProvider == ProviderTypes.EMIS) {
+            setupSpecialRequestConfigEmis()
+        }
     }
 
     @And("(.*) has disabled special request text")
     fun gpProviderHasDisabledSpecialRequestText(gpSystem: String) {
         initalize(gpSystem)
-        prescriptionCommentsAllowed = false
-        setupSpecialRequestConfigChanged(gpSystem)
+
+        SerenityHelpers.setPrescriptionCommentsAllowed(false)
+
+        if (currentProvider == ProviderTypes.EMIS) {
+            setupSpecialRequestConfigEmis()
+        }
     }
 
-    private fun setupSpecialRequestConfigChanged(gpSystem: String) {
-        if(gpSystem == "EMIS") {
-            val response = SettingsResponseModel()
+    private fun setupSpecialRequestConfigEmis() {
+        val response = SettingsResponseModel()
 
-            if (prescriptionCommentsAllowed) {
-                response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.REQUESTED_OPTIONAL
-            } else {
-                response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.NOT_REQUESTED
-            }
-
-            mockingClient.forEmis {
-                EmisMappingBuilderAppointments(EmisConfiguration("16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7", "2.1.0.0"))
-                        .practiceSettingsRequest(currentPatient)
-                        .respondWithSuccess(response)
-            }
+        if (SerenityHelpers.getPrescriptionCommentsAllowed()) {
+            response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.REQUESTED_OPTIONAL
+        } else {
+            response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.NOT_REQUESTED
+        }
+        mockingClient.forEmis {
+            EmisMappingBuilderAppointments(EmisConfiguration("16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7", "2.1.0.0"))
+                    .practiceSettingsRequest(currentPatient)
+                    .respondWithSuccess(response)
         }
     }
 
@@ -210,6 +212,12 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
     @When("I click 'Change this repeat prescription' on the Prescription confirmation page")
     fun iClickChangeThisRepeatPrescriptionOnThePrescriptionConfirmationPage() {
         confirmRepeatPrescriptionOrderSteps.clickChangeThisPrescriptionButton()
+    }
+
+    @Then("I don't see the special request text on prescription confirmation")
+    fun iDontSeeTheSpecialRequestTextOnPrescriptionConfirmation() {
+        confirmRepeatPrescriptionOrderSteps.isLoaded()
+        confirmRepeatPrescriptionOrderSteps.assertSpecialRequestNotShown()
     }
 
     @Then("I see the previously selected prescriptions on the Confirm repeat prescription page")
@@ -280,7 +288,10 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
             initalize(Serenity.sessionVariableCalled<String>(GLOBAL_PROVIDER_TYPE))
         }
 
-        PrescriptionsFactory.getForSupplier(currentProvider.toString()).setupWireMockAndCreateData(numOfCourses,
+        val prescriptionsFactory = PrescriptionsFactory.getForSupplier(currentProvider.toString())
+
+        prescriptionsFactory.setupWireMockAndCreateData(
+                numOfCourses,
                 numOfRepeats,
                 numCanBeRequested,
                 showDosage,

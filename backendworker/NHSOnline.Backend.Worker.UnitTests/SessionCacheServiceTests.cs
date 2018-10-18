@@ -117,5 +117,47 @@ namespace NHSOnline.Backend.Worker.UnitTests
             _database.Verify();
             result.Should().Be(true);
         }
+
+        [TestMethod]
+        public async Task UpdateUserSession_UserSessionIsStoredInRedis()
+        {
+            // Arrange
+            var userSession = _fixture.Create<EmisUserSession>();
+            RedisValue userSessionJson = JsonConvert.SerializeObject(userSession);
+            const string encryptedOutput = "encrypted_string";
+
+            string redisSessionKey = null;
+            string redisValue = null;
+
+            _cipherService.Setup(x => x.Encrypt(It.IsAny<string>())).Returns(encryptedOutput);
+
+            _database
+                .Setup(x =>
+                    x.StringSetAsync(
+                        userSession.Key,
+                        "encrypted_string",
+                        TimeSpan.FromMinutes(_defaultSessionExpiryMinutes),
+                        When.Always,
+                        CommandFlags.None))
+                .Returns(Task.FromResult(true))
+                .Callback<RedisKey, RedisValue, TimeSpan?, When, CommandFlags>((key, value, expiry, when, flags) =>
+                {
+                    redisSessionKey = key;  // Store the guid key that was used as Redis session key
+                    redisValue = value;
+                })
+                .Verifiable();
+
+
+            var systemUnderTest = new SessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
+
+            // Act
+            await systemUnderTest.UpdateUserSession(userSession);
+
+            // Assert
+            _database.Verify();
+            redisValue.Should().NotBeNullOrEmpty();
+            redisValue.Should().Be(encryptedOutput);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package features.sharedSteps
 
+import constants.SerenitySessionKeys.Companion.PRESCRIPTION_COMMENTS_ALLOWED
 import mocking.MockingClient
 import models.Patient
 import net.serenitybdd.core.Serenity
@@ -8,6 +9,17 @@ import org.junit.Assert
 class SerenityHelpers {
 
     companion object {
+
+        fun getPrescriptionCommentsAllowed(): Boolean {
+            if (Serenity.hasASessionVariableCalled(PRESCRIPTION_COMMENTS_ALLOWED) ){
+                return Serenity.sessionVariableCalled<Boolean>(PRESCRIPTION_COMMENTS_ALLOWED)
+            }
+            return true
+        }
+
+        fun setPrescriptionCommentsAllowed(prescriptionCommentsAllowed: Boolean) {
+            Serenity.setSessionVariable(PRESCRIPTION_COMMENTS_ALLOWED).to(prescriptionCommentsAllowed)
+        }
 
         fun setPatient(patientToSet: Patient) {
             if (Serenity.hasASessionVariableCalled(Patient::class)) {

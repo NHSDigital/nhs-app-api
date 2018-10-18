@@ -236,8 +236,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
             return await Post<AddNhsUserRequest, AddNhsUserResponse>(
                 addNhsUserRequest, UsersNhsPath, headerParameters.EndUserSessionId, headerParameters.SessionId);
         }
-
-        
         
         private async Task<EmisApiObjectResponse<TResponse>> Delete<TRequest, TResponse>(TRequest model, string path,
             string endUserSessionId = null, string sessionId = null)

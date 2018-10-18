@@ -79,16 +79,17 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
             return result;
         }
 
-        public CourseListResponse Map(List<Repeat> repeats)
+        public CourseListResponse Map(EligibleRepeats eligibleRepeatsResponse)
         {
-            if (repeats == null)
+            if (eligibleRepeatsResponse == null)
             {
-                throw new ArgumentNullException(nameof(repeats));
+                throw new ArgumentNullException(nameof(eligibleRepeatsResponse));
             }
 
             var result = new CourseListResponse
             {
-                Courses = (repeats.Any() ? repeats : Enumerable.Empty<Repeat>()).Select(MapRepeatToCourse),
+                Courses = eligibleRepeatsResponse.Repeats.Select(MapRepeatToCourse),
+                SpecialRequestNecessity = eligibleRepeatsResponse?.Settings?.AllowFreeText == true ? Areas.SharedModels.Necessity.Optional : Areas.SharedModels.Necessity.NotAllowed,
             };
 
             return result;

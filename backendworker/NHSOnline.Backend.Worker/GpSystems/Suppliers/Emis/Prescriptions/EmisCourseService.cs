@@ -60,7 +60,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Prescriptions
                         }
 
                         _logger.LogDebug($"Mapping response from {nameof(CoursesGetResponse)} to {nameof(CourseListResponse)}");
-
+                        
                         var courseListResponse = _emisPrescriptionMapper.Map(coursesResponse.Body);
                         courseListResponse.SpecialRequestNecessity = emisUserSession.PrescriptionSpecialRequestNecessity;
 

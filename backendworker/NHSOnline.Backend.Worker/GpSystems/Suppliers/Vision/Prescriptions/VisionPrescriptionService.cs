@@ -109,6 +109,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                 return new PrescriptionResult.SupplierNotEnabled();
             }
 
+            if (!visionUserSession.AllowFreeTextPrescriptions && repeatPrescriptionRequest.SpecialRequest != null)
+            {
+                _logger.LogError($"User tried to submit prescription with { nameof(repeatPrescriptionRequest.SpecialRequest) } not null. " +
+                    $"Stopped because Vision configuration for { nameof(visionUserSession.AllowFreeTextPrescriptions) } currently set to { visionUserSession.AllowFreeTextPrescriptions }");
+                return new PrescriptionResult.BadRequest();
+            }
+
             var postRequest = new OrderNewPrescriptionRequest
             {
                 PatientId = visionUserSession.PatientId,

@@ -27,7 +27,7 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
 
         val request = OrderNewPrescriptionRequest(
                 patient.patientId,
-                courses.repeat!!.map { NewPrescriptionRepeat(it.getRepeatCourseId()!!) },
+                courses.repeat.map { NewPrescriptionRepeat(it.getRepeatCourseId()!!) },
                 "")
 
         mockingClient.forVision {
@@ -52,7 +52,6 @@ class PrescriptionsFactoryVision: PrescriptionsFactory("VISION") {
     }
 
     override fun setupWireMockAndCreateDataGpSpecific() {
-
         val userSession = VisionUserSession.fromPatient(patient)
 
         mockingClient.forVision {

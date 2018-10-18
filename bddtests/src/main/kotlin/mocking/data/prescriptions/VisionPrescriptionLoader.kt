@@ -36,7 +36,7 @@ object VisionPrescriptionLoader : IPrescriptionLoader<PrescriptionHistory> {
             var maxNumberOfPrescriptions = noPrescriptions.minus(1)
             var isSecondIteration = false
             var prescriptionNumber = 0
-            var courseNumber = repeatCourse!!.count().minus(1)
+            var courseNumber = repeatCourse.count().minus(1)
 
             while (prescriptionNumber <= maxNumberOfPrescriptions) {
                 var repeats = ArrayList<Repeat>()

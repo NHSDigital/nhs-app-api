@@ -199,11 +199,14 @@ Feature: View courses
     And I have 10 <GP System> assigned prescriptions
     And 10 of my prescriptions are of type repeat
     And 10 of my prescriptions can be requested
-    When I click 'Order a new repeat prescription'
+    And I select 1 <GP System> repeatable prescriptions out of 10 available
     Then I don't see the special request text area
+    When I click Continue on the Order a repeat prescription page
+    Then I don't see the special request text on prescription confirmation
     Examples:
       | GP System |
       | EMIS      |
+      | VISION    |
 
   Scenario Outline: The user can see prescription special request when the gp system <GP System> has enabled it
     Given a patient from <GP System> is defined
@@ -219,6 +222,7 @@ Feature: View courses
     Examples:
       | GP System |
       | EMIS      |
+      | VISION    |
 
   Scenario Outline: The User manipulates the url to go to the repeat prescriptions page and the service is disabled at a GP Practice level
     Given a patient from <GP System> is defined

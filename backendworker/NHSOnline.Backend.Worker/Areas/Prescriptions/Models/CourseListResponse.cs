@@ -7,7 +7,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions.Models
 {
     public class CourseListResponse
     {
-        public IEnumerable<Course> Courses { get; set; }
+        public IEnumerable<Course> Courses { get; set; } = new List<Course>();
 
         [JsonConverter(typeof(StringEnumConverter), false)]
         public Necessity SpecialRequestNecessity { get; set; } = Necessity.Optional;

@@ -1,11 +1,12 @@
 package mocking.data.prescriptions.courses
 
+import constants.SerenitySessionKeys.Companion.PRESCRIPTION_COMMENTS_ALLOWED
 import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.RepeatCourse
-import mocking.vision.models.Settings
 import models.prescriptions.MedicationCourse
+import net.serenitybdd.core.Serenity
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.ArrayList
@@ -22,11 +23,6 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
                           includeQuantity: Boolean) {
 
         var numberOfRepeats = numOfRepeats
-
-
-        var eligibleRepeats = EligibleRepeats()
-
-        eligibleRepeats.settings = Settings(true)
 
         val higherNumber: Int
 
@@ -53,7 +49,17 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
             repeats.add(createdCourse)
         }
 
-        this.data = EligibleRepeats(settings = Settings(true), repeat = repeats)
+        var eligibleRepeats = EligibleRepeats()
+
+        var allowFreeText = true
+        if (Serenity.hasASessionVariableCalled(PRESCRIPTION_COMMENTS_ALLOWED)) {
+            allowFreeText = Serenity.sessionVariableCalled<Boolean>(PRESCRIPTION_COMMENTS_ALLOWED)
+        }
+
+        eligibleRepeats.settings.allowFreetext = allowFreeText
+        eligibleRepeats.repeat = repeats
+
+        this.data = eligibleRepeats
     }
 
     fun IntRange.random() =
@@ -61,7 +67,7 @@ object VisionCoursesLoader: ICoursesLoader<EligibleRepeats> {
 
     override fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
 
-        var courses = data.repeat!!
+        var courses = data.repeat
 
         courses = courses.sortedBy { medicationCourse -> medicationCourse.drug }.toMutableList()
         courses = courses.take(COURSES_MAX).toMutableList()

@@ -18,13 +18,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
         private readonly ConfigurationSettings _settings;
         private readonly IVisionClient _visionClient;
         private readonly IVisionPrescriptionMapper _visionPrescriptionMapper;
+        private readonly ISessionCacheService _sessionCacheService;
 
-        public VisionCourseService(ILogger<VisionCourseService> logger, IOptions<ConfigurationSettings> settings, IVisionClient visionClient, IVisionPrescriptionMapper visionPrescriptionMapper)
+        public VisionCourseService(
+            ILogger<VisionCourseService> logger,
+            IOptions<ConfigurationSettings> settings,
+            IVisionClient visionClient,
+            IVisionPrescriptionMapper visionPrescriptionMapper,
+            ISessionCacheService sessionCacheService)
         {
             _logger = logger;
             _settings = settings.Value;
             _visionClient = visionClient;
             _visionPrescriptionMapper = visionPrescriptionMapper;
+            _sessionCacheService = sessionCacheService;
         }
 
         public async Task<GetCoursesResult> GetCourses(UserSession userSession)
@@ -51,22 +58,25 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Prescriptions
                     {
                         _logger
                             .LogDebug("Filtering courses from successful vision response. Unfiltered number of courses: " +
-                                      $"{coursesResponse.Body.EligibleRepeats.Repeat.Count}");
+                                      $"{coursesResponse.Body.EligibleRepeats.Repeats.Count}");
 
-                        coursesResponse.Body.EligibleRepeats.Repeat = 
-                            coursesResponse.Body.EligibleRepeats.Repeat
+                        coursesResponse.Body.EligibleRepeats.Repeats = 
+                            coursesResponse.Body.EligibleRepeats.Repeats
                             .OrderBy(x => x.Drug).ToList();
                         
                         if (_settings.CoursesMaxCoursesLimit != null)
                         {
-                            coursesResponse.Body.EligibleRepeats.Repeat = 
-                                coursesResponse.Body.EligibleRepeats.Repeat
+                            coursesResponse.Body.EligibleRepeats.Repeats = 
+                                coursesResponse.Body.EligibleRepeats.Repeats
                                     .Take(_settings.CoursesMaxCoursesLimit.Value).ToList();
                         }
 
                         _logger.LogDebug($"Mapping response from {nameof(EligibleRepeatsResponse)} to {nameof(CourseListResponse)}");
 
-                        var courseListResponse = _visionPrescriptionMapper.Map(coursesResponse.Body.EligibleRepeats.Repeat);
+                        var courseListResponse = _visionPrescriptionMapper.Map(coursesResponse.Body.EligibleRepeats);
+
+                        visionUserSession.AllowFreeTextPrescriptions = coursesResponse.Body.EligibleRepeats.Settings.AllowFreeText;
+                        await _sessionCacheService.UpdateUserSession(visionUserSession);
 
                         return new GetCoursesResult.SuccessfullyRetrieved(courseListResponse);
                     }

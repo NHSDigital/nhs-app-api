@@ -16,11 +16,7 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     var headerText: String = "Confirm prescription"
     lateinit var headerBar: Header
 
-    val specialRequestText = HybridPageElement(
-            browserLocator = "//*[@id='specialRequestText']",
-            androidLocator = null,
-            page = this
-    )
+    val specialRequestTextXPath = "//*[@id='specialRequestText']"
 
     val confirmAndOrderRepeatPrescriptionButton = HybridPageElement(
             browserLocator = "//*[@id='btn_confirm_and_order_prescription']",
@@ -64,8 +60,12 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
         }
     }
 
+    fun specialRequestElementIsVisible(): Boolean {
+        return findByXpath(specialRequestTextXPath).isVisible
+    }
+
     fun getSpecialRequest(): String {
-        return specialRequestText.element.text
+        return findByXpath(specialRequestTextXPath).text
     }
 
     fun clickConfirmAndOrderRepeatPrescriptionButton() {

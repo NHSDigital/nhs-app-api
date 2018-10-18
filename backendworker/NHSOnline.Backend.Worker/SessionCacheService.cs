@@ -14,8 +14,12 @@ namespace NHSOnline.Backend.Worker
     public interface ISessionCacheService
     {
         Task<string> CreateUserSession(UserSession userSession);
+
         Task<Option<UserSession>> GetUserSession(string sessionId);
+
         Task<bool> DeleteUserSession(string sessionId);
+
+        Task UpdateUserSession(UserSession userSession);
     }
 
     public class SessionCacheService : ISessionCacheService
@@ -136,5 +140,29 @@ namespace NHSOnline.Backend.Worker
                 _logger.LogExit(nameof(DeleteUserSession));
             }
         }
+
+        public async Task UpdateUserSession(UserSession userSession)
+        {
+            try
+            {
+                _logger.LogEnter(nameof(UpdateUserSession));
+                var multiplexer = _connectionMultiplexerFactory.GetMultiplexer(ConnectionMultiplexerName.Session);
+                var database = multiplexer.GetDatabase();
+                var sessionExpirationTime = TimeSpan.FromMinutes(_settings.DefaultSessionExpiryMinutes);
+
+                RedisValue sessionObject = JsonConvert.SerializeObject(userSession, _serializerSettings);
+                sessionObject = _cipherService.Encrypt(sessionObject);
+
+                using (_logger.WithTimer("Update Redis session"))
+                {
+                    await database.StringSetAsync(userSession.Key, sessionObject, sessionExpirationTime);
+                }
+            }
+            finally
+            {
+                _logger.LogExit(nameof(UpdateUserSession));
+            }
+        }
+
     }
 }

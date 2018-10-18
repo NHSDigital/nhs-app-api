@@ -28,4 +28,9 @@ open class ConfirmRepeatPrescriptionOrderSteps {
     fun assertSpecialRequest(value: String) {
         Assert.assertThat(confirmRepeatPrescriptionsOrderPage.getSpecialRequest(), containsString(value))
     }
+
+    @Step
+    fun assertSpecialRequestNotShown() {
+        Assert.assertFalse(confirmRepeatPrescriptionsOrderPage.specialRequestElementIsVisible())
+    }
 }
