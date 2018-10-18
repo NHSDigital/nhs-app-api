@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import mocking.defaults.MockDefaults
+import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.demographics.Sex
 import mocking.emis.models.AssociationType
@@ -28,10 +29,18 @@ class PatientVerificationSteps : AbstractSteps() {
     fun givenIHaveAnImConnectionTokenThatDoesNotExist(gpSystem: String) {
         when (gpSystem) {
             TPP -> {
-                var nonExistingConnectionToken = "{\"accountid\":\"999999999\",\"passphrase\":\"nonexistingpassword\"}"
-                mockingClient.forTpp { authentication.authenticateRequest(MockDefaults.tppAuthenticateRequest).respondWithError(MockDefaults.tppNonExistingAccountIdErrorResponse) }
+                val nonExistingConnectionToken = "{\"accountid\":\"999999999\",\"passphrase\":\"nonexistingpassword\"}"
 
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_TPP)
+                val tppNonExistingAccountIdErrorResponse = Error(
+                        errorCode = "9",
+                        userFriendlyMessage = "There was a problem logging on",
+                        uuid = "47788ae4-10e9-4f2c-9043-e08d285b67b6"
+                )
+
+                mockingClient.forTpp { authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
+                        .respondWithError(tppNonExistingAccountIdErrorResponse) }
+
+                setSessionVariable("NationalPracticeCode").to(TppMockDefaults.DEFAULT_ODS_CODE_TPP)
                 setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
             }
             EMIS -> {
@@ -135,7 +144,7 @@ class PatientVerificationSteps : AbstractSteps() {
     private fun setDefaultNationalPracticeCodeSessionVariable(gpSystem: String) {
         when (gpSystem) {
             TPP -> {
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_TPP)
+                setSessionVariable("NationalPracticeCode").to(TppMockDefaults.DEFAULT_ODS_CODE_TPP)
             }
             EMIS -> {
                 setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE)
@@ -173,7 +182,7 @@ class PatientVerificationSteps : AbstractSteps() {
                         firstName = "Kevin",
                         surname = "Barry",
                         connectionToken = "{\"accountId\": \"520993083\", \"passphrase\":\"c2axhQ9VWB2/62XFxvKrNKh9JwgLk0NFY15hIdI6aRytptqiBs6r/k+0OvGEZfcEdMLJEMp/J4pkOGm2ViaSLca49ODQzz4y+Cu2xOxLaehq/SjEIwflsWeSwCvCAxroId1bXejTdNsV17fOAD0M5nAZF6X9TysOfRR/j5tuR+o=\"}",
-                        odsCode = MockDefaults.DEFAULT_ODS_CODE_TPP,
+                        odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                         endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                         nhsNumbers = listOf("5785445875"),
                         accountId = "520993083",

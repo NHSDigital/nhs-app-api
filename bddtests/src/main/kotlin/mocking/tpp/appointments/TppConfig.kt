@@ -1,7 +1,7 @@
 package mocking.tpp.appointments
 
-import mocking.defaults.MockDefaults.Companion.DEFAULT_ODS_CODE_TPP
-import mocking.defaults.MockDefaults.Companion.DEFAULT_TPP_UUID
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_ODS_CODE_TPP
+import mocking.defaults.TppMockDefaults.Companion.DEFAULT_TPP_UUID
 
 object TppConfig {
     val appId = "tppAppId"

@@ -4,10 +4,10 @@ import config.Config
 import constants.DateTimeFormats
 import mocking.citizenId.models.IdTokenBuilder
 import mocking.defaults.MockDefaults
+import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
-import org.joda.time.DateTime
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
@@ -104,7 +104,7 @@ data class Patient(
                 odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
                 dateOfBirth = "1972-04-12",
-                sessionId = MockDefaults.DEFAULT_SESSION_ID,
+                sessionId = "AJYF0ufQI6tTpdfwaXAt",
                 connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers = listOf("2227007273"))
@@ -214,7 +214,7 @@ data class Patient(
                         postcode = "LS18 5TN"
                 ),
                 contactDetails = defaultContactDetails,
-                odsCode = MockDefaults.DEFAULT_ODS_CODE_TPP,
+                odsCode = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
                 nhsNumbers = listOf("5785445875"),
                 linkageKey = "?2sY3qyZp5gRB8*b",
                 accountId = "520993083",

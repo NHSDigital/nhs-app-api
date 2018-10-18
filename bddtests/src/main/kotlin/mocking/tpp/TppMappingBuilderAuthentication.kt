@@ -15,3 +15,4 @@ class TppMappingBuilderAuthentication{
 
     fun linkAccountRequest(patient: Patient) = LinkAccountBuilder(LinkAccount.forPatient(patient))
 }
+

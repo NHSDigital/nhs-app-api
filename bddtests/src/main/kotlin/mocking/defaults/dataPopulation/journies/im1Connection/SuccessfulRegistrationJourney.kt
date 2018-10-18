@@ -2,7 +2,7 @@ package mocking.defaults.dataPopulation.journies.im1Connection
 
 import constants.TppConstants
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.PatientIdentifier
 import mocking.emis.me.LinkApplicationRequestModel
 import mocking.emis.me.LinkageDetailsModel
@@ -71,7 +71,7 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
                 authentication.linkAccountRequest(patient).respondWithSuccess(
                                 LinkAccountReply(
                                         passphrase = patient.passphrase,
-                                        uuid = MockDefaults.DEFAULT_TPP_UUID
+                                        uuid = TppMockDefaults.DEFAULT_TPP_UUID
                                 )
                         )
         }
@@ -79,15 +79,15 @@ class SuccessfulRegistrationJourney(private val client: MockingClient) {
         client.forTpp {
             authentication.authenticateRequest(
                     Authenticate(
-                            apiVersion = MockDefaults.TPP_API_VERSION,
+                            apiVersion = TppMockDefaults.TPP_API_VERSION,
                             accountId = patient.accountId,
                             passphrase = patient.passphrase,
                             unitId = patient.odsCode,
-                            uuid = MockDefaults.DEFAULT_TPP_UUID,
+                            uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                             application = Application(
                                     name = "NhsApp",
                                     version = "1.0",
-                                    providerId = MockDefaults.DEFAULT_TPP_PROVIDER_ID,
+                                    providerId = TppMockDefaults.DEFAULT_TPP_PROVIDER_ID,
                                     deviceType = "NhsApp"
                             ))
                     )

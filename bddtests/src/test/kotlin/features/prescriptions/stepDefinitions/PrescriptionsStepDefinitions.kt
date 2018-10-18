@@ -25,6 +25,7 @@ import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.defaults.MockDefaults
 import mocking.defaults.MockDefaults.Companion.patient
+import mocking.defaults.TppMockDefaults
 import mocking.emis.models.PrescriptionRequestsGetResponse
 import mocking.emis.models.RequestedMedicationCourseStatus
 import mocking.tpp.models.Error
@@ -396,7 +397,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
         mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
 
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(MockDefaults.patientTpp, null).respondWith(200, resolve = {}, milliSecondDelay = 15000) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWith(200,
+                resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")
@@ -406,12 +408,12 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("The prescription submission endpoint is throwing an already ordered exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnAlreadyOrderedException() {
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "One of the medications requested is no longer available", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWithError(Error("1", "One of the medications requested is no longer available", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
     }
 
     @But("The prescription submission endpoint is throwing an invalid guid exception")
     fun butThePrescriptionSubmissionEndpointIsThrowingAnInvalidGuidException() {
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(MockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWithError(Error("1", "There was an error processing your request", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a")) }
     }
 
     @Then("I see the appropriate error message for a prescription timeout")

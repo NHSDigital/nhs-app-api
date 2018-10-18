@@ -2,7 +2,7 @@ package mocking.defaults.dataPopulation.journies.session
 
 import constants.TppConstants
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
@@ -16,15 +16,15 @@ class TppSessionCreateJourneyFactory(val client: MockingClient) : SessionCreateJ
 
     private fun authenticateRequest(patient: Patient): Authenticate {
         return Authenticate(
-                apiVersion = MockDefaults.TPP_API_VERSION,
+                apiVersion = TppMockDefaults.TPP_API_VERSION,
                 accountId = patient.accountId,
                 passphrase = patient.passphrase,
-                unitId = MockDefaults.DEFAULT_ODS_CODE_TPP,
-                uuid = MockDefaults.DEFAULT_TPP_UUID,
+                unitId = TppMockDefaults.DEFAULT_ODS_CODE_TPP,
+                uuid = TppMockDefaults.DEFAULT_TPP_UUID,
                 application = Application(
                         name = "NhsApp",
                         version = "1.0",
-                        providerId = MockDefaults.DEFAULT_TPP_PROVIDER_ID,
+                        providerId = TppMockDefaults.DEFAULT_TPP_PROVIDER_ID,
                         deviceType = "NhsApp"
                 ))
     }

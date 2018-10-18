@@ -27,9 +27,4 @@ abstract class AbstractSteps {
     protected var workerClient: WorkerClient
         get() = getFromContext()
         set(value) = setInContext(value)
-
-    companion object {
-        val connectionToken: String = MockDefaults.DEFAULT_CONNECTION_TOKEN
-        val odsCode: String = MockDefaults.DEFAULT_ODS_CODE
-    }
 }

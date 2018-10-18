@@ -1,6 +1,6 @@
 package mocking.tpp.session
 
-import mocking.defaults.MockDefaults
+import mocking.defaults.TppMockDefaults
 import mocking.models.Mapping
 import mocking.tpp.TppMappingBuilder
 import mocking.tpp.models.Authenticate
@@ -34,7 +34,7 @@ class TppSessionBuilder(authenticate: Authenticate) : TppMappingBuilder("POST", 
                 authenticateReply.user)
 
         val suidHeader = "suid"
-        val suidValue = MockDefaults.DEFAULT_TPP_SESSION_ID
+        val suidValue = TppMockDefaults.DEFAULT_TPP_SESSION_ID
 
         val jaxbContext = JAXBContext.newInstance(AuthenticateReply::class.java)
         val marshaller = jaxbContext.createMarshaller()

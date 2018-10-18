@@ -1,0 +1,35 @@
+package mocking.defaults
+
+import mocking.tpp.models.Application
+import mocking.tpp.models.Authenticate
+import mocking.tpp.models.Error
+import models.Patient
+
+class TppMockDefaults{
+    companion object {
+
+        const val TPP_API_VERSION = "1"
+        const val DEFAULT_TPP_UUID = "af0a8175-e6c2-4c49-883e-020b2b3600f9"
+        const val DEFAULT_TPP_PROVIDER_ID = "b891fc3b51d5e7c1"
+        const val DEFAULT_ODS_CODE_TPP: String = "KGPD"
+        const val DEFAULT_TPP_SESSION_ID = "alsdkfjLIKASDLIHUAJakjshdLIASKHDJALsdiojALSasIADJAISDioasjd"
+
+        val patientTpp = Patient.getDefault("TPP")
+
+        val DEFAULT_TPP_APPLICATION = Application(
+                name = "NhsApp",
+                version = "1.0",
+                providerId = DEFAULT_TPP_PROVIDER_ID,
+                deviceType = "NhsApp"
+        )
+
+        val tppAuthenticateRequest = Authenticate(
+                apiVersion = TPP_API_VERSION,
+                accountId = patientTpp.accountId,
+                passphrase = patientTpp.passphrase,
+                unitId = DEFAULT_ODS_CODE_TPP,
+                uuid = DEFAULT_TPP_UUID,
+                application = DEFAULT_TPP_APPLICATION
+        )
+    }
+}

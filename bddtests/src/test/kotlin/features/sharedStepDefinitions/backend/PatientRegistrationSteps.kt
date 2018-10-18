@@ -2,20 +2,12 @@ package features.sharedStepDefinitions.backend
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import cucumber.api.java.en.When
-import mocking.emis.demographics.PatientIdentifier
-import mocking.emis.me.LinkApplicationRequestModel
-import mocking.emis.me.LinkageDetailsModel
-
-import mocking.emis.models.AssociationType
-import mocking.emis.models.IdentifierType
+import mocking.defaults.MockDefaults
 import models.Patient
-import net.serenitybdd.core.Serenity.*
-
+import net.serenitybdd.core.Serenity.sessionVariableCalled
+import net.serenitybdd.core.Serenity.setSessionVariable
 import org.junit.Assert
-
 import worker.NhsoHttpException
-import worker.WorkerClient
 import worker.models.patient.Im1ConnectionRequest
 import worker.models.patient.Im1ConnectionResponse
 import worker.models.patient.PatientNhsNumber
@@ -30,7 +22,7 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Smith",
                 dateOfBirth = "1919-12-24T14:03:15Z",
                 accountId = "1195029928",
-                odsCode = odsCode,
+                odsCode = MockDefaults.DEFAULT_ODS_CODE,
                 endUserSessionId = "zVfHuYArbENW4aoAUeQPyS",
                 linkageKey = "KjwzyFSEUAGj4"
         )

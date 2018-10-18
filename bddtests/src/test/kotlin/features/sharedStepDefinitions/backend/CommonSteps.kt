@@ -5,18 +5,16 @@ import cucumber.api.java.Before
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import mocking.defaults.MockDefaults
-import mocking.defaults.MockDefaults.Companion.DEFAULT_END_USER_SESSION_ID
-
+import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
+import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
+import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
-import mocking.emis.demographics.PatientIdentifier
-import mocking.emis.models.AssociationType
-import mocking.emis.models.IdentifierType
-import mocking.tpp.models.AuthenticateReply
+import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
+import mocking.tpp.models.Authenticate
 import models.Patient
-import net.serenitybdd.core.Serenity.*
 import net.serenitybdd.core.Serenity
+import net.serenitybdd.core.Serenity.getCurrentSession
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
 import org.apache.http.HttpResponse
@@ -27,11 +25,6 @@ import worker.NhsoHttpException
 import worker.WorkerClient
 import java.util.*
 import java.util.concurrent.TimeUnit
-import features.sharedStepDefinitions.BaseStepDefinition.Companion.ProviderTypes
-import features.sharedStepDefinitions.GLOBAL_PROVIDER_TYPE
-import features.sharedSteps.SerenityHelpers
-import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.tpp.models.Authenticate
 
 
 class CommonSteps : AbstractSteps() {

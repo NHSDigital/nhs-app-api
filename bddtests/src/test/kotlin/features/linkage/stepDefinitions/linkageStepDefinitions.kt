@@ -1,24 +1,16 @@
 package features.linkage.stepDefinitions
 
-import cucumber.api.java.en.*
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.When
 import features.linkage.LinkageResult
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
-import mocking.defaults.MockDefaults.Companion.DEFAULT_ODS_CODE
-import mocking.defaults.MockDefaults.Companion.patient
-import mocking.emis.EmisMappingBuilder
-import mocking.emis.linkage.EmisLinkageGETBuilder
-import mocking.emis.linkage.EmisLinkagePOSTBuilder
-import mocking.emis.models.AddNhsUserRequest
-import mocking.emis.models.AddNhsUserResponse
-import mocking.emis.models.AddVerificationResponse
+import mocking.defaults.TppMockDefaults
+import mockingFacade.linkage.LinkageInformationFacade
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.NhsoHttpException
 import worker.WorkerClient
-import mocking.emis.models.AddVerificationRequest
-import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
-import mocking.models.Mapping
 import worker.models.linkage.CreateLinkageRequest
 import worker.models.linkage.LinkageResponse
 
@@ -26,223 +18,147 @@ open class LinkageStepDefinitions {
 
     val HTTP_EXCEPTION = "HttpException"
 
-    private val EMIS = "EMIS"
-    lateinit var currentGPSystem: String
-    lateinit var odsCode: String
-    lateinit var nhsNumber: String
-    private var accountId = "542343"
-    private var identityToken = "abc"
-    private var emailAddress = "ab@cd.com"
-
-    private var linkageResult: LinkageResult = LinkageResult.SuccessfullyRetrieved
-    private var linkageKey = "tTALtBP3rLR16"
-    private var linkageResponse: LinkageResponse? = null
-
     val mockingClient = MockingClient.instance
 
-    @Given("^I have a valid (.*) OdsCode$")
-    fun ihaveAValidXOdsCode(gpSystem: String) {
-        currentGPSystem = gpSystem
-
-        when (currentGPSystem) {
-            EMIS -> {
-                odsCode = DEFAULT_ODS_CODE
-            }
-        }
+    @Given("I have valid (.*) linkage details$")
+    fun iHaveValidLinkageDetailsFor(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        setLinkageInformation(linkage)
     }
 
-    @Given("^I have an empty (.*) OdsCode$")
-    fun ihaveAnEmptyOdsCode(gpSystem: String) {
-        currentGPSystem = gpSystem
-        odsCode = ""
+    @Given("I have valid (.*) linkage details apart from an empty OdsCode$")
+    fun iHaveValidLinkageDetailsExceptEmptyOds(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        linkage.odsCode = ""
+        setLinkageInformation(linkage)
     }
 
-    @Given("^I have a not found (.*) OdsCode$")
-    fun ihaveANotFoundXOdsCode(gpSystem: String) {
-        currentGPSystem = gpSystem
-        odsCode = "A04889999"
+    @Given("I have valid (.*) linkage details apart from a not found OdsCode$")
+    fun iHaveValidLinkageDetailsExceptNotFoundOds(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        linkage.odsCode = "A04889999"
+        setLinkageInformation(linkage)
     }
 
-    @And("^I have a valid NhsNumber$")
-    fun ihaveAnValidNhsNumber() {
-        when (currentGPSystem) {
-            EMIS -> {
-                nhsNumber = "3434234345"
-            }
-        }
+    @Given("I have valid (.*) linkage details apart from an empty NhsNumber$")
+    fun iHaveValidLinkageDetailsExceptEmptyNhsNumber(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        linkage.nhsNumber = ""
+        setLinkageInformation(linkage)
     }
 
-    @And("^I have an empty NhsNumber$")
-    fun ihaveAnEmptyNhsNumber() {
-        nhsNumber = ""
+    @Given("I have valid (.*) linkage details apart from an empty identity token$")
+    fun iHaveValidLinkageDetailsExceptEmptyIdentityToken(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        linkage.identityToken = ""
+        setLinkageInformation(linkage)
     }
 
-    @And("^I have a valid identity token$")
-    fun ihaveAnValidIdentityToken() {
-        when (currentGPSystem) {
-            EMIS -> {
-                identityToken = "abc"
-            }
-        }
+    @Given("I have valid (.*) linkage details apart from an empty email address$")
+    fun iHaveValidLinkageDetailsExceptEmptyEmail(gpSystem: String) {
+        val linkage = validLinkage(gpSystem)
+        linkage.emailAddress = ""
+        setLinkageInformation(linkage)
     }
 
-    @Given("^I have an empty identity token$")
-    fun ihaveAnEmptyIdentityToken() {
-        identityToken = ""
-    }
-
-    @And("^I have a valid email address$")
-    fun ihaveAnValidEmailAddress() {
-        emailAddress = "ab@cd.com"
-    }
-
-    @And("^I have an empty email address$")
-    fun ihaveAnEmptyEmailAddress() {
-        emailAddress = ""
-    }
-
-    @But("^The practice is not live$")
+    @Given("^The practice is not live$")
     fun thePraticeIsNotLive() {
-        linkageResult = LinkageResult.PracticeNotLive
+        setLinkageResult(LinkageResult.PracticeNotLive)
     }
 
-    @But("^The GP system has marked me as archived$")
+    @Given("^The GP system has marked me as archived$")
     fun theGpSystemHasMarkedMeAsArchived() {
-        linkageResult = LinkageResult.PatientMarkedAsArchived
+        setLinkageResult(LinkageResult.PatientMarkedAsArchived)
     }
 
-    @But("^I am under 16$")
+    @Given("^I am under 16$")
     fun iAmUnder16() {
-        linkageResult = LinkageResult.PatientNonCompetentOrUnder16
+        setLinkageResult(LinkageResult.PatientNonCompetentOrUnder16)
     }
 
-    @But("^My account status is invalid$")
+    @Given("^My account status is invalid$")
     fun myAccountStatusIsInvalid() {
-        linkageResult = LinkageResult.AccountStatusInvalid
+        setLinkageResult(LinkageResult.AccountStatusInvalid)
     }
 
-    @But("^I'm not registered at the practice$")
+    @Given("^I'm not registered at the practice$")
     fun imNotRegisteredAtThePractice() {
-        linkageResult = LinkageResult.PatientNotRegisteredAtPractice
+        setLinkageResult(LinkageResult.PatientNotRegisteredAtPractice)
     }
 
-    @But("^I am not found on the GP system$")
+    @Given("^I am not found on the GP system$")
     fun iAmNotFoundOnTheGpSystem() {
-        linkageResult = LinkageResult.NoRegisteredOnlineUserFound
+        setLinkageResult(LinkageResult.NoRegisteredOnlineUserFound)
     }
 
-    @But("^The GP system responds with an internal server error retrieving the linkage key$")
+    @Given("^The GP system responds with an internal server error retrieving the linkage key$")
     fun theGPSystemRespondsWithInternalServerErrorRetrievingLinkageKey() {
-        linkageResult = LinkageResult.InternalServerError
+        setLinkageResult(LinkageResult.InternalServerError)
     }
 
-    @But("^The GP system responds with an internal server error creating the linkage key$")
+    @Given("^The GP system responds with an internal server error creating the linkage key$")
     fun theGPSystemRespondsWithInternalServerErrorCreatingLinkageKey() {
-        linkageResult = LinkageResult.InternalServerError
+        setLinkageResult(LinkageResult.InternalServerError)
     }
 
-    @And("^It's the first time a linkage key has been retrieved for an identity token$")
+    @Given("^It's the first time a linkage key has been retrieved for an identity token$")
     fun itsTheFirstTimeALinkageKeyHasBeenRetrievedForAParticularIdentityToken() {
-        linkageResult = LinkageResult.SuccessfullyRetrievedFirstTime
+        setLinkageResult(LinkageResult.SuccessfullyRetrievedFirstTime)
     }
 
-    @And("^It's not the first time a linkage key has been retrieved for an identity token$")
+    @Given("^It's not the first time a linkage key has been retrieved for an identity token$")
     fun itsNotTheFirstTimeALinkageKeyHasBeenRetrievedForAParticularIdentityToken() {
-        linkageResult = LinkageResult.SuccessfullyRetrieved
+        setLinkageResult(LinkageResult.SuccessfullyRetrieved)
     }
 
-    @And("^It's the first time a linkage key has been created for my nhs number$")
+    @Given("^It's the first time a linkage key has been created for my nhs number$")
     fun itsTheFirstTimeALinkageKeyHasBeenCreatedForMyNhsNumberAtThisPractice() {
-        linkageResult = LinkageResult.SuccessfullyCreated
+        setLinkageResult(LinkageResult.SuccessfullyCreated)
     }
 
-    @When("^I call the Linkage GET endpoint$")
-    fun iCallTheLinkageGETEndpoint() {
+    @Given("I already have an online account")
+    fun iAlreadyHaveAnOnlineAccount() {
+        setLinkageResult(LinkageResult.PatientAlreadyHasAnOnlineAccount)
+    }
 
-        val linkageToGetRequestResponse = hashMapOf<LinkageResult, (EmisLinkageGETBuilder) -> Mapping>(
-                LinkageResult.SuccessfullyRetrievedFirstTime to { get ->
-                    get.respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
-                },
-                LinkageResult.SuccessfullyRetrieved to { get ->
-                    get.respondWithSuccessfullyRetrieved(AddVerificationResponse(odsCode, linkageKey, accountId))
-                },
-                LinkageResult.PatientNotRegisteredAtPractice to { get ->
-                    get.respondWithPatientNotRegisteredAtPractice()
-                },
-                LinkageResult.NoRegisteredOnlineUserFound to { get -> get.respondWithNoRegisteredOnlineUserFound() },
-                LinkageResult.PracticeNotLive to { get -> get.respondWithPracticeNotLive() },
-                LinkageResult.PatientMarkedAsArchived to { get -> get.respondWithPatientMarkedAsArchived() },
-                LinkageResult.PatientNonCompetentOrUnder16 to { get -> get.respondWithPatientNonCompetentOrUnder16() },
-                LinkageResult.AccountStatusInvalid to { get -> get.respondWithAccountStatusInvalid() },
-                LinkageResult.InternalServerError to { get -> get.respondWithInternalServerError() }
-        )
+    @When("^I call the (.*) Linkage GET endpoint$")
+    fun iCallTheLinkageGETEndpoint(gpSystem: String) {
 
-        if (currentGPSystem == EMIS) {
-
-            // end user session setup always required
-            mockingClient.forEmis {
-                authentication.endUserSessionRequest()
-                        .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
-            }
-
-            Assert.assertTrue("Test Setup Incorrect, Mapping not set up for linkage $linkageResult",
-                    linkageToGetRequestResponse.containsKey(linkageResult))
-            val response = linkageToGetRequestResponse[linkageResult]!!
-            mockingClient.forEmis {
-                response(authentication.linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken)))
-            }
-        }
+        val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
+        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
+        LinkageFactory.getForSupplier(gpSystem).mockLinkageGetResult(linkage, linkageResult)
 
         try {
-            linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication.getLinkageKey(nhsNumber, odsCode, identityToken)
+            val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.getLinkageKey(
+                            linkage.nhsNumber,
+                            linkage.odsCode,
+                            linkage.identityToken)
+
+            Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
+
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
     }
 
-    private fun successfulPost(): (EmisLinkagePOSTBuilder) -> Mapping {
+    @When("I call the (.*) Linkage POST endpoint")
+    fun iCallTheLinkagePOSTEndpoint(gpSystem: String) {
 
-        mockingClient.forEmis {
-            authentication.linkageKeyGetRequest(AddVerificationRequest(nhsNumber, odsCode, identityToken))
-                    .respondWithSuccessfullyRetrievedFirstTime(AddVerificationResponse(odsCode, linkageKey, accountId))
-        }
+        val linkageResult = Serenity.sessionVariableCalled<LinkageResult>(LinkageResult::class)
+        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
+        LinkageFactory.getForSupplier(gpSystem).mockLinkagePostResult(linkage, linkageResult)
 
-        return { post -> post.respondWithSuccessfullyCreated(AddNhsUserResponse(patient.connectionToken)) }
-    }
-
-
-    @When("I call the Linkage POST endpoint")
-    fun iCallTheLinkagePOSTEndpoint() {
-        val linkageToPostRequestResponse = hashMapOf(
-                LinkageResult.SuccessfullyRetrieved to successfulPost(),
-                LinkageResult.SuccessfullyCreated to successfulPost(),
-                LinkageResult.PatientAlreadyHasAnOnlineAccount to { get -> get.respondWithPatientAlreadyHasAnOnlineAccount() },
-                LinkageResult.NoRegisteredOnlineUserFound to { get -> get.respondWithNoRegisteredOnlineUserFound() },
-                LinkageResult.PatientNotRegisteredAtPractice to null,
-                LinkageResult.PracticeNotLive to { get -> get.respondWithPracticeNotLive() },
-                LinkageResult.PatientMarkedAsArchived to { get -> get.respondWithPatientMarkedAsArchived() },
-                LinkageResult.PatientNonCompetentOrUnder16 to { get -> get.respondWithPatientNonCompetentOrUnder16() },
-                LinkageResult.InternalServerError to { get -> get.respondWithInternalServerError() }
-        )
-
-        if (currentGPSystem == EMIS) {
-            // end user session setup always required
-            mockingClient.forEmis {
-                authentication.endUserSessionRequest()
-                        .respondWithSuccess(MockDefaults.DEFAULT_END_USER_SESSION_ID)
-            }
-            Assert.assertTrue("Test Setup Incorrect, Mapping not set up for linkage $linkageResult",
-                    linkageToPostRequestResponse.containsKey(linkageResult))
-            val response = linkageToPostRequestResponse[linkageResult]
-            if (response != null) {
-                mockingClient.forEmis {
-                    response(authentication.linkageKeyPOSTRequest(AddNhsUserRequest(odsCode, nhsNumber, emailAddress)))
-                }
-            }
-        }
         try {
-            linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .authentication.postLinkageKey(CreateLinkageRequest(odsCode, nhsNumber, identityToken, emailAddress))
+            val linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .authentication.postLinkageKey(CreateLinkageRequest(
+                            linkage.odsCode,
+                            linkage.nhsNumber,
+                            linkage.identityToken,
+                            linkage.emailAddress))
+
+            Serenity.setSessionVariable(LinkageResponse::class).to(linkageResponse)
+
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -250,15 +166,44 @@ open class LinkageStepDefinitions {
 
     @When("^I receive a valid response$")
     fun iReceiveAValidResponse() {
+        val linkageResponse = Serenity.sessionVariableCalled<LinkageResponse>(LinkageResponse::class)
+        val linkage = Serenity.sessionVariableCalled<LinkageInformationFacade>(LinkageInformationFacade::class)
+
         Assert.assertNotNull(linkageResponse)
-        Assert.assertEquals(odsCode, linkageResponse!!.odsCode)
-        Assert.assertEquals(accountId, linkageResponse!!.accountId)
-        Assert.assertEquals(linkageKey, linkageResponse!!.linkageKey)
+        Assert.assertEquals(linkage.odsCode, linkageResponse.odsCode)
+        Assert.assertEquals(linkage.accountId, linkageResponse.accountId)
+        Assert.assertEquals(linkage.linkageKey, linkageResponse.linkageKey)
     }
 
-    @But("I already have an online account")
-    fun iAlreadyHaveAnOnlineAccount() {
-        linkageResult = LinkageResult.PatientAlreadyHasAnOnlineAccount
+    private fun validLinkage(gpSystem: String): LinkageInformationFacade {
+        val odsCode = when (gpSystem) {
+            "EMIS" -> {
+                MockDefaults.DEFAULT_ODS_CODE
+            }
+            "TPP" -> {
+                TppMockDefaults.DEFAULT_ODS_CODE_TPP
+            }
+            else -> {
+                Assert.fail("OdsCode not set up for $gpSystem")
+                ""
+            }
+        }
+        setLinkageResult(LinkageResult.SuccessfullyRetrieved)
+        return LinkageInformationFacade(
+                odsCode = odsCode,
+                linkageKey = "tTALtBP3rLR16",
+                accountId = "542343",
+                nhsNumber = "3434234345",
+                identityToken = "abc",
+                emailAddress = "ab@cd.com")
+    }
+
+    private fun setLinkageInformation(linkageInformationFacade: LinkageInformationFacade) {
+        Serenity.setSessionVariable(LinkageInformationFacade::class).to(linkageInformationFacade)
+    }
+
+    private fun setLinkageResult(linkageResult: LinkageResult) {
+        Serenity.setSessionVariable(LinkageResult::class).to(linkageResult)
     }
 }
 

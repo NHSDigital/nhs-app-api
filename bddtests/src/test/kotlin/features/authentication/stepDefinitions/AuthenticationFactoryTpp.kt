@@ -1,6 +1,6 @@
 package features.authentication.stepDefinitions
 
-import mocking.defaults.MockDefaults
+import mocking.defaults.TppMockDefaults
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.AuthenticateReply
 import mocking.tpp.models.Error
@@ -10,7 +10,7 @@ class AuthenticationFactoryTpp  : AuthenticationFactory("TPP"){
 
     override fun validOAuthDetailsAndGpSystemSlowToRespond() {
         mockingClient.forTpp {
-            authentication.authenticateRequest(MockDefaults.tppAuthenticateRequest)
+            authentication.authenticateRequest(TppMockDefaults.tppAuthenticateRequest)
                     .respondWithSuccess(AuthenticateReply())
                     .delayedBy(Duration.ofSeconds(31))
         }
