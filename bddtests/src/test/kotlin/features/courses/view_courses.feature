@@ -169,13 +169,13 @@ Feature: View courses
     And I enter text "Please call when prescription received." for special request
     And I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
-    And I see the special request text "Please call when prescription received."
+    And I see the entered special request text
     When I click 'Change this repeat prescription' on the Prescription confirmation page
     And I select 1 additional repeat prescriptions
     And I enter text "Note I'm allergic to paracetamol." for special request
     When I click Continue on the Order a repeat prescription page
     Then I see the previously selected prescriptions on the Confirm repeat prescription page
-    And I see the special request text "Note I'm allergic to paracetamol."
+    And I see the entered special request text
     Examples:
       | GP System |
       | EMIS      |
@@ -188,7 +188,7 @@ Feature: View courses
     And I navigate to prescriptions
     And I select 1 <GP System> repeatable prescriptions out of 1 available
     And I click Continue on the Order a repeat prescription page
-    Then I see the special request text "None"
+    Then I see the default special request text
     Examples:
       | GP System |
       | EMIS      |

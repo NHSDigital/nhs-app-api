@@ -21,7 +21,7 @@
     <string name="dataPreferencesBaseUrl">https://app.your-data-matters.service.nhs.uk/</string>
     <string name="isFirstTimeOpened">isFirstTimeOpened</string>
     <string name="logoutPath">logout</string>
-
+    <string name="secureFlag">enabled</string>
     <string name="hotjarLink">https://in.hotjar.com/s?siteId=859152&amp;surveyId=95785</string>
     <string name="helpURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/help-and-support/</string>
     <string name="termsAndConditionsURL">https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/terms-of-use/</string>

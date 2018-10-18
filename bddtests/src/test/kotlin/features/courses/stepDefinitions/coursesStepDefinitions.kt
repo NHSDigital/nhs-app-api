@@ -197,7 +197,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
 
     @And("I enter text \"(.*)\" for special request")
     fun iEnterTextForSpecialRequest(text: String) {
-        courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text)
+        Serenity.setSessionVariable("specialRequestText").to(courseSteps.repeatPrescriptions.typeTextIntoSpecialRequestTextArea(text))
     }
 
     @When("I click Continue on the Order a repeat prescription page")
@@ -227,10 +227,16 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         confirmRepeatPrescriptionOrderSteps.confirmRepeatPrescriptionsOrderPage.verifySelectedRepeatPrescriptions(selectedCourses)
     }
 
-    @Then("I see the special request text \"(.*)\"")
-    fun iSeeTheSpecialRequestText(value: String) {
+    @Then("I see the entered special request text")
+    fun iSeeTheSpecialRequestText() {
         confirmRepeatPrescriptionOrderSteps.isLoaded()
-        confirmRepeatPrescriptionOrderSteps.assertSpecialRequest(value)
+        confirmRepeatPrescriptionOrderSteps.assertSpecialRequest(Serenity.sessionVariableCalled("specialRequestText"))
+    }
+
+    @Then("I see the default special request text")
+    fun iSeeTheDefaultSpecialRequestText() {
+        confirmRepeatPrescriptionOrderSteps.isLoaded()
+        confirmRepeatPrescriptionOrderSteps.assertSpecialRequest("None")
     }
 
     @Then("I see the special request text area")

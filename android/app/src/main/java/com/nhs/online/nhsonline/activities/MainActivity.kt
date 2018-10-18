@@ -51,8 +51,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE)
+        if(resources.getString(R.string.secureFlag)!="disabled") {
+            window.setFlags(WindowManager.LayoutParams.FLAG_SECURE,
+                WindowManager.LayoutParams.FLAG_SECURE)
+        }
+        
         CookieManager.getInstance().removeAllCookies(null)
 
         setContentView(R.layout.activity_main)

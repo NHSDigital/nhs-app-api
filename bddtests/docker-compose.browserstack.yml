@@ -3,11 +3,12 @@ services:
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
-      - CID_AUTH_ENDPOINT=http://bs-local.com:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
-      - URI_FORMAT_API_CLIENT=http://bs-local.com:8082
+      - CID_AUTH_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/authorize
+      - CID_REGISTER_ENDPOINT=http://stubs.local.bitraft.io:8080/citizenid/register
+      - URI_FORMAT_API_CLIENT=http://api.{host}:8082
       - URI_FORMAT_API_SERVER=http://api.{host}:8082
-      - URI_FORMAT_CID_REDIRECT_WEB=http://bs-local.com:3000/auth-return
-      - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
+      - URI_FORMAT_CID_REDIRECT_WEB=http://web.{host}:3000/auth-return
+      - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://web.{host}:3000/auth-return
   api.local.bitraft.io:
     image: nhsonline.backend.worker
     environment:
@@ -15,6 +16,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://*:8082
       - PORT=8082
-      - NHS_WEB_APP_BASE_URL=http://bs-local.com:3000
+      - NHS_WEB_APP_BASE_URL=http://web.local.bitraft.io:3000
       - STUB_TERMS_AND_CONDITIONS=true
       - ConfigurationSettings__CookieDomain=.bitraft.io
+      - ConfigurationSettings__DefaultSessionExpiryMinutes=5

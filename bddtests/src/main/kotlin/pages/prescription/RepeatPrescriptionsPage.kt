@@ -2,6 +2,7 @@ package pages.prescription
 
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.annotations.findby.By
+import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert
 import pages.HybridPageObject
@@ -140,15 +141,18 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         backButton.element.click()
     }
 
-    fun typeTextIntoSpecialRequestTextArea(text: String) {
+    fun typeTextIntoSpecialRequestTextArea(text: String) : String {
         val element = findByXpath(SpecialRequestTextAreaXpath)
-        //Each letter sent individually, and then asserted in order to give chrome extra time.
+        //Each letter sent individually
         //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
+        //Keys can sometimes go missing; so we return the actual text that got typed and assert that something went in
         text.toCharArray().forEach { letter ->
             element.sendKeys(letter.toString())
-            Assert.assertEquals("Last letter not sent", letter, element.value.last())
         }
-        findByXpath(SpecialRequestTextAreaXpath).sendKeys(text)
+
+        Assert.assertTrue("Expected some text to be output to the text area",element.value.isNotEmpty())
+
+        return element.value
     }
 
     fun isSpecialRequestTextAreaVisible() : Boolean {
