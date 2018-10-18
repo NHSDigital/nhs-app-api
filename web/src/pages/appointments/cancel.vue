@@ -113,6 +113,7 @@ export default {
       } else {
         this.submissionError = true;
         document.getElementById('txt_reason').focus();
+        window.scrollTo(0, 0);
         this.labelledBy = 'error-label';
       }
     },
