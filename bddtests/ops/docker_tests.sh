@@ -43,13 +43,19 @@ else
     CURRENT_TAG=$(git name-rev --tags --name-only $CURRENT_BRANCH)
     if [ "$RUN_AS_DEVELOP" == 1 ] || [ $CURRENT_BRANCH == "develop" ] || [ $CURRENT_TAG != "undefined" ]
     then
-        info "Main Tranche - Full BDD Test Run Configured"
-        BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS'"
+        if [ "$ENABLE_LONG_RUNNING" == 1 ]
+        then
+          info "Main Tranche - Full BDD Test including Long Running Run Configured"
+          BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt'"
+        else
+          info "Main Tranche - Full BDD Test Run Configured"
+          BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and not @long-running $SPECIFIC_TEST_TAGS'"
+        fi
     else
         info "MR Tranche - BDD Smoketest Run Configured"
         BDD_CUCUMBER_OPTIONS="--tags 'not @bug and not @pending and not @manual and not @native and not @tech-debt and
         not @long-running and @smoketest $SPECIFIC_TEST_TAGS'"
-    
+
     fi
 fi
 
