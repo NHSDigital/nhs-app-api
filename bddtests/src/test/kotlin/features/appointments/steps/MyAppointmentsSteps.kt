@@ -100,7 +100,7 @@ open class MyAppointmentsSteps {
     @Step
     fun generateCorruptedStubForMyAppointment(provider: String) {
         val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
-        currentViewAppointmentFactory.createCorruptedpcomingAppointmentsResponse()
+        currentViewAppointmentFactory.createCorruptedUpcomingAppointmentsResponse()
     }
 
     @Step

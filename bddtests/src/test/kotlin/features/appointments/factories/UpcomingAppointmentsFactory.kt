@@ -32,7 +32,7 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
         }
     }
 
-    fun createCorruptedpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
+    fun createCorruptedUpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
         createUpcomingAppointments {
             respondWithCorrupted(facade)
         }
