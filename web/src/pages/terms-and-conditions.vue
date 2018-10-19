@@ -6,6 +6,7 @@
 </template>
 <script>
 /* eslint-disable import/extensions */
+import NativeCallbacks from '@/services/native-app';
 import HeaderSlim from '@/components/HeaderSlim';
 import TermsConditions from '@/components/TermsConditions';
 
@@ -17,8 +18,8 @@ export default {
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
-      window.nativeApp.hideHeader();
-      window.nativeApp.hideWhiteScreen();
+      NativeCallbacks.hideHeader();
+      NativeCallbacks.hideWhiteScreen();
     }
   },
   methods: {

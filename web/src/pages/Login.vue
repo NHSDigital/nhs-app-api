@@ -15,6 +15,7 @@
 </template>
 <script>
 import AuthorisationService from '@/services/authorisation-service';
+import NativeCallbacks from '@/services/native-app';
 import LoginButton from '@/components/LoginButton';
 import { BEGINLOGIN } from '@/lib/routes';
 
@@ -42,7 +43,7 @@ export default {
   },
   mounted() {
     if (this.$store.state.device.isNativeApp) {
-      window.nativeApp.hideHeader();
+      NativeCallbacks.hideHeader();
     }
 
     const authorisationService = new AuthorisationService(this.$env);

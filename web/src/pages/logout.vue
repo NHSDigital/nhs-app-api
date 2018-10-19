@@ -3,10 +3,12 @@
 </template>
 
 <script>
+import NativeCallbacks from '@/services/native-app';
+
 export default {
   mounted() {
     if (this.$store.state.device.isNativeApp) {
-      window.nativeApp.hideHeader();
+      NativeCallbacks.hideHeader();
     }
     this.$store.dispatch('auth/logout');
   },

@@ -1,3 +1,4 @@
+import NativeCallbacks from '@/services/native-app';
 import Sources from '@/lib/sources';
 import { LOGIN } from '@/lib/routes';
 import { AUTH_RESPONSE, LOGOUT, INIT_AUTH, UPDATE_CONFIG } from './mutation-types';
@@ -77,6 +78,7 @@ export default {
     this.dispatch('session/clear');
     this.dispatch('session/endValidationChecking');
     this.dispatch('errors/disableApiError');
+    this.dispatch('navigation/clearPreviousSelectedMenuItem');
 
     this.app.$cookies.remove('nhso.session');
 
@@ -93,8 +95,7 @@ export default {
   nativeLogin() {
     const login = () => {
       if (window.nativeApp) {
-        window.nativeApp.onLogin();
-        return true;
+        return NativeCallbacks.onLogin();
       }
 
       return false;

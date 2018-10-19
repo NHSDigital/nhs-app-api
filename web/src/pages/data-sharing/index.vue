@@ -31,6 +31,7 @@
 
 <script>
 /* eslint-disable import/extensions */
+import NativeCallbacks from '@/services/native-app';
 import BottomNav from '@/components/data-sharing/BottomNav';
 import Overview from '@/components/data-sharing/Overview';
 import Benefits from '@/components/data-sharing/Benefits';
@@ -83,7 +84,7 @@ export default {
       event.preventDefault();
       this.$store.app.$http.getV1PatientNdop({}).then((p) => {
         if (this.$store.state.device.source === 'ios') {
-          window.nativeApp.postNdopToken(p.response.token);
+          NativeCallbacks.postNdopToken(p.response.token);
         } else {
           const ndopTokenForm = document.getElementById('ndop-token-form');
           const startNowButton = document.getElementById('start-now-button');
