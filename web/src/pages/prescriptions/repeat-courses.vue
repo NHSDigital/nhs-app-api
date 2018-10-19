@@ -12,7 +12,7 @@
         <li :class="$style['validation-text']">{{ $t('rp03.noMedicinesSelected') }}</li>
       </message-list>
       <message-list v-if="!specialRequestValid">
-        <li>{{ $t('rp03.specialRequestRequired') }}</li>
+        <li :class="$style['validation-text']">{{ $t('rp03.specialRequestRequired') }}</li>
       </message-list>
     </message-dialog>
 
@@ -115,20 +115,21 @@ export default {
   },
   computed: {
     error() {
-      const { isValid, validated } = this.$store.state.repeatPrescriptionCourses;
-      if (validated && !isValid) {
-        const errors = [];
+      const { validated } = this.$store.state.repeatPrescriptionCourses;
 
+      const errors = [];
+
+      if (validated && !this.courseSelectionValid) {
         errors.push(this.$t('rp03.noMedicinesSelected'));
+        return true;
+      }
+      if (validated && !this.specialRequestValid) {
+        errors.push(this.$t('rp03.noMedicinesSelected'));
+        return true;
+      }
 
+      if (validated && errors.length > 0) {
         this.$store.app.$analytics.validationError(errors);
-      }
-
-      if (validated && !isValid && !this.courseSelectionValid) {
-        return true;
-      }
-      if (validated && !isValid && !this.specialRequestValid) {
-        return true;
       }
 
       return false;
