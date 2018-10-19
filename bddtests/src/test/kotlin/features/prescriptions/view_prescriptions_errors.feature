@@ -13,6 +13,8 @@ Feature: View prescriptions error cases
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user tries to navigate to the prescriptions page, but the request to retrieve the prescriptions throws a server error
     Given <GP System> is initialised
@@ -24,6 +26,8 @@ Feature: View prescriptions error cases
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario: A user navigates to the prescriptions page and the session times out
     Given a patient from EMIS is defined
@@ -40,14 +44,16 @@ Feature: View prescriptions error cases
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    But The courses endpoint is timing out
     When I navigate to prescriptions
+    But The courses endpoint is timing out
     And I click 'Order a new repeat prescription'
     And I wait for 20 seconds
     Then I see the appropriate error message for a prescription timeout
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user tried to navigate to the 'Order a Repeat Prescription' page, but the request to retrieve the repeat prescriptions to order throws a server error
     Given <GP System> is initialised
@@ -55,13 +61,15 @@ Feature: View prescriptions error cases
     And I am logged in
     And I have 10 past repeat prescriptions
     And each repeat prescription contains 1 courses of which 1 are repeats
-    But The courses endpoint is throwing a server error
     When I navigate to prescriptions
+    But The courses endpoint is throwing a server error
     And I click 'Order a new repeat prescription'
     Then I see the appropriate error message for a prescription server error
     Examples:
       | GP System |
       | EMIS      |
+      | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request times out
     Given <GP System> is initialised
@@ -82,6 +90,7 @@ Feature: View prescriptions error cases
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but the request throws a server error
     Given <GP System> is initialised
@@ -101,6 +110,7 @@ Feature: View prescriptions error cases
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user tries to place an order for a repeat subscription, but request returns an already ordered response
     Given <GP System> is initialised

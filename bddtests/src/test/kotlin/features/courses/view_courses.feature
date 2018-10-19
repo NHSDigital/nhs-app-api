@@ -114,6 +114,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: The <GP System> User has selected one repeat prescription to order
     Given a patient from <GP System> is defined
@@ -127,6 +128,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: The <GP System> User has selected no repeat prescriptions to order
     Given a patient from <GP System> is defined
@@ -144,6 +146,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and views previous selection
     Given a patient from <GP System> is defined
@@ -158,6 +161,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   @smoketest
   Scenario Outline: The <GP System> User alters a repeat prescriptions selection and the special request text and sees the updated confirmation
@@ -180,6 +184,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: The <GP System> special request text is optional and 'None' is displayed if they don't enter a value
     Given a patient from <GP System> is defined
@@ -193,6 +198,7 @@ Feature: View courses
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: The user can't see prescription special request when the gp system <GP System> has disabled it
     Given a patient from <GP System> is defined

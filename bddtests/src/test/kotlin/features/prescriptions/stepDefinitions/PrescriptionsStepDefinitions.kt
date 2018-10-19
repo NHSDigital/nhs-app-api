@@ -364,8 +364,19 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                     prescriptions.prescriptionsRequest(currentPatient)
                             .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                 }
-    }
 
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(currentPatient)
+                            .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                }
+
+        mockingClient
+                .forVision {
+                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                }
+    }
 
     @But("The prescriptions endpoint is throwing a server error")
     fun butThePrescriptionsEndpointIsThrowingAServerError() {
@@ -374,21 +385,73 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
                     prescriptions.prescriptionsRequest(currentPatient)
                             .respondWith(500, resolve = {})
                 }
+
+        mockingClient
+                .forTpp {
+                    prescriptions.listRepeatMedication(currentPatient)
+                            .respondWith(500, resolve = {})
+                }
+
+        mockingClient
+                .forVision {
+                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                            .respondWith(500, resolve = {})
+                }
     }
 
     @But("The courses endpoint is timing out")
     fun butTheCoursesEndpointIsTimingOut() {
-        mockingClient.forEmis {
-            prescriptions.coursesRequest(currentPatient)
-                    .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+
+        if(currentProvider == ProviderTypes.EMIS) {
+            mockingClient.forEmis {
+                prescriptions.coursesRequest(currentPatient)
+                        .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+            }
+        }
+        else if(currentProvider == ProviderTypes.TPP) {
+            Thread.sleep(1000)
+            mockingClient
+                    .forTpp {
+                        prescriptions.listRepeatMedication(currentPatient)
+                                .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                    }
+        }
+        else if(currentProvider == ProviderTypes.VISION) {
+            Thread.sleep(1000)
+
+            mockingClient
+                    .forVision {
+                        getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                                .respondWith(504, resolve = {}, milliSecondDelay = 15000)
+                    }
         }
     }
 
     @But("The courses endpoint is throwing a server error")
     fun butTheCoursesEndpointIsThrowingAServerError() {
-        mockingClient.forEmis {
-            prescriptions.coursesRequest(currentPatient)
-                    .respondWith(500, resolve = {})
+
+        if(currentProvider == ProviderTypes.EMIS) {
+            mockingClient.forEmis {
+                prescriptions.coursesRequest(currentPatient)
+                        .respondWith(500, resolve = {})
+            }
+        }
+        else if(currentProvider == ProviderTypes.TPP) {
+            Thread.sleep(1000)
+            mockingClient
+                    .forTpp {
+                        prescriptions.listRepeatMedication(currentPatient)
+                                .respondWith(500, resolve = {})
+                    }
+        }
+        else if(currentProvider == ProviderTypes.VISION) {
+            Thread.sleep(1000)
+
+            mockingClient
+                    .forVision {
+                        getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                                .respondWith(500, resolve = {})
+                    }
         }
     }
 
@@ -396,8 +459,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
         mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
 
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWith(200,
-                resolve = {}, milliSecondDelay = 15000) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")

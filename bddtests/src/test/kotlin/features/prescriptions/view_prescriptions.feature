@@ -12,6 +12,7 @@ Feature: View prescriptions
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   
   Scenario Outline: <GP System> patient selects the prescriptions menu button

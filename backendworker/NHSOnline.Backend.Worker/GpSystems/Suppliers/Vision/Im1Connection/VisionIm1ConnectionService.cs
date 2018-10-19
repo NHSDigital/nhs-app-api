@@ -31,6 +31,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Im1Connection
 
                 if (getConfigurationReply.HasErrorResponse)
                 {
+                    _logger.LogError($"Vision system encountered an error: { getConfigurationReply.ErrorContent }");
                     return GetCorrectVerifyErrorResult(getConfigurationReply);
                 }
 
