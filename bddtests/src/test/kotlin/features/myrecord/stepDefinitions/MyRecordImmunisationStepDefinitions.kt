@@ -1,9 +1,10 @@
 package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
-import mocking.data.myrecord.AllergiesData
 import mocking.data.myrecord.ImmunisationsData
 import mocking.vision.VisionConstants
+import mocking.vision.VisionConstants.immunisationsView
+import mocking.vision.VisionConstants.xmlResponseFormat
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import worker.models.myrecord.MyRecordResponse
@@ -28,7 +29,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             }
             "VISION" -> {
                 mockingClient.forVision {
-                    immunisationsRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -36,7 +37,9 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                                    view = immunisationsView,
+                                    responseFormat = xmlResponseFormat
                     ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsData(2))
 
                 }
@@ -58,7 +61,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             }
             "VISION" -> {
                 mockingClient.forVision {
-                    allergiesRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -66,7 +69,9 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                                    view = immunisationsView,
+                                    responseFormat = xmlResponseFormat
                     ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
                 }
             }
@@ -88,7 +93,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             }
             "VISION" -> {
                 mockingClient.forVision {
-                    immunisationsRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -96,7 +101,9 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                                    view = immunisationsView,
+                                    responseFormat = xmlResponseFormat
                     ).respondWithAccessDeniedError()
                 }
             }
@@ -117,7 +124,7 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
             }
             "VISION" -> {
                 mockingClient.forVision {
-                    immunisationsRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -125,7 +132,9 @@ open class MyRecordImmunisationStepDefinitions : AbstractDemographicsStepDefinit
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                                    view = immunisationsView,
+                                    responseFormat = xmlResponseFormat
                     ).respondWithUnknownError()
                 }
             }

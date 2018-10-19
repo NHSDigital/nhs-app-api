@@ -2,7 +2,7 @@
 
 namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
-    public class Immunisations
+    public class Immunisations: IPatientDataModel
     {
         public Immunisations()
         {

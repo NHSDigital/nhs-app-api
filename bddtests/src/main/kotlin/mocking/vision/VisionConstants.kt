@@ -29,9 +29,12 @@ object VisionConstants {
     var existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
     var existingAppointmentsVersion: String = "2.0.0"
 
-    val ALLERGIES_VIEW = "VPS_ALLERGIES"
+    var allergiesView: String  = "VPS_ALLERGIES"
+    var medicationsView: String = "VPS_MEDICATIONS"
+    var immunisationsView: String = "PROCEDURES"
 
-    val HTML_RESPONSE_FORMAT = "HTML"
+    var htmlResponseFormat: String = "HTML"
+    var xmlResponseFormat: String = "XML"
 
     fun getVisionExistingAppointmentsResponse(serviceContent: String,
                                               serviceDefinition: mocking.vision.models.ServiceDefinition): String {
@@ -41,15 +44,9 @@ object VisionConstants {
         return getBaseVisionResponse(response, serviceDefinition)
    }
 
-    // Vision Allergies
-    fun getVisionAllergiesResponse(serviceContent: String,
-                                   serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
-        return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
-    }
-
-    // Vision Immunisations
-    fun getVisionImmunisationsResponse(serviceContent: String,
-                                   serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
+    // Vision Get Patient Data
+    fun getClinicalDataResponse(serviceContent: String,
+                                serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
         return getBaseVisionResponse("<vision:record>${serviceContent}</vision:record>", serviceDefinition)
     }
 

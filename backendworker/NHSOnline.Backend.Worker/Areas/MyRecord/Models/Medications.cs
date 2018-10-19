@@ -1,6 +1,6 @@
 ﻿namespace NHSOnline.Backend.Worker.Areas.MyRecord.Models
 {
-    public class Medications
+    public class Medications: IPatientDataModel
     {  
         public Medications()
         {

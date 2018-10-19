@@ -1,15 +1,15 @@
-package mocking.vision.allergies
+package mocking.vision
 
 import mocking.models.Mapping
 import mocking.vision.VisionConstants
-import mocking.vision.VisionConstants.getVisionAllergiesResponse
+import mocking.vision.VisionConstants.getClinicalDataResponse
 import mocking.vision.VisionMappingBuilder
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import org.apache.http.HttpStatus
 
-class VisionAllergiesBuilder(private val userSession: VisionUserSession, private val serviceDefinition:
-        ServiceDefinition) : VisionMappingBuilder("POST"){
+class VisionGetPatientDataBuilder(private val userSession: VisionUserSession, private val serviceDefinition:
+ServiceDefinition, private val view: String, private val responseFormat: String) : VisionMappingBuilder("POST"){
 
     init {
         val contentTypeHeader = "content-type"
@@ -23,13 +23,14 @@ class VisionAllergiesBuilder(private val userSession: VisionUserSession, private
                 .andBody(userSession.accountId, "contains")
                 .andBody(userSession.provider, "contains")
                 .andBody(serviceDefinition.name, "contains")
-                .andBody(VisionConstants.ALLERGIES_VIEW, "contains")
-                .andBody(VisionConstants.HTML_RESPONSE_FORMAT, "contains")
+                .andBody(view, "contains")
+                .andBody(responseFormat, "contains")
+
     }
 
-    fun respondWithSuccess (allergies: String) : Mapping {
+    fun respondWithSuccess (clinicalData: String) : Mapping {
         return respondWith(HttpStatus.SC_OK) {
-            andXmlBody(getVisionAllergiesResponse(allergies, serviceDefinition))
+            andXmlBody(getClinicalDataResponse(clinicalData, serviceDefinition))
         }
     }
 

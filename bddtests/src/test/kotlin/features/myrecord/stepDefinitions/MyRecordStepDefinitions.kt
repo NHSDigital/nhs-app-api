@@ -21,6 +21,11 @@ import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJo
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.tpp.models.Error
 import mocking.vision.VisionConstants
+import mocking.vision.VisionConstants.allergiesView
+import mocking.vision.VisionConstants.htmlResponseFormat
+import mocking.vision.VisionConstants.immunisationsView
+import mocking.vision.VisionConstants.medicationsView
+import mocking.vision.VisionConstants.xmlResponseFormat
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
@@ -104,7 +109,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
             }
             "VISION" -> {
                 mockingClient.forVision {
-                    allergiesRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -112,13 +117,15 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                                    view = allergiesView,
+                                    responseFormat = htmlResponseFormat
                     ).respondWithSuccess(AllergiesData.getVisionAllergiesData(0))
 
                 }
 
                 mockingClient.forVision {
-                    immunisationsRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -126,7 +133,25 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                                    view = immunisationsView,
+                                    responseFormat = xmlResponseFormat
+                    ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
+
+                }
+
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = medicationsView,
+                            responseFormat = xmlResponseFormat
                     ).respondWithSuccess(ImmunisationsData.getVisionImmunisationsDataWithNoImmunisations())
 
                 }
@@ -149,6 +174,22 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                             .respondWithError(Error("6", "Requested record access is disabled by the practice", "1f907c07-9063-4d3a-81d7-ee8c98c54f4a"))
                 }
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                                    view = allergiesView,
+                                    responseFormat = "HTML"
+                    ).respondWithAccessDeniedError()
+                }
+            }
         }
     }
 
@@ -158,7 +199,7 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         when (service) {
             "VISION" -> {
                 mockingClient.forVision {
-                    allergiesRequest(
+                    getPatientDataRequest(
                             visionUserSession = VisionUserSession(
                                     patient.rosuAccountId,
                                     patient.apiKey,
@@ -166,7 +207,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                                     patient.patientId),
                             serviceDefinition = ServiceDefinition(
                                     name = VisionConstants.patientDataName,
-                                    version = VisionConstants.patientDataVersion)
+                                    version = VisionConstants.patientDataVersion),
+                            view = allergiesView,
+                            responseFormat = htmlResponseFormat
                     ).respondWithUnknownError()
                 }
             }

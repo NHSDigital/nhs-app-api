@@ -6,6 +6,11 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import mocking.data.myrecord.MedicationsData
 import mocking.tpp.models.Error
+import mocking.vision.VisionConstants
+import mocking.vision.VisionConstants.medicationsView
+import mocking.vision.VisionConstants.xmlResponseFormat
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -33,6 +38,22 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
             "TPP"->{
                 mockingClient.forTpp {
                     myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppMedicationData())
+                }
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = medicationsView,
+                            responseFormat = xmlResponseFormat
+                    ).respondWithSuccess(MedicationsData.getVisionMedicationsData())
                 }
             }
         }
@@ -64,6 +85,31 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
                 val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
 
                 Serenity.setSessionVariable(MyRecordResponse::class).to(result)
+
+                }
+                catch(httpException: NhsoHttpException) {
+                    Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
+                }
+            }
+            "VISION" -> {
+                try {
+                    mockingClient.forVision {
+                        getPatientDataRequest(
+                                visionUserSession = VisionUserSession(
+                                        patient.rosuAccountId,
+                                        patient.apiKey,
+                                        patient.odsCode,
+                                        patient.patientId),
+                                serviceDefinition = ServiceDefinition(
+                                        name = VisionConstants.patientDataName,
+                                        version = VisionConstants.patientDataVersion),
+                                view = medicationsView,
+                                responseFormat = xmlResponseFormat
+                        ).respondWithSuccess(MedicationsData.getEmptySetOfVisionMedicationData())
+                    }
+                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
+
+                    Serenity.setSessionVariable(MyRecordResponse::class).to(result)
 
                 }
                 catch(httpException: NhsoHttpException) {

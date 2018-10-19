@@ -1,0 +1,47 @@
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
+
+namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.TaskChecker
+{
+    public class VisionTaskChecker<T> where T: IPatientDataModel, new()
+    {
+        private readonly IVisionMapper<T> _visionMapper;
+        private readonly ILogger _logger;
+        private readonly VisionMapperType _mapperType;
+        
+        public VisionTaskChecker(ILogger logger, IVisionMapper<T> visionMapper, VisionMapperType mapperType)
+        {
+            _logger = logger;
+            _visionMapper = visionMapper;
+            _mapperType = mapperType;
+        }
+
+        public T Check(Task<VisionClient.VisionApiObjectResponse<VisionPatientDataResponse>> task)
+        {
+            _logger.LogInformation($"Checking Vision {(_mapperType)}");
+
+            var result = task.Result;
+            
+            if (!result.HasErrorResponse) 
+                return _visionMapper.Map(result?.Body);
+            
+            if (result.IsAccessDeniedError)
+            {
+                _logger.LogWarning("User does not have access to their patient record");
+                return new T
+                {
+                    HasAccess = false
+                };
+            }
+
+            _logger.LogError($"Unsuccessful request retrieving {(_mapperType)} information for Vision. Status code: {(int)result.StatusCode}");
+            return new T
+            {
+                HasErrored = true
+            };
+        }
+    }
+}

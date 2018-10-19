@@ -7,6 +7,7 @@ using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.TaskChecker;
+using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
 using NHSOnline.Backend.Worker.Support.Logging;
 
@@ -35,16 +36,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord
             try
             {
                 var allergiesTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.HTML, Views.VPS_ALLERGIES));
+                var medicationsTask = _visionClient.GetPatientData(visionUserSession,
+                    CreatePatientDataRequest(visionUserSession, ResponseFormats.XML, Views.VPS_MEDICATIONS));
                 var immunisationsTask = _visionClient.GetPatientData(visionUserSession, CreatePatientDataRequest(visionUserSession, ResponseFormats.XML ,Views.PROCEDURES));
-                await Task.WhenAll(allergiesTask, immunisationsTask);
+                
+                await Task.WhenAll(allergiesTask, medicationsTask, immunisationsTask);
                 _logger.LogInformation("Patient record tasks completed");
 
                 try
                 {
-                    var checkedAllergies = new VisionGetAllergyTaskChecker(_logger).Check(allergiesTask);
-                    var checkedImmunisations = new VisionGetImmunisationsTaskChecker(_logger).Check(immunisationsTask);
-
-                    MyRecordResponse response = _visionMyRecordMapper.Map(checkedAllergies, checkedImmunisations);
+                    var checkedAllergies = new VisionTaskChecker<Allergies>(_logger, new VisionAllergyMapper(_logger), VisionMapperType.Allergies).Check(allergiesTask);
+                    var checkedMedications = new VisionTaskChecker<Medications>(_logger, new VisionMedicationMapper(_logger), VisionMapperType.Medications).Check(medicationsTask);
+                    var checkedImmunisations = new VisionTaskChecker<Immunisations>(_logger, new VisionImmunisationsMapper(_logger), VisionMapperType.Immunisations).Check(immunisationsTask);
+                    
+                    var response = _visionMyRecordMapper.Map(checkedAllergies, checkedMedications, checkedImmunisations);
                     response.Supplier = userSession.Supplier.ToString().ToUpper(CultureInfo.InvariantCulture);
                     
                     _logger.LogExit(nameof(GetMyRecord));

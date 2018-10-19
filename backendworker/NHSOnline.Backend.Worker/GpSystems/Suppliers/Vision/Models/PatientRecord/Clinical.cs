@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord
@@ -6,7 +6,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientReco
     public class Clinical
     {
         [XmlAttribute(AttributeName = "eventdate")]
-        public DateTime EventDate { get; set; }
+        public string EventDate { get; set; }
         [XmlAttribute(AttributeName = "read_term")]
         public string ReadTerm { get; set; }
         [XmlAttribute(AttributeName = "read_code")]
@@ -19,5 +19,15 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientReco
         public string DrugTerm { get; set; }
         [XmlAttribute(AttributeName = "subgroup_code")]
         public string SubGroupCode { get; set; }
+        [XmlAttribute(AttributeName = "last_prescribed_date")]
+        public string LastPrescribedDate { get; set; }
+        [XmlAttribute(AttributeName = "first_prescribed_date")]
+        public string FirstPrescribedDate { get; set; }
+        [XmlAttribute(AttributeName = "dosage")]
+        public string Dosage { get; set; }
+        [XmlAttribute(AttributeName = "quantity")]
+        public string Quantity { get; set; }
+        [XmlAttribute(AttributeName = "packsize")]
+        public string PackSize { get; set; }
     }
 }

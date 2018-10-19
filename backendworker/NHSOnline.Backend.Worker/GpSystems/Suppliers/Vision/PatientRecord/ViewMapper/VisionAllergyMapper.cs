@@ -6,7 +6,7 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper
 {
-    public class VisionAllergyMapper : IVisionAllergyMapper
+    public class VisionAllergyMapper : IVisionMapper<Allergies>
     {
         private readonly ILogger _logger;
 
@@ -34,7 +34,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
                         Name = clinical.ReadTerm,
                         Date = new MyRecordDate
                         {
-                            Value = clinical.EventDate,
+                            Value =DateTime.TryParse(clinical.EventDate, out var eventDate) ?
+                                eventDate : (DateTimeOffset?)null,
                             DatePart = "Unknown"
                         },
                         Reaction = clinical.ReadTerm2,

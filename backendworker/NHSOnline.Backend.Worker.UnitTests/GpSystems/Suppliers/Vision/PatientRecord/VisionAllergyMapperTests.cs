@@ -17,8 +17,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
     public class VisionAllergyMapperTests
     {
         private IFixture _fixture;
-        private IVisionAllergyMapper _mapper;
-        private ILogger<IVisionAllergyMapper> _logger;
+        IVisionMapper<Allergies> _mapper;
+        ILogger<IVisionMapper<Allergies>> _logger;
 
         private const string VisionAllergyTestDataDirectory = "GpSystems/Suppliers/Vision/PatientRecord/TestData";
 
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<ILogger<IVisionAllergyMapper>>();
+            _logger = _fixture.Freeze<ILogger<IVisionMapper<Allergies>>>();
             _mapper = new VisionAllergyMapper(_logger);
         }
 

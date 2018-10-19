@@ -17,8 +17,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
     public class VisionImmunisationsMapperTests
     {
         IFixture _fixture;
-        IVisionImmunisationsMapper _mapper;
-        ILogger<IVisionImmunisationsMapper> _logger;
+        IVisionMapper<Immunisations> _mapper;
+        ILogger<IVisionMapper<Immunisations>> _logger;
 
         const string VisionImmunisationsTestDataDirectory = "GpSystems/Suppliers/Vision/PatientRecord/TestData";
 
@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         public void TestInitialize()
         {
             _fixture = new Fixture().Customize(new AutoMoqCustomization());
-            _logger = _fixture.Freeze<ILogger<IVisionImmunisationsMapper>>();
+            _logger = _fixture.Freeze<ILogger<IVisionMapper<Immunisations>>>();
             _mapper = new VisionImmunisationsMapper(_logger);
         }
 
