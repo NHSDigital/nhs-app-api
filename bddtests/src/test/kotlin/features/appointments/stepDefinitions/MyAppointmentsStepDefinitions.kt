@@ -14,8 +14,7 @@ import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
-import java.util.*
-import java.time.Duration
+
 
 class MyAppointmentsStepDefinitions {
 
