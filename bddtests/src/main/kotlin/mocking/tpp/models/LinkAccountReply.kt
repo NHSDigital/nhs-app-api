@@ -9,5 +9,6 @@ import javax.xml.bind.annotation.XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 data class LinkAccountReply (
         @XmlAttribute var passphrase: String = "default passphrase",
-        @XmlAttribute var uuid: String = "default uuid"
+        @XmlAttribute var uuid: String = "default uuid",
+        @XmlAttribute var accountId: String? = null
 )

@@ -5,4 +5,5 @@ object WorkerHeaders {
     val OdsCode = "NHSO-ODS-Code"
     val NhsNumber = "NHSO-Nhs-Number"
     val IdentityToken = "NHSO-Identity-Token"
+    val Surname = "NHSO-Surname"
 }

@@ -14,6 +14,15 @@ import mockingFacade.linkage.LinkageInformationFacade
 
 class LinkageFactoryEmis : LinkageFactory("EMIS") {
 
+    override val validLinkageDetails = LinkageInformationFacade(
+                odsCode =  EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                linkageKey = "tTALtBP3rLR16",
+                accountId = "542343",
+                nhsNumber = "3434234345",
+                identityToken = "abc",
+                emailAddress = "ab@cd.com",
+                surname = "Edgar")
+
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult) {
         val linkageToPostRequestResponse = hashMapOf(
                 LinkageResult.SuccessfullyRetrieved to successfulPost(linkageInformationFacade),
@@ -87,16 +96,16 @@ class LinkageFactoryEmis : LinkageFactory("EMIS") {
     }
 
     private fun verificationRequest(linkageInformationFacade: LinkageInformationFacade): AddVerificationRequest {
-        return AddVerificationRequest(linkageInformationFacade.nhsNumber,
+        return AddVerificationRequest(
+                linkageInformationFacade.nhsNumber,
                 linkageInformationFacade.odsCode,
-                linkageInformationFacade
-                        .identityToken)
+                linkageInformationFacade.identityToken)
     }
 
     private fun verificationResponse(linkageInformationFacade: LinkageInformationFacade): AddVerificationResponse {
         return AddVerificationResponse(
-                linkageInformationFacade.odsCode
-                , linkageInformationFacade.linkageKey,
-                linkageInformationFacade.accountId)
+                linkageInformationFacade.odsCode,
+                linkageInformationFacade.linkageKey,
+                linkageInformationFacade.accountId!!)
     }
 }

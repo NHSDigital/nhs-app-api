@@ -15,6 +15,8 @@ abstract class LinkageFactory(protected val gpSystem: String) {
 
     abstract fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult)
 
+    abstract val validLinkageDetails: LinkageInformationFacade
+
     protected fun <TMapping>responseFromMap(linkageToGetRequestResponse: HashMap<LinkageResult, TMapping?>,
                                           linkageResult: LinkageResult): TMapping?{
 
@@ -27,7 +29,9 @@ abstract class LinkageFactory(protected val gpSystem: String) {
     companion object : SupplierSpecificFactory<LinkageFactory>() {
 
         override val map: HashMap<String, () -> LinkageFactory>
-            get() = hashMapOf("EMIS" to {LinkageFactoryEmis()})
+            get() = hashMapOf(
+                    "EMIS" to {LinkageFactoryEmis()},
+                    "TPP" to {LinkageFactoryTpp()})
 
     }
 }

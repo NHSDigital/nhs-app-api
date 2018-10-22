@@ -3,6 +3,7 @@ package worker
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import config.Config
+import mockingFacade.linkage.LinkageInformationFacade
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
@@ -64,11 +65,12 @@ class WorkerClientAuthentication(val config: Config, val sender: WorkerClientSen
         return json
     }
 
-    fun getLinkageKey(nhsNumber: String?, odsCode: String?, identityToken: String?): LinkageResponse {
+    fun getLinkageKey(linkage: LinkageInformationFacade): LinkageResponse {
         val httpGet = HttpGet(config.cidBackendUrl + WorkerPaths.LinkageKey)
-        httpGet.setHeader(WorkerHeaders.NhsNumber, nhsNumber)
-        httpGet.setHeader(WorkerHeaders.OdsCode, odsCode)
-        httpGet.setHeader(WorkerHeaders.IdentityToken, identityToken)
+        httpGet.setHeader(WorkerHeaders.NhsNumber, linkage.nhsNumber)
+        httpGet.setHeader(WorkerHeaders.OdsCode,linkage. odsCode)
+        httpGet.setHeader(WorkerHeaders.IdentityToken,linkage. identityToken)
+        httpGet.setHeader(WorkerHeaders.Surname, linkage.surname)
         val result = sender.sendAsyncAndGetResult(httpGet)
         httpGet.releaseConnection()
         println(result)

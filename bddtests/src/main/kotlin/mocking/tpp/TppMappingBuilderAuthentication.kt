@@ -1,5 +1,7 @@
 package mocking.tpp
 
+import mocking.tpp.linkage.TppLinkageGETBuilder
+import mocking.tpp.linkage.TppLinkagePOSTBuilder
 import mocking.tpp.models.Authenticate
 import mocking.tpp.models.LinkAccount
 import mocking.tpp.registration.LinkAccountBuilder
@@ -14,5 +16,9 @@ class TppMappingBuilderAuthentication{
     fun logOffRequest()= TppLogOffBuilder()
 
     fun linkAccountRequest(patient: Patient) = LinkAccountBuilder(LinkAccount.forPatient(patient))
+
+    fun linkageKeyPOSTRequest(linkAccount: LinkAccount) = TppLinkagePOSTBuilder(linkAccount)
+
+    fun linkageKeyGetRequest(linkAccount: LinkAccount)= TppLinkageGETBuilder (linkAccount)
 }
 
