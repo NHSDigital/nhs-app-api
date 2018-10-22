@@ -1,4 +1,4 @@
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   if (req.url === '/apple-app-site-association') {
     res.setHeader('content-type', 'application/json');
     res.writeHead(200);

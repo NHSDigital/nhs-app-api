@@ -11,6 +11,7 @@ import {
   DESELECT,
   CLEAR,
   FILTER,
+  SET_BOOKING_REASON_NECESSITY,
   SET_SELECTED_OPTIONS,
 } from './mutation-types';
 
@@ -49,6 +50,9 @@ export default {
   },
   [SET_SELECTED_OPTIONS](state, selectedOptions) {
     state.selectedOptions = selectedOptions;
+  },
+  [SET_BOOKING_REASON_NECESSITY](state, value) {
+    state.bookingReasonNecessity = value;
   },
   [LOAD](state, d) {
     const data = d || {};

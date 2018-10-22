@@ -1,12 +1,13 @@
 import {
-  SELECT,
   LOAD,
+  SELECT,
+  SET_BOOKING_REASON_NECESSITY,
 } from '@/store/modules/availableAppointments/mutation-types';
 import actions from '@/store/modules/availableAppointments/actions';
 
 const API_HOST = 'http://unit.test';
 
-const { load, select } = actions;
+const { load, select, setBookingReasonNecessity } = actions;
 
 describe('load', () => {
   it('will request the appointment slots from the backend', () => {
@@ -51,5 +52,16 @@ describe('select', () => {
     select({ commit }, slotId);
 
     expect(commit).toBeCalledWith(SELECT, slotId);
+  });
+});
+
+describe('set booking reason necessity', () => {
+  it('will commit the received value using the SET_BOOKING_REASON_NECESSITY mutation type', () => {
+    const commit = jest.fn();
+    const bookingReasonNecessity = 'NotAllowed';
+
+    setBookingReasonNecessity({ commit }, bookingReasonNecessity);
+
+    expect(commit).toBeCalledWith(SET_BOOKING_REASON_NECESSITY, bookingReasonNecessity);
   });
 });

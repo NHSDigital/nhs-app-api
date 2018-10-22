@@ -25,7 +25,7 @@ Feature: Book an available appointment slot
       | GP System |
       | VISION    |
 
-    # Not applicable for VISION
+  # Not applicable for VISION
   Scenario Outline: A <GP System> user cannot book an appointment without describing symptoms
     Given there are <GP System> appointments available to book
     And I am logged in

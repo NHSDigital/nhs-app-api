@@ -8,6 +8,7 @@
               v-model="textValue"
               :aria-labelledby="aLabelledBy"
               :maxlength="maxlength"
+              :name="name"
               autocomplete="off"
               autocorrect="off"
               autocapitalize="off"
@@ -49,6 +50,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    name: {
+      type: String,
+      default: undefined,
+    },
   },
   data: function data() { return { model: undefined }; },
   computed: {
@@ -62,7 +67,7 @@ export default {
       },
     },
   },
-  mounted() {
+  created() {
     this.model = this.initialContents;
   },
   methods: {

@@ -1,0 +1,9 @@
+{
+  "presets": ["node8"],
+  "plugins": [
+    ["babel-plugin-root-import", {
+      "rootPathPrefix": "@",
+      "rootPathSuffix": "src"
+    }]
+  ]
+}

@@ -6,6 +6,7 @@ import {
   LOAD,
   CLEAR,
   FILTER,
+  SET_BOOKING_REASON_NECESSITY,
   SET_SELECTED_OPTIONS,
 } from './mutation-types';
 
@@ -31,6 +32,9 @@ export default {
   },
   select({ commit }, slot) {
     commit(SELECT, slot);
+  },
+  setBookingReasonNecessity({ commit }, value) {
+    commit(SET_BOOKING_REASON_NECESSITY, value);
   },
   deselect({ commit }) {
     commit(DESELECT);

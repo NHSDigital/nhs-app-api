@@ -9,7 +9,11 @@
 import $q from 'q';
 import axios from 'axios'
 import isEmpty from 'lodash/fp/isEmpty'
+import get from 'lodash/fp/get'
 import { resolveApiClient } from '@/middleware/urlResolution'
+
+const getWebVersion = get('store.state.appVersion.webVersion');
+const getNativeVersion = get('store.state.appVersion.nativeVersion');
 
 /**
  * {{&description}}
@@ -44,9 +48,11 @@ class {{&className}} {
 
   get domain() {
     const { app: { $env }  } = this.store;
-    return this.req
+    const domain = this.req
       ? $env.API_HOST_SERVER
       : resolveApiClient({ host: this.req, env: $env });
+
+    return domain;
   }
 
   serializeQueryParams(parameters) {
@@ -83,7 +89,16 @@ class {{&className}} {
    * @param {object} form - form data object
    * @param {object} deferred - promise object
    */
-  request({ method, url, parameters, body, headers, queryParameters, form, deferred }){
+  request({
+    method,
+    url,
+    parameters,
+    body,
+    headers,
+    queryParameters,
+    form,
+    deferred,
+  }){
     const queryParams = queryParameters && Object.keys(queryParameters).length ? this.serializeQueryParams(queryParameters) : null ;
     const urlWithParams = url + (queryParams ? '?' + queryParams : '');
 
@@ -96,32 +111,20 @@ class {{&className}} {
 
     this.store.dispatch('http/isLoading');
 
-    if (this.store.state.session.csrfToken) {
-      headers['X-CSRF-TOKEN'] = this.store.state.session.csrfToken;
+    const csrfToken = get('csrfToken')(parameters) || get('store.state.session.csrfToken')(this);
+    if (csrfToken) {
+      headers['X-CSRF-TOKEN'] = csrfToken;
     }
 
-    if(this.cookie && this.cookie.length > 0) {
-      headers['Cookie'] = this.cookie;
+    const cookie = get('cookie')(parameters) || this.cookie;
+    if(cookie) {
+      headers['Cookie'] = cookie;
     }
 
-    if (this.store.state.appVersion) {
-
-      if (this.store.state.appVersion.webVersion) {
-        var webVersion = this.store.state.appVersion.webVersion;
-        headers['NHSO-Web-Version-Tag'] = webVersion;
-      }
-
-      if (this.store.state.appVersion.nativeVersion && this.store.state.appVersion.platform) {
-        var platform = this.store.state.appVersion.platform;
-
-        if (platform == 'web') {
-          headers['NHSO-Native-Version-Tag'] = nativeVersion;
-        }
-        else {
-          var nativeVersion = this.store.state.appVersion.nativeVersion;
-          headers['NHSO-Native-Version-Tag'] = platform + ": " + nativeVersion;
-        }
-      }
+    const webVersion = getWebVersion(this);
+    const nativeVersion = getNativeVersion(this);
+    if (webVersion) {
+      headers['NHSO-Version-Tag'] = nativeVersion ? `${webVersion} (${nativeVersion})` : webVersion;
     }
 
     const resolve = ({ store, deferred, result, cancel }) => {

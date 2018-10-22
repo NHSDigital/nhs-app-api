@@ -8,6 +8,7 @@ const {
   INIT,
   LOAD,
   FILTER,
+  SET_BOOKING_REASON_NECESSITY,
 } = mutations;
 
 describe('FILTER', () => {
@@ -62,5 +63,15 @@ describe('FILTER', () => {
     FILTER(state);
 
     expect(state.filteredSlots).toEqual(expectedSlots);
+  });
+});
+
+describe('SET_BOOKING_REASON_NECESSITY', () => {
+  it('will set the `bookingReasonNecessity` to the received value', () => {
+    const state = {};
+
+    SET_BOOKING_REASON_NECESSITY(state, 'boo');
+
+    expect(state.bookingReasonNecessity).toEqual('boo');
   });
 });

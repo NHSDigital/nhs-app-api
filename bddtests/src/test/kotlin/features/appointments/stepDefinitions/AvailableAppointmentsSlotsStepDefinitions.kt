@@ -35,7 +35,6 @@ import utils.SerenityHelpers
 import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
-import java.time.LocalDateTime
 import javax.servlet.http.Cookie
 
 private const val TIMEOUT_IN_SECONDS = 90L

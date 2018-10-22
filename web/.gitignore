@@ -10,6 +10,7 @@ yarn-error.log*
 /test/unit/coverage/
 local.log
 .nuxt
+.transpiled
 coverage/
 
 # Editor directories and files

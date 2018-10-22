@@ -30,9 +30,9 @@ const config = {
     '~/plugins/logging.js',
   ],
   serverMiddleware: [
-    './middleware/server/handler.js',
-    './middleware/server/responseHeaders.js',
-    './middleware/server/noJsApi.js',
+    './.transpiled/middleware-server/noJsApi.js',
+    './.transpiled/middleware-server/handler.js',
+    './.transpiled/middleware-server/responseHeaders.js',
   ],
   router: {
     middleware: ['throttling', 'auth', 'meta', 'analytics', 'termsAndConditions', 'urlResolution'],

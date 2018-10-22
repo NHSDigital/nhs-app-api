@@ -9,7 +9,7 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
 
     private val dateHeadingXpath = "//*[@data-purpose='appointment-day-heading']"
     private val dateHeadingByTextXpathFormat = "$dateHeadingXpath$containsTextXpathSubstring"
-    private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li%s"
+    private val timeSlotXpathFormat = "//form//h2%s/following-sibling::ul/li/a%s"
     private val timeSlotByDateAndTimeXpath = String.format(timeSlotXpathFormat,
                                                            containsTextXpathSubstring,
                                                            containsTextXpathSubstring)
