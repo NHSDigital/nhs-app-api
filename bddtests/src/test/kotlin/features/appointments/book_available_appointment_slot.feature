@@ -178,3 +178,36 @@ Feature: Book an available appointment slot
       | GP System |
       | EMIS      |
       | TPP       |
+
+# EMIS Specific Scenarios (For EMIS reason necessity)
+# The following scenarios covered only Optional and Not-Required reason necessity options.
+# The default is mandatory and if the option is not specified in a scenario, it is set to MANDATORY by default.
+  @NHSO-2760
+  Scenario: An EMIS user can book an appointment without describing symptoms
+    Given there are EMIS appointments available to book where booking reason is set optional
+    And I am logged in
+    And I am on the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
+
+  @NHSO-2760
+  Scenario: An EMIS user can book an appointment with describing symptoms
+    Given there are EMIS appointments available to book where booking reason is set optional with 150 reason characters entered
+    And I am logged in
+    And I am on the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I enter symptoms of 150 characters
+    And I click the 'Confirm and book appointment' button
+    Then the Appointment Booking confirmation screen is displayed
+
+  @NHSO-2760
+  Scenario: An EMIS user sees no booking symptoms text box displayed if practice settings disallow booking reasons
+    Given there are EMIS appointments available to book where booking reason option is set not required
+    And I am logged in
+    And I am on the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    And I don't see option to type in booking reason

@@ -11,13 +11,10 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
-import mocking.defaults.MockDataPopulate
 import mocking.defaults.MockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
-import mocking.defaults.dataPopulation.journies.session.TppSessionCreateJourneyFactory
-import mocking.emis.models.AssociationType
 import models.Patient
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.setSessionVariable

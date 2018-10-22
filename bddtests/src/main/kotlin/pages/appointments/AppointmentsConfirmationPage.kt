@@ -2,17 +2,18 @@ package pages.appointments
 
 import net.serenitybdd.core.pages.WebElementFacade
 import net.thucydides.core.annotations.DefaultUrl
+import org.openqa.selenium.By
 import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.support.ui.WebDriverWait
 import pages.HybridPageElement
 import java.time.Duration
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/confirmation")
-open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
+open class AppointmentsConfirmationPage : AppointmentSharedElementsPage() {
     private val confirmAndBookAppointmentButton = HybridPageElement(
-        browserLocator = "//*[@id='btn_book_appointment']",
-        androidLocator = null,
-        page = this
+            browserLocator = "//*[@id='btn_book_appointment']",
+            androidLocator = null,
+            page = this
     )
 
     private val reasonFormField = HybridPageElement(
@@ -23,6 +24,12 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
 
     val backToMyAppointmentsButton = HybridPageElement(
             browserLocator = "//button[contains(text(),'Back to my appointments')]",
+            androidLocator = null,
+            page = this
+    )
+
+    val symptomsFormDiv = HybridPageElement(
+            browserLocator = "//div[@role='form']",
             androidLocator = null,
             page = this
     )
@@ -52,6 +59,6 @@ open class AppointmentsConfirmationPage: AppointmentSharedElementsPage() {
     fun isButtonVisible(button: String): Boolean {
         return findBy<WebElementFacade>(
                 "//button[contains(text()," +
-                "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
+                        "'$button')]").waitUntilVisible<WebElementFacade>().isCurrentlyVisible
     }
 }

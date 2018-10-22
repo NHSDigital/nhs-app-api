@@ -16,6 +16,7 @@ import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
 import mocking.defaults.MockDefaults
 import mocking.vision.VisionConstants.gpAppointmentsDisabled
+import mocking.emis.practices.NecessityOption
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -54,25 +55,26 @@ class AvailableAppointmentsSlotsStepDefinitions  {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(
                 AppointmentsBookingData.defaultSessionStartDateRaw,
-                AppointmentsBookingData.defaultSessionEndDateRaw)
+                AppointmentsBookingData.defaultSessionEndDateRaw,
+                reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are available (.*) appointment slots$")
     fun thereAreAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateDefaultAvailableAppointmentSlotExample()
+        factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are available appointment slots with different criteria for (\\w+)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are available appointment slots with different criteria for EMIS when no appointment slot guidance is provided$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWithNoGuidance() {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false)
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false, reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are available appointment slots with different criteria for EMIS when guidance cannot be retrieved$")
@@ -84,40 +86,40 @@ class AvailableAppointmentsSlotsStepDefinitions  {
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExampleBuilderWithExpectations().build())
+        factory.generateExample(AppointmentsSlotsExampleBuilderWithExpectations().build(), reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there is 1 available appointment slot for (.*)$")
     fun thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExample.singleSlotExample())
+        factory.generateExample(AppointmentsSlotsExample.singleSlotExample(), reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExample.multipleSlotsOneLocation())
+        factory.generateExample(AppointmentsSlotsExample.multipleSlotsOneLocation(), reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are appointment slots on some days other than tomorrow, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsButNotForTomorrowForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val example = AppointmentsSlotsExample.slotForDayAfterTomorrow()
-        appointmentsSlotsFactory.generateExample(example)
+        appointmentsSlotsFactory.generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are appointment slots on some days this week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysThisWeekButNotAllForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val example = AppointmentsSlotsExample.slotForEndOfToday()
-        appointmentsSlotsFactory.generateExample(example)
+        appointmentsSlotsFactory.generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are appointment slots on some days next week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysNextWeekButNotAllForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val example = AppointmentsSlotsExample.slotForThisTimeNextWeek()
-        appointmentsSlotsFactory.generateExample(example)
+        appointmentsSlotsFactory.generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
     }
 
     @Given("^there are appointment slots on some days in the next few weeks but not others, provided by (.*)$")

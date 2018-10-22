@@ -97,6 +97,11 @@ class AppointmentsConfirmationStepDefinitions {
         appointmentsConfirmationSteps.checkValidationErrorMessage()
     }
 
+    @Then("^I don't see option to type in booking reason$")
+    fun i_don_t_see_option_to_type_in_booking_reason() {
+        appointmentsConfirmationSteps.appointmentsConfirmation.symptomsFormDiv.assertElementNotPresent()
+    }
+
     private fun getSymptomsOfLength(length: Int): String {
         val symptoms = Serenity.sessionVariableCalled<String>(SymptomsToEnter)
         Assert.assertNotNull("Expected symptoms to be set, incorrect test setup", symptoms)

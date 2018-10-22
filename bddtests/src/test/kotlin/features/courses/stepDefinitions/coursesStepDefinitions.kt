@@ -27,6 +27,7 @@ import mocking.emis.EmisMappingBuilderAppointments
 import mocking.emis.practices.SettingsResponseModel
 
 import features.sharedSteps.SerenityHelpers
+import mocking.emis.practices.NecessityOption
 
 open class CoursesStepDefinitions : BaseStepDefinition() {
 
@@ -141,9 +142,9 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         val response = SettingsResponseModel()
 
         if (SerenityHelpers.getPrescriptionCommentsAllowed()) {
-            response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.REQUESTED_OPTIONAL
+            response.inputRequirements.prescribingComment = NecessityOption.OPTIONAL.text
         } else {
-            response.inputRequirements.prescribingComment = mocking.emis.practices.PrescribingComment.NOT_REQUESTED
+            response.inputRequirements.prescribingComment = NecessityOption.NOT_ALLOWED.text
         }
         mockingClient.forEmis {
             EmisMappingBuilderAppointments(EmisConfiguration("16C4B8A9-A6B1-4727-80E3-DA0C755CD6E7", "2.1.0.0"))

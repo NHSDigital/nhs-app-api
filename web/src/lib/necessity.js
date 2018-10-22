@@ -4,7 +4,7 @@ const Optional = 'Optional';
 const Mandatory = 'Mandatory';
 
 export default {
-    NotAllowed,
-    Optional,
-    Mandatory,
+  NotAllowed,
+  Optional,
+  Mandatory,
 };

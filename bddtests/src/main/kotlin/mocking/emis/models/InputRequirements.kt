@@ -1,8 +1,8 @@
 package mocking.emis.models
 
-import mocking.emis.practices.PrescribingComment
+import mocking.emis.practices.NecessityOption
 
 data class InputRequirements(
-        var appointmentBookingReason: String = "RequestedOptional",
-        var prescribingComment: String = PrescribingComment.REQUESTED_OPTIONAL
+        var appointmentBookingReason: String = NecessityOption.OPTIONAL.text,
+        var prescribingComment: String = NecessityOption.OPTIONAL.text
 )

@@ -12,6 +12,7 @@ import features.appointments.data.AppointmentsBookingData.Companion.pastFromDate
 import features.appointments.data.AppointmentsBookingData.Companion.pastToDate
 import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.factories.AppointmentsSlotsFactory
+import mocking.emis.practices.NecessityOption
 import net.serenitybdd.core.Serenity
 import org.junit.Assert
 import worker.NhsoHttpException
@@ -40,16 +41,14 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
     fun appointmentBookingUnavailableToPatientWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null, true)
-        { respondWithExceptionWhenNotEnabled() }
+        factory.generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, { respondWithExceptionWhenNotEnabled() })
     }
 
     @Given("^unknown exception will occur when wanting to view appointment slots$")
     fun unknownExceptionWhenWantingToViewAppointmentSlots() {
 
         val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        factory.generateAppointmentSlotResponse(null, null, true)
-        { respondWithUnknownException() }
+        factory.generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, { respondWithUnknownException() })
     }
 
     @When("^the available appointment slots are retrieved without a cookie$")

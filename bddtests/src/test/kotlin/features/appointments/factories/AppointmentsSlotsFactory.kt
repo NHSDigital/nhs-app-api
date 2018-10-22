@@ -4,6 +4,7 @@ import constants.DateTimeFormats
 import features.appointments.data.AppointmentsSlotsExample
 import features.appointments.data.AppointmentsSlotsExampleBuilderWithExpectations
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.AppointmentFilterFacade
@@ -11,20 +12,17 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
-import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.TimeZone
-import java.util.Date
 
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     fun generateDefaultAvailableAppointmentSlotExample(startDate: ZonedDateTime? = null,
                                                        endDate: ZonedDateTime? = null,
-                                                       guidanceMessage: Boolean = true) {
-        generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate, endDate, guidanceMessage)
+                                                       guidanceMessage: Boolean = true,
+                                                       reasonNecessity: NecessityOption) {
+        generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
     fun generateDefaultAvailableAppointmentSlotExampleWithoutBeingAbleToAccessGuidanceMessage() {
@@ -37,14 +35,15 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
         val example = AppointmentsSlotsExample.multipleSlotsOneTime()
         storeUIDateAndTimeOfSlotToSelect()
-        generateExample(example)
+        generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
     }
 
     fun generateExample(
             example: AppointmentSlotsResponseFacade,
             startDate: ZonedDateTime? = null,
             endDate: ZonedDateTime? = null,
-            guidanceMessage: Boolean = true) {
+            guidanceMessage: Boolean = true,
+            reasonNecessity: NecessityOption) {
 
         saveToSerenityVariableForRequest(startDate, AppointmentStartTimeKey)
         saveToSerenityVariableForRequest(endDate, AppointmentEndTimeKey)
@@ -57,7 +56,9 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         generateAppointmentSlotResponse(
                 startDateToUseForMockResponse,
                 endDateToUseForMockResponse,
-                guidanceMessage) {
+                guidanceMessage,
+                reasonNecessity
+        ) {
             respondWithSuccess(example)
         }
     }
@@ -81,7 +82,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     fun generateExample(mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
         generateDefaultUserData()
-        generateAppointmentSlotResponse(null, null, true, mapping)
+        generateAppointmentSlotResponse(null, null, true, NecessityOption.OPTIONAL, mapping)
     }
 
     private fun saveToSerenityVariableForRequest(date: ZonedDateTime?, key: String) {
@@ -112,7 +113,8 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     abstract fun generateAppointmentSlotResponse(startDate: String?,
                                                  endDate: String?,
                                                  guidanceMessage: Boolean,
-                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping))
+                                                 reasonNecessity: NecessityOption,
+                                                 mapping: IAppointmentSlotsBuilder.() -> Mapping)
 
     abstract fun generateAppointmentSlotResponseWithoutGuidance(startDate: String?,
                                                                 endDate: String?,

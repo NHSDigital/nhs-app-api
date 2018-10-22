@@ -112,13 +112,16 @@ export default {
   },
   methods: {
     showBookingReason() {
-      return this.$store.state.availableAppointments.bookingReasonNecessity !== Necessity.NotAllowed;
+      return this.$store.state.availableAppointments
+        .bookingReasonNecessity !== Necessity.NotAllowed;
     },
     bookingReasonOptional() {
-      return this.$store.state.availableAppointments.bookingReasonNecessity === Necessity.Optional;
+      return this.$store.state.availableAppointments
+        .bookingReasonNecessity === Necessity.Optional;
     },
     onConfirmButtonClicked() {
-      let isMandatory = this.$store.state.availableAppointments.bookingReasonNecessity === Necessity.Mandatory;
+      const isMandatory = this.$store.state.availableAppointments
+        .bookingReasonNecessity === Necessity.Mandatory;
       this.symptoms = this.symptoms.trim();
       if (this.symptoms.length === 0 && isMandatory) {
         this.submissionError = true;

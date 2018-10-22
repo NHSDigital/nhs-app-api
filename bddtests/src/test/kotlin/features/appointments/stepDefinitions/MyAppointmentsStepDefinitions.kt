@@ -24,7 +24,6 @@ class MyAppointmentsStepDefinitions {
         myAppointmentsSteps.myAppointmentsPage.waitForPageHeaderText("Confirm appointment")
     }
 
-
     @Then("^the Appointment Booking confirmation screen is displayed$")
     fun appointmentBookingConfirmationScreenIsDisplayed() {
         myAppointmentsSteps.checkBookingSuccessMessage()

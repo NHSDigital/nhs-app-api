@@ -1,6 +1,7 @@
 package features.appointments.factories
 
 import features.sharedSteps.SupplierSpecificFactory
+import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
 import mocking.models.Mapping
 import mockingFacade.appointments.BookAppointmentSlotFacade
@@ -10,9 +11,9 @@ import java.util.*
 
 class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
-    fun generateDefaultAvailableAppointmentSlotExample() {
+    fun generateDefaultAvailableAppointmentSlotExample(guidanceMessage: Boolean = true, reasonNecessityOption: NecessityOption = NecessityOption.MANDATORY) {
         val factory = AppointmentsSlotsFactory.getForSupplier(supplier)
-        factory.generateDefaultAvailableAppointmentSlotExample()
+        factory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage= guidanceMessage, reasonNecessity = reasonNecessityOption)
     }
 
     fun generateMultipleAvailableAppointmentSlots() {
@@ -20,12 +21,12 @@ class AppointmentsBookingFactory(gpSupplier: String) : AppointmentsFactory(gpSup
         factory.generateMultipleAvailableAppointmentSlotsForTheSameTime()
     }
 
-    fun generateSuccessfulBookingResponse(bookingReason: String) {
+    fun generateSuccessfulBookingResponse(bookingReason: String = "Reason") {
         generateBookingResponse(bookingReason = bookingReason) { bookRequest -> bookRequest.respondWithSuccess() }
     }
 
-    fun generateSuccessfulBookingResponse() {
-        generateSuccessfulBookingResponse(bookingReason = "Reason")
+    fun generateSuccessfulBookingResponseEmptyReasong() {
+        generateSuccessfulBookingResponse(bookingReason = "")
     }
 
     fun generateBookingResponse(booker: (IBookAppointmentsBuilder) -> Mapping) {

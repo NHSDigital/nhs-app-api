@@ -1,12 +1,13 @@
 package features.appointments.factories
 
+import mocking.emis.practices.NecessityOption
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
 import java.util.TimeZone
 
 class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
 
-    override fun generateAppointmentSlotResponse(startDate: String?, endDate: String?, guidanceMessage: Boolean, mapping: IAppointmentSlotsBuilder.() -> Mapping) {
+    override fun generateAppointmentSlotResponse(startDate: String?, endDate: String?, guidanceMessage: Boolean, reasonNecessity: NecessityOption, mapping: IAppointmentSlotsBuilder.() -> Mapping) {
         appointmentMapper.requestMapping {
             mapping(appointmentSlotsRequest(patient, startDate, endDate))
         }
