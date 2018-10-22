@@ -104,7 +104,6 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
         }
     }
 
-    @Suppress("TooGenericExceptionCaught")
     private fun getPatientsFromCsv(filePath: String): List<Patient> {
         val patients = ArrayList<Patient>()
 
@@ -149,9 +148,6 @@ open class MockDataPopulate(private val mockingClient: MockingClient) {
             }
         } catch (e: FileNotFoundException) {
             println("Error, Could not find csv file: $filePath")
-            e.printStackTrace()
-        } catch (e: Exception) {
-            println("Error when reading user csv!")
             e.printStackTrace()
         } finally {
             try {
