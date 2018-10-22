@@ -61,6 +61,8 @@ export BACKEND_TAG=$APP_DOCKER_TAG
 [ -z $REDIS_DATA_DOCKER_TAG ] || export REDIS_DATA_TAG=$REDIS_DATA_DOCKER_TAG
 
 # Pull images
+docker pull $DOCKER_IMAGE
+
 for s in $DOCKER_SERVICES; do
   if [[ "$s" != "api.local.bitraft.io" && "$s" != "www.local.bitraft.io" ]]; then #Don't pull local images we've built as part of the pipeline
     docker-compose -f docker-compose_ci.yml pull $s
