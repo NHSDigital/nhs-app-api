@@ -87,7 +87,7 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getAppointmentSlots(fromDate,
+                    .appointments.getAppointmentSlots(fromDate,
                             toDate,
                             cookie)
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)

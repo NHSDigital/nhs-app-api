@@ -149,7 +149,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         try {
             val sessionVariable = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-            PrescriptionsListResponse = sessionVariable.getPrescriptionsConnection(if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
+            PrescriptionsListResponse = sessionVariable.prescriptions.getPrescriptionsConnection(
+                    if (formattedFromDate != null) formattedFromDate.toString() else formattedFromDate)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -243,7 +244,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun iRequestPrescriptionsForTheLastSixMonths() {
         try {
             PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getPrescriptionsConnection(fromDate)
+                    .prescriptions.getPrescriptionsConnection(fromDate)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -253,7 +254,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
     fun iRequestPrescriptionsForTheLastSixMonthsWithAnInvalidCookie() {
         try {
             PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+                    .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -265,7 +266,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         try {
             PrescriptionsListResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
+                    .prescriptions.getPrescriptionsConnection(fromDate, WorkerClient.getHttpContext(true))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }

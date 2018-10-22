@@ -134,7 +134,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun theAvailableAppointmentSlotsAreRetrieved() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getAppointmentSlots(null,
+                    .appointments.getAppointmentSlots(null,
                             null,
                             Serenity.sessionVariableCalled<Cookie>(Cookie::class))
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
@@ -150,7 +150,7 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
             val startDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentStartTimeKey)
             val endDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentEndTimeKey)
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getAppointmentSlots(startDate,
+                    .appointments.getAppointmentSlots(startDate,
                             endDate,
                             Serenity.sessionVariableCalled<Cookie>(Cookie::class))
             setSessionVariable(AppointmentSlotsResponse::class).to(result)

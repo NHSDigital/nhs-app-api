@@ -12,7 +12,6 @@ import org.apache.http.HttpStatus
 import mocking.emis.models.AddVerificationRequest
 import mocking.emis.models.ErrorResponse
 
-@Suppress("TooManyFunctions")
 class EmisLinkageGETBuilder(addVerificationRequest: AddVerificationRequest)
     : EmisMappingBuilder(null, method = "POST", relativePath = "/me/verifications") {
 

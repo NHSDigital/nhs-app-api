@@ -194,7 +194,7 @@ open class LinkageStepDefinitions {
         }
 
         try {
-            linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getLinkageKey(nhsNumber, odsCode, identityToken)
+            linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication.getLinkageKey(nhsNumber, odsCode, identityToken)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }
@@ -242,7 +242,7 @@ open class LinkageStepDefinitions {
         }
         try {
             linkageResponse = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .postLinkageKey(CreateLinkageRequest(odsCode, nhsNumber, identityToken, emailAddress))
+                    .authentication.postLinkageKey(CreateLinkageRequest(odsCode, nhsNumber, identityToken, emailAddress))
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable(HTTP_EXCEPTION).to(httpException)
         }

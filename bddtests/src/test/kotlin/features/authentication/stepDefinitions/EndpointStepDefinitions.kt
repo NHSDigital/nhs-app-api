@@ -102,13 +102,13 @@ class EndpointStepDefinitions : AbstractSteps() {
     private fun retrieveIM1() {
         val patient = SerenityHelpers.getPatient()
         submitRequest(_im1ConnectionResponse, _im1HttpException)
-        { worker -> worker.getIm1Connection(patient.connectionToken, patient.odsCode) }
+        { worker -> worker.authentication.getIm1Connection(patient.connectionToken, patient.odsCode) }
     }
 
     private fun retrievePFS() {
         val appointmentToBook = Serenity.sessionVariableCalled<AppointmentBookRequest>(
                 AppointmentsBookingBackendFactory.appointmentToBookKey)
-        submitRequest(_pfsResponse, _pfsException) { worker -> worker.postAppointment(appointmentToBook) }
+        submitRequest(_pfsResponse, _pfsException) { worker -> worker.appointments.postAppointment(appointmentToBook) }
 
     }
 

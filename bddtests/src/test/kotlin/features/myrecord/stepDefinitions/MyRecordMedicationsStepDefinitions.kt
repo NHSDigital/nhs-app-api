@@ -69,7 +69,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
                         myRecord.medicationsRequest(this@MyRecordMedicationsStepDefinitions.patient).respondWithSuccess(MedicationsData.getEmisDefaultMedicationsModel())
                     }
 
-                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
+                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 
                     Serenity.setSessionVariable(MyRecordResponse::class).to(result)
                 } catch (httpException: NhsoHttpException) {
@@ -82,7 +82,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
                         myRecord.viewPatientOverviewPost(this@MyRecordMedicationsStepDefinitions.patient.tppUserSession!!).respondWithSuccess(MedicationsData.getTppDefaultMedicationsModel())
                 }
 
-                val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
+                val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 
                 Serenity.setSessionVariable(MyRecordResponse::class).to(result)
 
@@ -107,7 +107,7 @@ open class MyRecordMedicationsStepDefinitions: AbstractDemographicsStepDefinitio
                                 responseFormat = xmlResponseFormat
                         ).respondWithSuccess(MedicationsData.getEmptySetOfVisionMedicationData())
                     }
-                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
+                    val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 
                     Serenity.setSessionVariable(MyRecordResponse::class).to(result)
 

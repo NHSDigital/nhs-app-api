@@ -17,7 +17,7 @@ open class NdopStepDefinitions : AbstractDemographicsStepDefinitions() {
     fun whenIRequestaNdopToken()
     {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getNdopToken()
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication.getNdopToken()
 
             Serenity.setSessionVariable(NdopResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {

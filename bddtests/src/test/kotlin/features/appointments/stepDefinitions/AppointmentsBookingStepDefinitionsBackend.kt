@@ -145,7 +145,7 @@ open class AppointmentsBookingStepDefinitionsBackend {
         try {
             val workerClient = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
             val sessionCookie = Serenity.sessionVariableCalled<Cookie>(Cookie::class)
-            val result = workerClient.postAppointment(workerAppointmentRequest, sessionCookie)
+            val result = workerClient.appointments.postAppointment(workerAppointmentRequest, sessionCookie)
             Serenity.setSessionVariable("Http Status Code").to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)

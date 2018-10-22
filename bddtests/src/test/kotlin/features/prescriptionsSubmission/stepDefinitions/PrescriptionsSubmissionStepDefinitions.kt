@@ -128,7 +128,7 @@ open class PrescriptionsSubmissionStepDefinitions : BaseStepDefinition() {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .postPrescriptionsConnection(prescriptionSubmissionRequest)
+                    .prescriptions.postPrescriptionsConnection(prescriptionSubmissionRequest)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {

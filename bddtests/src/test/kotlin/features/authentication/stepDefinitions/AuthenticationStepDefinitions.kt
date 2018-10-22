@@ -299,7 +299,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @When("^I create a user session$")
     fun iCreateUserSession() {
         try {
-            this.userSessionResponse = WorkerClient().postSessionConnection(
+            this.userSessionResponse = WorkerClient().authentication.postSessionConnection(
                     UserSessionRequest(authCode = this.authCode, codeVerifier = this.codeVerifier!!, redirectUrl = Config.instance.cidRedirectUri))
         } catch (httpException: NhsoHttpException) {
             setErrorResponse(httpException)

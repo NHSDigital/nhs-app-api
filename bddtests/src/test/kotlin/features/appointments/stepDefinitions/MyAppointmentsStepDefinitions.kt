@@ -1,5 +1,6 @@
 package features.appointments.stepDefinitions
 
+import constants.DateTimeFormats
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
@@ -9,6 +10,11 @@ import org.junit.Assert
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
 import worker.NhsoHttpException
+import worker.WorkerClient
+import worker.models.appointments.MyAppointmentsResponse
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 class MyAppointmentsStepDefinitions {
 
@@ -98,9 +104,12 @@ class MyAppointmentsStepDefinitions {
     @When("^the \"([^\"]*)\" API call fails with csrf token of \"([^\"]*)\"$")
     fun the_API_call_failes_with_csrf_token_of(provider: String, csrfToken: String) {
         Assert.assertEquals("Test setup incorrect: Step only implemented for EMIS", "EMIS", provider.toUpperCase())
-        myAppointmentsSteps.setCsrfToken(csrfToken)
+
         try {
-            myAppointmentsSteps.createSerenityEmisMyAppointmentSessionVariable()
+            val result = Serenity
+                    .sessionVariableCalled<WorkerClient>(WorkerClient::class)
+                    .appointments.setCsrfToken(csrfToken).getMyAppointments(LocalDateTime.now().toString())
+            Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
             Assert.fail("The API did not fail with invalid token.")
         } catch (exception: NhsoHttpException) {
         }

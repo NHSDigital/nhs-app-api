@@ -86,7 +86,7 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         try {
             val result = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .getCoursesConnection()
+                    .prescriptions.getCoursesConnection()
 
             Serenity.setSessionVariable(CoursesListResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {

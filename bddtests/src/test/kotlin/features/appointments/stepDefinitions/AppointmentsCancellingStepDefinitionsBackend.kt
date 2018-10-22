@@ -80,7 +80,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .deleteAppointment(body)
+                    .appointments.deleteAppointment(body)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -99,7 +99,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .deleteAppointment(body)
+                    .appointments.deleteAppointment(body)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -118,7 +118,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
         try {
             val response = Serenity
                     .sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .deleteAppointment(body)
+                    .appointments.deleteAppointment(body)
 
             Serenity.setSessionVariable(HTTP_RESPONSE).to(response)
         } catch (httpException: NhsoHttpException) {
@@ -135,7 +135,7 @@ class AppointmentsCancellingStepDefinitionsBackend {
 
     private fun retrieveCancellationReasons(): ArrayList<GenericResponseObject> {
         val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                .getMyAppointments(LocalDateTime.now().toString())
+                .appointments.getMyAppointments(LocalDateTime.now().toString())
 
         return result.cancellationReasons
     }

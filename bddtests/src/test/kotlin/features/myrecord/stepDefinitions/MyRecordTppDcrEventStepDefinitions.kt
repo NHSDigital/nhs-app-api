@@ -54,7 +54,7 @@ open class MyRecordTppDcrEventStepDefinitions: AbstractDemographicsStepDefinitio
     fun whenIGetTheUsersMyRecordData()
     {
         try {
-            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).getMyRecord()
+            val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class).myRecord.getMyRecord()
 
             Serenity.setSessionVariable(MyRecordResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {

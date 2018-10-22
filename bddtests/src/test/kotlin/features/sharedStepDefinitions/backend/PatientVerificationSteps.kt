@@ -329,7 +329,7 @@ class PatientVerificationSteps : AbstractSteps() {
         val odsCode = sessionVariableCalled<String>("NationalPracticeCode")
 
         try {
-            val result = sessionVariableCalled<WorkerClient>(WorkerClient::class).getIm1Connection(connectionToken, odsCode)
+            val result = sessionVariableCalled<WorkerClient>(WorkerClient::class).authentication.getIm1Connection(connectionToken, odsCode)
             setSessionVariable(Im1ConnectionResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             setSessionVariable("HttpException").to(httpException)
