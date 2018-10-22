@@ -29,9 +29,9 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     var headerText: String = "Select medication"
     lateinit var headerBar: Header
 
-    private val PrescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
-    private val PrescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
-    private val SpecialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
+    private val prescriptionNameLocator = By.cssSelector("[data-label='prescription-name']")
+    private val prescriptionInstructionsLocator = By.cssSelector("[data-label='prescription-description']")
+    private val specialRequestTextAreaXpath = "//textarea[@id='specialRequest']"
 
     val orderRepeatPrescriptionButton = HybridPageElement(
             browserLocator = "//button[@id='btn_order_prescription']",
@@ -118,8 +118,8 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
         val repeatPrescriptionContainers = findAllByXpath("//div[@data-purpose='repeat-prescription']")
 
         repeatPrescriptionContainers.forEach { el ->
-            val nameOnScreen = el.findElement(PrescriptionNameLocator)
-            val instructionsOnScreen = el.findElement(PrescriptionInstructionsLocator)
+            val nameOnScreen = el.findElement(prescriptionNameLocator)
+            val instructionsOnScreen = el.findElement(prescriptionInstructionsLocator)
             val inputElement = el.findElement(By.tagName("input"))
 
             if (medicationCourse.name == nameOnScreen.text
@@ -142,7 +142,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun typeTextIntoSpecialRequestTextArea(text: String) : String {
-        val element = findByXpath(SpecialRequestTextAreaXpath)
+        val element = findByXpath(specialRequestTextAreaXpath)
         //Each letter sent individually
         //This doesn't add a lot of time onto the test, but does help to ensure the full text is typed
         //Keys can sometimes go missing; so we return the actual text that got typed and assert that something went in
@@ -156,7 +156,7 @@ open class RepeatPrescriptionsPage : HybridPageObject(PageType.WEBVIEW_APP) {
     }
 
     fun isSpecialRequestTextAreaVisible() : Boolean {
-        return findByXpath(SpecialRequestTextAreaXpath).isVisible
+        return findByXpath(specialRequestTextAreaXpath).isVisible
     }
 }
 

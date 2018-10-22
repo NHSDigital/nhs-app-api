@@ -331,7 +331,7 @@ naming:
     active: false
     minimumVariableNameLength: 1
   VariableNaming:
-    active: false #temporary disabled
+    active: true
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'

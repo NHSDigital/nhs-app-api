@@ -10,9 +10,13 @@ import java.util.*
 open class TppMappingBuilder(method: String = "POST", relativePath: String = "/tpp/") :
         MappingBuilder(method, relativePath) {
 
-    private val HEADER_CONTENT_TYPE = "Content-Type"
-    internal val HEADER_TYPE = "type"
-    internal val HEADER_SUID = "suid"
+    companion object {
+        const val apiVersion = "1"
+        const val uuid = "3e3d8bef-4ce1-4925-a263-149c15ac7208"
+        const val HEADER_CONTENT_TYPE: String = "Content-Type"
+        internal const val HEADER_TYPE = "type"
+        internal const val HEADER_SUID = "suid"
+    }
 
     var delayMillisecs = 0
 
@@ -27,7 +31,6 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
     var prescriptions = TppMappingBuilderPrescriptions()
 
     var authentication = TppMappingBuilderAuthentication()
-
 
     fun responseErrorWhenGPDisabledAppointmentsService(): Mapping {
         val errorMsg = "You don't have access to this online service"
@@ -49,10 +52,4 @@ open class TppMappingBuilder(method: String = "POST", relativePath: String = "/t
                     .build()
         }
     }
-
-    companion object {
-        const val apiVersion = "1"
-        const val uuid = "3e3d8bef-4ce1-4925-a263-149c15ac7208"
-    }
-
 }

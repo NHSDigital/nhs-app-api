@@ -16,7 +16,7 @@ import javax.xml.bind.Marshaller
 class TppPrescriptionsBuilder(patient: Patient)
     : TppMappingBuilder("POST", "/tpp/") {
 
-    private var Suid: String = ""
+    private var suid: String = ""
 
     init {
         requestBuilder.andHeader(HEADER_TYPE, "ListRepeatMedication")
@@ -37,7 +37,7 @@ class TppPrescriptionsBuilder(patient: Patient)
 
         return respondWith(HttpStatus.SC_OK) {
             andXmlBody(stringWriter.toString())
-                    .andHeader(HEADER_SUID, Suid)
+                    .andHeader(HEADER_SUID, suid)
                     .build()
         }
     }

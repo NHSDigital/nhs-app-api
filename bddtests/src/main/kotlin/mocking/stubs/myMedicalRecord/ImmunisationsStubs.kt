@@ -13,12 +13,12 @@ import java.time.Duration
 
 class ImmunisationsStubs(private val mockingClient: MockingClient) {
     fun generateEMISStubs() {
-        val ImunisationDataLoader = ImmunisationsData.getImmunisationsData()
+        val immunisationDataLoader = ImmunisationsData.getImmunisationsData()
         val mapEMISImmunisationResultsStubs =
                 InputResponse<Patient, EmisImmunisationsBuilder>()
                         .addResponse(goodPatientEMIS) { builder
                             ->
-                            builder.respondWithSuccess(ImunisationDataLoader)
+                            builder.respondWithSuccess(immunisationDataLoader)
                         }
 
                         .addResponse(serviceNotEnabledPatientEMIS) { builder
@@ -28,7 +28,7 @@ class ImmunisationsStubs(private val mockingClient: MockingClient) {
 
                         .addResponse(timeoutPatientEMIS) { builder
                             ->
-                            builder.respondWithSuccess(ImunisationDataLoader)
+                            builder.respondWithSuccess(immunisationDataLoader)
                                     .delayedBy(Duration.ofSeconds(TIMEOUT_DELAY))
                         }
 

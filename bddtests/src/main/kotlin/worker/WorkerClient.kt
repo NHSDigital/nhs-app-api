@@ -59,7 +59,9 @@ class WorkerClient(config:Config = Config.instance) {
     }
 
     class HttpDeleteWithBody constructor() : HttpEntityEnclosingRequestBase() {
-        val METHOD_NAME = "DELETE"
+        companion object {
+            const val METHOD_NAME = "DELETE"
+        }
 
         constructor(uri: String) : this() {
             setURI(URI.create(uri))

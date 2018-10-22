@@ -1,11 +1,18 @@
 package mocking.emis.models
 
 import models.Patient
+import javax.xml.bind.annotation.XmlElement
+import javax.xml.bind.annotation.XmlRootElement
 
-data class LinkApplicationRequestData(var Surname: String, var DateOfBirth: String) {
-    var LinkageDetails: LinkageDetails? = null
+@XmlRootElement(name = "LinkApplicationRequest")
+data class LinkApplicationRequestData(
+        @field:XmlElement(name = "Surname") var surname: String,
+        @field:XmlElement(name = "DateOfBirth") var dateOfBirth: String) {
+
+    @field:XmlElement(name = "LinkageDetails")
+    var linkageDetails: LinkageDetails? = null
 
     constructor(patient: Patient) : this(patient.surname, patient.dateOfBirth) {
-        LinkageDetails = LinkageDetails(patient.accountId, patient.linkageKey, patient.odsCode)
+        linkageDetails = LinkageDetails(patient.accountId, patient.linkageKey, patient.odsCode)
     }
 }
