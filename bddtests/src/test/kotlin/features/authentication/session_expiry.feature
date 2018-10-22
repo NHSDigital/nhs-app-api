@@ -6,9 +6,18 @@ Feature: Session Expiry
     Given EMIS is initialised
 
   @long-running
-  Scenario: On session expiry, a user on a secure screen is automatically signed out
+  Scenario: On session expiry (when on the home page), a user on a secure screen is automatically signed out
     Given I am logged in
     And I am on the home page
+    When I am idle long enough for the session to expire
+    Then I see the login page with the session expiry notification
+    And the user login details are cleared from cookies
+
+  @long-running
+  Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
+    Given I have no upcoming appointments for EMIS
+    And I am logged in
+    And I am on my appointments page
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification
     And the user login details are cleared from cookies
