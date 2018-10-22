@@ -25,7 +25,8 @@ class InitialLoginRequestBuilder(redirectUri: String, clientId: String, matcherT
                             <input value="clientId" type="hidden" name="client_id" >
                             <input value="3" type="hidden" name="code_challenge">
                             <input value ="codeMethod" type="hidden" name="code_challenge_method" >
-                            <input value="openid" type="hidden" name="scope">
+                            <input value="openid profile nhs_app_credentials gp_integration_credentials"
+                                   type="hidden" name="scope">
                             <input value="{{request.query.redirect_uri}}" type="hidden" name="redirect_uri">
                             <input value="{{request.query.state}}" type="hidden" name="state">
                             <input value="responseType" type="hidden" name="response_type">

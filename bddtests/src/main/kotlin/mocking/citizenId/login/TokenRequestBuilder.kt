@@ -59,7 +59,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
     fun respondWithSuccess(
             accessToken: String = MockDefaults.patient.accessToken,
             expiresIn: String = "90",
-            scope: String = "openid",
+            scope: String = "openid profile nhs_app_credentials gp_integration_credentials",
             tokenType: String = "Bearer",
             idToken: String = ""): Mapping {
         return respondWith(HttpStatus.SC_OK) {

@@ -30,7 +30,7 @@ class AuthorisationService {
     const redirectUri = this.getRedirectUri(source || Sources.Web);
 
     const request = {
-      scope: 'openid',
+      scope: 'openid profile nhs_app_credentials gp_integration_credentials',
       clientId: this.cidClientId,
       redirectUri,
       responseType: 'code',
