@@ -188,7 +188,7 @@ class WebViewDelegate: NSObject, WKNavigationDelegate, WKUIDelegate, WKScriptMes
             }
             
             if (message.name == "resetPageFocus") {
-                viewController.headerBar.setFocusToNhsLogo()
+                viewController.headerBar.setFocusToNhsLogoForA11y()
             }
             
             if (message.name == "updateHeaderText") {

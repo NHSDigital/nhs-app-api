@@ -44,8 +44,9 @@ class HeaderBar: UIView {
         self.layer.shadowOpacity = 0.5
     }
     
-    func setFocusToNhsLogo() {
-        self.NHSHomeLogo.becomeFirstResponder()
-        UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.NHSHomeLogo)
+    func setFocusToNhsLogoForA11y() {
+        if !isHidden && UIAccessibilityIsVoiceOverRunning() {
+            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, self.NHSHomeLogo)
+        }
     }
 }

@@ -78,6 +78,15 @@ export default {
     return false;
   },
 
+  resetPageFocus() {
+    const app = window.nativeApp;
+    if (app && app.resetPageFocus) {
+      app.resetPageFocus();
+      return true;
+    }
+    return false;
+  },
+
   // iOS specific
   postNdopToken(token) {
     const app = window.nativeApp;

@@ -35,7 +35,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_layout.*
 import kotlinx.android.synthetic.main.header_layout.*
 import android.location.LocationManager
+import android.util.Log
 import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityManager
 
 
 class MainActivity : IInteractor, AppCompatActivity() {
@@ -229,11 +231,9 @@ class MainActivity : IInteractor, AppCompatActivity() {
     private fun loadWelcomePage() = loadPage(resources.getString(R.string.baseURL))
 
     override fun setHeaderText(text: String, description: String?) {
-        runOnUiThread {
-            header_text_view.text = text
-            header_text_view.contentDescription = description
-            webview.announceForAccessibility(description ?: text)
-        }
+        header_text_view.text = text
+        header_text_view.contentDescription = description
+        webview.announceForAccessibility(description ?: text)
     }
 
     override fun onBackPressed() {
@@ -329,9 +329,7 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     override fun clearMenuBarItem() {
-        runOnUiThread {
-            menuBar.deselectActiveItem()
-        }
+        menuBar.deselectActiveItem()
     }
 
     override fun goToCheckSymptoms() {
@@ -344,15 +342,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
     }
 
     private fun hideMenuBar() {
-        runOnUiThread {
-            menuBar.visibility = GONE
-        }
+        menuBar.visibility = GONE
     }
 
     fun hideHeader() {
-        runOnUiThread {
-            header.visibility = GONE
-        }
+        header.visibility = GONE
     }
 
     fun loggedIn() {
@@ -373,15 +367,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
 
 
     private fun showMenuBar() {
-        runOnUiThread {
-            menuBar.visibility = VISIBLE
-        }
+        menuBar.visibility = VISIBLE
     }
 
     fun showHeader() {
-        runOnUiThread {
-            header.visibility = VISIBLE
-        }
+        header.visibility = VISIBLE
     }
 
     fun showBlankScreen() {
@@ -389,9 +379,11 @@ class MainActivity : IInteractor, AppCompatActivity() {
         blankScreen.visibility = View.VISIBLE
     }
 
-    fun resetFocusToNhsLogo() {
-        nhsOnlineLogoIcon.requestFocus()
-        nhsOnlineLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+    fun resetFocusToNhsLogoForA11y() {
+        val a11yMng = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        if (header.visibility == View.VISIBLE && a11yMng.isTouchExplorationEnabled && a11yMng.isEnabled) {
+            nhsOnlineLogoIcon.sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_FOCUSED)
+        }
     }
 
     fun hideBlankScreen() {

@@ -11,6 +11,7 @@ describe('NATIVE CALLBACKS', () => {
     { fn: 'showHeader' },
     { fn: 'hideWhiteScreen' },
     { fn: 'completeAppIntro' },
+    { fn: 'resetPageFocus' },
     {
       fn: 'updateHeaderText',
       param: 'headerText',

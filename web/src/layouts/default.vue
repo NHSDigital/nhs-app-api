@@ -19,6 +19,7 @@
 <script>
 /* eslint-disable no-underscore-dangle */
 import A11yTitleAnnouncer from '@/components/widgets/A11yTitleAnnouncer';
+import NativeCallbacks from '@/services/native-app';
 import HeaderMenu from '@/components/HeaderMenu';
 import NavigationMenu from '@/components/NavigationMenu';
 import Spinner from '@/components/widgets/Spinner';
@@ -153,7 +154,7 @@ export default {
       }
       this.resetTimeoutId = setTimeout(() => {
         if (this.$store.state.device.isNativeApp) {
-          window.nativeApp.resetPageFocus();
+          NativeCallbacks.resetPageFocus();
         } else {
           const headerMenuCompt = this.$refs.headerMenu;
           if (headerMenuCompt) {

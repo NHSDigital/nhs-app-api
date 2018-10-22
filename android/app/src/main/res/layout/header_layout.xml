@@ -24,14 +24,12 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/nhsAppHome"
             android:focusable="true"
-            android:focusableInTouchMode="true"
             android:paddingTop="@dimen/_8sdp"
             android:src="@drawable/icon_drawable_nhs_logo"
             android:nextFocusForward="@id/helpIcon"
             android:nextFocusLeft="@id/more"
             android:nextFocusUp="@id/more"
             android:nextFocusDown="@id/webview"
-            android:focusedByDefault="true"
             android:background="@drawable/icon_drawable_boarder_focusable"
         />
 

@@ -158,7 +158,7 @@ class HomeViewController : UIViewController {
     }
     
     func resetFocusAndAnnouncePageTitle(pageTitle: String?) {
-        self.headerBar.setFocusToNhsLogo()
+        self.headerBar.setFocusToNhsLogoForA11y()
         if let title = pageTitle {
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, title)
         }

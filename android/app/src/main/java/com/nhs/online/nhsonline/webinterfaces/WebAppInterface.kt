@@ -10,47 +10,47 @@ class WebAppInterface(private val context: MainActivity) {
 
     @JavascriptInterface
     fun onLogin() {
-        context.loggedIn()
+        context.runOnUiThread{context.loggedIn()}
     }
 
     @JavascriptInterface
     fun onLogout() {
-        context.loggedOut()
+        context.runOnUiThread{context.loggedOut()}
     }
 
     @JavascriptInterface
     fun updateHeaderText(text: String) {
-        context.setHeaderText(text)
+        context.runOnUiThread{context.setHeaderText(text)}
     }
 
     @JavascriptInterface
     fun clearMenuBarItem() {
-        context.clearMenuBarItem()
+        context.runOnUiThread{context.clearMenuBarItem()}
     }
 
     @JavascriptInterface
     fun checkSymptoms() {
-        context.goToCheckSymptoms()
+        context.runOnUiThread{context.goToCheckSymptoms()}
     }
 
     @JavascriptInterface
     fun hideHeader() {
-        context.hideHeader()
+        context.runOnUiThread{context.hideHeader()}
     }
 
     @JavascriptInterface
     fun showHeader() {
-        context.showHeader()
+        context.runOnUiThread{context.showHeader()}
     }
 
     @JavascriptInterface
     fun resetPageFocus() {
-        context.resetFocusToNhsLogo()
+        context.runOnUiThread{context.resetFocusToNhsLogoForA11y()}
     }
 
     @JavascriptInterface
     fun hideWhiteScreen() {
-        context.hideBlankScreen()
+        context.runOnUiThread{context.hideBlankScreen()}
     }
 
     @JavascriptInterface
