@@ -85,7 +85,21 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
+  @long-running
+  @NHSO-802
+  Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
+    Given I have no upcoming appointments for EMIS
+    And I am logged in
+    And I am on my appointments page
+    When I am idle long enough for the session to expire
+    Then I see the login page with the session expiry notification
+    And the user login details are cleared from cookies
 
   @manual
   @NHSO-802
   Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems
+    Given I have no upcoming appointments for EMIS
+    And I am logged in
+    And I lose my internet connection
+    When I am on my appointments page
+    Then I see a message indicating user may have connectivity problems
