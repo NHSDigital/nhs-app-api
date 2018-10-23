@@ -96,16 +96,7 @@
 
     queryParameters = this.mergeQueryParams(parameters, queryParameters);
 
-    this.request({
-      method: '{{method}}',
-      url: domain + path,
-      parameters,
-      body,
-      headers,
-      queryParameters,
-      form,
-      deferred
-    });
+    this.request('{{method}}', domain + path, parameters, body, headers, queryParameters, form, deferred);
 
     return deferred.promise;
  }

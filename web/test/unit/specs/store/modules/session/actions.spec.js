@@ -74,7 +74,7 @@ describe('actions', () => {
       );
 
       it(
-        'will not call commit for the START_VALIDATION_CHECKING when not running on the server',
+        'will not call commit for the START_VALIDATION_CHECKING when not running on the client',
         () => {
           mutation.state.validationInterval = 1;
           process.client = false;

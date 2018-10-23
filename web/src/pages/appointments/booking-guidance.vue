@@ -18,12 +18,10 @@
     <generic-button id="btn_check_symptoms" :class="$style.button" @click="onCheckSymptomClicked">
       {{ $t('appointments.guidance.symptomButttonText') }}
     </generic-button>
-    <form action="/appointments/booking" method="get">
-      <generic-button id="btn_appointment" :class="[$style.button, $style.green]"
-                      @click="onBookButtonClicked">
-        {{ $t('appointments.guidance.bookButtonText') }}
-      </generic-button>
-    </form>
+    <generic-button id="btn_appointment" :class="[$style.button, $style.green]"
+                    @click="onBookButtonClicked">
+      {{ $t('appointments.guidance.bookButtonText') }}
+    </generic-button>
   </div>
 
 </template>

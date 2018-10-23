@@ -7,33 +7,24 @@
       </template>
       <p>{{ guidanceMsg }}</p>
     </collapsible-dialog>
-    <select-dropdown v-model="type" select-id="type" select-name="type">
-      <option v-for="option in options.types"
-              :key="option.value"
-              :value="option.value"
-              :disabled="option.value===''"
-              :selected="option.value===''">
+    <select-dropdown v-model="type" select-id = "type" select-name="type">
+      <option v-for="option in options.types" :key="option.value" :value="option.value"
+              :disabled="option.value===''">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
 
     <label for="location">{{ $t('appointments.booking.filters.location.label') }}</label>
     <select-dropdown v-model="location" select-id = "location" select-name="location">
-      <option v-for="option in options.locations"
-              :key="option.value"
-              :value="option.value"
+      <option v-for="option in options.locations" :key="option.value" :value="option.value"
               :disabled="option.value===''">
         {{ displayName(option) }}
       </option>
     </select-dropdown>
 
     <label for="clinician">{{ $t('appointments.booking.filters.clinician.label') }}</label>
-    <select-dropdown
-      v-model="clinician"
-      :required="false"
-      select-id = "clinician"
-      select-name="clinician">
-      <option v-for="option in options.clinicians" :key="option.value" :value="option.value">
+    <select-dropdown v-model="clinician" select-id = "clinician" select-name="clinician">
+      <option v-for="option in options.clinicians" :key="option. value" :value="option.value">
         {{ displayName(option) }}
       </option>
     </select-dropdown>

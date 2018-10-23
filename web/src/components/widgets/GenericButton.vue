@@ -1,5 +1,5 @@
 <template>
-  <button v-tabbing="defaultClasses" :id="id"
+  <button v-tabbing="buttonStylingClasses" :id="id"
           :class="getStyleClasses"
           @click="clicked($event)">
     <slot/>
@@ -7,6 +7,7 @@
 </template>
 
 <script>
+
 import TabFocusMixin from './TabFocusMixin';
 
 export default {
@@ -25,7 +26,7 @@ export default {
     },
   },
   computed: {
-    defaultClasses() {
+    buttonStylingClasses() {
       const classes = [this.$style.button];
       this.buttonClasses.forEach((element) => {
         classes.push(this.$style[element]);
@@ -43,5 +44,5 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/buttons';
+@import '../../style/buttons';
 </style>
