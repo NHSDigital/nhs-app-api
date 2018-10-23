@@ -51,6 +51,12 @@ class MyAppointmentsBuilderVision(val patient: Patient) : VisionMappingBuilder()
                         "MyAppointmentsBuilderVision")
     }
 
+    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
+        return respondWith(HttpStatus.SC_SERVICE_UNAVAILABLE) {
+            andXmlBody("").build()
+        }
+    }
+
     override fun respondWithUnknownException(): Mapping {
         throw UnsupportedOperationException(
                 "Test Setup Incorrect: respondWithUnknownException() is not yet implemented in " +

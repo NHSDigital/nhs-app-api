@@ -8,8 +8,11 @@ import mocking.emis.models.AppointmentCancellationReason
 import models.Slot
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Step
+import org.junit.Assert
 import org.junit.Assert.*
+import pages.ErrorPage
 import pages.appointments.MyAppointmentsPage
+import pages.navigation.Header
 import worker.NhsoHttpException
 import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
@@ -21,6 +24,9 @@ open class MyAppointmentsSteps {
     val mockingClient = MockingClient.instance
 
     lateinit var myAppointmentsPage: MyAppointmentsPage
+    lateinit var header: Header
+    lateinit var errorPage: ErrorPage
+
 
     val pageHeader = "My appointments"
     val expectedNoUpcomingText = "You don't currently have any appointments booked\n" +
@@ -178,5 +184,19 @@ open class MyAppointmentsSteps {
                 myAppointmentsPage.getWebAppointmentSlotDivs().size,
                 myAppointmentsPage.getNumberOfCancelLinks()
         )
+    }
+
+    fun verifyAppointmentDataErrorHeaderIsDisplayed() {
+        Assert.assertEquals("Appointment data error", header.pageTitle.element.text)
+    }
+
+    fun checkAppointmentDataErrorMessagesAreCorrect() {
+        val expectedHeader = "There's been a problem getting your appointment history"
+        val expectedBody = "Try again later. If the problem continues and you need this information now, contact your GP surgery directly. For urgent medical advice, call 111."
+        errorPage.waitForSpinnerToDisappear()
+        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedHeader, errorPage.heading.element.text)
+        assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.element.text}",
+                expectedBody, errorPage.errorText1.element.text)
     }
 }

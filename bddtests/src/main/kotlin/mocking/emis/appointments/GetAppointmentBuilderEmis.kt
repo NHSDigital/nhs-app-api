@@ -7,7 +7,6 @@ import mocking.emis.EmisMappingBuilder
 import mocking.emis.HEADER_API_END_USER_SESSION_ID
 import mocking.emis.HEADER_API_SESSION_ID
 import mocking.emis.appointments.helpers.GetAppointmentHelper
-import mocking.emis.models.Appointment
 import mocking.emis.models.ExceptionResponse
 import mocking.gpServiceBuilderInterfaces.appointments.IMyAppointmentsBuilder
 import mocking.models.Mapping
@@ -36,6 +35,10 @@ class GetAppointmentBuilderEmis(configuration: EmisConfiguration?, patient: Pati
         val exceptionResponse = ExceptionResponse(EmisResponseCode.EXCEPTION,
                 "Unknown Exception")
         return respondWithException(exceptionResponse)
+    }
+
+    override fun responseWithExceptionWhenServiceUnavailable(): Mapping {
+        return respondWithBody("Service unavailable", HttpStatus.SC_SERVICE_UNAVAILABLE)
     }
 
     private fun respondWithException(exceptionResponse: ExceptionResponse): Mapping {

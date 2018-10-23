@@ -53,6 +53,19 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
+  @NHSO-2910
+  Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
+    Given the <GP System> GP appointment system is unavailable
+    And I am logged in as a <GP System> user
+    When I am on my appointments page
+    Then I see page header indicating there is an appointment data error
+    And I see the appropriate error messages for the appointment data error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
+
   @NHSO-797
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>

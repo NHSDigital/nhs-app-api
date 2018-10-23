@@ -12,5 +12,7 @@ interface IMyAppointmentsBuilder {
 
     fun respondWithUnknownException() : Mapping
 
+    fun responseWithExceptionWhenServiceUnavailable(): Mapping
+
     fun respondWithCorrupted(facade: MyAppointmentsFacade) : Mapping
 }

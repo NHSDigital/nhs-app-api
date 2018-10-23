@@ -13,7 +13,6 @@ import worker.WorkerClient
 import worker.models.appointments.MyAppointmentsResponse
 import java.time.LocalDateTime
 
-
 class MyAppointmentsStepDefinitions {
 
     @Steps
@@ -136,5 +135,23 @@ class MyAppointmentsStepDefinitions {
     @Then("^a \"Cancellation confirmed\" message is displayed$")
     fun cancellationConfirmationMessage() {
         myAppointmentsSteps.verifyCancellationConfirmationMessage()
+    }
+
+    @Given("^the (.*) GP appointment system is unavailable$")
+    fun theAppointmentSystemIsUnavailable(gpSystem: String) {
+        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(gpSystem)
+        currentViewAppointmentFactory.createUpcomingAppointments {
+            responseWithExceptionWhenServiceUnavailable()
+        }
+    }
+
+    @Then("^I see page header indicating there is an appointment data error$")
+    fun iSeePageHeaderIndicatingAppointmentDataError() {
+        myAppointmentsSteps.verifyAppointmentDataErrorHeaderIsDisplayed()
+    }
+
+    @Then("^I see the appropriate error messages for the appointment data error$")
+    fun iSeeTheAppropriateErrorMessagesForTheAppointmentDataError() {
+        myAppointmentsSteps.checkAppointmentDataErrorMessagesAreCorrect()
     }
 }
