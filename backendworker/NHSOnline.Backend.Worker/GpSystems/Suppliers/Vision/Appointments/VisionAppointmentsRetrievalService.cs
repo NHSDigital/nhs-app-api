@@ -53,11 +53,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogError(exception, "Getting appointments failed.");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Something went wrong during retrieving the response.");
-                return new AppointmentsResult.InternalServerError();
-            }
             finally
             {
                 _logger.LogExit(nameof(GetAppointments));

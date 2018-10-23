@@ -157,38 +157,36 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
         private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse>
             (HttpRequestMessage request)
         {
-            try
+            _logger.LogInformation($"{nameof(VisionClient)} sending request");
+
+            var responseMessage = await _httpClient.Client.SendAsync(request);
+            
+            var response = new VisionApiObjectResponse<TResponse>(responseMessage.StatusCode);
+
+            if (!response.HasSuccessResponse)
             {
-                _logger.LogInformation($"{nameof(VisionClient)} sending request");
-
-                var responseMessage = await _httpClient.Client.SendAsync(request);
-                
-                var response = new VisionApiObjectResponse<TResponse>(responseMessage.StatusCode);
-
-                var stringResponse = responseMessage.Content != null
-                    ? await responseMessage.Content.ReadAsStringAsync()
-                    : null;
-                
-                if (string.IsNullOrEmpty(stringResponse)) return response;
-
-                try
-                {
-                    var responseObject = Deserializer<VisionResponseEnvelope<TResponse>>(stringResponse);
-                    response.RawResponse = responseObject;
-                }
-                catch (FormatException e)
-                {
-                    _logger.LogError(e, "An error occured while parsing the response");
-                    return new VisionApiObjectResponse<TResponse>(HttpStatusCode.InternalServerError);
-                }
-
+                _logger.LogError($"Tpp request failed with status code {responseMessage.StatusCode}");
                 return response;
             }
-            catch (Exception e)
+
+            var stringResponse = responseMessage.Content != null
+                ? await responseMessage.Content.ReadAsStringAsync()
+                : null;
+            
+            if (string.IsNullOrEmpty(stringResponse)) return response;
+
+            try
             {
-                Console.WriteLine(e);
-                throw;
+                var responseObject = Deserializer<VisionResponseEnvelope<TResponse>>(stringResponse);
+                response.RawResponse = responseObject;
             }
+            catch (FormatException e)
+            {
+                _logger.LogError(e, "An error occured while parsing the response");
+                return new VisionApiObjectResponse<TResponse>(HttpStatusCode.InternalServerError);
+            }
+
+            return response;
         }
 
         private T Deserializer<T>(string request)
@@ -240,6 +238,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
                                StringComparison.OrdinalIgnoreCase);
                 }
             }
+
+            public bool HasSuccessResponse => !HasErrorResponse && StatusCode.IsSuccessStatusCode();
 
             public string ErrorContent
             {
