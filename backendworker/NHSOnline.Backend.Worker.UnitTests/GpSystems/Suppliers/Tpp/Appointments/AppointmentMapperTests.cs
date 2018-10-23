@@ -5,9 +5,11 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using System.Threading;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -24,7 +26,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void TestInitialize()
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS() )});
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _systemUnderTest = new AppointmentMapper(_dateTimeOffsetProvider);
@@ -134,7 +136,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         [TestMethod]
         public void Map_ReturnsOnlyAppointmentsThatHaveNotYetStarted()
         {
-            var appt1 = new AppointmentTime(DateTime.Now.AddMinutes(-5));
+            var appt1 = new AppointmentTime(DateTime.UtcNow.AddMinutes(-5));
             var appt2 = new AppointmentTime(Tomorrow().At("14:20"));
 
             var appointment1 =
@@ -142,7 +144,6 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             var appointment2 =
                 CreateAppointment("0647d0000", appt2.Start.AsTPPDateTimeString(), appt2.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
-
 
             var appointments = new[] { appointment1, appointment2 }.ToList();
 
