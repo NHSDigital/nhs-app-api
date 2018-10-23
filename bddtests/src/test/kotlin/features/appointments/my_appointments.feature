@@ -89,7 +89,7 @@ Feature: My appointments
   @NHSO-802
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have no upcoming appointments for EMIS
-    And I am logged in
+    And I am logged in as a EMIS user
     And I am on my appointments page
     When I am idle long enough for the session to expire
     Then I see the login page with the session expiry notification
