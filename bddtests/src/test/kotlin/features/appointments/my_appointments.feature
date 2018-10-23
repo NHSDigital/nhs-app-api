@@ -40,6 +40,19 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
+  @backend
+  @NHSO-802
+  Scenario Outline: Requesting my appointments the <GP System> times out and returns "Gateway Timeout" error
+    Given I have logged into <GP System> and have a valid session cookie
+    But <GP System> will time out when trying to retrieve my appointments
+    When the API retrieves upcoming appointments
+    Then I receive a "Gateway Timeout" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+#      | VISION    |
+
   @NHSO-797
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>
@@ -72,3 +85,7 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
+
+  @manual
+  @NHSO-802
+  Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems

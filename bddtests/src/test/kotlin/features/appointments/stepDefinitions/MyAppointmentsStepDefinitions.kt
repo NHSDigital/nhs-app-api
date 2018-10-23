@@ -15,6 +15,7 @@ import worker.models.appointments.MyAppointmentsResponse
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
+import java.time.Duration
 
 class MyAppointmentsStepDefinitions {
 
@@ -74,6 +75,11 @@ class MyAppointmentsStepDefinitions {
     @Given("^(.*) returns corrupted response for my appointments")
     fun corruptedResponseFromMyAppointments(provider: String) {
         myAppointmentsSteps.generateCorruptedStubForMyAppointment(provider)
+    }
+
+    @Given("^(.*) will time out when trying to retrieve my appointments")
+    fun timeoutResponseFromMyAppointments(provider: String) {
+        myAppointmentsSteps.generateTimeoutStubForMyAppointment(provider)
     }
 
     @When("^I select \"([^\"]*)\" button$")

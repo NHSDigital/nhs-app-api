@@ -104,6 +104,12 @@ open class MyAppointmentsSteps {
     }
 
     @Step
+    fun generateTimeoutStubForMyAppointment(provider: String) {
+        val currentViewAppointmentFactory = UpcomingAppointmentsFactory.getForSupplier(provider)
+        currentViewAppointmentFactory.createTimeoutUpcomingAppointmentsResponse()
+    }
+
+    @Step
     fun createSerenityMyAppointmentSessionVariable() {
         val timeZone = TimeZone.getTimeZone("Europe/London")
         val dateTimeFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)

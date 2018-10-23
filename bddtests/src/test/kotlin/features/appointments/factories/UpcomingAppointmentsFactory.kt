@@ -9,6 +9,7 @@ import mockingFacade.appointments.MyAppointmentsFacade
 import models.Slot
 import net.serenitybdd.core.Serenity
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 
 abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
@@ -35,6 +36,12 @@ abstract class UpcomingAppointmentsFactory(gpSupplier: String) : AppointmentsFac
     fun createCorruptedUpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
         createUpcomingAppointments {
             respondWithCorrupted(facade)
+        }
+    }
+
+    fun createTimeoutUpcomingAppointmentsResponse(facade: MyAppointmentsFacade = genericMyAppointmentsFacade()) {
+        createUpcomingAppointments {
+            respondWithSuccess(facade).delayedBy(Duration.ofSeconds(90))
         }
     }
 
