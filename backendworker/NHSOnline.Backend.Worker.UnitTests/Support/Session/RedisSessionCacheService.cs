@@ -11,10 +11,10 @@ using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis;
 using NHSOnline.Backend.Worker.Settings;
 using NHSOnline.Backend.Worker.Support.Cipher;
-using StackExchange.Redis;
 using NHSOnline.Backend.Worker.Support.Session;
+using StackExchange.Redis;
 
-namespace NHSOnline.Backend.Worker.Support.Session.UnitTests
+namespace NHSOnline.Backend.Worker.UnitTests.Support.Session
 {
     [TestClass]
     public class SessionCacheServiceTests
@@ -148,7 +148,6 @@ namespace NHSOnline.Backend.Worker.Support.Session.UnitTests
                 })
                 .Verifiable();
 
-
             var systemUnderTest = new RedisSessionCacheService(_connectionMultiplexerFactory.Object, _cipherService.Object, _settings.Object, _logger);
 
             // Act
@@ -159,6 +158,5 @@ namespace NHSOnline.Backend.Worker.Support.Session.UnitTests
             redisValue.Should().NotBeNullOrEmpty();
             redisValue.Should().Be(encryptedOutput);
         }
-
     }
 }

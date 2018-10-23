@@ -22,13 +22,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         [TestMethod]
         public void Map_HappyPath_ReturnsAnArrayOfCancellationReasons()
         {
-            var descUK = new Description
+            // Arrange
+            var description1 = new Description
             {
                 Language = "en_UK",
                 Text = "Reason no. 1 UK"
             };
             
-            var descPL = new Description
+            var description2 = new Description
             {
                 Language = "pl_PL",
                 Text = "Powod nr 1 PL"
@@ -37,13 +38,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var reason1 = new Reason
             {
                 Id = "1",
-                Descriptions = new[] { descUK, descPL }.ToList()
+                Descriptions = new[] { description1, description2 }.ToList()
             };
             
             var reason2 = new Reason
             {
                 Id = "2",
-                Descriptions = new[] { descPL }.ToList()
+                Descriptions = new[] { description2 }.ToList()
             };
 
             var settings = new SlotSettings
@@ -53,8 +54,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             var appointmentsResponses = new BookedAppointmentsResponse { Appointments = new BookedAppointments{Settings = settings} };
 
+            // Act
             var actualResponse = _systemUnderTest.Map(appointmentsResponses);
 
+            // Assert
             var expectedResponse = new[]
             {
                 new CancellationReason
@@ -69,6 +72,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 }
             };
 
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
         
         [TestMethod]

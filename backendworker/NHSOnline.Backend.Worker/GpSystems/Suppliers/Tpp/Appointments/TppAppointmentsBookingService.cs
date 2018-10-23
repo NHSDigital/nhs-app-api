@@ -72,8 +72,6 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                     case TppApiErrorCodes.NoAccess:
                         _logger.LogTppResponseAccessIsForbidden();
                         return new AppointmentBookResult.InsufficientPermissions();
-                    default:
-                        break;
                 }
             }
 

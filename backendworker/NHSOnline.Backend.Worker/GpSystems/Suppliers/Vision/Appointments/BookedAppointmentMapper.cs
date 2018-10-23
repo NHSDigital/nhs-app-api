@@ -29,9 +29,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             if (bookedAppointments?.Slots == null)
                 return mappedAppointments;
             
-            var locations = SetUpLocations(bookedAppointments?.References?.Locations);
-            var slotTypes = SetUpSlotType(bookedAppointments?.References?.SlotTypes);
-            var sessions = SetUpSessions(bookedAppointments?.References?.Sessions);
+            var locations = SetUpLocations(bookedAppointments.References?.Locations);
+            var slotTypes = SetUpSlotType(bookedAppointments.References?.SlotTypes);
+            var sessions = SetUpSessions(bookedAppointments.References?.Sessions);
             
             foreach (var slot in bookedAppointments.Slots)
             {
@@ -53,7 +53,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                     EndTime = GetEndTime(startTime, slot),
                     Location = location,
                     Type = CreateTypeFromAppointmentAndSession(slotType, session),
-                    Clinicians = GetClinician(slot.Owner, bookedAppointments?.References?.Owners)
+                    Clinicians = GetClinician(slot.Owner, bookedAppointments.References?.Owners)
                 }
                     );
             }

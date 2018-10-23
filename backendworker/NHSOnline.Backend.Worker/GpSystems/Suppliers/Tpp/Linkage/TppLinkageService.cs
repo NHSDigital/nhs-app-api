@@ -68,7 +68,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             }
         }
 
-        private AddNhsUserRequest CreateRequest(CreateLinkageRequest createLinkageRequest)
+        private static AddNhsUserRequest CreateRequest(CreateLinkageRequest createLinkageRequest)
         {
             var request = new AddNhsUserRequest
             {
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage
             return request;
         }
 
-        private TppConnectionToken CreateConnectionToken(TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
+        private static TppConnectionToken CreateConnectionToken(TppApiObjectResponse<AddNhsUserResponse> createNhsUserResponse)
         {
             return new TppConnectionToken
             {

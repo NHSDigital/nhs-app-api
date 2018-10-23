@@ -42,9 +42,8 @@ namespace NHSOnline.Backend.Worker.CitizenId
             try
             {
                 var validationParameters = _parameterBuilder.Build(signingKeys);
-                
-                SecurityToken secKey;
-                var principal = _jwtTokenHandler.ValidateToken(token, validationParameters, out secKey);
+
+                var principal = _jwtTokenHandler.ValidateToken(token, validationParameters, out _);
 
                 var im1Token = principal.FindFirstValue(Constants.CitizenIdClaimTypes.Im1ConnectionTokenClaim);
                 var odsCode = principal.FindFirstValue(Constants.CitizenIdClaimTypes.OdscodeClaim);

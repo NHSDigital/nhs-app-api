@@ -3,8 +3,6 @@ using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using NHSOnline.Backend.Worker.GpSystems.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session;
 using NHSOnline.Backend.Worker.Support.Certificate;
 

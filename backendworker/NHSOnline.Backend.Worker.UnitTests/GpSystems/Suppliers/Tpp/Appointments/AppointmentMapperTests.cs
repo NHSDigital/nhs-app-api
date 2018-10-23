@@ -5,11 +5,9 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using NHSOnline.Backend.Worker.Support.Temporal;
 using System.Threading;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -26,7 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
         public void TestInitialize()
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS() )});
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform() )});
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
             _systemUnderTest = new AppointmentMapper(_dateTimeOffsetProvider);
@@ -40,9 +38,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var appt2 = new AppointmentTime(Tomorrow().At("14:40"));
             var appt3 = new AppointmentTime(Tomorrow().At("15:20"));
 
-            var appointment1 = CreateAppointment("0547d0000",appt1.Start.AsTPPDateTimeString(), appt1.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
-            var appointment2 = CreateAppointment("0647d0000", appt2.Start.AsTPPDateTimeString(), appt2.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
-            var appointment3 = CreateAppointment("0747d0000", appt3.Start.AsTPPDateTimeString(), appt3.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+            var appointment1 = CreateAppointment("0547d0000",appt1.Start.AsTppDateTimeString(), appt1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+            var appointment2 = CreateAppointment("0647d0000", appt2.Start.AsTppDateTimeString(), appt2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+            var appointment3 = CreateAppointment("0747d0000", appt3.Start.AsTppDateTimeString(), appt3.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment1, appointment2, appointment3 }.ToList();
 
@@ -111,7 +109,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var apptStart = Tomorrow().At("14:40");
             // Arrange
             var appointment =
-                CreateAppointment("0547d0000", apptStart.AsTPPDateTimeString(), invalidEndTime, "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0547d0000", apptStart.AsTppDateTimeString(), invalidEndTime, "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment }.ToList();
 
@@ -140,10 +138,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
             var appt2 = new AppointmentTime(Tomorrow().At("14:20"));
 
             var appointment1 =
-                CreateAppointment("0547d0000", appt1.Start.AsTPPDateTimeString(), appt1.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0547d0000", appt1.Start.AsTppDateTimeString(), appt1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointment2 =
-                CreateAppointment("0647d0000", appt2.Start.AsTPPDateTimeString(), appt2.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0647d0000", appt2.Start.AsTppDateTimeString(), appt2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment1, appointment2 }.ToList();
 
@@ -176,10 +174,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             // Arrange
             var appointment1 =
-                CreateAppointment("0547d0000", invalidStartTime, appt1.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0547d0000", invalidStartTime, appt1.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointment2 =
-                CreateAppointment("0647d0000", appt2.Start.AsTPPDateTimeString(), appt2.End.AsTPPDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
+                CreateAppointment("0647d0000", appt2.Start.AsTppDateTimeString(), appt2.End.AsTppDateTimeString(), "Clinician: Dr House", "The Frankenstein Place");
 
             var appointments = new[] { appointment1, appointment2 }.ToList();
 
@@ -237,7 +235,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Tpp.Appointment
 
             return dateTime.AddHours(int.Parse(parts[0], Thread.CurrentThread.CurrentCulture)).AddMinutes(int.Parse(parts[1], Thread.CurrentThread.CurrentCulture));
         }
-        public static string AsTPPDateTimeString(this DateTimeOffset dateTime)
+        public static string AsTppDateTimeString(this DateTimeOffset dateTime)
         {
             return dateTime.ToString("yyyy-MM-ddTHH:mm:00.0Z", Thread.CurrentThread.CurrentCulture);
         }

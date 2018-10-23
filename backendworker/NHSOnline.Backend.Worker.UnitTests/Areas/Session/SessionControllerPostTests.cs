@@ -45,7 +45,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
         private Mock<IAntiforgery> _mockAntiforgery;
         private Mock<IAuditor> _mockAuditor;
         private Mock<IMinimumAgeValidator> _mockMinimumAgeValidator;
-        private const string DATE_FORMAT = "yyyy-MM-dd";
+        private const string DateFormat = "yyyy-MM-dd";
 
         private UserSessionRequest _userSessionRequest;
         private UserProfile _userProfile;
@@ -65,7 +65,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
 
             _userSessionRequest = _fixture.Freeze<UserSessionRequest>();
             _userProfile = _fixture.Freeze<UserProfile>();
-            _userProfile.DateOfBirth = DateTime.Now.ToString(DATE_FORMAT, CultureInfo.InvariantCulture);
+            _userProfile.DateOfBirth = DateTime.Now.ToString(DateFormat, CultureInfo.InvariantCulture);
             _name = _fixture.Create<string>();
             _sessionTimeoutMinutes = _fixture.Create<int>();
             _sessionTimeoutSeconds = _sessionTimeoutMinutes * 60;
@@ -305,7 +305,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Session
                 Name = _name,
                 SessionTimeout = _sessionTimeoutSeconds,
                 OdsCode = _userProfile.OdsCode,
-                DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DATE_FORMAT,
+                DateOfBirth = DateTime.ParseExact(_userProfile.DateOfBirth, DateFormat,
                     CultureInfo.InvariantCulture),
                 NhsNumber = _userProfile.NhsNumber,
             };

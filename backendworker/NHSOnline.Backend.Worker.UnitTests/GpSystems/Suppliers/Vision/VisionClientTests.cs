@@ -85,7 +85,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         [TestMethod]
         public async Task VisionRespondsWithInvalidRequest()
         {
-            // Arrage
+            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
             
             var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/requestWasInvalidResponse.xml");
@@ -103,7 +103,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         [TestMethod]
         public async Task VisionRespondsWithInvalidSecurityHeader()
         {
-            // Arrage
+            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
 
             var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/invalidSecurityHeaderResponse.xml");
@@ -121,7 +121,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         [TestMethod]
         public async Task VisionRespondsWithInvalidUserCredentials()
         {
-            // Arrage
+            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
 
             var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/invalidUserCredentialsResponse.xml");
@@ -139,7 +139,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         [TestMethod]
         public async Task VisionRespondsWithUnknownError()
         {
-            // Arrage
+            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
 
             var xmlText = File.ReadAllText($"{VisionTestDataDirectory}/unknownErrorResponse.xml");
@@ -157,21 +157,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         [TestMethod]
         public async Task GetConfigurationPostRequest_ReturnsPatientConfiguration_WhenValidRequested()
         {
-            // Arrage
+            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
             
             var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfigurationResponse>>();
 
-            try
-            {
-                var responseContent = new StringContent(bodyResponse.SerializeXml());
-                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
-                .Respond(HttpStatusCode.OK, responseContent);
-            }
-            catch(Exception e)
-            {
-                var ex = e;
-            }
+            var responseContent = new StringContent(bodyResponse.SerializeXml());
+            _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+            .Respond(HttpStatusCode.OK, responseContent);
             
             // Act
             var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
@@ -184,21 +177,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
         [TestMethod]
         public async Task GetEligibleRepeatsPostRequest_ReturnsEligibleRepeats_WhenValidRequested()
         {
-            // Arrage
+            // Arrange
             _fixture.Customize<PatientNumber>(c => c.With(s => s.Number, "9434765919"));
             
             var bodyResponse  = _fixture.Create<VisionResponseEnvelope<PatientConfigurationResponse>>();
 
-            try
-            {
-                var responseContent = new StringContent(bodyResponse.SerializeXml());
-                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
-                    .Respond(HttpStatusCode.OK, responseContent);
-            }
-            catch(Exception e)
-            {
-                var ex = e;
-            }
+            var responseContent = new StringContent(bodyResponse.SerializeXml());
+            _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                .Respond(HttpStatusCode.OK, responseContent);
             
             // Act
             var response = await _sut.GetConfiguration(_connectionToken, _odsCode);
@@ -219,16 +205,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 It.IsAny<VisionRequest<CoursesRequest>>(), 
                 It.IsAny<string>())).Returns("AnyString");
 
-            try
-            {
-                var responseContent = new StringContent(bodyResponse.SerializeXml());
-                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
-                    .Respond(HttpStatusCode.OK, responseContent);
-            }
-            catch (Exception e)
-            {
-                var ex = e;
-            }
+            var responseContent = new StringContent(bodyResponse.SerializeXml());
+            _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
             var response = await _sut.GetEligibleRepeats(_visionUserSession);
@@ -251,17 +230,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 It.Is<VisionRequest<PrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
                 It.IsAny<string>())).Returns("requestXml");
 
-            try
-            {
-                var responseContent = new StringContent(bodyResponse.SerializeXml());
-                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
-                    .WithContent("requestXml")
-                    .Respond(HttpStatusCode.OK, responseContent);
-            }
-            catch (Exception e)
-            {
-                var ex = e;
-            }
+            var responseContent = new StringContent(bodyResponse.SerializeXml());
+            _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                .WithContent("requestXml")
+                .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
             var response = await _sut.GetHistoricPrescriptions(_visionUserSession, request);
@@ -284,17 +256,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 It.Is<VisionRequest<OrderNewPrescriptionRequest>>(pr => pr.ServiceContent.ServiceContentBody == request),
                 It.IsAny<string>())).Returns("requestXml");
 
-            try
-            {
-                var responseContent = new StringContent(bodyResponse.SerializeXml());
-                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
-                    .WithContent("requestXml")
-                    .Respond(HttpStatusCode.OK, responseContent);
-            }
-            catch (Exception e)
-            {
-                var ex = e;
-            }
+            var responseContent = new StringContent(bodyResponse.SerializeXml());
+            _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                .WithContent("requestXml")
+                .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
             var response = await _sut.OrderNewPrescription(_visionUserSession, request);
@@ -328,16 +293,9 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision
                 .Callback<X509Certificate, VisionRequest<AvailableAppointmentsRequest>, string>((c, r, s) =>
                     received = r);
 
-            try
-            {
-                var responseContent = new StringContent(bodyResponse.SerializeXml());
-                _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
-                    .Respond(HttpStatusCode.OK, responseContent);
-            }
-            catch (Exception e)
-            {
-                var ex = e;
-            }
+            var responseContent = new StringContent(bodyResponse.SerializeXml());
+            _mockHttpHandler.WhenVision(HttpMethod.Post, ApiUrl)
+                .Respond(HttpStatusCode.OK, responseContent);
 
             // Act
             await _sut.GetAvailableAppointments(_visionUserSession, dateRange);

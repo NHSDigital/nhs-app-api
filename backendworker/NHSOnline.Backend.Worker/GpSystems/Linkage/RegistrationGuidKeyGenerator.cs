@@ -1,5 +1,4 @@
 ﻿using System;
-using NHSOnline.Backend.Worker.GpSystems.Linkage;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Linkage
 {

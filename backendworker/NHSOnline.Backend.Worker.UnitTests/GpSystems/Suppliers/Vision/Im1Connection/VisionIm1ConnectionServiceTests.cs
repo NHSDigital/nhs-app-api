@@ -21,11 +21,11 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
     {
         private const string DefaultConnectionToken = "{\"rosuAccountId\":\"account_id\",\"apiKey\":\"key\"}";
         private const string DefaultOdsCode = "token";
-        private const string accountId = "account_id";
-        private const string surname = "surname";
-        private const string linkageKey = "key";
+        private const string AccountId = "account_id";
+        private const string Surname = "surname";
+        private const string LinkageKey = "key";
         
-        private  DateTime dob = System.DateTime.Now;
+        private readonly DateTime _dob = DateTime.Now;
         private IFixture _fixture;
         private Mock<IVisionClient> _mockVisionClient;
         private ILogger<VisionIm1ConnectionService> _logger;
@@ -300,10 +300,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
-                AccountId = accountId,
-                DateOfBirth  = dob,
-                LinkageKey = linkageKey,
-                Surname = surname
+                AccountId = AccountId,
+                DateOfBirth  = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
             };
             var result = await systemUnderTest.Register(request);
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SuccessfullyRegistered>();
@@ -319,10 +319,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
-                AccountId = accountId,
-                DateOfBirth  = dob,
-                LinkageKey = linkageKey,
-                Surname = surname
+                AccountId = AccountId,
+                DateOfBirth  = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
             };
             var result = await systemUnderTest.Register(request);
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.SupplierSystemUnavailable>();
@@ -338,10 +338,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
-                AccountId = accountId,
-                DateOfBirth  = dob,
-                LinkageKey = linkageKey,
-                Surname = surname
+                AccountId = AccountId,
+                DateOfBirth  = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
             };
             var result = await systemUnderTest.Register(request);
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.AccountAlreadyExists>();
@@ -357,10 +357,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
-                AccountId = accountId,
-                DateOfBirth  = dob,
-                LinkageKey = linkageKey,
-                Surname = surname
+                AccountId = AccountId,
+                DateOfBirth  = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
             };
             var result = await systemUnderTest.Register(request);
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.NotFound>();
@@ -376,10 +376,10 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Im1Conne
             var request = new PatientIm1ConnectionRequest
             {
                 OdsCode = DefaultOdsCode,
-                AccountId = accountId,
-                DateOfBirth  = dob,
-                LinkageKey = linkageKey,
-                Surname = surname
+                AccountId = AccountId,
+                DateOfBirth  = _dob,
+                LinkageKey = LinkageKey,
+                Surname = Surname
             };
             var result = await systemUnderTest.Register(request);
             result.Should().BeAssignableTo<Im1ConnectionRegisterResult.BadRequest>();

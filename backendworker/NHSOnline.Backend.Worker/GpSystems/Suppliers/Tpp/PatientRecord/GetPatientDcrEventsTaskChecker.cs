@@ -15,20 +15,20 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
 
         public TppDcrEvents Check(TppClient.TppApiObjectResponse<RequestPatientRecordReply> taskResponse)
         {
-            var methodName = "Check";
-            _logger.LogDebug("Entered: {0}", methodName);
-            TppDcrEvents tppDcrEvents = null;
+            _logger.LogDebug("Entered: {0}", nameof(Check));
 
             if (taskResponse.HasSuccessResponse)
             {              
-                _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", methodName);
-                return tppDcrEvents ?? new TppDcrEventsMapper().Map(taskResponse.Body);
+                _logger.LogDebug("Exiting: {0} with HasSuccessResponse=true", nameof(Check));
+                return new TppDcrEventsMapper().Map(taskResponse.Body);
             }
-            
+
+            TppDcrEvents tppDcrEvents;
+
             if (taskResponse.HasForbiddenResponse)
             {
                 _logger.LogWarning("User does not have access to their patient record for Tpp");
-                tppDcrEvents = new TppDcrEvents()
+                tppDcrEvents = new TppDcrEvents
                 {
                     HasAccess = false
                 };
@@ -36,13 +36,13 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.PatientRecord
             else
             {
                 _logger.LogError($"Unsuccessful request retrieving patient record information for Tpp. Status code: {(int)taskResponse.StatusCode}");
-                tppDcrEvents = new TppDcrEvents()
+                tppDcrEvents = new TppDcrEvents
                 {
                     HasErrored = true
                 };
             }
 
-            _logger.LogDebug("Exiting: {0}", methodName);
+            _logger.LogDebug("Exiting: {0}", nameof(Check));
             return tppDcrEvents;
         }
     }

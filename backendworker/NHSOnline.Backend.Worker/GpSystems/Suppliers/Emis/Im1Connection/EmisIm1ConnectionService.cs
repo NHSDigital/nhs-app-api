@@ -115,7 +115,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Im1Connection
                 }
 
                 var endUserSessionId = endUserSessionResponse.Body.EndUserSessionId;
-                string accessIdentityGuid = null;
+                string accessIdentityGuid;
                 
                 _logger.LogInformation("Checking Cache for AccessIdentityGuid");
                 var key = _emisRegistrationGuidKeyGenerator.GenerateRegistrationKey(

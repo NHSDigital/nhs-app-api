@@ -6,8 +6,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.UnitTests.Areas;
+using NHSOnline.Backend.Worker.ValidationAttributes;
 
-namespace NHSOnline.Backend.Worker.ValidationAttributes
+namespace NHSOnline.Backend.Worker.UnitTests.ValidationAttributes
 {
     [TestClass]
     public class SafeStringAttributeTests

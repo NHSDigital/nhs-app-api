@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -12,8 +11,6 @@ using NHSOnline.Backend.Worker.Areas.Linkage;
 using NHSOnline.Backend.Worker.Areas.Linkage.Models;
 using NHSOnline.Backend.Worker.GpSystems;
 using NHSOnline.Backend.Worker.GpSystems.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Linkage;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Linkage;
 using NHSOnline.Backend.Worker.Support;
 using NHSOnline.Backend.Worker.Support.Auditing;
 

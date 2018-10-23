@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.GpSystems.Session;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
-using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using static NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.VisionClient;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session

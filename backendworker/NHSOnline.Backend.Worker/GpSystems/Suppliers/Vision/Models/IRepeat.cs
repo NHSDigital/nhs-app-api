@@ -1,6 +1,4 @@
-﻿using System.Xml.Serialization;
-
-namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
+﻿namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models
 {
     public interface IRepeat
     {

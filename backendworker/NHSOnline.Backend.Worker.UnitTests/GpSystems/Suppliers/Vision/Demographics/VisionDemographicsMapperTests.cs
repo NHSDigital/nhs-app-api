@@ -1,6 +1,4 @@
 ﻿using System;
-using AutoFixture;
-using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.Demographics.Models;
@@ -12,16 +10,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Demograp
     [TestClass]
     public class VisionDemographicsMapperTests
     {
-        private IFixture _fixture;
         private IVisionDemographicsMapper _mapper;
 
         [TestInitialize]
         public void TestInitialize()
         {
             _mapper = new VisionDemographicsMapper();
-
-            _fixture = new Fixture()
-                .Customize(new AutoMoqCustomization());
         }
 
         [TestMethod]
@@ -45,7 +39,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Demograp
         {
             // Arrange
             var item = new VisionDemographics();
-            var testNhsNumber = "123456789";
+            const string testNhsNumber = "123456789";
             
             // Act
             var result = _mapper.Map(item, testNhsNumber);

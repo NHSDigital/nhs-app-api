@@ -4,8 +4,6 @@ using System.Globalization;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
-using FluentAssertions.Common;
-using FluentAssertions.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;

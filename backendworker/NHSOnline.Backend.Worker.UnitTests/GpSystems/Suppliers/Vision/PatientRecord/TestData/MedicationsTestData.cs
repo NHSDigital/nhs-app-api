@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using FluentAssertions.Extensions;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData
 {

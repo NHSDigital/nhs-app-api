@@ -9,7 +9,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
     {
         private readonly ILogger<EmisEnumMapper> _logger;
 
-        private static readonly IDictionary<string, Necessity> _necessityMap =
+        private static readonly IDictionary<string, Necessity> NecessityMap =
             new Dictionary<string, Necessity>(StringComparer.OrdinalIgnoreCase)
             {
                 { "NotRequested", Necessity.NotAllowed },
@@ -24,9 +24,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis
 
         public Necessity MapNecessity(string emisNecessity, Necessity? defaultValue)
         {
-            if (!string.IsNullOrEmpty(emisNecessity) && _necessityMap.ContainsKey(emisNecessity))
+            if (!string.IsNullOrEmpty(emisNecessity) && NecessityMap.ContainsKey(emisNecessity))
             {
-                return _necessityMap[emisNecessity];
+                return NecessityMap[emisNecessity];
             }
 
             if (defaultValue.HasValue)

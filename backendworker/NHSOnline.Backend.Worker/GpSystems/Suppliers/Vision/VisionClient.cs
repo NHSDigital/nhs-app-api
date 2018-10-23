@@ -266,14 +266,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             var xmlSerializer = new XmlSerializer(typeof(T));
             
-            xmlSerializer.UnknownNode+= new   
-                XmlNodeEventHandler(serializer_UnknownNode);  
-            xmlSerializer.UnknownAttribute+= new   
-                XmlAttributeEventHandler(serializer_UnknownAttribute);
+            xmlSerializer.UnknownNode+= serializer_UnknownNode;  
+            xmlSerializer.UnknownAttribute+= serializer_UnknownAttribute;
             
-            using (var stringreader = new StringReader(request))
+            using (var stringReader = new StringReader(request))
             {
-                instance = (T) xmlSerializer.Deserialize(stringreader);
+                instance = (T) xmlSerializer.Deserialize(stringReader);
             }
 
             return instance;

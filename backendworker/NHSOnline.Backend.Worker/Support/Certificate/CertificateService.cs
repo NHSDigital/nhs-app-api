@@ -21,10 +21,9 @@ namespace NHSOnline.Backend.Worker.Support.Certificate
                 return null;
             }
 
-            X509Certificate2 _clientCert;
             try
             {
-                _clientCert = new X509Certificate2(certificatePath, certificatePassphrase);
+                return new X509Certificate2(certificatePath, certificatePassphrase);
             }
             catch (Exception ex)
             {
@@ -32,7 +31,6 @@ namespace NHSOnline.Backend.Worker.Support.Certificate
                 _logger.LogCritical(ex.ToString());
                 throw;
             }
-            return _clientCert;
         }
 
         private bool CheckValid(string certificatePath, string certificatePassphrase)

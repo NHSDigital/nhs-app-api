@@ -35,7 +35,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
         private readonly IAuditor _auditor;
         private readonly IAntiforgery _antiforgery;
         private readonly IMinimumAgeValidator _minimumAgeValidator;
-        private const string DATE_FORMAT = "yyyy-MM-dd";
+        private const string DateFormat = "yyyy-MM-dd";
 
         public SessionController(
             ICitizenIdService citizenIdService,
@@ -80,7 +80,7 @@ namespace NHSOnline.Backend.Worker.Areas.Session
                 var cidUserProfile = cidUserProfileOption.ValueOrFailure();
 
                 // Validate the Date of Birth meets expected format and minimum age requirements
-                if (!DateTime.TryParseExact(cidUserProfile.DateOfBirth, DATE_FORMAT, CultureInfo.InvariantCulture,
+                if (!DateTime.TryParseExact(cidUserProfile.DateOfBirth, DateFormat, CultureInfo.InvariantCulture,
                     DateTimeStyles.None, out var dateOfBirthParsed))
                 {
                     _logger.LogError($"Missing or invalid date of birth");

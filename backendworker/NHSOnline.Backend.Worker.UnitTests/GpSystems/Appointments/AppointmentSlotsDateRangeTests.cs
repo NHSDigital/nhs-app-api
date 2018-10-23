@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using NHSOnline.Backend.Worker.GpSystems.Appointments;
@@ -21,7 +20,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
         public void TestInitialize()
         {
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
+            configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOperatingSystemPlatform()) });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
         }
@@ -29,7 +28,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
         [TestMethod]
         public void SetsDefaultRange_WhenFromDateAndToDateAreNull()
         {
-            var todayDateString = "2018-05-12T00:00:00";
+            const string todayDateString = "2018-05-12T00:00:00";
 
             DateTimeOffset? todayDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(todayDateString).SetTimeToMidnight();
             var expectedFromDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-12T14:15:31");
@@ -83,7 +82,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Appointments
         public void SetsDefaultFromDate_WhenFromDateIsNull()
         {
             var toDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-05-27T18:45:22");
-            var toDateAtMidnightString = "2018-05-27T00:00:00";
+            const string toDateAtMidnightString = "2018-05-27T00:00:00";
             DateTimeOffset? toDateAtMidnight = _dateTimeOffsetProvider.GetDateTimeOffsetForTest(toDateAtMidnightString).SetTimeToMidnight();
             var expectedFromDate = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-04-29T00:00:01").SetTimeToMidnight();
             var expectedFromDateOut = _dateTimeOffsetProvider.GetDateTimeOffsetForTest("2018-04-29T00:00:01").SetTimeToMidnight();

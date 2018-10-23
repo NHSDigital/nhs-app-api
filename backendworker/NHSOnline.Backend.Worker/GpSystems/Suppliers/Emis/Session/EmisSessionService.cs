@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -75,7 +74,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.Session
 
                 var endUserSessionResponse = await SendSessionsEndUserSessionPost();
 
-                var patientName = string.Empty;
+                string patientName;
                 
                 var session = new EmisUserSession
                 {

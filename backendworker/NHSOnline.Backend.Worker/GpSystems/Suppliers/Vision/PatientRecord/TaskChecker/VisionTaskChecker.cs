@@ -26,7 +26,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.Task
             var result = task.Result;
             
             if (!result.HasErrorResponse) 
-                return _visionMapper.Map(result?.Body);
+                return _visionMapper.Map(result.Body);
             
             if (result.IsAccessDeniedError)
             {
