@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div v-if="showTemplate" class="content">
     <div :class="$style['page']">
       <h1 :class="$style['pageTitle']" :key="`${pageId}header`">
         {{ $t('ds01.titles.' + pageId) }}
