@@ -33,7 +33,7 @@ namespace NHSOnline.Backend.Worker.Areas.Im1Connection
 
         public IActionResult Visit(Im1ConnectionVerifyResult.InvalidUserCredentials invalidUserCredentials)
         {
-            return new StatusCodeResult(StatusCodes.Status403Forbidden);
+            return new StatusCodeResult(StatusCodes.Status502BadGateway);
         }
 
         public IActionResult Visit(Im1ConnectionVerifyResult.InvalidRequest invalidRequest)

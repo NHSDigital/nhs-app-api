@@ -45,13 +45,7 @@ Feature: Patient Verification
       | GP System |
       | EMIS      |
       | TPP       |
-
-  
-  @NHSO-2059
-  Scenario: Non-existent IM1 Connection Token for the Vision
-    Given I have an VISION IM1 Connection Token that does not exist
-    When I verify patient data
-    Then I receive a "Forbidden" error
+      | VISION    |
 
   Scenario Outline: <GP System> IM1 Connection Token not in the expected format
     Given I have an <GP System> IM1 Connection Token that is in an invalid format
