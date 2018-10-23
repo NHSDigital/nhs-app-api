@@ -1,8 +1,8 @@
 package mocking.vision.appointments
-
 import constants.DateTimeFormats
 import constants.DateTimeFormats.Companion.dateWithoutTimeFormat
 import mocking.JSonXmlConverter
+import constants.ErrorResponseCodeVision
 import mocking.JSonXmlConverter.wrapAroundXmlTag
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.models.Mapping
@@ -11,6 +11,7 @@ import mocking.vision.VisionMappingBuilder
 import mocking.vision.appointments.AppointmentSlotsBuilderVision.Companion.FOUR_WEEKS_OF_DAYS_PLUS_ONE
 import mocking.vision.appointments.helpers.AppointmentsSlotsHelper
 import mocking.vision.appointments.helpers.GeneralAppointmentsHelper
+import mocking.vision.helpers.VisionConstantsHelper
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.appointments.AvailableAppointmentsResponse
@@ -118,9 +119,12 @@ class AppointmentSlotsBuilderVision(
     }
 
     override fun respondWithUnknownException(): Mapping {
-        throw UnsupportedOperationException(
-                "Test Setup Incorrect: respondWithUnknownException() is not yet implemented in " +
-                        "AppointmentsSlotsVision")
+
+        return respondWith(HttpStatus.SC_OK) {
+                andXmlBody(VisionConstantsHelper.getBaseVisionFailedResponse(
+                        serviceDefinition,
+                        ErrorResponseCodeVision.NON_VISION_ERROR_CODE)).build()
+        }
     }
 
     override fun respondWithCorrupted(): Mapping {

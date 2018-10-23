@@ -18,12 +18,16 @@ Feature: View available appointment slots backend
       | VISION    |
 
 
-    # GP System agnostic, depends on what status code we get back
-  Scenario: Requesting available appointment slots returns an unknown exception, returns a Bad Gateway error
-    Given an unknown exception will occur when wanting to view appointment slots
-    And I have logged into EMIS and have a valid session cookie
+  Scenario Outline: Requesting available <GP System> appointment slots returns an unknown exception, returns a Bad Gateway error
+    Given an unknown exception will occur when wanting to view <GP System> appointment slots
+    And I have logged into <GP System> and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
     # GP System agnostic as GP System shouldn't be hit
   Scenario: Requesting available appointment slots by patient whose session expired returns "Unauthorized" error
@@ -60,18 +64,27 @@ Feature: View available appointment slots backend
     When I try to retrieve appointment slots with a malformed to Date
     Then I receive a "Bad Request" error
 
-    # GP System agnostic as GP System shouldn't be hit
-  Scenario: Requesting available appointment slots when GP system is unavailable returns "Bad gateway" error
-    Given I have logged into EMIS and have a valid session cookie
+  Scenario Outline: Requesting available appointment slots when <GP system> is unavailable returns "Bad gateway" error
+    Given I have logged into <GP System> and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Bad Gateway" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
-    # GP System agnostic as GP System shouldn't be hit
-  Scenario: Requesting available appointment slots the GP system times out and returns "Gateway Timeout" error
-    Given I have logged into EMIS and have a valid session cookie
-    And the system will time out when trying to retrieve appointment slots
+  @long-running
+  Scenario Outline: Requesting available appointment slots the <GP System> times out and returns "Gateway Timeout" error
+    Given the system will time out when trying to retrieve <GP System> appointment slots
+    And I have logged into <GP System> and have a valid session cookie
     When the available appointment slots are retrieved
     Then I receive a "Gateway Timeout" error
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+      | VISION    |
 
   @manual
   Scenario: Requesting available appointment slots without fromDate and toDate parameters returns set of appointment slots for the next 4 weeks from now

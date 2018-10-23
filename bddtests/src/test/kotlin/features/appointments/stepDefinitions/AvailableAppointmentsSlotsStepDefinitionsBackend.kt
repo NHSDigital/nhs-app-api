@@ -23,9 +23,9 @@ import javax.servlet.http.Cookie
 
 class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
-    @Given("^the system will time out when trying to retrieve appointment slots$")
-    fun appointmentSlotsTimesOut() {
-        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+    @Given("^the system will time out when trying to retrieve (.*) appointment slots$")
+    fun appointmentSlotsTimesOut(gpSystem: String) {
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
             respondWithSuccess(AppointmentsSlotsExample.getGenericExample())
                     .delayedBy(Duration.ofSeconds(90))

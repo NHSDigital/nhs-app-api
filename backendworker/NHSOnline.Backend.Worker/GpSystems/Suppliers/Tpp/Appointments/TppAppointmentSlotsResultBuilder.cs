@@ -73,7 +73,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Appointments
                 return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.CannotBookAppointments());
             }
             _logger.LogTppUnknownError(response);
-            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.InternalServerError());
+            return Option.Some<AppointmentSlotsResult>(new AppointmentSlotsResult.SupplierSystemUnavailable());
         }
 
         private Option<AppointmentSlotsResult> GetSlotsTaskCompletedUnsuccessfullyCase(Task<TppClient.TppApiObjectResponse<ListSlotsReply>> slotTask)

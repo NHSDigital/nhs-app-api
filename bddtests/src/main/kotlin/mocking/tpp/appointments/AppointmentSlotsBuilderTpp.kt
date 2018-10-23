@@ -79,7 +79,12 @@ class AppointmentSlotsBuilderTpp(
     }
 
     override fun respondWithUnknownException(): Mapping {
-        throw NotImplementedError("Not Implemented. ")
+        val errorMsg = "Unknown exception"
+        val error = Error(
+                errorCode = ErrorResponseCodeTpp.UNKNOWN_ERROR,
+                userFriendlyMessage = errorMsg,
+                uuid = TppConfig.uuid)
+        return respondWith(error)
     }
 
     override fun respondWithSuccess(facade: AppointmentSlotsResponseFacade): Mapping {

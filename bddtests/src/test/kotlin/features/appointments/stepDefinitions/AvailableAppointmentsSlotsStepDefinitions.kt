@@ -170,9 +170,9 @@ class AvailableAppointmentsSlotsStepDefinitions {
         Serenity.setSessionVariable(Cookie::class).to(expiredCookie)
     }
 
-    @Given("^an unknown exception will occur when wanting to view appointment slots$")
-    fun unknownExceptionWhenWantingToViewAppointmentSlots() {
-        val factory = AppointmentsSlotsFactory.getForSupplier("EMIS")
+    @Given("^an unknown exception will occur when wanting to view (.*) appointment slots$")
+    fun unknownExceptionWhenWantingToViewAppointmentSlots(gpSystem: String) {
+        val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateExample {
             respondWithUnknownException()
         }
