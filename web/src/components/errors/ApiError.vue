@@ -11,15 +11,18 @@
         <message-text data-purpose="msg-text">
           {{ message }}
         </message-text>
-        <message-text v-if="hasAdditionalInfo" :class="$style['additionalInfomation']"
+        <message-text v-if="hasAdditionalInfo" :aria-label="additionalInfoLabel"
+                      :class="$style['additionalInfomation']"
                       data-purpose="msg-extratext">
           {{ additionalInfo }}
         </message-text >
       </message-dialog>
-      <generic-button v-if="retryButtonText" :class="buttonClasses"
-                      data-purpose="retry-or-back-button" @click="onRetryButtonClicked">
-        {{ retryButtonText }}
-      </generic-button>
+      <form :action="retryUrl" method="get">
+        <generic-button v-if="retryButtonText" :class="buttonClasses"
+                        data-purpose="retry-or-back-button" @click="onRetryButtonClicked($event)">
+          {{ retryButtonText }}
+        </generic-button>
+      </form>
     </div>
     <div v-else>
       <header-slim>{{ header }}</header-slim>
@@ -36,8 +39,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import HeaderSlim from '@/components/HeaderSlim';
 import GenericButton from '@/components/widgets/GenericButton';
-import Sources from '@/lib/sources';
-import { LOGIN } from '@/lib/routes';
+import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 
 export default {
   components: {
@@ -46,6 +48,7 @@ export default {
     HeaderSlim,
     GenericButton,
   },
+  mixins: [ErrorMessageMixin],
   computed: {
     isVisible() {
       return this.showError();
@@ -67,14 +70,21 @@ export default {
     additionalInfo() {
       return this.getMessage('additionalInfo');
     },
+    additionalInfoLabel() {
+      return this.getMessage('additionalInfoLabel');
+    },
     hasAdditionalInfo() {
       return this.getMessage('additionalInfo') !== '';
     },
     retryButtonText() {
-      if (this.hasComponentErrorCodeKey('retryButtonText') || this.hasComponentKey('retryButtonText')) {
+      if (this.hasComponentErrorCodeKey('retryButtonText') || this.hasComponentKey('retryButtonText', 'errors')) {
         return this.getMessage('retryButtonText');
       }
       return '';
+    },
+    retryUrl() {
+      const url = this.getRedirectUrl();
+      return this.correctUrl(url);
     },
     overrideStyle() {
       const overrideStyles = this.$store.state.errors.pageSettings.errorOverrideStyles;
@@ -98,7 +108,7 @@ export default {
   },
   methods: {
     showError() {
-      return this.$store.getters['errors/showApiError'];
+      return this.hasApiError();
     },
     showStandardErrorView() {
       return this.$store.getters['errors/isStandardError'];
@@ -110,23 +120,9 @@ export default {
       };
       this.$store.dispatch('analytics/trackError', errorMessage);
     },
-    onRetryButtonClicked() {
-      const url = this.getRedirectUrl();
-      const sourceDevice = this.$store.state.device.source;
-
-      if (url === LOGIN.path) {
-        this.$cookies.remove('nhso.session');
-      }
-
-      if (url === '') {
-        this.$router.go();
-      } else if (url === LOGIN.path && Sources.isNative(sourceDevice)) {
-        this.$router.push({
-          path: url,
-          query: { source: sourceDevice } });
-      } else {
-        this.$router.push(url);
-      }
+    onRetryButtonClicked(event) {
+      event.preventDefault();
+      this.goToUrl(this.retryUrl);
     },
     getRedirectUrl() {
       const errorCode = this.getApiErrorResponse().status;
@@ -139,54 +135,6 @@ export default {
         redirectUrl = redirectUrlMap.default;
       }
       return redirectUrl;
-    },
-    getApiErrorResponse() {
-      return this.$store.state.errors.apiErrors[0];
-    },
-    getRoutePath() {
-      return this.$store.state.errors.routePath.substring(1).replace(/\//g, '.').replace(/-/g, '_');
-    },
-    getComponentErrorCodeKey(type) {
-      if (!this.showError()) {
-        return '';
-      }
-      const component = this.getRoutePath();
-
-      return `${component}.errors.${this.getApiErrorResponse().status}.${type}`;
-    },
-    hasComponentErrorCodeKey(type) {
-      return this.$te(this.getComponentErrorCodeKey(type));
-    },
-    getComponentKey(type) {
-      if (!this.showError()) {
-        return '';
-      }
-      const component = this.getRoutePath();
-      return `${component}.errors.${type}`;
-    },
-    hasComponentKey(type) {
-      return this.$te(this.getComponentKey(type));
-    },
-    getDefaultErrorCodeKey(type) {
-      if (!this.showError()) {
-        return '';
-      }
-      return `errors.${this.getApiErrorResponse().status}.${type}`;
-    },
-    hasDefaultErrorCodeKey(type) {
-      return this.$te(this.getDefaultErrorCodeKey(type));
-    },
-    getMessage(type) {
-      if (this.hasComponentErrorCodeKey(type)) {
-        return this.$t(this.getComponentErrorCodeKey(type));
-      } else if (this.hasComponentKey(type)) {
-        return this.$t(this.getComponentKey(type));
-      } else if (this.hasDefaultErrorCodeKey(type)) {
-        return this.$t(this.getDefaultErrorCodeKey(type));
-      } else if (this.$te(`errors.${type}`)) {
-        return this.$t(`errors.${type}`);
-      }
-      return '';
     },
     getPageHeader() {
       return this.getMessage('pageHeader');

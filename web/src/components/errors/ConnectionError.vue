@@ -15,6 +15,7 @@
 import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import GenericButton from '@/components/widgets/GenericButton';
+import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 
 export default {
   components: {
@@ -22,9 +23,10 @@ export default {
     MessageText,
     GenericButton,
   },
+  mixins: [ErrorMessageMixin],
   computed: {
     isVisible() {
-      return this.$store.state.errors.hasConnectionProblem;
+      return this.showError();
     },
     header() {
       return this.getMessage('header');
@@ -48,23 +50,8 @@ export default {
     onRetryButtonClicked() {
       this.$router.go();
     },
-    getRoutePath() {
-      return this.$route.path.substring(1).replace('/', '.').replace('-', '_');
-    },
-    getComponentKey(type) {
-      const component = this.getRoutePath();
-      return `${component}.noConnection.${type}`;
-    },
-    existsComponentKey(type) {
-      return this.$te(this.getComponentKey(type));
-    },
-    getMessage(type) {
-      if (this.existsComponentKey(type)) {
-        return this.$t(this.getComponentKey(type));
-      } else if (this.$te(`noConnection.${type}`)) {
-        return this.$t(`noConnection.${type}`);
-      }
-      return '';
+    showError() {
+      return this.hasConnectionError();
     },
   },
 };

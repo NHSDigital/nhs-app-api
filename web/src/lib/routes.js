@@ -5,6 +5,10 @@ const routes = {
     name: 'account',
     path: '/account',
   },
+  ACCOUNT_SIGNOUT: {
+    name: 'account-signout',
+    path: '/account/signout',
+  },
   APPOINTMENTS: {
     name: 'appointments',
     path: '/appointments',
@@ -109,6 +113,7 @@ export const isAnonymous = (input) => {
 
 export const {
   ACCOUNT,
+  ACCOUNT_SIGNOUT,
   APPOINTMENTS,
   APPOINTMENT_BOOKING_GUIDANCE,
   APPOINTMENT_CANCELLING,

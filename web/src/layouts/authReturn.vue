@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-menu :show-account-icon="false"/>
+    <header-slim :show-in-native="true" :click-url="loginUrl">{{ headerTitle }}</header-slim>
     <main :class="mainClass">
       <spinner />
       <connection-error />
@@ -13,21 +13,24 @@
 
 <script>
 /* eslint-disable no-underscore-dangle */
-import HeaderMenu from '@/components/HeaderMenu';
+import HeaderSlim from '@/components/HeaderSlim';
 import Spinner from '@/components/widgets/Spinner';
 import ApiError from '@/components/errors/ApiError';
+import ErrorMessageMixin from '@/components/errors/ErrorMessageMixin';
 import ConnectionError from '@/components/errors/ConnectionError';
 import FlashMessage from '@/components/widgets/FlashMessage';
 import Sources from '@/lib/sources';
+import { LOGIN } from '@/lib/routes';
 
 export default {
   components: {
-    HeaderMenu,
+    HeaderSlim,
     Spinner,
     ApiError,
     ConnectionError,
     FlashMessage,
   },
+  mixins: [ErrorMessageMixin],
   head() {
     const head = {
       htmlAttrs: {
@@ -43,8 +46,16 @@ export default {
     return head;
   },
   computed: {
+    loginUrl() {
+      return LOGIN.path;
+    },
+    headerTitle() {
+      return this.showError()
+        ? this.getMessage('header')
+        : this.$store.state.header.headerText;
+    },
     mainClass() {
-      const classes = ['content', 'pull-body'];
+      const classes = ['content', 'pull-body', 'slim'];
       if (this.$store.state.device.isNativeApp) {
         classes.push('native');
       }
@@ -52,22 +63,28 @@ export default {
     },
   },
   created() {
-    if (Sources.isNative(this.$route.query.source)) {
+    const { source } = this.$route.query;
+
+    if (Sources.isNative(source)) {
       this.$store.dispatch('device/updateIsNativeApp', true);
     } else {
       this.$store.dispatch('device/updateIsNativeApp', false);
     }
-    this.$store.dispatch('device/setSourceDevice', this.$route.query.source);
+    this.$store.dispatch('device/setSourceDevice', source);
   },
   methods: {
     pageTitle() {
       const nhsApp = 'NHS App';
+      const { pageTitle } = this.$store.state.pageTitle;
 
-      if (this.$store.state.pageTitle.pageTitle) {
-        return `${this.$store.state.pageTitle.pageTitle}-${nhsApp}`;
+      if (pageTitle) {
+        return `${pageTitle}-${nhsApp}`;
       }
 
       return nhsApp;
+    },
+    showError() {
+      return this.hasApiError() || this.hasConnectionError(); // API or connection errors
     },
   },
 };

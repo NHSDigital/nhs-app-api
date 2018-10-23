@@ -2,7 +2,7 @@
   <!--eslint-disable-next-line  vue/this-in-template -->
   <svg v-tabbing="iconClasses"
        :id="id"
-       :class="isLoaded === false ? $style.defaultStyle : getStyleClasses"
+       :class="getStyleClasses"
        :viewBox="viewBox"
        xmlns="http://www.w3.org/2000/svg"
        tabindex="0">
@@ -33,9 +33,8 @@ export default {
       default: '0 0 0 0',
     },
   },
-  data: function data() { return { isLoaded: false }; },
-  mounted() {
-    this.isLoaded = true;
+  created() {
+    this.stylingBinding = this.iconClasses;
   },
 };
 

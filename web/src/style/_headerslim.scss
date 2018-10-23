@@ -19,10 +19,18 @@ header.slim {
 		margin-right: 1.875em;
 		margin-left: 1.875em;
 	}
+
+	button {
+		top: 0em;
+		position: absolute;
+		background-color: transparent;
+		border: none;
+		cursor: pointer;
+		font-size: 1em;
+	}
+
 	svg {
-		float: left;
-		position: fixed;
-    	top: 0em;
+		float: left
 	}
 
 	&.cid {

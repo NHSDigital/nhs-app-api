@@ -14,7 +14,7 @@ export default {
         /* eslint no-param-reassign:
         ["error", { "props": true, "ignorePropertyModificationsFor": ["vnode"] }] */
         bind(el, binding, vnode) {
-          vnode.context.stylingBinding = binding;
+          vnode.context.stylingBinding = binding.value;
           el.addEventListener('keyup', vnode.context.onFocusButton);
           el.addEventListener('keydown', vnode.context.onKeyDown);
           el.addEventListener('blur', vnode.context.onBlurButton);
@@ -27,8 +27,8 @@ export default {
     computed: {
       getStyleClasses() {
         let styleClasses = [];
-        if (this.stylingBinding && this.stylingBinding.value) {
-          styleClasses = this.stylingBinding.value;
+        if (this.stylingBinding) {
+          styleClasses = this.stylingBinding;
           const index = styleClasses.indexOf(this.$style.tabFocus);
           if (index > -1) {
             styleClasses.splice(index, 1);

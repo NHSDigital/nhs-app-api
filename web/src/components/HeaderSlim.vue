@@ -1,9 +1,11 @@
 <template>
   <header v-if="showHeader" :class="[$style.slim]">
     <h1 :class="[$style.h1]"><slot/></h1>
-    <a tabindex="0" @click="performLogout()" @keypress="keyPress($event)">
-      <back-icon/>
-    </a>
+    <form :action="backUrl" method="get">
+      <button tabindex="0" @click="backClick($event)" @keypress="keyPress($event)">
+        <back-icon/>
+      </button>
+    </form>
   </header>
 </template>
 
@@ -11,6 +13,7 @@
 <script>
 /* eslint-disable import/extensions */
 import BackIcon from '@/components/icons/BackIcon';
+import { ACCOUNT_SIGNOUT } from '@/lib/routes';
 
 const ENTER_KEY_CODE = 13;
 
@@ -23,8 +26,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    clickUrl: {
+      type: String,
+      default: ACCOUNT_SIGNOUT.path,
+    },
   },
   computed: {
+    backUrl() {
+      return this.correctUrl(this.clickUrl);
+    },
     showHeader() {
       if (this.showInNative) {
         return true;
@@ -33,13 +43,13 @@ export default {
     },
   },
   methods: {
-    performLogout() {
-      this.$store.dispatch('auth/logout');
+    backClick(event) {
+      event.preventDefault();
+      this.goToUrl(this.backUrl);
     },
     keyPress(event) {
       if (event.keyCode === ENTER_KEY_CODE) {
-        event.preventDefault();
-        this.performLogout();
+        this.backClick(event);
       }
     },
 

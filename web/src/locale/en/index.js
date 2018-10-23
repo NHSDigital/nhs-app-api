@@ -19,9 +19,10 @@ export default {
       pageTitle: 'Session error',
       pageHeader: 'Session error',
       header: 'Session error',
-      subheader: 'There\'s been a problem loading this page',
+      subheader: 'There\'s been a problem loading this page.',
       message: 'Go back to the home screen and log in again.',
       additionalInfo: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call 111.',
+      additionalInfoLabel: 'If the problem continues and you need to book an appointment or get a prescription now, contact your GP surgery directly. For urgent medical advice, call one one one.',
       retryButtonText: 'Back to home',
       464: {
         pageHeader: 'Service unavailable',

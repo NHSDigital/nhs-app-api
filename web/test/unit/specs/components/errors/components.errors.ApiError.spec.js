@@ -30,6 +30,7 @@ const createApiErrorComponent = ($route, apiError) => {
       $route,
       $t,
       $te,
+      correctUrl: url => url,
     },
   });
 };
