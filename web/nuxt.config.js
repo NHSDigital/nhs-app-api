@@ -45,10 +45,10 @@ module.exports = {
   ],
   env: {
     // URL Formats
-    URI_FORMAT_API_CLIENT: 'http://api.{host}:8082',
-    URI_FORMAT_API_SERVER: 'http://api.{host}:8082',
-    URI_FORMAT_CID_REDIRECT_WEB: 'http://web.{host}:3000/auth-return',
-    URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web.{host}:3000/auth-return',
+    URI_FORMAT_API_CLIENT: 'http://api{host}:8082',
+    API_HOST_SERVER: 'http://api.local.bitraft.io:8082',
+    URI_FORMAT_CID_REDIRECT_WEB: 'http://web{host}:3000/auth-return',
+    URI_FORMAT_CID_REDIRECT_NATIVE: 'nhsapp://web{host}:3000/auth-return',
     // Core
     COOKIE_DOMAIN: '.bitraft.io',
     // Citizen ID

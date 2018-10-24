@@ -7,11 +7,14 @@ const getOriginHeader = get('headers.x-origin');
 const getWindowLocation = get('location.href');
 
 export const getHost = (req) => {
-  if (!req) return getWindowLocation(window);
+  if (!req) {
+    return getWindowLocation(window);
+  }
 
   const host = getOriginHeader(req) || getHostHeader(req);
   if (host) {
-    return host.split(',').map(x => x.trim())[0];
+    return host.split(',')
+      .map(x => x.trim())[0];
   }
 
   return undefined;
@@ -19,7 +22,7 @@ export const getHost = (req) => {
 
 const resolveBaseHost = req => getHost(req)
   .replace(/^https?:\/\//, '')
-  .replace(/^(?:web|www)[.-]?/, '')
+  .replace(/^(?:web|www)([.-]?)/, '$1')
   .replace(/(?:[:/?].*$)/, '');
 
 const resolveUrlFormat = (formatName, env) => {
@@ -34,15 +37,6 @@ export const resolveApiClient = ({ req, env }) => {
   );
 
   return env.API_HOST;
-};
-
-export const resolveApiServer = ({ req, env }) => {
-  env.API_HOST_SERVER = env.API_HOST_SERVER || applyUriFormat(
-    resolveBaseHost(req),
-    resolveUrlFormat('URI_FORMAT_API_SERVER', env),
-  );
-
-  return env.API_HOST_SERVER;
 };
 
 export const resolveCidWeb = ({ req, env }) => {
@@ -66,7 +60,6 @@ export const resolveCidNative = ({ req, env }) => {
 export default ({ env, req }) => {
   // const { env, req } = input;
   resolveApiClient({ env, req });
-  resolveApiServer({ env, req });
   resolveCidWeb({ env, req });
   resolveCidNative({ env, req });
 };

@@ -3,9 +3,9 @@ services:
   web.local.bitraft.io:
     image: nhsonline.web
     environment:
-      - URI_FORMAT_API_CLIENT=http://api.{host}:8082
-      - URI_FORMAT_API_SERVER=http://api.{host}:8082
-      - URI_FORMAT_CID_REDIRECT_WEB=http://web.{host}:3000/auth-return
+      - URI_FORMAT_API_CLIENT=http://api{host}:8082
+      - API_HOST_SERVER=http://api.local.bitraft.io:8082
+      - URI_FORMAT_CID_REDIRECT_WEB=http://web{host}:3000/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://10.0.2.2:3000/auth-return
       - CID_AUTH_ENDPOINT=http://10.0.2.2:8080/citizenid/cicauth/realms/NHS/protocol/openid-connect/auth
       - VERSION_TAG=dev_bdd_docker_appium

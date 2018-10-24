@@ -15,7 +15,7 @@ services:
     image: nhsonline.web
     environment:
       - URI_FORMAT_API_CLIENT=https://{host}:444
-      - URI_FORMAT_API_SERVER=http://api.{host}:8082
+      - API_HOST_SERVER=http://api.local.bitraft.io:8082
       - URI_FORMAT_CID_REDIRECT_WEB=https://{host}/auth-return
       - URI_FORMAT_CID_REDIRECT_NATIVE=nhsapp://{host}/auth-return
       - VERSION_TAG=dev_web_docker_https

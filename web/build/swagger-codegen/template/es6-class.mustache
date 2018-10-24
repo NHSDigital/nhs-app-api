@@ -9,7 +9,7 @@
 import $q from 'q';
 import axios from 'axios'
 import isEmpty from 'lodash/fp/isEmpty'
-import { resolveApiClient, resolveApiServer } from '@/middleware/urlResolution'
+import { resolveApiClient } from '@/middleware/urlResolution'
 
 /**
  * {{&description}}
@@ -45,7 +45,7 @@ class {{&className}} {
   get domain() {
     const { app: { $env }  } = this.store;
     return this.req
-      ? resolveApiServer({ req: this.req, env: $env })
+      ? $env.API_HOST_SERVER
       : resolveApiClient({ host: this.req, env: $env });
   }
 
