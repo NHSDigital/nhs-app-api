@@ -4,21 +4,30 @@ failFast: false
 test-pattern: # Configure exclusions for test sources
   active: true
   patterns: # Test file regexes
+    - '.*\\test\\.*'
     - '.*/test/.*'
-    - '.*Test.kt'
-    - '.*Spec.kt'
+    - '.*StepDefinitions.kt'
   exclude-rule-sets:
     - 'comments'
   exclude-rules:
-    - 'NamingRules'
-    - 'WildcardImport'
-    - 'MagicNumber'
-    - 'MaxLineLength'
-    - 'LateinitUsage'
-    - 'StringLiteralDuplication'
-    - 'SpreadOperator'
     - 'TooManyFunctions'
-    - 'ForEachOnRange'
+    - 'LargeClass'
+    - 'ComplexMethod'
+    - 'EmptyClassBlock'
+    - 'NestedBlockDepth'
+    - 'EmptyDefaultConstructor'
+    - 'EmptyClassBlock'
+    - 'EmptyCatchBlock'
+    - 'TooGenericExceptionCaught'
+    - 'TooGenericExceptionThrown'
+    - 'FunctionNaming'
+    - 'MatchingDeclarationName'
+    - 'TopLevelPropertyNaming'
+    - 'MaxLineLength'
+    - 'MagicNumber'
+    - 'WildcardImport'
+    - 'ReturnCount'
+    - 'VariableNaming'
 
 build:
   maxIssues: 0

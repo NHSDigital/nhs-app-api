@@ -77,7 +77,7 @@ compileTestKotlin {
 detekt {
     version = "1.0.0.RC8"
     defaultProfile {
-        input = file("src/main")
+        input = file("src")
         config = file("default-detekt-config.yml")
         filters = ".*/resources/.*,.*/tmp/.*"
         output = file("target/site/detekt")
