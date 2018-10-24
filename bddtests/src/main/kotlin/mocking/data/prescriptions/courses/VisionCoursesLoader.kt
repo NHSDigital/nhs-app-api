@@ -2,7 +2,7 @@ package mocking.data.prescriptions.courses
 
 import constants.SerenitySessionKeys.Companion.PRESCRIPTION_COMMENTS_ALLOWED
 import mocking.data.prescriptions.EmisPrescriptionLoader
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.RepeatCourse
 import models.prescriptions.MedicationCourse

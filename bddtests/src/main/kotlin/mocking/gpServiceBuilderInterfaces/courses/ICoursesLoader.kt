@@ -1,4 +1,4 @@
-package mocking.gpServiceBuilderInterfaces.Courses
+package mocking.gpServiceBuilderInterfaces.courses
 
 import models.prescriptions.MedicationCourse
 

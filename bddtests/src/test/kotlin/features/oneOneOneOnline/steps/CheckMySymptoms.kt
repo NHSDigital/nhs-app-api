@@ -1,7 +1,6 @@
-package features.oneOneOneOnline.Steps
+package features.oneOneOneOnline.steps
 
 import net.thucydides.core.annotations.Step
-import net.thucydides.core.annotations.Steps
 import org.junit.Assert
 import pages.CheckMySymtomsPage
 

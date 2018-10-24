@@ -4,9 +4,9 @@ import mocking.MockingClient
 import mocking.emis.EmisConfiguration
 import config.Config
 import mocking.MockingConfiguration
-import mocking.vision.Demographics.Demographics
-import mocking.vision.Demographics.Name
-import mocking.vision.Demographics.PrimaryAddress
+import mocking.vision.demographics.Demographics
+import mocking.vision.demographics.Name
+import mocking.vision.demographics.PrimaryAddress
 import mocking.vision.VisionConstants
 import mocking.vision.VisionMockDefaults.Companion.patientVision
 import mocking.vision.models.VisionUserSession

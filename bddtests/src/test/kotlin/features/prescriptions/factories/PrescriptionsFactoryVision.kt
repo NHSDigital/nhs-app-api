@@ -3,7 +3,7 @@ package features.prescriptions.factories
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
 import mocking.data.prescriptions.courses.VisionCoursesLoader
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.vision.VisionMockDefaults
 import mocking.vision.models.EligibleRepeats
 import mocking.vision.models.NewPrescriptionRepeat

@@ -4,7 +4,7 @@ import cucumber.api.java.en.And
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import features.oneOneOneOnline.Steps.CheckMySymptoms
+import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.sharedSteps.NavigationSteps
 import net.thucydides.core.annotations.Steps
 import org.junit.Assert

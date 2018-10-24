@@ -4,7 +4,7 @@ import features.sharedSteps.SerenityHelpers
 import features.sharedSteps.SupplierSpecificFactory
 import mocking.MockingClient
 import mocking.data.prescriptions.IPrescriptionLoader
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.Patient
 
 abstract class PrescriptionsFactory(gpSupplier:String) {

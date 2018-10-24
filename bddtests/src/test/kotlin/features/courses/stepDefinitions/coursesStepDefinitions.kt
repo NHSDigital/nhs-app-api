@@ -5,7 +5,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
 import features.authentication.steps.LoginSteps
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import features.courses.steps.ConfirmRepeatPrescriptionOrderSteps
 import features.courses.steps.CourseSteps
 import features.prescriptions.factories.PrescriptionsFactory

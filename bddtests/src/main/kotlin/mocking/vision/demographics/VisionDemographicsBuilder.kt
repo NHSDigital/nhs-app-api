@@ -1,4 +1,4 @@
-package mocking.vision.Demographics
+package mocking.vision.demographics
 
 import mocking.models.Mapping
 import mocking.vision.VisionConstants.getVisionDemographicsResponse

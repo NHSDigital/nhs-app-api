@@ -3,7 +3,7 @@ package features.prescriptions.factories
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.courses.TppCoursesLoader
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import mocking.tpp.models.RequestMedicationReply
 

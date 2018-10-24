@@ -6,7 +6,7 @@ import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.courses.EmisCoursesLoader
 import mocking.emis.models.CourseRequestsGetResponse
 import mocking.emis.models.PrescriptionRequestsGetResponse
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import models.prescriptions.MedicationCourse
 import net.serenitybdd.core.Serenity
 

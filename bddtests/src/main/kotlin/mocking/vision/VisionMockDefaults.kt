@@ -1,10 +1,8 @@
 package mocking.vision
 
-import mocking.vision.Demographics.Demographics
-import mocking.vision.Demographics.Name
-import mocking.vision.Demographics.PrimaryAddress
-import mocking.vision.VisionConstants.allergiesView
-import mocking.vision.VisionConstants.htmlResponseFormat
+import mocking.vision.demographics.Demographics
+import mocking.vision.demographics.Name
+import mocking.vision.demographics.PrimaryAddress
 import mocking.vision.models.Account
 import mocking.vision.models.Configuration
 import mocking.vision.models.PatientNumber

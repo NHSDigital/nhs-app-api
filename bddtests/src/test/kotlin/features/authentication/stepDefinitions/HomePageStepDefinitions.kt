@@ -4,7 +4,7 @@ import cucumber.api.java.en.Then
 import features.appointments.steps.MyAppointmentsSteps
 import features.authentication.steps.HomeSteps
 import features.myrecord.stepDefinitions.MyRecordStepDefinitions
-import features.oneOneOneOnline.Steps.CheckMySymptoms
+import features.oneOneOneOnline.steps.CheckMySymptoms
 import features.prescriptions.steps.PrescriptionsSteps
 import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps

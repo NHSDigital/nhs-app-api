@@ -1,7 +1,7 @@
 package mocking.vision
 
 import mocking.MappingBuilder
-import mocking.vision.Demographics.VisionDemographicsBuilder
+import mocking.vision.demographics.VisionDemographicsBuilder
 import mocking.vision.models.VisionUserSession
 import mocking.vision.models.OrderNewPrescriptionRequest
 import mocking.vision.models.ServiceDefinition

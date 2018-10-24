@@ -1,7 +1,7 @@
 package mocking.data.prescriptions.courses
 
 import mocking.data.prescriptions.TppPrescriptionLoader
-import mocking.gpServiceBuilderInterfaces.Courses.ICoursesLoader
+import mocking.gpServiceBuilderInterfaces.courses.ICoursesLoader
 import mocking.tpp.models.ListRepeatMedicationReply
 import models.prescriptions.MedicationCourse
 
