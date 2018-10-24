@@ -36,7 +36,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
                 var acuteMedications = parsedContent.Patient.Clinicals
                     .Where(x => x.SubGroupCode.Equals(Acute, StringComparison.OrdinalIgnoreCase) &&
                                 DateTime.TryParse(x.EventDate, out var eventDate) 
-                                && eventDate >= DateTimeOffset.Now.AddYears(-1));
+                                && eventDate.Date >= DateTime.Now.AddYears(-1).Date);
 
                 medications.Data.AcuteMedications = 
                     acuteMedications.Select(MapMedicationResponse);
@@ -51,7 +51,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
                 var discontinuedRepeatMedications = parsedContent.Patient.Clinicals
                     .Where(x => x.SubGroupCode.Equals(DiscontinuedRepeat, StringComparison.OrdinalIgnoreCase) &&
                                 DateTime.TryParse(x.LastPrescribedDate,  out var lastPrescribedDate) 
-                                && lastPrescribedDate >= DateTimeOffset.Now.AddMonths(-6));
+                                && lastPrescribedDate.Date >= DateTime.Now.AddMonths(-6).Date);
 
                 medications.Data.DiscontinuedRepeatMedications =
                     discontinuedRepeatMedications.Select(MapMedicationResponse);
@@ -71,10 +71,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.View
             return new MedicationItem
             {
                 Date = clinical.SubGroupCode.Equals(Acute, StringComparison.OrdinalIgnoreCase) ? 
-                    (DateTimeOffset.TryParse(clinical.EventDate, out var eventDate) ? 
-                        eventDate : (DateTimeOffset?)null) :
-                    DateTimeOffset.TryParse(clinical.FirstPrescribedDate, out var firstPrescribedDate) 
-                        ? firstPrescribedDate : (DateTimeOffset?)null
+                    (DateTime.TryParse(clinical.EventDate, out var eventDate) ? 
+                        eventDate.Date : (DateTime?)null) :
+                    DateTime.TryParse(clinical.FirstPrescribedDate, out var firstPrescribedDate) 
+                        ? firstPrescribedDate.Date : (DateTime?)null
                 ,
                 LineItems = new List<MedicationLineItem>
                 {

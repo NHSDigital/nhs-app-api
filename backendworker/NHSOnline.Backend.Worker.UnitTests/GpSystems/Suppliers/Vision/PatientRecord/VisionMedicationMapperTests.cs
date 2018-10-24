@@ -4,6 +4,7 @@ using System.Globalization;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
+using FluentAssertions.Common;
 using FluentAssertions.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -74,6 +75,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
         {
             // Arrange
             var today = DateTime.Now;
+
             var data = new VisionPatientDataResponse
             {
                 Record = MedicationsTestData.GetMedicationTestData(today)
@@ -87,7 +89,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
                     {
                         new MedicationItem
                         {
-                            Date = DateTimeOffset.Parse("2017-10-08T00:00:00", CultureInfo.InvariantCulture),
+                            Date = DateTime.Parse("2017-10-08T00:00:00", CultureInfo.InvariantCulture),
                             LineItems = new List<MedicationLineItem>
                             {
                                 new MedicationLineItem { Text = "Flucloxacillin 250mg capsules" },
@@ -101,8 +103,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
                     {
                         new MedicationItem
                         {
-                            Date = DateTimeOffset.Parse(today.AddMonths(-10)
-                                .AsUtc().ToString("s", CultureInfo.InvariantCulture), CultureInfo.InvariantCulture),
+                            Date = DateTime.Parse(today.AddMonths(-10).Date.ToString(CultureInfo.InvariantCulture),
+                                CultureInfo.InvariantCulture),
                             LineItems = new List<MedicationLineItem>
                             {
                                 new MedicationLineItem { Text = "Panadol ActiFast 500mg tablets (GlaxoSmithKline Consumer Healthcare)" },
@@ -116,7 +118,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
                     {
                         new MedicationItem
                         {
-                            Date = DateTimeOffset.Parse("2015-10-08T00:00:00", CultureInfo.InvariantCulture),
+                            Date = DateTime.Parse("2015-10-08T00:00:00", CultureInfo.InvariantCulture),
                             LineItems = new List<MedicationLineItem>
                             {
                                 new MedicationLineItem { Text = "Panadol ActiFast 1000mg tablets (GlaxoSmithKline Consumer Healthcare)" },
