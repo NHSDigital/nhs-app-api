@@ -94,22 +94,11 @@ export default {
     commit(INIT_AUTH);
   },
   nativeLogin() {
-    const login = () => {
-      if (window.nativeApp) {
-        return NativeCallbacks.onLogin();
-      }
-
-      return false;
-    };
-
-    if (process.server) return;
-
-    if (!login()) {
-      let tries = 0;
+    if (!process.server && !NativeCallbacks.onLogin()) {
+      let attempts = 0;
       const interval = setInterval(() => {
-        tries += 1;
-        if (login() && tries <= MAX_TRIES) {
-          tries = 0;
+        attempts += 1;
+        if (NativeCallbacks.onLogin() || attempts >= MAX_TRIES) {
           clearInterval(interval);
         }
       }, 500);

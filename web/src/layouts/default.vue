@@ -129,7 +129,10 @@ export default {
           window.validateSession || (() => {
             this.$store.dispatch('session/validate');
           });
-        this.$store.dispatch('auth/nativeLogin');
+
+        if (this.$store.state.device.isNativeApp) {
+          this.$store.dispatch('auth/nativeLogin');
+        }
         this.resetFocus();
       }
     }

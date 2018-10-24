@@ -1,6 +1,7 @@
 import { find } from 'lodash/fp';
 import actions from '@/store/modules/auth/actions';
 import { AUTH_RESPONSE, UPDATE_CONFIG } from '@/store/modules/auth/mutation-types';
+import NativeCallbacks from '@/services/native-app';
 import { mockCookies } from '../../../../helpers';
 import Sources from '../../../../../../src/lib/sources';
 
@@ -125,6 +126,49 @@ describe('actions', () => {
       actions.updateConfig({ commit }, newConfigValue);
 
       expect(commit).toBeCalledWith(UPDATE_CONFIG, newConfigValue);
+    });
+  });
+
+  describe('nativeLogin', () => {
+    let spy;
+
+    beforeEach(() => {
+      jest.useFakeTimers();
+      window.nativeApp = undefined;
+    });
+
+    afterEach(() => {
+      (spy || {}).mockRestore();
+    });
+
+    it('will attempt to fire the native onLogin callback and fail as the app has timed out', () => {
+      process.server = false;
+      spy = jest.spyOn(NativeCallbacks, 'onLogin').mockImplementation(() => false);
+
+      actions.nativeLogin();
+
+      // Fast-forward until all timers have been executed
+      jest.runTimersToTime(10000);
+
+      expect(NativeCallbacks.onLogin).toHaveBeenCalledTimes(11);
+    });
+
+
+    it('will attempt to fire the native onLogin callback and succeed ', () => {
+      process.server = false;
+
+      let attempts = 0;
+      spy = jest.spyOn(NativeCallbacks, 'onLogin').mockImplementation(() => {
+        attempts += 1;
+        return attempts > 1;
+      });
+
+      actions.nativeLogin();
+
+      // Fast-forward until all timers have been executed
+      jest.runTimersToTime(10000);
+
+      expect(NativeCallbacks.onLogin).toHaveBeenCalledTimes(2);
     });
   });
 });
