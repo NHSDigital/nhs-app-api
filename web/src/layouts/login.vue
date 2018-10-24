@@ -1,11 +1,13 @@
 <template>
-  <div id="app" :class="$style['login-app-header']">
+  <div v-if="isErrorVisible" :class="$style['error-container']">
+    <connection-error />
+    <api-error />
+  </div>
+  <div v-else id="app" :class="$style['login-app-header']">
     <div :class="$style['login-app-header-flex-container']">
       <home-header />
       <session-expired-banner v-if="showSessionExpiredBanner" />
       <main :class="this.$style.homeMain">
-        <connection-error />
-        <api-error />
         <flash-message />
         <nuxt />
       </main>
@@ -35,6 +37,9 @@ export default {
   computed: {
     showSessionExpiredBanner() {
       return this.$store.state.session.showExpiryMessage;
+    },
+    isErrorVisible() {
+      return this.$store.getters['errors/showApiError'] || this.$store.state.errors.hasConnectionProblem;
     },
   },
   head() {
@@ -73,6 +78,11 @@ export default {
 
 <style module lang="scss" scoped>
 @import "../style/home";
+@import "../style/spacings";
+
+.error-container {
+  @include space(padding, all, 1em);
+}
 
 .login-app-header {
   position: absolute;
