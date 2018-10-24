@@ -33,6 +33,8 @@ object VisionConstants {
     var htmlResponseFormat: String = "HTML"
     var xmlResponseFormat: String = "XML"
 
+    var gpAppointmentsDisabled: String = "gpAppointmentsDisabled"
+
     fun getVisionExistingAppointmentsResponse(serviceContent: String,
                                               serviceDefinition: mocking.vision.models.ServiceDefinition): String {
 

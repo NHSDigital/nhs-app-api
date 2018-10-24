@@ -34,6 +34,12 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 _logger.LogEnter(nameof(GetAppointments));
             
                 var visionUserSession = (VisionUserSession) userSession;
+
+                if (!visionUserSession.IsAppointmentsEnabled)
+                {
+                    _logger.LogError("Appointments not enabled");
+                    return new AppointmentsResult.CannotViewAppointments();
+                }
                 
                 var visionConnectionToken = new VisionConnectionToken
                 {

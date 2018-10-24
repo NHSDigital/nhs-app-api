@@ -14,6 +14,8 @@
         
         public bool IsRepeatPrescriptionsEnabled { get; set; }
 
+        public bool IsAppointmentsEnabled { get; set; } = true;
+
         public bool AllowFreeTextPrescriptions { get; set; }
     }
 }

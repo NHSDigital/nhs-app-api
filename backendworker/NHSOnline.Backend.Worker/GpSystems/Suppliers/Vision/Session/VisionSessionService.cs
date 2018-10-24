@@ -35,6 +35,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session
                             NhsNumber = nhsNumber,
                             PatientId = response.Body.Configuration.Account.PatientId,
                             IsRepeatPrescriptionsEnabled = response.Body.Configuration.Prescriptions.RepeatEnabled,
+                            IsAppointmentsEnabled = response.Body.Configuration.Appointments.BookingEnabled
                         }
                     );
                 }

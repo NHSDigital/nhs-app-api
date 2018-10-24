@@ -125,6 +125,17 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     }
 
     @Step
+    fun checkAppointmentsDisabledMessage() {
+        val expectedHeader = "You are not currently able to book appointments online"
+        val expectedBody = "Contact your GP surgery for more information. For urgent medical help, call 111."
+        errorPage.waitForSpinnerToDisappear()
+        assertEquals("expected Header text $expectedHeader but found ${errorPage.heading.element.text}",
+                expectedHeader, errorPage.heading.element.text)
+        assertEquals("expected error text $expectedBody but found ${errorPage.errorText1.element.text}",
+                expectedBody, errorPage.errorText1.element.text)
+    }
+
+    @Step
     fun clickOnTryAgainButton() {
         errorPage.waitForSpinnerToDisappear(11) // 1 second more than timeout
         errorPage.clickOnButtonContainingText("Try again")

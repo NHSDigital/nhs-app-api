@@ -10,6 +10,9 @@ data class Configuration(
         var account: Account = Account(),
 
         @XmlElement(namespace = "urn:vision", name = "prescriptions")
-        var prescriptions: Prescriptions = Prescriptions()
+        var prescriptions: Prescriptions = Prescriptions(),
+
+        @XmlElement(namespace = "urn:vision", name = "appointments")
+        var appointments: Appointments = Appointments()
 
 )

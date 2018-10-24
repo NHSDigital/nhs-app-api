@@ -205,6 +205,16 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
+    @NHSO-799
+  Scenario: A user sees appropriate information message when appointments are disabled on VISION
+      # VISION Specific test
+    Given Appointments are disabled for VISION at a GP Practice level
+    And I am logged in as a VISION user
+    When I am on my appointments page
+    Then I see appropriate information message when appointments are disabled
+    And there should not be an option to try again
+
+
   @native
   @manual
   Scenario: A user sees appropriate information message when internet connection has been lost

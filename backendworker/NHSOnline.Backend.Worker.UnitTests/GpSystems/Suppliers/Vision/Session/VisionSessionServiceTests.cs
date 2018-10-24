@@ -69,8 +69,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                                             },
                                             Prescriptions = new PrescriptionsConfiguration()
                                             {
-                                                RepeatEnabled = true,
+                                                RepeatEnabled = true
                                             },
+                                            Appointments = new AppointmentsConfiguration()
+                                            {
+                                                BookingEnabled = false
+                                            }
                                         }
                                     }
                                 }
@@ -87,6 +91,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Session
                     ApiKey = DefaultApiKey,
                     RosuAccountId = DefaultRosuAccountId,
                     IsRepeatPrescriptionsEnabled = true,
+                    IsAppointmentsEnabled = false
                 });
             
             var systemUnderTest = new VisionSessionService(_mockVisionClient.Object);

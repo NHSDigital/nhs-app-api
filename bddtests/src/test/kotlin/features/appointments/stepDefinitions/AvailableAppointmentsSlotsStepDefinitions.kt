@@ -14,6 +14,8 @@ import features.authentication.steps.LoginSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
+import mocking.defaults.MockDefaults
+import mocking.vision.VisionConstants.gpAppointmentsDisabled
 import mockingFacade.appointments.AppointmentFilterFacade
 import mockingFacade.appointments.AppointmentSessionFacade
 import mockingFacade.appointments.AppointmentSlotFacade
@@ -145,6 +147,12 @@ class AvailableAppointmentsSlotsStepDefinitions  {
     fun emis_responds_a_timely_fashion_for_available_appointment_slots() {
         thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem("EMIS")
     }
+
+    @Given ("^Appointments are disabled for VISION at a GP Practice level")
+    fun appointmentsAreDisabledForVisionAtAGPLevel() {
+       Serenity.setSessionVariable(gpAppointmentsDisabled).to("true")
+    }
+
 
     @Given("^EMIS is unavailable for available appointment slots$")
     fun emis_is_unavailable_for_available_appointment_slots() {
@@ -310,6 +318,11 @@ class AvailableAppointmentsSlotsStepDefinitions  {
     @Then("^I see appropriate information message when there is a error retrieving data$")
     fun i_see_appropriate_information_message_when_there_is_a_error_retrieving_data() {
         availableAppointments.checkUnavailableErrorMessage()
+    }
+
+    @Then("^I see appropriate information message when appointments are disabled$")
+    fun i_see_appropriate_information_message_when_appointments_are_disabled() {
+        availableAppointments.checkAppointmentsDisabledMessage()
     }
 
     @Then("^there should not be an option to try again$")
