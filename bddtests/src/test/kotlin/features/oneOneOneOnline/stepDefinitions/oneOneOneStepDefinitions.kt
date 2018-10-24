@@ -21,7 +21,7 @@ open class OneOneOneStepDefinitions {
 
     @When("^I Check My Symptoms$")
     open fun iCheckMySymptoms() {
-        login.checkMySymptoms()
+        login.loginPage.symptomsButton.element.click()
     }
 
     @And("^Symptoms is unselected")

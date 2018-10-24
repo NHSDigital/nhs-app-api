@@ -1,6 +1,7 @@
 package features.linkage.stepDefinitions
 
 import features.linkage.LinkageResult
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.emis.linkage.EmisLinkageGETBuilder
 import mocking.emis.linkage.EmisLinkagePOSTBuilder
@@ -11,7 +12,7 @@ import mocking.emis.models.AddVerificationResponse
 import mocking.models.Mapping
 import mockingFacade.linkage.LinkageInformationFacade
 
-class LinkageFactoryEmis() : LinkageFactory("EMIS") {
+class LinkageFactoryEmis : LinkageFactory("EMIS") {
 
     override fun mockLinkagePostResult(linkageInformationFacade: LinkageInformationFacade, linkageResult: LinkageResult) {
         val linkageToPostRequestResponse = hashMapOf(
@@ -48,7 +49,7 @@ class LinkageFactoryEmis() : LinkageFactory("EMIS") {
             authentication.linkageKeyGetRequest(verificationRequest(linkageInformationFacade))
                     .respondWithSuccessfullyRetrievedFirstTime(verificationResponse(linkageInformationFacade))
         }
-        return { post -> post.respondWithSuccessfullyCreated(AddNhsUserResponse(MockDefaults.patient.connectionToken)) }
+        return { post -> post.respondWithSuccessfullyCreated(AddNhsUserResponse(EmisMockDefaults.patientEmis.connectionToken)) }
     }
 
 

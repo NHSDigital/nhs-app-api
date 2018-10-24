@@ -24,6 +24,7 @@ import mocking.data.prescriptions.EmisPrescriptionLoader
 import mocking.data.prescriptions.IPrescriptionLoader
 import mocking.data.prescriptions.TppPrescriptionLoader
 import mocking.data.prescriptions.VisionPrescriptionLoader
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.models.PrescriptionRequestsGetResponse
@@ -50,6 +51,7 @@ import java.time.ZonedDateTime
 import javax.servlet.http.Cookie
 import mocking.vision.VisionMockDefaults
 import pages.navigation.NavBarNative
+import mocking.vision.models.VisionUserSession
 
 open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
@@ -375,7 +377,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         mockingClient
                 .forVision {
-                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
                             .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                 }
     }
@@ -396,7 +398,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         mockingClient
                 .forVision {
-                    getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                    getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
                             .respondWith(500, resolve = {})
                 }
     }
@@ -421,7 +423,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
             mockingClient
                     .forVision {
-                        getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                        getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
                                 .respondWith(504, resolve = {}, milliSecondDelay = 15000)
                     }
         }
@@ -447,7 +449,7 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
             mockingClient
                     .forVision {
-                        getPrescriptionHistoryRequest(MockDefaults.visionUserSession)
+                        getPrescriptionHistoryRequest(VisionUserSession.fromPatient(currentPatient))
                                 .respondWith(500, resolve = {})
                     }
         }
@@ -455,14 +457,17 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
     @But("The prescription submission endpoint is timing out")
     fun butThePrescriptionSubmissionEndpointIsTimingOut() {
-        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
+        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
+                .respondWith(504, resolve = {}, milliSecondDelay = 15000) }
 
-        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null).respondWith(504, resolve = {}, milliSecondDelay = 15000) }
+        mockingClient.forTpp { prescriptions.prescriptionSubmission(TppMockDefaults.patientTpp, null)
+                .respondWith(504, resolve = {}, milliSecondDelay = 15000) }
     }
 
     @But("The prescription submission endpoint is throwing a server error")
     fun butThePrescriptionSubmissionEndpointIsThrowingAServerError() {
-        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(MockDefaults.patient).respondWith(500, resolve = {}) }
+        mockingClient.forEmis { prescriptions.repeatPrescriptionSubmissionRequest(EmisMockDefaults.patientEmis)
+                .respondWith(500, resolve = {}) }
     }
 
     @But("The prescription submission endpoint is throwing an already ordered exception")
@@ -549,7 +554,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
                 mockingClient
                         .forEmis {
-                            prescriptions.prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                            prescriptions.prescriptionsRequest(EmisMockDefaults.patientEmis,
+                                    EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
                                     .respondWithSuccess(prescriptionLoader.data as PrescriptionRequestsGetResponse)
                         }
             }
@@ -693,7 +699,8 @@ open class PrescriptionsStepDefinitions : BaseStepDefinition() {
 
         mockingClient
                 .forEmis {
-                    prescriptions.prescriptionsRequest(MockDefaults.patient, EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
+                    prescriptions.prescriptionsRequest(EmisMockDefaults.patientEmis,
+                            EXPECTED_DEFAULT_FROM_DATE, TO_DATE)
                             .respondWithSuccess(prgr)
                 }
     }

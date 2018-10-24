@@ -3,6 +3,7 @@ package features.sharedStepDefinitions.backend
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
 import cucumber.api.java.en.When
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.PatientIdentifier
@@ -48,7 +49,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 val nonExistingConnectionToken = "0d135b66-a8b0-46b2-b437-cfe75edc773d"
                 val patient = Patient(
                         connectionToken = nonExistingConnectionToken,
-                        odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                        odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                         endUserSessionId = "zVGrzHH7YUPeEBRk1nat1D"
                 )
 
@@ -59,7 +60,7 @@ class PatientVerificationSteps : AbstractSteps() {
                             patientIdentifiers = arrayOf(
                                     PatientIdentifier(
                                             identifierType = IdentifierType.NhsNumber,
-                                            identifierValue = MockDefaults.patient.nhsNumbers[0])))
+                                            identifierValue = EmisMockDefaults.patientEmis.nhsNumbers.first())))
                 }
                 setSessionVariable("ConnectionToken").to(nonExistingConnectionToken)
                 setSessionVariable("NationalPracticeCode").to(patient.odsCode)
@@ -93,7 +94,7 @@ class PatientVerificationSteps : AbstractSteps() {
     @Given("Vision responds with a security header error")
     fun visionRespondsWithASecurityHeaderError() {
         setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
+        setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
 
         mockingClient
                 .forVision {
@@ -110,7 +111,7 @@ class PatientVerificationSteps : AbstractSteps() {
     @Given("Vision responds with an invalid request error")
     fun visionRespondsWithAInvalidRequestError() {
         setSessionVariable("ConnectionToken").to(VisionMockDefaults.patientVision.connectionToken)
-        setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
+        setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
 
         mockingClient
                 .forVision {
@@ -148,10 +149,10 @@ class PatientVerificationSteps : AbstractSteps() {
                 setSessionVariable("NationalPracticeCode").to(TppMockDefaults.DEFAULT_ODS_CODE_TPP)
             }
             EMIS -> {
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE)
+                setSessionVariable("NationalPracticeCode").to(EmisMockDefaults.DEFAULT_ODS_CODE_EMIS)
             }
             VISION -> {
-                setSessionVariable("NationalPracticeCode").to(MockDefaults.DEFAULT_ODS_CODE_VISION)
+                setSessionVariable("NationalPracticeCode").to(VisionMockDefaults.DEFAULT_ODS_CODE_VISION)
             }
         }
     }
@@ -264,7 +265,7 @@ class PatientVerificationSteps : AbstractSteps() {
                 title = "Miss",
                 firstName = "Alexia",
                 surname = "Scott",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 connectionToken = "fe81f191-b016-466e-aeb2-64f08f2330a4",
                 sessionId = "xkWiivK1WBAkxIN9CDrGyy",
                 endUserSessionId = "9RFDWiqTO8zBWrp2p8s4K7",

@@ -21,7 +21,7 @@ class SessionExpiryStepDefinitions : AbstractSteps() {
 
     @Then("^I see the login page with the session expiry notification$")
     fun iSeeTheLoginPageWithTheSessionExpiryNotification() {
-        login.assertPageIsDisplayed()
+        login.loginPage.shouldBeDisplayed()
         login.loginPage.assertTimeoutBannerIsVisible()
     }
 }

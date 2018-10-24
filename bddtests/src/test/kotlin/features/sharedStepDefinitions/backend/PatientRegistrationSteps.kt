@@ -2,7 +2,7 @@ package features.sharedStepDefinitions.backend
 
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
-import mocking.defaults.MockDefaults
+import mocking.defaults.EmisMockDefaults
 import models.Patient
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
@@ -22,7 +22,7 @@ class PatientRegistrationSteps : AbstractSteps() {
                 surname = "Smith",
                 dateOfBirth = "1919-12-24T14:03:15Z",
                 accountId = "1195029928",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 endUserSessionId = "zVfHuYArbENW4aoAUeQPyS",
                 linkageKey = "KjwzyFSEUAGj4"
         )

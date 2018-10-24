@@ -1,11 +1,12 @@
 package mocking.citizenId.login
 
 import mocking.citizenId.CitizenIdMappingBuilder
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import models.Patient
 
-class CompleteLoginRequestBuilder(val patient: Patient = MockDefaults.patient, customId: String? = null)
+class CompleteLoginRequestBuilder(val patient: Patient = EmisMockDefaults.patientEmis, customId: String? = null)
     : CitizenIdMappingBuilder("GET",
         "/complete-login") {
 

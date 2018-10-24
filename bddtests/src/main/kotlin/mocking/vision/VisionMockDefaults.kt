@@ -9,11 +9,14 @@ import mocking.vision.models.PatientNumber
 import mocking.vision.models.Prescriptions
 import mocking.vision.models.ServiceDefinition
 import mocking.vision.models.VisionUserSession
+import mocking.vision.models.appointments.Appointments
 import models.Patient
 
 class VisionMockDefaults{
 
     companion object {
+
+        const val DEFAULT_ODS_CODE_VISION: String = "X00100"
 
         val patientVision = Patient.getDefault("VISION")
 
@@ -40,14 +43,6 @@ class VisionMockDefaults{
         val visionOrderNewPrescription = ServiceDefinition(
                 VisionConstants.newPrescription,
                 VisionConstants.newPrescriptionVersion)
-
-        val visionImmunisationsRequest = ServiceDefinition(
-                VisionConstants.patientDataName,
-                VisionConstants.patientDataVersion)
-
-        val visionAllergiesRequest = ServiceDefinition(
-                VisionConstants.patientDataName,
-                VisionConstants.patientDataVersion)
 
         val visionUserSessionPrescriptionDisabled = VisionUserSession(
                 Patient.aderynCanon.rosuAccountId,
@@ -93,5 +88,12 @@ class VisionMockDefaults{
                     patient.odsCode,
                     patient.patientId)
         }
+
+        val visionConfigurationResponseAppointmentsDisabled = Configuration(account = Account(patientVision.patientId,
+                patientNumber = listOf(
+                        PatientNumber(number = patientVision.nhsNumbers[0])
+                ),
+                name = patientVision.formattedFullName()),
+                appointments = Appointments(false))
     }
 }

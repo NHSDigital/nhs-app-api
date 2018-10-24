@@ -2,7 +2,6 @@ package mocking.defaults
 
 import mocking.tpp.models.Application
 import mocking.tpp.models.Authenticate
-import mocking.tpp.models.Error
 import models.Patient
 
 class TppMockDefaults{

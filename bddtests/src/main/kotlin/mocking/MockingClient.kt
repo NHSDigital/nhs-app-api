@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import config.Config
 import io.restassured.response.Response
 import mocking.citizenId.CitizenIdMappingBuilder
-import mocking.defaults.MockDefaults
+import mocking.defaults.EmisMockDefaults
 import mocking.emis.EmisMappingBuilder
 import mocking.favicon.FaviconMappingBuilder
 import mocking.models.Mapping
@@ -93,6 +93,6 @@ class MockingClient(private val configuration: MockingConfiguration) {
     }
 
     companion object {
-        val instance: MockingClient by lazy { MockDefaults.createMockingClient(Config.instance) }
+        val instance: MockingClient by lazy { EmisMockDefaults.createMockingClient(Config.instance) }
     }
 }

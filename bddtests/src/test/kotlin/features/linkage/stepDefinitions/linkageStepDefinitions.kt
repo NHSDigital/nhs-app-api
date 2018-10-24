@@ -4,6 +4,7 @@ import cucumber.api.java.en.Given
 import cucumber.api.java.en.When
 import features.linkage.LinkageResult
 import mocking.MockingClient
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mockingFacade.linkage.LinkageInformationFacade
@@ -178,7 +179,7 @@ open class LinkageStepDefinitions {
     private fun validLinkage(gpSystem: String): LinkageInformationFacade {
         val odsCode = when (gpSystem) {
             "EMIS" -> {
-                MockDefaults.DEFAULT_ODS_CODE
+                EmisMockDefaults.DEFAULT_ODS_CODE_EMIS
             }
             "TPP" -> {
                 TppMockDefaults.DEFAULT_ODS_CODE_TPP

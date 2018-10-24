@@ -4,6 +4,7 @@ import cucumber.deps.com.thoughtworks.xstream.InitializationException
 import mocking.citizenId.CitizenIdMappingBuilder
 import mocking.citizenId.models.TokenRequest
 import mocking.citizenId.models.login.token.SucceededResponse
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import org.apache.http.HttpStatus
@@ -57,7 +58,7 @@ class TokenRequestBuilder(codeVerifier: String, authCode: String?, customTokenRe
     }
 
     fun respondWithSuccess(
-            accessToken: String = MockDefaults.patient.accessToken,
+            accessToken: String = EmisMockDefaults.patientEmis.accessToken,
             expiresIn: String = "90",
             scope: String = "openid profile nhs_app_credentials gp_integration_credentials",
             tokenType: String = "Bearer",

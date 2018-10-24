@@ -17,7 +17,7 @@ import mocking.data.myrecord.ProblemsData
 import mocking.data.myrecord.TestResultsData
 import mocking.data.myrecord.TppDcrData
 import mocking.data.myrecord.ViewPatientOverviewData
-import mocking.defaults.MockDefaults
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
 import mocking.tpp.models.Error
@@ -91,7 +91,8 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
                 }
 
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
+                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+                            .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
                 }
             }
             "TPP" -> {

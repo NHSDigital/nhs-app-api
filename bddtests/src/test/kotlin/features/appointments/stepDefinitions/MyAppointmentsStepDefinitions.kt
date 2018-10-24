@@ -124,6 +124,7 @@ class MyAppointmentsStepDefinitions {
             Serenity.setSessionVariable(MyAppointmentsResponse::class.java).to(result)
             Assert.fail("The API did not fail with invalid token.")
         } catch (exception: NhsoHttpException) {
+            Serenity.setSessionVariable("HttpException").to(exception)
         }
     }
 

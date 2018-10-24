@@ -11,7 +11,7 @@ import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SerenityHelpers
 import mocking.MockingClient
-import mocking.defaults.MockDefaults
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.EmisSessionCreateJourneyFactory
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -87,8 +87,8 @@ open class SharedStepDefinitions {
     @Given("^I am not logged in$")
     open fun iAmNotLoggedIn() {
         browser.goToApp()
-        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
-        EmisSessionCreateJourneyFactory(mockingClient).createFor(MockDefaults.patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
+        EmisSessionCreateJourneyFactory(mockingClient).createFor(EmisMockDefaults.patientEmis)
     }
 
     @When("^I navigate to (.*)$")

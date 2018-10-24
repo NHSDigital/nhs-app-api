@@ -3,11 +3,13 @@ package models
 import config.Config
 import constants.DateTimeFormats
 import mocking.citizenId.models.IdTokenBuilder
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import mocking.defaults.TppMockDefaults
 import mocking.emis.demographics.Address
 import mocking.emis.demographics.ContactDetails
 import mocking.emis.demographics.Sex
+import mocking.vision.VisionMockDefaults
 import utils.DateConverter
 import worker.models.demographics.TppUserSession
 import worker.models.session.UserSessionRequest
@@ -101,11 +103,11 @@ data class Patient(
                 title = "Mr",
                 firstName = "Paul",
                 surname = "Smith",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 userPatientLinkToken = "3v4DARxCmznF6eiGMQRR2u",
                 dateOfBirth = "1972-04-12",
                 sessionId = "AJYF0ufQI6tTpdfwaXAt",
-                connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
+                connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
                 nhsNumbers = listOf("2227007273"))
 
@@ -114,7 +116,7 @@ data class Patient(
                 firstName = "Jack",
                 surname = "Jackson",
                 dateOfBirth = "1972-04-12",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "gY39SJJMEEg7rNbcsfF8",
                 connectionToken = "efa22020-9221-46a6-a0f0-6c0340b8f44d",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -126,7 +128,7 @@ data class Patient(
                 firstName = "Alan",
                 surname = "Cook",
                 dateOfBirth = "1972-04-12",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "fbWgorZ8Fggk9c5PgKd7",
                 connectionToken = "7e14cfb4-eb7a-44c3-8603-28ee36c7a9bf",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -138,7 +140,7 @@ data class Patient(
                 firstName = "Halle",
                 surname = "Dawe",
                 dateOfBirth = "1994-02-21",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "4RDwmQVi3OfSbp47dbAnRF",
                 connectionToken = "1da4fe9d-0fd2-45bc-90a9-014e57291d0f",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -155,7 +157,7 @@ data class Patient(
                 dateOfBirth = "1972-04-12",
                 address = defaultAddress,
                 contactDetails = defaultContactDetails,
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "2jM47sZ0ic4FIAcVogI4WI",
                 connectionToken = "7a3a3cf8-a797-4fcc-a4b9-629cdbe104fc",
                 endUserSessionId = MockDefaults.DEFAULT_END_USER_SESSION_ID,
@@ -172,7 +174,7 @@ data class Patient(
                 dateOfBirth = "1972-04-12",
                 address = defaultAddress,
                 contactDetails = defaultContactDetails,
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
                 sessionId = "4FIAcVogI4WI2jM47sZ0ic",
                 connectionToken = "7a3a3cf8-4fcc-a797-a4b9-629cdbe104fc",
                 endUserSessionId = "SY1iAcXGG8ZU7YjG1LYkOk",
@@ -187,8 +189,8 @@ data class Patient(
                 firstName = "John",
                 surname = "Smith",
                 dateOfBirth = "1919-12-24",
-                odsCode = MockDefaults.DEFAULT_ODS_CODE,
-                connectionToken = MockDefaults.DEFAULT_CONNECTION_TOKEN,
+                odsCode = EmisMockDefaults.DEFAULT_ODS_CODE_EMIS,
+                connectionToken = EmisMockDefaults.DEFAULT_CONNECTION_TOKEN,
                 sessionId = "MT4vWCxTKXRYr7fFJWM3wB",
                 endUserSessionId = "Ab42ZoP21dT4JE12avEWQ5",
                 accountId = "1195029928",
@@ -261,7 +263,7 @@ data class Patient(
                         postcode = "LS18 5TN"
                 ),
                 contactDetails = defaultContactDetails,
-                odsCode = MockDefaults.DEFAULT_ODS_CODE_VISION,
+                odsCode = VisionMockDefaults.DEFAULT_ODS_CODE_VISION,
                 nhsNumbers = listOf("5785445875"),
                 connectionToken = "{\"RosuAccountId\":\"104969\",\"" +
                         "ApiKey\":\"h4h9869kj3ytz6427y7" +

@@ -1,14 +1,13 @@
 package mocking.citizenId.login
 
+import config.Config
 import mocking.citizenId.CitizenIdMappingBuilder
-import mocking.defaults.MockDefaults
 import mocking.models.Mapping
 import models.Patient
-import config.Config
 import org.apache.http.HttpStatus
 
 class InitialLoginRequestBuilder(
-        val patient: Patient = MockDefaults.patient,
+        val patient: Patient,
         redirectUri: String,
         clientId: String,
         matcherToUse:String? = null)

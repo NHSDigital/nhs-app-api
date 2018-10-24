@@ -14,7 +14,7 @@ import features.sharedStepDefinitions.backend.AbstractSteps
 import features.sharedSteps.BrowserSteps
 import features.sharedSteps.NavigationSteps
 import features.sharedSteps.SerenityHelpers
-import mocking.defaults.MockDefaults
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.dataPopulation.journies.im1Connection.SuccessfulRegistrationJourney
 import mocking.defaults.dataPopulation.journies.session.CitizenIdSessionCreateJourney
 import mocking.defaults.dataPopulation.journies.session.SessionCreateJourneyFactory
@@ -64,8 +64,8 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     lateinit var authReturnPage: AuthReturnPage
     lateinit var serviceUnavailablePage: ServiceUnavailablePage
 
-    private var authCode: String? = MockDefaults.patient.cidUserSession.authCode
-    private var codeVerifier: String? = MockDefaults.patient.cidUserSession.codeVerifier
+    private var authCode: String? = EmisMockDefaults.patientEmis.cidUserSession.authCode
+    private var codeVerifier: String? = EmisMockDefaults.patientEmis.cidUserSession.codeVerifier
     private lateinit var patient: Patient
     private val associationType = AssociationType.Self
 
@@ -112,14 +112,14 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Given("^I have valid OAuth details and the EMIS end user session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisUserSessionEndpointFails() {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithServerError() }
         mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithSuccess(Patient.getDefault("EMIS"), associationType) }
     }
 
     @Given("^I have valid OAuth details and the EMIS session endpoint fails to create$")
     fun iHaveValidOAuthDetailsAndEmisSessionEndpointFails() {
-        CitizenIdSessionCreateJourney(mockingClient).createFor(MockDefaults.patient)
+        CitizenIdSessionCreateJourney(mockingClient).createFor(EmisMockDefaults.patientEmis)
         mockingClient.forEmis { authentication.endUserSessionRequest().respondWithSuccess(Patient.getDefault("EMIS").endUserSessionId) }
         mockingClient.forEmis { authentication.sessionRequest(Patient.getDefault("EMIS")).respondWithServerError() }
     }
@@ -357,7 +357,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @And("^the response has a name$")
     fun theResponseHasAName() {
-        Assert.assertEquals("${MockDefaults.patient.title} ${MockDefaults.patient.firstName} ${MockDefaults.patient.surname}", this.userSessionResponse?.userSessionResponseBody?.name)
+        Assert.assertEquals(EmisMockDefaults.patientEmis.formattedFullName(), this.userSessionResponse?.userSessionResponseBody?.name)
     }
 
     @And("^the response has a session timeout$")
@@ -397,7 +397,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Given("^I have just logged out$")
     fun iHaveJustLoggedOut() {
         browser.goToApp()
-        login.asDefault()
+        login.using(EmisMockDefaults.patientEmis)
         navHeader.clickMyAccount()
         myAccount.signOutButton.element.click()
     }
@@ -498,7 +498,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see the login page$")
     fun iSeeTheLoginPage() {
-        login.assertPageIsDisplayed()
+        login.loginPage.shouldBeDisplayed()
     }
 
     @Then("^I see the relevant page$")
@@ -542,7 +542,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I do not see the menu bar$")
     @Throws(Exception::class)
     fun iDoNotSeeMenuBar() {
-        login.assertMenuIsNotVisible()
+        login.loginPage.assertMenuIsNotVisible()
     }
 
     @Then("^I see the sign out button$")
@@ -567,12 +567,12 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @Then("^I see create account button$")
     fun iSeeCreateAccountButton() {
-        login.assertCreateAccountButtonIsVisible()
+        Assert.assertTrue(login.loginPage.loginOrCreateAccountButton.element.isVisible())
     }
 
     @When("^I select to create an account$")
     fun iClickCreateAccountButton() {
-        login.clickCreateAccountButton()
+        login.loginPage.loginOrCreateAccountButton.element.click()
     }
 
     @When("^I have completed (.+) account creation$")
@@ -585,7 +585,7 @@ class AuthenticationStepDefinitions : AbstractSteps() {
 
     @And("^I complete the account registration$")
     fun iCompleteAccountRegistration() {
-        login.createAccount(this.patient)
+        login.loginPage.createAccount(patient)
     }
 
     @Then("^the spinner appears$")

@@ -1,5 +1,6 @@
 package pages
 
+import mocking.defaults.EmisMockDefaults
 import mocking.defaults.MockDefaults
 import models.Patient
 import net.thucydides.core.annotations.DefaultUrl
@@ -50,10 +51,6 @@ class LoginPage : HybridPageObject() {
     fun createAccount(patient: Patient) {
         loginOrCreateAccountButton.element.click()
         accountCreationPage.completeAccountCreation(patient)
-    }
-
-    fun isCreateAccountButtonVisible(): Boolean {
-        return loginOrCreateAccountButton.element.isVisible
     }
 
     override fun shouldBeDisplayed() {

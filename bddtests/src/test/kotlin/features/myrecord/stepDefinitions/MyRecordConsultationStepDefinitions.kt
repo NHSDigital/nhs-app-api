@@ -1,10 +1,12 @@
 package features.myrecord.stepDefinitions
 
 import constants.ErrorResponseCodeTpp
-import cucumber.api.java.en.*
+import cucumber.api.java.en.Given
+import cucumber.api.java.en.Then
+import cucumber.api.java.en.When
 import mocking.data.myrecord.ConsultationsData
 import mocking.data.myrecord.TppDcrData
-import mocking.defaults.MockDefaults
+import mocking.defaults.EmisMockDefaults
 import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import net.thucydides.core.annotations.Steps
@@ -24,7 +26,8 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
+                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+                            .respondWithSuccess(ConsultationsData.getMultipleConsultationRecords())
                 }
             }
             "TPP" -> {
@@ -41,7 +44,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(MockDefaults.patient).respondWithExceptionWhenNotEnabled()
+                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithExceptionWhenNotEnabled()
                 }
             }
             "TPP" -> {
@@ -64,7 +67,8 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(MockDefaults.patient).respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
+                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis)
+                            .respondWithSuccess(ConsultationsData.getDefaultConsultationsData())
                 }
             }
             "TPP" -> {
@@ -84,7 +88,7 @@ open class MyRecordConsultationStepDefinitions : AbstractDemographicsStepDefinit
         when (getService) {
             "EMIS" -> {
                 mockingClient.forEmis {
-                    myRecord.consultationsRequest(MockDefaults.patient).respondWithNonDataAccessException()
+                    myRecord.consultationsRequest(EmisMockDefaults.patientEmis).respondWithNonDataAccessException()
                 }
             }
             "TPP" -> {
