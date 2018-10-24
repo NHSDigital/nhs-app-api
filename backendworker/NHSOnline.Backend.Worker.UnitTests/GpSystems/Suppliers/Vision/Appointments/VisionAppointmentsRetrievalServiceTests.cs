@@ -24,6 +24,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
     public class VisionAppointmentsRetrievalServiceTests
     {
         private IFixture _fixture;
+        private Mock<IAppointmentMapper> _mockAppointmentMapper;
         private Mock<IVisionClient> _mockVisionClient;
         private VisionUserSession _userSession;
         private VisionAppointmentsRetrievalService _systemUnderTest;
@@ -56,14 +57,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
             var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
-            
-            var appointmentMapper = new AppointmentMapper(dateTimeOffsetProvider);
+
+            _mockAppointmentMapper = _fixture.Freeze<Mock<IAppointmentMapper>>();
             var cancellationReasonMapper = new CancellationReasonMapper();
             
             _systemUnderTest = new VisionAppointmentsRetrievalService(
                 _fixture.Create<ILogger<VisionAppointmentsRetrievalService>>(),
                 _mockVisionClient.Object,
-                new BookedAppointmentsResponseMapper(appointmentMapper, cancellationReasonMapper));
+                new BookedAppointmentsResponseMapper(_mockAppointmentMapper.Object, cancellationReasonMapper));
         }
         
         [TestMethod]
@@ -102,31 +103,21 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             // Assert
             result.Should().BeAssignableTo<AppointmentsResult.SupplierSystemUnavailable>();
         }
-// =============================
-// DON'T REMOVE
-// Test is going to be fixed
-// https://jira.service.nhs.uk/browse/NHSO-2877
-// =============================        
-//        [TestMethod]
-//        public async Task GetAppointments_MapperThrows_ReturnsInternalServerError()
-//        {
-//            // Arrange
-//            _mockVisionClient.Setup(x => x.GetExistingAppointments(
-//                It.Is<VisionConnectionToken>(p => 
-//                    p.RosuAccountId.Equals(_userSession.RosuAccountId, StringComparison.Ordinal)
-//                    && p.ApiKey.Equals(_userSession.ApiKey, StringComparison.Ordinal)),
-//                _userSession.OdsCode,
-//                _userSession.PatientId
-//            ))
-//            .Throws<Exception>();
-//
-//            // Act
-//            var result = await _systemUnderTest.GetAppointments(_userSession);
-//
-//            // Assert
-//            result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
-//        }
-        
+ 
+        [TestMethod]
+        public async Task GetAppointments_MapperThrows_ReturnsInternalServerError()
+        {
+            // Arrange
+            _mockAppointmentMapper.Setup(x=>x.Map(It.IsAny<BookedAppointmentsResponse>()))
+            .Throws<Exception>();
+
+            // Act
+            var result = await _systemUnderTest.GetAppointments(_userSession);
+
+            // Assert
+            result.Should().BeAssignableTo<AppointmentsResult.InternalServerError>();
+        }
+
         private void MockVisionClientAppointmentsGetMethod(
             VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse> response)
         {   
