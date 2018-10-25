@@ -20,7 +20,7 @@ import java.time.Duration
 const val DEFAULT_SPINNER_WAIT: Long = 30
 const val POOLING_FREQUENCY: Long = 100
 
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "To be addressed after browser stack implementation work, NHSO-2949")
 abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
 
     val containsTextXpathSubstring = "[contains(text(), \"%s\")]"
@@ -33,12 +33,6 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
             page = this
     )
 
-    private val warningMessage = HybridPageElement(
-            browserLocator = "//div[@data-purpose='warning']",
-            androidLocator = null,
-            page = this
-    )
-
     fun waitForSpinnerToDisappear(seconds: Long = DEFAULT_SPINNER_WAIT) {
         if (!spinner.elements.isEmpty()) spinner.shouldNotBeVisible(seconds)
     }
@@ -48,7 +42,7 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         return this.element
     }
 
-    fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
+    private fun HybridPageElement.shouldNotBeVisible(seconds: Long = DEFAULT_SPINNER_WAIT) {
         try {
             val currentElement = this.element
             FluentWait<WebElementFacade>(currentElement)
@@ -207,29 +201,6 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         }
     }
 
-    fun getErrorDetailText(): String? {
-        return try {
-            switchToPage(ErrorPage::class.java)
-                    .errorText2.element.text
-        } catch (e: NoSuchElementException) {
-            null
-        }
-    }
-
-    fun getWarningText(): String? {
-        return try {
-            warningMessage.element.text
-        } catch (e: NoSuchElementException) {
-            null
-        }
-    }
-
-    fun getRetryButtonText(): String {
-        val buttons = findAllByXpath("//div[@class='msg error']//button")
-        Assert.assertEquals(1, buttons.size)
-        return buttons[0].text
-    }
-
     fun waitForPageHeaderText(expectedHeaderText: String) {
         assertEquals(
                 "Header is incorrect",
@@ -262,22 +233,6 @@ abstract class HybridPageObject(private var pageType: PageType) : PageObject() {
         } else if (isIOS()) {
             throw NotImplementedError("IOS keyboard hiding not yet implemented.")
         }
-    }
-
-    private fun isAnyXpathVisible(xpath: String): Boolean {
-
-        val allElements = findAllByXpath(xpath)
-
-        var anyVisible = false
-
-        allElements.forEach {
-            if (it.isVisible) {
-                anyVisible = true
-            }
-        }
-
-
-        return anyVisible
     }
 
     private fun getPageHeaderText(): String {

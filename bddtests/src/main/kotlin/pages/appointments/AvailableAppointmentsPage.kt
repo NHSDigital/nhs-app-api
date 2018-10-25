@@ -2,6 +2,7 @@ package pages.appointments
 
 import net.thucydides.core.annotations.DefaultUrl
 import org.junit.Assert.assertTrue
+import org.openqa.selenium.NoSuchElementException
 import pages.HybridPageElement
 
 @DefaultUrl("http://web.local.bitraft.io:3000/appointments/booking")
@@ -41,6 +42,12 @@ class AvailableAppointmentsPage : AppointmentSharedElementsPage() {
             "time-period",
             "Appointment time period filter",
             this
+    )
+
+    val warningMessage = HybridPageElement(
+            browserLocator = "//div[@data-purpose='warning']",
+            androidLocator = null,
+            page = this
     )
 
     fun timeSlotForDateAndTime(date: String, time: String) = HybridPageElement(

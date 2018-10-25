@@ -329,13 +329,15 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     fun verifyThatNoAppointmentsErrorIsDisplayed() {
         assertEquals("No appointments available\n" +
                 "There are currently no appointments available to book online right now. If you need to book one now, call your GP surgery.\n" +
-                "If it's urgent and you don't know what to do, call 111 to get help near you.", availableAppointments.getWarningText())
+                "If it's urgent and you don't know what to do, call 111 to get help near you.",
+                availableAppointments.warningMessage.assertSingleElementPresent().element.text)
     }
 
     @Step
     fun verifyThatNoAppointmentsForSelectedCriteriaErrorIsDisplayed() {
         assertEquals("Try selecting a different date and time, or without a preferred practice member selected. If you can't find the appointment you need, call your GP surgery.\n" +
-                "If it's urgent and you don't know what to do, call 111 to get help near you.", availableAppointments.getWarningText())
+                "If it's urgent and you don't know what to do, call 111 to get help near you.",
+                availableAppointments.warningMessage.assertSingleElementPresent().element.text)
     }
 
     @Step
