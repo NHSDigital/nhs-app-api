@@ -125,7 +125,7 @@ export default {
       this.symptoms = this.symptoms.trim();
       if (this.symptoms.length === 0 && isMandatory) {
         this.submissionError = true;
-        this.$refs.reason.focus();
+        window.scrollTo(0, 0);
         return;
       }
       this.submissionError = false;
