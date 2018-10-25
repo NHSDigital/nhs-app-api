@@ -2,6 +2,7 @@ package features.authentication.stepDefinitions
 
 import com.google.gson.Gson
 import config.Config
+import cucumber.api.DataTable
 import cucumber.api.java.en.And
 import cucumber.api.java.en.Given
 import cucumber.api.java.en.Then
@@ -491,6 +492,27 @@ class AuthenticationStepDefinitions : AbstractSteps() {
         this.currentUrl = fullUrl
     }
 
+    @When("^I browse to the pages at the following urls I see the (.*) page$")
+    fun iBrowseToPageAtXAndSeeTheXPage(page: String, table: DataTable) {
+        val lowerPage = page.toLowerCase()
+        for(row in table.raw()) {
+            val fullUrl = Config.instance.url + row.get(0)
+            browser.browseTo(fullUrl)
+            this.currentUrl = fullUrl
+            when (lowerPage) {
+                "login" -> {
+                    login.loginPage.shouldBeDisplayed()
+                }
+                "home" -> {
+                    home.assertHeaderVisible()
+                }
+                "relevant" -> {
+                    browser.shouldHaveUrl(Config.instance.url + row.get(1))
+                }
+            }
+        }
+    }
+
     @Then("^I see the home page$")
     fun iSeeTheHomePage() {
         home.assertHeaderVisible()
@@ -504,6 +526,11 @@ class AuthenticationStepDefinitions : AbstractSteps() {
     @Then("^I see the relevant page$")
     fun iSeeTheRelevantPage() {
         browser.shouldHaveUrl(this.currentUrl)
+    }
+
+    @Then("I see the relevant (.*)")
+    fun iSeeTheRelevant(relevantUrl: String){
+        browser.shouldHaveUrl(Config.instance.url + relevantUrl)
     }
 
     @Then("^I see a welcome message$")

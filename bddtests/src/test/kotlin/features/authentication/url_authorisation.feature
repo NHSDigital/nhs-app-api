@@ -7,85 +7,124 @@ Feature: Authorisation occurs during each URL visit
   Background:
     Given a patient from EMIS is defined
 
-  Scenario Outline: User has never logged in and attempts to navigate to <URL>
+  Scenario: User has never logged in and attempts to navigate to a restricted url
     Given I am not logged in
-    When I browse to the page at <URL>
-    Then I see the login page
+    When I browse to the pages at the following urls I see the login page
+      | /account                                    |
+      | /appointments                               |
+      | /appointments/booking-guidance              |
+      | /appointments/cancel                        |
+      | /appointments/booking                       |
+      | /appointments/confirmation                  |
+      | /data-sharing                               |
+      | /                                           |
+      | /logout                                     |
+      | /more                                       |
+      | /my-record                                  |
+      | /my-record-warning                          |
+      | /my-record/noaccess                         |
+      | /my-record/testresultdetail                 |
+      | /prescriptions                              |
+      | /prescriptions/repeat-courses               |
+      | /prescriptions/confirm-prescription-details |
+      | /symptoms                                   |
+      | /terms-and-conditions                       |
 
-  @smoketest
-    Examples:
-      | URL                           |
-      | /prescriptions                |
-    Examples:
-      | URL                           |
-      | /                             |
-      | /appointments                 |
-      | /prescriptions/repeat-courses |
-      | /more                         |
-      | /account                      |
-
-
-  Scenario Outline: User has just logged out and attempts to navigate to <URL>
+  Scenario: User has just logged out and attempts to navigate to a restricted url
     Given I have just logged out
     And I see the login page
-    When I browse to the page at <URL>
-    Then I see the login page
-
-    Examples:
-    | URL                           |
-    | /                             |
-    | /appointments                 |
-    | /prescriptions                |
-    | /prescriptions/repeat-courses |
-    | /more                         |
-    | /account                      |
+    When I browse to the pages at the following urls I see the login page
+      | /account                                    |
+      | /appointments                               |
+      | /appointments/booking-guidance              |
+      | /appointments/cancel                        |
+      | /appointments/booking                       |
+      | /appointments/confirmation                  |
+      | /data-sharing                               |
+      | /                                           |
+      | /logout                                     |
+      | /more                                       |
+      | /my-record                                  |
+      | /my-record-warning                          |
+      | /my-record/noaccess                         |
+      | /my-record/testresultdetail                 |
+      | /prescriptions                              |
+      | /prescriptions/repeat-courses               |
+      | /prescriptions/confirm-prescription-details |
+      | /symptoms                                   |
+      | /terms-and-conditions                       |
 
   @manual
-  Scenario Outline: User session has expired and attempts to navigate to <URL>
+  Scenario: User session has expired and attempts to navigate to a restricted url
     Given my session has expired
-    When I browse to the page at <URL>
-    Then I see the login page
+    When I browse to the pages at the following urls I see the login page
+      | /account                                    |
+      | /appointments                               |
+      | /appointments/booking-guidance              |
+      | /appointments/cancel                        |
+      | /appointments/booking                       |
+      | /appointments/confirmation                  |
+      | /data-sharing                               |
+      | /                                           |
+      | /logout                                     |
+      | /more                                       |
+      | /my-record                                  |
+      | /my-record-warning                          |
+      | /my-record/noaccess                         |
+      | /my-record/testresultdetail                 |
+      | /prescriptions                              |
+      | /prescriptions/repeat-courses               |
+      | /prescriptions/confirm-prescription-details |
+      | /symptoms                                   |
+      | /terms-and-conditions                       |
 
-    Examples:
-    | URL                           |
-    | /                             |
-    | /appointments                 |
-    | /prescriptions                |
-    | /prescriptions/repeat-courses |
-    | /more                         |
-    | /account                      |
-
-  Scenario Outline: User browses to <URL> when logged in
+  Scenario: User browses to url when logged in
     Given I am logged in
     And I see the home page
-    When I browse to the page at <URL>
-    Then I see the relevant page
-  @smoketest
-    Examples:
-    | URL                           |
-    | /prescriptions                |
-    Examples:
-    | URL                           |
-    | /                             |
-    | /appointments                 |
-    | /prescriptions/repeat-courses |
-    | /more                         |
-    | /account                      |
+    When I browse to the pages at the following urls I see the relevant page
+      | /account                                    | /account                       |
+      | /appointments                               | /appointments                  |
+      | /appointments/booking-guidance              | /appointments/booking-guidance |
+      | /appointments/cancel                        | /appointments                  |
+      | /appointments/booking                       | /appointments/booking          |
+      | /appointments/confirmation                  | /appointments/booking          |
+      | /data-sharing                               | /data-sharing                  |
+      | /                                           | /                              |
+      | /more                                       | /more                          |
+      | /my-record                                  | /my-record-warning             |
+      | /my-record-warning                          | /my-record-warning             |
+      | /my-record/noaccess                         | /my-record/noaccess            |
+      | /my-record/testresultdetail                 | /my-record-warning             |
+      | /prescriptions                              | /prescriptions                 |
+      | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
+      | /prescriptions/confirm-prescription-details | /prescriptions                 |
+      | /symptoms                                   | /symptoms                      |
+      | /terms-and-conditions                       | /                              |
+      | /logout                                     | /login                         |
 
   @nativepending @NHSO-2956
   @manual
-  Scenario Outline: Mobile Web User switches app then browses to <URL>
+  Scenario: Mobile Web User switches app then browses to a url
     Given I am logged in
     And I switch apps
     When I switch to the NHS App
-    And I browse to the page at <URL>
-    Then I see the relevant page
-
-    Examples:
-    | URL                           |
-    | /                             |
-    | /appointments                 |
-    | /prescriptions                |
-    | /prescriptions/repeat-courses |
-    | /more                         |
-    | /account                      |
+    When I browse to the pages at the following urls I see the relevant page
+      | /account                                    | /account                       |
+      | /appointments                               | /appointments                  |
+      | /appointments/booking-guidance              | /appointments/booking-guidance |
+      | /appointments/cancel                        | /appointments                  |
+      | /appointments/booking                       | /appointments/booking          |
+      | /appointments/confirmation                  | /appointments/booking          |
+      | /data-sharing                               | /data-sharing                  |
+      | /                                           | /                              |
+      | /more                                       | /more                          |
+      | /my-record                                  | /my-record-warning             |
+      | /my-record-warning                          | /my-record-warning             |
+      | /my-record/noaccess                         | /my-record/noaccess            |
+      | /my-record/testresultdetail                 | /my-record-warning             |
+      | /prescriptions                              | /prescriptions                 |
+      | /prescriptions/repeat-courses               | /prescriptions/repeat-courses  |
+      | /prescriptions/confirm-prescription-details | /prescriptions                 |
+      | /symptoms                                   | /symptoms                      |
+      | /terms-and-conditions                       | /                              |
+      | /logout                                     | /login                         |
