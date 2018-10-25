@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 
 namespace NHSOnline.Backend.Worker
 {
@@ -18,13 +19,16 @@ namespace NHSOnline.Backend.Worker
             context.Response.OnStarting(() =>
             {
                 context.Response.GetTypedHeaders().CacheControl = 
-                    new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                    new CacheControlHeaderValue()
                     {
                         NoCache = true,
                         NoStore = true,
                         NoTransform = true,
-                        Private = true
+                        Private = true,
+                        MustRevalidate = true,
                     };
+
+                context.Response.Headers[HeaderNames.Pragma] = "no-cache";
 
                 return Task.CompletedTask;
             });

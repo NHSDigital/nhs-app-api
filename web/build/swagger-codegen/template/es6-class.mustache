@@ -137,7 +137,8 @@ class {{&className}} {
       data: JSON.stringify(body)
     }).then((response) => {
       if (process.server) {
-        this.res.setHeader('Cache-Control', `${response.headers['cache-control']};`);
+        this.res.setHeader('Cache-Control', `${response.headers['cache-control']}`);
+        this.res.setHeader('Pragma', `${response.headers['pragma']}`);
 
         if (response) {
           const requestDurationMilliseconds = new Date().getTime() - requestStartTime.getTime();

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Net.Http.Headers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace NHSOnline.Backend.Worker.UnitTests.Middleware
@@ -33,9 +32,12 @@ namespace NHSOnline.Backend.Worker.UnitTests.Middleware
 
             // Assert
             var response = context.Response;
-            Assert.IsTrue(response.Headers.TryGetValue("Cache-Control", out var headerValues));
-            string actualHeaders = string.Join(", ", headerValues);
-            Assert.IsTrue("no-store, no-transform, no-cache, private".Equals(actualHeaders, StringComparison.Ordinal));
+
+            Assert.IsTrue(response.Headers.TryGetValue(HeaderNames.CacheControl, out var cacheControlHeaderValues));
+            Assert.AreEqual("no-store, no-transform, must-revalidate, no-cache, private", cacheControlHeaderValues.ToString());
+
+            Assert.IsTrue(response.Headers.TryGetValue(HeaderNames.Pragma, out var pragmaHeaderValues));
+            Assert.AreEqual("no-cache", pragmaHeaderValues.ToString());
         }
     }
 }
