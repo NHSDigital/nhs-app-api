@@ -3,29 +3,13 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
     <CodeAnalysisRuleSet>..\ProductionCode.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+  <PropertyGroup>
+    <ThreadPoolMinThreads>100</ThreadPoolMinThreads>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="wwwroot\**" />
-    <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="wwwroot\**" />
-    <Compile Remove="Bridges\**" />
-    <EmbeddedResource Remove="Bridges\**" />
-    <None Remove="Bridges\**" />
-    <Content Remove="Bridges\**" />
-    <Compile Remove="Router\**" />
-    <EmbeddedResource Remove="Router\**" />
-    <None Remove="Router\**" />
-    <Content Remove="Router\**" />
-    <Compile Remove="GpSystems\Suppliers\Emis\DateStringFormatter.cs" />
-    <Compile Remove="GpSystems\Suppliers\Emis\Models\ErrorResponseException.cs" />
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.0" />
@@ -37,9 +21,11 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.2.4" />
     <PackageReference Include="StackExchange.Redis" Version="2.0.510" />
   </ItemGroup>
+
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Update="ExceptionMessages.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -57,6 +43,7 @@
       <DependentUpon>EmisApiErrorMessages.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="ExceptionMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
