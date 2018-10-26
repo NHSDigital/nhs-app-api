@@ -1,0 +1,80 @@
+<template>
+  <div>
+    <analytics-tracked-tag :class="[$style['record-title'],
+                                    getCollapsedState(isEventsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="EVENTS"
+                           :text="$t('my_record.events.sectionHeader')"
+                           data-purpose="accordion"
+                           tag="h2">
+      {{ $t('my_record.events.sectionHeader') }}
+    </analytics-tracked-tag>
+    <events :is-collapsed="isEventsCollapsed" :data="myRecord.tppDcrEvents" />
+
+    <analytics-tracked-tag :id="'testResultsHeader'"
+                           :class="[$style['record-title'],
+                                    getCollapsedState(isTestResultsCollapsed)]"
+                           :click-func="myRecordSectionClick"
+                           :click-param="TESTRESULTS"
+                           :text="$t('my_record.testResults.sectionHeader.tpp')"
+                           data-purpose="accordion"
+                           tag="h2">
+      {{ $t('my_record.testResults.sectionHeader.tpp') }}
+    </analytics-tracked-tag>
+    <test-results :is-collapsed="isTestResultsCollapsed" :data="myRecord.testResults"
+                  :supplier="myRecord.supplier" />
+  </div>
+</template>
+
+<script>
+import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import TestResults from '@/components/my-record/SharedComponents/TestResults';
+import Events from '@/components/my-record/SharedComponents/Events';
+import VueScrollTo from 'vue-scrollto';
+
+const TESTRESULTS = 'testresults';
+const EVENTS = 'events';
+
+export default {
+  components: {
+    AnalyticsTrackedTag,
+    Events,
+    TestResults,
+    VueScrollTo,
+  },
+  data() {
+    return {
+      TESTRESULTS,
+      EVENTS,
+      isTestResultsCollapsed: true,
+      isEventsCollapsed: true,
+      myRecord: this.$parent.myRecord,
+    };
+  },
+  methods: {
+    getCollapsedState(collapsed) {
+      return collapsed ? this.$style.closed : this.$style.opened;
+    },
+    myRecordSectionClick(section) {
+      switch (section) {
+        case EVENTS:
+          this.isEventsCollapsed =
+            !this.isEventsCollapsed;
+          break;
+        case TESTRESULTS:
+          this.isTestResultsCollapsed =
+            !this.isTestResultsCollapsed;
+          break;
+        default:
+          break;
+      }
+    },
+  },
+};
+</script>
+
+
+<style module lang="scss" scoped>
+  @import '../../../style/medrecordtitle';
+
+</style>

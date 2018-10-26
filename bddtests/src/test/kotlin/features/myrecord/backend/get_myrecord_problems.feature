@@ -16,6 +16,7 @@ Feature: Get patient problems data
     Examples:
       |Service|
       |EMIS|
+      |VISION|
 
   Scenario Outline: GP practice has disabled problems functionality
     Given the my record wiremocks are initialised for <Service>
@@ -30,3 +31,4 @@ Feature: Get patient problems data
     Examples:
       |Service|
       |EMIS|
+      |VISION|

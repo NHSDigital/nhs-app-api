@@ -46,7 +46,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/medrecordcontent';
+@import '../../../style/medrecordcontent';
+@import '../../../style/medrecordtitle';
 
   .fieldName {
     padding-left: 1.3em;

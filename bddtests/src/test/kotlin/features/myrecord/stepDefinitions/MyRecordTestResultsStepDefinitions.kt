@@ -26,6 +26,15 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
         }
     }
 
+    @Given("^the test result details are retrieved successfully$")
+    fun successGettingTestResultDetailForTpp() {
+        setPatientToDefaultFor("TPP")
+
+        mockingClient.forTpp {
+            myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, TestResultsData.mockTestResultId).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(4))
+        }
+    }
+
     @Given("^the GP Practice has six test results for (.*)$")
     fun givenTheGpPracticeHasSixTestResultsFor(getService:String) {
         setPatientToDefaultFor(getService)

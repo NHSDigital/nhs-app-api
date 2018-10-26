@@ -5,10 +5,10 @@
         public MyRecordResponse()
         {
             Allergies = new Allergies();
-            Immunisations = new Immunisations();
-            TestResults = new TestResults();
             Medications = new Medications();
+            Immunisations = new Immunisations();
             Problems = new Problems();
+            TestResults = new TestResults();
             TppDcrEvents = new TppDcrEvents();
             Consultations = new Consultations();
         }

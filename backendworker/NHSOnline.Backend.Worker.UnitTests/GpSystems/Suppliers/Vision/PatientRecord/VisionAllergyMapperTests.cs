@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -10,6 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
+using NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord
 {
@@ -17,10 +17,8 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
     public class VisionAllergyMapperTests
     {
         private IFixture _fixture;
-        IVisionMapper<Allergies> _mapper;
-        ILogger<IVisionMapper<Allergies>> _logger;
-
-        private const string VisionAllergyTestDataDirectory = "GpSystems/Suppliers/Vision/PatientRecord/TestData";
+        private IVisionMapper<Allergies> _mapper;
+        private ILogger<IVisionMapper<Allergies>> _logger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Arrange
             var data = new VisionPatientDataResponse
             {
-                Record = File.ReadAllText($"{VisionAllergyTestDataDirectory}/InvalidAllergyResponseContent.xml")
+                Record = AllergiesTestData.GetInvalidAllergiesTestData
             };
 
             var expectedResult = new Allergies
@@ -57,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Arrange
             var data = new VisionPatientDataResponse
             {
-                Record = File.ReadAllText($"{VisionAllergyTestDataDirectory}/NoAllergiesAllergyResponseContent.xml")
+                Record = AllergiesTestData.GetEmptyAllergiesDataResponse
             };
 
             var expectedResult = new Allergies();
@@ -75,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Arrange
             var data = new VisionPatientDataResponse
             {
-                Record = File.ReadAllText($"{VisionAllergyTestDataDirectory}/ValidAllergyResponseContent.xml")
+                Record = AllergiesTestData.GetAllergiesTestData
             };
 
             var expectedResult = new Allergies

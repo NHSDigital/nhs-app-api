@@ -5,33 +5,34 @@ import mocking.vision.models.appointments.BookedAppointmentsResponse
 object VisionConstants {
 
     // Service names and versions
-    var configurationName: String = "VOS.GetConfiguration"
-    var configurationVersion: String = "2.3.0"
+    const val configurationName: String = "VOS.GetConfiguration"
+    const val configurationVersion: String = "2.3.0"
 
-    var prescriptionHistory: String = "VONREP.GetHistory"
-    var prescriptionHistoryVersion: String = "2.0.0"
+    const val prescriptionHistory: String = "VONREP.GetHistory"
+    const val prescriptionHistoryVersion: String = "2.0.0"
 
-    var eligibleRepeats: String = "VONREP.GetEligibleRepeats"
-    var eligibleRepeatsVersion: String = "2.0.0"
+    const val eligibleRepeats: String = "VONREP.GetEligibleRepeats"
+    const val eligibleRepeatsVersion: String = "2.0.0"
 
-    var newPrescription: String = "VONREP.NewPrescription"
-    var newPrescriptionVersion: String = "2.0.0"
+    const val newPrescription: String = "VONREP.NewPrescription"
+    const val newPrescriptionVersion: String = "2.0.0"
 
-    var demographicsName: String = "VODEM.GetDemographics"
-    var demographicsVersion: String = "2.0.0"
+    const val demographicsName: String = "VODEM.GetDemographics"
+    const val demographicsVersion: String = "2.0.0"
 
-    var patientDataName: String = "VOS.GetPatientData"
-    var patientDataVersion: String = "2.1.0"
+    const val patientDataName: String = "VOS.GetPatientData"
+    const val patientDataVersion: String = "2.1.0"
 
-    var existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
-    var existingAppointmentsVersion: String = "2.0.0"
+    const val existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
+    const val existingAppointmentsVersion: String = "2.0.0"
 
-    var allergiesView: String  = "VPS_ALLERGIES"
-    var medicationsView: String = "VPS_MEDICATIONS"
-    var immunisationsView: String = "PROCEDURES"
+    const val allergiesView: String  = "VPS_ALLERGIES"
+    const val medicationsView: String = "VPS_MEDICATIONS"
+    const val immunisationsView: String = "PROCEDURES"
+    const val problemsView: String = "PROBLEMS"
 
-    var htmlResponseFormat: String = "HTML"
-    var xmlResponseFormat: String = "XML"
+    const val htmlResponseFormat: String = "HTML"
+    const val xmlResponseFormat: String = "XML"
 
     var gpAppointmentsDisabled: String = "gpAppointmentsDisabled"
 

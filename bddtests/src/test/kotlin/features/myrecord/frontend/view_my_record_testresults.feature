@@ -138,3 +138,16 @@ Feature: View My Medical Record Information - Test Results
     Examples:
       | Service |
       | TPP     |
+
+  Scenario Outline: A <Service> user has multiple test results navigation
+    Given the my record wiremocks are initialised for <Service>
+    And the GP Practice has enabled demographics functionality for <Service>
+    And the GP Practice has six test results for <Service>
+    And the test result details are retrieved successfully
+    And I am on my record information page
+    When I click the test result section
+    And I click a test result
+
+    Examples:
+      | Service |
+      | TPP     |

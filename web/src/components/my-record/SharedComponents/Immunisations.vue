@@ -1,16 +1,7 @@
 <template>
-  <div v-if="showError" :class="[$style['record-content'], getCollapseState]"
-       :aria-hidden="isCollapsed">
-    <p v-if="data.hasErrored">
-      {{ $t('my_record.genericErrorMessage') }}
-    </p>
-    <p v-else-if="!data.hasAccess">
-      {{ $t('my_record.genericNoAccessMessage') }}
-    </p>
-    <p v-else>
-      {{ $t('my_record.genericNoDataMessage') }}
-    </p>
-  </div>
+  <dcr-error-no-access v-if="showError"
+                       :data="data" :class="[$style['record-content'], getCollapseState]"
+                       :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(item, index) in orderedImmunisations" :key="`item-${index}`"
@@ -27,8 +18,12 @@
 <script>
 
 import _ from 'lodash';
+import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
+  components: {
+    DcrErrorNoAccess,
+  },
   props: {
     isCollapsed: {
       type: Boolean,
@@ -57,7 +52,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-@import '../../style/medrecordcontent';
+@import '../../../style/medrecordcontent';
+@import '../../../style/medrecordtitle';
 
 .fieldName {
   padding-left: 1.3em;

@@ -2,6 +2,9 @@ package features.myrecord.stepDefinitions
 
 import cucumber.api.java.en.*
 import mocking.data.myrecord.ProblemsData
+import mocking.vision.VisionConstants
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.VisionUserSession
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.assertEquals
 import worker.models.myrecord.MyRecordResponse
@@ -28,6 +31,22 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
             }
             "TPP"->{
             }
+            "VISION"->{
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = VisionConstants.problemsView,
+                            responseFormat = VisionConstants.xmlResponseFormat
+                    ).respondWithSuccess(ProblemsData.getVisionProblemsData())
+                }
+            }
         }
     }
 
@@ -49,6 +68,22 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
             }
             "TPP"->{
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = VisionConstants.problemsView,
+                            responseFormat = VisionConstants.xmlResponseFormat
+                    ).respondWithAccessDeniedError()
+                }
+            }
         }
     }
     @Given("^no Problems records exist for the patient for (.*)$")
@@ -61,6 +96,22 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
                 }
             }
             "TPP"->{
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = VisionConstants.problemsView,
+                            responseFormat = VisionConstants.xmlResponseFormat
+                    ).respondWithSuccess(ProblemsData.getVisionProblemsDataWithNoProblems())
+                }
             }
         }
     }
@@ -76,6 +127,22 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
             }
             "TPP"->{
             }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = VisionConstants.problemsView,
+                            responseFormat = VisionConstants.xmlResponseFormat
+                    ).respondWithAccessDeniedError()
+                }
+            }
         }
     }
 
@@ -89,6 +156,22 @@ open class MyRecordProblemsStepDefinitions: AbstractDemographicsStepDefinitions(
                 }
             }
             "TPP"->{
+            }
+            "VISION" -> {
+                mockingClient.forVision {
+                    getPatientDataRequest(
+                            visionUserSession = VisionUserSession(
+                                    patient.rosuAccountId,
+                                    patient.apiKey,
+                                    patient.odsCode,
+                                    patient.patientId),
+                            serviceDefinition = ServiceDefinition(
+                                    name = VisionConstants.patientDataName,
+                                    version = VisionConstants.patientDataVersion),
+                            view = VisionConstants.problemsView,
+                            responseFormat = VisionConstants.xmlResponseFormat
+                    ).respondWithUnknownError()
+                }
             }
         }
     }

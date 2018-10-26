@@ -13,6 +13,7 @@ Feature: View My Medical Record Information - Problems
     Examples:
       |Service|
       |EMIS|
+      |VISION|
 
 
   Scenario Outline: A <Service> user has no Problems on their record
@@ -27,6 +28,7 @@ Feature: View My Medical Record Information - Problems
     Examples:
       |Service|
       |EMIS|
+      |VISION|
 
   Scenario Outline: A <Service> user does not have access to Problems
     Given the my record wiremocks are initialised for <Service>
@@ -40,6 +42,7 @@ Feature: View My Medical Record Information - Problems
     Examples:
       |Service|
       |EMIS|
+      |VISION|
 
   Scenario Outline: An Error occurs retrieving Problems data for <Service>
     Given the my record wiremocks are initialised for <Service>
@@ -53,3 +56,4 @@ Feature: View My Medical Record Information - Problems
     Examples:
       |Service|
       |EMIS|
+      |VISION|

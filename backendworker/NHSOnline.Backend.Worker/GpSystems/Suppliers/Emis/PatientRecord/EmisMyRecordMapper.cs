@@ -15,7 +15,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Emis.PatientRecord
                 Problems = problems,
                 Consultations = consultations,
                 HasSummaryRecordAccess = allergies?.HasAccess ?? false,
-                HasDetailedRecordAccess = immunisations.HasAccess || testResults.HasAccess
+                HasDetailedRecordAccess = immunisations.HasAccess || testResults.HasAccess || problems.HasAccess || consultations.HasAccess
             };
         }
     }

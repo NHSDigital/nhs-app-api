@@ -88,4 +88,26 @@ object ProblemsData {
                 )
         )
     }
+
+    fun getVisionProblemsData(): String {
+        val problem =
+                "<problems eventdate=\"2018-10-10T00:00:00\" " +
+                "read_term=\"Peanut allergy\"  subgroup_code=\"PastProblem\"/> " +
+                "<problems eventdate=\"2018-10-10T00:00:00\" " +
+                "read_term=\"Broken leg\"  subgroup_code=\"CurrentProblem\"/> " +
+                "<problems eventdate=\"2018-10-10T00:00:00\" " +
+                "read_term=\"Acne\"  subgroup_code=\"Random\"/>"
+
+        val response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + problem + responseStringEnd
+    }
+
+    fun getVisionProblemsDataWithNoProblems(): String {
+        val response = "<![CDATA[<root><patient>"
+        val responseStringEnd = "</patient></root>]]>"
+
+        return response + responseStringEnd
+    }
 }

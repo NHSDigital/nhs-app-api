@@ -42,7 +42,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             var expectedResult = new Medications()
             {
                 HasErrored = true,
-                Data = new MedicationsData(),
+                Data = new MedicationsData()
             };
 
             // Act

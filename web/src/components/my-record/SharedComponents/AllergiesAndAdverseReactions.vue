@@ -1,13 +1,7 @@
 <template>
-  <div v-if="showError" :class="[$style['record-content'], getCollapseState]"
-       :aria-hidden="isCollapsed">
-    <p v-if="data.hasErrored">
-      {{ $t('my_record.genericErrorMessage') }}
-    </p>
-    <p v-else>
-      {{ $t('my_record.genericNoDataMessage') }}
-    </p>
-  </div>
+  <scr-error-no-access v-if="showError"
+                       :data="data" :class="[$style['record-content'], getCollapseState]"
+                       :aria-hidden="isCollapsed"/>
   <div v-else :class="[$style['record-content'], getCollapseState]"
        :aria-hidden="isCollapsed">
     <div v-for="(allergy, index) in orderedAllergies" :key="`allergy.name-${index}`"
@@ -26,8 +20,12 @@
 <script>
 
 import _ from 'lodash';
+import ScrErrorNoAccess from '@/components/my-record/SharedComponents/SCRErrorNoAccess';
 
 export default {
+  components: {
+    ScrErrorNoAccess,
+  },
   props: {
     data: {
       type: Object,
@@ -54,7 +52,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
-  @import '../../style/medrecordcontent';
+  @import '../../../style/medrecordcontent';
+  @import '../../../style/medrecordtitle';
 
   .fieldName {
     padding-left: 1.3em;

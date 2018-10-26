@@ -87,26 +87,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidAllergyResponseContent.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoAllergiesAllergyResponseContent.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidAllergyResponseContent.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\InvalidImmunisationsResponseContent.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\NoImmunisationResponseContent.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GpSystems\Suppliers\Vision\PatientRecord\TestData\ValidImmunisationResponseContent.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
 </Project>

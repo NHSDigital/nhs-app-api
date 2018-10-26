@@ -7,5 +7,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientReco
     {
         [XmlElement(ElementName = "clinical")]
         public List<Clinical> Clinicals { get; set; }
+        
+        [XmlElement(ElementName = "problems")]
+        public List<Clinical> Problems { get; set; }
     }
 }

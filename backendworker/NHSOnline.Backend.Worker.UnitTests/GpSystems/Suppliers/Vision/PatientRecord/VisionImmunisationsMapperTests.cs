@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using FluentAssertions;
@@ -10,17 +9,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NHSOnline.Backend.Worker.Areas.MyRecord.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.PatientRecord;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.PatientRecord.ViewMapper;
+using NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord.TestData;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientRecord
 {
     [TestClass]
     public class VisionImmunisationsMapperTests
     {
-        IFixture _fixture;
-        IVisionMapper<Immunisations> _mapper;
-        ILogger<IVisionMapper<Immunisations>> _logger;
-
-        const string VisionImmunisationsTestDataDirectory = "GpSystems/Suppliers/Vision/PatientRecord/TestData";
+        private IFixture _fixture;
+        private IVisionMapper<Immunisations> _mapper;
+        private ILogger<IVisionMapper<Immunisations>> _logger;
 
         [TestInitialize]
         public void TestInitialize()
@@ -36,7 +34,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Arrange
             var data = new VisionPatientDataResponse
             {
-                Record = File.ReadAllText($"{VisionImmunisationsTestDataDirectory}/InvalidImmunisationsResponseContent.xml")
+                Record = ImmunisationsTestData.GetInvalidImmunisationsTestData
             };
 
             var expectedResult = new Immunisations
@@ -57,7 +55,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Arrange
             var data = new VisionPatientDataResponse
             {
-                Record = File.ReadAllText($"{VisionImmunisationsTestDataDirectory}/NoImmunisationResponseContent.xml")
+                Record = ImmunisationsTestData.GetEmptyImmunisationsDataResponse
             };
 
             var expectedResult = new Immunisations();
@@ -75,7 +73,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.PatientR
             // Arrange
             var data = new VisionPatientDataResponse
             {
-                Record = File.ReadAllText($"{VisionImmunisationsTestDataDirectory}/ValidImmunisationResponseContent.xml")
+                Record = ImmunisationsTestData.GetImmunisationsTestData
             };
 
             var expectedResult = new Immunisations

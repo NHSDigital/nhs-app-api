@@ -1,24 +1,16 @@
 <template>
-  <div v-if="showError" :class="[$style['record-content'], getCollapseState]"
-       :aria-hidden="isCollapsed">
-    <p v-if="data.hasErrored">
-      {{ $t('my_record.genericErrorMessage') }}
-    </p>
-    <p v-else-if="!data.hasAccess">
-      {{ $t('my_record.genericNoAccessMessage') }}
-    </p>
-    <p v-else>
-      {{ $t('my_record.genericNoDataMessage') }}
-    </p>
-  </div>
-  <div v-else :class="[$style['record-content'], getCollapseState]"
+  <dcr-error-no-access v-if="showError"
+                       :data="data" :is-collapsed="isCollapsed"
+                       :class="[$style['record-content'], getCollapsedState]"
+                       :aria-hidden="isCollapsed"/>
+  <div v-else :class="[$style['record-content'], getCollapsedState]"
        :aria-hidden="isCollapsed">
     <div v-for="(consultation, consultationIndex) in orderedConsultations"
          :key="`consultation-${consultationIndex}`" :class="$style['record-item']"
          data-purpose="record-item">
       <span v-if="consultation.effectiveDate.value" :class="$style.fieldName">
         {{ consultation.effectiveDate.value | datePart(consultation.effectiveDate.datePart) }}
-      </span>
+      </span>s
 
       <p> {{ consultation.consultantLocation }} </p>
 
@@ -58,8 +50,12 @@
 <script>
 
 import _ from 'lodash';
+import DcrErrorNoAccess from '@/components/my-record/SharedComponents/DCRErrorNoAccess';
 
 export default {
+  components: {
+    DcrErrorNoAccess,
+  },
   props: {
     isCollapsed: {
       type: Boolean,
@@ -71,7 +67,7 @@ export default {
     },
   },
   computed: {
-    getCollapseState() {
+    getCollapsedState() {
       return this.isCollapsed ? this.$style.closed : this.$style.opened;
     },
     orderedConsultations() {
@@ -88,7 +84,8 @@ export default {
 </script>
 
 <style module lang="scss" scoped>
- @import '../../style/medrecordcontent';
+ @import '../../../style/medrecordcontent';
+ @import '../../../style/medrecordtitle';
 
  .fieldName {
    padding-left: 1.3em;

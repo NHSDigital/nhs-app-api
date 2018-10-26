@@ -1,6 +1,0 @@
-﻿<rooot>
-    <patient>
-        <clinical eventdate="2007-05-12T00:00:00" drug_term="Paracetamol 500mg capsules" read_code="14L..00" read_term="H/O: drug allergy" read_code2="1833.00" read_term2="Leg swelling"/>
-        <clinical eventdate="2018-07-09T00:00:00" read_code="SN58911" read_term="Strawberry allergy"/>
-    </patient>
-</rooot>
