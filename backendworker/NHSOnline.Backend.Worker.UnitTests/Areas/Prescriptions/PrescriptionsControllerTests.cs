@@ -133,7 +133,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             value.Should().BeEquivalentTo(prescriptionRequestsGetResponse);
 
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved - 3 courses", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.PostAudit(GetResponseAuditType, "Prescriptions successfully retrieved - 3 courses", It.IsAny<object[]>()));
         }
 
         [TestMethod]
@@ -201,7 +201,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.Areas.Prescriptions
             Assert.AreEqual(xMonthsAgo.Date, fromDateGenerated.Value.Date);
             
             _mockAuditor.Verify(x => x.Audit(GetRequestAuditType, "Attempting to view prescriptions", It.IsAny<object[]>()));
-            _mockAuditor.Verify(x => x.Audit(GetResponseAuditType, "Prescriptions successfully retrieved - 3 courses", It.IsAny<object[]>()));
+            _mockAuditor.Verify(x => x.PostAudit(GetResponseAuditType, "Prescriptions successfully retrieved - 3 courses", It.IsAny<object[]>()));
         }
         
         [TestMethod]

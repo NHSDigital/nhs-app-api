@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using NHSOnline.Backend.Worker.Areas.Prescriptions.Models;
 using NHSOnline.Backend.Worker.GpSystems.Prescriptions;
 using NHSOnline.Backend.Worker.Support.Auditing;
+using System.Threading.Tasks;
 
 namespace NHSOnline.Backend.Worker.Areas.Prescriptions
 {
-    public class GetPrescriptionResultAuditingVisitor :  IPrescriptionResultVisitor<object>
+    public class GetPrescriptionResultAuditingVisitor :  IPrescriptionResultVisitor<Task>
     {
         private readonly IAuditor _auditor;
         
@@ -16,46 +16,39 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _auditor = auditor;
         }
         
-        public object Visit(PrescriptionResult.SuccessfulGet result)
+        public async Task Visit(PrescriptionResult.SuccessfulGet result)
         {
-            _auditor.Audit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses.Count()).Sum() } courses");
-            return null;
+            await _auditor.PostAudit(AuditType, $"Prescriptions successfully retrieved - { result.Response?.Prescriptions?.Select(x => x.Courses?.Count()).Sum() } courses");
         }
 
-        public object Visit(PrescriptionResult.SuccessfulPost result)
+        public async Task Visit(PrescriptionResult.SuccessfulPost result)
         {
-            _auditor.Audit(AuditType, "Repeat prescription request successfully created");
-            return null;
+            await _auditor.PostAudit(AuditType, "Repeat prescription request successfully created");
         }
 
-        public object Visit(PrescriptionResult.SupplierSystemUnavailable result)
+        public async Task Visit(PrescriptionResult.SupplierSystemUnavailable result)
         {
-            _auditor.Audit(AuditType, "Error retrieving prescriptions: Supplier Unavailable");
-            return null;
+            await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Supplier Unavailable");
         }
 
-        public object Visit(PrescriptionResult.SupplierNotEnabled result)
+        public async Task Visit(PrescriptionResult.SupplierNotEnabled result)
         {
-            _auditor.Audit(AuditType, "Error retrieving prescriptions: Supplier Not Enabled");
-            return null;
+            await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Supplier Not Enabled");
         }
 
-        public object Visit(PrescriptionResult.InternalServerError result)
+        public async Task Visit(PrescriptionResult.InternalServerError result)
         {
-            _auditor.Audit(AuditType, "Error retrieving prescriptions: Internal Server Error");
-            return null;
+            await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Internal Server Error");
         }
 
-        public object Visit(PrescriptionResult.BadRequest result)
+        public async Task Visit(PrescriptionResult.BadRequest result)
         {
-            _auditor.Audit(AuditType, "Error retrieving prescriptions: Bad Request");
-            return null;
+            await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Bad Request");
         }
 
-        public object Visit(PrescriptionResult.CannotReorderPrescription result)
+        public async Task Visit(PrescriptionResult.CannotReorderPrescription result)
         {
-            _auditor.Audit(AuditType, "Error retrieving prescriptions: Cannot Reorder Prescription");
-            return null;
+            await _auditor.PostAudit(AuditType, "Error retrieving prescriptions: Cannot Reorder Prescription");
         }
     }
 }

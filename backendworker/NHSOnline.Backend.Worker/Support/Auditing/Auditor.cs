@@ -54,6 +54,18 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
             }
         }
 
+        public async Task PostAudit(string operation, string details, params object[] parameters)
+        {
+            try
+            {
+                await Audit(operation, null, parameters);
+            }
+            catch (Exception)
+            {
+                _logger.LogInformation($"PostAudit suppress exception thrown by '{operation}'");
+            }
+        }
+
         public async Task AuditWithExplicitNhsNumber(
             string nhsNumber, 
             Supplier supplier, 

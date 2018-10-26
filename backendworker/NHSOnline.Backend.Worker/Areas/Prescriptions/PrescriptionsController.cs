@@ -64,7 +64,7 @@ namespace NHSOnline.Backend.Worker.Areas.Prescriptions
             _logger.LogInformation($"Calling prescription service to get prescriptions");
             var result = await prescriptionService.GetPrescriptions(userSession, fromDate, DateTimeOffset.Now);
             
-            result.Accept(new GetPrescriptionResultAuditingVisitor(_auditor));
+            await result.Accept(new GetPrescriptionResultAuditingVisitor(_auditor));
             return result.Accept(new PrescriptionResultVisitor());
         }
 
