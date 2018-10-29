@@ -33,7 +33,7 @@
 
     <generic-button id="back-to-prescriptions"
                     :class="[$style.button, $style.grey]"
-                    @click="$router.push('/prescriptions/repeat-courses')">
+                    @click="$router.push(prescriptionRepeatCoursesPath)">
       {{ $t('rp04.backButton') }}
     </generic-button>
   </div>
@@ -41,7 +41,7 @@
 
 <script>
 /* eslint-disable import/extensions */
-import { PRESCRIPTIONS } from '@/lib/routes';
+import { PRESCRIPTIONS, PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import GenericButton from '@/components/widgets/GenericButton';
 
 export default {
@@ -58,6 +58,9 @@ export default {
     specialRequestNecessity() {
       return this.$store.state.repeatPrescriptionCourses
         .specialRequestNecessity;
+    },
+    prescriptionRepeatCoursesPath() {
+      return PRESCRIPTION_REPEAT_COURSES.path;
     },
   },
   created() {

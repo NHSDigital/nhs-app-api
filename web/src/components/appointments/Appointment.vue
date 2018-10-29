@@ -24,7 +24,8 @@
     <span v-if="showCancellationLink">
       <hr :class="$style.cancel" aria-hidden="true">
       <p>
-        <nuxt-link :class="$style['cancel-link']" to="/appointments/cancel" @click.native="select">
+        <nuxt-link :class="$style['cancel-link']" :to="appointmentCancellingPath"
+                   @click.native="select">
           Cancel appointment
         </nuxt-link>
       </p>
@@ -37,6 +38,7 @@
 import moment from 'moment-timezone';
 import LocationIcon from '@/components/icons/LocationIcon';
 import ClinicianIcon from '@/components/icons/ClinicianIcon';
+import { APPOINTMENT_CANCELLING } from '@/lib/routes';
 
 export default {
   components: {
@@ -51,6 +53,11 @@ export default {
     showCancellationLink: {
       default: true,
       type: Boolean,
+    },
+  },
+  computed: {
+    appointmentCancellingPath() {
+      return APPOINTMENT_CANCELLING.path;
     },
   },
   methods: {

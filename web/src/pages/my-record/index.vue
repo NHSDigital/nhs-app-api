@@ -59,6 +59,7 @@ import ScrTpp from '@/components/my-record/SummaryCareRecord/ScrTPP';
 import ScrVision from '@/components/my-record/SummaryCareRecord/ScrVISION';
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
 import GlossaryHeader from '@/components/GlossaryHeader';
+import { MYRECORDWARNING, MYRECORDTESTRESULT } from '@/lib/routes';
 
 const PATIENTDETAILS = 'patientdetails';
 
@@ -75,10 +76,10 @@ export default {
     ScrVision,
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === '/my-record-warning' || from.path === '/my-record/testresultdetail') {
+    if (from.path === MYRECORDWARNING.path || from.path === MYRECORDTESTRESULT.path.split('/:')[0]) {
       next();
     } else {
-      next('/my-record-warning');
+      next(MYRECORDWARNING.path);
     }
   },
   data() {

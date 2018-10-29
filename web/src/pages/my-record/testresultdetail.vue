@@ -23,16 +23,17 @@
 
 <script>
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
+import { MYRECORD, MYRECORDWARNING } from '@/lib/routes';
 
 export default {
   components: {
     FloatingButtonBottom,
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === '/my-record') {
+    if (from.path === MYRECORD.path) {
       next();
     } else {
-      next('/my-record-warning');
+      next(MYRECORDWARNING.path);
     }
   },
   data() {
@@ -54,7 +55,7 @@ export default {
   },
   methods: {
     onBackButtonClicked() {
-      this.$router.push('/my-record#testResultsHeader');
+      this.$router.push(`${MYRECORD.path}#testResultsHeader`);
     },
   },
 };

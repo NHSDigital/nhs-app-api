@@ -3,7 +3,7 @@
     <li :class="$style.listMenuItem">
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.symptoms')"
-                             href="/symptoms"
+                             :href="symptomsPath"
                              data-sid="symptoms-list-item"
                              tag="a">
         {{ $t('navigationMenuList.symptoms') }}
@@ -12,7 +12,7 @@
     <li :class="$style.listMenuItem">
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.appointments')"
-                             href="/appointments"
+                             :href="appointmentsPath"
                              data-sid="appointments-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.appointments') }}
@@ -21,7 +21,7 @@
     <li :class="$style.listMenuItem">
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.prescriptions')"
-                             href="/prescriptions"
+                             :href="prescriptionsPath"
                              data-sid="prescriptions-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.prescriptions') }}
@@ -30,7 +30,7 @@
     <li :class="$style.listMenuItem">
       <analytics-tracked-tag :class="$style.listMenuAnchor"
                              :text="$t('navigationMenuList.myRecord')"
-                             href="/my-record-warning"
+                             :href="myRecordWarningPath"
                              data-sid="myrecord-menu-item"
                              tag="a">
         {{ $t('navigationMenuList.myRecord') }}
@@ -52,6 +52,12 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import {
+  SYMPTOMS,
+  PRESCRIPTIONS,
+  APPOINTMENTS,
+  MYRECORDWARNING,
+} from '@/lib/routes';
 
 export default {
   name: 'NavigationListMenu',
@@ -62,6 +68,20 @@ export default {
     return {
       organDonationUrl: this.$store.app.$env.ORGAN_DONATION_URL,
     };
+  },
+  computed: {
+    symptomsPath() {
+      return SYMPTOMS.path;
+    },
+    appointmentsPath() {
+      return APPOINTMENTS.path;
+    },
+    prescriptionsPath() {
+      return PRESCRIPTIONS.path;
+    },
+    myRecordWarningPath() {
+      return MYRECORDWARNING.path;
+    },
   },
 };
 </script>

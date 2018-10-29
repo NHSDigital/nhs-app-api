@@ -1,17 +1,17 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/extensions */
 import AuthorisationService from '@/services/authorisation-service';
-import { isAnonymous, BEGINLOGIN, LOGIN } from '@/lib/routes';
+import { isAnonymous, BEGINLOGIN, LOGIN, INDEX } from '@/lib/routes';
 
 export default function ({ app, store, redirect, route }) {
   const isLoggedIn = store.getters['session/isLoggedIn']();
 
   if (!isAnonymous(route.name) && !isLoggedIn) {
-    return redirect('/login');
+    return redirect(LOGIN.path);
   }
 
   if (route.name === LOGIN.name && isLoggedIn) {
-    return redirect('/');
+    return redirect(INDEX.path);
   }
 
   if (route.name === BEGINLOGIN.name) {

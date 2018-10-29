@@ -43,6 +43,7 @@ import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import HistoricPrescription from '@/components/HistoricPrescription';
 import MedicationCourseStatus from '@/lib/medication-course-status';
 import GlossaryHeader from '@/components/GlossaryHeader';
+import { PRESCRIPTION_REPEAT_COURSES } from '@/lib/routes';
 import _ from 'lodash';
 
 export default {
@@ -111,7 +112,7 @@ export default {
   },
   methods: {
     onRepeatPrescriptionButtonClicked() {
-      this.$router.push('/prescriptions/repeat-courses');
+      this.$router.push(PRESCRIPTION_REPEAT_COURSES.path);
     },
   },
 };

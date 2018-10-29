@@ -78,7 +78,7 @@
     <generic-button v-if="hasLoaded"
                     id="back-to-prescriptions"
                     :class="[$style.button, $style.grey]"
-                    @click="$router.push('/prescriptions')">
+                    @click="$router.push(prescriptionsPath)">
       {{ $t('rp03.backButton') }}
     </generic-button>
   </div>
@@ -95,6 +95,7 @@ import ErrorMessage from '@/components/widgets/ErrorMessage';
 import GlossaryHeader from '@/components/GlossaryHeader';
 import GenericButton from '@/components/widgets/GenericButton';
 import GenericTextArea from '@/components/widgets/GenericTextArea';
+import { PRESCRIPTIONS, PRESCRIPTION_CONFIRM_COURSES } from '@/lib/routes';
 
 export default {
   components: {
@@ -174,6 +175,9 @@ export default {
       }
       return true;
     },
+    prescriptionsPath() {
+      return PRESCRIPTIONS.path;
+    },
   },
   mounted() {
     if (!this.$store.state.repeatPrescriptionCourses.hasLoaded) {
@@ -194,7 +198,7 @@ export default {
           specialRequest,
         };
         this.$store.dispatch('repeatPrescriptionCourses/updateAdditionalInfo', repeatPrescriptionCoursesAdditionalInfo);
-        this.$router.push('/prescriptions/confirm-prescription-details');
+        this.$router.push(PRESCRIPTION_CONFIRM_COURSES.path);
       } else {
         const validationObj = {
           isValid: this.courseSelectionValid && this.specialRequestValid,

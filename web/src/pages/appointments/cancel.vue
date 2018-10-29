@@ -88,7 +88,7 @@ export default {
     this.isReasonRequired = this.cancellationReasons.length > 0;
 
     if (!this.appointment) {
-      this.$router.push('/appointments');
+      this.$router.push(APPOINTMENTS.path);
     }
   },
   beforeDestroy() {
@@ -118,7 +118,7 @@ export default {
       }
     },
     onBackButtonClicked() {
-      this.$router.push('/appointments');
+      this.$router.push(APPOINTMENTS.path);
     },
   },
 };

@@ -15,7 +15,7 @@
         <analytics-tracked-tag :text="$t('sc04.dataSharing.subheader')" data-purpose="text_link">
           <a id="btn_data_sharing"
              :class="$style['no-decoration']"
-             href="/data-sharing"
+             :href="dataSharingPath"
              @click="navigate($event)">
             <h2>{{ $t('sc04.dataSharing.subheader') }}</h2>
             <p>{{ $t('sc04.dataSharing.body') }}</p>
@@ -29,10 +29,16 @@
 <script>
 /* eslint-disable import/extensions */
 import AnalyticsTrackedTag from '@/components/widgets/AnalyticsTrackedTag';
+import { DATA_SHARING_PREFERENCES } from '@/lib/routes';
 
 export default {
   components: {
     AnalyticsTrackedTag,
+  },
+  computed: {
+    dataSharingPath() {
+      return DATA_SHARING_PREFERENCES.path;
+    },
   },
   methods: {
     navigate(event) {

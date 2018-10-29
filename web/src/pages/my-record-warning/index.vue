@@ -35,6 +35,7 @@ import MessageDialog from '@/components/widgets/MessageDialog';
 import MessageText from '@/components/widgets/MessageText';
 import FloatingButtonBottom from '@/components/widgets/FloatingButtonBottom';
 import GenericButton from '@/components/widgets/GenericButton';
+import { INDEX, MYRECORD } from '@/lib/routes';
 
 export default {
   components: {
@@ -45,10 +46,10 @@ export default {
   },
   methods: {
     onContinueButtonClicked() {
-      this.$router.push('/my-record');
+      this.$router.push(MYRECORD.path);
     },
     onBackButtonClicked() {
-      this.$router.push('/');
+      this.$router.push(INDEX.path);
     },
   },
 };

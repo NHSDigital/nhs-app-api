@@ -37,6 +37,7 @@ import MessageText from '@/components/widgets/MessageText';
 import HeaderSlim from '@/components/HeaderSlim';
 import GenericButton from '@/components/widgets/GenericButton';
 import Sources from '@/lib/sources';
+import { LOGIN } from '@/lib/routes';
 
 export default {
   components: {
@@ -113,13 +114,13 @@ export default {
       const url = this.getRedirectUrl();
       const sourceDevice = this.$store.state.device.source;
 
-      if (url === '/login') {
+      if (url === LOGIN.path) {
         this.$cookies.remove('nhso.session');
       }
 
       if (url === '') {
         this.$router.go();
-      } else if (url === '/login' && Sources.isNative(sourceDevice)) {
+      } else if (url === LOGIN.path && Sources.isNative(sourceDevice)) {
         this.$router.push({
           path: url,
           query: { source: sourceDevice } });

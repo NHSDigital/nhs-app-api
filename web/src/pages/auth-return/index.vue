@@ -5,6 +5,7 @@
 <script>
 import { isEmpty } from 'lodash/fp';
 import NativeCallbacks from '@/services/native-app';
+import { TERMSANDCONDITIONS } from '@/lib/routes';
 
 export default {
   name: '',
@@ -13,7 +14,7 @@ export default {
     if (process.server) {
       await context.store.dispatch('auth/handleAuthResponse', context.route.query.code);
       if (isEmpty(context.store.state.errors.apiErrors)) {
-        return context.redirect('/terms-and-conditions');
+        return context.redirect(TERMSANDCONDITIONS.path);
       }
     }
     return undefined;
