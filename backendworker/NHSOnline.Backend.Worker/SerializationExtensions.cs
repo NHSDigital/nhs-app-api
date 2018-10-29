@@ -15,28 +15,14 @@ namespace NHSOnline.Backend.Worker
             {
                 return string.Empty;
             }
-            try
-            {
-                return JsonConvert.SerializeObject(toJson);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Exception when attempting to serialize object to json");
-                Console.WriteLine("JSON");
-                Console.WriteLine("--------------------");
-                Console.WriteLine();
-                Console.WriteLine("EXCEPTION");
-                Console.WriteLine("--------------------");
-                Console.WriteLine(e);
-                throw;
-            }
+            
+            return JsonConvert.SerializeObject(toJson);
         }
 
         public static T DeserializeJson<T>(this string json)
         {
             if (string.IsNullOrEmpty(json))
             {
-                // TODO: Check logging strategy
                 Console.WriteLine($"JSON was null or empty when attempting to deserialize: { typeof(T).FullName }");
                 return default(T);
             }
@@ -48,12 +34,6 @@ namespace NHSOnline.Backend.Worker
             catch (Exception e)
             {
                 Console.WriteLine($"Exception when attempting to deserialize json: { typeof(T).FullName }");
-                Console.WriteLine("JSON");
-                Console.WriteLine("--------------------");
-                Console.WriteLine(json);
-                Console.WriteLine();
-                Console.WriteLine("EXCEPTION");
-                Console.WriteLine("--------------------");
                 Console.WriteLine(e);
                 return default(T);
             }
@@ -97,24 +77,8 @@ namespace NHSOnline.Backend.Worker
                 return default(T);
             }
             
-            try
-            {
-                var serializer = new XmlSerializer(typeof(T));
-                return (T) serializer.Deserialize(new StringReader(xml));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Exception when attempting to deserialize xml: { typeof(T).FullName }");
-                Console.WriteLine("XML");
-                Console.WriteLine("--------------------");
-                Console.WriteLine(xml);
-                Console.WriteLine();
-                Console.WriteLine("EXCEPTION");
-                Console.WriteLine("--------------------");
-                Console.WriteLine(e);
-
-                throw;
-            }
+            var serializer = new XmlSerializer(typeof(T));
+            return (T) serializer.Deserialize(new StringReader(xml));
         }
     }
 }
