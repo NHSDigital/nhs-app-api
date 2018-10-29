@@ -58,7 +58,7 @@ namespace NHSOnline.Backend.Worker.Support.Auditing
         {
             try
             {
-                await Audit(operation, null, parameters);
+                await Audit(operation, details, parameters);
             }
             catch (Exception)
             {
