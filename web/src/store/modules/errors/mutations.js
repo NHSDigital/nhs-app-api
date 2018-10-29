@@ -39,8 +39,9 @@ export default {
     state.errors.push(error);
   },
   [SET_ROUTE_PATH](state, route) {
-    state.pageSettings = ErrorSettings.forPage(route);
-    state.routePath = route;
+    const routePath = route.replace(/\/$/, '');
+    state.pageSettings = ErrorSettings.forPage(routePath);
+    state.routePath = routePath;
   },
   [DISABLE_API_ERROR](state) {
     state.showApiError = false;
