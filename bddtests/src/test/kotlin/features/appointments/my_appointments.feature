@@ -2,6 +2,7 @@
 Feature: My appointments
   Users can view their upcoming and past appointments in the My Appointments screen.
 
+  @NHSO-3018 @bug
   @NHSO-797
   @backend
   Scenario Outline: API call for upcoming appointments will only request upcoming appointments from <GP System>
@@ -16,6 +17,7 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
+  @NHSO-3018 @bug
   @backend
   Scenario Outline: API call for upcoming appointments won't filter out past appointments from <GP System>
     Given I have upcoming appointments for <GP System>, with one in the past
@@ -27,6 +29,7 @@ Feature: My appointments
       | EMIS      |
       | VISION    |
 
+  @NHSO-3018 @bug
   @backend
   Scenario: API call for upcoming appointments will filter out past appointments from TPP
     Given I have upcoming appointments for TPP, with one in the past
