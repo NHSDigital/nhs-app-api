@@ -1,5 +1,6 @@
 package mocking.emis.appointments
 
+import constants.DateTimeFormats
 import constants.EmisResponseCode
 import mocking.GsonFactory
 import mocking.emis.EmisConfiguration
@@ -14,6 +15,8 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR
 import org.apache.http.HttpStatus.SC_OK
 import java.time.Duration
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class AppointmentSlotsMetaBuilderEmis(
         configuration: EmisConfiguration,
@@ -30,8 +33,8 @@ class AppointmentSlotsMetaBuilderEmis(
                 .andHeader(HEADER_API_END_USER_SESSION_ID, apiEndUserSessionId)
                 .andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
-        requestBuilder.andQueryParameterIfNotNull("sessionStartDate", sessionStartDate)
-        requestBuilder.andQueryParameterIfNotNull("sessionEndDate", sessionEndDate)
+        requestBuilder.andQueryParameterIfNotNull("sessionStartDate", convertDateToEmisTime(sessionStartDate))
+        requestBuilder.andQueryParameterIfNotNull("sessionEndDate", convertDateToEmisTime(sessionEndDate))
         requestBuilder.andQueryParameterIfNotNull("userPatientLinkToken", userPatientLinkToken)
     }
 
@@ -84,4 +87,15 @@ class AppointmentSlotsMetaBuilderEmis(
 
         }
     }
+
+    private fun convertDateToEmisTime(time: String?): String? {
+        return if (time.isNullOrEmpty()) {
+            null
+        } else {
+            val dateToPass = ZonedDateTime.parse(time)
+            val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+            return queryDateFormat.format(dateToPass)
+        }
+    }
+
 }

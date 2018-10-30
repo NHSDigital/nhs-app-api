@@ -56,7 +56,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
             }
             catch (HttpRequestException exception)
             {
-                _logger.LogError(exception, "Getting appointments failed.");
+                _logger.LogError(exception, "Calling GetExistingAppointments threw HttpRequestException.");
                 return new AppointmentsResult.SupplierSystemUnavailable();
             }
             finally

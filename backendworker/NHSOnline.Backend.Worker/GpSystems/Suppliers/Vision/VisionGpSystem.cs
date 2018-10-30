@@ -33,11 +33,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             return _serviceProvider.GetService<VisionAppointmentsService>();
         }
 
-        [SuppressMessage("Microsoft.Naming", "CA1024", 
-            Justification = "Remove this suppression when method has been implemented.")]
         public IAppointmentSlotsService GetAppointmentSlotsService()
         {
-            throw new NotImplementedException();
+            return _serviceProvider.GetService<VisionAppointmentSlotsService>();
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1024", 

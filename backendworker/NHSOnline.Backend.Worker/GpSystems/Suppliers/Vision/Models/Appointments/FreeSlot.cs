@@ -2,8 +2,8 @@ using System.Xml.Serialization;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments
 {
-    public class BookedSlot
-    { 
+    public class FreeSlot
+    {
         [XmlAttribute(AttributeName = "id")]
         public string Id { get; set; }
 

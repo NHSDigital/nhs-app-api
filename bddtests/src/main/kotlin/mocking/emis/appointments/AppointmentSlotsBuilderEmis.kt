@@ -38,9 +38,9 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
         requestBuilder.andHeader(HEADER_API_SESSION_ID, apiSessionId)
 
         if (!fromDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
-                name = "fromDateTime", value = fromDateTime!!)
+                name = "fromDateTime", value = convertDateToEmisTime(fromDateTime!!))
         if (!toDateTime.isNullOrEmpty()) requestBuilder.andQueryParameter(
-                name = "toDateTime", value = toDateTime!!)
+                name = "toDateTime", value = convertDateToEmisTime(toDateTime!!))
         if (!linkToken.isEmpty()) requestBuilder.andQueryParameter(
                 name = "userPatientLinkToken", value = linkToken)
     }
@@ -77,9 +77,7 @@ class AppointmentSlotsBuilderEmis(configuration: EmisConfiguration,
     }
 
     private fun convertDateToEmisTime(time: String): String {
-        val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
-        val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
-        ("Europe/London"))
+        val dateToPass = ZonedDateTime.parse(time)
         val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
         return queryDateFormat.format(dateToPass)
     }

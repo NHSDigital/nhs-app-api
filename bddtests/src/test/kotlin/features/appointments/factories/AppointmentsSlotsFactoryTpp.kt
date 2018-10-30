@@ -18,6 +18,4 @@ class AppointmentsSlotsFactoryTpp : AppointmentsSlotsFactory("TPP") {
                                                                 mapping: (IAppointmentSlotsBuilder.() -> Mapping)) {
         throw Exception("Test Setup Incorrect: Practice Settings are not relevant to TPP anyway. ")
     }
-
-    override val supplierAdjustTime= TimeZone.getTimeZone("UTC").toZoneId()
 }

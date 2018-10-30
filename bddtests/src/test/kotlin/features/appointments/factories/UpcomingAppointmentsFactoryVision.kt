@@ -58,7 +58,7 @@ class UpcomingAppointmentsFactoryVision : UpcomingAppointmentsFactory("VISION") 
         val startDate = gpDateTimeFormat.parse(slot.startTime)
         val date = slotDateFormat(startDate)
         val time = slotTimeFormat(startDate)
-        val sessionDetails = "${session.sessionDetails}"
+        val sessionDetails = "${session.sessionType} - ${slot.slotTypeName}"
         val location = session.location
         return Slot(
                 date = date,

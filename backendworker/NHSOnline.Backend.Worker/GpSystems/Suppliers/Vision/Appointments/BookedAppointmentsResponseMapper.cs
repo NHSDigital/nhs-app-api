@@ -10,21 +10,21 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
     
     public class BookedAppointmentsResponseMapper : IBookedAppointmentsResponseMapper
     {
-        private readonly IAppointmentMapper _appointmentMapper;
+        private readonly IBookedAppointmentMapper _bookedAppointmentMapper;
         private readonly ICancellationReasonMapper _cancellationReasonMapper;
 
         public BookedAppointmentsResponseMapper(
-            IAppointmentMapper appointmentMapper, 
+            IBookedAppointmentMapper bookedAppointmentMapper, 
             ICancellationReasonMapper cancellationReasonMapper
             )
         {
-            _appointmentMapper = appointmentMapper;
+            _bookedAppointmentMapper = bookedAppointmentMapper;
             _cancellationReasonMapper = cancellationReasonMapper;
         }
         
         public AppointmentsResponse Map(BookedAppointmentsResponse bookedAppointmentsResponse)
         {
-            var appointments = _appointmentMapper.Map(bookedAppointmentsResponse);
+            var appointments = _bookedAppointmentMapper.Map(bookedAppointmentsResponse.Appointments);
             var cancellationReasons = _cancellationReasonMapper.Map(bookedAppointmentsResponse);
             var response = new AppointmentsResponse
             {

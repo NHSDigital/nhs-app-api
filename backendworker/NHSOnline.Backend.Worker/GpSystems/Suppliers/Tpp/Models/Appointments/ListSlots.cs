@@ -1,11 +1,26 @@
 ﻿using System;
+using System.Globalization;
 using System.Xml.Serialization;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
 {
     [Serializable]
     public class ListSlots : AbstractTppRequestModel
     {
+        private const string ExpectedDateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'f'Z'";
+
+        private ListSlots() { }
+
+        public ListSlots(TppUserSession userSession, AppointmentSlotsDateRange dateRange)
+        {
+            StartDate = dateRange.FromDate.DateTime.ToString(ExpectedDateFormat, CultureInfo.InvariantCulture);
+            NumberOfDays = (dateRange.ToDate - dateRange.FromDate).Days;
+            UnitId = userSession.UnitId;
+            PatientId = userSession.PatientId;
+            OnlineUserId = userSession.OnlineUserId;
+        }
+
         [XmlAttribute("patientId")]
         public string PatientId { get; set; }
 
@@ -13,7 +28,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Tpp.Models.Appointments
         public string OnlineUserId { get; set; }
 
         [XmlAttribute("startDate")]
-        public DateTime StartDate { get; set; }
+        public string StartDate { get; set; }
 
         [XmlAttribute("numberOfDays")]
         public int NumberOfDays { get; set; }

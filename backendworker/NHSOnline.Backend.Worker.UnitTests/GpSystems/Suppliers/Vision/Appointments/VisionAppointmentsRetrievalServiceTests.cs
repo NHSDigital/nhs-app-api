@@ -16,7 +16,6 @@ using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Session;
-using NHSOnline.Backend.Worker.Support.Temporal;
 
 namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointments
 {
@@ -24,7 +23,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
     public class VisionAppointmentsRetrievalServiceTests
     {
         private IFixture _fixture;
-        private Mock<IAppointmentMapper> _mockAppointmentMapper;
+        private Mock<IBookedAppointmentsResponseMapper> _mockBookedAppointmentsResponseMapper;
         private Mock<IVisionClient> _mockVisionClient;
         private VisionUserSession _userSession;
         private VisionAppointmentsRetrievalService _systemUnderTest;
@@ -55,16 +54,13 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             
             IConfigurationBuilder configBuilder = new ConfigurationBuilder();
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
-            var timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
-            var dateTimeOffsetProvider = new DateTimeOffsetProvider(timeZoneInfoProvider);
 
-            _mockAppointmentMapper = _fixture.Freeze<Mock<IAppointmentMapper>>();
-            var cancellationReasonMapper = new CancellationReasonMapper();
-            
+            _mockBookedAppointmentsResponseMapper = _fixture.Freeze<Mock<IBookedAppointmentsResponseMapper>>();
+   
             _systemUnderTest = new VisionAppointmentsRetrievalService(
                 _fixture.Create<ILogger<VisionAppointmentsRetrievalService>>(),
                 _mockVisionClient.Object,
-                new BookedAppointmentsResponseMapper(_mockAppointmentMapper.Object, cancellationReasonMapper));
+                _mockBookedAppointmentsResponseMapper.Object);
         }
         
         [TestMethod]
@@ -79,7 +75,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var response = result.Should().BeAssignableTo<AppointmentsResult.SuccessfullyRetrieved>().Subject.Response;
 
             response.Appointments.Should().BeEmpty();
-            response.CancellationReasons.Should().NotBeEmpty();
+            response.CancellationReasons.Should().BeEmpty();
             _mockVisionClient.VerifyAll();
         }
         
@@ -108,7 +104,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         public async Task GetAppointments_MapperThrows_ReturnsInternalServerError()
         {
             // Arrange
-            _mockAppointmentMapper.Setup(x=>x.Map(It.IsAny<BookedAppointmentsResponse>()))
+            _mockBookedAppointmentsResponseMapper.Setup(x=>x.Map(It.IsAny<BookedAppointmentsResponse>()))
             .Throws<Exception>();
 
             // Act

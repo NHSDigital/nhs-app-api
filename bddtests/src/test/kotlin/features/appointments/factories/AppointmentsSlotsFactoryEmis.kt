@@ -45,6 +45,4 @@ class AppointmentsSlotsFactoryEmis : AppointmentsSlotsFactory("EMIS") {
         }
         mockingClient.forEmis { mapping(appointments.appointmentSlotsMetaRequest(patient, startDate, endDate)) }
     }
-
-    override val supplierAdjustTime = TimeZone.getTimeZone("Europe/London").toZoneId()
 }

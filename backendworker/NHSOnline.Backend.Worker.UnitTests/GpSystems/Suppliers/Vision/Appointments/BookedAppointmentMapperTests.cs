@@ -19,7 +19,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
     {
         private IDateTimeOffsetProvider _dateTimeOffsetProvider;
         private TimeZoneInfoProvider _timeZoneInfoProvider;
-        private AppointmentMapper _systemUnderTest;
+        private BookedAppointmentMapper _systemUnderTest;
 
         [TestInitialize]
         public void TestInitialize()
@@ -28,14 +28,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             configBuilder.AddInMemoryCollection(new[] { new KeyValuePair<string, string>("TIMEZONE", TimeZoneResolver.GetTimeZoneNameForCurrentOS()) });
             _timeZoneInfoProvider = new TimeZoneInfoProvider(new Mock<ILogger<TimeZoneInfoProvider>>().Object, configBuilder.Build());
             _dateTimeOffsetProvider = new DateTimeOffsetProvider(_timeZoneInfoProvider);
-            _systemUnderTest = new AppointmentMapper(_dateTimeOffsetProvider);
+            _systemUnderTest = new BookedAppointmentMapper(_dateTimeOffsetProvider);
         }
 
         [TestMethod]
         public void Map_HappyPath_ReturnsAnArrayOfAppointments()
         {
-            var slotTime1 = new SlotTime(Tomorrow().At("14:20"), Tomorrow().At("15:00"));
-            var slotTime2 = new SlotTime(Tomorrow().At("14:40"), Tomorrow().At("14:55"));
+            var slotTime1 = new SlotTime(Tomorrow("14:20"), Tomorrow("15:00"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("14:55"));
 
             var leeds = new Location
             {
@@ -82,7 +82,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             var slot1 = new BookedSlot
             {
-                DateTime = slotTime1.Start.AsVisionDateTimeString(),
+                DateTime = slotTime1.Start.ToVisionDateTimeString(),
                 Id = "SLOTX01",
                 Location = leeds.Id,
                 Session = generalSession.Id,
@@ -93,7 +93,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
 
             var slot2 = new BookedSlot
             {
-                DateTime = slotTime2.Start.AsVisionDateTimeString(),
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
                 Id = "SLOTX02",
                 Location = london.Id,
                 Session = generalSession.Id,
@@ -111,7 +111,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             var bookedAppointmentsResponse =
                 CreateBookedAppointmentsResponse(slots, locations, sessions, slotTypes, owners);
             
-            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse);
+            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
             
             var expectedResponse = new[] 
             {
@@ -151,7 +151,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 );
 
             // Act
-            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse);
+            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
 
             // Assert
             actualResponse.Should().BeEmpty();
@@ -173,7 +173,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         [DataRow("2018-05-09T9:59:19")]
         public void Map_ReturnsResponseWithoutSlotsAppointment_WhenStartTimeInSlotsAppointmentIsInInvalidFormat(string invalidStartTime)
         {
-            var slotTime2 = new SlotTime(Tomorrow().At("14:40"), Tomorrow().At("15:05"));
+            var slotTime2 = new SlotTime(Tomorrow("14:40"), Tomorrow("15:05"));
 
             var leeds = new Location
             {
@@ -230,7 +230,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
             
             var slot2 = new BookedSlot
             {
-                DateTime = slotTime2.Start.AsVisionDateTimeString(),
+                DateTime = slotTime2.Start.ToVisionDateTimeString(),
                 Id = "SLOTX02",
                 Location = london.Id,
                 Session = generalSession.Id,
@@ -250,7 +250,7 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 CreateBookedAppointmentsResponse(slots, locations, sessions, slotTypes, owners);
             
             // Act
-            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse);
+            var actualResponse = _systemUnderTest.Map(bookedAppointmentsResponse.Appointments);
 
             // Assert
             var expectedResponse = new[] 
@@ -273,10 +273,14 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
         {
             return _dateTimeOffsetProvider.CreateDateTimeOffset().SetTimeToMidnight().AddDays(1);
         }
-        
-        private DateTimeOffset InThePast()
+
+        private DateTimeOffset Tomorrow(string time)
         {
-            return _dateTimeOffsetProvider.CreateDateTimeOffset().AddMinutes(-5);
+            var dateTime = Tomorrow();
+            var parts = time.Split(':');
+
+            return dateTime.AddHours(int.Parse(parts[0], Thread.CurrentThread.CurrentCulture))
+                .AddMinutes(int.Parse(parts[1], Thread.CurrentThread.CurrentCulture));
         }
 
         private static BookedAppointmentsResponse CreateBookedAppointmentsResponse(
@@ -304,34 +308,19 @@ namespace NHSOnline.Backend.Worker.UnitTests.GpSystems.Suppliers.Vision.Appointm
                 
             };
         }
-    }
-    
-    public class SlotTime
-    {
-        public SlotTime(DateTimeOffset start, DateTimeOffset end)
+
+        private class SlotTime
         {
-            Start = start;
-            End = end;
-        }
+            public SlotTime(DateTimeOffset start, DateTimeOffset end)
+            {
+                Start = start;
+                End = end;
+            }
 
-        public DateTimeOffset Start { get; }
-        public DateTimeOffset End { get; }
-
-        public string Duration => (End - Start).Minutes.ToString(CultureInfo.InvariantCulture);
-    }
-
-    public static class VisionAppointmentExtensions
-    {
-        public static DateTimeOffset At(this DateTimeOffset dateTime, string time)
-        {
-            var parts = time.Split(':');
-
-            return dateTime.AddHours(int.Parse(parts[0], Thread.CurrentThread.CurrentCulture))
-                .AddMinutes(int.Parse(parts[1], Thread.CurrentThread.CurrentCulture));
-        }
-        public static string AsVisionDateTimeString(this DateTimeOffset dateTime)
-        {
-            return dateTime.ToString("yyyy-MM-ddTHH:mm:00", Thread.CurrentThread.CurrentCulture);
+            public DateTimeOffset Start { get; }
+            public DateTimeOffset End { get; }
+            
+            public string Duration => (End - Start).Minutes.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

@@ -146,8 +146,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
         try {
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
                     .appointments.getAppointmentSlots(null,
-                            null,
-                            Serenity.sessionVariableCalled<Cookie>(Cookie::class))
+                    null,
+                    Serenity.sessionVariableCalled<Cookie>(Cookie::class))
             Serenity.setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             Serenity.setSessionVariable("HttpException").to(httpException)
@@ -157,13 +157,14 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
     @Step
     fun theAvailableAppointmentSlotsAreRetrievedForExplicitDateTimeRange() {
         try {
-
             val startDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentStartTimeKey)
             val endDate = Serenity.sessionVariableCalled<String>(AppointmentsFactory.AppointmentEndTimeKey)
             val result = Serenity.sessionVariableCalled<WorkerClient>(WorkerClient::class)
-                    .appointments.getAppointmentSlots(startDate,
-                            endDate,
-                            Serenity.sessionVariableCalled<Cookie>(Cookie::class))
+                    .appointments.getAppointmentSlots(
+                    startDate,
+                    endDate,
+                    Serenity.sessionVariableCalled<Cookie>(Cookie::class)
+            )
             setSessionVariable(AppointmentSlotsResponse::class).to(result)
         } catch (httpException: NhsoHttpException) {
             setSessionVariable("HttpException").to(httpException)

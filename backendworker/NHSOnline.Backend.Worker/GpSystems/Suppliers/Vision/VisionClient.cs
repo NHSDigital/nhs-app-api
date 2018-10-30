@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Envelope;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
@@ -132,20 +133,45 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
             return await SendRequestAndParseResponse<BookedAppointmentsResponse, VisionRequest<PatientId>>(visionRequest);
         }
+        
+        public async Task<VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
+            VisionConnectionToken token, string odsCode, string patientId, AppointmentSlotsDateRange dateRange)
+        {
+            IVisionServiceDefinition visionServiceDefinition = new GetAvailableAppointmenServiceDefinition();
+
+            var request = new AvailableAppointmentsRequest
+            {
+                PatientId = patientId,
+                Page = new Page
+                {
+                    Number = 1,
+                    SlotsPerPage = 1000,
+                },
+                DateRange = new DateRange
+                {
+                    From = dateRange.FromDate.Date,
+                    To = dateRange.ToDate.Date,
+                }
+            };
+            var visionRequest = new VisionRequest<AvailableAppointmentsRequest>(visionServiceDefinition.Name, visionServiceDefinition.Version,
+                token.RosuAccountId, token.ApiKey, odsCode, _providerId, request);
+            
+            return await SendRequestAndParseResponse<AvailableAppointmentsResponse, VisionRequest<AvailableAppointmentsRequest>>(visionRequest);
+        }
 
         public async Task<VisionApiObjectResponse<ServiceContentRegisterResponse>> PostLinkAccount(string odsCode,
             PatientIm1ConnectionRequest request, string dob)
         {
             IVisionServiceDefinition visionServiceDefinition = new RegisterServiceDefinition();
-            
+
             var visionRequest = new VisionRequest<Object>(visionServiceDefinition.Name, visionServiceDefinition.Version,
                 odsCode, _providerId, request.AccountId, request.LinkageKey, request.Surname, dob);
 
-            
-            return await SendRequestAndParseResponse<ServiceContentRegisterResponse, VisionRequest<Object>>(visionRequest);
+            return await SendRequestAndParseResponse<ServiceContentRegisterResponse, VisionRequest<Object>>(
+                visionRequest);
         }
 
-        public async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
+        private async Task<VisionApiObjectResponse<TResponse>> SendRequestAndParseResponse<TResponse, T>(T request)
         {
             var envelope = _envelopeService.BuildEnvelope(_certificate, request, _requestUsername);
             var response = await TransmitAsync<TResponse>(envelope);

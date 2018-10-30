@@ -17,7 +17,7 @@ data class Slot(
         @XmlElement(namespace = "urn:vision")
         var location: Int? = null,
         @XmlElement(namespace = "urn:vision")
-        var type: String? = null,
+        var type: Int? = null,
         @XmlElement(namespace = "urn:vision")
         var session: Int? = null
 )

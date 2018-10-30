@@ -29,12 +29,13 @@ import org.apache.http.HttpStatus.SC_OK
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
+import worker.NhsoHttpException
 import worker.models.appointments.AppointmentSlotsResponse
 import java.time.Duration
 import javax.servlet.http.Cookie
 
 
-class AvailableAppointmentsSlotsStepDefinitions  {
+class AvailableAppointmentsSlotsStepDefinitions {
 
     @Steps
     lateinit var login: LoginSteps
@@ -55,26 +56,25 @@ class AvailableAppointmentsSlotsStepDefinitions  {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         factory.generateDefaultAvailableAppointmentSlotExample(
                 AppointmentsBookingData.defaultSessionStartDateRaw,
-                AppointmentsBookingData.defaultSessionEndDateRaw,
-                reasonNecessity = NecessityOption.MANDATORY)
+                AppointmentsBookingData.defaultSessionEndDateRaw)
     }
 
     @Given("^there are available (.*) appointment slots$")
     fun thereAreAvailableAppointmentSlots(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateDefaultAvailableAppointmentSlotExample(reasonNecessity = NecessityOption.MANDATORY)
+        factory.generateDefaultAvailableAppointmentSlotExample()
     }
 
     @Given("^there are available appointment slots with different criteria for (\\w+)$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(reasonNecessity = NecessityOption.MANDATORY)
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample()
     }
 
     @Given("^there are available appointment slots with different criteria for EMIS when no appointment slot guidance is provided$")
     fun thereAreAvailableAppointmentSlotsWithDifferentCriteriaForEmisWithNoGuidance() {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier("EMIS")
-        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false, reasonNecessity = NecessityOption.MANDATORY)
+        appointmentsSlotsFactory.generateDefaultAvailableAppointmentSlotExample(guidanceMessage = false)
     }
 
     @Given("^there are available appointment slots with different criteria for EMIS when guidance cannot be retrieved$")
@@ -86,40 +86,40 @@ class AvailableAppointmentsSlotsStepDefinitions  {
     @Given("^there are no available appointment slots for (.*)$")
     fun thereAreNoAvailableAppointmentSlotsForGPSystem(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExampleBuilderWithExpectations().build(), reasonNecessity = NecessityOption.MANDATORY)
+        factory.generateExample(AppointmentsSlotsExampleBuilderWithExpectations().build())
     }
 
     @Given("^there is 1 available appointment slot for (.*)$")
     fun thereIsOneAvailableAppointmentSlotForGPSystem(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExample.singleSlotExample(), reasonNecessity = NecessityOption.MANDATORY)
+        factory.generateExample(AppointmentsSlotsExample.singleSlotExample())
     }
 
     @Given("^there are available appointment slots for (.*) for 1 location$")
     fun thereAreAvailableAppointmentSlotsForGPSystemForOneLocation(gpSystem: String) {
         val factory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
-        factory.generateExample(AppointmentsSlotsExample.multipleSlotsOneLocation(), reasonNecessity = NecessityOption.MANDATORY)
+        factory.generateExample(AppointmentsSlotsExample.multipleSlotsOneLocation())
     }
 
     @Given("^there are appointment slots on some days other than tomorrow, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsButNotForTomorrowForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val example = AppointmentsSlotsExample.slotForDayAfterTomorrow()
-        appointmentsSlotsFactory.generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
+        appointmentsSlotsFactory.generateExample(example)
     }
 
     @Given("^there are appointment slots on some days this week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysThisWeekButNotAllForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val example = AppointmentsSlotsExample.slotForEndOfToday()
-        appointmentsSlotsFactory.generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
+        appointmentsSlotsFactory.generateExample(example)
     }
 
     @Given("^there are appointment slots on some days next week but not others, provided by (.*)$")
     fun thereAreAvailableAppointmentSlotsOnSomeDaysNextWeekButNotAllForGPSystem(gpSystem: String) {
         val appointmentsSlotsFactory = AppointmentsSlotsFactory.getForSupplier(gpSystem)
         val example = AppointmentsSlotsExample.slotForThisTimeNextWeek()
-        appointmentsSlotsFactory.generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
+        appointmentsSlotsFactory.generateExample(example)
     }
 
     @Given("^there are appointment slots on some days in the next few weeks but not others, provided by (.*)$")
@@ -288,6 +288,13 @@ class AvailableAppointmentsSlotsStepDefinitions  {
         for (appointmentSession in expectedAppointmentSessions) {
             expectedAppointmentSlots.addAll(appointmentSession.slots)
         }
+        val httpStatus =
+                try {
+                    sessionVariableCalled<NhsoHttpException>("HttpException").statusCode
+                } catch (e: NullPointerException) {
+                    200
+                }
+        assertEquals("Http Error Status. ", 200, httpStatus)
         val actualResult = sessionVariableCalled<AppointmentSlotsResponse>(AppointmentSlotsResponse::class)
         assertNotNull("Expected actualResult not null", actualResult)
         assertNotNull("Expected actualResult.slots not null", actualResult.slots)

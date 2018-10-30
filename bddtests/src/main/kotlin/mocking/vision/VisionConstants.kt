@@ -1,7 +1,11 @@
 package mocking.vision
 
+import mocking.vision.helpers.VisionConstantsHelper.Companion.getBaseVisionResponse
 import mocking.vision.helpers.VisionConstantsHelper.Companion.setContextOnServiceContent
 import mocking.vision.models.appointments.BookedAppointmentsResponse
+import mocking.vision.models.ServiceDefinition
+import mocking.vision.models.appointments.AvailableAppointmentsResponse
+
 object VisionConstants {
 
     // Service names and versions
@@ -25,11 +29,15 @@ object VisionConstants {
 
     const val existingAppointmentsName: String = "VOAPP.GetExistingAppointments"
     const val existingAppointmentsVersion: String = "2.0.0"
+    
+    const val availableAppointmentsName: String = "VOAPP.GetAvailableAppointment"
+    const val availableAppointmentsVersion: String = "2.0.0"
 
     const val allergiesView: String  = "VPS_ALLERGIES"
     const val medicationsView: String = "VPS_MEDICATIONS"
     const val immunisationsView: String = "PROCEDURES"
     const val problemsView: String = "PROBLEMS"
+
 
     const val htmlResponseFormat: String = "HTML"
     const val xmlResponseFormat: String = "XML"
@@ -43,6 +51,14 @@ object VisionConstants {
 
         return getBaseVisionResponse(response, serviceDefinition)
    }
+
+    fun getVisionAvailableAppointmentsResponse(serviceContent: String,
+                                              serviceDefinition: mocking.vision.models.ServiceDefinition): String {
+
+        val response = setContextOnServiceContent(serviceContent, AvailableAppointmentsResponse.name)
+
+        return getBaseVisionResponse(response, serviceDefinition)
+    }
 
     // Vision Get Patient Data
     fun getClinicalDataResponse(serviceContent: String,
@@ -73,27 +89,5 @@ object VisionConstants {
                 .replace("vision:/", "/")
 
         return getBaseVisionResponse(response, serviceDefinition)
-    }
-
-    fun getBaseVisionResponse(response: String, serviceDefinition: mocking.vision.models.ServiceDefinition) : String {
-
-        return "<soap:Envelope xmlns:urn=\"urn:vision\" " +
-                "xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
-                "    <soap:Body>\n" +
-                "        <vision:visionResponse xmlns:vision=\"urn:vision\">\n" +
-                "            <vision:serviceDefinition>\n" +
-                "                <vision:name>${serviceDefinition.name}</vision:name>\n" +
-                "                <vision:version>${serviceDefinition.version}</vision:version>\n" +
-                "            </vision:serviceDefinition>\n" +
-                "            <vision:serviceHeader>\n" +
-                "                <vision:outcome>\n" +
-                "                    <vision:successful>true</vision:successful>\n" +
-                "                </vision:outcome>\n" +
-                "            </vision:serviceHeader>\n" +
-                //           putting service content on one line as response can be raw text (avoiding new lines)
-                "            <vision:serviceContent>" + response + "</vision:serviceContent>" +
-                "        </vision:visionResponse>\n" +
-                "    </soap:Body>\n" +
-                "</soap:Envelope>"
     }
 }

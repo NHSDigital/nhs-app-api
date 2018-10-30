@@ -12,16 +12,16 @@ import mockingFacade.appointments.AppointmentSlotsResponseFacade
 import net.serenitybdd.core.Serenity
 import net.serenitybdd.core.Serenity.sessionVariableCalled
 import net.serenitybdd.core.Serenity.setSessionVariable
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactory(gpSupplier) {
 
     fun generateDefaultAvailableAppointmentSlotExample(startDate: ZonedDateTime? = null,
                                                        endDate: ZonedDateTime? = null,
                                                        guidanceMessage: Boolean = true,
-                                                       reasonNecessity: NecessityOption) {
+                                                       reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
         generateExample(generateDefaultUserDataAndRetrieveSlotsExample(), startDate, endDate, guidanceMessage, reasonNecessity)
     }
 
@@ -35,7 +35,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
     fun generateMultipleAvailableAppointmentSlotsForTheSameTime() {
         val example = AppointmentsSlotsExample.multipleSlotsOneTime()
         storeUIDateAndTimeOfSlotToSelect()
-        generateExample(example, reasonNecessity = NecessityOption.MANDATORY)
+        generateExample(example)
     }
 
     fun generateExample(
@@ -43,7 +43,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
             startDate: ZonedDateTime? = null,
             endDate: ZonedDateTime? = null,
             guidanceMessage: Boolean = true,
-            reasonNecessity: NecessityOption) {
+            reasonNecessity: NecessityOption = NecessityOption.MANDATORY) {
 
         saveToSerenityVariableForRequest(startDate, AppointmentStartTimeKey)
         saveToSerenityVariableForRequest(endDate, AppointmentEndTimeKey)
@@ -71,7 +71,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         return null
     }
 
-    abstract val supplierAdjustTime: ZoneId
+    private val supplierAdjustTime = TimeZone.getTimeZone("Europe/London").toZoneId()
 
     private fun generateDefaultUserDataAndRetrieveSlotsExample(): AppointmentSlotsResponseFacade {
         generateDefaultUserData()
@@ -94,7 +94,7 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
 
     private fun formatDate(date: ZonedDateTime): String {
         val dateFormatter = DateTimeFormatter.ofPattern(
-                DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+                DateTimeFormats.backendDateTimeFormatWithTimezone)
         return dateFormatter.format(date)
     }
 
@@ -126,7 +126,8 @@ abstract class AppointmentsSlotsFactory(gpSupplier: String) : AppointmentsFactor
         override val map: HashMap<String, (() -> (AppointmentsSlotsFactory))> by lazy {
             hashMapOf(
                     "EMIS" to { AppointmentsSlotsFactoryEmis() },
-                    "TPP" to { AppointmentsSlotsFactoryTpp() })
+                    "TPP" to { AppointmentsSlotsFactoryTpp() },
+                    "VISION" to { AppointmentsSlotsFactoryVision() })
         }
     }
 }

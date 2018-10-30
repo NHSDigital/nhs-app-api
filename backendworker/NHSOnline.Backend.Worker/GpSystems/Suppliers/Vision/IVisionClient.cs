@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NHSOnline.Backend.Worker.Areas.Im1Connection.Models;
+using NHSOnline.Backend.Worker.GpSystems.Appointments;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Courses;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
@@ -24,7 +25,7 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
             DemographicsRequest requestContent);
         
         Task<VisionClient.VisionApiObjectResponse<EligibleRepeatsResponse>> GetEligibleRepeats(
-                VisionUserSession session);
+            VisionUserSession session);
 
         Task<VisionClient.VisionApiObjectResponse<OrderNewPrescriptionResponse>> OrderNewPrescription(
             VisionUserSession userSession,
@@ -32,6 +33,9 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision
 
         Task<VisionClient.VisionApiObjectResponse<BookedAppointmentsResponse>> GetExistingAppointments(
             VisionConnectionToken token, string odsCode, string patientId);
+        
+        Task<VisionClient.VisionApiObjectResponse<AvailableAppointmentsResponse>> GetAvailableAppointments(
+            VisionConnectionToken token, string odsCode, string patientId, AppointmentSlotsDateRange dateRange);
             
         Task<VisionClient.VisionApiObjectResponse<VisionPatientDataResponse>> GetPatientData(
             VisionUserSession visionUserSession,

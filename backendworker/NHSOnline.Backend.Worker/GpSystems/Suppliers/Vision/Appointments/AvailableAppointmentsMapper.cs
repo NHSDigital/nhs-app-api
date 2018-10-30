@@ -1,64 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHSOnline.Backend.Worker.Areas.Appointments.Models;
 using NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Models.Appointments;
 using NHSOnline.Backend.Worker.Support.Temporal;
+using Slot = NHSOnline.Backend.Worker.Areas.Appointments.Models.Slot;
 
 namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
 {
-    public interface IAppointmentMapper
+    public interface IAvailableAppointmentsMapper
     {
-        IEnumerable<Appointment> Map(BookedAppointmentsResponse appointmentsResponses);
+        IEnumerable<Slot> Map(AvailableAppointments availableAppointments);
     }
     
-    public class AppointmentMapper : IAppointmentMapper
+    public class AvailableAppointmentsMapper: IAvailableAppointmentsMapper
     {
         private const string SessionTypeSeparator = " - ";
         private readonly IDateTimeOffsetProvider _dateTimeOffsetProvider;
 
-        public AppointmentMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
+        public AvailableAppointmentsMapper(IDateTimeOffsetProvider dateTimeOffsetProvider)
         {
             _dateTimeOffsetProvider = dateTimeOffsetProvider;
         }
         
-        public IEnumerable<Appointment> Map(BookedAppointmentsResponse appointmentsResponses)
+        public IEnumerable<Slot> Map(AvailableAppointments availableAppointments)
         {
-            var appointments = new List<Appointment>();
+            var mappedAppointments = new List<Slot>();
             
-            if (appointmentsResponses?.Appointments?.Slots == null)
-                return appointments;
+            if (availableAppointments?.Slots == null)
+                return mappedAppointments;
             
-            var now = _dateTimeOffsetProvider.CreateDateTimeOffset();
-            var locations = SetUpLocations(appointmentsResponses.Appointments?.References?.Locations);
-            var slotTypes = SetUpSlotType(appointmentsResponses.Appointments?.References?.SlotTypes);
-            var sessions = SetUpSessions(appointmentsResponses.Appointments?.References?.Sessions);
+            var locations = SetUpLocations(availableAppointments?.References?.Locations);
+            var slotTypes = SetUpSlotType(availableAppointments?.References?.SlotTypes);
+            var sessions = SetUpSessions(availableAppointments?.References?.Sessions);
             
-            foreach (var slot in appointmentsResponses.Appointments.Slots)
+            foreach (var slot in availableAppointments.Slots)
             {
+
                 if (!_dateTimeOffsetProvider.TryCreateDateTimeOffset(slot.DateTime, out var startTime))
-                {
                     continue;
-                }
 
                 var location = locations.GetValueOrDefault(slot.Location, null);
                 var slotType = slotTypes.GetValueOrDefault(slot.Type, null);
                 var session = sessions.GetValueOrDefault(slot.Session, null);
-                
-                var appointment = new Appointment
+
+                mappedAppointments.Add(
+                    new Slot
                 {
                     Id = slot.Id,
                     StartTime = startTime.GetValueOrDefault(),
                     EndTime = GetEndTime(startTime, slot),
                     Location = location,
                     Type = CreateTypeFromAppointmentAndSession(slotType, session),
-                    Clinicians = GetClinician(slot.Owner, appointmentsResponses.Appointments?.References?.Owners)
-                };
-                
-                appointments.Add(appointment);
+                    Clinicians = GetClinician(slot.Owner, availableAppointments?.References?.Owners)
+                }
+                    );
             }
 
-            return appointments;
+            return mappedAppointments;
         }
 
         private static Dictionary<string, string> SetUpLocations(IEnumerable<Location> locations)
@@ -97,8 +95,8 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
                 : owners?.Where(owner => owner.Id.Equals(ownerId, StringComparison.Ordinal))
                       .Select(owner => owner.Name) ?? Array.Empty<string>();
         }
-
-        private static DateTimeOffset? GetEndTime(DateTimeOffset? startTime, BookedSlot slot)
+        
+        private static DateTimeOffset? GetEndTime(DateTimeOffset? startTime, FreeSlot slot)
         {
             return startTime.HasValue && int.TryParse(slot.Duration, out var mins)
                 ? (DateTimeOffset?)startTime.Value.AddMinutes(mins)

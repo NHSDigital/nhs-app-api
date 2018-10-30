@@ -22,6 +22,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario: A user can expand, view and collapse guidance provided by EMIS
     Given there are available appointment slots with different criteria for EMIS
@@ -63,6 +64,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user enters the available appointments page, but appointments only available at 1 location
     Given there are available appointment slots for <GP System> for 1 location
@@ -73,6 +75,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user sees appropriate information message when no slots are available at all
     Given there are no available appointment slots for <GP System>
@@ -83,6 +86,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user goes back when no slots are available at all
     Given there are no available appointment slots for <GP System>
@@ -94,6 +98,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by today but no appointments are available
     Given there are available appointment slots with different criteria for <GP System>
@@ -105,6 +110,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user sees appropriate message, if filtering by tomorrow but no appointments are available
     Given there are appointment slots on some days other than tomorrow, provided by <GP System>
@@ -117,6 +123,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user still sees the remainder of the current week, if filtering by this week but no appointments are available for some days
     Given there are appointment slots on some days this week but not others, provided by <GP System>
@@ -129,6 +136,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user still sees the whole of week, if filtering by next week but no appointments are available for some days
     Given there are appointment slots on some days next week but not others, provided by <GP System>
@@ -141,6 +149,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
   Scenario Outline: A <GP System> user only sees days with available slots, if filtering by "All available" but no appointments are available for some days
     Given there are appointment slots on some days in the next few weeks but not others, provided by <GP System>
@@ -153,6 +162,7 @@ Feature: View available appointment slots
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
     #    GP System agnostic scenario, so only need to test with EMIS
   Scenario: A user decides to go back even though there's available slots
@@ -205,14 +215,6 @@ Feature: View available appointment slots
     Then I see appropriate information message when there is a error retrieving data
     And there should not be an option to try again
 
-    @NHSO-799
-  Scenario: A user sees appropriate information message when appointments are disabled on VISION
-      # VISION Specific test
-    Given Appointments are disabled for VISION at a GP Practice level
-    And I am logged in as a VISION user
-    When I am on my appointments page
-    Then I see appropriate information message when appointments are disabled
-    And there should not be an option to try again
 
 
   @native

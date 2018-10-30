@@ -1,6 +1,7 @@
 package mocking.vision
 
 import mocking.MappingBuilder
+import mocking.vision.appointments.AppointmentSlotsBuilderVision
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentMappingBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IAppointmentSlotsBuilder
 import mocking.gpServiceBuilderInterfaces.appointments.IBookAppointmentsBuilder
@@ -23,7 +24,7 @@ open class VisionMappingBuilderAppointments(method: String = "POST") : MappingBu
     override fun appointmentSlotsRequest(patient: Patient,
                                          fromDateTime: String?,
                                          toDateTime: String?):
-            IAppointmentSlotsBuilder = throw NotImplementedError("To be implemented as part of NHSO-795")
+            IAppointmentSlotsBuilder = AppointmentSlotsBuilderVision(patient, fromDateTime, toDateTime)
 
     override fun cancelAppointmentRequest(patient: Patient, request: CancelAppointmentSlotFacade):
             ICancelAppointmentsBuilder = throw NotImplementedError("To be implemented as part of NHSO-798")

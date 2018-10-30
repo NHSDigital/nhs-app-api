@@ -15,6 +15,7 @@ Feature: View available appointment slots backend
       | GP System |
       | EMIS      |
       | TPP       |
+      | VISION    |
 
 
     # GP System agnostic, depends on what status code we get back

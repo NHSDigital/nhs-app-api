@@ -38,7 +38,7 @@ class AppointmentSlotsBuilderTpp(
         val path = StringBuilder("//ListSlots[")
 
         if (startDate != null) {
-            path.append("@startDate='$startDate' and ")
+            path.append("@startDate='${convertDateToTppTime(startDate)}' and ")
             val numberOfDays = getNumberOfDays(startDate, endDate)
             path.append("@numberOfDays='$numberOfDays' and ")
         }
@@ -55,7 +55,7 @@ class AppointmentSlotsBuilderTpp(
     private fun getNumberOfDays(startDate: String, endDate: String? = null): Long {
 
         if (endDate != null) {
-            val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithoutTimezone)
+            val format = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
             val firstDate = LocalDate.parse(startDate, format)
             val secondDate = LocalDate.parse(endDate, format)
 
@@ -125,9 +125,7 @@ class AppointmentSlotsBuilderTpp(
     }
 
     private fun convertDateToTppTime(time: String): String {
-        val currentDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.backendDateTimeFormatWithTimezone)
-        val dateToPass = ZonedDateTime.of(LocalDateTime.parse(time, currentDateFormat), ZoneId.of
-        ("Europe/London"))
+        val dateToPass = ZonedDateTime.parse(time)
         val queryDateFormat = DateTimeFormatter.ofPattern(DateTimeFormats.tppDateTimeFormat)
         return queryDateFormat.format(dateToPass)
     }

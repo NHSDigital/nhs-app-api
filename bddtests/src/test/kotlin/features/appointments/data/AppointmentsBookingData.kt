@@ -1,6 +1,6 @@
 package features.appointments.data
 
-import constants.DateTimeFormats.Companion.backendDateTimeFormatWithoutTimezone
+import constants.DateTimeFormats.Companion.backendDateTimeFormatWithTimezone
 import mocking.MockingClient
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -12,7 +12,7 @@ open class AppointmentsBookingData {
 
         const val pastFromDate = "2017-12-24T14:00:00"
         const val pastToDate = "2017-12-30T14:00:00"
-        val dateTimeFormat = DateTimeFormatter.ofPattern(backendDateTimeFormatWithoutTimezone)!!
+        val dateTimeFormat = DateTimeFormatter.ofPattern(backendDateTimeFormatWithTimezone)!!
         val mockingClient = MockingClient.instance
 
         val defaultSessionStartDateRaw = tomorrowMidnight()
@@ -21,16 +21,14 @@ open class AppointmentsBookingData {
         val defaultSessionStartDate = defaultSessionStartDateRaw.format(dateTimeFormat)!!
         val defaultSessionEndDate = defaultSessionEndDateRaw.format(dateTimeFormat)!!
 
-
         private fun tomorrowMidnight() = midnightDayInTheFuture(1)
         private fun threeWeeksTomorrowMidnight() = midnightDayInTheFuture(22)
 
         private fun midnightDayInTheFuture(daysToAdd: Int): ZonedDateTime {
 
-            val baseTime = ZonedDateTime.now(ZoneId.of("UTC"))
+            val baseTime = ZonedDateTime.now(ZoneId.of("Europe/London"))
             val dayInTheFuture = baseTime.plusDays(daysToAdd.toLong())
-            val midnightDate = setToMidnight(dayInTheFuture)
-            return midnightDate
+            return setToMidnight(dayInTheFuture)
         }
 
         private fun setToMidnight(date: ZonedDateTime): ZonedDateTime {

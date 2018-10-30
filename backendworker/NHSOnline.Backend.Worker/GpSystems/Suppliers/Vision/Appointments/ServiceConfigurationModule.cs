@@ -8,7 +8,10 @@ namespace NHSOnline.Backend.Worker.GpSystems.Suppliers.Vision.Appointments
         public override void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IBookedAppointmentsResponseMapper, BookedAppointmentsResponseMapper>();
-            services.AddTransient<IAppointmentMapper, AppointmentMapper>();
+            services.AddTransient<IBookedAppointmentMapper, BookedAppointmentMapper>();
+            services.AddTransient<IAvailableAppointmentsMapper, AvailableAppointmentsMapper>();
+            services.AddTransient<IAvailableAppointmentsResponseMapper, AvailableAppointmentsResponseMapper>();
+            services.AddTransient<VisionAppointmentSlotsService>();
             services.AddTransient<ICancellationReasonMapper, CancellationReasonMapper>();
             services.AddTransient<VisionAppointmentsService>();
             services.AddTransient<VisionAppointmentsRetrievalService>();
