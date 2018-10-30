@@ -2,7 +2,6 @@
 Feature: My appointments
   Users can view their upcoming and past appointments in the My Appointments screen.
 
-  @NHSO-797
   @backend
   Scenario Outline: API call for upcoming appointments will only request upcoming appointments from <GP System>
     Given I have upcoming appointments for <GP System>
@@ -55,7 +54,6 @@ Feature: My appointments
     And there should not be an option to try again
 
   @backend
-  @NHSO-802
   Scenario Outline: Appropriate error response, when <GP System> returns corrupted data
     Given I have logged into <GP System> and have a valid session cookie
     But <GP System> returns corrupted response for my appointments
@@ -68,7 +66,6 @@ Feature: My appointments
       | VISION    |
 
   @backend
-  @NHSO-802
   Scenario Outline: Requesting my appointments the <GP System> times out and returns "Gateway Timeout" error
     Given I have logged into <GP System> and have a valid session cookie
     But <GP System> will time out when trying to retrieve my appointments
@@ -80,7 +77,6 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
-  @NHSO-2910
   Scenario Outline: A <GP System> user sees Service currently unavailable message when GP system is unavailable
     Given the <GP System> GP appointment system is unavailable
     And I am logged in as a <GP System> user
@@ -93,7 +89,6 @@ Feature: My appointments
       | TPP       |
       | VISION    |
 
-  @NHSO-797
   Scenario Outline: A user has never booked an appointment
     Given I have no upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
@@ -108,7 +103,6 @@ Feature: My appointments
       | VISION    |
 
   @smoketest
-  @NHSO-797
   Scenario Outline: A <GP System> user can see their upcoming appointments
     Given I have upcoming appointments for <GP System>
     And I am logged in as a <GP System> user
@@ -126,7 +120,6 @@ Feature: My appointments
       | VISION    |
 
   @long-running
-  @NHSO-802
   Scenario: On session expiry (when on my appointments page), a user on a secure screen is automatically signed out
     Given I have no upcoming appointments for EMIS
     And I am logged in as a EMIS user
@@ -136,7 +129,6 @@ Feature: My appointments
     And the user login details are cleared from cookies
 
   @manual
-  @NHSO-802
   Scenario: Requesting list of appointments, when there is no internet connection should result with a message indicating user may have connectivity problems
     Given I have no upcoming appointments for EMIS
     And I am logged in

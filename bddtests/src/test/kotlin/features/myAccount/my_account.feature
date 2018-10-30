@@ -33,7 +33,6 @@ Feature: View My Account Page
     When I click the Cookies policy link
     Then a new tab opens https://www.nhs.uk/using-the-nhs/nhs-services/the-nhs-app/cookies-policy/
 
-  @NHSO-1917
   Scenario: A patient can navigate to the Open source licences page
     Given I am on the My Account page
     When I click the Open source licences link
