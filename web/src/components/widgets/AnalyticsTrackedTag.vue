@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" @click="trackClick($event);">
+  <component :id="id" :is="tag" @click="trackClick($event);">
     <slot/>
   </component>
 </template>

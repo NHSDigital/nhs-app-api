@@ -6,6 +6,7 @@ import mocking.tpp.models.Error
 import net.serenitybdd.core.Serenity
 import org.junit.Assert.*
 import pages.ErrorPage
+import pages.myrecord.MyRecordInfoPage
 import pages.myrecord.MyRecordTestResultDetailPage
 import worker.NhsoHttpException
 import worker.WorkerClient
@@ -16,6 +17,7 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
 
     lateinit var myRecordDetailedTestResultPage: MyRecordTestResultDetailPage
     lateinit var errorPage: ErrorPage
+    lateinit var myRecordInfoPage: MyRecordInfoPage
 
     @Given("^an error occurs retrieving the test result detail$")
     fun givenAnErrorOccursGettingTestResultDetailForTpp() {
@@ -32,6 +34,16 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
 
         mockingClient.forTpp {
             myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!, TestResultsData.mockTestResultId).respondWithSuccess(TestResultsData.getMultipleTestResultsForTpp(4))
+        }
+    }
+
+    @Given("^the GP Practice has test result details$")
+    fun givenTestResultDetailIsRetrievedSuccessfully() {
+        setPatientToDefaultFor("TPP")
+
+        mockingClient.forTpp {
+            myRecord.testResultsDetailRequest(this@MyRecordTestResultsStepDefinitions.patient.tppUserSession!!,
+                    TestResultsData.mockTestResultId).respondWithSuccess(TestResultsData.getTestResultDetail())
         }
     }
 
@@ -306,6 +318,23 @@ open class MyRecordTestResultsStepDefinitions: AbstractDemographicsStepDefinitio
                 .assertMessageText(message)
                 .assertPageHeader(pageHeader)
                 .assertNoRetryButton()
+    }
+
+    @Then("I select a test result")
+    fun thenISelectATestResult() {
+        myRecordInfoPage.testResults.toggleShrub()
+        myRecordInfoPage.testResults.clickFirst()
+    }
+
+    @Then("I am on the test result detail page")
+    fun thenISeeTheTestResultDetailPage() {
+        myRecordDetailedTestResultPage.testResultDetailsHeader.assertSingleElementPresent().assertIsVisible()
+        myRecordDetailedTestResultPage.backButton.assertIsVisible()
+    }
+
+    @Then("I click the test result detail back button")
+    fun thenIClickTheTestResultDetailBackButton() {
+        myRecordDetailedTestResultPage.clickBackToMyRecordButton()
     }
 }
 

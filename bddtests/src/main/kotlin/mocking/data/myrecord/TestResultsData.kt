@@ -198,4 +198,12 @@ object TestResultsData {
     fun getDefaultTppTestResultsData(): TestResultsViewReply {
         return TestResultsViewReply(items = mutableListOf())
     }
+
+    fun getTestResultDetail(): TestResultsViewReply {
+        var testResultDetail = TestResultsViewReply(items = mutableListOf())
+
+        testResultDetail.items.add(TestResultsViewReplyItem(value = "<p>Test Result Detail</p>"))
+
+        return testResultDetail
+    }
 }

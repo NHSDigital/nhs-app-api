@@ -51,6 +51,14 @@ export default {
       myRecord: this.$parent.myRecord,
     };
   },
+  mounted() {
+    if (this.$route.hash) {
+      setTimeout((route) => {
+        VueScrollTo.scrollTo(route.hash, 500, { easing: VueScrollTo['ease-in'] });
+      }, 500, this.$route);
+      this.isTestResultsCollapsed = false;
+    }
+  },
   methods: {
     getCollapsedState(collapsed) {
       return collapsed ? this.$style.closed : this.$style.opened;

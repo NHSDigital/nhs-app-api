@@ -139,6 +139,20 @@ Feature: View My Medical Record Information - Test Results
       | Service |
       | TPP     |
 
+  Scenario Outline: An user navigates back to my record page from test result detail
+    Given the my record wiremocks are initialised for <Service>
+    And the GP Practice has enabled demographics functionality for <Service>
+    And the GP Practice has six test results for <Service>
+    And the GP Practice has test result details
+    And I am on my record information page
+    When I select a test result
+    And I click the test result detail back button
+    Then I see the my record page scrolled to the test result section
+
+    Examples:
+      | Service |
+      | TPP     |
+    
   Scenario Outline: A <Service> user has multiple test results navigation
     Given the my record wiremocks are initialised for <Service>
     And the GP Practice has enabled demographics functionality for <Service>

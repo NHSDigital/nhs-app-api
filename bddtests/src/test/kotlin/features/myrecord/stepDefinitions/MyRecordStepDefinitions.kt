@@ -577,4 +577,9 @@ open class MyRecordStepDefinitions : AbstractDemographicsStepDefinitions() {
         assertTrue("Expected records",allergyMessages.size == expectedMessages.size)
         allergyMessages.forEachIndexed { i, message -> assertTrue(message == expectedMessages[i]) }
     }
+
+    @Then("I see the my record page scrolled to the test result section")
+    fun thenISeeMyRecordPageScrolledToTestResultSection() {
+        assertTrue(myRecordInfoPage.isTestResultsTextMsgVisible())
+    }
 }
