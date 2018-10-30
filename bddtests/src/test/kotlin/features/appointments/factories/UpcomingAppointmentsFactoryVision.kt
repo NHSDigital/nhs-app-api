@@ -34,7 +34,7 @@ class UpcomingAppointmentsFactoryVision : UpcomingAppointmentsFactory("VISION") 
                     session.slots.map { slot ->
                         AppointmentResponseObject(
                                 slot.slotId.toString(),
-                                session.sessionDetails!!,
+                                "${session.sessionType!!} - ${slot.slotTypeName}",
                                 slot.startTime!!,
                                 slot.endTime!!,
                                 session.location!!,

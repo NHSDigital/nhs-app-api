@@ -206,8 +206,8 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
 
     private fun assertSlotsAreEqual(expectedSlot: SlotResponseObject, actualSlot: SlotResponseObject) {
         assertEquals("Slot type", expectedSlot.type, actualSlot.type)
-        assertEquals("Slot start time", toUTC(expectedSlot.startTime), toUTC(actualSlot.startTime))
-        assertEquals("Slot end time", toUTC(expectedSlot.endTime), toUTC(actualSlot.endTime))
+        assertEquals("Slot start time", expectedSlot.startTime, actualSlot.startTime)
+        assertEquals("Slot end time", expectedSlot.endTime, actualSlot.endTime)
         assertEquals("Slot location", expectedSlot.location, actualSlot.location)
         assertEquals("Slot clinicians", expectedSlot.clinicians.toSet(), actualSlot.clinicians.toSet())
     }
@@ -430,14 +430,6 @@ open class AvailableAppointmentsSteps : AppointmentsBookingData() {
                 String.format("%s not present as %s option", defaultOption, optionType),
                 actualOptions.contains(defaultOption)
         )
-    }
-
-    private fun toUTC(date: String?): String {
-        val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
-        val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat(DateTimeFormats.backendDateTimeFormatWithTimezone)
-        queryDateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        return queryDateFormat.format(dateToPass).removeSuffix("00").plus(":00")
     }
 
     companion object {

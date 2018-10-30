@@ -58,12 +58,12 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
 
     @When("^I try to retrieve appointment slots with fromDate after the toDate$")
     fun tryToRetrieveAppointmentSlotsWithFromDateAfterToDate() {
-        retrieveAppointmentSlots(toLocalTime(defaultSessionEndDate), toLocalTime(defaultSessionStartDate))
+        retrieveAppointmentSlots(defaultSessionEndDate, defaultSessionStartDate)
     }
 
     @When("^I try to retrieve appointment slots only from the past$")
     fun tryToRetrieveAppointmentSlotsFromThePast() {
-        retrieveAppointmentSlots(toLocalTime(pastFromDate), toLocalTime(pastToDate))
+        retrieveAppointmentSlots(pastFromDate, pastToDate)
     }
 
     @When("^I try to retrieve appointment slots with a malformed to Date$")
@@ -105,13 +105,5 @@ class AvailableAppointmentsSlotsStepDefinitionsBackend  {
     private fun assertAppointmentSlotsResponseNotNull(result: AppointmentSlotsResponse) {
         Assert.assertNotNull("result", result)
         Assert.assertNotNull("result.slots", result.slots)
-    }
-
-    private fun toLocalTime(date: String?): String {
-        val currentDateFormat = SimpleDateFormat(backendDateTimeFormatWithoutTimezone)
-        currentDateFormat.timeZone = TimeZone.getDefault()
-        val dateToPass = currentDateFormat.parse(date, ParsePosition(0))
-        val queryDateFormat = SimpleDateFormat(backendDateTimeFormatWithTimezone)
-        return queryDateFormat.format(dateToPass)
     }
 }
