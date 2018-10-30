@@ -103,6 +103,20 @@ Feature: Book an available appointment slot
       | EMIS      |
       | TPP       |
 
+  Scenario Outline: A <GP System> user cannot enter dangerous text for booking reason
+    Given there are <GP System> appointments available to book and user attempts to enter booking reason <script>
+    And I am logged in
+    And I am on the available appointments page
+    And I have selected an appointment slot to book
+    Then the Appointment Slot page is displayed
+    When I enter symptoms
+    And I click the 'Confirm and book appointment' button
+    Then I see appropriate information message when there is an error sending data on appointment confirmation page
+    Examples:
+      | GP System |
+      | EMIS      |
+      | TPP       |
+
   Scenario Outline: A <GP System> user sees appropriate information message when there is a timeout
     Given there are <GP System> appointments available to book, but GP system doesn't respond a timely fashion when booking
     And I am logged in

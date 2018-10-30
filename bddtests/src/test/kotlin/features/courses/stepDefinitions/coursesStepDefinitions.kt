@@ -271,6 +271,12 @@ open class CoursesStepDefinitions : BaseStepDefinition() {
         selectedCourses = selectedCourses.plus(coursesToSelect)
     }
 
+    @Then("I see a message indicating there was an error sending my order")
+    fun iSeeAMessageOrderNotSuccessful() {
+        confirmRepeatPrescriptionOrderSteps.assertErrorSendingOrderShown()
+    }
+
+
     private fun getAvailableCoursesFilteredSortedOrdered(): List<MedicationCourse> {
         return coursesLoader.getAvailableCoursesFilteredSortedOrdered()
     }

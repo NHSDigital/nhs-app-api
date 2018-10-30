@@ -41,6 +41,14 @@ class AppointmentsBookingStepDefinitions {
         Serenity.setSessionVariable(SymptomsToEnter).to(symptomsToEnter)
     }
 
+    @Given("^there are (.*) appointments available to book and user attempts to enter booking reason (.*)\$")
+    fun thereAreAvailableAppointmentsToBookWithABookingReason(gpSystem: String, bookingReason: String) {
+        val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)
+        factory.generateDefaultAvailableAppointmentSlotExample()
+        factory.generateSuccessfulBookingResponse(bookingReason)
+        Serenity.setSessionVariable(SymptomsToEnter).to(bookingReason)
+    }
+
     @Given("^there are (.*) appointments available to book, but GP system doesn't respond a timely fashion when booking$")
     fun thereAreAvailableAppointmentsToBookButSystemDoesNotRespond(gpSystem: String) {
         val factory = AppointmentsBookingFactory.getForSupplier(gpSystem)

@@ -33,4 +33,8 @@ open class ConfirmRepeatPrescriptionOrderSteps {
     fun assertSpecialRequestNotShown() {
         Assert.assertFalse(confirmRepeatPrescriptionsOrderPage.specialRequestElementIsVisible())
     }
+
+    fun assertErrorSendingOrderShown() {
+        Assert.assertTrue(confirmRepeatPrescriptionsOrderPage.errorSendingOrderErrorIsVisible())
+    }
 }

@@ -75,4 +75,8 @@ open class ConfirmRepeatPrescriptionsOrderPage : HybridPageObject(PageType.WEBVI
     fun clickChangeThisPrescriptionButton() {
         changeThisPrescriptionButton.element.sendKeys(Keys.ENTER)
     }
+
+    fun errorSendingOrderErrorIsVisible(): Boolean {
+        return findByXpath("//*[contains(text(), \"$serverErrorHeader\")]").isVisible
+    }
 }

@@ -6,7 +6,7 @@ Feature: Prescriptions submission
     Given the scenario is submit prescription
 
   @smoketest
-Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
+  Scenario Outline: The <GP System> user orders a repeat prescription with 5 entries
     Given <GP System> is initialised
     And I am using <GP System> GP System to submit my prescription
     And I have 1 historic prescriptions in this scenario
@@ -38,3 +38,18 @@ Scenario Outline: The <GP System> user orders a repeat prescription with 5 entri
     | EMIS      |
     | TPP       |
     | VISION    |
+
+  Scenario Outline: The <GP System> user tries to submit potentially dangerous text for special request
+    Given <GP System> is initialised
+    And I am using <GP System> GP System to submit my prescription
+    And I have 0 historic prescriptions in this scenario
+    And I am logged in
+    And I navigate to prescriptions
+    And I select 1 <GP System> repeatable prescriptions to order
+    And I enter text "<script>" for special request
+    And I click Continue on the Order a repeat prescription page
+    When I click Confirm and order repeat prescription
+    Then I see a message indicating there was an error sending my order
+    Examples:
+      | GP System |
+      | EMIS      |
